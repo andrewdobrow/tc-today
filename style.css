@@ -6,18 +6,14 @@
   --text-secondary: #6B6B65; --text-muted: #9B9B93;
   --border: #E4E4DF; --accent: #0A7075;
 }
-[data-theme="dark"] {
-  --bg: #090F0F; --bg-secondary: #1C1C1A; --text: #F0F0EE;
-  --text-secondary: #8A8A82; --text-muted: #5A5A54;
-  --border: #2A2A27; --accent: #14969C;
-}
+
 /* -- BASE -- */
 body { font-family: "DM Sans", sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; transition: background 0.2s, color 0.2s; }
 
 /* -- HEADER -- */
 header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); }
 .header-inner { max-width: 1200px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.header-top { display: flex; align-items: center; gap: 12px; width: 100%; }
+.header-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
 .wordmark { font-family: "Fraunces", serif; font-size: 22px; font-weight: 600; color: var(--accent); letter-spacing: -0.5px; text-decoration: none; flex: 1; }
 .category-nav { display: flex; gap: 2px; flex: 1; min-width: 0; flex-wrap: wrap; }
 .category-nav::-webkit-scrollbar { display: none; }
@@ -25,8 +21,6 @@ header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-b
 .cat-btn:hover { background: var(--bg-secondary); color: var(--text); }
 .cat-btn.active { background: var(--text); color: var(--bg); font-weight: 500; }
 .header-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-.theme-toggle { background: none; border: 1px solid var(--border); width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 14px; transition: all 0.15s; }
-.theme-toggle:hover { background: var(--bg-secondary); color: var(--text); }
 .support-btn { background: none; color: var(--accent); border: 1px solid var(--accent); padding: 7px 16px; border-radius: 20px; font-family: "DM Sans", sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
 .support-btn:hover { background: var(--accent); color: white; }
 
@@ -190,9 +184,7 @@ footer { border-top: 1px solid var(--border); padding: 28px 24px; margin-top: 60
   .header-inner { gap: 0; padding: 10px 16px; flex-direction: column; align-items: stretch; }
   .header-top { margin-bottom: 8px; }
   .support-btn { padding: 6px 12px; font-size: 12px; }
-  /* On mobile: nav is a full-width scrollable strip below the logo row */
   .category-nav { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; width: 100%; -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%); mask-image: linear-gradient(to right, black 85%, transparent 100%); }
   .category-nav::-webkit-scrollbar { display: none; }
-  .header-actions { display: none; }
   .hero-image { height: 200px; }
 }
