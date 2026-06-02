@@ -134,10 +134,19 @@ document.querySelectorAll(".cat-btn").forEach(btn => {
 
 // -- INITIAL STATE: show only Top News (deduped) cards on load --
 document.addEventListener("DOMContentLoaded", () => {
+  // Default: show only top news cards
   document.querySelectorAll(".article-card").forEach(card => {
     if (card.classList.contains("support-card")) return;
     card.style.display = card.dataset.topnews === "true" ? "block" : "none";
   });
+
+  // If arriving from another page with ?cat= query param, auto-activate that category
+  const params = new URLSearchParams(window.location.search);
+  const catParam = params.get("cat");
+  if (catParam) {
+    const btn = document.querySelector(`.cat-btn[data-cat="${catParam}"]`);
+    if (btn) btn.click();
+  }
 });
 
 // -- COUNTDOWN --
