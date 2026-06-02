@@ -688,6 +688,14 @@ def promote_duplicate_heroes(top_cat, all_categories):
 
 def render_index(all_categories, top_cat):
 
+    # County categories get a prominent SEO-friendly section label above their hero
+    COUNTY_KEYS = {"martin", "st_lucie", "indian_river"}
+    COUNTY_SEO_LABELS = {
+        "martin":       "Martin County News",
+        "st_lucie":     "St. Lucie County News",
+        "indian_river": "Indian River County News",
+    }
+
     def hero_section(cat_key, cat_label, hero, visible=False):
         preview    = hero.get("body", "")[:380].rstrip()
         paragraphs = make_paragraphs(hero.get("body", ""))
@@ -698,8 +706,14 @@ def render_index(all_categories, top_cat):
         pub_time    = hero.get("published", "")
         display     = "" if visible else ' style="display:none"'
         fade        = " fade-in" if visible else ""
+        # County sections get a prominent Fraunces section label for SEO and readability
+        section_label = ""
+        if cat_key in COUNTY_KEYS:
+            seo_text = COUNTY_SEO_LABELS[cat_key]
+            section_label = f'<div class="county-section-label"><h2 class="county-label-text">{seo_text}</h2></div>'
         return f"""
     <section class="hero{fade}" data-cat-hero="{cat_key}"{display}>
+      {section_label}
       <div class="hero-inner">
         {img_html}
         <span class="tag">{cat_label}</span>
@@ -776,7 +790,25 @@ def render_index(all_categories, top_cat):
         for i, cat in enumerate([None] + all_categories)
     )
 
-    _head   = _page_head("Treasure Coast Today — Your Treasure Coast, every day.", "Local news for Martin, St. Lucie, and Indian River counties.")
+    _structured_data = {
+        "@context": "https://schema.org",
+        "@type": "NewsMediaOrganization",
+        "name": "Treasure Coast Today",
+        "url": SITE_URL,
+        "logo": f"{SITE_URL}/favicon.svg",
+        "description": "Local news for Martin County, St. Lucie County, and Indian River County, Florida.",
+        "areaServed": [
+            {"@type": "AdministrativeArea", "name": "Martin County, Florida"},
+            {"@type": "AdministrativeArea", "name": "St. Lucie County, Florida"},
+            {"@type": "AdministrativeArea", "name": "Indian River County, Florida"},
+        ],
+        "sameAs": [f"{SITE_URL}"]
+    }
+    _head   = _page_head(
+        "Treasure Coast Today | Local News for Martin, St. Lucie & Indian River County",
+        "Local news for the Treasure Coast — Martin County, Port St. Lucie, Fort Pierce, Stuart, Vero Beach, Jensen Beach and surrounding communities. Updated 4 times daily.",
+        structured_data=_structured_data
+    )
     _footer = _page_footer()
 
     return f"""<!DOCTYPE html>
@@ -1011,25 +1043,35 @@ def write_data_json(all_categories, top_cat):
     print("  data.json written")
 
 
-def _page_head(title, description, canonical_path=""):
+def _page_head(title, description, canonical_path="", structured_data=None):
     """Shared HTML head used by every generated page."""
     canonical = f"{SITE_URL}{canonical_path}" if canonical_path else SITE_URL
+    schema = ""
+    if structured_data:
+        import json as _json
+        schema = f'  <script type="application/ld+json">{_json.dumps(structured_data)}</script>'
     return f"""  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
   <meta name="description" content="{description}">
+  <link rel="canonical" href="{canonical}">
   <meta property="og:title" content="{title}">
   <meta property="og:description" content="{description}">
   <meta property="og:url" content="{canonical}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Treasure Coast Today">
   <meta property="og:image" content="{SITE_URL}/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="{SITE_URL}/og-image.png">
+  <meta name="geo.region" content="US-FL">
+  <meta name="geo.placename" content="Treasure Coast, Florida">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">"""
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+{schema}"""
 
 
 def _page_header(active=""):
