@@ -29,102 +29,108 @@ CATEGORIES = {
         "label": "Local Government",
         "front_page_cap": 10,
         "feeds": [
-            "https://news.google.com/rss/search?q=martin+county+florida+commission+budget+zoning&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=st+lucie+county+florida+commission+council&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=indian+river+county+florida+commission+council&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=stuart+florida+city+council&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=port+st+lucie+city+council+mayor&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=fort+pierce+city+commission+florida&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=vero+beach+city+council+florida&hl=en-US&gl=US&ceid=US:en",
+            "https://www.wptv.com/news/political.rss",
+            "https://www.wptv.com/news/local-news/investigations.rss",
+            "https://news.google.com/rss/search?q=martin+county+florida+commission+budget+zoning+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=st+lucie+county+florida+commission+council+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=indian+river+county+florida+commission+council+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=stuart+florida+city+council+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=port+st+lucie+city+council+mayor+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=fort+pierce+city+commission+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=vero+beach+city+council+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "crime": {
         "label": "Crime & Safety",
         "front_page_cap": 8,
         "feeds": [
-            "https://news.google.com/rss/search?q=martin+county+florida+crime+arrest+sheriff&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=st+lucie+county+florida+crime+arrest+police&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=indian+river+county+florida+crime+arrest&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=treasure+coast+florida+crime+safety+shooting&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=port+st+lucie+police+arrest+crime&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=fort+pierce+police+crime+florida&hl=en-US&gl=US&ceid=US:en",
+            "https://www.wptv.com/news/local-news.rss",
+            "https://news.google.com/rss/search?q=martin+county+florida+crime+arrest+sheriff+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=st+lucie+county+florida+crime+arrest+police+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=indian+river+county+florida+crime+arrest+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=treasure+coast+florida+crime+safety+shooting+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=port+st+lucie+police+arrest+crime+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=fort+pierce+police+crime+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "business": {
         "label": "Business & Development",
         "front_page_cap": 8,
         "feeds": [
-            "https://news.google.com/rss/search?q=martin+county+florida+business+development+real+estate&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=st+lucie+county+florida+business+jobs+development&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=indian+river+county+florida+business+development&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=treasure+coast+florida+new+business+restaurant+opening&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=port+st+lucie+real+estate+development+construction&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=stuart+florida+business+downtown+development&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=martin+county+florida+business+development+real+estate+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=st+lucie+county+florida+business+jobs+development+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=indian+river+county+florida+business+development+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=treasure+coast+florida+new+business+restaurant+opening+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=port+st+lucie+real+estate+development+construction+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=stuart+florida+business+downtown+development+when:2d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "schools": {
         "label": "Schools",
         "front_page_cap": 7,
         "feeds": [
-            "https://news.google.com/rss/search?q=martin+county+school+district+florida&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=st+lucie+county+school+district+florida&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=indian+river+county+school+district+florida&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=treasure+coast+florida+school+education&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=martin+county+school+district+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=st+lucie+county+school+district+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=indian+river+county+school+district+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=treasure+coast+florida+school+education+when:3d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "sports": {
         "label": "Sports",
         "front_page_cap": 6,
         "feeds": [
-            "https://news.google.com/rss/search?q=martin+county+florida+high+school+sports&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=st+lucie+county+florida+sports+high+school&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=treasure+coast+florida+sports&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=st+lucie+mets+florida&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=vero+beach+dodgers+sports+florida&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=jensen+beach+south+fork+martin+county+sports&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=martin+county+florida+high+school+sports+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=st+lucie+county+florida+sports+high+school+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=treasure+coast+florida+sports+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=st+lucie+mets+florida+when:7d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=vero+beach+dodgers+sports+florida+when:7d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=jensen+beach+south+fork+martin+county+sports+when:7d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "things_to_do": {
         "label": "Things To Do",
         "front_page_cap": 5,
         "feeds": [
-            "https://news.google.com/rss/search?q=treasure+coast+florida+events+festival+weekend&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=stuart+florida+events+arts+culture&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=port+st+lucie+events+parks+recreation&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=vero+beach+florida+events+arts+beach&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=martin+county+florida+nature+environment+beach&hl=en-US&gl=US&ceid=US:en",
+            "https://www.wptv.com/news/good-news.rss",
+            "https://www.wptv.com/lifestyle/taste-and-see.rss",
+            "https://news.google.com/rss/search?q=treasure+coast+florida+events+festival+weekend+when:7d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=stuart+florida+events+arts+culture+when:7d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=port+st+lucie+events+parks+recreation+when:7d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=vero+beach+florida+events+arts+beach+when:7d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "martin": {
         "label": "Martin County",
         "front_page_hero": False,
         "feeds": [
-            "https://news.google.com/rss/search?q=martin+county+florida&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=stuart+florida+news&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=jensen+beach+florida+news&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=palm+city+florida+news&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=hobe+sound+florida+news&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=port+salerno+florida+news&hl=en-US&gl=US&ceid=US:en",
+            "https://www.wptv.com/news/region-martin-county.rss",
+            "https://news.google.com/rss/search?q=martin+county+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=stuart+florida+news+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=jensen+beach+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=palm+city+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=hobe+sound+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "st_lucie": {
         "label": "St. Lucie County",
         "front_page_hero": False,
         "feeds": [
-            "https://news.google.com/rss/search?q=st+lucie+county+florida&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=port+st+lucie+florida+news&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=fort+pierce+florida+news&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=st+lucie+west+florida+news&hl=en-US&gl=US&ceid=US:en",
+            "https://www.wptv.com/news/region-st-lucie-county.rss",
+            "https://news.google.com/rss/search?q=st+lucie+county+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=port+st+lucie+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=fort+pierce+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=st+lucie+west+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "indian_river": {
         "label": "Indian River County",
         "front_page_hero": False,
         "feeds": [
-            "https://news.google.com/rss/search?q=indian+river+county+florida&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=vero+beach+florida+news&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=sebastian+florida+news&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=fellsmere+florida+news&hl=en-US&gl=US&ceid=US:en",
+            "https://www.wptv.com/news/region-indian-river-county.rss",
+            "https://news.google.com/rss/search?q=indian+river+county+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=vero+beach+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=sebastian+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=fellsmere+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
 }
@@ -137,14 +143,16 @@ client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
 # Image sources — local Florida outlets + broad aggregators
 IMAGE_BANK_FEEDS = [
-    "https://news.google.com/rss/search?q=treasure+coast+florida&hl=en-US&gl=US&ceid=US:en",
-    "https://news.google.com/rss/search?q=martin+county+florida&hl=en-US&gl=US&ceid=US:en",
-    "https://news.google.com/rss/search?q=port+st+lucie+florida&hl=en-US&gl=US&ceid=US:en",
-    "https://news.google.com/rss/search?q=vero+beach+florida&hl=en-US&gl=US&ceid=US:en",
-    "https://news.google.com/rss/search?q=florida+news&hl=en-US&gl=US&ceid=US:en",
-    "https://feeds.bbci.co.uk/news/us-and-canada/rss.xml",
-    "https://feeds.npr.org/1001/rss.xml",
-    "https://news.yahoo.com/rss",
+    "https://www.wptv.com/news/local-news.rss",
+    "https://www.wptv.com/news/region-martin-county.rss",
+    "https://www.wptv.com/news/region-st-lucie-county.rss",
+    "https://www.wptv.com/news/region-indian-river-county.rss",
+    "https://www.wptv.com/news/good-news.rss",
+    "https://news.google.com/rss/search?q=treasure+coast+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=martin+county+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=port+st+lucie+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=vero+beach+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=florida+news+when:1d&hl=en-US&gl=US&ceid=US:en",
 ]
 
 FEED_PUBLISHER_MAP = {
@@ -366,16 +374,21 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
                 })
         except Exception as e:
             pass
-    # Filter < 48 hours
+    # Filter to 48 hours — REJECT stories with missing/unparseable dates
+    # (Google News search queries often return old articles; bad dates = old content)
     from email.utils import parsedate_to_datetime
     from datetime import timezone
     now_utc = datetime.now(timezone.utc)
     def is_fresh(h):
+        pub = h.get("published", "").strip()
+        if not pub:
+            return False  # No date = reject (don't assume fresh)
         try:
-            dt = parsedate_to_datetime(h["published"]).astimezone(timezone.utc)
-            return (now_utc - dt).total_seconds() / 3600 <= 48
+            dt = parsedate_to_datetime(pub).astimezone(timezone.utc)
+            age_hours = (now_utc - dt).total_seconds() / 3600
+            return age_hours <= 48
         except Exception:
-            return True
+            return False  # Unparseable date = reject
     fresh = [h for h in headlines if is_fresh(h)]
     result = fresh if len(fresh) >= 1 else headlines
     return result[:limit]
@@ -664,49 +677,44 @@ def promote_duplicate_heroes(top_cat, all_categories):
 
 def render_index(all_categories, top_cat):
     from datetime import timezone
-    ts = now_et()
 
+    # Build nav buttons — matches Plain's structure exactly (inside header-inner)
     nav_buttons = '\n        '.join(
         f'<button class="cat-btn{"  active" if i==0 else ""}" data-cat="{"all" if i==0 else cat["category_key"]}">'
         f'{"Top News" if i==0 else cat["category_label"]}</button>'
         for i, cat in enumerate([None] + all_categories)
     )
 
-    hero      = top_cat["hero"]
-    hero_body = make_paragraphs(hero.get("body",""))
-    hero_img  = f'<img src="{hero["image_url"]}" alt="" class="hero-img" loading="eager">' if hero.get("image_url") else ""
-    hero_credit = f'<span class="img-credit">Photo: {hero["image_credit"]}</span>' if hero.get("image_credit") else ""
-
     # Build card grid
     cards_html = ""
-    support_card = f"""
+    support_card = """
       <div class="article-card support-card fade-in" data-cat="all" data-support-card="true">
         <div class="support-inner">
           <div class="support-logo">tct</div>
           <p class="support-text">Treasure Coast Today is free and local. If it's worth something to you, consider supporting it.</p>
-          <a href="https://buymeacoffee.com" target="_blank" class="support-card-btn">Support &#9829;</a>
+          <a href="https://buymeacoffee.com/andrewdobrow" target="_blank" class="support-card-btn">Support &#9829;</a>
         </div>
       </div>"""
 
     all_cards_pool = []
     for cat in all_categories:
-        for card in cat.get("cards",[]):
+        for card in cat.get("cards", []):
             card["cat_label"] = cat["category_label"]
             card["cat_key"]   = cat["category_key"]
             all_cards_pool.append(card)
 
-    all_cards_pool.sort(key=lambda c: int(c.get("urgency_score",0) or 0), reverse=True)
-    topnews = global_rank(all_cards_pool, dedupe_against=top_cat["hero"].get("headline",""))
+    all_cards_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
+    topnews     = global_rank(all_cards_pool, dedupe_against=top_cat["hero"].get("headline", ""))
     topnews_ids = {id(c) for c in topnews}
-    remaining = [c for c in all_cards_pool if id(c) not in topnews_ids]
+    remaining   = [c for c in all_cards_pool if id(c) not in topnews_ids]
     all_cards_display = topnews + remaining
 
     for i, card in enumerate(all_cards_display):
-        ck       = card.get("cat_key","all")
-        cl       = card.get("cat_label","")
-        teaser   = card.get("teaser","") or ""
-        card_time = card.get("published","")
-        body_html = make_paragraphs(card.get("body",""))
+        ck        = card.get("cat_key", "all")
+        cl        = card.get("cat_label", "")
+        teaser    = card.get("teaser", "") or ""
+        card_time = card.get("published", "")
+        body_html = make_paragraphs(card.get("body", ""))
         topnews_attr = ' data-topnews="true"' if id(card) in topnews_ids else ""
         if i == 2:
             cards_html += support_card
@@ -728,18 +736,18 @@ def render_index(all_categories, top_cat):
     # Category hero sections
     heroes_html = ""
     for cat in all_categories:
-        h     = cat["hero"]
-        hbody = make_paragraphs(h.get("body",""))
-        himg  = f'<img src="{h["image_url"]}" alt="" class="hero-img" loading="lazy">' if h.get("image_url") else ""
+        h      = cat["hero"]
+        hbody  = make_paragraphs(h.get("body", ""))
+        himg   = f'<img src="{h["image_url"]}" alt="" class="hero-img" loading="lazy">' if h.get("image_url") else ""
         hcredit = f'<span class="img-credit">Photo: {h["image_credit"]}</span>' if h.get("image_credit") else ""
-        vis   = "style=\"display:none\"" if cat["category_key"] != top_cat["category_key"] else ""
+        hidden = ' style="display:none"' if cat["category_key"] != "all" else ""
         heroes_html += f"""
-    <div class="hero cat-hero" data-cat-hero="{cat["category_key"]}" {vis}>
+    <div class="hero cat-hero" data-cat-hero="{cat["category_key"]}"{hidden}>
       <div class="hero-inner">
         <div class="hero-text">
           <span class="hero-tag">{cat["category_label"]}</span>
           <h1 class="hero-headline">{h["headline"]}</h1>
-          <p class="hero-time">{h.get("published","")}</p>
+          <p class="hero-time">{h.get("published", "")}</p>
           <div class="hero-body">{hbody[:800]}</div>
           <button class="expand-btn hero-expand" onclick="toggleExpand(this)">Continue reading &darr;</button>
           <div class="article-expand">
@@ -748,6 +756,29 @@ def render_index(all_categories, top_cat):
           </div>
         </div>
         <div class="hero-media">{himg}{hcredit}</div>
+      </div>
+    </div>"""
+
+    # Top News hero (front page)
+    fp_hero   = top_cat["hero"]
+    fp_body   = make_paragraphs(fp_hero.get("body", ""))
+    fp_img    = f'<img src="{fp_hero["image_url"]}" alt="" class="hero-img" loading="eager">' if fp_hero.get("image_url") else ""
+    fp_credit = f'<span class="img-credit">Photo: {fp_hero["image_credit"]}</span>' if fp_hero.get("image_credit") else ""
+    top_news_hero = f"""
+    <div class="hero cat-hero" data-cat-hero="all">
+      <div class="hero-inner">
+        <div class="hero-text">
+          <span class="hero-tag">{top_cat["category_label"]}</span>
+          <h1 class="hero-headline">{fp_hero["headline"]}</h1>
+          <p class="hero-time">{fp_hero.get("published", "")}</p>
+          <div class="hero-body">{fp_body[:800]}</div>
+          <button class="expand-btn hero-expand" onclick="toggleExpand(this)">Continue reading &darr;</button>
+          <div class="article-expand">
+            <div class="card-expand-body">{fp_body}</div>
+            <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
+          </div>
+        </div>
+        <div class="hero-media">{fp_img}{fp_credit}</div>
       </div>
     </div>"""
 
@@ -766,23 +797,22 @@ def render_index(all_categories, top_cat):
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header class="site-header">
+  <header>
     <div class="header-inner">
       <a href="/" class="wordmark">Treasure Coast Today</a>
-      <div class="header-meta">
-        <span class="updated-time">Updated {ts}</span>
-        <span class="countdown-wrap">Next update in <span id="countdown">--</span></span>
+      <nav class="category-nav">
+        {nav_buttons}
+        <a href="events.html" class="cat-btn" style="text-decoration:none">Events</a>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
+        <button class="support-btn" onclick="window.open('https://buymeacoffee.com/andrewdobrow','_blank')">Support TCT</button>
       </div>
     </div>
   </header>
 
-  <nav class="cat-nav">
-    <div class="nav-inner">
-      {nav_buttons}
-    </div>
-  </nav>
-
   <main>
+    {top_news_hero}
     {heroes_html}
 
     <section class="card-grid" id="card-grid">
@@ -797,6 +827,7 @@ def render_index(all_categories, top_cat):
       <span class="footer-tagline">Local news for Martin, St. Lucie &amp; Indian River counties.</span>
       <div class="footer-links">
         <a href="about.html">About</a>
+        <a href="events.html">Events</a>
         <a href="privacy.html">Privacy</a>
         <a href="mailto:hello@treasurecoast.today">Contact</a>
       </div>
@@ -806,8 +837,6 @@ def render_index(all_categories, top_cat):
   <script src="main.js"></script>
 </body>
 </html>"""
-
-# -- DATA.JSON FOR APP --
 
 def write_data_json(all_categories, top_cat):
     def card_to_dict(c):
@@ -869,6 +898,172 @@ def write_data_json(all_categories, top_cat):
     print("  data.json written")
 
 # -- MAIN --
+
+def fetch_eventbrite_events():
+    """Fetch upcoming local events from Eventbrite API. Returns list of event dicts."""
+    api_key = os.environ.get("EKXCFPOIO7WXXEZQMB3J", "")
+    if not api_key:
+        print("  Eventbrite: no API key, skipping events page")
+        return []
+    try:
+        # Search for events in the Treasure Coast area
+        # lat/lng center point between Stuart and Port St. Lucie
+        params = {
+            "token":          api_key,
+            "location.latitude":  27.1975,
+            "location.longitude": -80.2520,
+            "location.within":    "30mi",
+            "expand":             "venue,logo",
+            "sort_by":            "date",
+            "start_date.range_start": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        }
+        resp = requests.get(
+            "https://www.eventbriteapi.com/v3/events/search/",
+            params=params, timeout=15
+        )
+        if resp.status_code != 200:
+            print(f"  Eventbrite API error: {resp.status_code}")
+            return []
+        data = resp.json()
+        events = []
+        for e in data.get("events", [])[:30]:
+            venue    = e.get("venue") or {}
+            logo     = e.get("logo") or {}
+            name     = (e.get("name") or {}).get("text", "")
+            desc     = (e.get("description") or {}).get("text", "")[:300]
+            start    = (e.get("start") or {}).get("local", "")
+            url      = e.get("url", "")
+            city     = venue.get("city", "")
+            address  = (venue.get("address") or {}).get("localized_address_display", "")
+            img      = logo.get("url", "") or logo.get("original", {}).get("url", "")
+            is_free  = e.get("is_free", False)
+            # Parse date for display
+            try:
+                from datetime import datetime as dt
+                d = dt.strptime(start[:16], "%Y-%m-%dT%H:%M")
+                date_display = d.strftime("%a, %b %-d")
+                time_display = d.strftime("%-I:%M %p")
+            except Exception:
+                date_display = start[:10]
+                time_display = ""
+            events.append({
+                "name":         name,
+                "description":  desc,
+                "date":         date_display,
+                "time":         time_display,
+                "city":         city,
+                "address":      address,
+                "url":          url,
+                "image":        img,
+                "is_free":      is_free,
+            })
+        print(f"  Eventbrite: {len(events)} events fetched")
+        return events
+    except Exception as e:
+        print(f"  Eventbrite fetch failed: {e}")
+        return []
+
+
+def render_events_page(events):
+    """Generate a standalone events.html page."""
+    ts = now_et()
+
+    if not events:
+        events_html = '<p class="no-events">No upcoming events found. Check back soon.</p>'
+    else:
+        events_html = ""
+        for ev in events:
+            img_html  = f'<img src="{ev["image"]}" alt="" class="event-img" loading="lazy">' if ev.get("image") else '<div class="event-img-placeholder"></div>'
+            free_badge = '<span class="event-free">Free</span>' if ev.get("is_free") else ""
+            city_str  = f' &middot; {ev["city"]}' if ev.get("city") else ""
+            time_str  = f' at {ev["time"]}' if ev.get("time") else ""
+            events_html += f"""
+    <a href="{ev['url']}" target="_blank" rel="noopener" class="event-card">
+      <div class="event-img-wrap">{img_html}</div>
+      <div class="event-info">
+        <div class="event-date-row">
+          <span class="event-date">{ev['date']}{time_str}</span>
+          {free_badge}
+        </div>
+        <h2 class="event-name">{ev['name']}</h2>
+        <p class="event-location">{ev.get('address','') or ev.get('city','')}{city_str}</p>
+        <p class="event-desc">{ev.get('description','')}</p>
+      </div>
+    </a>"""
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events — Treasure Coast Today</title>
+  <meta name="description" content="Upcoming events on the Treasure Coast — Martin, St. Lucie, and Indian River counties.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    .events-header {{ max-width: 900px; margin: 40px auto 8px; padding: 0 24px; }}
+    .events-header h1 {{ font-family: 'Fraunces', serif; font-size: 32px; color: var(--text); margin: 0 0 4px; }}
+    .events-header p {{ color: var(--text-sub); font-size: 14px; margin: 0 0 32px; }}
+    .events-grid {{ max-width: 900px; margin: 0 auto; padding: 0 24px 64px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }}
+    .event-card {{ background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: box-shadow .15s; }}
+    .event-card:hover {{ box-shadow: 0 4px 20px rgba(0,0,0,.12); }}
+    .event-img-wrap {{ height: 160px; overflow: hidden; background: var(--border); }}
+    .event-img {{ width: 100%; height: 100%; object-fit: cover; }}
+    .event-img-placeholder {{ width: 100%; height: 100%; background: var(--border); }}
+    .event-info {{ padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 6px; }}
+    .event-date-row {{ display: flex; align-items: center; gap: 8px; }}
+    .event-date {{ font-size: 12px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .5px; }}
+    .event-free {{ font-size: 11px; background: var(--accent); color: white; padding: 2px 7px; border-radius: 20px; font-weight: 600; }}
+    .event-name {{ font-size: 16px; font-weight: 600; color: var(--text); line-height: 1.35; margin: 0; }}
+    .event-location {{ font-size: 12px; color: var(--text-sub); margin: 0; }}
+    .event-desc {{ font-size: 13px; color: var(--text-sub); line-height: 1.5; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }}
+    .no-events {{ text-align: center; color: var(--text-sub); padding: 64px 24px; font-size: 16px; }}
+    @media(max-width:600px) {{ .events-grid {{ grid-template-columns: 1fr; }} }}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <a href="/" class="wordmark">Treasure Coast Today</a>
+      <nav class="category-nav">
+        <a href="/" class="cat-btn" style="text-decoration:none">News</a>
+        <span class="cat-btn active">Events</span>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
+        <button class="support-btn" onclick="window.open('https://buymeacoffee.com/andrewdobrow','_blank')">Support TCT</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="events-header">
+      <h1>Upcoming Events</h1>
+      <p>Things to do across Martin, St. Lucie &amp; Indian River counties &middot; Updated {ts}</p>
+    </div>
+    <div class="events-grid">
+      {events_html}
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-wordmark">Treasure Coast Today</span>
+      <span class="footer-tagline">Local news for Martin, St. Lucie &amp; Indian River counties.</span>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="events.html">Events</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="mailto:hello@treasurecoast.today">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>"""
+
 
 def main():
     print("Treasure Coast Today — building site...")
@@ -936,7 +1131,13 @@ def main():
     index_html = render_index(all_categories, top_cat)
     (OUTPUT_DIR / "index.html").write_text(index_html, encoding="utf-8")
     write_data_json(all_categories, top_cat)
-    print(f"Done. {len(all_categories)} categories written.")
+
+    # Events page
+    print("Fetching Eventbrite events...")
+    events = fetch_eventbrite_events()
+    events_html = render_events_page(events)
+    (OUTPUT_DIR / "events.html").write_text(events_html, encoding="utf-8")
+    print(f"Done. {len(all_categories)} categories, {len(events)} events written.")
 
 if __name__ == "__main__":
     main()
