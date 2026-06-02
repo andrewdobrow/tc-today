@@ -901,7 +901,7 @@ def write_data_json(all_categories, top_cat):
 
 def fetch_eventbrite_events():
     """Fetch upcoming local events from Eventbrite API. Returns list of event dicts."""
-    api_key = os.environ.get("EKXCFPOIO7WXXEZQMB3J", "")
+    api_key = os.environ.get("EVENTBRITE_API_KEY", "")
     if not api_key:
         print("  Eventbrite: no API key, skipping events page")
         return []
