@@ -985,6 +985,69 @@ def render_events_page(events):
 </html>"""
 
 
+def write_data_json(all_categories, top_cat):
+    def card_to_dict(c):
+        return {
+            "headline":      c.get("headline", ""),
+            "teaser":        c.get("teaser", ""),
+            "body":          c.get("body", ""),
+            "published":     c.get("published", ""),
+            "cat_label":     c.get("cat_label", "") or c.get("category_label", ""),
+            "urgency_score": c.get("urgency_score", 0),
+            "image_url":     c.get("image_url", ""),
+        }
+
+    # Build front page cards pool
+    _all = []
+    for cat in all_categories:
+        hero = cat["hero"]
+        _all.append({**hero, "cat_label": cat["category_label"], "is_hero": True})
+        for card in cat.get("cards", []):
+            _all.append({**card, "cat_label": cat["category_label"], "is_hero": False})
+    _all.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
+
+    _fp_headline = top_cat["hero"].get("headline", "")
+    _seen = set()
+    _deduped = []
+    for c in _all:
+        h   = c.get("headline", "")
+        key = re.sub(r"[^a-z0-9 ]", "", h.lower())[:60]
+        fp_key = re.sub(r"[^a-z0-9 ]", "", _fp_headline.lower())[:60]
+        if key != fp_key and key not in _seen:
+            _seen.add(key)
+            _deduped.append(c)
+
+    app_data = {
+        "updated": now_et(),
+        "front_page": {
+            "hero": {
+                "headline":      top_cat["hero"].get("headline", ""),
+                "teaser":        top_cat["hero"].get("teaser", ""),
+                "body":          top_cat["hero"].get("body", ""),
+                "image_url":     top_cat["hero"].get("image_url", ""),
+                "image_credit":  top_cat["hero"].get("image_credit", ""),
+                "published":     top_cat["hero"].get("published", ""),
+                "cat_label":     top_cat["category_label"],
+                "urgency_score": top_cat["hero"].get("urgency_score", 0),
+            },
+            "cards": [card_to_dict(c) for c in _deduped[:6]],
+        },
+        "categories": [
+            {
+                "key":   cat["category_key"],
+                "label": cat["category_label"],
+                "hero":  card_to_dict(cat["hero"]),
+                "cards": [card_to_dict(c) for c in cat.get("cards", [])[:6]],
+            }
+            for cat in all_categories
+        ],
+    }
+    (OUTPUT_DIR / "data.json").write_text(
+        json.dumps(app_data, indent=2), encoding="utf-8"
+    )
+    print("  data.json written")
+
+
 def main():
     print("Treasure Coast Today — building site...")
     image_bank = build_image_bank()
