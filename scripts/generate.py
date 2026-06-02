@@ -584,13 +584,10 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
     fresh = [h for h in headlines if is_fresh(h)]
     result = fresh if len(fresh) >= 1 else headlines
     result = result[:limit]
-    # Fetch fuller article text for top headlines only — not all 12, since
-    # fetching every entry is the main cause of long run times. The top 7 are
-    # the ones most likely to become the hero or a card.
-    for h in result[:7]:
-        full = fetch_article_text(h.get("link", ""))
-        if full and len(full) > len(h.get("summary", "")):
-            h["article_text"] = full
+    # Note: article text fetching via HTTP is disabled — it adds significant
+    # run time (up to 70 fetches × 5s timeout = 350s worst case) and provides
+    # minimal benefit since WPTV's full content is already in the RSS content
+    # field (captured above), and Google News URLs are skipped anyway.
     return result
 
 # -- CATEGORY CONTENT GENERATION --
