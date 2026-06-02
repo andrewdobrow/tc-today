@@ -888,15 +888,17 @@ def render_index(all_categories, top_cat):
     <div class="header-inner">
       <div class="header-top">
         <a href="/" class="wordmark">Treasure Coast Today</a>
-        <div class="header-actions">
-          <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
-        </div>
       </div>
+
       <nav class="category-nav">
         {nav_buttons}
         <a href="events.html" class="cat-btn" style="text-decoration:none">Events</a>
         <a href="about.html" class="cat-btn" style="text-decoration:none">About</a>
       </nav>
+
+      <div class="header-actions">
+        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
+      </div>
     </div>
   </header>
 
@@ -1082,10 +1084,8 @@ def _page_header(active=""):
     <div class="header-inner">
       <div class="header-top">
         <a href="/" class="wordmark">Treasure Coast Today</a>
-        <div class="header-actions">
-          <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
-        </div>
       </div>
+
       <nav class="category-nav">
         {cat_link("Top News", "/", "news")}
         {cat_link("Local Gov", "/?cat=local_gov", "local_gov")}
@@ -1101,6 +1101,10 @@ def _page_header(active=""):
         {cat_link("Events", "events.html", "events")}
         {cat_link("About", "about.html", "about")}
       </nav>
+
+      <div class="header-actions">
+        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
+      </div>
     </div>
   </header>"""
 
