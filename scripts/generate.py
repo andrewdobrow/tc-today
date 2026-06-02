@@ -252,10 +252,12 @@ _pexels_used = set()
 def fetch_pexels_image(category_key):
     """Last-resort image: pull a relevant, license-free stock photo from Pexels
     so no hero is ever imageless. Returns (image_url, credit) or ("", "")."""
-    api_key = os.environ.get("PEXELS_API_KEY", "")
+    api_key = os.environ.get("PEXELS_API_KEY", "qeDQdH5sqDXv44pAj80ePVC4XdPohwgOM2xczaCgDdLUD5DJbFHOZxYF")
     if not api_key:
+        print(f"  Pexels: no API key")
         return "", ""
     query = PEXELS_QUERY_MAP.get(category_key, PEXELS_QUERY_MAP["all"])
+    print(f"  Pexels query: '{query}'")
     try:
         resp = requests.get(
             "https://api.pexels.com/v1/search",
@@ -263,7 +265,9 @@ def fetch_pexels_image(category_key):
             headers={"Authorization": api_key},
             timeout=10,
         )
+        print(f"  Pexels status: {resp.status_code}")
         if resp.status_code != 200:
+            print(f"  Pexels error: {resp.text[:200]}")
             return "", ""
         photos = resp.json().get("photos", [])
         for p in photos:
@@ -1559,7 +1563,9 @@ def main():
 
         # Final fallback: license-free Pexels stock image so no hero is ever imageless
         if not img:
+            print(f"  Trying Pexels for {cat_key}...")
             px_img, px_credit = fetch_pexels_image(cat_key)
+            print(f"  Pexels result: {'found' if px_img else 'empty'}")
             if px_img:
                 img = px_img
                 image_credit = px_credit
