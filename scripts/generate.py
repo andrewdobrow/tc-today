@@ -764,9 +764,10 @@ def render_index(all_categories, top_cat):
 
     support_card = """
       <div class="article-card support-card fade-in" data-cat="all" data-support-card="true">
-        <div class="support-inner">
-          <div class="support-logo">tct</div>
-          <p class="support-text">Reach thousands of Treasure Coast readers every day. Advertise with Treasure Coast Today.</p>
+        <span class="card-tag support-card-tag">Advertise</span>
+        <h2 class="card-headline support-card-headline">Reach Treasure Coast readers every day.</h2>
+        <p class="card-summary">Your business alongside local news for Martin, St. Lucie &amp; Indian River counties. No algorithms. Just local readers.</p>
+        <div class="card-foot">
           <a href="advertise.html" class="support-card-btn">Get in touch &rarr;</a>
         </div>
       </div>"""
@@ -1248,7 +1249,7 @@ def render_advertise_page():
       </div>
       <hr class="adv-divider">
       <h2 class="adv-form-title">Tell us about your business</h2>
-      <form class="adv-form" id="advForm" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+      <form class="adv-form" id="advForm" action="https://formspree.io/f/mqejrpdv" method="POST">
         <div class="adv-row">
           <div class="adv-field"><label for="name">Your name *</label><input type="text" id="name" name="name" required placeholder="Jane Smith"></div>
           <div class="adv-field"><label for="business">Business name *</label><input type="text" id="business" name="business" required placeholder="Sunrise Realty"></div>
