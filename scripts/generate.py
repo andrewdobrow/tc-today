@@ -225,9 +225,15 @@ def build_image_bank():
             feed = feedparser.parse(url)
             for entry in feed.entries[:60]:
                 img = extract_image(entry)
+                # If RSS has no image, fetch og:image from the article page
+                # Skip Google News redirect URLs — they won't resolve correctly
+                if not img:
+                    link = entry.get("link", "") or getattr(entry, "link", "")
+                    if link and "news.google.com" not in link:
+                        img = fetch_og_image(link)
                 if img:
                     bank.append({
-                        "title":     entry.get("title",""),
+                        "title":     entry.get("title", ""),
                         "image_url": img,
                         "source":    url,
                     })
@@ -268,7 +274,7 @@ def match_image(headline, image_bank, cat_key=None):
 def fetch_og_image(url):
     if not url: return ""
     try:
-        resp = requests.get(url, timeout=10, headers={"User-Agent":"Mozilla/5.0 PlainBot/1.0"})
+        resp = requests.get(url, timeout=12, allow_redirects=True, headers={"User-Agent":"Mozilla/5.0 (compatible; TCTBot/1.0)"})
         if resp.status_code != 200: return ""
         html = resp.text[:200000]
         patterns = [
@@ -688,12 +694,18 @@ def promote_duplicate_heroes(top_cat, all_categories):
 
 def render_index(all_categories, top_cat):
 
-    # County categories get a prominent SEO-friendly section label above their hero
+    # All categories get a section label — counties get "X County News", topics get "Treasure Coast X News"
     COUNTY_KEYS = {"martin", "st_lucie", "indian_river"}
-    COUNTY_SEO_LABELS = {
+    SECTION_LABELS = {
         "martin":       "Martin County News",
         "st_lucie":     "St. Lucie County News",
         "indian_river": "Indian River County News",
+        "local_gov":    "Treasure Coast Local Government News",
+        "crime":        "Treasure Coast Crime & Safety News",
+        "business":     "Treasure Coast Business News",
+        "schools":      "Treasure Coast Schools News",
+        "sports":       "Treasure Coast Sports News",
+        "things_to_do": "Things To Do on the Treasure Coast",
     }
 
     def hero_section(cat_key, cat_label, hero, visible=False):
@@ -706,11 +718,12 @@ def render_index(all_categories, top_cat):
         pub_time    = hero.get("published", "")
         display     = "" if visible else ' style="display:none"'
         fade        = " fade-in" if visible else ""
-        # County sections get a prominent Fraunces section label for SEO and readability
+        # Section label for SEO — all categories except Top News get one
         section_label = ""
-        if cat_key in COUNTY_KEYS:
-            seo_text = COUNTY_SEO_LABELS[cat_key]
-            section_label = f'<div class="county-section-label"><h2 class="county-label-text">{seo_text}</h2></div>'
+        if cat_key in SECTION_LABELS:
+            seo_text  = SECTION_LABELS[cat_key]
+            label_cls = "county-section-label" if cat_key in COUNTY_KEYS else "topic-section-label"
+            section_label = f'<div class="{label_cls}"><h2 class="county-label-text">{seo_text}</h2></div>'
         return f"""
     <section class="hero{fade}" data-cat-hero="{cat_key}"{display}>
       {section_label}
@@ -851,23 +864,24 @@ def fetch_eventbrite_events():
         print("  Eventbrite: no API key, skipping events page")
         return []
     try:
-        # Search for events in the Treasure Coast area
-        # lat/lng center point between Stuart and Port St. Lucie
         params = {
-            "token":          api_key,
-            "location.latitude":  27.1975,
-            "location.longitude": -80.2520,
-            "location.within":    "30mi",
-            "expand":             "venue,logo",
-            "sort_by":            "date",
+            "location.latitude":      27.1975,
+            "location.longitude":    -80.2520,
+            "location.within":        "30mi",
+            "expand":                 "venue,logo",
+            "sort_by":                "date",
             "start_date.range_start": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        }
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Accept":        "application/json",
         }
         resp = requests.get(
             "https://www.eventbriteapi.com/v3/events/search/",
-            params=params, timeout=15
+            params=params, headers=headers, timeout=15
         )
         if resp.status_code != 200:
-            print(f"  Eventbrite API error: {resp.status_code}")
+            print(f"  Eventbrite API error: {resp.status_code} — {resp.text[:300]}")
             return []
         data = resp.json()
         events = []
@@ -1075,18 +1089,28 @@ def _page_head(title, description, canonical_path="", structured_data=None):
 
 
 def _page_header(active=""):
-    """Shared site header used by every generated page."""
-    def nav_link(label, href, key):
+    """Shared site header used by every generated page — full category nav always visible."""
+    def cat_link(label, href, key):
+        cls = "cat-btn active" if key == active else "cat-btn"
         if key == active:
-            return f'<span class="cat-btn active">{label}</span>'
-        return f'<a href="{href}" class="cat-btn" style="text-decoration:none">{label}</a>'
+            return f'<span class="{cls}">{label}</span>'
+        return f'<a href="{href}" class="{cls}" style="text-decoration:none">{label}</a>'
     return f"""  <header>
     <div class="header-inner">
       <a href="/" class="wordmark">Treasure Coast Today</a>
       <nav class="category-nav">
-        {nav_link("News", "/", "news")}
-        {nav_link("Events", "events.html", "events")}
-        {nav_link("About", "about.html", "about")}
+        {cat_link("Top News", "/", "news")}
+        {cat_link("Local Gov", "/?cat=local_gov", "local_gov")}
+        {cat_link("Crime", "/?cat=crime", "crime")}
+        {cat_link("Business", "/?cat=business", "business")}
+        {cat_link("Schools", "/?cat=schools", "schools")}
+        {cat_link("Sports", "/?cat=sports", "sports")}
+        {cat_link("Things To Do", "/?cat=things_to_do", "things_to_do")}
+        {cat_link("Martin Co.", "/?cat=martin", "martin")}
+        {cat_link("St. Lucie Co.", "/?cat=st_lucie", "st_lucie")}
+        {cat_link("Indian River Co.", "/?cat=indian_river", "indian_river")}
+        {cat_link("Events", "events.html", "events")}
+        {cat_link("About", "about.html", "about")}
       </nav>
       <div class="header-actions">
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
