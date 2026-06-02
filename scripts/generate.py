@@ -230,6 +230,57 @@ def extract_image(entry):
         if valid(u): return u
     return ""
 
+# Category-appropriate Pexels search queries — used as a last-resort image so
+# every hero has a clean, relevant, license-free image even when no real photo
+# was found. These are intentionally generic and neutral.
+PEXELS_QUERY_MAP = {
+    "local_gov":    "florida city hall government building",
+    "crime":        "police car lights night",
+    "business":     "florida main street storefront",
+    "schools":      "school classroom students",
+    "sports":       "high school stadium field",
+    "things_to_do": "florida beach palm trees",
+    "florida":      "florida state capitol palm",
+    "martin":       "stuart florida waterfront",
+    "st_lucie":     "port st lucie florida",
+    "indian_river": "vero beach florida coast",
+    "all":          "treasure coast florida aerial",
+}
+
+_pexels_used = set()
+
+def fetch_pexels_image(category_key):
+    """Last-resort image: pull a relevant, license-free stock photo from Pexels
+    so no hero is ever imageless. Returns (image_url, credit) or ("", "")."""
+    api_key = os.environ.get("PEXELS_API_KEY", "")
+    if not api_key:
+        return "", ""
+    query = PEXELS_QUERY_MAP.get(category_key, PEXELS_QUERY_MAP["all"])
+    try:
+        resp = requests.get(
+            "https://api.pexels.com/v1/search",
+            params={"query": query, "per_page": 15, "orientation": "landscape"},
+            headers={"Authorization": api_key},
+            timeout=10,
+        )
+        if resp.status_code != 200:
+            return "", ""
+        photos = resp.json().get("photos", [])
+        for p in photos:
+            img = p.get("src", {}).get("large", "") or p.get("src", {}).get("medium", "")
+            if img and img not in _pexels_used:
+                _pexels_used.add(img)
+                photographer = p.get("photographer", "Pexels")
+                return img, f"{photographer} / Pexels"
+        # If all were used already, just take the first
+        if photos:
+            img = photos[0].get("src", {}).get("large", "")
+            if img:
+                return img, f"{photos[0].get('photographer','Pexels')} / Pexels"
+        return "", ""
+    except Exception:
+        return "", ""
+
 def build_image_bank():
     bank = []
     for url in IMAGE_BANK_FEEDS:
@@ -392,7 +443,16 @@ def extract_publisher_url(entry):
             break
 
     matches = re.findall(r'href=["\'](https?://(?!news\.google)[^"\']+)["\']', html)
-    return matches[0] if matches else link
+    if matches:
+        return matches[0]
+    # Some Google News entries expose the source link in a <source url="..."> element
+    # or via the entry.source attribute
+    src = entry.get("source", "")
+    if isinstance(src, dict):
+        src_url = src.get("href", "") or src.get("url", "")
+        if src_url and "news.google" not in src_url:
+            return src_url
+    return link
 
 def canonical_image_url(url):
     if not url:
@@ -519,9 +579,9 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
 
 # -- CATEGORY CONTENT GENERATION --
 
-LOCAL_SYSTEM_PROMPT = """You write factual local news articles for Treasure Coast Today, covering Martin, St. Lucie, and Indian River counties in Florida. Your readers live here — they care about what's happening in their towns, schools, and county government far more than national news. Always prioritize genuinely local stories over state or national ones. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries. Name specific towns, streets, facilities, and local officials when available. Towns include: Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno, Port St. Lucie, Fort Pierce, Vero Beach, Sebastian, Fellsmere, and surrounding communities."""
+LOCAL_SYSTEM_PROMPT = """You write factual local news articles for Treasure Coast Today, covering Martin, St. Lucie, and Indian River counties in Florida. Your readers live here — they care about what's happening in their towns, schools, and county government far more than national news. Always prioritize genuinely local stories over state or national ones. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries. Name specific towns, streets, facilities, and local officials when available. Towns include: Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno, Port St. Lucie, Fort Pierce, Vero Beach, Sebastian, Fellsmere, and surrounding communities. CRITICAL: Never invent, assume, or embellish facts. Use ONLY what is stated in the provided source text. If the source is brief, write a brief article — a short accurate article is always better than a longer one padded with invented details. Do not guess at names, numbers, dates, quotes, locations, or outcomes that are not explicitly in the source. If you do not know a detail, leave it out."""
 
-FLORIDA_SYSTEM_PROMPT = """You write factual news articles for the Florida section of Treasure Coast Today. Your readers are Treasure Coast residents who want to stay informed about statewide Florida news that affects them as Floridians. This section covers the whole state — legislation, courts, economy, environment, politics, weather, and major events anywhere in Florida. Do NOT artificially narrow to the Treasure Coast; this is the statewide section. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries."""
+FLORIDA_SYSTEM_PROMPT = """You write factual news articles for the Florida section of Treasure Coast Today. Your readers are Treasure Coast residents who want to stay informed about statewide Florida news that affects them as Floridians. This section covers the whole state — legislation, courts, economy, environment, politics, weather, and major events anywhere in Florida. Do NOT artificially narrow to the Treasure Coast; this is the statewide section. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries. CRITICAL: Never invent, assume, or embellish facts. Use ONLY what is stated in the provided source text. If the source is brief, write a brief article — a short accurate article is always better than a longer one padded with invented details. Do not guess at names, numbers, dates, quotes, locations, or outcomes that are not explicitly in the source. If you do not know a detail, leave it out."""
 
 def generate_category_content(category_key, category_label, headlines):
     def sanitize(text):
@@ -553,7 +613,7 @@ Tasks:
 1. Pick the single most important/urgent Florida statewide story. Prioritize stories with broad impact across Florida — major legislation, court rulings, economic news, environmental decisions, significant crimes or disasters anywhere in the state. Do NOT favor Treasure Coast stories here; this is the statewide section.
 2. Write an accurate Florida-focused headline. Name the specific Florida city, region, or institution when relevant.
 3. Write a 380-430 word factual article in FOUR full paragraphs. Cover what happened, who is affected across Florida, and what happens next statewide. Do NOT write only two paragraphs.
-4. For the next {CARDS_PER_CATEGORY} most important Florida stories write a teaser (one to two sentences that summarize the story and entice the reader), a body of THREE full paragraphs (200-250 words) covering what happened, who is affected, and what comes next, and an urgency_score (1-10). Cards MUST be different stories from the hero. Card bodies should be substantial and informative — not a thin summary. Use only confirmed facts and name specific people, places, and institutions.
+4. For the next {CARDS_PER_CATEGORY} most important Florida stories write a teaser (one to two sentences) and a body of two to three paragraphs covering what happened, who is affected, and what comes next. Write as much as the source supports and NO MORE — if a story only has enough for two paragraphs, write two. Never invent details, names, numbers, or quotes to reach a length. Use only confirmed facts from the source. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
 
 URGENCY SCORING for Florida statewide news (1-10):
 - 9-10: Major legislation signed/passed, significant court ruling, statewide emergency or disaster, major economic news affecting all Floridians
@@ -572,12 +632,12 @@ Return ONLY valid JSON:
     "source_index": <number>
   }},
   "cards": [
-    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}
+    {{"headline": "...", "teaser": "...", "body": "two to three paragraphs, only as long as the source supports...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two to three paragraphs, only as long as the source supports...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two to three paragraphs, only as long as the source supports...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two to three paragraphs, only as long as the source supports...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two to three paragraphs, only as long as the source supports...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two to three paragraphs, only as long as the source supports...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}
   ]
 }}"""
     else:
@@ -588,8 +648,8 @@ Return ONLY valid JSON:
 Tasks:
 1. Pick the single most important/urgent story for Treasure Coast Florida residents. LOCAL stories affecting residents directly (county commission decisions, local crime, school district news, local business openings/closings, road/infrastructure, local sports) should be ranked ABOVE national or state stories unless the national story has a very direct local impact (e.g. a hurricane heading toward Martin County, a federal ruling on the Indian River Lagoon). A routine city council vote in Stuart is more relevant to this audience than a national political story.
 2. Write an accurate, locally-framed headline. Name the specific county, city, or town (Stuart, Port St. Lucie, Fort Pierce, Vero Beach, Jensen Beach, Palm City, Hobe Sound, Sebastian, etc.) in the headline when relevant.
-3. Write a 380-430 word factual article in FOUR full paragraphs. Use only confirmed facts. Name specific places, officials, streets, and facilities when available. Cover what happened, who is affected locally, and what happens next for the community. Do NOT write only two paragraphs.
-4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one to two sentences that summarize the story and entice the reader), a body of THREE full paragraphs (200-250 words) covering what happened, who is affected locally, and what comes next for the community, and an urgency_score (1-10). Cards MUST be different stories from the hero. Card bodies should be substantial and informative — not a thin summary. Use only confirmed facts and name specific local people, places, streets, and institutions.
+3. Write a factual article covering what happened, who is affected locally, and what happens next. Aim for three to four paragraphs IF the source contains enough detail to support that length accurately. If the source is thin, write a shorter accurate article instead — never pad with invented or assumed details to reach a length. Use only confirmed facts. Name specific places, officials, and streets ONLY if they appear in the source.
+4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one to two sentences) and a body of two to three paragraphs covering what happened, who is affected locally, and what comes next. Write as much as the source supports and NO MORE — if a story only has enough for two paragraphs, write two. Never invent details, names, numbers, or quotes to reach a length. Use only confirmed facts from the source. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
 
 URGENCY SCORING for local news (1-10):
 - 9-10: Major public safety event, significant government decision directly affecting residents, serious local crime with community impact, natural disaster or emergency
@@ -608,12 +668,12 @@ Return ONLY valid JSON:
     "source_index": <number>
   }},
   "cards": [
-    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}
+    {{"headline": "...", "teaser": "...", "body": "two to three paragraphs, only as long as the source supports...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two to three paragraphs, only as long as the source supports...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two to three paragraphs, only as long as the source supports...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two to three paragraphs, only as long as the source supports...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two to three paragraphs, only as long as the source supports...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two to three paragraphs, only as long as the source supports...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}
   ]
 }}"""
 
@@ -1487,6 +1547,14 @@ def main():
                 image_credit = bank_credit
                 used_bank_images.add(canonical_image_url(bank_img))
                 print(f"  Hero image via strict image-bank match")
+
+        # Final fallback: license-free Pexels stock image so no hero is ever imageless
+        if not img:
+            px_img, px_credit = fetch_pexels_image(cat_key)
+            if px_img:
+                img = px_img
+                image_credit = px_credit
+                print(f"  Hero image via Pexels fallback")
 
         data["hero"]["image_url"]    = img
         data["hero"]["image_credit"] = image_credit
