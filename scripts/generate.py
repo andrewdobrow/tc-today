@@ -13,6 +13,7 @@ import anthropic
 from datetime import datetime
 from collections import defaultdict
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # -- CONFIG --
 
@@ -264,7 +265,7 @@ def fetch_pexels_image(category_key):
             "https://api.pexels.com/v1/search",
             params={"query": query, "per_page": 15, "orientation": "landscape"},
             headers={"Authorization": api_key},
-            timeout=10,
+            timeout=6,
         )
         print(f"  Pexels status: {resp.status_code}")
         if resp.status_code != 200:
@@ -371,7 +372,7 @@ def match_image(headline, image_bank, cat_key=None, used_images=None):
 def fetch_og_image(url):
     if not url: return ""
     try:
-        resp = requests.get(url, timeout=12, allow_redirects=True, headers={"User-Agent":"Mozilla/5.0 (compatible; TCTBot/1.0)"})
+        resp = requests.get(url, timeout=6, allow_redirects=True, headers={"User-Agent":"Mozilla/5.0 (compatible; TCTBot/1.0)"})
         if resp.status_code != 200: return ""
         html = resp.text[:200000]
         patterns = [
@@ -1782,7 +1783,7 @@ def main():
         if not data:
             continue
 
-        # Attach image to hero
+        # Attach source metadata to hero
         hero_headline = data["hero"].get("headline","")
         src_idx       = data["hero"].get("source_index")
         original_title = ""
@@ -1792,62 +1793,75 @@ def main():
             except Exception:
                 pass
 
-        # Conservative hero-image priority:
-        # 1) article RSS image, but only when it did not come from a Google News thumbnail
-        # 2) article's own og:image from the publisher page
-        # 3) strict image-bank match as a last resort
-        # 4) no image if confidence is low
-        img = ""
-        image_credit = ""
-        source_img = data["hero"].get("image_url","")
+        data["_original_title"] = original_title
+        data["_cat_key"]        = cat_key
+        all_categories.append(data)
+        print(f"  Hero: {data['hero']['headline'][:60]}... (urgency: {data['hero'].get('urgency_score')})")
+
+    if not all_categories:
+        print("No categories generated. Aborting.")
+        return
+
+    # Fetch hero images in parallel — much faster than sequential og:image + Pexels calls
+    print("Fetching hero images...")
+
+    def fetch_hero_image(data):
+        cat_key        = data["_cat_key"]
+        hero_headline  = data["hero"].get("headline","")
+        original_title = data.get("_original_title","")
+        source_img     = data["hero"].get("image_url","")
         source_is_google_thumb = data["hero"].get("image_from_google", False)
-        link = data["hero"].get("link","")
+        link           = data["hero"].get("link","")
+        img, image_credit = "", ""
 
         if source_img and not source_is_google_thumb:
-            img = source_img
+            img          = source_img
             image_credit = get_image_credit(link)
 
         if not img and link and "news.google.com" not in link.lower():
             og = fetch_og_image(link)
             if og:
-                img = og
+                img          = og
                 image_credit = get_image_credit(link)
-                print(f"  Hero image via og:image")
 
-        bank_img, bank_credit = ("", "")
         if not img:
-            if original_title:
-                bank_img, bank_credit = match_image(original_title, image_bank, cat_key, used_bank_images)
-            if not bank_img:
-                bank_img, bank_credit = match_image(hero_headline, image_bank, cat_key, used_bank_images)
-            if not bank_img:
-                body_ctx = (original_title or hero_headline) + " " + data["hero"].get("body","")[:250]
-                bank_img, bank_credit = match_image(body_ctx, image_bank, cat_key, used_bank_images)
+            bank_img = bank_credit = ""
+            for query in [original_title, hero_headline,
+                          (original_title or hero_headline) + " " + data["hero"].get("body","")[:250]]:
+                if query:
+                    bank_img, bank_credit = match_image(query, image_bank, cat_key, used_bank_images)
+                if bank_img:
+                    break
             if bank_img:
-                img = bank_img
+                img          = bank_img
                 image_credit = bank_credit
                 used_bank_images.add(canonical_image_url(bank_img))
-                print(f"  Hero image via strict image-bank match")
 
-        # Final fallback: license-free Pexels stock image so no hero is ever imageless
         if not img:
-            print(f"  Trying Pexels for {cat_key}...")
             px_img, px_credit = fetch_pexels_image(cat_key)
-            print(f"  Pexels result: {'found' if px_img else 'empty'}")
             if px_img:
-                img = px_img
+                img          = px_img
                 image_credit = px_credit
-                print(f"  Hero image via Pexels fallback")
 
         data["hero"]["image_url"]    = img
         data["hero"]["image_credit"] = image_credit
+        return data, cat_key, img
 
-        all_categories.append(data)
-        print(f"  Hero: {data['hero']['headline'][:60]}... (urgency: {data['hero'].get('urgency_score')}, image: {'yes' if img else 'no'})")
+    # Run all image fetches concurrently — max 10 workers (one per category)
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        futures = {executor.submit(fetch_hero_image, d): d for d in all_categories}
+        for future in as_completed(futures):
+            try:
+                data, cat_key, img = future.result()
+                print(f"  {cat_key}: image {'yes' if img else 'no'}")
+            except Exception as e:
+                print(f"  Image fetch error: {e}")
 
-    if not all_categories:
-        print("No categories generated. Aborting.")
-        return
+    # Clean up temp keys
+    for data in all_categories:
+        data.pop("_original_title", None)
+        data.pop("_cat_key", None)
+
 
     # Select front page hero
     top_cat = select_front_page_hero(all_categories)
