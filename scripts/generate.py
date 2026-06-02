@@ -886,16 +886,18 @@ def render_index(all_categories, top_cat):
 <body>
   <header>
     <div class="header-inner">
-      <a href="/" class="wordmark">Treasure Coast Today</a>
+      <div class="header-top">
+        <a href="/" class="wordmark">Treasure Coast Today</a>
+        <div class="header-actions">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
+        </div>
+        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
+      </div>
       <nav class="category-nav">
         {nav_buttons}
         <a href="events.html" class="cat-btn" style="text-decoration:none">Events</a>
         <a href="about.html" class="cat-btn" style="text-decoration:none">About</a>
       </nav>
-      <div class="header-actions">
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
-        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
-      </div>
     </div>
   </header>
 
@@ -1071,7 +1073,7 @@ def _page_head(title, description, canonical_path="", structured_data=None):
 
 
 def _page_header(active=""):
-    """Shared site header used by every generated page — full category nav always visible."""
+    """Shared site header — two rows on mobile: logo+advertise, then scrollable nav."""
     def cat_link(label, href, key):
         cls = "cat-btn active" if key == active else "cat-btn"
         if key == active:
@@ -1079,7 +1081,13 @@ def _page_header(active=""):
         return f'<a href="{href}" class="{cls}" style="text-decoration:none">{label}</a>'
     return f"""  <header>
     <div class="header-inner">
-      <a href="/" class="wordmark">Treasure Coast Today</a>
+      <div class="header-top">
+        <a href="/" class="wordmark">Treasure Coast Today</a>
+        <div class="header-actions">
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
+        </div>
+        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
+      </div>
       <nav class="category-nav">
         {cat_link("Top News", "/", "news")}
         {cat_link("Local Gov", "/?cat=local_gov", "local_gov")}
@@ -1095,10 +1103,6 @@ def _page_header(active=""):
         {cat_link("Events", "events.html", "events")}
         {cat_link("About", "about.html", "about")}
       </nav>
-      <div class="header-actions">
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
-        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
-      </div>
     </div>
   </header>"""
 
