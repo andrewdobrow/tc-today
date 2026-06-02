@@ -394,7 +394,7 @@ def fetch_article_text(url, max_chars=2500):
     if not url or "news.google.com" in url.lower():
         return ""
     try:
-        resp = requests.get(url, timeout=12, allow_redirects=True,
+        resp = requests.get(url, timeout=5, allow_redirects=True,
                             headers={"User-Agent":"Mozilla/5.0 (compatible; TCTBot/1.0)"})
         if resp.status_code != 200:
             return ""
@@ -583,10 +583,10 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
     fresh = [h for h in headlines if is_fresh(h)]
     result = fresh if len(fresh) >= 1 else headlines
     result = result[:limit]
-    # Fetch fuller article text for each surviving headline so the model writes
-    # from real content instead of a thin RSS summary. This is the single biggest
-    # lever for richer hero AND card articles.
-    for h in result:
+    # Fetch fuller article text for top headlines only — not all 12, since
+    # fetching every entry is the main cause of long run times. The top 7 are
+    # the ones most likely to become the hero or a card.
+    for h in result[:7]:
         full = fetch_article_text(h.get("link", ""))
         if full and len(full) > len(h.get("summary", "")):
             h["article_text"] = full
