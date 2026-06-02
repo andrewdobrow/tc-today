@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Events — Treasure Coast Today</title>
-  <meta name="description" content="Upcoming events on the Treasure Coast — Martin, St. Lucie, and Indian River counties.">
+  <title>List Your Event — Treasure Coast Today</title>
+  <meta name="description" content="Coming soon: list your Treasure Coast event for free. Sign up to be notified when the events calendar launches.">
   <link rel="canonical" href="https://treasurecoast.today/events.html">
-  <meta property="og:title" content="Events — Treasure Coast Today">
-  <meta property="og:description" content="Upcoming events on the Treasure Coast — Martin, St. Lucie, and Indian River counties.">
+  <meta property="og:title" content="List Your Event — Treasure Coast Today">
+  <meta property="og:description" content="Coming soon: list your Treasure Coast event for free. Sign up to be notified when the events calendar launches.">
   <meta property="og:url" content="https://treasurecoast.today/events.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Treasure Coast Today">
@@ -24,30 +24,33 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 
   <style>
-    .events-header { max-width: 900px; margin: 40px auto 8px; padding: 0 24px; }
-    .events-header h1 { font-family: 'Fraunces', serif; font-size: 32px; color: var(--text); margin: 0 0 4px; }
-    .events-header p { color: var(--text-secondary); font-size: 14px; margin: 0 0 32px; }
-    .events-grid { max-width: 900px; margin: 0 auto; padding: 0 24px 64px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-    .event-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: box-shadow .15s; }
-    .event-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.12); }
-    .event-img-wrap { height: 160px; overflow: hidden; background: var(--border); }
-    .event-img { width: 100%; height: 100%; object-fit: cover; }
-    .event-img-placeholder { width: 100%; height: 100%; background: var(--border); }
-    .event-info { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
-    .event-date-row { display: flex; align-items: center; gap: 8px; }
-    .event-date { font-size: 12px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .5px; }
-    .event-free { font-size: 11px; background: var(--accent); color: white; padding: 2px 7px; border-radius: 20px; font-weight: 600; }
-    .event-name { font-size: 16px; font-weight: 600; color: var(--text); line-height: 1.35; margin: 0; }
-    .event-location { font-size: 12px; color: var(--text-secondary); margin: 0; }
-    .event-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-    .no-events { text-align: center; color: var(--text-secondary); padding: 64px 24px; font-size: 16px; }
-    @media(max-width:600px) { .events-grid { grid-template-columns: 1fr; } }
+    .cs-wrap { max-width: 600px; margin: 80px auto 80px; padding: 0 24px; text-align: center; }
+    .cs-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 16px; }
+    .cs-headline { font-family: 'Fraunces', serif; font-size: clamp(28px, 5vw, 44px); font-weight: 600; line-height: 1.15; color: var(--text); margin: 0 0 20px; letter-spacing: -.02em; }
+    .cs-sub { font-size: 16px; color: var(--text-secondary); line-height: 1.65; margin: 0 0 40px; }
+    .cs-form { display: flex; gap: 10px; max-width: 440px; margin: 0 auto 16px; }
+    .cs-input { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); outline: none; transition: border-color .15s; }
+    .cs-input:focus { border-color: var(--accent); }
+    .cs-input::placeholder { color: var(--text-secondary); opacity: .5; }
+    .cs-btn { background: var(--accent); color: white; border: none; border-radius: 8px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: opacity .15s; }
+    .cs-btn:hover { opacity: .88; }
+    .cs-fine { font-size: 12px; color: var(--text-secondary); }
+    .cs-success { display: none; color: var(--accent); font-size: 15px; font-weight: 500; margin-top: 12px; }
+    .cs-divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+    .cs-also { font-size: 14px; color: var(--text-secondary); }
+    .cs-also a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    @media(max-width:500px) { .cs-form { flex-direction: column; } .cs-btn { width: 100%; } }
   </style>
 </head>
 <body>
   <header>
     <div class="header-inner">
-      <a href="/" class="wordmark">Treasure Coast Today</a>
+      <div class="header-top">
+        <a href="/" class="wordmark">Treasure Coast Today</a>
+        <div class="header-actions">
+          <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
+        </div>
+      </div>
       <nav class="category-nav">
         <a href="/" class="cat-btn" style="text-decoration:none">Top News</a>
         <a href="/?cat=local_gov" class="cat-btn" style="text-decoration:none">Local Gov</a>
@@ -56,25 +59,29 @@
         <a href="/?cat=schools" class="cat-btn" style="text-decoration:none">Schools</a>
         <a href="/?cat=sports" class="cat-btn" style="text-decoration:none">Sports</a>
         <a href="/?cat=things_to_do" class="cat-btn" style="text-decoration:none">Things To Do</a>
+        <a href="/?cat=florida" class="cat-btn" style="text-decoration:none">Florida</a>
         <a href="/?cat=martin" class="cat-btn" style="text-decoration:none">Martin Co.</a>
         <a href="/?cat=st_lucie" class="cat-btn" style="text-decoration:none">St. Lucie Co.</a>
         <a href="/?cat=indian_river" class="cat-btn" style="text-decoration:none">Indian River Co.</a>
         <span class="cat-btn active">Events</span>
         <a href="about.html" class="cat-btn" style="text-decoration:none">About</a>
       </nav>
-      <div class="header-actions">
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
-        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
-      </div>
     </div>
   </header>
   <main>
-    <div class="events-header">
-      <h1>Upcoming Events</h1>
-      <p>Things to do across Martin, St. Lucie &amp; Indian River counties &middot; Updated 9:33 PM ET</p>
-    </div>
-    <div class="events-grid">
-      <p class="no-events">No upcoming events found. Check back soon.</p>
+    <div class="cs-wrap">
+      <span class="cs-eyebrow">Coming Soon</span>
+      <h1 class="cs-headline">List your Treasure Coast event for free.</h1>
+      <p class="cs-sub">We're building a local events calendar for Martin, St. Lucie, and Indian River counties. Leave your email and we'll let you know when you can submit your event.</p>
+      <form class="cs-form" id="csForm" action="https://formspree.io/f/mqejrpdv" method="POST">
+        <input type="hidden" name="_subject" value="Events calendar interest — Treasure Coast Today">
+        <input class="cs-input" type="email" name="email" placeholder="your@email.com" required>
+        <button class="cs-btn" type="submit">Notify me</button>
+      </form>
+      <p class="cs-fine">No spam. Just a heads-up when the calendar is live.</p>
+      <p class="cs-success" id="csSuccess">&#10003; You're on the list — we'll be in touch!</p>
+      <hr class="cs-divider">
+      <p class="cs-also">In the meantime, check out <a href="/?cat=things_to_do">Things To Do</a> for local event coverage, or <a href="advertise.html">advertise with us</a> to reach Treasure Coast readers.</p>
     </div>
   </main>
   <footer>
@@ -91,5 +98,16 @@
     </div>
   </footer>
   <script src="main.js"></script>
+  <script>
+    const f=document.getElementById('csForm'),s=document.getElementById('csSuccess');
+    f.addEventListener('submit',async(e)=>{
+      e.preventDefault();
+      try{
+        const r=await fetch(f.action,{method:'POST',body:new FormData(f),headers:{'Accept':'application/json'}});
+        if(r.ok){f.style.display='none';s.style.display='block';}
+        else alert('Something went wrong. Please try again.');
+      }catch(err){alert('Something went wrong. Please try again.');}
+    });
+  </script>
 </body>
 </html>
