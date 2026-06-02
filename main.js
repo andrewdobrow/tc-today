@@ -13,11 +13,12 @@ function expandContainer(container) {
   const isOpen  = expand.classList.contains("open");
 
   if (isOpen) {
-    expand.classList.remove("open");
-    if (summary) summary.style.display = "";
-    if (foot)    foot.style.display    = "";
-    if (btn)     btn.innerHTML = "Continue reading &darr;";
+    collapseContainer(container);
   } else {
+    // Store exactly where the top of this container is right now, before any
+    // content opens. We'll scroll back here on close.
+    container.dataset.scrollTarget = window.pageYOffset + container.getBoundingClientRect().top - 70;
+
     expand.classList.add("open");
     if (summary) summary.style.display = "none";
     if (foot)    foot.style.display    = "none";
@@ -26,30 +27,28 @@ function expandContainer(container) {
   }
 }
 
-function collapseThis(collapseBtn) {
-  const container = collapseBtn.closest(".hero, .article-card");
-  const expand    = container.querySelector(".article-expand");
-  const summary   = container.querySelector(".hero-summary, .card-summary");
-  const foot      = container.querySelector(".hero-foot, .card-foot");
-  const btn       = container.querySelector(".expand-btn");
+function collapseContainer(container) {
+  const expand  = container.querySelector(".article-expand");
+  const summary = container.querySelector(".hero-summary, .card-summary");
+  const foot    = container.querySelector(".hero-foot, .card-foot");
+  const btn     = container.querySelector(".expand-btn");
 
-  // Collapse the article
   expand.classList.remove("open");
   if (summary) summary.style.display = "";
   if (foot)    foot.style.display    = "";
   if (btn)     btn.innerHTML = "Continue reading &darr;";
 
-  // Bring the user back to the top of the article they just closed. Two nested
-  // requestAnimationFrame calls guarantee the browser has fully reflowed the
-  // page after the large collapse before we scroll — a single frame is not
-  // always enough when a long article shrinks, which left the user stranded.
-  requestAnimationFrame(() => {
+  // Scroll back to exactly where the user was when they opened this article
+  const target = parseFloat(container.dataset.scrollTarget);
+  if (!isNaN(target)) {
     requestAnimationFrame(() => {
-      container.scrollIntoView({ behavior: "auto", block: "start" });
-      // Nudge down so the sticky header doesn't cover the headline
-      window.scrollBy({ top: -70, behavior: "auto" });
+      window.scrollTo({ top: Math.max(0, target), behavior: "auto" });
     });
-  });
+  }
+}
+
+function collapseThis(collapseBtn) {
+  collapseContainer(collapseBtn.closest(".hero, .article-card"));
 }
 
 // Make entire card or hero clickable to toggle — but ignore clicks on any button or link
@@ -88,6 +87,15 @@ document.querySelectorAll(".cat-btn").forEach(btn => {
         "indian_river":  "Indian River County News — Treasure Coast Today",
       };
       if (titleMap[cat]) document.title = titleMap[cat];
+
+      // Persist the active category in the URL so a refresh stays on this section
+      // instead of resetting to Top News.
+      try {
+        const newUrl = cat && cat !== "all"
+          ? `${window.location.pathname}?cat=${cat}`
+          : window.location.pathname;
+        history.replaceState(null, "", newUrl);
+      } catch (e) {}
 
       // Switch hero sections
       document.querySelectorAll("[data-cat-hero]").forEach(hero => {
