@@ -140,3 +140,27 @@ function updateCountdown() {
 }
 updateCountdown();
 setInterval(updateCountdown, 60000);
+
+// -- SHARE --
+function shareArticle(btn) {
+  const headline = btn.getAttribute("data-headline") || "Treasure Coast Today";
+  const url      = "https://treasurecoast.today/";
+  const shareText = headline + " — read more on Treasure Coast Today";
+
+  // Native share sheet (mobile)
+  if (navigator.share) {
+    navigator.share({ title: headline, text: shareText, url: url })
+      .catch(() => {});
+    return;
+  }
+
+  // Desktop fallback: copy headline + link to clipboard
+  const clipText = shareText + " " + url;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(clipText).then(() => {
+      const original = btn.innerHTML;
+      btn.innerHTML = "Copied &#10003;";
+      setTimeout(() => { btn.innerHTML = original; }, 1800);
+    }).catch(() => {});
+  }
+}
