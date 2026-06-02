@@ -676,26 +676,41 @@ def promote_duplicate_heroes(top_cat, all_categories):
 # -- RENDER INDEX.HTML --
 
 def render_index(all_categories, top_cat):
-    from datetime import timezone
 
-    # Build nav buttons — matches Plain's structure exactly (inside header-inner)
-    nav_buttons = '\n        '.join(
-        f'<button class="cat-btn{"  active" if i==0 else ""}" data-cat="{"all" if i==0 else cat["category_key"]}">'
-        f'{"Top News" if i==0 else cat["category_label"]}</button>'
-        for i, cat in enumerate([None] + all_categories)
-    )
-
-    # Build card grid
-    cards_html = ""
-    support_card = """
-      <div class="article-card support-card fade-in" data-cat="all" data-support-card="true">
-        <div class="support-inner">
-          <div class="support-logo">tct</div>
-          <p class="support-text">Treasure Coast Today is free and local. If it's worth something to you, consider supporting it.</p>
-          <a href="https://buymeacoffee.com/andrewdobrow" target="_blank" class="support-card-btn">Support &#9829;</a>
+    def hero_section(cat_key, cat_label, hero, visible=False):
+        preview    = hero.get("body", "")[:380].rstrip()
+        paragraphs = make_paragraphs(hero.get("body", ""))
+        img_url    = hero.get("image_url", "")
+        img_credit = hero.get("image_credit", "")
+        credit_html = f'<figcaption class="img-credit">Photo: {img_credit}</figcaption>' if img_url and img_credit else ""
+        img_html    = f'<figure class="hero-image-wrap"><img class="hero-image" src="{img_url}" alt="" loading="lazy">{credit_html}</figure>' if img_url else ""
+        pub_time    = hero.get("published", "")
+        display     = "" if visible else ' style="display:none"'
+        fade        = " fade-in" if visible else ""
+        return f"""
+    <section class="hero{fade}" data-cat-hero="{cat_key}"{display}>
+      <div class="hero-inner">
+        {img_html}
+        <span class="tag">{cat_label}</span>
+        <h1>{hero["headline"]}</h1>
+        <p class="hero-summary">{preview}...</p>
+        <div class="hero-foot">
+          <span class="meta">{pub_time}</span>
+          <button class="expand-btn" onclick="toggleExpand(this)">Continue reading &darr;</button>
         </div>
-      </div>"""
+        <div class="article-expand hero-expand">
+          <div class="hero-expand-body">{paragraphs}</div>
+          <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
+        </div>
+      </div>
+    </section>"""
 
+    # Top News hero + all category heroes
+    heroes_html = hero_section("all", top_cat["category_label"], top_cat["hero"], visible=True)
+    for cat in all_categories:
+        heroes_html += hero_section(cat["category_key"], cat["category_label"], cat["hero"], visible=False)
+
+    # Build card pool
     all_cards_pool = []
     for cat in all_categories:
         for card in cat.get("cards", []):
@@ -709,15 +724,26 @@ def render_index(all_categories, top_cat):
     remaining   = [c for c in all_cards_pool if id(c) not in topnews_ids]
     all_cards_display = topnews + remaining
 
+    support_card = """
+      <div class="article-card support-card fade-in" data-cat="all" data-support-card="true">
+        <div class="support-inner">
+          <div class="support-logo">tct</div>
+          <p class="support-text">Reach thousands of Treasure Coast readers every day. Advertise with Treasure Coast Today.</p>
+          <a href="advertise.html" class="support-card-btn">Get in touch &rarr;</a>
+        </div>
+      </div>"""
+
+    cards_html = ""
     for i, card in enumerate(all_cards_display):
-        ck        = card.get("cat_key", "all")
-        cl        = card.get("cat_label", "")
-        teaser    = card.get("teaser", "") or ""
-        card_time = card.get("published", "")
-        body_html = make_paragraphs(card.get("body", ""))
-        topnews_attr = ' data-topnews="true"' if id(card) in topnews_ids else ""
         if i == 2:
             cards_html += support_card
+        teaser          = card.get("teaser", card.get("summary", ""))
+        body            = card.get("body", card.get("summary", ""))
+        card_paragraphs = make_paragraphs(body)
+        ck              = card.get("cat_key", "all")
+        cl              = card.get("cat_label", "")
+        card_time       = card.get("published", "")
+        topnews_attr    = ' data-topnews="true"' if id(card) in topnews_ids else ""
         cards_html += f"""
       <div class="article-card fade-in" data-cat="{ck}"{topnews_attr}>
         <span class="card-tag">{cl}</span>
@@ -728,59 +754,16 @@ def render_index(all_categories, top_cat):
           <button class="expand-btn" onclick="toggleExpand(this)">Continue reading &darr;</button>
         </div>
         <div class="article-expand">
-          <div class="card-expand-body">{body_html}</div>
+          <div class="card-expand-body">{card_paragraphs}</div>
           <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
         </div>
       </div>"""
 
-    # Category hero sections
-    heroes_html = ""
-    for cat in all_categories:
-        h      = cat["hero"]
-        hbody  = make_paragraphs(h.get("body", ""))
-        himg   = f'<img src="{h["image_url"]}" alt="" class="hero-img" loading="lazy">' if h.get("image_url") else ""
-        hcredit = f'<span class="img-credit">Photo: {h["image_credit"]}</span>' if h.get("image_credit") else ""
-        hidden = ' style="display:none"' if cat["category_key"] != "all" else ""
-        heroes_html += f"""
-    <div class="hero cat-hero" data-cat-hero="{cat["category_key"]}"{hidden}>
-      <div class="hero-inner">
-        <div class="hero-text">
-          <span class="hero-tag">{cat["category_label"]}</span>
-          <h1 class="hero-headline">{h["headline"]}</h1>
-          <p class="hero-time">{h.get("published", "")}</p>
-          <div class="hero-body">{hbody[:800]}</div>
-          <button class="expand-btn hero-expand" onclick="toggleExpand(this)">Continue reading &darr;</button>
-          <div class="article-expand">
-            <div class="card-expand-body">{hbody}</div>
-            <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
-          </div>
-        </div>
-        <div class="hero-media">{himg}{hcredit}</div>
-      </div>
-    </div>"""
-
-    # Top News hero (front page)
-    fp_hero   = top_cat["hero"]
-    fp_body   = make_paragraphs(fp_hero.get("body", ""))
-    fp_img    = f'<img src="{fp_hero["image_url"]}" alt="" class="hero-img" loading="eager">' if fp_hero.get("image_url") else ""
-    fp_credit = f'<span class="img-credit">Photo: {fp_hero["image_credit"]}</span>' if fp_hero.get("image_credit") else ""
-    top_news_hero = f"""
-    <div class="hero cat-hero" data-cat-hero="all">
-      <div class="hero-inner">
-        <div class="hero-text">
-          <span class="hero-tag">{top_cat["category_label"]}</span>
-          <h1 class="hero-headline">{fp_hero["headline"]}</h1>
-          <p class="hero-time">{fp_hero.get("published", "")}</p>
-          <div class="hero-body">{fp_body[:800]}</div>
-          <button class="expand-btn hero-expand" onclick="toggleExpand(this)">Continue reading &darr;</button>
-          <div class="article-expand">
-            <div class="card-expand-body">{fp_body}</div>
-            <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
-          </div>
-        </div>
-        <div class="hero-media">{fp_img}{fp_credit}</div>
-      </div>
-    </div>"""
+    nav_buttons = "\n        ".join(
+        f'<button class="cat-btn{" active" if i==0 else ""}" data-cat="{"all" if i==0 else cat["category_key"]}">' +
+        f'{"Top News" if i==0 else cat["category_label"]}</button>'
+        for i, cat in enumerate([None] + all_categories)
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -794,7 +777,7 @@ def render_index(all_categories, top_cat):
   <meta property="og:url" content="{SITE_URL}">
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
@@ -806,19 +789,16 @@ def render_index(all_categories, top_cat):
       </nav>
       <div class="header-actions">
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
-        <button class="support-btn" onclick="window.open('https://buymeacoffee.com/andrewdobrow','_blank')">Support TCT</button>
+        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
       </div>
     </div>
   </header>
 
   <main>
-    {top_news_hero}
     {heroes_html}
-
-    <section class="card-grid" id="card-grid">
-      <div class="grid-label">LATEST</div>
+    <div class="articles-grid" id="articlesGrid">
       {cards_html}
-    </section>
+    </div>
   </main>
 
   <footer>
@@ -838,66 +818,6 @@ def render_index(all_categories, top_cat):
 </body>
 </html>"""
 
-def write_data_json(all_categories, top_cat):
-    def card_to_dict(c):
-        return {
-            "headline":      c.get("headline",""),
-            "teaser":        c.get("teaser",""),
-            "body":          c.get("body",""),
-            "published":     c.get("published",""),
-            "cat_label":     c.get("cat_label","") or c.get("category_label",""),
-            "urgency_score": c.get("urgency_score",0),
-            "image_url":     c.get("image_url",""),
-        }
-
-    # Build front page cards
-    _all = []
-    for cat in all_categories:
-        hero = cat["hero"]
-        _all.append({**hero, "cat_label": cat["category_label"], "is_hero": True})
-        for card in cat.get("cards",[]):
-            _all.append({**card, "cat_label": cat["category_label"], "is_hero": False})
-    _all.sort(key=lambda c: int(c.get("urgency_score",0) or 0), reverse=True)
-    _fp_headline = top_cat["hero"].get("headline","")
-    _seen = set()
-    _deduped = []
-    for c in _all:
-        h = c.get("headline","")
-        key = re.sub(r"[^a-z0-9 ]","",h.lower())[:60]
-        if key != re.sub(r"[^a-z0-9 ]","",_fp_headline.lower())[:60] and key not in _seen:
-            _seen.add(key)
-            _deduped.append(c)
-    _all = _deduped
-
-    app_data = {
-        "updated": now_et(),
-        "front_page": {
-            "hero": {
-                "headline":      top_cat["hero"].get("headline",""),
-                "teaser":        top_cat["hero"].get("teaser",""),
-                "body":          top_cat["hero"].get("body",""),
-                "image_url":     top_cat["hero"].get("image_url",""),
-                "image_credit":  top_cat["hero"].get("image_credit",""),
-                "published":     top_cat["hero"].get("published",""),
-                "cat_label":     top_cat["category_label"],
-                "urgency_score": top_cat["hero"].get("urgency_score",0),
-            },
-            "cards": [card_to_dict(c) for c in _all[:6]],
-        },
-        "categories": [
-            {
-                "key":   cat["category_key"],
-                "label": cat["category_label"],
-                "hero":  card_to_dict(cat["hero"]),
-                "cards": [card_to_dict(c) for c in cat.get("cards",[])[:6]],
-            }
-            for cat in all_categories
-        ],
-    }
-    (OUTPUT_DIR / "data.json").write_text(json.dumps(app_data, indent=2), encoding="utf-8")
-    print("  data.json written")
-
-# -- MAIN --
 
 def fetch_eventbrite_events():
     """Fetch upcoming local events from Eventbrite API. Returns list of event dicts."""
@@ -1032,7 +952,7 @@ def render_events_page(events):
       </nav>
       <div class="header-actions">
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
-        <button class="support-btn" onclick="window.open('https://buymeacoffee.com/andrewdobrow','_blank')">Support TCT</button>
+        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
       </div>
     </div>
   </header>
