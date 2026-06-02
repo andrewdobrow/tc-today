@@ -76,6 +76,21 @@ document.querySelectorAll(".cat-btn").forEach(btn => {
       btn.classList.add("active");
       const cat = btn.dataset.cat;
 
+      // Update page title for SEO / browser tab clarity
+      const titleMap = {
+        "all":          "Treasure Coast Today | Local News for Martin, St. Lucie & Indian River County",
+        "local_gov":    "Local Government News — Treasure Coast Today",
+        "crime":        "Crime & Safety — Treasure Coast Today",
+        "business":     "Business & Development — Treasure Coast Today",
+        "schools":      "Schools News — Treasure Coast Today",
+        "sports":       "Sports — Treasure Coast Today",
+        "things_to_do": "Things To Do on the Treasure Coast — Treasure Coast Today",
+        "martin":       "Martin County News — Treasure Coast Today",
+        "st_lucie":     "St. Lucie County News — Treasure Coast Today",
+        "indian_river":  "Indian River County News — Treasure Coast Today",
+      };
+      if (titleMap[cat]) document.title = titleMap[cat];
+
       // Switch hero sections
       document.querySelectorAll("[data-cat-hero]").forEach(hero => {
         hero.style.display = hero.dataset.catHero === cat ? "block" : "none";
