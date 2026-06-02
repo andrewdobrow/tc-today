@@ -100,6 +100,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  justify-self: end;
 }
 
 .support-btn {
@@ -625,19 +626,26 @@ footer {
   }
 
   .header-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
     height: auto;
+    min-height: 0;
     padding: 10px 16px;
-    flex-wrap: wrap;
     gap: 8px;
   }
 
   .header-top {
+    grid-column: 1;
+    grid-row: 1;
     width: auto;
-    flex: 1;
+    min-width: 0;
   }
 
   .header-actions {
-    margin-left: auto;
+    grid-column: 2;
+    grid-row: 1;
+    margin-left: 0;
+    justify-content: flex-end;
   }
 
   .support-btn {
@@ -646,9 +654,9 @@ footer {
   }
 
   .category-nav {
-    order: 3;
+    grid-column: 1 / -1;
+    grid-row: 2;
     width: 100%;
-    flex: 0 0 100%;
     justify-content: flex-start;
     flex-wrap: nowrap;
     overflow-x: auto;
