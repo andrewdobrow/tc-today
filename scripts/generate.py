@@ -889,9 +889,8 @@ def render_index(all_categories, top_cat):
       <div class="header-top">
         <a href="/" class="wordmark">Treasure Coast Today</a>
         <div class="header-actions">
-          <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
+          <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
         </div>
-        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
       </div>
       <nav class="category-nav">
         {nav_buttons}
@@ -1084,9 +1083,8 @@ def _page_header(active=""):
       <div class="header-top">
         <a href="/" class="wordmark">Treasure Coast Today</a>
         <div class="header-actions">
-          <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
+          <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
         </div>
-        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
       </div>
       <nav class="category-nav">
         {cat_link("Top News", "/", "news")}
