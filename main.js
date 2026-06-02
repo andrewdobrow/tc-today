@@ -37,6 +37,12 @@ function collapseThis(collapseBtn) {
   if (summary) summary.style.display = "";
   if (foot)    foot.style.display    = "";
   if (btn)     btn.innerHTML = "Continue reading &darr;";
+
+  // Return the reader to the top of the article they just collapsed, so they
+  // aren't left stranded in the middle of an unrelated story below.
+  const headerOffset = 80;
+  const top = container.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+  window.scrollTo({ top: top, behavior: "smooth" });
 }
 
 // Make entire card or hero clickable to toggle expand/collapse
