@@ -252,7 +252,7 @@ _pexels_used = set()
 def fetch_pexels_image(category_key):
     """Last-resort image: pull a relevant, license-free stock photo from Pexels
     so no hero is ever imageless. Returns (image_url, credit) or ("", "")."""
-    api_key = os.environ.get("qeDQdH5sqDXv44pAj80ePVC4XdPohwgOM2xczaCgDdLUD5DJbFHOZxYF", "")
+    api_key = os.environ.get("PEXELS_API_KEY", "")
     if not api_key:
         return "", ""
     query = PEXELS_QUERY_MAP.get(category_key, PEXELS_QUERY_MAP["all"])
@@ -1081,7 +1081,6 @@ def render_index(all_categories, top_cat):
       <nav class="category-nav">
         {nav_buttons}
         <a href="events.html" class="cat-btn" style="text-decoration:none">Events</a>
-        <a href="about.html" class="cat-btn" style="text-decoration:none">About</a>
       </nav>
 
       <div class="header-actions">
@@ -1287,7 +1286,6 @@ def _page_header(active=""):
         {cat_link("St. Lucie Co.", "/?cat=st_lucie", "st_lucie")}
         {cat_link("Indian River Co.", "/?cat=indian_river", "indian_river")}
         {cat_link("Events", "events.html", "events")}
-        {cat_link("About", "about.html", "about")}
       </nav>
 
       <div class="header-actions">
