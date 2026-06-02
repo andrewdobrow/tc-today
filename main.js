@@ -33,25 +33,35 @@ function collapseThis(collapseBtn) {
   const foot      = container.querySelector(".hero-foot, .card-foot");
   const btn       = container.querySelector(".expand-btn");
 
+  // Collapse the article
   expand.classList.remove("open");
   if (summary) summary.style.display = "";
   if (foot)    foot.style.display    = "";
   if (btn)     btn.innerHTML = "Continue reading &darr;";
 
-  // Return the reader to the top of the article they just collapsed, so they
-  // aren't left stranded in the middle of an unrelated story below.
-  const headerOffset = 80;
-  const top = container.getBoundingClientRect().top + window.pageYOffset - headerOffset;
-  window.scrollTo({ top: top, behavior: "smooth" });
+  // Bring the user back to the top of the article they just closed. Two nested
+  // requestAnimationFrame calls guarantee the browser has fully reflowed the
+  // page after the large collapse before we scroll — a single frame is not
+  // always enough when a long article shrinks, which left the user stranded.
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      container.scrollIntoView({ behavior: "auto", block: "start" });
+      // Nudge down so the sticky header doesn't cover the headline
+      window.scrollBy({ top: -70, behavior: "auto" });
+    });
+  });
 }
 
-// Make entire card or hero clickable to toggle expand/collapse
+// Make entire card or hero clickable to toggle — but ignore clicks on any button or link
 document.addEventListener("click", e => {
+  // If the click landed on (or inside) any interactive control, let that control
+  // handle it and do NOT also toggle the container. This prevents the open-then-
+  // instantly-close double fire.
+  if (e.target.closest("button, a")) return;
+
   const container = e.target.closest(".article-card, .hero");
   if (!container) return;
   if (container.classList.contains("support-card")) return;
-  if (e.target.closest(".collapse-btn")) return;
-  if (e.target.closest(".expand-btn")) return;
   expandContainer(container);
 });
 
