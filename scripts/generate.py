@@ -237,8 +237,6 @@ def build_image_bank():
             feed = feedparser.parse(url)
             for entry in feed.entries[:60]:
                 img = extract_image(entry)
-                # If RSS has no image, fetch og:image from the article page
-                # Skip Google News redirect URLs — they won't resolve correctly
                 if not img:
                     link = entry.get("link", "") or getattr(entry, "link", "")
                     if link and "news.google.com" not in link:
@@ -415,6 +413,8 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
 
 LOCAL_SYSTEM_PROMPT = """You write factual local news articles for Treasure Coast Today, covering Martin, St. Lucie, and Indian River counties in Florida. Your readers live here — they care about what's happening in their towns, schools, and county government far more than national news. Always prioritize genuinely local stories over state or national ones. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries. Name specific towns, streets, facilities, and local officials when available. Towns include: Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno, Port St. Lucie, Fort Pierce, Vero Beach, Sebastian, Fellsmere, and surrounding communities."""
 
+FLORIDA_SYSTEM_PROMPT = """You write factual news articles for the Florida section of Treasure Coast Today. Your readers are Treasure Coast residents who want to stay informed about statewide Florida news that affects them as Floridians. This section covers the whole state — legislation, courts, economy, environment, politics, weather, and major events anywhere in Florida. Do NOT artificially narrow to the Treasure Coast; this is the statewide section. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries."""
+
 def generate_category_content(category_key, category_label, headlines):
     def sanitize(text):
         if not text: return ""
@@ -431,7 +431,47 @@ def generate_category_content(category_key, category_label, headlines):
     headlines_text = "\n".join(hl_line(i,h) for i,h in enumerate(headlines))
     headlines_text = headlines_text.replace("\\","").encode("ascii","ignore").decode("ascii")
 
-    prompt = f"""Local Treasure Coast news headlines for {category_label}:
+    is_florida = (category_key == "florida")
+    system_prompt = FLORIDA_SYSTEM_PROMPT if is_florida else LOCAL_SYSTEM_PROMPT
+
+    if is_florida:
+        prompt = f"""Florida news headlines:
+
+{headlines_text}
+
+Tasks:
+1. Pick the single most important/urgent Florida statewide story. Prioritize stories with broad impact across Florida — major legislation, court rulings, economic news, environmental decisions, significant crimes or disasters anywhere in the state. Do NOT favor Treasure Coast stories here; this is the statewide section.
+2. Write an accurate Florida-focused headline. Name the specific Florida city, region, or institution when relevant.
+3. Write a 380-430 word factual article in FOUR full paragraphs. Cover what happened, who is affected across Florida, and what happens next statewide. Do NOT write only two paragraphs.
+4. For the next {CARDS_PER_CATEGORY} most important Florida stories write a teaser (one sentence), body (two short paragraphs ~100 words), and urgency_score (1-10). Cards MUST be different stories from the hero.
+
+URGENCY SCORING for Florida statewide news (1-10):
+- 9-10: Major legislation signed/passed, significant court ruling, statewide emergency or disaster, major economic news affecting all Floridians
+- 7-8: Legislative proposals with real chance of passing, significant state agency decision, major Florida crime or trial, statewide policy change
+- 5-6: Regional Florida news, state politics, business news, environmental updates
+- 3-4: Minor state agency news, local Florida stories outside the Treasure Coast
+- 1-2: National news with no Florida angle
+
+Return ONLY valid JSON:
+{{
+  "hero": {{
+    "headline": "Florida-focused headline",
+    "body": "full article with paragraph breaks",
+    "urgency_score": <1-10>,
+    "published": "copy the [pub:...] string from the chosen headline exactly",
+    "source_index": <number>
+  }},
+  "cards": [
+    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}
+  ]
+}}"""
+    else:
+        prompt = f"""Local Treasure Coast news headlines for {category_label}:
 
 {headlines_text}
 
@@ -471,7 +511,7 @@ Return ONLY valid JSON:
         response = client.messages.create(
             model="claude-sonnet-4-5",
             max_tokens=1800,
-            system=[{"type":"text","text":LOCAL_SYSTEM_PROMPT,"cache_control":{"type":"ephemeral"}}],
+            system=[{"type":"text","text":system_prompt,"cache_control":{"type":"ephemeral"}}],
             messages=[{"role":"user","content":prompt}],
         )
         raw = response.content[0].text.strip()
@@ -1330,7 +1370,7 @@ def main():
     (OUTPUT_DIR / "about.html").write_text(render_about_page(), encoding="utf-8")
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
 
-    print(f"Done. {len(all_categories)} categories, {len(events)} events written.")
+    print(f"Done. {len(all_categories)} categories written.")
 
 if __name__ == "__main__":
     main()
