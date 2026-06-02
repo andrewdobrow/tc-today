@@ -296,7 +296,7 @@ def build_image_bank():
                 img = extract_image(entry)
                 if not img:
                     link = entry.get("link", "") or getattr(entry, "link", "")
-                    if link and "news.google.com" not in link:
+                    if link:
                         img = fetch_og_image(link)
                 if img:
                     bank.append({
@@ -392,8 +392,9 @@ def fetch_og_image(url):
 def fetch_article_text(url, max_chars=2500):
     """Fetch the readable body text of an article page so the model writes from
     real content instead of a thin RSS summary. Returns plain text (truncated)
-    or empty string on any failure. Skips Google News redirect URLs."""
-    if not url or "news.google.com" in url.lower():
+    or empty string on any failure. Google News redirect URLs are followed
+    automatically via allow_redirects=True to reach the real publisher page."""
+    if not url:
         return ""
     try:
         resp = requests.get(url, timeout=5, allow_redirects=True,
@@ -585,10 +586,19 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
     fresh = [h for h in headlines if is_fresh(h)]
     result = fresh if len(fresh) >= 1 else headlines
     result = result[:limit]
-    # Note: article text fetching via HTTP is disabled — it adds significant
-    # run time (up to 70 fetches × 5s timeout = 350s worst case) and provides
-    # minimal benefit since WPTV's full content is already in the RSS content
-    # field (captured above), and Google News URLs are skipped anyway.
+
+    # Fetch fuller article text in parallel for top 7 headlines.
+    # Running concurrently means total time = slowest single fetch (~5s),
+    # not 7 × 5s = 35s sequential. Google News URLs are skipped automatically
+    # inside fetch_article_text so only real publisher URLs get fetched.
+    def try_fetch(h):
+        full = fetch_article_text(h.get("link", ""))
+        if full and len(full) > len(h.get("summary", "")):
+            h["article_text"] = full
+
+    with ThreadPoolExecutor(max_workers=7) as ex:
+        list(ex.map(try_fetch, result[:7]))
+
     return result
 
 # -- CATEGORY CONTENT GENERATION --
@@ -1818,7 +1828,7 @@ def main():
             img          = source_img
             image_credit = get_image_credit(link)
 
-        if not img and link and "news.google.com" not in link.lower():
+        if not img and link:
             og = fetch_og_image(link)
             if og:
                 img          = og
