@@ -288,24 +288,55 @@ def fetch_pexels_image(category_key):
         return "", ""
 
 def build_image_bank():
+    """Build a small fallback image bank without letting image fetching dominate
+    the workflow runtime.
+
+    The previous version looped through up to 60 entries from every image feed and
+    called fetch_og_image() sequentially whenever the RSS item had no image. With
+    10 feeds, that can become hundreds of network requests at 6 seconds each.
+    This fallback bank is intentionally bounded because hero-specific image
+    lookup later already tries the chosen article's own og:image.
+    """
     bank = []
+    og_candidates = []
+    MAX_ENTRIES_PER_FEED = 25
+    MAX_OG_FETCHES = 30
+
     for url in IMAGE_BANK_FEEDS:
         try:
             feed = feedparser.parse(url)
-            for entry in feed.entries[:60]:
+            for entry in feed.entries[:MAX_ENTRIES_PER_FEED]:
+                title = entry.get("title", "")
                 img = extract_image(entry)
-                if not img:
-                    link = entry.get("link", "") or getattr(entry, "link", "")
-                    if link:
-                        img = fetch_og_image(link)
                 if img:
                     bank.append({
-                        "title":     entry.get("title", ""),
+                        "title": title,
                         "image_url": img,
-                        "source":    url,
+                        "source": url,
                     })
+                    continue
+
+                # Only keep a small list of publisher pages for optional OG fetches.
+                # Avoid crawling Google News redirect pages in the fallback image bank.
+                link = entry.get("link", "") or getattr(entry, "link", "")
+                if link and "news.google.com" not in link.lower() and len(og_candidates) < MAX_OG_FETCHES:
+                    og_candidates.append((title, link, url))
         except Exception:
             pass
+
+    def fetch_candidate(candidate):
+        title, link, source = candidate
+        img = fetch_og_image(link)
+        if not img:
+            return None
+        return {"title": title, "image_url": img, "source": source}
+
+    if og_candidates:
+        with ThreadPoolExecutor(max_workers=10) as ex:
+            for result in ex.map(fetch_candidate, og_candidates):
+                if result:
+                    bank.append(result)
+
     print(f"  Image bank: {len(bank)} entries")
     return bank
 
