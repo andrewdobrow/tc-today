@@ -11,6 +11,7 @@ import feedparser
 import requests
 import anthropic
 from datetime import datetime
+from collections import defaultdict
 from pathlib import Path
 
 # -- CONFIG --
@@ -1084,6 +1085,7 @@ def render_index(all_categories, top_cat):
 
       <nav class="category-nav">
         {nav_buttons}
+        <a href="archive.html" class="cat-btn" style="text-decoration:none">Archive</a>
         <a href="events.html" class="cat-btn" style="text-decoration:none">Events</a>
       </nav>
 
@@ -1297,6 +1299,7 @@ def _page_header(active=""):
         {cat_link("Martin Co.", "/?cat=martin", "martin")}
         {cat_link("St. Lucie Co.", "/?cat=st_lucie", "st_lucie")}
         {cat_link("Indian River Co.", "/?cat=indian_river", "indian_river")}
+        {cat_link("Archive", "archive.html", "archive")}
         {cat_link("Events", "events.html", "events")}
       </nav>
 
@@ -1315,6 +1318,7 @@ def _page_footer():
       <span class="footer-tagline">Local news for Martin, St. Lucie &amp; Indian River counties.</span>
       <div class="footer-links">
         <a href="about.html">About</a>
+        <a href="archive.html">Archive</a>
         <a href="events.html">Events</a>
         <a href="advertise.html">Advertise</a>
         <a href="privacy.html">Privacy</a>
@@ -1504,6 +1508,265 @@ def render_advertise_page():
 </html>"""
 
 
+def slugify(text):
+    """Convert a headline to a URL-safe slug."""
+    text = text.lower().strip()
+    text = re.sub(r"[^\w\s-]", "", text)
+    text = re.sub(r"[\s_]+", "-", text)
+    text = re.sub(r"-+", "-", text)
+    return text[:80].strip("-")
+
+
+def load_archive(archive_path):
+    """Load the existing archive metadata or return empty list."""
+    try:
+        if archive_path.exists():
+            return json.loads(archive_path.read_text(encoding="utf-8"))
+    except Exception:
+        pass
+    return []
+
+
+def render_article_page(hero, category_label, category_key, pub_date, slug):
+    """Render a permanent article page for a single hero story."""
+    head   = _page_head(
+        f"{hero['headline']} — Treasure Coast Today",
+        (hero.get("teaser") or hero.get("body","")[:155]).replace('"',''),
+        f"/articles/{slug}.html"
+    )
+    header = _page_header()
+    footer = _page_footer()
+    body   = make_paragraphs(hero.get("body",""))
+    img_html = ""
+    if hero.get("image_url"):
+        credit = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
+        img_html = f'<figure class="article-hero-image"><img src="{hero["image_url"]}" alt="{hero["headline"]}" loading="eager">{credit}</figure>'
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{head}
+  <style>
+    .article-wrap {{ max-width: 740px; margin: 0 auto; padding: 40px 24px 80px; }}
+    .article-meta {{ display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }}
+    .article-category {{ font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }}
+    .article-date {{ font-size: 11px; color: var(--text-muted); }}
+    .article-headline {{ font-family: "Fraunces", serif; font-size: clamp(26px, 4vw, 42px); font-weight: 600; line-height: 1.15; letter-spacing: -.02em; color: var(--text); margin-bottom: 24px; }}
+    .article-hero-image {{ margin: 0 0 28px; }}
+    .article-hero-image img {{ width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px; display: block; }}
+    .article-body p {{ font-size: 17px; line-height: 1.8; color: var(--text-secondary); margin-bottom: 20px; }}
+    .article-back {{ display: inline-block; font-size: 13px; color: var(--accent); text-decoration: none; margin-bottom: 32px; font-weight: 500; }}
+    .article-back:hover {{ opacity: .7; }}
+    .article-divider {{ border: none; border-top: 1px solid var(--border); margin: 40px 0; }}
+    .article-more {{ font-family: "Fraunces", serif; font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 16px; }}
+    .article-more-link {{ display: inline-block; color: var(--accent); font-size: 14px; font-weight: 500; text-decoration: none; }}
+    .article-more-link:hover {{ opacity: .7; }}
+  </style>
+</head>
+<body>
+{header}
+  <main>
+    <div class="article-wrap">
+      <a href="/" class="article-back">&larr; Back to Treasure Coast Today</a>
+      <div class="article-meta">
+        <span class="article-category">{category_label}</span>
+        <span class="article-date">{pub_date}</span>
+      </div>
+      <h1 class="article-headline">{hero["headline"]}</h1>
+      {img_html}
+      <div class="article-body">{body}</div>
+      <hr class="article-divider">
+      <p class="article-more">More local news</p>
+      <a href="/?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
+    </div>
+  </main>
+{footer}
+</body>
+</html>"""
+
+
+def render_archive_page(archive_entries):
+    """Render a browsable archive index page."""
+    head   = _page_head(
+        "Article Archive — Treasure Coast Today",
+        "Browse all local news articles from Treasure Coast Today covering Martin, St. Lucie, and Indian River counties.",
+        "/archive.html"
+    )
+    header = _page_header()
+    footer = _page_footer()
+
+    # Group entries by month
+    by_month = defaultdict(list)
+    for e in sorted(archive_entries, key=lambda x: x.get("date",""), reverse=True):
+        try:
+            month = e["date"][:7]  # YYYY-MM
+            label = datetime.strptime(month, "%Y-%m").strftime("%B %Y")
+        except Exception:
+            label = "Recent"
+            month = "recent"
+        by_month[(month, label)].append(e)
+
+    months_html = ""
+    for (month_key, month_label), entries in sorted(by_month.items(), reverse=True):
+        items = ""
+        for e in entries:
+            items += f"""
+        <li class="archive-item">
+          <a href="/articles/{e['slug']}.html" class="archive-link">
+            <span class="archive-cat">{e['category_label']}</span>
+            <span class="archive-headline">{e['headline']}</span>
+            <span class="archive-date">{e['date']}</span>
+          </a>
+        </li>"""
+        months_html += f"""
+      <div class="archive-month">
+        <h2 class="archive-month-label">{month_label}</h2>
+        <ul class="archive-list">{items}
+        </ul>
+      </div>"""
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{head}
+  <style>
+    .archive-wrap {{ max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }}
+    .archive-eyebrow {{ font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 14px; }}
+    .archive-headline {{ font-family: "Fraunces", serif; font-size: clamp(28px,4vw,40px); font-weight: 600; color: var(--text); margin-bottom: 8px; letter-spacing: -.02em; }}
+    .archive-sub {{ font-size: 15px; color: var(--text-secondary); margin-bottom: 48px; }}
+    .archive-month {{ margin-bottom: 40px; }}
+    .archive-month-label {{ font-family: "Fraunces", serif; font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }}
+    .archive-list {{ list-style: none; }}
+    .archive-item {{ border-bottom: 1px solid var(--border); }}
+    .archive-link {{ display: flex; align-items: baseline; gap: 10px; padding: 12px 0; text-decoration: none; color: inherit; flex-wrap: wrap; transition: background .1s; }}
+    .archive-link:hover .archive-headline {{ color: var(--accent); }}
+    .archive-cat {{ font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); flex-shrink: 0; }}
+    .archive-headline {{ font-size: 15px; font-weight: 500; color: var(--text); flex: 1; line-height: 1.4; }}
+    .archive-date {{ font-size: 11px; color: var(--text-muted); flex-shrink: 0; margin-left: auto; }}
+    @media(max-width:580px) {{ .archive-date {{ display: none; }} }}
+  </style>
+</head>
+<body>
+{header}
+  <main>
+    <div class="archive-wrap">
+      <span class="archive-eyebrow">Archive</span>
+      <h1 class="archive-headline">All Articles</h1>
+      <p class="archive-sub">Every story published on Treasure Coast Today, organized by month.</p>
+      {months_html}
+    </div>
+  </main>
+{footer}
+</body>
+</html>"""
+
+
+def update_sitemap(archive_entries):
+    """Regenerate sitemap.xml including all archived article URLs."""
+    now_str = datetime.utcnow().strftime("%Y-%m-%d")
+    static_urls = f"""  <url>
+    <loc>{SITE_URL}/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <lastmod>{now_str}</lastmod>
+  </url>
+  <url>
+    <loc>{SITE_URL}/archive.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <lastmod>{now_str}</lastmod>
+  </url>
+  <url>
+    <loc>{SITE_URL}/about.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>{SITE_URL}/advertise.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>"""
+
+    article_urls = ""
+    for e in archive_entries:
+        article_urls += f"""
+  <url>
+    <loc>{SITE_URL}/articles/{e['slug']}.html</loc>
+    <changefreq>never</changefreq>
+    <priority>0.7</priority>
+    <lastmod>{e['date']}</lastmod>
+  </url>"""
+
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{static_urls}
+{article_urls}
+</urlset>"""
+
+
+def write_archives(all_categories, top_cat):
+    """Write individual article pages, update archive.json, archive.html, sitemap.xml."""
+    articles_dir  = OUTPUT_DIR / "articles"
+    archive_path  = OUTPUT_DIR / "archive.json"
+    articles_dir.mkdir(exist_ok=True)
+
+    archive = load_archive(archive_path)
+    existing_slugs = {e["slug"] for e in archive}
+    new_count = 0
+
+    # Use today's date for all articles in this run
+    today = datetime.utcnow().strftime("%Y-%m-%d")
+
+    # Write a page for every category hero (including top_cat)
+    heroes_to_archive = [(top_cat["category_key"], top_cat["category_label"], top_cat["hero"])]
+    for cat in all_categories:
+        if cat["category_key"] != top_cat["category_key"]:
+            heroes_to_archive.append((cat["category_key"], cat["category_label"], cat["hero"]))
+
+    for cat_key, cat_label, hero in heroes_to_archive:
+        headline = hero.get("headline","").strip()
+        if not headline:
+            continue
+
+        # Build slug — date prefix ensures uniqueness across runs
+        base_slug = f"{today}-{slugify(headline)}"
+        slug = base_slug
+        # Handle rare slug collision (same headline picked twice)
+        counter = 1
+        while slug in existing_slugs:
+            slug = f"{base_slug}-{counter}"
+            counter += 1
+
+        # Write article HTML
+        article_html = render_article_page(hero, cat_label, cat_key, today, slug)
+        (articles_dir / f"{slug}.html").write_text(article_html, encoding="utf-8")
+
+        # Add to archive metadata
+        entry = {
+            "slug":           slug,
+            "headline":       headline,
+            "teaser":         hero.get("teaser","") or hero.get("body","")[:180],
+            "category_key":   cat_key,
+            "category_label": cat_label,
+            "date":           today,
+            "image_url":      hero.get("image_url",""),
+        }
+        archive.append(entry)
+        existing_slugs.add(slug)
+        new_count += 1
+
+    # Save updated archive.json
+    archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
+
+    # Render archive index page
+    (OUTPUT_DIR / "archive.html").write_text(render_archive_page(archive), encoding="utf-8")
+
+    # Update sitemap
+    (OUTPUT_DIR / "sitemap.xml").write_text(update_sitemap(archive), encoding="utf-8")
+
+    print(f"  Archived {new_count} new articles ({len(archive)} total)")
+
+
 def main():
     print("Treasure Coast Today — building site...")
     image_bank = build_image_bank()
@@ -1600,10 +1863,13 @@ def main():
     (OUTPUT_DIR / "index.html").write_text(index_html, encoding="utf-8")
     write_data_json(all_categories, top_cat)
 
+    # Archive — write permanent article pages and update archive.json + sitemap
+    write_archives(all_categories, top_cat)
+
     # Events coming-soon page
     (OUTPUT_DIR / "events.html").write_text(render_events_page(), encoding="utf-8")
 
-    # Static pages (regenerated every run to pick up any template changes)
+    # Static pages
     (OUTPUT_DIR / "about.html").write_text(render_about_page(), encoding="utf-8")
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
 
