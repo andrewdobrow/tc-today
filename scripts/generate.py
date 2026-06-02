@@ -902,7 +902,10 @@ def render_index(all_categories, top_cat):
         </div>
         <div class="article-expand hero-expand">
           <div class="hero-expand-body">{paragraphs}</div>
-          <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
+          <div class="article-actions">
+            <button class="share-btn" data-headline="{hero["headline"].replace('"', "&quot;")}" onclick="shareArticle(this)">Share &#8599;</button>
+            <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
+          </div>
         </div>
       </div>
     </section>"""
@@ -958,7 +961,10 @@ def render_index(all_categories, top_cat):
         </div>
         <div class="article-expand">
           <div class="card-expand-body">{card_paragraphs}</div>
-          <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
+          <div class="article-actions">
+            <button class="share-btn" data-headline="{card["headline"].replace('"', "&quot;")}" onclick="shareArticle(this)">Share &#8599;</button>
+            <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
+          </div>
         </div>
       </div>"""
 
@@ -1263,25 +1269,29 @@ def render_about_page():
   <main>
     <div class="about-wrap">
       <span class="about-eyebrow">About</span>
-      <h1 class="about-headline">Local news for the Treasure Coast, every day.</h1>
+      <h1 class="about-headline">Local news for Florida's Treasure Coast.</h1>
       <div class="about-body">
-        <p>Treasure Coast Today covers Martin, St. Lucie, and Indian River counties with fresh local news four times a day. We write about local government, public safety, business, schools, sports, and things to do — the stories that actually affect people who live and work here.</p>
+        <p>Treasure Coast Today is a local news source covering Martin County, St. Lucie County, and Indian River County, Florida. We bring residents the stories that matter most close to home — local government, public safety, business and development, schools, sports, and things to do across the Treasure Coast.</p>
 
-        <p>Every story is sourced from local outlets and written by AI with a focus on accuracy, clarity, and local relevance. No national politics filler. No clickbait. Just what's happening on the Treasure Coast.</p>
+        <p>Our focus is simple: the news that actually affects the people who live and work here. From county commission decisions in Stuart to development in Port St. Lucie, school district news in Vero Beach to public safety in Fort Pierce, we keep the community informed about what's happening in their own backyard.</p>
 
-        <h2>How it works</h2>
-        <p>Our pipeline runs at 7am, 12pm, 5pm, and 10pm ET. It pulls from local news sources including WPTV and regional feeds, selects the most important stories for each category, and writes concise summaries. The front page hero is chosen based on local impact — a county commission vote matters more than a national story with no local angle.</p>
+        <h2>Our coverage area</h2>
+        <p>We cover all three Treasure Coast counties with equal dedication:</p>
+        <p><strong>Martin County</strong> — Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno, and surrounding communities.</p>
+        <p><strong>St. Lucie County</strong> — Port St. Lucie, Fort Pierce, St. Lucie West, and the surrounding area.</p>
+        <p><strong>Indian River County</strong> — Vero Beach, Sebastian, Fellsmere, and nearby communities.</p>
+        <p>We also cover statewide Florida news that affects Treasure Coast residents, from legislation in Tallahassee to issues touching the entire region. Stories are organized by both topic and county, so readers can quickly find the local news most relevant to them.</p>
 
-        <h2>Coverage area</h2>
-        <p>We cover all three Treasure Coast counties equally — Martin County (Stuart, Jensen Beach, Palm City, Hobe Sound), St. Lucie County (Port St. Lucie, Fort Pierce), and Indian River County (Vero Beach, Sebastian). Stories are tagged by both topic and county so you can find exactly what you're looking for.</p>
+        <h2>Our mission</h2>
+        <p>Local news strengthens communities. When residents know what's happening in their towns, they make better decisions, get more involved, and hold their institutions accountable. Treasure Coast Today exists to make staying informed about local news effortless for everyone on the Treasure Coast.</p>
 
-        <h2>Advertising</h2>
-        <p>Treasure Coast Today is supported by local advertising. If your business serves Treasure Coast residents, we'd love to talk. <a href="advertise.html" class="about-contact">Learn more about advertising &rarr;</a></p>
+        <h2>Advertise with us</h2>
+        <p>Treasure Coast Today connects local businesses with engaged readers across Martin, St. Lucie, and Indian River counties. If your business serves the Treasure Coast community, we'd love to help you reach them. <a href="advertise.html" class="about-contact">Learn more about advertising &rarr;</a></p>
 
         <hr class="about-divider">
 
-        <h2>Contact</h2>
-        <p>Questions, tips, or corrections? Reach us at <a href="mailto:hello@treasurecoast.today" class="about-contact">hello@treasurecoast.today</a></p>
+        <h2>Get in touch</h2>
+        <p>Have a news tip, question, or correction? We'd love to hear from you at <a href="mailto:hello@treasurecoast.today" class="about-contact">hello@treasurecoast.today</a></p>
       </div>
     </div>
   </main>
