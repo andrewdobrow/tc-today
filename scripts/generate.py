@@ -395,7 +395,7 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
 
 # -- CATEGORY CONTENT GENERATION --
 
-LOCAL_SYSTEM_PROMPT = """You write factual local news articles for Treasure Coast Today, covering Martin, St. Lucie, and Indian River counties in Florida. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries. Name specific towns, streets, facilities, and local officials when available."""
+LOCAL_SYSTEM_PROMPT = """You write factual local news articles for Treasure Coast Today, covering Martin, St. Lucie, and Indian River counties in Florida. Your readers live here — they care about what's happening in their towns, schools, and county government far more than national news. Always prioritize genuinely local stories over state or national ones. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries. Name specific towns, streets, facilities, and local officials when available. Towns include: Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno, Port St. Lucie, Fort Pierce, Vero Beach, Sebastian, Fellsmere, and surrounding communities."""
 
 def generate_category_content(category_key, category_label, headlines):
     def sanitize(text):
@@ -418,10 +418,17 @@ def generate_category_content(category_key, category_label, headlines):
 {headlines_text}
 
 Tasks:
-1. Pick the single most important/urgent story relevant to Treasure Coast Florida residents.
-2. Write an accurate, locally-framed headline. Name the specific county or town in the headline if relevant.
-3. Write a 380-430 word factual article in FOUR full paragraphs. Use only confirmed facts. Name specific places, officials, and addresses when available. Cover what happened, who is affected, and what happens next. Do NOT write only two paragraphs.
+1. Pick the single most important/urgent story for Treasure Coast Florida residents. LOCAL stories affecting residents directly (county commission decisions, local crime, school district news, local business openings/closings, road/infrastructure, local sports) should be ranked ABOVE national or state stories unless the national story has a very direct local impact (e.g. a hurricane heading toward Martin County, a federal ruling on the Indian River Lagoon). A routine city council vote in Stuart is more relevant to this audience than a national political story.
+2. Write an accurate, locally-framed headline. Name the specific county, city, or town (Stuart, Port St. Lucie, Fort Pierce, Vero Beach, Jensen Beach, Palm City, Hobe Sound, Sebastian, etc.) in the headline when relevant.
+3. Write a 380-430 word factual article in FOUR full paragraphs. Use only confirmed facts. Name specific places, officials, streets, and facilities when available. Cover what happened, who is affected locally, and what happens next for the community. Do NOT write only two paragraphs.
 4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one sentence), body (two short paragraphs ~100 words), and urgency_score (1-10). Cards MUST be different stories from the hero.
+
+URGENCY SCORING for local news (1-10):
+- 9-10: Major public safety event, significant government decision directly affecting residents, serious local crime with community impact, natural disaster or emergency
+- 7-8: Local government vote or proposal, business opening/closing affecting jobs or services, school district news, local development approval
+- 5-6: Regional sports, community events, local business news, follow-up stories
+- 3-4: State or national news with indirect local connection
+- 1-2: National/state news with no meaningful local angle — these should rarely appear
 
 Return ONLY valid JSON:
 {{
@@ -598,14 +605,18 @@ def global_rank(all_cards, dedupe_against=None):
             "EXCLUDE any story covering this same underlying event.\n"
         )
     prompt = (
-        f"Rank these {n} Treasure Coast local news stories by importance and relevance to local residents.\n"
+        f"Rank these {n} Treasure Coast local news stories by importance and relevance to LOCAL residents of Martin, St. Lucie, and Indian River counties.\n"
         f"{dedupe_clause}\n"
-        "DEDUPLICATION: If multiple stories cover the same event, keep only the best version.\n"
-        "RANKING PRIORITY:\n"
-        "1. Stories with direct impact on residents (government decisions, public safety, major development)\n"
-        "2. County-wide or multi-county stories over single-town stories\n"
-        "3. Breaking news over follow-up coverage\n"
-        "4. Sports and things to do rank lowest unless exceptional\n\n"
+        "DEDUPLICATION: If multiple stories cover the same event, keep only the best version.\n\n"
+        "RANKING PRIORITY — local relevance is everything:\n"
+        "1. LOCAL government decisions directly affecting residents (county/city commission votes, zoning, budgets, school board actions)\n"
+        "2. LOCAL public safety (serious crimes, accidents, emergencies affecting the Treasure Coast community)\n"
+        "3. LOCAL business and development (jobs, new businesses, closings, real estate, major projects)\n"
+        "4. LOCAL schools and education news\n"
+        "5. State news with DIRECT local impact (a Florida law specifically affecting these counties, a state agency ruling on a local issue)\n"
+        "6. LOCAL sports and community events\n"
+        "7. National or state news with indirect/no local connection — rank these LOWEST. A national political story belongs at the bottom unless it has a named direct effect on Martin, St. Lucie, or Indian River County.\n\n"
+        "The audience lives here. A county commission vote on a new development matters more to them than a national headline with no local angle.\n\n"
         + "\n".join(stories) + "\n\n"
         "Return ONLY a JSON array of numbers in ranked order, duplicates removed. Example: [3,1,7,2]"
     )
