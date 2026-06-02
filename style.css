@@ -625,34 +625,53 @@ footer {
     grid-template-columns: 1fr;
   }
 
-  /* Mobile header: match the compact Plain-style top category bar */
+  /* Mobile header: logo + Advertise on top, category scroller on its own row */
   .header-inner {
-    height: 56px;
-    min-height: 56px;
-    padding: 0 16px;
+    height: auto;
+    min-height: 0;
+    padding: 10px 16px 9px;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    flex-wrap: nowrap;
-    gap: 16px;
+    gap: 10px;
   }
 
   .header-top {
-    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
     min-width: 0;
   }
 
   .wordmark {
+    flex: 1 1 auto;
+    min-width: 0;
     font-size: 21px;
+    line-height: 1.1;
   }
 
   .header-actions {
-    display: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: auto;
+    flex: 0 0 auto;
+  }
+
+  .support-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    font-size: 12px;
+    line-height: 1.2;
   }
 
   .category-nav {
-    flex: 1 1 auto;
+    order: 3;
+    width: 100%;
+    flex: 0 0 100%;
     min-width: 0;
-    width: auto;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -661,9 +680,10 @@ footer {
     overflow-x: auto;
     overflow-y: hidden;
     max-height: none;
+    padding-top: 1px;
     scrollbar-width: none;
-    -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
-    mask-image: linear-gradient(to right, black 80%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 84%, transparent 100%);
+    mask-image: linear-gradient(to right, black 84%, transparent 100%);
   }
 
   .category-nav::-webkit-scrollbar {
@@ -671,10 +691,13 @@ footer {
   }
 
   .cat-btn {
-    padding: 6px 13px;
+    flex: 0 0 auto;
+    padding: 6px 11px;
+    font-size: 13px;
   }
 
   .hero-image {
     height: 200px;
   }
 }
+
