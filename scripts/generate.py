@@ -99,6 +99,18 @@ CATEGORIES = {
             "https://news.google.com/rss/search?q=vero+beach+florida+events+arts+beach+when:7d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
+    "florida": {
+        "label": "Florida",
+        "front_page_hero": False,
+        "feeds": [
+            "https://news.google.com/rss/search?q=florida+news+when:1d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=florida+legislature+governor+desantis+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=florida+economy+housing+insurance+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://feeds.sun-sentinel.com/sun-sentinel/news/florida",
+            "https://www.miamiherald.com/news/state/florida/rss.xml",
+            "https://floridapolitics.com/feed/",
+        ],
+    },
     "martin": {
         "label": "Martin County",
         "front_page_hero": False,
@@ -706,6 +718,7 @@ def render_index(all_categories, top_cat):
         "schools":      "Treasure Coast Schools News",
         "sports":       "Treasure Coast Sports News",
         "things_to_do": "Things To Do on the Treasure Coast",
+        "florida":      "Florida News",
     }
 
     def hero_section(cat_key, cat_label, hero, visible=False):
@@ -858,139 +871,67 @@ def render_index(all_categories, top_cat):
 </html>"""
 
 
-def fetch_eventbrite_events():
-    """Fetch upcoming local events from Eventbrite API. Returns list of event dicts."""
-    api_key = os.environ.get("EVENTBRITE_API_KEY", "")
-    if not api_key:
-        print("  Eventbrite: no API key, skipping events page")
-        return []
-    try:
-        params = {
-            "location.latitude":      27.1975,
-            "location.longitude":    -80.2520,
-            "location.within":        "30mi",
-            "expand":                 "venue,logo",
-            "sort_by":                "date",
-            "start_date.range_start": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
-        }
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Accept":        "application/json",
-        }
-        resp = requests.get(
-            "https://www.eventbriteapi.com/v3/events/search/",
-            params=params, headers=headers, timeout=15
-        )
-        if resp.status_code != 200:
-            print(f"  Eventbrite API error: {resp.status_code} — {resp.text[:300]}")
-            return []
-        data = resp.json()
-        events = []
-        for e in data.get("events", [])[:30]:
-            venue    = e.get("venue") or {}
-            logo     = e.get("logo") or {}
-            name     = (e.get("name") or {}).get("text", "")
-            desc     = (e.get("description") or {}).get("text", "")[:300]
-            start    = (e.get("start") or {}).get("local", "")
-            url      = e.get("url", "")
-            city     = venue.get("city", "")
-            address  = (venue.get("address") or {}).get("localized_address_display", "")
-            img      = logo.get("url", "") or logo.get("original", {}).get("url", "")
-            is_free  = e.get("is_free", False)
-            # Parse date for display
-            try:
-                from datetime import datetime as dt
-                d = dt.strptime(start[:16], "%Y-%m-%dT%H:%M")
-                date_display = d.strftime("%a, %b %-d")
-                time_display = d.strftime("%-I:%M %p")
-            except Exception:
-                date_display = start[:10]
-                time_display = ""
-            events.append({
-                "name":         name,
-                "description":  desc,
-                "date":         date_display,
-                "time":         time_display,
-                "city":         city,
-                "address":      address,
-                "url":          url,
-                "image":        img,
-                "is_free":      is_free,
-            })
-        print(f"  Eventbrite: {len(events)} events fetched")
-        return events
-    except Exception as e:
-        print(f"  Eventbrite fetch failed: {e}")
-        return []
 
-
-def render_events_page(events):
-    """Generate a standalone events.html page."""
-    ts     = now_et()
-    head   = _page_head("Events — Treasure Coast Today", "Upcoming events on the Treasure Coast — Martin, St. Lucie, and Indian River counties.", "/events.html")
+def render_events_page():
+    """Generate a coming-soon events.html page with email capture for organizers."""
+    head   = _page_head("List Your Event — Treasure Coast Today",
+                        "Coming soon: list your Treasure Coast event for free. Sign up to be notified when the events calendar launches.",
+                        "/events.html")
     header = _page_header(active="events")
     footer = _page_footer()
-
-    if not events:
-        events_html = '<p class="no-events">No upcoming events found. Check back soon.</p>'
-    else:
-        events_html = ""
-        for ev in events:
-            img_html   = f'<img src="{ev["image"]}" alt="" class="event-img" loading="lazy">' if ev.get("image") else '<div class="event-img-placeholder"></div>'
-            free_badge = '<span class="event-free">Free</span>' if ev.get("is_free") else ""
-            city_str   = f' &middot; {ev["city"]}' if ev.get("city") else ""
-            time_str   = f' at {ev["time"]}' if ev.get("time") else ""
-            events_html += f"""
-    <a href="{ev['url']}" target="_blank" rel="noopener" class="event-card">
-      <div class="event-img-wrap">{img_html}</div>
-      <div class="event-info">
-        <div class="event-date-row">
-          <span class="event-date">{ev['date']}{time_str}</span>
-          {free_badge}
-        </div>
-        <h2 class="event-name">{ev['name']}</h2>
-        <p class="event-location">{ev.get('address','') or ev.get('city','')}{city_str}</p>
-        <p class="event-desc">{ev.get('description','')}</p>
-      </div>
-    </a>"""
-
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 {head}
   <style>
-    .events-header {{ max-width: 900px; margin: 40px auto 8px; padding: 0 24px; }}
-    .events-header h1 {{ font-family: 'Fraunces', serif; font-size: 32px; color: var(--text); margin: 0 0 4px; }}
-    .events-header p {{ color: var(--text-secondary); font-size: 14px; margin: 0 0 32px; }}
-    .events-grid {{ max-width: 900px; margin: 0 auto; padding: 0 24px 64px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }}
-    .event-card {{ background: var(--bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: box-shadow .15s; }}
-    .event-card:hover {{ box-shadow: 0 4px 20px rgba(0,0,0,.12); }}
-    .event-img-wrap {{ height: 160px; overflow: hidden; background: var(--border); }}
-    .event-img {{ width: 100%; height: 100%; object-fit: cover; }}
-    .event-img-placeholder {{ width: 100%; height: 100%; background: var(--border); }}
-    .event-info {{ padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 6px; }}
-    .event-date-row {{ display: flex; align-items: center; gap: 8px; }}
-    .event-date {{ font-size: 12px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .5px; }}
-    .event-free {{ font-size: 11px; background: var(--accent); color: white; padding: 2px 7px; border-radius: 20px; font-weight: 600; }}
-    .event-name {{ font-size: 16px; font-weight: 600; color: var(--text); line-height: 1.35; margin: 0; }}
-    .event-location {{ font-size: 12px; color: var(--text-secondary); margin: 0; }}
-    .event-desc {{ font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }}
-    .no-events {{ text-align: center; color: var(--text-secondary); padding: 64px 24px; font-size: 16px; }}
-    @media(max-width:600px) {{ .events-grid {{ grid-template-columns: 1fr; }} }}
+    .cs-wrap {{ max-width: 600px; margin: 80px auto 80px; padding: 0 24px; text-align: center; }}
+    .cs-eyebrow {{ font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 16px; }}
+    .cs-headline {{ font-family: 'Fraunces', serif; font-size: clamp(28px, 5vw, 44px); font-weight: 600; line-height: 1.15; color: var(--text); margin: 0 0 20px; letter-spacing: -.02em; }}
+    .cs-sub {{ font-size: 16px; color: var(--text-secondary); line-height: 1.65; margin: 0 0 40px; }}
+    .cs-form {{ display: flex; gap: 10px; max-width: 440px; margin: 0 auto 16px; }}
+    .cs-input {{ flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); outline: none; transition: border-color .15s; }}
+    .cs-input:focus {{ border-color: var(--accent); }}
+    .cs-input::placeholder {{ color: var(--text-secondary); opacity: .5; }}
+    .cs-btn {{ background: var(--accent); color: white; border: none; border-radius: 8px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: opacity .15s; }}
+    .cs-btn:hover {{ opacity: .88; }}
+    .cs-fine {{ font-size: 12px; color: var(--text-secondary); }}
+    .cs-success {{ display: none; color: var(--accent); font-size: 15px; font-weight: 500; margin-top: 12px; }}
+    .cs-divider {{ border: none; border-top: 1px solid var(--border); margin: 48px 0; }}
+    .cs-also {{ font-size: 14px; color: var(--text-secondary); }}
+    .cs-also a {{ color: var(--accent); text-decoration: none; font-weight: 500; }}
+    @media(max-width:500px) {{ .cs-form {{ flex-direction: column; }} .cs-btn {{ width: 100%; }} }}
   </style>
 </head>
 <body>
 {header}
   <main>
-    <div class="events-header">
-      <h1>Upcoming Events</h1>
-      <p>Things to do across Martin, St. Lucie &amp; Indian River counties &middot; Updated {ts}</p>
-    </div>
-    <div class="events-grid">
-      {events_html}
+    <div class="cs-wrap">
+      <span class="cs-eyebrow">Coming Soon</span>
+      <h1 class="cs-headline">List your Treasure Coast event for free.</h1>
+      <p class="cs-sub">We're building a local events calendar for Martin, St. Lucie, and Indian River counties. Leave your email and we'll let you know when you can submit your event.</p>
+      <form class="cs-form" id="csForm" action="https://formspree.io/f/mqejrpdv" method="POST">
+        <input type="hidden" name="_subject" value="Events calendar interest — Treasure Coast Today">
+        <input class="cs-input" type="email" name="email" placeholder="your@email.com" required>
+        <button class="cs-btn" type="submit">Notify me</button>
+      </form>
+      <p class="cs-fine">No spam. Just a heads-up when the calendar is live.</p>
+      <p class="cs-success" id="csSuccess">&#10003; You're on the list — we'll be in touch!</p>
+      <hr class="cs-divider">
+      <p class="cs-also">In the meantime, check out <a href="/?cat=things_to_do">Things To Do</a> for local event coverage, or <a href="advertise.html">advertise with us</a> to reach Treasure Coast readers.</p>
     </div>
   </main>
 {footer}
+  <script>
+    const f=document.getElementById('csForm'),s=document.getElementById('csSuccess');
+    f.addEventListener('submit',async(e)=>{{
+      e.preventDefault();
+      try{{
+        const r=await fetch(f.action,{{method:'POST',body:new FormData(f),headers:{{'Accept':'application/json'}}}});
+        if(r.ok){{f.style.display='none';s.style.display='block';}}
+        else alert('Something went wrong. Please try again.');
+      }}catch(err){{alert('Something went wrong. Please try again.');}}
+    }});
+  </script>
 </body>
 </html>"""
 
@@ -1107,6 +1048,7 @@ def _page_header(active=""):
         {cat_link("Schools", "/?cat=schools", "schools")}
         {cat_link("Sports", "/?cat=sports", "sports")}
         {cat_link("Things To Do", "/?cat=things_to_do", "things_to_do")}
+        {cat_link("Florida", "/?cat=florida", "florida")}
         {cat_link("Martin Co.", "/?cat=martin", "martin")}
         {cat_link("St. Lucie Co.", "/?cat=st_lucie", "st_lucie")}
         {cat_link("Indian River Co.", "/?cat=indian_river", "indian_river")}
@@ -1381,11 +1323,8 @@ def main():
     (OUTPUT_DIR / "index.html").write_text(index_html, encoding="utf-8")
     write_data_json(all_categories, top_cat)
 
-    # Events page
-    print("Fetching Eventbrite events...")
-    events = fetch_eventbrite_events()
-    events_html = render_events_page(events)
-    (OUTPUT_DIR / "events.html").write_text(events_html, encoding="utf-8")
+    # Events coming-soon page
+    (OUTPUT_DIR / "events.html").write_text(render_events_page(), encoding="utf-8")
 
     # Static pages (regenerated every run to pick up any template changes)
     (OUTPUT_DIR / "about.html").write_text(render_about_page(), encoding="utf-8")
