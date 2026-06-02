@@ -255,7 +255,14 @@ def build_image_bank():
 def tokens(text):
     stops = {"the","a","an","in","of","for","to","and","or","on","at","is","was","are",
              "were","that","this","with","from","have","been","after","over","into","says",
-             "said","will","than","more","also","when","s"}
+             "said","will","than","more","also","when","s",
+             # Geographic/common terms that appear in nearly every Treasure Coast headline —
+             # these carry no story-specific signal here, so matching on them produces
+             # false positives (two unrelated stories both mention "Martin County Florida").
+             "county","florida","treasure","coast","martin","lucie","indian","river",
+             "beach","port","stuart","pierce","vero","jensen","palm","city","sebastian",
+             "hobe","sound","salerno","fellsmere","news","area","local","new","report",
+             "police","man","woman","year","years","day","week","county's"}
     return set(w.lower().strip(".,;:()") for w in text.split() if len(w)>3 and w.lower() not in stops)
 
 def match_image(headline, image_bank, cat_key=None, used_images=None):
@@ -269,6 +276,10 @@ def match_image(headline, image_bank, cat_key=None, used_images=None):
     """
     used_images = used_images or set()
     hw = tokens(headline)
+    # If the headline has almost no distinctive tokens left after filtering, don't
+    # risk a match — there's nothing meaningful to match on.
+    if len(hw) < 2:
+        return "", ""
     best_score, best_img, best_credit = 0, "", ""
 
     for entry in image_bank:
@@ -277,22 +288,23 @@ def match_image(headline, image_bank, cat_key=None, used_images=None):
             continue
         et = tokens(entry.get("title", ""))
         overlap = len(hw & et)
-        # Require at least 3 shared meaningful words for a normal match.
+        # Require at least 3 shared meaningful (non-geographic) words.
         if overlap > best_score and overlap >= 3:
             best_score  = overlap
             best_img    = img
             best_credit = get_image_credit(entry.get("source",""))
 
-    # Distinctive-token fallback. This catches specific names/places like Wawa,
-    # Macy's, Jensen, Fellsmere, etc., but still requires two distinctive terms.
+    # Distinctive-token fallback for specific names/places like Wawa, Macy's, etc.
+    # Now requires 2 shared DISTINCTIVE words AND that they be genuinely distinctive
+    # (7+ chars, proper-noun-like), since common 6-char words caused false matches.
     if not best_img:
-        distinctive = {w for w in hw if len(w) >= 6}
-        if distinctive:
+        distinctive = {w for w in hw if len(w) >= 7}
+        if len(distinctive) >= 2:
             for entry in image_bank:
                 img = entry.get("image_url", "")
                 if canonical_image_url(img) in used_images:
                     continue
-                et = {w for w in tokens(entry.get("title", "")) if len(w) >= 6}
+                et = {w for w in tokens(entry.get("title", "")) if len(w) >= 7}
                 overlap = len(distinctive & et)
                 if overlap > best_score and overlap >= 2:
                     best_score  = overlap
@@ -319,6 +331,45 @@ def fetch_og_image(url):
         return ""
     except Exception:
         return ""
+
+def fetch_article_text(url, max_chars=2500):
+    """Fetch the readable body text of an article page so the model writes from
+    real content instead of a thin RSS summary. Returns plain text (truncated)
+    or empty string on any failure. Skips Google News redirect URLs."""
+    if not url or "news.google.com" in url.lower():
+        return ""
+    try:
+        resp = requests.get(url, timeout=12, allow_redirects=True,
+                            headers={"User-Agent":"Mozilla/5.0 (compatible; TCTBot/1.0)"})
+        if resp.status_code != 200:
+            return ""
+        html = resp.text
+        # Prefer text inside <article> if present, else <p> tags from the body
+        article_match = re.search(r"<article[^>]*>(.*?)</article>", html, re.DOTALL | re.IGNORECASE)
+        scope = article_match.group(1) if article_match else html
+        # Collect paragraph text
+        paras = re.findall(r"<p[^>]*>(.*?)</p>", scope, re.DOTALL | re.IGNORECASE)
+        text_parts = []
+        for p in paras:
+            clean = re.sub(r"<[^>]+>", "", p)           # strip nested tags
+            clean = re.sub(r"&[a-z]+;", " ", clean)     # strip entities
+            clean = re.sub(r"\s+", " ", clean).strip()
+            # Skip boilerplate / junk paragraphs
+            if len(clean) < 40:
+                continue
+            low = clean.lower()
+            if any(junk in low for junk in ["subscribe", "sign up", "cookie", "advertisement",
+                                            "all rights reserved", "terms of service", "privacy policy",
+                                            "follow us", "newsletter"]):
+                continue
+            text_parts.append(clean)
+            if sum(len(t) for t in text_parts) > max_chars:
+                break
+        return " ".join(text_parts)[:max_chars]
+    except Exception:
+        return ""
+
+
 
 def extract_publisher_url(entry):
     """Return the publisher URL for Google News RSS entries when possible.
@@ -456,7 +507,15 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
             return False  # Unparseable date = reject
     fresh = [h for h in headlines if is_fresh(h)]
     result = fresh if len(fresh) >= 1 else headlines
-    return result[:limit]
+    result = result[:limit]
+    # Fetch fuller article text for each surviving headline so the model writes
+    # from real content instead of a thin RSS summary. This is the single biggest
+    # lever for richer hero AND card articles.
+    for h in result:
+        full = fetch_article_text(h.get("link", ""))
+        if full and len(full) > len(h.get("summary", "")):
+            h["article_text"] = full
+    return result
 
 # -- CATEGORY CONTENT GENERATION --
 
@@ -475,7 +534,9 @@ def generate_category_content(category_key, category_label, headlines):
     def hl_line(i, h):
         pub     = sanitize(h.get("published",""))
         pub_str = f" [pub:{pub}]" if pub else ""
-        return f"{i+1}. {sanitize(h.get('title',''))}{pub_str}\n   {sanitize(h.get('summary',''))[:550]}"
+        # Use fuller article text when we managed to fetch it, else the RSS summary
+        content = h.get("article_text", "") or h.get("summary", "")
+        return f"{i+1}. {sanitize(h.get('title',''))}{pub_str}\n   {sanitize(content)[:1400]}"
 
     headlines_text = "\n".join(hl_line(i,h) for i,h in enumerate(headlines))
     headlines_text = headlines_text.replace("\\","").encode("ascii","ignore").decode("ascii")
@@ -492,7 +553,7 @@ Tasks:
 1. Pick the single most important/urgent Florida statewide story. Prioritize stories with broad impact across Florida — major legislation, court rulings, economic news, environmental decisions, significant crimes or disasters anywhere in the state. Do NOT favor Treasure Coast stories here; this is the statewide section.
 2. Write an accurate Florida-focused headline. Name the specific Florida city, region, or institution when relevant.
 3. Write a 380-430 word factual article in FOUR full paragraphs. Cover what happened, who is affected across Florida, and what happens next statewide. Do NOT write only two paragraphs.
-4. For the next {CARDS_PER_CATEGORY} most important Florida stories write a teaser (one sentence), body (two short paragraphs ~100 words), and urgency_score (1-10). Cards MUST be different stories from the hero.
+4. For the next {CARDS_PER_CATEGORY} most important Florida stories write a teaser (one to two sentences that summarize the story and entice the reader), a body of THREE full paragraphs (200-250 words) covering what happened, who is affected, and what comes next, and an urgency_score (1-10). Cards MUST be different stories from the hero. Card bodies should be substantial and informative — not a thin summary. Use only confirmed facts and name specific people, places, and institutions.
 
 URGENCY SCORING for Florida statewide news (1-10):
 - 9-10: Major legislation signed/passed, significant court ruling, statewide emergency or disaster, major economic news affecting all Floridians
@@ -511,12 +572,12 @@ Return ONLY valid JSON:
     "source_index": <number>
   }},
   "cards": [
-    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}
+    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}
   ]
 }}"""
     else:
@@ -528,7 +589,7 @@ Tasks:
 1. Pick the single most important/urgent story for Treasure Coast Florida residents. LOCAL stories affecting residents directly (county commission decisions, local crime, school district news, local business openings/closings, road/infrastructure, local sports) should be ranked ABOVE national or state stories unless the national story has a very direct local impact (e.g. a hurricane heading toward Martin County, a federal ruling on the Indian River Lagoon). A routine city council vote in Stuart is more relevant to this audience than a national political story.
 2. Write an accurate, locally-framed headline. Name the specific county, city, or town (Stuart, Port St. Lucie, Fort Pierce, Vero Beach, Jensen Beach, Palm City, Hobe Sound, Sebastian, etc.) in the headline when relevant.
 3. Write a 380-430 word factual article in FOUR full paragraphs. Use only confirmed facts. Name specific places, officials, streets, and facilities when available. Cover what happened, who is affected locally, and what happens next for the community. Do NOT write only two paragraphs.
-4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one sentence), body (two short paragraphs ~100 words), and urgency_score (1-10). Cards MUST be different stories from the hero.
+4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one to two sentences that summarize the story and entice the reader), a body of THREE full paragraphs (200-250 words) covering what happened, who is affected locally, and what comes next for the community, and an urgency_score (1-10). Cards MUST be different stories from the hero. Card bodies should be substantial and informative — not a thin summary. Use only confirmed facts and name specific local people, places, streets, and institutions.
 
 URGENCY SCORING for local news (1-10):
 - 9-10: Major public safety event, significant government decision directly affecting residents, serious local crime with community impact, natural disaster or emergency
@@ -547,19 +608,19 @@ Return ONLY valid JSON:
     "source_index": <number>
   }},
   "cards": [
-    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}
+    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
+    {{"headline": "...", "teaser": "...", "body": "three full paragraphs, 200-250 words...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}
   ]
 }}"""
 
     try:
         response = client.messages.create(
             model="claude-sonnet-4-5",
-            max_tokens=1800,
+            max_tokens=4000,
             system=[{"type":"text","text":system_prompt,"cache_control":{"type":"ephemeral"}}],
             messages=[{"role":"user","content":prompt}],
         )
