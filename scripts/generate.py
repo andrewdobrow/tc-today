@@ -258,26 +258,45 @@ def tokens(text):
              "said","will","than","more","also","when","s"}
     return set(w.lower().strip(".,;:()") for w in text.split() if len(w)>3 and w.lower() not in stops)
 
-def match_image(headline, image_bank, cat_key=None):
+def match_image(headline, image_bank, cat_key=None, used_images=None):
+    """Conservative image-bank match.
+
+    This is intentionally strict because a missing image is better than a wrong
+    image. We only accept a bank image when the bank article title has a strong
+    token overlap with the story headline/context. Previously this accepted loose
+    two-token matches and could reuse the same unrelated image across multiple
+    heroes.
+    """
+    used_images = used_images or set()
     hw = tokens(headline)
     best_score, best_img, best_credit = 0, "", ""
+
     for entry in image_bank:
-        et = tokens(entry["title"])
+        img = entry.get("image_url", "")
+        if canonical_image_url(img) in used_images:
+            continue
+        et = tokens(entry.get("title", ""))
         overlap = len(hw & et)
-        if overlap > best_score and overlap >= 2:
+        # Require at least 3 shared meaningful words for a normal match.
+        if overlap > best_score and overlap >= 3:
             best_score  = overlap
-            best_img    = entry["image_url"]
+            best_img    = img
             best_credit = get_image_credit(entry.get("source",""))
-    # Distinctive-token fallback
+
+    # Distinctive-token fallback. This catches specific names/places like Wawa,
+    # Macy's, Jensen, Fellsmere, etc., but still requires two distinctive terms.
     if not best_img:
         distinctive = {w for w in hw if len(w) >= 6}
         if distinctive:
             for entry in image_bank:
-                et = {w for w in tokens(entry["title"]) if len(w) >= 6}
+                img = entry.get("image_url", "")
+                if canonical_image_url(img) in used_images:
+                    continue
+                et = {w for w in tokens(entry.get("title", "")) if len(w) >= 6}
                 overlap = len(distinctive & et)
                 if overlap > best_score and overlap >= 2:
                     best_score  = overlap
-                    best_img    = entry["image_url"]
+                    best_img    = img
                     best_credit = get_image_credit(entry.get("source",""))
     return best_img, best_credit
 
@@ -300,6 +319,34 @@ def fetch_og_image(url):
         return ""
     except Exception:
         return ""
+
+def extract_publisher_url(entry):
+    """Return the publisher URL for Google News RSS entries when possible.
+    Google News often stores the real publisher link inside the description HTML.
+    Using the publisher URL lets us fetch the article's own og:image instead of
+    relying on loose RSS thumbnails or unrelated image-bank matches.
+    """
+    link = entry.get("link", "") or getattr(entry, "link", "")
+    if "news.google.com" not in link:
+        return link
+
+    html = ""
+    for field in ["summary", "description"]:
+        val = entry.get(field, "") or getattr(entry, field, "")
+        if isinstance(val, list) and val:
+            html = val[0].get("value", "") if isinstance(val[0], dict) else str(val[0])
+        elif isinstance(val, str):
+            html = val
+        if html:
+            break
+
+    matches = re.findall(r'href=["\'](https?://(?!news\.google)[^"\']+)["\']', html)
+    return matches[0] if matches else link
+
+def canonical_image_url(url):
+    if not url:
+        return ""
+    return re.sub(r"[?#].*$", "", url.strip())
 
 def format_age(raw_pub):
     if not raw_pub: return ""
@@ -379,7 +426,8 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
                 pub = ""
                 if hasattr(entry,"published"): pub = entry.published
                 elif hasattr(entry,"updated"):  pub = entry.updated
-                link = entry.get("link","") or getattr(entry,"link","")
+                raw_link = entry.get("link","") or getattr(entry,"link","")
+                link = extract_publisher_url(entry)
                 img  = extract_image(entry)
                 headlines.append({
                     "title":   title,
@@ -387,6 +435,7 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
                     "published": pub,
                     "link":    link,
                     "image_url": img,
+                    "image_from_google": "news.google.com" in raw_link.lower(),
                 })
         except Exception as e:
             pass
@@ -531,10 +580,11 @@ Return ONLY valid JSON:
                     source = headlines[int(idx)-1]
                     item["link"]      = source.get("link","")
                     item["image_url"] = source.get("image_url","")
+                    item["image_from_google"] = source.get("image_from_google", False)
                 except Exception:
-                    item["link"] = ""; item["image_url"] = ""
+                    item["link"] = ""; item["image_url"] = ""; item["image_from_google"] = False
             else:
-                item["link"] = ""; item["image_url"] = ""
+                item["link"] = ""; item["image_url"] = ""; item["image_from_google"] = False
             raw_pub = item.get("published","").replace("pub:","").strip().strip("[]")
             item["published"] = format_age(raw_pub)
             return item
@@ -1305,6 +1355,7 @@ def render_advertise_page():
 def main():
     print("Treasure Coast Today — building site...")
     image_bank = build_image_bank()
+    used_bank_images = set()
     all_categories = []
 
     for cat_key, cat_config in CATEGORIES.items():
@@ -1329,27 +1380,45 @@ def main():
             except Exception:
                 pass
 
+        # Conservative hero-image priority:
+        # 1) article RSS image, but only when it did not come from a Google News thumbnail
+        # 2) article's own og:image from the publisher page
+        # 3) strict image-bank match as a last resort
+        # 4) no image if confidence is low
+        img = ""
+        image_credit = ""
         source_img = data["hero"].get("image_url","")
-        bank_img, bank_credit = ("","")
-        if original_title:
-            bank_img, bank_credit = match_image(original_title, image_bank, cat_key)
-        if not bank_img:
-            bank_img, bank_credit = match_image(hero_headline, image_bank, cat_key)
-        if not bank_img:
-            body_ctx = (original_title or hero_headline) + " " + data["hero"].get("body","")[:250]
-            bank_img, bank_credit = match_image(body_ctx, image_bank, cat_key)
+        source_is_google_thumb = data["hero"].get("image_from_google", False)
+        link = data["hero"].get("link","")
 
-        img = source_img or bank_img
-        if not img:
-            link = data["hero"].get("link","")
-            og   = fetch_og_image(link)
+        if source_img and not source_is_google_thumb:
+            img = source_img
+            image_credit = get_image_credit(link)
+
+        if not img and link and "news.google.com" not in link.lower():
+            og = fetch_og_image(link)
             if og:
                 img = og
-                bank_credit = get_image_credit(link)
+                image_credit = get_image_credit(link)
                 print(f"  Hero image via og:image")
 
+        bank_img, bank_credit = ("", "")
+        if not img:
+            if original_title:
+                bank_img, bank_credit = match_image(original_title, image_bank, cat_key, used_bank_images)
+            if not bank_img:
+                bank_img, bank_credit = match_image(hero_headline, image_bank, cat_key, used_bank_images)
+            if not bank_img:
+                body_ctx = (original_title or hero_headline) + " " + data["hero"].get("body","")[:250]
+                bank_img, bank_credit = match_image(body_ctx, image_bank, cat_key, used_bank_images)
+            if bank_img:
+                img = bank_img
+                image_credit = bank_credit
+                used_bank_images.add(canonical_image_url(bank_img))
+                print(f"  Hero image via strict image-bank match")
+
         data["hero"]["image_url"]    = img
-        data["hero"]["image_credit"] = bank_credit
+        data["hero"]["image_credit"] = image_credit
 
         all_categories.append(data)
         print(f"  Hero: {data['hero']['headline'][:60]}... (urgency: {data['hero'].get('urgency_score')}, image: {'yes' if img else 'no'})")
