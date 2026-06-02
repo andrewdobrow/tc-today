@@ -897,7 +897,7 @@ def render_index(all_categories, top_cat):
       </nav>
 
       <div class="header-actions">
-        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
+        <a href="https://treasurecoast.today/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
       </div>
     </div>
   </header>
@@ -1103,7 +1103,7 @@ def _page_header(active=""):
       </nav>
 
       <div class="header-actions">
-        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
+        <a href="https://treasurecoast.today/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
       </div>
     </div>
   </header>"""
