@@ -36,16 +36,17 @@ header {
   max-width: 1200px;
   margin: 0 auto;
   padding: 8px 24px;
-  min-height: 64px;
-  display: flex;
+  min-height: 72px;
+
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 18px;
+  column-gap: 20px;
 }
 
 .header-top {
   display: flex;
   align-items: center;
-  flex-shrink: 0;
 }
 
 .wordmark {
@@ -60,14 +61,14 @@ header {
 
 .category-nav {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 4px;
-  flex: 1;
+  align-content: center;
+  gap: 4px 6px;
   min-width: 0;
   overflow: visible;
-  max-height: 72px;
+  line-height: 1;
 }
 
 .cat-btn {
@@ -77,6 +78,7 @@ header {
   border-radius: 20px;
   font-family: "DM Sans", sans-serif;
   font-size: 13px;
+  line-height: 1.2;
   color: var(--text-secondary);
   cursor: pointer;
   white-space: nowrap;
@@ -97,8 +99,7 @@ header {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
+  justify-content: flex-end;
 }
 
 .support-btn {
@@ -119,7 +120,6 @@ header {
   background: var(--accent);
   color: white;
 }
-
 /* -- UPDATE BAR -- */
 .update-bar {
   background: var(--bg-secondary);
