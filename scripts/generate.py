@@ -765,19 +765,13 @@ def render_index(all_categories, top_cat):
         for i, cat in enumerate([None] + all_categories)
     )
 
+    _head   = _page_head("Treasure Coast Today — Your Treasure Coast, every day.", "Local news for Martin, St. Lucie, and Indian River counties.")
+    _footer = _page_footer()
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Treasure Coast Today — Your Treasure Coast, every day.</title>
-  <meta name="description" content="Local news for Martin, St. Lucie, and Indian River counties.">
-  <meta property="og:title" content="Treasure Coast Today">
-  <meta property="og:description" content="Your Treasure Coast, every day.">
-  <meta property="og:url" content="{SITE_URL}">
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+{_head}
 </head>
 <body>
   <header>
@@ -786,6 +780,7 @@ def render_index(all_categories, top_cat):
       <nav class="category-nav">
         {nav_buttons}
         <a href="events.html" class="cat-btn" style="text-decoration:none">Events</a>
+        <a href="about.html" class="cat-btn" style="text-decoration:none">About</a>
       </nav>
       <div class="header-actions">
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
@@ -801,20 +796,7 @@ def render_index(all_categories, top_cat):
     </div>
   </main>
 
-  <footer>
-    <div class="footer-inner">
-      <span class="footer-wordmark">Treasure Coast Today</span>
-      <span class="footer-tagline">Local news for Martin, St. Lucie &amp; Indian River counties.</span>
-      <div class="footer-links">
-        <a href="about.html">About</a>
-        <a href="events.html">Events</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="mailto:hello@treasurecoast.today">Contact</a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="main.js"></script>
+{_footer}
 </body>
 </html>"""
 
@@ -886,17 +868,20 @@ def fetch_eventbrite_events():
 
 def render_events_page(events):
     """Generate a standalone events.html page."""
-    ts = now_et()
+    ts     = now_et()
+    head   = _page_head("Events — Treasure Coast Today", "Upcoming events on the Treasure Coast — Martin, St. Lucie, and Indian River counties.", "/events.html")
+    header = _page_header(active="events")
+    footer = _page_footer()
 
     if not events:
         events_html = '<p class="no-events">No upcoming events found. Check back soon.</p>'
     else:
         events_html = ""
         for ev in events:
-            img_html  = f'<img src="{ev["image"]}" alt="" class="event-img" loading="lazy">' if ev.get("image") else '<div class="event-img-placeholder"></div>'
+            img_html   = f'<img src="{ev["image"]}" alt="" class="event-img" loading="lazy">' if ev.get("image") else '<div class="event-img-placeholder"></div>'
             free_badge = '<span class="event-free">Free</span>' if ev.get("is_free") else ""
-            city_str  = f' &middot; {ev["city"]}' if ev.get("city") else ""
-            time_str  = f' at {ev["time"]}' if ev.get("time") else ""
+            city_str   = f' &middot; {ev["city"]}' if ev.get("city") else ""
+            time_str   = f' at {ev["time"]}' if ev.get("time") else ""
             events_html += f"""
     <a href="{ev['url']}" target="_blank" rel="noopener" class="event-card">
       <div class="event-img-wrap">{img_html}</div>
@@ -914,19 +899,13 @@ def render_events_page(events):
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Events — Treasure Coast Today</title>
-  <meta name="description" content="Upcoming events on the Treasure Coast — Martin, St. Lucie, and Indian River counties.">
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+{head}
   <style>
     .events-header {{ max-width: 900px; margin: 40px auto 8px; padding: 0 24px; }}
     .events-header h1 {{ font-family: 'Fraunces', serif; font-size: 32px; color: var(--text); margin: 0 0 4px; }}
-    .events-header p {{ color: var(--text-sub); font-size: 14px; margin: 0 0 32px; }}
+    .events-header p {{ color: var(--text-secondary); font-size: 14px; margin: 0 0 32px; }}
     .events-grid {{ max-width: 900px; margin: 0 auto; padding: 0 24px 64px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }}
-    .event-card {{ background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: box-shadow .15s; }}
+    .event-card {{ background: var(--bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: box-shadow .15s; }}
     .event-card:hover {{ box-shadow: 0 4px 20px rgba(0,0,0,.12); }}
     .event-img-wrap {{ height: 160px; overflow: hidden; background: var(--border); }}
     .event-img {{ width: 100%; height: 100%; object-fit: cover; }}
@@ -936,27 +915,14 @@ def render_events_page(events):
     .event-date {{ font-size: 12px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .5px; }}
     .event-free {{ font-size: 11px; background: var(--accent); color: white; padding: 2px 7px; border-radius: 20px; font-weight: 600; }}
     .event-name {{ font-size: 16px; font-weight: 600; color: var(--text); line-height: 1.35; margin: 0; }}
-    .event-location {{ font-size: 12px; color: var(--text-sub); margin: 0; }}
-    .event-desc {{ font-size: 13px; color: var(--text-sub); line-height: 1.5; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }}
-    .no-events {{ text-align: center; color: var(--text-sub); padding: 64px 24px; font-size: 16px; }}
+    .event-location {{ font-size: 12px; color: var(--text-secondary); margin: 0; }}
+    .event-desc {{ font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }}
+    .no-events {{ text-align: center; color: var(--text-secondary); padding: 64px 24px; font-size: 16px; }}
     @media(max-width:600px) {{ .events-grid {{ grid-template-columns: 1fr; }} }}
   </style>
 </head>
 <body>
-  <header>
-    <div class="header-inner">
-      <a href="/" class="wordmark">Treasure Coast Today</a>
-      <nav class="category-nav">
-        <a href="/" class="cat-btn" style="text-decoration:none">News</a>
-        <span class="cat-btn active">Events</span>
-      </nav>
-      <div class="header-actions">
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
-        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
-      </div>
-    </div>
-  </header>
-
+{header}
   <main>
     <div class="events-header">
       <h1>Upcoming Events</h1>
@@ -966,21 +932,7 @@ def render_events_page(events):
       {events_html}
     </div>
   </main>
-
-  <footer>
-    <div class="footer-inner">
-      <span class="footer-wordmark">Treasure Coast Today</span>
-      <span class="footer-tagline">Local news for Martin, St. Lucie &amp; Indian River counties.</span>
-      <div class="footer-links">
-        <a href="about.html">About</a>
-        <a href="events.html">Events</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="mailto:hello@treasurecoast.today">Contact</a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="main.js"></script>
+{footer}
 </body>
 </html>"""
 
@@ -1048,6 +1000,242 @@ def write_data_json(all_categories, top_cat):
     print("  data.json written")
 
 
+def _page_head(title, description, canonical_path=""):
+    """Shared HTML head used by every generated page."""
+    canonical = f"{SITE_URL}{canonical_path}" if canonical_path else SITE_URL
+    return f"""  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content="{description}">
+  <meta property="og:title" content="{title}">
+  <meta property="og:description" content="{description}">
+  <meta property="og:url" content="{canonical}">
+  <meta property="og:image" content="{SITE_URL}/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{SITE_URL}/og-image.png">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">"""
+
+
+def _page_header(active=""):
+    """Shared site header used by every generated page."""
+    def nav_link(label, href, key):
+        if key == active:
+            return f'<span class="cat-btn active">{label}</span>'
+        return f'<a href="{href}" class="cat-btn" style="text-decoration:none">{label}</a>'
+    return f"""  <header>
+    <div class="header-inner">
+      <a href="/" class="wordmark">Treasure Coast Today</a>
+      <nav class="category-nav">
+        {nav_link("News", "/", "news")}
+        {nav_link("Events", "events.html", "events")}
+        {nav_link("About", "about.html", "about")}
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">&#9790;</button>
+        <a href="advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
+      </div>
+    </div>
+  </header>"""
+
+
+def _page_footer():
+    """Shared footer used by every generated page."""
+    return """  <footer>
+    <div class="footer-inner">
+      <span class="footer-wordmark">Treasure Coast Today</span>
+      <span class="footer-tagline">Local news for Martin, St. Lucie &amp; Indian River counties.</span>
+      <div class="footer-links">
+        <a href="about.html">About</a>
+        <a href="events.html">Events</a>
+        <a href="advertise.html">Advertise</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="mailto:hello@treasurecoast.today">Contact</a>
+      </div>
+    </div>
+  </footer>
+  <script src="main.js"></script>"""
+
+
+def render_about_page():
+    """Generate about.html — static, only regenerated if this function changes."""
+    head   = _page_head("About — Treasure Coast Today", "Treasure Coast Today delivers local news for Martin, St. Lucie, and Indian River counties four times a day.", "/about.html")
+    header = _page_header(active="about")
+    footer = _page_footer()
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{head}
+  <style>
+    .about-wrap {{ max-width: 720px; margin: 56px auto 80px; padding: 0 24px; }}
+    .about-eyebrow {{ font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; display: block; }}
+    .about-headline {{ font-family: 'Fraunces', serif; font-size: clamp(32px, 5vw, 48px); font-weight: 600; line-height: 1.1; color: var(--text); margin: 0 0 24px; letter-spacing: -.02em; }}
+    .about-body {{ font-size: 16px; color: var(--text-secondary); line-height: 1.75; }}
+    .about-body p {{ margin: 0 0 20px; }}
+    .about-body h2 {{ font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500; color: var(--text); margin: 40px 0 12px; }}
+    .about-divider {{ border: none; border-top: 1px solid var(--border); margin: 40px 0; }}
+    .about-contact {{ display: inline-block; margin-top: 8px; color: var(--accent); font-weight: 500; }}
+  </style>
+</head>
+<body>
+{header}
+  <main>
+    <div class="about-wrap">
+      <span class="about-eyebrow">About</span>
+      <h1 class="about-headline">Local news for the Treasure Coast, every day.</h1>
+      <div class="about-body">
+        <p>Treasure Coast Today covers Martin, St. Lucie, and Indian River counties with fresh local news four times a day. We write about local government, public safety, business, schools, sports, and things to do — the stories that actually affect people who live and work here.</p>
+
+        <p>Every story is sourced from local outlets and written by AI with a focus on accuracy, clarity, and local relevance. No national politics filler. No clickbait. Just what's happening on the Treasure Coast.</p>
+
+        <h2>How it works</h2>
+        <p>Our pipeline runs at 7am, 12pm, 5pm, and 10pm ET. It pulls from local news sources including WPTV and regional feeds, selects the most important stories for each category, and writes concise summaries. The front page hero is chosen based on local impact — a county commission vote matters more than a national story with no local angle.</p>
+
+        <h2>Coverage area</h2>
+        <p>We cover all three Treasure Coast counties equally — Martin County (Stuart, Jensen Beach, Palm City, Hobe Sound), St. Lucie County (Port St. Lucie, Fort Pierce), and Indian River County (Vero Beach, Sebastian). Stories are tagged by both topic and county so you can find exactly what you're looking for.</p>
+
+        <h2>Advertising</h2>
+        <p>Treasure Coast Today is supported by local advertising. If your business serves Treasure Coast residents, we'd love to talk. <a href="advertise.html" class="about-contact">Learn more about advertising &rarr;</a></p>
+
+        <hr class="about-divider">
+
+        <h2>Contact</h2>
+        <p>Questions, tips, or corrections? Reach us at <a href="mailto:hello@treasurecoast.today" class="about-contact">hello@treasurecoast.today</a></p>
+      </div>
+    </div>
+  </main>
+{footer}
+</body>
+</html>"""
+
+
+def render_advertise_page():
+    """Generate advertise.html — Formspree contact form for ad inquiries."""
+    head   = _page_head("Advertise — Treasure Coast Today", "Reach thousands of Treasure Coast readers every day. Advertise with Treasure Coast Today.", "/advertise.html")
+    header = _page_header(active="advertise")
+    footer = _page_footer()
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{head}
+  <style>
+    .adv-wrap {{ max-width: 720px; margin: 56px auto 80px; padding: 0 24px; }}
+    .adv-eyebrow {{ font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; display: block; }}
+    .adv-headline {{ font-family: 'Fraunces', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 600; line-height: 1.1; color: var(--text); margin: 0 0 20px; letter-spacing: -.02em; }}
+    .adv-sub {{ font-size: 16px; color: var(--text-secondary); line-height: 1.65; margin: 0 0 40px; max-width: 560px; }}
+    .adv-stats {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 48px; }}
+    .adv-stat {{ background: var(--bg); padding: 20px 18px; text-align: center; }}
+    .adv-stat-num {{ font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: var(--accent); display: block; line-height: 1; margin-bottom: 6px; }}
+    .adv-stat-label {{ font-size: 12px; color: var(--text-secondary); line-height: 1.4; }}
+    .adv-divider {{ border: none; border-top: 1px solid var(--border); margin: 0 0 40px; }}
+    .adv-form-title {{ font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500; color: var(--text); margin: 0 0 28px; }}
+    .adv-form {{ display: flex; flex-direction: column; gap: 20px; }}
+    .adv-row {{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }}
+    .adv-field {{ display: flex; flex-direction: column; gap: 6px; }}
+    .adv-field label {{ font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); }}
+    .adv-field input, .adv-field select, .adv-field textarea {{ background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 11px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); outline: none; transition: border-color .15s; width: 100%; box-sizing: border-box; -webkit-appearance: none; }}
+    .adv-field input:focus, .adv-field select:focus, .adv-field textarea:focus {{ border-color: var(--accent); }}
+    .adv-field select {{ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230A7075' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }}
+    .adv-field textarea {{ resize: vertical; min-height: 100px; }}
+    .adv-field input::placeholder, .adv-field textarea::placeholder {{ color: var(--text-secondary); opacity: .5; }}
+    .adv-check-group {{ display: flex; flex-direction: column; gap: 10px; }}
+    .adv-check {{ display: flex; align-items: center; gap: 10px; cursor: pointer; }}
+    .adv-check input[type="checkbox"] {{ width: 16px; height: 16px; min-width: 16px; accent-color: var(--accent); cursor: pointer; padding: 0; }}
+    .adv-check span {{ font-size: 14px; color: var(--text); line-height: 1.4; }}
+    .adv-submit {{ background: var(--accent); color: white; border: none; border-radius: 8px; padding: 14px 28px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity .15s; align-self: flex-start; }}
+    .adv-submit:hover {{ opacity: .88; }}
+    .adv-submit:disabled {{ opacity: .5; cursor: not-allowed; }}
+    .adv-success {{ display: none; background: var(--bg); border: 1px solid var(--accent); border-radius: 12px; padding: 32px; text-align: center; }}
+    .adv-success-icon {{ font-size: 36px; display: block; margin-bottom: 12px; }}
+    .adv-success h3 {{ font-family: 'Fraunces', serif; font-size: 22px; color: var(--text); margin: 0 0 8px; }}
+    .adv-success p {{ font-size: 14px; color: var(--text-secondary); margin: 0; }}
+    .adv-fine {{ font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin-top: 4px; }}
+    @media (max-width: 580px) {{ .adv-wrap {{ margin-top: 32px; }} .adv-row {{ grid-template-columns: 1fr; }} .adv-stats {{ grid-template-columns: 1fr; }} .adv-submit {{ width: 100%; text-align: center; }} }}
+  </style>
+</head>
+<body>
+{header}
+  <main>
+    <div class="adv-wrap">
+      <span class="adv-eyebrow">Advertising</span>
+      <h1 class="adv-headline">Reach the Treasure Coast every day.</h1>
+      <p class="adv-sub">Treasure Coast Today delivers local news to Martin, St. Lucie, and Indian River County residents four times daily. Your business appears alongside stories they actually read.</p>
+      <div class="adv-stats">
+        <div class="adv-stat"><span class="adv-stat-num">4&times;</span><span class="adv-stat-label">Daily updates keeping readers coming back</span></div>
+        <div class="adv-stat"><span class="adv-stat-num">3</span><span class="adv-stat-label">Counties covered equally</span></div>
+        <div class="adv-stat"><span class="adv-stat-num">Local</span><span class="adv-stat-label">Readers who live, work, and spend here</span></div>
+      </div>
+      <hr class="adv-divider">
+      <h2 class="adv-form-title">Tell us about your business</h2>
+      <form class="adv-form" id="advForm" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+        <div class="adv-row">
+          <div class="adv-field"><label for="name">Your name *</label><input type="text" id="name" name="name" required placeholder="Jane Smith"></div>
+          <div class="adv-field"><label for="business">Business name *</label><input type="text" id="business" name="business" required placeholder="Sunrise Realty"></div>
+        </div>
+        <div class="adv-row">
+          <div class="adv-field"><label for="email">Email address *</label><input type="email" id="email" name="email" required placeholder="jane@example.com"></div>
+          <div class="adv-field"><label for="phone">Phone number</label><input type="tel" id="phone" name="phone" placeholder="(772) 555-0100"></div>
+        </div>
+        <div class="adv-field"><label for="website">Website</label><input type="url" id="website" name="website" placeholder="https://yourbusiness.com"></div>
+        <div class="adv-field">
+          <label for="industry">Industry / business type *</label>
+          <select id="industry" name="industry" required>
+            <option value="" disabled selected>Select one</option>
+            <option>Real estate</option><option>Restaurant / food &amp; beverage</option><option>Healthcare / medical</option><option>Legal services</option><option>Home services / contractors</option><option>Retail</option><option>Financial services</option><option>Automotive</option><option>Non-profit / community org</option><option>Events / entertainment</option><option>Education</option><option>Tourism / hospitality</option><option>Other</option>
+          </select>
+        </div>
+        <div class="adv-field">
+          <label>Which counties are most important for your audience?</label>
+          <div class="adv-check-group">
+            <label class="adv-check"><input type="checkbox" name="counties" value="Martin County"><span>Martin County (Stuart, Jensen Beach, Palm City, Hobe Sound)</span></label>
+            <label class="adv-check"><input type="checkbox" name="counties" value="St. Lucie County"><span>St. Lucie County (Port St. Lucie, Fort Pierce)</span></label>
+            <label class="adv-check"><input type="checkbox" name="counties" value="Indian River County"><span>Indian River County (Vero Beach, Sebastian)</span></label>
+            <label class="adv-check"><input type="checkbox" name="counties" value="All three counties"><span>All three counties</span></label>
+          </div>
+        </div>
+        <div class="adv-field">
+          <label for="budget">Estimated monthly budget</label>
+          <select id="budget" name="budget"><option value="" disabled selected>Select a range</option><option>Under $250/month</option><option>$250 – $500/month</option><option>$500 – $1,000/month</option><option>$1,000 – $2,500/month</option><option>$2,500+/month</option><option>Not sure yet</option></select>
+        </div>
+        <div class="adv-field">
+          <label for="goal">What's the main goal of your advertising?</label>
+          <select id="goal" name="goal"><option value="" disabled selected>Select one</option><option>Drive traffic to my website</option><option>Increase foot traffic / calls</option><option>Promote a specific event or offer</option><option>Build brand awareness in the area</option><option>Reach new customers in a specific county</option><option>Other</option></select>
+        </div>
+        <div class="adv-field">
+          <label for="start">When are you looking to start?</label>
+          <select id="start" name="start"><option value="" disabled selected>Select one</option><option>As soon as possible</option><option>Within the next month</option><option>1–3 months from now</option><option>Just exploring for now</option></select>
+        </div>
+        <div class="adv-field"><label for="message">Anything else you'd like us to know?</label><textarea id="message" name="message" placeholder="Tell us about your business, upcoming promotions, or any questions..."></textarea></div>
+        <p class="adv-fine">We'll get back to you within one business day. No spam, no automated sales sequences.</p>
+        <button type="submit" class="adv-submit" id="submitBtn">Send inquiry &rarr;</button>
+      </form>
+      <div class="adv-success" id="successMsg">
+        <span class="adv-success-icon">&#10003;</span>
+        <h3>Got it — thanks!</h3>
+        <p>We'll be in touch within one business day.</p>
+      </div>
+    </div>
+  </main>
+{footer}
+  <script>
+    const form=document.getElementById('advForm'),success=document.getElementById('successMsg'),btn=document.getElementById('submitBtn');
+    form.addEventListener('submit',async(e)=>{{
+      e.preventDefault();btn.disabled=true;btn.textContent='Sending...';
+      try{{
+        const res=await fetch(form.action,{{method:'POST',body:new FormData(form),headers:{{'Accept':'application/json'}}}});
+        if(res.ok){{form.style.display='none';success.style.display='block';}}
+        else{{btn.disabled=false;btn.textContent='Send inquiry \u2192';alert('Something went wrong. Please try again.');}}
+      }}catch(err){{btn.disabled=false;btn.textContent='Send inquiry \u2192';alert('Something went wrong. Please try again.');}}
+    }});
+  </script>
+</body>
+</html>"""
+
+
 def main():
     print("Treasure Coast Today — building site...")
     image_bank = build_image_bank()
@@ -1110,7 +1298,7 @@ def main():
     # Ensure no other category hero duplicates the front page hero
     promote_duplicate_heroes(top_cat, all_categories)
 
-    # Render and write
+    # Render and write all pages
     index_html = render_index(all_categories, top_cat)
     (OUTPUT_DIR / "index.html").write_text(index_html, encoding="utf-8")
     write_data_json(all_categories, top_cat)
@@ -1120,6 +1308,11 @@ def main():
     events = fetch_eventbrite_events()
     events_html = render_events_page(events)
     (OUTPUT_DIR / "events.html").write_text(events_html, encoding="utf-8")
+
+    # Static pages (regenerated every run to pick up any template changes)
+    (OUTPUT_DIR / "about.html").write_text(render_about_page(), encoding="utf-8")
+    (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
+
     print(f"Done. {len(all_categories)} categories, {len(events)} events written.")
 
 if __name__ == "__main__":
