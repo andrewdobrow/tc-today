@@ -168,7 +168,7 @@ setInterval(updateCountdown, 60000);
 // -- SHARE --
 function shareArticle(btn) {
   const headline = btn.getAttribute("data-headline") || "Treasure Coast Today";
-  const url      = "https://treasurecoast.today/";
+  const url      = btn.getAttribute("data-url") || "https://treasurecoast.today/";
   const shareText = headline + " — read more on Treasure Coast Today";
 
   // Native share sheet (mobile)
@@ -179,7 +179,7 @@ function shareArticle(btn) {
   }
 
   // Desktop fallback: copy headline + link to clipboard
-  const clipText = shareText + " " + url;
+  const clipText = shareText + "\n" + url;
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(clipText).then(() => {
       const original = btn.innerHTML;
