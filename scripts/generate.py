@@ -7,6 +7,7 @@ Runs 4x/day via cron-job.org -> GitHub Actions.
 import os
 import json
 import re
+import hashlib
 import feedparser
 import requests
 import anthropic
@@ -232,12 +233,9 @@ def extract_image(entry):
         if valid(u): return u
     return ""
 
-# Category-appropriate Pexels search queries — used as a last-resort image so
-# every hero has a clean, relevant, license-free image even when no real photo
-# was found. These are intentionally generic and neutral.
 # Local fallback images — stored in /images/fallback/ in the repo.
-# Three images per category, selected randomly when no real image is found.
-# No API calls, no latency, no rate limits.
+# Three images per category are selected deterministically when no real image is found.
+# No external image API calls, no latency, no rate limits.
 FALLBACK_IMAGE_MAP = {
     "local_gov":    ["local_gov-1.jpg",    "local_gov-2.jpg",    "local_gov-3.jpg"],
     "crime":        ["crime-1.jpg",        "crime-2.jpg",        "crime-3.jpg"],
@@ -261,7 +259,7 @@ def get_fallback_image(category_key, headline=""):
     available = []
     for base in base_names:
         stem = base.rsplit(".", 1)[0]
-        for ext in ["jpg", "jpeg", "png"]:
+        for ext in ["jpg", "jpeg", "png", "webp"]:
             path = OUTPUT_DIR / "images" / "fallback" / f"{stem}.{ext}"
             if path.exists():
                 available.append(f"{stem}.{ext}")
@@ -269,7 +267,10 @@ def get_fallback_image(category_key, headline=""):
     if not available:
         return "", ""
     # Deterministic selection — same headline always gets the same image
-    idx = hash(headline) % len(available)
+    # across pipeline runs. Python's built-in hash() is randomized per process,
+    # so use a stable digest instead.
+    seed = headline or category_key or "all"
+    idx = int(hashlib.sha256(seed.encode("utf-8")).hexdigest(), 16) % len(available)
     chosen = available[idx]
     return f"{SITE_URL}/images/fallback/{chosen}", "Treasure Coast Today"
 
@@ -1019,7 +1020,7 @@ def render_index(all_categories, top_cat):
         <h2 class="card-headline support-card-headline">Reach Treasure Coast readers every day.</h2>
         <p class="card-summary">Your business alongside local news for Martin, St. Lucie &amp; Indian River counties. No algorithms. Just local readers.</p>
         <div class="card-foot">
-          <a href="advertise.html" class="support-card-btn">Get in touch &rarr;</a>
+          <a href="/advertise.html" class="support-card-btn">Get in touch &rarr;</a>
         </div>
       </div>"""
 
@@ -1093,8 +1094,8 @@ def render_index(all_categories, top_cat):
 
       <nav class="category-nav">
         {nav_buttons}
-        <a href="archive.html" class="cat-btn" style="text-decoration:none">Archive</a>
-        <a href="events.html" class="cat-btn" style="text-decoration:none">Events</a>
+        <a href="/archive.html" class="cat-btn" style="text-decoration:none">Archive</a>
+        <a href="/events.html" class="cat-btn" style="text-decoration:none">Events</a>
       </nav>
 
       <div class="header-actions">
@@ -1161,7 +1162,7 @@ def render_events_page():
       <p class="cs-fine">No spam. Just a heads-up when the calendar is live.</p>
       <p class="cs-success" id="csSuccess">&#10003; You're on the list — we'll be in touch!</p>
       <hr class="cs-divider">
-      <p class="cs-also">In the meantime, check out <a href="/?cat=things_to_do">Things To Do</a> for local event coverage, or <a href="advertise.html">advertise with us</a> to reach Treasure Coast readers.</p>
+      <p class="cs-also">In the meantime, check out <a href="/?cat=things_to_do">Things To Do</a> for local event coverage, or <a href="/advertise.html">advertise with us</a> to reach Treasure Coast readers.</p>
     </div>
   </main>
 {footer}
@@ -1268,7 +1269,7 @@ def _page_head(title, description, canonical_path="", structured_data=None):
   <meta name="geo.region" content="US-FL">
   <meta name="geo.placename" content="Treasure Coast, Florida">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 {schema}
@@ -1325,16 +1326,16 @@ def _page_footer():
       <span class="footer-wordmark">Treasure Coast Today</span>
       <span class="footer-tagline">Local news for Martin, St. Lucie &amp; Indian River counties.</span>
       <div class="footer-links">
-        <a href="about.html">About</a>
-        <a href="archive.html">Archive</a>
-        <a href="events.html">Events</a>
-        <a href="advertise.html">Advertise</a>
-        <a href="privacy.html">Privacy</a>
+        <a href="/about.html">About</a>
+        <a href="/archive.html">Archive</a>
+        <a href="/events.html">Events</a>
+        <a href="/advertise.html">Advertise</a>
+        <a href="/privacy.html">Privacy</a>
         <a href="mailto:hello@treasurecoast.today">Contact</a>
       </div>
     </div>
   </footer>
-  <script src="main.js"></script>"""
+  <script src="/main.js"></script>"""
 
 
 def render_about_page():
@@ -1379,7 +1380,7 @@ def render_about_page():
         <p>Local news strengthens communities. When residents know what's happening in their towns, they make better decisions, get more involved, and hold their institutions accountable. Treasure Coast Today exists to make staying informed about local news effortless for everyone on the Treasure Coast.</p>
 
         <h2>Advertise with us</h2>
-        <p>Treasure Coast Today connects local businesses with engaged readers across Martin, St. Lucie, and Indian River counties. If your business serves the Treasure Coast community, we'd love to help you reach them. <a href="advertise.html" class="about-contact">Learn more about advertising &rarr;</a></p>
+        <p>Treasure Coast Today connects local businesses with engaged readers across Martin, St. Lucie, and Indian River counties. If your business serves the Treasure Coast community, we'd love to help you reach them. <a href="/advertise.html" class="about-contact">Learn more about advertising &rarr;</a></p>
 
         <hr class="about-divider">
 
@@ -1537,41 +1538,44 @@ def load_archive(archive_path):
 
 def render_article_page(hero, category_label, category_key, pub_date, slug):
     """Render a permanent article page for a single hero story."""
-    head   = _page_head(
+    description = (hero.get("teaser") or hero.get("body", "")[:155]).replace('"', '')
+    image_url = hero.get("image_url") or f"{SITE_URL}/og-image.png"
+
+    structured_data = {
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        "headline": hero.get("headline", ""),
+        "description": description,
+        "image": image_url,
+        "datePublished": pub_date,
+        "author": {"@type": "Organization", "name": SITE_NAME},
+        "publisher": {
+            "@type": "Organization",
+            "name": SITE_NAME,
+            "logo": {"@type": "ImageObject", "url": f"{SITE_URL}/favicon.svg"},
+        },
+        "mainEntityOfPage": f"{SITE_URL}/articles/{slug}.html",
+    }
+
+    head = _page_head(
         f"{hero['headline']} — Treasure Coast Today",
-        (hero.get("teaser") or hero.get("body","")[:155]).replace('"',''),
-        f"/articles/{slug}.html"
+        description,
+        f"/articles/{slug}.html",
+        structured_data=structured_data,
     )
+    header = _page_header(active=category_key)
     footer = _page_footer()
-    body   = make_paragraphs(hero.get("body",""))
+    body = make_paragraphs(hero.get("body", ""))
+
     img_html = ""
     if hero.get("image_url"):
-        credit   = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
+        credit = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
         img_html = f'<figure class="article-hero-image"><img src="{hero["image_url"]}" alt="{hero["headline"]}" loading="eager">{credit}</figure>'
-
-    # Build full category nav with absolute URLs (page is in /articles/ subdir)
-    nav_links = " ".join([
-        f'<a href="{SITE_URL}/?cat={k}" class="cat-btn" style="text-decoration:none">{l}</a>'
-        for k, l in [
-            ("all","Top News"),("local_gov","Local Gov"),("crime","Crime"),
-            ("business","Business"),("schools","Schools"),("sports","Sports"),
-            ("things_to_do","Things To Do"),("florida","Florida"),
-            ("martin","Martin Co."),("st_lucie","St. Lucie Co."),("indian_river","Indian River Co."),
-        ]
-    ] + [
-        f'<a href="{SITE_URL}/archive.html" class="cat-btn" style="text-decoration:none">Archive</a>',
-        f'<a href="{SITE_URL}/events.html" class="cat-btn" style="text-decoration:none">Events</a>',
-    ])
 
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 {head}
-  <!-- Override relative asset paths since this page lives in /articles/ -->
-  <link rel="stylesheet" href="{SITE_URL}/style.css">
-  <link rel="icon" href="{SITE_URL}/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
   <style>
     .article-wrap {{ max-width: 740px; margin: 0 auto; padding: 40px 24px 80px; }}
     .article-meta {{ display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }}
@@ -1590,16 +1594,10 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
   </style>
 </head>
 <body>
-  <header>
-    <div class="header-inner">
-      <a href="{SITE_URL}" class="wordmark">Treasure Coast Today</a>
-      <nav class="category-nav">{nav_links}</nav>
-      <a href="{SITE_URL}/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
-    </div>
-  </header>
+{header}
   <main>
     <div class="article-wrap">
-      <a href="{SITE_URL}" class="article-back">&larr; Back to Treasure Coast Today</a>
+      <a href="/" class="article-back">&larr; Back to Treasure Coast Today</a>
       <div class="article-meta">
         <span class="article-category">{category_label}</span>
         <span class="article-date">{pub_date}</span>
@@ -1609,27 +1607,12 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
       <div class="article-body">{body}</div>
       <hr class="article-divider">
       <p class="article-more">More local news</p>
-      <a href="{SITE_URL}/?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
+      <a href="/?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
     </div>
   </main>
-  <footer>
-    <div class="footer-inner">
-      <span class="footer-wordmark">Treasure Coast Today</span>
-      <span class="footer-tagline">Local news for Martin, St. Lucie &amp; Indian River counties.</span>
-      <div class="footer-links">
-        <a href="{SITE_URL}/about.html">About</a>
-        <a href="{SITE_URL}/archive.html">Archive</a>
-        <a href="{SITE_URL}/events.html">Events</a>
-        <a href="{SITE_URL}/advertise.html">Advertise</a>
-        <a href="{SITE_URL}/privacy.html">Privacy</a>
-        <a href="mailto:hello@treasurecoast.today">Contact</a>
-      </div>
-    </div>
-  </footer>
-  <script src="{SITE_URL}/main.js"></script>
+{footer}
 </body>
 </html>"""
-
 
 def render_archive_page(archive_entries):
     """Render a browsable archive index page."""
@@ -1850,7 +1833,7 @@ def main():
         print("No categories generated. Aborting.")
         return
 
-    # Fetch hero images in parallel — much faster than sequential og:image + Pexels calls
+    # Fetch hero images in parallel — much faster than sequential og:image checks
     print("Fetching hero images...")
 
     def fetch_hero_image(data):
@@ -1895,6 +1878,27 @@ def main():
         data["hero"]["image_credit"] = image_credit
         return data, cat_key, img
 
+    def ensure_missing_hero_fallbacks(categories):
+        """Guarantee every category hero has an image after hero swaps/promotions.
+
+        Hero images are fetched before duplicate heroes are promoted. If a promoted
+        card becomes the new category hero, it can bypass the earlier image step.
+        This final pass applies the local hosted fallback image to any hero still
+        missing an image before HTML, data JSON, and article archives are written.
+        """
+        for cat in categories:
+            hero = cat.get("hero", {})
+            if hero.get("image_url"):
+                continue
+            cat_key = cat.get("category_key") or cat.get("_cat_key") or "all"
+            fallback_img, fallback_credit = get_fallback_image(cat_key, hero.get("headline", ""))
+            if fallback_img:
+                hero["image_url"] = fallback_img
+                hero["image_credit"] = fallback_credit
+                print(f"  {cat_key}: fallback image applied after hero promotion")
+            else:
+                print(f"  {cat_key}: no fallback files found in /images/fallback")
+
     # Run all image fetches concurrently — max 10 workers (one per category)
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = {executor.submit(fetch_hero_image, d): d for d in all_categories}
@@ -1916,6 +1920,19 @@ def main():
 
     # Ensure no other category hero duplicates the front page hero
     promote_duplicate_heroes(top_cat, all_categories)
+
+    # Promotion can swap in a card as the new category hero after the first image
+    # pass. Re-check all heroes so hosted fallbacks are always applied before
+    # rendering and archiving.
+    ensure_missing_hero_fallbacks(all_categories)
+
+    # If the selected top story somehow still lacks an image, apply its category
+    # fallback too. This keeps the Top News hero from rendering without artwork.
+    if not top_cat.get("hero", {}).get("image_url"):
+        fallback_img, fallback_credit = get_fallback_image(top_cat.get("category_key", "all"), top_cat["hero"].get("headline", ""))
+        if fallback_img:
+            top_cat["hero"]["image_url"] = fallback_img
+            top_cat["hero"]["image_credit"] = fallback_credit
 
     # Render and write all pages
     index_html = render_index(all_categories, top_cat)
