@@ -235,108 +235,64 @@ def extract_image(entry):
 # Category-appropriate Pexels search queries — used as a last-resort image so
 # every hero has a clean, relevant, license-free image even when no real photo
 # was found. These are intentionally generic and neutral.
-PEXELS_QUERY_MAP = {
-    "local_gov":    "florida city hall government building",
-    "crime":        "police car lights night",
-    "business":     "florida main street storefront",
-    "schools":      "school classroom students",
-    "sports":       "high school stadium field",
-    "things_to_do": "florida beach palm trees",
-    "florida":      "florida state capitol palm",
-    "martin":       "stuart florida waterfront",
-    "st_lucie":     "port st lucie florida",
-    "indian_river": "vero beach florida coast",
-    "all":          "treasure coast florida aerial",
+# Local fallback images — stored in /images/fallback/ in the repo.
+# Three images per category, selected randomly when no real image is found.
+# No API calls, no latency, no rate limits.
+FALLBACK_IMAGE_MAP = {
+    "local_gov":    ["local_gov-1.jpg",    "local_gov-2.jpg",    "local_gov-3.jpg"],
+    "crime":        ["crime-1.jpg",        "crime-2.jpg",        "crime-3.jpg"],
+    "business":     ["business-1.jpg",     "business-2.jpg",     "business-3.jpg"],
+    "schools":      ["schools-1.jpg",      "schools-2.jpg",      "schools-3.jpg"],
+    "sports":       ["sports-1.jpg",       "sports-2.jpg",       "sports-3.jpg"],
+    "things_to_do": ["things_to_do-1.jpg", "things_to_do-2.jpg", "things_to_do-3.jpg"],
+    "florida":      ["florida-1.jpg",      "florida-2.jpg",      "florida-3.jpg"],
+    "martin":       ["martin-1.jpg",       "martin-2.jpg",       "martin-3.jpg"],
+    "st_lucie":     ["st_lucie-1.jpg",     "st_lucie-2.jpg",     "st_lucie-3.jpg"],
+    "indian_river": ["indian_river-1.jpg", "indian_river-2.jpg", "indian_river-3.jpg"],
+    "all":          ["all-1.jpg",          "all-2.jpg",          "all-3.jpg"],
 }
 
-_pexels_used = set()
+def get_fallback_image(category_key, headline=""):
+    """Pick a deterministic local fallback image for the given category.
+    Uses the headline to always pick the same image for the same story,
+    so shared article links show a consistent image across pipeline runs.
+    Returns (url, credit) or ('', '') if no fallback images exist yet."""
+    base_names = FALLBACK_IMAGE_MAP.get(category_key, FALLBACK_IMAGE_MAP["all"])
+    available = []
+    for base in base_names:
+        stem = base.rsplit(".", 1)[0]
+        for ext in ["jpg", "jpeg", "png"]:
+            path = OUTPUT_DIR / "images" / "fallback" / f"{stem}.{ext}"
+            if path.exists():
+                available.append(f"{stem}.{ext}")
+                break
+    if not available:
+        return "", ""
+    # Deterministic selection — same headline always gets the same image
+    idx = hash(headline) % len(available)
+    chosen = available[idx]
+    return f"{SITE_URL}/images/fallback/{chosen}", "Treasure Coast Today"
 
-def fetch_pexels_image(category_key):
-    """Last-resort image: pull a relevant, license-free stock photo from Pexels
-    so no hero is ever imageless. Returns (image_url, credit) or ("", "")."""
-    api_key = os.environ.get("PEXELS_API_KEY", "qeDQdH5sqDXv44pAj80ePVC4XdPohwgOM2xczaCgDdLUD5DJbFHOZxYF")
-    if not api_key:
-        print(f"  Pexels: no API key")
-        return "", ""
-    query = PEXELS_QUERY_MAP.get(category_key, PEXELS_QUERY_MAP["all"])
-    print(f"  Pexels query: '{query}'")
-    try:
-        resp = requests.get(
-            "https://api.pexels.com/v1/search",
-            params={"query": query, "per_page": 15, "orientation": "landscape"},
-            headers={"Authorization": api_key},
-            timeout=6,
-        )
-        print(f"  Pexels status: {resp.status_code}")
-        if resp.status_code != 200:
-            print(f"  Pexels error: {resp.text[:200]}")
-            return "", ""
-        photos = resp.json().get("photos", [])
-        for p in photos:
-            img = p.get("src", {}).get("large", "") or p.get("src", {}).get("medium", "")
-            if img and img not in _pexels_used:
-                _pexels_used.add(img)
-                photographer = p.get("photographer", "Pexels")
-                return img, f"{photographer} / Pexels"
-        # If all were used already, just take the first
-        if photos:
-            img = photos[0].get("src", {}).get("large", "")
-            if img:
-                return img, f"{photos[0].get('photographer','Pexels')} / Pexels"
-        return "", ""
-    except Exception:
-        return "", ""
 
 def build_image_bank():
-    """Build a small fallback image bank without letting image fetching dominate
-    the workflow runtime.
-
-    The previous version looped through up to 60 entries from every image feed and
-    called fetch_og_image() sequentially whenever the RSS item had no image. With
-    10 feeds, that can become hundreds of network requests at 6 seconds each.
-    This fallback bank is intentionally bounded because hero-specific image
-    lookup later already tries the chosen article's own og:image.
-    """
     bank = []
-    og_candidates = []
-    MAX_ENTRIES_PER_FEED = 25
-    MAX_OG_FETCHES = 30
-
     for url in IMAGE_BANK_FEEDS:
         try:
             feed = feedparser.parse(url)
-            for entry in feed.entries[:MAX_ENTRIES_PER_FEED]:
-                title = entry.get("title", "")
+            for entry in feed.entries[:60]:
                 img = extract_image(entry)
+                if not img:
+                    link = entry.get("link", "") or getattr(entry, "link", "")
+                    if link:
+                        img = fetch_og_image(link)
                 if img:
                     bank.append({
-                        "title": title,
+                        "title":     entry.get("title", ""),
                         "image_url": img,
-                        "source": url,
+                        "source":    url,
                     })
-                    continue
-
-                # Only keep a small list of publisher pages for optional OG fetches.
-                # Avoid crawling Google News redirect pages in the fallback image bank.
-                link = entry.get("link", "") or getattr(entry, "link", "")
-                if link and "news.google.com" not in link.lower() and len(og_candidates) < MAX_OG_FETCHES:
-                    og_candidates.append((title, link, url))
         except Exception:
             pass
-
-    def fetch_candidate(candidate):
-        title, link, source = candidate
-        img = fetch_og_image(link)
-        if not img:
-            return None
-        return {"title": title, "image_url": img, "source": source}
-
-    if og_candidates:
-        with ThreadPoolExecutor(max_workers=10) as ex:
-            for result in ex.map(fetch_candidate, og_candidates):
-                if result:
-                    bank.append(result)
-
     print(f"  Image bank: {len(bank)} entries")
     return bank
 
@@ -997,6 +953,10 @@ def render_index(all_categories, top_cat):
         pub_time    = hero.get("published", "")
         display     = "" if visible else ' style="display:none"'
         fade        = " fade-in" if visible else ""
+        # Build the permanent article URL using the same slug logic as write_archives
+        today       = datetime.utcnow().strftime("%Y-%m-%d")
+        slug        = f"{today}-{slugify(hero.get('headline', ''))}"
+        article_url = f"{SITE_URL}/articles/{slug}.html"
         # Section label for SEO — all categories except Top News get one
         section_label = ""
         if cat_key in SECTION_LABELS:
@@ -1018,7 +978,7 @@ def render_index(all_categories, top_cat):
         <div class="article-expand hero-expand">
           <div class="hero-expand-body">{paragraphs}</div>
           <div class="article-actions">
-            <button class="share-btn" data-headline="{hero["headline"].replace('"', "&quot;")}" onclick="shareArticle(this)">Share &#8599;</button>
+            <button class="share-btn" data-headline="{hero["headline"].replace('"', "&quot;")}" data-url="{article_url}" onclick="shareArticle(this)">Share &#8599;</button>
             <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
           </div>
         </div>
@@ -1879,7 +1839,7 @@ def main():
                 used_bank_images.add(canonical_image_url(bank_img))
 
         if not img:
-            px_img, px_credit = fetch_pexels_image(cat_key)
+            px_img, px_credit = get_fallback_image(cat_key, data["hero"].get("headline", ""))
             if px_img:
                 img          = px_img
                 image_credit = px_credit
