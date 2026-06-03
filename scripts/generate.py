@@ -46,13 +46,13 @@ CATEGORIES = {
         "label": "Crime & Safety",
         "front_page_cap": 8,
         "feeds": [
-            "https://www.wptv.com/news/local-news.rss",
-            "https://news.google.com/rss/search?q=martin+county+florida+crime+arrest+sheriff+when:2d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=st+lucie+county+florida+crime+arrest+police+when:2d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=indian+river+county+florida+crime+arrest+when:2d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=treasure+coast+florida+crime+safety+shooting+when:2d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=port+st+lucie+police+arrest+crime+when:2d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=fort+pierce+police+crime+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://www.wptv.com/news/region-martin-county.rss",
+            "https://www.wptv.com/news/region-st-lucie-county.rss",
+            "https://www.wptv.com/news/region-indian-river-county.rss",
+            "https://news.google.com/rss/search?q=martin+county+sheriff+arrest+charged+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=st+lucie+county+police+arrest+charged+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=indian+river+county+sheriff+arrest+charged+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=port+st+lucie+fort+pierce+police+arrest+when:2d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "business": {
@@ -81,12 +81,12 @@ CATEGORIES = {
         "label": "Sports",
         "front_page_cap": 6,
         "feeds": [
-            "https://news.google.com/rss/search?q=martin+county+florida+high+school+sports+when:3d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=st+lucie+county+florida+sports+high+school+when:3d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=treasure+coast+florida+sports+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=martin+county+high+school+sports+game+score+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=st+lucie+county+high+school+sports+game+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=treasure+coast+florida+football+basketball+baseball+soccer+when:3d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=st+lucie+mets+florida+when:7d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=vero+beach+dodgers+sports+florida+when:7d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=jensen+beach+south+fork+martin+county+sports+when:7d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=vero+beach+dodgers+spring+training+when:7d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=jensen+beach+south+fork+martin+county+high+school+sports+when:7d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "things_to_do": {
@@ -363,19 +363,28 @@ def fetch_og_image(url):
         if resp.status_code != 200: return ""
         html = resp.text[:200000]
         patterns = [
-            r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)',
-            r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']',
-            r'<meta[^>]+name=["\']twitter:image["\'][^>]+content=["\']([^"\']+)',
+            r'<meta[^>]+property=["\'"]og:image["\'"][^>]+content=["\'"]([^"\'"]+)',
+            r'<meta[^>]+content=["\'"]([^"\'"]+)["\'"][^>]+property=["\'"]og:image["\'"][^>]*>',
+            r'<meta[^>]+name=["\'"]twitter:image["\'"][^>]+content=["\'"]([^"\'"]+)',
         ]
         for pat in patterns:
             m = re.search(pat, html, re.IGNORECASE)
             if m:
                 img = m.group(1).strip()
-                if img.startswith("http"): return img
+                if not img.startswith("http"):
+                    continue
+                # Verify the image URL actually serves a real image before accepting
+                try:
+                    img_resp = requests.head(img, timeout=4, allow_redirects=True,
+                                            headers={"User-Agent":"Mozilla/5.0 (compatible; TCTBot/1.0)"})
+                    ct = img_resp.headers.get("content-type","")
+                    if img_resp.status_code == 200 and "image" in ct:
+                        return img
+                except Exception:
+                    continue
         return ""
     except Exception:
         return ""
-
 def fetch_article_text(url, max_chars=2500):
     """Fetch the readable body text of an article page so the model writes from
     real content instead of a thin RSS summary. Returns plain text (truncated)
@@ -657,7 +666,7 @@ Return ONLY valid JSON:
 {headlines_text}
 
 Tasks:
-1. Pick the single most important/urgent story for Treasure Coast Florida residents. LOCAL stories affecting residents directly (county commission decisions, local crime, school district news, local business openings/closings, road/infrastructure, local sports) should be ranked ABOVE national or state stories unless the national story has a very direct local impact (e.g. a hurricane heading toward Martin County, a federal ruling on the Indian River Lagoon). A routine city council vote in Stuart is more relevant to this audience than a national political story.
+1. Pick the single most important/urgent story for Treasure Coast Florida residents. LOCAL stories affecting residents directly (county commission decisions, local crime, school district news, local business openings/closings, road/infrastructure, local sports) should be ranked ABOVE national or state stories unless the national story has a very direct local impact (e.g. a hurricane heading toward Martin County, a federal ruling on the Indian River Lagoon). A routine city council vote in Stuart is more relevant to this audience than a national political story.{"  CRITICAL for Sports: pick an actual sports story — game result, standings, player/team news, or athletic event. Skip crime, arrests, or non-sports stories entirely." if category_key == "sports" else ""}{"  CRITICAL for Crime & Safety: pick an actual local crime, arrest, public safety, or emergency story. Skip politics, tax, government budget, or non-safety stories entirely." if category_key == "crime" else ""}{"  CRITICAL for Things To Do: pick events, activities, restaurants, parks, or attractions specifically in Martin, St. Lucie, or Indian River counties. Skip anything more than 60 miles away such as Orlando, Miami, or Tampa events." if category_key == "things_to_do" else ""}
 2. Write an accurate, locally-framed headline. Name the specific county, city, or town (Stuart, Port St. Lucie, Fort Pierce, Vero Beach, Jensen Beach, Palm City, Hobe Sound, Sebastian, etc.) in the headline when relevant.
 3. Write a complete, readable factual article of four full paragraphs covering what happened, who is affected locally, the context, and what happens next. Ground all specific facts (names, numbers, dates, quotes, locations) in the source text, but write naturally with useful context and clear explanation. Never write 'no further details available' or similar — always produce a substantive article.
 4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one to two sentences) and a body of two to three full paragraphs. Write a complete, readable article that covers what happened, who is affected locally, and what it means for the community. Ground all specific facts (names, numbers, dates, quotes) in the source, but write naturally and provide useful local context and explanation. Never write 'no further details available' — always produce a substantive article. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
