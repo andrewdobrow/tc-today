@@ -1542,18 +1542,36 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
         (hero.get("teaser") or hero.get("body","")[:155]).replace('"',''),
         f"/articles/{slug}.html"
     )
-    header = _page_header()
     footer = _page_footer()
     body   = make_paragraphs(hero.get("body",""))
     img_html = ""
     if hero.get("image_url"):
-        credit = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
+        credit   = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
         img_html = f'<figure class="article-hero-image"><img src="{hero["image_url"]}" alt="{hero["headline"]}" loading="eager">{credit}</figure>'
+
+    # Build full category nav with absolute URLs (page is in /articles/ subdir)
+    nav_links = " ".join([
+        f'<a href="{SITE_URL}/?cat={k}" class="cat-btn" style="text-decoration:none">{l}</a>'
+        for k, l in [
+            ("all","Top News"),("local_gov","Local Gov"),("crime","Crime"),
+            ("business","Business"),("schools","Schools"),("sports","Sports"),
+            ("things_to_do","Things To Do"),("florida","Florida"),
+            ("martin","Martin Co."),("st_lucie","St. Lucie Co."),("indian_river","Indian River Co."),
+        ]
+    ] + [
+        f'<a href="{SITE_URL}/archive.html" class="cat-btn" style="text-decoration:none">Archive</a>',
+        f'<a href="{SITE_URL}/events.html" class="cat-btn" style="text-decoration:none">Events</a>',
+    ])
 
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 {head}
+  <!-- Override relative asset paths since this page lives in /articles/ -->
+  <link rel="stylesheet" href="{SITE_URL}/style.css">
+  <link rel="icon" href="{SITE_URL}/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
   <style>
     .article-wrap {{ max-width: 740px; margin: 0 auto; padding: 40px 24px 80px; }}
     .article-meta {{ display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }}
@@ -1572,10 +1590,16 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
   </style>
 </head>
 <body>
-{header}
+  <header>
+    <div class="header-inner">
+      <a href="{SITE_URL}" class="wordmark">Treasure Coast Today</a>
+      <nav class="category-nav">{nav_links}</nav>
+      <a href="{SITE_URL}/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
+    </div>
+  </header>
   <main>
     <div class="article-wrap">
-      <a href="/" class="article-back">&larr; Back to Treasure Coast Today</a>
+      <a href="{SITE_URL}" class="article-back">&larr; Back to Treasure Coast Today</a>
       <div class="article-meta">
         <span class="article-category">{category_label}</span>
         <span class="article-date">{pub_date}</span>
@@ -1585,10 +1609,24 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
       <div class="article-body">{body}</div>
       <hr class="article-divider">
       <p class="article-more">More local news</p>
-      <a href="/?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
+      <a href="{SITE_URL}/?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
     </div>
   </main>
-{footer}
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-wordmark">Treasure Coast Today</span>
+      <span class="footer-tagline">Local news for Martin, St. Lucie &amp; Indian River counties.</span>
+      <div class="footer-links">
+        <a href="{SITE_URL}/about.html">About</a>
+        <a href="{SITE_URL}/archive.html">Archive</a>
+        <a href="{SITE_URL}/events.html">Events</a>
+        <a href="{SITE_URL}/advertise.html">Advertise</a>
+        <a href="{SITE_URL}/privacy.html">Privacy</a>
+        <a href="mailto:hello@treasurecoast.today">Contact</a>
+      </div>
+    </div>
+  </footer>
+  <script src="{SITE_URL}/main.js"></script>
 </body>
 </html>"""
 
