@@ -1691,7 +1691,8 @@ def render_archive_page(archive_entries):
 
 
 def update_sitemap(archive_entries):
-    """Regenerate sitemap.xml including all archived article URLs."""
+    """Regenerate sitemap.xml. No changefreq on article pages — Google ignores it
+    and 'never' sends a confusing signal for news content."""
     now_str = datetime.utcnow().strftime("%Y-%m-%d")
     static_urls = f"""  <url>
     <loc>{SITE_URL}/</loc>
@@ -1707,12 +1708,10 @@ def update_sitemap(archive_entries):
   </url>
   <url>
     <loc>{SITE_URL}/about.html</loc>
-    <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>{SITE_URL}/advertise.html</loc>
-    <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>"""
 
@@ -1721,7 +1720,6 @@ def update_sitemap(archive_entries):
         article_urls += f"""
   <url>
     <loc>{SITE_URL}/articles/{e['slug']}.html</loc>
-    <changefreq>never</changefreq>
     <priority>0.7</priority>
     <lastmod>{e['date']}</lastmod>
   </url>"""
@@ -1733,20 +1731,51 @@ def update_sitemap(archive_entries):
 </urlset>"""
 
 
+def update_news_sitemap(archive_entries):
+    """Generate news-sitemap.xml for Google News inclusion.
+    Only includes articles from the last 2 days (Google News requirement)."""
+    from datetime import timedelta
+    cutoff = (datetime.utcnow() - timedelta(days=2)).strftime("%Y-%m-%d")
+    recent = [e for e in archive_entries if e.get("date","") >= cutoff]
+
+    news_urls = ""
+    for e in recent:
+        pub_date = f"{e['date']}T00:00:00Z"
+        # Escape any special chars in headline
+        headline = e['headline'].replace('&','&amp;').replace('<','&lt;').replace('>','&gt;').replace('"','&quot;')
+        news_urls += f"""
+  <url>
+    <loc>{SITE_URL}/articles/{e['slug']}.html</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Treasure Coast Today</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>{pub_date}</news:publication_date>
+      <news:title>{headline}</news:title>
+    </news:news>
+  </url>"""
+
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+{news_urls}
+</urlset>"""
+
+
 def write_archives(all_categories, top_cat):
-    """Write individual article pages, update archive.json, archive.html, sitemap.xml."""
+    """Write individual article pages, update archive.json, archive.html, sitemap.xml, news-sitemap.xml."""
     articles_dir  = OUTPUT_DIR / "articles"
     archive_path  = OUTPUT_DIR / "archive.json"
     articles_dir.mkdir(exist_ok=True)
 
-    archive = load_archive(archive_path)
-    existing_slugs = {e["slug"] for e in archive}
+    archive            = load_archive(archive_path)
+    existing_slugs     = {e["slug"] for e in archive}
+    existing_headlines = {re.sub(r"\s+", " ", e["headline"].lower().strip()) for e in archive}
     new_count = 0
 
-    # Use today's date for all articles in this run
     today = datetime.utcnow().strftime("%Y-%m-%d")
 
-    # Write a page for every category hero (including top_cat)
     heroes_to_archive = [(top_cat["category_key"], top_cat["category_label"], top_cat["hero"])]
     for cat in all_categories:
         if cat["category_key"] != top_cat["category_key"]:
@@ -1757,20 +1786,21 @@ def write_archives(all_categories, top_cat):
         if not headline:
             continue
 
-        # Build slug — date prefix ensures uniqueness across runs
+        # Skip if same story already archived (dedupe by headline across runs)
+        normalized = re.sub(r"\s+", " ", headline.lower().strip())
+        if normalized in existing_headlines:
+            continue
+
         base_slug = f"{today}-{slugify(headline)}"
         slug = base_slug
-        # Handle rare slug collision (same headline picked twice)
         counter = 1
         while slug in existing_slugs:
             slug = f"{base_slug}-{counter}"
             counter += 1
 
-        # Write article HTML
         article_html = render_article_page(hero, cat_label, cat_key, today, slug)
         (articles_dir / f"{slug}.html").write_text(article_html, encoding="utf-8")
 
-        # Add to archive metadata
         entry = {
             "slug":           slug,
             "headline":       headline,
@@ -1782,17 +1812,13 @@ def write_archives(all_categories, top_cat):
         }
         archive.append(entry)
         existing_slugs.add(slug)
+        existing_headlines.add(normalized)
         new_count += 1
 
-    # Save updated archive.json
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
-
-    # Render archive index page
     (OUTPUT_DIR / "archive.html").write_text(render_archive_page(archive), encoding="utf-8")
-
-    # Update sitemap
     (OUTPUT_DIR / "sitemap.xml").write_text(update_sitemap(archive), encoding="utf-8")
-
+    (OUTPUT_DIR / "news-sitemap.xml").write_text(update_news_sitemap(archive), encoding="utf-8")
     print(f"  Archived {new_count} new articles ({len(archive)} total)")
 
 
