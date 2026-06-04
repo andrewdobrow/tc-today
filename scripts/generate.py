@@ -623,7 +623,7 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
             h["article_text"] = full
 
     with ThreadPoolExecutor(max_workers=7) as ex:
-        list(ex.map(try_fetch, result[:7]))
+        list(ex.map(try_fetch, result[:7], timeout=30))
 
     return result
 
@@ -2023,9 +2023,9 @@ def main():
     # Run all image fetches concurrently — max 10 workers (one per category)
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = {executor.submit(fetch_hero_image, d): d for d in all_categories}
-        for future in as_completed(futures):
+        for future in as_completed(futures, timeout=60):
             try:
-                data, cat_key, img = future.result()
+                data, cat_key, img = future.result(timeout=15)
                 print(f"  {cat_key}: image {'yes' if img else 'no'}")
             except Exception as e:
                 print(f"  Image fetch error: {e}")
