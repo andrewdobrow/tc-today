@@ -21,8 +21,10 @@ jobs:
       - name: Install dependencies
         run: pip install feedparser anthropic requests json-repair
 
-        - name: Dupe clean up remove after one run
+      - name: Clean up duplicate archives
         run: python cleanup_archive.py
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 
       - name: Generate news
         run: python scripts/generate.py
