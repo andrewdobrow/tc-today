@@ -963,9 +963,16 @@ def render_index(all_categories, top_cat):
         pub_time    = hero.get("published", "")
         display     = "" if visible else ' style="display:none"'
         fade        = " fade-in" if visible else ""
-        # Build the permanent article URL using the same slug logic as write_archives
-        today       = datetime.utcnow().strftime("%Y-%m-%d")
-        slug        = f"{today}-{slugify(hero.get('headline', ''))}"
+        # Look up the actual archived slug for this story so the share URL
+        # points to the real article page rather than a freshly-computed slug
+        # that may not match what was actually written to disk.
+        archive      = load_archive(OUTPUT_DIR / "archive.json")
+        matched      = find_matching_entry(hero.get("headline",""), archive, hero.get("link",""))
+        if matched:
+            slug = matched["slug"]
+        else:
+            today = datetime.utcnow().strftime("%Y-%m-%d")
+            slug  = f"{today}-{slugify(hero.get('headline', ''))}"
         article_url = f"{SITE_URL}/articles/{slug}.html"
         # Section label for SEO — all categories except Top News get one
         section_label = ""
