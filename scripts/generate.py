@@ -375,6 +375,8 @@ PLACEHOLDER_URL_PATTERNS = [
     "gray.tv/gray/arc-fusion-assets",
     "townnews.com/content/tncms/custom",
     "bloximages",
+    "trd-logo",
+    "therealdeal.com/wp-content/uploads",
 ]
 
 def is_placeholder_image(img_url):
