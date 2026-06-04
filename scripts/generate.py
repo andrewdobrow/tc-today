@@ -631,9 +631,71 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
 
 # -- CATEGORY CONTENT GENERATION --
 
-LOCAL_SYSTEM_PROMPT = """You write factual local news articles for Treasure Coast Today, covering Martin, St. Lucie, and Indian River counties in Florida. Your readers live here — they care about what's happening in their towns, schools, and county government far more than national news. Always prioritize genuinely local stories over state or national ones. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries. Name specific towns, streets, facilities, and local officials when available. Towns include: Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno, Port St. Lucie, Fort Pierce, Vero Beach, Sebastian, Fellsmere, and surrounding communities. IMPORTANT: Base every factual claim on the provided source text. You may write naturally and provide helpful context and clear explanation, but do NOT fabricate specific names, numbers, dates, direct quotes, or outcomes that are not in the source. Never write phrases like 'no further details are available' or 'details were not disclosed' — if you lack a specific detail, simply write around it and focus on what IS known. Always produce a complete, readable article."""
+LOCAL_SYSTEM_PROMPT = """You write factual local news articles for Treasure Coast Today, covering Martin, St. Lucie, and Indian River counties in Florida. Your readers live here — they care about what's happening in their towns, schools, and county government far more than national news. Always prioritize genuinely local stories over state or national ones. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries. Name specific towns, streets, facilities, and local officials when available. Towns include: Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno, Port St. Lucie, Fort Pierce, Vero Beach, Sebastian, Fellsmere, and surrounding communities. Always preserve proper nouns exactly as they appear in the source — school names, road names, business names, people's names. Never replace a specific name with a generic description. IMPORTANT: Base every factual claim on the provided source text. You may write naturally and provide helpful context and clear explanation, but do NOT fabricate specific names, numbers, dates, direct quotes, or outcomes that are not in the source. Never write phrases like 'no further details are available' or 'details were not disclosed' — if you lack a specific detail, simply write around it and focus on what IS known. Always produce a complete, readable article."""
 
 FLORIDA_SYSTEM_PROMPT = """You write factual news articles for the Florida section of Treasure Coast Today. Your readers are Treasure Coast residents who want to stay informed about statewide Florida news that affects them as Floridians. This section covers the whole state — legislation, courts, economy, environment, politics, weather, and major events anywhere in Florida. Do NOT artificially narrow to the Treasure Coast; this is the statewide section. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries. IMPORTANT: Base every factual claim on the provided source text. You may write naturally and provide helpful context and clear explanation, but do NOT fabricate specific names, numbers, dates, direct quotes, or outcomes that are not in the source. Never write phrases like 'no further details are available' or 'details were not disclosed' — if you lack a specific detail, simply write around it and focus on what IS known. Always produce a complete, readable article."""
+
+def enhance_card(card, headlines):
+    """Enrich a card body using fetched article text and related RSS summaries.
+    Uses Haiku for speed. Skips if source text is too thin to improve on."""
+    headline = card.get("headline", "")
+    link     = card.get("link", "")
+    if not headline:
+        return card
+
+    # Try to get full article text from the source URL
+    article_text = fetch_article_text(link) if link else ""
+
+    # Also gather related RSS summaries from the category headlines
+    stops = {"that","this","with","from","have","been","said","will","more",
+             "also","when","were","they","their","about","says","just","after"}
+    hl_tokens = set(re.sub(r"[^a-z0-9 ]", " ", headline.lower()).split()) - stops
+    related_parts = []
+    for h in headlines:
+        h_tokens = set(re.sub(r"[^a-z0-9 ]", " ", h.get("title","").lower()).split()) - stops
+        if len(hl_tokens & h_tokens) >= 2:
+            related_parts.append(h.get("title","") + ". " + h.get("summary","")[:300])
+    related_text = " | ".join(related_parts[:3])
+
+    source_parts = [p for p in [article_text, related_text] if p]
+    source_text  = "\n\n".join(source_parts)
+
+    if not source_text or len(source_text.split()) < 40:
+        return card
+
+    # Relevance check — ensure source relates to the card headline
+    stops2   = {"the","a","an","in","of","for","to","and","or","on","at","is","was","are","were","that","this","with"}
+    hl_tok   = set(re.sub(r"[^a-z0-9 ]", " ", headline.lower()).split()) - stops2
+    src_tok  = set(re.sub(r"[^a-z0-9 ]", " ", source_text[:400].lower()).split()) - stops2
+    if len(hl_tok & src_tok) < 2:
+        return card
+
+    try:
+        body   = card.get("body", "")
+        prompt = (
+            f"You wrote this local news card about: {headline}\n\n"
+            f"Your original card text:\n\n{body}\n\n"
+            f"Here is additional source material:\n\n{source_text}\n\n"
+            "If the source is about a different story, return the original card text unchanged. "
+            "Otherwise rewrite the card body in two short paragraphs (~120 words total) using only "
+            "confirmed facts from the source. Always preserve proper nouns — school names, road names, "
+            "business names, people's full names. Write in plain direct English. No em dashes. "
+            "Never use absence language like 'details were not available' or 'officials have not commented'. "
+            "If details are limited, write fewer words and stop — do not pad."
+        )
+        resp = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=300,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        enhanced = resp.content[0].text.strip()
+        skip_signals = ["i cannot rewrite", "source material", "does not match", "cannot proceed"]
+        if enhanced and not any(s in enhanced.lower()[:150] for s in skip_signals):
+            card["body"] = strip_absence_language(strip_markdown(enhanced, headline))
+    except Exception as e:
+        pass
+    return card
+
 
 def generate_category_content(category_key, category_label, headlines):
     def sanitize(text):
@@ -653,7 +715,13 @@ def generate_category_content(category_key, category_label, headlines):
     headlines_text = "\n".join(hl_line(i,h) for i,h in enumerate(headlines))
     headlines_text = headlines_text.replace("\\","").encode("ascii","ignore").decode("ascii")
 
-    is_florida = (category_key == "florida")
+    from datetime import timezone as _tz
+    _now = datetime.now(_tz.utc)
+    _today_label     = _now.strftime("%A, %B %-d, %Y")
+    _yesterday_label = (_now - timedelta(days=1)).strftime("%A, %B %-d")
+    _date_context    = f"TODAY IS: {_today_label}. Yesterday was {_yesterday_label}. Use this to judge how recent each story is.\n\n"
+
+    is_florida    = (category_key == "florida")
     system_prompt = FLORIDA_SYSTEM_PROMPT if is_florida else LOCAL_SYSTEM_PROMPT
 
     if is_florida:
@@ -665,7 +733,7 @@ Tasks:
 1. Pick the single most important/urgent Florida statewide story. Prioritize stories with broad impact across Florida — major legislation, court rulings, economic news, environmental decisions, significant crimes or disasters anywhere in the state. Do NOT favor Treasure Coast stories here; this is the statewide section.
 2. Write an accurate Florida-focused headline. Name the specific Florida city, region, or institution when relevant.
 3. Write a 380-430 word factual article in FOUR full paragraphs. Cover what happened, who is affected across Florida, and what happens next statewide. Do NOT write only two paragraphs.
-4. For the next {CARDS_PER_CATEGORY} most important Florida stories write a teaser (one to two sentences) and a body of two to three full paragraphs. Write a complete, readable article that covers what happened, who is affected, and the broader context. Ground all specific facts (names, numbers, dates, quotes) in the source, but write naturally and provide useful context and explanation. Never write 'no further details available' — always produce a substantive article. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
+4. For the next {CARDS_PER_CATEGORY} most important Florida stories write a teaser (one to two sentences) and a body of two to three full paragraphs. Write a complete, readable article that covers what happened, who is affected, and the broader context. Ground all specific facts (names, numbers, dates, quotes) in the source, but write naturally and provide useful context and explanation. CRITICAL: Always preserve proper nouns from the source — school names, road names, business names, people's names, building names. Never replace a specific name with a generic description. Never write 'no further details available' — always produce a substantive article. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
 
 URGENCY SCORING for Florida statewide news (1-10):
 - 9-10: Major legislation signed/passed, significant court ruling, statewide emergency or disaster, major economic news affecting all Floridians
@@ -701,7 +769,7 @@ Tasks:
 1. Pick the single most important/urgent story for Treasure Coast Florida residents. LOCAL stories affecting residents directly (county commission decisions, local crime, school district news, local business openings/closings, road/infrastructure, local sports) should be ranked ABOVE national or state stories unless the national story has a very direct local impact (e.g. a hurricane heading toward Martin County, a federal ruling on the Indian River Lagoon). A routine city council vote in Stuart is more relevant to this audience than a national political story.{"  CRITICAL for Sports: pick an actual sports story — game result, standings, player/team news, or athletic event. Skip crime, arrests, or non-sports stories entirely." if category_key == "sports" else ""}{"  CRITICAL for Crime & Safety: pick an actual local crime, arrest, public safety, or emergency story. Skip politics, tax, government budget, or non-safety stories entirely." if category_key == "crime" else ""}{"  CRITICAL for Things To Do: pick events, activities, restaurants, parks, or attractions specifically in Martin, St. Lucie, or Indian River counties. Skip anything more than 60 miles away such as Orlando, Miami, or Tampa events." if category_key == "things_to_do" else ""}
 2. Write an accurate, locally-framed headline. Name the specific county, city, or town (Stuart, Port St. Lucie, Fort Pierce, Vero Beach, Jensen Beach, Palm City, Hobe Sound, Sebastian, etc.) in the headline when relevant.
 3. Write a complete, readable factual article of four full paragraphs covering what happened, who is affected locally, the context, and what happens next. Ground all specific facts (names, numbers, dates, quotes, locations) in the source text, but write naturally with useful context and clear explanation. Never write 'no further details available' or similar — always produce a substantive article.
-4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one to two sentences) and a body of two to three full paragraphs. Write a complete, readable article that covers what happened, who is affected locally, and what it means for the community. Ground all specific facts (names, numbers, dates, quotes) in the source, but write naturally and provide useful local context and explanation. Never write 'no further details available' — always produce a substantive article. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
+4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one to two sentences) and a body of two to three full paragraphs. Write a complete, readable article that covers what happened, who is affected locally, and what it means for the community. Ground all specific facts (names, numbers, dates, quotes) in the source, but write naturally and provide useful local context and explanation. CRITICAL: Always preserve proper nouns from the source — school names, road names, business names, people's names, building names. If the source names specific schools, streets, or institutions, those names MUST appear in the card. Never replace a specific name with a generic description (e.g. never write "the schools" if the source names them). Never write 'no further details available' — always produce a substantive article. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
 
 URGENCY SCORING for local news (1-10):
 - 9-10: Major public safety event, significant government decision directly affecting residents, serious local crime with community impact, natural disaster or emergency
@@ -768,6 +836,10 @@ Return ONLY valid JSON:
             card["body"] = strip_absence_language(strip_markdown(card.get("body",""), card.get("headline","")))
         data["category_key"]   = category_key
         data["category_label"] = category_label
+
+        # Enrich cards with article text and related summaries via Haiku
+        for card in data.get("cards", []):
+            enhance_card(card, headlines)
         return data
     except Exception as e:
         print(f"  Claude error for {category_label}: {e}")
@@ -799,6 +871,17 @@ def select_front_page_hero(all_categories):
         for day in stale_days:
             if f" {day} " in content or f" {day}," in content: return True
         if any(p in content for p in stale_phrases): return True
+        # Hard timestamp check — reject heroes older than 24 hours regardless of content language
+        pub = cat["hero"].get("published","")
+        if pub:
+            try:
+                from email.utils import parsedate_to_datetime
+                dt  = parsedate_to_datetime(pub).astimezone(timezone.utc)
+                age = (now_utc - dt).total_seconds() / 3600
+                if age > 24:
+                    return True
+            except Exception:
+                pass
         return False
 
     fresh = [c for c in candidates if not is_stale(c)]
