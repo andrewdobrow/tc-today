@@ -1856,6 +1856,8 @@ def write_archives(all_categories, top_cat):
     today   = datetime.utcnow().strftime("%Y-%m-%d")
     new_count     = 0
     updated_count = 0
+    # Track stories written THIS run to prevent cross-category duplicates
+    this_run_token_sets = []
 
     heroes_to_archive = [(top_cat["category_key"], top_cat["category_label"], top_cat["hero"])]
     for cat in all_categories:
@@ -1869,6 +1871,14 @@ def write_archives(all_categories, top_cat):
 
         source_url = hero.get("link", "")
         existing   = find_matching_entry(headline, archive, source_url)
+
+        # Check within-run cross-category duplicates FIRST
+        # (same story picked by crime AND martin county in same run)
+        if _is_duplicate_headline(headline, this_run_token_sets):
+            print(f"  Skipped cross-category duplicate: {headline[:60]}")
+            continue
+
+        this_run_token_sets.append(_sig_tokens(headline))
 
         if existing:
             # Same story — update the existing page in place, keep the original URL
