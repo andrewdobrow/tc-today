@@ -357,6 +357,31 @@ def match_image(headline, image_bank, cat_key=None, used_images=None):
                     best_credit = get_image_credit(entry.get("source",""))
     return best_img, best_credit
 
+# Known publisher placeholder/logo URL patterns — rejected as og:images.
+PLACEHOLDER_URL_PATTERNS = [
+    "brand-icons", "brand_icons",
+    "default-image", "default_image", "defaultimage",
+    "top_image", "top-image",
+    "htv_default", "htv-default",
+    "fallback", "placeholder",
+    "news-slate", "news_slate",
+    "og-image.png", "og_image.png",
+    "eenewslogo", "site-logo", "site_logo",
+    "station-logo", "stationlogo",
+    "wpec-16x9", "wpbf", "wflx",
+    "aolfp/images", "cbsnewsstatic.com/hub",
+    "yimg.com/cv/apiv2",
+    "foxtv.com/img",
+    "gray.tv/gray/arc-fusion-assets",
+    "townnews.com/content/tncms/custom",
+    "bloximages",
+]
+
+def is_placeholder_image(img_url):
+    url_lower = img_url.lower()
+    return any(pat in url_lower for pat in PLACEHOLDER_URL_PATTERNS)
+
+
 def fetch_og_image(url):
     if not url: return ""
     try:
@@ -374,12 +399,16 @@ def fetch_og_image(url):
                 img = m.group(1).strip()
                 if not img.startswith("http"):
                     continue
-                # Verify the image URL actually serves a real image before accepting
+                if is_placeholder_image(img):
+                    continue
                 try:
                     img_resp = requests.head(img, timeout=4, allow_redirects=True,
                                             headers={"User-Agent":"Mozilla/5.0 (compatible; TCTBot/1.0)"})
                     ct = img_resp.headers.get("content-type","")
+                    cl = int(img_resp.headers.get("content-length", 0))
                     if img_resp.status_code == 200 and "image" in ct:
+                        if cl > 0 and cl < 10000:
+                            continue
                         return img
                 except Exception:
                     continue
