@@ -985,7 +985,7 @@ def make_brief_from_source(headline, source_text, max_words=45):
     return brief
 
 
-def generate_category_content(category_key, category_label, headlines):
+def generate_category_content(category_key, category_label, headlines, content_bank=None):
     def sanitize(text):
         if not text: return ""
         text = text.replace("\\", " ").replace('"', "'").replace("\n"," ").replace("\r"," ").replace("\t"," ")
@@ -2384,7 +2384,7 @@ def main():
             continue
 
         print(f"  {len(headlines)} headlines fetched")
-        data = generate_category_content(cat_key, cat_config["label"], headlines)
+        data = generate_category_content(cat_key, cat_config["label"], headlines, content_bank)
         if not data:
             continue
 
