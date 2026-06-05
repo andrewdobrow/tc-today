@@ -152,6 +152,19 @@ CATEGORIES = {
 
 HEADLINES_PER_CATEGORY = 12
 CARDS_PER_CATEGORY     = 6
+
+# Content bank feeds — loaded once at startup, used for card enrichment
+# These are the same feeds used for headlines, giving us rich summaries in memory
+CONTENT_BANK_FEEDS = [
+    "https://www.wptv.com/feeds/rss/news",
+    "https://www.wptv.com/feeds/rss/local",
+    "https://news.google.com/rss/search?q=treasure+coast+florida&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=martin+county+florida&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=port+st+lucie+florida&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=vero+beach+florida&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=fort+pierce+florida&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=stuart+florida+news&hl=en-US&gl=US&ceid=US:en",
+]
 OUTPUT_DIR             = Path(__file__).parent.parent
 
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
@@ -417,6 +430,48 @@ def fetch_og_image(url):
         return ""
     except Exception:
         return ""
+def build_content_bank():
+    """Load RSS summaries into memory once — used for card enrichment without live fetches."""
+    bank = []
+    seen = set()
+    for url in CONTENT_BANK_FEEDS:
+        try:
+            feed = feedparser.parse(url)
+            for entry in feed.entries[:20]:
+                title = (entry.get("title") or "").strip()
+                if not title or title.lower() in seen:
+                    continue
+                seen.add(title.lower())
+                summary = entry.get("summary", entry.get("description", ""))[:800]
+                if summary and len(summary) > 50:
+                    bank.append({"title": title, "summary": summary})
+        except Exception:
+            pass
+    print(f"  Content bank: {len(bank)} entries")
+    return bank
+
+
+def find_content(headline, content_bank, max_entries=3):
+    """Fuzzy-match headline against content bank, return combined summaries."""
+    stops = {"that","this","with","from","have","been","said","will","more",
+             "also","when","were","they","their","about","says","just","after"}
+    def tok(text):
+        return set(re.sub(r"[^a-z0-9 ]", " ", text.lower()).split()) - stops
+    hl_tok = tok(headline)
+    matches = []
+    for entry in content_bank:
+        overlap = len(hl_tok & tok(entry["title"]))
+        if overlap >= 2:
+            matches.append((overlap, entry))
+    matches.sort(key=lambda x: x[0], reverse=True)
+    if not matches:
+        return ""
+    return " | ".join(
+        f"{e['title']}. {e['summary'][:300]}"
+        for _, e in matches[:max_entries]
+    )
+
+
 def fetch_article_text(url, max_chars=2500):
     """Fetch the readable body text of an article page so the model writes from
     real content instead of a thin RSS summary. Returns plain text (truncated)
@@ -638,21 +693,17 @@ LOCAL_SYSTEM_PROMPT = """You write factual local news articles for Treasure Coas
 
 FLORIDA_SYSTEM_PROMPT = """You write factual news articles for the Florida section of Treasure Coast Today. Your readers are Treasure Coast residents who want to stay informed about statewide Florida news that affects them as Floridians. This section covers the whole state — legislation, courts, economy, environment, politics, weather, and major events anywhere in Florida. Do NOT artificially narrow to the Treasure Coast; this is the statewide section. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries. IMPORTANT: Base every factual claim on the provided source text. You may write naturally and provide helpful context and clear explanation, but do NOT fabricate specific names, numbers, dates, direct quotes, or outcomes that are not in the source. Never write phrases like 'no further details are available' or 'details were not disclosed' — if you lack a specific detail, simply write around it and focus on what IS known. Always produce a complete, readable article."""
 
-def enhance_card(card, headlines):
-    """Enrich a card body using fetched article text and related RSS summaries.
-    Uses Haiku for speed. Skips if source text is too thin to improve on."""
+def enhance_card(card, headlines, content_bank=None):
+    """Enrich a card body using content bank and related RSS summaries.
+    No live HTTP fetches — everything comes from in-memory data."""
     headline = card.get("headline", "")
-    link     = card.get("link", "")
     if not headline:
         return card
 
-    # Try to get full article text from the source URL
-    # Skip known paywalled/thin sources to save time
-    _skip_domains = ["tcpalm.com", "sun-sentinel.com", "palmbeachpost.com", "wsj.com", "nytimes.com", "washingtonpost.com"]
-    _should_fetch = link and not any(d in link.lower() for d in _skip_domains)
-    article_text = fetch_article_text(link) if _should_fetch else ""
+    # Content bank match
+    bank_content = find_content(headline, content_bank or [], max_entries=2)
 
-    # Also gather related RSS summaries from the category headlines
+    # Related RSS summaries from the category headlines
     stops = {"that","this","with","from","have","been","said","will","more",
              "also","when","were","they","their","about","says","just","after"}
     hl_tokens = set(re.sub(r"[^a-z0-9 ]", " ", headline.lower()).split()) - stops
@@ -663,24 +714,21 @@ def enhance_card(card, headlines):
             related_parts.append(h.get("title","") + ". " + h.get("summary","")[:300])
     related_text = " | ".join(related_parts[:3])
 
-    source_parts = [p for p in [article_text, related_text] if p]
+    source_parts = [p for p in [bank_content, related_text] if p]
     source_text  = "\n\n".join(source_parts)
 
-    if not source_text or len(source_text.split()) < 40:
+    if not source_text or len(source_text.split()) < 60:
         return card
 
-    # Relevance check — ensure source relates to the card headline
-    stops2   = {"the","a","an","in","of","for","to","and","or","on","at","is","was","are","were","that","this","with"}
-    hl_tok   = set(re.sub(r"[^a-z0-9 ]", " ", headline.lower()).split()) - stops2
-    src_tok  = set(re.sub(r"[^a-z0-9 ]", " ", source_text[:400].lower()).split()) - stops2
+    # Relevance check
+    stops2 = {"the","a","an","in","of","for","to","and","or","on","at","is","was","are","were","that","this","with"}
+    hl_tok  = set(re.sub(r"[^a-z0-9 ]", " ", headline.lower()).split()) - stops2
+    src_tok = set(re.sub(r"[^a-z0-9 ]", " ", source_text[:400].lower()).split()) - stops2
     if len(hl_tok & src_tok) < 2:
         return card
 
     try:
-        body   = card.get("body", "")
-        # Skip enrichment when source is too thin — prevents padding with generic knowledge
-        if len(source_text.split()) < 60:
-            return card
+        body = card.get("body", "")
         prompt = (
             f"You wrote this local news card about: {headline}\n\n"
             f"Your original card text:\n\n{body}\n\n"
@@ -691,7 +739,6 @@ def enhance_card(card, headlines):
             "Always preserve proper nouns exactly — school names, road names, business names, people's full names. "
             "Write in plain direct English. No em dashes. "
             "CRITICAL: Never add background context, general explanations, or typical patterns. "
-            "Never write sentences like 'school consolidations typically...' or 'split votes indicate...'. "
             "If you do not have enough specific facts, write fewer words and stop. Do not pad."
         )
         resp = client.messages.create(
@@ -703,7 +750,7 @@ def enhance_card(card, headlines):
         skip_signals = ["i cannot rewrite", "source material", "does not match", "cannot proceed"]
         if enhanced and not any(s in enhanced.lower()[:150] for s in skip_signals):
             card["body"] = strip_absence_language(strip_markdown(enhanced, headline))
-    except Exception as e:
+    except Exception:
         pass
     return card
 
@@ -852,7 +899,7 @@ Return ONLY valid JSON:
         # Enrich cards with article text and related summaries via Haiku — run in parallel
         from concurrent.futures import ThreadPoolExecutor as _TPE, as_completed as _ac
         with _TPE(max_workers=6) as ex:
-            futures = {ex.submit(enhance_card, card, headlines): card for card in data.get("cards", [])}
+            futures = {ex.submit(enhance_card, card, headlines, content_bank): card for card in data.get("cards", [])}
             for fut in _ac(futures, timeout=45):
                 try:
                     fut.result(timeout=10)
@@ -2060,7 +2107,8 @@ def write_archives(all_categories, top_cat):
 
 def main():
     print("Treasure Coast Today — building site...")
-    image_bank = build_image_bank()
+    image_bank   = build_image_bank()
+    content_bank = build_content_bank()
     used_bank_images = set()
     all_categories = []
 
