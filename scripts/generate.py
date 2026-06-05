@@ -8,6 +8,8 @@ import os
 import json
 import re
 import hashlib
+import html as html_lib
+from urllib.parse import urlparse
 import feedparser
 import requests
 import anthropic
@@ -165,6 +167,41 @@ CONTENT_BANK_FEEDS = [
     "https://news.google.com/rss/search?q=fort+pierce+florida&hl=en-US&gl=US&ceid=US:en",
     "https://news.google.com/rss/search?q=stuart+florida+news&hl=en-US&gl=US&ceid=US:en",
 ]
+
+# Source strategy:
+# - WPTV and other local TV/open feeds can support full cards when article text is available.
+# - TCPalm and other paywalled outlets are useful for discovering stories, but should not be
+#   stretched into full AI-written articles from a tiny RSS blurb.
+# - Google News is treated as an aggregator/discovery source unless we successfully extract a
+#   real publisher URL and fetch enough body text from that publisher.
+FULL_CONTENT_DOMAINS = [
+    "wptv.com",
+    "wpbf.com",
+    "cbs12.com",
+    "wflx.com",
+    "hometownnewstc.com",
+]
+
+DISCOVERY_ONLY_DOMAINS = [
+    "tcpalm.com",
+    "palmbeachpost.com",
+    "sun-sentinel.com",
+    "wsj.com",
+    "nytimes.com",
+    "washingtonpost.com",
+    "bloomberg.com",
+]
+
+AGGREGATOR_DOMAINS = [
+    "news.google.com",
+    "news.yahoo.com",
+    "yahoo.com",
+]
+
+MIN_FULL_ARTICLE_WORDS = 100
+MIN_SUMMARY_CARD_WORDS = 65
+MIN_BRIEF_WORDS = 25
+
 OUTPUT_DIR             = Path(__file__).parent.parent
 
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
@@ -209,6 +246,76 @@ def now_et():
     utc = datetime.now(timezone.utc)
     et  = utc - timedelta(hours=5)  # approximation; DST ignored for display
     return et.strftime("%-I:%M %p ET")
+
+def get_domain(url):
+    try:
+        return urlparse(url).netloc.lower().replace("www.", "")
+    except Exception:
+        return ""
+
+
+def classify_source(link):
+    domain = get_domain(link)
+    if not domain:
+        return "unknown"
+    if any(d in domain for d in FULL_CONTENT_DOMAINS):
+        return "full_source"
+    if any(d in domain for d in DISCOVERY_ONLY_DOMAINS):
+        return "discovery_only"
+    if any(d in domain for d in AGGREGATOR_DOMAINS):
+        return "aggregator"
+    return "unknown"
+
+
+def source_priority(h):
+    """Prefer accessible local/full-content sources when choosing which fresh
+    stories get sent to Claude. This keeps WPTV-like stories from being crowded
+    out by thin Google News or paywalled RSS blurbs."""
+    st = h.get("source_type", "unknown")
+    link = h.get("link", "")
+    if "wptv.com" in link.lower():
+        return 0
+    if st == "full_source":
+        return 1
+    if st == "unknown":
+        return 2
+    if st == "aggregator":
+        return 3
+    if st == "discovery_only":
+        return 4
+    return 5
+
+
+def word_count(text):
+    return len(re.findall(r"\b\w+\b", text or ""))
+
+
+def initial_source_quality(summary, source_type):
+    words = word_count(summary)
+    if source_type == "discovery_only":
+        return "discovery_only"
+    if words >= MIN_SUMMARY_CARD_WORDS:
+        return "summary"
+    if words >= MIN_BRIEF_WORDS:
+        return "brief"
+    return "thin"
+
+
+def parse_feed_url(url, timeout=8):
+    """Fetch RSS with an explicit timeout, then parse. feedparser.parse(url)
+    can hang longer than expected on slow feeds."""
+    try:
+        resp = requests.get(
+            url,
+            timeout=timeout,
+            headers={"User-Agent": "Mozilla/5.0 (compatible; TCTBot/1.0)"},
+        )
+        if resp.status_code != 200:
+            return None
+        return feedparser.parse(resp.content)
+    except Exception:
+        return None
+
 
 def get_image_credit(source_url):
     if not source_url:
@@ -292,7 +399,8 @@ def build_image_bank():
     bank = []
     for url in IMAGE_BANK_FEEDS:
         try:
-            feed = feedparser.parse(url)
+            feed = parse_feed_url(url)
+            if not feed: continue
             for entry in feed.entries[:60]:
                 img = extract_image(entry)
                 if not img:
@@ -436,7 +544,8 @@ def build_content_bank():
     seen = set()
     for url in CONTENT_BANK_FEEDS:
         try:
-            feed = feedparser.parse(url)
+            feed = parse_feed_url(url)
+            if not feed: continue
             for entry in feed.entries[:20]:
                 title = (entry.get("title") or "").strip()
                 if not title or title.lower() in seen:
@@ -472,41 +581,121 @@ def find_content(headline, content_bank, max_entries=3):
     )
 
 
-def fetch_article_text(url, max_chars=2500):
-    """Fetch the readable body text of an article page so the model writes from
-    real content instead of a thin RSS summary. Returns plain text (truncated)
-    or empty string on any failure. Google News redirect URLs are followed
-    automatically via allow_redirects=True to reach the real publisher page."""
+def clean_article_text(text):
+    text = html_lib.unescape(text or "")
+    text = re.sub(r"\s+", " ", text).strip()
+    if not text:
+        return ""
+
+    junk_phrases = [
+        "subscribe", "sign up", "cookie", "advertisement", "all rights reserved",
+        "terms of service", "privacy policy", "follow us", "newsletter",
+        "download the app", "copyright", "click here", "watch live", "closed captioning",
+    ]
+    sentences = re.split(r"(?<=[.!?])\s+", text)
+    kept = []
+    for sentence in sentences:
+        low = sentence.lower()
+        if any(j in low for j in junk_phrases):
+            continue
+        kept.append(sentence.strip())
+    return " ".join(s for s in kept if s).strip()
+
+
+def extract_jsonld_article_body(html):
+    scripts = re.findall(
+        r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
+        html or "",
+        re.DOTALL | re.IGNORECASE,
+    )
+    for raw in scripts:
+        raw = html_lib.unescape(raw).strip()
+        try:
+            data = json.loads(raw)
+        except Exception:
+            continue
+        stack = data if isinstance(data, list) else [data]
+        while stack:
+            item = stack.pop(0)
+            if isinstance(item, list):
+                stack.extend(item)
+                continue
+            if not isinstance(item, dict):
+                continue
+            body = item.get("articleBody")
+            if isinstance(body, str) and word_count(body) >= MIN_BRIEF_WORDS:
+                return body
+            graph = item.get("@graph")
+            if isinstance(graph, list):
+                stack.extend(graph)
+    return ""
+
+
+def regex_extract_article_text(html, max_chars=4000):
+    article_match = re.search(r"<article[^>]*>(.*?)</article>", html or "", re.DOTALL | re.IGNORECASE)
+    scope = article_match.group(1) if article_match else (html or "")
+    paras = re.findall(r"<p[^>]*>(.*?)</p>", scope, re.DOTALL | re.IGNORECASE)
+    text_parts = []
+    for p in paras:
+        clean = re.sub(r"<[^>]+>", " ", p)
+        clean = clean_article_text(clean)
+        if len(clean) < 40:
+            continue
+        text_parts.append(clean)
+        if sum(len(t) for t in text_parts) > max_chars:
+            break
+    return " ".join(text_parts)[:max_chars]
+
+
+def fetch_article_text(url, max_chars=4000):
+    """Fetch readable body text from an article page. Prefer trafilatura,
+    then JSON-LD articleBody, then a paragraph-regex fallback. Returns empty
+    string if the page is blocked, paywalled, too thin, or extraction fails."""
     if not url:
         return ""
     try:
-        resp = requests.get(url, timeout=3, allow_redirects=True,
-                            headers={"User-Agent":"Mozilla/5.0 (compatible; TCTBot/1.0)"})
+        resp = requests.get(
+            url,
+            timeout=8,
+            allow_redirects=True,
+            headers={
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/120.0 Safari/537.36"
+                )
+            },
+        )
         if resp.status_code != 200:
             return ""
         html = resp.text
-        # Prefer text inside <article> if present, else <p> tags from the body
-        article_match = re.search(r"<article[^>]*>(.*?)</article>", html, re.DOTALL | re.IGNORECASE)
-        scope = article_match.group(1) if article_match else html
-        # Collect paragraph text
-        paras = re.findall(r"<p[^>]*>(.*?)</p>", scope, re.DOTALL | re.IGNORECASE)
-        text_parts = []
-        for p in paras:
-            clean = re.sub(r"<[^>]+>", "", p)           # strip nested tags
-            clean = re.sub(r"&[a-z]+;", " ", clean)     # strip entities
-            clean = re.sub(r"\s+", " ", clean).strip()
-            # Skip boilerplate / junk paragraphs
-            if len(clean) < 40:
-                continue
-            low = clean.lower()
-            if any(junk in low for junk in ["subscribe", "sign up", "cookie", "advertisement",
-                                            "all rights reserved", "terms of service", "privacy policy",
-                                            "follow us", "newsletter"]):
-                continue
-            text_parts.append(clean)
-            if sum(len(t) for t in text_parts) > max_chars:
-                break
-        return " ".join(text_parts)[:max_chars]
+
+        # 1. Robust extractor for modern news HTML.
+        try:
+            import trafilatura
+            extracted = trafilatura.extract(
+                html,
+                url=url,
+                include_comments=False,
+                include_tables=False,
+                favor_precision=False,
+            )
+            extracted = clean_article_text(extracted)
+            if word_count(extracted) >= MIN_FULL_ARTICLE_WORDS:
+                return extracted[:max_chars]
+        except Exception:
+            pass
+
+        # 2. Many publishers expose the full story in schema.org JSON-LD.
+        body = clean_article_text(extract_jsonld_article_body(html))
+        if word_count(body) >= MIN_FULL_ARTICLE_WORDS:
+            return body[:max_chars]
+
+        # 3. Last fallback for simple pages.
+        fallback = clean_article_text(regex_extract_article_text(html, max_chars=max_chars))
+        if word_count(fallback) >= MIN_FULL_ARTICLE_WORDS:
+            return fallback[:max_chars]
+        return ""
     except Exception:
         return ""
 
@@ -610,7 +799,8 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
     seen, headlines = set(), []
     for url in feeds:
         try:
-            feed = feedparser.parse(url)
+            feed = parse_feed_url(url)
+            if not feed: continue
             for entry in feed.entries:
                 title = (entry.get("title") or "").strip()
                 if not title or title in seen: continue
@@ -641,11 +831,15 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
                 raw_link = entry.get("link","") or getattr(entry,"link","")
                 link = extract_publisher_url(entry)
                 img  = extract_image(entry)
+                source_type = classify_source(link)
                 headlines.append({
                     "title":   title,
                     "summary": summary,
                     "published": pub,
                     "link":    link,
+                    "source_type": source_type,
+                    "source_quality": initial_source_quality(summary, source_type),
+                    "source_word_count": word_count(summary),
                     "image_url": img,
                     "image_from_google": "news.google.com" in raw_link.lower(),
                 })
@@ -668,23 +862,51 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
             return False  # Unparseable date = reject
     fresh = [h for h in headlines if is_fresh(h)]
     result = fresh if len(fresh) >= 1 else headlines
-    result = result[:limit]
 
-    # Fetch fuller article text in parallel for top 7 headlines.
-    # Skip known paywalled domains — they never return useful content.
-    _PAYWALL_DOMAINS = ["tcpalm.com", "sun-sentinel.com", "palmbeachpost.com",
-                        "wsj.com", "nytimes.com", "washingtonpost.com", "bloomberg.com"]
+    # Prefer accessible local/full-content sources (especially WPTV) before thin
+    # discovery-only sources when deciding which stories enter the Claude prompt.
+    def parsed_pub_ts(h):
+        try:
+            return parsedate_to_datetime(h.get("published", "")).timestamp()
+        except Exception:
+            return 0
+    result = sorted(result, key=lambda h: (source_priority(h), -parsed_pub_ts(h)))[:limit]
+
     def try_fetch(h):
         link = h.get("link", "")
-        if not link or any(d in link.lower() for d in _PAYWALL_DOMAINS):
+        st = h.get("source_type", "unknown")
+        if not link:
+            h["source_quality"] = "thin"
+            return
+        if st in {"discovery_only", "aggregator"}:
+            # Paywalled/aggregator stories can still be shown as briefs, but should
+            # not be inflated into full cards from an RSS snippet.
             return
         full = fetch_article_text(link)
-        if full and len(full) > len(h.get("summary", "")):
+        if full and word_count(full) >= MIN_FULL_ARTICLE_WORDS:
             h["article_text"] = full
+            h["source_quality"] = "full"
+            h["source_word_count"] = word_count(full)
+        else:
+            h["source_quality"] = initial_source_quality(h.get("summary", ""), st)
+            h["source_word_count"] = word_count(h.get("summary", ""))
 
-    with ThreadPoolExecutor(max_workers=7) as ex:
-        list(ex.map(try_fetch, result[:7], timeout=20))
+    with ThreadPoolExecutor(max_workers=5) as ex:
+        futures = [ex.submit(try_fetch, h) for h in result]
+        try:
+            for fut in as_completed(futures, timeout=45):
+                try:
+                    fut.result(timeout=1)
+                except Exception:
+                    pass
+        except Exception:
+            # Do not let a slow publisher stall or fail the whole category.
+            for fut in futures:
+                fut.cancel()
 
+    full_count = sum(1 for h in result if h.get("source_quality") == "full")
+    brief_count = sum(1 for h in result if h.get("source_quality") in {"summary", "brief", "discovery_only"})
+    print(f"  Source quality: {full_count} full, {brief_count} summary/brief/discovery, {len(result)} total")
     return result
 
 # -- CATEGORY CONTENT GENERATION --
@@ -694,57 +916,45 @@ LOCAL_SYSTEM_PROMPT = """You write factual local news articles for Treasure Coas
 FLORIDA_SYSTEM_PROMPT = """You write factual news articles for the Florida section of Treasure Coast Today. Your readers are Treasure Coast residents who want to stay informed about statewide Florida news that affects them as Floridians. This section covers the whole state — legislation, courts, economy, environment, politics, weather, and major events anywhere in Florida. Do NOT artificially narrow to the Treasure Coast; this is the statewide section. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries. IMPORTANT: Base every factual claim on the provided source text. You may write naturally and provide helpful context and clear explanation, but do NOT fabricate specific names, numbers, dates, direct quotes, or outcomes that are not in the source. Never write phrases like 'no further details are available' or 'details were not disclosed' — if you lack a specific detail, simply write around it and focus on what IS known. Always produce a complete, readable article."""
 
 def enhance_card(card, headlines, content_bank=None):
-    """Enrich a card body using content bank and related RSS summaries.
-    No live HTTP fetches — everything comes from in-memory data."""
+    """Lightly rewrite a card only from its exact selected source. Avoid fuzzy
+    content-bank expansion, because that can mix unrelated stories and create
+    filler. Discovery-only/paywalled stories are kept short."""
     headline = card.get("headline", "")
-    if not headline:
+    idx = card.get("source_index")
+    if not headline or idx is None:
+        return card
+    try:
+        source = headlines[int(idx) - 1]
+    except Exception:
         return card
 
-    # Content bank match
-    bank_content = find_content(headline, content_bank or [], max_entries=2)
-
-    # Related RSS summaries from the category headlines
-    stops = {"that","this","with","from","have","been","said","will","more",
-             "also","when","were","they","their","about","says","just","after"}
-    hl_tokens = set(re.sub(r"[^a-z0-9 ]", " ", headline.lower()).split()) - stops
-    related_parts = []
-    for h in headlines:
-        h_tokens = set(re.sub(r"[^a-z0-9 ]", " ", h.get("title","").lower()).split()) - stops
-        if len(hl_tokens & h_tokens) >= 2:
-            related_parts.append(h.get("title","") + ". " + h.get("summary","")[:300])
-    related_text = " | ".join(related_parts[:3])
-
-    source_parts = [p for p in [bank_content, related_text] if p]
-    source_text  = "\n\n".join(source_parts)
-
-    if not source_text or len(source_text.split()) < 60:
+    quality = source.get("source_quality", "thin")
+    source_text = source.get("article_text", "") or source.get("summary", "")
+    if not source_text or word_count(source_text) < MIN_BRIEF_WORDS:
         return card
 
-    # Relevance check
-    stops2 = {"the","a","an","in","of","for","to","and","or","on","at","is","was","are","were","that","this","with"}
-    hl_tok  = set(re.sub(r"[^a-z0-9 ]", " ", headline.lower()).split()) - stops2
-    src_tok = set(re.sub(r"[^a-z0-9 ]", " ", source_text[:400].lower()).split()) - stops2
-    if len(hl_tok & src_tok) < 2:
+    # Do not inflate discovery-only/paywalled RSS blurbs. Keep them as short briefs.
+    if quality in {"thin", "brief", "discovery_only", "aggregator"}:
+        card["body"] = make_brief_from_source(headline, source_text)
+        if not card.get("teaser"):
+            card["teaser"] = card["body"]
         return card
 
     try:
-        body = card.get("body", "")
+        target = "two short paragraphs, 90-130 words total" if quality == "full" else "one short paragraph, 45-70 words total"
         prompt = (
-            f"You wrote this local news card about: {headline}\n\n"
-            f"Your original card text:\n\n{body}\n\n"
-            f"Here is additional source material:\n\n{source_text}\n\n"
-            "If the source is about a different story, return the original card text unchanged. "
-            "Otherwise rewrite the card body in two short paragraphs (~120 words total) using ONLY "
-            "confirmed facts explicitly stated in the source above. "
-            "Always preserve proper nouns exactly — school names, road names, business names, people's full names. "
-            "Write in plain direct English. No em dashes. "
-            "CRITICAL: Never add background context, general explanations, or typical patterns. "
-            "If you do not have enough specific facts, write fewer words and stop. Do not pad."
+            f"Rewrite this local news card about: {headline}\n\n"
+            f"SOURCE QUALITY: {quality}\n\n"
+            f"Exact source material for this same story:\n\n{source_text[:3000]}\n\n"
+            f"Write {target}. Use ONLY confirmed facts explicitly stated in the source above. "
+            "Preserve proper nouns exactly. No em dashes. "
+            "Never add background context, general explanations, typical patterns, or implications. "
+            "If there are not enough specific facts, write fewer words and stop. Do not pad."
         )
         resp = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=300,
-            messages=[{"role": "user", "content": prompt}]
+            max_tokens=260,
+            messages=[{"role": "user", "content": prompt}],
         )
         enhanced = resp.content[0].text.strip()
         skip_signals = ["i cannot rewrite", "source material", "does not match", "cannot proceed"]
@@ -755,7 +965,27 @@ def enhance_card(card, headlines, content_bank=None):
     return card
 
 
-def generate_category_content(category_key, category_label, headlines):
+def make_brief_from_source(headline, source_text, max_words=45):
+    """Fallback for thin/paywalled/discovery-only items. It is better to publish
+    a short factual brief than a padded AI article."""
+    text = clean_article_text(source_text)
+    sentences = re.split(r"(?<=[.!?])\s+", text)
+    picked = []
+    for sentence in sentences:
+        sentence = sentence.strip()
+        if len(sentence) < 25:
+            continue
+        picked.append(sentence)
+        if word_count(" ".join(picked)) >= 22:
+            break
+    brief = " ".join(picked).strip() or headline
+    words = brief.split()
+    if len(words) > max_words:
+        brief = " ".join(words[:max_words]).rstrip(" ,;:") + "."
+    return brief
+
+
+def generate_category_content(category_key, category_label, headlines, content_bank=None):
     def sanitize(text):
         if not text: return ""
         text = text.replace("\\", " ").replace('"', "'").replace("\n"," ").replace("\r"," ").replace("\t"," ")
@@ -766,9 +996,16 @@ def generate_category_content(category_key, category_label, headlines):
     def hl_line(i, h):
         pub     = sanitize(h.get("published",""))
         pub_str = f" [pub:{pub}]" if pub else ""
+        source_type = sanitize(h.get("source_type", "unknown"))
+        quality = sanitize(h.get("source_quality", "unknown"))
+        words = h.get("source_word_count", word_count(h.get("article_text", "") or h.get("summary", "")))
         # Use fuller article text when we managed to fetch it, else the RSS summary
         content = h.get("article_text", "") or h.get("summary", "")
-        return f"{i+1}. {sanitize(h.get('title',''))}{pub_str}\n   {sanitize(content)[:2800]}"
+        return (
+            f"{i+1}. {sanitize(h.get('title',''))} "
+            f"[source_type:{source_type}] [source_quality:{quality}] [words:{words}]"
+            f"{pub_str}\n   {sanitize(content)[:2800]}"
+        )
 
     headlines_text = "\n".join(hl_line(i,h) for i,h in enumerate(headlines))
     headlines_text = headlines_text.replace("\\","").encode("ascii","ignore").decode("ascii")
@@ -787,11 +1024,18 @@ def generate_category_content(category_key, category_label, headlines):
 
 {headlines_text}
 
+SOURCE QUALITY RULES:
+- Prefer stories marked [source_quality:full] for the hero and full multi-paragraph cards.
+- Stories marked [source_quality:summary] may be used for short cards only.
+- Stories marked [source_quality:brief], [source_quality:thin], [source_quality:discovery_only], or [source_type:discovery_only] may only be used as one-sentence briefs, or skipped.
+- Never pad thin RSS blurbs into full articles. If the source has only a few facts, write fewer words.
+- It is acceptable to return fewer than six useful cards if the source material is thin.
+
 Tasks:
 1. Pick the single most important/urgent Florida statewide story. Prioritize stories with broad impact across Florida — major legislation, court rulings, economic news, environmental decisions, significant crimes or disasters anywhere in the state. Do NOT favor Treasure Coast stories here; this is the statewide section.
 2. Write an accurate Florida-focused headline. Name the specific Florida city, region, or institution when relevant.
-3. Write a 380-430 word factual article in FOUR full paragraphs. Cover what happened, who is affected across Florida, and what happens next statewide. Do NOT write only two paragraphs.
-4. For the next {CARDS_PER_CATEGORY} most important Florida stories write a teaser (one to two sentences) and a body of two to three full paragraphs. Write a complete, readable article that covers what happened, who is affected, and the broader context. Ground all specific facts (names, numbers, dates, quotes) in the source, but write naturally and provide useful context and explanation. CRITICAL: Always preserve proper nouns from the source — school names, road names, business names, people's names, building names. Never replace a specific name with a generic description. Never write 'no further details available' — always produce a substantive article. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
+3. If the chosen source is [source_quality:full], write a 300-420 word factual article in three to four paragraphs. If it is not full, write a shorter factual brief or choose a better sourced story. Cover only facts supported by the source.
+4. For the next {CARDS_PER_CATEGORY} most important Florida stories write a teaser and body sized to the source quality: full sources may get two short paragraphs, summary sources get one short paragraph, and brief/discovery-only sources get one sentence. Ground all specific facts (names, numbers, dates, quotes) in the source, but write naturally and provide useful context and explanation. CRITICAL: Always preserve proper nouns from the source — school names, road names, business names, people's names, building names. Never replace a specific name with a generic description. Never write 'no further details available' — always produce a substantive article. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
 
 URGENCY SCORING for Florida statewide news (1-10):
 - 9-10: Major legislation signed/passed, significant court ruling, statewide emergency or disaster, major economic news affecting all Floridians
@@ -823,11 +1067,18 @@ Return ONLY valid JSON:
 
 {headlines_text}
 
+SOURCE QUALITY RULES:
+- Prefer stories marked [source_quality:full] for the hero and full multi-paragraph cards.
+- Stories marked [source_quality:summary] may be used for short cards only.
+- Stories marked [source_quality:brief], [source_quality:thin], [source_quality:discovery_only], or [source_type:discovery_only] may only be used as one-sentence briefs, or skipped.
+- Never pad thin RSS blurbs into full articles. If the source has only a few facts, write fewer words.
+- It is acceptable to return fewer than six useful cards if the source material is thin.
+
 Tasks:
 1. Pick the single most important/urgent story for Treasure Coast Florida residents. LOCAL stories affecting residents directly (county commission decisions, local crime, school district news, local business openings/closings, road/infrastructure, local sports) should be ranked ABOVE national or state stories unless the national story has a very direct local impact (e.g. a hurricane heading toward Martin County, a federal ruling on the Indian River Lagoon). A routine city council vote in Stuart is more relevant to this audience than a national political story.{"  CRITICAL for Sports: pick an actual sports story — game result, standings, player/team news, or athletic event. Skip crime, arrests, or non-sports stories entirely." if category_key == "sports" else ""}{"  CRITICAL for Crime & Safety: pick an actual local crime, arrest, public safety, or emergency story. Skip politics, tax, government budget, or non-safety stories entirely." if category_key == "crime" else ""}{"  CRITICAL for Things To Do: pick events, activities, restaurants, parks, or attractions specifically in Martin, St. Lucie, or Indian River counties. Skip anything more than 60 miles away such as Orlando, Miami, or Tampa events." if category_key == "things_to_do" else ""}
 2. Write an accurate, locally-framed headline. Name the specific county, city, or town (Stuart, Port St. Lucie, Fort Pierce, Vero Beach, Jensen Beach, Palm City, Hobe Sound, Sebastian, etc.) in the headline when relevant.
-3. Write a complete, readable factual article of four full paragraphs covering what happened, who is affected locally, the context, and what happens next. Ground all specific facts (names, numbers, dates, quotes, locations) in the source text, but write naturally with useful context and clear explanation. Never write 'no further details available' or similar — always produce a substantive article.
-4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one to two sentences) and a body of two to three full paragraphs. Write a complete, readable article that covers what happened, who is affected locally, and what it means for the community. Ground all specific facts (names, numbers, dates, quotes) in the source, but write naturally and provide useful local context and explanation. CRITICAL: Always preserve proper nouns from the source — school names, road names, business names, people's names, building names. If the source names specific schools, streets, or institutions, those names MUST appear in the card. Never replace a specific name with a generic description (e.g. never write "the schools" if the source names them). Never write 'no further details available' — always produce a substantive article. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
+3. If the chosen source is [source_quality:full], write a complete factual article of three to four paragraphs covering what happened, who is affected locally, the context, and what happens next. If it is not full, write a shorter factual brief or choose a better sourced story. Ground all specific facts (names, numbers, dates, quotes, locations) in the source text, but write naturally with useful context and clear explanation. Never write 'no further details available' or similar — always produce a substantive article.
+4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser and body sized to the source quality: full sources may get two short paragraphs, summary sources get one short paragraph, and brief/discovery-only sources get one sentence. Ground all specific facts (names, numbers, dates, quotes) in the source, but write naturally and provide useful local context and explanation. CRITICAL: Always preserve proper nouns from the source — school names, road names, business names, people's names, building names. If the source names specific schools, streets, or institutions, those names MUST appear in the card. Never replace a specific name with a generic description (e.g. never write "the schools" if the source names them). Never write 'no further details available' — always produce a substantive article. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
 
 URGENCY SCORING for local news (1-10):
 - 9-10: Major public safety event, significant government decision directly affecting residents, serious local crime with community impact, natural disaster or emergency
@@ -878,21 +1129,34 @@ Return ONLY valid JSON:
                 try:
                     source = headlines[int(idx)-1]
                     item["link"]      = source.get("link","")
+                    item["source_type"] = source.get("source_type", "unknown")
+                    item["source_quality"] = source.get("source_quality", "unknown")
+                    item["source_word_count"] = source.get("source_word_count", 0)
                     item["image_url"] = source.get("image_url","")
                     item["image_from_google"] = source.get("image_from_google", False)
                 except Exception:
-                    item["link"] = ""; item["image_url"] = ""; item["image_from_google"] = False
+                    item["link"] = ""; item["source_type"] = "unknown"; item["source_quality"] = "unknown"; item["source_word_count"] = 0; item["image_url"] = ""; item["image_from_google"] = False
             else:
-                item["link"] = ""; item["image_url"] = ""; item["image_from_google"] = False
+                item["link"] = ""; item["source_type"] = "unknown"; item["source_quality"] = "unknown"; item["source_word_count"] = 0; item["image_url"] = ""; item["image_from_google"] = False
             raw_pub = item.get("published","").replace("pub:","").strip().strip("[]")
             item["published_raw"] = raw_pub  # preserve for staleness checking
             item["published"] = format_age(raw_pub)
             return item
         data["hero"] = attach_source(data["hero"])
         data["hero"]["body"] = strip_absence_language(strip_markdown(data["hero"].get("body",""), data["hero"].get("headline","")))
+        if data["hero"].get("source_quality") in {"thin", "brief", "discovery_only", "aggregator"}:
+            data["hero"]["body"] = make_brief_from_source(data["hero"].get("headline", ""), data["hero"].get("body", ""), max_words=55)
         for card in data.get("cards",[]):
             attach_source(card)
             card["body"] = strip_absence_language(strip_markdown(card.get("body",""), card.get("headline","")))
+            if card.get("source_quality") in {"thin", "brief", "discovery_only", "aggregator"}:
+                idx = card.get("source_index")
+                try:
+                    src = headlines[int(idx)-1]
+                    src_text = src.get("article_text", "") or src.get("summary", "") or card.get("body", "")
+                except Exception:
+                    src_text = card.get("body", "")
+                card["body"] = make_brief_from_source(card.get("headline", ""), src_text, max_words=45)
         data["category_key"]   = category_key
         data["category_label"] = category_label
 
@@ -2120,7 +2384,7 @@ def main():
             continue
 
         print(f"  {len(headlines)} headlines fetched")
-        data = generate_category_content(cat_key, cat_config["label"], headlines)
+        data = generate_category_content(cat_key, cat_config["label"], headlines, content_bank)
         if not data:
             continue
 
