@@ -135,6 +135,7 @@ CATEGORIES = {
     },
 }
 HEADLINES_PER_CATEGORY = 12
+CARDS_PER_CATEGORY     = 6
 
 # Content bank — loaded once at startup, used for card enrichment
 CONTENT_BANK_FEEDS = [
@@ -275,6 +276,38 @@ def sanitize_text(text):
 
 
 
+def fetch_og_image(url):
+    """Fetch an article page and extract its og:image (or twitter:image) meta tag.
+    This is the most reliable image source because it comes from the article itself,
+    guaranteeing the image actually matches the story. Returns "" on any failure."""
+    if not url:
+        return ""
+    try:
+        import re as _re_og
+        resp = requests.get(url, timeout=10,
+                            headers={"User-Agent": "Mozilla/5.0 (compatible; PlainBot/1.0)"})
+        if resp.status_code != 200:
+            return ""
+        html = resp.text[:200000]  # only need the <head>
+        # Try og:image then twitter:image, in either attribute order
+        patterns = [
+            r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)',
+            r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']',
+            r'<meta[^>]+name=["\']twitter:image["\'][^>]+content=["\']([^"\']+)',
+            r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+name=["\']twitter:image["\']',
+        ]
+        for pat in patterns:
+            m = _re_og.search(pat, html, _re_og.IGNORECASE)
+            if m:
+                img = m.group(1).strip()
+                if img.startswith("http"):
+                    return img
+        return ""
+    except Exception:
+        return ""
+
+
+
 def build_image_bank():
     """Fetch images from RSS feeds that reliably include them (BBC, ESPN, TechCrunch)."""
     bank = []
@@ -386,37 +419,6 @@ PLACEHOLDER_URL_PATTERNS = [
 def is_placeholder_image(img_url):
     url_lower = img_url.lower()
     return any(pat in url_lower for pat in PLACEHOLDER_URL_PATTERNS)
-
-
-def fetch_og_image(url):
-    """Fetch an article page and extract its og:image (or twitter:image) meta tag.
-    This is the most reliable image source because it comes from the article itself,
-    guaranteeing the image actually matches the story. Returns "" on any failure."""
-    if not url:
-        return ""
-    try:
-        import re as _re_og
-        resp = requests.get(url, timeout=10,
-                            headers={"User-Agent": "Mozilla/5.0 (compatible; PlainBot/1.0)"})
-        if resp.status_code != 200:
-            return ""
-        html = resp.text[:200000]  # only need the <head>
-        # Try og:image then twitter:image, in either attribute order
-        patterns = [
-            r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)',
-            r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']',
-            r'<meta[^>]+name=["\']twitter:image["\'][^>]+content=["\']([^"\']+)',
-            r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+name=["\']twitter:image["\']',
-        ]
-        for pat in patterns:
-            m = _re_og.search(pat, html, _re_og.IGNORECASE)
-            if m:
-                img = m.group(1).strip()
-                if img.startswith("http"):
-                    return img
-        return ""
-    except Exception:
-        return ""
 
 
 def find_image(headline, entries):
