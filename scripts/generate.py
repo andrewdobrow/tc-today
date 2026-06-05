@@ -222,17 +222,24 @@ def get_fallback_image(category_key, headline=""):
     idx  = int(hashlib.sha256(seed.encode("utf-8")).hexdigest(), 16) % len(available)
     return f"{SITE_URL}/images/fallback/{available[idx]}", "Treasure Coast Today"
 
+def upscale_image_url(url):
+    """Upscale BBC CDN images by replacing the size segment with 1024."""
+    if not url or "ichef.bbci.co.uk" not in url:
+        return url
+    return re.sub(r"/\d{2,3}/", "/1024/", url, count=1)
+
+
 def extract_image(entry):
     """Try every known location for an image in an RSS entry."""
     def valid(u):
         if not u or len(u) < 15: return False
         return not any(x in u.lower() for x in ["1x1","pixel","spacer","tracking","data:"])
     for t in (getattr(entry,"media_thumbnail",None) or []):
-        if isinstance(t,dict) and valid(t.get("url","")): return t["url"]
+        if isinstance(t,dict) and valid(t.get("url","")): return upscale_image_url(t["url"])
     for m in (getattr(entry,"media_content",None) or []):
         if not isinstance(m,dict): continue
         u = m.get("url","")
-        if valid(u) and ("image" in m.get("type","") or any(u.lower().endswith(e) for e in (".jpg",".jpeg",".png",".webp"))): return u
+        if valid(u) and ("image" in m.get("type","") or any(u.lower().endswith(e) for e in (".jpg",".jpeg",".png",".webp"))): return upscale_image_url(u)
     for enc in (getattr(entry,"enclosures",None) or []):
         if isinstance(enc,dict) and "image" in enc.get("type",""):
             u = enc.get("href",enc.get("url",""))
@@ -708,7 +715,7 @@ Tasks:
 Return ONLY valid JSON:
 {{
   "hero": {{"headline": "...", "body": "full article", "urgency_score": <1-10>, "published": "copy [pub:...] exactly", "source_index": <number>}},
-  "cards": [{"headline": "...", "teaser": "...", "body": "two to three paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}]
+  "cards": [{{"headline": "...", "teaser": "...", "body": "two to three paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}]
 }}
 """
     else:
@@ -725,12 +732,10 @@ Tasks:
 Return ONLY valid JSON:
 {{
   "hero": {{"headline": "...", "body": "full article", "urgency_score": <1-10>, "published": "copy [pub:...] exactly", "source_index": <number>}},
-  "cards": [{"headline": "...", "teaser": "...", "body": "two to three paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}]
+  "cards": [{{"headline": "...", "teaser": "...", "body": "two to three paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}]
 }}
 """
 
-    is_florida    = (category_key == "florida")
-    system_prompt = FLORIDA_SYSTEM_PROMPT if is_florida else LOCAL_SYSTEM_PROMPT
 
     response = client.messages.create(
         model="claude-sonnet-4-5",
