@@ -343,8 +343,9 @@ def build_image_bank():
     return bank
 
 
-def match_image(headline, image_bank, cat_key=""):
+def match_image(headline, image_bank, cat_key="", used_images=None):
     """Fuzzy-match a headline against the image bank with geographic and category conflict detection."""
+    used_images = used_images or set()
     stops = {"that","this","with","from","have","been","after","over","into","says","said","will","than","more","also","when","were","they","their","about"}
     geo_words = {"ukraine","ukrainian","russia","russian","china","chinese","israel","israeli","gaza","iran","iranian",
                  "france","french","germany","german","australia","australian","india","indian","pakistan","pakistani",
@@ -379,6 +380,9 @@ def match_image(headline, image_bank, cat_key=""):
     best_score, best_img, best_credit = 0, "", ""
 
     for entry in image_bank:
+        img_url = entry.get("image_url", "")
+        if canonical_image_url(img_url) in used_images:
+            continue
         source = entry.get("source", "").lower()
         # Block sports images on non-sports categories
         if any(b in source for b in blocked_sources):
