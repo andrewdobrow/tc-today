@@ -827,6 +827,7 @@ Return ONLY valid JSON:
             else:
                 item["link"] = ""; item["image_url"] = ""; item["image_from_google"] = False
             raw_pub = item.get("published","").replace("pub:","").strip().strip("[]")
+            item["published_raw"] = raw_pub  # preserve for staleness checking
             item["published"] = format_age(raw_pub)
             return item
         data["hero"] = attach_source(data["hero"])
@@ -871,21 +872,43 @@ def select_front_page_hero(all_categories):
         for day in stale_days:
             if f" {day} " in content or f" {day}," in content: return True
         if any(p in content for p in stale_phrases): return True
-        # Hard timestamp check — reject heroes older than 24 hours regardless of content language
-        pub = cat["hero"].get("published","")
-        if pub:
+        # Hard timestamp check using raw RFC timestamp stored before format_age conversion
+        raw_pub = cat["hero"].get("published_raw","") or cat["hero"].get("published","")
+        if raw_pub:
             try:
                 from email.utils import parsedate_to_datetime
-                dt  = parsedate_to_datetime(pub).astimezone(timezone.utc)
+                dt  = parsedate_to_datetime(raw_pub).astimezone(timezone.utc)
                 age = (now_utc - dt).total_seconds() / 3600
                 if age > 24:
+                    print(f"  Stale hero filtered ({age:.0f}h old): {cat['hero'].get('headline','')[:50]}")
                     return True
             except Exception:
                 pass
         return False
 
     fresh = [c for c in candidates if not is_stale(c)]
-    candidates = fresh if fresh else candidates
+    if fresh:
+        candidates = fresh
+    else:
+        print("  All candidates stale — using full pool")
+
+    # Additional hard Python-side age filter — belt and suspenders
+    from email.utils import parsedate_to_datetime as _pdt
+    def _hero_age_hrs(cat):
+        raw = cat["hero"].get("published_raw","")
+        if not raw: return 0
+        try:
+            dt = _pdt(raw).astimezone(timezone.utc)
+            return (now_utc - dt).total_seconds() / 3600
+        except Exception:
+            return 0
+
+    under_24 = [c for c in candidates if _hero_age_hrs(c) <= 24 or _hero_age_hrs(c) == 0]
+    if under_24:
+        candidates = under_24
+    else:
+        print("  No candidates under 24h — keeping freshest available")
+        candidates = sorted(candidates, key=_hero_age_hrs)[:max(1, len(candidates)//2)]
 
     today_label   = now_utc.strftime("%A, %B %-d, %Y")
     yesterday_lbl = (now_utc - timedelta(days=1)).strftime("%A")
@@ -2048,6 +2071,26 @@ def main():
 
         data["_original_title"] = original_title
         data["_cat_key"]        = cat_key
+
+        # Demote stale category heroes — if the chosen hero is over 24 hours old,
+        # promote the first card instead. This catches staleness at the category level
+        # before the front page hero selection even runs.
+        from email.utils import parsedate_to_datetime as _parse_pub
+        from datetime import timezone as _tz2
+        _now2 = datetime.now(_tz2.utc)
+        _raw_pub = data["hero"].get("published_raw","")
+        if _raw_pub:
+            try:
+                _dt  = _parse_pub(_raw_pub).astimezone(_tz2.utc)
+                _age = (_now2 - _dt).total_seconds() / 3600
+                if _age > 24 and data.get("cards"):
+                    print(f"  Demoting stale hero ({_age:.0f}h old), promoting next card for {cat_config['label']}")
+                    old_hero = data["hero"]
+                    data["hero"]  = data["cards"][0]
+                    data["cards"] = data["cards"][1:] + [old_hero]
+            except Exception:
+                pass
+
         all_categories.append(data)
         print(f"  Hero: {data['hero']['headline'][:60]}... (urgency: {data['hero'].get('urgency_score')})")
 
