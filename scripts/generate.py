@@ -221,6 +221,60 @@ def get_fallback_image(category_key, headline=""):
     idx  = int(hashlib.sha256(seed.encode("utf-8")).hexdigest(), 16) % len(available)
     return f"{SITE_URL}/images/fallback/{available[idx]}", "Treasure Coast Today"
 
+def extract_image(entry):
+    """Try every known location for an image in an RSS entry."""
+    def valid(u):
+        if not u or len(u) < 15: return False
+        return not any(x in u.lower() for x in ["1x1","pixel","spacer","tracking","data:"])
+    for t in (getattr(entry,"media_thumbnail",None) or []):
+        if isinstance(t,dict) and valid(t.get("url","")): return t["url"]
+    for m in (getattr(entry,"media_content",None) or []):
+        if not isinstance(m,dict): continue
+        u = m.get("url","")
+        if valid(u) and ("image" in m.get("type","") or any(u.lower().endswith(e) for e in (".jpg",".jpeg",".png",".webp"))): return u
+    for enc in (getattr(entry,"enclosures",None) or []):
+        if isinstance(enc,dict) and "image" in enc.get("type",""):
+            u = enc.get("href",enc.get("url",""))
+            if valid(u): return u
+    html = ""
+    for field in ["description","summary"]:
+        val = entry.get(field,"") or getattr(entry,field,"")
+        if isinstance(val,list) and val:
+            html = val[0].get("value","") if isinstance(val[0],dict) else str(val[0])
+        elif isinstance(val,str):
+            html = val
+        if html: break
+    for match in re.finditer(r'<img[^>]+src=["\']([^"\']{20,})["\']', html):
+        u = match.group(1)
+        if valid(u): return u
+    return ""
+
+
+def extract_publisher_url(entry):
+    """Extract actual publisher URL from a Google News RSS entry."""
+    link = entry.get("link", "") or getattr(entry, "link", "")
+    if "news.google.com" not in link:
+        return link
+    for field in ["summary", "description"]:
+        val = entry.get(field, "") or getattr(entry, field, "")
+        if isinstance(val, list) and val:
+            html = val[0].get("value", "") if isinstance(val[0], dict) else str(val[0])
+        elif isinstance(val, str):
+            html = val
+        else:
+            continue
+        matches = re.findall(r'href=["\']?(https?://(?!news\.google)[^"\'>]+)', html)
+        if matches:
+            return matches[0]
+    return link
+
+
+def sanitize_text(text):
+    if not text: return ""
+    return text.replace("\\", " ").replace('"', "'").replace("\n", " ").replace("\r", " ").replace("\t", " ").strip()
+
+
+
 def build_image_bank():
     """Fetch images from RSS feeds that reliably include them (BBC, ESPN, TechCrunch)."""
     bank = []
