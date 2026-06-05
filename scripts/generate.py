@@ -1046,8 +1046,36 @@ def find_content(headline, content_bank, max_entries=5):
 
 
 def fetch_article_text(url, max_words=900):
-    """Article fetch disabled — base articles from RSS summaries only."""
-    return ""
+    """Fetch readable body text from an article page. Returns plain text or empty string on failure."""
+    if not url:
+        return ""
+    try:
+        resp = requests.get(url, timeout=5, allow_redirects=True,
+                            headers={"User-Agent": "Mozilla/5.0 (compatible; TCTBot/1.0)"})
+        if resp.status_code != 200:
+            return ""
+        html = resp.text
+        article_match = re.search(r"<article[^>]*>(.*?)</article>", html, re.DOTALL | re.IGNORECASE)
+        scope = article_match.group(1) if article_match else html
+        paras = re.findall(r"<p[^>]*>(.*?)</p>", scope, re.DOTALL | re.IGNORECASE)
+        text_parts = []
+        for p in paras:
+            clean = re.sub(r"<[^>]+>", "", p)
+            clean = re.sub(r"&[a-z]+;", " ", clean)
+            clean = re.sub(r"\s+", " ", clean).strip()
+            if len(clean) < 40:
+                continue
+            low = clean.lower()
+            if any(junk in low for junk in ["subscribe", "sign up", "cookie", "advertisement",
+                                            "all rights reserved", "terms of service", "privacy policy",
+                                            "follow us", "newsletter"]):
+                continue
+            text_parts.append(clean)
+            if sum(len(t.split()) for t in text_parts) >= max_words:
+                break
+        return " ".join(text_parts)
+    except Exception:
+        return ""
 
 
 
