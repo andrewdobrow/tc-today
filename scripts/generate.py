@@ -672,16 +672,21 @@ def enhance_card(card, headlines):
 
     try:
         body   = card.get("body", "")
+        # Skip enrichment when source is too thin — prevents padding with generic knowledge
+        if len(source_text.split()) < 60:
+            return card
         prompt = (
             f"You wrote this local news card about: {headline}\n\n"
             f"Your original card text:\n\n{body}\n\n"
             f"Here is additional source material:\n\n{source_text}\n\n"
             "If the source is about a different story, return the original card text unchanged. "
-            "Otherwise rewrite the card body in two short paragraphs (~120 words total) using only "
-            "confirmed facts from the source. Always preserve proper nouns — school names, road names, "
-            "business names, people's full names. Write in plain direct English. No em dashes. "
-            "Never use absence language like 'details were not available' or 'officials have not commented'. "
-            "If details are limited, write fewer words and stop — do not pad."
+            "Otherwise rewrite the card body in two short paragraphs (~120 words total) using ONLY "
+            "confirmed facts explicitly stated in the source above. "
+            "Always preserve proper nouns exactly — school names, road names, business names, people's full names. "
+            "Write in plain direct English. No em dashes. "
+            "CRITICAL: Never add background context, general explanations, or typical patterns. "
+            "Never write sentences like 'school consolidations typically...' or 'split votes indicate...'. "
+            "If you do not have enough specific facts, write fewer words and stop. Do not pad."
         )
         resp = client.messages.create(
             model="claude-haiku-4-5-20251001",
