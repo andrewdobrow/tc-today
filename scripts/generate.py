@@ -2477,13 +2477,21 @@ def main():
             data["hero"]["image_url"]    = img
             data["hero"]["image_credit"] = credit
 
-            # Hero enrichment — content bank + related RSS summaries
+            # Hero enrichment — live fetch first, then content bank + related RSS
             hero_headline = data["hero"]["headline"]
             hero_link     = data["hero"].get("link", "")
             _is_thin_src  = any(d in hero_link.lower() for d in THIN_SOURCE_DOMAINS)
             if _is_thin_src:
                 print(f"  Thin source ({hero_link[:40]}): skipping hero enrichment, capping urgency")
                 data["hero"]["urgency_score"] = min(int(data["hero"].get("urgency_score", 5) or 5), 5)
+
+            # Try to fetch full article text for the hero — much richer than RSS summary
+            fetched_text = ""
+            if hero_link and not _is_thin_src:
+                fetched_text = fetch_article_text(hero_link)
+                if fetched_text:
+                    print(f"  Hero article text fetched: {len(fetched_text.split())} words")
+
             bank_content  = find_content(hero_headline, content_bank)
             stops = {"that","this","with","from","have","been","said","will","more",
                      "also","when","were","they","their","about","says","just"}
@@ -2494,8 +2502,13 @@ def main():
                 if len(hero_tokens & h_tokens) >= 2:
                     related_parts.append(h.get("title","") + ". " + h.get("summary",""))
             related_text = " | ".join(related_parts[:6])
-            source_parts = [p for p in [bank_content, related_text] if p]
-            source_text  = "\n\n".join(source_parts)
+
+            # Prefer fetched article text; fall back to bank + related
+            if fetched_text and len(fetched_text.split()) >= 80:
+                source_text = fetched_text
+            else:
+                source_parts = [p for p in [bank_content, related_text] if p]
+                source_text  = "\n\n".join(source_parts)
 
             if source_text and len(source_text.split()) >= 80 and not _is_thin_src:
                 stops2 = {"the","a","an","in","of","for","to","and","or","on","at","is","was","are","were","that","this","with"}
