@@ -1,34 +1,22 @@
 """
 Treasure Coast Today - news generation pipeline
 Covers Martin, St. Lucie, and Indian River counties.
-Runs 4x/day via cron-job.org -> GitHub Actions.
+Runs 4x/day via GitHub Actions.
 """
 
 import os
 import json
 import re
 import hashlib
-import html as html_lib
-from urllib.parse import urlparse
 import feedparser
 import requests
 import anthropic
 from datetime import datetime, timedelta
-from collections import defaultdict
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from collections import defaultdict
 
 # -- CONFIG --
 
-SITE_NAME    = "Treasure Coast Today"
-SITE_URL     = "https://treasurecoast.today"
-SITE_TAGLINE = "Your Treasure Coast, every day."
-ACCENT_LIGHT = "#0A7075"
-ACCENT_DARK  = "#14969C"
-BG_LIGHT     = "#F7FAFA"
-BG_DARK      = "#090F0F"
-
-# Topic categories + county categories
 CATEGORIES = {
     "local_gov": {
         "label": "Local Government",
@@ -88,7 +76,6 @@ CATEGORIES = {
             "https://news.google.com/rss/search?q=st+lucie+county+high+school+sports+game+when:3d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=treasure+coast+florida+football+basketball+baseball+soccer+when:3d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=st+lucie+mets+florida+when:7d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=vero+beach+dodgers+spring+training+when:7d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=jensen+beach+south+fork+martin+county+high+school+sports+when:7d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
@@ -111,8 +98,6 @@ CATEGORIES = {
             "https://news.google.com/rss/search?q=florida+news+when:1d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=florida+legislature+governor+desantis+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=florida+economy+housing+insurance+when:2d&hl=en-US&gl=US&ceid=US:en",
-            "https://feeds.sun-sentinel.com/sun-sentinel/news/florida",
-            "https://www.miamiherald.com/news/state/florida/rss.xml",
             "https://floridapolitics.com/feed/",
         ],
     },
@@ -136,7 +121,6 @@ CATEGORIES = {
             "https://news.google.com/rss/search?q=st+lucie+county+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=port+st+lucie+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=fort+pierce+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=st+lucie+west+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "indian_river": {
@@ -147,16 +131,12 @@ CATEGORIES = {
             "https://news.google.com/rss/search?q=indian+river+county+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=vero+beach+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=sebastian+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=fellsmere+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
 }
-
 HEADLINES_PER_CATEGORY = 12
-CARDS_PER_CATEGORY     = 6
 
-# Content bank feeds — loaded once at startup, used for card enrichment
-# These are the same feeds used for headlines, giving us rich summaries in memory
+# Content bank — loaded once at startup, used for card enrichment
 CONTENT_BANK_FEEDS = [
     "https://www.wptv.com/feeds/rss/news",
     "https://www.wptv.com/feeds/rss/local",
@@ -167,46 +147,7 @@ CONTENT_BANK_FEEDS = [
     "https://news.google.com/rss/search?q=fort+pierce+florida&hl=en-US&gl=US&ceid=US:en",
     "https://news.google.com/rss/search?q=stuart+florida+news&hl=en-US&gl=US&ceid=US:en",
 ]
-
-# Source strategy:
-# - WPTV and other local TV/open feeds can support full cards when article text is available.
-# - TCPalm and other paywalled outlets are useful for discovering stories, but should not be
-#   stretched into full AI-written articles from a tiny RSS blurb.
-# - Google News is treated as an aggregator/discovery source unless we successfully extract a
-#   real publisher URL and fetch enough body text from that publisher.
-FULL_CONTENT_DOMAINS = [
-    "wptv.com",
-    "wpbf.com",
-    "cbs12.com",
-    "wflx.com",
-    "hometownnewstc.com",
-]
-
-DISCOVERY_ONLY_DOMAINS = [
-    "tcpalm.com",
-    "palmbeachpost.com",
-    "sun-sentinel.com",
-    "wsj.com",
-    "nytimes.com",
-    "washingtonpost.com",
-    "bloomberg.com",
-]
-
-AGGREGATOR_DOMAINS = [
-    "news.google.com",
-    "news.yahoo.com",
-    "yahoo.com",
-]
-
-MIN_FULL_ARTICLE_WORDS = 100
-MIN_SUMMARY_CARD_WORDS = 65
-MIN_BRIEF_WORDS = 25
-
-OUTPUT_DIR             = Path(__file__).parent.parent
-
-client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-
-# Image sources — local Florida outlets + broad aggregators
+# Image bank — local Florida outlets
 IMAGE_BANK_FEEDS = [
     "https://www.wptv.com/news/local-news.rss",
     "https://www.wptv.com/news/region-martin-county.rss",
@@ -219,7 +160,6 @@ IMAGE_BANK_FEEDS = [
     "https://news.google.com/rss/search?q=vero+beach+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
     "https://news.google.com/rss/search?q=florida+news+when:1d&hl=en-US&gl=US&ceid=US:en",
 ]
-
 FEED_PUBLISHER_MAP = {
     "tcpalm.com":        "TCPalm",
     "wptv.com":          "WPTV",
@@ -239,123 +179,18 @@ FEED_PUBLISHER_MAP = {
     "nbcnews.com":       "NBC News",
 }
 
-# -- UTILITIES --
-
-def now_et():
-    from datetime import timezone, timedelta
-    utc = datetime.now(timezone.utc)
-    et  = utc - timedelta(hours=5)  # approximation; DST ignored for display
-    return et.strftime("%-I:%M %p ET")
-
-def get_domain(url):
-    try:
-        return urlparse(url).netloc.lower().replace("www.", "")
-    except Exception:
-        return ""
-
-
-def classify_source(link):
-    domain = get_domain(link)
-    if not domain:
-        return "unknown"
-    if any(d in domain for d in FULL_CONTENT_DOMAINS):
-        return "full_source"
-    if any(d in domain for d in DISCOVERY_ONLY_DOMAINS):
-        return "discovery_only"
-    if any(d in domain for d in AGGREGATOR_DOMAINS):
-        return "aggregator"
-    return "unknown"
-
-
-def source_priority(h):
-    """Prefer accessible local/full-content sources when choosing which fresh
-    stories get sent to Claude. This keeps WPTV-like stories from being crowded
-    out by thin Google News or paywalled RSS blurbs."""
-    st = h.get("source_type", "unknown")
-    link = h.get("link", "")
-    if "wptv.com" in link.lower():
-        return 0
-    if st == "full_source":
-        return 1
-    if st == "unknown":
-        return 2
-    if st == "aggregator":
-        return 3
-    if st == "discovery_only":
-        return 4
-    return 5
-
-
-def word_count(text):
-    return len(re.findall(r"\b\w+\b", text or ""))
-
-
-def initial_source_quality(summary, source_type):
-    words = word_count(summary)
-    if source_type == "discovery_only":
-        return "discovery_only"
-    if words >= MIN_SUMMARY_CARD_WORDS:
-        return "summary"
-    if words >= MIN_BRIEF_WORDS:
-        return "brief"
-    return "thin"
-
-
-def parse_feed_url(url, timeout=8):
-    """Fetch RSS with an explicit timeout, then parse. feedparser.parse(url)
-    can hang longer than expected on slow feeds."""
-    try:
-        resp = requests.get(
-            url,
-            timeout=timeout,
-            headers={"User-Agent": "Mozilla/5.0 (compatible; TCTBot/1.0)"},
-        )
-        if resp.status_code != 200:
-            return None
-        return feedparser.parse(resp.content)
-    except Exception:
-        return None
-
-
 def get_image_credit(source_url):
+    """Return a clean publisher name from a feed URL. Returns empty string if unknown."""
     if not source_url:
         return ""
-    sl = source_url.lower()
+    source_lower = source_url.lower()
     for domain, name in FEED_PUBLISHER_MAP.items():
-        if domain in sl:
+        if domain in source_lower:
             return name
     return ""
 
-def extract_image(entry):
-    def valid(u):
-        if not u or len(u) < 15: return False
-        return not any(x in u.lower() for x in ["1x1","pixel","spacer","tracking","data:"])
-    for t in (getattr(entry,"media_thumbnail",None) or []):
-        if isinstance(t,dict) and valid(t.get("url","")): return t["url"]
-    for m in (getattr(entry,"media_content",None) or []):
-        if not isinstance(m,dict): continue
-        u = m.get("url","")
-        if valid(u) and ("image" in m.get("type","") or any(u.lower().endswith(e) for e in (".jpg",".jpeg",".png",".webp"))): return u
-    for enc in (getattr(entry,"enclosures",None) or []):
-        if isinstance(enc,dict) and "image" in enc.get("type",""):
-            u = enc.get("href",enc.get("url",""))
-            if valid(u): return u
-    html = ""
-    for field in ["description","summary"]:
-        val = entry.get(field,"") or getattr(entry,field,"")
-        if isinstance(val,list) and val:
-            html = val[0].get("value","") if isinstance(val[0],dict) else str(val[0])
-        elif isinstance(val,str):
-            html = val
-        if html: break
-    for match in re.finditer(r'<img[^>]+src=["\']([^"\']{20,})["\']',html):
-        u = match.group(1)
-        if valid(u): return u
-    return ""
 
-# Local fallback images — stored in /images/fallback/ in the repo.
-# Three images per category are selected deterministically when no real image is found.
-# No external image API calls, no latency, no rate limits.
+# Local fallback images — /images/fallback/ in repo
 FALLBACK_IMAGE_MAP = {
     "local_gov":    ["local_gov-1.jpg",    "local_gov-2.jpg",    "local_gov-3.jpg"],
     "crime":        ["crime-1.jpg",        "crime-2.jpg",        "crime-3.jpg"],
@@ -367,15 +202,11 @@ FALLBACK_IMAGE_MAP = {
     "martin":       ["martin-1.jpg",       "martin-2.jpg",       "martin-3.jpg"],
     "st_lucie":     ["st_lucie-1.jpg",     "st_lucie-2.jpg",     "st_lucie-3.jpg"],
     "indian_river": ["indian_river-1.jpg", "indian_river-2.jpg", "indian_river-3.jpg"],
-    "all":          ["all-1.jpg",          "all-2.jpg",          "all-3.jpg"],
+    "top_news":     ["local_gov-1.jpg",    "crime-1.jpg",        "business-1.jpg"],
 }
 
 def get_fallback_image(category_key, headline=""):
-    """Pick a deterministic local fallback image for the given category.
-    Uses the headline to always pick the same image for the same story,
-    so shared article links show a consistent image across pipeline runs.
-    Returns (url, credit) or ('', '') if no fallback images exist yet."""
-    base_names = FALLBACK_IMAGE_MAP.get(category_key, FALLBACK_IMAGE_MAP["all"])
+    base_names = FALLBACK_IMAGE_MAP.get(category_key, FALLBACK_IMAGE_MAP["top_news"])
     available = []
     for base in base_names:
         stem = base.rsplit(".", 1)[0]
@@ -386,105 +217,105 @@ def get_fallback_image(category_key, headline=""):
                 break
     if not available:
         return "", ""
-    # Deterministic selection — same headline always gets the same image
-    # across pipeline runs. Python's built-in hash() is randomized per process,
-    # so use a stable digest instead.
-    seed = headline or category_key or "all"
-    idx = int(hashlib.sha256(seed.encode("utf-8")).hexdigest(), 16) % len(available)
-    chosen = available[idx]
-    return f"{SITE_URL}/images/fallback/{chosen}", "Treasure Coast Today"
-
+    seed = headline or category_key or "top_news"
+    idx  = int(hashlib.sha256(seed.encode("utf-8")).hexdigest(), 16) % len(available)
+    return f"{SITE_URL}/images/fallback/{available[idx]}", "Treasure Coast Today"
 
 def build_image_bank():
+    """Fetch images from RSS feeds that reliably include them (BBC, ESPN, TechCrunch)."""
     bank = []
     for url in IMAGE_BANK_FEEDS:
         try:
-            feed = parse_feed_url(url)
-            if not feed: continue
+            feed = feedparser.parse(url)
             for entry in feed.entries[:60]:
-                img = extract_image(entry)
-                if not img:
-                    link = entry.get("link", "") or getattr(entry, "link", "")
-                    if link:
-                        img = fetch_og_image(link)
-                if img:
-                    bank.append({
-                        "title":     entry.get("title", ""),
-                        "image_url": img,
-                        "source":    url,
-                    })
-        except Exception:
-            pass
-    print(f"  Image bank: {len(bank)} entries")
+                title = entry.get("title", "").strip()
+                img   = extract_image(entry)
+                if title and img:
+                    bank.append({"title": title, "image_url": img, "source": url})
+        except Exception as e:
+            print(f"  Image bank feed error ({url[:50]}): {e}")
+    print(f"  Image bank built: {len(bank)} entries with images")
     return bank
 
-def tokens(text):
-    stops = {"the","a","an","in","of","for","to","and","or","on","at","is","was","are",
-             "were","that","this","with","from","have","been","after","over","into","says",
-             "said","will","than","more","also","when","s",
-             # Geographic/common terms that appear in nearly every Treasure Coast headline —
-             # these carry no story-specific signal here, so matching on them produces
-             # false positives (two unrelated stories both mention "Martin County Florida").
-             "county","florida","treasure","coast","martin","lucie","indian","river",
-             "beach","port","stuart","pierce","vero","jensen","palm","city","sebastian",
-             "hobe","sound","salerno","fellsmere","news","area","local","new","report",
-             "police","man","woman","year","years","day","week","county's"}
-    return set(w.lower().strip(".,;:()") for w in text.split() if len(w)>3 and w.lower() not in stops)
 
-def match_image(headline, image_bank, cat_key=None, used_images=None):
-    """Conservative image-bank match.
+def match_image(headline, image_bank, cat_key=""):
+    """Fuzzy-match a headline against the image bank with geographic and category conflict detection."""
+    stops = {"that","this","with","from","have","been","after","over","into","says","said","will","than","more","also","when","were","they","their","about"}
+    geo_words = {"ukraine","ukrainian","russia","russian","china","chinese","israel","israeli","gaza","iran","iranian",
+                 "france","french","germany","german","australia","australian","india","indian","pakistan","pakistani",
+                 "korea","korean","japan","japanese","mexico","mexican","brazil","brazilian","cuba","cuban"}
 
-    This is intentionally strict because a missing image is better than a wrong
-    image. We only accept a bank image when the bank article title has a strong
-    token overlap with the story headline/context. Previously this accepted loose
-    two-token matches and could reuse the same unrelated image across multiple
-    heroes.
-    """
-    used_images = used_images or set()
+    # Category-to-source mapping — prevent cross-category image mismatches
+    cat_source_hints = {
+        "sports":       ["sport", "espn"],
+        "crime":        ["police", "sheriff", "crime"],
+        "local_gov":    ["commission", "council", "government"],
+    }
+    # Sources that should NOT be used for certain categories
+    cat_source_blocks = {
+        "local_gov":    [],
+        "crime":        [],
+        "business":     [],
+        "schools":      [],
+        "sports":       [],
+        "things_to_do": [],
+        "florida":      [],
+        "martin":       [],
+        "st_lucie":     [],
+        "indian_river": [],
+    }
+
+    def tokens(text):
+        return set(w.lower().strip(".,;:()") for w in text.split() if len(w) > 3 and w.lower() not in stops)
+
     hw = tokens(headline)
-    # If the headline has almost no distinctive tokens left after filtering, don't
-    # risk a match — there's nothing meaningful to match on.
-    if len(hw) < 2:
-        return "", ""
+    hl_geo = hw & geo_words
+    blocked_sources = cat_source_blocks.get(cat_key, [])
     best_score, best_img, best_credit = 0, "", ""
 
     for entry in image_bank:
-        img = entry.get("image_url", "")
-        if canonical_image_url(img) in used_images:
+        source = entry.get("source", "").lower()
+        # Block sports images on non-sports categories
+        if any(b in source for b in blocked_sources):
             continue
-        et = tokens(entry.get("title", ""))
-        overlap = len(hw & et)
-        # Require at least 3 shared meaningful (non-geographic) words.
+        entry_tokens = tokens(entry["title"])
+        overlap = len(hw & entry_tokens)
         if overlap > best_score and overlap >= 3:
-            best_score  = overlap
-            best_img    = img
-            best_credit = get_image_credit(entry.get("source",""))
+            entry_geo = entry_tokens & geo_words
+            if hl_geo and entry_geo and not (hl_geo & entry_geo):
+                continue
+            best_score   = overlap
+            best_img     = upscale_image_url(entry["image_url"])
+            best_credit  = get_image_credit(entry.get("source", ""))
 
-    # Distinctive-token fallback for specific names/places like Wawa, Macy's, etc.
-    # Now requires 2 shared DISTINCTIVE words AND that they be genuinely distinctive
-    # (7+ chars, proper-noun-like), since common 6-char words caused false matches.
+    # Fallback pass: if no 3-token match, try distinctive long tokens (>=6 chars).
+    # Two shared distinctive terms (e.g. "longview"+"mill", "frankie"+"valli") are a
+    # confident match even when the rewritten headline shares few common words.
     if not best_img:
         distinctive = {w for w in hw if len(w) >= 7}
-        if len(distinctive) >= 2:
+        if distinctive:
             for entry in image_bank:
-                img = entry.get("image_url", "")
-                if canonical_image_url(img) in used_images:
+                source = entry.get("source", "").lower()
+                if any(b in source for b in blocked_sources):
                     continue
-                et = {w for w in tokens(entry.get("title", "")) if len(w) >= 7}
-                overlap = len(distinctive & et)
-                if overlap > best_score and overlap >= 2:
+                entry_tokens = {w for w in tokens(entry["title"]) if len(w) >= 7}
+                overlap = len(distinctive & entry_tokens)
+                if overlap > best_score and overlap >= 3:
+                    entry_geo = tokens(entry["title"]) & geo_words
+                    if hl_geo and entry_geo and not (hl_geo & entry_geo):
+                        continue
                     best_score  = overlap
-                    best_img    = img
-                    best_credit = get_image_credit(entry.get("source",""))
+                    best_img    = upscale_image_url(entry["image_url"])
+                    best_credit = get_image_credit(entry.get("source", ""))
+
     return best_img, best_credit
 
-# Known publisher placeholder/logo URL patterns — rejected as og:images.
+
 PLACEHOLDER_URL_PATTERNS = [
     "brand-icons", "brand_icons",
     "default-image", "default_image", "defaultimage",
     "top_image", "top-image",
     "htv_default", "htv-default",
-    "fallback", "placeholder",
     "news-slate", "news_slate",
     "og-image.png", "og_image.png",
     "eenewslogo", "site-logo", "site_logo",
@@ -496,8 +327,6 @@ PLACEHOLDER_URL_PATTERNS = [
     "gray.tv/gray/arc-fusion-assets",
     "townnews.com/content/tncms/custom",
     "bloximages",
-    "trd-logo",
-    "therealdeal.com/wp-content/uploads",
 ]
 
 def is_placeholder_image(img_url):
@@ -506,784 +335,974 @@ def is_placeholder_image(img_url):
 
 
 def fetch_og_image(url):
-    if not url: return ""
-    try:
-        resp = requests.get(url, timeout=4, allow_redirects=True, headers={"User-Agent":"Mozilla/5.0 (compatible; TCTBot/1.0)"})
-        if resp.status_code != 200: return ""
-        html = resp.text[:200000]
-        patterns = [
-            r'<meta[^>]+property=["\'"]og:image["\'"][^>]+content=["\'"]([^"\'"]+)',
-            r'<meta[^>]+content=["\'"]([^"\'"]+)["\'"][^>]+property=["\'"]og:image["\'"][^>]*>',
-            r'<meta[^>]+name=["\'"]twitter:image["\'"][^>]+content=["\'"]([^"\'"]+)',
-        ]
-        for pat in patterns:
-            m = re.search(pat, html, re.IGNORECASE)
-            if m:
-                img = m.group(1).strip()
-                if not img.startswith("http"):
-                    continue
-                if is_placeholder_image(img):
-                    continue
-                try:
-                    img_resp = requests.head(img, timeout=4, allow_redirects=True,
-                                            headers={"User-Agent":"Mozilla/5.0 (compatible; TCTBot/1.0)"})
-                    ct = img_resp.headers.get("content-type","")
-                    cl = int(img_resp.headers.get("content-length", 0))
-                    if img_resp.status_code == 200 and "image" in ct:
-                        if cl > 0 and cl < 10000:
-                            continue
-                        return img
-                except Exception:
-                    continue
-        return ""
-    except Exception:
-        return ""
-def build_content_bank():
-    """Load RSS summaries into memory once — used for card enrichment without live fetches."""
-    bank = []
-    seen = set()
-    for url in CONTENT_BANK_FEEDS:
-        try:
-            feed = parse_feed_url(url)
-            if not feed: continue
-            for entry in feed.entries[:20]:
-                title = (entry.get("title") or "").strip()
-                if not title or title.lower() in seen:
-                    continue
-                seen.add(title.lower())
-                summary = entry.get("summary", entry.get("description", ""))[:800]
-                if summary and len(summary) > 50:
-                    bank.append({"title": title, "summary": summary})
-        except Exception:
-            pass
-    print(f"  Content bank: {len(bank)} entries")
-    return bank
-
-
-def find_content(headline, content_bank, max_entries=3):
-    """Fuzzy-match headline against content bank, return combined summaries."""
-    stops = {"that","this","with","from","have","been","said","will","more",
-             "also","when","were","they","their","about","says","just","after"}
-    def tok(text):
-        return set(re.sub(r"[^a-z0-9 ]", " ", text.lower()).split()) - stops
-    hl_tok = tok(headline)
-    matches = []
-    for entry in content_bank:
-        overlap = len(hl_tok & tok(entry["title"]))
-        if overlap >= 2:
-            matches.append((overlap, entry))
-    matches.sort(key=lambda x: x[0], reverse=True)
-    if not matches:
-        return ""
-    return " | ".join(
-        f"{e['title']}. {e['summary'][:300]}"
-        for _, e in matches[:max_entries]
-    )
-
-
-def clean_article_text(text):
-    text = html_lib.unescape(text or "")
-    text = re.sub(r"\s+", " ", text).strip()
-    if not text:
-        return ""
-
-    junk_phrases = [
-        "subscribe", "sign up", "cookie", "advertisement", "all rights reserved",
-        "terms of service", "privacy policy", "follow us", "newsletter",
-        "download the app", "copyright", "click here", "watch live", "closed captioning",
-    ]
-    sentences = re.split(r"(?<=[.!?])\s+", text)
-    kept = []
-    for sentence in sentences:
-        low = sentence.lower()
-        if any(j in low for j in junk_phrases):
-            continue
-        kept.append(sentence.strip())
-    return " ".join(s for s in kept if s).strip()
-
-
-def extract_jsonld_article_body(html):
-    scripts = re.findall(
-        r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
-        html or "",
-        re.DOTALL | re.IGNORECASE,
-    )
-    for raw in scripts:
-        raw = html_lib.unescape(raw).strip()
-        try:
-            data = json.loads(raw)
-        except Exception:
-            continue
-        stack = data if isinstance(data, list) else [data]
-        while stack:
-            item = stack.pop(0)
-            if isinstance(item, list):
-                stack.extend(item)
-                continue
-            if not isinstance(item, dict):
-                continue
-            body = item.get("articleBody")
-            if isinstance(body, str) and word_count(body) >= MIN_BRIEF_WORDS:
-                return body
-            graph = item.get("@graph")
-            if isinstance(graph, list):
-                stack.extend(graph)
-    return ""
-
-
-def regex_extract_article_text(html, max_chars=4000):
-    article_match = re.search(r"<article[^>]*>(.*?)</article>", html or "", re.DOTALL | re.IGNORECASE)
-    scope = article_match.group(1) if article_match else (html or "")
-    paras = re.findall(r"<p[^>]*>(.*?)</p>", scope, re.DOTALL | re.IGNORECASE)
-    text_parts = []
-    for p in paras:
-        clean = re.sub(r"<[^>]+>", " ", p)
-        clean = clean_article_text(clean)
-        if len(clean) < 40:
-            continue
-        text_parts.append(clean)
-        if sum(len(t) for t in text_parts) > max_chars:
-            break
-    return " ".join(text_parts)[:max_chars]
-
-
-def fetch_article_text(url, max_chars=4000):
-    """Fetch readable body text from an article page. Prefer trafilatura,
-    then JSON-LD articleBody, then a paragraph-regex fallback. Returns empty
-    string if the page is blocked, paywalled, too thin, or extraction fails."""
+    """Fetch an article page and extract its og:image (or twitter:image) meta tag.
+    This is the most reliable image source because it comes from the article itself,
+    guaranteeing the image actually matches the story. Returns "" on any failure."""
     if not url:
         return ""
     try:
-        resp = requests.get(
-            url,
-            timeout=8,
-            allow_redirects=True,
-            headers={
-                "User-Agent": (
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) "
-                    "Chrome/120.0 Safari/537.36"
-                )
-            },
-        )
+        import re as _re_og
+        resp = requests.get(url, timeout=10,
+                            headers={"User-Agent": "Mozilla/5.0 (compatible; PlainBot/1.0)"})
         if resp.status_code != 200:
             return ""
-        html = resp.text
-
-        # 1. Robust extractor for modern news HTML.
-        try:
-            import trafilatura
-            extracted = trafilatura.extract(
-                html,
-                url=url,
-                include_comments=False,
-                include_tables=False,
-                favor_precision=False,
-            )
-            extracted = clean_article_text(extracted)
-            if word_count(extracted) >= MIN_FULL_ARTICLE_WORDS:
-                return extracted[:max_chars]
-        except Exception:
-            pass
-
-        # 2. Many publishers expose the full story in schema.org JSON-LD.
-        body = clean_article_text(extract_jsonld_article_body(html))
-        if word_count(body) >= MIN_FULL_ARTICLE_WORDS:
-            return body[:max_chars]
-
-        # 3. Last fallback for simple pages.
-        fallback = clean_article_text(regex_extract_article_text(html, max_chars=max_chars))
-        if word_count(fallback) >= MIN_FULL_ARTICLE_WORDS:
-            return fallback[:max_chars]
+        html = resp.text[:200000]  # only need the <head>
+        # Try og:image then twitter:image, in either attribute order
+        patterns = [
+            r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)',
+            r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']',
+            r'<meta[^>]+name=["\']twitter:image["\'][^>]+content=["\']([^"\']+)',
+            r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+name=["\']twitter:image["\']',
+        ]
+        for pat in patterns:
+            m = _re_og.search(pat, html, _re_og.IGNORECASE)
+            if m:
+                img = m.group(1).strip()
+                if img.startswith("http"):
+                    return img
         return ""
     except Exception:
         return ""
 
+
+def find_image(headline, entries):
+    """Match headline back to RSS entry for image, link, and publish time."""
+    h = headline.lower()[:50]
+    for entry in entries:
+        t = entry.get("title", "").lower()[:50]
+        if h in t or t in h:
+            return {
+                "image_url": entry.get("image_url", ""),
+                "link":      entry.get("link", ""),
+                "published": entry.get("published", ""),
+            }
+    return {"image_url": "", "link": "", "published": ""}
 
 
 def extract_publisher_url(entry):
-    """Return the publisher URL for Google News RSS entries when possible.
-    Google News often stores the real publisher link inside the description HTML.
-    Using the publisher URL lets us fetch the article's own og:image instead of
-    relying on loose RSS thumbnails or unrelated image-bank matches.
+    """Extract actual publisher URL from a Google News RSS entry.
+    Google News embeds the publisher URL as an href in the description HTML.
+    Falls back to entry link for non-Google feeds.
     """
-    link = entry.get("link", "") or getattr(entry, "link", "")
+    link = entry.get("link", "")
     if "news.google.com" not in link:
-        return link
-
-    html = ""
-    for field in ["summary", "description"]:
-        val = entry.get(field, "") or getattr(entry, field, "")
-        if isinstance(val, list) and val:
-            html = val[0].get("value", "") if isinstance(val[0], dict) else str(val[0])
-        elif isinstance(val, str):
-            html = val
-        if html:
-            break
-
-    matches = re.findall(r'href=["\'](https?://(?!news\.google)[^"\']+)["\']', html)
+        return link  # Already a direct publisher URL
+    desc = entry.get("summary", entry.get("description", ""))
+    if isinstance(desc, list):
+        desc = desc[0].get("value", "") if desc else ""
+    matches = re.findall(r'href="(https?://(?!news\.google)[^"]+)"', desc)
     if matches:
         return matches[0]
-    # Some Google News entries expose the source link in a <source url="..."> element
-    # or via the entry.source attribute
-    src = entry.get("source", "")
-    if isinstance(src, dict):
-        src_url = src.get("href", "") or src.get("url", "")
-        if src_url and "news.google" not in src_url:
-            return src_url
     return link
 
-def canonical_image_url(url):
-    if not url:
-        return ""
-    return re.sub(r"[?#].*$", "", url.strip())
 
-def format_age(raw_pub):
-    if not raw_pub: return ""
-    try:
-        from email.utils import parsedate_to_datetime
-        from datetime import timezone, timedelta
-        dt  = parsedate_to_datetime(raw_pub).astimezone(timezone.utc)
-        now = datetime.now(timezone.utc)
-        diff_mins = (now - dt).total_seconds() / 60
-        if diff_mins < 60:   return f"{int(diff_mins)} minutes ago"
-        if diff_mins < 120:  return "1 hour ago"
-        if diff_mins < 1440: return f"{int(diff_mins/60)} hours ago"
-        if diff_mins < 2880: return f"Yesterday, {dt.strftime('%-I:%M %p')} ET"
-        return dt.strftime("%b %-d")
-    except Exception:
-        return raw_pub[:30] if raw_pub else ""
+def sanitize_text(text):
+    """Remove characters that break JSON parsing."""
+    if not text:
+        return ""
+    return text.replace("\\", " ").replace('"', "'").replace("\n", " ").replace("\r", " ").replace("\t", " ").strip()
+
+
+def clean_summary(text):
+    """Strip navigation text, bylines, HTML tags, and noise from RSS summaries."""
+    if not text:
+        return ""
+    import re as _re
+    # Remove HTML tags
+    text = _re.sub(r"<[^>]+>", " ", text)
+    # Remove URLs
+    text = _re.sub(r"https?://\S+", "", text)
+    # Remove common RSS noise patterns
+    noise_patterns = [
+        r"(?i)read more.*$",
+        r"(?i)click here.*$",
+        r"(?i)continue reading.*$",
+        r"(?i)\[\+\d+ chars\].*$",
+        r"(?i)^by [A-Z][a-z]+ [A-Z][a-z]+",
+        r"(?i)related articles?:.*$",
+        r"(?i)also read:.*$",
+        r"(?i)share this:.*$",
+        r"(?i)follow us.*$",
+        r"&amp;|&lt;|&gt;|&quot;|&#\d+;",
+    ]
+    for pattern in noise_patterns:
+        text = _re.sub(pattern, "", text, flags=_re.MULTILINE)
+    # Remove characters that break JSON parsing
+    text = text.replace("\\", " ").replace('"', "'").replace("\n", " ").replace("\r", " ").replace("\t", " ")
+    # Collapse whitespace
+    text = _re.sub(r"\s+", " ", text).strip()
+    return text
+
+
+def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
+    """Pull headlines from all feeds, deduplicate, then limit."""
+    seen, entries = set(), []
+    for url in feeds:
+        try:
+            feed = feedparser.parse(url)
+            count = 0
+            for entry in feed.entries[:15]:
+                title = sanitize_text(entry.get("title", "").strip())
+                if not title or title.lower() in seen:
+                    continue
+                seen.add(title.lower())
+                entries.append({
+                    "title":     title,
+                    "summary":   clean_summary(entry.get("summary", entry.get("description", "")))[:800],
+                    "link":      extract_publisher_url(entry),
+                    "image_url": extract_image(entry),
+                    "published": entry.get("published", ""),
+                })
+                count += 1
+        except Exception as e:
+            print(f"  Feed error ({url[:60]}): {e}")
+    # Sort by published date (freshest first) then limit
+    def pub_sort(h):
+        try:
+            from email.utils import parsedate_to_datetime
+            from datetime import timezone
+            return parsedate_to_datetime(h["published"]).astimezone(timezone.utc).timestamp()
+        except Exception:
+            return 0
+    entries.sort(key=pub_sort, reverse=True)
+    return entries[:limit]
+
+
+# -- CLAUDE EDITORIAL ENGINE --
+
+LOCAL_SYSTEM_PROMPT = (
+    "You write factual local news articles for Treasure Coast Today, covering Martin, St. Lucie, and Indian River counties in Florida. "
+    "Your readers live here. Always prioritize genuinely local stories over state or national ones. "
+    "Write in plain direct English. No em dashes. No fluff. No absence language. "
+    "Every sentence must be a confirmed fact from the provided source material. "
+    "Name specific towns, streets, facilities, and local officials when available. "
+    "Towns include: Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno, Port St. Lucie, Fort Pierce, Vero Beach, Sebastian, Fellsmere. "
+    "Always preserve proper nouns exactly as they appear in the source. "
+    "Never fabricate names, numbers, dates, or quotes not in the source. "
+    "Never write absence phrases like 'no further details available' or 'details were not disclosed'. "
+    "Always produce a complete, readable article."
+)
+
+FLORIDA_SYSTEM_PROMPT = (
+    "You write factual news articles for the Florida section of Treasure Coast Today. "
+    "This section covers the whole state — legislation, courts, economy, environment, politics, weather, and major events anywhere in Florida. "
+    "Do NOT narrow to the Treasure Coast; this is the statewide section. "
+    "Write in plain direct English. No em dashes. No fluff. No absence language. "
+    "Every sentence must be a confirmed fact from the provided source material. "
+    "Never fabricate names, numbers, dates, or quotes not in the source. "
+    "Write around missing details — do not reference their absence. "
+    "Always produce a complete, readable article."
+)
+
+
 
 def strip_absence_language(text):
-    if not text: return text
+    """Remove sentences containing absence/uncertainty language from article text."""
+    if not text:
+        return text
     absence_patterns = [
-        "no information was","no details were","details were not","details have not",
-        "has not been confirmed","was not disclosed","it remains unclear","it is unclear",
-        "officials have not","has not responded","not immediately available","could not be reached",
-        "no official statement","reporting is ongoing","investigation is ongoing",
+        "no information was", "no details were", "no details have",
+        "details were not", "details have not", "details are not",
+        "has not been confirmed", "have not been confirmed",
+        "was not disclosed", "were not disclosed",
+        "it remains unclear", "it is unclear", "remains unknown",
+        "officials have not", "has not responded", "did not respond",
+        "not immediately available", "not yet available",
+        "could not be reached", "could not be confirmed",
+        "no official statement", "no statement has",
+        "reporting is ongoing", "investigation is ongoing",
     ]
-    sentences = text.replace("\n\n","<<PARA>>").split(".")
-    cleaned = [s for s in sentences if not any(p in s.lower() for p in absence_patterns)]
-    return ".".join(cleaned).replace("<<PARA>>","\n\n").strip()
+    sentences = text.replace("\n\n", "<<PARA>>").split(".")
+    cleaned = []
+    for s in sentences:
+        s_lower = s.lower()
+        if not any(p in s_lower for p in absence_patterns):
+            cleaned.append(s)
+    result = ".".join(cleaned)
+    return result.replace("<<PARA>>", "\n\n").strip()
+
 
 def strip_markdown(text, headline=""):
-    if not text: return text
-    text = re.sub(r"#{1,6}\s*","",text)
-    text = re.sub(r"\*{1,2}([^*]+)\*{1,2}",r"\1",text)
-    text = re.sub(r"_([^_]+)_",r"\1",text)
-    text = re.sub(r"\[([^\]]+)\]\([^)]+\)",r"\1",text)
-    text = re.sub(r"^[-*]\s+","",text,flags=re.MULTILINE)
-    text = re.sub(r"\n{3,}","\n\n",text).strip()
-    for g in ["good morning.","good afternoon.","good evening."]:
-        if text.lower().startswith(g):
-            text = text[len(g):].lstrip(); break
+    """Remove markdown formatting and headline restatements from article text."""
+    if not text:
+        return text
+    text = re.sub(r"#{1,6}\s*", "", text)
+    text = re.sub(r"\*{1,2}([^*]+)\*{1,2}", r"\1", text)
+    text = re.sub(r"_([^_]+)_", r"\1", text)
+    text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)
+    text = re.sub(r"^[-*]\s+", "", text, flags=re.MULTILINE)
+    text = re.sub(r"\n{3,}", "\n\n", text).strip()
+    # Remove common Guardian/newsletter openers
+    greetings = ["good morning.", "good afternoon.", "good evening.", "good morning,", "good afternoon,", "good evening,"]
+    lower = text.lower()
+    for g in greetings:
+        if lower.startswith(g):
+            text = text[len(g):].lstrip()
+            break
+
+    # Remove first paragraph if it looks like a headline restatement
     if headline:
         paragraphs = text.split("\n\n")
         if paragraphs:
             first = paragraphs[0].strip()
             if len(first.split()) < 20:
-                hl_words = set(re.sub(r"[^a-z0-9 ]"," ",headline.lower()).split())
-                p_words  = set(re.sub(r"[^a-z0-9 ]"," ",first.lower()).split())
-                if len(hl_words & p_words) >= min(4,len(hl_words)//2):
+                hl_words = set(re.sub(r"[^a-z0-9 ]", " ", headline.lower()).split())
+                p_words  = set(re.sub(r"[^a-z0-9 ]", " ", first.lower()).split())
+                if len(hl_words & p_words) >= min(4, len(hl_words) // 2):
                     text = "\n\n".join(paragraphs[1:]).strip()
     return text
 
-def make_paragraphs(text):
-    if not text: return ""
-    paragraphs = text.split("\n\n")
-    if len(paragraphs) == 1:
-        paragraphs = text.split("\n")
-    return "".join(f"<p>{p.strip()}</p>" for p in paragraphs if p.strip())
 
-def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
-    seen, headlines = set(), []
-    for url in feeds:
-        try:
-            feed = parse_feed_url(url)
-            if not feed: continue
-            for entry in feed.entries:
-                title = (entry.get("title") or "").strip()
-                if not title or title in seen: continue
-                seen.add(title)
-                # Prefer the richest available field. WPTV and many RSS feeds put
-                # the full article body in content:encoded / content, while summary
-                # is just a blurb. Grab content FIRST, fall back to summary.
-                summary = ""
-                best_len = 0
-                for field in ["content", "summary", "description"]:
-                    val = entry.get(field, "") or getattr(entry, field, "")
-                    if isinstance(val, list) and val:
-                        candidate = val[0].get("value", "") if isinstance(val[0], dict) else str(val[0])
-                    elif isinstance(val, str):
-                        candidate = val
-                    else:
-                        candidate = ""
-                    candidate = re.sub(r"<[^>]+>", " ", candidate)
-                    candidate = re.sub(r"&[a-z]+;", " ", candidate)
-                    candidate = re.sub(r"\s+", " ", candidate).strip()
-                    # Keep the longest field — that's the one with the real content
-                    if len(candidate) > best_len:
-                        summary  = candidate[:3000]
-                        best_len = len(candidate)
-                pub = ""
-                if hasattr(entry,"published"): pub = entry.published
-                elif hasattr(entry,"updated"):  pub = entry.updated
-                raw_link = entry.get("link","") or getattr(entry,"link","")
-                link = extract_publisher_url(entry)
-                img  = extract_image(entry)
-                source_type = classify_source(link)
-                headlines.append({
-                    "title":   title,
-                    "summary": summary,
-                    "published": pub,
-                    "link":    link,
-                    "source_type": source_type,
-                    "source_quality": initial_source_quality(summary, source_type),
-                    "source_word_count": word_count(summary),
-                    "image_url": img,
-                    "image_from_google": "news.google.com" in raw_link.lower(),
-                })
-        except Exception as e:
-            pass
-    # Filter to 48 hours — REJECT stories with missing/unparseable dates
-    # (Google News search queries often return old articles; bad dates = old content)
-    from email.utils import parsedate_to_datetime
-    from datetime import timezone
-    now_utc = datetime.now(timezone.utc)
-    def is_fresh(h):
-        pub = h.get("published", "").strip()
-        if not pub:
-            return False  # No date = reject (don't assume fresh)
-        try:
-            dt = parsedate_to_datetime(pub).astimezone(timezone.utc)
-            age_hours = (now_utc - dt).total_seconds() / 3600
-            return age_hours <= 48
-        except Exception:
-            return False  # Unparseable date = reject
-    fresh = [h for h in headlines if is_fresh(h)]
-    result = fresh if len(fresh) >= 1 else headlines
-
-    # Prefer accessible local/full-content sources (especially WPTV) before thin
-    # discovery-only sources when deciding which stories enter the Claude prompt.
-    def parsed_pub_ts(h):
-        try:
-            return parsedate_to_datetime(h.get("published", "")).timestamp()
-        except Exception:
-            return 0
-    result = sorted(result, key=lambda h: (source_priority(h), -parsed_pub_ts(h)))[:limit]
-
-    def try_fetch(h):
-        link = h.get("link", "")
-        st = h.get("source_type", "unknown")
-        if not link:
-            h["source_quality"] = "thin"
-            return
-        if st in {"discovery_only", "aggregator"}:
-            # Paywalled/aggregator stories can still be shown as briefs, but should
-            # not be inflated into full cards from an RSS snippet.
-            return
-        full = fetch_article_text(link)
-        if full and word_count(full) >= MIN_FULL_ARTICLE_WORDS:
-            h["article_text"] = full
-            h["source_quality"] = "full"
-            h["source_word_count"] = word_count(full)
-        else:
-            h["source_quality"] = initial_source_quality(h.get("summary", ""), st)
-            h["source_word_count"] = word_count(h.get("summary", ""))
-
-    with ThreadPoolExecutor(max_workers=5) as ex:
-        futures = [ex.submit(try_fetch, h) for h in result]
-        try:
-            for fut in as_completed(futures, timeout=45):
-                try:
-                    fut.result(timeout=1)
-                except Exception:
-                    pass
-        except Exception:
-            # Do not let a slow publisher stall or fail the whole category.
-            for fut in futures:
-                fut.cancel()
-
-    full_count = sum(1 for h in result if h.get("source_quality") == "full")
-    brief_count = sum(1 for h in result if h.get("source_quality") in {"summary", "brief", "discovery_only"})
-    print(f"  Source quality: {full_count} full, {brief_count} summary/brief/discovery, {len(result)} total")
-    return result
-
-# -- CATEGORY CONTENT GENERATION --
-
-LOCAL_SYSTEM_PROMPT = """You write factual local news articles for Treasure Coast Today, covering Martin, St. Lucie, and Indian River counties in Florida. Your readers live here — they care about what's happening in their towns, schools, and county government far more than national news. Always prioritize genuinely local stories over state or national ones. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries. Name specific towns, streets, facilities, and local officials when available. Towns include: Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno, Port St. Lucie, Fort Pierce, Vero Beach, Sebastian, Fellsmere, and surrounding communities. Always preserve proper nouns exactly as they appear in the source — school names, road names, business names, people's names. Never replace a specific name with a generic description. IMPORTANT: Base every factual claim on the provided source text. You may write naturally and provide helpful context and clear explanation, but do NOT fabricate specific names, numbers, dates, direct quotes, or outcomes that are not in the source. Never write phrases like 'no further details are available' or 'details were not disclosed' — if you lack a specific detail, simply write around it and focus on what IS known. Always produce a complete, readable article."""
-
-FLORIDA_SYSTEM_PROMPT = """You write factual news articles for the Florida section of Treasure Coast Today. Your readers are Treasure Coast residents who want to stay informed about statewide Florida news that affects them as Floridians. This section covers the whole state — legislation, courts, economy, environment, politics, weather, and major events anywhere in Florida. Do NOT artificially narrow to the Treasure Coast; this is the statewide section. Write in plain direct English — no em dashes, no fluff, no absence language. Every sentence must be a confirmed fact from the provided headlines and summaries. IMPORTANT: Base every factual claim on the provided source text. You may write naturally and provide helpful context and clear explanation, but do NOT fabricate specific names, numbers, dates, direct quotes, or outcomes that are not in the source. Never write phrases like 'no further details are available' or 'details were not disclosed' — if you lack a specific detail, simply write around it and focus on what IS known. Always produce a complete, readable article."""
-
-def enhance_card(card, headlines, content_bank=None):
-    """Lightly rewrite a card only from its exact selected source. Avoid fuzzy
-    content-bank expansion, because that can mix unrelated stories and create
-    filler. Discovery-only/paywalled stories are kept short."""
-    headline = card.get("headline", "")
-    idx = card.get("source_index")
-    if not headline or idx is None:
-        return card
-    try:
-        source = headlines[int(idx) - 1]
-    except Exception:
-        return card
-
-    quality = source.get("source_quality", "thin")
-    source_text = source.get("article_text", "") or source.get("summary", "")
-    if not source_text or word_count(source_text) < MIN_BRIEF_WORDS:
-        return card
-
-    # Do not inflate discovery-only/paywalled RSS blurbs. Keep them as short briefs.
-    if quality in {"thin", "brief", "discovery_only", "aggregator"}:
-        card["body"] = make_brief_from_source(headline, source_text)
-        if not card.get("teaser"):
-            card["teaser"] = card["body"]
-        return card
-
-    try:
-        target = "two short paragraphs, 90-130 words total" if quality == "full" else "one short paragraph, 45-70 words total"
-        prompt = (
-            f"Rewrite this local news card about: {headline}\n\n"
-            f"SOURCE QUALITY: {quality}\n\n"
-            f"Exact source material for this same story:\n\n{source_text[:3000]}\n\n"
-            f"Write {target}. Use ONLY confirmed facts explicitly stated in the source above. "
-            "Preserve proper nouns exactly. No em dashes. "
-            "Never add background context, general explanations, typical patterns, or implications. "
-            "If there are not enough specific facts, write fewer words and stop. Do not pad."
-        )
-        resp = client.messages.create(
-            model="claude-haiku-4-5-20251001",
-            max_tokens=260,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        enhanced = resp.content[0].text.strip()
-        skip_signals = ["i cannot rewrite", "source material", "does not match", "cannot proceed"]
-        if enhanced and not any(s in enhanced.lower()[:150] for s in skip_signals):
-            card["body"] = strip_absence_language(strip_markdown(enhanced, headline))
-    except Exception:
-        pass
-    return card
-
-
-def make_brief_from_source(headline, source_text, max_words=45):
-    """Fallback for thin/paywalled/discovery-only items. It is better to publish
-    a short factual brief than a padded AI article."""
-    text = clean_article_text(source_text)
-    sentences = re.split(r"(?<=[.!?])\s+", text)
-    picked = []
-    for sentence in sentences:
-        sentence = sentence.strip()
-        if len(sentence) < 25:
-            continue
-        picked.append(sentence)
-        if word_count(" ".join(picked)) >= 22:
-            break
-    brief = " ".join(picked).strip() or headline
-    words = brief.split()
-    if len(words) > max_words:
-        brief = " ".join(words[:max_words]).rstrip(" ,;:") + "."
-    return brief
-
-
-def generate_category_content(category_key, category_label, headlines, content_bank=None):
+def generate_category_content(category_key, category_label, headlines):
+    # Build headlines with raw published strings for Claude to copy back
     def sanitize(text):
-        if not text: return ""
-        text = text.replace("\\", " ").replace('"', "'").replace("\n"," ").replace("\r"," ").replace("\t"," ")
+        if not text:
+            return ""
+        import re as _re
+        # Remove characters that break JSON
+        text = text.replace("\\", " ").replace('"', "'").replace("\n", " ").replace("\r", " ").replace("\t", " ")
+        # Remove non-printable characters
         text = "".join(c for c in text if c.isprintable())
-        text = re.sub(r"[\x00-\x1f\x7f-\x9f]", " ", text)
-        return re.sub(r"\s+", " ", text).strip()
+        # Remove any remaining control sequences
+        text = _re.sub(r"[\x00-\x1f\x7f-\x9f]", " ", text)
+        # Collapse whitespace
+        text = _re.sub(r"\s+", " ", text).strip()
+        return text
 
     def hl_line(i, h):
-        pub     = sanitize(h.get("published",""))
+        pub     = sanitize(h.get("published", ""))
         pub_str = f" [pub:{pub}]" if pub else ""
-        source_type = sanitize(h.get("source_type", "unknown"))
-        quality = sanitize(h.get("source_quality", "unknown"))
-        words = h.get("source_word_count", word_count(h.get("article_text", "") or h.get("summary", "")))
-        # Use fuller article text when we managed to fetch it, else the RSS summary
-        content = h.get("article_text", "") or h.get("summary", "")
-        return (
-            f"{i+1}. {sanitize(h.get('title',''))} "
-            f"[source_type:{source_type}] [source_quality:{quality}] [words:{words}]"
-            f"{pub_str}\n   {sanitize(content)[:2800]}"
-        )
-
-    headlines_text = "\n".join(hl_line(i,h) for i,h in enumerate(headlines))
-    headlines_text = headlines_text.replace("\\","").encode("ascii","ignore").decode("ascii")
-
+        title   = sanitize(h.get("title", ""))
+        summary = sanitize(h.get("summary", ""))
+        return f"{i+1}. {title}{pub_str}\n   {summary[:550]}"
+    # Pre-filter headlines older than 48 hours before Claude sees them
     from datetime import timezone as _tz
-    _now = datetime.now(_tz.utc)
-    _today_label     = _now.strftime("%A, %B %-d, %Y")
-    _yesterday_label = (_now - timedelta(days=1)).strftime("%A, %B %-d")
+    _now_utc = datetime.now(_tz.utc)
+    def _is_stale(h):
+        try:
+            from email.utils import parsedate_to_datetime
+            dt = parsedate_to_datetime(h.get("published","")).astimezone(_tz.utc)
+            age_hrs = (_now_utc - dt).total_seconds() / 3600
+            return age_hrs > 48
+        except Exception:
+            return True
+    if category_label == "Politics":
+        print(f"  Politics pre-filter: {len(headlines)} headlines incoming")
+        for h in headlines[:8]:
+            stale = _is_stale(h)
+            print(f"    [stale={stale}] [{h.get('published','NO DATE')}] {h.get('title','')[:55]}")
+    fresh = [h for h in headlines if not _is_stale(h)]
+    headlines = fresh if len(fresh) >= 1 else headlines
+
+    headlines_text = "\n".join(hl_line(i, h) for i, h in enumerate(headlines))
+    # Final safety pass — remove any remaining characters that break JSON
+    headlines_text = headlines_text.replace("\\", " ")
+    # Final nuclear sanitization — encode to ASCII and back to strip any remaining bad chars
+    headlines_text = headlines_text.encode("ascii", "ignore").decode("ascii")
+
+    # Category-specific hero selection rules
+    cat_rules = {
+        "world": "CRITICAL for World: pick a story about international geopolitics, foreign government actions, wars, diplomacy, or global crises. A celebrity death or cultural figure dying belongs in Entertainment, not World. Skip any story that is primarily about a single person's death unless they were a head of state or major political figure.",
+        "business": "CRITICAL for Business: pick a story about markets, economic policy, major corporate decisions, trade, financial regulation, or industry-wide developments. An accident at a factory or airport (Boeing gear collapse, workplace injury) is NOT a business story — it belongs in U.S. or World. Business heroes should be about economic consequences, not physical accidents.",
+        "us": "CRITICAL for U.S.: pick a story about something happening on US soil that affects American life broadly — policy, law, public safety, society. Avoid duplicating the Politics hero.",
+        "politics": "CRITICAL for Politics: pick a story where the US government, Congress, White House, or Supreme Court is the PRIMARY actor. Foreign political news without direct US government involvement belongs in World.",
+        "tech": "CRITICAL for Tech & Science: pick a story about technology products, companies, research, or scientific discoveries. Avoid general business stories that happen to involve a tech company.",
+        "entertainment": "CRITICAL for Entertainment: this is the correct home for celebrity deaths, cultural figures, film, music, television, and arts. A major author or artist dying belongs HERE, not in World.",
+        "sports": "CRITICAL for Sports: pick an actual sports result, trade, signing, or athletic achievement. Avoid crime or non-sports stories even if they involve athletes.",
+    }
+    rule = cat_rules.get(category_key, "")
+    rule_line = f"\n\nCATEGORY RULE: {rule}" if rule else ""
+
+    from datetime import timezone as _tz2
+    _now2 = datetime.now(_tz2.utc)
+    _today_label     = _now2.strftime("%A, %B %-d, %Y")
+    _yesterday_label = (_now2 - timedelta(days=1)).strftime("%A, %B %-d")
     _date_context    = f"TODAY IS: {_today_label}. Yesterday was {_yesterday_label}. Use this to judge how recent each story is.\n\n"
+
+    # Category-specific rules
+    cat_rules = {
+        "local_gov":    "Pick a story about local government decisions, zoning, budgets, elections, or public policy.",
+        "crime":        "Pick an actual crime, arrest, or public safety story. Not politics or tax policy.",
+        "business":     "Pick a story about local economic development, real estate, business openings/closings, or commercial projects.",
+        "schools":      "Pick a story directly about schools, students, teachers, or education policy.",
+        "sports":       "Pick an actual sports result, signing, or athletic achievement. Not crime involving athletes.",
+        "things_to_do": "Pick a local event, activity, or attraction within 60 miles. Skip Orlando/Miami/Tampa unless very close.",
+        "florida":      "Pick a statewide Florida story with broad impact. Not hyperlocal Treasure Coast.",
+        "martin":       "Pick a story specifically about Martin County — Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno.",
+        "st_lucie":     "Pick a story specifically about St. Lucie County — Port St. Lucie, Fort Pierce.",
+        "indian_river": "Pick a story specifically about Indian River County — Vero Beach, Sebastian, Fellsmere.",
+    }
+    rule = cat_rules.get(category_key, "")
+    rule_line = f"\n\nCATEGORY RULE: {rule}" if rule else ""
 
     is_florida    = (category_key == "florida")
     system_prompt = FLORIDA_SYSTEM_PROMPT if is_florida else LOCAL_SYSTEM_PROMPT
 
     if is_florida:
-        prompt = f"""Florida news headlines:
+        prompt = f"""{_date_context}Florida news headlines:{rule_line}
 
 {headlines_text}
 
-SOURCE QUALITY RULES:
-- Prefer stories marked [source_quality:full] for the hero and full multi-paragraph cards.
-- Stories marked [source_quality:summary] may be used for short cards only.
-- Stories marked [source_quality:brief], [source_quality:thin], [source_quality:discovery_only], or [source_type:discovery_only] may only be used as one-sentence briefs, or skipped.
-- Never pad thin RSS blurbs into full articles. If the source has only a few facts, write fewer words.
-- It is acceptable to return fewer than six useful cards if the source material is thin.
-
 Tasks:
-1. Pick the single most important/urgent Florida statewide story. Prioritize stories with broad impact across Florida — major legislation, court rulings, economic news, environmental decisions, significant crimes or disasters anywhere in the state. Do NOT favor Treasure Coast stories here; this is the statewide section.
+1. Pick the single most important/urgent Florida statewide story. Prioritize broad impact — legislation, court rulings, economic news, environmental decisions, significant crimes or disasters anywhere in the state.
 2. Write an accurate Florida-focused headline. Name the specific Florida city, region, or institution when relevant.
-3. If the chosen source is [source_quality:full], write a 300-420 word factual article in three to four paragraphs. If it is not full, write a shorter factual brief or choose a better sourced story. Cover only facts supported by the source.
-4. For the next {CARDS_PER_CATEGORY} most important Florida stories write a teaser and body sized to the source quality: full sources may get two short paragraphs, summary sources get one short paragraph, and brief/discovery-only sources get one sentence. Ground all specific facts (names, numbers, dates, quotes) in the source, but write naturally and provide useful context and explanation. CRITICAL: Always preserve proper nouns from the source — school names, road names, business names, people's names, building names. Never replace a specific name with a generic description. Never write 'no further details available' — always produce a substantive article. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
-
-URGENCY SCORING for Florida statewide news (1-10):
-- 9-10: Major legislation signed/passed, significant court ruling, statewide emergency or disaster, major economic news affecting all Floridians
-- 7-8: Legislative proposals with real chance of passing, significant state agency decision, major Florida crime or trial, statewide policy change
-- 5-6: Regional Florida news, state politics, business news, environmental updates
-- 3-4: Minor state agency news, local Florida stories outside the Treasure Coast
-- 1-2: National news with no Florida angle
+3. Write a 380-430 word factual article in FOUR full paragraphs. Cover what happened, who is affected across Florida, and what happens next statewide.
+4. For the next {CARDS_PER_CATEGORY} most important Florida stories write a teaser (one to two sentences) and a body of two to three full paragraphs. Ground all specific facts in the source. Always preserve proper nouns. Never write absence language. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
 
 Return ONLY valid JSON:
 {{
-  "hero": {{
-    "headline": "Florida-focused headline",
-    "body": "full article with paragraph breaks",
-    "urgency_score": <1-10>,
-    "published": "copy the [pub:...] string from the chosen headline exactly",
-    "source_index": <number>
-  }},
-  "cards": [
-    {{"headline": "...", "teaser": "...", "body": "two to three full paragraphs, complete and readable...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two to three full paragraphs, complete and readable...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two to three full paragraphs, complete and readable...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two to three full paragraphs, complete and readable...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two to three full paragraphs, complete and readable...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two to three full paragraphs, complete and readable...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}
-  ]
-}}"""
+  "hero": {{"headline": "...", "body": "full article", "urgency_score": <1-10>, "published": "copy [pub:...] exactly", "source_index": <number>}},
+  "cards": [{"headline": "...", "teaser": "...", "body": "two to three paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}]
+}}
+"""
     else:
-        prompt = f"""Local Treasure Coast news headlines for {category_label}:
+        prompt = f"""{_date_context}Local Treasure Coast news headlines for {category_label}:{rule_line}
 
 {headlines_text}
 
-SOURCE QUALITY RULES:
-- Prefer stories marked [source_quality:full] for the hero and full multi-paragraph cards.
-- Stories marked [source_quality:summary] may be used for short cards only.
-- Stories marked [source_quality:brief], [source_quality:thin], [source_quality:discovery_only], or [source_type:discovery_only] may only be used as one-sentence briefs, or skipped.
-- Never pad thin RSS blurbs into full articles. If the source has only a few facts, write fewer words.
-- It is acceptable to return fewer than six useful cards if the source material is thin.
-
 Tasks:
-1. Pick the single most important/urgent story for Treasure Coast Florida residents. LOCAL stories affecting residents directly (county commission decisions, local crime, school district news, local business openings/closings, road/infrastructure, local sports) should be ranked ABOVE national or state stories unless the national story has a very direct local impact (e.g. a hurricane heading toward Martin County, a federal ruling on the Indian River Lagoon). A routine city council vote in Stuart is more relevant to this audience than a national political story.{"  CRITICAL for Sports: pick an actual sports story — game result, standings, player/team news, or athletic event. Skip crime, arrests, or non-sports stories entirely." if category_key == "sports" else ""}{"  CRITICAL for Crime & Safety: pick an actual local crime, arrest, public safety, or emergency story. Skip politics, tax, government budget, or non-safety stories entirely." if category_key == "crime" else ""}{"  CRITICAL for Things To Do: pick events, activities, restaurants, parks, or attractions specifically in Martin, St. Lucie, or Indian River counties. Skip anything more than 60 miles away such as Orlando, Miami, or Tampa events." if category_key == "things_to_do" else ""}
-2. Write an accurate, locally-framed headline. Name the specific county, city, or town (Stuart, Port St. Lucie, Fort Pierce, Vero Beach, Jensen Beach, Palm City, Hobe Sound, Sebastian, etc.) in the headline when relevant.
-3. If the chosen source is [source_quality:full], write a complete factual article of three to four paragraphs covering what happened, who is affected locally, the context, and what happens next. If it is not full, write a shorter factual brief or choose a better sourced story. Ground all specific facts (names, numbers, dates, quotes, locations) in the source text, but write naturally with useful context and clear explanation. Never write 'no further details available' or similar — always produce a substantive article.
-4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser and body sized to the source quality: full sources may get two short paragraphs, summary sources get one short paragraph, and brief/discovery-only sources get one sentence. Ground all specific facts (names, numbers, dates, quotes) in the source, but write naturally and provide useful local context and explanation. CRITICAL: Always preserve proper nouns from the source — school names, road names, business names, people's names, building names. If the source names specific schools, streets, or institutions, those names MUST appear in the card. Never replace a specific name with a generic description (e.g. never write "the schools" if the source names them). Never write 'no further details available' — always produce a substantive article. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
-
-URGENCY SCORING for local news (1-10):
-- 9-10: Major public safety event, significant government decision directly affecting residents, serious local crime with community impact, natural disaster or emergency
-- 7-8: Local government vote or proposal, business opening/closing affecting jobs or services, school district news, local development approval
-- 5-6: Regional sports, community events, local business news, follow-up stories
-- 3-4: State or national news with indirect local connection
-- 1-2: National/state news with no meaningful local angle — these should rarely appear
+1. Pick the single most important/urgent story for Treasure Coast Florida residents. LOCAL stories (county commission decisions, local crime, school district news, local business, road/infrastructure, local sports) rank ABOVE national or state stories unless the national story has very direct local impact.
+2. Write an accurate, locally-framed headline. Name the specific county, city, or town in the headline when relevant.
+3. Write a complete, readable factual article of four full paragraphs covering what happened, who is affected locally, the context, and what happens next. Never write absence language.
+4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one to two sentences) and a body of two to three full paragraphs. Always preserve proper nouns — school names, road names, business names, people's names. If the source names specific schools, streets, or institutions, those names MUST appear in the card. Never write absence language. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
 
 Return ONLY valid JSON:
 {{
-  "hero": {{
-    "headline": "locally-framed headline",
-    "body": "full article with paragraph breaks",
-    "urgency_score": <1-10>,
-    "published": "copy the [pub:...] string from the chosen headline exactly",
-    "source_index": <number>
-  }},
-  "cards": [
-    {{"headline": "...", "teaser": "...", "body": "two to three full paragraphs, complete and readable...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two to three full paragraphs, complete and readable...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two to three full paragraphs, complete and readable...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two to three full paragraphs, complete and readable...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two to three full paragraphs, complete and readable...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}},
-    {{"headline": "...", "teaser": "...", "body": "two to three full paragraphs, complete and readable...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}}
-  ]
-}}"""
+  "hero": {{"headline": "...", "body": "full article", "urgency_score": <1-10>, "published": "copy [pub:...] exactly", "source_index": <number>}},
+  "cards": [{"headline": "...", "teaser": "...", "body": "two to three paragraphs...", "urgency_score": <1-10>, "published": "copy timestamp", "source_index": <number>}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}, {{"headline": "...", "teaser": "...", "body": "...", "urgency_score": <1-10>, "published": "...", "source_index": <number>}}]
+}}
+"""
+
+    is_florida    = (category_key == "florida")
+    system_prompt = FLORIDA_SYSTEM_PROMPT if is_florida else LOCAL_SYSTEM_PROMPT
+
+    response = client.messages.create(
+        model="claude-sonnet-4-5",
+        max_tokens=2400,
+        system=[{
+            "type": "text",
+            "text": system_prompt,
+            "cache_control": {"type": "ephemeral"}
+        }],
+        messages=[{"role": "user", "content": prompt}],
+        extra_headers={"anthropic-beta": "prompt-caching-2024-07-31"},
+    )
+
+    raw = response.content[0].text.strip()
+    if raw.startswith("```"):
+        raw = raw.split("```")[1]
+        if raw.startswith("json"):
+            raw = raw[4:]
+    raw = raw.strip()
 
     try:
-        response = client.messages.create(
-            model="claude-sonnet-4-5",
-            max_tokens=4000,
-            system=[{"type":"text","text":system_prompt,"cache_control":{"type":"ephemeral"}}],
-            messages=[{"role":"user","content":prompt}],
-        )
-        raw = response.content[0].text.strip()
-        if raw.startswith("```"):
-            raw = raw.split("```")[1].lstrip("json").strip()
-        # json-repair fallback
+        from json_repair import repair_json
+        data = json.loads(repair_json(raw))
+    except Exception:
         try:
-            import json_repair
-            data = json_repair.loads(raw)
+            data = json.loads(raw, strict=False)
+        except json.JSONDecodeError:
+            import re as _re
+            cleaned = raw.encode("ascii", "ignore").decode("ascii")
+            try:
+                data = json.loads(cleaned, strict=False)
+            except json.JSONDecodeError:
+                start = cleaned.index("{")
+                end   = cleaned.rindex("}") + 1
+                data  = json.loads(cleaned[start:end], strict=False)
+    data["category_key"]   = category_key
+    data["category_label"] = category_label
+
+    # Use source_index to attach original RSS link and image directly — no fuzzy matching needed
+    def attach_source(item, headlines):
+        idx = item.get("source_index")
+        if idx is not None:
+            try:
+                source = headlines[int(idx) - 1]
+                item["link"]      = source.get("link", "")
+                item["image_url"] = source.get("image_url", "")
+            except (IndexError, ValueError, TypeError):
+                item["link"]      = ""
+                item["image_url"] = ""
+        else:
+            item["link"]      = ""
+            item["image_url"] = ""
+
+        # Format published
+        raw_pub = item.get("published", "").replace("pub:", "").strip().strip("[]")
+        item["published"] = format_age(raw_pub)
+        return item
+
+    data["hero"] = attach_source(data["hero"], headlines)
+    data["hero"]["body"] = strip_markdown(data["hero"].get("body", ""), data["hero"].get("headline", ""))
+    for card in data.get("cards", []):
+        attach_source(card, headlines)
+        card["body"] = strip_absence_language(strip_markdown(card.get("body", ""), card.get("headline", "")))
+
+    # Age-based score decay for stale non-breaking stories
+    def decay_score(item):
+        score = item.get("urgency_score", 5)
+        idx = item.get("source_index")
+        if idx is None: return item
+        try:
+            pub_raw = headlines[int(idx) - 1].get("published", "")
+            if not pub_raw: return item
+            from email.utils import parsedate_to_datetime
+            from datetime import timezone
+            dt  = parsedate_to_datetime(pub_raw).astimezone(timezone.utc)
+            now = datetime.now(timezone.utc)
+            hrs = (now - dt).total_seconds() / 3600
+            headline = item.get("headline", "").lower()
+            fresh_words = ["confirms","confirmed","announces","announced","charges","charged",
+                          "arrested","arrest","resigns","resigned","fired","breaks","exclusive",
+                          "new details","emerges","emerged","discovered","uncovers","uncovered",
+                          "identified","named","ruled","plot","conspiracy","indicted","sentenced",
+                          "found guilty","linked","motive","cause of death"]
+            is_fresh = any(w in headline for w in fresh_words)
+            if not is_fresh:
+                if hrs > 48: score = min(score, 4)
+                elif hrs > 36: score = min(score, 5)
+                elif hrs > 24: score = min(score, 7)
+                elif hrs > 12: score = min(score, 8)
         except Exception:
-            data = json.loads(raw)
-        # Attach source to hero
-        def attach_source(item):
-            idx = item.get("source_index")
-            if idx is not None:
-                try:
-                    source = headlines[int(idx)-1]
-                    item["link"]      = source.get("link","")
-                    item["source_type"] = source.get("source_type", "unknown")
-                    item["source_quality"] = source.get("source_quality", "unknown")
-                    item["source_word_count"] = source.get("source_word_count", 0)
-                    item["image_url"] = source.get("image_url","")
-                    item["image_from_google"] = source.get("image_from_google", False)
-                except Exception:
-                    item["link"] = ""; item["source_type"] = "unknown"; item["source_quality"] = "unknown"; item["source_word_count"] = 0; item["image_url"] = ""; item["image_from_google"] = False
+            pass
+        item["urgency_score"] = score
+        return item
+
+    decay_score(data["hero"])
+    for card in data.get("cards", []): decay_score(card)
+
+    # Age cap function — parses RSS timestamps properly
+    def apply_age_cap(item):
+        from email.utils import parsedate_to_datetime
+        from datetime import timezone, timedelta
+        import re as _re
+        score = item.get("urgency_score", 5)
+        # Try to get age from source headline timestamp via source_index
+        idx = item.get("source_index")
+        pub_raw = ""
+        if idx is not None:
+            try:
+                pub_raw = headlines[int(idx) - 1].get("published", "")
+            except Exception:
+                pass
+        if not pub_raw:
+            pub_raw = item.get("published", "")
+        if not pub_raw:
+            return
+        try:
+            dt  = parsedate_to_datetime(pub_raw).astimezone(timezone.utc)
+            now = datetime.now(timezone.utc)
+            hrs = (now - dt).total_seconds() / 3600
+        except Exception:
+            return
+
+        headline_lower = item.get("headline", "").lower()
+        body_lower     = item.get("body", "").lower()[:400]
+        one_time_events = ["resigns", "resigned", "steps down", "fired", "dies", "dead at",
+                           "killed in", "found dead", "passed away", "obituary"]
+
+        if hrs > 48:
+            item["urgency_score"] = min(score, 4)
+        elif hrs > 24:
+            if any(w in headline_lower for w in one_time_events):
+                item["urgency_score"] = min(score, 4)
             else:
-                item["link"] = ""; item["source_type"] = "unknown"; item["source_quality"] = "unknown"; item["source_word_count"] = 0; item["image_url"] = ""; item["image_from_google"] = False
-            raw_pub = item.get("published","").replace("pub:","").strip().strip("[]")
-            item["published_raw"] = raw_pub  # preserve for staleness checking
-            item["published"] = format_age(raw_pub)
-            return item
-        data["hero"] = attach_source(data["hero"])
-        data["hero"]["body"] = strip_absence_language(strip_markdown(data["hero"].get("body",""), data["hero"].get("headline","")))
-        if data["hero"].get("source_quality") in {"thin", "brief", "discovery_only", "aggregator"}:
-            data["hero"]["body"] = make_brief_from_source(data["hero"].get("headline", ""), data["hero"].get("body", ""), max_words=55)
-        for card in data.get("cards",[]):
-            attach_source(card)
-            card["body"] = strip_absence_language(strip_markdown(card.get("body",""), card.get("headline","")))
-            if card.get("source_quality") in {"thin", "brief", "discovery_only", "aggregator"}:
-                idx = card.get("source_index")
-                try:
-                    src = headlines[int(idx)-1]
-                    src_text = src.get("article_text", "") or src.get("summary", "") or card.get("body", "")
-                except Exception:
-                    src_text = card.get("body", "")
-                card["body"] = make_brief_from_source(card.get("headline", ""), src_text, max_words=45)
-        data["category_key"]   = category_key
-        data["category_label"] = category_label
+                item["urgency_score"] = min(score, 6)
+        elif hrs > 12:
+            if any(w in headline_lower for w in one_time_events):
+                item["urgency_score"] = min(score, 6)
+            else:
+                # Check for stale body signals
+                _now   = datetime.now(timezone.utc)
+                _dates = [(_now - timedelta(days=d)).strftime("%B %d").lower().replace(" 0", " ") for d in range(2, 14)]
+                _months_gone = [(_now - timedelta(days=d*30)).strftime("%B").lower() for d in range(1, 6)]
+                stale_body_signals = ["last week", "last month", "a week ago", "days ago",
+                                      "on monday", "on tuesday", "on wednesday", "on thursday",
+                                      "on friday", "on saturday", "on sunday"] + _dates + _months_gone
+                if any(s in body_lower for s in stale_body_signals):
+                    item["urgency_score"] = min(score, 6)
 
-        # Enrich cards with article text and related summaries via Haiku — run in parallel
-        from concurrent.futures import ThreadPoolExecutor as _TPE, as_completed as _ac
-        with _TPE(max_workers=6) as ex:
-            futures = {ex.submit(enhance_card, card, headlines, content_bank): card for card in data.get("cards", [])}
-            for fut in _ac(futures, timeout=45):
-                try:
-                    fut.result(timeout=10)
-                except Exception:
-                    pass
-        return data
+    apply_age_cap(data["hero"])
+    if data["hero"].get("published", "") and not any(w in data["hero"]["published"].lower() for w in ["minute", "hour", "a few", ":"]):
+        print(f"  Hard age cap applied: hero is from {data['hero']['published']}")
+    for card in data.get("cards", []):
+        apply_age_cap(card)
+
+    # Stale-hero swap: if the chosen hero describes an OLD event (even with a refreshed
+    # timestamp), promote the freshest non-stale card to hero instead. Timestamp filtering
+    # alone misses stories that publishers re-touch, so we also scan the body content.
+    from email.utils import parsedate_to_datetime as _pdt
+    from datetime import timezone as _tzc, timedelta as _tdc
+    _now_c = datetime.now(_tzc.utc)
+    _yest  = (_now_c - _tdc(days=1)).strftime("%A").lower()
+    _2day  = (_now_c - _tdc(days=2)).strftime("%A").lower()
+    _3day  = (_now_c - _tdc(days=3)).strftime("%A").lower()
+    _4day  = (_now_c - _tdc(days=4)).strftime("%A").lower()
+    _stale_days = {_yest, _2day, _3day, _4day}
+    _fresh_override = ["today", "this morning", "this afternoon", "this evening",
+                       "hours ago", "minutes ago", "just announced", "just released",
+                       "breaking", "moments ago", "earlier today", "announced today",
+                       "arrested today", "ruled today", "confirmed today"]
+    _stale_phrases = ["yesterday", "two days ago", "three days ago", "earlier this week",
+                      "last week", "days ago", "happened on", "occurred on", "took place on"]
+
+    def _story_is_stale(item):
+        content = (item.get("teaser", "") + " " + item.get("body", "")[:800]).lower()
+        # Fresh-development language always wins (e.g. "suspect arrested today" in an old story)
+        if any(p in content for p in _fresh_override):
+            return False
+        # Past day-name reference (e.g. "on Thursday" when today is Saturday)
+        for day in _stale_days:
+            if f" {day} " in content or f" {day}," in content or f" {day}." in content or content.startswith(f"{day} "):
+                return True
+        # Stale-event phrases
+        if any(p in content for p in _stale_phrases):
+            return True
+        # Timestamp 24+ hours old via original RSS source
+        idx = item.get("source_index")
+        if idx is not None:
+            try:
+                pub_raw = headlines[int(idx) - 1].get("published", "")
+                if pub_raw:
+                    dt  = _pdt(pub_raw).astimezone(_tzc.utc)
+                    if (_now_c - dt).total_seconds() / 3600 >= 24:
+                        return True
+            except Exception:
+                pass
+        return False
+
+    if _story_is_stale(data["hero"]) and data.get("cards"):
+        for ci, card in enumerate(data["cards"]):
+            if not _story_is_stale(card):
+                old_hero = data["hero"]
+                print(f"  Stale hero swapped: '{old_hero.get('headline','')[:50]}' -> '{card.get('headline','')[:50]}'")
+                # Give the demoted hero a teaser (heroes lack one; cards need one)
+                if not old_hero.get("teaser"):
+                    _body = old_hero.get("body", "").strip()
+                    _first = _body.split(". ")[0].strip()
+                    old_hero["teaser"] = (_first[:160] + ".") if _first else ""
+                data["hero"] = card
+                data["cards"][ci] = old_hero
+                break
+
+    return data
+
+
+# -- HTML GENERATION --
+
+def now_et():
+    from datetime import timezone, timedelta
+    utc = datetime.now(timezone.utc)
+    et  = utc - timedelta(hours=4)
+    return et.strftime("%-I:%M %p ET")
+
+def canonical_image_url(url):
+    if not url: return ""
+    return re.sub(r"[?#].*$", "", url.strip())
+
+
+def make_paragraphs(text):
+    if not text:
+        return ""
+    # Split on double newlines first, fall back to single newlines
+    paragraphs = text.split("\n\n")
+    if len(paragraphs) == 1:
+        paragraphs = text.split("\n")
+    return "".join(
+        f"<p>{p.strip()}</p>"
+        for p in paragraphs
+        if p.strip() and len(p.strip()) > 30
+    )
+
+
+def build_content_bank():
+    """Build a bank of rich publisher content from direct RSS feeds.
+    These have far richer summaries than Google News and no redirect issues.
+    """
+    bank = []
+    seen = set()
+    for url in CONTENT_BANK_FEEDS:
+        try:
+            feed = feedparser.parse(url)
+            for entry in feed.entries[:25]:
+                title = sanitize_text(entry.get("title", ""))
+                if not title or title.lower() in seen:
+                    continue
+                seen.add(title.lower())
+                summary = entry.get("summary", entry.get("description", ""))[:1200]
+                if summary and len(summary) > 100:
+                    bank.append({
+                        "title":   title,
+                        "summary": summary,
+                        "source":  feed.feed.get("title", url),
+                    })
+        except Exception as e:
+            print(f"  Content bank feed error ({url[:50]}): {e}")
+    print(f"  Content bank built: {len(bank)} entries")
+    return bank
+
+
+def find_content(headline, content_bank, max_entries=5):
+    """Fuzzy-match a headline against the content bank and return combined rich summaries."""
+    stops = {"that","this","with","from","have","been","said","will","more",
+             "also","when","were","they","their","about","says","just","after"}
+    def tokens(text):
+        return set(re.sub(r"[^a-z0-9 ]", " ", text.lower()).split()) - stops
+    hero_tokens = tokens(headline)
+    matches = []
+    for entry in content_bank:
+        overlap = len(hero_tokens & tokens(entry["title"]))
+        if overlap >= 2:
+            matches.append((overlap, entry))
+    matches.sort(key=lambda x: x[0], reverse=True)
+    if not matches:
+        return ""
+    parts = []
+    for _, entry in matches[:max_entries]:
+        src     = entry["source"]
+        title   = entry["title"]
+        summary = entry["summary"]
+        parts.append(f"[{src}] {title}\n{summary}")
+    return "\n\n".join(parts)
+
+
+
+
+def fetch_article_text(url, max_words=900):
+    """Article fetch disabled — base articles from RSS summaries only."""
+    return ""
+
+
+
+def enhance_card(card, content_bank, headlines):
+    """Enrich a card body using content bank and related RSS summaries. Uses Haiku."""
+    headline = card.get("headline", "")
+    if not headline:
+        return card
+
+    # Gather content bank matches
+    bank_content = find_content(headline, content_bank, max_entries=2)
+
+    # Gather related RSS summaries
+    stops = {"that","this","with","from","have","been","said","will","more",
+             "also","when","were","they","their","about","says","just","after"}
+    hl_tokens = set(re.sub(r"[^a-z0-9 ]", " ", headline.lower()).split()) - stops
+    related_parts = []
+    for h in headlines:
+        h_tokens = set(re.sub(r"[^a-z0-9 ]", " ", h.get("title","").lower()).split()) - stops
+        if len(hl_tokens & h_tokens) >= 2:
+            related_parts.append(h.get("title","") + ". " + h.get("summary","")[:200])
+    related_text = " | ".join(related_parts[:3])
+
+    source_parts = [p for p in [bank_content, related_text] if p]
+    source_text  = "\n\n".join(source_parts)
+
+    if not source_text or len(source_text.split()) < 50:
+        return card
+
+    # Relevance check
+    stops2 = {"the","a","an","in","of","for","to","and","or","on","at","is","was","are","were","that","this","with"}
+    hl_tok  = set(re.sub(r"[^a-z0-9 ]", " ", headline.lower()).split()) - stops2
+    src_tok = set(re.sub(r"[^a-z0-9 ]", " ", source_text[:400].lower()).split()) - stops2
+    if len(hl_tok & src_tok) < 2:
+        return card
+
+    try:
+        body   = card.get("body", "")
+        prompt = (
+            f"You wrote this news card about: {headline}\n\n"
+            f"Your original card text:\n\n{body}\n\n"
+            f"Here is additional source material:\n\n{source_text}\n\n"
+            "If the source is about a different story, return the original card text unchanged. "
+            "Otherwise rewrite the card body in two short paragraphs (~120 words total) "
+            "using only confirmed facts from the source. Write in your own words. "
+            "Never use phrases like 'no information was disclosed', 'details were not available', "
+            "'it remains unclear', 'has not been confirmed', or any similar absence language. "
+            "If details are limited write fewer words and stop — do not pad."
+        )
+        resp = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=300,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        enhanced = resp.content[0].text.strip()
+        explanation_signals = ["i cannot rewrite", "source material", "does not match", "cannot proceed"]
+        if enhanced and not any(s in enhanced.lower()[:150] for s in explanation_signals):
+            card["body"] = strip_markdown(enhanced, headline)
+    except Exception:
+        pass
+    return card
+
+
+def enhance_hero_article(hero, full_text):
+    """Rewrite the hero article using the full source text for accuracy and detail."""
+    if not full_text or len(full_text.split()) < 150:
+        return hero  # Not enough text to improve on
+    body = hero.get("body", "")
+    prompt = (
+        f"You wrote this article about: {hero.get('headline', '')}\n\n"
+        f"Your original article:\n\n{body}\n\n"
+        f"Here is source material:\n\n{full_text}\n\n"
+        "If the source material is clearly about a different story, location, or incident than the headline, "
+        "return your original article exactly as written above with no changes. "
+        "Otherwise, rewrite your article using confirmed facts from the source. "
+        "Write in your own words — paraphrase everything except direct quotes from named individuals. "
+        "Do not invent details not in the source. Do not comment on absent information. "
+        "Do not copy newsletter openers like 'Good morning'. "
+        "Keep it 420-480 words. Plain direct English. No em dashes."
+    )
+    try:
+        resp = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=1200,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        enhanced = resp.content[0].text.strip()
+        # Detect if Claude returned an explanation instead of an article
+        explanation_signals = ["i cannot rewrite", "source material", "does not match", "i must return", "cannot proceed"]
+        if enhanced and not any(s in enhanced.lower()[:200] for s in explanation_signals):
+            hero["body"] = strip_markdown(enhanced, hero.get("headline", ""))
+            print(f"  Hero article enhanced with full source text")
+        else:
+            print(f"  Enhancement skipped: Claude returned explanation, keeping original")
     except Exception as e:
-        print(f"  Claude error for {category_label}: {e}")
-        return None
+        print(f"  Enhancement failed ({e}), keeping original")
+    return hero
 
-# -- FRONT PAGE HERO SELECTION --
+
+def format_age(published_str):
+    """Format publish time using stdlib only — no pytz needed."""
+    if not published_str:
+        return ""
+    try:
+        from email.utils import parsedate_to_datetime
+        from datetime import timezone, timedelta
+        et      = timezone(timedelta(hours=-4))  # EDT approximation
+        dt_utc  = parsedate_to_datetime(published_str).astimezone(timezone.utc)
+        now_utc = datetime.now(timezone.utc)
+        mins    = int((now_utc - dt_utc).total_seconds() / 60)
+        dt_et   = dt_utc.astimezone(et)
+        now_et  = now_utc.astimezone(et)
+        hour    = dt_et.hour % 12 or 12
+        ampm    = "AM" if dt_et.hour < 12 else "PM"
+        time_str = f"{hour}:{dt_et.strftime('%M')} {ampm} ET"
+        if mins < 60:
+            return "A few minutes ago"
+        if dt_et.date() == now_et.date():
+            return time_str
+        if mins < 2880:
+            return f"Yesterday, {time_str}"
+        months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+        return f"{months[dt_et.month-1]} {dt_et.day}, {time_str}"
+    except Exception:
+        return ""
+
 
 def select_front_page_hero(all_categories):
-    """Pick the most locally-significant story across all topic category heroes."""
-    from email.utils import parsedate_to_datetime
-    from datetime import timezone, timedelta
+    """Use Claude to pick the most front-page-worthy hero across all categories.
+    Considers systemic impact and US relevance — not just raw urgency or casualty count.
+    Localized tragedies (regional accidents) lose to geopolitical events with broad reach,
+    even when casualty counts are similar."""
+    if not all_categories:
+        return None
 
-    eligible = [c for c in all_categories
-                if CATEGORIES.get(c["category_key"],{}).get("front_page_hero", True)]
+    def _is_eligible(cat):
+        if not CATEGORIES.get(cat["category_key"], {}).get("front_page_hero", True):
+            us_words = ["us strikes", "us military", "american forces", "u.s. strikes",
+                        "u.s. military", "united states strikes", "trump orders", "pentagon"]
+            return any(w in cat["hero"].get("headline", "").lower() for w in us_words)
+        return True
+
+    def _fp_score(cat):
+        score = int(cat["hero"].get("urgency_score", 0) or 0)
+        cap   = CATEGORIES.get(cat["category_key"], {}).get("front_page_cap", 10)
+        return min(score, cap)
+
+    eligible   = [c for c in all_categories if _is_eligible(c)]
     candidates = eligible if eligible else all_categories
-    if len(candidates) == 1: return candidates[0]
+    if len(candidates) == 1:
+        return candidates[0]
 
-    now_utc = datetime.now(timezone.utc)
-    yesterday = (now_utc - timedelta(days=1)).strftime("%A").lower()
-    two_days  = (now_utc - timedelta(days=2)).strftime("%A").lower()
-    three_days = (now_utc - timedelta(days=3)).strftime("%A").lower()
-    stale_days = {yesterday, two_days, three_days}
-    fresh_override = ["today","this morning","this afternoon","just announced","breaking","hours ago","minutes ago","earlier today"]
-    stale_phrases  = ["yesterday","two days ago","three days ago","earlier this week","last week","days ago"]
+    # Compute age for each candidate so Claude can weight freshness
+    from email.utils import parsedate_to_datetime
+    from datetime import timezone as _tz, timedelta
+    _now = datetime.now(_tz.utc)
 
-    def is_stale(cat):
-        content = (cat["hero"].get("teaser","") + " " + cat["hero"].get("body","")[:600]).lower()
-        if any(p in content for p in fresh_override): return False
-        for day in stale_days:
-            if f" {day} " in content or f" {day}," in content: return True
-        if any(p in content for p in stale_phrases): return True
-        # Hard timestamp check using raw RFC timestamp stored before format_age conversion
-        raw_pub = cat["hero"].get("published_raw","") or cat["hero"].get("published","")
-        if raw_pub:
+    # HARD pre-filter: exclude candidates that are clearly stale events.
+    # This runs before Claude sees anything, so Claude cannot pick a known-stale story.
+    # A candidate is filtered out if:
+    #   (1) its timestamp is more than 18 hours old AND content has no fresh-development language, OR
+    #   (2) its content explicitly mentions a past day-name when today is a different day
+    _today_name      = _now.strftime("%A").lower()
+    _yesterday_name  = (_now - timedelta(days=1)).strftime("%A").lower()
+    _two_days_name   = (_now - timedelta(days=2)).strftime("%A").lower()
+    _three_days_name = (_now - timedelta(days=3)).strftime("%A").lower()
+    _stale_day_names = {_yesterday_name, _two_days_name, _three_days_name}
+
+    _stale_event_phrases = [
+        "yesterday", "two days ago", "three days ago", "earlier this week",
+        "last week", "days ago", "happened on", "occurred on",
+    ]
+    _fresh_dev_phrases = [
+        "today", "this morning", "this afternoon", "this evening",
+        "hours ago", "minutes ago", "just announced", "just released",
+        "breaking", "moments ago", "earlier today",
+    ]
+
+    def _is_stale(cat):
+        hero = cat["hero"]
+        content = (hero.get("teaser", "") + " " + hero.get("body", "")[:800]).lower()
+        # Fresh-development language wins regardless of timestamp
+        if any(p in content for p in _fresh_dev_phrases):
+            return False
+        # Check for past day-name references (e.g. "Thursday" when today is Saturday)
+        for day in _stale_day_names:
+            # Check the day appears as a standalone word
+            if f" {day} " in content or content.startswith(f"{day} ") or f" {day}." in content or f" {day}," in content:
+                return True
+        # Check for stale-event phrases
+        if any(p in content for p in _stale_event_phrases):
+            return True
+        # Check timestamp — 18+ hours old with no fresh-development language is stale
+        pub = hero.get("published", "")
+        if pub:
             try:
-                from email.utils import parsedate_to_datetime
-                dt  = parsedate_to_datetime(raw_pub).astimezone(timezone.utc)
-                age = (now_utc - dt).total_seconds() / 3600
-                if age > 24:
-                    print(f"  Stale hero filtered ({age:.0f}h old): {cat['hero'].get('headline','')[:50]}")
+                dt  = parsedate_to_datetime(pub).astimezone(_tz.utc)
+                hrs = (_now - dt).total_seconds() / 3600
+                if hrs >= 18:
                     return True
             except Exception:
                 pass
         return False
 
-    fresh = [c for c in candidates if not is_stale(c)]
-    if fresh:
-        candidates = fresh
+    fresh_candidates = [c for c in candidates if not _is_stale(c)]
+    if fresh_candidates:
+        filtered_out = [c["hero"].get("headline", "")[:60] for c in candidates if c not in fresh_candidates]
+        if filtered_out:
+            print(f"  Hero pre-filter excluded {len(filtered_out)} stale candidate(s): {filtered_out}")
+        candidates = fresh_candidates
     else:
-        print("  All candidates stale — using full pool")
+        print(f"  Hero pre-filter: no fresh candidates, keeping all for Claude to decide")
 
-    # Additional hard Python-side age filter — belt and suspenders
-    from email.utils import parsedate_to_datetime as _pdt
-    def _hero_age_hrs(cat):
-        raw = cat["hero"].get("published_raw","")
-        if not raw: return 0
+    if len(candidates) == 1:
+        print(f"  Front page hero: [{candidates[0]['category_label']}] {candidates[0]['hero'].get('headline','')[:60]} (only fresh candidate)")
+        return candidates[0]
+
+    def _age_label(cat):
+        pub = cat["hero"].get("published", "")
+        if not pub:
+            return "unknown age"
         try:
-            dt = _pdt(raw).astimezone(timezone.utc)
-            return (now_utc - dt).total_seconds() / 3600
+            dt  = parsedate_to_datetime(pub).astimezone(_tz.utc)
+            hrs = (_now - dt).total_seconds() / 3600
+            if hrs < 1:
+                mins = max(1, int((_now - dt).total_seconds() / 60))
+                return f"{mins} minutes ago"
+            if hrs < 24:
+                return f"{int(hrs)} hours ago"
+            days = int(hrs / 24)
+            return f"{days} day{'s' if days != 1 else ''} ago"
         except Exception:
-            return 0
-
-    under_24 = [c for c in candidates if _hero_age_hrs(c) <= 24 or _hero_age_hrs(c) == 0]
-    if under_24:
-        candidates = under_24
-    else:
-        print("  No candidates under 24h — keeping freshest available")
-        candidates = sorted(candidates, key=_hero_age_hrs)[:max(1, len(candidates)//2)]
-
-    today_label   = now_utc.strftime("%A, %B %-d, %Y")
-    yesterday_lbl = (now_utc - timedelta(days=1)).strftime("%A")
-    two_days_lbl  = (now_utc - timedelta(days=2)).strftime("%A")
-
-    def age_label(cat):
-        pub = cat["hero"].get("published","")
-        if not pub: return "unknown age"
-        for phrase in ["minutes ago","hour ago","hours ago"]:
-            if phrase in pub.lower(): return pub
-        if "yesterday" in pub.lower(): return "yesterday"
-        return pub
+            return "unknown age"
 
     listing = "\n\n".join(
-        f"{i+1}. [{c['category_label']}] (timestamp: {age_label(c)}) {c['hero'].get('headline','')}\n"
-        f"   Content: {(c['hero'].get('teaser','') + ' ' + c['hero'].get('body','')[:400]).strip()}"
+        f"{i+1}. [{c['category_label']}] (timestamp: {_age_label(c)}) {c['hero'].get('headline','')}\n"
+        f"   Content: {(c['hero'].get('teaser','') + ' ' + c['hero'].get('body','')[:500]).strip()}"
         for i, c in enumerate(candidates)
     )
-
+    _today_label = _now.strftime("%A, %B %d, %Y")
+    _yesterday   = (_now - timedelta(days=1)).strftime("%A")
+    _two_days    = (_now - timedelta(days=2)).strftime("%A")
+    _three_days  = (_now - timedelta(days=3)).strftime("%A")
     prompt = (
-        f"TODAY IS: {today_label}\n"
-        f"Yesterday was {yesterday_lbl}. Two days ago was {two_days_lbl}.\n\n"
-        "You are selecting the SINGLE most front-page-worthy story for Treasure Coast Today, "
-        "a LOCAL news site covering Martin, St. Lucie, and Indian River counties in Florida.\n\n"
+        f"TODAY IS: {_today_label}\n"
+        f"Yesterday was {_yesterday}. Two days ago was {_two_days}. Three days ago was {_three_days}.\n"
+        "Use this date context to evaluate when events actually happened.\n\n"
+        "You are selecting the SINGLE most front-page-worthy story for Treasure Coast Today, a LOCAL news site covering Martin, St. Lucie, and Indian River counties in Florida.\n\n"
         f"{listing}\n\n"
-        "AUDIENCE: Local Treasure Coast residents who want to know what's happening in their community.\n\n"
-        "FRESHNESS IS CRITICAL: The hero must be CURRENT news happening now or today. "
-        "Each candidate is labeled with its age. Strongly prefer stories from the past few hours. "
-        "Stories more than 24 hours old should not lead unless they are ongoing major events "
-        "still actively developing (a missing person case, an ongoing trial, a storm approaching).\n\n"
-        "STRONG front-page heroes for a local site:\n"
-        "1. Significant local government decisions directly affecting residents (major zoning approvals, "
-        "budget votes, school board actions, commission decisions on development)\n"
-        "2. Major public safety events affecting the community (serious crimes, accidents with casualties, "
-        "emergencies, weather events hitting the area)\n"
-        "3. Major local development or business news affecting jobs, housing, or daily life\n"
-        "4. School district news with broad community impact\n"
-        "5. Significant local sports victories (state championships, major tournament wins)\n"
-        "6. National or state news with DIRECT local impact (a hurricane heading toward the TC, "
-        "a federal ruling on the Indian River Lagoon, state legislation affecting local property taxes)\n\n"
-        "WEAK front-page heroes:\n"
-        "- National news with no local angle\n"
-        "- Minor events or routine announcements\n"
-        "- Things to do / event listings (these are cards, not heroes)\n"
-        "- Old events being recapped with no new development\n\n"
-        "THINK FIRST, THEN ANSWER. For each candidate briefly assess: (a) how current is it, "
-        "(b) how directly does it affect Treasure Coast residents?\n\n"
+        "AUDIENCE: Local Treasure Coast residents who want to know what's happening in their community.\n"
+        "But \"matters to US readers\" is about national/systemic relevance, NOT just whether it happened on US soil. "
+        "A regional US tragedy is local to that region; a foreign event involving US allies or US interests can have "
+        "broader national implications.\n"
+        "\n"
+        "FRESHNESS IS CRITICAL: This app updates throughout the day. The front page hero must be CURRENT news — what is "
+        "happening NOW, not what already happened. Each candidate has a timestamp label, but BE SKEPTICAL OF TIMESTAMPS — "
+        "publishers often re-publish or update old articles with minor changes, which refreshes the timestamp even though "
+        "the event itself is old.\n"
+        "\n"
+        "CRITICAL DISTINCTION: differentiate between (A) an OLD EVENT being republished with a refreshed timestamp, vs "
+        "(B) a NEW DEVELOPMENT in an ongoing story. The former is stale; the latter is fresh and can absolutely be hero-worthy.\n"
+        "- (A) STALE: The article describes an event that already happened, with no new action today. Example: \"Blue Origin "
+        "rocket exploded yesterday at Cape Canaveral\" — this is yesterday's explosion being recapped. Avoid as hero.\n"
+        "- (B) FRESH: The article describes a NEW action, decision, arrest, ruling, statement, or development today, even if "
+        "it's connected to an older story. Example: \"Suspect in Trump assassination attempt arrested\" — even though the "
+        "attempt was days ago, the arrest is happening NOW and is breaking news. This IS hero-worthy.\n"
+        "\n"
+        "Look at the teaser to determine which case applies:\n"
+        "- Phrases like \"announced today\", \"arrested today\", \"ruled today\", \"said this morning\", \"hours ago\", "
+        "\"just\", \"breaking\" — these signal a NEW development happening now, even in an old story. TREAT AS FRESH.\n"
+        "- Phrases that recap an old event with no new action today — \"yesterday's\", \"earlier this week\", \"last "
+        "Monday's\", and the article is just summarizing what already happened — TREAT AS STALE.\n"
+        "- When in doubt, ask: \"Is something new happening today in this story, or is this just a recap of an old event?\"\n"
+        "\n"
+        "Freshness tiers (combining timestamp AND content signals):\n"
+        "- New event or new development from the past few hours: strong hero candidate\n"
+        "- New development today in an older ongoing story: also strong (arrests, rulings, statements, decisions)\n"
+        "- From 6-12 hours ago and still actively unfolding: still acceptable\n"
+        "- Pure recap of an event from yesterday or earlier with no new development: AVOID as hero — it belongs as a card if at all\n"
+        "\n"
+        "When comparing, ask: \"Is something NEW happening in this story right now, or did it already happen and move on?\" "
+        "If something new is happening, it's fresh regardless of when the original event occurred. If it has moved on with "
+        "no new development, pick a fresher story.\n"
+        "\n"
+        "Pick the story with the GREATEST systemic impact for the US audience among CURRENT stories — not the biggest story regardless of when it happened.\n"
+        "\n"
+        "STRONG front-page heroes for a local news site:\n"
+        "1. Breaking court rulings or legal decisions involving the President, Congress, or major US institutions — these are the kind of stories that make every major outlet's front page\n"
+        "2. Major US national policy/political developments affecting millions (Supreme Court rulings, major legislation passed/signed, executive actions with broad immediate impact)\n"
+        "3. US national security crises, attacks on US soil, US military action\n"
+        "4. Major economic events affecting US consumers/markets (Fed decisions, market crashes, major industry collapses, jobs reports)\n"
+        "5. Major geopolitical events involving US allies or US interests (attacks on NATO countries, peace deals, sanctions, treaties) — these affect US foreign policy even when they happen abroad\n"
+        "6. Major US infrastructure/space/scientific events with national consequence (NASA missions, major tech failures with national impact)\n"
+        "\n"
+        "MEDIUM heroes — okay if nothing stronger is fresh, but typically belong as cards if a strong-tier story exists:\n"
+        "- Routine regulatory proposals (SEC rule changes, FCC proposals, agency-level rulemaking) — these matter to specific industries and policy wonks but rarely lead general-audience newspapers\n"
+        "- Single-state political news without broader implications\n"
+        "- Minor policy clarifications or technical legal rulings\n"
+        "\n"
+        "Quick gut check: if a story would NOT be on the front page of CNN, NYT, WaPo, or AP right now, it probably shouldn't be your hero either. Court rulings about Trump, breaking legal decisions, major political fights, and significant policy shifts make general-audience front pages. Niche regulatory proposals usually don't.\n"
+        "\n"
+        "WEAK front-page heroes (these belong as cards, NOT as the lead):\n"
+        "- Smaller-scale localized US tragedies — single bus/car crashes, single-building fires, industrial accidents, factory explosions, mine collapses, single-aircraft small plane crashes, local crime. These affect their region/industry, not the nation broadly.\n"
+        "- Foreign tragedies without US connection (foreign domestic crime, regional conflicts not involving US allies/interests)\n"
+        "- Single-company news (funding rounds, IPOs, executive shakeups, single-quarter earnings)\n"
+        "- Executive opinions or statements about competitors \u2014 'CEO says X is too expensive', 'executive calls Y overrated' are cards, not heroes\n"
+        "- Industry commentary, analyst takes, or opinion pieces without a concrete policy or market-moving event\n"
+        "- Sports/entertainment — these are ALWAYS cards, never heroes, regardless of historic significance. A Grand Slam final, championship game, or record-breaking performance belongs in the Sports section as a card.\n"
+        "- Celebrity deaths unless of major historical/cultural figures\n"
+        "- Routine policy proposals without immediate broad impact\n"
+        "\n"
+        "Casualty/disaster events that DO warrant hero status are large in scale or national in reach:\n"
+        "- Major commercial airline crashes (large passenger jets, dozens+ killed)\n"
+        "- Mass shootings or terrorism at historic scale\n"
+        "- Multi-state natural disasters (major hurricanes, large wildfires across regions, earthquakes affecting populated areas)\n"
+        "- Bridge collapses or major infrastructure failures with national implications\n"
+        "- Attacks on US military or significant US security events\n"
+        "- Industrial disasters with broad consequences (e.g. nuclear incidents, chemical releases affecting large populations)\n"
+        "\n"
+        "Rule of thumb: if a tragedy is contained to one workplace, one road, one building, or one small town, it is a card, not a hero — even with multiple casualties. If it affects multiple states, a major industry, or hundreds of lives, it can be hero-worthy.\n"
+        "\n"
+        "Examples:\n"
+        "- 'Trump delays Iran ceasefire' BEATS 'Nine dead in Oregon paper mill disaster' — the ceasefire decision is active US foreign policy reshaping a major conflict; the mill disaster, however tragic, is a regional industrial accident with no national policy consequence.\n"
+        "- 'Russian drone strikes NATO ally Romania' BEATS 'Bus crash kills 5 in Virginia' — the drone strike has NATO/Article 5 implications affecting US foreign policy; the bus crash, however tragic, is regional.\n"
+        "- 'Supreme Court rules on major case' BEATS 'Tech company raises $10B' — court rulings reshape US law for millions.\n"
+        "- 'US bus crash kills 5' BEATS 'European train delay' — between two local stories, US readers care more about US events.\n"
+        "\n"
+        "IMPORTANT ON CASUALTY COUNT: A high death toll does NOT by itself make a story front-page-worthy. The question is REACH — how many people BEYOND those directly involved are affected, and whether anything changes nationally. A chemical spill that kills 11 workers INSIDE one mill is a contained workplace accident — its reach is that facility and that town, NOT the nation. That is a card. The 'chemical release affecting large populations' exception means events like a city-wide toxic cloud forcing mass evacuation — NOT a fatal accident confined to one workplace. Do not let the word 'chemical' or a double-digit death count override the reach test.\n"
+        "\n"
+        "THINK FIRST, THEN ANSWER. For each candidate, briefly assess in one short line: (a) how recent the actual event is, and (b) its national reach — does it change US policy/markets/security, or affect Americans beyond those directly involved? Then state your pick.\n"
+        "\n"
         "Format your response EXACTLY like this:\n"
         "Reasoning: <one line per candidate, very brief>\n"
         "PICK: <number>\n"
@@ -1292,118 +1311,175 @@ def select_front_page_hero(all_categories):
         resp = client.messages.create(
             model="claude-haiku-4-5-20251001",
             max_tokens=500,
-            messages=[{"role":"user","content":prompt}]
+            messages=[{"role": "user", "content": prompt}]
         )
-        raw  = resp.content[0].text.strip()
-        pick = re.search(r"PICK:\s*(\d+)", raw, re.IGNORECASE)
-        if pick:
-            idx = int(pick.group(1)) - 1
-            if 0 <= idx < len(candidates):
-                chosen = candidates[idx]
-                print(f"  Front page hero: [{chosen['category_label']}] {chosen['hero'].get('headline','')[:60]}")
-                return chosen
+        raw = resp.content[0].text.strip()
+        import re as _re
+        # Prefer the explicit PICK: line; fall back to last number in the text
+        pick_match = _re.search(r"PICK:\s*(\d+)", raw, _re.IGNORECASE)
+        if pick_match:
+            idx = int(pick_match.group(1)) - 1
+        else:
+            nums = _re.findall(r"\d+", raw)
+            idx = int(nums[-1]) - 1 if nums else -1
+        if 0 <= idx < len(candidates):
+            chosen = candidates[idx]
+            print(f"  Front page hero: [{chosen['category_label']}] {chosen['hero'].get('headline','')[:60]}")
+            return chosen
     except Exception as e:
-        print(f"  Hero selection failed: {e}")
-    # Fallback: highest urgency_score
-    return max(candidates, key=lambda c: int(c["hero"].get("urgency_score",0) or 0))
+        print(f"  Front page hero selection failed ({e}), falling back to score-based")
 
-# -- GLOBAL RANK (front page card ordering + semantic dedup) --
+    # Fallback: score-based selection
+    top_cat = max(candidates, key=_fp_score)
+    if _fp_score(top_cat) < 5:
+        top_cat = max(all_categories, key=_fp_score)
+    return top_cat
+
+
+def promote_duplicate_heroes(top_cat, all_categories):
+    """If any other category's hero covers the same underlying story as the front page
+    hero, promote that category's next non-duplicate card to be its hero instead.
+    Uses Claude for reliable semantic matching (string matching is too brittle for
+    rewritten headlines). Mutates all_categories in place."""
+    fp_headline = top_cat["hero"].get("headline", "")
+    fp_key      = top_cat["category_key"]
+    others      = [c for c in all_categories if c["category_key"] != fp_key]
+    if not others or not fp_headline:
+        return
+
+    listing = "\n".join(f"{i+1}. {c['hero'].get('headline','')}" for i, c in enumerate(others))
+    prompt = (
+        f"The lead front-page story is:\n\"{fp_headline}\"\n\n"
+        f"Here are other section lead headlines:\n{listing}\n\n"
+        "Which of these numbered headlines cover the SAME underlying event as the lead story? "
+        "Same event means the same action by the same actors at the same time, even if worded "
+        "completely differently (e.g. 'US strikes Iran' and 'US military hits Iranian launch site' "
+        "are the same event).\n"
+        "Return ONLY a JSON array of the numbers that are duplicates of the lead story. "
+        "If none are duplicates, return []."
+    )
+    try:
+        resp = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=200,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        raw = resp.content[0].text.strip()
+        if raw.startswith("```"):
+            raw = raw.split("```")[1].lstrip("json").strip()
+        dupes = set(int(x) for x in json.loads(raw))
+    except Exception as e:
+        print(f"  Hero dedup failed ({e}), leaving heroes as-is")
+        return
+
+    for i, cat in enumerate(others):
+        if (i + 1) in dupes:
+            cards = cat.get("cards", [])
+            if cards:
+                promoted = cards[0]
+                cat["hero"] = {
+                    "headline":      promoted.get("headline", ""),
+                    "body":          promoted.get("body", ""),
+                    "teaser":        promoted.get("teaser", ""),
+                    "urgency_score": promoted.get("urgency_score", 0),
+                    "published":     promoted.get("published", ""),
+                    "image_url":     promoted.get("image_url", ""),
+                    "image_credit":  promoted.get("image_credit", ""),
+                    "link":          promoted.get("link", ""),
+                }
+                cat["cards"] = cards[1:]
+                print(f"  Promoted next card to hero for {cat['category_label']} (was duplicate of front page hero)")
+
 
 def global_rank(all_cards, dedupe_against=None):
-    if not all_cards: return all_cards
-    stories = [f"{i+1}. [{c.get('cat_label','')}] {c.get('headline','')}" for i,c in enumerate(all_cards)]
-    n = len(all_cards)
+    """Final global ranking — sends all headlines to Claude for true cross-category
+    ordering AND semantic deduplication. Claude identifies stories that cover the same
+    underlying event and keeps only the most important version.
+
+    dedupe_against: optional headline string (e.g. the front page hero) that stories
+    should also be deduplicated against — any story covering that same event is dropped.
+    """
+    if not all_cards:
+        return all_cards
+
+    ranked_input = all_cards
+    stories = []
+    for i, c in enumerate(ranked_input):
+        cat   = c.get("cat_label", "")
+        head  = c.get("headline", "")
+        stories.append(f"{i+1}. [{cat}] {head}")
+    stories_text = "\n".join(stories)
+    n = len(ranked_input)
+
     dedupe_clause = ""
     if dedupe_against:
         dedupe_clause = (
             f"\nThe lead story already shown is: \"{dedupe_against}\"\n"
-            "EXCLUDE any story covering this same underlying event.\n"
+            "EXCLUDE any story from your list that covers this same underlying event, "
+            "even if worded very differently or framed from a different angle.\n"
         )
+
     prompt = (
         f"Rank these {n} Treasure Coast local news stories by importance and relevance to LOCAL residents of Martin, St. Lucie, and Indian River counties.\n"
-        f"{dedupe_clause}\n"
-        "DEDUPLICATION: If multiple stories cover the same event, keep only the best version.\n\n"
-        "RANKING PRIORITY — local relevance is everything:\n"
-        "1. LOCAL government decisions directly affecting residents (county/city commission votes, zoning, budgets, school board actions)\n"
-        "2. LOCAL public safety (serious crimes, accidents, emergencies affecting the Treasure Coast community)\n"
-        "3. LOCAL business and development (jobs, new businesses, closings, real estate, major projects)\n"
-        "4. LOCAL schools and education news\n"
-        "5. State news with DIRECT local impact (a Florida law specifically affecting these counties, a state agency ruling on a local issue)\n"
-        "6. LOCAL sports and community events\n"
-        "7. National or state news with indirect/no local connection — rank these LOWEST. A national political story belongs at the bottom unless it has a named direct effect on Martin, St. Lucie, or Indian River County.\n\n"
-        "The audience lives here. A county commission vote on a new development matters more to them than a national headline with no local angle.\n\n"
-        + "\n".join(stories) + "\n\n"
-        "Return ONLY a JSON array of numbers in ranked order, duplicates removed. Example: [3,1,7,2]"
+        "\n"
+        "CRITICAL DEDUPLICATION RULE: Many of these stories cover the SAME underlying event "
+        "from different angles or with different wording (e.g. 'US strikes Iran' and "
+        "'US military shoots down Iranian drones, hits launch site' are the SAME event). "
+        "Identify every cluster of stories about the same event and keep ONLY the single "
+        "best version of each. Drop all the others entirely. Two stories are the same event "
+        "if they describe the same action, by the same actors, at the same time — regardless "
+        "of how differently they are phrased.\n"
+        + dedupe_clause +
+        "\n"
+        "PRIMARY signal: consequence and US relevance combined.\n"
+        "SECONDARY signal: recency — edited timestamps do not make old stories new.\n"
+        "Apply this weighting:\n"
+        "1. Major foreign policy events (military action, peace deals, sanctions, treaty changes), especially involving oil/trade routes or major allies: TOP TIER — these affect millions and reshape global affairs\n"
+        "2. Direct US impact on millions of Americans (economy-wide policy, national security incidents, major Supreme Court rulings, mass casualties): very high\n"
+        "3. Significant domestic political developments (major legislation, executive actions with broad impact, presidential decisions): high\n"
+        "4. Major business stories that affect consumers/economy broadly (Fed decisions, major industry collapses, jobs reports): high\n"
+        "5. Company-specific news (funding rounds, single-company earnings, executive changes, IPO plans): MEDIUM — even huge funding rounds for private companies rank BELOW major foreign policy or national news. A $10B Anthropic round is less important than a US-Iran de-escalation deal.\n"
+        "5b. Foreign economic indicators (China factory/PMI data, foreign GDP, foreign central bank moves): LOWER for a US audience unless they trigger an immediate, named US market reaction. 'China factory activity contracts' is a routine indicator that interests economists but should NOT be a top card on a US front page — rank it well below US domestic news, US policy, and major US-relevant world events.\n"
+        "6. International tragedies with no direct US connection: belong in World but should NOT lead. Rank below any US-relevant story.\n"
+        "7. Follow-up stories: rank below genuinely new stories\n"
+        "8. Sports, entertainment: rank below policy and crisis stories unless exceptionally significant\n"
+        "When two stories seem equally important, use recency as a tiebreaker.\n\n"
+        f"{stories_text}\n\n"
+        "Return ONLY a JSON array of the original numbers, in ranked order, most important first, "
+        "with all duplicates removed (only the best version of each distinct event included).\n"
+        "Example: [4, 1, 12, 7]"
     )
     try:
         resp = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=400,
-            messages=[{"role":"user","content":prompt}]
+            max_tokens=600,
+            messages=[{"role": "user", "content": prompt}]
         )
         raw = resp.content[0].text.strip()
-        if raw.startswith("```"): raw = raw.split("```")[1].lstrip("json").strip()
+        if raw.startswith("```"):
+            raw = raw.split("```")[1].lstrip("json").strip()
         indices = json.loads(raw)
         seen, ranked = set(), []
         for idx in indices:
-            i = int(idx)-1
+            i = int(idx) - 1
             if 0 <= i < n and i not in seen:
-                seen.add(i); ranked.append(all_cards[i])
-        if len(ranked) < max(3, n//3):
-            for i,c in enumerate(all_cards):
-                if i not in seen: ranked.append(c)
-        print(f"  Global ranking: {len(ranked)} stories (from {n})")
+                seen.add(i)
+                ranked.append(ranked_input[i])
+        # NOTE: stories Claude omitted are treated as duplicates and intentionally dropped.
+        # Only append back un-ranked stories if Claude returned suspiciously few (failure guard).
+        if len(ranked) < max(3, n // 3):
+            for i, card in enumerate(ranked_input):
+                if i not in seen:
+                    ranked.append(card)
+        print(f"  Global ranking: {len(ranked)} stories after dedup (from {n})")
         return ranked
     except Exception as e:
-        print(f"  Global ranking failed ({e}), using fallback")
+        print(f"  Global ranking failed ({e}), using urgency_score fallback")
         return all_cards
 
-# -- PROMOTE DUPLICATE HEROES --
 
-def promote_duplicate_heroes(top_cat, all_categories):
-    fp_headline = top_cat["hero"].get("headline","")
-    fp_key      = top_cat["category_key"]
-    others = [c for c in all_categories if c["category_key"] != fp_key]
-    if not others or not fp_headline: return
-
-    listing = "\n".join(f"{i+1}. {c['hero'].get('headline','')}" for i,c in enumerate(others))
-    prompt = (
-        f"The lead front-page story is:\n\"{fp_headline}\"\n\n"
-        f"These are other section lead headlines:\n{listing}\n\n"
-        "Which numbered headlines cover the SAME underlying event as the lead? "
-        "Return ONLY a JSON array of matching numbers, e.g. [2,4]. If none match, return []."
-    )
-    try:
-        resp = client.messages.create(
-            model="claude-haiku-4-5-20251001",
-            max_tokens=100,
-            messages=[{"role":"user","content":prompt}]
-        )
-        raw = resp.content[0].text.strip()
-        if raw.startswith("```"): raw = raw.split("```")[1].lstrip("json").strip()
-        dupes = set(int(x) for x in json.loads(raw))
-    except Exception as e:
-        print(f"  Hero dedup failed ({e})")
-        return
-    for i, cat in enumerate(others):
-        if (i+1) in dupes:
-            cards = cat.get("cards",[])
-            if cards:
-                promoted = cards[0]
-                old_hero = cat["hero"]
-                if not old_hero.get("teaser"):
-                    body = old_hero.get("body","").strip()
-                    first = body.split(". ")[0].strip()
-                    old_hero["teaser"] = (first[:160]+".") if first else ""
-                cat["hero"]  = promoted
-                cat["cards"] = cards[1:] + [old_hero]
-                print(f"  Promoted next card for {cat['category_label']} (was duplicate)")
-
-# -- RENDER INDEX.HTML --
 
 def render_index(all_categories, top_cat):
-
-    # All categories get a section label — counties get "X County News", topics get "Treasure Coast X News"
     COUNTY_KEYS = {"martin", "st_lucie", "indian_river"}
     SECTION_LABELS = {
         "martin":       "Martin County News",
@@ -1428,23 +1504,20 @@ def render_index(all_categories, top_cat):
         pub_time    = hero.get("published", "")
         display     = "" if visible else ' style="display:none"'
         fade        = " fade-in" if visible else ""
-        # Look up the actual archived slug for this story so the share URL
-        # points to the real article page rather than a freshly-computed slug
-        # that may not match what was actually written to disk.
-        archive      = load_archive(OUTPUT_DIR / "archive.json")
-        matched      = find_matching_entry(hero.get("headline",""), archive, hero.get("link",""))
+        archive     = load_archive(OUTPUT_DIR / "archive.json")
+        matched     = find_matching_entry(hero.get("headline",""), archive, hero.get("link",""))
         if matched:
             slug = matched["slug"]
         else:
             today = datetime.utcnow().strftime("%Y-%m-%d")
             slug  = f"{today}-{slugify(hero.get('headline', ''))}"
         article_url = f"{SITE_URL}/articles/{slug}.html"
-        # Section label for SEO — all categories except Top News get one
         section_label = ""
         if cat_key in SECTION_LABELS:
             seo_text  = SECTION_LABELS[cat_key]
             label_cls = "county-section-label" if cat_key in COUNTY_KEYS else "topic-section-label"
             section_label = f'<div class="{label_cls}"><h2 class="county-label-text">{seo_text}</h2></div>'
+        hl_escaped = hero["headline"].replace('"', "&quot;")
         return f"""
     <section class="hero{fade}" data-cat-hero="{cat_key}"{display}>
       {section_label}
@@ -1460,19 +1533,17 @@ def render_index(all_categories, top_cat):
         <div class="article-expand hero-expand">
           <div class="hero-expand-body">{paragraphs}</div>
           <div class="article-actions">
-            <button class="share-btn" data-headline="{hero["headline"].replace('"', "&quot;")}" data-url="{article_url}" onclick="shareArticle(this)">Share &#8599;</button>
+            <button class="share-btn" data-headline="{hl_escaped}" data-url="{article_url}" onclick="shareArticle(this)">Share &#8599;</button>
             <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
           </div>
         </div>
       </div>
     </section>"""
 
-    # Top News hero + all category heroes
     heroes_html = hero_section("all", top_cat["category_label"], top_cat["hero"], visible=True)
     for cat in all_categories:
         heroes_html += hero_section(cat["category_key"], cat["category_label"], cat["hero"], visible=False)
 
-    # Build card pool
     all_cards_pool = []
     for cat in all_categories:
         for card in cat.get("cards", []):
@@ -1507,6 +1578,7 @@ def render_index(all_categories, top_cat):
         cl              = card.get("cat_label", "")
         card_time       = card.get("published", "")
         topnews_attr    = ' data-topnews="true"' if id(card) in topnews_ids else ""
+        card_hl_esc = card["headline"].replace('"', "&quot;")
         cards_html += f"""
       <div class="article-card fade-in" data-cat="{ck}"{topnews_attr}>
         <span class="card-tag">{cl}</span>
@@ -1519,7 +1591,7 @@ def render_index(all_categories, top_cat):
         <div class="article-expand">
           <div class="card-expand-body">{card_paragraphs}</div>
           <div class="article-actions">
-            <button class="share-btn" data-headline="{card["headline"].replace('"', "&quot;")}" onclick="shareArticle(this)">Share &#8599;</button>
+            <button class="share-btn" data-headline="{card_hl_esc}" onclick="shareArticle(this)">Share &#8599;</button>
             <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
           </div>
         </div>
@@ -1531,24 +1603,9 @@ def render_index(all_categories, top_cat):
         for i, cat in enumerate([None] + all_categories)
     )
 
-    _structured_data = {
-        "@context": "https://schema.org",
-        "@type": "NewsMediaOrganization",
-        "name": "Treasure Coast Today",
-        "url": SITE_URL,
-        "logo": f"{SITE_URL}/favicon.svg",
-        "description": "Local news for Martin County, St. Lucie County, and Indian River County, Florida.",
-        "areaServed": [
-            {"@type": "AdministrativeArea", "name": "Martin County, Florida"},
-            {"@type": "AdministrativeArea", "name": "St. Lucie County, Florida"},
-            {"@type": "AdministrativeArea", "name": "Indian River County, Florida"},
-        ],
-        "sameAs": [f"{SITE_URL}"]
-    }
     _head   = _page_head(
         "Treasure Coast Today | Local News for Martin, St. Lucie & Indian River County",
-        "Local news for the Treasure Coast — Martin County, Port St. Lucie, Fort Pierce, Stuart, Vero Beach, Jensen Beach and surrounding communities. Updated 4 times daily.",
-        structured_data=_structured_data
+        "Local news for the Treasure Coast. Updated 4 times daily.",
     )
     _footer = _page_footer()
 
@@ -1563,161 +1620,348 @@ def render_index(all_categories, top_cat):
       <div class="header-top">
         <a href="/" class="wordmark">Treasure Coast Today</a>
       </div>
-
       <nav class="category-nav">
         {nav_buttons}
         <a href="/archive.html" class="cat-btn" style="text-decoration:none">Archive</a>
         <a href="/events.html" class="cat-btn" style="text-decoration:none">Events</a>
       </nav>
-
       <div class="header-actions">
-        <a href="https://treasurecoast.today/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
+        <a href="/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
       </div>
     </div>
   </header>
-
   <main>
     {heroes_html}
     <div class="articles-grid" id="articlesGrid">
       {cards_html}
     </div>
   </main>
-
 {_footer}
 </body>
 </html>"""
 
 
+def slugify(text):
+    text = text.lower().strip()
+    text = re.sub(r"[^\w\s-]", "", text)
+    text = re.sub(r"[\s_]+", "-", text)
+    text = re.sub(r"-+", "-", text)
+    return text[:80].strip("-")
 
-def render_events_page():
-    """Generate a coming-soon events.html page with email capture for organizers."""
-    head   = _page_head("List Your Event — Treasure Coast Today",
-                        "Coming soon: list your Treasure Coast event for free. Sign up to be notified when the events calendar launches.",
-                        "/events.html")
-    header = _page_header(active="events")
-    footer = _page_footer()
+
+def load_archive(archive_path):
+    try:
+        if archive_path.exists():
+            return json.loads(archive_path.read_text(encoding="utf-8"))
+    except Exception:
+        pass
+    return []
+
+
+def render_article_page(hero, category_label, category_key, pub_date, slug):
+    """Render a permanent article page for a single Plain story."""
+    description = (hero.get("teaser") or hero.get("body", "")[:155]).replace('"', '')
+    image_url   = hero.get("image_url") or f"{SITE_URL}/social-card.png"
+    structured_data = {
+        "@context": "https://schema.org",
+        "@type":    "NewsArticle",
+        "headline": hero.get("headline", ""),
+        "description": description,
+        "image":    image_url,
+        "datePublished": pub_date,
+        "author":    {"@type": "Organization", "name": SITE_NAME},
+        "publisher": {
+            "@type": "Organization",
+            "name":  SITE_NAME,
+            "logo":  {"@type": "ImageObject", "url": f"{SITE_URL}/favicon.svg"},
+        },
+        "mainEntityOfPage": f"{SITE_URL}/articles/{slug}.html",
+    }
+    import json as _json
+    schema_tag = f'  <script type="application/ld+json">{_json.dumps(structured_data)}</script>'
+    body       = make_paragraphs(hero.get("body", ""))
+    img_html   = ""
+    if hero.get("image_url"):
+        credit   = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
+        img_html = f'<figure class="article-hero-image"><img src="{hero["image_url"]}" alt="{hero["headline"]}" loading="eager">{credit}</figure>'
+
+    # Nav for article pages — all absolute URLs since page lives in /articles/
+    nav_links = " ".join([
+        f'<button class="cat-btn" data-cat="{k}" onclick="window.location=\'{SITE_URL}/news.html?cat={k}\'">{l}</button>'
+        for k, l in [("all","Top News"),("world","World"),("us","U.S."),
+                     ("politics","Politics"),("business","Business"),
+                     ("tech","Tech & Science"),("sports","Sports"),("entertainment","Entertainment")]
+    ] + [f'<a href="{SITE_URL}/archive.html" class="cat-btn" style="text-decoration:none">Archive</a>'])
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-{head}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{hero["headline"]} — Plain</title>
+  <meta name="description" content="{description}">
+  <link rel="canonical" href="{SITE_URL}/articles/{slug}.html">
+  <meta property="og:title" content="{hero["headline"]}">
+  <meta property="og:description" content="{description}">
+  <meta property="og:url" content="{SITE_URL}/articles/{slug}.html">
+  <meta property="og:image" content="{image_url}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{image_url}">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+{schema_tag}
   <style>
-    .cs-wrap {{ max-width: 600px; margin: 80px auto 80px; padding: 0 24px; text-align: center; }}
-    .cs-eyebrow {{ font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 16px; }}
-    .cs-headline {{ font-family: 'Fraunces', serif; font-size: clamp(28px, 5vw, 44px); font-weight: 600; line-height: 1.15; color: var(--text); margin: 0 0 20px; letter-spacing: -.02em; }}
-    .cs-sub {{ font-size: 16px; color: var(--text-secondary); line-height: 1.65; margin: 0 0 40px; }}
-    .cs-form {{ display: flex; gap: 10px; max-width: 440px; margin: 0 auto 16px; }}
-    .cs-input {{ flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); outline: none; transition: border-color .15s; }}
-    .cs-input:focus {{ border-color: var(--accent); }}
-    .cs-input::placeholder {{ color: var(--text-secondary); opacity: .5; }}
-    .cs-btn {{ background: var(--accent); color: white; border: none; border-radius: 8px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: opacity .15s; }}
-    .cs-btn:hover {{ opacity: .88; }}
-    .cs-fine {{ font-size: 12px; color: var(--text-secondary); }}
-    .cs-success {{ display: none; color: var(--accent); font-size: 15px; font-weight: 500; margin-top: 12px; }}
-    .cs-divider {{ border: none; border-top: 1px solid var(--border); margin: 48px 0; }}
-    .cs-also {{ font-size: 14px; color: var(--text-secondary); }}
-    .cs-also a {{ color: var(--accent); text-decoration: none; font-weight: 500; }}
-    @media(max-width:500px) {{ .cs-form {{ flex-direction: column; }} .cs-btn {{ width: 100%; }} }}
+    .article-wrap {{ max-width: 740px; margin: 0 auto; padding: 40px 24px 80px; }}
+    .article-meta {{ display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }}
+    .article-category {{ font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }}
+    .article-date {{ font-size: 11px; color: var(--text-muted); }}
+    .article-headline {{ font-family: "Fraunces", serif; font-size: clamp(26px, 4vw, 42px); font-weight: 600; line-height: 1.15; letter-spacing: -.02em; color: var(--text); margin-bottom: 24px; }}
+    .article-hero-image {{ margin: 0 0 28px; }}
+    .article-hero-image img {{ width: 100%; max-height: 420px; object-fit: cover; border-radius: 8px; display: block; }}
+    .article-body p {{ font-size: 17px; line-height: 1.8; color: var(--text-secondary); margin-bottom: 20px; }}
+    .article-back {{ display: inline-block; font-size: 13px; color: var(--accent); text-decoration: none; margin-bottom: 32px; font-weight: 500; }}
+    .article-back:hover {{ opacity: .7; }}
+    .article-divider {{ border: none; border-top: 1px solid var(--border); margin: 40px 0; }}
+    .article-more {{ font-family: "Fraunces", serif; font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 16px; }}
+    .article-more-link {{ display: inline-block; color: var(--accent); font-size: 14px; font-weight: 500; text-decoration: none; }}
+    .article-more-link:hover {{ opacity: .7; }}
   </style>
 </head>
 <body>
-{header}
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="{SITE_URL}/news.html" class="wordmark">plain</a>
+      <nav class="category-nav">{nav_links}</nav>
+    </div>
+  </header>
   <main>
-    <div class="cs-wrap">
-      <span class="cs-eyebrow">Coming Soon</span>
-      <h1 class="cs-headline">List your Treasure Coast event for free.</h1>
-      <p class="cs-sub">We're building a local events calendar for Martin, St. Lucie, and Indian River counties. Leave your email and we'll let you know when you can submit your event.</p>
-      <form class="cs-form" id="csForm" action="https://formspree.io/f/mqejrpdv" method="POST">
-        <input type="hidden" name="_subject" value="Events calendar interest — Treasure Coast Today">
-        <input class="cs-input" type="email" name="email" placeholder="your@email.com" required>
-        <button class="cs-btn" type="submit">Notify me</button>
-      </form>
-      <p class="cs-fine">No spam. Just a heads-up when the calendar is live.</p>
-      <p class="cs-success" id="csSuccess">&#10003; You're on the list — we'll be in touch!</p>
-      <hr class="cs-divider">
-      <p class="cs-also">In the meantime, check out <a href="/?cat=things_to_do">Things To Do</a> for local event coverage, or <a href="/advertise.html">advertise with us</a> to reach Treasure Coast readers.</p>
+    <div class="article-wrap">
+      <a href="{SITE_URL}/news.html" class="article-back">&larr; Back to Plain</a>
+      <div class="article-meta">
+        <span class="article-category">{category_label}</span>
+        <span class="article-date">{pub_date}</span>
+      </div>
+      <h1 class="article-headline">{hero["headline"]}</h1>
+      {img_html}
+      <div class="article-body">{body}</div>
+      <hr class="article-divider">
+      <p class="article-more">More news</p>
+      <a href="{SITE_URL}/news.html?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
     </div>
   </main>
-{footer}
-  <script>
-    const f=document.getElementById('csForm'),s=document.getElementById('csSuccess');
-    f.addEventListener('submit',async(e)=>{{
-      e.preventDefault();
-      try{{
-        const r=await fetch(f.action,{{method:'POST',body:new FormData(f),headers:{{'Accept':'application/json'}}}});
-        if(r.ok){{f.style.display='none';s.style.display='block';}}
-        else alert('Something went wrong. Please try again.');
-      }}catch(err){{alert('Something went wrong. Please try again.');}}
-    }});
-  </script>
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-wordmark">plain</span>
+      <div class="footer-links">
+        <a href="{SITE_URL}/archive.html">Archive</a>
+        <a href="{SITE_URL}/privacy.html">Privacy</a>
+        <a href="{SITE_URL}/terms.html">Terms</a>
+      </div>
+    </div>
+  </footer>
+  <script src="/main.js"></script>
 </body>
 </html>"""
 
 
-def write_data_json(all_categories, top_cat):
-    def card_to_dict(c):
-        return {
-            "headline":      c.get("headline", ""),
-            "teaser":        c.get("teaser", ""),
-            "body":          c.get("body", ""),
-            "published":     c.get("published", ""),
-            "cat_label":     c.get("cat_label", "") or c.get("category_label", ""),
-            "urgency_score": c.get("urgency_score", 0),
-            "image_url":     c.get("image_url", ""),
-        }
+def render_archive_page(archive_entries):
+    by_month = defaultdict(list)
+    for e in sorted(archive_entries, key=lambda x: x.get("date",""), reverse=True):
+        try:
+            month = e["date"][:7]
+            label = datetime.strptime(month, "%Y-%m").strftime("%B %Y")
+        except Exception:
+            label = "Recent"; month = "recent"
+        by_month[(month, label)].append(e)
 
-    # Build front page cards pool
-    _all = []
-    for cat in all_categories:
-        hero = cat["hero"]
-        _all.append({**hero, "cat_label": cat["category_label"], "is_hero": True})
-        for card in cat.get("cards", []):
-            _all.append({**card, "cat_label": cat["category_label"], "is_hero": False})
-    _all.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
+    months_html = ""
+    for (month_key, month_label), entries in sorted(by_month.items(), reverse=True):
+        items = ""
+        for e in entries:
+            items += f"""
+        <li class="archive-item">
+          <a href="/articles/{e['slug']}.html" class="archive-link">
+            <span class="archive-cat">{e['category_label']}</span>
+            <span class="archive-headline">{e['headline']}</span>
+            <span class="archive-date">{e['date']}</span>
+          </a>
+        </li>"""
+        months_html += f"""
+      <div class="archive-month">
+        <h2 class="archive-month-label">{month_label}</h2>
+        <ul class="archive-list">{items}
+        </ul>
+      </div>"""
 
-    _fp_headline = top_cat["hero"].get("headline", "")
-    _seen = set()
-    _deduped = []
-    for c in _all:
-        h   = c.get("headline", "")
-        key = re.sub(r"[^a-z0-9 ]", "", h.lower())[:60]
-        fp_key = re.sub(r"[^a-z0-9 ]", "", _fp_headline.lower())[:60]
-        if key != fp_key and key not in _seen:
-            _seen.add(key)
-            _deduped.append(c)
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Archive — Plain</title>
+  <meta name="description" content="Every story published on Plain, organized by month.">
+  <link rel="canonical" href="{SITE_URL}/archive.html">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+    .archive-wrap {{ max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }}
+    .archive-eyebrow {{ font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 14px; }}
+    .archive-headline {{ font-family: "Fraunces", serif; font-size: clamp(28px,4vw,40px); font-weight: 600; color: var(--text); margin-bottom: 8px; letter-spacing: -.02em; }}
+    .archive-sub {{ font-size: 15px; color: var(--text-secondary); margin-bottom: 48px; }}
+    .archive-month {{ margin-bottom: 40px; }}
+    .archive-month-label {{ font-family: "Fraunces", serif; font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }}
+    .archive-list {{ list-style: none; }}
+    .archive-item {{ border-bottom: 1px solid var(--border); }}
+    .archive-link {{ display: flex; align-items: baseline; gap: 10px; padding: 12px 0; text-decoration: none; color: inherit; flex-wrap: wrap; }}
+    .archive-link:hover .archive-headline {{ color: var(--accent); }}
+    .archive-cat {{ font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); flex-shrink: 0; }}
+    .archive-headline {{ font-size: 15px; font-weight: 500; color: var(--text); flex: 1; line-height: 1.4; }}
+    .archive-date {{ font-size: 11px; color: var(--text-muted); flex-shrink: 0; margin-left: auto; }}
+    @media(max-width:580px) {{ .archive-date {{ display: none; }} }}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="{SITE_URL}/news.html" class="wordmark">plain</a>
+    </div>
+  </header>
+  <main>
+    <div class="archive-wrap">
+      <span class="archive-eyebrow">Archive</span>
+      <h1 class="archive-headline">All Articles</h1>
+      <p class="archive-sub">Every story published on Plain, organized by month.</p>
+      {months_html}
+    </div>
+  </main>
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-wordmark">plain</span>
+      <div class="footer-links">
+        <a href="{SITE_URL}/privacy.html">Privacy</a>
+        <a href="{SITE_URL}/terms.html">Terms</a>
+      </div>
+    </div>
+  </footer>
+  <script src="/main.js"></script>
+</body>
+</html>"""
 
-    app_data = {
-        "updated": now_et(),
-        "front_page": {
-            "hero": {
-                "headline":      top_cat["hero"].get("headline", ""),
-                "teaser":        top_cat["hero"].get("teaser", ""),
-                "body":          top_cat["hero"].get("body", ""),
-                "image_url":     top_cat["hero"].get("image_url", ""),
-                "image_credit":  top_cat["hero"].get("image_credit", ""),
-                "published":     top_cat["hero"].get("published", ""),
-                "cat_label":     top_cat["category_label"],
-                "urgency_score": top_cat["hero"].get("urgency_score", 0),
-            },
-            "cards": [card_to_dict(c) for c in _deduped[:6]],
-        },
-        "categories": [
-            {
-                "key":   cat["category_key"],
-                "label": cat["category_label"],
-                "hero":  card_to_dict(cat["hero"]),
-                "cards": [card_to_dict(c) for c in cat.get("cards", [])[:6]],
-            }
-            for cat in all_categories
-        ],
-    }
-    (OUTPUT_DIR / "data.json").write_text(
-        json.dumps(app_data, indent=2), encoding="utf-8"
-    )
-    print("  data.json written")
+
+def update_sitemap(archive_entries):
+    now_str = datetime.utcnow().strftime("%Y-%m-%d")
+    static = f"""  <url>
+    <loc>{SITE_URL}/</loc>
+    <changefreq>hourly</changefreq>
+    <priority>1.0</priority>
+    <lastmod>{now_str}</lastmod>
+  </url>
+  <url>
+    <loc>{SITE_URL}/archive.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <lastmod>{now_str}</lastmod>
+  </url>
+  <url>
+    <loc>{SITE_URL}/privacy.html</loc>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>{SITE_URL}/terms.html</loc>
+    <priority>0.3</priority>
+  </url>"""
+    article_urls = "".join(f"""
+  <url>
+    <loc>{SITE_URL}/articles/{e['slug']}.html</loc>
+    <priority>0.7</priority>
+    <lastmod>{e.get('lastmod') or e['date']}</lastmod>
+  </url>""" for e in archive_entries)
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{static}
+{article_urls}
+</urlset>"""
+
+
+def update_news_sitemap(archive_entries):
+    """Google News sitemap — only articles from last 2 days."""
+    from datetime import timedelta
+    cutoff = (datetime.utcnow() - timedelta(days=2)).strftime("%Y-%m-%d")
+    recent = [e for e in archive_entries if e.get("date","") >= cutoff]
+    news_urls = ""
+    for e in recent:
+        pub_date = f"{e['date']}T00:00:00Z"
+        headline = e['headline'].replace('&','&amp;').replace('<','&lt;').replace('>','&gt;').replace('"','&quot;')
+        news_urls += f"""
+  <url>
+    <loc>{SITE_URL}/articles/{e['slug']}.html</loc>
+    <news:news>
+      <news:publication>
+        <news:name>Plain</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>{pub_date}</news:publication_date>
+      <news:title>{headline}</news:title>
+    </news:news>
+  </url>"""
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+{news_urls}
+</urlset>"""
+
+
+ARCHIVE_STOPS = {"the","a","an","in","of","for","to","and","or","on","at","is","was","are",
+                 "were","that","this","with","from","have","been","after","over","into","says",
+                 "said","will","than","more","also","when","s","county","florida","treasure",
+                 "coast","martin","lucie","indian","river","beach","port","city","news"}
+
+def _sig_tokens(text):
+    return frozenset(w.lower().strip(".,;:()") for w in text.split()
+                     if len(w) > 3 and w.lower() not in ARCHIVE_STOPS)
+
+def _is_duplicate_headline(headline, existing_token_sets):
+    new_tok = _sig_tokens(headline)
+    if len(new_tok) < 3:
+        return False
+    for ex_tok in existing_token_sets:
+        if len(new_tok & ex_tok) >= 4:
+            return True
+    return False
+
+
+def find_matching_entry(headline, archive, source_url=""):
+    """Find an existing archive entry for this story using two-tier matching:
+    1. source_url exact match — only when URL has a specific article path
+    2. fuzzy headline match — catches rewrites and same story from different feeds
+    Returns the matching entry dict or None."""
+    if source_url:
+        def norm_url(u):
+            return re.sub(r"[?#].*$", "", u.strip().rstrip("/").lower())
+        norm_src = norm_url(source_url)
+        path_part = re.sub(r"^https?://[^/]+", "", norm_src)
+        if len(path_part) > 10:
+            for entry in archive:
+                if entry.get("source_url") and norm_url(entry["source_url"]) == norm_src:
+                    return entry
+
+    tok = _sig_tokens(headline)
+    if len(tok) < 3:
+        return None
+    for entry in archive:
+        if len(tok & _sig_tokens(entry["headline"])) >= 4:
+            return entry
+    return None
+
 
 
 def _page_head(title, description, canonical_path="", structured_data=None):
-    """Shared HTML head used by every generated page."""
     canonical = f"{SITE_URL}{canonical_path}" if canonical_path else SITE_URL
     schema = ""
     if structured_data:
@@ -1732,12 +1976,7 @@ def _page_head(title, description, canonical_path="", structured_data=None):
   <meta property="og:description" content="{description}">
   <meta property="og:url" content="{canonical}">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Treasure Coast Today">
   <meta property="og:image" content="{SITE_URL}/og-image.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="{SITE_URL}/og-image.png">
   <meta name="geo.region" content="US-FL">
   <meta name="geo.placename" content="Treasure Coast, Florida">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -1745,7 +1984,6 @@ def _page_head(title, description, canonical_path="", structured_data=None):
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 {schema}
-  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-GLJY7M6F3G"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -1756,7 +1994,6 @@ def _page_head(title, description, canonical_path="", structured_data=None):
 
 
 def _page_header(active=""):
-    """Shared site header — two rows on mobile: logo+advertise, then scrollable nav."""
     def cat_link(label, href, key):
         cls = "cat-btn active" if key == active else "cat-btn"
         if key == active:
@@ -1767,7 +2004,6 @@ def _page_header(active=""):
       <div class="header-top">
         <a href="/" class="wordmark">Treasure Coast Today</a>
       </div>
-
       <nav class="category-nav">
         {cat_link("Top News", "/", "news")}
         {cat_link("Local Gov", "/?cat=local_gov", "local_gov")}
@@ -1780,19 +2016,17 @@ def _page_header(active=""):
         {cat_link("Martin Co.", "/?cat=martin", "martin")}
         {cat_link("St. Lucie Co.", "/?cat=st_lucie", "st_lucie")}
         {cat_link("Indian River Co.", "/?cat=indian_river", "indian_river")}
-        {cat_link("Archive", "archive.html", "archive")}
-        {cat_link("Events", "events.html", "events")}
+        {cat_link("Archive", "/archive.html", "archive")}
+        {cat_link("Events", "/events.html", "events")}
       </nav>
-
       <div class="header-actions">
-        <a href="https://treasurecoast.today/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
+        <a href="/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
       </div>
     </div>
   </header>"""
 
 
 def _page_footer():
-    """Shared footer used by every generated page."""
     return """  <footer>
     <div class="footer-inner">
       <span class="footer-wordmark">Treasure Coast Today</span>
@@ -1811,7 +2045,6 @@ def _page_footer():
 
 
 def render_about_page():
-    """Generate about.html — static, only regenerated if this function changes."""
     head   = _page_head("About — Treasure Coast Today", "Treasure Coast Today delivers local news for Martin, St. Lucie, and Indian River counties four times a day.", "/about.html")
     header = _page_header(active="about")
     footer = _page_footer()
@@ -1837,27 +2070,17 @@ def render_about_page():
       <span class="about-eyebrow">About</span>
       <h1 class="about-headline">Local news for Florida's Treasure Coast.</h1>
       <div class="about-body">
-        <p>Treasure Coast Today is a local news source covering Martin County, St. Lucie County, and Indian River County, Florida. We bring residents the stories that matter most close to home — local government, public safety, business and development, schools, sports, and things to do across the Treasure Coast.</p>
-
-        <p>Our focus is simple: the news that actually affects the people who live and work here. From county commission decisions in Stuart to development in Port St. Lucie, school district news in Vero Beach to public safety in Fort Pierce, we keep the community informed about what's happening in their own backyard.</p>
-
-        <h2>Our coverage area</h2>
-        <p>We cover all three Treasure Coast counties with equal dedication:</p>
-        <p><strong>Martin County</strong> — Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno, and surrounding communities.</p>
-        <p><strong>St. Lucie County</strong> — Port St. Lucie, Fort Pierce, St. Lucie West, and the surrounding area.</p>
-        <p><strong>Indian River County</strong> — Vero Beach, Sebastian, Fellsmere, and nearby communities.</p>
-        <p>We also cover statewide Florida news that affects Treasure Coast residents, from legislation in Tallahassee to issues touching the entire region. Stories are organized by both topic and county, so readers can quickly find the local news most relevant to them.</p>
-
-        <h2>Our mission</h2>
-        <p>Local news strengthens communities. When residents know what's happening in their towns, they make better decisions, get more involved, and hold their institutions accountable. Treasure Coast Today exists to make staying informed about local news effortless for everyone on the Treasure Coast.</p>
-
+        <p>Treasure Coast Today is a local news source covering Martin County, St. Lucie County, and Indian River County, Florida. We bring residents the stories that matter most close to home.</p>
+        <p>Our focus is simple: the news that actually affects the people who live and work here. From county commission decisions in Stuart to development in Port St. Lucie, school district news in Vero Beach to public safety in Fort Pierce.</p>
+        <h2>Coverage area</h2>
+        <p><strong>Martin County</strong> — Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno.</p>
+        <p><strong>St. Lucie County</strong> — Port St. Lucie, Fort Pierce, St. Lucie West.</p>
+        <p><strong>Indian River County</strong> — Vero Beach, Sebastian, Fellsmere.</p>
         <h2>Advertise with us</h2>
-        <p>Treasure Coast Today connects local businesses with engaged readers across Martin, St. Lucie, and Indian River counties. If your business serves the Treasure Coast community, we'd love to help you reach them. <a href="/advertise.html" class="about-contact">Learn more about advertising &rarr;</a></p>
-
+        <p>Connect your business with engaged local readers. <a href="/advertise.html" class="about-contact">Learn more &rarr;</a></p>
         <hr class="about-divider">
-
         <h2>Get in touch</h2>
-        <p>Have a news tip, question, or correction? We'd love to hear from you at <a href="mailto:hello@treasurecoast.today" class="about-contact">hello@treasurecoast.today</a></p>
+        <p><a href="mailto:hello@treasurecoast.today" class="about-contact">hello@treasurecoast.today</a></p>
       </div>
     </div>
   </main>
@@ -1866,9 +2089,58 @@ def render_about_page():
 </html>"""
 
 
+def render_events_page():
+    head   = _page_head("Events — Treasure Coast Today", "Treasure Coast events coming soon.", "/events.html")
+    header = _page_header(active="events")
+    footer = _page_footer()
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{head}
+  <style>
+    .cs-wrap {{ max-width: 600px; margin: 80px auto; padding: 0 24px; text-align: center; }}
+    .cs-eyebrow {{ font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 16px; }}
+    .cs-headline {{ font-family: 'Fraunces', serif; font-size: clamp(28px, 5vw, 44px); font-weight: 600; line-height: 1.15; color: var(--text); margin: 0 0 20px; }}
+    .cs-sub {{ font-size: 16px; color: var(--text-secondary); line-height: 1.65; margin: 0 0 40px; }}
+    .cs-form {{ display: flex; gap: 10px; max-width: 440px; margin: 0 auto 16px; }}
+    .cs-input {{ flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); outline: none; }}
+    .cs-input:focus {{ border-color: var(--accent); }}
+    .cs-btn {{ background: var(--accent); color: white; border: none; border-radius: 8px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; }}
+    .cs-fine {{ font-size: 12px; color: var(--text-secondary); }}
+    .cs-success {{ display: none; color: var(--accent); font-size: 15px; font-weight: 500; margin-top: 12px; }}
+  </style>
+</head>
+<body>
+{header}
+  <main>
+    <div class="cs-wrap">
+      <span class="cs-eyebrow">Coming Soon</span>
+      <h1 class="cs-headline">List your Treasure Coast event for free.</h1>
+      <p class="cs-sub">We're building a local events calendar. Leave your email and we'll notify you when it launches.</p>
+      <form class="cs-form" id="csForm" action="https://formspree.io/f/mqejrpdv" method="POST">
+        <input type="hidden" name="_subject" value="Events calendar interest">
+        <input class="cs-input" type="email" name="email" placeholder="your@email.com" required>
+        <button class="cs-btn" type="submit">Notify me</button>
+      </form>
+      <p class="cs-fine">No spam. Just a heads-up when the calendar is live.</p>
+      <p class="cs-success" id="csSuccess">You're on the list!</p>
+    </div>
+  </main>
+{footer}
+  <script>
+    const f=document.getElementById('csForm'),s=document.getElementById('csSuccess');
+    f.addEventListener('submit',async(e)=>{{
+      e.preventDefault();
+      const r=await fetch(f.action,{{method:'POST',body:new FormData(f),headers:{{'Accept':'application/json'}}}});
+      if(r.ok){{f.style.display='none';s.style.display='block';}}
+    }});
+  </script>
+</body>
+</html>"""
+
+
 def render_advertise_page():
-    """Generate advertise.html — Formspree contact form for ad inquiries."""
-    head   = _page_head("Advertise — Treasure Coast Today", "Reach thousands of Treasure Coast readers every day. Advertise with Treasure Coast Today.", "/advertise.html")
+    head   = _page_head("Advertise — Treasure Coast Today", "Reach Treasure Coast readers every day.", "/advertise.html")
     header = _page_header(active="advertise")
     footer = _page_footer()
     return f"""<!DOCTYPE html>
@@ -1878,36 +2150,21 @@ def render_advertise_page():
   <style>
     .adv-wrap {{ max-width: 720px; margin: 56px auto 80px; padding: 0 24px; }}
     .adv-eyebrow {{ font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; display: block; }}
-    .adv-headline {{ font-family: 'Fraunces', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 600; line-height: 1.1; color: var(--text); margin: 0 0 20px; letter-spacing: -.02em; }}
+    .adv-headline {{ font-family: 'Fraunces', serif; font-size: clamp(32px, 5vw, 52px); font-weight: 600; line-height: 1.1; color: var(--text); margin: 0 0 20px; }}
     .adv-sub {{ font-size: 16px; color: var(--text-secondary); line-height: 1.65; margin: 0 0 40px; max-width: 560px; }}
     .adv-stats {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 48px; }}
     .adv-stat {{ background: var(--bg); padding: 20px 18px; text-align: center; }}
     .adv-stat-num {{ font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600; color: var(--accent); display: block; line-height: 1; margin-bottom: 6px; }}
     .adv-stat-label {{ font-size: 12px; color: var(--text-secondary); line-height: 1.4; }}
-    .adv-divider {{ border: none; border-top: 1px solid var(--border); margin: 0 0 40px; }}
-    .adv-form-title {{ font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500; color: var(--text); margin: 0 0 28px; }}
-    .adv-form {{ display: flex; flex-direction: column; gap: 20px; }}
-    .adv-row {{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }}
+    .adv-form {{ display: flex; flex-direction: column; gap: 20px; margin-top: 40px; }}
     .adv-field {{ display: flex; flex-direction: column; gap: 6px; }}
     .adv-field label {{ font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-secondary); }}
-    .adv-field input, .adv-field select, .adv-field textarea {{ background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 11px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); outline: none; transition: border-color .15s; width: 100%; box-sizing: border-box; -webkit-appearance: none; }}
-    .adv-field input:focus, .adv-field select:focus, .adv-field textarea:focus {{ border-color: var(--accent); }}
-    .adv-field select {{ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230A7075' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }}
+    .adv-field input, .adv-field textarea {{ background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 11px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); outline: none; width: 100%; box-sizing: border-box; }}
+    .adv-field input:focus, .adv-field textarea:focus {{ border-color: var(--accent); }}
     .adv-field textarea {{ resize: vertical; min-height: 100px; }}
-    .adv-field input::placeholder, .adv-field textarea::placeholder {{ color: var(--text-secondary); opacity: .5; }}
-    .adv-check-group {{ display: flex; flex-direction: column; gap: 10px; }}
-    .adv-check {{ display: flex; align-items: center; gap: 10px; cursor: pointer; }}
-    .adv-check input[type="checkbox"] {{ width: 16px; height: 16px; min-width: 16px; accent-color: var(--accent); cursor: pointer; padding: 0; }}
-    .adv-check span {{ font-size: 14px; color: var(--text); line-height: 1.4; }}
-    .adv-submit {{ background: var(--accent); color: white; border: none; border-radius: 8px; padding: 14px 28px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity .15s; align-self: flex-start; }}
-    .adv-submit:hover {{ opacity: .88; }}
-    .adv-submit:disabled {{ opacity: .5; cursor: not-allowed; }}
-    .adv-success {{ display: none; background: var(--bg); border: 1px solid var(--accent); border-radius: 12px; padding: 32px; text-align: center; }}
-    .adv-success-icon {{ font-size: 36px; display: block; margin-bottom: 12px; }}
-    .adv-success h3 {{ font-family: 'Fraunces', serif; font-size: 22px; color: var(--text); margin: 0 0 8px; }}
-    .adv-success p {{ font-size: 14px; color: var(--text-secondary); margin: 0; }}
-    .adv-fine {{ font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin-top: 4px; }}
-    @media (max-width: 580px) {{ .adv-wrap {{ margin-top: 32px; }} .adv-row {{ grid-template-columns: 1fr; }} .adv-stats {{ grid-template-columns: 1fr; }} .adv-submit {{ width: 100%; text-align: center; }} }}
+    .adv-submit {{ background: var(--accent); color: white; border: none; border-radius: 8px; padding: 14px 28px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; align-self: flex-start; }}
+    .adv-success {{ display: none; color: var(--accent); font-size: 16px; font-weight: 500; margin-top: 20px; }}
+    @media (max-width: 580px) {{ .adv-stats {{ grid-template-columns: 1fr; }} .adv-submit {{ width: 100%; }} }}
   </style>
 </head>
 <body>
@@ -1916,63 +2173,20 @@ def render_advertise_page():
     <div class="adv-wrap">
       <span class="adv-eyebrow">Advertising</span>
       <h1 class="adv-headline">Reach the Treasure Coast every day.</h1>
-      <p class="adv-sub">Treasure Coast Today delivers local news to Martin, St. Lucie, and Indian River County residents four times daily. Your business appears alongside stories they actually read.</p>
+      <p class="adv-sub">Treasure Coast Today delivers local news to Martin, St. Lucie, and Indian River County residents four times daily.</p>
       <div class="adv-stats">
-        <div class="adv-stat"><span class="adv-stat-num">706K+</span><span class="adv-stat-label">Residents across Martin, St. Lucie &amp; Indian River counties</span></div>
-        <div class="adv-stat"><span class="adv-stat-num">100%</span><span class="adv-stat-label">No paywall — every reader sees your ad, every time</span></div>
-        <div class="adv-stat"><span class="adv-stat-num">Top 5</span><span class="adv-stat-label">Fastest-growing metro in the U.S. — new residents every day</span></div>
-        <div class="adv-stat"><span class="adv-stat-num">4&times;</span><span class="adv-stat-label">Daily updates — readers return morning, noon, evening &amp; night</span></div>
-        <div class="adv-stat"><span class="adv-stat-num">Local</span><span class="adv-stat-label">Readers who live, work, own homes, and spend here</span></div>
+        <div class="adv-stat"><span class="adv-stat-num">706K+</span><span class="adv-stat-label">Residents across three counties</span></div>
+        <div class="adv-stat"><span class="adv-stat-num">100%</span><span class="adv-stat-label">No paywall</span></div>
+        <div class="adv-stat"><span class="adv-stat-num">4x</span><span class="adv-stat-label">Daily updates</span></div>
       </div>
-      <hr class="adv-divider">
-      <h2 class="adv-form-title">Tell us about your business</h2>
       <form class="adv-form" id="advForm" action="https://formspree.io/f/mqejrpdv" method="POST">
-        <div class="adv-row">
-          <div class="adv-field"><label for="name">Your name *</label><input type="text" id="name" name="name" required placeholder="Jane Smith"></div>
-          <div class="adv-field"><label for="business">Business name *</label><input type="text" id="business" name="business" required placeholder="Sunrise Realty"></div>
-        </div>
-        <div class="adv-row">
-          <div class="adv-field"><label for="email">Email address *</label><input type="email" id="email" name="email" required placeholder="jane@example.com"></div>
-          <div class="adv-field"><label for="phone">Phone number</label><input type="tel" id="phone" name="phone" placeholder="(772) 555-0100"></div>
-        </div>
-        <div class="adv-field"><label for="website">Website</label><input type="url" id="website" name="website" placeholder="https://yourbusiness.com"></div>
-        <div class="adv-field">
-          <label for="industry">Industry / business type *</label>
-          <select id="industry" name="industry" required>
-            <option value="" disabled selected>Select one</option>
-            <option>Real estate</option><option>Restaurant / food &amp; beverage</option><option>Healthcare / medical</option><option>Legal services</option><option>Home services / contractors</option><option>Retail</option><option>Financial services</option><option>Automotive</option><option>Non-profit / community org</option><option>Events / entertainment</option><option>Education</option><option>Tourism / hospitality</option><option>Other</option>
-          </select>
-        </div>
-        <div class="adv-field">
-          <label>Which counties are most important for your audience?</label>
-          <div class="adv-check-group">
-            <label class="adv-check"><input type="checkbox" name="counties" value="Martin County"><span>Martin County (Stuart, Jensen Beach, Palm City, Hobe Sound)</span></label>
-            <label class="adv-check"><input type="checkbox" name="counties" value="St. Lucie County"><span>St. Lucie County (Port St. Lucie, Fort Pierce)</span></label>
-            <label class="adv-check"><input type="checkbox" name="counties" value="Indian River County"><span>Indian River County (Vero Beach, Sebastian)</span></label>
-            <label class="adv-check"><input type="checkbox" name="counties" value="All three counties"><span>All three counties</span></label>
-          </div>
-        </div>
-        <div class="adv-field">
-          <label for="budget">Estimated monthly budget</label>
-          <select id="budget" name="budget"><option value="" disabled selected>Select a range</option><option>Under $250/month</option><option>$250 – $500/month</option><option>$500 – $1,000/month</option><option>$1,000 – $2,500/month</option><option>$2,500+/month</option><option>Not sure yet</option></select>
-        </div>
-        <div class="adv-field">
-          <label for="goal">What's the main goal of your advertising?</label>
-          <select id="goal" name="goal"><option value="" disabled selected>Select one</option><option>Drive traffic to my website</option><option>Increase foot traffic / calls</option><option>Promote a specific event or offer</option><option>Build brand awareness in the area</option><option>Reach new customers in a specific county</option><option>Other</option></select>
-        </div>
-        <div class="adv-field">
-          <label for="start">When are you looking to start?</label>
-          <select id="start" name="start"><option value="" disabled selected>Select one</option><option>As soon as possible</option><option>Within the next month</option><option>1–3 months from now</option><option>Just exploring for now</option></select>
-        </div>
-        <div class="adv-field"><label for="message">Anything else you'd like us to know?</label><textarea id="message" name="message" placeholder="Tell us about your business, upcoming promotions, or any questions..."></textarea></div>
-        <p class="adv-fine">We'll get back to you within one business day. No spam, no automated sales sequences.</p>
+        <div class="adv-field"><label>Name *</label><input type="text" name="name" required placeholder="Jane Smith"></div>
+        <div class="adv-field"><label>Business *</label><input type="text" name="business" required placeholder="Sunrise Realty"></div>
+        <div class="adv-field"><label>Email *</label><input type="email" name="email" required placeholder="jane@example.com"></div>
+        <div class="adv-field"><label>Message</label><textarea name="message" placeholder="Tell us about your business..."></textarea></div>
         <button type="submit" class="adv-submit" id="submitBtn">Send inquiry &rarr;</button>
       </form>
-      <div class="adv-success" id="successMsg">
-        <span class="adv-success-icon">&#10003;</span>
-        <h3>Got it — thanks!</h3>
-        <p>We'll be in touch within one business day.</p>
-      </div>
+      <p class="adv-success" id="successMsg">Got it! We'll be in touch within one business day.</p>
     </div>
   </main>
 {footer}
@@ -1980,354 +2194,105 @@ def render_advertise_page():
     const form=document.getElementById('advForm'),success=document.getElementById('successMsg'),btn=document.getElementById('submitBtn');
     form.addEventListener('submit',async(e)=>{{
       e.preventDefault();btn.disabled=true;btn.textContent='Sending...';
-      try{{
-        const res=await fetch(form.action,{{method:'POST',body:new FormData(form),headers:{{'Accept':'application/json'}}}});
-        if(res.ok){{form.style.display='none';success.style.display='block';}}
-        else{{btn.disabled=false;btn.textContent='Send inquiry \u2192';alert('Something went wrong. Please try again.');}}
-      }}catch(err){{btn.disabled=false;btn.textContent='Send inquiry \u2192';alert('Something went wrong. Please try again.');}}
+      const res=await fetch(form.action,{{method:'POST',body:new FormData(form),headers:{{'Accept':'application/json'}}}});
+      if(res.ok){{form.style.display='none';success.style.display='block';}}
+      else{{btn.disabled=false;btn.textContent='Send inquiry \u2192';}}
     }});
   </script>
 </body>
 </html>"""
 
 
-def slugify(text):
-    """Convert a headline to a URL-safe slug."""
-    text = text.lower().strip()
-    text = re.sub(r"[^\w\s-]", "", text)
-    text = re.sub(r"[\s_]+", "-", text)
-    text = re.sub(r"-+", "-", text)
-    return text[:80].strip("-")
-
-
-def load_archive(archive_path):
-    """Load the existing archive metadata or return empty list."""
-    try:
-        if archive_path.exists():
-            return json.loads(archive_path.read_text(encoding="utf-8"))
-    except Exception:
-        pass
-    return []
-
-
-def render_article_page(hero, category_label, category_key, pub_date, slug):
-    """Render a permanent article page for a single hero story."""
-    description = (hero.get("teaser") or hero.get("body", "")[:155]).replace('"', '')
-    image_url = hero.get("image_url") or f"{SITE_URL}/og-image.png"
-
-    structured_data = {
-        "@context": "https://schema.org",
-        "@type": "NewsArticle",
-        "headline": hero.get("headline", ""),
-        "description": description,
-        "image": image_url,
-        "datePublished": pub_date,
-        "author": {"@type": "Organization", "name": SITE_NAME},
-        "publisher": {
-            "@type": "Organization",
-            "name": SITE_NAME,
-            "logo": {"@type": "ImageObject", "url": f"{SITE_URL}/favicon.svg"},
+def write_data_json(all_categories, top_cat):
+    def card_to_dict(c):
+        return {
+            "headline":      c.get("headline", ""),
+            "teaser":        c.get("teaser", ""),
+            "body":          c.get("body", ""),
+            "published":     c.get("published", ""),
+            "cat_label":     c.get("cat_label", "") or c.get("category_label", ""),
+            "urgency_score": c.get("urgency_score", 0),
+            "image_url":     c.get("image_url", ""),
+        }
+    _all = []
+    for cat in all_categories:
+        hero = cat["hero"]
+        _all.append({**hero, "cat_label": cat["category_label"], "is_hero": True})
+        for card in cat.get("cards", []):
+            _all.append({**card, "cat_label": cat["category_label"], "is_hero": False})
+    _all.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
+    fp_key = re.sub(r"[^a-z0-9 ]", "", top_cat["hero"].get("headline","").lower())[:60]
+    seen, deduped = set(), []
+    for c in _all:
+        k = re.sub(r"[^a-z0-9 ]", "", c.get("headline","").lower())[:60]
+        if k != fp_key and k not in seen:
+            seen.add(k); deduped.append(c)
+    app_data = {
+        "updated": now_et(),
+        "front_page": {
+            "hero": {
+                "headline":      top_cat["hero"].get("headline", ""),
+                "teaser":        top_cat["hero"].get("teaser", ""),
+                "body":          top_cat["hero"].get("body", ""),
+                "image_url":     top_cat["hero"].get("image_url", ""),
+                "image_credit":  top_cat["hero"].get("image_credit", ""),
+                "published":     top_cat["hero"].get("published", ""),
+                "cat_label":     top_cat["category_label"],
+                "urgency_score": top_cat["hero"].get("urgency_score", 0),
+            },
+            "cards": [card_to_dict(c) for c in deduped[:6]],
         },
-        "mainEntityOfPage": f"{SITE_URL}/articles/{slug}.html",
+        "categories": [
+            {
+                "key":   cat["category_key"],
+                "label": cat["category_label"],
+                "hero":  card_to_dict(cat["hero"]),
+                "cards": [card_to_dict(c) for c in cat.get("cards", [])[:6]],
+            }
+            for cat in all_categories
+        ],
     }
+    (OUTPUT_DIR / "data.json").write_text(json.dumps(app_data, indent=2), encoding="utf-8")
+    print("  data.json written")
 
-    head = _page_head(
-        f"{hero['headline']} — Treasure Coast Today",
-        description,
-        f"/articles/{slug}.html",
-        structured_data=structured_data,
-    )
-    header = _page_header(active=category_key)
-    footer = _page_footer()
-    body = make_paragraphs(hero.get("body", ""))
-
-    img_html = ""
-    if hero.get("image_url"):
-        credit = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
-        img_html = f'<figure class="article-hero-image"><img src="{hero["image_url"]}" alt="{hero["headline"]}" loading="eager">{credit}</figure>'
-
-    return f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-{head}
-  <style>
-    .article-wrap {{ max-width: 740px; margin: 0 auto; padding: 40px 24px 80px; }}
-    .article-meta {{ display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }}
-    .article-category {{ font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }}
-    .article-date {{ font-size: 11px; color: var(--text-muted); }}
-    .article-headline {{ font-family: "Fraunces", serif; font-size: clamp(26px, 4vw, 42px); font-weight: 600; line-height: 1.15; letter-spacing: -.02em; color: var(--text); margin-bottom: 24px; }}
-    .article-hero-image {{ margin: 0 0 28px; }}
-    .article-hero-image img {{ width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px; display: block; }}
-    .article-body p {{ font-size: 17px; line-height: 1.8; color: var(--text-secondary); margin-bottom: 20px; }}
-    .article-back {{ display: inline-block; font-size: 13px; color: var(--accent); text-decoration: none; margin-bottom: 32px; font-weight: 500; }}
-    .article-back:hover {{ opacity: .7; }}
-    .article-divider {{ border: none; border-top: 1px solid var(--border); margin: 40px 0; }}
-    .article-more {{ font-family: "Fraunces", serif; font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 16px; }}
-    .article-more-link {{ display: inline-block; color: var(--accent); font-size: 14px; font-weight: 500; text-decoration: none; }}
-    .article-more-link:hover {{ opacity: .7; }}
-  </style>
-</head>
-<body>
-{header}
-  <main>
-    <div class="article-wrap">
-      <a href="/" class="article-back">&larr; Back to Treasure Coast Today</a>
-      <div class="article-meta">
-        <span class="article-category">{category_label}</span>
-        <span class="article-date">{pub_date}</span>
-      </div>
-      <h1 class="article-headline">{hero["headline"]}</h1>
-      {img_html}
-      <div class="article-body">{body}</div>
-      <hr class="article-divider">
-      <p class="article-more">More local news</p>
-      <a href="/?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
-    </div>
-  </main>
-{footer}
-</body>
-</html>"""
-
-def render_archive_page(archive_entries):
-    """Render a browsable archive index page."""
-    head   = _page_head(
-        "Article Archive — Treasure Coast Today",
-        "Browse all local news articles from Treasure Coast Today covering Martin, St. Lucie, and Indian River counties.",
-        "/archive.html"
-    )
-    header = _page_header()
-    footer = _page_footer()
-
-    # Group entries by month
-    by_month = defaultdict(list)
-    for e in sorted(archive_entries, key=lambda x: x.get("date",""), reverse=True):
-        try:
-            month = e["date"][:7]  # YYYY-MM
-            label = datetime.strptime(month, "%Y-%m").strftime("%B %Y")
-        except Exception:
-            label = "Recent"
-            month = "recent"
-        by_month[(month, label)].append(e)
-
-    months_html = ""
-    for (month_key, month_label), entries in sorted(by_month.items(), reverse=True):
-        items = ""
-        for e in entries:
-            items += f"""
-        <li class="archive-item">
-          <a href="/articles/{e['slug']}.html" class="archive-link">
-            <span class="archive-cat">{e['category_label']}</span>
-            <span class="archive-headline">{e['headline']}</span>
-            <span class="archive-date">{e['date']}</span>
-          </a>
-        </li>"""
-        months_html += f"""
-      <div class="archive-month">
-        <h2 class="archive-month-label">{month_label}</h2>
-        <ul class="archive-list">{items}
-        </ul>
-      </div>"""
-
-    return f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-{head}
-  <style>
-    .archive-wrap {{ max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }}
-    .archive-eyebrow {{ font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 14px; }}
-    .archive-headline {{ font-family: "Fraunces", serif; font-size: clamp(28px,4vw,40px); font-weight: 600; color: var(--text); margin-bottom: 8px; letter-spacing: -.02em; }}
-    .archive-sub {{ font-size: 15px; color: var(--text-secondary); margin-bottom: 48px; }}
-    .archive-month {{ margin-bottom: 40px; }}
-    .archive-month-label {{ font-family: "Fraunces", serif; font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }}
-    .archive-list {{ list-style: none; }}
-    .archive-item {{ border-bottom: 1px solid var(--border); }}
-    .archive-link {{ display: flex; align-items: baseline; gap: 10px; padding: 12px 0; text-decoration: none; color: inherit; flex-wrap: wrap; transition: background .1s; }}
-    .archive-link:hover .archive-headline {{ color: var(--accent); }}
-    .archive-cat {{ font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); flex-shrink: 0; }}
-    .archive-headline {{ font-size: 15px; font-weight: 500; color: var(--text); flex: 1; line-height: 1.4; }}
-    .archive-date {{ font-size: 11px; color: var(--text-muted); flex-shrink: 0; margin-left: auto; }}
-    @media(max-width:580px) {{ .archive-date {{ display: none; }} }}
-  </style>
-</head>
-<body>
-{header}
-  <main>
-    <div class="archive-wrap">
-      <span class="archive-eyebrow">Archive</span>
-      <h1 class="archive-headline">All Articles</h1>
-      <p class="archive-sub">Every story published on Treasure Coast Today, organized by month.</p>
-      {months_html}
-    </div>
-  </main>
-{footer}
-</body>
-</html>"""
-
-
-def update_sitemap(archive_entries):
-    """Regenerate sitemap.xml. No changefreq on article pages — Google ignores it
-    and 'never' sends a confusing signal for news content."""
-    now_str = datetime.utcnow().strftime("%Y-%m-%d")
-    static_urls = f"""  <url>
-    <loc>{SITE_URL}/</loc>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-    <lastmod>{now_str}</lastmod>
-  </url>
-  <url>
-    <loc>{SITE_URL}/archive.html</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>{now_str}</lastmod>
-  </url>
-  <url>
-    <loc>{SITE_URL}/about.html</loc>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>{SITE_URL}/advertise.html</loc>
-    <priority>0.5</priority>
-  </url>"""
-
-    article_urls = ""
-    for e in archive_entries:
-        lastmod = e.get("lastmod") or e.get("date","")
-        article_urls += f"""
-  <url>
-    <loc>{SITE_URL}/articles/{e['slug']}.html</loc>
-    <priority>0.7</priority>
-    <lastmod>{lastmod}</lastmod>
-  </url>"""
-
-    return f"""<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{static_urls}
-{article_urls}
-</urlset>"""
-
-
-def update_news_sitemap(archive_entries):
-    """Generate news-sitemap.xml for Google News inclusion.
-    Only includes articles from the last 2 days (Google News requirement)."""
-    from datetime import timedelta
-    cutoff = (datetime.utcnow() - timedelta(days=2)).strftime("%Y-%m-%d")
-    recent = [e for e in archive_entries if e.get("date","") >= cutoff]
-
-    news_urls = ""
-    for e in recent:
-        pub_date = f"{e['date']}T00:00:00Z"
-        # Escape any special chars in headline
-        headline = e['headline'].replace('&','&amp;').replace('<','&lt;').replace('>','&gt;').replace('"','&quot;')
-        news_urls += f"""
-  <url>
-    <loc>{SITE_URL}/articles/{e['slug']}.html</loc>
-    <news:news>
-      <news:publication>
-        <news:name>Treasure Coast Today</news:name>
-        <news:language>en</news:language>
-      </news:publication>
-      <news:publication_date>{pub_date}</news:publication_date>
-      <news:title>{headline}</news:title>
-    </news:news>
-  </url>"""
-
-    return f"""<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
-{news_urls}
-</urlset>"""
-
-
-ARCHIVE_STOPS = {"the","a","an","in","of","for","to","and","or","on","at","is","was","are",
-                 "were","that","this","with","from","have","been","after","over","into","says",
-                 "said","will","than","more","also","when","s","county","florida","treasure",
-                 "coast","martin","lucie","indian","river","beach","port","city","news"}
-
-def _sig_tokens(text):
-    """Significant tokens for fuzzy headline deduplication."""
-    return frozenset(w.lower().strip(".,;:()") for w in text.split()
-                     if len(w) > 3 and w.lower() not in ARCHIVE_STOPS)
-
-def _is_duplicate_headline(headline, existing_token_sets):
-    """Return True if headline shares 4+ significant tokens with any archived headline.
-    Catches the same story with slightly different wording across runs."""
-    new_tok = _sig_tokens(headline)
-    if len(new_tok) < 3:
-        return False
-    for ex_tok in existing_token_sets:
-        if len(new_tok & ex_tok) >= 4:
-            return True
-    return False
-
-
-def find_matching_entry(headline, archive, source_url=""):
-    """Find an existing archive entry for this story using two-tier matching:
-    1. source_url exact match — only when URL has a specific article path
-    2. fuzzy headline match — catches rewrites and same story from different feeds
-    Returns the matching entry dict or None."""
-    # Tier 1: source URL match — only fire when URL is a specific article (has path)
-    if source_url:
-        def norm_url(u):
-            return re.sub(r"[?#].*$", "", u.strip().rstrip("/").lower())
-        norm_src = norm_url(source_url)
-        # Reject bare domain URLs like "https://www.wptv.com" or "https://tcpalm.com"
-        # A real article URL has a meaningful path (at least one slash after the domain)
-        path_part = re.sub(r"^https?://[^/]+", "", norm_src)
-        if len(path_part) > 10:  # real article path, not just "/" or ""
-            for entry in archive:
-                if entry.get("source_url") and norm_url(entry["source_url"]) == norm_src:
-                    return entry
-
-    # Tier 2: fuzzy headline match
-    tok = _sig_tokens(headline)
-    if len(tok) < 3:
-        return None
-    for entry in archive:
-        if len(tok & _sig_tokens(entry["headline"])) >= 4:
-            return entry
-    return None
 
 def write_archives(all_categories, top_cat):
-    """Write/update individual article pages, update archive.json, sitemap.xml.
-    Same-story updates overwrite the existing URL rather than creating new pages."""
     articles_dir = OUTPUT_DIR / "articles"
     archive_path = OUTPUT_DIR / "archive.json"
     articles_dir.mkdir(exist_ok=True)
 
-    archive = load_archive(archive_path)
-    today   = datetime.utcnow().strftime("%Y-%m-%d")
+    archive       = load_archive(archive_path)
+    today         = datetime.utcnow().strftime("%Y-%m-%d")
     new_count     = 0
     updated_count = 0
-    # Track stories written THIS run to prevent cross-category duplicates
     this_run_token_sets = []
 
-    heroes_to_archive = [(top_cat["category_key"], top_cat["category_label"], top_cat["hero"])]
+    heroes = [(top_cat["category_key"], top_cat["category_label"], top_cat["hero"])]
     for cat in all_categories:
         if cat["category_key"] != top_cat["category_key"]:
-            heroes_to_archive.append((cat["category_key"], cat["category_label"], cat["hero"]))
+            heroes.append((cat["category_key"], cat["category_label"], cat["hero"]))
 
-    for cat_key, cat_label, hero in heroes_to_archive:
-        headline = hero.get("headline","").strip()
+    for cat_key, cat_label, hero in heroes:
+        headline = hero.get("headline", "").strip()
         if not headline:
             continue
 
         source_url = hero.get("link", "")
         existing   = find_matching_entry(headline, archive, source_url)
 
-        # Check within-run cross-category duplicates FIRST
-        # (same story picked by crime AND martin county in same run)
-        if _is_duplicate_headline(headline, this_run_token_sets):
+        # Skip cross-category duplicates within the same run
+        if not existing and _is_duplicate_headline(headline, this_run_token_sets):
             print(f"  Skipped cross-category duplicate: {headline[:60]}")
             continue
 
         this_run_token_sets.append(_sig_tokens(headline))
 
         if existing:
-            # Same story — update the existing page in place, keep the original URL
+            # Same story — update existing page in place, keep original URL
             slug = existing["slug"]
-            article_html = render_article_page(hero, cat_label, cat_key, today, slug)
-            (articles_dir / f"{slug}.html").write_text(article_html, encoding="utf-8")
-            # Update metadata in archive — preserve original date, update content
+            (articles_dir / f"{slug}.html").write_text(
+                render_article_page(hero, cat_label, cat_key, today, slug), encoding="utf-8"
+            )
             existing["headline"]  = headline
             existing["teaser"]    = hero.get("teaser","") or hero.get("body","")[:180]
             existing["image_url"] = hero.get("image_url","")
@@ -2335,30 +2300,23 @@ def write_archives(all_categories, top_cat):
             if source_url:
                 existing["source_url"] = source_url
             updated_count += 1
-            print(f"  Updated existing article: {slug[:60]}")
         else:
-            # Genuinely new story — create a new page
+            # New story — create new page
             existing_slugs = {e["slug"] for e in archive}
             base_slug = f"{today}-{slugify(headline)}"
             slug = base_slug
             counter = 1
             while slug in existing_slugs:
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-
-            article_html = render_article_page(hero, cat_label, cat_key, today, slug)
-            (articles_dir / f"{slug}.html").write_text(article_html, encoding="utf-8")
-
+                slug = f"{base_slug}-{counter}"; counter += 1
+            (articles_dir / f"{slug}.html").write_text(
+                render_article_page(hero, cat_label, cat_key, today, slug), encoding="utf-8"
+            )
             archive.append({
-                "slug":           slug,
-                "headline":       headline,
-                "teaser":         hero.get("teaser","") or hero.get("body","")[:180],
-                "category_key":   cat_key,
-                "category_label": cat_label,
-                "date":           today,
-                "lastmod":        today,
-                "image_url":      hero.get("image_url",""),
-                "source_url":     source_url,
+                "slug": slug, "headline": headline,
+                "teaser": hero.get("teaser","") or hero.get("body","")[:180],
+                "category_key": cat_key, "category_label": cat_label,
+                "date": today, "lastmod": today,
+                "image_url": hero.get("image_url",""),
             })
             new_count += 1
 
@@ -2367,7 +2325,6 @@ def write_archives(all_categories, top_cat):
     (OUTPUT_DIR / "sitemap.xml").write_text(update_sitemap(archive), encoding="utf-8")
     (OUTPUT_DIR / "news-sitemap.xml").write_text(update_news_sitemap(archive), encoding="utf-8")
     print(f"  Archived {new_count} new, updated {updated_count} existing ({len(archive)} total)")
-
 
 def main():
     print("Treasure Coast Today — building site...")
@@ -2379,171 +2336,183 @@ def main():
     for cat_key, cat_config in CATEGORIES.items():
         print(f"Processing: {cat_config['label']}...")
         headlines = fetch_headlines(cat_config["feeds"])
+
+        # Filter headlines older than 48 hours
+        from datetime import timezone as _tz2
+        _now2 = datetime.now(_tz2.utc)
+        def _headline_stale(h):
+            try:
+                from email.utils import parsedate_to_datetime
+                dt = parsedate_to_datetime(h.get("published","")).astimezone(_tz2.utc)
+                return (_now2 - dt).total_seconds() > 48 * 3600
+            except Exception:
+                return True
+        fresh_h = [h for h in headlines if not _headline_stale(h)]
+        if len(fresh_h) >= 6:
+            headlines = fresh_h
         if not headlines:
-            print(f"  No headlines found, skipping.")
+            print(f"  No headlines found for {cat_config['label']}, skipping.")
             continue
 
         print(f"  {len(headlines)} headlines fetched")
-        data = generate_category_content(cat_key, cat_config["label"], headlines, content_bank)
-        if not data:
+        try:
+            data = generate_category_content(cat_key, cat_config["label"], headlines)
+
+            # Images — source_index already attached image_url, fall back to image bank
+            source_img = data["hero"].get("image_url", "")
+            src_idx = data["hero"].get("source_index")
+            original_title = ""
+            if src_idx is not None:
+                try:
+                    original_title = headlines[int(src_idx) - 1].get("title", "")
+                except Exception:
+                    pass
+            bank_img, bank_credit = ("", "")
+            if original_title:
+                bank_img, bank_credit = match_image(original_title, image_bank, cat_key, used_bank_images)
+            if not bank_img:
+                bank_img, bank_credit = match_image(data["hero"]["headline"], image_bank, cat_key, used_bank_images)
+            img    = source_img if (source_img and not data["hero"].get("image_from_google")) else ""
+            credit = bank_credit
+
+            # og:image fetch as fallback
+            if not img:
+                link = data["hero"].get("link", "")
+                if link:
+                    og_img = fetch_og_image(link)
+                    if og_img:
+                        img    = og_img
+                        credit = get_image_credit(link)
+                        print(f"  Hero image via og:image fetch")
+
+            if not img and bank_img:
+                img    = bank_img
+                credit = bank_credit
+                used_bank_images.add(canonical_image_url(bank_img))
+
+            # Local fallback
+            if not img:
+                fb_img, fb_credit = get_fallback_image(cat_key, data["hero"].get("headline", ""))
+                if fb_img:
+                    img    = fb_img
+                    credit = fb_credit
+                    print(f"  Hero image via local fallback")
+
+            data["hero"]["image_url"]    = img
+            data["hero"]["image_credit"] = credit
+
+            # Hero enrichment — content bank + related RSS summaries
+            hero_headline = data["hero"]["headline"]
+            hero_link     = data["hero"].get("link", "")
+            _is_thin_src  = any(d in hero_link.lower() for d in THIN_SOURCE_DOMAINS)
+            if _is_thin_src:
+                print(f"  Thin source ({hero_link[:40]}): skipping hero enrichment, capping urgency")
+                data["hero"]["urgency_score"] = min(int(data["hero"].get("urgency_score", 5) or 5), 5)
+            bank_content  = find_content(hero_headline, content_bank)
+            stops = {"that","this","with","from","have","been","said","will","more",
+                     "also","when","were","they","their","about","says","just"}
+            hero_tokens = set(re.sub(r"[^a-z0-9 ]", " ", hero_headline.lower()).split()) - stops
+            related_parts = []
+            for h in headlines:
+                h_tokens = set(re.sub(r"[^a-z0-9 ]", " ", h.get("title","").lower()).split()) - stops
+                if len(hero_tokens & h_tokens) >= 2:
+                    related_parts.append(h.get("title","") + ". " + h.get("summary",""))
+            related_text = " | ".join(related_parts[:6])
+            source_parts = [p for p in [bank_content, related_text] if p]
+            source_text  = "\n\n".join(source_parts)
+
+            if source_text and len(source_text.split()) >= 80 and not _is_thin_src:
+                stops2 = {"the","a","an","in","of","for","to","and","or","on","at","is","was","are","were","that","this","with"}
+                hl_tok  = set(re.sub(r"[^a-z0-9 ]", " ", hero_headline.lower()).split()) - stops2
+                src_tok = set(re.sub(r"[^a-z0-9 ]", " ", source_text[:500].lower()).split()) - stops2
+                if len(hl_tok & src_tok) >= 2:
+                    data["hero"] = enhance_hero_article(data["hero"], source_text)
+                    print(f"  Enhanced with: {'bank+' if bank_content else ''}{'related' if related_text else ''}")
+                else:
+                    print(f"  Enhancement skipped: insufficient keyword overlap")
+
+            # Stale hero demotion
+            from email.utils import parsedate_to_datetime as _parse_pub
+            from datetime import timezone as _tz3
+            _now3 = datetime.now(_tz3.utc)
+            _raw_pub = data["hero"].get("published_raw","")
+            if _raw_pub:
+                try:
+                    _dt  = _parse_pub(_raw_pub).astimezone(_tz3.utc)
+                    _age = (_now3 - _dt).total_seconds() / 3600
+                    if _age > 24 and data.get("cards"):
+                        print(f"  Demoting stale hero ({_age:.0f}h old), promoting next card for {cat_config['label']}")
+                        old_hero = data["hero"]
+                        data["hero"]  = data["cards"][0]
+                        data["cards"] = data["cards"][1:] + [old_hero]
+                except Exception:
+                    pass
+
+            all_categories.append(data)
+            print(f"  Hero: {data['hero']['headline'][:60]}... (urgency: {data['hero'].get('urgency_score')}, image: {'yes' if img else 'no'})")
+
+            # Enrich cards in parallel
+            from concurrent.futures import ThreadPoolExecutor as _TPE, as_completed as _ac
+            with _TPE(max_workers=6) as _ex:
+                _futs = {_ex.submit(enhance_card, card, content_bank, headlines): card
+                         for card in data.get("cards", [])}
+                for _fut in _ac(_futs, timeout=45):
+                    try: _fut.result(timeout=10)
+                    except Exception: pass
+
+        except Exception as e:
+            import traceback
+            print(f"  Error for {cat_config['label']}: {e}")
+            print(traceback.format_exc())
             continue
-
-        # Attach source metadata to hero
-        hero_headline = data["hero"].get("headline","")
-        src_idx       = data["hero"].get("source_index")
-        original_title = ""
-        if src_idx is not None:
-            try:
-                original_title = headlines[int(src_idx)-1].get("title","")
-            except Exception:
-                pass
-
-        data["_original_title"] = original_title
-        data["_cat_key"]        = cat_key
-
-        # Demote stale category heroes — if the chosen hero is over 24 hours old,
-        # promote the first card instead. This catches staleness at the category level
-        # before the front page hero selection even runs.
-        from email.utils import parsedate_to_datetime as _parse_pub
-        from datetime import timezone as _tz2
-        _now2 = datetime.now(_tz2.utc)
-        _raw_pub = data["hero"].get("published_raw","")
-        if _raw_pub:
-            try:
-                _dt  = _parse_pub(_raw_pub).astimezone(_tz2.utc)
-                _age = (_now2 - _dt).total_seconds() / 3600
-                if _age > 24 and data.get("cards"):
-                    print(f"  Demoting stale hero ({_age:.0f}h old), promoting next card for {cat_config['label']}")
-                    old_hero = data["hero"]
-                    data["hero"]  = data["cards"][0]
-                    data["cards"] = data["cards"][1:] + [old_hero]
-            except Exception:
-                pass
-
-        all_categories.append(data)
-        print(f"  Hero: {data['hero']['headline'][:60]}... (urgency: {data['hero'].get('urgency_score')})")
 
     if not all_categories:
         print("No categories generated. Aborting.")
         return
 
-    # Fetch hero images in parallel — much faster than sequential og:image checks
-    print("Fetching hero images...")
-
-    def fetch_hero_image(data):
-        cat_key        = data["_cat_key"]
-        hero_headline  = data["hero"].get("headline","")
-        original_title = data.get("_original_title","")
-        source_img     = data["hero"].get("image_url","")
-        source_is_google_thumb = data["hero"].get("image_from_google", False)
-        link           = data["hero"].get("link","")
-        img, image_credit = "", ""
-
-        if source_img and not source_is_google_thumb:
-            img          = source_img
-            image_credit = get_image_credit(link)
-
-        if not img and link:
-            og = fetch_og_image(link)
-            if og:
-                img          = og
-                image_credit = get_image_credit(link)
-
-        if not img:
-            bank_img = bank_credit = ""
-            for query in [original_title, hero_headline,
-                          (original_title or hero_headline) + " " + data["hero"].get("body","")[:250]]:
-                if query:
-                    bank_img, bank_credit = match_image(query, image_bank, cat_key, used_bank_images)
-                if bank_img:
-                    break
-            if bank_img:
-                img          = bank_img
-                image_credit = bank_credit
-                used_bank_images.add(canonical_image_url(bank_img))
-
-        if not img:
-            px_img, px_credit = get_fallback_image(cat_key, data["hero"].get("headline", ""))
-            if px_img:
-                img          = px_img
-                image_credit = px_credit
-
-        data["hero"]["image_url"]    = img
-        data["hero"]["image_credit"] = image_credit
-        return data, cat_key, img
-
-    def ensure_missing_hero_fallbacks(categories):
-        """Guarantee every category hero has an image after hero swaps/promotions.
-
-        Hero images are fetched before duplicate heroes are promoted. If a promoted
-        card becomes the new category hero, it can bypass the earlier image step.
-        This final pass applies the local hosted fallback image to any hero still
-        missing an image before HTML, data JSON, and article archives are written.
-        """
-        for cat in categories:
-            hero = cat.get("hero", {})
-            if hero.get("image_url"):
-                continue
-            cat_key = cat.get("category_key") or cat.get("_cat_key") or "all"
-            fallback_img, fallback_credit = get_fallback_image(cat_key, hero.get("headline", ""))
-            if fallback_img:
-                hero["image_url"] = fallback_img
-                hero["image_credit"] = fallback_credit
-                print(f"  {cat_key}: fallback image applied after hero promotion")
-            else:
-                print(f"  {cat_key}: no fallback files found in /images/fallback")
-
-    # Run all image fetches concurrently — max 10 workers (one per category)
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        futures = {executor.submit(fetch_hero_image, d): d for d in all_categories}
-        for future in as_completed(futures, timeout=60):
-            try:
-                data, cat_key, img = future.result(timeout=15)
-                print(f"  {cat_key}: image {'yes' if img else 'no'}")
-            except Exception as e:
-                print(f"  Image fetch error: {e}")
-
-    # Clean up temp keys
-    for data in all_categories:
-        data.pop("_original_title", None)
-        data.pop("_cat_key", None)
-
-
-    # Select front page hero
+    # Front page hero selection
     top_cat = select_front_page_hero(all_categories)
+    if top_cat is None:
+        eligible = [c for c in all_categories if CATEGORIES.get(c["category_key"],{}).get("front_page_hero", True)]
+        top_cat  = max(eligible if eligible else all_categories,
+                       key=lambda c: min(int(c["hero"].get("urgency_score",0) or 0),
+                                         CATEGORIES.get(c["category_key"],{}).get("front_page_cap",10)))
 
-    # Ensure no other category hero duplicates the front page hero
+    # Promote duplicate heroes
     promote_duplicate_heroes(top_cat, all_categories)
 
-    # Promotion can swap in a card as the new category hero after the first image
-    # pass. Re-check all heroes so hosted fallbacks are always applied before
-    # rendering and archiving.
-    ensure_missing_hero_fallbacks(all_categories)
-
-    # If the selected top story somehow still lacks an image, apply its category
-    # fallback too. This keeps the Top News hero from rendering without artwork.
-    if not top_cat.get("hero", {}).get("image_url"):
-        fallback_img, fallback_credit = get_fallback_image(top_cat.get("category_key", "all"), top_cat["hero"].get("headline", ""))
-        if fallback_img:
-            top_cat["hero"]["image_url"] = fallback_img
-            top_cat["hero"]["image_credit"] = fallback_credit
+    # Final fallback images for any promoted heroes without images
+    for cat in all_categories:
+        hero = cat.get("hero", {})
+        if not hero.get("image_url"):
+            fb_img, fb_credit = get_fallback_image(cat.get("category_key","local_gov"), hero.get("headline",""))
+            if fb_img:
+                hero["image_url"]    = fb_img
+                hero["image_credit"] = fb_credit
+                print(f"  {cat.get('category_key')}: fallback image applied after hero promotion")
+    if not top_cat.get("hero",{}).get("image_url"):
+        fb_img, fb_credit = get_fallback_image(top_cat.get("category_key","local_gov"), top_cat["hero"].get("headline",""))
+        if fb_img:
+            top_cat["hero"]["image_url"]    = fb_img
+            top_cat["hero"]["image_credit"] = fb_credit
 
     # Render and write all pages
     index_html = render_index(all_categories, top_cat)
     (OUTPUT_DIR / "index.html").write_text(index_html, encoding="utf-8")
-    write_data_json(all_categories, top_cat)
 
-    # Archive — write permanent article pages and update archive.json + sitemap
+    # Archive
     write_archives(all_categories, top_cat)
 
-    # Events coming-soon page
-    (OUTPUT_DIR / "events.html").write_text(render_events_page(), encoding="utf-8")
+    # data.json
+    write_data_json(all_categories, top_cat)
 
     # Static pages
+    (OUTPUT_DIR / "events.html").write_text(render_events_page(), encoding="utf-8")
     (OUTPUT_DIR / "about.html").write_text(render_about_page(), encoding="utf-8")
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
 
     print(f"Done. {len(all_categories)} categories written.")
+
 
 if __name__ == "__main__":
     main()
