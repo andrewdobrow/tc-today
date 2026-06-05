@@ -838,9 +838,15 @@ Return ONLY valid JSON:
         data["category_key"]   = category_key
         data["category_label"] = category_label
 
-        # Enrich cards with article text and related summaries via Haiku
-        for card in data.get("cards", []):
-            enhance_card(card, headlines)
+        # Enrich cards with article text and related summaries via Haiku — run in parallel
+        from concurrent.futures import ThreadPoolExecutor as _TPE, as_completed as _ac
+        with _TPE(max_workers=6) as ex:
+            futures = {ex.submit(enhance_card, card, headlines): card for card in data.get("cards", [])}
+            for fut in _ac(futures, timeout=45):
+                try:
+                    fut.result(timeout=10)
+                except Exception:
+                    pass
         return data
     except Exception as e:
         print(f"  Claude error for {category_label}: {e}")
