@@ -387,7 +387,7 @@ def is_placeholder_image(img_url):
 def fetch_og_image(url):
     if not url: return ""
     try:
-        resp = requests.get(url, timeout=6, allow_redirects=True, headers={"User-Agent":"Mozilla/5.0 (compatible; TCTBot/1.0)"})
+        resp = requests.get(url, timeout=4, allow_redirects=True, headers={"User-Agent":"Mozilla/5.0 (compatible; TCTBot/1.0)"})
         if resp.status_code != 200: return ""
         html = resp.text[:200000]
         patterns = [
@@ -425,7 +425,7 @@ def fetch_article_text(url, max_chars=2500):
     if not url:
         return ""
     try:
-        resp = requests.get(url, timeout=5, allow_redirects=True,
+        resp = requests.get(url, timeout=3, allow_redirects=True,
                             headers={"User-Agent":"Mozilla/5.0 (compatible; TCTBot/1.0)"})
         if resp.status_code != 200:
             return ""
@@ -616,16 +616,19 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
     result = result[:limit]
 
     # Fetch fuller article text in parallel for top 7 headlines.
-    # Running concurrently means total time = slowest single fetch (~5s),
-    # not 7 × 5s = 35s sequential. Google News URLs are skipped automatically
-    # inside fetch_article_text so only real publisher URLs get fetched.
+    # Skip known paywalled domains — they never return useful content.
+    _PAYWALL_DOMAINS = ["tcpalm.com", "sun-sentinel.com", "palmbeachpost.com",
+                        "wsj.com", "nytimes.com", "washingtonpost.com", "bloomberg.com"]
     def try_fetch(h):
-        full = fetch_article_text(h.get("link", ""))
+        link = h.get("link", "")
+        if not link or any(d in link.lower() for d in _PAYWALL_DOMAINS):
+            return
+        full = fetch_article_text(link)
         if full and len(full) > len(h.get("summary", "")):
             h["article_text"] = full
 
     with ThreadPoolExecutor(max_workers=7) as ex:
-        list(ex.map(try_fetch, result[:7], timeout=30))
+        list(ex.map(try_fetch, result[:7], timeout=20))
 
     return result
 
@@ -644,7 +647,10 @@ def enhance_card(card, headlines):
         return card
 
     # Try to get full article text from the source URL
-    article_text = fetch_article_text(link) if link else ""
+    # Skip known paywalled/thin sources to save time
+    _skip_domains = ["tcpalm.com", "sun-sentinel.com", "palmbeachpost.com", "wsj.com", "nytimes.com", "washingtonpost.com"]
+    _should_fetch = link and not any(d in link.lower() for d in _skip_domains)
+    article_text = fetch_article_text(link) if _should_fetch else ""
 
     # Also gather related RSS summaries from the category headlines
     stops = {"that","this","with","from","have","been","said","will","more",
