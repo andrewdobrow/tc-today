@@ -137,6 +137,17 @@ CATEGORIES = {
 HEADLINES_PER_CATEGORY = 12
 CARDS_PER_CATEGORY     = 6
 
+OUTPUT_DIR   = Path(__file__).parent.parent
+SITE_URL     = "https://treasurecoast.today"
+SITE_NAME    = "Treasure Coast Today"
+SITE_TAGLINE = "Your Treasure Coast, every day."
+
+# Sources that are paywalled or provide minimal content — skip article text fetching
+# and cap hero urgency scores to deprioritize them for hero selection
+THIN_SOURCE_DOMAINS = ["tcpalm.com", "sun-sentinel.com", "palmbeachpost.com"]
+
+client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+
 # Content bank — loaded once at startup, used for card enrichment
 CONTENT_BANK_FEEDS = [
     "https://www.wptv.com/feeds/rss/news",
