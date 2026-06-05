@@ -14,6 +14,7 @@ import anthropic
 from datetime import datetime, timedelta
 from pathlib import Path
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # -- CONFIG --
 
@@ -145,6 +146,10 @@ SITE_TAGLINE = "Your Treasure Coast, every day."
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
 THIN_SOURCE_DOMAINS = ["tcpalm.com", "sun-sentinel.com", "palmbeachpost.com"]
+
+# Sources we can usually use for full article text. TCPalm stays discovery-only
+# because its pages are paywalled and tend to produce thin/blocked extraction.
+FULL_TEXT_DOMAINS = ["wptv.com", "wpbf.com", "cbs12.com", "wflx.com", "hometownnewstc.com", "floridapolitics.com"]
 
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
@@ -481,6 +486,45 @@ def sanitize_text(text):
     return text.replace("\\", " ").replace('"', "'").replace("\n", " ").replace("\r", " ").replace("\t", " ").strip()
 
 
+
+def get_domain(url):
+    """Return a normalized domain for source classification."""
+    try:
+        from urllib.parse import urlparse
+        return urlparse(url).netloc.lower().replace("www.", "")
+    except Exception:
+        return ""
+
+
+def classify_source(link):
+    """Classify a source so the writer knows whether it has usable body text."""
+    domain = get_domain(link)
+    if any(d in domain for d in THIN_SOURCE_DOMAINS):
+        return "discovery_only"
+    if any(d in domain for d in FULL_TEXT_DOMAINS):
+        return "full_source"
+    if "news.google.com" in domain or "yahoo.com" in domain:
+        return "aggregator"
+    return "unknown"
+
+
+def extract_rss_text(entry):
+    """Prefer the richest text field in an RSS entry."""
+    best = ""
+    for field in ["content", "summary", "description"]:
+        val = entry.get(field, "") or getattr(entry, field, "")
+        if isinstance(val, list) and val:
+            candidate = val[0].get("value", "") if isinstance(val[0], dict) else str(val[0])
+        elif isinstance(val, str):
+            candidate = val
+        else:
+            candidate = ""
+        candidate = clean_summary(candidate)
+        if len(candidate) > len(best):
+            best = candidate
+    return best
+
+
 def clean_summary(text):
     """Strip navigation text, bylines, HTML tags, and noise from RSS summaries."""
     if not text:
@@ -513,28 +557,34 @@ def clean_summary(text):
 
 
 def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
-    """Pull headlines from all feeds, deduplicate, then limit."""
+    """Pull headlines, dedupe, fetch usable full article text for open sources, then limit."""
     seen, entries = set(), []
     for url in feeds:
         try:
             feed = feedparser.parse(url)
-            count = 0
             for entry in feed.entries[:15]:
                 title = sanitize_text(entry.get("title", "").strip())
                 if not title or title.lower() in seen:
                     continue
                 seen.add(title.lower())
+
+                link = extract_publisher_url(entry)
+                summary = extract_rss_text(entry)[:2500]
+                source_type = classify_source(link)
+
                 entries.append({
-                    "title":     title,
-                    "summary":   clean_summary(entry.get("summary", entry.get("description", "")))[:800],
-                    "link":      extract_publisher_url(entry),
-                    "image_url": extract_image(entry),
-                    "published": entry.get("published", ""),
+                    "title":       title,
+                    "summary":     summary,
+                    "link":        link,
+                    "source_type": source_type,
+                    "source_quality": "unclassified",
+                    "image_url":   extract_image(entry),
+                    "published":   entry.get("published", "") or entry.get("updated", ""),
                 })
-                count += 1
         except Exception as e:
             print(f"  Feed error ({url[:60]}): {e}")
-    # Sort by published date (freshest first) then limit
+
+    # Sort by published date (freshest first), then fetch bodies for the candidate pool.
     def pub_sort(h):
         try:
             from email.utils import parsedate_to_datetime
@@ -542,9 +592,55 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
             return parsedate_to_datetime(h["published"]).astimezone(timezone.utc).timestamp()
         except Exception:
             return 0
-    entries.sort(key=pub_sort, reverse=True)
-    return entries[:limit]
 
+    entries.sort(key=pub_sort, reverse=True)
+    result = entries[:limit]
+
+    def enrich_one(h):
+        link = h.get("link", "")
+        summary_words = len((h.get("summary") or "").split())
+
+        # Never try to turn paywalled/discovery sources into full articles.
+        if h.get("source_type") == "discovery_only":
+            h["source_quality"] = "discovery_only"
+            return h
+
+        # Try full body extraction for open/local sources.
+        if h.get("source_type") == "full_source" and link:
+            full = fetch_article_text(link, max_words=1000)
+            if full and len(full.split()) >= 140:
+                h["article_text"] = full
+                h["source_quality"] = "full"
+                return h
+
+        # Fallback quality labels based on actual RSS text depth.
+        if summary_words >= 140:
+            h["source_quality"] = "summary"
+        elif summary_words >= 40:
+            h["source_quality"] = "brief"
+        else:
+            h["source_quality"] = "thin"
+        return h
+
+    # Keep this parallel and bounded; otherwise a few slow publisher pages can stall the run.
+    try:
+        with ThreadPoolExecutor(max_workers=5) as ex:
+            futures = [ex.submit(enrich_one, h) for h in result]
+            for fut in as_completed(futures, timeout=45):
+                try:
+                    fut.result(timeout=1)
+                except Exception:
+                    pass
+    except Exception:
+        # If the timeout trips, use whatever was enriched so far.
+        pass
+
+    full_count = sum(1 for h in result if h.get("source_quality") == "full")
+    summary_count = sum(1 for h in result if h.get("source_quality") in ("summary", "brief"))
+    discovery_count = sum(1 for h in result if h.get("source_quality") == "discovery_only")
+    print(f"  Source quality: {full_count} full, {summary_count} summary/brief, {discovery_count} discovery-only, {len(result)} total")
+
+    return result
 
 # -- CLAUDE EDITORIAL ENGINE --
 
@@ -651,8 +747,10 @@ def generate_category_content(category_key, category_label, headlines):
         pub     = sanitize(h.get("published", ""))
         pub_str = f" [pub:{pub}]" if pub else ""
         title   = sanitize(h.get("title", ""))
-        summary = sanitize(h.get("summary", ""))
-        return f"{i+1}. {title}{pub_str}\n   {summary[:550]}"
+        quality = h.get("source_quality", "unknown")
+        stype   = h.get("source_type", "unknown")
+        content = h.get("article_text", "") or h.get("summary", "")
+        return f"{i+1}. {title} [source_type:{stype}] [source_quality:{quality}]{pub_str}\n   {sanitize(content)[:5000]}"
     # Pre-filter headlines older than 48 hours before Claude sees them
     from datetime import timezone as _tz
     _now_utc = datetime.now(_tz.utc)
@@ -716,10 +814,19 @@ def generate_category_content(category_key, category_label, headlines):
     is_florida    = (category_key == "florida")
     system_prompt = FLORIDA_SYSTEM_PROMPT if is_florida else LOCAL_SYSTEM_PROMPT
 
+    source_rules = """SOURCE RULES:
+- Stories marked [source_quality:full] contain full article body text and may be used for the hero or full cards.
+- Stories marked [source_quality:summary] may be used for shorter full cards only if the provided text has enough concrete facts.
+- Stories marked [source_quality:brief], [source_quality:thin], or [source_type:discovery_only] must NOT be used for the hero and must not be padded into full articles.
+- If there are not enough usable stories for six cards, return fewer cards rather than writing filler.
+- Do not write generic context such as "this reflects growth," "officials continue to investigate," or "residents are encouraged" unless those facts are explicitly in the source.
+
+"""
+
     if is_florida:
         prompt = f"""{_date_context}Florida news headlines:{rule_line}
 
-{headlines_text}
+{source_rules}{headlines_text}
 
 Tasks:
 1. Pick the single most important/urgent Florida statewide story. Prioritize broad impact — legislation, court rulings, economic news, environmental decisions, significant crimes or disasters anywhere in the state.
@@ -736,7 +843,7 @@ Return ONLY valid JSON:
     else:
         prompt = f"""{_date_context}Local Treasure Coast news headlines for {category_label}:{rule_line}
 
-{headlines_text}
+{source_rules}{headlines_text}
 
 Tasks:
 1. Pick the single most important/urgent story for Treasure Coast Florida residents. LOCAL stories (county commission decisions, local crime, school district news, local business, road/infrastructure, local sports) rank ABOVE national or state stories unless the national story has very direct local impact.
@@ -754,7 +861,7 @@ Return ONLY valid JSON:
 
     response = client.messages.create(
         model="claude-sonnet-4-5",
-        max_tokens=2400,
+        max_tokens=5600,
         system=[{
             "type": "text",
             "text": system_prompt,
@@ -797,6 +904,9 @@ Return ONLY valid JSON:
                 source = headlines[int(idx) - 1]
                 item["link"]      = source.get("link", "")
                 item["image_url"] = source.get("image_url", "")
+                item["source_quality"] = source.get("source_quality", "")
+                item["source_type"] = source.get("source_type", "")
+                item["article_text"] = source.get("article_text", "")
             except (IndexError, ValueError, TypeError):
                 item["link"]      = ""
                 item["image_url"] = ""
@@ -806,6 +916,7 @@ Return ONLY valid JSON:
 
         # Format published
         raw_pub = item.get("published", "").replace("pub:", "").strip().strip("[]")
+        item["published_raw"] = raw_pub
         item["published"] = format_age(raw_pub)
         return item
 
@@ -1045,97 +1156,163 @@ def find_content(headline, content_bank, max_entries=5):
 
 
 
-def fetch_article_text(url, max_words=900):
-    """Fetch readable body text from an article page. Returns plain text or empty string on failure."""
+def fetch_article_text(url, max_words=1000):
+    """Fetch readable article body text.
+
+    Uses trafilatura when available, then JSON-LD articleBody, then a paragraph fallback.
+    Returns plain text or an empty string on failure.
+    """
     if not url:
         return ""
     try:
-        resp = requests.get(url, timeout=5, allow_redirects=True,
-                            headers={"User-Agent": "Mozilla/5.0 (compatible; TCTBot/1.0)"})
+        resp = requests.get(
+            url,
+            timeout=8,
+            allow_redirects=True,
+            headers={
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/120.0 Safari/537.36"
+                )
+            },
+        )
         if resp.status_code != 200:
             return ""
+
         html = resp.text
+
+        def clean_article_text(raw):
+            raw = re.sub(r"<script.*?</script>", " ", raw or "", flags=re.DOTALL | re.IGNORECASE)
+            raw = re.sub(r"<style.*?</style>", " ", raw, flags=re.DOTALL | re.IGNORECASE)
+            raw = re.sub(r"<[^>]+>", " ", raw)
+            raw = re.sub(r"&[a-zA-Z0-9#]+;", " ", raw)
+            raw = re.sub(r"\s+", " ", raw).strip()
+            junk = [
+                "subscribe", "sign up", "cookie", "advertisement", "all rights reserved",
+                "terms of service", "privacy policy", "follow us", "newsletter",
+                "download our app", "watch live", "copyright"
+            ]
+            sentences = re.split(r"(?<=[.!?])\s+", raw)
+            kept = [s.strip() for s in sentences if len(s.strip()) > 25 and not any(j in s.lower() for j in junk)]
+            words = " ".join(kept).split()
+            return " ".join(words[:max_words]).strip()
+
+        # 1. Best: trafilatura if installed in the workflow.
+        try:
+            import trafilatura
+            extracted = trafilatura.extract(
+                html,
+                url=url,
+                include_comments=False,
+                include_tables=False,
+                favor_precision=False,
+            )
+            cleaned = clean_article_text(extracted or "")
+            if len(cleaned.split()) >= 140:
+                return cleaned
+        except Exception:
+            pass
+
+        # 2. JSON-LD articleBody often exists on modern news pages.
+        scripts = re.findall(
+            r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
+            html,
+            flags=re.DOTALL | re.IGNORECASE,
+        )
+        for raw in scripts:
+            try:
+                data = json.loads(raw.strip())
+            except Exception:
+                continue
+            stack = data if isinstance(data, list) else [data]
+            for item in stack:
+                if not isinstance(item, dict):
+                    continue
+                candidates = item.get("@graph") if isinstance(item.get("@graph"), list) else [item]
+                for c in candidates:
+                    if isinstance(c, dict) and c.get("articleBody"):
+                        cleaned = clean_article_text(c.get("articleBody", ""))
+                        if len(cleaned.split()) >= 140:
+                            return cleaned
+
+        # 3. Fallback: paragraphs within <article>, then all paragraphs.
         article_match = re.search(r"<article[^>]*>(.*?)</article>", html, re.DOTALL | re.IGNORECASE)
         scope = article_match.group(1) if article_match else html
         paras = re.findall(r"<p[^>]*>(.*?)</p>", scope, re.DOTALL | re.IGNORECASE)
-        text_parts = []
-        for p in paras:
-            clean = re.sub(r"<[^>]+>", "", p)
-            clean = re.sub(r"&[a-z]+;", " ", clean)
-            clean = re.sub(r"\s+", " ", clean).strip()
-            if len(clean) < 40:
-                continue
-            low = clean.lower()
-            if any(junk in low for junk in ["subscribe", "sign up", "cookie", "advertisement",
-                                            "all rights reserved", "terms of service", "privacy policy",
-                                            "follow us", "newsletter"]):
-                continue
-            text_parts.append(clean)
-            if sum(len(t.split()) for t in text_parts) >= max_words:
-                break
-        return " ".join(text_parts)
+        cleaned = clean_article_text(" ".join(paras))
+        return cleaned if len(cleaned.split()) >= 80 else ""
+
     except Exception:
         return ""
 
 
-
 def enhance_card(card, content_bank, headlines):
-    """Enrich a card body using content bank and related RSS summaries. Uses Haiku."""
+    """Rewrite a card from its exact source article, not fuzzy content-bank matches."""
     headline = card.get("headline", "")
     if not headline:
         return card
 
-    # Gather content bank matches
-    bank_content = find_content(headline, content_bank, max_entries=2)
+    source = None
+    idx = card.get("source_index")
+    if idx is not None:
+        try:
+            source = headlines[int(idx) - 1]
+        except Exception:
+            source = None
 
-    # Gather related RSS summaries
-    stops = {"that","this","with","from","have","been","said","will","more",
-             "also","when","were","they","their","about","says","just","after"}
-    hl_tokens = set(re.sub(r"[^a-z0-9 ]", " ", headline.lower()).split()) - stops
-    related_parts = []
-    for h in headlines:
-        h_tokens = set(re.sub(r"[^a-z0-9 ]", " ", h.get("title","").lower()).split()) - stops
-        if len(hl_tokens & h_tokens) >= 2:
-            related_parts.append(h.get("title","") + ". " + h.get("summary","")[:200])
-    related_text = " | ".join(related_parts[:3])
-
-    source_parts = [p for p in [bank_content, related_text] if p]
-    source_text  = "\n\n".join(source_parts)
-
-    if not source_text or len(source_text.split()) < 50:
+    if not source:
         return card
 
-    # Relevance check
-    stops2 = {"the","a","an","in","of","for","to","and","or","on","at","is","was","are","were","that","this","with"}
-    hl_tok  = set(re.sub(r"[^a-z0-9 ]", " ", headline.lower()).split()) - stops2
-    src_tok = set(re.sub(r"[^a-z0-9 ]", " ", source_text[:400].lower()).split()) - stops2
-    if len(hl_tok & src_tok) < 2:
+    link = source.get("link", "")
+    is_thin = source.get("source_type") == "discovery_only" or any(d in link.lower() for d in THIN_SOURCE_DOMAINS)
+    source_text = source.get("article_text", "") or ""
+
+    # If this is an open source but article_text was not stored, try once here.
+    if not source_text and link and not is_thin and source.get("source_type") == "full_source":
+        source_text = fetch_article_text(link, max_words=900)
+        if source_text and len(source_text.split()) >= 140:
+            source["article_text"] = source_text
+            source["source_quality"] = "full"
+
+    # Fallback only to the exact RSS summary for this same story, never the fuzzy bank.
+    if not source_text:
+        source_text = source.get("summary", "")
+
+    word_count = len(source_text.split())
+    if word_count < 80 or is_thin:
+        # Not enough verifiable material for a full rewrite. Keep Claude's original,
+        # but do not expand a paywalled/thin blurb into fake detail.
         return card
 
     try:
-        body   = card.get("body", "")
+        body = card.get("body", "")
+        target = "two fully developed paragraphs, about 170-240 words total" if word_count >= 140 else "one concise paragraph"
         prompt = (
-            f"You wrote this news card about: {headline}\n\n"
-            f"Your original card text:\n\n{body}\n\n"
-            f"Here is additional source material:\n\n{source_text}\n\n"
-            "If the source is about a different story, return the original card text unchanged. "
-            "Otherwise rewrite the card body in two short paragraphs (~120 words total) "
-            "using only confirmed facts from the source. Write in your own words. "
-            "Never use phrases like 'no information was disclosed', 'details were not available', "
-            "'it remains unclear', 'has not been confirmed', or any similar absence language. "
-            "If details are limited write fewer words and stop — do not pad."
+            f"Rewrite this local news card using the exact source material below.\n\n"
+            f"Card headline: {headline}\n\n"
+            f"Current card body:\n{body}\n\n"
+            f"Exact source material:\n{source_text[:6000]}\n\n"
+            f"Write {target}. Use only confirmed facts from the source. "
+            "Include concrete names, places, agencies, dates, numbers, votes, charges, locations, schools, roads, or businesses when present. "
+            "Do not write generic background, typical patterns, community-impact filler, or advice unless explicitly stated in the source. "
+            "If the source lacks enough facts, write less and stop. No em dashes. Return only the rewritten body."
         )
         resp = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=300,
+            max_tokens=800,
             messages=[{"role": "user", "content": prompt}]
         )
         enhanced = resp.content[0].text.strip()
         explanation_signals = ["i cannot rewrite", "source material", "does not match", "cannot proceed"]
         if enhanced and not any(s in enhanced.lower()[:150] for s in explanation_signals):
-            card["body"] = strip_markdown(enhanced, headline)
+            # Only accept a short rewrite if the source itself was short. Full sources should
+            # produce at least two useful paragraphs.
+            if word_count < 140 or len(enhanced.split()) >= 90:
+                card["body"] = strip_absence_language(strip_markdown(enhanced, headline))
     except Exception:
         pass
+
     return card
 
 
@@ -1154,12 +1331,12 @@ def enhance_hero_article(hero, full_text):
         "Write in your own words — paraphrase everything except direct quotes from named individuals. "
         "Do not invent details not in the source. Do not comment on absent information. "
         "Do not copy newsletter openers like 'Good morning'. "
-        "Keep it 420-480 words. Plain direct English. No em dashes."
+        "Keep it 380-480 words in four paragraphs. Include the concrete facts from the source. Plain direct English. No em dashes."
     )
     try:
         resp = client.messages.create(
             model="claude-haiku-4-5-20251001",
-            max_tokens=1200,
+            max_tokens=1600,
             messages=[{"role": "user", "content": prompt}]
         )
         enhanced = resp.content[0].text.strip()
@@ -2531,11 +2708,15 @@ def main():
                     related_parts.append(h.get("title","") + ". " + h.get("summary",""))
             related_text = " | ".join(related_parts[:6])
 
-            # Prefer fetched article text; fall back to bank + related
-            if fetched_text and len(fetched_text.split()) >= 80:
+            # Prefer exact full article text from the selected source; do not rely on fuzzy bank matches
+            # unless there is no extracted body available.
+            selected_article_text = data["hero"].get("article_text", "")
+            if selected_article_text and len(selected_article_text.split()) >= 140:
+                source_text = selected_article_text
+            elif fetched_text and len(fetched_text.split()) >= 80:
                 source_text = fetched_text
             else:
-                source_parts = [p for p in [bank_content, related_text] if p]
+                source_parts = [p for p in [related_text] if p]
                 source_text  = "\n\n".join(source_parts)
 
             if source_text and len(source_text.split()) >= 80 and not _is_thin_src:
