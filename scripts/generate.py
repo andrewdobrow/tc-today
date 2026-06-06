@@ -157,6 +157,27 @@ CATEGORIES = {
 HEADLINES_PER_CATEGORY = 12
 CARDS_PER_CATEGORY     = 6
 
+COUNTY_KEYS = {"martin", "st_lucie", "indian_river"}
+
+def category_max_age_hours(category_key):
+    """Different sections need different freshness windows.
+
+    The front page still prioritizes fresh stories later, but section pages should
+    not collapse just because a county feed only has a few stories in the last
+    48 hours. County/schools/sports/events content remains useful longer than
+    front-page breaking news.
+    """
+    if category_key in COUNTY_KEYS:
+        return 168  # 7 days for county pages
+    if category_key in {"schools", "sports", "business"}:
+        return 168  # 7 days for slower-moving local beats
+    if category_key == "things_to_do":
+        return 336  # 14 days for event/activity planning
+    if category_key == "florida":
+        return 72
+    return 72
+
+
 OUTPUT_DIR   = Path(__file__).parent.parent
 SITE_URL     = "https://treasurecoast.today"
 SITE_NAME    = "Treasure Coast Today"
@@ -600,6 +621,7 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
                     "title":       title,
                     "summary":     summary,
                     "link":        link,
+                    "feed_url":    url,
                     "source_type": source_type,
                     "source_quality": "unclassified",
                     "image_url":   extract_image(entry),
@@ -683,6 +705,54 @@ def _has_any(text, terms):
     return any(term in text for term in terms)
 
 
+# Hero selection is stricter than card inclusion. Cards may use softer fallback
+# logic to keep a section populated, but a section lead must clearly belong to
+# that section.
+def _hero_eligible(category_key, h):
+    text = _text_for_category_match(h)
+    title = (h.get("title", "") or "").lower()
+    quality = h.get("source_quality", "")
+
+    if quality in {"thin", "discovery_only"}:
+        return False
+
+    topic_terms = {
+        "local_gov": ["commission", "commissioner", "city council", "county council", "school board", "zoning", "rezoning", "ordinance", "budget", "tax", "millage", "mayor", "public meeting", "vote", "approved", "approval", "proposal", "hearing", "development order", "planning", "public policy", "ban", "takes effect"],
+        "crime": ["arrest", "arrested", "charged", "charges", "sheriff", "police", "deputies", "deputy", "officer", "shooting", "stabbed", "stabbing", "homicide", "murder", "crash", "fatal", "killed", "injured", "fire rescue", "missing", "suspect", "victim", "jail", "court", "public safety", "fraud", "burglary", "robbery"],
+        "business": ["business", "development", "developer", "real estate", "housing", "restaurant", "store", "retail", "mall", "company", "jobs", "hiring", "economic", "economy", "construction", "project", "commercial", "warehouse", "factory", "plant", "opening", "closing", "closes", "expansion", "wawa", "publix", "downtown", "permit", "property", "market", "walmart", "campbell soup"],
+        "schools": ["school", "schools", "student", "students", "teacher", "teachers", "education", "district", "superintendent", "principal", "classroom", "campus", "graduation", "back to school", "school board", "college", "university", "scholarship", "curriculum", "kindergarten", "high school", "middle school", "elementary"],
+        "sports": ["sports", "football", "basketball", "baseball", "softball", "soccer", "volleyball", "tennis", "golf", "lacrosse", "wrestling", "track", "cross country", "swimming", "game", "score", "win", "wins", "won", "loss", "defeats", "beats", "championship", "playoff", "tournament", "athlete", "coach", "team", "mets", "st. lucie mets", "st lucie mets"],
+        "things_to_do": ["event", "events", "festival", "concert", "show", "weekend", "things to do", "restaurant", "food", "arts", "art", "music", "theater", "theatre", "park", "market", "farmers market", "fair", "fundraiser", "community", "parade", "holiday", "museum", "exhibit", "taste", "family-friendly", "activities"],
+        "florida": ["florida", "state", "desantis", "legislature", "tallahassee", "supreme court", "insurance", "hurricane", "weather", "statewide", "lawmakers", "law", "governor", "environment", "economy", "housing", "property insurance"],
+    }
+
+    hard_negatives = {
+        "sports": ["sues", "lawsuit", "campbell soup", "spaghettios", "worms", "walmart", "fertilizer", "ban", "commission", "politics", "arrest", "charged", "shooting", "homicide", "murder", "missing", "crash"],
+        "schools": ["fertilizer", "lawn", "yard", "landscape", "ban takes effect", "campbell soup", "spaghettios", "worms", "walmart", "st. lucie mets", "st lucie mets", "restaurant", "shooting", "arrest", "arrested"],
+        "business": ["shooting", "homicide", "murder", "missing", "fatal crash"],
+        "things_to_do": ["shooting", "homicide", "murder", "fatal crash", "arrest", "charged"],
+        "local_gov": ["concert", "festival", "game recap"],
+    }
+
+    county_terms = {
+        "martin": ["martin county", "stuart", "jensen beach", "palm city", "hobe sound", "port salerno", "jupiter island"],
+        "st_lucie": ["st. lucie", "st lucie", "port st. lucie", "port st lucie", "fort pierce", "st. lucie west", "st lucie west"],
+        "indian_river": ["indian river", "vero beach", "sebastian", "fellsmere"],
+    }
+
+    if category_key in county_terms:
+        feed_url = (h.get("feed_url", "") or "").lower()
+        county_feed_hints = {"martin": "region-martin-county", "st_lucie": "region-st-lucie-county", "indian_river": "region-indian-river-county"}
+        return county_feed_hints.get(category_key, "") in feed_url or _has_any(text, county_terms[category_key])
+
+    if category_key in topic_terms:
+        if _has_any(text, hard_negatives.get(category_key, [])):
+            return False
+        return _has_any(title, topic_terms[category_key]) or _has_any(text, topic_terms[category_key])
+
+    return True
+
+
 def _category_score(category_key, h):
     text = _text_for_category_match(h)
     title = (h.get("title", "") or "").lower()
@@ -748,17 +818,29 @@ def _category_score(category_key, h):
 
     negative_terms = {
         "business": ["shooting", "arrest", "charged", "homicide", "murder", "missing", "crash", "fatal"],
-        "schools": ["st. lucie mets", "st lucie mets", "restaurant opening", "shooting", "arrested"],
-        "sports": ["arrest", "charged", "shooting", "homicide", "murder", "missing", "crash", "politics", "commission"],
+        "schools": ["st. lucie mets", "st lucie mets", "restaurant opening", "shooting", "arrested", "fertilizer", "lawn", "yard", "landscape", "campbell soup", "spaghettios", "worms", "walmart"],
+        "sports": ["arrest", "charged", "shooting", "homicide", "murder", "missing", "crash", "politics", "commission", "sues", "lawsuit", "campbell soup", "spaghettios", "worms", "walmart", "fertilizer", "ban"],
         "things_to_do": ["arrest", "charged", "shooting", "homicide", "murder", "fatal crash", "tax", "budget"],
         "local_gov": ["concert", "festival", "restaurant review", "game recap"],
     }
 
     if category_key in county_terms:
+        feed_url = (h.get("feed_url", "") or "").lower()
+        county_feed_hints = {
+            "martin": "region-martin-county",
+            "st_lucie": "region-st-lucie-county",
+            "indian_river": "region-indian-river-county",
+        }
+        # If WPTV itself placed the story in a county feed, trust that signal.
+        # Do not force the headline/body to repeat the county name.
+        if county_feed_hints.get(category_key, "") in feed_url:
+            score += 9
         if _has_any(text, county_terms[category_key]):
             score += 5
         if h.get("source_quality") == "full":
             score += 2
+        elif h.get("source_quality") in {"summary", "brief"}:
+            score += 1
         # County pages can carry all local-news topics, so do not over-filter by topic.
         return score
 
@@ -800,6 +882,7 @@ def filter_category_headlines(category_key, headlines, target=HEADLINES_PER_CATE
     for h in headlines:
         score = _category_score(category_key, h)
         h["category_match_score"] = score
+        h["hero_eligible"] = "yes" if _hero_eligible(category_key, h) else "no"
         scored.append((score, h))
 
     # For broad/local categories, require only a weak positive score. The goal is
@@ -811,12 +894,19 @@ def filter_category_headlines(category_key, headlines, target=HEADLINES_PER_CATE
         threshold = 3
 
     filtered = [h for score, h in scored if score >= threshold]
-    if len(filtered) < min_keep:
-        print(f"  Category filter: only {len(filtered)} strong matches; using unfiltered pool")
-        return headlines[:target]
+    hero_ready = [h for _, h in scored if h.get("hero_eligible") == "yes"]
 
-    filtered.sort(key=lambda h: (h.get("category_match_score", 0), h.get("source_quality") == "full"), reverse=True)
-    print(f"  Category filter: {len(filtered)} on-topic matches from {len(headlines)}")
+    if len(filtered) < min_keep:
+        if hero_ready:
+            filler = [h for score, h in sorted(scored, key=lambda x: x[0], reverse=True) if h not in hero_ready]
+            combined = hero_ready + filler
+            print(f"  Category filter: only {len(filtered)} strong matches; preserving {len(hero_ready)} hero-eligible items and filling cards")
+            return combined[:target]
+        print(f"  Category filter: only {len(filtered)} strong matches and no hero-eligible items; using best scored pool")
+        return [h for score, h in sorted(scored, key=lambda x: x[0], reverse=True)][:target]
+
+    filtered.sort(key=lambda h: (h.get("hero_eligible") == "yes", h.get("category_match_score", 0), h.get("source_quality") == "full"), reverse=True)
+    print(f"  Category filter: {len(filtered)} on-topic matches from {len(headlines)}; {len(hero_ready)} hero-eligible")
     return filtered[:target]
 
 # -- CLAUDE EDITORIAL ENGINE --
@@ -926,8 +1016,10 @@ def generate_category_content(category_key, category_label, headlines):
         title   = sanitize(h.get("title", ""))
         quality = h.get("source_quality", "unknown")
         stype   = h.get("source_type", "unknown")
+        hero_eligible = h.get("hero_eligible", "unknown")
+        match_score = h.get("category_match_score", "")
         content = h.get("article_text", "") or h.get("summary", "")
-        return f"{i+1}. {title} [source_type:{stype}] [source_quality:{quality}]{pub_str}\n   {sanitize(content)[:5000]}"
+        return f"{i+1}. {title} [source_type:{stype}] [source_quality:{quality}] [hero_eligible:{hero_eligible}] [category_match_score:{match_score}]{pub_str}\n   {sanitize(content)[:5000]}"
     # Pre-filter headlines older than 48 hours before Claude sees them
     from datetime import timezone as _tz
     _now_utc = datetime.now(_tz.utc)
@@ -936,16 +1028,22 @@ def generate_category_content(category_key, category_label, headlines):
             from email.utils import parsedate_to_datetime
             dt = parsedate_to_datetime(h.get("published","")).astimezone(_tz.utc)
             age_hrs = (_now_utc - dt).total_seconds() / 3600
-            return age_hrs > 48
+            return age_hrs > category_max_age_hours(category_key)
         except Exception:
-            return True
+            return False
     if category_label == "Politics":
         print(f"  Politics pre-filter: {len(headlines)} headlines incoming")
         for h in headlines[:8]:
             stale = _is_stale(h)
             print(f"    [stale={stale}] [{h.get('published','NO DATE')}] {h.get('title','')[:55]}")
     fresh = [h for h in headlines if not _is_stale(h)]
-    headlines = fresh if len(fresh) >= 1 else headlines
+    # Do not shrink a section to 1-3 stories just because only a few are inside
+    # the freshness window. If there are not enough fresh stories, keep the full
+    # candidate pool and let ranking/age caps keep older items from leading.
+    if len(fresh) >= min(6, len(headlines)):
+        headlines = fresh
+    else:
+        print(f"  Freshness guard: only {len(fresh)} fresh stories; keeping {len(headlines)} candidates")
 
     headlines_text = "\n".join(hl_line(i, h) for i, h in enumerate(headlines))
     # Final safety pass — remove any remaining characters that break JSON
@@ -977,8 +1075,8 @@ def generate_category_content(category_key, category_label, headlines):
         "local_gov":    "Pick a story about local government decisions, zoning, budgets, elections, or public policy.",
         "crime":        "Pick an actual crime, arrest, or public safety story. Not politics or tax policy.",
         "business":     "Pick a story about local economic development, real estate, business openings/closings, or commercial projects.",
-        "schools":      "Pick a story directly about schools, students, teachers, or education policy.",
-        "sports":       "Pick an actual sports result, signing, or athletic achievement. Not crime involving athletes.",
+        "schools":      "Pick a story directly about schools, students, teachers, campuses, school districts, school boards, or education policy. Do NOT pick environmental bans, fertilizer rules, general county government items, restaurants, lawsuits, or consumer stories as the Schools hero.",
+        "sports":       "Pick an actual sports result, game, team, athlete, coach, signing, tournament, championship, or St. Lucie Mets story. Do NOT pick lawsuits, consumer stories, crime, politics, general local news, or county government items as the Sports hero.",
         "things_to_do": "Pick a local event, activity, or attraction within 60 miles. Skip Orlando/Miami/Tampa unless very close.",
         "florida":      "Pick a statewide Florida story with broad impact. Not hyperlocal Treasure Coast.",
         "martin":       "Pick a story specifically about Martin County — Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno.",
@@ -991,7 +1089,20 @@ def generate_category_content(category_key, category_label, headlines):
     is_florida    = (category_key == "florida")
     system_prompt = FLORIDA_SYSTEM_PROMPT if is_florida else LOCAL_SYSTEM_PROMPT
 
-    source_rules = """SOURCE RULES:
+    if category_key in COUNTY_KEYS:
+        source_rules = """SOURCE RULES:
+- Items marked [hero_eligible:no] must NOT be selected as the hero/section lead, even if they are full-source stories. They may only be used as lower cards if needed.
+- Stories marked [source_quality:full] contain full article body text and should be used for the hero and the main full cards.
+- Stories marked [source_quality:summary] may be used for normal cards if the provided text has concrete facts.
+- Stories marked [source_quality:brief] or [source_type:discovery_only] may be used as short factual cards when needed to keep the county section populated, but they must not be padded with generic context.
+- The hero must come from [source_quality:full] or [source_quality:summary] whenever possible. Do not use [source_quality:thin] for the hero.
+- For county sections, aim to return six cards. If a source is thin, write a brief factual card instead of inventing filler or dropping the item.
+- Do not write generic context such as "this reflects growth," "officials continue to investigate," or "residents are encouraged" unless those facts are explicitly in the source.
+
+"""
+    else:
+        source_rules = """SOURCE RULES:
+- Items marked [hero_eligible:no] must NOT be selected as the hero/section lead, even if they are full-source stories. They may only be used as lower cards if needed.
 - Stories marked [source_quality:full] contain full article body text and may be used for the hero or full cards.
 - Stories marked [source_quality:summary] may be used for shorter full cards only if the provided text has enough concrete facts.
 - Stories marked [source_quality:brief], [source_quality:thin], or [source_type:discovery_only] must NOT be used for the hero and must not be padded into full articles.
@@ -1102,6 +1213,28 @@ Return ONLY valid JSON:
     for card in data.get("cards", []):
         attach_source(card, headlines)
         card["body"] = strip_absence_language(strip_markdown(card.get("body", ""), card.get("headline", "")))
+
+    # Enforce category lead eligibility in Python, not just by prompt. Claude can
+    # still be tempted by a full-source off-topic item from a broad WPTV feed.
+    def _item_hero_eligible(item):
+        idx = item.get("source_index")
+        try:
+            return headlines[int(idx) - 1].get("hero_eligible") == "yes"
+        except Exception:
+            return False
+
+    if not _item_hero_eligible(data.get("hero", {})) and data.get("cards"):
+        for ci, card in enumerate(data["cards"]):
+            if _item_hero_eligible(card):
+                old_hero = data["hero"]
+                print(f"  Hero eligibility swap for {category_label}: '{old_hero.get('headline','')[:55]}' -> '{card.get('headline','')[:55]}'")
+                if not old_hero.get("teaser"):
+                    _body = old_hero.get("body", "").strip()
+                    _first = _body.split(". ")[0].strip()
+                    old_hero["teaser"] = (_first[:160] + ".") if _first else ""
+                data["hero"] = card
+                data["cards"][ci] = old_hero
+                break
 
     # Age-based score decay for stale non-breaking stories
     def decay_score(item):
@@ -2808,12 +2941,14 @@ def main():
             try:
                 from email.utils import parsedate_to_datetime
                 dt = parsedate_to_datetime(h.get("published","")).astimezone(_tz2.utc)
-                return (_now2 - dt).total_seconds() > 48 * 3600
+                return (_now2 - dt).total_seconds() > category_max_age_hours(cat_key) * 3600
             except Exception:
-                return True
+                return False
         fresh_h = [h for h in headlines if not _headline_stale(h)]
         if len(fresh_h) >= 6:
             headlines = fresh_h
+        else:
+            print(f"  Freshness guard: only {len(fresh_h)} fresh stories for {category_max_age_hours(cat_key)}h window; keeping wider pool")
         if not headlines:
             print(f"  No headlines found for {cat_config['label']}, skipping.")
             continue
