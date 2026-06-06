@@ -353,7 +353,7 @@ def fetch_og_image(url):
     try:
         import re as _re_og
         resp = requests.get(url, timeout=10,
-                            headers={"User-Agent": "Mozilla/5.0 (compatible; PlainBot/1.0)"})
+                            headers={"User-Agent": "Mozilla/5.0 (compatible; TCTBot/1.0)"})
         if resp.status_code != 200:
             return ""
         html = resp.text[:200000]  # only need the <head>
@@ -2254,7 +2254,7 @@ def load_archive(archive_path):
 
 
 def render_article_page(hero, category_label, category_key, pub_date, slug):
-    """Render a permanent article page for a single Plain story."""
+    """Render a permanent article page for a single TCT story."""
     description = (hero.get("teaser") or hero.get("body", "")[:155]).replace('"', '')
     image_url   = hero.get("image_url") or f"{SITE_URL}/social-card.png"
     structured_data = {
@@ -2280,35 +2280,19 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
         credit   = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
         img_html = f'<figure class="article-hero-image"><img src="{hero["image_url"]}" alt="{hero["headline"]}" loading="eager">{credit}</figure>'
 
-    # Nav for article pages — all absolute URLs since page lives in /articles/
-    nav_links = " ".join([
-        f'<button class="cat-btn" data-cat="{k}" onclick="window.location=\'{SITE_URL}/news.html?cat={k}\'">{l}</button>'
-        for k, l in [("all","Top News"),("world","World"),("us","U.S."),
-                     ("politics","Politics"),("business","Business"),
-                     ("tech","Tech & Science"),("sports","Sports"),("entertainment","Entertainment")]
-    ] + [f'<a href="{SITE_URL}/archive.html" class="cat-btn" style="text-decoration:none">Archive</a>'])
+    head   = _page_head(
+        f"{hero['headline']} — Treasure Coast Today",
+        description,
+        f"/articles/{slug}.html",
+        structured_data=structured_data,
+    )
+    header = _page_header(active=category_key)
+    footer = _page_footer()
 
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{hero["headline"]} — Plain</title>
-  <meta name="description" content="{description}">
-  <link rel="canonical" href="{SITE_URL}/articles/{slug}.html">
-  <meta property="og:title" content="{hero["headline"]}">
-  <meta property="og:description" content="{description}">
-  <meta property="og:url" content="{SITE_URL}/articles/{slug}.html">
-  <meta property="og:image" content="{image_url}">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="{image_url}">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="stylesheet" href="/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
-{schema_tag}
+{head}
   <style>
     .article-wrap {{ max-width: 740px; margin: 0 auto; padding: 40px 24px 80px; }}
     .article-meta {{ display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }}
@@ -2316,7 +2300,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
     .article-date {{ font-size: 11px; color: var(--text-muted); }}
     .article-headline {{ font-family: "Fraunces", serif; font-size: clamp(26px, 4vw, 42px); font-weight: 600; line-height: 1.15; letter-spacing: -.02em; color: var(--text); margin-bottom: 24px; }}
     .article-hero-image {{ margin: 0 0 28px; }}
-    .article-hero-image img {{ width: 100%; max-height: 420px; object-fit: cover; border-radius: 8px; display: block; }}
+    .article-hero-image img {{ width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px; display: block; }}
     .article-body p {{ font-size: 17px; line-height: 1.8; color: var(--text-secondary); margin-bottom: 20px; }}
     .article-back {{ display: inline-block; font-size: 13px; color: var(--accent); text-decoration: none; margin-bottom: 32px; font-weight: 500; }}
     .article-back:hover {{ opacity: .7; }}
@@ -2327,15 +2311,10 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <a href="{SITE_URL}/news.html" class="wordmark">plain</a>
-      <nav class="category-nav">{nav_links}</nav>
-    </div>
-  </header>
+{header}
   <main>
     <div class="article-wrap">
-      <a href="{SITE_URL}/news.html" class="article-back">&larr; Back to Plain</a>
+      <a href="/" class="article-back">&larr; Back to Treasure Coast Today</a>
       <div class="article-meta">
         <span class="article-category">{category_label}</span>
         <span class="article-date">{pub_date}</span>
@@ -2344,21 +2323,11 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
       {img_html}
       <div class="article-body">{body}</div>
       <hr class="article-divider">
-      <p class="article-more">More news</p>
-      <a href="{SITE_URL}/news.html?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
+      <p class="article-more">More local news</p>
+      <a href="/?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
     </div>
   </main>
-  <footer>
-    <div class="footer-inner">
-      <span class="footer-wordmark">plain</span>
-      <div class="footer-links">
-        <a href="{SITE_URL}/archive.html">Archive</a>
-        <a href="{SITE_URL}/privacy.html">Privacy</a>
-        <a href="{SITE_URL}/terms.html">Terms</a>
-      </div>
-    </div>
-  </footer>
-  <script src="/main.js"></script>
+{footer}
 </body>
 </html>"""
 
@@ -2392,18 +2361,18 @@ def render_archive_page(archive_entries):
         </ul>
       </div>"""
 
+    head   = _page_head(
+        "Article Archive — Treasure Coast Today",
+        "Browse all local news articles from Treasure Coast Today covering Martin, St. Lucie, and Indian River counties.",
+        "/archive.html"
+    )
+    header = _page_header(active="archive")
+    footer = _page_footer()
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Archive — Plain</title>
-  <meta name="description" content="Every story published on Plain, organized by month.">
-  <link rel="canonical" href="{SITE_URL}/archive.html">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="stylesheet" href="/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+{head}
   <style>
     .archive-wrap {{ max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }}
     .archive-eyebrow {{ font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 14px; }}
@@ -2422,29 +2391,16 @@ def render_archive_page(archive_entries):
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <a href="{SITE_URL}/news.html" class="wordmark">plain</a>
-    </div>
-  </header>
+{header}
   <main>
     <div class="archive-wrap">
       <span class="archive-eyebrow">Archive</span>
       <h1 class="archive-headline">All Articles</h1>
-      <p class="archive-sub">Every story published on Plain, organized by month.</p>
+      <p class="archive-sub">Every story published on Treasure Coast Today, organized by month.</p>
       {months_html}
     </div>
   </main>
-  <footer>
-    <div class="footer-inner">
-      <span class="footer-wordmark">plain</span>
-      <div class="footer-links">
-        <a href="{SITE_URL}/privacy.html">Privacy</a>
-        <a href="{SITE_URL}/terms.html">Terms</a>
-      </div>
-    </div>
-  </footer>
-  <script src="/main.js"></script>
+{footer}
 </body>
 </html>"""
 
@@ -2498,7 +2454,7 @@ def update_news_sitemap(archive_entries):
     <loc>{SITE_URL}/articles/{e['slug']}.html</loc>
     <news:news>
       <news:publication>
-        <news:name>Plain</news:name>
+        <news:name>Treasure Coast Today</news:name>
         <news:language>en</news:language>
       </news:publication>
       <news:publication_date>{pub_date}</news:publication_date>
