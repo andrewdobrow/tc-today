@@ -2160,6 +2160,8 @@ def render_index(all_categories, top_cat):
         card_time       = card.get("published", "")
         topnews_attr    = ' data-topnews="true"' if id(card) in topnews_ids else ""
         card_hl_esc = card["headline"].replace('"', "&quot;")
+        card_link   = card.get("link", "")
+        read_more   = f'<a href="{card_link}" target="_blank" rel="noopener" class="read-source-link">Read full story &#8599;</a>' if card_link else ""
         cards_html += f"""
       <div class="article-card fade-in" data-cat="{ck}"{topnews_attr}>
         <span class="card-tag">{cl}</span>
@@ -2173,6 +2175,7 @@ def render_index(all_categories, top_cat):
           <div class="card-expand-body">{card_paragraphs}</div>
           <div class="article-actions">
             <button class="share-btn" data-headline="{card_hl_esc}" onclick="shareArticle(this)">Share &#8599;</button>
+            {read_more}
             <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
           </div>
         </div>
