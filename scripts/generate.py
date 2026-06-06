@@ -2727,7 +2727,7 @@ def render_advertise_page():
   </style>
 </head>
 <body>
-{{header}}
+{header}
   <main>
     <div class="adv-wrap">
       <span class="adv-eyebrow">Advertising</span>
@@ -2789,7 +2789,7 @@ def render_advertise_page():
       </div>
     </div>
   </main>
-{{footer}}
+{footer}
   <script>
     const form=document.getElementById('advForm'),success=document.getElementById('successMsg'),btn=document.getElementById('submitBtn');
     form.addEventListener('submit',async(e)=>{{
