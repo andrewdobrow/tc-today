@@ -23,6 +23,7 @@ CATEGORIES = {
         "label": "Local Government",
         "front_page_cap": 10,
         "feeds": [
+            "https://www.wptv.com/news/local-news.rss",
             "https://www.wptv.com/news/political.rss",
             "https://www.wptv.com/news/local-news/investigations.rss",
             "https://news.google.com/rss/search?q=martin+county+florida+commission+budget+zoning+when:2d&hl=en-US&gl=US&ceid=US:en",
@@ -38,6 +39,7 @@ CATEGORIES = {
         "label": "Crime & Safety",
         "front_page_cap": 8,
         "feeds": [
+            "https://www.wptv.com/news/local-news.rss",
             "https://www.wptv.com/news/region-martin-county.rss",
             "https://www.wptv.com/news/region-st-lucie-county.rss",
             "https://www.wptv.com/news/region-indian-river-county.rss",
@@ -51,6 +53,10 @@ CATEGORIES = {
         "label": "Business & Development",
         "front_page_cap": 8,
         "feeds": [
+            "https://www.wptv.com/news/local-news.rss",
+            "https://www.wptv.com/news/region-martin-county.rss",
+            "https://www.wptv.com/news/region-st-lucie-county.rss",
+            "https://www.wptv.com/news/region-indian-river-county.rss",
             "https://news.google.com/rss/search?q=martin+county+florida+business+development+real+estate+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=st+lucie+county+florida+business+jobs+development+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=indian+river+county+florida+business+development+when:2d&hl=en-US&gl=US&ceid=US:en",
@@ -63,6 +69,11 @@ CATEGORIES = {
         "label": "Schools",
         "front_page_cap": 7,
         "feeds": [
+            "https://www.wptv.com/news/education/back-to-school.rss",
+            "https://www.wptv.com/news/local-news.rss",
+            "https://www.wptv.com/news/region-martin-county.rss",
+            "https://www.wptv.com/news/region-st-lucie-county.rss",
+            "https://www.wptv.com/news/region-indian-river-county.rss",
             "https://news.google.com/rss/search?q=martin+county+school+district+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=st+lucie+county+school+district+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=indian+river+county+school+district+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
@@ -73,6 +84,10 @@ CATEGORIES = {
         "label": "Sports",
         "front_page_cap": 6,
         "feeds": [
+            "https://www.wptv.com/news/local-news.rss",
+            "https://www.wptv.com/news/region-martin-county.rss",
+            "https://www.wptv.com/news/region-st-lucie-county.rss",
+            "https://www.wptv.com/news/region-indian-river-county.rss",
             "https://news.google.com/rss/search?q=martin+county+high+school+sports+game+score+when:3d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=st+lucie+county+high+school+sports+game+when:3d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=treasure+coast+florida+football+basketball+baseball+soccer+when:3d&hl=en-US&gl=US&ceid=US:en",
@@ -96,6 +111,7 @@ CATEGORIES = {
         "label": "Florida",
         "front_page_hero": False,
         "feeds": [
+            "https://www.wptv.com/news/state.rss",
             "https://news.google.com/rss/search?q=florida+news+when:1d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=florida+legislature+governor+desantis+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=florida+economy+housing+insurance+when:2d&hl=en-US&gl=US&ceid=US:en",
@@ -107,6 +123,7 @@ CATEGORIES = {
         "front_page_hero": False,
         "feeds": [
             "https://www.wptv.com/news/region-martin-county.rss",
+            "https://www.wptv.com/news/local-news.rss",
             "https://news.google.com/rss/search?q=martin+county+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=stuart+florida+news+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=jensen+beach+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
@@ -119,6 +136,7 @@ CATEGORIES = {
         "front_page_hero": False,
         "feeds": [
             "https://www.wptv.com/news/region-st-lucie-county.rss",
+            "https://www.wptv.com/news/local-news.rss",
             "https://news.google.com/rss/search?q=st+lucie+county+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=port+st+lucie+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=fort+pierce+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
@@ -129,6 +147,7 @@ CATEGORIES = {
         "front_page_hero": False,
         "feeds": [
             "https://www.wptv.com/news/region-indian-river-county.rss",
+            "https://www.wptv.com/news/local-news.rss",
             "https://news.google.com/rss/search?q=indian+river+county+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=vero+beach+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=sebastian+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
@@ -155,6 +174,9 @@ client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
 # Content bank — loaded once at startup, used for card enrichment
 CONTENT_BANK_FEEDS = [
+    "https://www.wptv.com/news/local-news.rss",
+    "https://www.wptv.com/news/education/back-to-school.rss",
+    "https://www.wptv.com/news/state.rss",
     "https://www.wptv.com/feeds/rss/news",
     "https://www.wptv.com/feeds/rss/local",
     "https://news.google.com/rss/search?q=treasure+coast+florida&hl=en-US&gl=US&ceid=US:en",
@@ -167,6 +189,8 @@ CONTENT_BANK_FEEDS = [
 # Image bank — local Florida outlets
 IMAGE_BANK_FEEDS = [
     "https://www.wptv.com/news/local-news.rss",
+    "https://www.wptv.com/news/education/back-to-school.rss",
+    "https://www.wptv.com/news/state.rss",
     "https://www.wptv.com/news/region-martin-county.rss",
     "https://www.wptv.com/news/region-st-lucie-county.rss",
     "https://www.wptv.com/news/region-indian-river-county.rss",
@@ -640,7 +664,160 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
     discovery_count = sum(1 for h in result if h.get("source_quality") == "discovery_only")
     print(f"  Source quality: {full_count} full, {summary_count} summary/brief, {discovery_count} discovery-only, {len(result)} total")
 
+
     return result
+
+
+# Category relevance filtering for broad feeds.
+# This is intentionally conservative: it promotes clearly on-topic stories, but
+# falls back to the unfiltered pool if a section would otherwise go thin.
+def _text_for_category_match(h):
+    return " ".join([
+        h.get("title", ""),
+        h.get("summary", ""),
+        h.get("article_text", "")[:1200],
+    ]).lower()
+
+
+def _has_any(text, terms):
+    return any(term in text for term in terms)
+
+
+def _category_score(category_key, h):
+    text = _text_for_category_match(h)
+    title = (h.get("title", "") or "").lower()
+    score = 0
+
+    local_places = [
+        "treasure coast", "martin county", "st. lucie", "st lucie", "indian river",
+        "stuart", "jensen beach", "palm city", "hobe sound", "port salerno",
+        "port st. lucie", "port st lucie", "fort pierce", "vero beach",
+        "sebastian", "fellsmere", "okeechobee", "jupiter island"
+    ]
+
+    county_terms = {
+        "martin": ["martin county", "stuart", "jensen beach", "palm city", "hobe sound", "port salerno", "jupiter island"],
+        "st_lucie": ["st. lucie", "st lucie", "port st. lucie", "port st lucie", "fort pierce", "st. lucie west", "st lucie west"],
+        "indian_river": ["indian river", "vero beach", "sebastian", "fellsmere"],
+    }
+
+    positive_terms = {
+        "local_gov": [
+            "commission", "commissioner", "city council", "county council", "school board",
+            "zoning", "rezoning", "ordinance", "budget", "tax", "millage", "mayor",
+            "councilman", "councilwoman", "public meeting", "vote", "approved", "approval",
+            "proposal", "hearing", "development order", "planning", "public policy"
+        ],
+        "crime": [
+            "arrest", "arrested", "charged", "charges", "sheriff", "police", "deputies",
+            "deputy", "officer", "shooting", "stabbed", "stabbing", "homicide", "murder",
+            "crash", "fatal", "killed", "injured", "fire rescue", "missing", "suspect",
+            "victim", "jail", "court", "public safety", "fraud", "burglary", "robbery"
+        ],
+        "business": [
+            "business", "development", "developer", "real estate", "housing", "restaurant",
+            "store", "retail", "mall", "company", "jobs", "hiring", "economic", "economy",
+            "construction", "project", "commercial", "warehouse", "factory", "plant",
+            "opening", "closing", "closes", "expansion", "wawa", "publix", "downtown",
+            "permit", "approved", "zoning", "property", "market"
+        ],
+        "schools": [
+            "school", "schools", "student", "students", "teacher", "teachers", "education",
+            "district", "superintendent", "principal", "classroom", "campus", "graduation",
+            "back to school", "school board", "college", "university", "scholarship",
+            "curriculum", "bus", "kindergarten", "high school", "middle school", "elementary"
+        ],
+        "sports": [
+            "sports", "football", "basketball", "baseball", "softball", "soccer", "volleyball",
+            "tennis", "golf", "lacrosse", "wrestling", "track", "cross country", "swimming",
+            "game", "score", "win", "wins", "won", "loss", "defeats", "beats", "championship",
+            "playoff", "tournament", "athlete", "coach", "team", "mets", "st. lucie mets", "st lucie mets"
+        ],
+        "things_to_do": [
+            "event", "events", "festival", "concert", "show", "weekend", "things to do",
+            "restaurant", "food", "arts", "art", "music", "theater", "theatre", "park",
+            "beach", "market", "farmers market", "fair", "fundraiser", "community", "parade",
+            "holiday", "museum", "exhibit", "taste", "family-friendly", "activities"
+        ],
+        "florida": [
+            "florida", "state", "desantis", "legislature", "tallahassee", "supreme court",
+            "insurance", "hurricane", "weather", "statewide", "lawmakers", "law", "governor",
+            "environment", "economy", "housing", "property insurance"
+        ],
+    }
+
+    negative_terms = {
+        "business": ["shooting", "arrest", "charged", "homicide", "murder", "missing", "crash", "fatal"],
+        "schools": ["st. lucie mets", "st lucie mets", "restaurant opening", "shooting", "arrested"],
+        "sports": ["arrest", "charged", "shooting", "homicide", "murder", "missing", "crash", "politics", "commission"],
+        "things_to_do": ["arrest", "charged", "shooting", "homicide", "murder", "fatal crash", "tax", "budget"],
+        "local_gov": ["concert", "festival", "restaurant review", "game recap"],
+    }
+
+    if category_key in county_terms:
+        if _has_any(text, county_terms[category_key]):
+            score += 5
+        if h.get("source_quality") == "full":
+            score += 2
+        # County pages can carry all local-news topics, so do not over-filter by topic.
+        return score
+
+    terms = positive_terms.get(category_key, [])
+    if terms:
+        for term in terms:
+            if term in title:
+                score += 3
+            elif term in text:
+                score += 1
+
+    if category_key != "florida" and _has_any(text, local_places):
+        score += 2
+
+    if h.get("source_quality") == "full":
+        score += 2
+    elif h.get("source_quality") == "discovery_only":
+        score -= 2
+
+    for term in negative_terms.get(category_key, []):
+        if term in text:
+            score -= 3
+
+    return score
+
+
+def filter_category_headlines(category_key, headlines, target=HEADLINES_PER_CATEGORY, min_keep=6):
+    """Return the best on-topic headlines for a section without blanking weak sections.
+
+    Broad WPTV feeds are useful because they provide full bodies, but they can put crime,
+    schools, business, and county stories in the same pool. This layer promotes stories
+    that actually match the current section. If the filter would leave too little content,
+    it falls back to the original list so Claude still has something to work with.
+    """
+    if not headlines:
+        return headlines
+
+    scored = []
+    for h in headlines:
+        score = _category_score(category_key, h)
+        h["category_match_score"] = score
+        scored.append((score, h))
+
+    # For broad/local categories, require only a weak positive score. The goal is
+    # to remove obvious mismatches, not starve the section.
+    threshold = 1
+    if category_key in {"business", "schools", "sports", "things_to_do", "local_gov", "crime"}:
+        threshold = 2
+    if category_key in {"martin", "st_lucie", "indian_river"}:
+        threshold = 3
+
+    filtered = [h for score, h in scored if score >= threshold]
+    if len(filtered) < min_keep:
+        print(f"  Category filter: only {len(filtered)} strong matches; using unfiltered pool")
+        return headlines[:target]
+
+    filtered.sort(key=lambda h: (h.get("category_match_score", 0), h.get("source_quality") == "full"), reverse=True)
+    print(f"  Category filter: {len(filtered)} on-topic matches from {len(headlines)}")
+    return filtered[:target]
 
 # -- CLAUDE EDITORIAL ENGINE --
 
@@ -1878,10 +2055,14 @@ def render_index(all_categories, top_cat):
         </div>
       </div>"""
 
+    # Header/nav should be stable even if a category fails to generate content in a run.
+    # Build nav from the master CATEGORIES config, not all_categories.
     nav_buttons = "\n        ".join(
-        f'<button class="cat-btn{" active" if i==0 else ""}" data-cat="{"all" if i==0 else cat["category_key"]}">' +
-        f'{"Top News" if i==0 else cat["category_label"]}</button>'
-        for i, cat in enumerate([None] + all_categories)
+        ['<button class="cat-btn active" data-cat="all">Top News</button>'] +
+        [
+            f'<button class="cat-btn" data-cat="{cat_key}">{cat_config["label"]}</button>'
+            for cat_key, cat_config in CATEGORIES.items()
+        ]
     )
 
     _head   = _page_head(
@@ -2616,7 +2797,9 @@ def main():
 
     for cat_key, cat_config in CATEGORIES.items():
         print(f"Processing: {cat_config['label']}...")
-        headlines = fetch_headlines(cat_config["feeds"])
+        # Pull a wider candidate pool because broad WPTV feeds can contain several
+        # sections' worth of local stories. Then rank/filter down to this category.
+        headlines = fetch_headlines(cat_config["feeds"], limit=24)
 
         # Filter headlines older than 48 hours
         from datetime import timezone as _tz2
@@ -2634,6 +2817,8 @@ def main():
         if not headlines:
             print(f"  No headlines found for {cat_config['label']}, skipping.")
             continue
+
+        headlines = filter_category_headlines(cat_key, headlines, target=HEADLINES_PER_CATEGORY, min_keep=6)
 
         print(f"  {len(headlines)} headlines fetched")
         try:
