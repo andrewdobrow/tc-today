@@ -33,6 +33,9 @@ CATEGORIES = {
             "https://news.google.com/rss/search?q=port+st+lucie+city+council+mayor+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=fort+pierce+city+commission+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=vero+beach+city+council+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=martin+county+school+district+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=st+lucie+county+school+district+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=indian+river+county+school+district+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "crime": {
@@ -65,21 +68,7 @@ CATEGORIES = {
             "https://news.google.com/rss/search?q=stuart+florida+business+downtown+development+when:2d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
-    "schools": {
-        "label": "Schools",
-        "front_page_cap": 7,
-        "feeds": [
-            "https://www.wptv.com/news/education/back-to-school.rss",
-            "https://www.wptv.com/news/local-news.rss",
-            "https://www.wptv.com/news/region-martin-county.rss",
-            "https://www.wptv.com/news/region-st-lucie-county.rss",
-            "https://www.wptv.com/news/region-indian-river-county.rss",
-            "https://news.google.com/rss/search?q=martin+county+school+district+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=st+lucie+county+school+district+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=indian+river+county+school+district+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=treasure+coast+florida+school+education+when:3d&hl=en-US&gl=US&ceid=US:en",
-        ],
-    },
+
     "sports": {
         "label": "Sports",
         "front_page_cap": 6,
@@ -169,7 +158,7 @@ def category_max_age_hours(category_key):
     """
     if category_key in COUNTY_KEYS:
         return 168  # 7 days for county pages
-    if category_key in {"schools", "sports", "business"}:
+    if category_key in {"sports", "business"}:
         return 168  # 7 days for slower-moving local beats
     if category_key == "things_to_do":
         return 336  # 14 days for event/activity planning
@@ -257,7 +246,6 @@ FALLBACK_IMAGE_MAP = {
     "local_gov":    ["local_gov-1.jpg",    "local_gov-2.jpg",    "local_gov-3.jpg"],
     "crime":        ["crime-1.jpg",        "crime-2.jpg",        "crime-3.jpg"],
     "business":     ["business-1.jpg",     "business-2.jpg",     "business-3.jpg"],
-    "schools":      ["schools-1.jpg",      "schools-2.jpg",      "schools-3.jpg"],
     "sports":       ["sports-1.jpg",       "sports-2.jpg",       "sports-3.jpg"],
     "things_to_do": ["things_to_do-1.jpg", "things_to_do-2.jpg", "things_to_do-3.jpg"],
     "florida":      ["florida-1.jpg",      "florida-2.jpg",      "florida-3.jpg"],
@@ -412,7 +400,6 @@ def match_image(headline, image_bank, cat_key="", used_images=None):
         "local_gov":    [],
         "crime":        [],
         "business":     [],
-        "schools":      [],
         "sports":       [],
         "things_to_do": [],
         "florida":      [],
@@ -717,21 +704,33 @@ def _hero_eligible(category_key, h):
         return False
 
     topic_terms = {
-        "local_gov": ["commission", "commissioner", "city council", "county council", "school board", "zoning", "rezoning", "ordinance", "budget", "tax", "millage", "mayor", "public meeting", "vote", "approved", "approval", "proposal", "hearing", "development order", "planning", "public policy", "ban", "takes effect"],
+        "local_gov": ["commission", "commissioner", "city council", "county council", "school board", "zoning", "rezoning", "ordinance", "budget", "tax", "millage", "mayor", "public meeting", "vote", "approved", "approval", "proposal", "hearing", "development order", "planning", "public policy", "ban", "takes effect", "school district", "superintendent", "principal", "education", "student", "teacher", "curriculum", "school closure", "school merger"],
         "crime": ["arrest", "arrested", "charged", "charges", "sheriff", "police", "deputies", "deputy", "officer", "shooting", "stabbed", "stabbing", "homicide", "murder", "crash", "fatal", "killed", "injured", "fire rescue", "missing", "suspect", "victim", "jail", "court", "public safety", "fraud", "burglary", "robbery"],
         "business": ["business", "development", "developer", "real estate", "housing", "restaurant", "store", "retail", "mall", "company", "jobs", "hiring", "economic", "economy", "construction", "project", "commercial", "warehouse", "factory", "plant", "opening", "closing", "closes", "expansion", "wawa", "publix", "downtown", "permit", "property", "market", "walmart", "campbell soup"],
-        "schools": ["school", "schools", "student", "students", "teacher", "teachers", "education", "district", "superintendent", "principal", "classroom", "campus", "graduation", "back to school", "school board", "college", "university", "scholarship", "curriculum", "kindergarten", "high school", "middle school", "elementary"],
         "sports": ["sports", "football", "basketball", "baseball", "softball", "soccer", "volleyball", "tennis", "golf", "lacrosse", "wrestling", "track", "cross country", "swimming", "game", "score", "win", "wins", "won", "loss", "defeats", "beats", "championship", "playoff", "tournament", "athlete", "coach", "team", "mets", "st. lucie mets", "st lucie mets"],
         "things_to_do": ["event", "events", "festival", "concert", "show", "weekend", "things to do", "restaurant", "food", "arts", "art", "music", "theater", "theatre", "park", "market", "farmers market", "fair", "fundraiser", "community", "parade", "holiday", "museum", "exhibit", "taste", "family-friendly", "activities"],
         "florida": ["florida", "state", "desantis", "legislature", "tallahassee", "supreme court", "insurance", "hurricane", "weather", "statewide", "lawmakers", "law", "governor", "environment", "economy", "housing", "property insurance"],
     }
 
     hard_negatives = {
-        "sports": ["sues", "lawsuit", "campbell soup", "spaghettios", "worms", "walmart", "fertilizer", "ban", "commission", "politics", "arrest", "charged", "shooting", "homicide", "murder", "missing", "crash"],
-        "schools": ["fertilizer", "lawn", "yard", "landscape", "ban takes effect", "campbell soup", "spaghettios", "worms", "walmart", "st. lucie mets", "st lucie mets", "restaurant", "shooting", "arrest", "arrested"],
-        "business": ["shooting", "homicide", "murder", "missing", "fatal crash"],
-        "things_to_do": ["shooting", "homicide", "murder", "fatal crash", "arrest", "charged"],
-        "local_gov": ["concert", "festival", "game recap"],
+        "sports":       ["sues", "lawsuit", "campbell soup", "spaghettios", "worms", "walmart",
+                         "fertilizer", "ban", "commission", "politics", "arrest", "charged",
+                         "shooting", "homicide", "murder", "missing", "fatal crash", "zoning",
+                         "ordinance", "budget", "tax", "city council", "county council",
+                         "restaurant opens", "business opens", "store opens", "new store"],
+        "business":     ["shooting", "homicide", "murder", "missing", "fatal crash",
+                         "arrest", "arrested", "charged", "stabbing", "robbery", "burglary",
+                         "game recap", "score", "wins over", "defeats", "beats", "championship",
+                         "playoff", "tournament", "festival", "concert", "parade"],
+        "crime":        ["restaurant", "business opens", "store opens", "new store", "hiring",
+                         "festival", "concert", "event", "game recap", "score", "wins", "defeats",
+                         "zoning", "ordinance", "budget vote", "commission vote", "development order"],
+        "things_to_do": ["shooting", "homicide", "murder", "fatal crash", "arrest", "charged",
+                         "stabbing", "robbery", "burglary", "zoning", "ordinance", "budget",
+                         "tax", "lawsuit", "commission vote"],
+        "local_gov":    ["concert", "festival", "game recap", "score", "wins over", "defeats",
+                         "arrest", "shooting", "homicide", "murder"],
+        "florida":      ["game recap", "score", "wins over", "defeats", "beats"],
     }
 
     county_terms = {
@@ -791,13 +790,7 @@ def _category_score(category_key, h):
             "opening", "closing", "closes", "expansion", "wawa", "publix", "downtown",
             "permit", "approved", "zoning", "property", "market"
         ],
-        "schools": [
-            "school", "schools", "student", "students", "teacher", "teachers", "education",
-            "district", "superintendent", "principal", "classroom", "campus", "graduation",
-            "back to school", "school board", "college", "university", "scholarship",
-            "curriculum", "bus", "kindergarten", "high school", "middle school", "elementary"
-        ],
-        "sports": [
+                "sports": [
             "sports", "football", "basketball", "baseball", "softball", "soccer", "volleyball",
             "tennis", "golf", "lacrosse", "wrestling", "track", "cross country", "swimming",
             "game", "score", "win", "wins", "won", "loss", "defeats", "beats", "championship",
@@ -818,7 +811,6 @@ def _category_score(category_key, h):
 
     negative_terms = {
         "business": ["shooting", "arrest", "charged", "homicide", "murder", "missing", "crash", "fatal"],
-        "schools": ["st. lucie mets", "st lucie mets", "restaurant opening", "shooting", "arrested", "fertilizer", "lawn", "yard", "landscape", "campbell soup", "spaghettios", "worms", "walmart"],
         "sports": ["arrest", "charged", "shooting", "homicide", "murder", "missing", "crash", "politics", "commission", "sues", "lawsuit", "campbell soup", "spaghettios", "worms", "walmart", "fertilizer", "ban"],
         "things_to_do": ["arrest", "charged", "shooting", "homicide", "murder", "fatal crash", "tax", "budget"],
         "local_gov": ["concert", "festival", "restaurant review", "game recap"],
@@ -888,7 +880,7 @@ def filter_category_headlines(category_key, headlines, target=HEADLINES_PER_CATE
     # For broad/local categories, require only a weak positive score. The goal is
     # to remove obvious mismatches, not starve the section.
     threshold = 1
-    if category_key in {"business", "schools", "sports", "things_to_do", "local_gov", "crime"}:
+    if category_key in {"business", "sports", "things_to_do", "local_gov", "crime"}:
         threshold = 2
     if category_key in {"martin", "st_lucie", "indian_river"}:
         threshold = 3
@@ -1075,7 +1067,6 @@ def generate_category_content(category_key, category_label, headlines):
         "local_gov":    "Pick a story about local government decisions, zoning, budgets, elections, or public policy.",
         "crime":        "Pick an actual crime, arrest, or public safety story. Not politics or tax policy.",
         "business":     "Pick a story about local economic development, real estate, business openings/closings, or commercial projects.",
-        "schools":      "Pick a story directly about schools, students, teachers, campuses, school districts, school boards, or education policy. Do NOT pick environmental bans, fertilizer rules, general county government items, restaurants, lawsuits, or consumer stories as the Schools hero.",
         "sports":       "Pick an actual sports result, game, team, athlete, coach, signing, tournament, championship, or St. Lucie Mets story. Do NOT pick lawsuits, consumer stories, crime, politics, general local news, or county government items as the Sports hero.",
         "things_to_do": "Pick a local event, activity, or attraction within 60 miles. Skip Orlando/Miami/Tampa unless very close.",
         "florida":      "Pick a statewide Florida story with broad impact. Not hyperlocal Treasure Coast.",
@@ -2079,7 +2070,6 @@ def render_index(all_categories, top_cat):
         "local_gov":    "Treasure Coast Local Government News",
         "crime":        "Treasure Coast Crime & Safety News",
         "business":     "Treasure Coast Business News",
-        "schools":      "Treasure Coast Schools News",
         "sports":       "Treasure Coast Sports News",
         "things_to_do": "Things To Do on the Treasure Coast",
         "florida":      "Florida News",
@@ -2560,7 +2550,6 @@ def _page_header(active=""):
         {cat_link("Local Gov", "/?cat=local_gov", "local_gov")}
         {cat_link("Crime", "/?cat=crime", "crime")}
         {cat_link("Business", "/?cat=business", "business")}
-        {cat_link("Schools", "/?cat=schools", "schools")}
         {cat_link("Sports", "/?cat=sports", "sports")}
         {cat_link("Things To Do", "/?cat=things_to_do", "things_to_do")}
         {cat_link("Florida", "/?cat=florida", "florida")}
