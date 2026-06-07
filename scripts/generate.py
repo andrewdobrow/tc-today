@@ -638,6 +638,11 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
             h["source_quality"] = "discovery_only"
             return h
 
+        # Google News aggregators — treat as brief minimum, don't penalize
+        if h.get("source_type") == "aggregator":
+            h["source_quality"] = "brief" if summary_words >= 20 else "thin"
+            return h
+
         # Try full body extraction for open/local sources.
         if h.get("source_type") == "full_source" and link:
             full = fetch_article_text(link, max_words=1000)
@@ -849,8 +854,6 @@ def _category_score(category_key, h):
 
     if h.get("source_quality") == "full":
         score += 2
-    elif h.get("source_quality") == "discovery_only":
-        score -= 2
 
     for term in negative_terms.get(category_key, []):
         if term in text:
@@ -883,7 +886,7 @@ def filter_category_headlines(category_key, headlines, target=HEADLINES_PER_CATE
     if category_key in {"business", "sports", "things_to_do", "local_gov", "crime"}:
         threshold = 2
     if category_key in {"martin", "st_lucie", "indian_river"}:
-        threshold = 3
+        threshold = 1  # County pages are already narrow feeds — don't filter aggressively
 
     filtered = [h for score, h in scored if score >= threshold]
     hero_ready = [h for _, h in scored if h.get("hero_eligible") == "yes"]
