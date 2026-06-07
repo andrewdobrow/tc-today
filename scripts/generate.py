@@ -125,10 +125,10 @@ CATEGORIES = {
         "front_page_hero": False,
         "feeds": [
             "https://www.wptv.com/news/region-st-lucie-county.rss",
-            "https://www.wptv.com/news/local-news.rss",
             "https://news.google.com/rss/search?q=st+lucie+county+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=port+st+lucie+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=fort+pierce+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=st+lucie+county+florida+when:7d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "indian_river": {
