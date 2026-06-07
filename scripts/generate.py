@@ -588,13 +588,39 @@ def clean_summary(text):
     return text
 
 
-def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY):
+def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
     """Pull headlines, dedupe, fetch usable full article text for open sources, then limit."""
-    seen, entries = set(), []
-    for url in feeds:
+
+    def fetch_one_feed(url):
+        # Use cache if available
+        if feed_cache is not None and url in feed_cache:
+            return url, feed_cache[url]
         try:
+            import socket
+            old_timeout = socket.getdefaulttimeout()
+            socket.setdefaulttimeout(8)
             feed = feedparser.parse(url)
-            for entry in feed.entries[:15]:
+            socket.setdefaulttimeout(old_timeout)
+            return url, feed.entries
+        except Exception as e:
+            print(f"  Feed error ({url[:60]}): {e}")
+            return url, []
+
+    # Fetch all feeds in parallel — a slow/blocked feed won't stall the others
+    feed_results = []
+    with ThreadPoolExecutor(max_workers=6) as ex:
+        futures = {ex.submit(fetch_one_feed, url): url for url in feeds}
+        for fut in as_completed(futures, timeout=25):
+            try:
+                url, feed_entries = fut.result(timeout=10)
+                feed_results.append((url, feed_entries))
+            except Exception as e:
+                print(f"  Feed timeout ({futures[fut][:60]}): {e}")
+
+    seen, entries = set(), []
+    for url, feed_entries in feed_results:
+        try:
+            for entry in feed_entries[:15]:
                 title = sanitize_text(entry.get("title", "").strip())
                 if not title or title.lower() in seen:
                     continue
@@ -2937,11 +2963,41 @@ def main():
     used_bank_images = set()
     all_categories = []
 
+    # Pre-fetch all unique feed URLs once to avoid hammering WPTV with
+    # duplicate requests across categories that share the same feeds.
+    all_feed_urls = list({url for cat in CATEGORIES.values() for url in cat.get("feeds", [])})
+    print(f"  Pre-fetching {len(all_feed_urls)} unique feeds...")
+    feed_cache = {}
+
+    def _fetch_and_cache(url):
+        try:
+            import socket
+            old = socket.getdefaulttimeout()
+            socket.setdefaulttimeout(8)
+            feed = feedparser.parse(url)
+            socket.setdefaulttimeout(old)
+            return url, feed.entries
+        except Exception as e:
+            print(f"  Feed error ({url[:60]}): {e}")
+            return url, []
+
+    with ThreadPoolExecutor(max_workers=8) as ex:
+        futures = {ex.submit(_fetch_and_cache, url): url for url in all_feed_urls}
+        for fut in as_completed(futures, timeout=40):
+            try:
+                url, entries = fut.result(timeout=10)
+                feed_cache[url] = entries
+            except Exception as e:
+                feed_cache[futures[fut]] = []
+                print(f"  Feed timeout ({futures[fut][:60]}): {e}")
+
+    print(f"  Feed cache: {sum(len(v) for v in feed_cache.values())} total entries across {len(feed_cache)} feeds")
+
     for cat_key, cat_config in CATEGORIES.items():
         print(f"Processing: {cat_config['label']}...")
         # Pull a wider candidate pool because broad WPTV feeds can contain several
         # sections' worth of local stories. Then rank/filter down to this category.
-        headlines = fetch_headlines(cat_config["feeds"], limit=24)
+        headlines = fetch_headlines(cat_config["feeds"], limit=24, feed_cache=feed_cache)
 
         # Filter headlines older than 48 hours
         from datetime import timezone as _tz2
