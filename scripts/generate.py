@@ -2331,6 +2331,8 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
     .article-more-link {{ display: inline-block; color: var(--accent); font-size: 14px; font-weight: 500; text-decoration: none; }}
     .article-more-link:hover {{ opacity: .7; }}
   </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9679836198092378"
+     crossorigin="anonymous"></script>
 </head>
 <body>
 {header}
