@@ -2331,8 +2331,6 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
     .article-more-link {{ display: inline-block; color: var(--accent); font-size: 14px; font-weight: 500; text-decoration: none; }}
     .article-more-link:hover {{ opacity: .7; }}
   </style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9679836198092378"
-     crossorigin="anonymous"></script>
 </head>
 <body>
 {header}
@@ -2554,6 +2552,7 @@ def _page_head(title, description, canonical_path="", structured_data=None):
   <meta property="og:image" content="{SITE_URL}/og-image.png">
   <meta name="geo.region" content="US-FL">
   <meta name="geo.placename" content="Treasure Coast, Florida">
+  <meta name="google-adsense-account" content="ca-pub-9679836198092378">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
