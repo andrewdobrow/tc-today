@@ -2292,7 +2292,8 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
     # Hotlinked CDN images from Google News or unknown sources may break on social sharing
     _reliable_domains = ["wptv.com", "wpbf.com", "cbs12.com", "treasurecoast.today", "wflx.com"]
     _hero_img = hero.get("image_url", "")
-    image_url = _hero_img if (_hero_img and any(d in _hero_img for d in _reliable_domains)) else f"{SITE_URL}/og-image.png"
+    _cat_og   = f"{SITE_URL}/og-{category_key}.png"
+    image_url = _hero_img if (_hero_img and any(d in _hero_img for d in _reliable_domains)) else _cat_og
     structured_data = {
         "@context": "https://schema.org",
         "@type":    "NewsArticle",
