@@ -2818,7 +2818,10 @@ def render_advertise_page():
     .adv-field input::placeholder, .adv-field textarea::placeholder {{ color: var(--text-secondary); opacity: .5; }}
     .adv-check-group {{ display: flex; flex-direction: column; gap: 10px; }}
     .adv-check {{ display: flex; align-items: center; gap: 10px; cursor: pointer; }}
-    .adv-check input[type="checkbox"] {{ width: 16px; height: 16px; min-width: 16px; accent-color: var(--accent); cursor: pointer; padding: 0; }}
+    .adv-check input[type="checkbox"] {{ position: absolute; opacity: 0; width: 0; height: 0; }}
+    .adv-check-box {{ width: 18px; height: 18px; min-width: 18px; border: 2px solid var(--border); border-radius: 4px; background: var(--bg); display: flex; align-items: center; justify-content: center; transition: background .15s, border-color .15s; flex-shrink: 0; }}
+    .adv-check input[type="checkbox"]:checked + .adv-check-box {{ background: var(--accent); border-color: var(--accent); }}
+    .adv-check input[type="checkbox"]:checked + .adv-check-box::after {{ content: ""; display: block; width: 5px; height: 9px; border: 2px solid white; border-top: none; border-left: none; transform: rotate(45deg) translate(-1px, -1px); }}
     .adv-check span {{ font-size: 14px; color: var(--text); line-height: 1.4; }}
     .adv-submit {{ background: var(--accent); color: white; border: none; border-radius: 8px; padding: 14px 28px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity .15s; align-self: flex-start; }}
     .adv-submit:hover {{ opacity: .88; }}
@@ -2865,10 +2868,10 @@ def render_advertise_page():
         <div class="adv-field">
           <label>Which counties are most important for your audience?</label>
           <div class="adv-check-group">
-            <label class="adv-check"><input type="checkbox" name="counties" value="Martin County"><span>Martin County (Stuart, Jensen Beach, Palm City, Hobe Sound)</span></label>
-            <label class="adv-check"><input type="checkbox" name="counties" value="St. Lucie County"><span>St. Lucie County (Port St. Lucie, Fort Pierce)</span></label>
-            <label class="adv-check"><input type="checkbox" name="counties" value="Indian River County"><span>Indian River County (Vero Beach, Sebastian)</span></label>
-            <label class="adv-check"><input type="checkbox" name="counties" value="All three counties"><span>All three counties</span></label>
+            <label class="adv-check"><input type="checkbox" name="counties" value="Martin County"><div class="adv-check-box"></div><span>Martin County (Stuart, Jensen Beach, Palm City, Hobe Sound)</span></label>
+            <label class="adv-check"><input type="checkbox" name="counties" value="St. Lucie County"><div class="adv-check-box"></div><span>St. Lucie County (Port St. Lucie, Fort Pierce)</span></label>
+            <label class="adv-check"><input type="checkbox" name="counties" value="Indian River County"><div class="adv-check-box"></div><span>Indian River County (Vero Beach, Sebastian)</span></label>
+            <label class="adv-check"><input type="checkbox" name="counties" value="All three counties"><div class="adv-check-box"></div><span>All three counties</span></label>
           </div>
         </div>
         <div class="adv-field">
