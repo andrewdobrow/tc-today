@@ -2427,7 +2427,82 @@ def render_archive_page(archive_entries):
 </html>"""
 
 
-def update_sitemap(archive_entries):
+def render_rss_feed(all_categories, top_cat):
+    """Generate an RSS feed featuring all hero stories from the current run."""
+    from email.utils import formatdate
+    import time
+
+    now_rfc = formatdate(usegmt=True)
+
+    items = []
+    # Front page hero first
+    hero = top_cat["hero"]
+    headline = hero.get("headline", "")
+    if headline:
+        archive     = load_archive(OUTPUT_DIR / "archive.json")
+        matched     = find_matching_entry(headline, archive, hero.get("link", ""))
+        slug        = matched["slug"] if matched else f"{datetime.utcnow().strftime('%Y-%m-%d')}-{slugify(headline)}"
+        article_url = f"{SITE_URL}/articles/{slug}.html"
+        teaser      = hero.get("teaser") or hero.get("body", "")[:300]
+        pub         = hero.get("published_raw") or now_rfc
+        try:
+            from email.utils import parsedate_to_datetime
+            pub = formatdate(parsedate_to_datetime(pub).timestamp(), usegmt=True)
+        except Exception:
+            pub = now_rfc
+        items.append(f"""  <item>
+    <title><![CDATA[{headline}]]></title>
+    <link>{article_url}</link>
+    <guid isPermaLink="true">{article_url}</guid>
+    <description><![CDATA[{teaser}]]></description>
+    <pubDate>{pub}</pubDate>
+    <category><![CDATA[{top_cat["category_label"]}]]></category>
+  </item>""")
+
+    # All other category heroes
+    seen_headlines = {headline}
+    for cat in all_categories:
+        hero = cat["hero"]
+        hl   = hero.get("headline", "")
+        if not hl or hl in seen_headlines:
+            continue
+        seen_headlines.add(hl)
+        archive     = load_archive(OUTPUT_DIR / "archive.json")
+        matched     = find_matching_entry(hl, archive, hero.get("link", ""))
+        slug        = matched["slug"] if matched else f"{datetime.utcnow().strftime('%Y-%m-%d')}-{slugify(hl)}"
+        article_url = f"{SITE_URL}/articles/{slug}.html"
+        teaser      = hero.get("teaser") or hero.get("body", "")[:300]
+        pub         = hero.get("published_raw") or now_rfc
+        try:
+            from email.utils import parsedate_to_datetime
+            pub = formatdate(parsedate_to_datetime(pub).timestamp(), usegmt=True)
+        except Exception:
+            pub = now_rfc
+        items.append(f"""  <item>
+    <title><![CDATA[{hl}]]></title>
+    <link>{article_url}</link>
+    <guid isPermaLink="true">{article_url}</guid>
+    <description><![CDATA[{teaser}]]></description>
+    <pubDate>{pub}</pubDate>
+    <category><![CDATA[{cat["category_label"]}]]></category>
+  </item>""")
+
+    items_xml = "\n".join(items)
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Treasure Coast Today</title>
+    <link>{SITE_URL}</link>
+    <description>Local news for Martin, St. Lucie and Indian River counties, Florida.</description>
+    <language>en-us</language>
+    <lastBuildDate>{now_rfc}</lastBuildDate>
+    <atom:link href="{SITE_URL}/feed.xml" rel="self" type="application/rss+xml" />
+{items_xml}
+  </channel>
+</rss>"""
+
+
+
     now_str = datetime.utcnow().strftime("%Y-%m-%d")
     static = f"""  <url>
     <loc>{SITE_URL}/</loc>
@@ -3194,6 +3269,7 @@ def main():
     (OUTPUT_DIR / "events.html").write_text(render_events_page(), encoding="utf-8")
     (OUTPUT_DIR / "about.html").write_text(render_about_page(), encoding="utf-8")
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
+    (OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat), encoding="utf-8")
 
     print(f"Done. {len(all_categories)} categories written.")
 
