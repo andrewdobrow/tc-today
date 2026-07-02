@@ -743,25 +743,35 @@ def _hero_eligible(category_key, h):
         "florida": ["florida", "state", "desantis", "legislature", "tallahassee", "supreme court", "insurance", "hurricane", "weather", "statewide", "lawmakers", "law", "governor", "environment", "economy", "housing", "property insurance"],
     }
 
+    # Block obituary listings (non-notable individuals) but not news coverage of notable deaths.
+    # Terms like "obituary", "survived by", "funeral home" only appear in obit listings —
+    # news coverage of notable deaths uses "dies", "killed", "death of" which we allow.
+    obit_terms = ["obituary", "obituaries", "survived by", "is survived by",
+                  "funeral home", "in memoriam", "memorial service at",
+                  "laid to rest", "celebration of life"]
+
     hard_negatives = {
         "sports":       ["sues", "lawsuit", "campbell soup", "spaghettios", "worms", "walmart",
                          "fertilizer", "ban", "commission", "politics", "arrest", "charged",
                          "shooting", "homicide", "murder", "missing", "fatal crash", "zoning",
                          "ordinance", "budget", "tax", "city council", "county council",
-                         "restaurant opens", "business opens", "store opens", "new store"],
+                         "restaurant opens", "business opens", "store opens", "new store"] + obit_terms,
         "business":     ["shooting", "homicide", "murder", "missing", "fatal crash",
                          "arrest", "arrested", "charged", "stabbing", "robbery", "burglary",
                          "game recap", "score", "wins over", "defeats", "beats", "championship",
-                         "playoff", "tournament", "festival", "concert", "parade"],
+                         "playoff", "tournament", "festival", "concert", "parade"] + obit_terms,
         "crime":        ["restaurant", "business opens", "store opens", "new store", "hiring",
                          "festival", "concert", "event", "game recap", "score", "wins", "defeats",
                          "zoning", "ordinance", "budget vote", "commission vote", "development order"],
         "things_to_do": ["shooting", "homicide", "murder", "fatal crash", "arrest", "charged",
                          "stabbing", "robbery", "burglary", "zoning", "ordinance", "budget",
-                         "tax", "lawsuit", "commission vote"],
+                         "tax", "lawsuit", "commission vote"] + obit_terms,
         "local_gov":    ["concert", "festival", "game recap", "score", "wins over", "defeats",
-                         "arrest", "shooting", "homicide", "murder"],
-        "florida":      ["game recap", "score", "wins over", "defeats", "beats"],
+                         "arrest", "shooting", "homicide", "murder"] + obit_terms,
+        "florida":      ["game recap", "score", "wins over", "defeats", "beats"] + obit_terms,
+        "martin":       [],
+        "st_lucie":     [],
+        "indian_river": [],
     }
 
     county_terms = {
@@ -2278,7 +2288,11 @@ def load_archive(archive_path):
 def render_article_page(hero, category_label, category_key, pub_date, slug):
     """Render a permanent article page for a single TCT story."""
     description = (hero.get("teaser") or hero.get("body", "")[:155]).replace('"', '')
-    image_url   = hero.get("image_url") or f"{SITE_URL}/social-card.png"
+    # Only use images from reliable/stable sources for og:image
+    # Hotlinked CDN images from Google News or unknown sources may break on social sharing
+    _reliable_domains = ["wptv.com", "wpbf.com", "cbs12.com", "treasurecoast.today", "wflx.com"]
+    _hero_img = hero.get("image_url", "")
+    image_url = _hero_img if (_hero_img and any(d in _hero_img for d in _reliable_domains)) else f"{SITE_URL}/og-image.png"
     structured_data = {
         "@context": "https://schema.org",
         "@type":    "NewsArticle",
@@ -2307,6 +2321,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
         description,
         f"/articles/{slug}.html",
         structured_data=structured_data,
+        image_url=image_url,
     )
     header = _page_header(active=category_key)
     footer = _page_footer()
@@ -2537,6 +2552,47 @@ def render_rss_feed(all_categories, top_cat):
 </urlset>"""
 
 
+def update_sitemap(archive_entries):
+    """Regenerate sitemap.xml with all static and article pages."""
+    now_str = datetime.utcnow().strftime("%Y-%m-%d")
+    static_urls = f"""  <url>
+    <loc>{SITE_URL}/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <lastmod>{now_str}</lastmod>
+  </url>
+  <url>
+    <loc>{SITE_URL}/archive.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <lastmod>{now_str}</lastmod>
+  </url>
+  <url>
+    <loc>{SITE_URL}/about.html</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>{SITE_URL}/advertise.html</loc>
+    <priority>0.5</priority>
+  </url>"""
+
+    article_urls = ""
+    for e in archive_entries:
+        lastmod = e.get("lastmod") or e.get("date", "")
+        article_urls += f"""
+  <url>
+    <loc>{SITE_URL}/articles/{e['slug']}.html</loc>
+    <priority>0.7</priority>
+    <lastmod>{lastmod}</lastmod>
+  </url>"""
+
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{static_urls}
+{article_urls}
+</urlset>"""
+
+
 def update_news_sitemap(archive_entries):
     """Google News sitemap — only articles from last 2 days."""
     from datetime import timedelta
@@ -2609,8 +2665,9 @@ def find_matching_entry(headline, archive, source_url=""):
 
 
 
-def _page_head(title, description, canonical_path="", structured_data=None):
+def _page_head(title, description, canonical_path="", structured_data=None, image_url=""):
     canonical = f"{SITE_URL}{canonical_path}" if canonical_path else SITE_URL
+    og_image  = image_url if image_url else f"{SITE_URL}/og-image.png"
     schema = ""
     if structured_data:
         import json as _json
@@ -2624,7 +2681,11 @@ def _page_head(title, description, canonical_path="", structured_data=None):
   <meta property="og:description" content="{description}">
   <meta property="og:url" content="{canonical}">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="{SITE_URL}/og-image.png">
+  <meta property="og:image" content="{og_image}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{og_image}">
   <meta name="geo.region" content="US-FL">
   <meta name="geo.placename" content="Treasure Coast, Florida">
   <meta name="google-adsense-account" content="ca-pub-9679836198092378">
