@@ -2616,7 +2616,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
 <head>
 {head}
   <style>
-    .article-wrap {{ max-width: 740px; margin: 0 auto; padding: 40px 24px 80px; }}
+    .article-wrap {{ max-width: 740px; margin: 0 auto; padding: 20px 24px 80px; }}
     .article-meta {{ display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }}
     .article-category {{ font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }}
     .article-date {{ font-size: 11px; color: var(--text-muted); }}
@@ -2637,7 +2637,6 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
 {ad_banner}
   <main>
     <div class="article-wrap">
-      <a href="/" class="article-back">&larr; Back to Treasure Coast Today</a>
       <div class="article-meta">
         <span class="article-category">{category_label}</span>
         <span class="article-date">{pub_date}</span>
