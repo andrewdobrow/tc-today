@@ -1735,8 +1735,10 @@ def enhance_card(card, content_bank, headlines):
     is_thin = source.get("source_type") == "discovery_only" or any(d in link.lower() for d in THIN_SOURCE_DOMAINS)
     source_text = source.get("article_text", "") or ""
 
-    # If this is an open source but article_text was not stored, try once here.
-    if not source_text and link and not is_thin and source.get("source_type") == "full_source":
+    # If article_text was not stored, try fetching it now — for open full sources
+    # AND aggregators (Google News links resolve to real publisher pages). This is
+    # what lets crime/things-to-do cards from Google News enrich instead of being dropped.
+    if not source_text and link and not is_thin and source.get("source_type") in ("full_source", "aggregator"):
         source_text = fetch_article_text(link, max_words=900)
         if source_text and len(source_text.split()) >= 140:
             source["article_text"] = source_text
