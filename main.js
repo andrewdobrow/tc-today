@@ -47,14 +47,6 @@ function collapseThis(collapseBtn) {
   collapseContainer(collapseBtn.closest(".hero"));
 }
 
-// -- IN BRIEF expand/collapse --
-function toggleBrief(btn) {
-  const item = btn.closest(".brief-item");
-  if (!item) return;
-  const open = item.classList.toggle("open");
-  btn.textContent = open ? "\u2212" : "+";
-}
-
 // Clicking a hero (not a button/link) toggles it. Grid cards are <a> links so
 // they navigate normally.
 document.addEventListener("click", e => {
@@ -131,16 +123,24 @@ document.querySelectorAll(".cat-btn").forEach(btn => {
         card.style.display = show ? "flex" : "none";
       });
 
-      // Filter In Brief items — show all in Top News, category-matched otherwise
-      document.querySelectorAll(".brief-item").forEach(item => {
-        const show = cat === "all" ? true : item.dataset.cat === cat;
-        item.style.display = show ? "block" : "none";
+      // Filter Older stories — show all in Top News, category-matched otherwise
+      document.querySelectorAll(".older-item").forEach(item => {
+        const link = item.querySelector(".older-link");
+        const itemCat = item.dataset.cat;
+        const show = cat === "all" ? true : itemCat === cat;
+        item.style.display = show ? "list-item" : "none";
       });
-      const briefSection = document.getElementById("inbriefSection");
-      if (briefSection) {
-        const anyVisible = Array.from(briefSection.querySelectorAll(".brief-item"))
-          .some(i => i.style.display !== "none");
-        briefSection.style.display = anyVisible ? "block" : "none";
+      const olderSection = document.getElementById("olderSection");
+      if (olderSection) {
+        // Older section always visible in Top News; hidden in category views
+        // unless it has matching items
+        if (cat === "all") {
+          olderSection.style.display = "block";
+        } else {
+          const anyVisible = Array.from(olderSection.querySelectorAll(".older-item"))
+            .some(i => i.style.display !== "none");
+          olderSection.style.display = anyVisible ? "block" : "none";
+        }
       }
 
       // Reposition support card to 5th visible slot
