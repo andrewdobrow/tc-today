@@ -2258,6 +2258,7 @@ def render_index(all_categories, top_cat):
     # go into an "In Brief" section below with expandable inline bodies.
     enriched_pool = [c for c in all_cards_pool if c.get("enriched")]
     inbrief_pool  = [c for c in all_cards_pool if not c.get("enriched")]
+    print(f"  Grid split: {len(enriched_pool)} enriched cards, {len(inbrief_pool)} in-brief cards")
 
     enriched_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
     topnews     = global_rank(enriched_pool, dedupe_against=top_cat["hero"].get("headline", ""))
