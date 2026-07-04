@@ -2597,64 +2597,54 @@ def render_archive_page(archive_entries):
 
 
 def render_rss_feed(all_categories, top_cat):
-    """Generate an RSS feed featuring all hero stories from the current run."""
-    from email.utils import formatdate
-    import time
+    """Generate an RSS feed featuring all articles (heroes and cards) from the run."""
+    from email.utils import formatdate, parsedate_to_datetime
 
     now_rfc = formatdate(usegmt=True)
+    archive = load_archive(OUTPUT_DIR / "archive.json")
 
-    items = []
-    # Front page hero first
-    hero = top_cat["hero"]
-    headline = hero.get("headline", "")
-    if headline:
-        archive     = load_archive(OUTPUT_DIR / "archive.json")
-        matched     = find_matching_entry(headline, archive, hero.get("link", ""))
-        slug        = matched["slug"] if matched else f"{datetime.utcnow().strftime('%Y-%m-%d')}-{slugify(headline)}"
-        article_url = f"{SITE_URL}/articles/{slug}.html"
-        teaser      = hero.get("teaser") or hero.get("body", "")[:300]
-        pub         = hero.get("published_raw") or now_rfc
+    def make_item(article, cat_label):
+        headline = article.get("headline", "")
+        if not headline:
+            return None, None
+        matched     = find_matching_entry(headline, archive, article.get("link", ""))
+        if not matched:
+            return None, None  # No article page exists — skip
+        article_url = f"{SITE_URL}/articles/{matched['slug']}.html"
+        teaser      = article.get("teaser") or article.get("body", "")[:300]
+        pub         = article.get("published_raw") or now_rfc
         try:
-            from email.utils import parsedate_to_datetime
             pub = formatdate(parsedate_to_datetime(pub).timestamp(), usegmt=True)
         except Exception:
             pub = now_rfc
-        items.append(f"""  <item>
+        item = f"""  <item>
     <title><![CDATA[{headline}]]></title>
     <link>{article_url}</link>
     <guid isPermaLink="true">{article_url}</guid>
     <description><![CDATA[{teaser}]]></description>
     <pubDate>{pub}</pubDate>
-    <category><![CDATA[{top_cat["category_label"]}]]></category>
-  </item>""")
+    <category><![CDATA[{cat_label}]]></category>
+  </item>"""
+        return item, headline
 
-    # All other category heroes
-    seen_headlines = {headline}
+    items = []
+    seen  = set()
+
+    # Front page hero first
+    item, hl = make_item(top_cat["hero"], top_cat["category_label"])
+    if item:
+        items.append(item)
+        seen.add(hl)
+
+    # Every category hero + all cards
     for cat in all_categories:
-        hero = cat["hero"]
-        hl   = hero.get("headline", "")
-        if not hl or hl in seen_headlines:
-            continue
-        seen_headlines.add(hl)
-        archive     = load_archive(OUTPUT_DIR / "archive.json")
-        matched     = find_matching_entry(hl, archive, hero.get("link", ""))
-        slug        = matched["slug"] if matched else f"{datetime.utcnow().strftime('%Y-%m-%d')}-{slugify(hl)}"
-        article_url = f"{SITE_URL}/articles/{slug}.html"
-        teaser      = hero.get("teaser") or hero.get("body", "")[:300]
-        pub         = hero.get("published_raw") or now_rfc
-        try:
-            from email.utils import parsedate_to_datetime
-            pub = formatdate(parsedate_to_datetime(pub).timestamp(), usegmt=True)
-        except Exception:
-            pub = now_rfc
-        items.append(f"""  <item>
-    <title><![CDATA[{hl}]]></title>
-    <link>{article_url}</link>
-    <guid isPermaLink="true">{article_url}</guid>
-    <description><![CDATA[{teaser}]]></description>
-    <pubDate>{pub}</pubDate>
-    <category><![CDATA[{cat["category_label"]}]]></category>
-  </item>""")
+        cat_label = cat["category_label"]
+        articles  = [cat["hero"]] + cat.get("cards", [])
+        for art in articles:
+            item, hl = make_item(art, cat_label)
+            if item and hl not in seen:
+                items.append(item)
+                seen.add(hl)
 
     items_xml = "\n".join(items)
     return f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -2669,41 +2659,6 @@ def render_rss_feed(all_categories, top_cat):
 {items_xml}
   </channel>
 </rss>"""
-
-
-
-    now_str = datetime.utcnow().strftime("%Y-%m-%d")
-    static = f"""  <url>
-    <loc>{SITE_URL}/</loc>
-    <changefreq>hourly</changefreq>
-    <priority>1.0</priority>
-    <lastmod>{now_str}</lastmod>
-  </url>
-  <url>
-    <loc>{SITE_URL}/archive.html</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>{now_str}</lastmod>
-  </url>
-  <url>
-    <loc>{SITE_URL}/privacy.html</loc>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>{SITE_URL}/terms.html</loc>
-    <priority>0.3</priority>
-  </url>"""
-    article_urls = "".join(f"""
-  <url>
-    <loc>{SITE_URL}/articles/{e['slug']}.html</loc>
-    <priority>0.7</priority>
-    <lastmod>{e.get('lastmod') or e['date']}</lastmod>
-  </url>""" for e in archive_entries)
-    return f"""<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{static}
-{article_urls}
-</urlset>"""
 
 
 def update_sitemap(archive_entries):
