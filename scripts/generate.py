@@ -2177,48 +2177,60 @@ def render_index(all_categories, top_cat):
     remaining   = [c for c in all_cards_pool if id(c) not in topnews_ids]
     all_cards_display = topnews + remaining
 
+    # Apply pin_position overrides — pinned custom articles lock to specific slots
+    pinned = [(c.get("pin_position"), c) for c in all_cards_display if c.get("pin_position")]
+    if pinned:
+        unpinned = [c for c in all_cards_display if not c.get("pin_position")]
+        result = list(unpinned)
+        for pos, card in sorted(pinned, key=lambda x: x[0]):
+            idx = max(0, min(pos - 1, len(result)))
+            if card in result:
+                result.remove(card)
+            result.insert(idx, card)
+        all_cards_display = result
+
+    archive_for_links = load_archive(OUTPUT_DIR / "archive.json")
+
+    def card_permalink(card):
+        matched = find_matching_entry(card.get("headline",""), archive_for_links, card.get("link",""))
+        if matched:
+            return f"{SITE_URL}/articles/{matched['slug']}.html"
+        today = datetime.utcnow().strftime("%Y-%m-%d")
+        return f"{SITE_URL}/articles/{today}-{slugify(card.get('headline',''))}.html"
+
     support_card = """
-      <div class="article-card support-card fade-in" data-cat="all" data-support-card="true">
-        <span class="card-tag support-card-tag">Advertise</span>
-        <h2 class="card-headline support-card-headline">Reach Treasure Coast readers every day.</h2>
-        <p class="card-summary">Your business alongside local news for Martin, St. Lucie &amp; Indian River counties. No algorithms. Just local readers.</p>
-        <div class="card-foot">
-          <a href="/advertise.html" class="support-card-btn">Get in touch &rarr;</a>
+      <a href="/advertise.html" class="grid-card support-grid-card" data-cat="all" data-support-card="true">
+        <div class="grid-card-body">
+          <span class="grid-card-tag support-card-tag">Advertise</span>
+          <h2 class="grid-card-headline">Reach Treasure Coast readers every day.</h2>
+          <span class="support-card-cta">Get in touch &rarr;</span>
         </div>
-      </div>"""
+      </a>"""
 
     cards_html = ""
     for i, card in enumerate(all_cards_display):
-        if i == 2:
+        if i == 4:
             cards_html += support_card
-        teaser          = card.get("teaser", card.get("summary", ""))
-        body            = card.get("body", card.get("summary", ""))
-        card_paragraphs = make_paragraphs(body)
-        ck              = card.get("cat_key", "all")
-        cl              = card.get("cat_label", "")
-        card_time       = card.get("published", "")
-        topnews_attr    = ' data-topnews="true"' if id(card) in topnews_ids else ""
-        card_hl_esc = card["headline"].replace('"', "&quot;")
-        card_link   = card.get("link", "")
-        read_more   = f'<a href="{card_link}" target="_blank" rel="noopener" class="read-source-link">Read full story &#8599;</a>' if card_link else ""
+        ck        = card.get("cat_key", "all")
+        cl        = card.get("cat_label", "")
+        card_time = card.get("published", "")
+        img_url   = card.get("image_url", "")
+        if not img_url:
+            fb_img, _ = get_fallback_image(ck, card.get("headline", ""))
+            img_url   = fb_img or f"{SITE_URL}/og-{ck}.png"
+        permalink    = card_permalink(card)
+        topnews_attr = ' data-topnews="true"' if id(card) in topnews_ids else ""
         cards_html += f"""
-      <div class="article-card fade-in" data-cat="{ck}"{topnews_attr}>
-        <span class="card-tag">{cl}</span>
-        <h2 class="card-headline">{card["headline"]}</h2>
-        <p class="card-summary">{teaser}</p>
-        <div class="card-foot">
-          <span class="card-time">{card_time}</span>
-          <button class="expand-btn" onclick="toggleExpand(this)">Continue reading &darr;</button>
+      <a href="{permalink}" class="grid-card fade-in" data-cat="{ck}"{topnews_attr}>
+        <div class="grid-card-image-wrap">
+          <img class="grid-card-image" src="{img_url}" alt="" loading="lazy">
         </div>
-        <div class="article-expand">
-          <div class="card-expand-body">{card_paragraphs}</div>
-          <div class="article-actions">
-            <button class="share-btn" data-headline="{card_hl_esc}" onclick="shareArticle(this)">Share &#8599;</button>
-            {read_more}
-            <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
-          </div>
+        <div class="grid-card-body">
+          <span class="grid-card-tag">{cl}</span>
+          <h2 class="grid-card-headline">{card["headline"]}</h2>
+          <span class="grid-card-time">{card_time}</span>
         </div>
-      </div>"""
+      </a>"""
 
     # Header/nav should be stable even if a category fails to generate content in a run.
     # Build nav from the master CATEGORIES config, not all_categories.
@@ -2274,6 +2286,66 @@ def slugify(text):
     text = re.sub(r"[\s_]+", "-", text)
     text = re.sub(r"-+", "-", text)
     return text[:80].strip("-")
+
+
+def load_custom_articles():
+    """Load manually-submitted custom articles from custom_articles.json.
+
+    Each article supports the same treatment as news articles: scored, ranked,
+    archived, and expired. Override flags:
+      - force_hero: true    -> pin as that category's hero
+      - pin_position: N     -> lock to grid slot N (1-indexed) regardless of score
+
+    Expected schema per entry:
+      {
+        "headline": "...",
+        "body": "full article text",
+        "category": "local_gov",
+        "image_url": "https://... (optional)",
+        "published": "Wed, 02 Jul 2026 14:00:00 +0000",
+        "expires": "2026-07-10",
+        "force_hero": false,
+        "pin_position": null,
+        "urgency_score": 7
+      }
+    """
+    path = OUTPUT_DIR / "custom_articles.json"
+    if not path.exists():
+        return []
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"  custom_articles.json parse error: {e}")
+        return []
+
+    from datetime import timezone as _tz
+    now = datetime.now(_tz.utc)
+    live = []
+    for art in data:
+        # Skip expired
+        expires = art.get("expires", "")
+        if expires:
+            try:
+                exp_dt = datetime.strptime(expires, "%Y-%m-%d").replace(tzinfo=_tz.utc)
+                if now > exp_dt + timedelta(days=1):
+                    continue
+            except Exception:
+                pass
+        if not art.get("headline") or not art.get("body") or not art.get("category"):
+            continue
+        # Normalize into the same shape as generated articles
+        art["is_custom"]       = True
+        art["link"]            = art.get("link", f"{SITE_URL}/")
+        art["source_quality"]  = "full"
+        art["source_type"]     = "custom"
+        art.setdefault("urgency_score", 6)
+        art.setdefault("teaser", art["body"][:180].rstrip())
+        art.setdefault("published", now.strftime("%a, %d %b %Y %H:%M:%S +0000"))
+        art["published_raw"]   = art.get("published_raw", art["published"])
+        live.append(art)
+    if live:
+        print(f"  Custom articles loaded: {len(live)}")
+    return live
 
 
 def load_archive(archive_path):
@@ -3292,6 +3364,43 @@ def main():
 
     if not all_categories:
         print("No categories generated. Aborting.")
+        return
+
+    # Inject custom (manually-submitted) articles into their category pools.
+    # They get the same scoring/ranking/archival treatment. force_hero pins as
+    # the category hero; pin_position is applied later during grid rendering.
+    custom_articles = load_custom_articles()
+    if custom_articles:
+        cat_by_key = {c["category_key"]: c for c in all_categories}
+        for art in custom_articles:
+            ckey = art["category"]
+            target = cat_by_key.get(ckey)
+            if not target:
+                # Category didn't generate this run — create a minimal container
+                label = CATEGORIES.get(ckey, {}).get("label", ckey.replace("_", " ").title())
+                target = {"category_key": ckey, "category_label": label,
+                          "hero": None, "cards": []}
+                all_categories.append(target)
+                cat_by_key[ckey] = target
+            if art.get("force_hero"):
+                # Demote existing hero to a card, pin custom as hero
+                if target.get("hero"):
+                    target.setdefault("cards", []).insert(0, target["hero"])
+                target["hero"] = art
+                print(f"  Custom force_hero: '{art['headline'][:50]}' -> {ckey}")
+            else:
+                # If category has no hero yet, this becomes it; else it's a card
+                if not target.get("hero"):
+                    target["hero"] = art
+                else:
+                    target.setdefault("cards", []).append(art)
+                print(f"  Custom article: '{art['headline'][:50]}' -> {ckey}")
+
+    # Drop any category containers that still have no hero (safety)
+    all_categories = [c for c in all_categories if c.get("hero")]
+
+    if not all_categories:
+        print("No categories with heroes. Aborting.")
         return
 
     # Front page hero selection
