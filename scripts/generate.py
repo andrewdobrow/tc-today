@@ -255,7 +255,11 @@ FALLBACK_IMAGE_MAP = {
     "top_news":     ["local_gov-1.jpg",    "crime-1.jpg",        "business-1.jpg"],
 }
 
-def get_fallback_image(category_key, headline=""):
+# Tracks how many times each category's fallback has been used this run,
+# so fallbacks cycle sequentially instead of repeating.
+_FALLBACK_ROTATION = {}
+
+def get_fallback_image(category_key, headline="", sequential=False):
     base_names = FALLBACK_IMAGE_MAP.get(category_key, FALLBACK_IMAGE_MAP["top_news"])
     available = []
     for base in base_names:
@@ -267,8 +271,14 @@ def get_fallback_image(category_key, headline=""):
                 break
     if not available:
         return "", ""
-    seed = headline or category_key or "top_news"
-    idx  = int(hashlib.sha256(seed.encode("utf-8")).hexdigest(), 16) % len(available)
+    if sequential:
+        # Cycle through available images in order per category
+        n = _FALLBACK_ROTATION.get(category_key, 0)
+        idx = n % len(available)
+        _FALLBACK_ROTATION[category_key] = n + 1
+    else:
+        seed = headline or category_key or "top_news"
+        idx  = int(hashlib.sha256(seed.encode("utf-8")).hexdigest(), 16) % len(available)
     return f"{SITE_URL}/images/fallback/{available[idx]}", "Treasure Coast Today"
 
 def upscale_image_url(url):
@@ -2268,10 +2278,11 @@ def render_index(all_categories, top_cat):
 
     support_card = """
       <a href="/advertise.html" class="grid-card support-grid-card" data-cat="all" data-support-card="true">
-        <div class="grid-card-body">
-          <span class="grid-card-tag support-card-tag">Advertise</span>
-          <h2 class="grid-card-headline">Reach Treasure Coast readers every day.</h2>
-          <span class="support-card-cta">Get in touch &rarr;</span>
+        <div class="support-card-inner">
+          <span class="support-card-eyebrow">Local Business?</span>
+          <h2 class="support-card-headline">Put your business in front of Treasure Coast locals.</h2>
+          <p class="support-card-text">We cover Martin, St. Lucie &amp; Indian River counties with no paywall, so every reader sees your ad. Reach local customers for less than the cost of a single newspaper spot.</p>
+          <span class="support-card-cta">Start advertising &rarr;</span>
         </div>
       </a>"""
 
@@ -2287,7 +2298,7 @@ def render_index(all_categories, top_cat):
         card_time = card.get("published", "")
         img_url   = card.get("image_url", "")
         if not img_url:
-            fb_img, _ = get_fallback_image(ck, card.get("headline", ""))
+            fb_img, _ = get_fallback_image(ck, card.get("headline", ""), sequential=True)
             img_url   = fb_img or f"{SITE_URL}/og-{ck}.png"
         topnews_attr = ' data-topnews="true"' if id(card) in topnews_ids else ""
         cards_html += f"""
