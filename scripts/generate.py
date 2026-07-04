@@ -14,7 +14,7 @@ import anthropic
 from datetime import datetime, timedelta
 from pathlib import Path
 from collections import defaultdict
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
 
 # -- CONFIG --
 
@@ -620,12 +620,16 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
     feed_results = []
     with ThreadPoolExecutor(max_workers=6) as ex:
         futures = {ex.submit(fetch_one_feed, url): url for url in feeds}
-        for fut in as_completed(futures, timeout=25):
-            try:
-                url, feed_entries = fut.result(timeout=10)
-                feed_results.append((url, feed_entries))
-            except Exception as e:
-                print(f"  Feed timeout ({futures[fut][:60]}): {e}")
+        try:
+            for fut in as_completed(futures, timeout=25):
+                try:
+                    url, feed_entries = fut.result(timeout=10)
+                    feed_results.append((url, feed_entries))
+                except Exception as e:
+                    print(f"  Feed timeout ({futures[fut][:60]}): {e}")
+        except (FuturesTimeoutError, TimeoutError):
+            for f in futures:
+                f.cancel()
 
     seen, entries = set(), []
 
@@ -3289,13 +3293,24 @@ def main():
 
     with ThreadPoolExecutor(max_workers=8) as ex:
         futures = {ex.submit(_fetch_and_cache, url): url for url in all_feed_urls}
-        for fut in as_completed(futures, timeout=40):
-            try:
-                url, entries = fut.result(timeout=10)
-                feed_cache[url] = entries
-            except Exception as e:
-                feed_cache[futures[fut]] = []
-                print(f"  Feed timeout ({futures[fut][:60]}): {e}")
+        # Initialize all feeds to empty so any that never complete still have an entry
+        for url in all_feed_urls:
+            feed_cache.setdefault(url, [])
+        try:
+            for fut in as_completed(futures, timeout=45):
+                try:
+                    url, entries = fut.result(timeout=10)
+                    feed_cache[url] = entries
+                except Exception as e:
+                    feed_cache[futures[fut]] = []
+                    print(f"  Feed timeout ({futures[fut][:60]}): {e}")
+        except (FuturesTimeoutError, TimeoutError):
+            # Some feeds never finished within the overall window — proceed with
+            # whatever we have rather than crashing the whole run.
+            unfinished = [futures[f] for f in futures if not f.done()]
+            print(f"  {len(unfinished)} feed(s) did not finish in time; proceeding with cached results")
+            for f in futures:
+                f.cancel()
 
     print(f"  Feed cache: {sum(len(v) for v in feed_cache.values())} total entries across {len(feed_cache)} feeds")
 
