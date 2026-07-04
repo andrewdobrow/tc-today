@@ -618,6 +618,24 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
                 print(f"  Feed timeout ({futures[fut][:60]}): {e}")
 
     seen, entries = set(), []
+
+    # Obituary signals — filter these out entirely so they never become heroes
+    # OR cards. Specific to obituary/funeral listings; won't catch news coverage
+    # of notable deaths (which uses "dies", "killed", "death of" without this language).
+    _OBIT_SIGNALS = [
+        "survived by", "is survived by", "funeral home", "funeral & cremation",
+        "funeral and cremation", "cremation service", "cremation services",
+        "celebration of life", "laid to rest", "in lieu of flowers",
+        "visitation will", "visitation is", "services are being handled",
+        "services being handled", "arrangements by", "arrangements are",
+        "arrangements entrusted", "passed away peacefully", "passed away at",
+        "entered into rest", "went to be with the lord", "obituary", "obituaries",
+    ]
+
+    def _is_obituary(title, summary):
+        blob = (title + " " + (summary or "")).lower()
+        return any(sig in blob for sig in _OBIT_SIGNALS)
+
     for url, feed_entries in feed_results:
         try:
             for entry in feed_entries[:15]:
@@ -628,6 +646,11 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
 
                 link = extract_publisher_url(entry)
                 summary = extract_rss_text(entry)[:2500]
+
+                # Skip obituaries entirely
+                if _is_obituary(title, summary):
+                    continue
+
                 source_type = classify_source(link)
 
                 entries.append({
@@ -732,6 +755,18 @@ def _hero_eligible(category_key, h):
     quality = h.get("source_quality", "")
 
     if quality in {"thin", "discovery_only"}:
+        return False
+
+    # Universal obituary block — obituaries should NEVER be a hero in any section,
+    # including county pages. This is specific to obituary listings (funeral home
+    # references, "survived by") and won't catch news coverage of notable deaths,
+    # which uses "dies", "killed", "death of" without funeral-listing language.
+    _obit_signals = ["survived by", "is survived by", "funeral home",
+                     "funeral and cremation", "cremation service", "memorial service at",
+                     "laid to rest", "celebration of life", "visitation will",
+                     "in lieu of flowers", "services are being handled",
+                     "services being handled", "arrangements by", "arrangements are"]
+    if any(sig in text for sig in _obit_signals):
         return False
 
     topic_terms = {
@@ -864,17 +899,50 @@ def _category_score(category_key, h):
             "st_lucie": "region-st-lucie-county",
             "indian_river": "region-indian-river-county",
         }
-        # If WPTV itself placed the story in a county feed, trust that signal.
-        # Do not force the headline/body to repeat the county name.
-        if county_feed_hints.get(category_key, "") in feed_url:
+        title_l = (h.get("title", "") or "").lower()
+
+        # Count mentions of the target county vs other counties
+        def _county_mentions(terms):
+            return sum(text.count(t) for t in terms)
+
+        target_mentions = _county_mentions(county_terms[category_key])
+        other_counties  = {k: v for k, v in county_terms.items() if k != category_key}
+        other_mentions  = {k: _county_mentions(v) for k, v in other_counties.items()}
+        max_other       = max(other_mentions.values()) if other_mentions else 0
+        max_other_key   = max(other_mentions, key=other_mentions.get) if other_mentions else None
+
+        in_target_feed = county_feed_hints.get(category_key, "") in feed_url
+        in_other_feed  = any(county_feed_hints.get(k, "___") in feed_url for k in other_counties)
+
+        # HARD BLOCK: if the story is primarily about another county
+        # (another county appears in the title, or is mentioned more than the
+        # target county, or came from another county's dedicated WPTV feed),
+        # it does not belong in this county section.
+        target_in_title = _has_any(title_l, county_terms[category_key])
+        other_in_title  = any(_has_any(title_l, other_counties[k]) for k in other_counties)
+
+        if other_in_title and not target_in_title:
+            return -10  # Clearly about another county
+        if in_other_feed and not in_target_feed:
+            return -10  # WPTV filed it under another county
+        if max_other > target_mentions and target_mentions == 0:
+            return -10  # Only mentions other counties, never the target
+
+        # Positive signals for the target county
+        if in_target_feed:
             score += 9
-        if _has_any(text, county_terms[category_key]):
-            score += 5
+        if target_in_title:
+            score += 6
+        elif target_mentions > 0:
+            score += 4
+        # Penalize competing county mentions even if target is present
+        if max_other > target_mentions:
+            score -= 4
+
         if h.get("source_quality") == "full":
             score += 2
         elif h.get("source_quality") in {"summary", "brief"}:
             score += 1
-        # County pages can carry all local-news topics, so do not over-filter by topic.
         return score
 
     terms = positive_terms.get(category_key, [])
@@ -922,7 +990,7 @@ def filter_category_headlines(category_key, headlines, target=HEADLINES_PER_CATE
     if category_key in {"business", "sports", "things_to_do", "local_gov", "crime"}:
         threshold = 2
     if category_key in {"martin", "st_lucie", "indian_river"}:
-        threshold = 1  # County pages are already narrow feeds — don't filter aggressively
+        threshold = 4  # Require a genuine county signal; cross-county penalty blocks bleed
 
     filtered = [h for score, h in scored if score >= threshold]
     hero_ready = [h for _, h in scored if h.get("hero_eligible") == "yes"]
