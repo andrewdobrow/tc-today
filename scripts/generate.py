@@ -1728,6 +1728,7 @@ def enhance_card(card, content_bank, headlines):
             # produce at least two useful paragraphs.
             if word_count < 140 or len(enhanced.split()) >= 90:
                 card["body"] = strip_absence_language(strip_markdown(enhanced, headline))
+                card["enriched"] = True
     except Exception:
         pass
 
@@ -2416,6 +2417,7 @@ def load_custom_articles():
             continue
         # Normalize into the same shape as generated articles
         art["is_custom"]       = True
+        art["enriched"]        = True
         art["link"]            = art.get("link", f"{SITE_URL}/")
         art["source_quality"]  = "full"
         art["source_type"]     = "custom"
@@ -3156,6 +3158,10 @@ def write_archives(all_categories, top_cat):
     all_articles = list(heroes)
     for cat in all_categories:
         for card in cat.get("cards", []):
+            # Only archive cards that were actually enriched. Thin unenriched cards
+            # (just a rehashed headline) don't get permalink pages, archive entries, or RSS.
+            if not card.get("enriched"):
+                continue
             all_articles.append((cat["category_key"], cat["category_label"], card))
 
     for cat_key, cat_label, hero in all_articles:
