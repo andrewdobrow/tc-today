@@ -2263,8 +2263,8 @@ def render_index(all_categories, top_cat):
         matched = find_matching_entry(card.get("headline",""), archive_for_links, card.get("link",""))
         if matched:
             return f"{SITE_URL}/articles/{matched['slug']}.html"
-        today = datetime.utcnow().strftime("%Y-%m-%d")
-        return f"{SITE_URL}/articles/{today}-{slugify(card.get('headline',''))}.html"
+        # No archive entry means no article page exists — skip this card
+        return None
 
     support_card = """
       <a href="/advertise.html" class="grid-card support-grid-card" data-cat="all" data-support-card="true">
@@ -2277,6 +2277,9 @@ def render_index(all_categories, top_cat):
 
     cards_html = ""
     for i, card in enumerate(all_cards_display):
+        permalink = card_permalink(card)
+        if not permalink:
+            continue  # No article page exists for this card — skip it
         if i == 4:
             cards_html += support_card
         ck        = card.get("cat_key", "all")
@@ -2286,7 +2289,6 @@ def render_index(all_categories, top_cat):
         if not img_url:
             fb_img, _ = get_fallback_image(ck, card.get("headline", ""))
             img_url   = fb_img or f"{SITE_URL}/og-{ck}.png"
-        permalink    = card_permalink(card)
         topnews_attr = ' data-topnews="true"' if id(card) in topnews_ids else ""
         cards_html += f"""
       <a href="{permalink}" class="grid-card fade-in" data-cat="{ck}"{topnews_attr}>
@@ -3183,7 +3185,14 @@ def write_archives(all_categories, top_cat):
         if cat["category_key"] != top_cat["category_key"]:
             heroes.append((cat["category_key"], cat["category_label"], cat["hero"]))
 
-    for cat_key, cat_label, hero in heroes:
+    # Also generate article pages for every card, since the homepage grid links
+    # to permalink pages for all articles, not just heroes.
+    all_articles = list(heroes)
+    for cat in all_categories:
+        for card in cat.get("cards", []):
+            all_articles.append((cat["category_key"], cat["category_label"], card))
+
+    for cat_key, cat_label, hero in all_articles:
         headline = hero.get("headline", "").strip()
         if not headline:
             continue
@@ -3497,12 +3506,13 @@ def main():
             top_cat["hero"]["image_url"]    = fb_img
             top_cat["hero"]["image_credit"] = fb_credit
 
-    # Render and write all pages
+    # Archive first — creates all article pages and populates archive.json so the
+    # homepage grid can link to permalinks that actually exist with matching slugs.
+    write_archives(all_categories, top_cat)
+
+    # Render and write homepage (now archive lookups resolve to real slugs)
     index_html = render_index(all_categories, top_cat)
     (OUTPUT_DIR / "index.html").write_text(index_html, encoding="utf-8")
-
-    # Archive
-    write_archives(all_categories, top_cat)
 
     # data.json
     write_data_json(all_categories, top_cat)
