@@ -2250,10 +2250,15 @@ def render_index(all_categories, top_cat):
             card["cat_key"]   = cat["category_key"]
             all_cards_pool.append(card)
 
-    all_cards_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
-    topnews     = global_rank(all_cards_pool, dedupe_against=top_cat["hero"].get("headline", ""))
+    # Split: enriched cards get the full image-grid treatment; unenriched cards
+    # go into an "In Brief" section below with expandable inline bodies.
+    enriched_pool = [c for c in all_cards_pool if c.get("enriched")]
+    inbrief_pool  = [c for c in all_cards_pool if not c.get("enriched")]
+
+    enriched_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
+    topnews     = global_rank(enriched_pool, dedupe_against=top_cat["hero"].get("headline", ""))
     topnews_ids = {id(c) for c in topnews}
-    remaining   = [c for c in all_cards_pool if id(c) not in topnews_ids]
+    remaining   = [c for c in enriched_pool if id(c) not in topnews_ids]
     all_cards_display = topnews + remaining
 
     # Apply pin_position overrides — pinned custom articles lock to specific slots
@@ -2314,6 +2319,44 @@ def render_index(all_categories, top_cat):
         </div>
       </a>"""
 
+    # -- IN BRIEF: unenriched cards, expandable inline, grouped below the grid --
+    inbrief_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
+    inbrief_html = ""
+    for card in inbrief_pool:
+        ck        = card.get("cat_key", "all")
+        cl        = card.get("cat_label", "")
+        card_time = card.get("published", "")
+        body      = card.get("body", card.get("summary", ""))
+        card_paragraphs = make_paragraphs(body)
+        card_hl_esc = card["headline"].replace('"', "&quot;")
+        card_link   = card.get("link", "")
+        read_more   = f'<a href="{card_link}" target="_blank" rel="noopener" class="read-source-link">Read full story &#8599;</a>' if card_link else ""
+        inbrief_html += f"""
+      <div class="brief-item" data-cat="{ck}">
+        <div class="brief-head">
+          <span class="brief-tag">{cl}</span>
+          <h3 class="brief-headline">{card["headline"]}</h3>
+          <span class="brief-time">{card_time}</span>
+          <button class="brief-expand-btn" onclick="toggleBrief(this)">+</button>
+        </div>
+        <div class="brief-body">
+          {card_paragraphs}
+          <div class="brief-actions">
+            <button class="share-btn" data-headline="{card_hl_esc}" onclick="shareArticle(this)">Share &#8599;</button>
+            {read_more}
+          </div>
+        </div>
+      </div>"""
+
+    inbrief_section = ""
+    if inbrief_html:
+        inbrief_section = f"""
+    <section class="inbrief-section" id="inbriefSection">
+      <h2 class="inbrief-title">In Brief</h2>
+      <div class="inbrief-list">{inbrief_html}
+      </div>
+    </section>"""
+
     # Header/nav should be stable even if a category fails to generate content in a run.
     # Build nav from the master CATEGORIES config, not all_categories.
     nav_buttons = "\n        ".join(
@@ -2356,6 +2399,7 @@ def render_index(all_categories, top_cat):
     <div class="articles-grid" id="articlesGrid">
       {cards_html}
     </div>
+    {inbrief_section}
   </main>
 {_footer}
 </body>
