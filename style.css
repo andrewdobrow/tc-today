@@ -891,132 +891,97 @@ footer {
   }
 }
 
-
-/* -- IN BRIEF SECTION -- */
-.inbrief-section {
+/* -- OLDER STORIES SECTION -- */
+.older-section {
   max-width: 1200px;
   margin: 48px auto 0;
   padding: 0 24px;
 }
 
-.inbrief-title {
+.older-title {
   font-family: "Fraunces", serif;
   font-size: 24px;
   font-weight: 600;
   color: var(--text);
-  margin: 0 0 20px;
+  margin: 0 0 16px;
   padding-bottom: 12px;
   border-bottom: 2px solid var(--border);
 }
 
-.inbrief-list {
-  display: flex;
-  flex-direction: column;
+.older-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.brief-item {
+.older-item {
   border-bottom: 1px solid var(--border);
 }
 
-.brief-head {
+.older-link {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 0;
-  cursor: pointer;
+  align-items: baseline;
+  gap: 14px;
+  padding: 13px 0;
+  text-decoration: none;
+  color: inherit;
+  flex-wrap: wrap;
 }
 
-.brief-head:hover .brief-headline {
+.older-link:hover .older-headline {
   color: var(--accent);
 }
 
-.brief-tag {
+.older-cat {
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent);
   flex-shrink: 0;
-  width: 120px;
+  width: 130px;
 }
 
-.brief-headline {
-  font-size: 16px;
+.older-headline {
+  font-size: 15px;
   font-weight: 500;
   color: var(--text);
-  margin: 0;
   flex: 1;
   line-height: 1.4;
   transition: color 0.15s;
 }
 
-.brief-time {
+.older-date {
   font-size: 11px;
   color: var(--text-muted);
   flex-shrink: 0;
+  margin-left: auto;
   white-space: nowrap;
 }
 
-.brief-expand-btn {
-  background: none;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  width: 26px;
-  height: 26px;
-  font-size: 18px;
-  line-height: 1;
-  color: var(--text-secondary);
-  cursor: pointer;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s;
-}
-
-.brief-expand-btn:hover {
-  border-color: var(--accent);
+.older-more {
+  display: inline-block;
+  margin-top: 18px;
+  font-size: 14px;
+  font-weight: 500;
   color: var(--accent);
+  text-decoration: none;
 }
 
-.brief-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease, padding 0.3s ease;
-}
-
-.brief-item.open .brief-body {
-  max-height: 2000px;
-  padding: 0 0 20px;
-}
-
-.brief-body p {
-  font-size: 15px;
-  line-height: 1.7;
-  color: var(--text-secondary);
-  margin: 0 0 14px;
-}
-
-.brief-actions {
-  display: flex;
-  gap: 18px;
-  align-items: center;
-  margin-top: 4px;
+.older-more:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 580px) {
-  .brief-head {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .brief-tag {
+  .older-cat {
     width: auto;
   }
-  .brief-headline {
+  .older-headline {
     width: 100%;
     order: 3;
+    margin-top: 2px;
   }
-  .brief-expand-btn {
-    margin-left: auto;
+  .older-date {
+    margin-left: 0;
   }
 }
