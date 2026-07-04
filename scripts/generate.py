@@ -1335,6 +1335,33 @@ Return ONLY valid JSON:
         except Exception:
             return False
 
+    # Obituary check on the GENERATED content — catches obituaries whose RSS title
+    # was just a person's name (so the ingestion filter missed them) but whose
+    # written-up body contains funeral-listing language.
+    _OBIT_BODY_SIGNALS = [
+        "survived by", "funeral home", "funeral and cremation", "funeral & cremation",
+        "cremation service", "services are being handled", "services being handled",
+        "in lieu of flowers", "celebration of life", "laid to rest",
+        "visitation will", "arrangements by", "arrangements are",
+        "passed away peacefully", "entered into rest",
+    ]
+    def _is_obituary_content(item):
+        blob = (item.get("headline", "") + " " + item.get("body", "")).lower()
+        return any(sig in blob for sig in _OBIT_BODY_SIGNALS)
+
+    # If the hero is an obituary, swap in the first non-obituary card
+    if _is_obituary_content(data.get("hero", {})) and data.get("cards"):
+        for ci, card in enumerate(data["cards"]):
+            if not _is_obituary_content(card):
+                print(f"  Obituary hero swap for {category_label}: '{data['hero'].get('headline','')[:50]}' -> '{card.get('headline','')[:50]}'")
+                data["hero"] = card
+                data["cards"].pop(ci)
+                break
+
+    # Also drop any obituary cards entirely
+    if data.get("cards"):
+        data["cards"] = [c for c in data["cards"] if not _is_obituary_content(c)]
+
     if not _item_hero_eligible(data.get("hero", {})) and data.get("cards"):
         for ci, card in enumerate(data["cards"]):
             if _item_hero_eligible(card):
