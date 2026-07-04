@@ -2525,7 +2525,7 @@ def load_archive(archive_path):
     return []
 
 
-def render_article_page(hero, category_label, category_key, pub_date, slug):
+def render_article_page(hero, category_label, category_key, pub_date, slug, related=None):
     """Render a permanent article page for a single TCT story."""
     description = (hero.get("teaser") or hero.get("body", "")[:155]).replace('"', '')
     # Only use images from reliable/stable sources for og:image
@@ -2567,6 +2567,26 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
     header = _page_header(active=category_key)
     footer = _page_footer()
 
+    # Related stories — same category, most recent, excluding this article
+    related_html = ""
+    if related:
+        items = ""
+        for r in related[:5]:
+            items += f"""
+        <li class="related-item">
+          <a href="/articles/{r['slug']}.html" class="related-link">
+            <span class="related-headline">{r['headline']}</span>
+            <span class="related-date">{r.get('date','')}</span>
+          </a>
+        </li>"""
+        if items:
+            related_html = f"""
+      <section class="related-section">
+        <h2 class="related-title">Related {category_label} Stories</h2>
+        <ul class="related-list">{items}
+        </ul>
+      </section>"""
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2603,6 +2623,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug):
       <hr class="article-divider">
       <p class="article-more">More local news</p>
       <a href="/?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
+      {related_html}
     </div>
   </main>
 {footer}
@@ -3267,8 +3288,11 @@ def write_archives(all_categories, top_cat):
         if existing:
             # Same story — update existing page in place, keep original URL
             slug = existing["slug"]
+            _related = [e for e in archive
+                        if e.get("category_key") == cat_key and e.get("slug") != slug]
+            _related.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
             (articles_dir / f"{slug}.html").write_text(
-                render_article_page(hero, cat_label, cat_key, today, slug), encoding="utf-8"
+                render_article_page(hero, cat_label, cat_key, today, slug, related=_related), encoding="utf-8"
             )
             existing["headline"]  = headline
             existing["teaser"]    = hero.get("teaser","") or hero.get("body","")[:180]
@@ -3285,8 +3309,11 @@ def write_archives(all_categories, top_cat):
             counter = 1
             while slug in existing_slugs:
                 slug = f"{base_slug}-{counter}"; counter += 1
+            _related = [e for e in archive
+                        if e.get("category_key") == cat_key and e.get("slug") != slug]
+            _related.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
             (articles_dir / f"{slug}.html").write_text(
-                render_article_page(hero, cat_label, cat_key, today, slug), encoding="utf-8"
+                render_article_page(hero, cat_label, cat_key, today, slug, related=_related), encoding="utf-8"
             )
             archive.append({
                 "slug": slug, "headline": headline,
