@@ -1,24 +1,21 @@
-// -- EXPAND / COLLAPSE --
+// -- HERO EXPAND / COLLAPSE (grid cards link out, only heroes expand) --
 function toggleExpand(btn) {
-  const container = btn.closest(".hero, .article-card");
-  expandContainer(container);
+  const container = btn.closest(".hero");
+  if (container) expandContainer(container);
 }
 
 function expandContainer(container) {
-  const expand  = container.querySelector(".article-expand");
+  const expand = container.querySelector(".article-expand");
   if (!expand) return;
-  const summary = container.querySelector(".hero-summary, .card-summary");
-  const foot    = container.querySelector(".hero-foot, .card-foot");
+  const summary = container.querySelector(".hero-summary");
+  const foot    = container.querySelector(".hero-foot");
   const btn     = container.querySelector(".expand-btn");
   const isOpen  = expand.classList.contains("open");
 
   if (isOpen) {
     collapseContainer(container);
   } else {
-    // Store exactly where the top of this container is right now, before any
-    // content opens. We'll scroll back here on close.
     container.dataset.scrollTarget = window.pageYOffset + container.getBoundingClientRect().top - 70;
-
     expand.classList.add("open");
     if (summary) summary.style.display = "none";
     if (foot)    foot.style.display    = "none";
@@ -29,8 +26,8 @@ function expandContainer(container) {
 
 function collapseContainer(container) {
   const expand  = container.querySelector(".article-expand");
-  const summary = container.querySelector(".hero-summary, .card-summary");
-  const foot    = container.querySelector(".hero-foot, .card-foot");
+  const summary = container.querySelector(".hero-summary");
+  const foot    = container.querySelector(".hero-foot");
   const btn     = container.querySelector(".expand-btn");
 
   expand.classList.remove("open");
@@ -38,7 +35,6 @@ function collapseContainer(container) {
   if (foot)    foot.style.display    = "";
   if (btn)     btn.innerHTML = "Continue reading &darr;";
 
-  // Scroll back to exactly where the user was when they opened this article
   const target = parseFloat(container.dataset.scrollTarget);
   if (!isNaN(target)) {
     requestAnimationFrame(() => {
@@ -48,48 +44,59 @@ function collapseContainer(container) {
 }
 
 function collapseThis(collapseBtn) {
-  collapseContainer(collapseBtn.closest(".hero, .article-card"));
+  collapseContainer(collapseBtn.closest(".hero"));
 }
 
-// Make entire card or hero clickable to toggle — but ignore clicks on any button or link
+// Clicking a hero (not a button/link) toggles it. Grid cards are <a> links so
+// they navigate normally.
 document.addEventListener("click", e => {
-  // If the click landed on (or inside) any interactive control, let that control
-  // handle it and do NOT also toggle the container. This prevents the open-then-
-  // instantly-close double fire.
   if (e.target.closest("button, a")) return;
-
-  const container = e.target.closest(".article-card, .hero");
+  const container = e.target.closest(".hero");
   if (!container) return;
-  if (container.classList.contains("support-card")) return;
   expandContainer(container);
 });
+
+// -- SHARE --
+async function shareArticle(btn) {
+  const headline = btn.dataset.headline || document.title;
+  const url      = btn.dataset.url || window.location.href;
+  const shareData = { title: headline, text: headline, url };
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      await navigator.clipboard.writeText(url);
+      const orig = btn.innerHTML;
+      btn.innerHTML = "Copied &#10003;";
+      setTimeout(() => { btn.innerHTML = orig; }, 1500);
+    }
+  } catch (e) {}
+}
 
 // -- CATEGORY FILTER --
 document.querySelectorAll(".cat-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     try {
+      const cat = btn.dataset.cat;
+      if (!cat) return; // Archive/Events are plain links
+
       document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
-      const cat = btn.dataset.cat;
 
-      // Update page title for SEO / browser tab clarity
-      const titleMap = {
-        "all":          "Treasure Coast Today | Local News for Martin, St. Lucie & Indian River County",
-        "local_gov":    "Local Government News — Treasure Coast Today",
+      const titles = {
+        "all":          "Treasure Coast Today | Local News",
+        "local_gov":    "Local Government — Treasure Coast Today",
         "crime":        "Crime & Safety — Treasure Coast Today",
-        "business":     "Business & Development — Treasure Coast Today",
-        "schools":      "Schools News — Treasure Coast Today",
+        "business":     "Business — Treasure Coast Today",
         "sports":       "Sports — Treasure Coast Today",
-        "things_to_do": "Things To Do on the Treasure Coast — Treasure Coast Today",
-        "florida":      "Florida News — Treasure Coast Today",
-        "martin":       "Martin County News — Treasure Coast Today",
-        "st_lucie":     "St. Lucie County News — Treasure Coast Today",
-        "indian_river":  "Indian River County News — Treasure Coast Today",
+        "things_to_do": "Things To Do — Treasure Coast Today",
+        "florida":      "Florida — Treasure Coast Today",
+        "martin":       "Martin County — Treasure Coast Today",
+        "st_lucie":     "St. Lucie County — Treasure Coast Today",
+        "indian_river": "Indian River County — Treasure Coast Today",
       };
-      if (titleMap[cat]) document.title = titleMap[cat];
+      document.title = titles[cat] || "Treasure Coast Today";
 
-      // Persist the active category in the URL so a refresh stays on this section
-      // instead of resetting to Top News.
       try {
         const newUrl = cat && cat !== "all"
           ? `${window.location.pathname}?cat=${cat}`
@@ -102,51 +109,43 @@ document.querySelectorAll(".cat-btn").forEach(btn => {
         hero.style.display = hero.dataset.catHero === cat ? "block" : "none";
       });
 
-      // Scroll to top
       window.scrollTo({ top: 0, behavior: "smooth" });
 
-      // Filter article cards (skip support card)
-      document.querySelectorAll(".article-card").forEach(card => {
-        if (card.classList.contains("support-card")) return;
+      // Filter grid cards
+      document.querySelectorAll(".grid-card").forEach(card => {
+        if (card.classList.contains("support-grid-card")) return;
         let show;
         if (cat === "all") {
-          // Top News: only show the deduped front page set
           show = card.dataset.topnews === "true";
         } else {
-          // Category view: show all cards for this category, minus the category hero
-          // (the hero is already displayed in the hero section above)
-          const matchesCat  = card.dataset.cat === cat;
-          const isHeroInCat = card.dataset.isHero === "true" && card.dataset.cat === cat;
-          show = matchesCat && !isHeroInCat;
+          show = card.dataset.cat === cat;
         }
-        card.style.display = show ? "block" : "none";
+        card.style.display = show ? "flex" : "none";
       });
 
-      // Reposition support card to 3rd visible slot
+      // Reposition support card to 5th visible slot
       const grid        = document.getElementById("articlesGrid");
-      const supportCard = grid ? grid.querySelector(".support-card") : null;
+      const supportCard = grid ? grid.querySelector(".support-grid-card") : null;
       if (supportCard && grid) {
-        const visible = Array.from(grid.querySelectorAll(".article-card:not(.support-card)"))
+        const visible = Array.from(grid.querySelectorAll(".grid-card:not(.support-grid-card)"))
           .filter(c => c.style.display !== "none");
-        const insertAfter = visible.length >= 2 ? visible[1] : visible[visible.length - 1];
+        const insertAfter = visible.length >= 4 ? visible[3] : visible[visible.length - 1];
         if (insertAfter) insertAfter.insertAdjacentElement("afterend", supportCard);
-        supportCard.style.display = "block";
+        supportCard.style.display = "flex";
       }
-    } catch(e) {
+    } catch (e) {
       console.error("Category filter error:", e);
     }
   });
 });
 
-// -- INITIAL STATE: show only Top News (deduped) cards on load --
+// -- INITIAL STATE: show only Top News hero + deduped grid on load --
 document.addEventListener("DOMContentLoaded", () => {
-  // Default: show only top news cards
-  document.querySelectorAll(".article-card").forEach(card => {
-    if (card.classList.contains("support-card")) return;
-    card.style.display = card.dataset.topnews === "true" ? "block" : "none";
+  document.querySelectorAll(".grid-card").forEach(card => {
+    if (card.classList.contains("support-grid-card")) return;
+    card.style.display = card.dataset.topnews === "true" ? "flex" : "none";
   });
 
-  // If arriving from another page with ?cat= query param, auto-activate that category
   const params = new URLSearchParams(window.location.search);
   const catParam = params.get("cat");
   if (catParam) {
@@ -154,37 +153,3 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btn) btn.click();
   }
 });
-
-// -- COUNTDOWN --
-function updateCountdown() {
-  const now = new Date(), next = new Date(now);
-  next.setHours(now.getHours() + 1, 0, 0, 0);
-  const el = document.getElementById("countdown");
-  if (el) el.textContent = Math.floor((next - now) / 60000) + " min";
-}
-updateCountdown();
-setInterval(updateCountdown, 60000);
-
-// -- SHARE --
-function shareArticle(btn) {
-  const headline = btn.getAttribute("data-headline") || "Treasure Coast Today";
-  const url      = btn.getAttribute("data-url") || "https://treasurecoast.today/";
-  const shareText = headline + " — read more on Treasure Coast Today";
-
-  // Native share sheet (mobile)
-  if (navigator.share) {
-    navigator.share({ title: headline, text: shareText, url: url })
-      .catch(() => {});
-    return;
-  }
-
-  // Desktop fallback: copy headline + link to clipboard
-  const clipText = shareText + "\n" + url;
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(clipText).then(() => {
-      const original = btn.innerHTML;
-      btn.innerHTML = "Copied &#10003;";
-      setTimeout(() => { btn.innerHTML = original; }, 1800);
-    }).catch(() => {});
-  }
-}
