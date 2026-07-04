@@ -2254,11 +2254,8 @@ def render_index(all_categories, top_cat):
             card["cat_key"]   = cat["category_key"]
             all_cards_pool.append(card)
 
-    # Split: enriched cards get the full image-grid treatment; unenriched cards
-    # go into an "In Brief" section below with expandable inline bodies.
+    # Only enriched cards appear on the homepage. Unenriched cards are dropped.
     enriched_pool = [c for c in all_cards_pool if c.get("enriched")]
-    inbrief_pool  = [c for c in all_cards_pool if not c.get("enriched")]
-    print(f"  Grid split: {len(enriched_pool)} enriched cards, {len(inbrief_pool)} in-brief cards")
 
     enriched_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
     topnews     = global_rank(enriched_pool, dedupe_against=top_cat["hero"].get("headline", ""))
@@ -2324,42 +2321,45 @@ def render_index(all_categories, top_cat):
         </div>
       </a>"""
 
-    # -- IN BRIEF: unenriched cards, expandable inline, grouped below the grid --
-    inbrief_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
-    inbrief_html = ""
-    for card in inbrief_pool:
-        ck        = card.get("cat_key", "all")
-        cl        = card.get("cat_label", "")
-        card_time = card.get("published", "")
-        body      = card.get("body", card.get("summary", ""))
-        card_paragraphs = make_paragraphs(body)
-        card_hl_esc = card["headline"].replace('"', "&quot;")
-        card_link   = card.get("link", "")
-        read_more   = f'<a href="{card_link}" target="_blank" rel="noopener" class="read-source-link">Read full story &#8599;</a>' if card_link else ""
-        inbrief_html += f"""
-      <div class="brief-item" data-cat="{ck}">
-        <div class="brief-head">
-          <span class="brief-tag">{cl}</span>
-          <h3 class="brief-headline">{card["headline"]}</h3>
-          <span class="brief-time">{card_time}</span>
-          <button class="brief-expand-btn" onclick="toggleBrief(this)">+</button>
-        </div>
-        <div class="brief-body">
-          {card_paragraphs}
-          <div class="brief-actions">
-            <button class="share-btn" data-headline="{card_hl_esc}" onclick="shareArticle(this)">Share &#8599;</button>
-            {read_more}
-          </div>
-        </div>
-      </div>"""
+    # -- OLDER: recent archived stories no longer shown as current cards --
+    # Collect headlines currently displayed so we never duplicate them.
+    current_headlines = {top_cat["hero"].get("headline", "").strip().lower()}
+    for cat in all_categories:
+        current_headlines.add(cat["hero"].get("headline", "").strip().lower())
+    for card in all_cards_display:
+        current_headlines.add(card.get("headline", "").strip().lower())
 
-    inbrief_section = ""
-    if inbrief_html:
-        inbrief_section = f"""
-    <section class="inbrief-section" id="inbriefSection">
-      <h2 class="inbrief-title">In Brief</h2>
-      <div class="inbrief-list">{inbrief_html}
-      </div>
+    older_archive = load_archive(OUTPUT_DIR / "archive.json")
+    # Sort archive newest-first by lastmod/date
+    older_archive.sort(key=lambda e: e.get("lastmod") or e.get("date", ""), reverse=True)
+    older_items = []
+    for e in older_archive:
+        hl = (e.get("headline", "") or "").strip()
+        if not hl or hl.lower() in current_headlines:
+            continue
+        older_items.append(e)
+        if len(older_items) >= 10:
+            break
+
+    older_html = ""
+    for e in older_items:
+        older_html += f"""
+        <li class="older-item" data-cat="{e.get('category_key','')}">
+          <a href="/articles/{e['slug']}.html" class="older-link">
+            <span class="older-cat">{e.get('category_label','')}</span>
+            <span class="older-headline">{e['headline']}</span>
+            <span class="older-date">{e.get('date','')}</span>
+          </a>
+        </li>"""
+
+    older_section = ""
+    if older_html:
+        older_section = f"""
+    <section class="older-section" id="olderSection">
+      <h2 class="older-title">Older Stories</h2>
+      <ul class="older-list">{older_html}
+      </ul>
+      <a href="/archive.html" class="older-more">View full archive &rarr;</a>
     </section>"""
 
     # Header/nav should be stable even if a category fails to generate content in a run.
@@ -2404,7 +2404,7 @@ def render_index(all_categories, top_cat):
     <div class="articles-grid" id="articlesGrid">
       {cards_html}
     </div>
-    {inbrief_section}
+    {older_section}
   </main>
 {_footer}
 </body>
