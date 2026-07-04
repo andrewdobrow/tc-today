@@ -123,25 +123,11 @@ document.querySelectorAll(".cat-btn").forEach(btn => {
         card.style.display = show ? "flex" : "none";
       });
 
-      // Filter Older stories — show all in Top News, category-matched otherwise
-      document.querySelectorAll(".older-item").forEach(item => {
-        const link = item.querySelector(".older-link");
-        const itemCat = item.dataset.cat;
-        const show = cat === "all" ? true : itemCat === cat;
-        item.style.display = show ? "list-item" : "none";
+      // Show only the active category's Older section. Top News shows none.
+      document.querySelectorAll(".older-section").forEach(section => {
+        section.style.display = (cat !== "all" && section.dataset.olderCat === cat)
+          ? "block" : "none";
       });
-      const olderSection = document.getElementById("olderSection");
-      if (olderSection) {
-        // Older section always visible in Top News; hidden in category views
-        // unless it has matching items
-        if (cat === "all") {
-          olderSection.style.display = "block";
-        } else {
-          const anyVisible = Array.from(olderSection.querySelectorAll(".older-item"))
-            .some(i => i.style.display !== "none");
-          olderSection.style.display = anyVisible ? "block" : "none";
-        }
-      }
 
       // Reposition support card to 5th visible slot
       const grid        = document.getElementById("articlesGrid");
