@@ -804,7 +804,9 @@ def _hero_eligible(category_key, h):
                          "fertilizer", "ban", "commission", "politics", "arrest", "charged",
                          "shooting", "homicide", "murder", "missing", "fatal crash", "zoning",
                          "ordinance", "budget", "tax", "city council", "county council",
-                         "restaurant opens", "business opens", "store opens", "new store"] + obit_terms,
+                         "restaurant opens", "business opens", "store opens", "new store",
+                         "house fire", "died", "death", "dead", "killed", "fundraiser",
+                         "gofundme", "fire broke out", "passed away", "fatal"] + obit_terms,
         "business":     ["shooting", "homicide", "murder", "missing", "fatal crash",
                          "arrest", "arrested", "charged", "stabbing", "robbery", "burglary",
                          "game recap", "score", "wins over", "defeats", "beats", "championship",
@@ -1375,6 +1377,18 @@ Return ONLY valid JSON:
                 data["cards"][ci] = old_hero
                 break
 
+    # Content-based category guard: the final hero must actually match the category
+    # by content (topic terms present, no hard negatives), regardless of what Claude
+    # flagged. Catches cases like a house-fire tragedy landing in Sports.
+    if not _hero_eligible(category_key, data.get("hero", {})) and data.get("cards"):
+        for ci, card in enumerate(data["cards"]):
+            if _hero_eligible(category_key, card):
+                print(f"  Category content swap for {category_label}: '{data['hero'].get('headline','')[:50]}' -> '{card.get('headline','')[:50]}'")
+                old_hero = data["hero"]
+                data["hero"] = card
+                data["cards"][ci] = old_hero
+                break
+
     # Age-based score decay for stale non-breaking stories
     def decay_score(item):
         score = item.get("urgency_score", 5)
@@ -1833,17 +1847,18 @@ def format_age(published_str):
 
 def select_front_page_hero(all_categories):
     """Use Claude to pick the most front-page-worthy hero across all categories.
-    Considers systemic impact and US relevance — not just raw urgency or casualty count.
-    Localized tragedies (regional accidents) lose to geopolitical events with broad reach,
-    even when casualty counts are similar."""
+    This is a HYPERLOCAL site — the best hero is the story that matters most to
+    Treasure Coast residents right now. Local tragedies, local government, and
+    local public-safety stories are all legitimately hero-worthy; scale is measured
+    locally, not nationally."""
     if not all_categories:
         return None
 
     def _is_eligible(cat):
-        if not CATEGORIES.get(cat["category_key"], {}).get("front_page_hero", True):
-            us_words = ["us strikes", "us military", "american forces", "u.s. strikes",
-                        "u.s. military", "united states strikes", "trump orders", "pentagon"]
-            return any(w in cat["hero"].get("headline", "").lower() for w in us_words)
+        # On a hyperlocal site, county and Florida stories CAN be the front-page hero —
+        # the biggest local story of the day often comes from a county section. The
+        # front_page_hero=False flag only deprioritizes them slightly via front_page_cap,
+        # it does not exclude them.
         return True
 
     def _fp_score(cat):
@@ -1954,81 +1969,23 @@ def select_front_page_hero(all_categories):
         "You are selecting the SINGLE most front-page-worthy story for Treasure Coast Today, a LOCAL news site covering Martin, St. Lucie, and Indian River counties in Florida.\n\n"
         f"{listing}\n\n"
         "AUDIENCE: Local Treasure Coast residents who want to know what's happening in their community.\n"
-        "But \"matters to US readers\" is about national/systemic relevance, NOT just whether it happened on US soil. "
-        "A regional US tragedy is local to that region; a foreign event involving US allies or US interests can have "
-        "broader national implications.\n"
         "\n"
-        "FRESHNESS IS CRITICAL: This app updates throughout the day. The front page hero must be CURRENT news — what is "
-        "happening NOW, not what already happened. Each candidate has a timestamp label, but BE SKEPTICAL OF TIMESTAMPS — "
-        "publishers often re-publish or update old articles with minor changes, which refreshes the timestamp even though "
-        "the event itself is old.\n"
+        "This is a HYPERLOCAL news site. The best hero is the story that matters MOST to people living in "
+        "Martin, St. Lucie, and Indian River counties RIGHT NOW. Local relevance is everything — a story about "
+        "a local fire, a county commission decision, a major local business opening, a local crime, a road project, "
+        "or a school issue is exactly what belongs on the front page. Do NOT undervalue local tragedies or local "
+        "events the way a national outlet would. A deadly house fire in Hobe Sound, a fatal crash on US-1, or a "
+        "major arrest in Fort Pierce IS front-page news here — that is the entire point of local journalism.\n"
         "\n"
-        "CRITICAL DISTINCTION: differentiate between (A) an OLD EVENT being republished with a refreshed timestamp, vs "
-        "(B) a NEW DEVELOPMENT in an ongoing story. The former is stale; the latter is fresh and can absolutely be hero-worthy.\n"
-        "- (A) STALE: The article describes an event that already happened, with no new action today. Example: \"Blue Origin "
-        "rocket exploded yesterday at Cape Canaveral\" — this is yesterday's explosion being recapped. Avoid as hero.\n"
-        "- (B) FRESH: The article describes a NEW action, decision, arrest, ruling, statement, or development today, even if "
-        "it's connected to an older story. Example: \"Suspect in Trump assassination attempt arrested\" — even though the "
-        "attempt was days ago, the arrest is happening NOW and is breaking news. This IS hero-worthy.\n"
-        "\n"
-        "Look at the teaser to determine which case applies:\n"
-        "- Phrases like \"announced today\", \"arrested today\", \"ruled today\", \"said this morning\", \"hours ago\", "
-        "\"just\", \"breaking\" — these signal a NEW development happening now, even in an old story. TREAT AS FRESH.\n"
-        "- Phrases that recap an old event with no new action today — \"yesterday's\", \"earlier this week\", \"last "
-        "Monday's\", and the article is just summarizing what already happened — TREAT AS STALE.\n"
-        "- When in doubt, ask: \"Is something new happening today in this story, or is this just a recap of an old event?\"\n"
-        "\n"
-        "Freshness tiers (combining timestamp AND content signals):\n"
-        "- New event or new development from the past few hours: strong hero candidate\n"
-        "- New development today in an older ongoing story: also strong (arrests, rulings, statements, decisions)\n"
-        "- From 6-12 hours ago and still actively unfolding: still acceptable\n"
-        "- Pure recap of an event from yesterday or earlier with no new development: AVOID as hero — it belongs as a card if at all\n"
-        "\n"
-        "When comparing, ask: \"Is something NEW happening in this story right now, or did it already happen and move on?\" "
-        "If something new is happening, it's fresh regardless of when the original event occurred. If it has moved on with "
-        "no new development, pick a fresher story.\n"
-        "\n"
-        "Pick the story with the GREATEST systemic impact for the US audience among CURRENT stories — not the biggest story regardless of when it happened.\n"
-        "\n"
-        "STRONG front-page heroes for a local news site:\n"
-        "1. Breaking court rulings or legal decisions involving the President, Congress, or major US institutions — these are the kind of stories that make every major outlet's front page\n"
-        "2. Major US national policy/political developments affecting millions (Supreme Court rulings, major legislation passed/signed, executive actions with broad immediate impact)\n"
-        "3. US national security crises, attacks on US soil, US military action\n"
-        "4. Major economic events affecting US consumers/markets (Fed decisions, market crashes, major industry collapses, jobs reports)\n"
-        "5. Major geopolitical events involving US allies or US interests (attacks on NATO countries, peace deals, sanctions, treaties) — these affect US foreign policy even when they happen abroad\n"
-        "6. Major US infrastructure/space/scientific events with national consequence (NASA missions, major tech failures with national impact)\n"
-        "\n"
-        "MEDIUM heroes — okay if nothing stronger is fresh, but typically belong as cards if a strong-tier story exists:\n"
-        "- Routine regulatory proposals (SEC rule changes, FCC proposals, agency-level rulemaking) — these matter to specific industries and policy wonks but rarely lead general-audience newspapers\n"
-        "- Single-state political news without broader implications\n"
-        "- Minor policy clarifications or technical legal rulings\n"
-        "\n"
-        "Quick gut check: if a story would NOT be on the front page of CNN, NYT, WaPo, or AP right now, it probably shouldn't be your hero either. Court rulings about Trump, breaking legal decisions, major political fights, and significant policy shifts make general-audience front pages. Niche regulatory proposals usually don't.\n"
-        "\n"
-        "WEAK front-page heroes (these belong as cards, NOT as the lead):\n"
-        "- Smaller-scale localized US tragedies — single bus/car crashes, single-building fires, industrial accidents, factory explosions, mine collapses, single-aircraft small plane crashes, local crime. These affect their region/industry, not the nation broadly.\n"
-        "- Foreign tragedies without US connection (foreign domestic crime, regional conflicts not involving US allies/interests)\n"
-        "- Single-company news (funding rounds, IPOs, executive shakeups, single-quarter earnings)\n"
-        "- Executive opinions or statements about competitors \u2014 'CEO says X is too expensive', 'executive calls Y overrated' are cards, not heroes\n"
-        "- Industry commentary, analyst takes, or opinion pieces without a concrete policy or market-moving event\n"
-        "- Sports/entertainment — these are ALWAYS cards, never heroes, regardless of historic significance. A Grand Slam final, championship game, or record-breaking performance belongs in the Sports section as a card.\n"
-        "- Celebrity deaths unless of major historical/cultural figures\n"
-        "- Routine policy proposals without immediate broad impact\n"
-        "\n"
-        "Casualty/disaster events that DO warrant hero status are large in scale or national in reach:\n"
-        "- Major commercial airline crashes (large passenger jets, dozens+ killed)\n"
-        "- Mass shootings or terrorism at historic scale\n"
-        "- Multi-state natural disasters (major hurricanes, large wildfires across regions, earthquakes affecting populated areas)\n"
-        "- Bridge collapses or major infrastructure failures with national implications\n"
-        "- Attacks on US military or significant US security events\n"
-        "- Industrial disasters with broad consequences (e.g. nuclear incidents, chemical releases affecting large populations)\n"
-        "\n"
-        "Rule of thumb: if a tragedy is contained to one workplace, one road, one building, or one small town, it is a card, not a hero — even with multiple casualties. If it affects multiple states, a major industry, or hundreds of lives, it can be hero-worthy.\n"
-        "\n"
-        "Examples:\n"
-        "- 'Trump delays Iran ceasefire' BEATS 'Nine dead in Oregon paper mill disaster' — the ceasefire decision is active US foreign policy reshaping a major conflict; the mill disaster, however tragic, is a regional industrial accident with no national policy consequence.\n"
-        "- 'Russian drone strikes NATO ally Romania' BEATS 'Bus crash kills 5 in Virginia' — the drone strike has NATO/Article 5 implications affecting US foreign policy; the bus crash, however tragic, is regional.\n"
-        "- 'Supreme Court rules on major case' BEATS 'Tech company raises $10B' — court rulings reshape US law for millions.\n"
+        "PICK THE HERO BY LOCAL IMPACT AND FRESHNESS:\n"
+        "- Prefer the story that affects the most local residents or that the community is most likely talking about today.\n"
+        "- Breaking or very recent local news beats older local news.\n"
+        "- A significant local tragedy (fatal fire, deadly crash, homicide, major accident) is hero-worthy when it is "
+        "recent and local — do not demote it just because it involves few people. Scale is measured locally, not nationally.\n"
+        "- Local government decisions, major development/business news, and public-safety stories are all strong heroes.\n"
+        "- Sports and routine event listings are weaker heroes and usually belong as cards unless it is genuinely major "
+        "local sports news (a local team championship, a local athlete reaching a national stage).\n"
+        "- Avoid obituaries and routine announcements as heroes.\n"
         "- 'US bus crash kills 5' BEATS 'European train delay' — between two local stories, US readers care more about US events.\n"
         "\n"
         "IMPORTANT ON CASUALTY COUNT: A high death toll does NOT by itself make a story front-page-worthy. The question is REACH — how many people BEYOND those directly involved are affected, and whether anything changes nationally. A chemical spill that kills 11 workers INSIDE one mill is a contained workplace accident — its reach is that facility and that town, NOT the nation. That is a card. The 'chemical release affecting large populations' exception means events like a city-wide toxic cloud forcing mass evacuation — NOT a fatal accident confined to one workplace. Do not let the word 'chemical' or a double-digit death count override the reach test.\n"
