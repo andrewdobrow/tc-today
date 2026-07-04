@@ -1794,6 +1794,7 @@ def enhance_hero_article(hero, full_text):
         explanation_signals = ["i cannot rewrite", "source material", "does not match", "i must return", "cannot proceed"]
         if enhanced and not any(s in enhanced.lower()[:200] for s in explanation_signals):
             hero["body"] = strip_markdown(enhanced, hero.get("headline", ""))
+            hero["enriched"] = True
             print(f"  Hero article enhanced with full source text")
         else:
             print(f"  Enhancement skipped: Claude returned explanation, keeping original")
@@ -3499,6 +3500,23 @@ def main():
                 for _fut in _ac(_futs, timeout=45):
                     try: _fut.result(timeout=10)
                     except Exception: pass
+
+            # Hero quality gate: the hero MUST be enriched. If it isn't, promote the
+            # first enriched card. If nothing in the category enriched at all, the
+            # category has no publishable content this run and is skipped entirely.
+            if not data["hero"].get("enriched"):
+                swapped = False
+                for ci, card in enumerate(data.get("cards", [])):
+                    if card.get("enriched"):
+                        print(f"  Thin hero swap for {cat_config['label']}: '{data['hero'].get('headline','')[:50]}' -> '{card.get('headline','')[:50]}'")
+                        old_hero = data["hero"]
+                        data["hero"] = card
+                        data["cards"][ci] = old_hero
+                        swapped = True
+                        break
+                if not swapped:
+                    print(f"  Skipping {cat_config['label']}: no enriched content this run")
+                    all_categories.remove(data)
 
         except Exception as e:
             import traceback
