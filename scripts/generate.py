@@ -2321,8 +2321,9 @@ def render_index(all_categories, top_cat):
         </div>
       </a>"""
 
-    # -- OLDER: recent archived stories no longer shown as current cards --
-    # Collect headlines currently displayed so we never duplicate them.
+    # -- OLDER: per-category archived stories no longer shown as current cards --
+    # Top News ("all") gets no Older section. Each category gets up to 10 of its
+    # own older stories that aren't currently displayed.
     current_headlines = {top_cat["hero"].get("headline", "").strip().lower()}
     for cat in all_categories:
         current_headlines.add(cat["hero"].get("headline", "").strip().lower())
@@ -2330,37 +2331,44 @@ def render_index(all_categories, top_cat):
         current_headlines.add(card.get("headline", "").strip().lower())
 
     older_archive = load_archive(OUTPUT_DIR / "archive.json")
-    # Sort archive newest-first by lastmod/date
     older_archive.sort(key=lambda e: e.get("lastmod") or e.get("date", ""), reverse=True)
-    older_items = []
+
+    # Group older stories by category, up to 10 each, excluding current headlines
+    older_by_cat = {}
     for e in older_archive:
         hl = (e.get("headline", "") or "").strip()
-        if not hl or hl.lower() in current_headlines:
+        ckey = e.get("category_key", "")
+        if not hl or not ckey or hl.lower() in current_headlines:
             continue
-        older_items.append(e)
-        if len(older_items) >= 10:
-            break
+        older_by_cat.setdefault(ckey, [])
+        if len(older_by_cat[ckey]) < 10:
+            older_by_cat[ckey].append(e)
 
-    older_html = ""
-    for e in older_items:
-        older_html += f"""
-        <li class="older-item" data-cat="{e.get('category_key','')}">
+    older_sections_html = ""
+    for cat in all_categories:
+        ckey = cat["category_key"]
+        items = older_by_cat.get(ckey, [])
+        if not items:
+            continue
+        items_html = ""
+        for e in items:
+            items_html += f"""
+        <li class="older-item">
           <a href="/articles/{e['slug']}.html" class="older-link">
-            <span class="older-cat">{e.get('category_label','')}</span>
             <span class="older-headline">{e['headline']}</span>
             <span class="older-date">{e.get('date','')}</span>
           </a>
         </li>"""
-
-    older_section = ""
-    if older_html:
-        older_section = f"""
-    <section class="older-section" id="olderSection">
-      <h2 class="older-title">Older Stories</h2>
-      <ul class="older-list">{older_html}
+        # Hidden by default; shown only when its category is active
+        older_sections_html += f"""
+    <section class="older-section" data-older-cat="{ckey}" style="display:none">
+      <h2 class="older-title">More {cat['category_label']} Stories</h2>
+      <ul class="older-list">{items_html}
       </ul>
       <a href="/archive.html" class="older-more">View full archive &rarr;</a>
     </section>"""
+
+    older_section = older_sections_html
 
     # Header/nav should be stable even if a category fails to generate content in a run.
     # Build nav from the master CATEGORIES config, not all_categories.
