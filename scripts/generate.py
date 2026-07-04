@@ -1006,7 +1006,7 @@ def filter_category_headlines(category_key, headlines, target=HEADLINES_PER_CATE
     if category_key in {"business", "sports", "things_to_do", "local_gov", "crime"}:
         threshold = 2
     if category_key in {"martin", "st_lucie", "indian_river"}:
-        threshold = 4  # Require a genuine county signal; cross-county penalty blocks bleed
+        threshold = 2  # Cross-county hard-blocks already prevent bleed; keep this low so counties aren't starved
 
     filtered = [h for score, h in scored if score >= threshold]
     hero_ready = [h for _, h in scored if h.get("hero_eligible") == "yes"]
@@ -1380,14 +1380,18 @@ Return ONLY valid JSON:
     # Content-based category guard: the final hero must actually match the category
     # by content (topic terms present, no hard negatives), regardless of what Claude
     # flagged. Catches cases like a house-fire tragedy landing in Sports.
-    if not _hero_eligible(category_key, data.get("hero", {})) and data.get("cards"):
-        for ci, card in enumerate(data["cards"]):
-            if _hero_eligible(category_key, card):
-                print(f"  Category content swap for {category_label}: '{data['hero'].get('headline','')[:50]}' -> '{card.get('headline','')[:50]}'")
-                old_hero = data["hero"]
-                data["hero"] = card
-                data["cards"][ci] = old_hero
-                break
+    # Only applies to TOPIC categories — counties are geographic and already filtered
+    # upstream by relevance scoring, so re-checking them here wrongly empties sections.
+    _topic_guard_cats = {"sports", "business", "crime", "things_to_do", "local_gov", "florida"}
+    if category_key in _topic_guard_cats:
+        if not _hero_eligible(category_key, data.get("hero", {})) and data.get("cards"):
+            for ci, card in enumerate(data["cards"]):
+                if _hero_eligible(category_key, card):
+                    print(f"  Category content swap for {category_label}: '{data['hero'].get('headline','')[:50]}' -> '{card.get('headline','')[:50]}'")
+                    old_hero = data["hero"]
+                    data["hero"] = card
+                    data["cards"][ci] = old_hero
+                    break
 
     # Age-based score decay for stale non-breaking stories
     def decay_score(item):
