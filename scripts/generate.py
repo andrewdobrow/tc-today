@@ -751,7 +751,10 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
 def _text_for_category_match(h):
     return " ".join([
         h.get("title", ""),
+        h.get("headline", ""),
         h.get("summary", ""),
+        h.get("teaser", ""),
+        h.get("body", "")[:1200],
         h.get("article_text", "")[:1200],
     ]).lower()
 
@@ -1384,14 +1387,21 @@ Return ONLY valid JSON:
     # upstream by relevance scoring, so re-checking them here wrongly empties sections.
     _topic_guard_cats = {"sports", "business", "crime", "things_to_do", "local_gov", "florida"}
     if category_key in _topic_guard_cats:
-        if not _hero_eligible(category_key, data.get("hero", {})) and data.get("cards"):
-            for ci, card in enumerate(data["cards"]):
+        if not _hero_eligible(category_key, data.get("hero", {})):
+            swapped = False
+            for ci, card in enumerate(data.get("cards", [])):
                 if _hero_eligible(category_key, card):
                     print(f"  Category content swap for {category_label}: '{data['hero'].get('headline','')[:50]}' -> '{card.get('headline','')[:50]}'")
                     old_hero = data["hero"]
                     data["hero"] = card
                     data["cards"][ci] = old_hero
+                    swapped = True
                     break
+            if not swapped:
+                # No content in this category actually matches the category topic.
+                # Mark it for removal rather than showing an off-topic hero.
+                print(f"  Dropping {category_label}: hero and all cards are off-topic for this category")
+                data["_drop_category"] = True
 
     # Age-based score decay for stale non-breaking stories
     def decay_score(item):
@@ -3502,6 +3512,10 @@ def main():
                         data["cards"] = data["cards"][1:] + [old_hero]
                 except Exception:
                     pass
+
+            if data.get("_drop_category"):
+                print(f"  Skipping {cat_config['label']}: no on-topic content")
+                continue
 
             all_categories.append(data)
             print(f"  Hero: {data['hero']['headline'][:60]}... (urgency: {data['hero'].get('urgency_score')}, image: {'yes' if img else 'no'})")
