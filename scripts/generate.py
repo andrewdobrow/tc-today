@@ -2571,9 +2571,14 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     schema_tag = f'  <script type="application/ld+json">{_json.dumps(structured_data)}</script>'
     body       = make_paragraphs(hero.get("body", ""))
     img_html   = ""
-    if hero.get("image_url"):
+    _art_img   = hero.get("image_url", "")
+    if not _art_img:
+        # No real image — use the category fallback so the page isn't text-only
+        _fb, _ = get_fallback_image(category_key, hero.get("headline", ""))
+        _art_img = _fb or f"{SITE_URL}/og-{category_key}.png"
+    if _art_img:
         credit   = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
-        img_html = f'<figure class="article-hero-image"><img src="{hero["image_url"]}" alt="{hero["headline"]}" loading="eager">{credit}</figure>'
+        img_html = f'<figure class="article-hero-image"><img src="{_art_img}" alt="{hero["headline"]}" loading="eager">{credit}</figure>'
 
     head   = _page_head(
         f"{hero['headline']} — Treasure Coast Today",
