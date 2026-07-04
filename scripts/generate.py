@@ -2567,6 +2567,30 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     header = _page_header(active=category_key)
     footer = _page_footer()
 
+    # Suppress ad solicitation on sensitive stories — brand safety. Never place an
+    # advertise banner next to violent crime, sexual assault, or child abuse coverage.
+    _sensitive_terms = [
+        "murder", "murdered", "homicide", "killed", "killing", "shooting", "shot dead",
+        "stabbing", "stabbed", "rape", "raped", "sexual assault", "sexual battery",
+        "molest", "molestation", "molested", "child abuse", "child porn", "child sex",
+        "csam", "sex abuse", "sexual abuse", "abducted", "abduction", "kidnap",
+        "human trafficking", "sex trafficking", "manslaughter", "fatal shooting",
+        "domestic violence", "assault", "overdose death", "suicide", "dead body",
+        "body found", "remains found", "fatal crash", "deadly crash",
+    ]
+    _hl_body = (hero.get("headline", "") + " " + hero.get("body", "")[:300]).lower()
+    _show_ad_banner = not any(t in _hl_body for t in _sensitive_terms)
+
+    ad_banner = ""
+    if _show_ad_banner:
+        ad_banner = (
+            '  <a href="/advertise.html" class="article-ad-banner" '
+            'aria-label="Advertise with Treasure Coast Today">\n'
+            '    <img src="/images/advertise-banner.png" '
+            'alt="Advertise with Treasure Coast Today — reach Martin, St. Lucie and Indian River readers every day">\n'
+            '  </a>'
+        )
+
     # Related stories — same category, most recent, excluding this article
     related_html = ""
     if related:
@@ -2610,6 +2634,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
 </head>
 <body>
 {header}
+{ad_banner}
   <main>
     <div class="article-wrap">
       <a href="/" class="article-back">&larr; Back to Treasure Coast Today</a>
