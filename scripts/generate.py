@@ -2258,6 +2258,48 @@ def render_index(all_categories, top_cat):
     # Only enriched cards appear on the homepage. Unenriched cards are dropped.
     enriched_pool = [c for c in all_cards_pool if c.get("enriched")]
 
+    # Backfill from the archive: recent enriched stories (last 3 days) that aren't in
+    # this run's fresh cards. Feeds rotate stories off quickly, so a story from
+    # yesterday may not be re-fetched today — but it's still recent and relevant and
+    # should keep filling out the grid rather than dropping to "older" immediately.
+    from datetime import timezone as _tzbf
+    _now_bf = datetime.now(_tzbf.utc)
+    _current_hls = {c.get("headline", "").strip().lower() for c in enriched_pool}
+    _current_hls.add(top_cat["hero"].get("headline", "").strip().lower())
+    for cat in all_categories:
+        _current_hls.add(cat["hero"].get("headline", "").strip().lower())
+
+    _bf_archive = load_archive(OUTPUT_DIR / "archive.json")
+    _bf_archive.sort(key=lambda e: e.get("lastmod") or e.get("date", ""), reverse=True)
+    for e in _bf_archive:
+        hl = (e.get("headline", "") or "").strip()
+        if not hl or hl.lower() in _current_hls:
+            continue
+        date_str = e.get("lastmod") or e.get("date", "")
+        try:
+            edt = datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=_tzbf.utc)
+            if (_now_bf - edt).days > 3:
+                continue  # Older than 3 days — leave for the Older section
+        except Exception:
+            continue
+        # Reconstruct a card from the archive entry
+        backfill_card = {
+            "headline":   hl,
+            "teaser":     e.get("teaser", ""),
+            "body":       e.get("teaser", ""),
+            "cat_label":  e.get("category_label", ""),
+            "cat_key":    e.get("category_key", ""),
+            "image_url":  e.get("image_url", ""),
+            "published":  e.get("date", ""),
+            "published_raw": e.get("date", ""),
+            "enriched":   True,
+            "urgency_score": 4,  # Backfill ranks below fresh cards
+            "link":       f"{SITE_URL}/articles/{e['slug']}.html",
+            "_archived_slug": e["slug"],
+        }
+        enriched_pool.append(backfill_card)
+        _current_hls.add(hl.lower())
+
     enriched_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
     topnews     = global_rank(enriched_pool, dedupe_against=top_cat["hero"].get("headline", ""))
     topnews_ids = {id(c) for c in topnews}
@@ -2279,6 +2321,9 @@ def render_index(all_categories, top_cat):
     archive_for_links = load_archive(OUTPUT_DIR / "archive.json")
 
     def card_permalink(card):
+        # Backfill cards already carry their archived slug
+        if card.get("_archived_slug"):
+            return f"{SITE_URL}/articles/{card['_archived_slug']}.html"
         matched = find_matching_entry(card.get("headline",""), archive_for_links, card.get("link",""))
         if matched:
             return f"{SITE_URL}/articles/{matched['slug']}.html"
