@@ -1952,16 +1952,26 @@ def select_front_page_hero(all_categories):
         # Check for stale-event phrases
         if any(p in content for p in _stale_event_phrases):
             return True
-        # Check timestamp — 18+ hours old with no fresh-development language is stale
-        pub = hero.get("published", "")
-        if pub:
+        # Check timestamp — 18+ hours old with no fresh-development language is stale.
+        # published_raw holds the real RFC-822 timestamp; published is a display
+        # string ("Jul 2, 3:45 PM ET") so check the raw field first.
+        for _datefield in ("published_raw", "date", "published"):
+            pub = hero.get(_datefield, "")
+            if not pub:
+                continue
             try:
-                dt  = parsedate_to_datetime(pub).astimezone(_tz.utc)
+                if ("," in pub and ":" in pub) or pub.count(":") >= 1 and any(m in pub for m in ["GMT","+0","-0","Mon","Tue","Wed","Thu","Fri","Sat","Sun"]):
+                    dt = parsedate_to_datetime(pub).astimezone(_tz.utc)
+                elif "-" in pub[:10]:
+                    dt = datetime.strptime(pub[:10], "%Y-%m-%d").replace(tzinfo=_tz.utc)
+                else:
+                    continue  # Display string we can't reliably parse — skip
                 hrs = (_now - dt).total_seconds() / 3600
                 if hrs >= 18:
                     return True
+                return False  # Got a valid parse and it's fresh — done
             except Exception:
-                pass
+                continue
         return False
 
     fresh_candidates = [c for c in candidates if not _is_stale(c)]
@@ -2027,11 +2037,16 @@ def select_front_page_hero(all_categories):
         "- Sports and routine event listings are weaker heroes and usually belong as cards unless it is genuinely major "
         "local sports news (a local team championship, a local athlete reaching a national stage).\n"
         "- Avoid obituaries and routine announcements as heroes.\n"
-        "- 'US bus crash kills 5' BEATS 'European train delay' — between two local stories, US readers care more about US events.\n"
         "\n"
-        "IMPORTANT ON CASUALTY COUNT: A high death toll does NOT by itself make a story front-page-worthy. The question is REACH — how many people BEYOND those directly involved are affected, and whether anything changes nationally. A chemical spill that kills 11 workers INSIDE one mill is a contained workplace accident — its reach is that facility and that town, NOT the nation. That is a card. The 'chemical release affecting large populations' exception means events like a city-wide toxic cloud forcing mass evacuation — NOT a fatal accident confined to one workplace. Do not let the word 'chemical' or a double-digit death count override the reach test.\n"
+        "FRESHNESS IS CRITICAL: This is a daily news site. A story from today or last night should almost always beat "
+        "a story from two or three days ago. Look at the timestamp on each candidate. If a candidate is 2+ days old "
+        "and there is any reasonably significant story from today or yesterday, pick the fresher one. Only pick an "
+        "older story if it is dramatically more important than everything fresh available (e.g. a major ongoing local "
+        "tragedy with new developments). A 3-day-old story should never lead when fresh local news exists.\n"
         "\n"
-        "THINK FIRST, THEN ANSWER. For each candidate, briefly assess in one short line: (a) how recent the actual event is, and (b) its national reach — does it change US policy/markets/security, or affect Americans beyond those directly involved? Then state your pick.\n"
+        "THINK FIRST, THEN ANSWER. For each candidate, briefly assess in one short line: (a) how recent the event is "
+        "(check the timestamp), and (b) how much it matters to local Treasure Coast residents. Then state your pick, "
+        "favoring the story that is both recent AND locally significant.\n"
         "\n"
         "Format your response EXACTLY like this:\n"
         "Reasoning: <one line per candidate, very brief>\n"
@@ -2153,27 +2168,27 @@ def global_rank(all_cards, dedupe_against=None):
         f"Rank these {n} Treasure Coast local news stories by importance and relevance to LOCAL residents of Martin, St. Lucie, and Indian River counties.\n"
         "\n"
         "CRITICAL DEDUPLICATION RULE: Many of these stories cover the SAME underlying event "
-        "from different angles or with different wording (e.g. 'US strikes Iran' and "
-        "'US military shoots down Iranian drones, hits launch site' are the SAME event). "
+        "from different angles or with different wording (e.g. 'Stuart commission approves dock project' and "
+        "'Stuart City Commission votes to fund downtown dock renovation' are the SAME event). "
         "Identify every cluster of stories about the same event and keep ONLY the single "
         "best version of each. Drop all the others entirely. Two stories are the same event "
         "if they describe the same action, by the same actors, at the same time — regardless "
         "of how differently they are phrased.\n"
         + dedupe_clause +
         "\n"
-        "PRIMARY signal: consequence and US relevance combined.\n"
-        "SECONDARY signal: recency — edited timestamps do not make old stories new.\n"
+        "PRIMARY signal: local relevance and impact on Treasure Coast residents.\n"
+        "SECONDARY signal: recency — fresher local news ranks above older local news; edited timestamps do not make old stories new.\n"
         "Apply this weighting:\n"
-        "1. Major foreign policy events (military action, peace deals, sanctions, treaty changes), especially involving oil/trade routes or major allies: TOP TIER — these affect millions and reshape global affairs\n"
-        "2. Direct US impact on millions of Americans (economy-wide policy, national security incidents, major Supreme Court rulings, mass casualties): very high\n"
-        "3. Significant domestic political developments (major legislation, executive actions with broad impact, presidential decisions): high\n"
-        "4. Major business stories that affect consumers/economy broadly (Fed decisions, major industry collapses, jobs reports): high\n"
-        "5. Company-specific news (funding rounds, single-company earnings, executive changes, IPO plans): MEDIUM — even huge funding rounds for private companies rank BELOW major foreign policy or national news. A $10B Anthropic round is less important than a US-Iran de-escalation deal.\n"
-        "5b. Foreign economic indicators (China factory/PMI data, foreign GDP, foreign central bank moves): LOWER for a US audience unless they trigger an immediate, named US market reaction. 'China factory activity contracts' is a routine indicator that interests economists but should NOT be a top card on a US front page — rank it well below US domestic news, US policy, and major US-relevant world events.\n"
-        "6. International tragedies with no direct US connection: belong in World but should NOT lead. Rank below any US-relevant story.\n"
+        "1. Major local breaking news and public safety (local fires, fatal crashes, homicides, storms, evacuations affecting Martin, St. Lucie, or Indian River counties): TOP TIER\n"
+        "2. Local government decisions that affect residents (county commission votes, city council actions, school board decisions, zoning, budgets, tax changes): very high\n"
+        "3. Major local development and business news (large projects, major employers, notable openings/closings, road and infrastructure projects): high\n"
+        "4. Local crime and courts (arrests, charges, investigations, sentencing) in the three counties: high\n"
+        "5. Community news, events, and things to do that many residents care about: medium\n"
+        "6. Statewide Florida news with clear local relevance (insurance, hurricanes, state laws affecting residents): medium\n"
         "7. Follow-up stories: rank below genuinely new stories\n"
-        "8. Sports, entertainment: rank below policy and crisis stories unless exceptionally significant\n"
-        "When two stories seem equally important, use recency as a tiebreaker.\n\n"
+        "8. Sports and entertainment: rank below breaking news and government/public-safety unless a genuinely major local sports story\n"
+        "Stories about places OUTSIDE the three-county Treasure Coast area should rank low unless they directly affect local residents.\n"
+        "When two stories seem equally important, use recency as a tiebreaker (fresher wins).\n\n"
         f"{stories_text}\n\n"
         "Return ONLY a JSON array of the original numbers, in ranked order, most important first, "
         "with all duplicates removed (only the best version of each distinct event included).\n"
