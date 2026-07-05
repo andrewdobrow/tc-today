@@ -111,7 +111,6 @@ CATEGORIES = {
         "front_page_hero": False,
         "feeds": [
             "https://www.wptv.com/news/region-martin-county.rss",
-            "https://www.wptv.com/news/local-news.rss",
             "https://news.google.com/rss/search?q=martin+county+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=stuart+florida+news+when:2d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=jensen+beach+florida+when:2d&hl=en-US&gl=US&ceid=US:en",
@@ -771,6 +770,28 @@ def _hero_eligible(category_key, h):
     quality = h.get("source_quality", "")
 
     if quality in {"thin", "discovery_only"}:
+        return False
+
+    # Outside-coverage-area block: WPTV serves Palm Beach County and the wider
+    # South Florida market, which is NOT the Treasure Coast. If a story is clearly
+    # about a place outside Martin/St. Lucie/Indian River counties AND does not
+    # mention any Treasure Coast location, it should never be a hero.
+    _outside_places = [
+        "palm beach", "west palm", "riviera beach", "delray beach", "boca raton",
+        "boynton beach", "lake worth", "jupiter", "juno beach", "north palm beach",
+        "wellington", "royal palm", "belle glade", "pahokee", "greenacres",
+        "miami", "fort lauderdale", "broward", "okeechobee", "orlando", "tampa",
+        "jacksonville", "gainesville", "naples", "sarasota", "fort myers",
+    ]
+    _treasure_coast_places = [
+        "martin county", "st. lucie", "st lucie", "indian river", "treasure coast",
+        "stuart", "jensen beach", "palm city", "hobe sound", "port salerno",
+        "port st. lucie", "port st lucie", "fort pierce", "vero beach", "sebastian",
+        "fellsmere", "indiantown", "jupiter island", "hutchinson island",
+    ]
+    _has_outside = any(p in text for p in _outside_places)
+    _has_local   = any(p in text for p in _treasure_coast_places)
+    if _has_outside and not _has_local:
         return False
 
     # Universal obituary block — obituaries should NEVER be a hero in any section,
@@ -1823,8 +1844,13 @@ def enhance_card(card, content_bank, headlines):
 
 def enhance_hero_article(hero, full_text):
     """Rewrite the hero article using the full source text for accuracy and detail."""
-    if not full_text or len(full_text.split()) < 150:
-        return hero  # Not enough text to improve on
+    # A hero that already has a substantial generated body counts as enriched even
+    # if the supplementary full-text fetch is short or missing. The full-text fetch
+    # improves accuracy but is not required — the hero is already a real article.
+    if len((hero.get("body", "") or "").split()) >= 60:
+        hero["enriched"] = True
+    if not full_text or len(full_text.split()) < 100:
+        return hero  # Not enough extra text to improve on; keep generated body
     body = hero.get("body", "")
     prompt = (
         f"You wrote this article about: {hero.get('headline', '')}\n\n"
