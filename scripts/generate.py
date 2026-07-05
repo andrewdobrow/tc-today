@@ -73,15 +73,14 @@ CATEGORIES = {
         "label": "Sports",
         "front_page_cap": 6,
         "feeds": [
-            "https://www.wptv.com/news/local-news.rss",
-            "https://www.wptv.com/news/region-martin-county.rss",
-            "https://www.wptv.com/news/region-st-lucie-county.rss",
-            "https://www.wptv.com/news/region-indian-river-county.rss",
+            "https://www.wptv.com/sports.rss",
+            "https://www.wptv.com/sports/sports-headlines.rss",
             "https://news.google.com/rss/search?q=martin+county+high+school+sports+game+score+when:3d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=st+lucie+county+high+school+sports+game+when:3d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=treasure+coast+florida+football+basketball+baseball+soccer+when:3d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=st+lucie+mets+florida+when:7d&hl=en-US&gl=US&ceid=US:en",
             "https://news.google.com/rss/search?q=jensen+beach+south+fork+martin+county+high+school+sports+when:7d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=vero+beach+indian+river+high+school+sports+when:7d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "things_to_do": {
@@ -1538,17 +1537,43 @@ Return ONLY valid JSON:
 
     if _story_is_stale(data["hero"]) and data.get("cards"):
         for ci, card in enumerate(data["cards"]):
-            if not _story_is_stale(card):
-                old_hero = data["hero"]
-                print(f"  Stale hero swapped: '{old_hero.get('headline','')[:50]}' -> '{card.get('headline','')[:50]}'")
-                # Give the demoted hero a teaser (heroes lack one; cards need one)
-                if not old_hero.get("teaser"):
-                    _body = old_hero.get("body", "").strip()
-                    _first = _body.split(". ")[0].strip()
-                    old_hero["teaser"] = (_first[:160] + ".") if _first else ""
-                data["hero"] = card
-                data["cards"][ci] = old_hero
-                break
+            if _story_is_stale(card):
+                continue
+            # The replacement must also be eligible for this category —
+            # _hero_eligible routes to topic-matching for topic categories and
+            # geographic-matching for counties, so this is safe for all.
+            if not _hero_eligible(category_key, card):
+                continue
+            old_hero = data["hero"]
+            print(f"  Stale hero swapped: '{old_hero.get('headline','')[:50]}' -> '{card.get('headline','')[:50]}'")
+            if not old_hero.get("teaser"):
+                _body = old_hero.get("body", "").strip()
+                _first = _body.split(". ")[0].strip()
+                old_hero["teaser"] = (_first[:160] + ".") if _first else ""
+            data["hero"] = card
+            data["cards"][ci] = old_hero
+            break
+
+    # FINAL eligibility guard — runs last, after all other swaps. Applies to ALL
+    # categories: topic categories require topic match, counties require geographic
+    # match (both handled inside _hero_eligible).
+    if True:
+        # Drop cards that don't belong in this category
+        if data.get("cards"):
+            data["cards"] = [c for c in data["cards"] if _hero_eligible(category_key, c)]
+        if not _hero_eligible(category_key, data.get("hero", {})):
+            _fixed = False
+            for ci, card in enumerate(data.get("cards", [])):
+                if _hero_eligible(category_key, card):
+                    old_hero = data["hero"]
+                    data["hero"] = card
+                    data["cards"][ci] = old_hero
+                    print(f"  Final category guard swap for {category_label}: '{old_hero.get('headline','')[:50]}' -> '{card.get('headline','')[:50]}'")
+                    _fixed = True
+                    break
+            if not _fixed:
+                print(f"  Dropping {category_label}: no eligible hero available")
+                data["_drop_category"] = True
 
     return data
 
@@ -2297,6 +2322,19 @@ def render_index(all_categories, top_cat):
             "link":       f"{SITE_URL}/articles/{e['slug']}.html",
             "_archived_slug": e["slug"],
         }
+        # Validate against category — the archive may contain stories that were
+        # mis-categorized in earlier runs (before category fixes). For TOPIC categories,
+        # re-check topic match. For COUNTY categories, trust the archived tag since it
+        # passed the geographic filter when first archived (and feed_url may be absent
+        # on older entries, which would cause false rejections).
+        _bf_ckey = e.get("category_key", "")
+        if _bf_ckey in {"sports", "business", "crime", "things_to_do", "local_gov", "florida"}:
+            _check = {"headline": hl, "body": e.get("teaser", ""),
+                      "title": hl, "summary": e.get("teaser", ""),
+                      "feed_url": e.get("feed_url", ""),
+                      "source_quality": "full"}
+            if not _hero_eligible(_bf_ckey, _check):
+                continue  # Skip mis-categorized archived story
         enriched_pool.append(backfill_card)
         _current_hls.add(hl.lower())
 
@@ -3368,6 +3406,7 @@ def write_archives(all_categories, top_cat):
                 "category_key": cat_key, "category_label": cat_label,
                 "date": today, "lastmod": today,
                 "image_url": hero.get("image_url",""),
+                "feed_url": hero.get("feed_url",""),
             })
             new_count += 1
 
