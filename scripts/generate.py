@@ -2553,13 +2553,71 @@ def slugify(text):
     return text[:80].strip("-")
 
 
+def _weather_phenomenon(event):
+    """Group NWS event names into a stable phenomenon key so a Watch and the
+    later Warning for the SAME hazard share one article (updated, not duplicated)."""
+    e = (event or "").lower()
+    if "hurricane" in e:            return "hurricane"
+    if "tropical storm" in e:       return "tropical-storm"
+    if "storm surge" in e:          return "storm-surge"
+    if "tornado" in e:              return "tornado"
+    if "flash flood" in e:          return "flash-flood"
+    if "flood" in e:                return "flood"
+    if "severe thunderstorm" in e:  return "severe-thunderstorm"
+    if "extreme wind" in e:         return "extreme-wind"
+    if "high wind" in e or "wind" in e: return "wind"
+    if "fire" in e or "red flag" in e:  return "fire"
+    # Fallback: slugify the event name
+    return re.sub(r"[^a-z0-9]+", "-", e).strip("-") or "weather"
+
+
+def _rewrite_alert_to_article(event, area, severity, headline_txt, desc, instr):
+    """Rewrite an NWS alert into a short article in the site's voice. Falls back
+    to the official NWS text if the rewrite fails — safety info must never be lost."""
+    source = "\n\n".join(filter(None, [
+        f"Alert: {event}",
+        f"Area: {area}" if area else "",
+        f"NWS headline: {headline_txt}" if headline_txt else "",
+        f"Details: {desc}" if desc else "",
+        f"Safety instructions: {instr}" if instr else "",
+    ]))
+    prompt = (
+        "You are writing a brief, factual local news article about an active National Weather "
+        "Service alert for the Treasure Coast of Florida (Martin, St. Lucie, Indian River counties).\n\n"
+        f"Official NWS alert information:\n\n{source}\n\n"
+        "Write a clear, calm, factual news article of 3-5 short paragraphs. Lead with what the alert "
+        "is, who it affects, and when it is in effect. Include the concrete details (timing, locations, "
+        "expected conditions, hazards). Preserve all safety instructions accurately in your own words — "
+        "do not omit or soften them. Do not invent details not in the source. Do not use alarmist "
+        "language, but convey appropriate seriousness. Plain, direct English. No em dashes. "
+        "Write only the article body, no headline."
+    )
+    try:
+        resp = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=900,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        out = resp.content[0].text.strip()
+        if out and len(out.split()) >= 40:
+            return strip_markdown(out, "")
+    except Exception as e:
+        print(f"  Alert rewrite failed ({e}); using official NWS text")
+    # Fallback: official text, never lose safety info
+    parts = []
+    if headline_txt: parts.append(headline_txt.strip())
+    if desc: parts.append(desc)
+    if instr: parts.append("What to do: " + instr)
+    return "\n\n".join(parts)
+
+
 def load_weather_alerts():
     """Fetch active Extreme/Severe NWS alerts for the three Treasure Coast counties
-    and turn them into articles. Urgency starts high and decays toward the alert's
-    expiration so weather events lead briefly then fade fast, matching how they behave.
+    and rewrite them into articles. As an event evolves (e.g. Hurricane Watch then
+    Hurricane Warning for the same county), the SAME article updates in place rather
+    than creating duplicates, via a stable phenomenon+county event key.
 
     County SAME codes: Martin FLC085, St. Lucie FLC111, Indian River FLC061.
-    Alert text is public-domain government data, free to use directly.
     """
     from datetime import timezone as _tz
     import urllib.request
@@ -2585,40 +2643,59 @@ def load_weather_alerts():
 
     now = datetime.now(_tz.utc)
     features = data.get("features", [])
-    articles = []
-    seen = set()
 
+    # Group alerts by stable event key (phenomenon + affected counties). When both
+    # a Watch and a Warning are active for the same hazard+area, keep the most
+    # severe / most recent so we publish ONE current article for the event.
+    events = {}
     for f in features:
         p = f.get("properties", {})
         severity = (p.get("severity", "") or "").lower()
-        # Only Extreme and Severe alerts become articles
         if severity not in ("extreme", "severe"):
             continue
 
         event = p.get("event", "Weather Alert")
-        area  = p.get("areaDesc", "")
-        desc  = (p.get("description", "") or "").strip()
-        instr = (p.get("instruction", "") or "").strip()
 
-        # Dedupe by event + area
-        dkey = f"{event}|{area}"
-        if dkey in seen:
-            continue
-        seen.add(dkey)
-
-        # Determine which of our counties this alert affects
+        # Which of our counties this alert affects
         affected_zones = []
         for geo in p.get("geocode", {}).get("SAME", []):
-            # SAME codes are prefixed with a leading digit vs UGC; match on suffix
             for zc in ZONE_TO_COUNTY:
-                if geo.endswith(zc[3:]):  # match county number
+                if geo.endswith(zc[3:]):
                     affected_zones.append(zc)
-        # Fallback: parse from UGC codes
         if not affected_zones:
             for ugc in p.get("geocode", {}).get("UGC", []):
                 if ugc in ZONE_TO_COUNTY:
                     affected_zones.append(ugc)
         affected_zones = list(dict.fromkeys(affected_zones))
+        if not affected_zones:
+            continue
+
+        county_keys = tuple(sorted(ZONE_TO_COUNTY[z][0] for z in affected_zones))
+        phenom = _weather_phenomenon(event)
+        event_key = f"{phenom}:{'-'.join(county_keys)}"
+
+        # Sort key: severity rank, then most recent sent time
+        sev_rank = 0 if severity == "extreme" else 1
+        sent = p.get("sent", "") or ""
+        cand = (sev_rank, p, severity, affected_zones)
+
+        prev = events.get(event_key)
+        if prev is None:
+            events[event_key] = cand
+        else:
+            # Prefer extreme over severe; among equal severity, prefer the newer sent
+            if sev_rank < prev[0]:
+                events[event_key] = cand
+            elif sev_rank == prev[0] and sent > (prev[1].get("sent", "") or ""):
+                events[event_key] = cand
+
+    articles = []
+    for event_key, (sev_rank, p, severity, affected_zones) in events.items():
+        event = p.get("event", "Weather Alert")
+        area  = p.get("areaDesc", "")
+        desc  = (p.get("description", "") or "").strip()
+        instr = (p.get("instruction", "") or "").strip()
+        headline_txt = p.get("headline", "")
 
         # Route: single county -> that county; multiple -> front-page via florida
         if len(affected_zones) == 1:
@@ -2626,10 +2703,8 @@ def load_weather_alerts():
         else:
             ckey, clabel = ("florida", "Florida")
 
-        # Compute urgency. The alert stays at FULL urgency for its entire active
-        # window — the end of an alert window is often the most critical moment
-        # (storm arriving, surge cresting). Only after it expires does it decay,
-        # over the following ~2 hours, then it drops out entirely.
+        # Urgency: full strength through the active window, then decay over the
+        # two hours after expiry, then drop out.
         ends    = p.get("ends") or p.get("expires")
         base    = 10 if severity == "extreme" else 8
         urgency = base
@@ -2638,38 +2713,27 @@ def load_weather_alerts():
             end_dt = datetime.fromisoformat(ends.replace("Z", "+00:00")).astimezone(_tz.utc)
             exp_date = (end_dt + timedelta(hours=2)).strftime("%Y-%m-%d")
             mins_past_end = (now - end_dt).total_seconds() / 60
-
             if mins_past_end <= 0:
-                # Alert still active — full urgency the whole time
                 urgency = base
             elif mins_past_end <= 60:
-                # First hour after expiry — still very relevant, slight step down
                 urgency = base - 1
             elif mins_past_end <= 120:
-                # Second hour after expiry — fading
                 urgency = base - 3
             else:
-                # More than 2 hours past expiry — no longer news
-                continue
+                continue  # More than 2h past expiry — no longer news
         except Exception:
             pass
-
         urgency = max(4, urgency)
 
-        # Build the article body from the alert (public-domain NWS text)
-        body_parts = []
-        headline_txt = p.get("headline", "")
-        if headline_txt:
-            body_parts.append(headline_txt.strip())
-        if desc:
-            body_parts.append(desc)
-        if instr:
-            body_parts.append("What to do: " + instr)
-        body = "\n\n".join(body_parts)
+        # Rewrite into article voice (falls back to official text on failure)
+        body = _rewrite_alert_to_article(event, area, severity, headline_txt, desc, instr)
 
-        # Title-case a clean headline
         area_short = area.split(";")[0].strip() if area else clabel
         headline = f"{event} issued for {area_short}"
+
+        # STABLE link keyed on the event, NOT the volatile NWS alert id. This is
+        # what makes an upgrade (Watch -> Warning) update the same article in place.
+        stable_link = f"{SITE_URL}/weather-alert/{event_key}"
 
         articles.append({
             "headline":       headline,
@@ -2685,10 +2749,11 @@ def load_weather_alerts():
             "urgency_score":  urgency,
             "enriched":       True,
             "is_weather_alert": True,
-            "force_hero":     severity == "extreme",  # extreme pins as hero
-            "link":           p.get("id", "") or f"{SITE_URL}/weather.html",
+            "weather_event_key": event_key,
+            "force_hero":     severity == "extreme",
+            "link":           stable_link,
         })
-        print(f"  Weather alert [{severity}]: '{headline[:55]}' -> {ckey} (urgency {urgency})")
+        print(f"  Weather alert [{severity}]: '{headline[:55]}' -> {ckey} (urgency {urgency}, key {event_key})")
 
     return articles
 
