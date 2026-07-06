@@ -100,10 +100,10 @@ CATEGORIES = {
         "front_page_hero": False,
         "feeds": [
             "https://www.wptv.com/news/state.rss",
-            "https://news.google.com/rss/search?q=florida+news+when:1d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=florida+legislature+governor+desantis+when:2d&hl=en-US&gl=US&ceid=US:en",
-            "https://news.google.com/rss/search?q=florida+economy+housing+insurance+when:2d&hl=en-US&gl=US&ceid=US:en",
-            "https://floridapolitics.com/feed/",
+            "https://news.google.com/rss/search?q=florida+insurance+property+homeowners+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=florida+hurricane+storm+weather+when:2d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=florida+new+law+takes+effect+residents+when:3d&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=florida+gas+prices+cost+of+living+utilities+when:3d&hl=en-US&gl=US&ceid=US:en",
         ],
     },
     "martin": {
@@ -2068,6 +2068,15 @@ def select_front_page_hero(all_categories):
         "- Sports and routine event listings are weaker heroes and usually belong as cards unless it is genuinely major "
         "local sports news (a local team championship, a local athlete reaching a national stage).\n"
         "- Avoid obituaries and routine announcements as heroes.\n"
+        "\n"
+        "STATEWIDE AND POLITICAL STORIES: A story in the 'Florida' category can lead ONLY when it "
+        "directly and concretely affects Treasure Coast residents' daily lives (for example: a property "
+        "insurance change, a hurricane threatening the state, a new law taking effect, a cost-of-living or "
+        "utility change). Statewide POLITICAL stories with no direct local impact — campaign fundraising "
+        "totals, primary horse-race coverage, party or legislature intrigue, a governor's political "
+        "maneuvering — must NEVER be the front-page hero. If the only strong Florida candidate is political "
+        "insider news, pick a LOCAL story instead, even a smaller one. A modest Martin, St. Lucie, or Indian "
+        "River story always beats statewide political horse-race coverage on this front page.\n"
         "\n"
         "FRESHNESS IS CRITICAL: This is a daily news site. A story from today or last night should almost always beat "
         "a story from two or three days ago. Look at the timestamp on each candidate. If a candidate is 2+ days old "
