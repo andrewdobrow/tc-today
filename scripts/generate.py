@@ -785,8 +785,11 @@ def _hero_eligible(category_key, h):
         "palm beach", "west palm", "riviera beach", "delray beach", "boca raton",
         "boynton beach", "lake worth", "jupiter", "juno beach", "north palm beach",
         "wellington", "royal palm", "belle glade", "pahokee", "greenacres",
+        "westlake", "loxahatchee", "palm beach gardens", "lake park", "mangonia",
+        "haverhill", "atlantis", "lantana", "manalapan", "south bay", "glades",
         "miami", "fort lauderdale", "broward", "okeechobee", "orlando", "tampa",
         "jacksonville", "gainesville", "naples", "sarasota", "fort myers",
+        "kissimmee", "daytona", "melbourne", "cocoa", "brevard", "st. augustine",
     ]
     _treasure_coast_places = [
         "martin county", "st. lucie", "st lucie", "indian river", "treasure coast",
@@ -817,7 +820,7 @@ def _hero_eligible(category_key, h):
         "business": ["business", "development", "developer", "real estate", "housing", "restaurant", "store", "retail", "mall", "company", "jobs", "hiring", "economic", "economy", "construction", "project", "commercial", "warehouse", "factory", "plant", "opening", "closing", "closes", "expansion", "wawa", "publix", "downtown", "permit", "property", "market", "walmart", "campbell soup"],
         "sports": ["sports", "football", "basketball", "baseball", "softball", "soccer", "volleyball", "tennis", "golf", "lacrosse", "wrestling", "track", "cross country", "swimming", "game", "score", "win", "wins", "won", "loss", "defeats", "beats", "championship", "playoff", "tournament", "athlete", "coach", "team", "mets", "st. lucie mets", "st lucie mets"],
         "things_to_do": ["event", "events", "festival", "concert", "show", "weekend", "things to do", "restaurant", "food", "arts", "art", "music", "theater", "theatre", "park", "market", "farmers market", "fair", "fundraiser", "community", "parade", "holiday", "museum", "exhibit", "taste", "family-friendly", "activities"],
-        "florida": ["florida", "state", "desantis", "legislature", "tallahassee", "supreme court", "insurance", "hurricane", "weather", "statewide", "lawmakers", "law", "governor", "environment", "economy", "housing", "property insurance"],
+        "florida": ["florida", "statewide", "state of florida", "insurance", "property insurance", "homeowners insurance", "hurricane", "tropical storm", "weather", "storm", "flooding", "law takes effect", "takes effect", "new law", "new laws", "gas prices", "cost of living", "utility", "utilities", "fpl", "electric bill", "toll", "beaches", "red tide", "environment", "manatee", "everglades", "housing", "rent", "sinkhole", "evacuation", "desantis", "legislature", "lawmakers", "state law", "florida supreme court", "medicaid", "schools statewide", "springs", "wildlife", "boating", "fishing", "tourism", "state park"],
     }
 
     # Block obituary listings (non-notable individuals) but not news coverage of notable deaths.
@@ -847,7 +850,12 @@ def _hero_eligible(category_key, h):
                          "tax", "lawsuit", "commission vote"] + obit_terms,
         "local_gov":    ["concert", "festival", "game recap", "score", "wins over", "defeats",
                          "arrest", "shooting", "homicide", "murder"] + obit_terms,
-        "florida":      ["game recap", "score", "wins over", "defeats", "beats"] + obit_terms,
+        "florida":      ["game recap", "score", "wins over", "defeats", "beats",
+                         "fundraising", "raised $", "campaign", "primary", "ballot",
+                         "poll shows", "endorses", "endorsement", "gubernatorial",
+                         "for governor", "for senate", "for congress", "running for",
+                         "anonymous social media", "allies accuse", "party chair",
+                         "world cup", "soccer", "nfl", "nba", "super bowl"] + obit_terms,
         "martin":       [],
         "st_lucie":     [],
         "indian_river": [],
@@ -2122,12 +2130,47 @@ def select_front_page_hero(all_categories):
 
 
 def promote_duplicate_heroes(top_cat, all_categories):
-    """If any other category's hero covers the same underlying story as the front page
-    hero, promote that category's next non-duplicate card to be its hero instead.
-    Uses Claude for reliable semantic matching (string matching is too brittle for
-    rewritten headlines). Mutates all_categories in place."""
+    """Ensure no single story is the hero of more than one category. First removes
+    exact/near-exact duplicate heroes deterministically (guaranteed, no LLM needed),
+    then uses Claude to catch semantic duplicates of the front-page hero worded
+    differently. Mutates all_categories in place."""
+    fp_key = top_cat["category_key"]
+
+    def _norm(h):
+        return re.sub(r"[^a-z0-9 ]", "", (h or "").lower()).strip()
+
+    # -- Deterministic pass: no exact-duplicate headline across category heroes --
+    # Front page hero's headline is claimed first; any other category with the same
+    # headline gets its next card promoted.
+    claimed = { _norm(top_cat["hero"].get("headline","")) }
+    for cat in all_categories:
+        if cat["category_key"] == fp_key:
+            continue
+        h = _norm(cat["hero"].get("headline",""))
+        if h and h in claimed:
+            # Promote next non-duplicate card
+            promoted = None
+            for ci, card in enumerate(cat.get("cards", [])):
+                if _norm(card.get("headline","")) not in claimed:
+                    promoted = (ci, card); break
+            if promoted:
+                ci, card = promoted
+                cat["hero"] = dict(card)
+                cat["cards"] = cat["cards"][:ci] + cat["cards"][ci+1:]
+                claimed.add(_norm(card.get("headline","")))
+                print(f"  Dedup: promoted next card to hero for {cat['category_label']} (exact duplicate hero)")
+            else:
+                cat["_drop_category"] = True
+                print(f"  Dedup: dropping {cat['category_label']} (hero duplicate, no alternative card)")
+        else:
+            if h:
+                claimed.add(h)
+
+    # Drop any categories flagged with no alternative
+    all_categories[:] = [c for c in all_categories if not c.get("_drop_category")]
+
+    # -- Semantic pass: catch differently-worded duplicates of the front page hero --
     fp_headline = top_cat["hero"].get("headline", "")
-    fp_key      = top_cat["category_key"]
     others      = [c for c in all_categories if c["category_key"] != fp_key]
     if not others or not fp_headline:
         return
@@ -2138,8 +2181,7 @@ def promote_duplicate_heroes(top_cat, all_categories):
         f"Here are other section lead headlines:\n{listing}\n\n"
         "Which of these numbered headlines cover the SAME underlying event as the lead story? "
         "Same event means the same action by the same actors at the same time, even if worded "
-        "completely differently (e.g. 'US strikes Iran' and 'US military hits Iranian launch site' "
-        "are the same event).\n"
+        "completely differently.\n"
         "Return ONLY a JSON array of the numbers that are duplicates of the lead story. "
         "If none are duplicates, return []."
     )
@@ -2154,7 +2196,7 @@ def promote_duplicate_heroes(top_cat, all_categories):
             raw = raw.split("```")[1].lstrip("json").strip()
         dupes = set(int(x) for x in json.loads(raw))
     except Exception as e:
-        print(f"  Hero dedup failed ({e}), leaving heroes as-is")
+        print(f"  Hero semantic dedup failed ({e}), deterministic pass already applied")
         return
 
     for i, cat in enumerate(others):
@@ -2162,18 +2204,9 @@ def promote_duplicate_heroes(top_cat, all_categories):
             cards = cat.get("cards", [])
             if cards:
                 promoted = cards[0]
-                cat["hero"] = {
-                    "headline":      promoted.get("headline", ""),
-                    "body":          promoted.get("body", ""),
-                    "teaser":        promoted.get("teaser", ""),
-                    "urgency_score": promoted.get("urgency_score", 0),
-                    "published":     promoted.get("published", ""),
-                    "image_url":     promoted.get("image_url", ""),
-                    "image_credit":  promoted.get("image_credit", ""),
-                    "link":          promoted.get("link", ""),
-                }
+                cat["hero"] = dict(promoted)
                 cat["cards"] = cards[1:]
-                print(f"  Promoted next card to hero for {cat['category_label']} (was duplicate of front page hero)")
+                print(f"  Promoted next card to hero for {cat['category_label']} (semantic duplicate of front page hero)")
 
 
 def global_rank(all_cards, dedupe_against=None):
@@ -2433,6 +2466,24 @@ def render_index(all_categories, top_cat):
         </div>
       </a>"""
 
+    def card_display_date(card):
+        # Show the date the story was last updated ON OUR SITE (archive lastmod/date),
+        # not the original RSS published date, which can be weeks old for a story that
+        # has since been updated in place. Falls back to formatted published age.
+        matched = find_matching_entry(card.get("headline",""), archive_for_links, card.get("link",""), is_weather_alert=bool(card.get("is_weather_alert")))
+        if matched:
+            d = matched.get("lastmod") or matched.get("date", "")
+            if d:
+                try:
+                    from datetime import timezone as _tzc
+                    dt = datetime.strptime(d[:10], "%Y-%m-%d")
+                    months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+                    return f"{months[dt.month-1]} {dt.day}, {dt.year}"
+                except Exception:
+                    return d
+        # Fallback: the story's own published display string
+        return card.get("published", "")
+
     cards_html = ""
     for i, card in enumerate(all_cards_display):
         permalink = card_permalink(card)
@@ -2442,7 +2493,7 @@ def render_index(all_categories, top_cat):
             cards_html += support_card
         ck        = card.get("cat_key", "all")
         cl        = card.get("cat_label", "")
-        card_time = card.get("published", "")
+        card_time = card_display_date(card)
         img_url   = card.get("image_url", "")
         if not img_url:
             fb_img, _ = get_fallback_image(ck, card.get("headline", ""), sequential=True)
