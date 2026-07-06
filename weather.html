@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather &amp; Alerts | Treasure Coast Today</title>
+<meta name="description" content="Live Stuart, Florida weather, 7-day forecast, and active National Weather Service alerts for Martin, St. Lucie, and Indian River counties.">
+<link rel="canonical" href="https://treasurecoast.today/weather.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+<style>
+  .wx-wrap { max-width: 1000px; margin: 0 auto; padding: 28px 24px 80px; }
+  .wx-title {
+    font-family: "Fraunces", serif; font-size: 34px; font-weight: 600;
+    color: var(--text); margin: 0 0 4px;
+  }
+  .wx-sub { font-size: 14px; color: var(--text-secondary); margin: 0 0 28px; }
+  .wx-updated { font-size: 12px; color: var(--text-muted); }
+
+  /* Alerts */
+  .wx-alerts { margin-bottom: 32px; }
+  .wx-alert {
+    border-radius: 10px; padding: 16px 18px; margin-bottom: 12px;
+    border-left: 5px solid; background: var(--bg-secondary);
+  }
+  .wx-alert.extreme  { border-color: #7c2d12; background: #fef2f2; }
+  .wx-alert.severe   { border-color: #b91c1c; background: #fef2f2; }
+  .wx-alert.moderate { border-color: #c2760c; background: #fffbeb; }
+  .wx-alert.minor    { border-color: var(--accent); background: var(--bg-secondary); }
+  .wx-alert-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 12px; flex-wrap: wrap; cursor: pointer;
+  }
+  .wx-alert-event { font-family: "Fraunces", serif; font-size: 18px; font-weight: 600; color: var(--text); }
+  .wx-alert-area { font-size: 12px; color: var(--text-secondary); }
+  .wx-alert-body { font-size: 14px; line-height: 1.6; color: var(--text-secondary); margin-top: 10px; white-space: pre-wrap; display: none; }
+  .wx-alert.open .wx-alert-body { display: block; }
+  .wx-alert-toggle { font-size: 12px; color: var(--accent); font-weight: 600; margin-top: 8px; display: inline-block; }
+  .wx-no-alerts {
+    padding: 16px 18px; border-radius: 10px; background: var(--bg-secondary);
+    font-size: 14px; color: var(--text-secondary); border-left: 5px solid var(--accent);
+  }
+
+  /* Current conditions */
+  .wx-current {
+    display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+    padding: 24px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent) 0%, #0d5a5e 100%);
+    color: #fff; margin-bottom: 32px;
+  }
+  .wx-current-temp { font-family: "Fraunces", serif; font-size: 64px; font-weight: 600; line-height: 1; }
+  .wx-current-meta { flex: 1; min-width: 200px; }
+  .wx-current-cond { font-size: 20px; font-weight: 500; margin-bottom: 6px; }
+  .wx-current-loc { font-size: 13px; opacity: 0.85; }
+  .wx-current-detail { font-size: 13px; opacity: 0.9; margin-top: 8px; line-height: 1.6; }
+
+  /* Forecast */
+  .wx-section-title {
+    font-family: "Fraunces", serif; font-size: 22px; font-weight: 600;
+    color: var(--text); margin: 0 0 16px; padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+  }
+  .wx-forecast { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+  .wx-day {
+    background: var(--bg-secondary); border-radius: 10px; padding: 14px 10px;
+    text-align: center;
+  }
+  .wx-day-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .wx-day-icon { width: 44px; height: 44px; margin: 0 auto 8px; }
+  .wx-day-hi { font-size: 17px; font-weight: 600; color: var(--text); }
+  .wx-day-lo { font-size: 13px; color: var(--text-muted); }
+  .wx-day-desc { font-size: 11px; color: var(--text-secondary); margin-top: 6px; line-height: 1.35; }
+
+  .wx-loading { padding: 40px; text-align: center; color: var(--text-muted); font-size: 14px; }
+  .wx-error {
+    padding: 20px; border-radius: 10px; background: #fef2f2;
+    border-left: 5px solid #b91c1c; color: #7c2d12; font-size: 14px; line-height: 1.6;
+  }
+
+  @media (max-width: 760px) {
+    .wx-forecast { grid-template-columns: repeat(3, 1fr); }
+    .wx-current-temp { font-size: 52px; }
+  }
+  @media (max-width: 460px) {
+    .wx-forecast { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="header-top">
+        <a href="/" class="wordmark">Treasure Coast Today</a>
+      </div>
+      <nav class="category-nav">
+        <a href="/" class="cat-btn" style="text-decoration:none">Top News</a>
+        <a href="/?cat=local_gov" class="cat-btn" style="text-decoration:none">Local Gov</a>
+        <a href="/?cat=crime" class="cat-btn" style="text-decoration:none">Crime</a>
+        <a href="/?cat=business" class="cat-btn" style="text-decoration:none">Business</a>
+        <a href="/?cat=sports" class="cat-btn" style="text-decoration:none">Sports</a>
+        <a href="/?cat=things_to_do" class="cat-btn" style="text-decoration:none">Things To Do</a>
+        <a href="/?cat=florida" class="cat-btn" style="text-decoration:none">Florida</a>
+        <a href="/?cat=martin" class="cat-btn" style="text-decoration:none">Martin Co.</a>
+        <a href="/?cat=st_lucie" class="cat-btn" style="text-decoration:none">St. Lucie Co.</a>
+        <a href="/?cat=indian_river" class="cat-btn" style="text-decoration:none">Indian River Co.</a>
+        <span class="cat-btn active">Weather</span>
+        <a href="/archive.html" class="cat-btn" style="text-decoration:none">Archive</a>
+        <a href="/events.html" class="cat-btn" style="text-decoration:none">Events</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wx-wrap">
+      <h1 class="wx-title">Treasure Coast Weather</h1>
+      <p class="wx-sub">Live conditions for Stuart and active alerts for Martin, St. Lucie &amp; Indian River counties. <span class="wx-updated" id="wxUpdated"></span></p>
+
+      <section class="wx-alerts" id="wxAlerts">
+        <div class="wx-loading">Loading alerts...</div>
+      </section>
+
+      <section id="wxCurrentSection">
+        <div class="wx-loading">Loading current conditions...</div>
+      </section>
+
+      <section id="wxForecastSection" style="margin-top: 32px;">
+        <h2 class="wx-section-title">7-Day Forecast</h2>
+        <div class="wx-loading">Loading forecast...</div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-wordmark">Treasure Coast Today</span>
+      <span class="footer-tagline">Local news for Martin, St. Lucie &amp; Indian River counties.</span>
+      <div class="footer-links">
+        <a href="/about.html">About</a>
+        <a href="/archive.html">Archive</a>
+        <a href="/events.html">Events</a>
+        <a href="/advertise.html">Advertise</a>
+      </div>
+    </div>
+  </footer>
+
+<script>
+// Stuart, FL coordinates
+const STUART_LAT = 27.1973;
+const STUART_LON = -80.2528;
+// County zone codes for NWS alerts (Florida)
+const COUNTY_ZONES = ["FLC085", "FLC111", "FLC061"]; // Martin, St. Lucie, Indian River
+const UA = "(treasurecoast.today, weather@treasurecoast.today)";
+
+function fmtTime(d) {
+  return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" });
+}
+
+async function nws(url) {
+  const r = await fetch(url, { headers: { "User-Agent": UA, "Accept": "application/geo+json" } });
+  if (!r.ok) throw new Error("NWS " + r.status);
+  return r.json();
+}
+
+// ---- ALERTS ----
+async function loadAlerts() {
+  const el = document.getElementById("wxAlerts");
+  try {
+    const zoneParam = COUNTY_ZONES.join(",");
+    const data = await nws(`https://api.weather.gov/alerts/active?zone=${zoneParam}`);
+    const features = (data.features || []).filter(f => f.properties);
+    // Dedupe by event+area
+    const seen = new Set();
+    const alerts = [];
+    for (const f of features) {
+      const p = f.properties;
+      const key = p.event + "|" + (p.areaDesc || "");
+      if (seen.has(key)) continue;
+      seen.add(key);
+      alerts.push(p);
+    }
+    if (!alerts.length) {
+      el.innerHTML = `<div class="wx-no-alerts">No active weather alerts for the Treasure Coast right now.</div>`;
+      return;
+    }
+    const sevRank = { Extreme: 0, Severe: 1, Moderate: 2, Minor: 3, Unknown: 4 };
+    alerts.sort((a, b) => (sevRank[a.severity] ?? 5) - (sevRank[b.severity] ?? 5));
+    el.innerHTML = alerts.map((p, i) => {
+      const sev = (p.severity || "minor").toLowerCase();
+      const cls = ["extreme","severe","moderate","minor"].includes(sev) ? sev : "minor";
+      const body = (p.description || "").trim();
+      const instr = p.instruction ? "\n\n" + p.instruction.trim() : "";
+      return `
+        <div class="wx-alert ${cls}" data-idx="${i}">
+          <div class="wx-alert-head" onclick="this.parentElement.classList.toggle('open')">
+            <span class="wx-alert-event">${p.event || "Weather Alert"}</span>
+            <span class="wx-alert-area">${p.areaDesc || ""}</span>
+          </div>
+          <span class="wx-alert-toggle" onclick="this.closest('.wx-alert').classList.toggle('open')">Details &darr;</span>
+          <div class="wx-alert-body">${body}${instr}</div>
+        </div>`;
+    }).join("");
+  } catch (e) {
+    el.innerHTML = `<div class="wx-error">Could not load alerts right now. The National Weather Service service may be temporarily unavailable. Please check back shortly.</div>`;
+  }
+}
+
+// ---- CURRENT + FORECAST ----
+async function loadForecast() {
+  const curEl = document.getElementById("wxCurrentSection");
+  const fcEl = document.getElementById("wxForecastSection");
+  try {
+    const points = await nws(`https://api.weather.gov/points/${STUART_LAT},${STUART_LON}`);
+    const { forecast, forecastHourly, observationStations } = points.properties;
+
+    // Current conditions from nearest station
+    let cur = null;
+    try {
+      const stations = await nws(observationStations);
+      const stationId = stations.features[0].properties.stationIdentifier;
+      const obs = await nws(`https://api.weather.gov/stations/${stationId}/observations/latest`);
+      cur = obs.properties;
+    } catch (e) { /* fall back to hourly */ }
+
+    // Fallback to hourly forecast if no station obs
+    let curTemp, curCond, curIcon, curHumidity, curWind;
+    if (cur && cur.temperature && cur.temperature.value != null) {
+      curTemp = Math.round(cur.temperature.value * 9/5 + 32);
+      curCond = cur.textDescription || "";
+      curIcon = cur.icon;
+      curHumidity = cur.relativeHumidity && cur.relativeHumidity.value != null ? Math.round(cur.relativeHumidity.value) : null;
+      if (cur.windSpeed && cur.windSpeed.value != null) {
+        curWind = Math.round(cur.windSpeed.value * 0.621371);
+      }
+    } else {
+      const hourly = await nws(forecastHourly);
+      const now = hourly.properties.periods[0];
+      curTemp = now.temperature;
+      curCond = now.shortForecast;
+      curIcon = now.icon;
+    }
+
+    curEl.innerHTML = `
+      <div class="wx-current">
+        <div class="wx-current-temp">${curTemp}&deg;</div>
+        <div class="wx-current-meta">
+          <div class="wx-current-cond">${curCond}</div>
+          <div class="wx-current-loc">Stuart, Florida</div>
+          <div class="wx-current-detail">
+            ${curHumidity != null ? "Humidity " + curHumidity + "%" : ""}
+            ${curWind != null ? " &middot; Wind " + curWind + " mph" : ""}
+          </div>
+        </div>
+      </div>`;
+
+    // 7-day forecast (periods come in day/night pairs)
+    const fc = await nws(forecast);
+    const periods = fc.properties.periods;
+    const days = periods.filter(p => p.isDaytime).slice(0, 7);
+    fcEl.innerHTML = `
+      <h2 class="wx-section-title">7-Day Forecast</h2>
+      <div class="wx-forecast">
+        ${days.map(d => {
+          // Find matching night period for the low
+          const night = periods.find(p => !p.isDaytime && p.number === d.number + 1);
+          const lo = night ? night.temperature : "";
+          const dayName = new Date(d.startTime).toLocaleDateString("en-US", { weekday: "short", timeZone: "America/New_York" });
+          return `
+            <div class="wx-day">
+              <div class="wx-day-name">${dayName}</div>
+              <img class="wx-day-icon" src="${d.icon}" alt="${d.shortForecast}" loading="lazy">
+              <div class="wx-day-hi">${d.temperature}&deg;</div>
+              <div class="wx-day-lo">${lo !== "" ? lo + "&deg;" : ""}</div>
+              <div class="wx-day-desc">${d.shortForecast}</div>
+            </div>`;
+        }).join("")}
+      </div>`;
+  } catch (e) {
+    curEl.innerHTML = `<div class="wx-error">Could not load current conditions right now. Please check back shortly.</div>`;
+    fcEl.innerHTML = "";
+  }
+}
+
+function updateStamp() {
+  document.getElementById("wxUpdated").textContent = "Updated " + fmtTime(new Date()) + " ET";
+}
+
+async function refreshAll() {
+  await Promise.all([loadAlerts(), loadForecast()]);
+  updateStamp();
+}
+
+refreshAll();
+// Refresh every 5 minutes while the page is open
+setInterval(refreshAll, 5 * 60 * 1000);
+</script>
+</body>
+</html>
