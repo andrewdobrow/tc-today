@@ -871,26 +871,23 @@ def _hero_eligible(category_key, h):
     if category_key in topic_terms:
         if _has_any(text, hard_negatives.get(category_key, [])):
             return False
-        # Florida-wide news belongs ONLY in the Florida category. For every other
-        # topic category (local_gov, crime, business, things_to_do), the story must
-        # have a Treasure Coast geographic anchor — a local place name, or it came
-        # from a local (non-statewide) feed. This keeps statewide political and
-        # general Florida news from leaking into local sections or the front page.
+        # Keep statewide / out-of-area news OUT of local topic categories (it belongs
+        # only in Florida). Rather than requiring a local place name in every story
+        # (which wrongly drops local stories whose generated body doesn't repeat the
+        # town), we only BLOCK stories that came from a statewide feed or clearly
+        # reference an out-of-area place with no Treasure Coast connection.
         if category_key != "florida":
-            _tc_places = [
-                "martin county", "st. lucie", "st lucie", "indian river", "treasure coast",
-                "stuart", "jensen beach", "palm city", "hobe sound", "port salerno",
-                "port st. lucie", "port st lucie", "fort pierce", "vero beach", "sebastian",
-                "fellsmere", "indiantown", "jupiter island", "hutchinson island", "rio",
-                "ocean breeze", "sewall", "tequesta",
-            ]
             feed_url = (h.get("feed_url", "") or "").lower()
-            _local_feed = any(hint in feed_url for hint in
-                              ["region-martin", "region-st-lucie", "region-indian-river"])
-            _statewide_feed = "state.rss" in feed_url or "floridapolitics" in feed_url
-            has_local_anchor = _has_any(text, _tc_places) or (_local_feed and not _statewide_feed)
-            if not has_local_anchor:
-                return False
+            if "state.rss" in feed_url or "floridapolitics" in feed_url:
+                # From a statewide feed — only allow if it explicitly names a local place
+                _tc_places = [
+                    "martin county", "st. lucie", "st lucie", "indian river", "treasure coast",
+                    "stuart", "jensen beach", "palm city", "hobe sound", "port salerno",
+                    "port st. lucie", "port st lucie", "fort pierce", "vero beach", "sebastian",
+                    "fellsmere", "indiantown", "jupiter island", "hutchinson island",
+                ]
+                if not _has_any(text, _tc_places):
+                    return False
         return _has_any(title, topic_terms[category_key]) or _has_any(text, topic_terms[category_key])
 
     return True
@@ -2553,11 +2550,15 @@ def render_index(all_categories, top_cat):
             older_by_cat[ckey].append(e)
 
     older_sections_html = ""
-    for cat in all_categories:
-        ckey = cat["category_key"]
+    # Build an "More Stories" section for every category that has archived stories,
+    # NOT just categories that survived this run. A category with no fresh hero this
+    # run should still show its older archived stories. Use the master CATEGORIES
+    # config for labels so the section renders regardless of current-run state.
+    for ckey in CATEGORIES:
         items = older_by_cat.get(ckey, [])
         if not items:
             continue
+        cat_label = CATEGORIES[ckey]["label"]
         items_html = ""
         for e in items:
             items_html += f"""
@@ -2570,7 +2571,7 @@ def render_index(all_categories, top_cat):
         # Hidden by default; shown only when its category is active
         older_sections_html += f"""
     <section class="older-section" data-older-cat="{ckey}" style="display:none">
-      <h2 class="older-title">More {cat['category_label']} Stories</h2>
+      <h2 class="older-title">More {cat_label} Stories</h2>
       <ul class="older-list">{items_html}
       </ul>
       <a href="/archive.html" class="older-more">View full archive &rarr;</a>
