@@ -2275,7 +2275,7 @@ def render_index(all_categories, top_cat):
         display     = "" if visible else ' style="display:none"'
         fade        = " fade-in" if visible else ""
         archive     = load_archive(OUTPUT_DIR / "archive.json")
-        matched     = find_matching_entry(hero.get("headline",""), archive, hero.get("link",""))
+        matched     = find_matching_entry(hero.get("headline",""), archive, hero.get("link",""), is_weather_alert=bool(hero.get("is_weather_alert")))
         if matched:
             slug = matched["slug"]
         else:
@@ -2403,7 +2403,7 @@ def render_index(all_categories, top_cat):
         # Backfill cards already carry their archived slug
         if card.get("_archived_slug"):
             return f"{SITE_URL}/articles/{card['_archived_slug']}.html"
-        matched = find_matching_entry(card.get("headline",""), archive_for_links, card.get("link",""))
+        matched = find_matching_entry(card.get("headline",""), archive_for_links, card.get("link",""), is_weather_alert=bool(card.get("is_weather_alert")))
         if matched:
             return f"{SITE_URL}/articles/{matched['slug']}.html"
         # No archive entry means no article page exists — skip this card
@@ -2524,6 +2524,7 @@ def render_index(all_categories, top_cat):
       </div>
       <nav class="category-nav">
         {nav_buttons}
+        <a href="/weather.html" class="cat-btn" style="text-decoration:none">Weather</a>
         <a href="/archive.html" class="cat-btn" style="text-decoration:none">Archive</a>
         <a href="/events.html" class="cat-btn" style="text-decoration:none">Events</a>
       </nav>
@@ -2983,7 +2984,7 @@ def render_rss_feed(all_categories, top_cat):
         headline = article.get("headline", "")
         if not headline:
             return None, None
-        matched     = find_matching_entry(headline, archive, article.get("link", ""))
+        matched     = find_matching_entry(headline, archive, article.get("link", ""), is_weather_alert=bool(article.get("is_weather_alert")))
         if not matched:
             return None, None  # No article page exists — skip
         article_url = f"{SITE_URL}/articles/{matched['slug']}.html"
@@ -3125,11 +3126,16 @@ def _is_duplicate_headline(headline, existing_token_sets):
     return False
 
 
-def find_matching_entry(headline, archive, source_url=""):
+def find_matching_entry(headline, archive, source_url="", is_weather_alert=False):
     """Find an existing archive entry for this story using two-tier matching:
     1. source_url exact match — only when URL has a specific article path
     2. fuzzy headline match — catches rewrites and same story from different feeds
-    Returns the matching entry dict or None."""
+    Returns the matching entry dict or None.
+
+    Weather alerts only match other weather alerts (by their NWS ID), never a
+    regular article by fuzzy headline — so a "Tornado Warning" alert and a
+    "Tornado damages homes" news story never collide regardless of shared words.
+    """
     if source_url:
         def norm_url(u):
             return re.sub(r"[?#].*$", "", u.strip().rstrip("/").lower())
@@ -3144,6 +3150,10 @@ def find_matching_entry(headline, archive, source_url=""):
     if len(tok) < 3:
         return None
     for entry in archive:
+        # Never fuzzy-match across the weather-alert boundary: an alert matches
+        # only alerts, a regular article matches only regular articles.
+        if bool(entry.get("is_weather_alert")) != bool(is_weather_alert):
+            continue
         if len(tok & _sig_tokens(entry["headline"])) >= 4:
             return entry
     return None
@@ -3228,6 +3238,7 @@ def _page_footer():
       <span class="footer-tagline">Local news for Martin, St. Lucie &amp; Indian River counties.</span>
       <div class="footer-links">
         <a href="/about.html">About</a>
+        <a href="/weather.html">Weather</a>
         <a href="/archive.html">Archive</a>
         <a href="/events.html">Events</a>
         <a href="/advertise.html">Advertise</a>
@@ -3545,7 +3556,7 @@ def write_archives(all_categories, top_cat):
             continue
 
         source_url = hero.get("link", "")
-        existing   = find_matching_entry(headline, archive, source_url)
+        existing   = find_matching_entry(headline, archive, source_url, is_weather_alert=bool(hero.get("is_weather_alert")))
 
         # Skip cross-category duplicates within the same run
         if not existing and _is_duplicate_headline(headline, this_run_token_sets):
@@ -3591,6 +3602,8 @@ def write_archives(all_categories, top_cat):
                 "date": today, "lastmod": today,
                 "image_url": hero.get("image_url",""),
                 "feed_url": hero.get("feed_url",""),
+                "source_url": hero.get("link",""),
+                "is_weather_alert": bool(hero.get("is_weather_alert")),
             })
             new_count += 1
 
