@@ -2552,6 +2552,146 @@ def slugify(text):
     return text[:80].strip("-")
 
 
+def load_weather_alerts():
+    """Fetch active Extreme/Severe NWS alerts for the three Treasure Coast counties
+    and turn them into articles. Urgency starts high and decays toward the alert's
+    expiration so weather events lead briefly then fade fast, matching how they behave.
+
+    County SAME codes: Martin FLC085, St. Lucie FLC111, Indian River FLC061.
+    Alert text is public-domain government data, free to use directly.
+    """
+    from datetime import timezone as _tz
+    import urllib.request
+
+    ZONE_TO_COUNTY = {
+        "FLC085": ("martin", "Martin County"),
+        "FLC111": ("st_lucie", "St. Lucie County"),
+        "FLC061": ("indian_river", "Indian River County"),
+    }
+    zones = ",".join(ZONE_TO_COUNTY.keys())
+    url = f"https://api.weather.gov/alerts/active?zone={zones}"
+
+    try:
+        req = urllib.request.Request(url, headers={
+            "User-Agent": "(treasurecoast.today, weather@treasurecoast.today)",
+            "Accept": "application/geo+json",
+        })
+        raw = urllib.request.urlopen(req, timeout=12).read()
+        data = json.loads(raw)
+    except Exception as e:
+        print(f"  NWS alert fetch failed: {e}")
+        return []
+
+    now = datetime.now(_tz.utc)
+    features = data.get("features", [])
+    articles = []
+    seen = set()
+
+    for f in features:
+        p = f.get("properties", {})
+        severity = (p.get("severity", "") or "").lower()
+        # Only Extreme and Severe alerts become articles
+        if severity not in ("extreme", "severe"):
+            continue
+
+        event = p.get("event", "Weather Alert")
+        area  = p.get("areaDesc", "")
+        desc  = (p.get("description", "") or "").strip()
+        instr = (p.get("instruction", "") or "").strip()
+
+        # Dedupe by event + area
+        dkey = f"{event}|{area}"
+        if dkey in seen:
+            continue
+        seen.add(dkey)
+
+        # Determine which of our counties this alert affects
+        affected_zones = []
+        for geo in p.get("geocode", {}).get("SAME", []):
+            # SAME codes are prefixed with a leading digit vs UGC; match on suffix
+            for zc in ZONE_TO_COUNTY:
+                if geo.endswith(zc[3:]):  # match county number
+                    affected_zones.append(zc)
+        # Fallback: parse from UGC codes
+        if not affected_zones:
+            for ugc in p.get("geocode", {}).get("UGC", []):
+                if ugc in ZONE_TO_COUNTY:
+                    affected_zones.append(ugc)
+        affected_zones = list(dict.fromkeys(affected_zones))
+
+        # Route: single county -> that county; multiple -> front-page via florida
+        if len(affected_zones) == 1:
+            ckey, clabel = ZONE_TO_COUNTY[affected_zones[0]]
+        else:
+            ckey, clabel = ("florida", "Florida")
+
+        # Compute urgency. The alert stays at FULL urgency for its entire active
+        # window — the end of an alert window is often the most critical moment
+        # (storm arriving, surge cresting). Only after it expires does it decay,
+        # over the following ~2 hours, then it drops out entirely.
+        ends    = p.get("ends") or p.get("expires")
+        base    = 10 if severity == "extreme" else 8
+        urgency = base
+        exp_date = None
+        try:
+            end_dt = datetime.fromisoformat(ends.replace("Z", "+00:00")).astimezone(_tz.utc)
+            exp_date = (end_dt + timedelta(hours=2)).strftime("%Y-%m-%d")
+            mins_past_end = (now - end_dt).total_seconds() / 60
+
+            if mins_past_end <= 0:
+                # Alert still active — full urgency the whole time
+                urgency = base
+            elif mins_past_end <= 60:
+                # First hour after expiry — still very relevant, slight step down
+                urgency = base - 1
+            elif mins_past_end <= 120:
+                # Second hour after expiry — fading
+                urgency = base - 3
+            else:
+                # More than 2 hours past expiry — no longer news
+                continue
+        except Exception:
+            pass
+
+        urgency = max(4, urgency)
+
+        # Build the article body from the alert (public-domain NWS text)
+        body_parts = []
+        headline_txt = p.get("headline", "")
+        if headline_txt:
+            body_parts.append(headline_txt.strip())
+        if desc:
+            body_parts.append(desc)
+        if instr:
+            body_parts.append("What to do: " + instr)
+        body = "\n\n".join(body_parts)
+
+        # Title-case a clean headline
+        area_short = area.split(";")[0].strip() if area else clabel
+        headline = f"{event} issued for {area_short}"
+
+        articles.append({
+            "headline":       headline,
+            "body":           body,
+            "teaser":         (headline_txt or desc[:180]).strip(),
+            "category":       ckey,
+            "category_key":   ckey,
+            "category_label": clabel,
+            "image_url":      "",
+            "published":      now.strftime("%a, %d %b %Y %H:%M:%S +0000"),
+            "published_raw":  now.strftime("%a, %d %b %Y %H:%M:%S +0000"),
+            "expires":        exp_date or now.strftime("%Y-%m-%d"),
+            "urgency_score":  urgency,
+            "enriched":       True,
+            "is_weather_alert": True,
+            "force_hero":     severity == "extreme",  # extreme pins as hero
+            "link":           p.get("id", "") or f"{SITE_URL}/weather.html",
+        })
+        print(f"  Weather alert [{severity}]: '{headline[:55]}' -> {ckey} (urgency {urgency})")
+
+    return articles
+
+
 def load_custom_articles():
     """Load manually-submitted custom articles from custom_articles.json.
 
@@ -2682,6 +2822,8 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     ]
     _hl_body = (hero.get("headline", "") + " " + hero.get("body", "")[:300]).lower()
     _show_ad_banner = not any(t in _hl_body for t in _sensitive_terms)
+    if hero.get("is_weather_alert"):
+        _show_ad_banner = False  # No ad solicitation on active weather emergencies
 
     ad_banner = ""
     if _show_ad_banner:
@@ -3068,6 +3210,7 @@ def _page_header(active=""):
         {cat_link("Martin Co.", "/?cat=martin", "martin")}
         {cat_link("St. Lucie Co.", "/?cat=st_lucie", "st_lucie")}
         {cat_link("Indian River Co.", "/?cat=indian_river", "indian_river")}
+        {cat_link("Weather", "/weather.html", "weather")}
         {cat_link("Archive", "/archive.html", "archive")}
         {cat_link("Events", "/events.html", "events")}
       </nav>
@@ -3689,10 +3832,16 @@ def main():
     # Inject custom (manually-submitted) articles into their category pools.
     # They get the same scoring/ranking/archival treatment. force_hero pins as
     # the category hero; pin_position is applied later during grid rendering.
+    # Weather alerts (NWS Extreme/Severe) — injected like custom articles so they
+    # flow through the normal hero/county/front-page system with decaying urgency.
+    weather_alerts = load_weather_alerts()
+
     custom_articles = load_custom_articles()
-    if custom_articles:
+    # Combine: weather alerts first so they take hero slots when severe
+    all_injected = weather_alerts + custom_articles
+    if all_injected:
         cat_by_key = {c["category_key"]: c for c in all_categories}
-        for art in custom_articles:
+        for art in all_injected:
             ckey = art["category"]
             target = cat_by_key.get(ckey)
             if not target:
