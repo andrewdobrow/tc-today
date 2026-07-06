@@ -851,10 +851,6 @@ def _hero_eligible(category_key, h):
         "local_gov":    ["concert", "festival", "game recap", "score", "wins over", "defeats",
                          "arrest", "shooting", "homicide", "murder"] + obit_terms,
         "florida":      ["game recap", "score", "wins over", "defeats", "beats",
-                         "fundraising", "raised $", "campaign", "primary", "ballot",
-                         "poll shows", "endorses", "endorsement", "gubernatorial",
-                         "for governor", "for senate", "for congress", "running for",
-                         "anonymous social media", "allies accuse", "party chair",
                          "world cup", "soccer", "nfl", "nba", "super bowl"] + obit_terms,
         "martin":       [],
         "st_lucie":     [],
@@ -875,6 +871,26 @@ def _hero_eligible(category_key, h):
     if category_key in topic_terms:
         if _has_any(text, hard_negatives.get(category_key, [])):
             return False
+        # Florida-wide news belongs ONLY in the Florida category. For every other
+        # topic category (local_gov, crime, business, things_to_do), the story must
+        # have a Treasure Coast geographic anchor — a local place name, or it came
+        # from a local (non-statewide) feed. This keeps statewide political and
+        # general Florida news from leaking into local sections or the front page.
+        if category_key != "florida":
+            _tc_places = [
+                "martin county", "st. lucie", "st lucie", "indian river", "treasure coast",
+                "stuart", "jensen beach", "palm city", "hobe sound", "port salerno",
+                "port st. lucie", "port st lucie", "fort pierce", "vero beach", "sebastian",
+                "fellsmere", "indiantown", "jupiter island", "hutchinson island", "rio",
+                "ocean breeze", "sewall", "tequesta",
+            ]
+            feed_url = (h.get("feed_url", "") or "").lower()
+            _local_feed = any(hint in feed_url for hint in
+                              ["region-martin", "region-st-lucie", "region-indian-river"])
+            _statewide_feed = "state.rss" in feed_url or "floridapolitics" in feed_url
+            has_local_anchor = _has_any(text, _tc_places) or (_local_feed and not _statewide_feed)
+            if not has_local_anchor:
+                return False
         return _has_any(title, topic_terms[category_key]) or _has_any(text, topic_terms[category_key])
 
     return True
@@ -1935,10 +1951,12 @@ def select_front_page_hero(all_categories):
         return None
 
     def _is_eligible(cat):
-        # On a hyperlocal site, county and Florida stories CAN be the front-page hero —
-        # the biggest local story of the day often comes from a county section. The
-        # front_page_hero=False flag only deprioritizes them slightly via front_page_cap,
-        # it does not exclude them.
+        # County stories CAN be the front-page hero — the biggest local story of the
+        # day often comes from a county section. But Florida (statewide) news must
+        # NEVER be the front-page hero; the front page is for local Treasure Coast
+        # news. Florida still has its own category hero, just never leads the site.
+        if cat["category_key"] == "florida":
+            return False
         return True
 
     def _fp_score(cat):
