@@ -22,8 +22,9 @@
   /* Alerts */
   .wx-alerts { margin-bottom: 32px; }
   .wx-alert {
-    border-radius: 10px; padding: 16px 18px; margin-bottom: 12px;
+    border-radius: 12px; padding: 16px 18px; margin-bottom: 12px;
     border-left: 5px solid; background: var(--bg-secondary);
+    box-shadow: 0 1px 3px rgba(9,15,15,0.06);
   }
   .wx-alert.extreme  { border-color: #7c2d12; background: #fef2f2; }
   .wx-alert.severe   { border-color: #b91c1c; background: #fef2f2; }
@@ -37,51 +38,79 @@
   .wx-alert-area { font-size: 12px; color: var(--text-secondary); }
   .wx-alert-body { font-size: 14px; line-height: 1.6; color: var(--text-secondary); margin-top: 10px; white-space: pre-wrap; display: none; }
   .wx-alert.open .wx-alert-body { display: block; }
-  .wx-alert-toggle { font-size: 12px; color: var(--accent); font-weight: 600; margin-top: 8px; display: inline-block; }
+  .wx-alert-toggle { font-size: 12px; color: var(--accent); font-weight: 600; margin-top: 8px; display: inline-block; cursor: pointer; }
   .wx-no-alerts {
-    padding: 16px 18px; border-radius: 10px; background: var(--bg-secondary);
+    display: flex; align-items: center; gap: 12px;
+    padding: 18px 20px; border-radius: 12px; background: var(--bg-secondary);
     font-size: 14px; color: var(--text-secondary); border-left: 5px solid var(--accent);
+    box-shadow: 0 1px 3px rgba(9,15,15,0.06);
   }
+  .wx-no-alerts svg { flex-shrink: 0; }
 
-  /* Current conditions */
-  .wx-current {
-    display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
-    padding: 24px; border-radius: 12px;
-    background: linear-gradient(135deg, var(--accent) 0%, #0d5a5e 100%);
-    color: #fff; margin-bottom: 32px;
-  }
-  .wx-current-temp { font-family: "Fraunces", serif; font-size: 64px; font-weight: 600; line-height: 1; }
-  .wx-current-meta { flex: 1; min-width: 200px; }
-  .wx-current-cond { font-size: 20px; font-weight: 500; margin-bottom: 6px; }
-  .wx-current-loc { font-size: 13px; opacity: 0.85; }
-  .wx-current-detail { font-size: 13px; opacity: 0.9; margin-top: 8px; line-height: 1.6; }
-
-  /* Forecast */
+  /* Section labels */
   .wx-section-title {
     font-family: "Fraunces", serif; font-size: 22px; font-weight: 600;
     color: var(--text); margin: 0 0 16px; padding-bottom: 10px;
     border-bottom: 2px solid var(--border);
   }
+  .wx-section { margin-bottom: 36px; }
+
+  /* Current conditions card */
+  .wx-current {
+    display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: center;
+    padding: 32px 34px; border-radius: 16px;
+    background: linear-gradient(135deg, #0d5a5e 0%, #0A7075 55%, #128a8f 100%);
+    color: #fff; position: relative; overflow: hidden;
+    box-shadow: 0 10px 30px rgba(10,112,117,0.25);
+  }
+  .wx-current::after {
+    content: ""; position: absolute; right: -40px; top: -40px;
+    width: 220px; height: 220px; border-radius: 50%;
+    background: rgba(255,255,255,0.06); pointer-events: none;
+  }
+  .wx-current-left { display: flex; align-items: center; gap: 20px; position: relative; z-index: 1; }
+  .wx-current-icon { width: 76px; height: 76px; flex-shrink: 0; }
+  .wx-current-tempblock { line-height: 1; }
+  .wx-current-temp { font-family: "Fraunces", serif; font-size: 76px; font-weight: 600; line-height: 0.9; }
+  .wx-current-feels { font-size: 13px; opacity: 0.85; margin-top: 6px; }
+  .wx-current-right { position: relative; z-index: 1; }
+  .wx-current-cond { font-size: 22px; font-weight: 600; margin-bottom: 2px; }
+  .wx-current-loc { font-size: 13px; opacity: 0.85; margin-bottom: 16px; }
+  .wx-current-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 14px 20px;
+  }
+  .wx-stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; margin-bottom: 2px; }
+  .wx-stat-value { font-size: 16px; font-weight: 600; }
+
+  /* Forecast */
   .wx-forecast { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
   .wx-day {
-    background: var(--bg-secondary); border-radius: 10px; padding: 14px 10px;
-    text-align: center;
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 10px; text-align: center; transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 1px 3px rgba(9,15,15,0.05);
   }
-  .wx-day-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
-  .wx-day-icon { width: 44px; height: 44px; margin: 0 auto 8px; }
-  .wx-day-hi { font-size: 17px; font-weight: 600; color: var(--text); }
-  .wx-day-lo { font-size: 13px; color: var(--text-muted); }
-  .wx-day-desc { font-size: 11px; color: var(--text-secondary); margin-top: 6px; line-height: 1.35; }
+  .wx-day:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(9,15,15,0.10); }
+  .wx-day.today { border-color: var(--accent); box-shadow: 0 4px 14px rgba(10,112,117,0.18); }
+  .wx-day-name { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .wx-day.today .wx-day-name { color: var(--accent); }
+  .wx-day-icon { width: 46px; height: 46px; margin: 6px auto 10px; }
+  .wx-day-temps { display: flex; justify-content: center; align-items: baseline; gap: 8px; }
+  .wx-day-hi { font-size: 18px; font-weight: 700; color: var(--text); }
+  .wx-day-lo { font-size: 14px; color: var(--text-muted); }
+  .wx-day-pop { font-size: 11px; color: var(--accent); font-weight: 600; margin-top: 4px; }
+  .wx-day-desc { font-size: 11px; color: var(--text-secondary); margin-top: 8px; line-height: 1.35; }
 
   .wx-loading { padding: 40px; text-align: center; color: var(--text-muted); font-size: 14px; }
   .wx-error {
-    padding: 20px; border-radius: 10px; background: #fef2f2;
+    padding: 20px; border-radius: 12px; background: #fef2f2;
     border-left: 5px solid #b91c1c; color: #7c2d12; font-size: 14px; line-height: 1.6;
   }
 
   @media (max-width: 760px) {
+    .wx-current { grid-template-columns: 1fr; gap: 22px; padding: 26px; }
     .wx-forecast { grid-template-columns: repeat(3, 1fr); }
-    .wx-current-temp { font-size: 52px; }
+    .wx-current-temp { font-size: 62px; }
   }
   @media (max-width: 460px) {
     .wx-forecast { grid-template-columns: repeat(2, 1fr); }
@@ -124,11 +153,12 @@
         <div class="wx-loading">Loading alerts...</div>
       </section>
 
-      <section id="wxCurrentSection">
+      <section class="wx-section" id="wxCurrentSection">
+        <h2 class="wx-section-title">Current Conditions</h2>
         <div class="wx-loading">Loading current conditions...</div>
       </section>
 
-      <section id="wxForecastSection" style="margin-top: 32px;">
+      <section class="wx-section" id="wxForecastSection">
         <h2 class="wx-section-title">7-Day Forecast</h2>
         <div class="wx-loading">Loading forecast...</div>
       </section>
@@ -155,6 +185,31 @@ const STUART_LON = -80.2528;
 // County zone codes for NWS alerts (Florida)
 const COUNTY_ZONES = ["FLC085", "FLC111", "FLC061"]; // Martin, St. Lucie, Indian River
 const UA = "(treasurecoast.today, weather@treasurecoast.today)";
+
+// --- Clean inline SVG weather icons, mapped from NWS forecast text ---
+const ICONS = {
+  sun: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="12" fill="#F5B841"/><g stroke="#F5B841" stroke-width="3" stroke-linecap="round"><line x1="32" y1="6" x2="32" y2="14"/><line x1="32" y1="50" x2="32" y2="58"/><line x1="6" y1="32" x2="14" y2="32"/><line x1="50" y1="32" x2="58" y2="32"/><line x1="13" y1="13" x2="19" y2="19"/><line x1="45" y1="45" x2="51" y2="51"/><line x1="51" y1="13" x2="45" y2="19"/><line x1="19" y1="45" x2="13" y2="51"/></g></svg>`,
+  partly: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="10" fill="#F5B841"/><g stroke="#F5B841" stroke-width="2.5" stroke-linecap="round"><line x1="24" y1="6" x2="24" y2="11"/><line x1="6" y1="24" x2="11" y2="24"/><line x1="10" y1="10" x2="14" y2="14"/><line x1="38" y1="10" x2="34" y2="14"/></g><path d="M22 46a11 11 0 0 1 21-4 9 9 0 0 1-1 26H22a11 11 0 0 1 0-22z" fill="#CBD5D5"/></svg>`,
+  cloud: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 44a12 12 0 0 1 23-4 10 10 0 0 1-2 28H20a12 12 0 0 1 0-24z" fill="#B8C4C4"/></svg>`,
+  rain: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 34a12 12 0 0 1 23-4 10 10 0 0 1-2 28H20a12 12 0 0 1 0-24z" fill="#9AAAB0"/><g stroke="#4A90D9" stroke-width="3" stroke-linecap="round"><line x1="24" y1="50" x2="21" y2="58"/><line x1="34" y1="50" x2="31" y2="58"/><line x1="44" y1="50" x2="41" y2="58"/></g></svg>`,
+  storm: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 32a12 12 0 0 1 23-4 10 10 0 0 1-2 28H20a12 12 0 0 1 0-24z" fill="#7A8894"/><path d="M34 44l-8 10h6l-3 8 10-12h-6l3-6z" fill="#F5B841"/></svg>`,
+  fog: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 30a12 12 0 0 1 23-4 10 10 0 0 1-2 24H20a12 12 0 0 1 0-20z" fill="#C4CDCD"/><g stroke="#9AAAB0" stroke-width="3" stroke-linecap="round"><line x1="16" y1="52" x2="48" y2="52"/><line x1="20" y1="58" x2="44" y2="58"/></g></svg>`,
+  night: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M40 12a20 20 0 1 0 12 36 16 16 0 0 1-12-36z" fill="#E8C86A"/></svg>`,
+};
+
+function pickIcon(text, isDay = true) {
+  const t = (text || "").toLowerCase();
+  if (t.includes("thunder") || t.includes("storm")) return ICONS.storm;
+  if (t.includes("rain") || t.includes("shower") || t.includes("drizzle")) return ICONS.rain;
+  if (t.includes("fog") || t.includes("haze") || t.includes("mist")) return ICONS.fog;
+  if (t.includes("snow") || t.includes("sleet")) return ICONS.rain;
+  if (t.includes("cloud") || t.includes("overcast")) {
+    if (t.includes("partly") || t.includes("mostly sunny") || t.includes("mostly clear")) return isDay ? ICONS.partly : ICONS.night;
+    return ICONS.cloud;
+  }
+  if (t.includes("clear") || t.includes("sunny") || t.includes("fair")) return isDay ? ICONS.sun : ICONS.night;
+  return isDay ? ICONS.partly : ICONS.night;
+}
 
 function fmtTime(d) {
   return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" });
@@ -184,7 +239,10 @@ async function loadAlerts() {
       alerts.push(p);
     }
     if (!alerts.length) {
-      el.innerHTML = `<div class="wx-no-alerts">No active weather alerts for the Treasure Coast right now.</div>`;
+      el.innerHTML = `<div class="wx-no-alerts">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="#0A7075"/><path d="M8 12.5l2.5 2.5 5-5.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>No active weather alerts for the Treasure Coast right now.</span>
+      </div>`;
       return;
     }
     const sevRank = { Extreme: 0, Severe: 1, Moderate: 2, Minor: 3, Unknown: 4 };
@@ -226,55 +284,73 @@ async function loadForecast() {
       cur = obs.properties;
     } catch (e) { /* fall back to hourly */ }
 
-    // Fallback to hourly forecast if no station obs
-    let curTemp, curCond, curIcon, curHumidity, curWind;
+    // Get today's forecast for high/low and outlook
+    const fc = await nws(forecast);
+    const periods = fc.properties.periods;
+    const todayDay = periods.find(p => p.isDaytime) || periods[0];
+    const todayNight = periods.find(p => !p.isDaytime);
+
+    let curTemp, curCond, curHumidity, curWind, curFeels, isDay = true;
     if (cur && cur.temperature && cur.temperature.value != null) {
       curTemp = Math.round(cur.temperature.value * 9/5 + 32);
-      curCond = cur.textDescription || "";
-      curIcon = cur.icon;
+      curCond = cur.textDescription || todayDay.shortForecast || "";
       curHumidity = cur.relativeHumidity && cur.relativeHumidity.value != null ? Math.round(cur.relativeHumidity.value) : null;
-      if (cur.windSpeed && cur.windSpeed.value != null) {
-        curWind = Math.round(cur.windSpeed.value * 0.621371);
-      }
+      if (cur.windSpeed && cur.windSpeed.value != null) curWind = Math.round(cur.windSpeed.value * 0.621371);
+      if (cur.heatIndex && cur.heatIndex.value != null) curFeels = Math.round(cur.heatIndex.value * 9/5 + 32);
+      else if (cur.windChill && cur.windChill.value != null) curFeels = Math.round(cur.windChill.value * 9/5 + 32);
     } else {
       const hourly = await nws(forecastHourly);
       const now = hourly.properties.periods[0];
       curTemp = now.temperature;
       curCond = now.shortForecast;
-      curIcon = now.icon;
+      isDay = now.isDaytime;
     }
 
+    const hiTemp = todayDay ? todayDay.temperature : null;
+    const loTemp = todayNight ? todayNight.temperature : null;
+    const icon = pickIcon(curCond, isDay);
+
     curEl.innerHTML = `
+      <h2 class="wx-section-title">Current Conditions</h2>
       <div class="wx-current">
-        <div class="wx-current-temp">${curTemp}&deg;</div>
-        <div class="wx-current-meta">
+        <div class="wx-current-left">
+          <div class="wx-current-icon">${icon}</div>
+          <div class="wx-current-tempblock">
+            <div class="wx-current-temp">${curTemp}&deg;</div>
+            ${curFeels != null && curFeels !== curTemp ? `<div class="wx-current-feels">Feels like ${curFeels}&deg;</div>` : ""}
+          </div>
+        </div>
+        <div class="wx-current-right">
           <div class="wx-current-cond">${curCond}</div>
           <div class="wx-current-loc">Stuart, Florida</div>
-          <div class="wx-current-detail">
-            ${curHumidity != null ? "Humidity " + curHumidity + "%" : ""}
-            ${curWind != null ? " &middot; Wind " + curWind + " mph" : ""}
+          <div class="wx-current-grid">
+            ${hiTemp != null ? `<div><div class="wx-stat-label">Today High</div><div class="wx-stat-value">${hiTemp}&deg;</div></div>` : ""}
+            ${loTemp != null ? `<div><div class="wx-stat-label">Tonight Low</div><div class="wx-stat-value">${loTemp}&deg;</div></div>` : ""}
+            ${curHumidity != null ? `<div><div class="wx-stat-label">Humidity</div><div class="wx-stat-value">${curHumidity}%</div></div>` : ""}
+            ${curWind != null ? `<div><div class="wx-stat-label">Wind</div><div class="wx-stat-value">${curWind} mph</div></div>` : ""}
           </div>
         </div>
       </div>`;
 
     // 7-day forecast (periods come in day/night pairs)
-    const fc = await nws(forecast);
-    const periods = fc.properties.periods;
     const days = periods.filter(p => p.isDaytime).slice(0, 7);
     fcEl.innerHTML = `
       <h2 class="wx-section-title">7-Day Forecast</h2>
       <div class="wx-forecast">
-        ${days.map(d => {
-          // Find matching night period for the low
+        ${days.map((d, idx) => {
           const night = periods.find(p => !p.isDaytime && p.number === d.number + 1);
           const lo = night ? night.temperature : "";
           const dayName = new Date(d.startTime).toLocaleDateString("en-US", { weekday: "short", timeZone: "America/New_York" });
+          const pop = d.probabilityOfPrecipitation && d.probabilityOfPrecipitation.value ? d.probabilityOfPrecipitation.value : null;
           return `
-            <div class="wx-day">
-              <div class="wx-day-name">${dayName}</div>
-              <img class="wx-day-icon" src="${d.icon}" alt="${d.shortForecast}" loading="lazy">
-              <div class="wx-day-hi">${d.temperature}&deg;</div>
-              <div class="wx-day-lo">${lo !== "" ? lo + "&deg;" : ""}</div>
+            <div class="wx-day${idx === 0 ? " today" : ""}">
+              <div class="wx-day-name">${idx === 0 ? "Today" : dayName}</div>
+              <div class="wx-day-icon">${pickIcon(d.shortForecast, true)}</div>
+              <div class="wx-day-temps">
+                <span class="wx-day-hi">${d.temperature}&deg;</span>
+                ${lo !== "" ? `<span class="wx-day-lo">${lo}&deg;</span>` : ""}
+              </div>
+              ${pop ? `<div class="wx-day-pop">${pop}% rain</div>` : ""}
               <div class="wx-day-desc">${d.shortForecast}</div>
             </div>`;
         }).join("")}
