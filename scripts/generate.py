@@ -180,6 +180,11 @@ FULL_TEXT_DOMAINS = ["wptv.com", "wpbf.com", "cbs12.com", "wflx.com", "hometownn
 
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
+# Model selection — flip these to switch the whole pipeline between tiers.
+# TEST: running everything on Sonnet to evaluate article quality vs Haiku.
+MODEL_ARTICLES = "claude-sonnet-4-5"   # article generation, enrichment, ranking, rewrites
+MODEL_SELECTION = "claude-sonnet-4-5"  # hero selection, structural decisions
+
 # Content bank — loaded once at startup, used for card enrichment
 CONTENT_BANK_FEEDS = [
     "https://www.wptv.com/news/local-news.rss",
@@ -1285,7 +1290,7 @@ Return ONLY valid JSON:
 
 
     response = client.messages.create(
-        model="claude-sonnet-4-5",
+        model=MODEL_ARTICLES,
         max_tokens=5600,
         system=[{
             "type": "text",
@@ -1824,7 +1829,7 @@ def enhance_card(card, content_bank, headlines):
             "If the source lacks enough facts, write less and stop. No em dashes. Return only the rewritten body."
         )
         resp = client.messages.create(
-            model="claude-haiku-4-5-20251001",
+            model=MODEL_ARTICLES,
             max_tokens=800,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -1866,7 +1871,7 @@ def enhance_hero_article(hero, full_text):
     )
     try:
         resp = client.messages.create(
-            model="claude-haiku-4-5-20251001",
+            model=MODEL_ARTICLES,
             max_tokens=1600,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -2080,7 +2085,7 @@ def select_front_page_hero(all_categories):
     )
     try:
         resp = client.messages.create(
-            model="claude-haiku-4-5-20251001",
+            model=MODEL_SELECTION,
             max_tokens=500,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -2131,7 +2136,7 @@ def promote_duplicate_heroes(top_cat, all_categories):
     )
     try:
         resp = client.messages.create(
-            model="claude-haiku-4-5-20251001",
+            model=MODEL_SELECTION,
             max_tokens=200,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -2222,7 +2227,7 @@ def global_rank(all_cards, dedupe_against=None):
     )
     try:
         resp = client.messages.create(
-            model="claude-haiku-4-5-20251001",
+            model=MODEL_SELECTION,
             max_tokens=600,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -2594,7 +2599,7 @@ def _rewrite_alert_to_article(event, area, severity, headline_txt, desc, instr):
     )
     try:
         resp = client.messages.create(
-            model="claude-haiku-4-5-20251001",
+            model=MODEL_ARTICLES,
             max_tokens=900,
             messages=[{"role": "user", "content": prompt}],
         )
