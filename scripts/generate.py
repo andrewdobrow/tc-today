@@ -2966,6 +2966,12 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     header = _page_header(active=category_key)
     footer = _page_footer()
 
+    # Share button variables
+    import urllib.parse as _urlparse
+    article_url  = f"{SITE_URL}/articles/{slug}.html"
+    headline_enc = _urlparse.quote(hero.get("headline", ""))
+    headline_js  = _json.dumps(hero.get("headline", ""))
+
     # Suppress ad solicitation on sensitive stories — brand safety. Never place an
     # advertise banner next to violent crime, sexual assault, or child abuse coverage.
     _sensitive_terms = [
@@ -3025,6 +3031,20 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-hero-image {{ margin: 0 0 28px; }}
     .article-hero-image img {{ width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px; display: block; }}
     .article-body p {{ font-size: 17px; line-height: 1.8; color: var(--text-secondary); margin-bottom: 20px; }}
+    .article-share {{ margin: 36px 0 8px; padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }}
+    .article-share-label {{ display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 12px; text-transform: uppercase; letter-spacing: .05em; }}
+    .article-share-btns {{ display: flex; flex-wrap: wrap; gap: 10px; }}
+    .article-share-btns button, .article-share-btns a {{
+      display: inline-flex; align-items: center; gap: 7px; padding: 9px 15px;
+      font-size: 14px; font-weight: 500; font-family: inherit; border-radius: 8px;
+      cursor: pointer; text-decoration: none; border: 1px solid var(--border);
+      background: var(--bg); color: var(--text); transition: all .15s;
+    }}
+    .article-share-btns button:hover, .article-share-btns a:hover {{ border-color: var(--accent); color: var(--accent); }}
+    .article-share-btns .share-fb:hover {{ background: #1877F2; border-color: #1877F2; color: #fff; }}
+    .article-share-btns .share-x:hover {{ background: #000; border-color: #000; color: #fff; }}
+    .article-share-btns .share-native {{ background: var(--accent); border-color: var(--accent); color: #fff; }}
+    .article-share-btns .share-native:hover {{ background: #08595d; border-color: #08595d; color: #fff; }}
     .article-back {{ display: inline-block; font-size: 13px; color: var(--accent); text-decoration: none; margin-bottom: 32px; font-weight: 500; }}
     .article-back:hover {{ opacity: .7; }}
     .article-divider {{ border: none; border-top: 1px solid var(--border); margin: 40px 0; }}
@@ -3045,6 +3065,27 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
       <h1 class="article-headline">{hero["headline"]}</h1>
       {img_html}
       <div class="article-body">{body}</div>
+      <div class="article-share">
+        <span class="article-share-label">Share this story</span>
+        <div class="article-share-btns">
+          <button class="share-native" onclick="tctShare()" aria-label="Share">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Share
+          </button>
+          <a class="share-fb" href="https://www.facebook.com/sharer/sharer.php?u={article_url}" target="_blank" rel="noopener" aria-label="Share on Facebook">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+            Facebook
+          </a>
+          <a class="share-x" href="https://twitter.com/intent/tweet?url={article_url}&text={headline_enc}" target="_blank" rel="noopener" aria-label="Share on X">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.6l5.24 6.93zM17.6 20.64h2.04L6.49 3.24H4.3z"/></svg>
+            X
+          </a>
+          <button class="share-copy" onclick="tctCopyLink(this)" aria-label="Copy link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Copy link
+          </button>
+        </div>
+      </div>
       <hr class="article-divider">
       <p class="article-more">More local news</p>
       <a href="/?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
@@ -3052,6 +3093,21 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     </div>
   </main>
 {footer}
+<script>
+function tctShare() {{
+  const data = {{ title: document.title, text: {headline_js}, url: window.location.href }};
+  if (navigator.share) {{ navigator.share(data).catch(function(){{}}); }}
+  else {{ tctCopyLink(document.querySelector('.share-copy')); }}
+}}
+function tctCopyLink(btn) {{
+  navigator.clipboard.writeText(window.location.href).then(function() {{
+    if (!btn) return;
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied';
+    setTimeout(function() {{ btn.innerHTML = orig; }}, 1500);
+  }}).catch(function(){{}});
+}}
+</script>
 </body>
 </html>"""
 
