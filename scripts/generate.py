@@ -1676,11 +1676,32 @@ def make_paragraphs(text):
     paragraphs = text.split("\n\n")
     if len(paragraphs) == 1:
         paragraphs = text.split("\n")
-    return "".join(
-        f"<p>{p.strip()}</p>"
-        for p in paragraphs
-        if p.strip() and len(p.strip()) > 30
-    )
+
+    def _inline(s):
+        # Convert **bold** to <strong> (applied AFTER strip_markdown, so custom
+        # articles must use a marker strip_markdown won't remove — see below).
+        return re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
+
+    out = []
+    for p in paragraphs:
+        p = p.strip()
+        if not p:
+            continue
+        # Section header: line starting with "## "
+        if p.startswith("## "):
+            out.append(f'<h2 class="article-section">{_inline(p[3:].strip())}</h2>')
+        # Sub-header: line starting with "### "
+        elif p.startswith("### "):
+            out.append(f'<h3 class="article-subhead">{_inline(p[4:].strip())}</h3>')
+        # Regular paragraph — keep short lines only if they are not stray fragments.
+        # A header-like short line (Title Case, no ending period) is rendered as a
+        # subhead rather than dropped; genuine short fragments are still skipped.
+        elif len(p) > 30:
+            out.append(f"<p>{_inline(p)}</p>")
+        elif p and not p.endswith((".", "!", "?", ":")) and p[0:1].isupper():
+            # Short standalone label line (e.g. a date sub-header) — keep as subhead
+            out.append(f'<h3 class="article-subhead">{_inline(p)}</h3>')
+    return "".join(out)
 
 
 def build_content_bank():
@@ -3075,6 +3096,9 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-hero-image {{ margin: 0 0 28px; }}
     .article-hero-image img {{ width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px; display: block; }}
     .article-body p {{ font-size: 17px; line-height: 1.8; color: var(--text-secondary); margin-bottom: 20px; }}
+    .article-body .article-section {{ font-family: "Fraunces", serif; font-size: 24px; font-weight: 600; color: var(--text); margin: 36px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }}
+    .article-body .article-subhead {{ font-size: 18px; font-weight: 700; color: var(--text); margin: 26px 0 8px; }}
+    .article-body strong {{ color: var(--text); font-weight: 700; }}
     .article-share {{ margin: 36px 0 8px; padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }}
     .article-share-label {{ display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 12px; text-transform: uppercase; letter-spacing: .05em; }}
     .article-share-btns {{ display: flex; flex-wrap: wrap; gap: 10px; }}
