@@ -878,6 +878,30 @@ def _hero_eligible(category_key, h):
     if category_key in topic_terms:
         if _has_any(text, hard_negatives.get(category_key, [])):
             return False
+        # Block national / global syndicated filler that has no local hook. WPTV and
+        # other feeds carry survey/study/ranking pieces ("Study finds Gen X most
+        # trusted...") that match a category on a loose word (e.g. "vote of
+        # confidence" hitting local_gov's "vote"). These have international or
+        # nationwide scope and no Treasure Coast connection. For non-Florida topic
+        # categories, block a story that shows clear national/global scope AND names
+        # no local place.
+        if category_key != "florida":
+            _tc_anchor = [
+                "martin county", "st. lucie", "st lucie", "indian river", "treasure coast",
+                "stuart", "jensen beach", "palm city", "hobe sound", "port salerno",
+                "port st. lucie", "port st lucie", "fort pierce", "vero beach", "sebastian",
+                "fellsmere", "indiantown", "jupiter island", "hutchinson island",
+                "florida",
+            ]
+            _national_scope = [
+                "across 15 countries", "countries", "nationwide", "across america",
+                "american drivers", "americans", "global study", "worldwide", "u.k.",
+                "united states", "across the country", "national survey", "study finds",
+                "survey found", "survey finds", "study found", "ranking of states",
+                "50 states", "study reveals", "researchers found", "new study",
+            ]
+            if _has_any(text, _national_scope) and not _has_any(text, _tc_anchor):
+                return False
         # Keep statewide / out-of-area news OUT of local topic categories (it belongs
         # only in Florida). Rather than requiring a local place name in every story
         # (which wrongly drops local stories whose generated body doesn't repeat the
@@ -1960,6 +1984,26 @@ def select_front_page_hero(all_categories):
         # NEVER be the front-page hero; the front page is for local Treasure Coast
         # news. Florida still has its own category hero, just never leads the site.
         if cat["category_key"] == "florida":
+            return False
+        # The front-page hero must have a genuine local (or at least Florida)
+        # connection. A national story with no geographic markers — e.g. a national
+        # sports league announcement — can live in its section but must never lead
+        # a hyperlocal front page. County heroes are inherently local, so they pass.
+        if cat["category_key"] in ("martin", "st_lucie", "indian_river"):
+            return True
+        hero = cat.get("hero", {})
+        blob = (hero.get("headline", "") + " " + hero.get("body", "")).lower()
+        _fl_markers = [
+            "florida", "treasure coast", "martin county", "st. lucie", "st lucie",
+            "indian river", "stuart", "jensen beach", "palm city", "hobe sound",
+            "port salerno", "port st. lucie", "port st lucie", "fort pierce",
+            "vero beach", "sebastian", "fellsmere", "indiantown", "jupiter island",
+            "hutchinson island", "mets", "clover park", "roger dean",
+        ]
+        # Any topic category's front-page hero must have a local or Florida marker.
+        # National/global content (e.g. a worldwide survey, a national sports league)
+        # can appear in its section but must never lead a hyperlocal front page.
+        if not _has_any(blob, _fl_markers):
             return False
         return True
 
