@@ -716,6 +716,18 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
                 h["article_text"] = full
                 h["source_quality"] = "full"
                 return h
+            # Scrape failed or was blocked (e.g. WPTV returns 403 to bots). Many
+            # full_source feeds embed the ENTIRE article in the RSS content:encoded
+            # field, which extract_rss_text already captured into summary. Analysis of
+            # the WPTV feed shows bodies of 66-1349 words, all complete articles — the
+            # short ones are legitimate brief news items (a fatal crash, a fire report),
+            # not truncated snippets. Use the embedded text directly when it is a real
+            # body (60+ words) rather than discarding the story as thin. This is what
+            # keeps WPTV county stories alive.
+            if summary_words >= 60:
+                h["article_text"] = h.get("summary", "")
+                h["source_quality"] = "full"
+                return h
 
         # Fallback quality labels based on actual RSS text depth.
         if summary_words >= 140:
@@ -1682,8 +1694,57 @@ Return ONLY valid JSON:
                     _fixed = True
                     break
             if not _fixed:
-                print(f"  Dropping {category_label}: no eligible hero available")
-                data["_drop_category"] = True
+                # Before dropping a COUNTY page, try to build its hero from the recent
+                # archive. County live feeds are intermittent (WPTV rotates stories,
+                # Google News items come in thin), so a county can end up with nothing
+                # hero-eligible even though a relevant story was archived in the last
+                # few days (often under a topic category like Business). Pull the most
+                # recent archived story naming this county's places and use it.
+                if category_key in COUNTY_KEYS:
+                    _cf = {
+                        "martin": ["martin county", "stuart", "jensen beach", "palm city",
+                                   "hobe sound", "port salerno", "jupiter island",
+                                   "hutchinson island", "indiantown"],
+                        "st_lucie": ["st. lucie", "st lucie", "port st. lucie",
+                                     "port st lucie", "fort pierce"],
+                        "indian_river": ["indian river", "vero beach", "sebastian", "fellsmere"],
+                    }.get(category_key, [])
+                    try:
+                        _arch = load_archive(OUTPUT_DIR / "archive.json")
+                        _arch.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
+                        from datetime import timezone as _tzf
+                        _nowf = datetime.now(_tzf.utc)
+                        for e in _arch:
+                            _htext = (e.get("headline","") + " " + e.get("teaser","")).lower()
+                            if not any(p in _htext for p in _cf):
+                                continue
+                            _d = e.get("lastmod") or e.get("date","")
+                            try:
+                                _dt = datetime.strptime(_d[:10], "%Y-%m-%d").replace(tzinfo=_tzf.utc)
+                                if (_nowf - _dt).days > 4:
+                                    continue
+                            except Exception:
+                                continue
+                            data["hero"] = {
+                                "headline": e.get("headline",""),
+                                "teaser": e.get("teaser",""),
+                                "body": e.get("teaser",""),
+                                "image_url": e.get("image_url",""),
+                                "published": e.get("date",""),
+                                "published_raw": e.get("date",""),
+                                "enriched": True,
+                                "urgency_score": 4,
+                                "link": f"{SITE_URL}/articles/{e['slug']}.html",
+                                "_archived_slug": e["slug"],
+                            }
+                            print(f"  County archive-hero fallback for {category_label}: '{e.get('headline','')[:50]}'")
+                            _fixed = True
+                            break
+                    except Exception as _ex:
+                        print(f"  County archive fallback failed: {_ex}")
+                if not _fixed:
+                    print(f"  Dropping {category_label}: no eligible hero available")
+                    data["_drop_category"] = True
 
     return data
 
