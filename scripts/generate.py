@@ -3421,20 +3421,76 @@ def find_matching_entry(headline, archive, source_url="", is_weather_alert=False
             return re.sub(r"[?#].*$", "", u.strip().rstrip("/").lower())
         norm_src = norm_url(source_url)
         path_part = re.sub(r"^https?://[^/]+", "", norm_src)
+        # Aggregator URLs (Google News especially) can collapse different articles to
+        # the same normalized URL, so a URL match alone is not enough. Require the
+        # headlines to also share at least 2 significant tokens, so two genuinely
+        # different stories that happen to share a source URL are not merged.
+        _AGG = ("news.google.com", "google.com/rss", "/rss/", "bing.com/news")
+        _is_agg = any(a in norm_src for a in _AGG)
         if len(path_part) > 10:
+            src_tok = _sig_tokens(headline)
             for entry in archive:
                 if entry.get("source_url") and norm_url(entry["source_url"]) == norm_src:
+                    # For aggregator URLs, or any URL, sanity-check the headlines are
+                    # about the same thing before merging.
+                    ent_tok = _sig_tokens(entry.get("headline", ""))
+                    if src_tok and ent_tok:
+                        overlap = len(src_tok & ent_tok)
+                        # A URL match must be backed by real headline similarity.
+                        # Two shared words (e.g. "immigration" + "enforcement") is far
+                        # too weak — many distinct stories share that. Require 3+, or
+                        # for a very short headline, most of its tokens.
+                        need = 3
+                        if overlap < need and not (len(src_tok) <= 4 and overlap >= len(src_tok) - 1):
+                            continue  # same URL but clearly different stories — skip
                     return entry
 
     tok = _sig_tokens(headline)
     if len(tok) < 3:
         return None
+
+    # Location fingerprint: which specific Treasure Coast places a headline names.
+    # Two stories that name DIFFERENT specific locations are different stories even
+    # when their topical words overlap (e.g. "immigration arrests in Martin County"
+    # vs a statewide immigration story, or vs "...in St. Lucie County"). Geographic
+    # words are stopwords for token matching, so without this check a local story
+    # can wrongly collapse into a differently-located one.
+    def _loc_fingerprint(h):
+        hl = h.lower()
+        locs = set()
+        for name, key in [
+            ("martin", "martin"), ("st. lucie", "st_lucie"), ("st lucie", "st_lucie"),
+            ("port st. lucie", "st_lucie"), ("port st lucie", "st_lucie"),
+            ("indian river", "indian_river"), ("stuart", "martin"),
+            ("jensen beach", "martin"), ("palm city", "martin"), ("hobe sound", "martin"),
+            ("fort pierce", "st_lucie"), ("vero beach", "indian_river"),
+            ("sebastian", "indian_river"), ("fellsmere", "indian_river"),
+            ("indiantown", "martin"),
+        ]:
+            if name in hl:
+                locs.add(key)
+        return locs
+
+    new_loc = _loc_fingerprint(headline)
+
     for entry in archive:
         # Never fuzzy-match across the weather-alert boundary: an alert matches
         # only alerts, a regular article matches only regular articles.
         if bool(entry.get("is_weather_alert")) != bool(is_weather_alert):
             continue
         if len(tok & _sig_tokens(entry["headline"])) >= 4:
+            # Location-conflict guard. If the new story names a specific county, the
+            # matched story must share that county to be considered the same story.
+            # This keeps a county-specific story ("immigration arrests in Martin
+            # County") from collapsing into a differently-located or statewide story
+            # ("immigration arrests across Florida") that shares only topical words.
+            entry_loc = _loc_fingerprint(entry["headline"])
+            if new_loc:
+                if not (new_loc & entry_loc):
+                    continue  # entry names a different county, or none — not the same story
+            elif entry_loc:
+                # New story has no location but entry is county-specific — also a mismatch
+                continue
             return entry
     return None
 
