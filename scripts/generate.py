@@ -1375,6 +1375,22 @@ Return ONLY valid JSON:
                 start = cleaned.index("{")
                 end   = cleaned.rindex("}") + 1
                 data  = json.loads(cleaned[start:end], strict=False)
+    # The model must return a JSON object. If it returns a bare array (e.g. a list
+    # of story objects, or the object wrapped in a list), normalize it to the dict
+    # we expect so we don't crash on data["category_key"] below.
+    if isinstance(data, list):
+        if len(data) == 1 and isinstance(data[0], dict):
+            data = data[0]
+        elif data and isinstance(data[0], dict) and "hero" in data[0]:
+            data = data[0]
+        elif all(isinstance(x, dict) for x in data) and data:
+            # A list of story objects — treat first as hero, rest as cards
+            data = {"hero": data[0], "cards": data[1:]}
+        else:
+            data = {"hero": {}, "cards": []}
+    if not isinstance(data, dict):
+        data = {"hero": {}, "cards": []}
+
     data["category_key"]   = category_key
     data["category_label"] = category_label
 
@@ -1588,11 +1604,27 @@ Return ONLY valid JSON:
     _stale_phrases = ["yesterday", "two days ago", "three days ago", "earlier this week",
                       "last week", "days ago", "happened on", "occurred on", "took place on"]
 
+    _stale_archive = load_archive(OUTPUT_DIR / "archive.json")
+
     def _story_is_stale(item):
         content = (item.get("teaser", "") + " " + item.get("body", "")[:800]).lower()
         # Fresh-development language always wins (e.g. "suspect arrested today" in an old story)
         if any(p in content for p in _fresh_override):
             return False
+        # If this story matches an archive entry we updated within the last 2 days,
+        # it is NOT stale — the content was refreshed on our site recently even if the
+        # original RSS published date is old (e.g. a "coming soon" story updated to
+        # "now open"). This prevents freshly-updated stories being swapped out.
+        try:
+            _m = find_matching_entry(item.get("headline",""), _stale_archive, item.get("link",""))
+            if _m:
+                _lm = _m.get("lastmod") or _m.get("date", "")
+                if _lm:
+                    _lmdt = datetime.strptime(_lm[:10], "%Y-%m-%d").replace(tzinfo=_tzc.utc)
+                    if (_now_c - _lmdt).days <= 2:
+                        return False
+        except Exception:
+            pass
         # Past day-name reference (e.g. "on Thursday" when today is Saturday)
         for day in _stale_days:
             if f" {day} " in content or f" {day}," in content or f" {day}." in content or content.startswith(f"{day} "):
