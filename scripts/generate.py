@@ -2258,32 +2258,43 @@ def promote_duplicate_heroes(top_cat, all_categories):
     def _norm(h):
         return re.sub(r"[^a-z0-9 ]", "", (h or "").lower()).strip()
 
-    # -- Deterministic pass: no exact-duplicate headline across category heroes --
-    # Front page hero's headline is claimed first; any other category with the same
-    # headline gets its next card promoted.
-    claimed = { _norm(top_cat["hero"].get("headline","")) }
+    def _dupe_of_claimed(headline, claimed_tokens):
+        # A hero duplicates a claimed story if it shares 4+ significant tokens with
+        # any already-claimed hero. This catches near-identical headlines that are
+        # not exact string matches (e.g. three worded variants of the same FIFA
+        # teen story) which exact matching would miss.
+        htok = _sig_tokens(headline)
+        if len(htok) < 3:
+            return False
+        for ctok in claimed_tokens:
+            if len(htok & ctok) >= 4:
+                return True
+        return False
+
+    # -- Deterministic pass: no duplicate story across category heroes (token-based) --
+    claimed_tokens = [ _sig_tokens(top_cat["hero"].get("headline","")) ]
     for cat in all_categories:
         if cat["category_key"] == fp_key:
             continue
-        h = _norm(cat["hero"].get("headline",""))
-        if h and h in claimed:
+        h = cat["hero"].get("headline","")
+        if h and _dupe_of_claimed(h, claimed_tokens):
             # Promote next non-duplicate card
             promoted = None
             for ci, card in enumerate(cat.get("cards", [])):
-                if _norm(card.get("headline","")) not in claimed:
+                if not _dupe_of_claimed(card.get("headline",""), claimed_tokens):
                     promoted = (ci, card); break
             if promoted:
                 ci, card = promoted
                 cat["hero"] = dict(card)
                 cat["cards"] = cat["cards"][:ci] + cat["cards"][ci+1:]
-                claimed.add(_norm(card.get("headline","")))
-                print(f"  Dedup: promoted next card to hero for {cat['category_label']} (exact duplicate hero)")
+                claimed_tokens.append(_sig_tokens(card.get("headline","")))
+                print(f"  Dedup: promoted next card to hero for {cat['category_label']} (duplicate hero)")
             else:
                 cat["_drop_category"] = True
                 print(f"  Dedup: dropping {cat['category_label']} (hero duplicate, no alternative card)")
         else:
             if h:
-                claimed.add(h)
+                claimed_tokens.append(_sig_tokens(h))
 
     # Drop any categories flagged with no alternative
     all_categories[:] = [c for c in all_categories if not c.get("_drop_category")]
@@ -2544,6 +2555,28 @@ def render_index(all_categories, top_cat):
                 continue  # Skip mis-categorized archived story
         enriched_pool.append(backfill_card)
         _current_hls.add(hl.lower())
+
+        # Cross-post to county pages: a story archived under a topic category (e.g.
+        # a Hobe Sound business opening under Business) also belongs on its county
+        # page. If the story names a county's places and it isn't already a county
+        # story, add a second backfill card tagged for that county so it shows in
+        # both places rather than vanishing from the county page.
+        if _bf_ckey not in COUNTY_KEYS:
+            _htext = (hl + " " + e.get("teaser", "")).lower()
+            _county_places = {
+                "martin": ["martin county", "stuart", "jensen beach", "palm city",
+                           "hobe sound", "port salerno", "jupiter island",
+                           "hutchinson island", "indiantown", "rio", "sewall"],
+                "st_lucie": ["st. lucie", "st lucie", "port st. lucie", "port st lucie",
+                             "fort pierce", "st. lucie west"],
+                "indian_river": ["indian river", "vero beach", "sebastian", "fellsmere"],
+            }
+            for _ckey, _places in _county_places.items():
+                if any(p in _htext for p in _places):
+                    _county_card = dict(backfill_card)
+                    _county_card["cat_key"]   = _ckey
+                    _county_card["cat_label"] = CATEGORIES[_ckey]["label"]
+                    enriched_pool.append(_county_card)
 
     enriched_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
     topnews     = global_rank(enriched_pool, dedupe_against=top_cat["hero"].get("headline", ""))
@@ -4059,6 +4092,12 @@ def main():
         print(f"  {len(headlines)} headlines fetched")
         try:
             data = generate_category_content(cat_key, cat_config["label"], headlines)
+
+            # If the category was dropped or produced no usable hero, skip it entirely
+            # rather than crashing on data["hero"]["headline"] below.
+            if data.get("_drop_category") or not data.get("hero") or not data["hero"].get("headline"):
+                print(f"  Skipping {cat_config['label']}: no usable hero produced")
+                continue
 
             # Images — source_index already attached image_url, fall back to image bank
             source_img = data["hero"].get("image_url", "")
