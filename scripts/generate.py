@@ -180,6 +180,10 @@ FULL_TEXT_DOMAINS = ["wptv.com", "wpbf.com", "cbs12.com", "wflx.com", "hometownn
 
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
+# Populated once per run by classify_stories(); {headline_lower: set(category_keys)}.
+# None means classification unavailable -> keyword filtering is used instead.
+STORY_CLASSIFICATION = None
+
 # Model selection — flip these to switch the whole pipeline between tiers.
 # TEST: running everything on Sonnet to evaluate article quality vs Haiku.
 MODEL_ARTICLES = "claude-sonnet-4-5"   # article generation, enrichment, ranking, rewrites
@@ -789,6 +793,22 @@ def _hero_eligible(category_key, h):
     if quality in {"thin", "discovery_only"}:
         return False
 
+    # PRIMARY PATH: LLM classification. When available, the per-story category
+    # assignment decides eligibility — it understands content instead of matching
+    # words, so a DEA drug story is crime (not business via 'prices'), campaign
+    # fundraising is florida (not local_gov via 'vote'), and national survey filler
+    # is 'none'. The keyword logic below remains as the fallback when the
+    # classification call failed this run.
+    if STORY_CLASSIFICATION is not None:
+        _lookup = title or (h.get("headline", "") or "").lower()
+        cats = STORY_CLASSIFICATION.get(_lookup)
+        if cats is not None:
+            if "none" in cats and len(cats) == 1:
+                return False
+            return category_key in cats
+        # Story not in the classification map (e.g. custom article or generated
+        # headline differing from the RSS title) — fall through to keyword logic.
+
     # Outside-coverage-area block: WPTV serves Palm Beach County and the wider
     # South Florida market, which is NOT the Treasure Coast. If a story is clearly
     # about a place outside Martin/St. Lucie/Indian River counties AND does not
@@ -852,6 +872,9 @@ def _hero_eligible(category_key, h):
                          "gofundme", "fire broke out", "passed away", "fatal"] + obit_terms,
         "business":     ["shooting", "homicide", "murder", "missing", "fatal crash",
                          "arrest", "arrested", "charged", "stabbing", "robbery", "burglary",
+                         "meth", "methamphetamine", "cocaine", "fentanyl", "heroin",
+                         "narcotics", "drug bust", "drug trafficking", "trafficking",
+                         "seizes", "seized", "dea", "smuggling", "cartel", "overdose",
                          "game recap", "score", "wins over", "defeats", "beats", "championship",
                          "playoff", "tournament", "festival", "concert", "parade"] + obit_terms,
         "crime":        ["restaurant", "business opens", "store opens", "new store", "hiring",
@@ -1087,6 +1110,22 @@ def filter_category_headlines(category_key, headlines, target=HEADLINES_PER_CATE
 
     scored = []
     for h in headlines:
+        # Classification-first: when the LLM classified this story, its assignment
+        # dominates. Assigned to this category -> strong score. Assigned 'none'
+        # (non-local filler) -> excluded entirely. Not in the map -> keyword score.
+        if STORY_CLASSIFICATION is not None:
+            _cats = STORY_CLASSIFICATION.get((h.get("title", "") or "").lower())
+            if _cats is not None:
+                if "none" in _cats and len(_cats) == 1:
+                    continue  # non-local content, drop from every category
+                if category_key in _cats:
+                    score = 10  # classified for this category
+                else:
+                    continue  # classified, but for other categories — skip here
+                h["category_match_score"] = score
+                h["hero_eligible"] = "yes" if _hero_eligible(category_key, h) else "no"
+                scored.append((score, h))
+                continue
         score = _category_score(category_key, h)
         h["category_match_score"] = score
         h["hero_eligible"] = "yes" if _hero_eligible(category_key, h) else "no"
@@ -2328,7 +2367,7 @@ def promote_duplicate_heroes(top_cat, all_categories):
         if len(htok) < 3:
             return False
         for ctok in claimed_tokens:
-            if len(htok & ctok) >= 4:
+            if _token_overlap(htok, ctok) >= 4:
                 return True
         return False
 
@@ -3522,12 +3561,51 @@ def _sig_tokens(text):
     return frozenset(w.lower().strip(".,;:()") for w in text.split()
                      if len(w) > 3 and w.lower() not in ARCHIVE_STOPS)
 
+
+def _stem(w):
+    """Light stemming so common variants collapse: hits/hitting/hit, seizes/seized,
+    spreading/spread, prices/price. Not linguistically perfect, just enough to stop
+    the same story being split into duplicate articles by a reworded headline."""
+    for suf in ("ings", "ing", "ies", "ied", "ers", "er", "eds", "ed", "es", "s"):
+        if w.endswith(suf) and len(w) - len(suf) >= 4:
+            return w[: -len(suf)]
+    return w
+
+
+def _token_overlap(tok_a, tok_b):
+    """Count shared tokens, treating word variants as matches. Handles:
+      - stem equality (hits/hitting, seizes/seized)
+      - prefix abbreviation (meth/methamphetamine)
+    Without this, 'Methamphetamine surge hits...' and 'DEA... meth... spreading...'
+    look like different stories and a duplicate article is created at a new URL,
+    orphaning any link already published to RSS/social."""
+    count = 0
+    used = set()
+    for a in tok_a:
+        sa = _stem(a)
+        for b in tok_b:
+            if b in used:
+                continue
+            sb = _stem(b)
+            if sa == sb:
+                count += 1
+                used.add(b)
+                break
+            # Prefix abbreviation: one is a leading substring of the other and the
+            # shorter is at least 4 chars (meth -> methamphetamine)
+            short, long_ = (sa, sb) if len(sa) <= len(sb) else (sb, sa)
+            if len(short) >= 4 and long_.startswith(short):
+                count += 1
+                used.add(b)
+                break
+    return count
+
 def _is_duplicate_headline(headline, existing_token_sets):
     new_tok = _sig_tokens(headline)
     if len(new_tok) < 3:
         return False
     for ex_tok in existing_token_sets:
-        if len(new_tok & ex_tok) >= 4:
+        if _token_overlap(new_tok, ex_tok) >= 4:
             return True
     return False
 
@@ -3561,7 +3639,7 @@ def find_matching_entry(headline, archive, source_url="", is_weather_alert=False
                     # about the same thing before merging.
                     ent_tok = _sig_tokens(entry.get("headline", ""))
                     if src_tok and ent_tok:
-                        overlap = len(src_tok & ent_tok)
+                        overlap = _token_overlap(src_tok, ent_tok)
                         # A URL match must be backed by real headline similarity.
                         # Two shared words (e.g. "immigration" + "enforcement") is far
                         # too weak — many distinct stories share that. Require 3+, or
@@ -3604,7 +3682,7 @@ def find_matching_entry(headline, archive, source_url="", is_weather_alert=False
         # only alerts, a regular article matches only regular articles.
         if bool(entry.get("is_weather_alert")) != bool(is_weather_alert):
             continue
-        if len(tok & _sig_tokens(entry["headline"])) >= 4:
+        if _token_overlap(tok, _sig_tokens(entry["headline"])) >= 4:
             # Location-conflict guard. If the new story names a specific county, the
             # matched story must share that county to be considered the same story.
             # This keeps a county-specific story ("immigration arrests in Martin
@@ -4075,6 +4153,103 @@ def write_archives(all_categories, top_cat):
     (OUTPUT_DIR / "news-sitemap.xml").write_text(update_news_sitemap(archive), encoding="utf-8")
     print(f"  Archived {new_count} new, updated {updated_count} existing ({len(archive)} total)")
 
+def classify_stories(feed_cache):
+    """ONE batched LLM call assigns categories to every unique story across all feeds.
+    Replaces the per-category banned-word lists with actual comprehension: the model
+    knows a DEA meth story is crime (not business because it says 'prices'), that
+    campaign fundraising is not local government, and that a national survey doesn't
+    belong on a hyperlocal site at all.
+
+    Returns {headline_lower: set(category_keys)} or None on failure (caller falls
+    back to keyword behavior). A story can get MULTIPLE categories (e.g. a Hobe Sound
+    business opening is both 'business' and 'martin'). 'none' means the story does
+    not belong on the site (national fluff, out-of-area, syndicated filler).
+    """
+    # Collect unique stories from all feeds
+    seen = {}
+    for url, entries in feed_cache.items():
+        for e in entries[:15]:
+            title = sanitize_text((e.get("title") or "").strip())
+            if not title or title.lower() in seen:
+                continue
+            summary = ""
+            try:
+                summary = extract_rss_text(e)[:300]
+            except Exception:
+                pass
+            seen[title.lower()] = {"title": title, "summary": summary}
+
+    stories = list(seen.values())
+    if not stories:
+        return None
+
+    # Cap the batch to keep the call reasonable; freshest-first ordering is
+    # preserved by feed order. 120 covers a typical run's unique stories.
+    stories = stories[:120]
+
+    listing = "\n".join(
+        f"{i+1}. {s['title']}" + (f" — {s['summary'][:140]}" if s['summary'] else "")
+        for i, s in enumerate(stories)
+    )
+
+    prompt = (
+        "You classify stories for Treasure Coast Today, a hyperlocal news site covering "
+        "Martin County, St. Lucie County, and Indian River County, Florida (the Treasure Coast). "
+        "Palm Beach County, Miami, Orlando etc. are OUTSIDE the coverage area.\n\n"
+        "Categories:\n"
+        "- local_gov: city/county government, schools, budgets, ordinances, public meetings IN the three counties\n"
+        "- crime: crime, arrests, courts, fires, crashes, drug enforcement, public safety affecting the three counties "
+        "(including threats spreading INTO the area from elsewhere)\n"
+        "- business: local business openings/closings, development, real estate, economy IN the three counties\n"
+        "- sports: local sports (St. Lucie Mets, high schools) AND major sports news of broad interest\n"
+        "- things_to_do: local events, festivals, restaurants, recreation in the three counties\n"
+        "- florida: statewide Florida news including state politics, laws, insurance, DeSantis, elections\n"
+        "- martin / st_lucie / indian_river: stories specifically tied to that county (assign IN ADDITION "
+        "to a topic category when a story is clearly about a place in that county)\n"
+        "- none: does NOT belong on this site — national/world news with no Florida or local angle, "
+        "syndicated lifestyle/survey filler, stories solely about other Florida regions with no Treasure Coast relevance\n\n"
+        "Rules:\n"
+        "- A story can have multiple categories (e.g. a Stuart restaurant opening = business + martin + things_to_do)\n"
+        "- Statewide political stories (campaigns, fundraising, primaries) = florida ONLY, never local_gov\n"
+        "- A story about a threat/trend spreading INTO the Treasure Coast from outside IS relevant (crime/florida as fits)\n"
+        "- Feel-good human interest about a local person = the county + the closest topic fit\n"
+        "- When in doubt between none and a category, prefer none for non-local content; this is a LOCAL site\n\n"
+        f"Stories:\n{listing}\n\n"
+        "Return ONLY a JSON object mapping story number to an array of category keys, e.g.\n"
+        '{"1": ["crime", "martin"], "2": ["none"], "3": ["florida"]}\n'
+        "Every story number must appear. No other text."
+    )
+
+    try:
+        resp = client.messages.create(
+            model=MODEL_SELECTION,
+            max_tokens=3000,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        raw = resp.content[0].text.strip()
+        if raw.startswith("```"):
+            raw = raw.split("```")[1].lstrip("json").strip()
+        mapping = json.loads(raw)
+    except Exception as e:
+        print(f"  Story classification failed ({e}); falling back to keyword filters")
+        return None
+
+    valid_keys = set(CATEGORIES.keys()) | {"none"}
+    result = {}
+    for i, s in enumerate(stories):
+        cats = mapping.get(str(i + 1), [])
+        if isinstance(cats, str):
+            cats = [cats]
+        cats = {c for c in cats if c in valid_keys}
+        if not cats:
+            cats = {"none"}
+        result[s["title"].lower()] = cats
+
+    n_none = sum(1 for v in result.values() if v == {"none"})
+    print(f"  Classified {len(result)} stories via LLM ({n_none} rejected as non-local)")
+    return result
+
+
 def main():
     print("Treasure Coast Today — building site...")
     image_bank   = build_image_bank()
@@ -4122,6 +4297,12 @@ def main():
                 f.cancel()
 
     print(f"  Feed cache: {sum(len(v) for v in feed_cache.values())} total entries across {len(feed_cache)} feeds")
+
+    # LLM classification pass: one batched call assigns categories to every story.
+    # Replaces piecemeal banned-word lists with comprehension. On failure, this is
+    # None and all filtering falls back to the keyword system automatically.
+    global STORY_CLASSIFICATION
+    STORY_CLASSIFICATION = classify_stories(feed_cache)
 
     for cat_key, cat_config in CATEGORIES.items():
         print(f"Processing: {cat_config['label']}...")
