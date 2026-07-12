@@ -2847,7 +2847,6 @@ def render_index(all_categories, top_cat):
         {nav_buttons}
         <a href="/weather.html" class="cat-btn" style="text-decoration:none">Weather</a>
         <a href="/archive.html" class="cat-btn" style="text-decoration:none">Archive</a>
-        <a href="/events.html" class="cat-btn" style="text-decoration:none">Events</a>
       </nav>
       <div class="header-actions">
         <a href="/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
@@ -3505,6 +3504,10 @@ def update_sitemap(archive_entries):
   <url>
     <loc>{SITE_URL}/advertise.html</loc>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>{SITE_URL}/contact.html</loc>
+    <priority>0.5</priority>
   </url>"""
 
     article_urls = ""
@@ -3769,7 +3772,6 @@ def _page_header(active=""):
         {cat_link("Indian River Co.", "/?cat=indian_river", "indian_river")}
         {cat_link("Weather", "/weather.html", "weather")}
         {cat_link("Archive", "/archive.html", "archive")}
-        {cat_link("Events", "/events.html", "events")}
       </nav>
       <div class="header-actions">
         <a href="/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
@@ -3787,10 +3789,9 @@ def _page_footer():
         <a href="/about.html">About</a>
         <a href="/weather.html">Weather</a>
         <a href="/archive.html">Archive</a>
-        <a href="/events.html">Events</a>
         <a href="/advertise.html">Advertise</a>
         <a href="/privacy.html">Privacy</a>
-        <a href="mailto:hello@treasurecoast.today">Contact</a>
+        <a href="/contact.html">Contact</a>
       </div>
     </div>
   </footer>
@@ -3841,55 +3842,6 @@ def render_about_page():
 </body>
 </html>"""
 
-
-def render_events_page():
-    head   = _page_head("Events — Treasure Coast Today", "Treasure Coast events coming soon.", "/events.html")
-    header = _page_header(active="events")
-    footer = _page_footer()
-    return f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-{head}
-  <style>
-    .cs-wrap {{ max-width: 600px; margin: 80px auto; padding: 0 24px; text-align: center; }}
-    .cs-eyebrow {{ font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 16px; }}
-    .cs-headline {{ font-family: 'Fraunces', serif; font-size: clamp(28px, 5vw, 44px); font-weight: 600; line-height: 1.15; color: var(--text); margin: 0 0 20px; }}
-    .cs-sub {{ font-size: 16px; color: var(--text-secondary); line-height: 1.65; margin: 0 0 40px; }}
-    .cs-form {{ display: flex; gap: 10px; max-width: 440px; margin: 0 auto 16px; }}
-    .cs-input {{ flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); outline: none; }}
-    .cs-input:focus {{ border-color: var(--accent); }}
-    .cs-btn {{ background: var(--accent); color: white; border: none; border-radius: 8px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; }}
-    .cs-fine {{ font-size: 12px; color: var(--text-secondary); }}
-    .cs-success {{ display: none; color: var(--accent); font-size: 15px; font-weight: 500; margin-top: 12px; }}
-  </style>
-</head>
-<body>
-{header}
-  <main>
-    <div class="cs-wrap">
-      <span class="cs-eyebrow">Coming Soon</span>
-      <h1 class="cs-headline">List your Treasure Coast event for free.</h1>
-      <p class="cs-sub">We're building a local events calendar. Leave your email and we'll notify you when it launches.</p>
-      <form class="cs-form" id="csForm" action="https://formspree.io/f/mqejrpdv" method="POST">
-        <input type="hidden" name="_subject" value="Events calendar interest">
-        <input class="cs-input" type="email" name="email" placeholder="your@email.com" required>
-        <button class="cs-btn" type="submit">Notify me</button>
-      </form>
-      <p class="cs-fine">No spam. Just a heads-up when the calendar is live.</p>
-      <p class="cs-success" id="csSuccess">You're on the list!</p>
-    </div>
-  </main>
-{footer}
-  <script>
-    const f=document.getElementById('csForm'),s=document.getElementById('csSuccess');
-    f.addEventListener('submit',async(e)=>{{
-      e.preventDefault();
-      const r=await fetch(f.action,{{method:'POST',body:new FormData(f),headers:{{'Accept':'application/json'}}}});
-      if(r.ok){{f.style.display='none';s.style.display='block';}}
-    }});
-  </script>
-</body>
-</html>"""
 
 
 def render_advertise_page():
@@ -4579,7 +4531,6 @@ def main():
     write_data_json(all_categories, top_cat)
 
     # Static pages
-    (OUTPUT_DIR / "events.html").write_text(render_events_page(), encoding="utf-8")
     (OUTPUT_DIR / "about.html").write_text(render_about_page(), encoding="utf-8")
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
     (OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat), encoding="utf-8")
