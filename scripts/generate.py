@@ -3754,6 +3754,15 @@ def _page_header(active=""):
         if key == active:
             return f'<span class="{cls}">{label}</span>'
         return f'<a href="{href}" class="{cls}" style="text-decoration:none">{label}</a>'
+
+    # Build the category links from CATEGORIES so these labels always match the
+    # homepage nav. Previously they were hardcoded abbreviations ("Crime",
+    # "Martin Co.") which drifted from the real labels ("Crime & Safety",
+    # "Martin County") shown on the homepage.
+    cat_links = "\n        ".join(
+        cat_link(cfg["label"], f"/?cat={key}", key)
+        for key, cfg in CATEGORIES.items()
+    )
     return f"""  <header>
     <div class="header-inner">
       <div class="header-top">
@@ -3761,15 +3770,7 @@ def _page_header(active=""):
       </div>
       <nav class="category-nav">
         {cat_link("Top News", "/", "news")}
-        {cat_link("Local Gov", "/?cat=local_gov", "local_gov")}
-        {cat_link("Crime", "/?cat=crime", "crime")}
-        {cat_link("Business", "/?cat=business", "business")}
-        {cat_link("Sports", "/?cat=sports", "sports")}
-        {cat_link("Things To Do", "/?cat=things_to_do", "things_to_do")}
-        {cat_link("Florida", "/?cat=florida", "florida")}
-        {cat_link("Martin Co.", "/?cat=martin", "martin")}
-        {cat_link("St. Lucie Co.", "/?cat=st_lucie", "st_lucie")}
-        {cat_link("Indian River Co.", "/?cat=indian_river", "indian_river")}
+        {cat_links}
         {cat_link("Weather", "/weather.html", "weather")}
         {cat_link("Archive", "/archive.html", "archive")}
       </nav>
