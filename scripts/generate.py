@@ -3555,7 +3555,14 @@ def update_news_sitemap(archive_entries):
 ARCHIVE_STOPS = {"the","a","an","in","of","for","to","and","or","on","at","is","was","are",
                  "were","that","this","with","from","have","been","after","over","into","says",
                  "said","will","than","more","also","when","s","county","florida","treasure",
-                 "coast","martin","lucie","indian","river","beach","port","city","news"}
+                 "coast","martin","lucie","indian","river","beach","port","city","news",
+                 # Town-name tokens are geography, not story identity. Without these,
+                 # any two Hobe Sound stories share 2 free tokens and need only 2
+                 # generic words ("rising costs") to falsely merge — which is how an
+                 # Aldi story overwrote a food-pantry story's URL. The location-
+                 # conflict guard still uses full place phrases and is unaffected.
+                 "hobe","sound","stuart","vero","pierce","jensen","sebastian",
+                 "salerno","fellsmere","indiantown","tradition","jupiter","hutchinson"}
 
 def _sig_tokens(text):
     return frozenset(w.lower().strip(".,;:()") for w in text.split()
