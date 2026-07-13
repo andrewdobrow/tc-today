@@ -800,14 +800,23 @@ def _hero_eligible(category_key, h):
     # is 'none'. The keyword logic below remains as the fallback when the
     # classification call failed this run.
     if STORY_CLASSIFICATION is not None:
-        _lookup = title or (h.get("headline", "") or "").lower()
-        cats = STORY_CLASSIFICATION.get(_lookup)
-        if cats is not None:
-            if "none" in cats and len(cats) == 1:
-                return False
-            return category_key in cats
-        # Story not in the classification map (e.g. custom article or generated
-        # headline differing from the RSS title) — fall through to keyword logic.
+        # Look up by the ORIGINAL RSS title first. Generated heroes/cards carry it in
+        # source_title; raw feed items have it in title. The rewritten headline is a
+        # last resort — it will usually miss, since the map is keyed on RSS titles.
+        for _key in (
+            (h.get("source_title", "") or "").lower(),
+            title,
+            (h.get("headline", "") or "").lower(),
+        ):
+            if not _key:
+                continue
+            cats = STORY_CLASSIFICATION.get(_key)
+            if cats is not None:
+                if "none" in cats and len(cats) == 1:
+                    return False
+                return category_key in cats
+        # Story not in the classification map (e.g. a custom article) — fall through
+        # to keyword logic below.
 
     # Outside-coverage-area block: WPTV serves Palm Beach County and the wider
     # South Florida market, which is NOT the Treasure Coast. If a story is clearly
@@ -1456,6 +1465,12 @@ Return ONLY valid JSON:
                 item["source_quality"] = source.get("source_quality", "")
                 item["source_type"] = source.get("source_type", "")
                 item["article_text"] = source.get("article_text", "")
+                # Carry the ORIGINAL RSS title through. The generated headline is a
+                # rewrite and will not be found in STORY_CLASSIFICATION (which is keyed
+                # on RSS titles), so without this the eligibility guard falls back to
+                # keyword logic and rejects stories the classifier already approved —
+                # which is what was emptying whole categories of their heroes.
+                item["source_title"] = source.get("title", "")
             except (IndexError, ValueError, TypeError):
                 item["link"]      = ""
                 item["image_url"] = ""
@@ -1719,6 +1734,10 @@ Return ONLY valid JSON:
     # categories: topic categories require topic match, counties require geographic
     # match (both handled inside _hero_eligible).
     if True:
+        # Keep a copy BEFORE the eligibility filter. If every card gets filtered out
+        # and the hero is rejected too, the section would be dropped despite having
+        # had real content — so the last-resort promotion below falls back to this.
+        _cards_before_filter = list(data.get("cards", []))
         # Drop cards that don't belong in this category
         if data.get("cards"):
             data["cards"] = [c for c in data["cards"] if _hero_eligible(category_key, c)]
@@ -1781,6 +1800,25 @@ Return ONLY valid JSON:
                             break
                     except Exception as _ex:
                         print(f"  County archive fallback failed: {_ex}")
+                if not _fixed:
+                    # LAST RESORT: if this category has ANY cards, one of them becomes
+                    # the hero. A section with cards but no hero is never correct — it
+                    # is what happens when the guards above reject a hero that the
+                    # classifier already approved. Promote the highest-urgency card
+                    # rather than dropping a section that plainly has content.
+                    _cards = data.get("cards", []) or _cards_before_filter
+                    if _cards:
+                        _best_i = max(
+                            range(len(_cards)),
+                            key=lambda i: int(_cards[i].get("urgency_score", 0) or 0),
+                        )
+                        _best = _cards[_best_i]
+                        data["hero"] = _best
+                        data["cards"] = _cards[:_best_i] + _cards[_best_i + 1:]
+                        print(f"  Promoting highest-urgency card to hero for {category_label}: "
+                              f"'{_best.get('headline','')[:50]}'")
+                        _fixed = True
+
                 if not _fixed:
                     print(f"  Dropping {category_label}: no eligible hero available")
                     data["_drop_category"] = True
