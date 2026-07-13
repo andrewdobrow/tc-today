@@ -1769,8 +1769,8 @@ Return ONLY valid JSON:
                                 "teaser": e.get("teaser",""),
                                 "body": e.get("teaser",""),
                                 "image_url": e.get("image_url",""),
-                                "published": e.get("date",""),
-                                "published_raw": e.get("date",""),
+                                "published": e.get("lastmod") or e.get("date",""),
+                                "published_raw": e.get("lastmod") or e.get("date",""),
                                 "enriched": True,
                                 "urgency_score": 4,
                                 "link": f"{SITE_URL}/articles/{e['slug']}.html",
@@ -2367,7 +2367,7 @@ def promote_duplicate_heroes(top_cat, all_categories):
         if len(htok) < 3:
             return False
         for ctok in claimed_tokens:
-            if _token_overlap(htok, ctok) >= 4:
+            if _same_story(htok, ctok):
                 return True
         return False
 
@@ -2633,8 +2633,8 @@ def render_index(all_categories, top_cat):
             "cat_label":  e.get("category_label", ""),
             "cat_key":    e.get("category_key", ""),
             "image_url":  e.get("image_url", ""),
-            "published":  e.get("date", ""),
-            "published_raw": e.get("date", ""),
+            "published":  e.get("lastmod") or e.get("date", ""),
+            "published_raw": e.get("lastmod") or e.get("date", ""),
             "enriched":   True,
             "urgency_score": 4,  # Backfill ranks below fresh cards
             "link":       f"{SITE_URL}/articles/{e['slug']}.html",
@@ -2828,7 +2828,9 @@ def render_index(all_categories, top_cat):
 
     _head   = _page_head(
         "Treasure Coast Today | Local News for Martin, St. Lucie & Indian River County",
-        "Local news for the Treasure Coast. Updated 4 times daily.",
+        "Local news for Florida's Treasure Coast. Breaking news, crime, local government, "
+        "business, sports and weather for Stuart, Port St. Lucie, Fort Pierce, Vero Beach, "
+        "Jensen Beach and Hobe Sound.",
     )
     _footer = _page_footer()
 
@@ -3582,6 +3584,18 @@ def _stem(w):
     return w
 
 
+# Words that describe PEOPLE or generic framing rather than the EVENT itself.
+# Two stories sharing only these ("teen", "youth", "year", "southeast") are not the
+# same story — a June award and a July World Cup trip about the same kid share all
+# this boilerplate and none of the substance. A match must rest on distinctive words.
+GENERIC_TOKENS = {
+    "teen", "youth", "year", "years", "resident", "residents", "local", "woman",
+    "man", "girl", "boy", "student", "students", "first", "named", "becomes",
+    "become", "region", "people", "family", "home", "community", "area", "time",
+    "week", "days", "gets", "sets", "takes", "make", "makes", "could", "would",
+}
+
+
 def _token_overlap(tok_a, tok_b):
     """Count shared tokens, treating word variants as matches. Handles:
       - stem equality (hits/hitting, seizes/seized)
@@ -3610,12 +3624,42 @@ def _token_overlap(tok_a, tok_b):
                 break
     return count
 
+
+def _shared_tokens(tok_a, tok_b):
+    """The actual shared tokens (variant-aware), not just the count."""
+    shared = []
+    used = set()
+    for a in tok_a:
+        sa = _stem(a)
+        for b in tok_b:
+            if b in used:
+                continue
+            sb = _stem(b)
+            short, long_ = (sa, sb) if len(sa) <= len(sb) else (sb, sa)
+            if sa == sb or (len(short) >= 4 and long_.startswith(short)):
+                shared.append(a)
+                used.add(b)
+                break
+    return shared
+
+
+def _same_story(tok_a, tok_b, threshold=4):
+    """Two stories are the same only if they share enough tokens AND at least two of
+    those are DISTINCTIVE (not generic people/boilerplate words). Counting alone lets
+    'teen'+'youth'+'year'+'southeast' merge a June award story with a July World Cup
+    trip about the same kid, absorbing genuinely new news into a stale article."""
+    shared = _shared_tokens(tok_a, tok_b)
+    if len(shared) < threshold:
+        return False
+    distinctive = [t for t in shared if t not in GENERIC_TOKENS]
+    return len(distinctive) >= 2
+
 def _is_duplicate_headline(headline, existing_token_sets):
     new_tok = _sig_tokens(headline)
     if len(new_tok) < 3:
         return False
     for ex_tok in existing_token_sets:
-        if _token_overlap(new_tok, ex_tok) >= 4:
+        if _same_story(new_tok, ex_tok):
             return True
     return False
 
@@ -3692,7 +3736,7 @@ def find_matching_entry(headline, archive, source_url="", is_weather_alert=False
         # only alerts, a regular article matches only regular articles.
         if bool(entry.get("is_weather_alert")) != bool(is_weather_alert):
             continue
-        if _token_overlap(tok, _sig_tokens(entry["headline"])) >= 4:
+        if _same_story(tok, _sig_tokens(entry["headline"])):
             # Location-conflict guard. If the new story names a specific county, the
             # matched story must share that county to be considered the same story.
             # This keeps a county-specific story ("immigration arrests in Martin
@@ -3800,7 +3844,7 @@ def _page_footer():
 
 
 def render_about_page():
-    head   = _page_head("About — Treasure Coast Today", "Treasure Coast Today delivers local news for Martin, St. Lucie, and Indian River counties four times a day.", "/about.html")
+    head   = _page_head("About | Treasure Coast Today", "Treasure Coast Today is a local news source covering Martin, St. Lucie, and Indian River counties, Florida. Local government, crime, business, sports and weather for the Treasure Coast.", "/about.html")
     header = _page_header(active="about")
     footer = _page_footer()
     return f"""<!DOCTYPE html>
@@ -3898,11 +3942,11 @@ def render_advertise_page():
     <div class="adv-wrap">
       <span class="adv-eyebrow">Advertising</span>
       <h1 class="adv-headline">Reach the Treasure Coast every day.</h1>
-      <p class="adv-sub">Treasure Coast Today delivers local news to Martin, St. Lucie, and Indian River County residents four times daily. Your business appears alongside stories they actually read.</p>
+      <p class="adv-sub">Treasure Coast Today delivers local news to Martin, St. Lucie, and Indian River County residents throughout the day, every day. Your business appears alongside stories they actually read.</p>
       <div class="adv-stats">
         <div class="adv-stat"><span class="adv-stat-num">706K+</span><span class="adv-stat-label">Residents across Martin, St. Lucie &amp; Indian River counties</span></div>
-        <div class="adv-stat"><span class="adv-stat-num">100%</span><span class="adv-stat-label">No paywall — every reader sees your ad, every time</span></div>
-        <div class="adv-stat"><span class="adv-stat-num">Top 5</span><span class="adv-stat-label">Fastest-growing metro in the U.S. — new residents every day</span></div>
+        <div class="adv-stat"><span class="adv-stat-num">100%</span><span class="adv-stat-label">No paywall. Every reader sees your ad, every time</span></div>
+        <div class="adv-stat"><span class="adv-stat-num">Top 5</span><span class="adv-stat-label">Fastest-growing metro in the U.S. with new residents every day</span></div>
       </div>
       <hr class="adv-divider">
       <h2 class="adv-form-title">Tell us about your business</h2>
@@ -4023,6 +4067,57 @@ def write_data_json(all_categories, top_cat):
     print("  data.json written")
 
 
+def confirm_same_story(new_headline, new_teaser, existing_entry):
+    """Final gate before OVERWRITING a published permalink.
+
+    Overwriting is the one destructive, irreversible operation here: the existing
+    article's content is replaced, and its URL (already in RSS, already shared to
+    Nextdoor/Facebook) then serves different content. Token heuristics have merged
+    stories they should not have: a June award and a July World Cup trip about the
+    same teen; a food-pantry story and an Aldi opening that shared only geography.
+
+    So before any overwrite, the model decides: is this the SAME news event (a real
+    update), or a DIFFERENT event that merely shares words, people, or a location?
+
+    Fails safe. On any error this returns False, so a new article is created rather
+    than overwriting. A duplicate article is recoverable; a hijacked permalink is not.
+    """
+    old_headline = existing_entry.get("headline", "")
+    old_teaser   = existing_entry.get("teaser", "")
+
+    prompt = (
+        "Two news items from a local Florida news site. Decide whether they report the "
+        "SAME news event (so the second is an update of the first and should replace it), "
+        "or DIFFERENT events that merely share words, people, or a location.\n\n"
+        f"EXISTING ARTICLE:\nHeadline: {old_headline}\nSummary: {old_teaser[:250]}\n\n"
+        f"NEW STORY:\nHeadline: {new_headline}\nSummary: {(new_teaser or '')[:250]}\n\n"
+        "SAME event examples: a store 'opening soon' then 'now open'; a game recap "
+        "reworded; a suspect 'sought' then 'arrested' for the same crime; a storm watch "
+        "upgraded to a warning.\n"
+        "DIFFERENT event examples: the same person winning an award in June and taking a "
+        "trip in July; two separate crimes in the same town; two different businesses on "
+        "the same street; a local arrest versus a statewide policy story on the same topic.\n\n"
+        "If they are different events, the existing article must NOT be overwritten.\n"
+        "Answer with only one word: SAME or DIFFERENT."
+    )
+
+    try:
+        resp = client.messages.create(
+            model=MODEL_SELECTION,
+            max_tokens=10,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        answer = resp.content[0].text.strip().upper()
+        same = answer.startswith("SAME")
+        if not same:
+            print(f"    Overwrite blocked (different event): '{new_headline[:42]}' "
+                  f"vs '{old_headline[:42]}'")
+        return same
+    except Exception as e:
+        print(f"    Overwrite check failed ({e}); creating new article instead")
+        return False
+
+
 def write_archives(all_categories, top_cat):
     articles_dir = OUTPUT_DIR / "articles"
     archive_path = OUTPUT_DIR / "archive.json"
@@ -4057,6 +4152,21 @@ def write_archives(all_categories, top_cat):
 
         source_url = hero.get("link", "")
         existing   = find_matching_entry(headline, archive, source_url, is_weather_alert=bool(hero.get("is_weather_alert")))
+
+        # FINAL GATE BEFORE OVERWRITING A PUBLISHED PERMALINK.
+        # find_matching_entry uses token heuristics, which have wrongly merged distinct
+        # stories and destroyed live URLs. Before replacing the content at an existing
+        # URL, have the model confirm it is genuinely the same news event.
+        #
+        # Skipped when:
+        #   - the headline is unchanged (definitionally the same story, no risk), or
+        #   - it is a weather alert (matched on a stable event key, not fuzzy tokens).
+        # On refusal, existing is cleared -> a NEW article is created at a new URL and
+        # the published one is left intact.
+        if existing and not hero.get("is_weather_alert"):
+            if (existing.get("headline", "").strip().lower() != headline.strip().lower()):
+                if not confirm_same_story(headline, hero.get("teaser", "") or hero.get("body", "")[:250], existing):
+                    existing = None
 
         # Skip cross-category duplicates within the same run
         if not existing and _is_duplicate_headline(headline, this_run_token_sets):
