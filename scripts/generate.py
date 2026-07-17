@@ -1864,9 +1864,29 @@ def make_paragraphs(text):
         paragraphs = text.split("\n")
 
     def _inline(s):
-        # Convert **bold** to <strong> (applied AFTER strip_markdown, so custom
-        # articles must use a marker strip_markdown won't remove — see below).
-        return re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
+        # Links first (before bold), so URLs inside markdown link syntax are handled
+        # cleanly. Supports [text](url) markdown links and bare http(s) URLs. Applies
+        # to every article rendered through make_paragraphs, custom or generated.
+        # 1. Markdown links: [label](https://url) or [label](mailto:addr)
+        s = re.sub(
+            r'\[([^\]]+)\]\(((?:https?://|mailto:)[^)\s]+)\)',
+            r'<a href="\2" rel="noopener">\1</a>',
+            s,
+        )
+        # Add target=_blank to http(s) links only (mailto opens the mail client)
+        s = re.sub(
+            r'<a href="(https?://[^"]+)" rel="noopener">',
+            r'<a href="\1" target="_blank" rel="noopener">',
+            s,
+        )
+        # 2. Bare URLs not already inside an anchor tag
+        def _bare(m):
+            url = m.group(0)
+            return f'<a href="{url}" target="_blank" rel="noopener">{url}</a>'
+        s = re.sub(r'(?<!["\'>])(https?://[^\s<]+)', _bare, s)
+        # 3. Bold
+        s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
+        return s
 
     out = []
     for p in paragraphs:
@@ -3326,6 +3346,8 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-body .article-section {{ font-family: "Fraunces", serif; font-size: 24px; font-weight: 600; color: var(--text); margin: 36px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }}
     .article-body .article-subhead {{ font-size: 18px; font-weight: 700; color: var(--text); margin: 26px 0 8px; }}
     .article-body strong {{ color: var(--text); font-weight: 700; }}
+    .article-body a {{ color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }}
+    .article-body a:hover {{ text-decoration: none; }}
     .article-share {{ margin: 36px 0 8px; padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }}
     .article-share-label {{ display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 12px; text-transform: uppercase; letter-spacing: .05em; }}
     .article-share-btns {{ display: flex; flex-wrap: wrap; gap: 10px; }}
