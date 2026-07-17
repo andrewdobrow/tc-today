@@ -4193,6 +4193,34 @@ def write_archives(all_categories, top_cat):
                 continue
             all_articles.append((cat["category_key"], cat["category_label"], card))
 
+    # A story classified into multiple categories (e.g. a Hobe Sound business opening
+    # is both Business and Martin County) appears once per category in all_articles,
+    # each writing to the SAME slug. Whichever is processed last wins — which meant the
+    # later category could overwrite a good page with its own version that lacked the
+    # real image and carried the wrong category label. Deduplicate by slug, keeping the
+    # BEST copy: prefer one with a real (non-fallback) image, then the hero over a card.
+    def _slug_key(headline):
+        return re.sub(r"[^a-z0-9 ]", "", (headline or "").lower()).strip()[:60]
+
+    def _copy_rank(entry):
+        _ck, _cl, item = entry
+        has_real_img = 1 if (item.get("image_url") and not item.get("image_from_google")) else 0
+        is_hero_copy = 1 if item.get("_is_hero_copy") else 0
+        return (has_real_img, is_hero_copy)
+
+    # Tag hero copies so the ranker can prefer them
+    for _ck, _cl, _item in heroes:
+        _item["_is_hero_copy"] = True
+
+    _best_by_slug = {}
+    for entry in all_articles:
+        k = _slug_key(entry[2].get("headline", ""))
+        if not k:
+            continue
+        if k not in _best_by_slug or _copy_rank(entry) > _copy_rank(_best_by_slug[k]):
+            _best_by_slug[k] = entry
+    all_articles = list(_best_by_slug.values())
+
     for cat_key, cat_label, hero in all_articles:
         headline = hero.get("headline", "").strip()
         if not headline:
