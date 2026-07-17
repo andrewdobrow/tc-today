@@ -793,18 +793,6 @@ def _hero_eligible(category_key, h):
     if quality in {"thin", "discovery_only"}:
         return False
 
-    # Competitor-branding guard: a headline that names a rival local outlet (or is a
-    # profile of its staff) must never LEAD a page — that hands a competitor a banner
-    # on our own site. WPTV etc. are fine as story SOURCES; the block is on their brand
-    # or their people appearing in the headline of a hero. Cards are unaffected. Kept
-    # to LOCAL outlets so national-network mentions ("team appears on ABC") aren't hit.
-    _competitor_brands = [
-        "wptv", "wpbf", "cbs12", "cbs 12", "wflx", "newschannel 5",
-        "channel 5 weather", "tcpalm", "treasure coast newspapers", "hometown news",
-    ]
-    _hero_headline = (h.get("headline", "") or h.get("title", "") or "").lower()
-    if _has_any(_hero_headline, _competitor_brands):
-        return False
 
     # PRIMARY PATH: LLM classification. When available, the per-story category
     # assignment decides eligibility — it understands content instead of matching
