@@ -1557,10 +1557,11 @@ Return ONLY valid JSON:
                     swapped = True
                     break
             if not swapped:
-                # No content in this category actually matches the category topic.
-                # Mark it for removal rather than showing an off-topic hero.
-                print(f"  Dropping {category_label}: hero and all cards are off-topic for this category")
-                data["_drop_category"] = True
+                # Nothing swapped here, but do NOT drop yet: the final guard below has
+                # the full recovery cascade (card swap, county archive fallback, and
+                # highest-urgency promotion). Dropping this early was killing sections
+                # that the later safety nets would have saved.
+                print(f"  Category guard: no eligible swap found for {category_label}; deferring to final guard")
 
     # Age-based score decay for stale non-breaking stories
     def decay_score(item):
@@ -1819,7 +1820,9 @@ Return ONLY valid JSON:
                               f"'{_best.get('headline','')[:50]}'")
                         _fixed = True
 
-                if not _fixed:
+                if _fixed:
+                    data["_drop_category"] = False  # a hero was recovered; never keep a stale drop flag
+                else:
                     print(f"  Dropping {category_label}: no eligible hero available")
                     data["_drop_category"] = True
 
@@ -2427,6 +2430,13 @@ def promote_duplicate_heroes(top_cat, all_categories):
                 cat["cards"] = cat["cards"][:ci] + cat["cards"][ci+1:]
                 claimed_tokens.append(_sig_tokens(card.get("headline","")))
                 print(f"  Dedup: promoted next card to hero for {cat['category_label']} (duplicate hero)")
+            elif cat["category_key"] in COUNTY_KEYS:
+                # County pages may share a hero with a topic category: a Hobe Sound
+                # business opening legitimately leads BOTH Business and Martin County
+                # (the user's stories-can-appear-in-both rule). Keep the shared hero
+                # rather than emptying the county page.
+                print(f"  Dedup: keeping shared hero for {cat['category_label']} (county may mirror a topic hero)")
+                claimed_tokens.append(_sig_tokens(h))
             else:
                 cat["_drop_category"] = True
                 print(f"  Dedup: dropping {cat['category_label']} (hero duplicate, no alternative card)")
