@@ -2658,23 +2658,16 @@ def render_index(all_categories, top_cat):
         return f"""
     <section class="hero{fade}" data-cat-hero="{cat_key}"{display}>
       {section_label}
-      <div class="hero-inner">
+      <a class="hero-inner hero-link" href="{article_url}" style="text-decoration:none;color:inherit;display:block">
         {img_html}
         <span class="tag">{cat_label}</span>
         <h1>{hero["headline"]}</h1>
         <p class="hero-summary">{preview}...</p>
         <div class="hero-foot">
           <span class="meta">{pub_time}</span>
-          <button class="expand-btn" onclick="toggleExpand(this)">Continue reading &darr;</button>
+          <span class="hero-readmore">Read full story &rarr;</span>
         </div>
-        <div class="article-expand hero-expand">
-          <div class="hero-expand-body">{paragraphs}</div>
-          <div class="article-actions">
-            <button class="share-btn" data-headline="{hl_escaped}" data-url="{article_url}" onclick="shareArticle(this)">Share &#8599;</button>
-            <button class="collapse-btn" onclick="collapseThis(this)">Close &uarr;</button>
-          </div>
-        </div>
-      </div>
+      </a>
     </section>"""
 
     heroes_html = hero_section("all", top_cat["category_label"], top_cat["hero"], visible=True)
@@ -3257,6 +3250,33 @@ def load_archive(archive_path):
 
 def render_article_page(hero, category_label, category_key, pub_date, slug, related=None):
     """Render a permanent article page for a single TCT story."""
+    # Published + updated timestamps for the byline area. Prefer the article's real
+    # first-published time; fall back to the pub_date passed in. "Updated" only shows
+    # when it differs from published (a genuinely revised story).
+    def _fmt_full(raw):
+        # "July 18, 2026 at 3:45 PM ET" from an RFC-822 string; falls back to raw.
+        try:
+            from email.utils import parsedate_to_datetime
+            from datetime import timezone as _tz, timedelta as _td
+            et = _tz(_td(hours=-4))
+            dt = parsedate_to_datetime(raw).astimezone(et)
+            hour = dt.hour % 12 or 12
+            ampm = "AM" if dt.hour < 12 else "PM"
+            months = ["January","February","March","April","May","June","July",
+                      "August","September","October","November","December"]
+            return f"{months[dt.month-1]} {dt.day}, {dt.year} at {hour}:{dt.strftime('%M')} {ampm} ET"
+        except Exception:
+            return raw or ""
+    _pub_raw = hero.get("first_published") or hero.get("published_raw") or hero.get("published", "")
+    _upd_raw = hero.get("lastmod_raw") or ""
+    _pub_display = _fmt_full(_pub_raw) if _pub_raw else pub_date
+    _updated_html = ""
+    if _upd_raw:
+        _upd_display = _fmt_full(_upd_raw)
+        # Only show "Updated" if it's a different calendar day/time than published
+        if _upd_display and _upd_display != _pub_display:
+            _updated_html = f'<span class="article-updated">Updated {_upd_display}</span>'
+
     description = (hero.get("teaser") or hero.get("body", "")[:155]).replace('"', '')
     # Only use images from reliable/stable sources for og:image
     # Hotlinked CDN images from Google News or unknown sources may break on social sharing
@@ -3270,8 +3290,13 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         "headline": hero.get("headline", ""),
         "description": description,
         "image":    image_url,
-        "datePublished": pub_date,
-        "author":    {"@type": "Organization", "name": SITE_NAME},
+        "datePublished": _pub_raw or pub_date,
+        "dateModified":  _upd_raw or _pub_raw or pub_date,
+        "author":    {
+            "@type": "Person",
+            "name":  "Andrew Dobrow",
+            "url":   f"{SITE_URL}/author/andrew-dobrow.html",
+        },
         "publisher": {
             "@type": "Organization",
             "name":  SITE_NAME,
@@ -3363,9 +3388,15 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
 {head}
   <style>
     .article-wrap {{ max-width: 740px; margin: 0 auto; padding: 20px 24px 80px; }}
-    .article-meta {{ display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }}
+    .article-meta {{ display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }}
     .article-category {{ font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }}
     .article-date {{ font-size: 11px; color: var(--text-muted); }}
+    .article-byline {{ font-size: 13px; color: var(--text-secondary); }}
+    .article-byline a {{ color: var(--text); font-weight: 600; text-decoration: none; }}
+    .article-byline a:hover {{ text-decoration: underline; }}
+    .article-times {{ display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }}
+    .article-published, .article-updated {{ font-size: 12px; color: var(--text-muted); }}
+    .article-updated {{ font-style: italic; }}
     .article-headline {{ font-family: "Fraunces", serif; font-size: clamp(26px, 4vw, 42px); font-weight: 600; line-height: 1.15; letter-spacing: -.02em; color: var(--text); margin-bottom: 24px; }}
     .article-hero-image {{ margin: 0 0 28px; }}
     .article-hero-image img {{ width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px; display: block; }}
@@ -3404,7 +3435,10 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     <div class="article-wrap">
       <div class="article-meta">
         <span class="article-category">{category_label}</span>
-        <span class="article-date">{pub_date}</span>
+        <span class="article-byline">By <a href="/author/andrew-dobrow.html" rel="author">Andrew Dobrow</a></span>
+      </div>
+      <div class="article-times">
+        <span class="article-published">Published {_pub_display}</span>{_updated_html}
       </div>
       <h1 class="article-headline">{hero["headline"]}</h1>
       {img_html}
@@ -3629,6 +3663,10 @@ def update_sitemap(archive_entries):
   <url>
     <loc>{SITE_URL}/contact.html</loc>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>{SITE_URL}/author/andrew-dobrow.html</loc>
+    <priority>0.6</priority>
   </url>"""
 
     article_urls = ""
@@ -3951,6 +3989,7 @@ def _page_footer():
       <span class="footer-tagline">Local news for Martin, St. Lucie &amp; Indian River counties.</span>
       <div class="footer-links">
         <a href="/about.html">About</a>
+        <a href="/author/andrew-dobrow.html">Author</a>
         <a href="/weather.html">Weather</a>
         <a href="/archive.html">Archive</a>
         <a href="/advertise.html">Advertise</a>
@@ -3960,6 +3999,80 @@ def _page_footer():
     </div>
   </footer>
   <script src="/main.js"></script>"""
+
+
+def render_author_page():
+    author_schema = {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Andrew Dobrow",
+        "jobTitle": "Founder and Publisher",
+        "url": f"{SITE_URL}/author/andrew-dobrow.html",
+        "email": "hello@treasurecoast.today",
+        "worksFor": {
+            "@type": "Organization",
+            "name": SITE_NAME,
+            "url": SITE_URL,
+        },
+        "knowsAbout": [
+            "Local government", "Public safety", "Development", "Education",
+            "Sports", "Community events", "Martin County Florida",
+            "St. Lucie County Florida", "Indian River County Florida",
+        ],
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Hobe Sound",
+            "addressRegion": "FL",
+            "addressCountry": "US",
+        },
+    }
+    head   = _page_head(
+        "Andrew Dobrow, Founder and Publisher | Treasure Coast Today",
+        "Andrew Dobrow is the founder and publisher of Treasure Coast Today, an independent local news outlet serving Martin, St. Lucie and Indian River counties, Florida.",
+        "/author/andrew-dobrow.html",
+        structured_data=author_schema,
+    )
+    header = _page_header()
+    footer = _page_footer()
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{head}
+  <style>
+    .author-wrap {{ max-width: 720px; margin: 56px auto 80px; padding: 0 24px; }}
+    .author-eyebrow {{ font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; display: block; }}
+    .author-name {{ font-family: 'Fraunces', serif; font-size: clamp(30px, 5vw, 44px); font-weight: 600; line-height: 1.1; color: var(--text); margin: 0 0 6px; letter-spacing: -.02em; }}
+    .author-role {{ font-size: 15px; color: var(--text-muted); margin: 0 0 28px; }}
+    .author-body {{ font-size: 16px; color: var(--text-secondary); line-height: 1.75; }}
+    .author-body p {{ margin: 0 0 20px; }}
+    .author-body a {{ color: var(--accent); font-weight: 500; text-decoration: none; }}
+    .author-body a:hover {{ text-decoration: underline; }}
+    .author-divider {{ border: none; border-top: 1px solid var(--border); margin: 36px 0; }}
+    .author-contact-card {{ background: var(--bg-secondary); border-radius: 12px; padding: 22px 24px; font-size: 15px; color: var(--text-secondary); }}
+    .author-contact-card strong {{ color: var(--text); }}
+  </style>
+</head>
+<body>
+{header}
+  <main>
+    <div class="author-wrap">
+      <span class="author-eyebrow">Author</span>
+      <h1 class="author-name">Andrew Dobrow</h1>
+      <p class="author-role">Founder and Publisher, Treasure Coast Today</p>
+      <div class="author-body">
+        <p>Andrew Dobrow is the founder and publisher of Treasure Coast Today, an independent local news outlet serving Martin, St. Lucie and Indian River counties.</p>
+        <p>Based in Hobe Sound, Andrew focuses on timely, useful coverage of the issues that affect Treasure Coast residents, including local government, public safety, development, schools, sports, community events and breaking news. He created Treasure Coast Today to give readers a fast, accessible source for local reporting without unnecessary sensationalism or clutter.</p>
+        <p>Andrew is committed to building stronger connections between residents, public agencies, local organizations and businesses throughout the Treasure Coast.</p>
+        <hr class="author-divider">
+        <div class="author-contact-card">
+          <strong>Get in touch.</strong> Readers can reach Andrew at <a href="mailto:hello@treasurecoast.today">hello@treasurecoast.today</a> with story tips, questions, or feedback.
+        </div>
+      </div>
+    </div>
+  </main>
+{footer}
+</body>
+</html>"""
 
 
 def render_about_page():
@@ -4353,6 +4466,9 @@ def write_archives(all_categories, top_cat):
         if existing:
             # Same story — update existing page in place, keep original URL
             slug = existing["slug"]
+            # Byline timestamps: keep the original first-published, mark updated as now.
+            hero["first_published"] = existing.get("first_published") or existing.get("date", "")
+            hero["lastmod_raw"]     = _now_eastern_rfc822()
             _related = [e for e in archive
                         if e.get("category_key") == cat_key and e.get("slug") != slug]
             _related.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
@@ -4381,6 +4497,9 @@ def write_archives(all_categories, top_cat):
             counter = 1
             while slug in existing_slugs:
                 slug = f"{base_slug}-{counter}"; counter += 1
+            # Byline timestamp: brand-new article, first-published is now, no update yet.
+            hero["first_published"] = hero.get("first_published") or _now_eastern_rfc822()
+            hero["lastmod_raw"]     = ""
             _related = [e for e in archive
                         if e.get("category_key") == cat_key and e.get("slug") != slug]
             _related.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
@@ -4860,6 +4979,9 @@ def main():
 
     # Static pages
     (OUTPUT_DIR / "about.html").write_text(render_about_page(), encoding="utf-8")
+    _author_dir = OUTPUT_DIR / "author"
+    _author_dir.mkdir(exist_ok=True)
+    (_author_dir / "andrew-dobrow.html").write_text(render_author_page(), encoding="utf-8")
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
     (OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat), encoding="utf-8")
 
