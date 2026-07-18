@@ -4782,29 +4782,35 @@ def main():
                 print(f"  Custom force_hero: '{art['headline'][:50]}' -> {ckey}")
             else:
                 # A custom article is authoritative. If the feed generated its OWN
-                # version of the same story this run (as hero or a card), that feed
-                # version must be REPLACED by the custom one, not left sitting alongside
-                # it. Otherwise the page shows the feed hero while the permalink points
-                # to the custom article — the exact hero/card/permalink mismatch we hit.
+                # version of the same story this run, that feed version must be REPLACED
+                # by the custom one everywhere it appears — not just in the custom
+                # article's own category. The same story is often classified into
+                # multiple categories (e.g. a hazing investigation is crime AND
+                # st_lucie), so the feed can hero it in crime while the custom article
+                # only targets st_lucie, leaving the feed version to win the FRONT PAGE.
                 _art_tokens = _sig_tokens(art.get("headline", ""))
 
                 def _same_as_custom(item):
                     return item and _same_story(_art_tokens, _sig_tokens(item.get("headline", "")))
 
-                # Remove any feed cards that are the same story
-                if target.get("cards"):
-                    target["cards"] = [c for c in target["cards"] if not _same_as_custom(c)]
+                # Sweep EVERY category: drop feed cards that are this story, and if a
+                # feed hero in ANY category is this story, remove it (promote a card, or
+                # mark the category for the normal no-hero recovery path).
+                for _cat in all_categories:
+                    if _cat.get("cards"):
+                        _cat["cards"] = [c for c in _cat["cards"] if not _same_as_custom(c)]
+                    if _same_as_custom(_cat.get("hero")) and _cat is not target:
+                        # Feed's version of this story is heroing another category —
+                        # replace it with the next card, or clear it.
+                        _cards = _cat.get("cards", [])
+                        _cat["hero"] = _cards.pop(0) if _cards else None
+                        print(f"  Custom article displaced feed hero of same story in {_cat['category_key']}")
 
+                # Now place the custom article in its own category
                 _hero = target.get("hero")
-                if _hero is None:
-                    # No hero yet: custom becomes it
+                if _hero is None or _same_as_custom(_hero):
                     target["hero"] = art
-                elif _same_as_custom(_hero):
-                    # The feed's version of THIS story is the hero -> replace it outright
-                    target["hero"] = art
-                    print(f"  Custom article replaced feed hero for same story -> {ckey}")
                 else:
-                    # Different story is the hero: custom joins as a card
                     target.setdefault("cards", []).append(art)
                 print(f"  Custom article: '{art['headline'][:50]}' -> {ckey}")
 
