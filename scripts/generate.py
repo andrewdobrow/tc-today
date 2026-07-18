@@ -2839,7 +2839,12 @@ def render_index(all_categories, top_cat):
         img_url   = card.get("image_url", "")
         if not img_url:
             fb_img, _ = get_fallback_image(ck, card.get("headline", ""), sequential=True)
-            img_url   = fb_img or f"{SITE_URL}/og-{ck}.png"
+            # Never fall back to the og social-share image on-page. If the category
+            # fallback is somehow unavailable, use the generic top_news fallback, then
+            # a guaranteed local image — the og-*.png files are for social cards only.
+            if not fb_img:
+                fb_img, _ = get_fallback_image("top_news", card.get("headline", ""), sequential=True)
+            img_url = fb_img or f"{SITE_URL}/images/fallback/local_gov-1.jpg"
         topnews_attr = ' data-topnews="true"' if id(card) in topnews_ids else ""
         cards_html += f"""
       <a href="{permalink}" class="grid-card fade-in" data-cat="{ck}"{topnews_attr}>
@@ -3280,9 +3285,12 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     img_html   = ""
     _art_img   = hero.get("image_url", "")
     if not _art_img:
-        # No real image — use the category fallback so the page isn't text-only
+        # No real image — use the category fallback so the page isn't text-only.
+        # Never use the og-*.png social-share image here; those are for social cards.
         _fb, _ = get_fallback_image(category_key, hero.get("headline", ""))
-        _art_img = _fb or f"{SITE_URL}/og-{category_key}.png"
+        if not _fb:
+            _fb, _ = get_fallback_image("top_news", hero.get("headline", ""))
+        _art_img = _fb or f"{SITE_URL}/images/fallback/local_gov-1.jpg"
     if _art_img:
         credit   = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
         img_html = f'<figure class="article-hero-image"><img src="{_art_img}" alt="{hero["headline"]}" loading="eager">{credit}</figure>'
