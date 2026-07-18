@@ -3287,9 +3287,9 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     structured_data = {
         "@context": "https://schema.org",
         "@type":    "NewsArticle",
-        "headline": hero.get("headline", ""),
+        "headline": hero.get("headline", "")[:110],
         "description": description,
-        "image":    image_url,
+        "image":    [image_url] if image_url else [],
         "datePublished": _pub_raw or pub_date,
         "dateModified":  _upd_raw or _pub_raw or pub_date,
         "author":    {
@@ -3300,9 +3300,21 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         "publisher": {
             "@type": "Organization",
             "name":  SITE_NAME,
-            "logo":  {"@type": "ImageObject", "url": f"{SITE_URL}/favicon.svg"},
+            "url":   SITE_URL,
+            "logo":  {
+                "@type": "ImageObject",
+                "url":    f"{SITE_URL}/logo.png",
+                "width":  600,
+                "height": 60,
+            },
         },
-        "mainEntityOfPage": f"{SITE_URL}/articles/{slug}.html",
+        "articleSection": category_label,
+        "url":            f"{SITE_URL}/articles/{slug}.html",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id":   f"{SITE_URL}/articles/{slug}.html",
+        },
+        "isAccessibleForFree": True,
     }
     import json as _json
     schema_tag = f'  <script type="application/ld+json">{_json.dumps(structured_data)}</script>'
