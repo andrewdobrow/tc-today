@@ -4781,10 +4781,30 @@ def main():
                 target["hero"] = art
                 print(f"  Custom force_hero: '{art['headline'][:50]}' -> {ckey}")
             else:
-                # If category has no hero yet, this becomes it; else it's a card
-                if not target.get("hero"):
+                # A custom article is authoritative. If the feed generated its OWN
+                # version of the same story this run (as hero or a card), that feed
+                # version must be REPLACED by the custom one, not left sitting alongside
+                # it. Otherwise the page shows the feed hero while the permalink points
+                # to the custom article — the exact hero/card/permalink mismatch we hit.
+                _art_tokens = _sig_tokens(art.get("headline", ""))
+
+                def _same_as_custom(item):
+                    return item and _same_story(_art_tokens, _sig_tokens(item.get("headline", "")))
+
+                # Remove any feed cards that are the same story
+                if target.get("cards"):
+                    target["cards"] = [c for c in target["cards"] if not _same_as_custom(c)]
+
+                _hero = target.get("hero")
+                if _hero is None:
+                    # No hero yet: custom becomes it
                     target["hero"] = art
+                elif _same_as_custom(_hero):
+                    # The feed's version of THIS story is the hero -> replace it outright
+                    target["hero"] = art
+                    print(f"  Custom article replaced feed hero for same story -> {ckey}")
                 else:
+                    # Different story is the hero: custom joins as a card
                     target.setdefault("cards", []).append(art)
                 print(f"  Custom article: '{art['headline'][:50]}' -> {ckey}")
 
