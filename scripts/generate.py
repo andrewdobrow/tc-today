@@ -4316,6 +4316,18 @@ def write_archives(all_categories, top_cat):
             elif hero.get("unique_slug"):
                 existing = None
 
+        # HARD PROTECTION: an archived CUSTOM article is never overwritten by anything.
+        # Custom articles are hand-written and authoritative. A later feed/WPTV story
+        # that happens to fuzzy-match one must NOT replace it. If the match points at a
+        # custom entry and THIS incoming story is not itself that custom article, drop
+        # the match so a new page is created instead of destroying the custom one. This
+        # is the direction the previous guard missed: unique_slug protected the custom
+        # article from overwriting OTHERS, but nothing protected it from BEING overwritten.
+        if existing and existing.get("is_custom") and not hero.get("is_custom"):
+            print(f"  PROTECTED: refusing to overwrite custom article "
+                  f"'{existing.get('headline','')[:50]}' with feed story '{headline[:40]}'")
+            existing = None
+
         # FINAL GATE BEFORE OVERWRITING A PUBLISHED PERMALINK.
         # find_matching_entry uses token heuristics, which have wrongly merged distinct
         # stories and destroyed live URLs. Before replacing the content at an existing
@@ -4351,6 +4363,10 @@ def write_archives(all_categories, top_cat):
             existing["teaser"]    = hero.get("teaser","") or hero.get("body","")[:180]
             existing["image_url"] = hero.get("image_url","")
             existing["lastmod"]   = today
+            # If a custom article is writing here, permanently mark the entry custom so
+            # it can never be overwritten by a later feed story (see the PROTECTED guard).
+            if hero.get("is_custom"):
+                existing["is_custom"] = True
             if source_url:
                 existing["source_url"] = source_url
             updated_count += 1
@@ -4385,6 +4401,7 @@ def write_archives(all_categories, top_cat):
                 "feed_url": hero.get("feed_url",""),
                 "source_url": hero.get("link",""),
                 "is_weather_alert": bool(hero.get("is_weather_alert")),
+                "is_custom": bool(hero.get("is_custom")),
             })
             new_count += 1
 
