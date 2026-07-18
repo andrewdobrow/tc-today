@@ -1838,6 +1838,27 @@ def now_et():
     et  = utc - timedelta(hours=4)
     return et.strftime("%-I:%M %p ET")
 
+def _now_eastern_rfc822():
+    """Current time as an RFC-822 string in US Eastern time (EDT/EST aware).
+    Used as the first-published timestamp for RSS pubDate so consumers like Nextdoor
+    show when a story appeared on OUR site, not when the original source posted it."""
+    from datetime import timezone as _tz, timedelta as _td
+    # Eastern is UTC-4 (EDT) Mar-Nov, UTC-5 (EST) otherwise. Determine DST roughly by
+    # US rules: 2nd Sunday March through 1st Sunday November.
+    u = datetime.now(_tz.utc)
+    y = u.year
+    def _nth_sun(month, nth):
+        d = datetime(y, month, 1, tzinfo=_tz.utc)
+        first_sun = 1 + (6 - d.weekday()) % 7
+        return first_sun + (nth - 1) * 7
+    dst_start = datetime(y, 3, _nth_sun(3, 2), 7, tzinfo=_tz.utc)   # 2am EST = 7am UTC
+    dst_end   = datetime(y, 11, _nth_sun(11, 1), 6, tzinfo=_tz.utc) # 2am EDT = 6am UTC
+    offset = -4 if dst_start <= u < dst_end else -5
+    eastern = u + _td(hours=offset)
+    tzname = "-0400" if offset == -4 else "-0500"
+    return eastern.strftime(f"%a, %d %b %Y %H:%M:%S {tzname}")
+
+
 def canonical_image_url(url):
     if not url: return ""
     return re.sub(r"[?#].*$", "", url.strip())
@@ -3207,8 +3228,13 @@ def load_custom_articles():
         art["source_type"]     = "custom"
         art.setdefault("urgency_score", 6)
         art.setdefault("teaser", art["body"][:180].rstrip())
-        art.setdefault("published", now.strftime("%a, %d %b %Y %H:%M:%S +0000"))
+        art.setdefault("published", now.strftime("%a, %d %b %Y %H:%M:%S %z"))
         art["published_raw"]   = art.get("published_raw", art["published"])
+        # Display-format the timestamp like every other article ("A few minutes ago",
+        # "3:45 PM ET", "Jul 15, 3:45 PM ET"). Without this, the raw RFC-822 string
+        # (e.g. "Fri, 17 Jul 2026 21:57:35 -0400") leaked onto the card, exposing the
+        # -0400 offset. Keep the raw value in published_raw for sorting and RSS.
+        art["published"] = format_age(art["published_raw"]) or art["published_raw"]
         live.append(art)
     if live:
         print(f"  Custom articles loaded: {len(live)}")
@@ -3511,9 +3537,18 @@ def render_rss_feed(all_categories, top_cat):
             return None, None  # No article page exists — skip
         article_url = f"{SITE_URL}/articles/{matched['slug']}.html"
         teaser      = article.get("teaser") or article.get("body", "")[:300]
-        pub         = article.get("published_raw") or now_rfc
+        # Use OUR first-published time, not the source's. Nextdoor and other RSS
+        # consumers show pubDate as the story's age; featuring the source's timestamp
+        # made freshly republished stories look ancient. Prefer the archive's
+        # first_published (full Eastern timestamp); fall back to its date, then now.
+        from email.utils import parsedate_to_datetime as _pdt
+        pub = matched.get("first_published")
+        if not pub:
+            _d = matched.get("date", "")
+            if _d:
+                pub = f"{_d} 09:00:00 -0400"  # older entries: date only, assume 9am ET
         try:
-            pub = formatdate(parsedate_to_datetime(pub).timestamp(), usegmt=True)
+            pub = formatdate(_pdt(pub).timestamp(), usegmt=True)
         except Exception:
             pub = now_rfc
         item = f"""  <item>
@@ -4333,6 +4368,11 @@ def write_archives(all_categories, top_cat):
                 "teaser": hero.get("teaser","") or hero.get("body","")[:180],
                 "category_key": cat_key, "category_label": cat_label,
                 "date": today, "lastmod": today,
+                # Full timestamp of when WE first published this, in Eastern time,
+                # RFC-822. This is what the RSS feed uses for pubDate so Nextdoor and
+                # other consumers show when the story appeared on OUR site, not when
+                # the original source posted it.
+                "first_published": _now_eastern_rfc822(),
                 "image_url": hero.get("image_url",""),
                 "feed_url": hero.get("feed_url",""),
                 "source_url": hero.get("link",""),
