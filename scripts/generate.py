@@ -3687,13 +3687,47 @@ def update_sitemap(archive_entries):
 
 
 def update_news_sitemap(archive_entries):
-    """Google News sitemap — only articles from last 2 days."""
-    from datetime import timedelta
-    cutoff = (datetime.utcnow() - timedelta(days=2)).strftime("%Y-%m-%d")
-    recent = [e for e in archive_entries if e.get("date","") >= cutoff]
+    """Google News sitemap. Google News only accepts articles published in the last
+    48 hours, ordered by publication time. Uses each article's real first-published
+    Eastern timestamp (not a date-only midnight-UTC value, which mis-orders everything
+    and puts articles in the wrong timezone)."""
+    from datetime import timedelta, timezone as _tz
+    from email.utils import parsedate_to_datetime, format_datetime
+    now = datetime.now(_tz.utc)
+    cutoff = now - timedelta(hours=48)
+
+    def _iso(entry):
+        # Prefer the real first-published timestamp; fall back to date at 9am ET.
+        raw = entry.get("first_published") or ""
+        try:
+            dt = parsedate_to_datetime(raw)
+        except Exception:
+            dt = None
+        if dt is None:
+            d = entry.get("date", "")
+            if not d:
+                return None
+            try:
+                # date-only -> 9am Eastern (rough but valid), then to aware UTC
+                et = _tz(timedelta(hours=-4))
+                dt = datetime.strptime(d, "%Y-%m-%d").replace(hour=9, tzinfo=et)
+            except Exception:
+                return None
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=_tz.utc)
+        return dt
+
+    # Build (datetime, entry) pairs within the 48h window, newest first
+    recent = []
+    for e in archive_entries:
+        dt = _iso(e)
+        if dt is not None and dt >= cutoff:
+            recent.append((dt, e))
+    recent.sort(key=lambda p: p[0], reverse=True)
+
     news_urls = ""
-    for e in recent:
-        pub_date = f"{e['date']}T00:00:00Z"
+    for dt, e in recent:
+        pub_date = dt.isoformat()  # W3C datetime with offset, e.g. 2026-07-18T15:30:25-04:00
         headline = e['headline'].replace('&','&amp;').replace('<','&lt;').replace('>','&gt;').replace('"','&quot;')
         news_urls += f"""
   <url>
