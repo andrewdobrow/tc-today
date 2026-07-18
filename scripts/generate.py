@@ -3156,6 +3156,11 @@ def load_custom_articles():
     archived, and expired. Override flags:
       - force_hero: true    -> pin as that category's hero
       - pin_position: N     -> lock to grid slot N (1-indexed) regardless of score
+      - unique_slug: true   -> always get a fresh permalink; never overwrite a prior
+                               article. Use for recurring series (weekly traffic
+                               reports, roundups) whose editions share a title prefix
+                               and would otherwise overwrite each other.
+      - slug: "custom-slug" -> use this exact permalink (also implies unique_slug)
 
     Expected schema per entry:
       {
@@ -4252,6 +4257,22 @@ def write_archives(all_categories, top_cat):
         source_url = hero.get("link", "")
         existing   = find_matching_entry(headline, archive, source_url, is_weather_alert=bool(hero.get("is_weather_alert")))
 
+        # OVERRIDE for recurring series (weekly traffic reports, roundups, game recaps).
+        # These share a title prefix and vocabulary, so the matcher treats each new
+        # edition as an update of the last and OVERWRITES the previous permalink. A
+        # custom article can opt out:
+        #   "unique_slug": true      -> always create a fresh permalink this run, never
+        #                               overwrite a previous edition
+        #   "slug": "my-custom-slug" -> use this exact slug (also implies unique)
+        # Both only apply to custom articles.
+        _forced_slug = None
+        if hero.get("is_custom"):
+            if hero.get("slug"):
+                _forced_slug = slugify(str(hero["slug"]))
+                existing = None
+            elif hero.get("unique_slug"):
+                existing = None
+
         # FINAL GATE BEFORE OVERWRITING A PUBLISHED PERMALINK.
         # find_matching_entry uses token heuristics, which have wrongly merged distinct
         # stories and destroyed live URLs. Before replacing the content at an existing
@@ -4293,7 +4314,10 @@ def write_archives(all_categories, top_cat):
         else:
             # New story — create new page
             existing_slugs = {e["slug"] for e in archive}
-            base_slug = f"{today}-{slugify(headline)}"
+            if _forced_slug:
+                base_slug = _forced_slug
+            else:
+                base_slug = f"{today}-{slugify(headline)}"
             slug = base_slug
             counter = 1
             while slug in existing_slugs:
