@@ -4684,6 +4684,42 @@ def write_archives(all_categories, top_cat):
     updated_count = 0
     this_run_token_sets = []
 
+    # One-time cleanup: remove the WPTV fire-district duplicate that was published at
+    # its own permalink before the protection fix. The custom article at
+    # ".../fires-3..." is the authoritative version; this slug is the WPTV duplicate.
+    _DUP_SLUGS_TO_REMOVE = {
+        "2026-07-18-st-lucie-county-fire-district-fires-3-firefighters-after-hazing-investigation-in",
+    }
+    _before = len(archive)
+    archive = [e for e in archive if e.get("slug") not in _DUP_SLUGS_TO_REMOVE]
+    if len(archive) < _before:
+        for _slug in _DUP_SLUGS_TO_REMOVE:
+            _dup_file = articles_dir / f"{_slug}.html"
+            try:
+                if _dup_file.exists():
+                    _dup_file.unlink()
+            except Exception:
+                pass
+        print(f"  Removed {_before - len(archive)} known duplicate article(s) from archive")
+
+    # BACKFILL is_custom on existing archive entries. The flag was added later, so
+    # custom articles archived before then have no flag and would not be protected.
+    # Match each currently-loaded custom article to its archive entry (by fuzzy
+    # headline) and stamp the flag, so the protection guard below reliably fires even
+    # for custom articles first published before the flag existed.
+    try:
+        _current_customs = load_custom_articles()
+    except Exception:
+        _current_customs = []
+    if _current_customs:
+        for _c in _current_customs:
+            _ctok = _sig_tokens(_c.get("headline", ""))
+            for _entry in archive:
+                if _entry.get("is_custom"):
+                    continue
+                if _same_story(_ctok, _sig_tokens(_entry.get("headline", ""))):
+                    _entry["is_custom"] = True
+
     heroes = [(top_cat["category_key"], top_cat["category_label"], top_cat["hero"])]
     for cat in all_categories:
         if cat["category_key"] != top_cat["category_key"]:
@@ -4752,17 +4788,17 @@ def write_archives(all_categories, top_cat):
             elif hero.get("unique_slug"):
                 existing = None
 
-        # HARD PROTECTION: an archived CUSTOM article is never overwritten by anything.
-        # Custom articles are hand-written and authoritative. A later feed/WPTV story
-        # that happens to fuzzy-match one must NOT replace it. If the match points at a
-        # custom entry and THIS incoming story is not itself that custom article, drop
-        # the match so a new page is created instead of destroying the custom one. This
-        # is the direction the previous guard missed: unique_slug protected the custom
-        # article from overwriting OTHERS, but nothing protected it from BEING overwritten.
+        # HARD PROTECTION: an archived CUSTOM article is never overwritten by anything,
+        # and a feed story that matches one is DROPPED rather than published as its own
+        # duplicate. Custom articles are hand-written and authoritative; the custom
+        # version already covers this story, so a parallel WPTV/feed version at its own
+        # permalink is a pure duplicate. Clearing `existing` alone was not enough — it
+        # let the feed story fall through and create a NEW article, which is exactly the
+        # duplicate permalink this guard is meant to prevent. So we skip it entirely.
         if existing and existing.get("is_custom") and not hero.get("is_custom"):
-            print(f"  PROTECTED: refusing to overwrite custom article "
-                  f"'{existing.get('headline','')[:50]}' with feed story '{headline[:40]}'")
-            existing = None
+            print(f"  PROTECTED: dropping feed story '{headline[:45]}' — already covered "
+                  f"by custom article '{existing.get('headline','')[:45]}'")
+            continue
 
         # FINAL GATE BEFORE OVERWRITING A PUBLISHED PERMALINK.
         # find_matching_entry uses token heuristics, which have wrongly merged distinct
