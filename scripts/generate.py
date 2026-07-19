@@ -1754,54 +1754,65 @@ Return ONLY valid JSON:
                     _fixed = True
                     break
             if not _fixed:
-                # Before dropping a COUNTY page, try to build its hero from the recent
-                # archive. County live feeds are intermittent (WPTV rotates stories,
-                # Google News items come in thin), so a county can end up with nothing
-                # hero-eligible even though a relevant story was archived in the last
-                # few days (often under a topic category like Business). Pull the most
-                # recent archived story naming this county's places and use it.
-                if category_key in COUNTY_KEYS:
-                    _cf = {
-                        "martin": ["martin county", "stuart", "jensen beach", "palm city",
-                                   "hobe sound", "port salerno", "jupiter island",
-                                   "hutchinson island", "indiantown"],
-                        "st_lucie": ["st. lucie", "st lucie", "port st. lucie",
-                                     "port st lucie", "fort pierce"],
-                        "indian_river": ["indian river", "vero beach", "sebastian", "fellsmere"],
-                    }.get(category_key, [])
-                    try:
-                        _arch = load_archive(OUTPUT_DIR / "archive.json")
-                        _arch.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
-                        from datetime import timezone as _tzf
-                        _nowf = datetime.now(_tzf.utc)
-                        for e in _arch:
+                # Before dropping a page, try to build its hero from the recent archive.
+                # Live feeds are intermittent (WPTV rotates stories, Google News items
+                # come in thin), so a category can end up with nothing hero-eligible
+                # even though a relevant story was archived in the last few days. This
+                # applies to BOTH county pages AND topic categories (crime, business,
+                # etc.) — previously only counties were backfilled, so topic categories
+                # with good recent archived articles were wrongly dropped.
+                _is_county = category_key in COUNTY_KEYS
+                _cf = {
+                    "martin": ["martin county", "stuart", "jensen beach", "palm city",
+                               "hobe sound", "port salerno", "jupiter island",
+                               "hutchinson island", "indiantown"],
+                    "st_lucie": ["st. lucie", "st lucie", "port st. lucie",
+                                 "port st lucie", "fort pierce"],
+                    "indian_river": ["indian river", "vero beach", "sebastian", "fellsmere"],
+                }.get(category_key, [])
+                try:
+                    _arch = load_archive(OUTPUT_DIR / "archive.json")
+                    _arch.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
+                    from datetime import timezone as _tzf
+                    _nowf = datetime.now(_tzf.utc)
+                    for e in _arch:
+                        # County pages match on place names; topic categories match on
+                        # the archived story's own category_key.
+                        if _is_county:
                             _htext = (e.get("headline","") + " " + e.get("teaser","")).lower()
                             if not any(p in _htext for p in _cf):
                                 continue
-                            _d = e.get("lastmod") or e.get("date","")
-                            try:
-                                _dt = datetime.strptime(_d[:10], "%Y-%m-%d").replace(tzinfo=_tzf.utc)
-                                if (_nowf - _dt).days > 4:
-                                    continue
-                            except Exception:
+                        else:
+                            if e.get("category_key") != category_key:
                                 continue
-                            data["hero"] = {
-                                "headline": e.get("headline",""),
-                                "teaser": e.get("teaser",""),
-                                "body": e.get("teaser",""),
-                                "image_url": e.get("image_url",""),
-                                "published": e.get("lastmod") or e.get("date",""),
-                                "published_raw": e.get("lastmod") or e.get("date",""),
-                                "enriched": True,
-                                "urgency_score": 4,
-                                "link": f"{SITE_URL}/articles/{e['slug']}.html",
-                                "_archived_slug": e["slug"],
-                            }
-                            print(f"  County archive-hero fallback for {category_label}: '{e.get('headline','')[:50]}'")
-                            _fixed = True
-                            break
-                    except Exception as _ex:
-                        print(f"  County archive fallback failed: {_ex}")
+                        _d = e.get("lastmod") or e.get("date","")
+                        try:
+                            _dt = datetime.strptime(_d[:10], "%Y-%m-%d").replace(tzinfo=_tzf.utc)
+                            # Topic categories may reach a little further back (7 days)
+                            # than counties (4) — a recent crime or business story is
+                            # still worth showing rather than an empty section.
+                            _max_age = 4 if _is_county else 7
+                            if (_nowf - _dt).days > _max_age:
+                                continue
+                        except Exception:
+                            continue
+                        data["hero"] = {
+                            "headline": e.get("headline",""),
+                            "teaser": e.get("teaser",""),
+                            "body": e.get("teaser",""),
+                            "image_url": e.get("image_url",""),
+                            "published": e.get("lastmod") or e.get("date",""),
+                            "published_raw": e.get("lastmod") or e.get("date",""),
+                            "enriched": True,
+                            "urgency_score": 4,
+                            "link": f"{SITE_URL}/articles/{e['slug']}.html",
+                            "_archived_slug": e["slug"],
+                        }
+                        print(f"  Archive-hero fallback for {category_label}: '{e.get('headline','')[:50]}'")
+                        _fixed = True
+                        break
+                except Exception as _ex:
+                    print(f"  Archive fallback failed: {_ex}")
                 if not _fixed:
                     # LAST RESORT: if this category has ANY cards, one of them becomes
                     # the hero. A section with cards but no hero is never correct — it
@@ -4947,22 +4958,38 @@ def classify_stories(feed_cache):
         "- crime: crime, arrests, courts, fires, crashes, drug enforcement, public safety affecting the three counties "
         "(including threats spreading INTO the area from elsewhere)\n"
         "- business: local business openings/closings, development, real estate, economy IN the three counties\n"
-        "- sports: local sports (St. Lucie Mets, high schools) AND major sports news of broad interest\n"
+        "- sports: local sports specifically (St. Lucie Mets, Treasure Coast high schools and colleges). "
+        "Do NOT tag national or world sports (World Cup, NFL, NBA, national leagues) unless a Treasure Coast team, "
+        "school or athlete is the subject\n"
         "- things_to_do: local events, festivals, restaurants, recreation in the three counties\n"
         "- florida: statewide Florida news including state politics, laws, insurance, DeSantis, elections\n"
-        "- martin / st_lucie / indian_river: stories specifically tied to that county (assign IN ADDITION "
-        "to a topic category when a story is clearly about a place in that county)\n"
-        "- none: does NOT belong on this site — national/world news with no Florida or local angle, "
-        "syndicated lifestyle/survey filler, stories solely about other Florida regions with no Treasure Coast relevance, "
-        "OR a TV or radio station promoting itself or its own people (a profile of a station's weather spotter, "
-        "anchor, reporter, meteorologist or on-air personality; behind-the-scenes-at-our-station pieces). That is "
-        "self-promotion for a competing outlet, not news, even when it names a local town.\n\n"
+        "- martin / st_lucie / indian_river: stories specifically tied to that county. Assign the county ONLY when "
+        "the story's events happen in, or its subject is clearly located in, that specific county. Assign the "
+        "CORRECT county and no other: a St. Lucie story is st_lucie, NOT indian_river or martin. A story about one "
+        "county must never be tagged with a different county. If a story spans the whole Treasure Coast, it may take "
+        "more than one county; if it names no specific county, assign NO county tag (a topic category or florida only)\n"
+        "- none: does NOT belong on this site. This includes:\n"
+        "  * national or world news with no Treasure Coast angle (e.g. 'World Cup boosts national beer sales')\n"
+        "  * stories about Palm Beach County, Miami, Orlando, Tampa or anywhere outside the three counties, "
+        "with no direct Treasure Coast impact\n"
+        "  * syndicated lifestyle, survey, or listicle filler\n"
+        "  * PROMOTIONAL or ADVERTORIAL content: sponsored posts, contributed 'articles' from law firms, "
+        "clinics, contractors or other businesses, SEO content marketing, and anything whose real purpose is to "
+        "advertise a service rather than report news (e.g. 'Vero Beach truck accident lawyer explains what to do "
+        "after a crash' is a law-firm ad, not news). If it reads like marketing or a business explaining/promoting "
+        "its own services, it is none\n"
+        "  * a TV or radio station promoting itself or its own people (weather spotter, anchor, reporter, "
+        "meteorologist or on-air personality profiles; behind-the-scenes-at-our-station pieces) — self-promotion "
+        "for a competing outlet, not news, even when it names a local town\n\n"
         "Rules:\n"
         "- A story can have multiple categories (e.g. a Stuart restaurant opening = business + martin + things_to_do)\n"
         "- Statewide political stories (campaigns, fundraising, primaries) = florida ONLY, never local_gov\n"
         "- A story about a threat/trend spreading INTO the Treasure Coast from outside IS relevant (crime/florida as fits)\n"
         "- Feel-good human interest about a local person = the county + the closest topic fit\n"
-        "- When in doubt between none and a category, prefer none for non-local content; this is a LOCAL site\n\n"
+        "- NEVER assign a county tag to a national, statewide, or out-of-area story just because it mentions a topic; "
+        "a national business or sports story does not become local\n"
+        "- Be strict. This is a LOCAL news site. When in doubt between none and a category, choose none. It is far "
+        "better to drop a marginal or out-of-area story than to show it in a local section\n\n"
         f"Stories:\n{listing}\n\n"
         "Return ONLY a JSON object mapping story number to an array of category keys, e.g.\n"
         '{"1": ["crime", "martin"], "2": ["none"], "3": ["florida"]}\n'
