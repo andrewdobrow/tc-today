@@ -1872,6 +1872,46 @@ def make_paragraphs(text):
     if len(paragraphs) == 1:
         paragraphs = text.split("\n")
 
+    # WALL-OF-TEXT FALLBACK. Some sources (notably Google News summaries) arrive with
+    # their paragraph breaks stripped, so the whole article is one or two enormous
+    # blocks that render as an unreadable wall. When a "paragraph" is very long and has
+    # no internal breaks, regroup it into readable paragraphs of ~3 sentences each.
+    # Markdown structure (##, ###, **, links) is preserved: only long plain blocks are
+    # regrouped, and blocks that already contain markers are left alone.
+    def _regroup_long(block):
+        block = block.strip()
+        if not block:
+            return []
+        # Leave structured/short blocks untouched
+        if block.startswith(("## ", "### ")) or len(block) < 320:
+            return [block]
+        # Split into sentences (keep the terminator), then group ~3 per paragraph.
+        import re as _re
+        sentences = _re.split(r'(?<=[.!?])\s+(?=[A-Z"])', block)
+        sentences = [s.strip() for s in sentences if s.strip()]
+        if len(sentences) < 4:
+            return [block]  # not actually a wall; leave it
+        groups, cur, cur_len = [], [], 0
+        for s in sentences:
+            cur.append(s)
+            cur_len += len(s)
+            # New paragraph every ~3 sentences or ~360 chars, whichever comes first
+            if len(cur) >= 3 or cur_len >= 360:
+                groups.append(" ".join(cur))
+                cur, cur_len = [], 0
+        if cur:
+            # Avoid a lone trailing sentence: fold it into the previous paragraph
+            if len(cur) == 1 and groups:
+                groups[-1] = groups[-1] + " " + cur[0]
+            else:
+                groups.append(" ".join(cur))
+        return groups
+
+    _expanded = []
+    for p in paragraphs:
+        _expanded.extend(_regroup_long(p))
+    paragraphs = _expanded
+
     def _inline(s):
         # Links first (before bold), so URLs inside markdown link syntax are handled
         # cleanly. Supports [text](url) markdown links and bare http(s) URLs. Applies
@@ -3267,15 +3307,15 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
             return f"{months[dt.month-1]} {dt.day}, {dt.year} at {hour}:{dt.strftime('%M')} {ampm} ET"
         except Exception:
             return raw or ""
-    _pub_raw = hero.get("first_published") or hero.get("published_raw") or hero.get("published", "")
-    _upd_raw = hero.get("lastmod_raw") or ""
+    # Published time is OURS: when the article first appeared on this site, never the
+    # source/RSS publish time. Use first_published (full Eastern timestamp set when the
+    # article is first archived); fall back only to the archive date, never to
+    # published_raw (which for feed articles is the original source's timestamp).
+    _pub_raw = hero.get("first_published") or hero.get("date", "") or pub_date
     _pub_display = _fmt_full(_pub_raw) if _pub_raw else pub_date
-    _updated_html = ""
-    if _upd_raw:
-        _upd_display = _fmt_full(_upd_raw)
-        # Only show "Updated" if it's a different calendar day/time than published
-        if _upd_display and _upd_display != _pub_display:
-            _updated_html = f'<span class="article-updated">Updated {_upd_display}</span>'
+    # "Updated" is intentionally not shown. Article pages are rewritten on routine runs
+    # even when nothing changed, and there is no reliable significant-change signal, so
+    # an "Updated" timestamp would be misleading. Published time is the honest signal.
 
     description = (hero.get("teaser") or hero.get("body", "")[:155]).replace('"', '')
     # Only use images from reliable/stable sources for og:image
@@ -3291,7 +3331,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         "description": description,
         "image":    [image_url] if image_url else [],
         "datePublished": _pub_raw or pub_date,
-        "dateModified":  _upd_raw or _pub_raw or pub_date,
+        "dateModified":  _pub_raw or pub_date,
         "author":    {
             "@type": "Person",
             "name":  "Andrew Dobrow",
@@ -3304,8 +3344,8 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
             "logo":  {
                 "@type": "ImageObject",
                 "url":    f"{SITE_URL}/logo.png",
-                "width":  600,
-                "height": 60,
+                "width":  1200,
+                "height": 120,
             },
         },
         "articleSection": category_label,
@@ -3333,11 +3373,16 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         img_html = f'<figure class="article-hero-image"><img src="{_art_img}" alt="{hero["headline"]}" loading="eager">{credit}</figure>'
 
     head   = _page_head(
-        f"{hero['headline']} — Treasure Coast Today",
+        f"{hero['headline']} | Treasure Coast Today",
         description,
         f"/articles/{slug}.html",
         structured_data=structured_data,
         image_url=image_url,
+        article_meta={
+            "published": _pub_raw or pub_date,
+            "modified":  _pub_raw or pub_date,
+            "section":   category_label,
+        },
     )
     header = _page_header(active=category_key)
     footer = _page_footer()
@@ -3407,8 +3452,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-byline a {{ color: var(--text); font-weight: 600; text-decoration: none; }}
     .article-byline a:hover {{ text-decoration: underline; }}
     .article-times {{ display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }}
-    .article-published, .article-updated {{ font-size: 12px; color: var(--text-muted); }}
-    .article-updated {{ font-style: italic; }}
+    .article-published {{ font-size: 12px; color: var(--text-muted); }}
     .article-headline {{ font-family: "Fraunces", serif; font-size: clamp(26px, 4vw, 42px); font-weight: 600; line-height: 1.15; letter-spacing: -.02em; color: var(--text); margin-bottom: 24px; }}
     .article-hero-image {{ margin: 0 0 28px; }}
     .article-hero-image img {{ width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px; display: block; }}
@@ -3450,7 +3494,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         <span class="article-byline">By <a href="/author/andrew-dobrow.html" rel="author">Andrew Dobrow</a></span>
       </div>
       <div class="article-times">
-        <span class="article-published">Published {_pub_display}</span>{_updated_html}
+        <span class="article-published">Published {_pub_display}</span>
       </div>
       <h1 class="article-headline">{hero["headline"]}</h1>
       {img_html}
@@ -3679,6 +3723,18 @@ def update_sitemap(archive_entries):
   <url>
     <loc>{SITE_URL}/author/andrew-dobrow.html</loc>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>{SITE_URL}/editorial-standards.html</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>{SITE_URL}/corrections-policy.html</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>{SITE_URL}/ownership.html</loc>
+    <priority>0.5</priority>
   </url>"""
 
     article_urls = ""
@@ -3957,13 +4013,28 @@ def find_matching_entry(headline, archive, source_url="", is_weather_alert=False
 
 
 
-def _page_head(title, description, canonical_path="", structured_data=None, image_url=""):
+def _page_head(title, description, canonical_path="", structured_data=None, image_url="", article_meta=None):
     canonical = f"{SITE_URL}{canonical_path}" if canonical_path else SITE_URL
     og_image  = image_url if image_url else f"{SITE_URL}/og-image.png"
     schema = ""
     if structured_data:
         import json as _json
         schema = f'  <script type="application/ld+json">{_json.dumps(structured_data)}</script>'
+    # Articles declare og:type=article with published/modified/author/section so news
+    # crawlers correctly identify them as articles, not generic pages. Everything else
+    # stays og:type=website.
+    if article_meta:
+        og_type = "article"
+        _am = article_meta
+        og_article_tags = (
+            f'  <meta property="og:type" content="article">\n'
+            f'  <meta property="article:published_time" content="{_am.get("published","")}">\n'
+            f'  <meta property="article:modified_time" content="{_am.get("modified","") or _am.get("published","")}">\n'
+            f'  <meta property="article:author" content="Andrew Dobrow">\n'
+            f'  <meta property="article:section" content="{_am.get("section","")}">\n'
+        )
+    else:
+        og_article_tags = '  <meta property="og:type" content="website">\n'
     return f"""  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
@@ -3972,8 +4043,7 @@ def _page_head(title, description, canonical_path="", structured_data=None, imag
   <meta property="og:title" content="{title}">
   <meta property="og:description" content="{description}">
   <meta property="og:url" content="{canonical}">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="{og_image}">
+{og_article_tags}  <meta property="og:image" content="{og_image}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
@@ -4036,6 +4106,9 @@ def _page_footer():
       <div class="footer-links">
         <a href="/about.html">About</a>
         <a href="/author/andrew-dobrow.html">Author</a>
+        <a href="/editorial-standards.html">Editorial Standards</a>
+        <a href="/corrections-policy.html">Corrections</a>
+        <a href="/ownership.html">Ownership</a>
         <a href="/weather.html">Weather</a>
         <a href="/archive.html">Archive</a>
         <a href="/advertise.html">Advertise</a>
@@ -4109,6 +4182,7 @@ def render_author_page():
         <p>Andrew Dobrow is the founder and publisher of Treasure Coast Today, an independent local news outlet serving Martin, St. Lucie and Indian River counties.</p>
         <p>Based in Hobe Sound, Andrew focuses on timely, useful coverage of the issues that affect Treasure Coast residents, including local government, public safety, development, schools, sports, community events and breaking news. He created Treasure Coast Today to give readers a fast, accessible source for local reporting without unnecessary sensationalism or clutter.</p>
         <p>Andrew is committed to building stronger connections between residents, public agencies, local organizations and businesses throughout the Treasure Coast.</p>
+        <p>As publisher, Andrew is responsible for the editorial standards, accuracy and independence of everything published on Treasure Coast Today. You can read more about <a href="/editorial-standards.html">how our coverage is produced</a>, <a href="/corrections-policy.html">how we handle corrections</a>, and <a href="/ownership.html">how the site is owned and funded</a>.</p>
         <hr class="author-divider">
         <div class="author-contact-card">
           <strong>Get in touch.</strong> Readers can reach Andrew at <a href="mailto:hello@treasurecoast.today">hello@treasurecoast.today</a> with story tips, questions, or feedback.
@@ -4121,8 +4195,197 @@ def render_author_page():
 </html>"""
 
 
+def _policy_page_css():
+    return """
+    .policy-wrap { max-width: 720px; margin: 56px auto 80px; padding: 0 24px; }
+    .policy-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; display: block; }
+    .policy-headline { font-family: 'Fraunces', serif; font-size: clamp(30px, 5vw, 44px); font-weight: 600; line-height: 1.1; color: var(--text); margin: 0 0 10px; letter-spacing: -.02em; }
+    .policy-updated { font-size: 12px; color: var(--text-muted); margin: 0 0 32px; }
+    .policy-body { font-size: 16px; color: var(--text-secondary); line-height: 1.75; }
+    .policy-body p { margin: 0 0 20px; }
+    .policy-body h2 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500; color: var(--text); margin: 38px 0 12px; }
+    .policy-body ul { margin: 0 0 20px; padding-left: 22px; }
+    .policy-body li { margin: 0 0 10px; line-height: 1.7; }
+    .policy-body a { color: var(--accent); font-weight: 500; text-decoration: none; }
+    .policy-body a:hover { text-decoration: underline; }
+    .policy-divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+    .policy-callout { background: var(--bg-secondary); border-left: 4px solid var(--accent); border-radius: 10px; padding: 18px 22px; margin: 0 0 20px; font-size: 15px; line-height: 1.7; }
+    .policy-callout strong { color: var(--text); }
+    .policy-nav { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+    .policy-nav a { font-size: 13px; color: var(--accent); font-weight: 600; text-decoration: none; }
+    .policy-nav a:hover { text-decoration: underline; }
+    """
+
+
+def _policy_footer_nav(current=""):
+    links = [
+        ("/about.html", "About"),
+        ("/editorial-standards.html", "Editorial Standards"),
+        ("/corrections-policy.html", "Corrections Policy"),
+        ("/ownership.html", "Ownership &amp; Funding"),
+        ("/author/andrew-dobrow.html", "Author"),
+        ("/contact.html", "Contact"),
+    ]
+    items = "".join(
+        f'<a href="{href}">{label}</a>'
+        for href, label in links if href != current
+    )
+    return f'<div class="policy-nav">{items}</div>'
+
+
+def render_editorial_standards_page():
+    head   = _page_head(
+        "Editorial Standards | Treasure Coast Today",
+        "How Treasure Coast Today reports, sources, edits and publishes local news for Martin, St. Lucie and Indian River counties.",
+        "/editorial-standards.html",
+    )
+    header = _page_header()
+    footer = _page_footer()
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{head}
+  <style>{_policy_page_css()}</style>
+</head>
+<body>
+{header}
+  <main>
+    <div class="policy-wrap">
+      <span class="policy-eyebrow">Editorial Standards</span>
+      <h1 class="policy-headline">Editorial Standards</h1>
+      <p class="policy-updated">How we report, source and publish the news.</p>
+      <div class="policy-body">
+        <p>Treasure Coast Today is an independent local news outlet serving Martin, St. Lucie and Indian River counties. Our goal is to give residents accurate, timely and useful coverage of the issues that affect their communities, without sensationalism or clutter.</p>
+
+        <h2>Our mission</h2>
+        <p>We cover local government, public safety, development, schools, sports, community events and breaking news across the Treasure Coast. We prioritize stories that have a direct impact on the people who live and work here, and we aim to present them clearly and fairly.</p>
+
+        <h2>Sourcing</h2>
+        <p>Our reporting draws on public records, official statements and releases from government agencies, law enforcement, school districts and other public bodies, publicly available reporting, and information provided directly to us by residents and organizations. We aim to attribute information to its source so readers can judge it for themselves.</p>
+
+        <h2>How our coverage is produced</h2>
+        <p>Treasure Coast Today uses automated tools to help gather, organize and synthesize information from public sources and to assist in drafting and surfacing coverage. All coverage is produced and published under the editorial oversight of the publisher, Andrew Dobrow, who is responsible for what appears on this site.</p>
+        <p>We use technology to help us cover more local news more quickly, but the editorial responsibility for accuracy, fairness and judgment rests with us, not with any tool.</p>
+
+        <h2>Accuracy and corrections</h2>
+        <p>We work to get things right, and when we get something wrong we correct it promptly and transparently. If you spot an error, please tell us. See our <a href="/corrections-policy.html">Corrections Policy</a> for how we handle mistakes.</p>
+
+        <h2>Independence</h2>
+        <p>Treasure Coast Today is independently owned and personally funded, with no parent company and no outside investors. Advertising and editorial are kept separate: advertisers do not receive coverage in exchange for their business, and paying for an ad does not influence how or whether we report a story. See our <a href="/ownership.html">Ownership &amp; Funding</a> page for details.</p>
+
+        <h2>Fairness</h2>
+        <p>We aim to be fair to the people and institutions we cover, to give a reasonable opportunity for response where appropriate, and to distinguish clearly between news and opinion.</p>
+
+        <div class="policy-callout">
+          <strong>Have a concern about a story?</strong> Email <a href="mailto:corrections@treasurecoast.today">corrections@treasurecoast.today</a> for factual errors, or <a href="mailto:hello@treasurecoast.today">hello@treasurecoast.today</a> for anything else.
+        </div>
+      </div>
+      {_policy_footer_nav("/editorial-standards.html")}
+    </div>
+  </main>
+{footer}
+</body>
+</html>"""
+
+
+def render_corrections_page():
+    head   = _page_head(
+        "Corrections Policy | Treasure Coast Today",
+        "How to report an error and how Treasure Coast Today handles corrections, clarifications and updates.",
+        "/corrections-policy.html",
+    )
+    header = _page_header()
+    footer = _page_footer()
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{head}
+  <style>{_policy_page_css()}</style>
+</head>
+<body>
+{header}
+  <main>
+    <div class="policy-wrap">
+      <span class="policy-eyebrow">Corrections Policy</span>
+      <h1 class="policy-headline">Corrections Policy</h1>
+      <p class="policy-updated">We would rather be corrected than be wrong.</p>
+      <div class="policy-body">
+        <p>Treasure Coast Today is committed to accuracy. When we make a mistake, we fix it promptly and openly. This page explains how to report an error and how we handle corrections.</p>
+
+        <h2>How to report an error</h2>
+        <p>If you believe something we published is inaccurate, email <a href="mailto:corrections@treasurecoast.today">corrections@treasurecoast.today</a> with the headline or link to the story and a clear description of what you believe is wrong. If you can point us to a source for the correct information, that helps us review it faster.</p>
+
+        <h2>How we handle corrections</h2>
+        <ul>
+          <li><strong>Factual errors</strong> are corrected as soon as we have confirmed the correct information.</li>
+          <li>When we correct a material error in a published story, we update the article and, where appropriate, note that a correction was made.</li>
+          <li><strong>Clarifications</strong> are added when a story is accurate but could be misunderstood.</li>
+          <li><strong>Updates</strong> are made when a developing story changes after publication.</li>
+        </ul>
+
+        <h2>Our commitment</h2>
+        <p>We review every correction request we receive. We do not ignore credible reports of errors, and we do not quietly delete stories to avoid acknowledging a mistake. Transparency is part of earning your trust.</p>
+
+        <div class="policy-callout">
+          <strong>Report a correction:</strong> <a href="mailto:corrections@treasurecoast.today">corrections@treasurecoast.today</a>
+        </div>
+      </div>
+      {_policy_footer_nav("/corrections-policy.html")}
+    </div>
+  </main>
+{footer}
+</body>
+</html>"""
+
+
+def render_ownership_page():
+    head   = _page_head(
+        "Ownership &amp; Funding | Treasure Coast Today",
+        "Treasure Coast Today is independently owned and personally funded by Andrew Dobrow, with no parent company and no outside investors.",
+        "/ownership.html",
+    )
+    header = _page_header()
+    footer = _page_footer()
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{head}
+  <style>{_policy_page_css()}</style>
+</head>
+<body>
+{header}
+  <main>
+    <div class="policy-wrap">
+      <span class="policy-eyebrow">Ownership &amp; Funding</span>
+      <h1 class="policy-headline">Ownership &amp; Funding</h1>
+      <p class="policy-updated">Who owns Treasure Coast Today, and how it is funded.</p>
+      <div class="policy-body">
+        <h2>Ownership</h2>
+        <p>Treasure Coast Today is independently owned and operated by Andrew Dobrow, its founder and publisher. It is a sole proprietorship with a single owner. There is no parent company, no corporate group, and no outside ownership stake in the publication.</p>
+
+        <h2>Funding</h2>
+        <p>Treasure Coast Today is personally funded by its owner and supported by advertising. It has no outside investors, grants, or financial backers, and it is not funded by any political party, campaign, government agency or advocacy organization.</p>
+
+        <h2>Advertising and independence</h2>
+        <p>Advertising revenue helps keep Treasure Coast Today free to read, with no paywall. Advertising is kept separate from editorial decisions. Advertisers do not receive news coverage in exchange for their business, and buying an ad does not influence whether or how we report on a person, business or organization. Advertisements are identified as such.</p>
+
+        <h2>Our independence</h2>
+        <p>Because we answer to no parent company and no investors, our coverage decisions are our own. We are accountable to our readers on the Treasure Coast, and to the standards described on our <a href="/editorial-standards.html">Editorial Standards</a> page.</p>
+
+        <div class="policy-callout">
+          <strong>Questions about ownership or funding?</strong> Email <a href="mailto:hello@treasurecoast.today">hello@treasurecoast.today</a>.
+        </div>
+      </div>
+      {_policy_footer_nav("/ownership.html")}
+    </div>
+  </main>
+{footer}
+</body>
+</html>"""
+
+
 def render_about_page():
-    head   = _page_head("About | Treasure Coast Today", "Treasure Coast Today is a local news source covering Martin, St. Lucie, and Indian River counties, Florida. Local government, crime, business, sports and weather for the Treasure Coast.", "/about.html")
+    head   = _page_head("About | Treasure Coast Today", "Treasure Coast Today is an independent local news outlet covering Martin, St. Lucie, and Indian River counties, Florida. Local government, crime, business, sports and weather for the Treasure Coast.", "/about.html")
     header = _page_header(active="about")
     footer = _page_footer()
     return f"""<!DOCTYPE html>
@@ -4137,7 +4400,11 @@ def render_about_page():
     .about-body p {{ margin: 0 0 20px; }}
     .about-body h2 {{ font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500; color: var(--text); margin: 40px 0 12px; }}
     .about-divider {{ border: none; border-top: 1px solid var(--border); margin: 40px 0; }}
-    .about-contact {{ display: inline-block; margin-top: 8px; color: var(--accent); font-weight: 500; }}
+    .about-contact {{ display: inline-block; margin-top: 8px; color: var(--accent); font-weight: 500; text-decoration: none; }}
+    .about-contact:hover {{ text-decoration: underline; }}
+    .about-nav {{ display: flex; gap: 16px; flex-wrap: wrap; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }}
+    .about-nav a {{ font-size: 13px; color: var(--accent); font-weight: 600; text-decoration: none; }}
+    .about-nav a:hover {{ text-decoration: underline; }}
   </style>
 </head>
 <body>
@@ -4147,17 +4414,27 @@ def render_about_page():
       <span class="about-eyebrow">About</span>
       <h1 class="about-headline">Local news for Florida's Treasure Coast.</h1>
       <div class="about-body">
-        <p>Treasure Coast Today is a local news source covering Martin County, St. Lucie County, and Indian River County, Florida. We bring residents the stories that matter most close to home.</p>
+        <p>Treasure Coast Today is an independent local news outlet covering Martin County, St. Lucie County, and Indian River County, Florida. We bring residents the stories that matter most close to home.</p>
         <p>Our focus is simple: the news that actually affects the people who live and work here. From county commission decisions in Stuart to development in Port St. Lucie, school district news in Vero Beach to public safety in Fort Pierce.</p>
+        <p>Treasure Coast Today was founded by Andrew Dobrow, who serves as its publisher. It is independently owned and personally funded, with no parent company and no outside investors, so our coverage decisions answer only to our readers.</p>
         <h2>Coverage area</h2>
-        <p><strong>Martin County</strong> — Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno.</p>
-        <p><strong>St. Lucie County</strong> — Port St. Lucie, Fort Pierce, St. Lucie West.</p>
-        <p><strong>Indian River County</strong> — Vero Beach, Sebastian, Fellsmere.</p>
+        <p><strong>Martin County:</strong> Stuart, Jensen Beach, Palm City, Hobe Sound, Port Salerno.</p>
+        <p><strong>St. Lucie County:</strong> Port St. Lucie, Fort Pierce, St. Lucie West.</p>
+        <p><strong>Indian River County:</strong> Vero Beach, Sebastian, Fellsmere.</p>
+        <h2>How we work</h2>
+        <p>We hold ourselves to clear standards for sourcing, accuracy and independence. Learn more about <a href="/editorial-standards.html" class="about-contact">our editorial standards</a>, <a href="/corrections-policy.html" class="about-contact">how we handle corrections</a>, and <a href="/ownership.html" class="about-contact">who owns and funds this site</a>.</p>
         <h2>Advertise with us</h2>
         <p>Connect your business with engaged local readers. <a href="/advertise.html" class="about-contact">Learn more &rarr;</a></p>
         <hr class="about-divider">
         <h2>Get in touch</h2>
-        <p><a href="mailto:hello@treasurecoast.today" class="about-contact">hello@treasurecoast.today</a></p>
+        <p>Have a news tip, a correction, or a question? <a href="/contact.html" class="about-contact">Contact us &rarr;</a> or email <a href="mailto:hello@treasurecoast.today" class="about-contact">hello@treasurecoast.today</a>.</p>
+        <div class="about-nav">
+          <a href="/editorial-standards.html">Editorial Standards</a>
+          <a href="/corrections-policy.html">Corrections Policy</a>
+          <a href="/ownership.html">Ownership &amp; Funding</a>
+          <a href="/author/andrew-dobrow.html">Author</a>
+          <a href="/contact.html">Contact</a>
+        </div>
       </div>
     </div>
   </main>
@@ -4512,9 +4789,18 @@ def write_archives(all_categories, top_cat):
         if existing:
             # Same story — update existing page in place, keep original URL
             slug = existing["slug"]
-            # Byline timestamps: keep the original first-published, mark updated as now.
             hero["first_published"] = existing.get("first_published") or existing.get("date", "")
-            hero["lastmod_raw"]     = _now_eastern_rfc822()
+
+            # Detect whether the content genuinely changed (headline or teaser/body).
+            # This drives lastmod, which feeds freshness/staleness and card ordering.
+            # It intentionally does NOT drive any "Updated" byline — that was removed as
+            # unreliable, since pages are rewritten on routine runs regardless.
+            _new_headline = headline.strip()
+            _new_teaser   = (hero.get("teaser","") or hero.get("body","")[:180]).strip()
+            _old_headline = (existing.get("headline","") or "").strip()
+            _old_teaser   = (existing.get("teaser","") or "").strip()
+            _content_changed = (_new_headline != _old_headline) or (_new_teaser != _old_teaser)
+
             _related = [e for e in archive
                         if e.get("category_key") == cat_key and e.get("slug") != slug]
             _related.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
@@ -4524,7 +4810,9 @@ def write_archives(all_categories, top_cat):
             existing["headline"]  = headline
             existing["teaser"]    = hero.get("teaser","") or hero.get("body","")[:180]
             existing["image_url"] = hero.get("image_url","")
-            existing["lastmod"]   = today
+            # Only advance lastmod (freshness/staleness, card ordering) on real change.
+            if _content_changed:
+                existing["lastmod"] = today
             # If a custom article is writing here, permanently mark the entry custom so
             # it can never be overwritten by a later feed story (see the PROTECTED guard).
             if hero.get("is_custom"):
@@ -4543,9 +4831,8 @@ def write_archives(all_categories, top_cat):
             counter = 1
             while slug in existing_slugs:
                 slug = f"{base_slug}-{counter}"; counter += 1
-            # Byline timestamp: brand-new article, first-published is now, no update yet.
+            # Byline timestamp: brand-new article, first-published is now.
             hero["first_published"] = hero.get("first_published") or _now_eastern_rfc822()
-            hero["lastmod_raw"]     = ""
             _related = [e for e in archive
                         if e.get("category_key") == cat_key and e.get("slug") != slug]
             _related.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
@@ -4920,13 +5207,14 @@ def main():
     # Inject custom (manually-submitted) articles into their category pools.
     # They get the same scoring/ranking/archival treatment. force_hero pins as
     # the category hero; pin_position is applied later during grid rendering.
-    # Weather alerts (NWS Extreme/Severe) — injected like custom articles so they
-    # flow through the normal hero/county/front-page system with decaying urgency.
-    weather_alerts = load_weather_alerts()
-
+    #
+    # Auto-generated weather-alert articles (from NWS Extreme/Severe warnings) were
+    # removed: the standalone weather page covers conditions, and auto-publishing alert
+    # articles is no longer wanted. load_weather_alerts() is left defined but unused so
+    # it can be re-enabled later if desired; the is_weather_alert plumbing elsewhere is
+    # harmless and simply never fires now that nothing produces alerts.
     custom_articles = load_custom_articles()
-    # Combine: weather alerts first so they take hero slots when severe
-    all_injected = weather_alerts + custom_articles
+    all_injected = custom_articles
     if all_injected:
         cat_by_key = {c["category_key"]: c for c in all_categories}
         for art in all_injected:
@@ -5028,6 +5316,9 @@ def main():
     _author_dir = OUTPUT_DIR / "author"
     _author_dir.mkdir(exist_ok=True)
     (_author_dir / "andrew-dobrow.html").write_text(render_author_page(), encoding="utf-8")
+    (OUTPUT_DIR / "editorial-standards.html").write_text(render_editorial_standards_page(), encoding="utf-8")
+    (OUTPUT_DIR / "corrections-policy.html").write_text(render_corrections_page(), encoding="utf-8")
+    (OUTPUT_DIR / "ownership.html").write_text(render_ownership_page(), encoding="utf-8")
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
     (OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat), encoding="utf-8")
 
