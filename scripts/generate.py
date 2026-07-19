@@ -3746,6 +3746,10 @@ def update_sitemap(archive_entries):
   <url>
     <loc>{SITE_URL}/ownership.html</loc>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>{SITE_URL}/privacy.html</loc>
+    <priority>0.3</priority>
   </url>"""
 
     article_urls = ""
