@@ -196,12 +196,12 @@ CONTENT_BANK_FEEDS = [
     "https://www.wptv.com/news/state.rss",
     "https://www.wptv.com/feeds/rss/news",
     "https://www.wptv.com/feeds/rss/local",
-    "https://news.google.com/rss/search?q=treasure+coast+florida&hl=en-US&gl=US&ceid=US:en",
-    "https://news.google.com/rss/search?q=martin+county+florida&hl=en-US&gl=US&ceid=US:en",
-    "https://news.google.com/rss/search?q=port+st+lucie+florida&hl=en-US&gl=US&ceid=US:en",
-    "https://news.google.com/rss/search?q=vero+beach+florida&hl=en-US&gl=US&ceid=US:en",
-    "https://news.google.com/rss/search?q=fort+pierce+florida&hl=en-US&gl=US&ceid=US:en",
-    "https://news.google.com/rss/search?q=stuart+florida+news&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=treasure+coast+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=martin+county+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=port+st+lucie+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=vero+beach+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=fort+pierce+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
+    "https://news.google.com/rss/search?q=stuart+florida+news+when:3d&hl=en-US&gl=US&ceid=US:en",
 ]
 # Image bank — local Florida outlets
 IMAGE_BANK_FEEDS = [
@@ -4699,11 +4699,13 @@ def write_archives(all_categories, top_cat):
     updated_count = 0
     this_run_token_sets = []
 
-    # One-time cleanup: remove the WPTV fire-district duplicate that was published at
-    # its own permalink before the protection fix. The custom article at
-    # ".../fires-3..." is the authoritative version; this slug is the WPTV duplicate.
+    # One-time cleanup: remove specific bad articles by slug. Includes the WPTV
+    # fire-district duplicate (published before the custom-article protection fix; the
+    # custom ".../fires-3..." version is authoritative) and a non-newsworthy stale
+    # flight-tracking log that slipped through before the classifier/feed-window fixes.
     _DUP_SLUGS_TO_REMOVE = {
         "2026-07-18-st-lucie-county-fire-district-fires-3-firefighters-after-hazing-investigation-in",
+        "2026-07-19-halloween-flight-from-stuart-airport-to-georgia-documented",
     }
     _before = len(archive)
     archive = [e for e in archive if e.get("slug") not in _DUP_SLUGS_TO_REMOVE]
@@ -4984,7 +4986,12 @@ def classify_stories(feed_cache):
         "its own services, it is none\n"
         "  * a TV or radio station promoting itself or its own people (weather spotter, anchor, reporter, "
         "meteorologist or on-air personality profiles; behind-the-scenes-at-our-station pieces) — self-promotion "
-        "for a competing outlet, not news, even when it names a local town\n\n"
+        "for a competing outlet, not news, even when it names a local town\n"
+        "  * NON-NEWSWORTHY or automated data: a private individual's routine activity, automated flight-tracking "
+        "or vessel-tracking logs (e.g. 'Piper Aztec flew from Stuart to Georgia'), weather-station readings, "
+        "auto-generated data pages, obituaries-as-listings, or anything with no genuine public interest. If it is "
+        "just a record of one person's or family's private activity and not a matter of public concern, it is none. "
+        "A local news site reports events that matter to the community, not logs of who flew or sailed where\n\n"
         "Rules:\n"
         "- A story can have multiple categories (e.g. a Stuart restaurant opening = business + martin + things_to_do)\n"
         "- Statewide political stories (campaigns, fundraising, primaries) = florida ONLY, never local_gov\n"
