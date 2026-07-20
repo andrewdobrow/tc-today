@@ -3084,16 +3084,30 @@ def global_rank(all_cards, dedupe_against=None):
     ranked_input = all_cards
     stories = []
     for i, c in enumerate(ranked_input):
-        cat   = c.get("cat_label", "")
-        head  = c.get("headline", "")
-        stories.append(f"{i+1}. [{cat}] {head}")
+        cat      = c.get("cat_label", "")
+        head     = c.get("headline", "")
+        urgency  = int(c.get("urgency_score", 0) or 0)
+        origin   = "CUSTOM TCT" if c.get("is_custom") else "feed/archive"
+        placement = "category hero" if c.get("_category_hero_card") else "card"
+        stories.append(
+            f"{i+1}. [{cat}] [urgency {urgency}] [{origin}; {placement}] {head}"
+        )
     stories_text = "\n".join(stories)
     n = len(ranked_input)
 
+    # Accept the complete lead item so mandatory custom-story preservation can use
+    # full event context, not merely a headline. Strings remain supported for safety.
+    if isinstance(dedupe_against, dict):
+        lead_item = dedupe_against
+        lead_headline = lead_item.get("headline", "")
+    else:
+        lead_headline = str(dedupe_against or "")
+        lead_item = {"headline": lead_headline}
+
     dedupe_clause = ""
-    if dedupe_against:
+    if lead_headline:
         dedupe_clause = (
-            f"\nThe lead story already shown is: \"{dedupe_against}\"\n"
+            f"\nThe lead story already shown is: \"{lead_headline}\"\n"
             "EXCLUDE any story from your list that covers this same underlying event, "
             "even if worded very differently or framed from a different angle.\n"
         )
@@ -3110,6 +3124,9 @@ def global_rank(all_cards, dedupe_against=None):
         "of how differently they are phrased.\n"
         + dedupe_clause +
         "\n"
+        "CUSTOM TCT means original manual/staff reporting published directly by Treasure Coast Today. "
+        "When a CUSTOM TCT story and a feed/archive story cover the same event, ALWAYS keep the CUSTOM TCT version. "
+        "Do not omit a CUSTOM TCT story with urgency 7 or higher unless it genuinely duplicates the lead story above.\n"
         "PRIMARY signal: local relevance and impact on Treasure Coast residents.\n"
         "SECONDARY signal: recency — fresher local news ranks above older local news; edited timestamps do not make old stories new.\n"
         "Apply this weighting:\n"
@@ -3144,8 +3161,43 @@ def global_rank(all_cards, dedupe_against=None):
             if 0 <= i < n and i not in seen:
                 seen.add(i)
                 ranked.append(ranked_input[i])
-        # NOTE: stories Claude omitted are treated as duplicates and intentionally dropped.
-        # Only append back un-ranked stories if Claude returned suspiciously few (failure guard).
+        # High-urgency custom reporting is editorially authoritative. The model may
+        # omit numbers because it believes they are duplicates, but it is not allowed to
+        # silently remove an original TCT story unless it truly duplicates the visible lead.
+        mandatory_custom_indices = [
+            i for i, card in enumerate(ranked_input)
+            if card.get("is_custom")
+            and (
+                int(card.get("urgency_score", 0) or 0) >= 7
+                or card.get("pin_position")
+            )
+        ]
+        for i in mandatory_custom_indices:
+            if i in seen:
+                continue
+            card = ranked_input[i]
+            duplicates_lead = bool(lead_headline) and (
+                _same_custom_event(card, lead_item)
+                or _same_story(
+                    _sig_tokens(card.get("headline", "")),
+                    _sig_tokens(lead_headline),
+                )
+            )
+            if duplicates_lead:
+                continue
+            card_score = int(card.get("urgency_score", 0) or 0)
+            insert_at = next(
+                (
+                    pos for pos, existing_card in enumerate(ranked)
+                    if card_score > int(existing_card.get("urgency_score", 0) or 0)
+                ),
+                len(ranked),
+            )
+            ranked.insert(insert_at, card)
+            seen.add(i)
+            print(f"  Top News preserved custom article: '{card.get('headline','')[:60]}'")
+
+        # Only append back all unranked stories if Claude returned suspiciously few.
         if len(ranked) < max(3, n // 3):
             for i, card in enumerate(ranked_input):
                 if i not in seen:
@@ -3224,7 +3276,28 @@ def render_index(all_categories, top_cat):
         heroes_html += hero_section(cat["category_key"], cat["category_label"], cat["hero"], visible=False)
 
     all_cards_pool = []
+    front_hero = top_cat.get("hero", {})
+    front_hero_headline = front_hero.get("headline", "").strip().lower()
     for cat in all_categories:
+        # Category heroes other than the single visible front-page hero must also
+        # compete for Top News card positions. Previously they were omitted from the
+        # pool entirely, so a high-urgency custom article could become Martin County's
+        # hero and then disappear whenever another category won the overall lead slot.
+        category_hero = cat.get("hero") or {}
+        hero_headline = category_hero.get("headline", "").strip().lower()
+        if (
+            category_hero
+            and category_hero.get("enriched")
+            and category_hero is not front_hero
+            and hero_headline
+            and hero_headline != front_hero_headline
+            and not category_hero.get("_section_placeholder")
+        ):
+            category_hero["cat_label"] = cat["category_label"]
+            category_hero["cat_key"] = cat["category_key"]
+            category_hero["_category_hero_card"] = True
+            all_cards_pool.append(category_hero)
+
         for card in cat.get("cards", []):
             card["cat_label"] = cat["category_label"]
             card["cat_key"]   = cat["category_key"]
@@ -3311,22 +3384,51 @@ def render_index(all_categories, top_cat):
                     enriched_pool.append(_county_card)
 
     enriched_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
-    topnews     = global_rank(enriched_pool, dedupe_against=top_cat["hero"].get("headline", ""))
+    topnews = global_rank(enriched_pool, dedupe_against=top_cat["hero"])
+
+    # Belt-and-suspenders editorial guard: high-urgency or explicitly pinned custom
+    # articles belong in Top News unless the same event is already the lead story.
+    for card in enriched_pool:
+        if not card.get("is_custom"):
+            continue
+        if int(card.get("urgency_score", 0) or 0) < 7 and not card.get("pin_position"):
+            continue
+        if card in topnews:
+            continue
+        if (
+            _same_custom_event(card, top_cat["hero"])
+            or _same_story(
+                _sig_tokens(card.get("headline", "")),
+                _sig_tokens(top_cat["hero"].get("headline", "")),
+            )
+        ):
+            continue
+        card_score = int(card.get("urgency_score", 0) or 0)
+        insert_at = next(
+            (
+                pos for pos, existing_card in enumerate(topnews)
+                if card_score > int(existing_card.get("urgency_score", 0) or 0)
+            ),
+            len(topnews),
+        )
+        topnews.insert(insert_at, card)
+        print(f"  Top News forced high-urgency custom article: '{card.get('headline','')[:60]}'")
+
+    # pin_position controls a Top News slot, not merely the hidden all-category pool.
+    # The previous code moved pinned cards visually after topnews_ids had already been
+    # calculated, leaving them invisible whenever the Top News filter was active.
+    pinned = [(c.get("pin_position"), c) for c in topnews if c.get("pin_position")]
+    if pinned:
+        unpinned = [c for c in topnews if not c.get("pin_position")]
+        result = list(unpinned)
+        for pos, card in sorted(pinned, key=lambda x: x[0]):
+            idx = max(0, min(int(pos) - 1, len(result)))
+            result.insert(idx, card)
+        topnews = result
+
     topnews_ids = {id(c) for c in topnews}
     remaining   = [c for c in enriched_pool if id(c) not in topnews_ids]
     all_cards_display = topnews + remaining
-
-    # Apply pin_position overrides — pinned custom articles lock to specific slots
-    pinned = [(c.get("pin_position"), c) for c in all_cards_display if c.get("pin_position")]
-    if pinned:
-        unpinned = [c for c in all_cards_display if not c.get("pin_position")]
-        result = list(unpinned)
-        for pos, card in sorted(pinned, key=lambda x: x[0]):
-            idx = max(0, min(pos - 1, len(result)))
-            if card in result:
-                result.remove(card)
-            result.insert(idx, card)
-        all_cards_display = result
 
     archive_for_links = load_archive(OUTPUT_DIR / "archive.json")
 
@@ -6315,10 +6417,34 @@ def main():
                         _cat["hero"] = _cards.pop(0) if _cards else None
                         print(f"  Custom article displaced feed hero of same story in {_cat['category_key']}")
 
-                # Now place the custom article in its own category
+                # Now place the custom article in its own category. A high-urgency
+                # original TCT story must be allowed to become the category hero so it
+                # can compete for the overall front-page lead. Previously urgency was
+                # ignored here and every non-force_hero custom article was appended as a
+                # card behind whatever feed hero happened to be generated first.
                 _hero = target.get("hero")
-                if _hero is None or _same_as_custom(_hero):
+                _custom_score = int(art.get("urgency_score", 0) or 0)
+                _hero_score = int((_hero or {}).get("urgency_score", 0) or 0)
+                _promote_for_score = (
+                    _custom_score >= 7
+                    and (
+                        _hero is None
+                        or _custom_score > _hero_score
+                        or (
+                            _custom_score == _hero_score
+                            and not (_hero or {}).get("is_custom")
+                        )
+                    )
+                )
+                if _hero is None or _same_as_custom(_hero) or _promote_for_score:
+                    if _hero and not _same_as_custom(_hero):
+                        target.setdefault("cards", []).insert(0, _hero)
                     target["hero"] = art
+                    if _promote_for_score:
+                        print(
+                            f"  Custom urgency promotion: '{art['headline'][:50]}' "
+                            f"became {ckey} hero ({_custom_score} vs {_hero_score})"
+                        )
                 else:
                     target.setdefault("cards", []).append(art)
                 print(f"  Custom article: '{art['headline'][:50]}' -> {ckey}")
