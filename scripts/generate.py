@@ -2994,10 +2994,6 @@ def render_index(all_categories, top_cat):
     </div>
   </header>
   <main>
-    <section class="site-intro">
-      <h1 class="site-intro-title">Treasure Coast Today</h1>
-      <p class="site-intro-text">Local news for Florida's Treasure Coast: breaking news, crime and public safety, local government, business and development, sports and weather across Martin County, St. Lucie County and Indian River County, including Stuart, Port St. Lucie, Fort Pierce, Vero Beach, Jensen Beach, Sebastian and Hobe Sound.</p>
-    </section>
     {heroes_html}
     <div class="articles-grid" id="articlesGrid">
       {cards_html}
