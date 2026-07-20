@@ -1515,7 +1515,7 @@ Return ONLY valid JSON:
         return item
 
     data["hero"] = attach_source(data["hero"], headlines)
-    data["hero"]["body"] = strip_markdown(data["hero"].get("body", ""), data["hero"].get("headline", ""))
+    data["hero"]["body"] = strip_absence_language(strip_markdown(data["hero"].get("body", ""), data["hero"].get("headline", "")))
     for card in data.get("cards", []):
         attach_source(card, headlines)
         card["body"] = strip_absence_language(strip_markdown(card.get("body", ""), card.get("headline", "")))
