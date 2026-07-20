@@ -3328,16 +3328,31 @@ def render_index(all_categories, top_cat):
         _current_hls.add(cat["hero"].get("headline", "").strip().lower())
 
     _bf_archive = load_archive(OUTPUT_DIR / "archive.json")
-    _bf_archive.sort(key=lambda e: e.get("lastmod") or e.get("date", ""), reverse=True)
+
+    def _archive_first_publish_day(entry):
+        """Return the day TCT first published an archive entry.
+
+        Never use lastmod for homepage freshness: routine rewrites or headline
+        revisions must not turn a five-day-old article into today's first card.
+        """
+        raw = entry.get("material_update_at") or entry.get("first_published") or entry.get("date", "")
+        if not raw:
+            return ""
+        try:
+            return parsedate_to_datetime(raw).date().isoformat()
+        except Exception:
+            return str(raw)[:10]
+
+    _bf_archive.sort(key=_archive_first_publish_day, reverse=True)
     for e in _bf_archive:
         hl = (e.get("headline", "") or "").strip()
         if not hl or hl.lower() in _current_hls:
             continue
-        date_str = e.get("lastmod") or e.get("date", "")
+        date_str = _archive_first_publish_day(e)
         try:
             edt = datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=_tzbf.utc)
-            if (_now_bf - edt).days > 3:
-                continue  # Older than 3 days — leave for the Older section
+            if (_now_bf.date() - edt.date()).days > 3:
+                continue  # Older stories stay in the archive/Older section even if updated today
         except Exception:
             continue
         # Reconstruct a card from the archive entry
@@ -3348,8 +3363,8 @@ def render_index(all_categories, top_cat):
             "cat_label":  e.get("category_label", ""),
             "cat_key":    e.get("category_key", ""),
             "image_url":  e.get("image_url", ""),
-            "published":  e.get("lastmod") or e.get("date", ""),
-            "published_raw": e.get("lastmod") or e.get("date", ""),
+            "published":  e.get("material_update_at") or e.get("first_published") or e.get("date", ""),
+            "published_raw": e.get("material_update_at") or e.get("first_published") or e.get("date", ""),
             "enriched":   True,
             "urgency_score": 4,  # Backfill ranks below fresh cards
             "link":       f"{SITE_URL}/articles/{e['slug']}.html",
@@ -3434,21 +3449,21 @@ def render_index(all_categories, top_cat):
       </a>"""
 
     def card_display_date(card):
-        # Show the date the story was last updated ON OUR SITE (archive lastmod/date),
-        # not the original RSS published date, which can be weeks old for a story that
-        # has since been updated in place. Falls back to formatted published age.
+        # Show when TCT FIRST published the story. lastmod is an update/sitemap signal,
+        # not a new publication date, and must never make an older story look new.
         matched = find_matching_entry(card.get("headline",""), archive_for_links, card.get("link",""), is_weather_alert=bool(card.get("is_weather_alert")))
         if matched:
-            d = matched.get("lastmod") or matched.get("date", "")
-            if d:
+            raw = matched.get("first_published") or matched.get("date", "")
+            if raw:
                 try:
-                    from datetime import timezone as _tzc
-                    dt = datetime.strptime(d[:10], "%Y-%m-%d")
+                    try:
+                        dt = parsedate_to_datetime(raw)
+                    except Exception:
+                        dt = datetime.strptime(str(raw)[:10], "%Y-%m-%d")
                     months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
                     return f"{months[dt.month-1]} {dt.day}, {dt.year}"
                 except Exception:
-                    return d
-        # Fallback: the story's own published display string
+                    return str(raw)[:10]
         return card.get("published", "")
 
     cards_html = ""
@@ -3906,9 +3921,10 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     # published_raw (which for feed articles is the original source's timestamp).
     _pub_raw = hero.get("first_published") or hero.get("date", "") or pub_date
     _pub_display = _fmt_full(_pub_raw) if _pub_raw else pub_date
-    # "Updated" is intentionally not shown. Article pages are rewritten on routine runs
-    # even when nothing changed, and there is no reliable significant-change signal, so
-    # an "Updated" timestamp would be misleading. Published time is the honest signal.
+    _updated_raw = hero.get("material_update_at", "")
+    _updated_display = _fmt_full(_updated_raw) if _updated_raw else ""
+    _updated_html = (f'<span class="article-updated">Updated {_updated_display}</span>'
+                     if _updated_display and _updated_raw != _pub_raw else "")
 
     description = (hero.get("teaser") or hero.get("body", "")[:155]).replace('"', '')
     # Only use images from reliable/stable sources for og:image
@@ -3924,7 +3940,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         "description": description,
         "image":    [image_url] if image_url else [],
         "datePublished": _pub_raw or pub_date,
-        "dateModified":  _pub_raw or pub_date,
+        "dateModified":  _updated_raw or _pub_raw or pub_date,
         "author":    {
             "@type": "Person",
             "name":  "Andrew Dobrow",
@@ -3992,7 +4008,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         image_url=image_url,
         article_meta={
             "published": _pub_raw or pub_date,
-            "modified":  _pub_raw or pub_date,
+            "modified":  _updated_raw or _pub_raw or pub_date,
             "section":   category_label,
         },
     )
@@ -4112,6 +4128,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
       </div>
       <div class="article-times">
         <span class="article-published">Published {_pub_display}</span>
+        {_updated_html}
       </div>
       <h1 class="article-headline">{hero["headline"]}</h1>
       {img_html}
@@ -4570,18 +4587,19 @@ def find_matching_entry(headline, archive, source_url="", is_weather_alert=False
             src_tok = _sig_tokens(headline)
             for entry in archive:
                 if entry.get("source_url") and norm_url(entry["source_url"]) == norm_src:
-                    # For aggregator URLs, or any URL, sanity-check the headlines are
-                    # about the same thing before merging.
+                    # A stable publisher article URL is the strongest identity signal.
+                    # Publishers frequently revise headlines while keeping the same URL;
+                    # requiring token overlap here created duplicate TCT permalinks with a
+                    # new publication date for stories we had already covered. Aggregator
+                    # URLs are different because one feed URL may resolve to changing items.
+                    if not _is_agg:
+                        return entry
                     ent_tok = _sig_tokens(entry.get("headline", ""))
                     if src_tok and ent_tok:
                         overlap = _token_overlap(src_tok, ent_tok)
-                        # A URL match must be backed by real headline similarity.
-                        # Two shared words (e.g. "immigration" + "enforcement") is far
-                        # too weak — many distinct stories share that. Require 3+, or
-                        # for a very short headline, most of its tokens.
                         need = 3
                         if overlap < need and not (len(src_tok) <= 4 and overlap >= len(src_tok) - 1):
-                            continue  # same URL but clearly different stories — skip
+                            continue
                     return entry
 
     tok = _sig_tokens(headline)
@@ -4675,6 +4693,15 @@ def _page_head(title, description, canonical_path="", structured_data=None, imag
   <meta name="google-adsense-account" content="ca-pub-9679836198092378">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/style.css">
+  <style>
+    /* Keep the mobile document anchored even if a child element is oversized. */
+    html, body {{ width: 100%; max-width: 100%; overflow-x: hidden; }}
+    @supports (overflow: clip) {{ html, body {{ overflow-x: clip; }} }}
+    *, *::before, *::after {{ box-sizing: border-box; }}
+    img, video, iframe, svg, canvas {{ max-width: 100%; }}
+    main, header, footer, .header-inner {{ width: 100%; max-width: 100%; }}
+    .category-nav {{ max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; }}
+  </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 {schema}
@@ -5295,6 +5322,72 @@ def confirm_same_story(new_headline, new_teaser, existing_entry):
         return False
 
 
+
+def _material_update_fingerprint(text):
+    """Compact fact-oriented fingerprint used to distinguish routine rewrites from
+    genuinely new developments. It intentionally emphasizes numbers, dates, named
+    entities and change/status language rather than stylistic wording."""
+    text = re.sub(r"\s+", " ", (text or "")).strip()
+    words = re.findall(r"[A-Za-z0-9$%'-]+", text)
+    fact_words = []
+    status_terms = {
+        "arrested","charged","identified","died","killed","injured","hospitalized",
+        "approved","denied","passed","rejected","opened","closed","canceled",
+        "rescheduled","expanded","reduced","increased","decreased","announced",
+        "confirmed","released","sentenced","indicted","recovered","evacuated",
+        "contained","reopened","resolved","settled","filed","launched","completed",
+        "won","lost","signed","voted","declared","ordered","awarded","selected",
+    }
+    for w in words:
+        lw = w.lower().strip("'-")
+        if not lw:
+            continue
+        if any(ch.isdigit() for ch in lw) or lw in status_terms or (w[:1].isupper() and len(w) > 3):
+            fact_words.append(lw)
+    return sorted(set(fact_words))[:120]
+
+
+def _is_material_story_update(hero, existing):
+    """Return True only for a substantial new development to the same story.
+
+    Routine headline rewrites, added background and minor wording changes do not
+    refresh homepage freshness. A material update needs multiple new fact signals,
+    such as a changed status/outcome, newly identified person, new vote, arrest,
+    casualty figure, opening/closure, date, dollar amount or official decision.
+    """
+    new_text = " ".join([
+        hero.get("headline", ""), hero.get("teaser", ""), hero.get("body", "")
+    ])
+    old_text = " ".join([
+        existing.get("headline", ""), existing.get("teaser", ""),
+        existing.get("content_snapshot", "")
+    ])
+    new_fp = set(_material_update_fingerprint(new_text))
+    old_fp = set(existing.get("material_fingerprint") or _material_update_fingerprint(old_text))
+    novel = new_fp - old_fp
+
+    status_terms = {
+        "arrested","charged","identified","died","killed","injured","hospitalized",
+        "approved","denied","passed","rejected","opened","closed","canceled",
+        "rescheduled","expanded","reduced","increased","decreased","announced",
+        "confirmed","released","sentenced","indicted","recovered","evacuated",
+        "contained","reopened","resolved","settled","filed","launched","completed",
+        "won","lost","signed","voted","declared","ordered","awarded","selected",
+    }
+    novel_status = novel & status_terms
+    novel_numeric = {x for x in novel if any(ch.isdigit() for ch in x) or x.startswith("$") or x.endswith("%")}
+
+    # Conservative threshold: at least one changed outcome/status plus another new
+    # concrete fact, or three new concrete numeric/entity facts. This avoids turning
+    # routine rewrites into "fresh" news.
+    if novel_status and len(novel) >= 2:
+        return True
+    if len(novel_numeric) >= 2 and len(novel) >= 3:
+        return True
+    if len(novel) >= 5 and len(new_text.split()) >= max(140, int(len(old_text.split()) * 1.35)):
+        return True
+    return False
+
 def write_archives(all_categories, top_cat):
     articles_dir = OUTPUT_DIR / "articles"
     archive_path = OUTPUT_DIR / "archive.json"
@@ -5319,14 +5412,75 @@ def write_archives(all_categories, top_cat):
     _before = len(archive)
     archive = [e for e in archive if e.get("slug") not in _DUP_SLUGS_TO_REMOVE]
     if len(archive) < _before:
-        for _slug in _DUP_SLUGS_TO_REMOVE:
-            _dup_file = articles_dir / f"{_slug}.html"
+        # Remove bad entries from navigation/archive, but NEVER delete a published
+        # permalink. External RSS, Nextdoor and social links must remain valid forever.
+        # Existing HTML files are intentionally left in place.
+        print(f"  Removed {_before - len(archive)} known duplicate article(s) from archive; published URLs preserved")
+
+    # Automatic archive cleanup: the same stable publisher article URL must map to
+    # one TCT permalink. Earlier headline-overlap matching could create a second
+    # article when a publisher revised its headline. Preserve the oldest TCT entry
+    # and remove newer duplicates, including their redundant HTML files.
+    def _stable_source_key(entry):
+        raw = (entry.get("source_url", "") or "").strip().lower()
+        if not raw:
+            return ""
+        raw = re.sub(r"[?#].*$", "", raw).rstrip("/")
+        if any(x in raw for x in ("news.google.com", "google.com/rss", "bing.com/news", "/rss/")):
+            return ""
+        path = re.sub(r"^https?://[^/]+", "", raw)
+        return raw if len(path) > 10 else ""
+
+    def _entry_first_time(entry):
+        raw = entry.get("first_published") or entry.get("date", "")
+        try:
+            return parsedate_to_datetime(raw).timestamp()
+        except Exception:
             try:
-                if _dup_file.exists():
-                    _dup_file.unlink()
+                return datetime.strptime(str(raw)[:10], "%Y-%m-%d").timestamp()
             except Exception:
-                pass
-        print(f"  Removed {_before - len(archive)} known duplicate article(s) from archive")
+                return float("inf")
+
+    _by_source = {}
+    _duplicate_redirects = {}  # duplicate slug -> canonical oldest slug
+    for _entry in archive:
+        _key = _stable_source_key(_entry)
+        if not _key:
+            continue
+        _kept = _by_source.get(_key)
+        if _kept is None:
+            _by_source[_key] = _entry
+        elif _entry_first_time(_entry) < _entry_first_time(_kept):
+            old_kept_slug = _kept.get("slug", "")
+            new_kept_slug = _entry.get("slug", "")
+            if old_kept_slug and new_kept_slug:
+                _duplicate_redirects[old_kept_slug] = new_kept_slug
+            _by_source[_key] = _entry
+        else:
+            duplicate_slug = _entry.get("slug", "")
+            canonical_slug = _kept.get("slug", "")
+            if duplicate_slug and canonical_slug:
+                _duplicate_redirects[duplicate_slug] = canonical_slug
+
+    if _duplicate_redirects:
+        duplicate_slugs = set(_duplicate_redirects)
+        archive = [e for e in archive if e.get("slug") not in duplicate_slugs]
+        for duplicate_slug, canonical_slug in _duplicate_redirects.items():
+            # Published permalinks are immutable. Never unlink or rename an article
+            # file. Replace duplicate pages with a permanent canonical redirect so
+            # old RSS, Nextdoor and social links continue to resolve.
+            redirect_url = f"{SITE_URL}/articles/{canonical_slug}.html"
+            redirect_html = f"""<!doctype html>
+<html lang=\"en\"><head>
+<meta charset=\"utf-8\">
+<meta name=\"robots\" content=\"noindex,follow\">
+<link rel=\"canonical\" href=\"{redirect_url}\">
+<meta http-equiv=\"refresh\" content=\"0; url={redirect_url}\">
+<title>Article moved | Treasure Coast Today</title>
+<script>location.replace({json.dumps(redirect_url)});</script>
+</head><body><p>This article is available at <a href=\"{redirect_url}\">its permanent page</a>.</p></body></html>"""
+            (articles_dir / f"{duplicate_slug}.html").write_text(redirect_html, encoding="utf-8")
+        print(f"  Consolidated {len(_duplicate_redirects)} duplicate source-URL article(s); every published URL preserved with redirects")
 
     # BACKFILL is_custom on existing archive entries. The flag was added later, so
     # custom articles archived before then have no flag and would not be protected.
@@ -5457,7 +5611,7 @@ def write_archives(all_categories, top_cat):
         this_run_token_sets.append(_sig_tokens(headline))
 
         if existing:
-            # Same story — update existing page in place, keep original URL
+            # Same story — update content at the existing immutable permalink. The slug/URL is never changed.
             slug = existing["slug"]
             hero["first_published"] = existing.get("first_published") or existing.get("date", "")
 
@@ -5470,6 +5624,14 @@ def write_archives(all_categories, top_cat):
             _old_headline = (existing.get("headline","") or "").strip()
             _old_teaser   = (existing.get("teaser","") or "").strip()
             _content_changed = (_new_headline != _old_headline) or (_new_teaser != _old_teaser)
+            _material_update = _is_material_story_update(hero, existing)
+            if _material_update:
+                _material_ts = _now_eastern_rfc822()
+                existing["material_update_at"] = _material_ts
+                hero["material_update_at"] = _material_ts
+                print(f"  Material update refreshed: {headline[:60]}")
+            else:
+                hero["material_update_at"] = existing.get("material_update_at", "")
 
             _related = [e for e in archive
                         if e.get("category_key") == cat_key and e.get("slug") != slug]
@@ -5482,6 +5644,10 @@ def write_archives(all_categories, top_cat):
             existing["image_url"] = hero.get("image_url","")
             existing["article_word_count"] = _word_count(hero.get("body", ""))
             existing["article_paragraph_count"] = _paragraph_count(hero.get("body", ""))
+            existing["content_snapshot"] = (hero.get("body", "") or "")[:1800]
+            existing["material_fingerprint"] = _material_update_fingerprint(
+                " ".join([headline, hero.get("teaser", ""), hero.get("body", "")])
+            )
             if hero.get("event_url"):
                 existing["event_url"] = hero.get("event_url")
                 existing["event_link_text"] = hero.get("event_link_text", "")
@@ -5496,7 +5662,7 @@ def write_archives(all_categories, top_cat):
                 existing["source_url"] = source_url
             updated_count += 1
         else:
-            # New story — create new page
+            # Different event — create a new page while leaving every previously published permalink untouched
             existing_slugs = {e["slug"] for e in archive}
             if _forced_slug:
                 base_slug = _forced_slug
@@ -5531,6 +5697,11 @@ def write_archives(all_categories, top_cat):
                 "is_custom": bool(hero.get("is_custom")),
                 "article_word_count": _word_count(hero.get("body", "")),
                 "article_paragraph_count": _paragraph_count(hero.get("body", "")),
+                "content_snapshot": (hero.get("body", "") or "")[:1800],
+                "material_fingerprint": _material_update_fingerprint(
+                    " ".join([headline, hero.get("teaser", ""), hero.get("body", "")])
+                ),
+                "material_update_at": "",
                 "event_url": hero.get("event_url", ""),
                 "event_link_text": hero.get("event_link_text", ""),
             })
