@@ -799,12 +799,10 @@ def _hero_eligible(category_key, h):
         return False
 
 
-    # PRIMARY PATH: LLM classification. When available, the per-story category
-    # assignment decides eligibility — it understands content instead of matching
-    # words, so a DEA drug story is crime (not business via 'prices'), campaign
-    # fundraising is florida (not local_gov via 'vote'), and national survey filler
-    # is 'none'. The keyword logic below remains as the fallback when the
-    # classification call failed this run.
+    # LLM classification is a positive signal, never a bypass around deterministic
+    # locality/topic safety rules. The previous early return here meant that one bad
+    # classifier label skipped every outside-area block and hard negative below.
+    _classified_cats = None
     if STORY_CLASSIFICATION is not None:
         # Look up by the ORIGINAL RSS title first. Generated heroes/cards carry it in
         # source_title; raw feed items have it in title. The rewritten headline is a
@@ -818,11 +816,10 @@ def _hero_eligible(category_key, h):
                 continue
             cats = STORY_CLASSIFICATION.get(_key)
             if cats is not None:
-                if "none" in cats and len(cats) == 1:
-                    return False
-                return category_key in cats
-        # Story not in the classification map (e.g. a custom article) — fall through
-        # to keyword logic below.
+                _classified_cats = cats
+                break
+        if _classified_cats == {"none"}:
+            return False
 
     # Outside-coverage-area block: WPTV serves Palm Beach County and the wider
     # South Florida market, which is NOT the Treasure Coast. If a story is clearly
@@ -846,7 +843,9 @@ def _hero_eligible(category_key, h):
     ]
     _has_outside = any(p in text for p in _outside_places)
     _has_local   = any(p in text for p in _treasure_coast_places)
-    if _has_outside and not _has_local:
+    # Florida is the statewide section, so Tampa/Orlando/etc. are valid there.
+    # Every other section is Treasure Coast-local and must reject an outside-only story.
+    if category_key != "florida" and _has_outside and not _has_local:
         return False
 
     # Universal obituary block — obituaries should NEVER be a hero in any section,
@@ -923,7 +922,12 @@ def _hero_eligible(category_key, h):
     if category_key in county_terms:
         feed_url = (h.get("feed_url", "") or "").lower()
         county_feed_hints = {"martin": "region-martin-county", "st_lucie": "region-st-lucie-county", "indian_river": "region-indian-river-county"}
-        return county_feed_hints.get(category_key, "") in feed_url or _has_any(text, county_terms[category_key])
+        county_ok = county_feed_hints.get(category_key, "") in feed_url or _has_any(text, county_terms[category_key])
+        if not county_ok:
+            return False
+        if _classified_cats is not None:
+            return category_key in _classified_cats
+        return True
 
     if category_key in topic_terms:
         if _has_any(text, hard_negatives.get(category_key, [])):
@@ -959,18 +963,27 @@ def _hero_eligible(category_key, h):
         # reference an out-of-area place with no Treasure Coast connection.
         if category_key != "florida":
             feed_url = (h.get("feed_url", "") or "").lower()
+            _tc_places = [
+                "martin county", "st. lucie", "st lucie", "indian river", "treasure coast",
+                "stuart", "jensen beach", "palm city", "hobe sound", "port salerno",
+                "port st. lucie", "port st lucie", "fort pierce", "vero beach", "sebastian",
+                "fellsmere", "indiantown", "jupiter island", "hutchinson island",
+            ]
             if "state.rss" in feed_url or "floridapolitics" in feed_url:
                 # From a statewide feed — only allow if it explicitly names a local place
-                _tc_places = [
-                    "martin county", "st. lucie", "st lucie", "indian river", "treasure coast",
-                    "stuart", "jensen beach", "palm city", "hobe sound", "port salerno",
-                    "port st. lucie", "port st lucie", "fort pierce", "vero beach", "sebastian",
-                    "fellsmere", "indiantown", "jupiter island", "hutchinson island",
-                ]
                 if not _has_any(text, _tc_places):
                     return False
+            # Hyperlocal topic sections require a Treasure Coast anchor. This blocks
+            # national MLB/World Cup/political stories even when the classifier tags
+            # them as sports or business.
+            if not _has_any(text, _tc_places):
+                return False
+        if _classified_cats is not None:
+            return category_key in _classified_cats
         return _has_any(title, topic_terms[category_key]) or _has_any(text, topic_terms[category_key])
 
+    if _classified_cats is not None:
+        return category_key in _classified_cats
     return True
 
 
@@ -1462,8 +1475,15 @@ Return ONLY valid JSON:
             try:
                 data = json.loads(cleaned, strict=False)
             except json.JSONDecodeError:
-                start = cleaned.index("{")
-                end   = cleaned.rindex("}") + 1
+                start = cleaned.find("{")
+                end   = cleaned.rfind("}") + 1
+                if start == -1 or end <= start:
+                    # The model returned no JSON object at all (empty string, a refusal,
+                    # or prose). Raise a clear error the caller handles gracefully instead
+                    # of crashing the whole run with a bare ValueError from .index().
+                    raise ValueError(
+                        f"Model returned no JSON object (got {len(cleaned)} chars of non-JSON)"
+                    )
                 data  = json.loads(cleaned[start:end], strict=False)
     # The model must return a JSON object. If it returns a bare array (e.g. a list
     # of story objects, or the object wrapped in a list), normalize it to the dict
@@ -1501,6 +1521,7 @@ Return ONLY valid JSON:
                 # keyword logic and rejects stories the classifier already approved —
                 # which is what was emptying whole categories of their heroes.
                 item["source_title"] = source.get("title", "")
+                item["feed_url"] = source.get("feed_url", "")
             except (IndexError, ValueError, TypeError):
                 item["link"]      = ""
                 item["image_url"] = ""
@@ -1772,6 +1793,45 @@ Return ONLY valid JSON:
         # Drop cards that don't belong in this category
         if data.get("cards"):
             data["cards"] = [c for c in data["cards"] if _hero_eligible(category_key, c)]
+
+        # HARD LOCALITY GATE for county pages. The classifier sometimes places an
+        # out-of-area story (a Palm Beach wildfire, a Minneapolis rally) into a county
+        # and flags it hero-eligible. If that wrong story sits in the hero slot, the
+        # archive fallback below never fires (the code thinks the county already has a
+        # valid hero), and the county page leads with non-local news. So: a county hero
+        # MUST name one of that county's places. If it does not, clear it here so the
+        # eligibility swap / archive fallback replaces it with genuinely local content.
+        _county_places = {
+            "martin": ["martin county", "stuart", "jensen beach", "palm city",
+                       "hobe sound", "port salerno", "jupiter island",
+                       "hutchinson island", "indiantown", "palm city"],
+            "st_lucie": ["st. lucie", "st lucie", "port st. lucie", "port st lucie",
+                         "fort pierce", "st. lucie west", "hutchinson island"],
+            "indian_river": ["indian river", "vero beach", "sebastian", "fellsmere",
+                             "wabasso", "gifford"],
+        }.get(category_key, [])
+        if _county_places:
+            def _names_local_place(item):
+                blob = (item.get("headline", "") + " " + item.get("teaser", "") + " "
+                        + item.get("body", "")).lower()
+                return any(p in blob for p in _county_places)
+            if data.get("hero") and not _names_local_place(data["hero"]):
+                print(f"  Non-local hero cleared for {category_label}: "
+                      f"'{data['hero'].get('headline','')[:50]}' names no local place")
+                # Try a local card first; else leave hero to the archive fallback below.
+                _local_card = None
+                for _ci, _c in enumerate(data.get("cards", [])):
+                    if _names_local_place(_c):
+                        _local_card = _ci
+                        break
+                if _local_card is not None:
+                    data["hero"] = data["cards"].pop(_local_card)
+                else:
+                    data["hero"] = {}
+            # Drop non-local cards from county pages too
+            if data.get("cards"):
+                data["cards"] = [c for c in data["cards"] if _names_local_place(c)]
+
         if not _hero_eligible(category_key, data.get("hero", {})):
             _fixed = False
             for ci, card in enumerate(data.get("cards", [])):
@@ -1825,18 +1885,27 @@ Return ONLY valid JSON:
                                 continue
                         except Exception:
                             continue
-                        data["hero"] = {
+                        _archive_candidate = {
                             "headline": e.get("headline",""),
+                            "title": e.get("headline",""),
                             "teaser": e.get("teaser",""),
+                            "summary": e.get("teaser",""),
                             "body": e.get("teaser",""),
                             "image_url": e.get("image_url",""),
                             "published": e.get("lastmod") or e.get("date",""),
                             "published_raw": e.get("lastmod") or e.get("date",""),
+                            "source_quality": "full",
+                            "feed_url": e.get("feed_url", ""),
                             "enriched": True,
                             "urgency_score": 4,
                             "link": f"{SITE_URL}/articles/{e['slug']}.html",
                             "_archived_slug": e["slug"],
                         }
+                        # Never trust the old archive tag by itself; older runs may have
+                        # stored category bleed. Revalidate the archived story now.
+                        if not _hero_eligible(category_key, _archive_candidate):
+                            continue
+                        data["hero"] = _archive_candidate
                         print(f"  Archive-hero fallback for {category_label}: '{e.get('headline','')[:50]}'")
                         _fixed = True
                         break
@@ -1848,7 +1917,10 @@ Return ONLY valid JSON:
                     # is what happens when the guards above reject a hero that the
                     # classifier already approved. Promote the highest-urgency card
                     # rather than dropping a section that plainly has content.
-                    _cards = data.get("cards", []) or _cards_before_filter
+                    _cards = [
+                        c for c in (data.get("cards", []) or _cards_before_filter)
+                        if _hero_eligible(category_key, c)
+                    ]
                     if _cards:
                         _best_i = max(
                             range(len(_cards)),
@@ -2560,14 +2632,15 @@ def promote_duplicate_heroes(top_cat, all_categories):
                 print(f"  Dedup: keeping shared hero for {cat['category_label']} (county may mirror a topic hero)")
                 claimed_tokens.append(_sig_tokens(h))
             else:
-                cat["_drop_category"] = True
-                print(f"  Dedup: dropping {cat['category_label']} (hero duplicate, no alternative card)")
+                # Never remove a category merely because its best available lead also
+                # appears elsewhere. A shared hero is preferable to an empty or hidden
+                # category, and the archive/card grid still gives the section depth.
+                print(f"  Dedup: keeping shared hero for {cat['category_label']} "
+                      f"(no non-duplicate alternative available)")
+                claimed_tokens.append(_sig_tokens(h))
         else:
             if h:
                 claimed_tokens.append(_sig_tokens(h))
-
-    # Drop any categories flagged with no alternative
-    all_categories[:] = [c for c in all_categories if not c.get("_drop_category")]
 
     # -- Semantic pass: catch differently-worded duplicates of the front page hero --
     fp_headline = top_cat["hero"].get("headline", "")
@@ -2722,13 +2795,21 @@ def render_index(all_categories, top_cat):
         display     = "" if visible else ' style="display:none"'
         fade        = " fade-in" if visible else ""
         archive     = load_archive(OUTPUT_DIR / "archive.json")
-        matched     = find_matching_entry(hero.get("headline",""), archive, hero.get("link",""), is_weather_alert=bool(hero.get("is_weather_alert")))
-        if matched:
-            slug = matched["slug"]
+        if hero.get("_section_placeholder"):
+            article_url = f"{SITE_URL}/archive.html"
+        elif hero.get("_archived_slug"):
+            article_url = f"{SITE_URL}/articles/{hero['_archived_slug']}.html"
         else:
-            today = datetime.utcnow().strftime("%Y-%m-%d")
-            slug  = f"{today}-{slugify(hero.get('headline', ''))}"
-        article_url = f"{SITE_URL}/articles/{slug}.html"
+            matched = find_matching_entry(
+                hero.get("headline", ""), archive, hero.get("link", ""),
+                is_weather_alert=bool(hero.get("is_weather_alert")),
+            )
+            if matched:
+                slug = matched["slug"]
+            else:
+                today = datetime.utcnow().strftime("%Y-%m-%d")
+                slug = f"{today}-{slugify(hero.get('headline', ''))}"
+            article_url = f"{SITE_URL}/articles/{slug}.html"
         section_label = ""
         if cat_key in SECTION_LABELS:
             seo_text  = SECTION_LABELS[cat_key]
@@ -2984,8 +3065,8 @@ def render_index(all_categories, top_cat):
 
     older_section = older_sections_html
 
-    # Header/nav should be stable even if a category fails to generate content in a run.
-    # Build nav from the master CATEGORIES config, not all_categories.
+    # Category navigation is permanent. A weak/failed live run is recovered from the
+    # archive before rendering, so there is never a reason to hide a category button.
     nav_buttons = "\n        ".join(
         ['<button class="cat-btn active" data-cat="all">Top News</button>'] +
         [
@@ -4810,6 +4891,11 @@ def write_archives(all_categories, top_cat):
     all_articles = list(_best_by_slug.values())
 
     for cat_key, cat_label, hero in all_articles:
+        # Archive recovery items already have permanent article pages. They are reused
+        # for section continuity only and must not rewrite/degrade those pages from a
+        # short archive teaser.
+        if hero.get("_archive_only") or hero.get("_section_placeholder"):
+            continue
         headline = hero.get("headline", "").strip()
         if not headline:
             continue
@@ -5065,6 +5151,147 @@ def classify_stories(feed_cache):
     return result
 
 
+
+def ensure_all_category_sections(all_categories, min_cards=6):
+    """Guarantee every configured category has a visible, populated section.
+
+    Fresh/live content remains preferred. When a category fails generation, has no
+    valid hero, or has too few cards, recover the newest matching stories from the
+    permanent archive. Archive recovery has no freshness cutoff: an older real story
+    is always better than hiding a category or presenting an empty section.
+    """
+    archive = load_archive(OUTPUT_DIR / "archive.json")
+    archive.sort(key=lambda e: e.get("lastmod") or e.get("date", ""), reverse=True)
+
+    county_places = {
+        "martin": [
+            "martin county", "stuart", "jensen beach", "palm city", "hobe sound",
+            "port salerno", "jupiter island", "indiantown", "rio", "sewall",
+        ],
+        "st_lucie": [
+            "st. lucie", "st lucie", "port st. lucie", "port st lucie",
+            "fort pierce", "st. lucie west", "st lucie west",
+        ],
+        "indian_river": [
+            "indian river", "vero beach", "sebastian", "fellsmere", "wabasso", "gifford",
+        ],
+    }
+
+    def entry_matches(e, category_key):
+        if not e.get("headline") or not e.get("slug"):
+            return False
+        if e.get("category_key") == category_key:
+            return True
+        if category_key in county_places:
+            blob = (e.get("headline", "") + " " + e.get("teaser", "")).lower()
+            return any(place in blob for place in county_places[category_key])
+        return False
+
+    def archived_story(e, category_key):
+        label = CATEGORIES[category_key]["label"]
+        body = (e.get("body") or e.get("teaser") or "").strip()
+        if not body:
+            body = f"Read this {label.lower()} story from the Treasure Coast Today archive."
+        image_url = e.get("image_url", "")
+        image_credit = e.get("image_credit", "")
+        if not image_url:
+            image_url, image_credit = get_fallback_image(category_key, e.get("headline", ""))
+        return {
+            "headline": e.get("headline", ""),
+            "teaser": e.get("teaser", "") or body[:220],
+            "body": body,
+            "image_url": image_url,
+            "image_credit": image_credit,
+            "published": e.get("lastmod") or e.get("date", ""),
+            "published_raw": e.get("lastmod") or e.get("date", ""),
+            "urgency_score": 2,
+            "enriched": True,
+            "source_quality": "archive",
+            "category_key": category_key,
+            "category_label": label,
+            "link": f"{SITE_URL}/articles/{e['slug']}.html",
+            "_archived_slug": e["slug"],
+            "_archive_only": True,
+        }
+
+    by_key = {c.get("category_key"): c for c in all_categories if c.get("category_key")}
+    rebuilt = []
+
+    for category_key, config in CATEGORIES.items():
+        category = by_key.get(category_key)
+        if category is None:
+            category = {
+                "category_key": category_key,
+                "category_label": config["label"],
+                "hero": None,
+                "cards": [],
+            }
+        category["category_key"] = category_key
+        category["category_label"] = config["label"]
+        category["_drop_category"] = False
+        category.setdefault("cards", [])
+
+        # Collect archive candidates once, newest first, and avoid duplicates already
+        # present in the live category.
+        existing_headlines = {
+            (item.get("headline", "") or "").strip().lower()
+            for item in ([category.get("hero")] + category.get("cards", []))
+            if item
+        }
+        candidates = [e for e in archive if entry_matches(e, category_key)]
+
+        if not category.get("hero") or not category["hero"].get("headline"):
+            for entry in candidates:
+                headline_key = entry.get("headline", "").strip().lower()
+                if not headline_key or headline_key in existing_headlines:
+                    continue
+                category["hero"] = archived_story(entry, category_key)
+                existing_headlines.add(headline_key)
+                print(f"  Permanent archive recovery hero for {config['label']}: "
+                      f"'{entry.get('headline','')[:55]}'")
+                break
+
+        # Populate a thin live category with older real articles. These appear as normal
+        # cards and the remaining archive entries continue to appear in More Stories.
+        for entry in candidates:
+            if len(category["cards"]) >= min_cards:
+                break
+            headline_key = entry.get("headline", "").strip().lower()
+            if not headline_key or headline_key in existing_headlines:
+                continue
+            category["cards"].append(archived_story(entry, category_key))
+            existing_headlines.add(headline_key)
+
+        if not category.get("hero") and category.get("cards"):
+            category["hero"] = category["cards"].pop(0)
+
+        # Absolute first-run safety. This should almost never be used once archive.json
+        # contains stories, but it keeps the navigation and section structurally intact.
+        if not category.get("hero"):
+            fallback_img, fallback_credit = get_fallback_image(category_key, config["label"])
+            category["hero"] = {
+                "headline": f"{config['label']} coverage",
+                "teaser": f"Browse Treasure Coast Today's latest {config['label'].lower()} reporting.",
+                "body": f"Browse Treasure Coast Today's latest {config['label'].lower()} reporting and archived stories.",
+                "image_url": fallback_img,
+                "image_credit": fallback_credit,
+                "published": "",
+                "published_raw": "",
+                "urgency_score": 0,
+                "enriched": True,
+                "source_quality": "section_placeholder",
+                "category_key": category_key,
+                "category_label": config["label"],
+                "link": f"{SITE_URL}/archive.html",
+                "_section_placeholder": True,
+            }
+            print(f"  Structural placeholder used for {config['label']} (archive has no matching story)")
+
+        rebuilt.append(category)
+
+    all_categories[:] = rebuilt
+    return all_categories
+
 def main():
     print("Treasure Coast Today — building site...")
     image_bank   = build_image_bank()
@@ -5148,7 +5375,25 @@ def main():
 
         print(f"  {len(headlines)} headlines fetched")
         try:
-            data = generate_category_content(cat_key, cat_config["label"], headlines)
+            try:
+                data = generate_category_content(cat_key, cat_config["label"], headlines)
+            except (ValueError, json.JSONDecodeError) as first_generation_error:
+                # A blank/truncated model response should not erase an entire category.
+                # Retry once with the same grounded source set; the outer handler still
+                # isolates a persistent failure so the rest of the site can finish.
+                print(f"  Category generation returned invalid JSON for {cat_config['label']} "
+                      f"({first_generation_error}); retrying once")
+                data = generate_category_content(cat_key, cat_config["label"], headlines)
+
+            # Claude's initial generation already used the exact selected source. Mark a
+            # substantial generated body as publishable even when the optional second
+            # enrichment pass cannot fetch/scrape more text.
+            if data.get("hero") and len((data["hero"].get("body", "") or "").split()) >= 60:
+                data["hero"]["enriched"] = True
+            for _card in data.get("cards", []):
+                if (len((_card.get("body", "") or "").split()) >= 50
+                        and _card.get("source_quality") not in {"thin", "discovery_only"}):
+                    _card["enriched"] = True
 
             # If the category was dropped or produced no usable hero, skip it entirely
             # rather than crashing on data["hero"]["headline"] below.
@@ -5246,22 +5491,9 @@ def main():
                 else:
                     print(f"  Enhancement skipped: insufficient keyword overlap")
 
-            # Stale hero demotion
-            from email.utils import parsedate_to_datetime as _parse_pub
-            from datetime import timezone as _tz3
-            _now3 = datetime.now(_tz3.utc)
-            _raw_pub = data["hero"].get("published_raw","")
-            if _raw_pub:
-                try:
-                    _dt  = _parse_pub(_raw_pub).astimezone(_tz3.utc)
-                    _age = (_now3 - _dt).total_seconds() / 3600
-                    if _age > 24 and data.get("cards"):
-                        print(f"  Demoting stale hero ({_age:.0f}h old), promoting next card for {cat_config['label']}")
-                        old_hero = data["hero"]
-                        data["hero"]  = data["cards"][0]
-                        data["cards"] = data["cards"][1:] + [old_hero]
-                except Exception:
-                    pass
+            # Do not perform another stale swap here. generate_category_content already
+            # ran stale selection followed by the final category guard. A second blind
+            # cards[0] promotion here was reintroducing category bleed after validation.
 
             if data.get("_drop_category"):
                 print(f"  Skipping {cat_config['label']}: no on-topic content")
@@ -5279,21 +5511,31 @@ def main():
                     try: _fut.result(timeout=10)
                     except Exception: pass
 
-            # Hero quality gate: the hero MUST be enriched. If it isn't, promote the
-            # first enriched card. If nothing in the category enriched at all, the
-            # category has no publishable content this run and is skipped entirely.
+            # Enrichment is preferred, but it may never override category eligibility.
+            # A substantial generated hero is already publishable; do not delete an
+            # entire county section merely because the optional scrape/rewrite failed.
             if not data["hero"].get("enriched"):
-                swapped = False
                 for ci, card in enumerate(data.get("cards", [])):
-                    if card.get("enriched"):
+                    if card.get("enriched") and _hero_eligible(cat_key, card):
                         print(f"  Thin hero swap for {cat_config['label']}: '{data['hero'].get('headline','')[:50]}' -> '{card.get('headline','')[:50]}'")
                         old_hero = data["hero"]
                         data["hero"] = card
                         data["cards"][ci] = old_hero
-                        swapped = True
                         break
-                if not swapped:
-                    print(f"  Skipping {cat_config['label']}: no enriched content this run")
+
+            # One final check after every optional enrichment/swap in main. No code
+            # below this point may silently turn an off-topic card into the section hero.
+            if not _hero_eligible(cat_key, data.get("hero", {})):
+                replacement_i = next(
+                    (i for i, c in enumerate(data.get("cards", [])) if _hero_eligible(cat_key, c)),
+                    None,
+                )
+                if replacement_i is not None:
+                    old_hero = data["hero"]
+                    data["hero"] = data["cards"][replacement_i]
+                    data["cards"][replacement_i] = old_hero
+                else:
+                    print(f"  Removing {cat_config['label']}: final hero failed category validation")
                     all_categories.remove(data)
 
         except Exception as e:
@@ -5369,12 +5611,9 @@ def main():
                     target.setdefault("cards", []).append(art)
                 print(f"  Custom article: '{art['headline'][:50]}' -> {ckey}")
 
-    # Drop any category containers that still have no hero (safety)
-    all_categories = [c for c in all_categories if c.get("hero")]
-
-    if not all_categories:
-        print("No categories with heroes. Aborting.")
-        return
+    # Never hide or drop a configured category. Recover missing/thin sections from
+    # archive.json and guarantee a hero plus a useful card pool for every category.
+    ensure_all_category_sections(all_categories, min_cards=6)
 
     # Front page hero selection
     top_cat = select_front_page_hero(all_categories)
