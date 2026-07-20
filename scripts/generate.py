@@ -1009,6 +1009,71 @@ def _county_locality_evidence(category_key, item):
         return True
     return False
 
+
+
+def _county_story_matches(category_key, item):
+    """Return True only when the target county is a primary or meaningful location.
+
+    A single incidental body mention is not enough. Another county named in the
+    headline is a hard rejection unless the target county is also named there.
+    """
+    if category_key not in COUNTY_KEYS:
+        return True
+
+    title = _strip_quoted_phrases(" ".join([
+        item.get("headline", "") or "", item.get("title", "") or "",
+        item.get("source_title", "") or "",
+    ])).lower()
+    body = _strip_quoted_phrases(" ".join([
+        item.get("teaser", "") or "", item.get("summary", "") or "",
+        item.get("source_summary", "") or "", item.get("body", "") or "",
+        item.get("article_text", "") or "",
+    ])).lower()
+
+    terms = {
+        "martin": ["martin county", "jensen beach", "palm city", "hobe sound",
+                   "port salerno", "jupiter island", "indiantown",
+                   "sewall's point", "sewalls point", "city of stuart",
+                   "stuart, florida", "stuart, fla", "stuart police",
+                   "stuart city", "downtown stuart"],
+        "st_lucie": ["st. lucie county", "st lucie county", "port st. lucie",
+                     "port st lucie", "fort pierce", "st. lucie west",
+                     "st lucie west"],
+        "indian_river": ["indian river county", "vero beach", "fellsmere",
+                         "wabasso", "gifford", "indian river shores",
+                         "town of orchid", "city of sebastian",
+                         "sebastian, florida", "sebastian, fla",
+                         "sebastian police", "sebastian city"],
+    }
+
+    def count(blob, values):
+        return sum(blob.count(v) for v in values)
+
+    title_counts = {k: count(title, v) for k, v in terms.items()}
+    body_counts = {k: count(body, v) for k, v in terms.items()}
+    target_title = title_counts[category_key]
+    target_body = body_counts[category_key]
+    other_title = max((v for k, v in title_counts.items() if k != category_key), default=0)
+    other_body = max((v for k, v in body_counts.items() if k != category_key), default=0)
+
+    # A headline centered on another county cannot be rescued by an incidental
+    # target-county mention buried in the article.
+    if other_title > 0 and target_title == 0:
+        return False
+
+    # A target place in the headline is strong primary-location evidence.
+    if target_title > 0:
+        return True
+
+    # Dedicated county feeds may establish location for short headlines, but never
+    # when the text itself points more strongly to another county.
+    if _trusted_county_feed(category_key, item) and other_title == 0 and target_body >= other_body:
+        return True
+
+    # Body-only evidence must be meaningful, not one stray mention. Require at least
+    # two target references and no stronger competing county.
+    return target_body >= 2 and target_body >= other_body and target_body > 0
+
 def _has_treasure_coast_locality(item):
     raw = _strip_quoted_phrases(_story_locality_blob(item))
     return "treasure coast" in raw or any(
@@ -1282,7 +1347,7 @@ def _hero_eligible(category_key, h):
     }
 
     if category_key in COUNTY_KEYS:
-        return _county_locality_evidence(category_key, h)
+        return _county_story_matches(category_key, h)
 
     if category_key in topic_terms:
         if _has_any(text, hard_negatives.get(category_key, [])):
@@ -1526,6 +1591,11 @@ def filter_category_headlines(category_key, headlines, target=HEADLINES_PER_CATE
     hero_ready = [h for _, h in scored if h.get("hero_eligible") == "yes"]
 
     if len(filtered) < min_keep:
+        if category_key in COUNTY_KEYS:
+            strict = [h for score, h in sorted(scored, key=lambda x: x[0], reverse=True)
+                      if score >= threshold and _county_story_matches(category_key, h)]
+            print(f"  Category filter: only {len(strict)} verified county matches; archive will fill remaining cards")
+            return strict[:target]
         if hero_ready:
             filler = [h for score, h in sorted(scored, key=lambda x: x[0], reverse=True) if h not in hero_ready]
             combined = hero_ready + filler
@@ -2980,7 +3050,8 @@ def promote_duplicate_heroes(top_cat, all_categories):
             # Promote next non-duplicate card
             promoted = None
             for ci, card in enumerate(cat.get("cards", [])):
-                if not _dupe_of_claimed(card.get("headline",""), claimed_tokens):
+                if (_hero_eligible(cat["category_key"], card) and
+                        not _dupe_of_claimed(card.get("headline", ""), claimed_tokens)):
                     promoted = (ci, card); break
             if promoted:
                 ci, card = promoted
@@ -3005,6 +3076,37 @@ def promote_duplicate_heroes(top_cat, all_categories):
         else:
             if h:
                 claimed_tokens.append(_sig_tokens(h))
+
+    # Final invariant: no post-recovery or post-dedup operation may leave a county
+    # section containing a story whose primary geography is another county.
+    for cat in all_categories:
+        key = cat.get("category_key")
+        if key not in COUNTY_KEYS:
+            continue
+        valid_cards = [c for c in cat.get("cards", []) if _county_story_matches(key, c)]
+        removed = len(cat.get("cards", [])) - len(valid_cards)
+        cat["cards"] = valid_cards
+        if cat.get("hero") and not _county_story_matches(key, cat["hero"]):
+            replacement_idx = next((i for i, c in enumerate(valid_cards) if _hero_eligible(key, c)), None)
+            if replacement_idx is not None:
+                cat["hero"] = dict(valid_cards.pop(replacement_idx))
+                cat["cards"] = valid_cards
+            else:
+                print(f"  FINAL COUNTY GUARD: no valid replacement hero for {cat['category_label']}; keeping section placeholder")
+                img, credit = get_fallback_image(key, cat.get("category_label", ""))
+                cat["hero"] = {
+                    "headline": f"{cat['category_label']} coverage",
+                    "teaser": f"Browse Treasure Coast Today's latest {cat['category_label'].lower()} reporting.",
+                    "body": f"Browse Treasure Coast Today's latest {cat['category_label'].lower()} reporting and archived stories.",
+                    "image_url": img, "image_credit": credit, "published": "",
+                    "published_raw": "", "urgency_score": 0, "enriched": True,
+                    "source_quality": "section_placeholder", "category_key": key,
+                    "category_label": cat["category_label"], "link": f"{SITE_URL}/archive.html",
+                    "_section_placeholder": True,
+                }
+        if removed:
+            print(f"  FINAL COUNTY GUARD: removed {removed} cross-county card(s) from {cat['category_label']}")
+
 
     # -- Semantic pass: catch differently-worded duplicates of the front page hero --
     fp_headline = top_cat["hero"].get("headline", "")
@@ -3039,11 +3141,16 @@ def promote_duplicate_heroes(top_cat, all_categories):
     for i, cat in enumerate(others):
         if (i + 1) in dupes:
             cards = cat.get("cards", [])
-            if cards:
-                promoted = cards[0]
+            promoted_idx = next((j for j, card in enumerate(cards)
+                                 if _hero_eligible(cat["category_key"], card)), None)
+            if promoted_idx is not None:
+                promoted = cards[promoted_idx]
                 cat["hero"] = dict(promoted)
-                cat["cards"] = cards[1:]
-                print(f"  Promoted next card to hero for {cat['category_label']} (semantic duplicate of front page hero)")
+                cat["cards"] = cards[:promoted_idx] + cards[promoted_idx + 1:]
+                print(f"  Promoted validated card to hero for {cat['category_label']} (semantic duplicate of front page hero)")
+            else:
+                print(f"  Dedup: keeping shared hero for {cat['category_label']} (no validated alternative)")
+
 
 
 def global_rank(all_cards, dedupe_against=None):
@@ -5584,7 +5691,7 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             }
             # County archive recovery never trusts the old category_key by itself.
             # That old label may be exactly how a bad Stuart/Sebastian match entered.
-            return _county_locality_evidence(category_key, probe)
+            return _county_story_matches(category_key, probe)
         return e.get("category_key") == category_key
 
     def archived_story(e, category_key):
@@ -5637,13 +5744,13 @@ def ensure_all_category_sections(all_categories, min_cards=6):
         # geography. A stale archive category label or bare name like "Stuart" is not
         # enough to survive here.
         if category_key in COUNTY_KEYS:
-            if category.get("hero") and not _county_locality_evidence(category_key, category["hero"]):
+            if category.get("hero") and not _county_story_matches(category_key, category["hero"]):
                 print(f"  Permanent county guard removed non-local hero from {config['label']}: "
                       f"'{category['hero'].get('headline','')[:55]}'")
                 category["hero"] = None
             category["cards"] = [
                 c for c in category.get("cards", [])
-                if _county_locality_evidence(category_key, c)
+                if _county_story_matches(category_key, c)
             ]
 
         # Collect archive candidates once, newest first, and avoid duplicates already
