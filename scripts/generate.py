@@ -167,6 +167,14 @@ def category_max_age_hours(category_key):
 
 OUTPUT_DIR   = Path(__file__).parent.parent
 SITE_URL     = "https://treasurecoast.today"
+
+# Published duplicate URLs that must remain reachable but must never appear as
+# independent stories in the archive, sitemap, RSS, homepage recovery, or cards.
+# write_archives() converts each source file into a canonical redirect to the
+# authoritative custom TCT article.
+PERMANENT_REDIRECT_SOURCE_SLUGS = {
+    "2026-07-20-stuart-woman-arrested-after-deputies-rescue-80-cats-from-home-in-worst-hoarding",
+}
 SITE_NAME    = "Treasure Coast Today"
 SITE_TAGLINE = "Your Treasure Coast, every day."
 
@@ -3784,7 +3792,16 @@ def load_custom_articles():
 def load_archive(archive_path):
     try:
         if archive_path.exists():
-            return json.loads(archive_path.read_text(encoding="utf-8"))
+            data = json.loads(archive_path.read_text(encoding="utf-8"))
+            if isinstance(data, list):
+                # Redirect-source articles are no longer standalone stories. Filtering
+                # here prevents archive recovery or link lookup from resurrecting them
+                # before write_archives() rewrites the old HTML file as a redirect.
+                return [
+                    entry for entry in data
+                    if entry.get("slug") not in PERMANENT_REDIRECT_SOURCE_SLUGS
+                ]
+            return []
     except Exception:
         pass
     return []
@@ -4443,6 +4460,134 @@ def _same_story(tok_a, tok_b, threshold=4):
         return False
     distinctive = [t for t in shared if t not in GENERIC_TOKENS]
     return len(distinctive) >= 2
+
+
+# Custom articles are authoritative, but headline-only token matching is not enough.
+# A feed headline can frame the same event very differently (for example, "80 cats
+# rescued" versus "more than 70 animals found"). These helpers compare the headline,
+# teaser, and article body using normalized event concepts and local geography.
+CUSTOM_EVENT_STOPWORDS = {
+    "the", "a", "an", "and", "or", "but", "if", "to", "of", "in", "on",
+    "at", "for", "from", "with", "by", "after", "before", "during", "into",
+    "over", "under", "more", "than", "about", "approximately", "around",
+    "official", "officials", "authorities", "according", "said", "says",
+    "say", "reported", "reports", "report", "case", "worst", "seen",
+    "large", "scale", "response", "woman", "man", "resident", "residents",
+    "people", "person", "year", "years", "old", "new", "found", "finds",
+}
+
+CUSTOM_EVENT_ALIASES = {
+    "cat": "animal", "cats": "animal", "feline": "animal", "felines": "animal",
+    "animal": "animal", "animals": "animal",
+    "hoarder": "hoard", "hoarders": "hoard", "hoarding": "hoard", "hoarded": "hoard",
+    "rescue": "rescue", "rescued": "rescue", "rescues": "rescue", "recover": "rescue",
+    "recovered": "rescue", "remove": "rescue", "removed": "rescue", "removing": "rescue",
+    "deputy": "sheriff", "deputies": "sheriff", "sheriffs": "sheriff", "mcso": "sheriff",
+    "house": "home", "residence": "home", "property": "home",
+    "arrested": "arrest", "arrests": "arrest", "charged": "arrest",
+}
+
+CUSTOM_EVENT_GENERIC = {
+    "news", "today", "local", "county", "florida", "article", "story", "event",
+    "investigation", "investigators", "working", "continued", "continuing",
+}
+
+
+def _custom_event_blob(item):
+    if not item:
+        return ""
+    return " ".join([
+        str(item.get("headline", "") or ""),
+        str(item.get("teaser", "") or item.get("summary", "") or ""),
+        str(item.get("body", "") or item.get("article_text", "") or "")[:1600],
+        str(item.get("category_label", "") or ""),
+    ])
+
+
+def _custom_event_tokens(item):
+    words = re.findall(r"[a-z0-9]+", _custom_event_blob(item).lower())
+    out = set()
+    for word in words:
+        if word in CUSTOM_EVENT_STOPWORDS or len(word) < 3:
+            continue
+        # Exact counts frequently change as a scene is processed. Treat 70-89 as
+        # the same approximate mass-count concept for this kind of developing event.
+        if word.isdigit():
+            try:
+                n = int(word)
+            except ValueError:
+                continue
+            if 70 <= n <= 89:
+                out.add("many_animals")
+            continue
+        word = CUSTOM_EVENT_ALIASES.get(word, _stem(word))
+        if word and word not in CUSTOM_EVENT_GENERIC:
+            out.add(word)
+    return frozenset(out)
+
+
+def _custom_event_locations(item):
+    text = _custom_event_blob(item).lower()
+    locs = set()
+    for phrase, key in [
+        ("martin county", "martin"), ("stuart", "martin"),
+        ("jensen beach", "martin"), ("palm city", "martin"),
+        ("hobe sound", "martin"), ("indiantown", "martin"),
+        ("st. lucie county", "st_lucie"), ("st lucie county", "st_lucie"),
+        ("port st. lucie", "st_lucie"), ("port st lucie", "st_lucie"),
+        ("fort pierce", "st_lucie"),
+        ("indian river county", "indian_river"), ("vero beach", "indian_river"),
+        ("sebastian", "indian_river"), ("fellsmere", "indian_river"),
+    ]:
+        if phrase in text:
+            locs.add(key)
+    return frozenset(locs)
+
+
+def _same_custom_event(custom_article, candidate):
+    """Conservative full-context match used only to give custom TCT work priority.
+
+    It requires compatible local geography and either a strong shared event signature
+    or a high overlap of distinctive normalized concepts. It is deliberately separate
+    from the general archive matcher so this stronger logic cannot merge unrelated
+    feed stories with one another.
+    """
+    a = _custom_event_tokens(custom_article)
+    b = _custom_event_tokens(candidate)
+    if not a or not b:
+        return False
+
+    loc_a = _custom_event_locations(custom_article)
+    loc_b = _custom_event_locations(candidate)
+    if loc_a and loc_b and not (loc_a & loc_b):
+        return False
+
+    shared = a & b
+    distinctive = shared - CUSTOM_EVENT_GENERIC
+
+    # Strong event anchors for animal-hoarding coverage. This catches the current
+    # Stuart story even though one headline says "animals found" and the other says
+    # "cats rescued," while still requiring the same local area and corroborating
+    # concepts such as sheriff/home/rescue.
+    if {"animal", "hoard"}.issubset(a) and {"animal", "hoard"}.issubset(b):
+        supporting = shared & {"sheriff", "home", "rescue", "arrest", "many_animals", "stuart", "martin"}
+        if (loc_a & loc_b or loc_a or loc_b) and len(supporting) >= 2:
+            return True
+
+    # General custom-priority rule. Broad local-news words such as sheriff,
+    # home, rescue, and the county name are not enough on their own; otherwise a
+    # separate dog rescue or shelter story could suppress the hoarding report.
+    broad = {
+        "animal", "home", "sheriff", "rescue", "arrest", "martin", "stuart",
+        "st_lucie", "indian_river", "city", "need", "office", "service",
+    }
+    specific = distinctive - broad
+    smaller = min(len(a), len(b))
+    overlap_ratio = (len(shared) / smaller) if smaller else 0
+    if len(shared) >= 5 and len(specific) >= 2 and overlap_ratio >= 0.45:
+        return True
+    return False
+
 
 def _is_duplicate_headline(headline, existing_token_sets):
     new_tok = _sig_tokens(headline)
@@ -5252,7 +5397,10 @@ def write_archives(all_categories, top_cat):
             for _entry in archive:
                 if _entry.get("is_custom"):
                     continue
-                if _same_story(_ctok, _sig_tokens(_entry.get("headline", ""))):
+                if (
+                    _same_custom_event(_c, _entry)
+                    or _same_story(_ctok, _sig_tokens(_entry.get("headline", "")))
+                ):
                     _entry["is_custom"] = True
 
     heroes = [(top_cat["category_key"], top_cat["category_label"], top_cat["hero"])]
@@ -5313,6 +5461,22 @@ def write_archives(all_categories, top_cat):
             continue
 
         source_url = hero.get("link", "")
+
+        # CUSTOM ALWAYS WINS. Compare full event context before the ordinary archive
+        # matcher. Headline-only matching missed the Stuart 80-cats duplicate because
+        # the custom and feed headlines used different nouns and framing.
+        if not hero.get("is_custom"):
+            _custom_cover = next(
+                (_c for _c in _current_customs if _same_custom_event(_c, hero)),
+                None,
+            )
+            if _custom_cover:
+                print(
+                    f"  PROTECTED: dropping feed story '{headline[:45]}' — same event as "
+                    f"custom article '{_custom_cover.get('headline','')[:45]}'"
+                )
+                continue
+
         existing   = find_matching_entry(headline, archive, source_url, is_weather_alert=bool(hero.get("is_weather_alert")))
 
         # OVERRIDE for recurring series (weekly traffic reports, roundups, game recaps).
@@ -5444,6 +5608,75 @@ def write_archives(all_categories, top_cat):
                 "event_link_text": hero.get("event_link_text", ""),
             })
             new_count += 1
+
+    # Convert known duplicate permalinks into static canonical redirects after all
+    # custom entries have been archived. GitHub Pages cannot emit a server-side 301,
+    # so this page uses canonical + noindex + immediate meta/JavaScript redirect while
+    # preserving the old URL for anyone who already shared it.
+    def _redirect_html(target_slug):
+        target_path = f"/articles/{target_slug}.html"
+        target_url = f"{SITE_URL}{target_path}"
+        return f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Article moved — Treasure Coast Today</title>
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="{target_url}">
+  <meta http-equiv="refresh" content="0; url={target_path}">
+  <script>window.location.replace({json.dumps(target_path)});</script>
+</head>
+<body>
+  <p>This article has moved to <a href="{target_path}">the authoritative Treasure Coast Today report</a>.</p>
+</body>
+</html>"""
+
+    for _old_slug in PERMANENT_REDIRECT_SOURCE_SLUGS:
+        # Prefer a currently loaded custom article, then match it to its permanent
+        # archive entry. Fallback to the known custom slug only if the archive has not
+        # yet been populated for some reason.
+        _event_customs = [
+            c for c in _current_customs
+            if {"animal", "hoard"}.issubset(_custom_event_tokens(c))
+            and "martin" in _custom_event_locations(c)
+        ]
+        _target = None
+        for _custom in _event_customs:
+            _target = next(
+                (
+                    e for e in archive
+                    if e.get("slug") != _old_slug
+                    and e.get("is_custom")
+                    and _same_custom_event(_custom, e)
+                ),
+                None,
+            )
+            if _target:
+                break
+        if not _target:
+            _target = next(
+                (
+                    e for e in archive
+                    if e.get("slug") != _old_slug
+                    and e.get("is_custom")
+                    and {"animal", "hoard"}.issubset(_custom_event_tokens(e))
+                    and "martin" in _custom_event_locations(e)
+                ),
+                None,
+            )
+
+        # The custom article created from Sheriff Budensiek's briefing uses this slug
+        # under the current slugifier. Dynamic archive resolution above remains primary.
+        _target_slug = (
+            _target.get("slug") if _target else
+            "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response"
+        )
+        archive = [e for e in archive if e.get("slug") != _old_slug]
+        (articles_dir / f"{_old_slug}.html").write_text(
+            _redirect_html(_target_slug), encoding="utf-8"
+        )
+        print(f"  Redirected duplicate article {_old_slug} -> {_target_slug}")
 
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
     (OUTPUT_DIR / "archive.html").write_text(render_archive_page(archive), encoding="utf-8")
@@ -6064,7 +6297,10 @@ def main():
                 _art_tokens = _sig_tokens(art.get("headline", ""))
 
                 def _same_as_custom(item):
-                    return item and _same_story(_art_tokens, _sig_tokens(item.get("headline", "")))
+                    return bool(item) and (
+                        _same_custom_event(art, item)
+                        or _same_story(_art_tokens, _sig_tokens(item.get("headline", "")))
+                    )
 
                 # Sweep EVERY category: drop feed cards that are this story, and if a
                 # feed hero in ANY category is this story, remove it (promote a card, or
