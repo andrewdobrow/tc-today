@@ -715,7 +715,12 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
 
         # Try full body extraction for open/local sources.
         if h.get("source_type") == "full_source" and link:
-            full = fetch_article_text(link, max_words=1000)
+            # 2500 words: high enough that truncation effectively never cuts a normal
+            # article (even long investigations and listicles, whose ranked items come
+            # last). The cap exists only to guard against a pathologically long or
+            # junk-filled scraped page, not to save tokens — the savings were pennies and
+            # the cost was dropping the exact facts the article is about.
+            full = fetch_article_text(link, max_words=2500)
             if full and len(full.split()) >= 140:
                 h["article_text"] = full
                 h["source_quality"] = "full"
@@ -1177,6 +1182,13 @@ LOCAL_SYSTEM_PROMPT = (
     "Always preserve proper nouns exactly as they appear in the source. "
     "Never fabricate names, numbers, dates, or quotes not in the source. "
     "Never write absence phrases like 'no further details available' or 'details were not disclosed'. "
+    "CRITICAL: Never reference your own information, input, or what you were or were not given. Never write "
+    "phrases like 'the available information', 'the source does not specify', 'was not detailed', 'not provided', "
+    "'not included in the information', or any comment about what you do or do not know. If a specific fact (a name, "
+    "a number, a ranked list) is not in the source, simply do not mention that fact at all. Write only what IS "
+    "known, as a normal news article would. Never turn a gap in your input into a sentence, and never build "
+    "analysis or speculation on top of a missing fact. If you find yourself about to explain what is missing, stop "
+    "and omit it entirely. "
     "Always produce a complete, readable article."
 )
 
@@ -1188,6 +1200,13 @@ FLORIDA_SYSTEM_PROMPT = (
     "Every sentence must be a confirmed fact from the provided source material. "
     "Never fabricate names, numbers, dates, or quotes not in the source. "
     "Write around missing details — do not reference their absence. "
+    "CRITICAL: Never reference your own information, input, or what you were or were not given. Never write "
+    "phrases like 'the available information', 'the source does not specify', 'was not detailed', 'not provided', "
+    "'not included in the information', or any comment about what you do or do not know. If a specific fact (a name, "
+    "a number, a ranked list) is not in the source, simply do not mention that fact at all. Write only what IS "
+    "known, as a normal news article would. Never turn a gap in your input into a sentence, and never build "
+    "analysis or speculation on top of a missing fact. If you find yourself about to explain what is missing, stop "
+    "and omit it entirely. "
     "Always produce a complete, readable article."
 )
 
@@ -1208,6 +1227,13 @@ def strip_absence_language(text):
         "could not be reached", "could not be confirmed",
         "no official statement", "no statement has",
         "reporting is ongoing", "investigation is ongoing",
+        # References to the model's own input/knowledge gap — never belong in an article.
+        "available information", "the information provided", "information provided",
+        "was not detailed", "were not detailed", "not detailed in",
+        "the source does not", "source did not specify", "not specified in",
+        "not provided in", "not included in the", "were not listed",
+        "was not listed", "not named in", "were not named", "not mentioned in",
+        "specifics were not", "specific details were not", "were not available in",
     ]
     sentences = text.replace("\n\n", "<<PARA>>").split(".")
     cleaned = []
@@ -1275,7 +1301,10 @@ def generate_category_content(category_key, category_label, headlines):
         hero_eligible = h.get("hero_eligible", "unknown")
         match_score = h.get("category_match_score", "")
         content = h.get("article_text", "") or h.get("summary", "")
-        return f"{i+1}. {title} [source_type:{stype}] [source_quality:{quality}] [hero_eligible:{hero_eligible}] [category_match_score:{match_score}]{pub_str}\n   {sanitize(content)[:5000]}"
+        # 14000 chars (~2300 words): the input the model writes from. Set high enough
+        # that a normal article is never truncated, so key facts (ranked lists, names,
+        # numbers) always reach the model. Only a pathologically long page would be cut.
+        return f"{i+1}. {title} [source_type:{stype}] [source_quality:{quality}] [hero_eligible:{hero_eligible}] [category_match_score:{match_score}]{pub_str}\n   {sanitize(content)[:14000]}"
     # Pre-filter headlines older than 48 hours before Claude sees them
     from datetime import timezone as _tz
     _now_utc = datetime.now(_tz.utc)
@@ -1984,7 +2013,7 @@ def build_content_bank():
                 if not title or title.lower() in seen:
                     continue
                 seen.add(title.lower())
-                summary = entry.get("summary", entry.get("description", ""))[:1200]
+                summary = entry.get("summary", entry.get("description", ""))[:4000]
                 if summary and len(summary) > 100:
                     bank.append({
                         "title":   title,
@@ -2023,7 +2052,7 @@ def find_content(headline, content_bank, max_entries=5):
 
 
 
-def fetch_article_text(url, max_words=1000):
+def fetch_article_text(url, max_words=2500):
     """Fetch readable article body text.
 
     Uses trafilatura when available, then JSON-LD articleBody, then a paragraph fallback.
@@ -2139,7 +2168,7 @@ def enhance_card(card, content_bank, headlines):
     # AND aggregators (Google News links resolve to real publisher pages). This is
     # what lets crime/things-to-do cards from Google News enrich instead of being dropped.
     if not source_text and link and not is_thin and source.get("source_type") in ("full_source", "aggregator"):
-        source_text = fetch_article_text(link, max_words=900)
+        source_text = fetch_article_text(link, max_words=2500)
         if source_text and len(source_text.split()) >= 140:
             source["article_text"] = source_text
             source["source_quality"] = "full"
