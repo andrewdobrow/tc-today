@@ -381,6 +381,145 @@ def fetch_og_image(url):
 
 
 
+_EVENT_LINK_CACHE = {}
+
+
+def _event_link_root_host(host):
+    host = (host or "").lower().split(":", 1)[0].strip(".")
+    parts = [p for p in host.split(".") if p]
+    return ".".join(parts[-2:]) if len(parts) >= 2 else host
+
+
+def find_official_event_link(source_url, headline=""):
+    """Find a high-confidence official event/ticket/registration link in a source page.
+
+    The source article itself is never returned. Only real hrefs present on that page
+    are considered; no URL is guessed or fabricated. Low-confidence results are omitted.
+    """
+    if not source_url or not source_url.startswith("http"):
+        return "", ""
+    cache_key = (source_url, headline)
+    if cache_key in _EVENT_LINK_CACHE:
+        return _EVENT_LINK_CACHE[cache_key]
+
+    try:
+        from urllib.parse import urljoin, urlparse, parse_qs, unquote
+        import html as _html
+
+        resp = requests.get(
+            source_url,
+            timeout=10,
+            headers={"User-Agent": "Mozilla/5.0 (compatible; TCTBot/1.0)"},
+        )
+        if resp.status_code != 200:
+            _EVENT_LINK_CACHE[cache_key] = ("", "")
+            return "", ""
+
+        source_host = urlparse(source_url).netloc.lower().replace("www.", "")
+        source_root = _event_link_root_host(source_host)
+        page = resp.text[:600000]
+        candidates = []
+        stops = {
+            "this", "that", "with", "from", "will", "your", "about", "event",
+            "events", "week", "weekend", "local", "florida", "treasure", "coast",
+        }
+        headline_tokens = {
+            w for w in re.findall(r"[a-z0-9]+", (headline or "").lower())
+            if len(w) >= 5 and w not in stops
+        }
+        blocked_hosts = {
+            "facebook.com", "instagram.com", "twitter.com", "x.com", "youtube.com",
+            "linkedin.com", "tiktok.com", "pinterest.com", "google.com", "apple.com",
+        }
+        preferred_hosts = {
+            "eventbrite.com", "ticketmaster.com", "tickets.com", "etix.com",
+            "showclix.com", "universe.com", "simpletix.com", "humanitix.com",
+        }
+
+        anchor_pattern = r"<a\b[^>]*?href=[\"']([^\"']+)[\"'][^>]*>(.*?)</a>"
+        for match in re.finditer(anchor_pattern, page, re.IGNORECASE | re.DOTALL):
+            href = _html.unescape(match.group(1).strip())
+            anchor_html = match.group(2)
+            anchor = _html.unescape(re.sub(r"<[^>]+>", " ", anchor_html))
+            anchor = re.sub(r"\s+", " ", anchor).strip()
+            if not href or href.startswith(("#", "mailto:", "tel:", "javascript:")):
+                continue
+
+            url = urljoin(source_url, href)
+            parsed = urlparse(url)
+            host = parsed.netloc.lower().replace("www.", "")
+            if _event_link_root_host(host) == source_root:
+                query = parse_qs(parsed.query)
+                redirect_value = ""
+                for key in ("url", "u", "target", "redirect", "destination"):
+                    vals = query.get(key)
+                    if vals and vals[0].startswith("http"):
+                        redirect_value = unquote(vals[0])
+                        break
+                if redirect_value:
+                    url = redirect_value
+                    parsed = urlparse(url)
+                    host = parsed.netloc.lower().replace("www.", "")
+
+            root = _event_link_root_host(host)
+            if not host or root == source_root:
+                continue
+            if any(root == b or root.endswith("." + b) for b in blocked_hosts):
+                continue
+            lower_url = url.lower()
+            lower_anchor = anchor.lower()
+            if any(x in lower_url for x in (
+                "/privacy", "/terms", "/contact", "/advertis", "/author/",
+                "doubleclick", "googlesyndication", "utm_source=syndication",
+            )):
+                continue
+
+            score = 0
+            if root in preferred_hosts:
+                score += 7
+            if host.endswith(".gov") or root.endswith(".gov"):
+                score += 5
+            elif host.endswith(".org") or root.endswith(".org"):
+                score += 3
+
+            if any(term in lower_anchor for term in (
+                "official event", "event website", "official website", "visit website",
+            )):
+                score += 8
+            if any(term in lower_anchor for term in (
+                "buy tickets", "get tickets", "tickets", "register", "registration",
+                "rsvp", "reserve", "sign up",
+            )):
+                score += 7
+            if any(term in lower_anchor for term in (
+                "event details", "more information", "learn more", "full schedule",
+                "event page", "festival website", "details here",
+            )):
+                score += 5
+
+            candidate_tokens = set(re.findall(r"[a-z0-9]+", (anchor + " " + url).lower()))
+            overlap = len(headline_tokens & candidate_tokens)
+            score += min(overlap, 4)
+
+            if score >= 7:
+                label = anchor if 3 <= len(anchor) <= 80 else "Visit the official event page"
+                if lower_anchor in {"click here", "here", "website", "learn more"}:
+                    label = "Visit the official event page"
+                candidates.append((score, url, label))
+
+        if candidates:
+            candidates.sort(key=lambda x: x[0], reverse=True)
+            _, url, label = candidates[0]
+            result = (url, label)
+        else:
+            result = ("", "")
+    except Exception:
+        result = ("", "")
+
+    _EVENT_LINK_CACHE[cache_key] = result
+    return result
+
+
 def build_image_bank():
     """Fetch images from RSS feeds that reliably include them (BBC, ESPN, TechCrunch)."""
     bank = []
@@ -786,6 +925,235 @@ def _text_for_category_match(h):
 def _has_any(text, terms):
     return any(term in text for term in terms)
 
+def _story_locality_blob(item):
+    return " ".join([
+        item.get("source_title", ""),
+        item.get("title", ""),
+        item.get("headline", ""),
+        item.get("summary", ""),
+        item.get("source_summary", ""),
+        item.get("teaser", ""),
+        item.get("body", "")[:1800],
+        item.get("article_text", "")[:1800],
+    ]).lower()
+
+def _strip_quoted_phrases(text):
+    # Place names inside entertainment titles do not establish geography.
+    text = re.sub(r'"[^"\n]{1,200}"', " ", text or "")
+    text = re.sub(r"'[^'\n]{1,200}'", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+def _trusted_county_feed(category_key, item):
+    feed_url = (item.get("feed_url", "") or "").lower()
+    trusted_hints = {
+        "martin": "wptv.com/news/region-martin-county.rss",
+        "st_lucie": "wptv.com/news/region-st-lucie-county.rss",
+        "indian_river": "wptv.com/news/region-indian-river-county.rss",
+    }
+    return trusted_hints.get(category_key, "") in feed_url
+
+def _county_locality_evidence(category_key, item):
+    """Require real geographic evidence, not a person's name or title word."""
+    raw = _story_locality_blob(item)
+    unquoted = _strip_quoted_phrases(raw)
+
+    strong_places = {
+        "martin": [
+            "martin county", "jensen beach", "palm city", "hobe sound",
+            "port salerno", "jupiter island", "indiantown", "sewall's point",
+            "sewalls point",
+        ],
+        "st_lucie": [
+            "st. lucie county", "st lucie county", "port st. lucie",
+            "port st lucie", "fort pierce", "st. lucie west", "st lucie west",
+        ],
+        "indian_river": [
+            "indian river county", "vero beach", "fellsmere", "wabasso",
+            "gifford", "sebastian inlet", "sebastian river",
+        ],
+    }
+    if _has_any(unquoted, strong_places.get(category_key, [])):
+        return True
+
+    entertainment_context = _has_any(raw, [
+        "tv show", "television show", "television series", "streaming series",
+        "series premiere", "season premiere", "episode", "film", "movie",
+        "character", "actor", "actress", "sitcom", "debuts this week",
+        "save the universe",
+    ])
+
+    contextual_patterns = {
+        "martin": [
+            r"\bstuart,?\s+(?:florida|fla\.?|fl)\b",
+            r"\b(?:in|near|around|outside|north of|south of|east of|west of)\s+stuart\b",
+            r"\bcity of stuart\b",
+            r"\bstuart\s+(?:police|fire rescue|city commission|city hall|airport|"
+            r"high school|middle school|elementary|hospital|bridge|road|street|"
+            r"residents?|officials?|business|restaurant|home|man|woman|family)\b",
+            r"\b(?:downtown|police in|officials in|residents of)\s+stuart\b",
+        ],
+        "indian_river": [
+            r"\bsebastian,?\s+(?:florida|fla\.?|fl)\b",
+            r"\b(?:in|near|around|outside|north of|south of)\s+sebastian\b",
+            r"\bcity of sebastian\b",
+            r"\bsebastian\s+(?:police|city council|city hall|river|inlet|"
+            r"residents?|officials?|business|restaurant|home|man|woman|family)\b",
+        ],
+    }
+    if any(re.search(p, unquoted, re.IGNORECASE) for p in contextual_patterns.get(category_key, [])):
+        return True
+
+    # Dedicated publisher county feeds can establish locality when a short title omits
+    # the city. Search feeds do not count, and entertainment-title content is blocked.
+    if _trusted_county_feed(category_key, item) and not entertainment_context:
+        return True
+    return False
+
+def _has_treasure_coast_locality(item):
+    raw = _strip_quoted_phrases(_story_locality_blob(item))
+    return "treasure coast" in raw or any(
+        _county_locality_evidence(key, item) for key in COUNTY_KEYS
+    )
+
+
+# Publication quality gates. A category can fall back to older real reporting, but
+# a thin RSS blurb must never be expanded into a fake-looking article or promoted
+# merely to keep a section populated.
+MIN_HERO_BODY_WORDS = 120
+MIN_CARD_BODY_WORDS = 90
+MIN_SOURCE_WORDS = 80
+
+def _word_count(text):
+    return len(re.findall(r"\b[\w'-]+\b", text or ""))
+
+def _paragraph_count(text):
+    return len([p for p in re.split(r"\n\s*\n", text or "") if p.strip()])
+
+def _sentence_count(text):
+    return len([s for s in re.split(r"(?<=[.!?])\s+", (text or "").strip()) if s.strip()])
+
+def _source_word_count(item):
+    try:
+        stored = int(item.get("source_word_count", 0) or 0)
+    except Exception:
+        stored = 0
+    if stored:
+        return stored
+    source_text = item.get("article_text", "") or item.get("source_summary", "") or item.get("summary", "")
+    return _word_count(source_text)
+
+def _source_candidate_publishable(item):
+    """Require enough verified source material before Claude writes anything.
+
+    This runs before category generation, so a thin RSS blurb cannot become a hero,
+    card, permalink, or even consume article-generation tokens. Archive recovery fills
+    the section when the live source pool is too thin.
+    """
+    if not item or not item.get("title"):
+        return False
+    quality = (item.get("source_quality", "") or "").lower()
+    if quality not in {"full", "summary"}:
+        return False
+    return _source_word_count(item) >= MIN_SOURCE_WORDS
+
+def _publishable_article(item, hero=False):
+    """Return True only when an item is substantial enough for a permalink.
+
+    Custom/manual articles and active weather alerts remain editorial exceptions.
+    Automated feed stories must have a real source, enough verified source material,
+    and enough finished copy to stand alone as an article.
+    """
+    if not item or not item.get("headline"):
+        return False
+    if item.get("is_custom") or item.get("is_weather_alert"):
+        return True
+    if item.get("_section_placeholder"):
+        return False
+    if item.get("_archive_only"):
+        return bool(item.get("_archive_verified_quality"))
+
+    quality = (item.get("source_quality", "") or "").lower()
+    if quality in {"thin", "brief", "discovery_only"}:
+        return False
+
+    body = (item.get("body", "") or "").strip()
+    min_words = MIN_HERO_BODY_WORDS if hero else MIN_CARD_BODY_WORDS
+    if _word_count(body) < min_words:
+        return False
+    # Prefer real paragraph structure, but allow a well-developed single paragraph
+    # with at least five factual sentences.
+    if _paragraph_count(body) < 2 and _sentence_count(body) < 5:
+        return False
+
+    source_words = _source_word_count(item)
+    if source_words < MIN_SOURCE_WORDS:
+        return False
+    return True
+
+def _archive_article_metrics(entry):
+    """Get body depth for an archived page, reading legacy HTML when needed."""
+    try:
+        wc = int(entry.get("article_word_count", 0) or 0)
+        pc = int(entry.get("article_paragraph_count", 0) or 0)
+    except Exception:
+        wc, pc = 0, 0
+    if wc:
+        return wc, pc
+
+    slug = entry.get("slug", "")
+    if not slug:
+        return 0, 0
+    path = OUTPUT_DIR / "articles" / f"{slug}.html"
+    try:
+        html_text = path.read_text(encoding="utf-8", errors="ignore")
+        match = re.search(
+            r'<div class="article-body">(.*?)</div>\s*<div class="article-share">',
+            html_text, re.IGNORECASE | re.DOTALL,
+        )
+        if not match:
+            return 0, 0
+        body_html = match.group(1)
+        pc = len(re.findall(r"<p(?:\s[^>]*)?>", body_html, re.IGNORECASE))
+        import html as _html
+        plain = _html.unescape(re.sub(r"<[^>]+>", " ", body_html))
+        wc = _word_count(plain)
+        entry["article_word_count"] = wc
+        entry["article_paragraph_count"] = pc
+        return wc, pc
+    except Exception:
+        return 0, 0
+
+def _archive_article_body(entry):
+    """Return the existing full article body as plain paragraphs for hero previews."""
+    slug = entry.get("slug", "")
+    if not slug:
+        return ""
+    path = OUTPUT_DIR / "articles" / f"{slug}.html"
+    try:
+        html_text = path.read_text(encoding="utf-8", errors="ignore")
+        match = re.search(
+            r'<div class="article-body">(.*?)</div>\s*<div class="article-share">',
+            html_text, re.IGNORECASE | re.DOTALL,
+        )
+        if not match:
+            return ""
+        body_html = match.group(1)
+        body_html = re.sub(r"</p>", "\n\n", body_html, flags=re.IGNORECASE)
+        body_html = re.sub(r"</h[2-4]>", "\n\n", body_html, flags=re.IGNORECASE)
+        import html as _html
+        plain = _html.unescape(re.sub(r"<[^>]+>", " ", body_html))
+        plain = re.sub(r"[ \t]+", " ", plain)
+        plain = re.sub(r"\n\s*\n+", "\n\n", plain)
+        return plain.strip()
+    except Exception:
+        return ""
+
+def _archive_entry_publishable(entry):
+    if entry.get("is_custom"):
+        return True
+    wc, pc = _archive_article_metrics(entry)
+    return wc >= MIN_HERO_BODY_WORDS and (pc >= 2 or wc >= 180)
+
 
 # Hero selection is stricter than card inclusion. Cards may use softer fallback
 # logic to keep a section populated, but a section lead must clearly belong to
@@ -795,7 +1163,7 @@ def _hero_eligible(category_key, h):
     title = (h.get("title", "") or "").lower()
     quality = h.get("source_quality", "")
 
-    if quality in {"thin", "discovery_only"}:
+    if quality in {"thin", "brief", "discovery_only"}:
         return False
 
 
@@ -842,7 +1210,7 @@ def _hero_eligible(category_key, h):
         "fellsmere", "indiantown", "jupiter island", "hutchinson island",
     ]
     _has_outside = any(p in text for p in _outside_places)
-    _has_local   = any(p in text for p in _treasure_coast_places)
+    _has_local   = _has_treasure_coast_locality(h)
     # Florida is the statewide section, so Tampa/Orlando/etc. are valid there.
     # Every other section is Treasure Coast-local and must reject an outside-only story.
     if category_key != "florida" and _has_outside and not _has_local:
@@ -913,21 +1281,8 @@ def _hero_eligible(category_key, h):
         "indian_river": [],
     }
 
-    county_terms = {
-        "martin": ["martin county", "stuart", "jensen beach", "palm city", "hobe sound", "port salerno", "jupiter island"],
-        "st_lucie": ["st. lucie", "st lucie", "port st. lucie", "port st lucie", "fort pierce", "st. lucie west", "st lucie west"],
-        "indian_river": ["indian river", "vero beach", "sebastian", "fellsmere"],
-    }
-
-    if category_key in county_terms:
-        feed_url = (h.get("feed_url", "") or "").lower()
-        county_feed_hints = {"martin": "region-martin-county", "st_lucie": "region-st-lucie-county", "indian_river": "region-indian-river-county"}
-        county_ok = county_feed_hints.get(category_key, "") in feed_url or _has_any(text, county_terms[category_key])
-        if not county_ok:
-            return False
-        if _classified_cats is not None:
-            return category_key in _classified_cats
-        return True
+    if category_key in COUNTY_KEYS:
+        return _county_locality_evidence(category_key, h)
 
     if category_key in topic_terms:
         if _has_any(text, hard_negatives.get(category_key, [])):
@@ -1390,10 +1745,10 @@ def generate_category_content(category_key, category_label, headlines):
         source_rules = """SOURCE RULES:
 - Items marked [hero_eligible:no] must NOT be selected as the hero/section lead, even if they are full-source stories. They may only be used as lower cards if needed.
 - Stories marked [source_quality:full] contain full article body text and should be used for the hero and the main full cards.
-- Stories marked [source_quality:summary] may be used for normal cards if the provided text has concrete facts.
-- Stories marked [source_quality:brief] or [source_type:discovery_only] may be used as short factual cards when needed to keep the county section populated, but they must not be padded with generic context.
-- The hero must come from [source_quality:full] or [source_quality:summary] whenever possible. Do not use [source_quality:thin] for the hero.
-- For county sections, aim to return six cards. If a source is thin, write a brief factual card instead of inventing filler or dropping the item.
+- Stories marked [source_quality:summary] may be used for normal cards only when the provided source contains enough concrete facts.
+- Stories marked [source_quality:brief], [source_quality:thin], or [source_type:discovery_only] must NOT be used at all. Do not turn a blurb into an article.
+- The hero must come from [source_quality:full] or [source_quality:summary].
+- If there are not enough usable stories for six cards, return fewer cards. The site will backfill from its archive; never invent filler to populate the section.
 - Do not write generic context such as "this reflects growth," "officials continue to investigate," or "residents are encouraged" unless those facts are explicitly in the source.
 
 """
@@ -1515,6 +1870,10 @@ Return ONLY valid JSON:
                 item["source_quality"] = source.get("source_quality", "")
                 item["source_type"] = source.get("source_type", "")
                 item["article_text"] = source.get("article_text", "")
+                item["source_summary"] = source.get("summary", "")
+                item["source_word_count"] = _word_count(
+                    source.get("article_text", "") or source.get("summary", "")
+                )
                 # Carry the ORIGINAL RSS title through. The generated headline is a
                 # rewrite and will not be found in STORY_CLASSIFICATION (which is keyed
                 # on RSS titles), so without this the eligibility guard falls back to
@@ -2289,10 +2648,9 @@ def enhance_card(card, content_bank, headlines):
 
 def enhance_hero_article(hero, full_text):
     """Rewrite the hero article using the full source text for accuracy and detail."""
-    # A hero that already has a substantial generated body counts as enriched even
-    # if the supplementary full-text fetch is short or missing. The full-text fetch
-    # improves accuracy but is not required — the hero is already a real article.
-    if len((hero.get("body", "") or "").split()) >= 60:
+    # A generated hero counts as enriched only when it passes the same publication
+    # quality gate used before permalink creation. A 40-60 word blurb is not an article.
+    if _publishable_article(hero, hero=True):
         hero["enriched"] = True
     if not full_text or len(full_text.split()) < 100:
         return hero  # Not enough extra text to improve on; keep generated body
@@ -2319,9 +2677,15 @@ def enhance_hero_article(hero, full_text):
         # Detect if Claude returned an explanation instead of an article
         explanation_signals = ["i cannot rewrite", "source material", "does not match", "i must return", "cannot proceed"]
         if enhanced and not any(s in enhanced.lower()[:200] for s in explanation_signals):
-            hero["body"] = strip_markdown(enhanced, hero.get("headline", ""))
-            hero["enriched"] = True
-            print(f"  Hero article enhanced with full source text")
+            candidate_body = strip_markdown(enhanced, hero.get("headline", ""))
+            candidate = dict(hero)
+            candidate["body"] = candidate_body
+            if _publishable_article(candidate, hero=True):
+                hero["body"] = candidate_body
+                hero["enriched"] = True
+                print(f"  Hero article enhanced with full source text")
+            else:
+                print(f"  Enhancement rejected: result was still too thin for a hero article")
         else:
             print(f"  Enhancement skipped: Claude returned explanation, keeping original")
     except Exception as e:
@@ -3031,6 +3395,8 @@ def render_index(all_categories, top_cat):
         ckey = e.get("category_key", "")
         if not hl or not ckey or hl.lower() in current_headlines:
             continue
+        if not _archive_entry_publishable(e):
+            continue
         older_by_cat.setdefault(ckey, [])
         if len(older_by_cat[ckey]) < 10:
             older_by_cat[ckey].append(e)
@@ -3479,6 +3845,25 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     import json as _json
     schema_tag = f'  <script type="application/ld+json">{_json.dumps(structured_data)}</script>'
     body       = make_paragraphs(hero.get("body", ""))
+
+    # Optional user-service link for Things To Do coverage. This is an official event,
+    # venue, ticket, or registration page extracted from a real href in the source page,
+    # not a link back to the reporting outlet. No confident link means no box.
+    event_link_html = ""
+    if (category_key == "things_to_do"
+            and str(hero.get("event_url", "")).startswith(("https://", "http://"))):
+        import html as _html_escape
+        _event_url = _html_escape.escape(str(hero.get("event_url", "")), quote=True)
+        _event_label = _html_escape.escape(
+            str(hero.get("event_link_text") or "Visit the official event page")
+        )
+        event_link_html = f'''
+      <aside class="event-link-box">
+        <span class="event-link-kicker">Planning to go?</span>
+        <a href="{_event_url}" target="_blank" rel="noopener noreferrer external">{_event_label} &rarr;</a>
+        <small>Event details, schedules and ticket availability may change.</small>
+      </aside>'''
+
     img_html   = ""
     _art_img   = hero.get("image_url", "")
     if not _art_img:
@@ -3582,6 +3967,11 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-body strong {{ color: var(--text); font-weight: 700; }}
     .article-body a {{ color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }}
     .article-body a:hover {{ text-decoration: none; }}
+    .event-link-box {{ margin: 30px 0 8px; padding: 18px 20px; border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 10px; background: var(--surface); }}
+    .event-link-kicker {{ display: block; margin-bottom: 7px; color: var(--text-muted); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }}
+    .event-link-box a {{ color: var(--accent); font-size: 16px; font-weight: 700; text-decoration: none; }}
+    .event-link-box a:hover {{ text-decoration: underline; }}
+    .event-link-box small {{ display: block; margin-top: 8px; color: var(--text-muted); font-size: 11px; line-height: 1.5; }}
     .article-share {{ margin: 36px 0 8px; padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }}
     .article-share-label {{ display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 12px; text-transform: uppercase; letter-spacing: .05em; }}
     .article-share-btns {{ display: flex; flex-wrap: wrap; gap: 10px; }}
@@ -3619,6 +4009,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
       <h1 class="article-headline">{hero["headline"]}</h1>
       {img_html}
       <div class="article-body">{body}</div>
+      {event_link_html}
       <div class="article-share">
         <span class="article-share-label">Share this story</span>
         <div class="article-share-btns">
@@ -4815,6 +5206,8 @@ def write_archives(all_categories, top_cat):
     _DUP_SLUGS_TO_REMOVE = {
         "2026-07-18-st-lucie-county-fire-district-fires-3-firefighters-after-hazing-investigation-in",
         "2026-07-19-halloween-flight-from-stuart-airport-to-georgia-documented",
+        "2026-07-20-tv-show-titled-stuart-fails-to-save-the-universe-debuts-this-week",
+        "2026-07-19-fort-pierce-unity-in-the-community-event-connects-families-with-services",
     }
     _before = len(archive)
     archive = [e for e in archive if e.get("slug") not in _DUP_SLUGS_TO_REMOVE]
@@ -4899,6 +5292,9 @@ def write_archives(all_categories, top_cat):
         headline = hero.get("headline", "").strip()
         if not headline:
             continue
+        if not _publishable_article(hero, hero=bool(hero.get("_is_hero_copy"))):
+            print(f"  Skipped thin article before permalink creation: {headline[:60]}")
+            continue
 
         source_url = hero.get("link", "")
         existing   = find_matching_entry(headline, archive, source_url, is_weather_alert=bool(hero.get("is_weather_alert")))
@@ -4977,6 +5373,11 @@ def write_archives(all_categories, top_cat):
             existing["headline"]  = headline
             existing["teaser"]    = hero.get("teaser","") or hero.get("body","")[:180]
             existing["image_url"] = hero.get("image_url","")
+            existing["article_word_count"] = _word_count(hero.get("body", ""))
+            existing["article_paragraph_count"] = _paragraph_count(hero.get("body", ""))
+            if hero.get("event_url"):
+                existing["event_url"] = hero.get("event_url")
+                existing["event_link_text"] = hero.get("event_link_text", "")
             # Only advance lastmod (freshness/staleness, card ordering) on real change.
             if _content_changed:
                 existing["lastmod"] = today
@@ -5021,6 +5422,10 @@ def write_archives(all_categories, top_cat):
                 "source_url": hero.get("link",""),
                 "is_weather_alert": bool(hero.get("is_weather_alert")),
                 "is_custom": bool(hero.get("is_custom")),
+                "article_word_count": _word_count(hero.get("body", "")),
+                "article_paragraph_count": _paragraph_count(hero.get("body", "")),
+                "event_url": hero.get("event_url", ""),
+                "event_link_text": hero.get("event_link_text", ""),
             })
             new_count += 1
 
@@ -5163,33 +5568,28 @@ def ensure_all_category_sections(all_categories, min_cards=6):
     archive = load_archive(OUTPUT_DIR / "archive.json")
     archive.sort(key=lambda e: e.get("lastmod") or e.get("date", ""), reverse=True)
 
-    county_places = {
-        "martin": [
-            "martin county", "stuart", "jensen beach", "palm city", "hobe sound",
-            "port salerno", "jupiter island", "indiantown", "rio", "sewall",
-        ],
-        "st_lucie": [
-            "st. lucie", "st lucie", "port st. lucie", "port st lucie",
-            "fort pierce", "st. lucie west", "st lucie west",
-        ],
-        "indian_river": [
-            "indian river", "vero beach", "sebastian", "fellsmere", "wabasso", "gifford",
-        ],
-    }
-
     def entry_matches(e, category_key):
         if not e.get("headline") or not e.get("slug"):
             return False
-        if e.get("category_key") == category_key:
-            return True
-        if category_key in county_places:
-            blob = (e.get("headline", "") + " " + e.get("teaser", "")).lower()
-            return any(place in blob for place in county_places[category_key])
-        return False
+        if not _archive_entry_publishable(e):
+            return False
+        if category_key in COUNTY_KEYS:
+            probe = {
+                "headline": e.get("headline", ""),
+                "title": e.get("headline", ""),
+                "teaser": e.get("teaser", ""),
+                "summary": e.get("teaser", ""),
+                "body": _archive_article_body(e),
+                "feed_url": e.get("feed_url", ""),
+            }
+            # County archive recovery never trusts the old category_key by itself.
+            # That old label may be exactly how a bad Stuart/Sebastian match entered.
+            return _county_locality_evidence(category_key, probe)
+        return e.get("category_key") == category_key
 
     def archived_story(e, category_key):
         label = CATEGORIES[category_key]["label"]
-        body = (e.get("body") or e.get("teaser") or "").strip()
+        body = (_archive_article_body(e) or e.get("body") or e.get("teaser") or "").strip()
         if not body:
             body = f"Read this {label.lower()} story from the Treasure Coast Today archive."
         image_url = e.get("image_url", "")
@@ -5212,6 +5612,8 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             "link": f"{SITE_URL}/articles/{e['slug']}.html",
             "_archived_slug": e["slug"],
             "_archive_only": True,
+            "_archive_verified_quality": True,
+            "article_word_count": _archive_article_metrics(e)[0],
         }
 
     by_key = {c.get("category_key"): c for c in all_categories if c.get("category_key")}
@@ -5230,6 +5632,19 @@ def ensure_all_category_sections(all_categories, min_cards=6):
         category["category_label"] = config["label"]
         category["_drop_category"] = False
         category.setdefault("cards", [])
+
+        # Permanent county safety: revalidate live and recovered content with contextual
+        # geography. A stale archive category label or bare name like "Stuart" is not
+        # enough to survive here.
+        if category_key in COUNTY_KEYS:
+            if category.get("hero") and not _county_locality_evidence(category_key, category["hero"]):
+                print(f"  Permanent county guard removed non-local hero from {config['label']}: "
+                      f"'{category['hero'].get('headline','')[:55]}'")
+                category["hero"] = None
+            category["cards"] = [
+                c for c in category.get("cards", [])
+                if _county_locality_evidence(category_key, c)
+            ]
 
         # Collect archive candidates once, newest first, and avoid duplicates already
         # present in the live category.
@@ -5371,9 +5786,22 @@ def main():
             print(f"  No headlines found for {cat_config['label']}, skipping.")
             continue
 
+        # Publication begins with source quality, not generated word count. Remove
+        # thin/brief/discovery items before Claude sees them so they cannot become an
+        # article at all. Permanent archive recovery handles categories with no usable
+        # fresh source material.
+        _source_ready = [h for h in headlines if _source_candidate_publishable(h)]
+        _source_rejected = len(headlines) - len(_source_ready)
+        if _source_rejected:
+            print(f"  Source-depth gate: rejected {_source_rejected} item(s) before article generation")
+        headlines = _source_ready
+        if not headlines:
+            print(f"  No publishable source material for {cat_config['label']}; using archive recovery")
+            continue
+
         headlines = filter_category_headlines(cat_key, headlines, target=HEADLINES_PER_CATEGORY, min_keep=6)
 
-        print(f"  {len(headlines)} headlines fetched")
+        print(f"  {len(headlines)} publishable-source headlines fetched")
         try:
             try:
                 data = generate_category_content(cat_key, cat_config["label"], headlines)
@@ -5385,15 +5813,9 @@ def main():
                       f"({first_generation_error}); retrying once")
                 data = generate_category_content(cat_key, cat_config["label"], headlines)
 
-            # Claude's initial generation already used the exact selected source. Mark a
-            # substantial generated body as publishable even when the optional second
-            # enrichment pass cannot fetch/scrape more text.
-            if data.get("hero") and len((data["hero"].get("body", "") or "").split()) >= 60:
-                data["hero"]["enriched"] = True
-            for _card in data.get("cards", []):
-                if (len((_card.get("body", "") or "").split()) >= 50
-                        and _card.get("source_quality") not in {"thin", "discovery_only"}):
-                    _card["enriched"] = True
+            # Do not mark generated blurbs publishable merely because they crossed a
+            # low word threshold. Final publication quality is checked after optional
+            # source enrichment below.
 
             # If the category was dropped or produced no usable hero, skip it entirely
             # rather than crashing on data["hero"]["headline"] below.
@@ -5511,32 +5933,71 @@ def main():
                     try: _fut.result(timeout=10)
                     except Exception: pass
 
-            # Enrichment is preferred, but it may never override category eligibility.
-            # A substantial generated hero is already publishable; do not delete an
-            # entire county section merely because the optional scrape/rewrite failed.
-            if not data["hero"].get("enriched"):
-                for ci, card in enumerate(data.get("cards", [])):
-                    if card.get("enriched") and _hero_eligible(cat_key, card):
-                        print(f"  Thin hero swap for {cat_config['label']}: '{data['hero'].get('headline','')[:50]}' -> '{card.get('headline','')[:50]}'")
-                        old_hero = data["hero"]
-                        data["hero"] = card
-                        data["cards"][ci] = old_hero
-                        break
+            # Final publication gate. A hero must be both on-topic and substantial
+            # enough to deserve a standalone permalink. Thin cards are discarded; the
+            # permanent archive recovery step will fill the section with older real work.
+            publishable_cards = []
+            for card in data.get("cards", []):
+                if _publishable_article(card, hero=False) and _hero_eligible(cat_key, card):
+                    card["enriched"] = True
+                    publishable_cards.append(card)
+            data["cards"] = publishable_cards
 
-            # One final check after every optional enrichment/swap in main. No code
-            # below this point may silently turn an off-topic card into the section hero.
-            if not _hero_eligible(cat_key, data.get("hero", {})):
+            hero_ok = (
+                _hero_eligible(cat_key, data.get("hero", {}))
+                and _publishable_article(data.get("hero", {}), hero=True)
+            )
+            if hero_ok:
+                data["hero"]["enriched"] = True
+            else:
                 replacement_i = next(
-                    (i for i, c in enumerate(data.get("cards", [])) if _hero_eligible(cat_key, c)),
+                    (i for i, c in enumerate(data.get("cards", []))
+                     if _publishable_article(c, hero=True) and _hero_eligible(cat_key, c)),
                     None,
                 )
                 if replacement_i is not None:
-                    old_hero = data["hero"]
-                    data["hero"] = data["cards"][replacement_i]
-                    data["cards"][replacement_i] = old_hero
+                    rejected = data.get("hero", {})
+                    data["hero"] = data["cards"].pop(replacement_i)
+                    data["hero"]["enriched"] = True
+                    print(f"  Publication-quality hero swap for {cat_config['label']}: "
+                          f"'{rejected.get('headline','')[:50]}' -> "
+                          f"'{data['hero'].get('headline','')[:50]}'")
                 else:
-                    print(f"  Removing {cat_config['label']}: final hero failed category validation")
+                    print(f"  Live {cat_config['label']} content rejected as too thin or off-topic; "
+                          "using permanent archive recovery")
                     all_categories.remove(data)
+
+            # Things To Do articles may include a verified official event, ticket, or
+            # registration link found on the reporting source page. Never guess a URL,
+            # never link back to the source article here, and omit the CTA when confidence
+            # is low. Custom articles can provide event_url/event_link_text directly.
+            if cat_key == "things_to_do" and data in all_categories:
+                _event_items = [
+                    item for item in [data.get("hero", {})] + list(data.get("cards", []))
+                    if item and not item.get("event_url") and item.get("link")
+                ]
+                # Source pages are independent; fetch a few in parallel so a slow event
+                # site cannot add a minute to the workflow. This uses no Claude tokens.
+                if _event_items:
+                    with ThreadPoolExecutor(max_workers=min(4, len(_event_items))) as _event_ex:
+                        _event_futures = {
+                            _event_ex.submit(
+                                find_official_event_link,
+                                item.get("link", ""),
+                                item.get("source_title", "") or item.get("headline", ""),
+                            ): item
+                            for item in _event_items
+                        }
+                        for _event_future in as_completed(_event_futures):
+                            _event_item = _event_futures[_event_future]
+                            try:
+                                _event_url, _event_label = _event_future.result()
+                            except Exception:
+                                _event_url, _event_label = "", ""
+                            if _event_url:
+                                _event_item["event_url"] = _event_url
+                                _event_item["event_link_text"] = _event_label
+                                print(f"  Official event link attached: {_event_url[:80]}")
 
         except Exception as e:
             import traceback
@@ -5545,8 +6006,7 @@ def main():
             continue
 
     if not all_categories:
-        print("No categories generated. Aborting.")
-        return
+        print("  No live categories passed this run; continuing to permanent archive recovery")
 
     # Inject custom (manually-submitted) articles into their category pools.
     # They get the same scoring/ranking/archival treatment. force_hero pins as
