@@ -5003,6 +5003,79 @@ def _story_match_confidence(a, b):
     return max(0, min(99, score))
 
 
+
+
+def _story_entities(item):
+    """Extract lightweight, explainable entities for clustering and timelines.
+
+    This intentionally avoids another model call. It captures known Treasure Coast
+    places/agencies plus headline-style proper-name phrases and meaningful numbers.
+    """
+    text = _story_text(item)
+    headline = item.get("headline", "") or ""
+    lower = text.lower()
+    known = {
+        "locations": {
+            "Martin County": r"\bmartin county\b", "St. Lucie County": r"\bst[.]? lucie county\b",
+            "Indian River County": r"\bindian river county\b", "Stuart": r"\bstuart\b",
+            "Port St. Lucie": r"\bport st[.]? lucie\b", "Fort Pierce": r"\bfort pierce\b",
+            "Vero Beach": r"\bvero beach\b", "Sebastian": r"\bsebastian\b",
+            "Hobe Sound": r"\bhobe sound\b", "Jensen Beach": r"\bjensen beach\b",
+            "Palm City": r"\bpalm city\b", "Fellsmere": r"\bfellsmere\b",
+        },
+        "organizations": {
+            "Martin County Sheriff's Office": r"\bmartin county sheriff(?:'s office)?\b",
+            "St. Lucie County Sheriff's Office": r"\bst[.]? lucie county sheriff(?:'s office)?\b",
+            "Indian River County Sheriff's Office": r"\bindian river county sheriff(?:'s office)?\b",
+            "Port St. Lucie Police": r"\bport st[.]? lucie police\b",
+            "Fort Pierce Police": r"\bfort pierce police\b",
+            "Florida Legislature": r"\bflorida legislature\b",
+            "FDOT": r"\b(?:fdot|florida department of transportation)\b",
+            "St. Lucie Mets": r"\bst[.]? lucie mets\b",
+        },
+    }
+    result = {"people": [], "organizations": [], "locations": [], "numbers": []}
+    for group, mapping in known.items():
+        result[group] = [name for name, rx in mapping.items() if re.search(rx, lower, re.I)]
+    # Headline proper-name phrases. Filter sentence-openers and generic newsroom words.
+    stop = {"Florida", "Treasure Coast", "Martin County", "St. Lucie County", "Indian River County",
+            "Port St. Lucie", "Fort Pierce", "Vero Beach", "Stuart", "County", "City", "Police",
+            "Sheriff", "Deputies", "Officials", "Family", "Woman", "Man"}
+    phrases = re.findall(r"\b(?:[A-Z][a-z'’-]+(?:\s+|$)){2,4}", headline)
+    for phrase in phrases:
+        phrase = phrase.strip()
+        if phrase and phrase not in stop and not any(phrase in vals for vals in result.values() if isinstance(vals, list)):
+            result["people"].append(phrase)
+    result["people"] = list(dict.fromkeys(result["people"]))[:10]
+    result["organizations"] = list(dict.fromkeys(result["organizations"]))[:10]
+    result["locations"] = list(dict.fromkeys(result["locations"]))[:10]
+    result["numbers"] = sorted(_audit_numbers(headline))[:10]
+    return result
+
+
+def _merge_story_entities(members):
+    merged = {"people": [], "organizations": [], "locations": [], "numbers": []}
+    for member in members:
+        entities = _story_entities(member)
+        for key in merged:
+            merged[key].extend(entities.get(key, []))
+    for key in merged:
+        merged[key] = list(dict.fromkeys(merged[key]))[:25]
+    return merged
+
+
+def _story_timeline(members):
+    timeline = []
+    for article in sorted(members, key=lambda x: (_audit_date_value(x) or datetime.min.date(), x.get("headline", ""))):
+        timeline.append({
+            "date": article.get("date", ""),
+            "stage": _story_stage(_story_text(article)),
+            "headline": article.get("headline", ""),
+            "slug": article.get("slug", ""),
+            "is_custom": bool(article.get("is_custom") or article.get("authoritative_custom")),
+        })
+    return timeline
+
 def _story_base_id(item):
     text = _story_text(item)
     known = _known_event_key(text)
@@ -5046,6 +5119,8 @@ SAFE_AUTO_SUPPRESSION_STAGES = {
     "court-appearance", "trial", "verdict", "appeal",
     "veto-or-rejection", "proposal-or-expected", "public-meeting",
 }
+STORY_CLUSTERING_CONFIDENCE = 85
+STORY_OBSERVATION_CONFIDENCE = 90
 AUTO_SUPPRESSION_CONFIDENCE = 95
 HISTORY_MAX_PROCESSED = 20000
 SUPPRESSION_REPORT_LIMIT = 250
@@ -5085,7 +5160,7 @@ def _persist_story_decision_logs(data_dir, decisions, run_id):
         if not key or key in processed:
             continue
         record = dict(decision)
-        record.update({"run_id": run_id, "engine_version": "persistent-story-stage-canonical-v5.2"})
+        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v6"})
         new_records.append(record)
         processed[key] = {"run_id": run_id, "decision": decision.get("decision", ""), "slug": decision.get("slug", "")}
     if new_records:
@@ -5189,10 +5264,11 @@ def prior_membership_id(item, archive_items):
     return _story_base_id(item) if item else ""
 
 def build_story_shadow(archive, current_customs=None, live_categories=None, output_dir=None):
-    """Build persistent story records and a would-publish/would-suppress log.
+    """Build persistent story records with clustering separated from live action.
 
-    This function is intentionally non-destructive. It does not control article
-    generation or publication in Phase 2 shadow mode.
+    V6 groups credible 85%+ matches into the same story, while guarded publication
+    still suppresses only safe same-stage duplicates at 95%+. The 85-94 band is
+    observational: it enriches the story graph but never removes or redirects content.
     """
     if EVENT_PIPELINE_MODE not in {"audit", "shadow", "guarded"}:
         print(f"  Story engine disabled (mode={EVENT_PIPELINE_MODE})")
@@ -5217,14 +5293,26 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
 
     ordered = sorted(items, key=lambda x: (_audit_date_value(x) or datetime.min.date(), x.get("headline", "")))
     topic_groups = []
+    clustering_links = []
     for item in ordered:
         eligible = []
         for idx, members in enumerate(topic_groups):
-            # Complete-link remains conservative: every member must belong to the topic.
-            if all(_same_story_topic(item, member) for member in members):
-                eligible.append((idx, max((_story_priority(m) for m in members), default=(0, 0))))
+            matches = [(m, _story_match_confidence(item, m)) for m in members if _same_story_topic(item, m)]
+            if not matches:
+                continue
+            best_member, confidence = max(matches, key=lambda pair: pair[1])
+            if confidence >= STORY_CLUSTERING_CONFIDENCE:
+                eligible.append((idx, confidence, _story_priority(best_member), best_member))
         if eligible:
-            topic_groups[max(eligible, key=lambda x: x[1])[0]].append(item)
+            idx, confidence, _, best_member = max(eligible, key=lambda x: (x[1], x[2]))
+            topic_groups[idx].append(item)
+            clustering_links.append({
+                "slug": item.get("slug", ""), "headline": item.get("headline", ""),
+                "matched_slug": best_member.get("slug", ""), "matched_headline": best_member.get("headline", ""),
+                "confidence": confidence,
+                "band": "85-89" if confidence < 90 else "90-94" if confidence < 95 else "95-100",
+                "action": "GROUP_ONLY" if confidence < AUTO_SUPPRESSION_CONFIDENCE else "ELIGIBLE_FOR_SEPARATE_LIVE_EVALUATION",
+            })
         else:
             topic_groups.append([item])
 
@@ -5234,14 +5322,10 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
 
     for members in topic_groups:
         previous_ids = [prior_membership.get(m.get("slug")) for m in members if prior_membership.get(m.get("slug"))]
-        if previous_ids:
-            story_id = max(set(previous_ids), key=previous_ids.count)
-        else:
-            story_id = _story_base_id(max(members, key=_story_priority))
+        story_id = max(set(previous_ids), key=previous_ids.count) if previous_ids else _story_base_id(max(members, key=_story_priority))
         base_id, suffix = story_id, 2
         while story_id in used_ids:
-            story_id = f"{base_id}-{suffix}"
-            suffix += 1
+            story_id = f"{base_id}-{suffix}"; suffix += 1
         used_ids.add(story_id)
 
         stage_buckets = defaultdict(list)
@@ -5253,37 +5337,29 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
         first_article = chronological[0]
         for article in chronological:
             stage = _story_stage(_story_text(article))
-            best_prior = None
             prior_candidates = [x for x in chronological if x is not article and (_audit_date_value(x) or datetime.min.date()) <= (_audit_date_value(article) or datetime.min.date())]
             matches = [x for x in prior_candidates if _same_story_topic(article, x)]
-            if matches:
-                best_prior = max(matches, key=lambda x: _story_match_confidence(article, x))
+            best_prior = max(matches, key=lambda x: _story_match_confidence(article, x)) if matches else None
+            confidence = _story_match_confidence(article, best_prior) if best_prior else 100
 
             if article is first_article:
                 decision, reason = "WOULD_PUBLISH_NEW_STORY", "No earlier matching story was found."
             elif stage in seen_stages and bool(article.get("is_custom") or article.get("authoritative_custom")):
                 decision, reason = "WOULD_PUBLISH_CUSTOM_OVERRIDE", f"Authoritative custom coverage replaces feed coverage at the '{stage}' stage."
+            elif stage in seen_stages and confidence >= AUTO_SUPPRESSION_CONFIDENCE:
+                decision, reason = "WOULD_SUPPRESS_DUPLICATE", f"Same story and stage at {confidence}% confidence; eligible for guarded evaluation."
             elif stage in seen_stages:
-                decision, reason = "WOULD_SUPPRESS_DUPLICATE", f"The story already has coverage at the '{stage}' stage."
+                decision, reason = "GROUPED_NO_ACTION", f"Grouped into this story at {confidence}% confidence, but below the 95% live-action threshold."
             else:
                 decision, reason = "WOULD_PUBLISH_MAJOR_UPDATE", f"The story advanced to a new '{stage}' stage."
 
-            confidence = _story_match_confidence(article, best_prior) if best_prior else 100
-            if decision != "WOULD_PUBLISH_NEW_STORY" and confidence < 85:
-                decision = "WOULD_REVIEW"
-                reason = "A possible story match was found, but confidence is below the automatic threshold."
-
             decisions.append({
-                "story_id": story_id,
-                "slug": article.get("slug", ""),
-                "headline": article.get("headline", ""),
-                "date": article.get("date", ""),
-                "category_key": article.get("category_key", ""),
+                "story_id": story_id, "slug": article.get("slug", ""), "headline": article.get("headline", ""),
+                "date": article.get("date", ""), "category_key": article.get("category_key", ""),
                 "is_custom": bool(article.get("is_custom") or article.get("authoritative_custom")),
-                "story_stage": stage,
-                "decision": decision,
-                "reason": reason,
+                "story_stage": stage, "decision": decision, "reason": reason,
                 "match_confidence": confidence,
+                "confidence_band": "new" if not best_prior else "85-89" if confidence < 90 else "90-94" if confidence < 95 else "95-100",
                 "matched_prior_slug": best_prior.get("slug", "") if best_prior else "",
                 "matched_prior_headline": best_prior.get("headline", "") if best_prior else "",
             })
@@ -5292,83 +5368,57 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
         stage_records = []
         for stage, stage_members in sorted(stage_buckets.items()):
             canonical = max(stage_members, key=_story_priority)
-            stage_records.append({
-                "stage": stage,
-                "canonical_slug": canonical.get("slug", ""),
+            stage_records.append({"stage": stage, "canonical_slug": canonical.get("slug", ""),
                 "canonical_headline": canonical.get("headline", ""),
                 "canonical_is_custom": bool(canonical.get("is_custom") or canonical.get("authoritative_custom")),
-                "article_count": len(stage_members),
-            })
+                "article_count": len(stage_members)})
 
         story_canonical = max(members, key=_story_priority)
-        title = prior_titles.get(story_id) or story_canonical.get("headline", "")
         latest = max(chronological, key=lambda x: (_audit_date_value(x) or datetime.min.date(), _story_priority(x)))
         stories.append({
-            "story_id": story_id,
-            "title": title,
+            "story_id": story_id, "title": prior_titles.get(story_id) or story_canonical.get("headline", ""),
             "status": "active" if ((_audit_date_value(latest) and (datetime.utcnow().date() - _audit_date_value(latest)).days <= 30)) else "archived",
-            "latest_stage": _story_stage(_story_text(latest)),
-            "latest_date": latest.get("date", ""),
-            "canonical_slug": story_canonical.get("slug", ""),
-            "canonical_headline": story_canonical.get("headline", ""),
+            "latest_stage": _story_stage(_story_text(latest)), "latest_date": latest.get("date", ""),
+            "canonical_slug": story_canonical.get("slug", ""), "canonical_headline": story_canonical.get("headline", ""),
             "canonical_is_custom": bool(story_canonical.get("is_custom") or story_canonical.get("authoritative_custom")),
-            "article_count": len(members),
-            "stages": stage_records,
-            "articles": [{
-                "slug": m.get("slug", ""),
-                "headline": m.get("headline", ""),
-                "date": m.get("date", ""),
-                "category_key": m.get("category_key", ""),
-                "is_custom": bool(m.get("is_custom") or m.get("authoritative_custom")),
-                "origin": m.get("origin", "archive"),
-                "story_stage": _story_stage(_story_text(m)),
-            } for m in sorted(members, key=lambda x: (_audit_date_value(x) or datetime.min.date(), x.get("headline", "")))],
+            "article_count": len(members), "entities": _merge_story_entities(members),
+            "timeline": _story_timeline(members), "stages": stage_records,
+            "articles": [{"slug": m.get("slug", ""), "headline": m.get("headline", ""), "date": m.get("date", ""),
+                "category_key": m.get("category_key", ""), "is_custom": bool(m.get("is_custom") or m.get("authoritative_custom")),
+                "origin": m.get("origin", "archive"), "story_stage": _story_stage(_story_text(m)),
+                "entities": _story_entities(m)} for m in chronological],
         })
 
     summary_counts = defaultdict(int)
+    bands = defaultdict(int)
     for d in decisions:
         summary_counts[d["decision"]] += 1
+        bands[d.get("confidence_band", "unknown")] += 1
 
-    data_dir = out_root / "data"
-    data_dir.mkdir(parents=True, exist_ok=True)
-    registry = {
-        "schema_version": 5,
-        "mode": EVENT_PIPELINE_MODE,
-        "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-        "non_destructive": True,
-        "engine": "persistent-story-stage-canonical-v5.2",
-        "article_count": len(items),
-        "story_count": len(stories),
-        "stories": stories,
-    }
-    shadow = {
-        "schema_version": 5,
-        "mode": EVENT_PIPELINE_MODE,
-        "non_destructive": True,
-        "engine": "persistent-story-stage-canonical-v5.2",
-        "summary": {
-            "articles_analyzed": len(items),
-            "stories_identified": len(stories),
+    data_dir = out_root / "data"; data_dir.mkdir(parents=True, exist_ok=True)
+    run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    registry = {"schema_version": 6, "mode": EVENT_PIPELINE_MODE, "generated_at": run_id,
+        "non_destructive": True, "engine": "story-centric-newsroom-v6", "article_count": len(items),
+        "story_count": len(stories), "clustering_threshold": STORY_CLUSTERING_CONFIDENCE,
+        "live_action_threshold": AUTO_SUPPRESSION_CONFIDENCE, "stories": stories}
+    shadow = {"schema_version": 6, "mode": EVENT_PIPELINE_MODE, "non_destructive": True,
+        "engine": "story-centric-newsroom-v6", "generated_at": run_id,
+        "summary": {"articles_analyzed": len(items), "stories_identified": len(stories),
             "would_publish_new_story": summary_counts["WOULD_PUBLISH_NEW_STORY"],
             "would_publish_major_update": summary_counts["WOULD_PUBLISH_MAJOR_UPDATE"],
             "would_publish_custom_override": summary_counts["WOULD_PUBLISH_CUSTOM_OVERRIDE"],
             "would_suppress_duplicate": summary_counts["WOULD_SUPPRESS_DUPLICATE"],
-            "would_review": summary_counts["WOULD_REVIEW"],
-        },
-        "decisions": decisions,
-        "notice": "Current diagnostic snapshot. Guarded mode suppresses only same-story, same-safe-stage, non-custom matches at 95%+ confidence.",
-    }
-    run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"
-    registry["generated_at"] = run_id
-    shadow["generated_at"] = run_id
+            "grouped_no_action": summary_counts["GROUPED_NO_ACTION"],
+            "clustered_85_89": bands["85-89"], "clustered_90_94": bands["90-94"],
+            "eligible_95_plus": bands["95-100"]},
+        "clustering_links": clustering_links, "decisions": decisions,
+        "notice": "V6 groups same-story matches at 85%+, but guarded live suppression remains limited to safe same-stage non-custom matches at 95%+. GROUPED_NO_ACTION requires no human review."}
     (data_dir / "stories.json").write_text(json.dumps(registry, indent=2, ensure_ascii=False), encoding="utf-8")
     (data_dir / "story-shadow-log.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
     appended = _persist_story_decision_logs(data_dir, decisions, run_id)
-    # Keep the familiar audit filename as a small pointer for existing workflow artifacts.
     (data_dir / "event-audit.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  Story engine canonical v5.2: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
-    print(f"  Shadow decisions: {summary_counts['WOULD_SUPPRESS_DUPLICATE']} suppress, {summary_counts['WOULD_PUBLISH_MAJOR_UPDATE']} major update, {summary_counts['WOULD_PUBLISH_CUSTOM_OVERRIDE']} custom override, {summary_counts['WOULD_REVIEW']} review")
-    print("  Story engine is NON-DESTRUCTIVE; publication output was not changed")
+    print(f"  Story-centric newsroom v6: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
+    print(f"  Group-only: {summary_counts['GROUPED_NO_ACTION']}; eligible suppressions: {summary_counts['WOULD_SUPPRESS_DUPLICATE']}; major updates: {summary_counts['WOULD_PUBLISH_MAJOR_UPDATE']}")
     return shadow
 
 def _same_story(tok_a, tok_b, threshold=4):
@@ -6389,8 +6439,8 @@ def write_story_health_report(output_root, archive, current_run_redirects=None):
         major_updates = sum(1 for d in decisions if d.get("decision") == "WOULD_PUBLISH_MAJOR_UPDATE")
 
     report = {
-        "schema_version": 1,
-        "engine_version": "persistent-story-stage-canonical-v5.2-health",
+        "schema_version": 2,
+        "engine_version": "story-centric-newsroom-v6",
         "generated_at": run_id,
         "active_window_days": 7,
         "stories": {
@@ -6406,6 +6456,12 @@ def write_story_health_report(output_root, archive, current_run_redirects=None):
             "archive_total": len(archive or []),
             "story_membership_total": article_total,
         },
+        "confidence_bands": {
+            "clustered_85_89": int(summary.get("clustered_85_89", 0) or 0),
+            "clustered_90_94": int(summary.get("clustered_90_94", 0) or 0),
+            "eligible_95_plus": int(summary.get("eligible_95_plus", 0) or 0),
+            "meaning": "85-94 groups stories only; 95+ may be eligible for separate guarded action.",
+        },
         "actions": {
             "redirects_created_this_run": len(current_run_redirects),
             "redirects_cumulative": len(redirects),
@@ -6413,8 +6469,11 @@ def write_story_health_report(output_root, archive, current_run_redirects=None):
             "custom_overrides_last_shadow_run": custom_overrides,
             "major_updates_last_shadow_run": major_updates,
             "reviews_last_shadow_run": reviews,
+            "grouped_no_action_last_shadow_run": int(summary.get("grouped_no_action", 0) or 0),
         },
         "safety": {
+            "story_clustering_confidence": STORY_CLUSTERING_CONFIDENCE,
+            "observation_band_starts": STORY_OBSERVATION_CONFIDENCE,
             "minimum_suppression_confidence": AUTO_SUPPRESSION_CONFIDENCE,
             "minimum_canonical_cleanup_confidence": CANONICAL_CLEANUP_CONFIDENCE,
             "redirects_below_cleanup_threshold": sum(
