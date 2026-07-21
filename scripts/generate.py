@@ -167,14 +167,6 @@ def category_max_age_hours(category_key):
 
 OUTPUT_DIR   = Path(__file__).parent.parent
 SITE_URL     = "https://treasurecoast.today"
-
-# Published duplicate URLs that must remain reachable but must never appear as
-# independent stories in the archive, sitemap, RSS, homepage recovery, or cards.
-# write_archives() converts each source file into a canonical redirect to the
-# authoritative custom TCT article.
-PERMANENT_REDIRECT_SOURCE_SLUGS = {
-    "2026-07-20-stuart-woman-arrested-after-deputies-rescue-80-cats-from-home-in-worst-hoarding",
-}
 SITE_NAME    = "Treasure Coast Today"
 SITE_TAGLINE = "Your Treasure Coast, every day."
 
@@ -3084,30 +3076,16 @@ def global_rank(all_cards, dedupe_against=None):
     ranked_input = all_cards
     stories = []
     for i, c in enumerate(ranked_input):
-        cat      = c.get("cat_label", "")
-        head     = c.get("headline", "")
-        urgency  = int(c.get("urgency_score", 0) or 0)
-        origin   = "CUSTOM TCT" if c.get("is_custom") else "feed/archive"
-        placement = "category hero" if c.get("_category_hero_card") else "card"
-        stories.append(
-            f"{i+1}. [{cat}] [urgency {urgency}] [{origin}; {placement}] {head}"
-        )
+        cat   = c.get("cat_label", "")
+        head  = c.get("headline", "")
+        stories.append(f"{i+1}. [{cat}] {head}")
     stories_text = "\n".join(stories)
     n = len(ranked_input)
 
-    # Accept the complete lead item so mandatory custom-story preservation can use
-    # full event context, not merely a headline. Strings remain supported for safety.
-    if isinstance(dedupe_against, dict):
-        lead_item = dedupe_against
-        lead_headline = lead_item.get("headline", "")
-    else:
-        lead_headline = str(dedupe_against or "")
-        lead_item = {"headline": lead_headline}
-
     dedupe_clause = ""
-    if lead_headline:
+    if dedupe_against:
         dedupe_clause = (
-            f"\nThe lead story already shown is: \"{lead_headline}\"\n"
+            f"\nThe lead story already shown is: \"{dedupe_against}\"\n"
             "EXCLUDE any story from your list that covers this same underlying event, "
             "even if worded very differently or framed from a different angle.\n"
         )
@@ -3124,9 +3102,6 @@ def global_rank(all_cards, dedupe_against=None):
         "of how differently they are phrased.\n"
         + dedupe_clause +
         "\n"
-        "CUSTOM TCT means original manual/staff reporting published directly by Treasure Coast Today. "
-        "When a CUSTOM TCT story and a feed/archive story cover the same event, ALWAYS keep the CUSTOM TCT version. "
-        "Do not omit a CUSTOM TCT story with urgency 7 or higher unless it genuinely duplicates the lead story above.\n"
         "PRIMARY signal: local relevance and impact on Treasure Coast residents.\n"
         "SECONDARY signal: recency — fresher local news ranks above older local news; edited timestamps do not make old stories new.\n"
         "Apply this weighting:\n"
@@ -3161,43 +3136,8 @@ def global_rank(all_cards, dedupe_against=None):
             if 0 <= i < n and i not in seen:
                 seen.add(i)
                 ranked.append(ranked_input[i])
-        # High-urgency custom reporting is editorially authoritative. The model may
-        # omit numbers because it believes they are duplicates, but it is not allowed to
-        # silently remove an original TCT story unless it truly duplicates the visible lead.
-        mandatory_custom_indices = [
-            i for i, card in enumerate(ranked_input)
-            if card.get("is_custom")
-            and (
-                int(card.get("urgency_score", 0) or 0) >= 7
-                or card.get("pin_position")
-            )
-        ]
-        for i in mandatory_custom_indices:
-            if i in seen:
-                continue
-            card = ranked_input[i]
-            duplicates_lead = bool(lead_headline) and (
-                _same_custom_event(card, lead_item)
-                or _same_story(
-                    _sig_tokens(card.get("headline", "")),
-                    _sig_tokens(lead_headline),
-                )
-            )
-            if duplicates_lead:
-                continue
-            card_score = int(card.get("urgency_score", 0) or 0)
-            insert_at = next(
-                (
-                    pos for pos, existing_card in enumerate(ranked)
-                    if card_score > int(existing_card.get("urgency_score", 0) or 0)
-                ),
-                len(ranked),
-            )
-            ranked.insert(insert_at, card)
-            seen.add(i)
-            print(f"  Top News preserved custom article: '{card.get('headline','')[:60]}'")
-
-        # Only append back all unranked stories if Claude returned suspiciously few.
+        # NOTE: stories Claude omitted are treated as duplicates and intentionally dropped.
+        # Only append back un-ranked stories if Claude returned suspiciously few (failure guard).
         if len(ranked) < max(3, n // 3):
             for i, card in enumerate(ranked_input):
                 if i not in seen:
@@ -3276,28 +3216,7 @@ def render_index(all_categories, top_cat):
         heroes_html += hero_section(cat["category_key"], cat["category_label"], cat["hero"], visible=False)
 
     all_cards_pool = []
-    front_hero = top_cat.get("hero", {})
-    front_hero_headline = front_hero.get("headline", "").strip().lower()
     for cat in all_categories:
-        # Category heroes other than the single visible front-page hero must also
-        # compete for Top News card positions. Previously they were omitted from the
-        # pool entirely, so a high-urgency custom article could become Martin County's
-        # hero and then disappear whenever another category won the overall lead slot.
-        category_hero = cat.get("hero") or {}
-        hero_headline = category_hero.get("headline", "").strip().lower()
-        if (
-            category_hero
-            and category_hero.get("enriched")
-            and category_hero is not front_hero
-            and hero_headline
-            and hero_headline != front_hero_headline
-            and not category_hero.get("_section_placeholder")
-        ):
-            category_hero["cat_label"] = cat["category_label"]
-            category_hero["cat_key"] = cat["category_key"]
-            category_hero["_category_hero_card"] = True
-            all_cards_pool.append(category_hero)
-
         for card in cat.get("cards", []):
             card["cat_label"] = cat["category_label"]
             card["cat_key"]   = cat["category_key"]
@@ -3384,51 +3303,22 @@ def render_index(all_categories, top_cat):
                     enriched_pool.append(_county_card)
 
     enriched_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
-    topnews = global_rank(enriched_pool, dedupe_against=top_cat["hero"])
-
-    # Belt-and-suspenders editorial guard: high-urgency or explicitly pinned custom
-    # articles belong in Top News unless the same event is already the lead story.
-    for card in enriched_pool:
-        if not card.get("is_custom"):
-            continue
-        if int(card.get("urgency_score", 0) or 0) < 7 and not card.get("pin_position"):
-            continue
-        if card in topnews:
-            continue
-        if (
-            _same_custom_event(card, top_cat["hero"])
-            or _same_story(
-                _sig_tokens(card.get("headline", "")),
-                _sig_tokens(top_cat["hero"].get("headline", "")),
-            )
-        ):
-            continue
-        card_score = int(card.get("urgency_score", 0) or 0)
-        insert_at = next(
-            (
-                pos for pos, existing_card in enumerate(topnews)
-                if card_score > int(existing_card.get("urgency_score", 0) or 0)
-            ),
-            len(topnews),
-        )
-        topnews.insert(insert_at, card)
-        print(f"  Top News forced high-urgency custom article: '{card.get('headline','')[:60]}'")
-
-    # pin_position controls a Top News slot, not merely the hidden all-category pool.
-    # The previous code moved pinned cards visually after topnews_ids had already been
-    # calculated, leaving them invisible whenever the Top News filter was active.
-    pinned = [(c.get("pin_position"), c) for c in topnews if c.get("pin_position")]
-    if pinned:
-        unpinned = [c for c in topnews if not c.get("pin_position")]
-        result = list(unpinned)
-        for pos, card in sorted(pinned, key=lambda x: x[0]):
-            idx = max(0, min(int(pos) - 1, len(result)))
-            result.insert(idx, card)
-        topnews = result
-
+    topnews     = global_rank(enriched_pool, dedupe_against=top_cat["hero"].get("headline", ""))
     topnews_ids = {id(c) for c in topnews}
     remaining   = [c for c in enriched_pool if id(c) not in topnews_ids]
     all_cards_display = topnews + remaining
+
+    # Apply pin_position overrides — pinned custom articles lock to specific slots
+    pinned = [(c.get("pin_position"), c) for c in all_cards_display if c.get("pin_position")]
+    if pinned:
+        unpinned = [c for c in all_cards_display if not c.get("pin_position")]
+        result = list(unpinned)
+        for pos, card in sorted(pinned, key=lambda x: x[0]):
+            idx = max(0, min(pos - 1, len(result)))
+            if card in result:
+                result.remove(card)
+            result.insert(idx, card)
+        all_cards_display = result
 
     archive_for_links = load_archive(OUTPUT_DIR / "archive.json")
 
@@ -3894,16 +3784,7 @@ def load_custom_articles():
 def load_archive(archive_path):
     try:
         if archive_path.exists():
-            data = json.loads(archive_path.read_text(encoding="utf-8"))
-            if isinstance(data, list):
-                # Redirect-source articles are no longer standalone stories. Filtering
-                # here prevents archive recovery or link lookup from resurrecting them
-                # before write_archives() rewrites the old HTML file as a redirect.
-                return [
-                    entry for entry in data
-                    if entry.get("slug") not in PERMANENT_REDIRECT_SOURCE_SLUGS
-                ]
-            return []
+            return json.loads(archive_path.read_text(encoding="utf-8"))
     except Exception:
         pass
     return []
@@ -4552,6 +4433,172 @@ def _shared_tokens(tok_a, tok_b):
     return shared
 
 
+def _known_event_key(text):
+    """Return a stable key for high-risk stories that repeatedly arrive with
+    materially different syndicated headlines. These keys are intentionally narrow:
+    they identify one specific event, not a broad topic.
+
+    This prevents an already-published authoritative story from re-entering through
+    another feed, becoming a hero, and only being noticed at permalink-write time.
+    """
+    t = re.sub(r"[^a-z0-9]+", " ", (text or "").lower())
+    words = set(t.split())
+
+    # July 2026 Stuart/Martin County animal-hoarding case involving about 80 cats.
+    # Headline variants have used "80", "about 80", "rescued", "removed",
+    # "arrested", and "worst hoarding case". Require several independent signals
+    # so unrelated cat or animal-control stories never collide with it.
+    has_place = ("stuart" in words or ("martin" in words and "county" in words))
+    has_cats = ("cat" in words or "cats" in words)
+    has_case = any(w in words for w in ("hoarding", "hoarder", "hoard"))
+    has_action = any(w in words for w in ("rescue", "rescued", "remove", "removed",
+                                            "deputies", "arrested", "arrest"))
+    has_scale = ("80" in words or "eighty" in words)
+    if has_place and has_cats and has_case and has_action and has_scale:
+        return "2026-07-stuart-martin-80-cats-hoarding"
+
+    return ""
+
+
+def _same_event_text(a, b):
+    """Exact known-event match first, then the normal headline-token heuristic."""
+    ka, kb = _known_event_key(a), _known_event_key(b)
+    if ka and kb:
+        return ka == kb
+    return _same_story(_sig_tokens(a), _sig_tokens(b))
+
+
+
+
+def _custom_story_fingerprint(headline, teaser=""):
+    """Durable fingerprint stored with every custom article.
+
+    This is not the only duplicate test (headlines can be rewritten), but it gives
+    custom stories a permanent identity after custom_articles.json is cleared.
+    """
+    normalized = " ".join(sorted(_sig_tokens(f"{headline} {teaser}")))
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:24] if normalized else ""
+
+
+def _material_update_stages(text):
+    """Return major editorial milestones explicitly present in a story.
+
+    These are deliberately conservative. A new article may bypass custom-story
+    suppression only when it reports a genuinely new status-changing development,
+    not merely added quotes, a rewritten headline, a corrected count, or routine
+    follow-up details.
+    """
+    t = re.sub(r"[^a-z0-9]+", " ", (text or "").lower())
+    stages = set()
+
+    patterns = {
+        "victim_identified": (
+            r"\b(victim|decedent|person killed|man killed|woman killed) (?:has been |was )?identified\b",
+            r"\bidentified (?:the )?(?:victim|decedent|person killed)\b",
+        ),
+        "suspect_identified": (
+            r"\b(?:police|deputies|authorities) (?:have )?identified (?:a |the )?suspect\b",
+            r"\bsuspect (?:has been |was )?identified\b",
+        ),
+        "arrest": (
+            r"\b(?:arrested|taken into custody|booked into|apprehended)\b",
+            r"\barrest (?:made|announced)\b",
+        ),
+        "criminal_charge": (
+            r"\b(?:charged with|faces? charges?|criminal charges? filed|indicted|indictment)\b",
+        ),
+        "death": (
+            r"\b(?:died|has died|pronounced dead|death confirmed|dead after|fatality confirmed)\b",
+        ),
+        "missing_found": (
+            r"\b(?:found safe|located safe|missing person found|has been located)\b",
+        ),
+        "court_ruling": (
+            r"\b(?:convicted|found guilty|acquitted|pleaded guilty|pleads guilty|sentenced|sentence imposed)\b",
+        ),
+        "official_resolution": (
+            r"\b(?:reopened|closure lifted|evacuation order lifted|boil water notice lifted|all clear issued)\b",
+        ),
+        "major_escalation": (
+            r"\b(?:state of emergency|mandatory evacuation|evacuation ordered|declared a disaster)\b",
+        ),
+    }
+    for stage, regs in patterns.items():
+        if any(re.search(rx, t) for rx in regs):
+            stages.add(stage)
+    return stages
+
+
+def _is_significant_story_update(item, prior):
+    """True only when a matching event advances to a new major milestone.
+
+    Example: an initial homicide report followed the next day by an arrest. Routine
+    rewrites, extra quotes, small count changes, and repeated reports remain blocked.
+    """
+    if not item or not prior:
+        return False
+    new_text = " ".join([
+        item.get("headline", ""), item.get("teaser", ""), item.get("body", "")[:1200]
+    ])
+    old_text = " ".join([
+        prior.get("headline", ""), prior.get("teaser", ""), prior.get("body", "")[:1200]
+    ])
+    new_stages = _material_update_stages(new_text)
+    old_stages = _material_update_stages(old_text)
+    added = new_stages - old_stages
+    if not added:
+        return False
+
+    # An arrest/charge is not a new milestone if the prior story already clearly
+    # described custody or charges using different wording.
+    custody_family = {"arrest", "criminal_charge"}
+    if added <= custody_family and old_stages & custody_family:
+        return False
+
+    return True
+
+
+def _matches_archived_custom(item, entry):
+    """Conservatively determine whether a feed item duplicates an archived custom story.
+
+    Custom articles are authoritative forever. Matching uses, in order: a narrow
+    known-event key, an exact durable fingerprint, the normal archive matcher (which
+    includes locality conflict checks), and a stronger combined headline+teaser test.
+    """
+    if not item or not entry or not (entry.get("is_custom") or entry.get("authoritative_custom")):
+        return False
+
+    item_head = item.get("headline", "")
+    item_text = " ".join([item_head, item.get("teaser", ""), item.get("body", "")[:500]])
+    entry_head = entry.get("headline", "")
+    entry_text = " ".join([entry_head, entry.get("teaser", ""), entry.get("body", "")[:1200]])
+
+    # A custom article still wins by default, but a genuinely status-changing update
+    # may publish as a separate story (for example: homicide -> arrest).
+    if _is_significant_story_update(item, entry):
+        return False
+
+    item_key = _known_event_key(item_text)
+    entry_key = entry.get("custom_event_key") or _known_event_key(entry_text)
+    if item_key and entry_key and item_key == entry_key:
+        return True
+
+    item_fp = _custom_story_fingerprint(item_head, item.get("teaser", ""))
+    entry_fp = entry.get("custom_fingerprint")
+    if item_fp and entry_fp and item_fp == entry_fp:
+        return True
+
+    if find_matching_entry(item_head, [entry], item.get("link", "")):
+        return True
+
+    # Reworded syndication can move important details from headline to teaser. Use a
+    # stricter combined-text match here to catch that without collapsing broad topics.
+    a = _sig_tokens(item_text)
+    b = _sig_tokens(entry_text)
+    shared = _shared_tokens(a, b)
+    distinctive = [t for t in shared if t not in GENERIC_TOKENS]
+    return len(shared) >= 6 and len(distinctive) >= 3
+
 def _same_story(tok_a, tok_b, threshold=4):
     """Two stories are the same only if they share enough tokens AND at least two of
     those are DISTINCTIVE (not generic people/boilerplate words). Counting alone lets
@@ -4562,134 +4609,6 @@ def _same_story(tok_a, tok_b, threshold=4):
         return False
     distinctive = [t for t in shared if t not in GENERIC_TOKENS]
     return len(distinctive) >= 2
-
-
-# Custom articles are authoritative, but headline-only token matching is not enough.
-# A feed headline can frame the same event very differently (for example, "80 cats
-# rescued" versus "more than 70 animals found"). These helpers compare the headline,
-# teaser, and article body using normalized event concepts and local geography.
-CUSTOM_EVENT_STOPWORDS = {
-    "the", "a", "an", "and", "or", "but", "if", "to", "of", "in", "on",
-    "at", "for", "from", "with", "by", "after", "before", "during", "into",
-    "over", "under", "more", "than", "about", "approximately", "around",
-    "official", "officials", "authorities", "according", "said", "says",
-    "say", "reported", "reports", "report", "case", "worst", "seen",
-    "large", "scale", "response", "woman", "man", "resident", "residents",
-    "people", "person", "year", "years", "old", "new", "found", "finds",
-}
-
-CUSTOM_EVENT_ALIASES = {
-    "cat": "animal", "cats": "animal", "feline": "animal", "felines": "animal",
-    "animal": "animal", "animals": "animal",
-    "hoarder": "hoard", "hoarders": "hoard", "hoarding": "hoard", "hoarded": "hoard",
-    "rescue": "rescue", "rescued": "rescue", "rescues": "rescue", "recover": "rescue",
-    "recovered": "rescue", "remove": "rescue", "removed": "rescue", "removing": "rescue",
-    "deputy": "sheriff", "deputies": "sheriff", "sheriffs": "sheriff", "mcso": "sheriff",
-    "house": "home", "residence": "home", "property": "home",
-    "arrested": "arrest", "arrests": "arrest", "charged": "arrest",
-}
-
-CUSTOM_EVENT_GENERIC = {
-    "news", "today", "local", "county", "florida", "article", "story", "event",
-    "investigation", "investigators", "working", "continued", "continuing",
-}
-
-
-def _custom_event_blob(item):
-    if not item:
-        return ""
-    return " ".join([
-        str(item.get("headline", "") or ""),
-        str(item.get("teaser", "") or item.get("summary", "") or ""),
-        str(item.get("body", "") or item.get("article_text", "") or "")[:1600],
-        str(item.get("category_label", "") or ""),
-    ])
-
-
-def _custom_event_tokens(item):
-    words = re.findall(r"[a-z0-9]+", _custom_event_blob(item).lower())
-    out = set()
-    for word in words:
-        if word in CUSTOM_EVENT_STOPWORDS or len(word) < 3:
-            continue
-        # Exact counts frequently change as a scene is processed. Treat 70-89 as
-        # the same approximate mass-count concept for this kind of developing event.
-        if word.isdigit():
-            try:
-                n = int(word)
-            except ValueError:
-                continue
-            if 70 <= n <= 89:
-                out.add("many_animals")
-            continue
-        word = CUSTOM_EVENT_ALIASES.get(word, _stem(word))
-        if word and word not in CUSTOM_EVENT_GENERIC:
-            out.add(word)
-    return frozenset(out)
-
-
-def _custom_event_locations(item):
-    text = _custom_event_blob(item).lower()
-    locs = set()
-    for phrase, key in [
-        ("martin county", "martin"), ("stuart", "martin"),
-        ("jensen beach", "martin"), ("palm city", "martin"),
-        ("hobe sound", "martin"), ("indiantown", "martin"),
-        ("st. lucie county", "st_lucie"), ("st lucie county", "st_lucie"),
-        ("port st. lucie", "st_lucie"), ("port st lucie", "st_lucie"),
-        ("fort pierce", "st_lucie"),
-        ("indian river county", "indian_river"), ("vero beach", "indian_river"),
-        ("sebastian", "indian_river"), ("fellsmere", "indian_river"),
-    ]:
-        if phrase in text:
-            locs.add(key)
-    return frozenset(locs)
-
-
-def _same_custom_event(custom_article, candidate):
-    """Conservative full-context match used only to give custom TCT work priority.
-
-    It requires compatible local geography and either a strong shared event signature
-    or a high overlap of distinctive normalized concepts. It is deliberately separate
-    from the general archive matcher so this stronger logic cannot merge unrelated
-    feed stories with one another.
-    """
-    a = _custom_event_tokens(custom_article)
-    b = _custom_event_tokens(candidate)
-    if not a or not b:
-        return False
-
-    loc_a = _custom_event_locations(custom_article)
-    loc_b = _custom_event_locations(candidate)
-    if loc_a and loc_b and not (loc_a & loc_b):
-        return False
-
-    shared = a & b
-    distinctive = shared - CUSTOM_EVENT_GENERIC
-
-    # Strong event anchors for animal-hoarding coverage. This catches the current
-    # Stuart story even though one headline says "animals found" and the other says
-    # "cats rescued," while still requiring the same local area and corroborating
-    # concepts such as sheriff/home/rescue.
-    if {"animal", "hoard"}.issubset(a) and {"animal", "hoard"}.issubset(b):
-        supporting = shared & {"sheriff", "home", "rescue", "arrest", "many_animals", "stuart", "martin"}
-        if (loc_a & loc_b or loc_a or loc_b) and len(supporting) >= 2:
-            return True
-
-    # General custom-priority rule. Broad local-news words such as sheriff,
-    # home, rescue, and the county name are not enough on their own; otherwise a
-    # separate dog rescue or shelter story could suppress the hoarding report.
-    broad = {
-        "animal", "home", "sheriff", "rescue", "arrest", "martin", "stuart",
-        "st_lucie", "indian_river", "city", "need", "office", "service",
-    }
-    specific = distinctive - broad
-    smaller = min(len(a), len(b))
-    overlap_ratio = (len(shared) / smaller) if smaller else 0
-    if len(shared) >= 5 and len(specific) >= 2 and overlap_ratio >= 0.45:
-        return True
-    return False
-
 
 def _is_duplicate_headline(headline, existing_token_sets):
     new_tok = _sig_tokens(headline)
@@ -4711,6 +4630,16 @@ def find_matching_entry(headline, archive, source_url="", is_weather_alert=False
     regular article by fuzzy headline — so a "Tornado Warning" alert and a
     "Tornado damages homes" news story never collide regardless of shared words.
     """
+    # Stable event fingerprints are checked before URL and fuzzy-token matching.
+    # This catches heavily reworded syndicated versions of an event already in the
+    # archive, including old custom articles no longer present in custom_articles.json.
+    _event_key = _known_event_key(headline)
+    if _event_key:
+        for entry in archive:
+            _entry_text = " ".join([entry.get("headline", ""), entry.get("teaser", "")])
+            if _known_event_key(_entry_text) == _event_key:
+                return entry
+
     if source_url:
         def norm_url(u):
             return re.sub(r"[?#].*$", "", u.strip().rstrip("/").lower())
@@ -5471,6 +5400,7 @@ def write_archives(all_categories, top_cat):
         "2026-07-19-halloween-flight-from-stuart-airport-to-georgia-documented",
         "2026-07-20-tv-show-titled-stuart-fails-to-save-the-universe-debuts-this-week",
         "2026-07-19-fort-pierce-unity-in-the-community-event-connects-families-with-services",
+        "2026-07-21-stuart-woman-arrested-after-deputies-rescue-about-80-cats-from-home-in-worst-hoa",
     }
     _before = len(archive)
     archive = [e for e in archive if e.get("slug") not in _DUP_SLUGS_TO_REMOVE]
@@ -5499,11 +5429,15 @@ def write_archives(all_categories, top_cat):
             for _entry in archive:
                 if _entry.get("is_custom"):
                     continue
-                if (
-                    _same_custom_event(_c, _entry)
-                    or _same_story(_ctok, _sig_tokens(_entry.get("headline", "")))
-                ):
+                if _same_story(_ctok, _sig_tokens(_entry.get("headline", ""))):
                     _entry["is_custom"] = True
+                    _entry["authoritative_custom"] = True
+                    _entry["custom_fingerprint"] = _custom_story_fingerprint(
+                        _c.get("headline", ""), _c.get("teaser", "") or _c.get("body", "")[:180]
+                    )
+                    _entry["custom_event_key"] = _known_event_key(
+                        " ".join([_c.get("headline", ""), _c.get("teaser", ""), _c.get("body", "")[:500]])
+                    )
 
     heroes = [(top_cat["category_key"], top_cat["category_label"], top_cat["hero"])]
     for cat in all_categories:
@@ -5563,22 +5497,6 @@ def write_archives(all_categories, top_cat):
             continue
 
         source_url = hero.get("link", "")
-
-        # CUSTOM ALWAYS WINS. Compare full event context before the ordinary archive
-        # matcher. Headline-only matching missed the Stuart 80-cats duplicate because
-        # the custom and feed headlines used different nouns and framing.
-        if not hero.get("is_custom"):
-            _custom_cover = next(
-                (_c for _c in _current_customs if _same_custom_event(_c, hero)),
-                None,
-            )
-            if _custom_cover:
-                print(
-                    f"  PROTECTED: dropping feed story '{headline[:45]}' — same event as "
-                    f"custom article '{_custom_cover.get('headline','')[:45]}'"
-                )
-                continue
-
         existing   = find_matching_entry(headline, archive, source_url, is_weather_alert=bool(hero.get("is_weather_alert")))
 
         # OVERRIDE for recurring series (weekly traffic reports, roundups, game recaps).
@@ -5667,6 +5585,13 @@ def write_archives(all_categories, top_cat):
             # it can never be overwritten by a later feed story (see the PROTECTED guard).
             if hero.get("is_custom"):
                 existing["is_custom"] = True
+                existing["authoritative_custom"] = True
+                existing["custom_fingerprint"] = _custom_story_fingerprint(
+                    headline, hero.get("teaser", "") or hero.get("body", "")[:180]
+                )
+                existing["custom_event_key"] = _known_event_key(
+                    " ".join([headline, hero.get("teaser", ""), hero.get("body", "")[:500]])
+                )
             if source_url:
                 existing["source_url"] = source_url
             updated_count += 1
@@ -5704,81 +5629,19 @@ def write_archives(all_categories, top_cat):
                 "source_url": hero.get("link",""),
                 "is_weather_alert": bool(hero.get("is_weather_alert")),
                 "is_custom": bool(hero.get("is_custom")),
+                "authoritative_custom": bool(hero.get("is_custom")),
+                "custom_fingerprint": _custom_story_fingerprint(
+                    headline, hero.get("teaser", "") or hero.get("body", "")[:180]
+                ) if hero.get("is_custom") else "",
+                "custom_event_key": _known_event_key(
+                    " ".join([headline, hero.get("teaser", ""), hero.get("body", "")[:500]])
+                ) if hero.get("is_custom") else "",
                 "article_word_count": _word_count(hero.get("body", "")),
                 "article_paragraph_count": _paragraph_count(hero.get("body", "")),
                 "event_url": hero.get("event_url", ""),
                 "event_link_text": hero.get("event_link_text", ""),
             })
             new_count += 1
-
-    # Convert known duplicate permalinks into static canonical redirects after all
-    # custom entries have been archived. GitHub Pages cannot emit a server-side 301,
-    # so this page uses canonical + noindex + immediate meta/JavaScript redirect while
-    # preserving the old URL for anyone who already shared it.
-    def _redirect_html(target_slug):
-        target_path = f"/articles/{target_slug}.html"
-        target_url = f"{SITE_URL}{target_path}"
-        return f"""<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Article moved — Treasure Coast Today</title>
-  <meta name="robots" content="noindex,follow">
-  <link rel="canonical" href="{target_url}">
-  <meta http-equiv="refresh" content="0; url={target_path}">
-  <script>window.location.replace({json.dumps(target_path)});</script>
-</head>
-<body>
-  <p>This article has moved to <a href="{target_path}">the authoritative Treasure Coast Today report</a>.</p>
-</body>
-</html>"""
-
-    for _old_slug in PERMANENT_REDIRECT_SOURCE_SLUGS:
-        # Prefer a currently loaded custom article, then match it to its permanent
-        # archive entry. Fallback to the known custom slug only if the archive has not
-        # yet been populated for some reason.
-        _event_customs = [
-            c for c in _current_customs
-            if {"animal", "hoard"}.issubset(_custom_event_tokens(c))
-            and "martin" in _custom_event_locations(c)
-        ]
-        _target = None
-        for _custom in _event_customs:
-            _target = next(
-                (
-                    e for e in archive
-                    if e.get("slug") != _old_slug
-                    and e.get("is_custom")
-                    and _same_custom_event(_custom, e)
-                ),
-                None,
-            )
-            if _target:
-                break
-        if not _target:
-            _target = next(
-                (
-                    e for e in archive
-                    if e.get("slug") != _old_slug
-                    and e.get("is_custom")
-                    and {"animal", "hoard"}.issubset(_custom_event_tokens(e))
-                    and "martin" in _custom_event_locations(e)
-                ),
-                None,
-            )
-
-        # The custom article created from Sheriff Budensiek's briefing uses this slug
-        # under the current slugifier. Dynamic archive resolution above remains primary.
-        _target_slug = (
-            _target.get("slug") if _target else
-            "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response"
-        )
-        archive = [e for e in archive if e.get("slug") != _old_slug]
-        (articles_dir / f"{_old_slug}.html").write_text(
-            _redirect_html(_target_slug), encoding="utf-8"
-        )
-        print(f"  Redirected duplicate article {_old_slug} -> {_target_slug}")
 
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
     (OUTPUT_DIR / "archive.html").write_text(render_archive_page(archive), encoding="utf-8")
@@ -6399,10 +6262,14 @@ def main():
                 _art_tokens = _sig_tokens(art.get("headline", ""))
 
                 def _same_as_custom(item):
-                    return bool(item) and (
-                        _same_custom_event(art, item)
-                        or _same_story(_art_tokens, _sig_tokens(item.get("headline", "")))
-                    )
+                    if not item:
+                        return False
+                    # Permit only a major new milestone in the same underlying event.
+                    # Routine rewrites and incremental follow-ups remain suppressed.
+                    if _is_significant_story_update(item, art):
+                        return False
+                    return (_same_event_text(art.get("headline", ""), item.get("headline", ""))
+                            or _same_story(_art_tokens, _sig_tokens(item.get("headline", ""))))
 
                 # Sweep EVERY category: drop feed cards that are this story, and if a
                 # feed hero in ANY category is this story, remove it (promote a card, or
@@ -6417,37 +6284,37 @@ def main():
                         _cat["hero"] = _cards.pop(0) if _cards else None
                         print(f"  Custom article displaced feed hero of same story in {_cat['category_key']}")
 
-                # Now place the custom article in its own category. A high-urgency
-                # original TCT story must be allowed to become the category hero so it
-                # can compete for the overall front-page lead. Previously urgency was
-                # ignored here and every non-force_hero custom article was appended as a
-                # card behind whatever feed hero happened to be generated first.
+                # Now place the custom article in its own category
                 _hero = target.get("hero")
-                _custom_score = int(art.get("urgency_score", 0) or 0)
-                _hero_score = int((_hero or {}).get("urgency_score", 0) or 0)
-                _promote_for_score = (
-                    _custom_score >= 7
-                    and (
-                        _hero is None
-                        or _custom_score > _hero_score
-                        or (
-                            _custom_score == _hero_score
-                            and not (_hero or {}).get("is_custom")
-                        )
-                    )
-                )
-                if _hero is None or _same_as_custom(_hero) or _promote_for_score:
-                    if _hero and not _same_as_custom(_hero):
-                        target.setdefault("cards", []).insert(0, _hero)
+                if _hero is None or _same_as_custom(_hero):
                     target["hero"] = art
-                    if _promote_for_score:
-                        print(
-                            f"  Custom urgency promotion: '{art['headline'][:50]}' "
-                            f"became {ckey} hero ({_custom_score} vs {_hero_score})"
-                        )
                 else:
                     target.setdefault("cards", []).append(art)
                 print(f"  Custom article: '{art['headline'][:50]}' -> {ckey}")
+
+    # PRE-HERO AUTHORITATIVE-CUSTOM GUARD. Custom stories remain authoritative
+    # after custom_articles.json is cleared because that status is persisted in
+    # archive.json. Remove matching feed copies before homepage/category ranking.
+    _published_archive = load_archive(OUTPUT_DIR / "archive.json")
+    _archived_customs = [
+        e for e in _published_archive
+        if e.get("is_custom") or e.get("authoritative_custom")
+    ]
+    if _archived_customs:
+        for _cat in all_categories:
+            def _already_covered_by_custom(item):
+                if not item or item.get("is_custom") or item.get("_archive_only"):
+                    return False
+                return any(_matches_archived_custom(item, e) for e in _archived_customs)
+
+            _old_cards = list(_cat.get("cards", []))
+            _cat["cards"] = [c for c in _old_cards if not _already_covered_by_custom(c)]
+            _removed = len(_old_cards) - len(_cat["cards"])
+            if _already_covered_by_custom(_cat.get("hero")):
+                _cat["hero"] = _cat["cards"].pop(0) if _cat["cards"] else None
+                _removed += 1
+            if _removed:
+                print(f"  Custom-authority guard removed {_removed} feed duplicate(s) from {_cat['category_key']}")
 
     # Never hide or drop a configured category. Recover missing/thin sections from
     # archive.json and guarantee a hero plus a useful card pool for every category.
