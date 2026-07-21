@@ -1,5 +1,5 @@
 """
-Treasure Coast Today - news generation pipeline - v6.5.0 Canonical Event Lock
+Treasure Coast Today - news generation pipeline - v6.5.2 Canonical Freshness Lock
 Covers Martin, St. Lucie, and Indian River counties.
 Runs 4x/day via GitHub Actions.
 """
@@ -4907,6 +4907,30 @@ def _is_significant_story_update(item, prior):
     return True
 
 
+def _same_published_milestone(item, prior):
+    """Return True when an incoming feed item merely republishes an existing milestone.
+
+    This is intentionally stricter than broad story clustering. It requires the normal
+    deterministic archive matcher to have selected the prior article, the normalized
+    editorial stage to be unchanged, and no material milestone to have been added.
+    Such an item must not refresh lastmod, rewrite the canonical page, or re-enter the
+    live hero/card pool merely because a source changed its headline or RSS timestamp.
+    """
+    if not item or not prior:
+        return False
+    new_stage = _story_stage(_story_text(_event_audit_item(item, "live")))
+    old_stage = _story_stage(_story_text(_event_audit_item(prior, "archive")))
+    if new_stage == "general" or new_stage != old_stage:
+        return False
+    if _is_significant_story_update(item, prior):
+        return False
+    return bool(find_matching_entry(
+        item.get("headline", ""), [prior],
+        item.get("link") or item.get("source_url") or "",
+        is_weather_alert=bool(item.get("is_weather_alert")),
+    ))
+
+
 def _matches_archived_custom(item, entry):
     """Conservatively determine whether a feed item duplicates an archived custom story.
 
@@ -5562,16 +5586,27 @@ def apply_guarded_story_suppression(all_categories, archive, current_customs=Non
         if stage == "general" or stage not in SAFE_AUTO_SUPPRESSION_STAGES:
             return None
         candidates = archive_items + accepted_live
-        matches = [prior for prior in candidates
-                   if _story_stage(_story_text(prior)) == stage and _same_story_topic(normalized, prior)]
-        if not matches:
-            accepted_live.append(normalized)
-            return None
-        best = max(matches, key=lambda prior: _story_match_confidence(normalized, prior))
-        confidence = _story_match_confidence(normalized, best)
-        if confidence < AUTO_SUPPRESSION_CONFIDENCE:
-            accepted_live.append(normalized)
-            return None
+
+        # First use the same deterministic matcher that the archive writer uses. If it
+        # resolves to an existing article at the same editorial milestone, this is a
+        # republication—not a fresh story—even when wording changes lower the generic
+        # confidence score below 95.
+        deterministic = next((prior for prior in candidates
+                              if _same_published_milestone(item, prior)), None)
+        if deterministic:
+            best = deterministic
+            confidence = 100
+        else:
+            matches = [prior for prior in candidates
+                       if _story_stage(_story_text(prior)) == stage and _same_story_topic(normalized, prior)]
+            if not matches:
+                accepted_live.append(normalized)
+                return None
+            best = max(matches, key=lambda prior: _story_match_confidence(normalized, prior))
+            confidence = _story_match_confidence(normalized, best)
+            if confidence < AUTO_SUPPRESSION_CONFIDENCE:
+                accepted_live.append(normalized)
+                return None
         record = {
             "story_id": prior_membership_id(best, archive_items),
             "slug": normalized.get("slug", ""),
@@ -7170,7 +7205,7 @@ def _repair_article_shells(output_root):
         category = _extract(r'class="article-category"[^>]*>(.*?)</', raw)
         date_text = _extract(r'class="article-date"[^>]*>(.*?)</', raw)
         iso = re.search(r'20\d{2}-\d{2}-\d{2}', raw)
-        sort_key = iso.group(0) if iso else _dt.fromtimestamp(candidate.stat().st_mtime).strftime('%Y-%m-%d')
+        sort_key = iso.group(0) if iso else "1900-01-01"  # Never treat a repair/write timestamp as editorial freshness.
         catalog.append({
             "path": candidate,
             "slug": candidate.stem,
@@ -7766,6 +7801,15 @@ def write_archives(all_categories, top_cat):
             if (existing.get("headline", "").strip().lower() != headline.strip().lower()):
                 if not confirm_same_story(headline, hero.get("teaser", "") or hero.get("body", "")[:250], existing):
                     existing = None
+
+        # FRESHNESS LOCK: a source may republish an old development with a new RSS
+        # timestamp or slightly changed wording. When the deterministic matcher points
+        # to an existing canonical article and the editorial milestone has not changed,
+        # leave the canonical HTML and metadata untouched. This prevents an old story
+        # from receiving today's lastmod and resurfacing as the homepage hero.
+        if existing and not hero.get("is_custom") and _same_published_milestone(hero, existing):
+            print(f"  REPUBLICATION: keeping canonical freshness for '{existing.get('headline','')[:55]}'")
+            continue
 
         # Skip cross-category duplicates within the same run
         if not existing and _is_duplicate_headline(headline, this_run_token_sets):
