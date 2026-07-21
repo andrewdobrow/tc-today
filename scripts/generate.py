@@ -4885,6 +4885,85 @@ def _audit_action_families(text):
     return {name for name, rx in families.items() if re.search(rx, t)}
 
 
+
+def _audit_event_type(text):
+    """Classify the concrete editorial stage of a story.
+
+    The matcher uses this as a hard guardrail: stories about the same broad
+    subject are not duplicates when one is a preview and the other a result,
+    one is a proposal and the other an approval, or one is the original event
+    and the other is a meaningful follow-up.
+    """
+    t = re.sub(r"[^a-z0-9]+", " ", (text or "").lower())
+
+    # Sports stages must be checked before broad event/announcement language.
+    if re.search(r"\b(host|hosts|hosting|homestand|preview|upcoming|will face|set to play|schedule)\b", t) and re.search(r"\b(mets|baseball|football|basketball|soccer|game|series|threshers|tarpons|cardinals)\b", t):
+        return "sports-preview"
+    if re.search(r"\b(win|wins|won|loss|lose|loses|lost|defeat|defeats|victory|sweep|sweeps|score|rally|comeback)\b", t) and re.search(r"\b(mets|baseball|football|basketball|soccer|game|series|threshers|tarpons|cardinals)\b", t):
+        return "sports-result"
+
+    # Government, elections and court stages.
+    if re.search(r"\b(lawsuit|sues|sued|challenge|challenges|appeal|court blocks|court blocked|ruling|injunction)\b", t):
+        return "legal-challenge"
+    if re.search(r"\b(expected to|set to|scheduled to|plans to|will sign|could sign|proposal|proposed|considering|seeks|would)\b", t):
+        return "proposal-or-expected"
+    if re.search(r"\b(approves|approved|passes|passed|adopts|adopted|signs|signed|enacts|enacted|implements|implemented|takes effect)\b", t):
+        return "approved-or-enacted"
+    if re.search(r"\b(veto|vetoes|vetoed|rejects|rejected)\b", t):
+        return "veto-or-rejection"
+
+    # Crime/public-safety lifecycle.
+    if re.search(r"\b(disputed|questioned|contradicts|contradicted|appeal filed|wrongful|reinstatement)\b", t):
+        return "follow-up-dispute"
+    if re.search(r"\b(sentenced|sentencing|prison term|probation)\b", t):
+        return "sentencing"
+    if re.search(r"\b(convicted|conviction|found guilty|acquitted|not guilty|verdict)\b", t):
+        return "verdict"
+    if re.search(r"\b(trial begins|trial starts|goes on trial|jury selection)\b", t):
+        return "trial"
+    if re.search(r"\b(arrest|arrested|charged|indicted|custody|booked|firings|fired|suspended|terminated|terminations)\b", t):
+        return "arrest-charge-discipline"
+    if re.search(r"\b(body found|body recovered|remains found|remains recovered)\b", t):
+        return "body-recovery"
+    if re.search(r"\b(rescue|rescued|evacuated|saved)\b", t):
+        return "rescue"
+
+    # Fire/storm/traffic lifecycle.
+    if re.search(r"\b(fully contained|100 contained|extinguished|reopened|all clear|cleanup complete)\b", t):
+        return "incident-resolved"
+    if re.search(r"\b(contained|grows|spreads|burning|active fire|ongoing|closure|closed|shuts down)\b", t):
+        return "incident-active"
+    if re.search(r"\b(reopens|reopened|restored|resume|resumes)\b", t):
+        return "service-restored"
+
+    # Community response is a follow-up, not the original death/fire/crash.
+    if re.search(r"\b(raises funds|fundraiser|gofundme|vigil|memorial|community support)\b", t):
+        return "community-follow-up"
+
+    # Business/development stages.
+    if re.search(r"\b(listed|listing|for sale|on the market)\b", t):
+        return "property-listing"
+    if re.search(r"\b(demolition underway|construction begins|breaks ground|groundbreaking|opens|opening)\b", t):
+        return "project-action"
+    if re.search(r"\b(announces|announced|unveils|launches|ending|cuts|to gain)\b", t):
+        return "announcement"
+
+    return "general"
+
+
+def _audit_event_types_compatible(a, b, day_gap=None):
+    ta, tb = _audit_event_type(_story_text(a)), _audit_event_type(_story_text(b))
+    if ta != "general" and tb != "general" and ta != tb:
+        return False
+
+    # Separate consecutive games even when the same teams and series language recur.
+    if ta == tb == "sports-result" and day_gap is not None and day_gap > 0:
+        nums_a = _audit_numbers(a.get("headline", ""))
+        nums_b = _audit_numbers(b.get("headline", ""))
+        if not (nums_a & nums_b):
+            return False
+    return True
+
 def _audit_numbers(text):
     return {n for n in re.findall(r"\b\d{2,}\b", text or "") if not re.fullmatch(r"20\d{2}", n)}
 
@@ -4916,6 +4995,9 @@ def _audit_same_event_strict(a, b):
 
     aa, ab = _audit_action_families(ta), _audit_action_families(tb)
     if aa and ab and not (aa & ab):
+        return False
+
+    if not _audit_event_types_compatible(a, b, day_gap):
         return False
 
     na, nb = _audit_numbers(a.get("headline", "")), _audit_numbers(b.get("headline", ""))
@@ -4994,12 +5076,14 @@ def build_event_audit(archive, current_customs=None, live_categories=None, outpu
             "canonical_slug": canonical.get("slug", ""),
             "canonical_headline": canonical.get("headline", ""),
             "canonical_is_custom": bool(canonical.get("is_custom") or canonical.get("authoritative_custom")),
+            "event_type": _audit_event_type(_story_text(canonical)),
             "article_count": len(members),
             "articles": [{
                 "slug": m.get("slug", ""), "headline": m.get("headline", ""),
                 "date": m.get("date", ""), "category_key": m.get("category_key", ""),
                 "is_custom": bool(m.get("is_custom") or m.get("authoritative_custom")),
                 "origin": m.get("origin", "archive"),
+                "event_type": _audit_event_type(_story_text(m)),
             } for m in sorted(members, key=_story_priority, reverse=True)],
         }
         events.append(record)
@@ -5009,15 +5093,15 @@ def build_event_audit(archive, current_customs=None, live_categories=None, outpu
     out = Path(output_dir or OUTPUT_DIR) / "data"
     out.mkdir(parents=True, exist_ok=True)
     registry = {
-        "schema_version": 2, "mode": EVENT_PIPELINE_MODE,
+        "schema_version": 3, "mode": EVENT_PIPELINE_MODE,
         "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-        "non_destructive": True, "matcher": "strict-complete-link-v2",
+        "non_destructive": True, "matcher": "event-type-complete-link-v3",
         "article_count": len(items), "event_count": len(events),
         "candidate_duplicate_group_count": len(duplicate_groups), "events": events,
     }
     audit = {
-        "schema_version": 2, "mode": EVENT_PIPELINE_MODE, "non_destructive": True,
-        "matcher": "strict-complete-link-v2",
+        "schema_version": 3, "mode": EVENT_PIPELINE_MODE, "non_destructive": True,
+        "matcher": "event-type-complete-link-v3",
         "summary": {
             "articles_analyzed": len(items), "likely_unique_events": len(events),
             "candidate_duplicate_groups": len(duplicate_groups),
@@ -5028,7 +5112,7 @@ def build_event_audit(archive, current_customs=None, live_categories=None, outpu
     }
     (out / "events.json").write_text(json.dumps(registry, indent=2, ensure_ascii=False), encoding="utf-8")
     (out / "event-audit.json").write_text(json.dumps(audit, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  Event audit v2: {len(items)} articles -> {len(events)} candidate events; {len(duplicate_groups)} duplicate group(s)")
+    print(f"  Event audit v3: {len(items)} articles -> {len(events)} candidate events; {len(duplicate_groups)} duplicate group(s)")
     print("  Event audit is NON-DESTRUCTIVE; publication output was not changed")
     return audit
 
