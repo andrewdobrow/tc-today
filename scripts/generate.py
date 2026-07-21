@@ -7300,6 +7300,114 @@ def _repair_article_shells(output_root):
 </style>
 """
 
+    article_runtime_css = r"""
+<style id="tct-article-runtime-critical">
+.article-reading-progress{position:fixed!important;top:0!important;left:0!important;z-index:10000!important;width:0;height:3px!important;background:#087075!important;pointer-events:none!important;transition:width 70ms linear!important}
+</style>
+"""
+
+    article_runtime_script = r"""
+<script id="tct-article-runtime">
+(function(){
+  'use strict';
+  function updateProgress(){
+    var bar=document.querySelector('.article-reading-progress');
+    if(!bar)return;
+    var doc=document.documentElement;
+    var body=document.body;
+    var scrollTop=window.pageYOffset||doc.scrollTop||(body&&body.scrollTop)||0;
+    var scrollHeight=Math.max(doc.scrollHeight,body?body.scrollHeight:0);
+    var viewport=window.innerHeight||doc.clientHeight||0;
+    var max=Math.max(0,scrollHeight-viewport);
+    var pct=max>0?Math.min(100,Math.max(0,(scrollTop/max)*100)):0;
+    bar.style.width=pct+'%';
+  }
+
+  var timeEl=document.getElementById('tct-live-time');
+  var weatherEl=document.getElementById('tct-live-weather');
+  var iconEl=document.getElementById('tct-weather-icon');
+  var tempEl=document.getElementById('tct-weather-temp');
+  var conditionEl=document.getElementById('tct-weather-condition');
+
+  function updateClock(){
+    if(!timeEl)return;
+    try{
+      var now=new Date();
+      var datePart=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',month:'short',day:'numeric'}).format(now);
+      var timePart=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit',hour12:true,timeZoneName:'short'}).format(now);
+      timeEl.textContent=datePart+' · '+timePart;
+      timeEl.dateTime=now.toISOString();
+    }catch(e){
+      timeEl.textContent='Treasure Coast time';
+    }
+  }
+
+  var codes={0:['☀','Clear'],1:['🌤','Mostly clear'],2:['⛅','Partly cloudy'],3:['☁','Cloudy'],45:['🌫','Fog'],48:['🌫','Fog'],51:['🌦','Light drizzle'],53:['🌦','Drizzle'],55:['🌧','Heavy drizzle'],61:['🌦','Light rain'],63:['🌧','Rain'],65:['🌧','Heavy rain'],80:['🌦','Rain showers'],81:['🌧','Rain showers'],82:['⛈','Heavy showers'],95:['⛈','Thunderstorms'],96:['⛈','Storms with hail'],99:['⛈','Storms with hail']};
+  function paintWeather(d){
+    if(!d||typeof d.temperature!=='number'||!weatherEl)return;
+    var pair=codes[d.code]||['◌','Local weather'];
+    if(iconEl)iconEl.textContent=pair[0];
+    if(tempEl)tempEl.textContent=Math.round(d.temperature)+'°';
+    if(conditionEl)conditionEl.textContent=pair[1];
+    weatherEl.title='Treasure Coast: '+Math.round(d.temperature)+'°F, '+pair[1];
+  }
+  async function updateWeather(){
+    if(!weatherEl)return;
+    var key='tct-weather-v1',age=20*60*1000;
+    try{
+      var cached=JSON.parse(localStorage.getItem(key)||'null');
+      if(cached&&Date.now()-cached.savedAt<age){paintWeather(cached);return;}
+    }catch(e){}
+    try{
+      var response=await fetch('https://api.open-meteo.com/v1/forecast?latitude=27.1975&longitude=-80.2528&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=America%2FNew_York',{cache:'no-store'});
+      if(!response.ok)throw new Error('weather request failed');
+      var json=await response.json();
+      var data={temperature:json.current&&json.current.temperature_2m,code:json.current&&json.current.weather_code,savedAt:Date.now()};
+      paintWeather(data);
+      try{localStorage.setItem(key,JSON.stringify(data));}catch(e){}
+    }catch(e){
+      if(conditionEl)conditionEl.textContent='Local weather';
+    }
+  }
+
+  function start(){
+    updateProgress();
+    updateClock();
+    updateWeather();
+    window.addEventListener('scroll',updateProgress,{passive:true});
+    window.addEventListener('resize',updateProgress);
+    window.addEventListener('load',updateProgress);
+    setInterval(updateClock,30000);
+    setInterval(updateWeather,20*60*1000);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});
+  else start();
+})();
+</script>
+"""
+
+    def _ensure_article_runtime(raw):
+        """Install one canonical runtime on every retained article page."""
+        changed = False
+        css_pattern = r'<style\s+id=["\']tct-article-runtime-critical["\'][^>]*>.*?</style>'
+        if re.search(css_pattern, raw, re.I | re.S):
+            updated = re.sub(css_pattern, article_runtime_css.strip(), raw, count=1, flags=re.I | re.S)
+            changed = changed or updated != raw
+            raw = updated
+        elif '</head>' in raw:
+            raw = raw.replace('</head>', article_runtime_css + '\n</head>', 1)
+            changed = True
+
+        script_pattern = r'<script\s+id=["\']tct-article-runtime["\'][^>]*>.*?</script>'
+        if re.search(script_pattern, raw, re.I | re.S):
+            updated = re.sub(script_pattern, article_runtime_script.strip(), raw, count=1, flags=re.I | re.S)
+            changed = changed or updated != raw
+            raw = updated
+        elif '</body>' in raw:
+            raw = raw.replace('</body>', article_runtime_script + '\n</body>', 1)
+            changed = True
+        return raw, changed
+
     def _category_key(label):
         normalized = re.sub(r"[^a-z0-9]+", " ", (label or "").lower()).strip()
         aliases = {
@@ -7376,6 +7484,9 @@ def _repair_article_shells(output_root):
         else:
             html = html.replace('</head>', critical_banner_css + '\n</head>', 1)
             changed = True
+
+        html, runtime_changed = _ensure_article_runtime(html)
+        changed = changed or runtime_changed
 
         desired_banner = _banner_for((headline + " " + body_excerpt[:1200]).strip())
         html, banner_changed = _replace_banner(html, desired_banner)
