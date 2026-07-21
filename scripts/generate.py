@@ -18,6 +18,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as
 
 # -- CONFIG --
 
+TCT_PRESENTATION_VERSION = "6.3.2-banner-slot-editorial-resources"
+
 CATEGORIES = {
     "local_gov": {
         "label": "Local Government",
@@ -4085,8 +4087,9 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     headline_enc = _urlparse.quote(hero.get("headline", ""))
     headline_js  = _json.dumps(hero.get("headline", ""))
 
-    # Suppress ad solicitation on sensitive stories — brand safety. Never place an
-    # advertise banner next to violent crime, sexual assault, or child abuse coverage.
+    # Every article uses the same top banner slot. Ordinary stories show the paid
+    # advertising creative. Sensitive stories use a restrained editorial notice or
+    # an appropriate national support resource, preserving identical page geometry.
     _sensitive_terms = [
         "murder", "murdered", "homicide", "killed", "killing", "shooting", "shot dead",
         "stabbing", "stabbed", "rape", "raped", "sexual assault", "sexual battery",
@@ -4096,19 +4099,66 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         "domestic violence", "assault", "overdose death", "suicide", "dead body",
         "body found", "remains found", "fatal crash", "deadly crash",
     ]
-    _hl_body = (hero.get("headline", "") + " " + hero.get("body", "")[:300]).lower()
-    _show_ad_banner = not any(t in _hl_body for t in _sensitive_terms)
-    if hero.get("is_weather_alert"):
-        _show_ad_banner = False  # No ad solicitation on active weather emergencies
+    _sexual_terms = [
+        "rape", "raped", "sexual assault", "sexual battery", "molest", "molestation",
+        "molested", "child porn", "child sex", "csam", "sex abuse", "sexual abuse",
+        "sex trafficking",
+    ]
+    _domestic_terms = ["domestic violence", "domestic abuse", "intimate partner violence"]
+    _crisis_terms = ["suicide", "suicidal", "self-harm", "mental health crisis"]
 
-    ad_banner = ""
-    if _show_ad_banner:
-        ad_banner = (
-            '  <a href="/advertise.html" class="article-ad-banner" '
+    _hl_body = (hero.get("headline", "") + " " + hero.get("body", "")[:500]).lower()
+    _is_sensitive = any(t in _hl_body for t in _sensitive_terms) or bool(hero.get("is_weather_alert"))
+
+    def _editorial_notice(label, headline, copy, resource_html=""):
+        return f'''
+      <section class="article-banner-slot article-house-banner" aria-label="{label}">
+        <div class="article-house-mark" aria-hidden="true">TCT</div>
+        <div class="article-house-copy">
+          <span class="article-house-label">{label}</span>
+          <strong class="article-house-headline">{headline}</strong>
+          <span class="article-house-text">{copy}</span>
+        </div>
+        {resource_html}
+      </section>'''
+
+    if any(t in _hl_body for t in _sexual_terms):
+        _resource = '<a class="article-house-resource" href="https://rainn.org/" target="_blank" rel="noopener noreferrer external"><span>Confidential support</span><strong>RAINN: 800-656-HOPE (4673)</strong></a>'
+        banner_slot = _editorial_notice(
+            "Community Resource",
+            "Support is available.",
+            "Free, confidential help is available 24 hours a day.",
+            _resource,
+        )
+    elif any(t in _hl_body for t in _domestic_terms):
+        _resource = '<a class="article-house-resource" href="https://www.thehotline.org/" target="_blank" rel="noopener noreferrer external"><span>Confidential support</span><strong>Call 800-799-SAFE or text START to 88788</strong></a>'
+        banner_slot = _editorial_notice(
+            "Community Resource",
+            "You are not alone.",
+            "Confidential domestic violence support is available 24 hours a day.",
+            _resource,
+        )
+    elif any(t in _hl_body for t in _crisis_terms):
+        _resource = '<a class="article-house-resource" href="https://988lifeline.org/" target="_blank" rel="noopener noreferrer external"><span>Free and confidential</span><strong>Call or text 988</strong></a>'
+        banner_slot = _editorial_notice(
+            "Community Resource",
+            "Help is available now.",
+            "The 988 Lifeline provides free, confidential crisis support.",
+            _resource,
+        )
+    elif _is_sensitive:
+        banner_slot = _editorial_notice(
+            "Editorial Notice",
+            "Some stories are too important for commercial sponsorship.",
+            "To maintain appropriate context, Treasure Coast Today does not display paid advertising alongside certain sensitive news coverage.",
+        )
+    else:
+        banner_slot = (
+            '      <a href="/advertise.html" class="article-banner-slot article-ad-banner" '
             'aria-label="Advertise with Treasure Coast Today">\n'
-            '    <img src="/images/advertise-banner.png" '
-            'alt="Advertise with Treasure Coast Today — reach Martin, St. Lucie and Indian River readers every day">\n'
-            '  </a>'
+            '        <img src="/images/advertise-banner.png" '
+            'alt="Advertise with Treasure Coast Today. Reach Martin, St. Lucie and Indian River readers every day">\n'
+            '      </a>'
         )
 
     # Related stories — same category, most recent, excluding this article
@@ -4140,6 +4190,20 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
 {head}
   <style>
     .article-wrap {{ max-width: 1180px; margin: 0 auto; padding: 52px 28px 96px; position: relative; }}
+    .article-banner-slot {{ width: min(100%, 970px); aspect-ratio: 970 / 250; max-height: 250px; margin: 0 auto 34px; border-radius: 12px; overflow: hidden; }}
+    .article-ad-banner {{ display: block; background: var(--surface); border: 1px solid var(--border); }}
+    .article-ad-banner img {{ width: 100%; height: 100%; display: block; object-fit: cover; }}
+    .article-house-banner {{ position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: clamp(16px, 3vw, 32px); padding: clamp(20px, 3vw, 34px); background: linear-gradient(115deg, #f8fbfa 0%, #ffffff 68%); border: 1px solid var(--border); border-top: 4px solid var(--accent); box-shadow: 0 8px 26px rgba(9, 15, 15, .05); }}
+    .article-house-banner::after {{ content: ""; position: absolute; right: -48px; bottom: -76px; width: 220px; height: 220px; border: 1px solid rgba(10, 112, 117, .10); border-radius: 50%; pointer-events: none; }}
+    .article-house-mark {{ width: clamp(54px, 7vw, 78px); aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; background: var(--accent); color: white; font-family: "Fraunces", serif; font-size: clamp(18px, 2.4vw, 25px); font-weight: 700; letter-spacing: -.04em; }}
+    .article-house-copy {{ min-width: 0; display: grid; gap: 5px; position: relative; z-index: 1; }}
+    .article-house-label {{ width: fit-content; padding: 3px 8px; border-radius: 999px; background: rgba(10, 112, 117, .10); color: var(--accent); font-size: 9px; font-weight: 800; letter-spacing: .11em; line-height: 1.4; text-transform: uppercase; }}
+    .article-house-headline {{ color: var(--text); font-family: "Fraunces", serif; font-size: clamp(19px, 2.4vw, 29px); line-height: 1.12; letter-spacing: -.025em; text-wrap: balance; }}
+    .article-house-text {{ max-width: 650px; color: var(--text-secondary); font-size: clamp(11px, 1.3vw, 14px); line-height: 1.45; }}
+    .article-house-resource {{ position: relative; z-index: 1; min-width: 205px; max-width: 260px; padding: 13px 15px; border: 1px solid rgba(10, 112, 117, .22); border-radius: 10px; background: rgba(255,255,255,.82); color: var(--text); text-decoration: none; display: grid; gap: 3px; }}
+    .article-house-resource span {{ color: var(--text-muted); font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }}
+    .article-house-resource strong {{ color: var(--accent); font-size: 12px; line-height: 1.35; }}
+    .article-house-resource:hover {{ border-color: var(--accent); }}
     .article-meta {{ display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }}
     .article-category {{ font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }}
     .article-date {{ font-size: 11px; color: var(--text-muted); }}
@@ -4160,8 +4224,6 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-side-rail .related-link {{ display: grid; gap: 6px; color: inherit; text-decoration: none; }}
     .article-side-rail .related-headline {{ font-weight: 700; line-height: 1.28; }}
     .article-side-rail .related-date {{ font-size: 11px; color: var(--text-muted); }}
-    .article-side-rail .article-ad-banner {{ display: block; margin: 0; }}
-    .article-side-rail .article-ad-banner img {{ width: 100%; height: auto; display: block; border-radius: 10px; }}
     .article-hero-image {{ margin: 0 0 34px; width: 100%; }}
     .article-hero-image img {{ width: 100%; aspect-ratio: 16 / 9; max-height: 560px; object-fit: cover; border-radius: 12px; display: block; }}
     .article-body p {{ font-size: 17px; line-height: 1.86; color: var(--text-secondary); margin-bottom: 22px; text-wrap: pretty; }}
@@ -4200,6 +4262,10 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
 
     @media (max-width: 900px) {{
       .article-wrap {{ padding: 34px 20px 72px; }}
+      .article-banner-slot {{ margin-bottom: 26px; border-radius: 10px; }}
+      .article-house-banner {{ grid-template-columns: auto minmax(0, 1fr); gap: 14px; padding: 18px; }}
+      .article-house-resource {{ grid-column: 1 / -1; width: 100%; max-width: none; min-width: 0; padding: 10px 12px; }}
+      .article-house-text {{ display: none; }}
       .article-editorial-grid {{ grid-template-columns: 1fr; gap: 40px; }}
       .article-side-rail {{ position: static; }}
       .article-headline {{ font-size: clamp(34px, 9vw, 54px); margin-bottom: 28px; }}
@@ -4225,6 +4291,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
   </div>
   <main>
     <div class="article-wrap">
+{banner_slot}
       <div class="article-meta">
         <span class="article-category{urgency_cls}">{category_label}</span>
         <span class="article-byline">By <a href="/author/andrew-dobrow.html" rel="author">Andrew Dobrow</a></span>
@@ -4263,7 +4330,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
           <p class="article-more">More local news</p>
           <a href="/?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
         </div>
-        <aside class="article-side-rail">{related_html}{ad_banner}</aside>
+        <aside class="article-side-rail">{related_html}</aside>
       </div>
     </div>
   </main>
@@ -6965,6 +7032,19 @@ def write_archives(all_categories, top_cat):
     # Also generate article pages for every card, since the homepage grid links
     # to permalink pages for all articles, not just heroes.
     all_articles = list(heroes)
+
+    # Every active manually submitted article must be rendered through the current
+    # article template, even when it is not selected as a hero or grid card during
+    # this particular run. Previously, only selected articles were rewritten. That
+    # left older custom pages on the legacy template, where the advertisement banner
+    # appeared above the headline and the newsroom strip/sidebar were missing.
+    # Adding all active custom articles here unifies ad and non-ad article layouts.
+    for _custom_article in _current_customs:
+        _custom_key = _custom_article.get("category", "top_news")
+        _custom_cfg = CATEGORIES.get(_custom_key, {})
+        _custom_label = _custom_cfg.get("label", _custom_key.replace("_", " ").title())
+        all_articles.append((_custom_key, _custom_label, _custom_article))
+
     for cat in all_categories:
         for card in cat.get("cards", []):
             # Only archive cards that were actually enriched. Thin unenriched cards
