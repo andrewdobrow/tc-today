@@ -1349,3 +1349,294 @@ footer {
 body.debug-overflow * {
   outline: 1px solid rgba(220, 0, 0, 0.22) !important;
 }
+
+/* =========================================================
+   DESKTOP EDITORIAL POLISH — hero, interactions, hierarchy,
+   latest-news scanning, breaking labels, footer, articles.
+   ========================================================= */
+
+@media (min-width: 901px) {
+  /* 1. Give the lead story more visual authority. */
+  main {
+    padding-top: 52px;
+  }
+
+  .hero {
+    padding-bottom: 48px;
+    margin-bottom: 48px;
+  }
+
+  .hero-inner {
+    min-height: 320px;
+  }
+
+  figure.hero-image-wrap {
+    margin-left: 42px;
+    margin-bottom: 24px;
+  }
+
+  .hero-image {
+    width: 450px;
+    height: 310px;
+    border-radius: 10px;
+  }
+
+  .hero h1 {
+    font-size: clamp(42px, 4.2vw, 58px);
+    line-height: 1.08;
+    letter-spacing: -0.032em;
+    margin-bottom: 20px;
+  }
+
+  .hero-summary {
+    max-width: 690px;
+    font-size: 17px;
+    line-height: 1.78;
+    margin-bottom: 24px;
+  }
+
+  /* 2 and 10. Subtle, consistent desktop interactions. */
+  .grid-card,
+  .article-card,
+  .older-item,
+  .related-item {
+    transition:
+      transform 200ms ease,
+      box-shadow 200ms ease,
+      background-color 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .grid-card:hover,
+  .article-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 26px rgba(16, 34, 32, 0.09);
+    position: relative;
+    z-index: 2;
+  }
+
+  .grid-card-image,
+  .hero-image {
+    transition: transform 260ms ease, filter 260ms ease;
+  }
+
+  .grid-card:hover .grid-card-image {
+    transform: scale(1.035);
+  }
+
+  .hero-link:hover .hero-image {
+    transform: scale(1.025);
+    filter: saturate(1.03);
+  }
+
+  .footer-links a,
+  .hero-readmore,
+  .older-more,
+  .related-headline,
+  .grid-card-headline,
+  .card-headline {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  /* 3. Sharpen card hierarchy. */
+  .grid-card-body {
+    padding: 21px 22px 25px;
+    gap: 10px;
+  }
+
+  .grid-card-tag,
+  .card-tag {
+    font-size: 9px;
+    font-weight: 650;
+    letter-spacing: 0.13em;
+  }
+
+  .grid-card-headline {
+    font-size: 18px;
+    line-height: 1.28;
+  }
+
+  .card-headline {
+    font-size: 19px;
+    line-height: 1.28;
+    margin-bottom: 11px;
+  }
+
+  .card-summary {
+    font-size: 13px;
+    line-height: 1.72;
+    color: color-mix(in srgb, var(--text-secondary) 84%, var(--bg));
+  }
+
+  .grid-card-time,
+  .card-time,
+  .meta {
+    opacity: 0.82;
+  }
+
+  /* 4. Make dense news lists easier to scan. */
+  .older-link,
+  .related-link {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .older-item:hover,
+  .related-item:hover {
+    background: color-mix(in srgb, var(--bg-secondary) 74%, transparent);
+  }
+
+  .older-date,
+  .related-date {
+    font-size: 11px;
+    font-weight: 550;
+    letter-spacing: 0.025em;
+  }
+
+  /* 6. More comfortable desktop reading rhythm. */
+  .hero-summary,
+  .card-summary,
+  .support-card-text,
+  .footer-tagline {
+    text-wrap: pretty;
+  }
+
+  .grid-card-headline,
+  .card-headline,
+  .older-headline,
+  .related-headline {
+    text-wrap: balance;
+  }
+}
+
+/* 7. Reusable breaking/developing treatments. */
+.tag.breaking,
+.grid-card-tag.breaking,
+.card-tag.breaking,
+.article-category.breaking,
+.tag.live,
+.grid-card-tag.live,
+.card-tag.live,
+.article-category.live,
+.tag.developing,
+.grid-card-tag.developing,
+.card-tag.developing,
+.article-category.developing {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  font-weight: 700;
+}
+
+.tag.breaking::before,
+.grid-card-tag.breaking::before,
+.card-tag.breaking::before,
+.article-category.breaking::before,
+.tag.live::before,
+.grid-card-tag.live::before,
+.card-tag.live::before,
+.article-category.live::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 12%, transparent);
+  animation: tctPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes tctPulse {
+  0%, 100% { transform: scale(.92); opacity: .72; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+/* 8. Let the footer finish the page as a branded destination. */
+footer {
+  padding-top: 42px;
+  padding-bottom: 42px;
+  background: color-mix(in srgb, var(--bg-secondary) 55%, var(--bg));
+}
+
+.footer-inner {
+  gap: 18px 30px;
+}
+
+.footer-wordmark {
+  font-size: 22px;
+  letter-spacing: -0.025em;
+}
+
+.footer-tagline {
+  max-width: 430px;
+  line-height: 1.55;
+}
+
+.footer-links {
+  gap: 10px 22px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.footer-links a {
+  position: relative;
+  padding: 5px 0;
+}
+
+.footer-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: 1px;
+  height: 1px;
+  background: var(--accent);
+  transition: right 180ms ease;
+}
+
+.footer-links a:hover::after,
+.footer-links a:focus-visible::after {
+  right: 0;
+}
+
+/* 9. Article-page personality; inline generator styles may refine sizing. */
+.article-wrap {
+  position: relative;
+}
+
+.article-headline {
+  text-wrap: balance;
+}
+
+.article-body p {
+  text-wrap: pretty;
+}
+
+.article-body blockquote {
+  margin: 32px 0;
+  padding: 4px 0 4px 24px;
+  border-left: 4px solid var(--accent);
+  font-family: "Fraunces", serif;
+  font-size: 22px;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.article-reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  width: 0;
+  height: 3px;
+  background: var(--accent);
+  pointer-events: none;
+  transition: width 70ms linear;
+}
+
+@media (max-width: 680px) {
+  .article-reading-progress {
+    height: 2px;
+  }
+}
