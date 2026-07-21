@@ -1640,3 +1640,131 @@ footer {
     height: 2px;
   }
 }
+
+/* ==========================================================
+   TCT EDITORIAL REDESIGN V2
+   Homepage + article presentation inspired by newsroom mockup
+   ========================================================== */
+:root {
+  --tct-green: #103f2b;
+  --tct-green-2: #174f37;
+  --tct-cream: #fbfbf8;
+  --tct-panel: #ffffff;
+  --tct-red: #d92d20;
+  --tct-orange: #d86a12;
+  --tct-shadow: 0 8px 28px rgba(18, 38, 29, .08);
+}
+body { background: var(--tct-cream); }
+header { background: rgba(255,255,255,.98); }
+.header-inner { max-width: 1440px; min-height: 88px; padding: 12px 32px; }
+.wordmark { display:flex; align-items:center; gap:10px; color:var(--tct-green); line-height:1; }
+.wordmark-tct { font-family:"Fraunces",serif; font-size:46px; font-weight:650; letter-spacing:-.06em; }
+.wordmark-divider { width:1px; height:42px; background:#9da69f; }
+.wordmark-full { font-family:"DM Sans",sans-serif; font-size:10px; line-height:.95; font-weight:800; letter-spacing:.02em; }
+.category-nav { gap: 3px 10px; }
+.cat-btn { color:#111; font-size:12px; font-weight:650; border-radius:0; padding:8px 5px; }
+.cat-btn:hover, .cat-btn.active { background:transparent; color:var(--tct-green); box-shadow:inset 0 -2px var(--tct-green); }
+.support-btn { border-radius:6px; background:var(--tct-green-2); color:white; border-color:var(--tct-green-2); font-weight:700; }
+.newsroom-strip { background:linear-gradient(90deg,#0e3a28,#174f37); color:#fff; }
+.newsroom-strip-inner { max-width:1440px; margin:auto; padding:10px 32px; display:flex; justify-content:space-between; align-items:center; gap:20px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
+.newsroom-strip-actions { display:flex; gap:20px; }
+.newsroom-strip a { color:#fff; text-decoration:none; opacity:.92; }
+.homepage-v2 { max-width:1440px; margin:0 auto; padding:26px 30px 60px; }
+.lead-layout { display:grid; grid-template-columns:minmax(0,1fr) 310px; gap:24px; align-items:start; }
+.lead-primary { min-width:0; }
+.lead-primary .hero { margin:0; padding:0; max-width:none; background:#fff; border:1px solid #e6e8e4; border-radius:12px; overflow:hidden; box-shadow:var(--tct-shadow); }
+.lead-primary .county-section-label, .lead-primary .topic-section-label { display:none; }
+.lead-primary .hero-inner { display:grid !important; grid-template-columns:minmax(360px,48%) 1fr; grid-template-areas:"image tag" "image title" "image summary" "image foot"; gap:0 30px; padding:0; min-height:410px; }
+.lead-primary .hero-image-wrap { grid-area:image; height:100%; margin:0; border-radius:0; overflow:hidden; }
+.lead-primary .hero-image { width:100%; height:100%; min-height:410px; object-fit:cover; border-radius:0; }
+.lead-primary .hero-inner > .tag { grid-area:tag; align-self:end; justify-self:start; margin-top:34px; }
+.lead-primary .hero h1 { grid-area:title; margin:12px 30px 0 0; font-size:clamp(34px,3.4vw,56px); line-height:1.02; letter-spacing:-.045em; }
+.lead-primary .hero-summary { grid-area:summary; margin:18px 30px 0 0; font-size:17px; line-height:1.65; color:#3f4742; }
+.lead-primary .hero-foot { grid-area:foot; align-self:end; margin:22px 30px 30px 0; padding-top:15px; border-top:1px solid #e8ebe7; }
+.latest-rail { background:#fff; border:1px solid #e6e8e4; border-radius:12px; overflow:hidden; box-shadow:var(--tct-shadow); }
+.latest-rail-title { display:flex; align-items:center; gap:9px; padding:18px 18px 14px; border-bottom:1px solid #e6e8e4; }
+.latest-rail-title h2 { font-size:15px; text-transform:uppercase; letter-spacing:.02em; }
+.latest-item { display:block; padding:15px 18px; border-bottom:1px solid #eceeea; text-decoration:none; color:inherit; transition:background .18s ease; }
+.latest-item:hover { background:#f7faf7; }
+.latest-item-top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:7px; }
+.latest-time { font-size:11px; color:#cc3b2c; font-weight:700; }
+.latest-item h3 { font-family:"DM Sans",sans-serif; font-size:13px; line-height:1.35; margin:0 0 7px; font-weight:750; }
+.latest-county { font-size:10px; color:#2c7653; font-weight:650; }
+.latest-status, .tag.breaking, .grid-card-tag.breaking, .article-category.breaking { display:inline-flex; align-items:center; border-radius:4px; padding:4px 7px; color:#fff !important; background:var(--tct-red) !important; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
+.latest-status.developing, .tag.developing, .grid-card-tag.developing, .article-category.developing { background:var(--tct-orange) !important; color:#fff !important; }
+.latest-more { display:block; padding:14px 18px; color:var(--tct-green); font-size:12px; font-weight:750; text-decoration:none; }
+.top-stories-v2 { margin-top:26px; }
+.section-kicker { display:flex; align-items:center; gap:9px; margin:0 0 12px; }
+.section-kicker h2 { font-size:14px; text-transform:uppercase; letter-spacing:.04em; }
+.top-stories-v2 .articles-grid { max-width:none; margin:0; padding:0; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.top-stories-v2 .grid-card { background:#fff; border:1px solid #e4e7e2; border-radius:10px; box-shadow:none; overflow:hidden; }
+.top-stories-v2 .grid-card:hover { transform:translateY(-3px); box-shadow:var(--tct-shadow); }
+.top-stories-v2 .grid-card-image-wrap { aspect-ratio:16/8.5; }
+.top-stories-v2 .grid-card-body { padding:15px 16px 18px; }
+.top-stories-v2 .grid-card-headline { font-size:21px; line-height:1.18; }
+.top-stories-v2 .grid-card:nth-child(n+7) { display:none; }
+.county-panels-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-top:22px; }
+.county-panel { background:#fff; border:1px solid #e3e6e1; border-radius:10px; overflow:hidden; }
+.county-panel-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; padding:13px 14px; border-top:3px solid var(--tct-green); background:#f7faf7; }
+.county-st_lucie .county-panel-head { border-top-color:#50739a; background:#f5f8fc; }
+.county-indian_river .county-panel-head { border-top-color:#8a57b5; background:#faf6fd; }
+.county-panel-head h2 { font-size:14px; text-transform:uppercase; letter-spacing:.02em; }
+.county-panel-head p { font-size:9px; margin-top:3px; color:#747b76; }
+.county-panel-head a { font-size:10px; color:var(--tct-green); text-decoration:none; white-space:nowrap; font-weight:700; }
+.county-panel-story { display:grid; grid-template-columns:74px 1fr; gap:10px; align-items:center; padding:10px 12px; border-top:1px solid #eceeea; color:#171b18; text-decoration:none; }
+.county-panel-story img { width:74px; height:48px; object-fit:cover; border-radius:5px; }
+.county-panel-story span { font-size:12px; line-height:1.3; font-weight:700; }
+.footer-v2 { max-width:1440px; display:grid; grid-template-columns:1.4fr 1fr .8fr 1.2fr; gap:42px; padding:34px 32px 25px; align-items:start; }
+footer { background:linear-gradient(90deg,#103f2b,#174f37); color:#fff; margin-top:30px; }
+.footer-wordmark { font-size:42px; color:#fff; }
+.footer-brand p, .footer-column p { font-size:12px; line-height:1.5; opacity:.88; max-width:220px; }
+.footer-column { display:flex; flex-direction:column; gap:7px; }
+.footer-column strong { font-size:11px; text-transform:uppercase; letter-spacing:.05em; }
+.footer-column a, .footer-links a { color:#fff; font-size:11px; text-decoration:none; opacity:.9; }
+.footer-links { display:flex; flex-direction:column; gap:7px; }
+.footer-cta { border:1px solid rgba(255,255,255,.5); border-radius:6px; padding:8px 10px; width:max-content; margin-top:5px; }
+.footer-bottom { max-width:1440px; margin:auto; padding:14px 32px 22px; border-top:1px solid rgba(255,255,255,.15); font-size:10px; opacity:.8; }
+
+/* Article pages: centered newsroom composition with editorial side rails */
+.article-wrap { max-width:1120px !important; }
+.article-headline { max-width:980px; font-family:"DM Sans",sans-serif !important; font-size:clamp(42px,5vw,70px) !important; font-weight:800 !important; line-height:1.01 !important; }
+.article-hero-image img { max-height:560px !important; border-radius:8px !important; }
+.article-body { max-width:720px; margin:0 auto; }
+.article-body p { color:#292f2b !important; }
+.related-section { max-width:720px; margin:42px auto 0; background:#fff; border:1px solid #e4e7e2; border-radius:10px; padding:20px; }
+.article-share { max-width:720px; margin-left:auto !important; margin-right:auto !important; }
+.article-more, .article-more-link, .article-divider { max-width:720px; margin-left:auto !important; margin-right:auto !important; }
+
+@media (max-width: 1050px) {
+  .lead-layout { grid-template-columns:1fr; }
+  .latest-rail { display:grid; grid-template-columns:190px 1fr; }
+  .latest-list { display:grid; grid-template-columns:repeat(3,1fr); }
+  .latest-item { border-right:1px solid #eceeea; }
+  .latest-more { display:none; }
+  .county-panels-grid { grid-template-columns:1fr 1fr; }
+}
+@media (max-width: 760px) {
+  .header-inner { min-height:auto; padding:9px 14px; }
+  .wordmark-tct { font-size:34px; }
+  .wordmark-divider { height:32px; }
+  .homepage-v2 { padding:14px 12px 38px; }
+  .newsroom-strip-inner { padding:8px 14px; }
+  .newsroom-strip-actions { display:none; }
+  .lead-primary .hero-inner { display:block !important; min-height:0; }
+  .lead-primary .hero-image { min-height:230px; max-height:260px; }
+  .lead-primary .hero-inner > .tag { margin:18px 18px 0; }
+  .lead-primary .hero h1 { margin:10px 18px 0; font-size:31px; }
+  .lead-primary .hero-summary { margin:12px 18px 0; font-size:15px; }
+  .lead-primary .hero-foot { margin:18px; }
+  .latest-rail { display:block; }
+  .latest-list { display:block; }
+  .latest-item:nth-child(n+4) { display:none; }
+  .top-stories-v2 .articles-grid, .county-panels-grid { grid-template-columns:1fr; }
+  .top-stories-v2 .grid-card:nth-child(n+5) { display:none; }
+  .footer-v2 { grid-template-columns:1fr 1fr; gap:24px; padding:28px 18px; }
+  .article-headline { font-size:36px !important; }
+}
+@media (max-width: 480px) {
+  .footer-v2 { grid-template-columns:1fr; }
+  .wordmark-full { font-size:8px; }
+}
