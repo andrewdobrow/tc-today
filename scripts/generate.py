@@ -4654,6 +4654,138 @@ def _sanitize_authoritative_custom_archive(archive, articles_dir=None):
 
     return archive
 
+
+
+def _story_text(item):
+    if not item:
+        return ""
+    return " ".join([
+        item.get("headline", ""), item.get("teaser", ""),
+        (item.get("body", "") or "")[:1400],
+    ]).strip()
+
+
+def _same_event_items(a, b):
+    """One shared event matcher for custom, feed, archive, hero and card stories."""
+    if not a or not b:
+        return False
+    ta, tb = _story_text(a), _story_text(b)
+    ka, kb = _known_event_key(ta), _known_event_key(tb)
+    if ka and kb:
+        return ka == kb
+    # Reuse the archive matcher because it includes URL and locality safeguards.
+    probe = dict(b)
+    probe.setdefault("slug", "__candidate__")
+    if find_matching_entry(a.get("headline", ""), [probe], a.get("link", "")):
+        return True
+    aa, bb = _sig_tokens(ta), _sig_tokens(tb)
+    shared = _shared_tokens(aa, bb)
+    distinctive = [t for t in shared if t not in GENERIC_TOKENS]
+    return len(shared) >= 6 and len(distinctive) >= 3
+
+
+def _story_priority(item):
+    """Winner order inside one event group; custom is a priority, not a separate system."""
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return (500, int(item.get("article_word_count", 0) or len((item.get("body") or "").split())))
+    if item.get("source_quality") == "full":
+        return (300, int(item.get("article_word_count", 0) or len((item.get("body") or "").split())))
+    if item.get("_archive_only"):
+        return (200, int(item.get("article_word_count", 0) or len((item.get("body") or "").split())))
+    return (100, int(item.get("article_word_count", 0) or len((item.get("body") or "").split())))
+
+
+def _unified_archive_event_dedupe(archive, current_customs=None, articles_dir=None):
+    """Deduplicate archive stories with the same engine used for live stories.
+
+    Custom articles win their event group permanently. A later story survives only
+    when it contains a verified major milestone not present in the custom article.
+    """
+    archive = list(archive or [])
+    current_customs = list(current_customs or [])
+    authorities = [e for e in archive if e.get("is_custom") or e.get("authoritative_custom")] + current_customs
+    removed = []
+    kept = []
+    for entry in archive:
+        if entry.get("is_custom") or entry.get("authoritative_custom"):
+            kept.append(entry)
+            continue
+        duplicate_of = None
+        for custom in authorities:
+            if _same_event_items(entry, custom) and not _is_significant_story_update(entry, custom):
+                duplicate_of = custom
+                break
+        if duplicate_of:
+            removed.append(entry)
+        else:
+            kept.append(entry)
+
+    if removed and articles_dir is not None:
+        for entry in removed:
+            slug = entry.get("slug")
+            if not slug:
+                continue
+            try:
+                path = Path(articles_dir) / f"{slug}.html"
+                if path.exists():
+                    path.unlink()
+            except Exception:
+                pass
+    if removed:
+        print(f"  Unified event dedupe removed {len(removed)} archived duplicate article(s)")
+    return kept
+
+
+def _unified_live_event_dedupe(all_categories, archived_customs=None, current_customs=None):
+    """Run one event-level dedupe pass over every hero and card before ranking."""
+    authorities = list(archived_customs or []) + list(current_customs or [])
+    seen = []
+    removed = 0
+
+    # Process custom stories first so they become the event winner everywhere.
+    ordered = []
+    for cat in all_categories:
+        for role, item in [("hero", cat.get("hero"))] + [("card", c) for c in cat.get("cards", [])]:
+            if item:
+                ordered.append((cat, role, item))
+    ordered.sort(key=lambda x: _story_priority(x[2]), reverse=True)
+
+    winners = []
+    loser_ids = set()
+    for cat, role, item in ordered:
+        matched = None
+        for winner in winners:
+            if not _same_event_items(item, winner):
+                continue
+            # A genuine milestone may coexist with the original event article.
+            if _is_significant_story_update(item, winner) or _is_significant_story_update(winner, item):
+                continue
+            matched = winner
+            break
+        if matched is None:
+            winners.append(item)
+        elif item is not matched:
+            loser_ids.add(id(item))
+
+    # Also suppress any live/archive-recovered copy of an authoritative custom story.
+    for cat, role, item in ordered:
+        if item.get("is_custom") or item.get("authoritative_custom"):
+            continue
+        if any(_same_event_items(item, custom) and not _is_significant_story_update(item, custom)
+               for custom in authorities):
+            loser_ids.add(id(item))
+
+    for cat in all_categories:
+        old_cards = list(cat.get("cards", []))
+        cat["cards"] = [c for c in old_cards if id(c) not in loser_ids]
+        removed += len(old_cards) - len(cat["cards"])
+        if cat.get("hero") is not None and id(cat["hero"]) in loser_ids:
+            cat["hero"] = cat["cards"].pop(0) if cat["cards"] else None
+            removed += 1
+    if removed:
+        print(f"  Unified event dedupe removed {removed} duplicate hero/card placement(s)")
+    return removed
+
 def _same_story(tok_a, tok_b, threshold=4):
     """Two stories are the same only if they share enough tokens AND at least two of
     those are DISTINCTIVE (not generic people/boilerplate words). Counting alone lets
@@ -6352,35 +6484,37 @@ def main():
                     target.setdefault("cards", []).append(art)
                 print(f"  Custom article: '{art['headline'][:50]}' -> {ckey}")
 
-    # PRE-HERO AUTHORITATIVE-CUSTOM GUARD. Custom stories remain authoritative
-    # after custom_articles.json is cleared because that status is persisted in
-    # archive.json. Remove matching feed copies before homepage/category ranking.
+    # ONE SHARED EVENT-LEVEL DEDUPE PIPELINE. Custom articles use the same
+    # matcher as feed and archive stories; they simply have the highest winner priority.
+    # Clean the permanent archive before recovery so a losing permalink cannot return
+    # as a category hero, then run the same pass again after recovery over heroes/cards.
+    _archive_path = OUTPUT_DIR / "archive.json"
     _published_archive = _sanitize_authoritative_custom_archive(
-        load_archive(OUTPUT_DIR / "archive.json"), OUTPUT_DIR / "articles"
+        load_archive(_archive_path), OUTPUT_DIR / "articles"
     )
+    _published_archive = _unified_archive_event_dedupe(
+        _published_archive, custom_articles, OUTPUT_DIR / "articles"
+    )
+    try:
+        _archive_path.write_text(json.dumps(_published_archive, indent=2, ensure_ascii=False), encoding="utf-8")
+    except Exception as _e:
+        print(f"  Warning: could not persist pre-render dedupe cleanup: {_e}")
+
     _archived_customs = [
         e for e in _published_archive
         if e.get("is_custom") or e.get("authoritative_custom")
     ]
-    if _archived_customs:
-        for _cat in all_categories:
-            def _already_covered_by_custom(item):
-                if not item or item.get("is_custom") or item.get("authoritative_custom"):
-                    return False
-                return any(_matches_archived_custom(item, e) for e in _archived_customs)
-
-            _old_cards = list(_cat.get("cards", []))
-            _cat["cards"] = [c for c in _old_cards if not _already_covered_by_custom(c)]
-            _removed = len(_old_cards) - len(_cat["cards"])
-            if _already_covered_by_custom(_cat.get("hero")):
-                _cat["hero"] = _cat["cards"].pop(0) if _cat["cards"] else None
-                _removed += 1
-            if _removed:
-                print(f"  Custom-authority guard removed {_removed} feed duplicate(s) from {_cat['category_key']}")
 
     # Never hide or drop a configured category. Recover missing/thin sections from
-    # archive.json and guarantee a hero plus a useful card pool for every category.
+    # the already-cleaned archive, then dedupe every recovered/live placement together.
     ensure_all_category_sections(all_categories, min_cards=6)
+    _unified_live_event_dedupe(all_categories, _archived_customs, custom_articles)
+
+    # A duplicate removal may empty a hero slot. Promote a surviving card only; do not
+    # re-run archive recovery here, because that could reintroduce the losing event.
+    for _cat in all_categories:
+        if not _cat.get("hero") and _cat.get("cards"):
+            _cat["hero"] = _cat["cards"].pop(0)
 
     # Front page hero selection
     top_cat = select_front_page_hero(all_categories)
