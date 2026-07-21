@@ -2229,3 +2229,304 @@ footer { background:linear-gradient(90deg,#103f2b,#174f37); color:#fff; margin-t
     font-size: 28px;
   }
 }
+
+/* ============================================================
+   TCT Editorial Redesign v2.3 — Live newsroom utility masthead
+   ============================================================ */
+.newsroom-strip-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.newsroom-local-label {
+  min-width: 0;
+}
+
+.newsroom-live-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 22px;
+  white-space: nowrap;
+  text-transform: none;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.newsroom-live-time {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,.94);
+}
+
+.newsroom-live-weather {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+  opacity: .96;
+  transition: opacity .18s ease;
+}
+
+.newsroom-live-weather:hover {
+  opacity: .76;
+}
+
+.newsroom-weather-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  font-size: 15px;
+  line-height: 1;
+}
+
+@media (max-width: 760px) {
+  .newsroom-strip-inner {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .newsroom-local-label {
+    display: none;
+  }
+
+  .newsroom-live-tools {
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .newsroom-live-time,
+  .newsroom-live-weather {
+    font-size: 11px;
+  }
+
+  #tct-weather-condition {
+    display: none;
+  }
+}
+
+/* ============================================================
+   TCT Editorial Redesign v3 — structural layout corrections
+   Image and text are isolated in separate grid cells. No overlap.
+   ============================================================ */
+
+.lead-primary,
+.hero-v3,
+.hero-v3-link,
+.hero-v3-media,
+.hero-v3-content {
+  min-width: 0;
+}
+
+.hero-v3 {
+  position: relative !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.hero-v3-link {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.28fr) minmax(330px, .82fr);
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.hero-v3-media {
+  position: relative;
+  overflow: hidden;
+  min-height: 520px;
+  background: #e8ece9;
+}
+
+.hero-v3-media img,
+.hero-v3-media .hero-img,
+.hero-v3-media picture {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  position: static !important;
+  transform: none !important;
+}
+
+.hero-v3-content {
+  position: static !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(34px, 4vw, 62px);
+  background: var(--surface);
+  isolation: isolate;
+}
+
+.hero-v3 .hero-v3-tag,
+.hero-v3 .hero-v3-headline,
+.hero-v3 .hero-v3-summary,
+.hero-v3 .hero-v3-foot {
+  position: static !important;
+  inset: auto !important;
+  width: auto !important;
+  max-width: 100% !important;
+  transform: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.hero-v3 .hero-v3-tag {
+  align-self: flex-start;
+  margin-bottom: 18px !important;
+}
+
+.hero-v3 .hero-v3-headline {
+  margin: 0 0 24px !important;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(38px, 3.8vw, 66px) !important;
+  line-height: .99 !important;
+  letter-spacing: -.045em;
+  color: var(--text) !important;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  text-shadow: none !important;
+}
+
+.hero-v3 .hero-v3-summary {
+  margin: 0 0 28px !important;
+  font-size: clamp(16px, 1.25vw, 19px) !important;
+  line-height: 1.65 !important;
+  color: var(--text-secondary) !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+.hero-v3 .hero-v3-foot {
+  display: flex !important;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: auto !important;
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted) !important;
+}
+
+.hero-v3::before,
+.hero-v3::after,
+.hero-v3-link::before,
+.hero-v3-link::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Keep the lead and Latest News rail aligned without creating dead space. */
+.lead-layout {
+  align-items: stretch !important;
+}
+
+.lead-primary {
+  display: flex;
+}
+
+.lead-primary > .hero-v3 {
+  flex: 1 1 auto;
+}
+
+.latest-rail {
+  max-height: 650px;
+  overflow: hidden;
+}
+
+.latest-list {
+  overflow: auto;
+}
+
+/* Utility bar is available on the homepage, category views, and articles. */
+.newsroom-strip-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 28px;
+}
+
+.newsroom-live-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24px;
+  white-space: nowrap;
+}
+
+.newsroom-live-time,
+.newsroom-live-weather {
+  color: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .025em;
+  text-decoration: none;
+}
+
+.newsroom-live-weather {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+@media (max-width: 1050px) {
+  .hero-v3-link {
+    grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr);
+  }
+  .hero-v3-media { min-height: 460px; }
+  .hero-v3 .hero-v3-headline { font-size: clamp(34px, 4vw, 54px) !important; }
+}
+
+@media (max-width: 800px) {
+  .hero-v3-link {
+    grid-template-columns: 1fr;
+  }
+  .hero-v3-media {
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+  }
+  .hero-v3-content {
+    padding: 25px 22px 28px;
+  }
+  .hero-v3 .hero-v3-headline {
+    font-size: clamp(31px, 9vw, 46px) !important;
+    line-height: 1.03 !important;
+  }
+  .hero-v3 .hero-v3-summary {
+    font-size: 16px !important;
+  }
+  .hero-v3 .hero-v3-foot {
+    margin-top: 0 !important;
+  }
+  .newsroom-strip-inner {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    text-align: center;
+  }
+  .newsroom-local-label { display: none; }
+  .newsroom-live-tools {
+    justify-content: center;
+    gap: 16px;
+  }
+  #tct-weather-condition { display: none; }
+}
