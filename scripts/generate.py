@@ -3463,7 +3463,7 @@ def render_index(all_categories, top_cat):
 
     # Editorial redesign modules: a compact latest-news rail and county panels.
     latest_items_html = ""
-    for _latest in all_cards_display[:6]:
+    for _latest in all_cards_display[:5]:
         _url = card_permalink(_latest)
         if not _url:
             continue
@@ -3543,7 +3543,7 @@ def render_index(all_categories, top_cat):
   </header>
   <div class="newsroom-strip">
     <div class="newsroom-strip-inner">
-      <span>Treasure Coast news. Local focus. Real impact.</span>
+      <span>Local news for Martin, St. Lucie &amp; Indian River counties</span>
       <div class="newsroom-strip-actions"><a href="/weather.html">Local Weather</a><a href="/advertise.html">Support TCT</a></div>
     </div>
   </div>
@@ -4100,34 +4100,38 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         <span class="article-published">Published {_pub_display}</span>
       </div>
       <h1 class="article-headline">{hero["headline"]}</h1>
-      {img_html}
-      <div class="article-body">{body}</div>
-      {event_link_html}
-      <div class="article-share">
-        <span class="article-share-label">Share this story</span>
-        <div class="article-share-btns">
-          <button class="share-native" onclick="tctShare()" aria-label="Share">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            Share
-          </button>
-          <a class="share-fb" href="https://www.facebook.com/sharer/sharer.php?u={article_url}" target="_blank" rel="noopener" aria-label="Share on Facebook">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
-            Facebook
-          </a>
-          <a class="share-x" href="https://twitter.com/intent/tweet?url={article_url}&text={headline_enc}" target="_blank" rel="noopener" aria-label="Share on X">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.6l5.24 6.93zM17.6 20.64h2.04L6.49 3.24H4.3z"/></svg>
-            X
-          </a>
-          <button class="share-copy" onclick="tctCopyLink(this)" aria-label="Copy link">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-            Copy link
-          </button>
+      <div class="article-editorial-grid">
+        <div class="article-main-column">
+          {img_html}
+          <div class="article-body">{body}</div>
+          {event_link_html}
+          <div class="article-share">
+            <span class="article-share-label">Share this story</span>
+            <div class="article-share-btns">
+              <button class="share-native" onclick="tctShare()" aria-label="Share">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                Share
+              </button>
+              <a class="share-fb" href="https://www.facebook.com/sharer/sharer.php?u={article_url}" target="_blank" rel="noopener" aria-label="Share on Facebook">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+                Facebook
+              </a>
+              <a class="share-x" href="https://twitter.com/intent/tweet?url={article_url}&text={headline_enc}" target="_blank" rel="noopener" aria-label="Share on X">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.6l5.24 6.93zM17.6 20.64h2.04L6.49 3.24H4.3z"/></svg>
+                X
+              </a>
+              <button class="share-copy" onclick="tctCopyLink(this)" aria-label="Copy link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                Copy link
+              </button>
+            </div>
+          </div>
+          <hr class="article-divider">
+          <p class="article-more">More local news</p>
+          <a href="/?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
         </div>
+        <aside class="article-side-rail">{related_html}</aside>
       </div>
-      <hr class="article-divider">
-      <p class="article-more">More local news</p>
-      <a href="/?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
-      {related_html}
     </div>
   </main>
 {footer}
@@ -5712,7 +5716,7 @@ def _page_head(title, description, canonical_path="", structured_data=None, imag
     }}
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
 {schema}
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-GLJY7M6F3G"></script>
   <script>
