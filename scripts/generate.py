@@ -1,5 +1,5 @@
 """
-Treasure Coast Today - news generation pipeline — Editorial Redesign v3 — Structural Layout Fix
+Treasure Coast Today - news generation pipeline - v6.4.6 Unified Article Header
 Covers Martin, St. Lucie, and Indian River counties.
 Runs 4x/day via GitHub Actions.
 """
@@ -7154,7 +7154,54 @@ def _repair_article_shells(output_root):
 </style>
 """
 
-    checked = repaired = wrapped = unrepairable = 0
+    def _category_key(label):
+        normalized = re.sub(r"[^a-z0-9]+", " ", (label or "").lower()).strip()
+        aliases = {
+            "top news": "news", "news": "news",
+            "local government": "local_gov",
+            "crime safety": "crime", "crime and safety": "crime",
+            "business development": "business", "business and development": "business",
+            "sports": "sports", "things to do": "things_to_do", "florida": "florida",
+            "martin county": "martin", "st lucie county": "st_lucie",
+            "saint lucie county": "st_lucie", "indian river county": "indian_river",
+        }
+        return aliases.get(normalized, "")
+
+    def _canonical_article_prefix(active_key):
+        newsroom = """<div class="newsroom-strip">
+    <div class="newsroom-strip-inner">
+      <span class="newsroom-local-label">Local news for Martin, St. Lucie &amp; Indian River counties</span>
+      <div class="newsroom-live-tools" aria-label="Current Treasure Coast time and weather">
+        <time id="tct-live-time" class="newsroom-live-time" datetime=""></time>
+        <a id="tct-live-weather" class="newsroom-live-weather" href="/weather.html" aria-label="View local weather">
+          <span id="tct-weather-icon" class="newsroom-weather-icon" aria-hidden="true">◌</span>
+          <span id="tct-weather-temp">--°</span>
+          <span id="tct-weather-condition">Local weather</span>
+        </a>
+      </div>
+    </div>
+  </div>"""
+        return (
+            '<div class="article-reading-progress" aria-hidden="true"></div>\n'
+            + _page_header(active=active_key) + '\n  ' + newsroom + '\n  '
+        )
+
+    def _normalize_article_header(raw, category_label):
+        """Replace every retained article header with the canonical site header.
+
+        Banner choice only changes the banner contents. It must never preserve or
+        select an older masthead for sensitive stories.
+        """
+        body_match = re.search(r'<body[^>]*>', raw, re.I)
+        main_match = re.search(r'<main\b', raw, re.I)
+        if not body_match or not main_match or main_match.start() <= body_match.end():
+            return raw, False
+        prefix = _canonical_article_prefix(_category_key(category_label))
+        replacement = body_match.group(0) + '\n  ' + prefix + '<main'
+        updated = raw[:body_match.start()] + replacement + raw[main_match.end():]
+        return updated, updated != raw
+
+    checked = repaired = wrapped = unrepairable = header_normalized = 0
     for path in articles_dir.glob("*.html"):
         html = path.read_text(encoding="utf-8", errors="ignore")
         if 'http-equiv="refresh"' in html or "window.location.replace" in html:
@@ -7167,6 +7214,13 @@ def _repair_article_shells(output_root):
         headline = _extract(r'<h1[^>]*>(.*?)</h1>', html)
         category = _extract(r'class="article-category"[^>]*>(.*?)</', html)
         body_excerpt = _extract(r'class="article-body"[^>]*>(.*?)</div>', html)
+
+        # Normalize the shell before changing the banner. This removes the legacy
+        # text-only masthead from retained articles, including sensitive stories.
+        html, header_changed = _normalize_article_header(html, category)
+        if header_changed:
+            changed = True
+            header_normalized += 1
         critical_style_pattern = r'<style\s+id=["\']tct-banner-critical["\'][^>]*>.*?</style>'
         if re.search(critical_style_pattern, html, re.I | re.S):
             updated_html = re.sub(critical_style_pattern, critical_banner_css.strip(), html, count=1, flags=re.I | re.S)
@@ -7226,9 +7280,11 @@ def _repair_article_shells(output_root):
 
     print(
         f"  Article shell repair: checked {checked}, repaired {repaired}, "
-        f"legacy grids wrapped {wrapped}, unrepairable {unrepairable}"
+        f"headers normalized {header_normalized}, legacy grids wrapped {wrapped}, "
+        f"unrepairable {unrepairable}"
     )
-    return {"checked": checked, "repaired": repaired, "wrapped": wrapped, "unrepairable": unrepairable}
+    return {"checked": checked, "repaired": repaired, "wrapped": wrapped,
+            "header_normalized": header_normalized, "unrepairable": unrepairable}
 
 def _validate_presentation_contract(output_root):
     """Validate current presentation without blocking an urgent deploy on old archives.
