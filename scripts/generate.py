@@ -4786,6 +4786,170 @@ def _unified_live_event_dedupe(all_categories, archived_customs=None, current_cu
         print(f"  Unified event dedupe removed {removed} duplicate hero/card placement(s)")
     return removed
 
+
+# -- EVENT PIPELINE PHASE 1: NON-DESTRUCTIVE AUDIT ---------------------------
+# This phase creates durable event/audit files but never changes publication
+# decisions, archive entries, article HTML, heroes, cards, redirects or sitemaps.
+EVENT_PIPELINE_MODE = os.environ.get("TCT_EVENT_PIPELINE_MODE", "audit").strip().lower()
+
+
+def _event_audit_item(item, origin="archive"):
+    """Normalize an existing or custom article for the event audit registry."""
+    item = dict(item or {})
+    headline = (item.get("headline") or item.get("title") or "").strip()
+    body = item.get("body") or item.get("article") or item.get("content") or ""
+    teaser = item.get("teaser") or item.get("summary") or ""
+    slug = item.get("slug") or ""
+    return {
+        "headline": headline,
+        "teaser": teaser,
+        "body": body,
+        "slug": slug,
+        "link": item.get("link") or (f"{SITE_URL}/articles/{slug}.html" if slug else ""),
+        "date": item.get("date") or item.get("lastmod") or item.get("published") or "",
+        "lastmod": item.get("lastmod") or item.get("date") or "",
+        "category_key": item.get("category_key") or item.get("category") or "",
+        "category_label": item.get("category_label") or "",
+        "source_url": item.get("source_url") or item.get("original_url") or item.get("feed_url") or "",
+        "is_custom": bool(item.get("is_custom") or item.get("authoritative_custom") or origin == "custom"),
+        "authoritative_custom": bool(item.get("authoritative_custom") or origin == "custom"),
+        "origin": origin,
+        "article_word_count": int(item.get("article_word_count", 0) or len(str(body).split())),
+    }
+
+
+def _event_audit_id(item, index=0):
+    """Create a stable, readable event id without changing any article URL."""
+    text = _story_text(item)
+    known = _known_event_key(text)
+    if known:
+        base = re.sub(r"[^a-z0-9]+", "-", str(known).lower()).strip("-")
+    else:
+        toks = [t for t in sorted(_sig_tokens(text)) if t not in GENERIC_TOKENS][:8]
+        date = str(item.get("date") or item.get("lastmod") or "")[:7]
+        base = "-".join(toks[:6]) or re.sub(r"[^a-z0-9]+", "-", item.get("headline", "").lower()).strip("-")[:70]
+        if date:
+            base = f"{base}-{date}"
+    return (base or f"event-{index+1}")[:120]
+
+
+def build_event_audit(archive, current_customs=None, live_categories=None, output_dir=None):
+    """Build Phase-1 registry and reports. This function is read-only except for
+    writing data/events.json and data/event-audit.json.
+    """
+    if EVENT_PIPELINE_MODE not in {"audit", "shadow"}:
+        print(f"  Event pipeline disabled (mode={EVENT_PIPELINE_MODE})")
+        return None
+
+    items = [_event_audit_item(e, "archive") for e in (archive or []) if e.get("headline")]
+    known_slugs = {i.get("slug") for i in items if i.get("slug")}
+    for c in (current_customs or []):
+        normalized = _event_audit_item(c, "custom")
+        # A current custom may already be represented in archive. Merge its authority
+        # metadata into that item instead of creating an artificial duplicate.
+        existing = None
+        if normalized.get("slug"):
+            existing = next((i for i in items if i.get("slug") == normalized.get("slug")), None)
+        if not existing:
+            existing = next((i for i in items if i.get("headline", "").lower() == normalized.get("headline", "").lower()), None)
+        if existing:
+            existing["is_custom"] = True
+            existing["authoritative_custom"] = True
+            existing["origin"] = "archive+custom"
+            if normalized.get("body") and not existing.get("body"):
+                existing["body"] = normalized["body"]
+        else:
+            items.append(normalized)
+
+    # Union-find groups matching articles into candidate real-world events. Nothing
+    # is removed; uncertain results are merely reported for review.
+    parent = list(range(len(items)))
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+    def union(a, b):
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[rb] = ra
+
+    for i in range(len(items)):
+        for j in range(i + 1, len(items)):
+            # Keep broad historical matching conservative: require the shared event
+            # matcher and do not merge a genuine milestone update into its predecessor.
+            if not _same_event_items(items[i], items[j]):
+                continue
+            if _is_significant_story_update(items[i], items[j]) or _is_significant_story_update(items[j], items[i]):
+                continue
+            union(i, j)
+
+    groups = {}
+    for idx, item in enumerate(items):
+        groups.setdefault(find(idx), []).append(item)
+
+    events = []
+    duplicate_groups = []
+    used_ids = set()
+    for n, members in enumerate(groups.values()):
+        canonical = max(members, key=_story_priority)
+        eid = _event_audit_id(canonical, n)
+        original = eid
+        suffix = 2
+        while eid in used_ids:
+            eid = f"{original}-{suffix}"
+            suffix += 1
+        used_ids.add(eid)
+        record = {
+            "event_id": eid,
+            "canonical_slug": canonical.get("slug", ""),
+            "canonical_headline": canonical.get("headline", ""),
+            "canonical_is_custom": bool(canonical.get("is_custom") or canonical.get("authoritative_custom")),
+            "article_count": len(members),
+            "articles": [{
+                "slug": m.get("slug", ""),
+                "headline": m.get("headline", ""),
+                "date": m.get("date", ""),
+                "category_key": m.get("category_key", ""),
+                "is_custom": bool(m.get("is_custom") or m.get("authoritative_custom")),
+                "origin": m.get("origin", "archive"),
+            } for m in sorted(members, key=_story_priority, reverse=True)],
+        }
+        events.append(record)
+        if len(members) > 1:
+            duplicate_groups.append(record)
+
+    out = Path(output_dir or OUTPUT_DIR) / "data"
+    out.mkdir(parents=True, exist_ok=True)
+    registry = {
+        "schema_version": 1,
+        "mode": EVENT_PIPELINE_MODE,
+        "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "non_destructive": True,
+        "article_count": len(items),
+        "event_count": len(events),
+        "candidate_duplicate_group_count": len(duplicate_groups),
+        "events": events,
+    }
+    audit = {
+        "schema_version": 1,
+        "mode": EVENT_PIPELINE_MODE,
+        "non_destructive": True,
+        "summary": {
+            "articles_analyzed": len(items),
+            "likely_unique_events": len(events),
+            "candidate_duplicate_groups": len(duplicate_groups),
+            "candidate_duplicate_articles": sum(max(0, e["article_count"] - 1) for e in duplicate_groups),
+        },
+        "candidate_duplicate_groups": duplicate_groups,
+        "notice": "Audit only: no articles, archive entries, heroes, cards, redirects or sitemap records were changed.",
+    }
+    (out / "events.json").write_text(json.dumps(registry, indent=2, ensure_ascii=False), encoding="utf-8")
+    (out / "event-audit.json").write_text(json.dumps(audit, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"  Event audit: {len(items)} articles -> {len(events)} candidate events; {len(duplicate_groups)} duplicate group(s)")
+    print("  Event audit is NON-DESTRUCTIVE; publication output was not changed")
+    return audit
+
 def _same_story(tok_a, tok_b, threshold=4):
     """Two stories are the same only if they share enough tokens AND at least two of
     those are DISTINCTIVE (not generic people/boilerplate words). Counting alone lets
@@ -6484,37 +6648,21 @@ def main():
                     target.setdefault("cards", []).append(art)
                 print(f"  Custom article: '{art['headline'][:50]}' -> {ckey}")
 
-    # ONE SHARED EVENT-LEVEL DEDUPE PIPELINE. Custom articles use the same
-    # matcher as feed and archive stories; they simply have the highest winner priority.
-    # Clean the permanent archive before recovery so a losing permalink cannot return
-    # as a category hero, then run the same pass again after recovery over heroes/cards.
+    # PHASE 1 EVENT PIPELINE: audit only. Existing publication behavior remains
+    # unchanged. In particular, this block does not remove archive entries, delete HTML,
+    # suppress live stories, alter heroes/cards, create redirects or touch the sitemap.
     _archive_path = OUTPUT_DIR / "archive.json"
-    _published_archive = _sanitize_authoritative_custom_archive(
-        load_archive(_archive_path), OUTPUT_DIR / "articles"
+    _published_archive = load_archive(_archive_path)
+    build_event_audit(
+        _published_archive,
+        current_customs=custom_articles,
+        live_categories=all_categories,
+        output_dir=OUTPUT_DIR,
     )
-    _published_archive = _unified_archive_event_dedupe(
-        _published_archive, custom_articles, OUTPUT_DIR / "articles"
-    )
-    try:
-        _archive_path.write_text(json.dumps(_published_archive, indent=2, ensure_ascii=False), encoding="utf-8")
-    except Exception as _e:
-        print(f"  Warning: could not persist pre-render dedupe cleanup: {_e}")
 
-    _archived_customs = [
-        e for e in _published_archive
-        if e.get("is_custom") or e.get("authoritative_custom")
-    ]
-
-    # Never hide or drop a configured category. Recover missing/thin sections from
-    # the already-cleaned archive, then dedupe every recovered/live placement together.
+    # Preserve the pre-event-pipeline category recovery and rendering behavior while
+    # the audit report is reviewed.
     ensure_all_category_sections(all_categories, min_cards=6)
-    _unified_live_event_dedupe(all_categories, _archived_customs, custom_articles)
-
-    # A duplicate removal may empty a hero slot. Promote a surviving card only; do not
-    # re-run archive recovery here, because that could reintroduce the losing event.
-    for _cat in all_categories:
-        if not _cat.get("hero") and _cat.get("cards"):
-            _cat["hero"] = _cat["cards"].pop(0)
 
     # Front page hero selection
     top_cat = select_front_page_hero(all_categories)
