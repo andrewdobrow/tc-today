@@ -2721,3 +2721,384 @@ body > .article-ad-banner {
   margin-left: auto;
   margin-right: auto;
 }
+
+/* ============================================================
+   TCT v4 emergency presentation hotfix
+   Final rules intentionally override every earlier hero/ad rule.
+   ============================================================ */
+
+/* A 2:1 hero card made from two equal squares. The image and copy can never overlap. */
+.lead-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 352px) !important;
+  gap: 28px !important;
+  align-items: stretch !important;
+}
+
+.lead-primary,
+.lead-primary > .hero-v3 {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
+.hero-v3 {
+  position: relative !important;
+  overflow: hidden !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.hero-v3-link {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  aspect-ratio: 2 / 1 !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.hero-v3-media {
+  position: relative !important;
+  grid-column: 1 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  aspect-ratio: auto !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
+
+.hero-v3-media .hero-image-wrap,
+.hero-v3-media picture {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+.hero-v3-media img,
+.hero-v3-media .hero-image {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  transform: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+.hero-v3-content {
+  position: relative !important;
+  inset: auto !important;
+  grid-column: 2 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  padding: clamp(24px, 2.7vw, 42px) !important;
+  overflow: hidden !important;
+  background: var(--surface) !important;
+  opacity: 1 !important;
+  transform: none !important;
+  z-index: 2 !important;
+}
+
+.hero-v3 .hero-v3-tag,
+.hero-v3 .hero-v3-headline,
+.hero-v3 .hero-v3-summary,
+.hero-v3 .hero-v3-foot {
+  position: static !important;
+  inset: auto !important;
+  transform: none !important;
+  width: auto !important;
+  max-width: 100% !important;
+  color: inherit;
+  text-shadow: none !important;
+}
+
+.hero-v3 .hero-v3-tag {
+  margin: 0 0 12px !important;
+}
+
+.hero-v3 .hero-v3-headline {
+  display: -webkit-box !important;
+  margin: 0 0 14px !important;
+  overflow: hidden !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 6 !important;
+  line-clamp: 6 !important;
+  font-size: clamp(29px, 2.65vw, 48px) !important;
+  line-height: .98 !important;
+  letter-spacing: -.04em !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  color: var(--text) !important;
+}
+
+.hero-v3 .hero-v3-summary {
+  display: -webkit-box !important;
+  margin: 0 0 14px !important;
+  overflow: hidden !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 4 !important;
+  line-clamp: 4 !important;
+  font-size: clamp(13px, 1vw, 16px) !important;
+  line-height: 1.45 !important;
+  color: var(--text-secondary) !important;
+  opacity: 1 !important;
+}
+
+.hero-v3 .hero-v3-foot {
+  margin-top: auto !important;
+  padding-top: 12px !important;
+}
+
+.latest-rail {
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: hidden !important;
+}
+
+.latest-list {
+  min-height: 0 !important;
+  overflow-y: auto !important;
+}
+
+/* v3.1 accidentally hid the exact commercial banner introduced in v3.2. */
+.article-wrap > .article-ad-banner,
+.article-wrap > .article-banner-slot,
+main .article-wrap > .article-ad-banner {
+  display: block !important;
+}
+
+.article-wrap > .article-house-banner {
+  display: grid !important;
+}
+
+.article-banner-slot {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.article-side-rail {
+  display: grid !important;
+  min-width: 0 !important;
+}
+
+.related-section-fallback .related-empty {
+  margin: 0 0 14px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.related-section-fallback .related-more-link {
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+@media (max-width: 1180px) {
+  .hero-v3 .hero-v3-headline {
+    font-size: clamp(27px, 3vw, 42px) !important;
+    -webkit-line-clamp: 6 !important;
+    line-clamp: 6 !important;
+  }
+  .hero-v3 .hero-v3-summary {
+    -webkit-line-clamp: 3 !important;
+    line-clamp: 3 !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .lead-layout {
+    grid-template-columns: 1fr !important;
+  }
+  .hero-v3-link {
+    grid-template-columns: 1fr !important;
+    aspect-ratio: auto !important;
+  }
+  .hero-v3-media {
+    grid-column: 1 !important;
+    aspect-ratio: 16 / 10 !important;
+  }
+  .hero-v3-content {
+    grid-column: 1 !important;
+    overflow: visible !important;
+  }
+  .hero-v3 .hero-v3-headline,
+  .hero-v3 .hero-v3-summary {
+    display: block !important;
+    overflow: visible !important;
+    -webkit-line-clamp: unset !important;
+    line-clamp: unset !important;
+  }
+}
+
+/* ============================================================
+   TCT v4.1 mobile hero and compact editorial-banner fix
+   ============================================================ */
+@media (max-width: 900px) {
+  /* The hero always stacks media first, then copy. Earlier rules could collapse
+     or hide the media row because its descendants were absolutely positioned. */
+  .hero-v3,
+  .hero-v3-link {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .hero-v3-link {
+    display: flex !important;
+    flex-direction: column !important;
+    aspect-ratio: auto !important;
+  }
+
+  .hero-v3-media {
+    position: relative !important;
+    display: block !important;
+    flex: 0 0 auto !important;
+    order: 1 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 210px !important;
+    aspect-ratio: 16 / 10 !important;
+    overflow: hidden !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: #e8ece9 !important;
+  }
+
+  .hero-v3-media .hero-image-wrap,
+  .hero-v3-media figure,
+  .hero-v3-media picture {
+    position: absolute !important;
+    inset: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .hero-v3-media img,
+  .hero-v3-media .hero-image {
+    position: absolute !important;
+    inset: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .hero-v3-content {
+    order: 2 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 28px 24px 30px !important;
+    overflow: visible !important;
+  }
+
+  /* Keep editorial and resource replacements in the same compact visual slot
+     as the mobile sponsor banner. */
+  .article-wrap > .article-banner-slot,
+  .article-banner-slot {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: 970 / 250 !important;
+    margin: 0 auto 26px !important;
+    overflow: hidden !important;
+  }
+
+  .article-house-banner,
+  .article-wrap > .article-house-banner {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+    padding: 13px 17px !important;
+  }
+
+  .article-house-banner::after,
+  .article-house-mark {
+    display: none !important;
+  }
+
+  .article-house-copy {
+    width: 100% !important;
+    min-width: 0 !important;
+    gap: 4px !important;
+  }
+
+  .article-house-label {
+    font-size: 8px !important;
+    padding: 2px 7px !important;
+  }
+
+  .article-house-headline {
+    display: -webkit-box !important;
+    overflow: hidden !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    font-size: clamp(16px, 5vw, 21px) !important;
+    line-height: 1.05 !important;
+  }
+
+  .article-house-text {
+    display: none !important;
+  }
+
+  .article-house-resource {
+    flex: 0 0 42% !important;
+    min-width: 0 !important;
+    max-width: 42% !important;
+    margin-left: 12px !important;
+    padding: 8px 9px !important;
+  }
+
+  .article-house-resource span {
+    display: none !important;
+  }
+
+  .article-house-resource strong {
+    font-size: 9px !important;
+    line-height: 1.2 !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero-v3-media {
+    min-height: 190px !important;
+  }
+
+  .article-house-resource {
+    flex-basis: 40% !important;
+    max-width: 40% !important;
+  }
+}
