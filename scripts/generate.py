@@ -4791,7 +4791,7 @@ def _unified_live_event_dedupe(all_categories, archived_customs=None, current_cu
 # This phase models persistent stories and editorial stages, but it never changes
 # publication decisions, archive entries, article HTML, heroes, cards, redirects,
 # sitemaps, or Claude generation. It records what the engine WOULD do.
-EVENT_PIPELINE_MODE = os.environ.get("TCT_EVENT_PIPELINE_MODE", "shadow").strip().lower()
+EVENT_PIPELINE_MODE = os.environ.get("TCT_EVENT_PIPELINE_MODE", "guarded").strip().lower()
 
 
 def _event_audit_item(item, origin="archive"):
@@ -5035,13 +5035,148 @@ def _load_previous_story_membership(out_dir):
     return by_slug, titles
 
 
+
+SAFE_AUTO_SUPPRESSION_STAGES = {
+    "announcement", "arrest-or-charges", "approved-or-enacted",
+    "construction-or-demolition", "sports-preview", "sports-result",
+    "sentencing", "opening", "closure", "property-listing",
+    "discipline", "investigation", "body-recovery", "rescue",
+    "incident-active", "incident-resolved", "community-response",
+    "lawsuit-or-legal-challenge", "arbitration-or-grievance",
+    "court-appearance", "trial", "verdict", "appeal",
+    "veto-or-rejection", "proposal-or-expected", "public-meeting",
+}
+AUTO_SUPPRESSION_CONFIDENCE = 95
+HISTORY_MAX_PROCESSED = 20000
+SUPPRESSION_REPORT_LIMIT = 250
+
+
+def _read_json_file(path, default):
+    try:
+        if Path(path).exists():
+            return json.loads(Path(path).read_text(encoding="utf-8"))
+    except Exception as exc:
+        print(f"  Story engine warning: could not read {path}: {exc}")
+    return default
+
+
+def _article_log_key(item):
+    return (item.get("slug") or item.get("link") or item.get("source_url") or
+            hashlib.sha1(((item.get("headline") or "") + "|" + (item.get("date") or "")).encode("utf-8")).hexdigest())
+
+
+def _persist_story_decision_logs(data_dir, decisions, run_id):
+    """Keep a current snapshot plus append-only history for newly seen articles."""
+    processed_path = data_dir / "story-processed-articles.json"
+    history_path = data_dir / "story-decision-history.jsonl"
+    report_path = data_dir / "story-suppression-report.json"
+    processed_payload = _read_json_file(processed_path, {"schema_version": 5, "processed": {}})
+    processed = processed_payload.get("processed", {}) if isinstance(processed_payload, dict) else {}
+    new_records = []
+    for decision in decisions:
+        key = _article_log_key(decision)
+        if not key or key in processed:
+            continue
+        record = dict(decision)
+        record.update({"run_id": run_id, "engine_version": "persistent-story-stage-guarded-v5"})
+        new_records.append(record)
+        processed[key] = {"run_id": run_id, "decision": decision.get("decision", ""), "slug": decision.get("slug", "")}
+    if new_records:
+        with history_path.open("a", encoding="utf-8") as fh:
+            for record in new_records:
+                fh.write(json.dumps(record, ensure_ascii=False) + "\n")
+    # Bound the ledger while preserving the newest insertions.
+    if len(processed) > HISTORY_MAX_PROCESSED:
+        processed = dict(list(processed.items())[-HISTORY_MAX_PROCESSED:])
+    processed_path.write_text(json.dumps({"schema_version": 5, "updated_at": run_id, "processed": processed}, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    prior_report = _read_json_file(report_path, {"schema_version": 5, "suppressions": []})
+    suppressions = list(prior_report.get("suppressions", [])) if isinstance(prior_report, dict) else []
+    suppressions.extend([r for r in new_records if r.get("decision") in {"SUPPRESSED_DUPLICATE", "WOULD_SUPPRESS_DUPLICATE"}])
+    suppressions = suppressions[-SUPPRESSION_REPORT_LIMIT:]
+    report_path.write_text(json.dumps({
+        "schema_version": 5,
+        "updated_at": run_id,
+        "retained_suppressions": len(suppressions),
+        "suppressions": suppressions,
+    }, indent=2, ensure_ascii=False), encoding="utf-8")
+    return len(new_records)
+
+
+def apply_guarded_story_suppression(all_categories, archive, current_customs=None):
+    """Remove only extremely safe duplicate feed versions from live output.
+
+    Custom articles are never suppressed. General-stage and sub-95% matches are
+    never suppressed. Different stages remain publishable major updates.
+    """
+    if EVENT_PIPELINE_MODE != "guarded":
+        return []
+    archive_items = [_event_audit_item(e, "archive") for e in (archive or []) if e.get("headline")]
+    accepted_live = []
+    suppressions = []
+
+    def evaluate(item):
+        if not item or item.get("is_custom") or item.get("authoritative_custom"):
+            return None
+        normalized = _event_audit_item(item, "live")
+        stage = _story_stage(_story_text(normalized))
+        if stage == "general" or stage not in SAFE_AUTO_SUPPRESSION_STAGES:
+            return None
+        candidates = archive_items + accepted_live
+        matches = [prior for prior in candidates
+                   if _story_stage(_story_text(prior)) == stage and _same_story_topic(normalized, prior)]
+        if not matches:
+            accepted_live.append(normalized)
+            return None
+        best = max(matches, key=lambda prior: _story_match_confidence(normalized, prior))
+        confidence = _story_match_confidence(normalized, best)
+        if confidence < AUTO_SUPPRESSION_CONFIDENCE:
+            accepted_live.append(normalized)
+            return None
+        record = {
+            "story_id": prior_membership_id(best, archive_items),
+            "slug": normalized.get("slug", ""),
+            "headline": normalized.get("headline", ""),
+            "date": normalized.get("date", ""),
+            "category_key": normalized.get("category_key", ""),
+            "is_custom": False,
+            "story_stage": stage,
+            "decision": "SUPPRESSED_DUPLICATE",
+            "action_taken": True,
+            "reason": f"Same story and safe normalized stage '{stage}' at {confidence}% confidence.",
+            "match_confidence": confidence,
+            "matched_prior_slug": best.get("slug", ""),
+            "matched_prior_headline": best.get("headline", ""),
+        }
+        suppressions.append(record)
+        return record
+
+    # Resolve a best-effort story ID without making it a correctness dependency.
+    def _filter_category(cat):
+        hero = cat.get("hero")
+        if hero and evaluate(hero):
+            cat["hero"] = None
+        kept = []
+        for card in cat.get("cards", []) or []:
+            if not evaluate(card):
+                kept.append(card)
+        cat["cards"] = kept
+
+    for cat in all_categories or []:
+        _filter_category(cat)
+    return suppressions
+
+
+def prior_membership_id(item, archive_items):
+    return _story_base_id(item) if item else ""
+
 def build_story_shadow(archive, current_customs=None, live_categories=None, output_dir=None):
     """Build persistent story records and a would-publish/would-suppress log.
 
     This function is intentionally non-destructive. It does not control article
     generation or publication in Phase 2 shadow mode.
     """
-    if EVENT_PIPELINE_MODE not in {"audit", "shadow"}:
+    if EVENT_PIPELINE_MODE not in {"audit", "shadow", "guarded"}:
         print(f"  Story engine disabled (mode={EVENT_PIPELINE_MODE})")
         return None
 
@@ -5179,20 +5314,20 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
     data_dir = out_root / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
     registry = {
-        "schema_version": 4,
-        "mode": "shadow",
+        "schema_version": 5,
+        "mode": EVENT_PIPELINE_MODE,
         "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
         "non_destructive": True,
-        "engine": "persistent-story-stage-shadow-v4",
+        "engine": "persistent-story-stage-guarded-v5",
         "article_count": len(items),
         "story_count": len(stories),
         "stories": stories,
     }
     shadow = {
-        "schema_version": 4,
-        "mode": "shadow",
+        "schema_version": 5,
+        "mode": EVENT_PIPELINE_MODE,
         "non_destructive": True,
-        "engine": "persistent-story-stage-shadow-v4",
+        "engine": "persistent-story-stage-guarded-v5",
         "summary": {
             "articles_analyzed": len(items),
             "stories_identified": len(stories),
@@ -5203,13 +5338,17 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
             "would_review": summary_counts["WOULD_REVIEW"],
         },
         "decisions": decisions,
-        "notice": "Shadow mode only: no generation, publication, archive, HTML, hero, card, redirect or sitemap behavior was changed.",
+        "notice": "Current diagnostic snapshot. Guarded mode suppresses only same-story, same-safe-stage, non-custom matches at 95%+ confidence.",
     }
+    run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    registry["generated_at"] = run_id
+    shadow["generated_at"] = run_id
     (data_dir / "stories.json").write_text(json.dumps(registry, indent=2, ensure_ascii=False), encoding="utf-8")
     (data_dir / "story-shadow-log.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
+    appended = _persist_story_decision_logs(data_dir, decisions, run_id)
     # Keep the familiar audit filename as a small pointer for existing workflow artifacts.
     (data_dir / "event-audit.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  Story engine shadow v4: {len(items)} articles -> {len(stories)} persistent stories")
+    print(f"  Story engine guarded v5: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
     print(f"  Shadow decisions: {summary_counts['WOULD_SUPPRESS_DUPLICATE']} suppress, {summary_counts['WOULD_PUBLISH_MAJOR_UPDATE']} major update, {summary_counts['WOULD_PUBLISH_CUSTOM_OVERRIDE']} custom override, {summary_counts['WOULD_REVIEW']} review")
     print("  Story engine is NON-DESTRUCTIVE; publication output was not changed")
     return shadow
@@ -6912,20 +7051,27 @@ def main():
                     target.setdefault("cards", []).append(art)
                 print(f"  Custom article: '{art['headline'][:50]}' -> {ckey}")
 
-    # PHASE 2 STORY ENGINE: shadow mode only. Existing publication behavior remains
-    # unchanged. In particular, this block does not remove archive entries, delete HTML,
-    # suppress live stories, alter heroes/cards, create redirects or touch the sitemap.
+    # PHASE 2 STORY ENGINE: guarded production mode. Only non-custom, same-story,
+    # same-safe-stage matches at 95%+ confidence are removed from live output.
+    # Everything uncertain, general-stage, or stage-advancing remains publishable.
     _archive_path = OUTPUT_DIR / "archive.json"
     _published_archive = load_archive(_archive_path)
-    build_story_shadow(
+    _live_suppressions = apply_guarded_story_suppression(
+        all_categories, _published_archive, current_customs=custom_articles
+    )
+    _shadow = build_story_shadow(
         _published_archive,
         current_customs=custom_articles,
         live_categories=all_categories,
         output_dir=OUTPUT_DIR,
     )
+    if _live_suppressions:
+        _data_dir = OUTPUT_DIR / "data"
+        _run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"
+        _persist_story_decision_logs(_data_dir, _live_suppressions, _run_id)
+        print(f"  Guarded story engine suppressed {len(_live_suppressions)} high-confidence live duplicate placements")
 
-    # Preserve the pre-event-pipeline category recovery and rendering behavior while
-    # the audit report is reviewed.
+    # Recover category depth after safe duplicate removal.
     ensure_all_category_sections(all_categories, min_cards=6)
 
     # Front page hero selection
