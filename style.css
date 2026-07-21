@@ -2075,3 +2075,157 @@ footer { background:linear-gradient(90deg,#103f2b,#174f37); color:#fff; margin-t
     line-height: 1.72 !important;
   }
 }
+
+/* ================================================================
+   v2.2 — ADVERTISING GRID CARD HOTFIX
+   Uses dedicated class names and hard overrides so ordinary story-card
+   rules cannot turn the promo placement into an empty white grid cell.
+   ================================================================ */
+.articles-grid > .tct-advertise-card {
+  position: relative;
+  isolation: isolate;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: stretch;
+  min-height: 100%;
+  overflow: hidden;
+  border: 0;
+  background: #124f3c !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none;
+}
+
+.articles-grid > .tct-advertise-card::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(255,255,255,.16), transparent 31%),
+    linear-gradient(145deg, #176348 0%, #0d4238 100%);
+}
+
+.articles-grid > .tct-advertise-card::after {
+  content: "TCT";
+  position: absolute;
+  right: -12px;
+  bottom: -30px;
+  z-index: -1;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 112px;
+  line-height: 1;
+  font-weight: 700;
+  color: rgba(255,255,255,.055);
+  pointer-events: none;
+}
+
+.tct-advertise-card-inner {
+  display: flex !important;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  min-height: 100%;
+  padding: clamp(26px, 3vw, 42px);
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.tct-advertise-kicker,
+.tct-advertise-headline,
+.tct-advertise-copy,
+.tct-advertise-options,
+.tct-advertise-cta {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: #ffffff !important;
+}
+
+.tct-advertise-kicker {
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.76) !important;
+}
+
+.tct-advertise-headline {
+  max-width: 13ch;
+  margin: 0;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(24px, 2vw, 32px);
+  font-weight: 650;
+  line-height: 1.08;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+
+.tct-advertise-copy {
+  max-width: 44ch;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.58;
+  color: rgba(255,255,255,.88) !important;
+}
+
+.tct-advertise-options {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.tct-advertise-options span {
+  display: inline-flex;
+  padding: 5px 9px;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1;
+  color: rgba(255,255,255,.9) !important;
+  background: rgba(255,255,255,.07);
+}
+
+.tct-advertise-cta {
+  margin-top: 4px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgba(255,255,255,.55);
+  font-size: 13px;
+  font-weight: 750;
+  transition: gap .18s ease, border-color .18s ease;
+}
+
+.tct-advertise-card:hover {
+  background: #124f3c !important;
+}
+
+.tct-advertise-card:hover .tct-advertise-cta {
+  border-color: #ffffff;
+}
+
+.tct-advertise-card:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: -6px;
+}
+
+@media (max-width: 680px) {
+  .articles-grid > .tct-advertise-card {
+    min-height: 330px;
+  }
+
+  .tct-advertise-card-inner {
+    padding: 30px 24px;
+  }
+
+  .tct-advertise-headline {
+    max-width: 15ch;
+    font-size: 28px;
+  }
+}
