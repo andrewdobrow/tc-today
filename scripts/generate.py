@@ -4599,6 +4599,61 @@ def _matches_archived_custom(item, entry):
     distinctive = [t for t in shared if t not in GENERIC_TOKENS]
     return len(shared) >= 6 and len(distinctive) >= 3
 
+
+
+def _sanitize_authoritative_custom_archive(archive, articles_dir=None):
+    """Remove archived feed copies of authoritative custom stories before recovery.
+
+    This runs before category fallback/hero selection, not only during final archive
+    writing. It also backfills the canonical July 2026 Stuart hoarding custom story
+    when it predates durable custom metadata.
+    """
+    archive = list(archive or [])
+
+    # Backfill the canonical custom story for the July 2026 Stuart hoarding case.
+    event_entries = []
+    for e in archive:
+        text = " ".join([e.get("headline", ""), e.get("teaser", ""), e.get("body", "")[:1200]])
+        if _known_event_key(text) == "2026-07-stuart-martin-80-cats-hoarding":
+            event_entries.append(e)
+
+    if event_entries:
+        canonical = next((e for e in event_entries if e.get("is_custom") or e.get("authoritative_custom")), None)
+        if canonical is None:
+            # The custom headline used this distinctive framing; syndicated copies used
+            # variants such as "about 80" or "Martin County deputies rescue...".
+            canonical = next((e for e in event_entries
+                              if "stuart woman arrested" in e.get("headline", "").lower()
+                              and "80 cats" in e.get("headline", "").lower()
+                              and "worst hoarding" in e.get("headline", "").lower()), None)
+        if canonical is None:
+            # Last-resort preservation: keep the oldest substantial entry rather than
+            # allowing multiple copies to survive.
+            canonical = sorted(event_entries, key=lambda e: (e.get("date") or e.get("lastmod") or "9999",
+                                                               -len(e.get("body", "") or "")))[0]
+
+        canonical["is_custom"] = True
+        canonical["authoritative_custom"] = True
+        canonical["custom_event_key"] = "2026-07-stuart-martin-80-cats-hoarding"
+        canonical["custom_fingerprint"] = _custom_story_fingerprint(
+            canonical.get("headline", ""), canonical.get("teaser", "")
+        )
+
+        remove_slugs = {e.get("slug") for e in event_entries if e is not canonical and e.get("slug")}
+        if remove_slugs:
+            archive = [e for e in archive if e.get("slug") not in remove_slugs]
+            if articles_dir is not None:
+                for slug in remove_slugs:
+                    try:
+                        p = Path(articles_dir) / f"{slug}.html"
+                        if p.exists():
+                            p.unlink()
+                    except Exception:
+                        pass
+            print(f"  Custom-authority archive cleanup removed {len(remove_slugs)} duplicate event article(s)")
+
+    return archive
+
 def _same_story(tok_a, tok_b, threshold=4):
     """Two stories are the same only if they share enough tokens AND at least two of
     those are DISTINCTIVE (not generic people/boilerplate words). Counting alone lets
@@ -5385,7 +5440,9 @@ def write_archives(all_categories, top_cat):
     archive_path = OUTPUT_DIR / "archive.json"
     articles_dir.mkdir(exist_ok=True)
 
-    archive       = load_archive(archive_path)
+    archive       = _sanitize_authoritative_custom_archive(
+        load_archive(archive_path), articles_dir
+    )
     today         = datetime.utcnow().strftime("%Y-%m-%d")
     new_count     = 0
     updated_count = 0
@@ -5401,6 +5458,7 @@ def write_archives(all_categories, top_cat):
         "2026-07-20-tv-show-titled-stuart-fails-to-save-the-universe-debuts-this-week",
         "2026-07-19-fort-pierce-unity-in-the-community-event-connects-families-with-services",
         "2026-07-21-stuart-woman-arrested-after-deputies-rescue-about-80-cats-from-home-in-worst-hoa",
+        "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-hoarding-case-sh",
     }
     _before = len(archive)
     archive = [e for e in archive if e.get("slug") not in _DUP_SLUGS_TO_REMOVE]
@@ -5779,7 +5837,9 @@ def ensure_all_category_sections(all_categories, min_cards=6):
     permanent archive. Archive recovery has no freshness cutoff: an older real story
     is always better than hiding a category or presenting an empty section.
     """
-    archive = load_archive(OUTPUT_DIR / "archive.json")
+    archive = _sanitize_authoritative_custom_archive(
+        load_archive(OUTPUT_DIR / "archive.json"), OUTPUT_DIR / "articles"
+    )
     archive.sort(key=lambda e: e.get("lastmod") or e.get("date", ""), reverse=True)
 
     def entry_matches(e, category_key):
@@ -6295,7 +6355,9 @@ def main():
     # PRE-HERO AUTHORITATIVE-CUSTOM GUARD. Custom stories remain authoritative
     # after custom_articles.json is cleared because that status is persisted in
     # archive.json. Remove matching feed copies before homepage/category ranking.
-    _published_archive = load_archive(OUTPUT_DIR / "archive.json")
+    _published_archive = _sanitize_authoritative_custom_archive(
+        load_archive(OUTPUT_DIR / "archive.json"), OUTPUT_DIR / "articles"
+    )
     _archived_customs = [
         e for e in _published_archive
         if e.get("is_custom") or e.get("authoritative_custom")
@@ -6303,7 +6365,7 @@ def main():
     if _archived_customs:
         for _cat in all_categories:
             def _already_covered_by_custom(item):
-                if not item or item.get("is_custom") or item.get("_archive_only"):
+                if not item or item.get("is_custom") or item.get("authoritative_custom"):
                     return False
                 return any(_matches_archived_custom(item, e) for e in _archived_customs)
 
