@@ -1,5 +1,5 @@
 """
-Treasure Coast Today - news generation pipeline - v6.4.6 Unified Article Header
+Treasure Coast Today - news generation pipeline - v6.5.0 Canonical Event Lock
 Covers Martin, St. Lucie, and Indian River counties.
 Runs 4x/day via GitHub Actions.
 """
@@ -4792,6 +4792,20 @@ def _known_event_key(text):
     if has_place and has_animals and has_case and has_action and has_scale:
         return "2026-07-stuart-martin-animal-hoarding"
 
+    # July 2026 St. Lucie County Fire District firefighter discipline / hazing saga.
+    # Different outlets have framed the same continuing case as terminations, union
+    # objections, a contradictory police report, and a workplace-culture assessment.
+    # Those are developments within one event and must update one canonical article.
+    has_st_lucie = (("st" in words and "lucie" in words) or "fort" in words and "pierce" in words)
+    has_fire_org = bool(words & {"firefighter", "firefighters", "fire", "district"})
+    has_discipline = bool(words & {"fired", "terminated", "termination", "terminations",
+                                   "suspended", "suspension", "discipline", "disciplinary"})
+    has_case_signal = bool(words & {"hazing", "haze", "union", "police", "report",
+                                    "contradicts", "contradict", "assessment", "culture",
+                                    "zapper", "investigation", "findings"})
+    if has_st_lucie and has_fire_org and has_discipline and has_case_signal:
+        return "2026-07-st-lucie-firefighter-hazing-discipline"
+
     return ""
 
 
@@ -4908,10 +4922,8 @@ def _matches_archived_custom(item, entry):
     entry_head = entry.get("headline", "")
     entry_text = " ".join([entry_head, entry.get("teaser", ""), entry.get("body", "")[:1200]])
 
-    # A custom article still wins by default, but a genuinely status-changing update
-    # may publish as a separate story (for example: homicide -> arrest).
-    if _is_significant_story_update(item, entry):
-        return False
+    # Custom coverage remains the canonical page. Any status-changing development
+    # is merged into that page rather than published at a parallel permalink.
 
     item_key = _known_event_key(item_text)
     entry_key = entry.get("custom_event_key") or _known_event_key(entry_text)
@@ -5045,7 +5057,7 @@ def _unified_archive_event_dedupe(archive, current_customs=None, articles_dir=No
             continue
         duplicate_of = None
         for custom in authorities:
-            if _same_event_items(entry, custom) and not _is_significant_story_update(entry, custom):
+            if _same_event_items(entry, custom):
                 duplicate_of = custom
                 break
         if duplicate_of:
@@ -5090,9 +5102,8 @@ def _unified_live_event_dedupe(all_categories, archived_customs=None, current_cu
         for winner in winners:
             if not _same_event_items(item, winner):
                 continue
-            # A genuine milestone may coexist with the original event article.
-            if _is_significant_story_update(item, winner) or _is_significant_story_update(winner, item):
-                continue
+            # Every development in the same underlying event belongs to one canonical
+            # article. Milestones update that article; they never create a parallel URL.
             matched = winner
             break
         if matched is None:
@@ -5104,8 +5115,7 @@ def _unified_live_event_dedupe(all_categories, archived_customs=None, current_cu
     for cat, role, item in ordered:
         if item.get("is_custom") or item.get("authoritative_custom"):
             continue
-        if any(_same_event_items(item, custom) and not _is_significant_story_update(item, custom)
-               for custom in authorities):
+        if any(_same_event_items(item, custom) for custom in authorities):
             loser_ids.add(id(item))
 
     for cat in all_categories:
@@ -5878,6 +5888,101 @@ def find_matching_entry(headline, archive, source_url="", is_weather_alert=False
 
 
 
+def find_canonical_event_entry(item, archive):
+    """Find the single canonical archive article for an incoming development.
+
+    Tier 1 uses deterministic URL, stable-event and headline matching. Tier 2 asks
+    the model to compare the incoming item with a tightly filtered recent shortlist.
+    A high-similarity candidate is never allowed to become a second URL merely
+    because the model call fails; the existing canonical is retained.
+    """
+    item = item or {}
+    headline = (item.get("headline") or "").strip()
+    source_url = item.get("link") or item.get("source_url") or ""
+    direct = find_matching_entry(
+        headline, archive, source_url,
+        is_weather_alert=bool(item.get("is_weather_alert")),
+    )
+    if direct:
+        return direct
+
+    if item.get("is_weather_alert") or not headline:
+        return None
+
+    incoming_text = _story_text(item)
+    incoming_tokens = _sig_tokens(incoming_text)
+    incoming_locations = _audit_locations(incoming_text)
+    candidates = []
+    today = datetime.utcnow().date()
+
+    for entry in archive:
+        if not entry.get("slug") or entry.get("is_weather_alert"):
+            continue
+        # Keep the semantic comparison focused on recent continuing coverage.
+        raw_date = str(entry.get("lastmod") or entry.get("date") or "")[:10]
+        try:
+            age = (today - datetime.strptime(raw_date, "%Y-%m-%d").date()).days
+            if age > 45:
+                continue
+        except Exception:
+            pass
+
+        entry_text = _story_text(entry)
+        entry_locations = _audit_locations(entry_text)
+        if incoming_locations and entry_locations and not (incoming_locations & entry_locations):
+            continue
+        shared = _shared_tokens(incoming_tokens, _sig_tokens(entry_text))
+        distinctive = [t for t in shared if t not in GENERIC_TOKENS]
+        action_overlap = len(_audit_action_families(incoming_text) & _audit_action_families(entry_text))
+        # Two distinctive shared entities/terms plus a related action family is enough
+        # to warrant an ongoing-event comparison, but not an automatic merge.
+        if len(distinctive) < 2 or action_overlap < 1:
+            continue
+        score = len(distinctive) * 10 + len(shared) * 2 + action_overlap * 8
+        candidates.append((score, entry))
+
+    if not candidates:
+        return None
+    candidates.sort(key=lambda pair: pair[0], reverse=True)
+    shortlist = candidates[:8]
+
+    choices = "\n\n".join(
+        f"{i}. Headline: {e.get('headline','')}\nSummary: {(e.get('teaser') or '')[:350]}"
+        for i, (_, e) in enumerate(shortlist, 1)
+    )
+    prompt = (
+        "An incoming local-news item may be a new development in an already published "
+        "ongoing event. Choose the ONE existing article covering the same underlying "
+        "case/event, even if the new angle is a lawsuit, arrest, union response, official "
+        "report, contradiction, ruling, identification, suspension or other development. "
+        "Choose NONE only for a genuinely separate incident or proceeding.\n\n"
+        f"INCOMING:\nHeadline: {headline}\nSummary: {(item.get('teaser') or item.get('body','')[:500])[:500]}\n\n"
+        f"EXISTING CANDIDATES:\n{choices}\n\n"
+        "Answer only the candidate number or NONE."
+    )
+    try:
+        resp = client.messages.create(
+            model=MODEL_SELECTION, max_tokens=12,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        answer = resp.content[0].text.strip().upper()
+        match = re.search(r"\b([1-8])\b", answer)
+        if match:
+            idx = int(match.group(1)) - 1
+            if 0 <= idx < len(shortlist):
+                return shortlist[idx][1]
+        return None
+    except Exception as exc:
+        # Fail toward canonical continuity only when the lexical candidate is very
+        # strong. Otherwise suppressing/merging unrelated stories would be worse.
+        top_score, top_entry = shortlist[0]
+        if top_score >= 54:
+            print(f"    Semantic event check failed ({exc}); locking to strong canonical candidate")
+            return top_entry
+        print(f"    Semantic event check failed ({exc}); no canonical candidate selected")
+        return None
+
+
 def _page_head(title, description, canonical_path="", structured_data=None, image_url="", article_meta=None):
     canonical = f"{SITE_URL}{canonical_path}" if canonical_path else SITE_URL
     og_image  = image_url if image_url else f"{SITE_URL}/og-image.png"
@@ -6526,54 +6631,49 @@ def write_data_json(all_categories, top_cat):
 
 
 def confirm_same_story(new_headline, new_teaser, existing_entry):
-    """Final gate before OVERWRITING a published permalink.
+    """Confirm that a candidate belongs to the same continuing news event.
 
-    Overwriting is the one destructive, irreversible operation here: the existing
-    article's content is replaced, and its URL (already in RSS, already shared to
-    Nextdoor/Facebook) then serves different content. Token heuristics have merged
-    stories they should not have: a June award and a July World Cup trip about the
-    same teen; a food-pantry story and an Aldi opening that shared only geography.
-
-    So before any overwrite, the model decides: is this the SAME news event (a real
-    update), or a DIFFERENT event that merely shares words, people, or a location?
-
-    Fails safe. On any error this returns False, so a new article is created rather
-    than overwriting. A duplicate article is recoverable; a hijacked permalink is not.
+    This function is called only after deterministic matching has already identified a
+    plausible archive candidate. The publication invariant is now one event = one URL:
+    arrests, rulings, contradictory reports, union responses and other developments
+    update the canonical article rather than spawning parallel articles.
     """
     old_headline = existing_entry.get("headline", "")
-    old_teaser   = existing_entry.get("teaser", "")
+    old_teaser = existing_entry.get("teaser", "")
+
+    # Stable event keys are conclusive and avoid an unnecessary model call.
+    new_key = _known_event_key(" ".join([new_headline, new_teaser or ""]))
+    old_key = _known_event_key(" ".join([old_headline, old_teaser or ""]))
+    if new_key and old_key and new_key == old_key:
+        return True
 
     prompt = (
-        "Two news items from a local Florida news site. Decide whether they report the "
-        "SAME news event (so the second is an update of the first and should replace it), "
-        "or DIFFERENT events that merely share words, people, or a location.\n\n"
-        f"EXISTING ARTICLE:\nHeadline: {old_headline}\nSummary: {old_teaser[:250]}\n\n"
-        f"NEW STORY:\nHeadline: {new_headline}\nSummary: {(new_teaser or '')[:250]}\n\n"
-        "SAME event examples: a store 'opening soon' then 'now open'; a game recap "
-        "reworded; a suspect 'sought' then 'arrested' for the same crime; a storm watch "
-        "upgraded to a warning.\n"
-        "DIFFERENT event examples: the same person winning an award in June and taking a "
-        "trip in July; two separate crimes in the same town; two different businesses on "
-        "the same street; a local arrest versus a statewide policy story on the same topic.\n\n"
-        "If they are different events, the existing article must NOT be overwritten.\n"
-        "Answer with only one word: SAME or DIFFERENT."
+        "Determine whether these two local-news items concern the SAME UNDERLYING "
+        "ONGOING CASE OR EVENT. A later development in the same case is SAME, even "
+        "when the angle changes substantially. Examples that are SAME: initial firing "
+        "then union objection; suspect sought then arrested; lawsuit filed after the "
+        "original death; police report contradicting an employer investigation; court "
+        "ruling in a previously reported dispute. DIFFERENT means a separate incident, "
+        "different business, different crime, different game, or different proceeding.\n\n"
+        f"EXISTING ARTICLE:\nHeadline: {old_headline}\nSummary: {old_teaser[:350]}\n\n"
+        f"NEW DEVELOPMENT:\nHeadline: {new_headline}\nSummary: {(new_teaser or '')[:350]}\n\n"
+        "Answer only SAME or DIFFERENT."
     )
-
     try:
         resp = client.messages.create(
-            model=MODEL_SELECTION,
-            max_tokens=10,
+            model=MODEL_SELECTION, max_tokens=10,
             messages=[{"role": "user", "content": prompt}],
         )
         answer = resp.content[0].text.strip().upper()
         same = answer.startswith("SAME")
         if not same:
-            print(f"    Overwrite blocked (different event): '{new_headline[:42]}' "
-                  f"vs '{old_headline[:42]}'")
+            print(f"    Canonical merge rejected: '{new_headline[:42]}' vs '{old_headline[:42]}'")
         return same
     except Exception as e:
-        print(f"    Overwrite check failed ({e}); creating new article instead")
-        return False
+        # Candidate matching already passed deterministic safeguards. Splitting on a
+        # transient API error creates exactly the duplicate URLs this gate must prevent.
+        print(f"    Canonical merge check failed ({e}); retaining existing canonical URL")
+        return True
 
 
 CANONICAL_CLEANUP_CONFIDENCE = 95
@@ -6623,8 +6723,7 @@ def _strict_custom_duplicate_pair(candidate, canonical):
         return False, 0
     a = _event_audit_item(candidate, "archive")
     b = _event_audit_item(canonical, "archive")
-    if _is_significant_story_update(a, b) or _is_significant_story_update(b, a):
-        return False, 0
+    # Major milestones are still part of the same event and must consolidate.
     if not _same_story_topic(a, b):
         return False, 0
     confidence = _story_match_confidence(a, b)
@@ -6636,7 +6735,7 @@ def _strict_custom_duplicate_pair(candidate, canonical):
 
 
 def apply_canonical_story_cleanup(archive, articles_dir, output_root):
-    """Consolidate proven feed duplicates into authoritative custom articles."""
+    """Consolidate all proven duplicate developments into one canonical article."""
     archive = list(archive or [])
     customs = [e for e in archive if e.get("slug") and
                (e.get("is_custom") or e.get("authoritative_custom"))]
@@ -6666,6 +6765,53 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
             "canonical_is_custom": True,
             "reason": "High-confidence duplicate consolidated into authoritative custom coverage.",
         })
+
+    # Consolidate every stable known-event group, not only custom stories. The
+    # canonical URL is the authoritative custom article when one exists; otherwise
+    # it is the oldest published permalink. Later developments are represented by
+    # updated content at that URL and every duplicate URL becomes a 301 redirect.
+    known_groups = {}
+    for entry in archive:
+        if not entry.get("slug"):
+            continue
+        key = _known_event_key(_story_text(_event_audit_item(entry, "archive")))
+        if key:
+            known_groups.setdefault(key, []).append(entry)
+
+    existing_redirect_sources = {r["source_slug"] for r in redirects}
+    for event_key, members in known_groups.items():
+        active = [m for m in members if m.get("slug") not in removed_slugs]
+        if len(active) < 2:
+            continue
+        custom_members = [m for m in active if m.get("is_custom") or m.get("authoritative_custom")]
+        if custom_members:
+            canonical = max(custom_members, key=_canonical_candidate_score)
+        else:
+            def _oldest_key(e):
+                first = str(e.get("first_published") or "")
+                date = str(e.get("date") or e.get("lastmod") or "9999-99-99")
+                return (date, first, e.get("slug", ""))
+            canonical = min(active, key=_oldest_key)
+
+        for duplicate in active:
+            if duplicate.get("slug") == canonical.get("slug"):
+                continue
+            source_slug = duplicate["slug"]
+            if source_slug in existing_redirect_sources:
+                continue
+            removed_slugs.add(source_slug)
+            existing_redirect_sources.add(source_slug)
+            redirects.append({
+                "source_slug": source_slug,
+                "source_headline": duplicate.get("headline", ""),
+                "target_slug": canonical["slug"],
+                "target_headline": canonical.get("headline", ""),
+                "story_stage": _story_stage(_story_text(_event_audit_item(duplicate, "archive"))),
+                "match_confidence": 100,
+                "canonical_is_custom": bool(canonical.get("is_custom") or canonical.get("authoritative_custom")),
+                "event_key": event_key,
+                "reason": "Duplicate development consolidated under the single canonical event URL.",
+            })
 
     known_animal_sources = {
         # Exact live generated duplicate.
@@ -6735,7 +6881,7 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
         for r in merged_records
     ]
     (output_root / "_redirects").write_text("\n".join(redirect_rules) + "\n", encoding="utf-8")
-    print(f"  Canonical Story Manager redirected {len(redirects)} duplicate URL(s) to custom canonical coverage")
+    print(f"  Canonical Story Manager redirected {len(redirects)} duplicate URL(s) to canonical event coverage")
     return cleaned, redirects
 
 
@@ -7465,7 +7611,7 @@ def write_archives(all_categories, top_cat):
             continue
 
         source_url = hero.get("link", "")
-        existing   = find_matching_entry(headline, archive, source_url, is_weather_alert=bool(hero.get("is_weather_alert")))
+        existing   = find_canonical_event_entry(hero, archive)
 
         # OVERRIDE for recurring series (weekly traffic reports, roundups, game recaps).
         # These share a title prefix and vocabulary, so the matcher treats each new
