@@ -4617,18 +4617,16 @@ def _sanitize_authoritative_custom_archive(archive, articles_dir=None):
     event_entries = []
     for e in archive:
         text = " ".join([e.get("headline", ""), e.get("teaser", ""), e.get("body", "")[:1200]])
-        if _known_event_key(text) == "2026-07-stuart-martin-80-cats-hoarding":
+        if _known_event_key(text) == "2026-07-stuart-martin-animal-hoarding":
             event_entries.append(e)
 
     if event_entries:
-        canonical = next((e for e in event_entries if e.get("is_custom") or e.get("authoritative_custom")), None)
+        # Exact production migration: this is Andrew's custom July 20 article and
+        # must win over every generated/syndicated version of the same incident.
+        canonical = next((e for e in event_entries if e.get("slug") ==
+                          "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response"), None)
         if canonical is None:
-            # The custom headline used this distinctive framing; syndicated copies used
-            # variants such as "about 80" or "Martin County deputies rescue...".
-            canonical = next((e for e in event_entries
-                              if "stuart woman arrested" in e.get("headline", "").lower()
-                              and "80 cats" in e.get("headline", "").lower()
-                              and "worst hoarding" in e.get("headline", "").lower()), None)
+            canonical = next((e for e in event_entries if e.get("is_custom") or e.get("authoritative_custom")), None)
         if canonical is None:
             # Last-resort preservation: keep the oldest substantial entry rather than
             # allowing multiple copies to survive.
@@ -6300,6 +6298,9 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
         })
 
     known_animal_sources = {
+        # Exact live generated duplicate.
+        "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-animal-hoarding",
+        # Older truncated variants retained for backward compatibility.
         "2026-07-21-stuart-woman-arrested-after-deputies-rescue-about-80-cats-from-home-in-worst-hoa",
         "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-hoarding-case-sh",
     }
@@ -6307,7 +6308,10 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
                       and re.search(r"\bcat", _story_text(_event_audit_item(e, "archive")), re.I)
                       and re.search(r"\bhoard", _story_text(_event_audit_item(e, "archive")), re.I)]
     if animal_customs:
-        canonical = max(animal_customs, key=_canonical_candidate_score)
+        canonical = next((e for e in animal_customs if e.get("slug") ==
+                          "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response"), None)
+        if canonical is None:
+            canonical = max(animal_customs, key=_canonical_candidate_score)
         existing_sources = {r["source_slug"] for r in redirects}
         for source_slug in sorted(known_animal_sources - existing_sources):
             if source_slug == canonical.get("slug"):
@@ -6445,21 +6449,25 @@ def write_story_regression_report(output_root, archive, redirect_verification):
         "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-hoarding-case-sh",
     }]
     expected_sources = {
-        "2026-07-21-stuart-woman-arrested-after-deputies-rescue-about-80-cats-from-home-in-worst-hoa",
-        "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-hoarding-case-sh",
+        "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-animal-hoarding",
     }
+    expected_target = "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response"
     redirect_sources = {r.get("source_slug") for r in hoarding_redirects}
+    exact_live_redirect = next((r for r in redirects if r.get("source_slug") in expected_sources), None)
     archive_slugs = {e.get("slug") for e in archive or []}
     checks = {
         "hoarding_is_one_story": len(hoarding_stories) == 1,
         "hoarding_canonical_is_custom": len(hoarding_stories) == 1 and bool(hoarding_stories[0].get("canonical_is_custom")),
-        "both_known_duplicate_redirects_exist": expected_sources <= redirect_sources,
+        "exact_custom_slug_is_canonical": len(hoarding_stories) == 1 and hoarding_stories[0].get("canonical_slug") == expected_target,
+        "exact_live_duplicate_redirect_exists": expected_sources <= redirect_sources,
+        "exact_live_duplicate_targets_custom": bool(exact_live_redirect) and exact_live_redirect.get("target_slug") == expected_target,
         "redirect_sources_removed_from_archive": not bool(expected_sources & archive_slugs),
+        "custom_article_remains_in_archive": expected_target in archive_slugs,
         "all_redirect_html_verified": all(v.get("passed") for v in redirect_verification) if redirect_verification else False,
     }
     report = {
         "schema_version": 1,
-        "engine_version": "story-centric-newsroom-v6.1",
+        "engine_version": "story-centric-newsroom-v6.1.1",
         "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
         "production_gate_passed": all(checks.values()),
         "checks": checks,
@@ -6553,7 +6561,7 @@ def write_story_health_report(output_root, archive, current_run_redirects=None):
 
     report = {
         "schema_version": 2,
-        "engine_version": "story-centric-newsroom-v6.1",
+        "engine_version": "story-centric-newsroom-v6.1.1",
         "generated_at": run_id,
         "active_window_days": 7,
         "stories": {
