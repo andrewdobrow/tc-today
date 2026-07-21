@@ -23,6 +23,59 @@ body {
   line-height: 1.6;
 }
 
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+img,
+video,
+iframe,
+svg {
+  max-width: 100%;
+}
+
+main,
+header,
+footer,
+.header-inner,
+.ticker-inner,
+.hero,
+.hero-inner,
+.articles-grid,
+.grid-card,
+.article-card,
+.older-section,
+.related-section {
+  min-width: 0;
+  max-width: 100%;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+a,
+span,
+.article-body,
+.hero-summary,
+.card-summary,
+.grid-card-headline,
+.card-headline,
+.older-headline,
+.related-headline {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
 /* -- HEADER -- */
 header {
   position: sticky;
@@ -371,6 +424,7 @@ figure.hero-image-wrap {
 
 .share-btn:hover {
   opacity: 0.7;
+}
 
 .read-source-link {
   color: var(--accent);
@@ -384,8 +438,6 @@ figure.hero-image-wrap {
 .read-source-link:hover {
   opacity: 0.7;
 }
-}
-
 
 .article-expand {
   display: none;
@@ -792,13 +844,8 @@ footer {
   }
 }
 
-@media (max-width: 900px) {
-  .articles-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
 
-@media (max-width: 580px) {
+@media (max-width: 680px) {
   .articles-grid {
     grid-template-columns: 1fr;
   }
@@ -860,8 +907,10 @@ footer {
     max-height: none;
     padding-top: 1px;
     scrollbar-width: none;
-    -webkit-mask-image: linear-gradient(to right, black 84%, transparent 100%);
-    mask-image: linear-gradient(to right, black 84%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 0%, black 76%, transparent 100%);
+    mask-image: linear-gradient(to right, black 0%, black 76%, transparent 100%);
+    scroll-snap-type: x proximity;
+    scroll-padding-right: 32px;
   }
 
   .category-nav::-webkit-scrollbar {
@@ -872,6 +921,7 @@ footer {
     flex: 0 0 auto;
     padding: 6px 11px;
     font-size: 13px;
+    scroll-snap-align: start;
   }
 
   /* Mobile hero/category label fix: prevent SEO H1 labels from colliding with floated images */
@@ -901,6 +951,57 @@ footer {
   .hero-image {
     width: 100%;
     height: 200px;
+  }
+}
+
+
+@media (max-width: 680px) {
+  main {
+    width: 100%;
+    padding: 28px 16px 56px;
+  }
+
+  .market-ticker {
+    width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .ticker-inner,
+  .category-nav {
+    overscroll-behavior-x: contain;
+  }
+
+  .articles-grid,
+  .grid-card,
+  .article-card,
+  .hero,
+  .hero-inner,
+  figure.hero-image-wrap,
+  .support-box,
+  .older-section,
+  .related-section {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .support-box {
+    padding: 22px 20px;
+  }
+
+  .support-box-btn {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .footer-inner,
+  .footer-links {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
   }
 }
 
@@ -985,7 +1086,7 @@ footer {
   text-decoration: underline;
 }
 
-@media (max-width: 580px) {
+@media (max-width: 680px) {
   .older-cat {
     width: auto;
   }
@@ -1054,7 +1155,7 @@ footer {
   white-space: nowrap;
 }
 
-@media (max-width: 580px) {
+@media (max-width: 680px) {
   .related-date { display: none; }
 }
 
@@ -1073,9 +1174,178 @@ footer {
   display: block;
 }
 
-@media (max-width: 580px) {
+@media (max-width: 680px) {
   .article-ad-banner {
     margin-top: 14px;
     padding: 0 16px;
   }
+}
+
+
+/* =========================================================
+   PRODUCTION POLISH — navigation, hierarchy, spacing,
+   archive presentation, accessibility, and debug helpers.
+   ========================================================= */
+
+/* Stronger editorial hierarchy without changing TCT's visual identity. */
+.grid-card-headline,
+.card-headline {
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.hero-summary,
+.card-summary,
+.support-box-text span {
+  color: color-mix(in srgb, var(--text-secondary) 90%, var(--bg));
+}
+
+/* Make the horizontally scrollable category row easier to discover. */
+@media (max-width: 680px) {
+  .category-nav {
+    position: relative;
+    padding-right: 28px;
+  }
+
+  .category-nav:focus-within {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  /* Mobile cards should feel like distinct stories, not compressed columns. */
+  .grid-card-body {
+    padding: 21px 18px 25px;
+    gap: 10px;
+  }
+
+  .grid-card-headline {
+    font-size: 19px;
+    line-height: 1.32;
+  }
+
+  .article-card {
+    padding: 25px 18px 27px;
+  }
+
+  .card-headline {
+    font-size: 19px;
+    line-height: 1.34;
+    margin-bottom: 12px;
+  }
+
+  .card-summary {
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 17px;
+  }
+
+  .articles-grid {
+    gap: 0;
+    border-radius: 8px;
+  }
+
+  .grid-card + .grid-card,
+  .article-card + .article-card {
+    border-top: 1px solid var(--border);
+  }
+}
+
+/* Older Stories: more deliberate, newsroom-style archive presentation. */
+.older-section {
+  margin-top: 56px;
+}
+
+.older-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom-color: var(--accent);
+}
+
+.older-item {
+  transition: background 0.15s ease;
+}
+
+.older-item:hover {
+  background: var(--bg-secondary);
+}
+
+.older-link {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.older-headline {
+  font-family: "Fraunces", serif;
+  font-size: 16px;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+}
+
+.older-more {
+  padding-bottom: 2px;
+  border-bottom: 1px solid currentColor;
+}
+
+@media (max-width: 680px) {
+  .older-section {
+    margin-top: 44px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .older-title {
+    font-size: 22px;
+  }
+
+  .older-link {
+    gap: 8px 12px;
+    padding: 16px 4px;
+  }
+
+  .older-headline {
+    font-size: 17px;
+    line-height: 1.45;
+  }
+}
+
+/* Consistent keyboard focus for links, buttons, cards, and scrollers. */
+:where(
+  a,
+  button,
+  [tabindex]:not([tabindex="-1"]),
+  .grid-card,
+  .article-card,
+  .hero-link
+):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 72%, white);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.category-nav:focus-visible,
+.ticker-inner:focus-visible {
+  outline-offset: 2px;
+}
+
+/* Respect reduced-motion preferences. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/*
+  OVERFLOW DEBUG HELPER
+  Add class="debug-overflow" to <body> temporarily while testing.
+  Remove the class before production deployment.
+*/
+body.debug-overflow * {
+  outline: 1px solid rgba(220, 0, 0, 0.22) !important;
 }
