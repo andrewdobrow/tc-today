@@ -18,7 +18,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as
 
 # -- CONFIG --
 
-TCT_PRESENTATION_VERSION = "6.3.2-banner-slot-editorial-resources"
+TCT_PRESENTATION_VERSION = "6.4-unified-presentation-hotfix"
 
 CATEGORIES = {
     "local_gov": {
@@ -4162,23 +4162,28 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         )
 
     # Related stories — same category, most recent, excluding this article
-    related_html = ""
-    if related:
-        items = ""
-        for r in related[:5]:
-            items += f"""
+    items = ""
+    for r in (related or [])[:5]:
+        items += f"""
         <li class="related-item">
           <a href="/articles/{r['slug']}.html" class="related-link">
             <span class="related-headline">{r['headline']}</span>
             <span class="related-date">{r.get('date','')}</span>
           </a>
         </li>"""
-        if items:
-            related_html = f"""
+    if items:
+        related_html = f"""
       <section class="related-section">
         <h2 class="related-title">Related {category_label} Stories</h2>
         <ul class="related-list">{items}
         </ul>
+      </section>"""
+    else:
+        related_html = f"""
+      <section class="related-section related-section-fallback">
+        <h2 class="related-title">More Local News</h2>
+        <p class="related-empty">Browse the latest reporting from across the Treasure Coast.</p>
+        <a class="related-more-link" href="/?cat={category_key}">View {category_label} stories &rarr;</a>
       </section>"""
 
     _urgency_text = f"{category_label} {hero.get('headline','')}".strip().lower()
@@ -4224,6 +4229,9 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-side-rail .related-link {{ display: grid; gap: 6px; color: inherit; text-decoration: none; }}
     .article-side-rail .related-headline {{ font-weight: 700; line-height: 1.28; }}
     .article-side-rail .related-date {{ font-size: 11px; color: var(--text-muted); }}
+    .article-side-rail .related-empty {{ margin: 0 0 14px; color: var(--text-secondary); font-size: 14px; line-height: 1.55; }}
+    .article-side-rail .related-more-link {{ color: var(--accent); font-size: 13px; font-weight: 700; text-decoration: none; }}
+    .article-side-rail .related-more-link:hover {{ text-decoration: underline; }}
     .article-hero-image {{ margin: 0 0 34px; width: 100%; }}
     .article-hero-image img {{ width: 100%; aspect-ratio: 16 / 9; max-height: 560px; object-fit: cover; border-radius: 12px; display: block; }}
     .article-body p {{ font-size: 17px; line-height: 1.86; color: var(--text-secondary); margin-bottom: 22px; text-wrap: pretty; }}
@@ -4262,12 +4270,18 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
 
     @media (max-width: 900px) {{
       .article-wrap {{ padding: 34px 20px 72px; }}
-      .article-banner-slot {{ margin-bottom: 26px; border-radius: 10px; }}
-      .article-house-banner {{ grid-template-columns: auto minmax(0, 1fr); gap: 14px; padding: 18px; }}
-      .article-house-resource {{ grid-column: 1 / -1; width: 100%; max-width: none; min-width: 0; padding: 10px 12px; }}
+      .article-banner-slot {{ width: 100%; height: auto; min-height: 0; max-height: none; aspect-ratio: 970 / 250; margin-bottom: 26px; border-radius: 10px; }}
+      .article-house-banner {{ display: flex; align-items: center; grid-template-columns: none; gap: 0; min-height: 0; padding: 14px 18px; }}
+      .article-house-mark {{ display: none; }}
+      .article-house-copy {{ width: 100%; gap: 5px; }}
+      .article-house-label {{ font-size: 8px; padding: 2px 7px; }}
+      .article-house-headline {{ display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; font-size: clamp(17px, 5.3vw, 22px); line-height: 1.05; }}
       .article-house-text {{ display: none; }}
+      .article-house-resource {{ margin-left: auto; min-width: 0; max-width: 44%; padding: 9px 10px; }}
+      .article-house-resource span {{ display: none; }}
+      .article-house-resource strong {{ font-size: 10px; line-height: 1.25; }}
       .article-editorial-grid {{ grid-template-columns: 1fr; gap: 40px; }}
-      .article-side-rail {{ position: static; }}
+      .article-side-rail {{ position: static; display: grid; }}
       .article-headline {{ font-size: clamp(34px, 9vw, 54px); margin-bottom: 28px; }}
       .article-hero-image img {{ max-height: none; }}
     }}
@@ -6971,6 +6985,91 @@ def write_story_health_report(output_root, archive, current_run_redirects=None):
     )
     return report
 
+
+def _repair_article_shells(output_root):
+    """Repair missing banner/sidebar blocks on any article already using the v3 shell.
+
+    Older files can survive between runs because the archive intentionally preserves
+    permanent URLs. This pass makes the shell deterministic without rewriting article
+    copy. It only touches pages that already contain article-wrap/article-meta markup.
+    """
+    articles_dir = Path(output_root) / "articles"
+    if not articles_dir.exists():
+        return {"checked": 0, "repaired": 0, "legacy": 0}
+    checked = repaired = legacy = 0
+    ad_html = (
+        '<a href="/advertise.html" class="article-banner-slot article-ad-banner" '
+        'aria-label="Advertise with Treasure Coast Today">'
+        '<img src="/images/advertise-banner.png" '
+        'alt="Advertise with Treasure Coast Today. Reach Martin, St. Lucie and Indian River readers every day">'
+        '</a>'
+    )
+    fallback_sidebar = (
+        '<aside class="article-side-rail">'
+        '<section class="related-section related-section-fallback">'
+        '<h2 class="related-title">More Local News</h2>'
+        '<p class="related-empty">Browse the latest reporting from across the Treasure Coast.</p>'
+        '<a class="related-more-link" href="/archive.html">View the latest stories &rarr;</a>'
+        '</section></aside>'
+    )
+    for path in articles_dir.glob("*.html"):
+        html = path.read_text(encoding="utf-8", errors="ignore")
+        if 'http-equiv="refresh"' in html or 'window.location.replace' in html:
+            continue
+        checked += 1
+        if 'class="article-wrap"' not in html or 'class="article-meta"' not in html:
+            legacy += 1
+            continue
+        changed = False
+        if 'article-banner-slot' not in html:
+            html = html.replace('<div class="article-meta">', ad_html + '\n      <div class="article-meta">', 1)
+            changed = True
+        if 'class="article-editorial-grid"' in html:
+            if 'class="article-side-rail"' not in html:
+                # Insert the fallback before the editorial grid closes. The new renderer
+                # emits article-main-column first, followed by the side rail.
+                close_marker = '      </div>\n      <a href="/?cat='
+                if close_marker in html:
+                    html = html.replace(close_marker, fallback_sidebar + '\n      </div>\n      <a href="/?cat=', 1)
+                    changed = True
+        if changed:
+            path.write_text(html, encoding="utf-8")
+            repaired += 1
+    print(f"  Article shell repair: checked {checked}, repaired {repaired}, legacy-only {legacy}")
+    return {"checked": checked, "repaired": repaired, "legacy": legacy}
+
+
+def _validate_presentation_contract(output_root):
+    """Fail deployment when the homepage or newly rendered article shell regresses."""
+    root = Path(output_root)
+    failures = []
+    index_path = root / "index.html"
+    if not index_path.exists():
+        failures.append("index.html missing")
+    else:
+        index = index_path.read_text(encoding="utf-8", errors="ignore")
+        for token in ('hero-v3-link', 'hero-v3-media', 'hero-v3-content', 'latest-rail'):
+            if token not in index:
+                failures.append(f"homepage missing {token}")
+    for path in (root / "articles").glob("*.html") if (root / "articles").exists() else []:
+        html = path.read_text(encoding="utf-8", errors="ignore")
+        if 'http-equiv="refresh"' in html or 'window.location.replace' in html:
+            continue
+        if 'class="article-wrap"' not in html:
+            continue
+        for token in ('article-banner-slot', 'article-editorial-grid', 'article-side-rail'):
+            if token not in html:
+                failures.append(f"{path.name} missing {token}")
+                break
+    report = {"version": TCT_PRESENTATION_VERSION, "passed": not failures, "failures": failures[:100]}
+    data_dir = root / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    (data_dir / "presentation-contract.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    if failures:
+        raise RuntimeError("Presentation contract failed: " + "; ".join(failures[:8]))
+    print("  Presentation contract PASSED")
+
+
 def write_archives(all_categories, top_cat):
     articles_dir = OUTPUT_DIR / "articles"
     archive_path = OUTPUT_DIR / "archive.json"
@@ -7956,6 +8055,12 @@ def main():
     # Render and write homepage (now archive lookups resolve to real slugs)
     index_html = render_index(all_categories, top_cat)
     (OUTPUT_DIR / "index.html").write_text(index_html, encoding="utf-8")
+
+    # Normalize persistent article files, then stop the deployment if the unified
+    # presentation contract is not present. This prevents another apparently random
+    # mix of old and new article shells from reaching production.
+    _repair_article_shells(OUTPUT_DIR)
+    _validate_presentation_contract(OUTPUT_DIR)
 
     # data.json
     write_data_json(all_categories, top_cat)
