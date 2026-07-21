@@ -1,5 +1,5 @@
 """
-Treasure Coast Today - news generation pipeline
+Treasure Coast Today - news generation pipeline — Editorial Redesign v2
 Covers Martin, St. Lucie, and Indian River counties.
 Runs 4x/day via GitHub Actions.
 """
@@ -3461,6 +3461,58 @@ def render_index(all_categories, top_cat):
         ]
     )
 
+    # Editorial redesign modules: a compact latest-news rail and county panels.
+    latest_items_html = ""
+    for _latest in all_cards_display[:6]:
+        _url = card_permalink(_latest)
+        if not _url:
+            continue
+        _ltime = card_display_date(_latest)
+        _lcat = _latest.get("cat_label", "")
+        _lurgency_text = f"{_lcat} {_latest.get('headline','')}".strip().lower()
+        _lbadge = ""
+        if _latest.get("is_breaking") or _lurgency_text.startswith("breaking"):
+            _lbadge = '<span class="latest-status breaking">Breaking</span>'
+        elif _lurgency_text.startswith("developing"):
+            _lbadge = '<span class="latest-status developing">Developing</span>'
+        latest_items_html += f'''
+          <a class="latest-item" href="{_url}">
+            <div class="latest-item-top"><span class="latest-time">{_ltime}</span>{_lbadge}</div>
+            <h3>{_latest.get("headline", "")}</h3>
+            <span class="latest-county">{_lcat}</span>
+          </a>'''
+
+    county_panels_html = ""
+    for _county_key, _county_title, _county_sub in [
+        ("martin", "Martin County", "Stuart · Jensen Beach · Palm City · Hobe Sound"),
+        ("st_lucie", "St. Lucie County", "Port St. Lucie · Fort Pierce"),
+        ("indian_river", "Indian River County", "Vero Beach · Sebastian · Fellsmere"),
+    ]:
+        _county_cards = [c for c in all_cards_display if c.get("cat_key") == _county_key][:3]
+        if not _county_cards:
+            continue
+        _county_items = ""
+        for _cc in _county_cards:
+            _curl = card_permalink(_cc)
+            if not _curl:
+                continue
+            _cimg = _cc.get("image_url", "")
+            if not _cimg:
+                _cimg, _ = get_fallback_image(_county_key, _cc.get("headline", ""), sequential=True)
+            _county_items += f'''
+              <a class="county-panel-story" href="{_curl}">
+                <img src="{_cimg}" alt="" loading="lazy">
+                <span>{_cc.get("headline", "")}</span>
+              </a>'''
+        county_panels_html += f'''
+          <section class="county-panel county-{_county_key}">
+            <div class="county-panel-head">
+              <div><h2>{_county_title}</h2><p>{_county_sub}</p></div>
+              <a href="/?cat={_county_key}">View all →</a>
+            </div>
+            <div class="county-panel-list">{_county_items}</div>
+          </section>'''
+
     _head   = _page_head(
         "Treasure Coast Today | Local News for Martin, St. Lucie & Indian River County",
         "Local news for Florida's Treasure Coast. Breaking news, crime, government, "
@@ -3477,7 +3529,7 @@ def render_index(all_categories, top_cat):
   <header>
     <div class="header-inner">
       <div class="header-top">
-        <a href="/" class="wordmark">Treasure Coast Today</a>
+        <a href="/" class="wordmark" aria-label="Treasure Coast Today"><span class="wordmark-tct">TCT</span><span class="wordmark-divider"></span><span class="wordmark-full">TREASURE<br>COAST<br>TODAY</span></a>
       </div>
       <nav class="category-nav">
         {nav_buttons}
@@ -3489,11 +3541,26 @@ def render_index(all_categories, top_cat):
       </div>
     </div>
   </header>
-  <main>
-    {heroes_html}
-    <div class="articles-grid" id="articlesGrid">
-      {cards_html}
+  <div class="newsroom-strip">
+    <div class="newsroom-strip-inner">
+      <span>Treasure Coast news. Local focus. Real impact.</span>
+      <div class="newsroom-strip-actions"><a href="/weather.html">Local Weather</a><a href="/advertise.html">Support TCT</a></div>
     </div>
+  </div>
+  <main class="homepage-v2">
+    <div class="lead-layout">
+      <div class="lead-primary">{heroes_html}</div>
+      <aside class="latest-rail">
+        <div class="latest-rail-title"><span>◷</span><h2>Latest News</h2></div>
+        <div class="latest-list">{latest_items_html}</div>
+        <a class="latest-more" href="/archive.html">View all latest news →</a>
+      </aside>
+    </div>
+    <section class="top-stories-v2">
+      <div class="section-kicker"><span>☆</span><h2>Top Stories</h2></div>
+      <div class="articles-grid" id="articlesGrid">{cards_html}</div>
+    </section>
+    <div class="county-panels-grid">{county_panels_html}</div>
     {older_section}
   </main>
 {_footer}
@@ -5674,7 +5741,7 @@ def _page_header(active=""):
     return f"""  <header>
     <div class="header-inner">
       <div class="header-top">
-        <a href="/" class="wordmark">Treasure Coast Today</a>
+        <a href="/" class="wordmark" aria-label="Treasure Coast Today"><span class="wordmark-tct">TCT</span><span class="wordmark-divider"></span><span class="wordmark-full">TREASURE<br>COAST<br>TODAY</span></a>
       </div>
       <nav class="category-nav">
         {cat_link("Top News", "/", "news")}
@@ -5691,10 +5758,9 @@ def _page_header(active=""):
 
 def _page_footer():
     return """  <footer>
-    <div class="footer-inner">
-      <span class="footer-wordmark">Treasure Coast Today</span>
-      <span class="footer-tagline">Local news for Martin, St. Lucie &amp; Indian River counties.</span>
-      <div class="footer-links">
+    <div class="footer-inner footer-v2">
+      <div class="footer-brand"><span class="footer-wordmark">TCT</span><p>Independent, hyperlocal journalism for the Treasure Coast.</p></div>
+      <div class="footer-column"><strong>Quick Links</strong><div class="footer-links">
         <a href="/about.html">About</a>
         <a href="/author/andrew-dobrow.html">Author</a>
         <a href="/editorial-standards.html">Editorial Standards</a>
@@ -5705,8 +5771,11 @@ def _page_footer():
         <a href="/advertise.html">Advertise</a>
         <a href="/privacy.html">Privacy</a>
         <a href="/contact.html">Contact</a>
-      </div>
+      </div></div>
+      <div class="footer-column"><strong>Counties</strong><a href="/?cat=martin">Martin County</a><a href="/?cat=st_lucie">St. Lucie County</a><a href="/?cat=indian_river">Indian River County</a></div>
+      <div class="footer-column footer-connect"><strong>Stay Connected</strong><p>Join our local community for news, updates and discussion.</p><a class="footer-cta" href="/contact.html">Connect with TCT</a></div>
     </div>
+    <div class="footer-bottom">© 2026 Treasure Coast Today. All rights reserved.</div>
   </footer>
   <script src="/main.js"></script>"""
 
