@@ -3226,3 +3226,271 @@ main .article-wrap > .article-ad-banner {
     margin-bottom: 22px !important;
   }
 }
+
+/* ============================================================
+   TCT v4.3 final polish
+   Removes lead-row dead space and separates commercial/editorial banners.
+   ============================================================ */
+
+/* Desktop: remove Latest News from document flow so its taller content cannot
+   create a blank row beneath the fixed 2:1 hero. */
+@media (min-width: 901px) {
+  .lead-layout {
+    position: relative !important;
+    display: block !important;
+    min-height: 0 !important;
+  }
+
+  .lead-primary {
+    width: calc(100% - 380px) !important;
+    aspect-ratio: 2 / 1 !important;
+    display: block !important;
+  }
+
+  .lead-primary > .hero-v3,
+  .lead-primary > .hero-v3 > .hero-v3-link,
+  .hero-v3-link {
+    width: 100% !important;
+    height: 100% !important;
+    aspect-ratio: auto !important;
+  }
+
+  .latest-rail {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 352px !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .top-stories-v2 {
+    margin-top: 28px !important;
+  }
+}
+
+/* Commercial creative should display at its natural full width. The artwork
+   already contains its own rounded treatment, so no extra frame is added. */
+.article-wrap > .article-ad-banner,
+.article-ad-banner {
+  display: block !important;
+  width: min(100%, 970px) !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  margin: 0 auto 30px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+.article-ad-banner img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+}
+
+/* Editorial/resource cards keep the same reserved banner footprint, but use
+   an intentional TCT card rather than inheriting commercial-image rules. */
+.article-wrap > .article-house-banner,
+.article-house-banner {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: clamp(16px, 3vw, 32px) !important;
+  width: min(100%, 970px) !important;
+  aspect-ratio: 970 / 250 !important;
+  min-height: 0 !important;
+  max-height: 250px !important;
+  margin: 0 auto 30px !important;
+  padding: clamp(20px, 3vw, 34px) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--border) !important;
+  border-top: 4px solid var(--accent) !important;
+  border-radius: 12px !important;
+  background: linear-gradient(115deg, #f8fbfa 0%, #fff 68%) !important;
+  box-shadow: 0 8px 26px rgba(9, 15, 15, .05) !important;
+}
+
+.article-house-mark {
+  display: grid !important;
+  width: clamp(54px, 7vw, 78px) !important;
+  aspect-ratio: 1 !important;
+  place-items: center !important;
+  border-radius: 50% !important;
+  background: var(--accent) !important;
+  color: #fff !important;
+  font-family: "Fraunces", Georgia, serif !important;
+  font-size: clamp(18px, 2.4vw, 25px) !important;
+  font-weight: 700 !important;
+}
+
+.article-house-copy {
+  display: grid !important;
+  min-width: 0 !important;
+  gap: 5px !important;
+}
+
+.article-house-label {
+  display: inline-block !important;
+  width: fit-content !important;
+  padding: 3px 8px !important;
+  border-radius: 999px !important;
+  background: rgba(10, 112, 117, .10) !important;
+  color: var(--accent) !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: .11em !important;
+  line-height: 1.4 !important;
+  text-transform: uppercase !important;
+}
+
+.article-house-headline {
+  display: block !important;
+  color: var(--text) !important;
+  font-family: "Fraunces", Georgia, serif !important;
+  font-size: clamp(19px, 2.4vw, 29px) !important;
+  line-height: 1.12 !important;
+  letter-spacing: -.025em !important;
+}
+
+.article-house-text {
+  display: block !important;
+  max-width: 650px !important;
+  color: var(--text-secondary) !important;
+  font-size: clamp(11px, 1.3vw, 14px) !important;
+  line-height: 1.45 !important;
+}
+
+@media (max-width: 900px) {
+  .lead-layout {
+    position: static !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .lead-primary {
+    width: 100% !important;
+    aspect-ratio: auto !important;
+  }
+
+  .latest-rail {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 560px !important;
+  }
+
+  .article-wrap > .article-house-banner,
+  .article-house-banner {
+    display: flex !important;
+    aspect-ratio: auto !important;
+    min-height: 104px !important;
+    max-height: 132px !important;
+    padding: 14px 18px !important;
+    gap: 0 !important;
+  }
+
+  .article-house-mark {
+    display: none !important;
+  }
+
+  .article-house-headline {
+    display: -webkit-box !important;
+    overflow: hidden !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    font-size: clamp(16px, 5vw, 21px) !important;
+  }
+
+  .article-house-text {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   TCT v4.4 — desktop Latest News rail restored beside hero
+   The rail remains visible, matches the hero height, and scrolls internally.
+   Top Stories begins immediately beneath the hero card.
+   ============================================================ */
+@media (min-width: 901px) {
+  .lead-layout {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    min-height: 0 !important;
+  }
+
+  .lead-primary {
+    display: block !important;
+    width: calc(100% - 380px) !important;
+    aspect-ratio: 2 / 1 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+  }
+
+  .lead-primary > .hero-v3,
+  .lead-primary > .hero-v3 > .hero-v3-link,
+  .hero-v3-link {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+  }
+
+  .latest-rail {
+    position: absolute !important;
+    display: flex !important;
+    flex-direction: column !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 352px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .latest-rail-title {
+    flex: 0 0 auto !important;
+  }
+
+  .latest-list {
+    display: block !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    scrollbar-width: thin !important;
+  }
+
+  .latest-more {
+    display: block !important;
+    flex: 0 0 auto !important;
+    background: #fff !important;
+    border-top: 1px solid #eceeea !important;
+  }
+
+  .top-stories-v2,
+  .top-stories,
+  .story-grid-section {
+    clear: both !important;
+    margin-top: 28px !important;
+  }
+}
