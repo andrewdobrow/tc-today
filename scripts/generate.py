@@ -4449,13 +4449,16 @@ def _known_event_key(text):
     # "arrested", and "worst hoarding case". Require several independent signals
     # so unrelated cat or animal-control stories never collide with it.
     has_place = ("stuart" in words or ("martin" in words and "county" in words))
-    has_cats = ("cat" in words or "cats" in words)
+    has_animals = bool(words & {"animal", "animals", "cat", "cats"})
     has_case = any(w in words for w in ("hoarding", "hoarder", "hoard"))
     has_action = any(w in words for w in ("rescue", "rescued", "remove", "removed",
-                                            "deputies", "arrested", "arrest"))
-    has_scale = ("80" in words or "eighty" in words)
-    if has_place and has_cats and has_case and has_action and has_scale:
-        return "2026-07-stuart-martin-80-cats-hoarding"
+                                            "deputies", "arrested", "arrest", "found",
+                                            "response", "seized"))
+    # Early official coverage said more than 70 animals; later reporting specified
+    # about 80 cats. Those are count refinements, not separate events.
+    has_scale = bool(words & {"70", "seventy", "80", "eighty"})
+    if has_place and has_animals and has_case and has_action and has_scale:
+        return "2026-07-stuart-martin-animal-hoarding"
 
     return ""
 
@@ -5006,10 +5009,11 @@ def _story_match_confidence(a, b):
 
 
 def _story_entities(item):
-    """Extract lightweight, explainable entities for clustering and timelines.
+    """Extract conservative entities for internal clustering and timelines.
 
-    This intentionally avoids another model call. It captures known Treasure Coast
-    places/agencies plus headline-style proper-name phrases and meaningful numbers.
+    V6.1 deliberately avoids treating title-cased headline fragments as people.
+    Person names are captured only in strong name contexts; known places and
+    agencies remain deterministic and explainable.
     """
     text = _story_text(item)
     headline = item.get("headline", "") or ""
@@ -5037,18 +5041,19 @@ def _story_entities(item):
     result = {"people": [], "organizations": [], "locations": [], "numbers": []}
     for group, mapping in known.items():
         result[group] = [name for name, rx in mapping.items() if re.search(rx, lower, re.I)]
-    # Headline proper-name phrases. Filter sentence-openers and generic newsroom words.
-    stop = {"Florida", "Treasure Coast", "Martin County", "St. Lucie County", "Indian River County",
-            "Port St. Lucie", "Fort Pierce", "Vero Beach", "Stuart", "County", "City", "Police",
-            "Sheriff", "Deputies", "Officials", "Family", "Woman", "Man"}
-    phrases = re.findall(r"\b(?:[A-Z][a-z'’-]+(?:\s+|$)){2,4}", headline)
-    for phrase in phrases:
-        phrase = phrase.strip()
-        if phrase and phrase not in stop and not any(phrase in vals for vals in result.values() if isinstance(vals, list)):
-            result["people"].append(phrase)
-    result["people"] = list(dict.fromkeys(result["people"]))[:10]
-    result["organizations"] = list(dict.fromkeys(result["organizations"]))[:10]
-    result["locations"] = list(dict.fromkeys(result["locations"]))[:10]
+
+    # Only accept names in explicit contexts, avoiding phrases such as
+    # “Downtown Fort Pierce” or “Animals Found Stuart Home.”
+    person_patterns = [
+        r"\b(?:Sheriff|Chief|Mayor|Commissioner|Judge|Dr[.]?|Officer|Deputy)\s+([A-Z][a-z'’-]+\s+[A-Z][a-z'’-]+)\b",
+        r"\b(?:identified as|named|according to)\s+([A-Z][a-z'’-]+\s+[A-Z][a-z'’-]+)\b",
+    ]
+    for rx in person_patterns:
+        for name in re.findall(rx, text):
+            if name not in result["locations"] and name not in result["organizations"]:
+                result["people"].append(name)
+    for key in ("people", "organizations", "locations"):
+        result[key] = list(dict.fromkeys(result[key]))[:10]
     result["numbers"] = sorted(_audit_numbers(headline))[:10]
     return result
 
@@ -5160,7 +5165,7 @@ def _persist_story_decision_logs(data_dir, decisions, run_id):
         if not key or key in processed:
             continue
         record = dict(decision)
-        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v6"})
+        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v6.1"})
         new_records.append(record)
         processed[key] = {"run_id": run_id, "decision": decision.get("decision", ""), "slug": decision.get("slug", "")}
     if new_records:
@@ -5190,6 +5195,7 @@ def _persist_story_decision_logs(data_dir, decisions, run_id):
         "updated_at": run_id,
         "report_type": "actual_guarded_suppressions_only",
         "minimum_confidence": AUTO_SUPPRESSION_CONFIDENCE,
+        "suppressions_this_run": len(actual_new_suppressions),
         "retained_suppressions": len(suppressions),
         "suppressions": suppressions,
     }, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -5397,12 +5403,12 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
 
     data_dir = out_root / "data"; data_dir.mkdir(parents=True, exist_ok=True)
     run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"
-    registry = {"schema_version": 6, "mode": EVENT_PIPELINE_MODE, "generated_at": run_id,
-        "non_destructive": True, "engine": "story-centric-newsroom-v6", "article_count": len(items),
+    registry = {"schema_version": 6.1, "mode": EVENT_PIPELINE_MODE, "generated_at": run_id,
+        "non_destructive": True, "engine": "story-centric-newsroom-v6.1", "article_count": len(items),
         "story_count": len(stories), "clustering_threshold": STORY_CLUSTERING_CONFIDENCE,
         "live_action_threshold": AUTO_SUPPRESSION_CONFIDENCE, "stories": stories}
-    shadow = {"schema_version": 6, "mode": EVENT_PIPELINE_MODE, "non_destructive": True,
-        "engine": "story-centric-newsroom-v6", "generated_at": run_id,
+    shadow = {"schema_version": 6.1, "mode": EVENT_PIPELINE_MODE, "non_destructive": True,
+        "engine": "story-centric-newsroom-v6.1", "generated_at": run_id,
         "summary": {"articles_analyzed": len(items), "stories_identified": len(stories),
             "would_publish_new_story": summary_counts["WOULD_PUBLISH_NEW_STORY"],
             "would_publish_major_update": summary_counts["WOULD_PUBLISH_MAJOR_UPDATE"],
@@ -5412,12 +5418,12 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
             "clustered_85_89": bands["85-89"], "clustered_90_94": bands["90-94"],
             "eligible_95_plus": bands["95-100"]},
         "clustering_links": clustering_links, "decisions": decisions,
-        "notice": "V6 groups same-story matches at 85%+, but guarded live suppression remains limited to safe same-stage non-custom matches at 95%+. GROUPED_NO_ACTION requires no human review."}
+        "notice": "V6.1 groups same-story matches at 85%+, but guarded live suppression remains limited to safe same-stage non-custom matches at 95%+. GROUPED_NO_ACTION requires no human review."}
     (data_dir / "stories.json").write_text(json.dumps(registry, indent=2, ensure_ascii=False), encoding="utf-8")
     (data_dir / "story-shadow-log.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
     appended = _persist_story_decision_logs(data_dir, decisions, run_id)
     (data_dir / "event-audit.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  Story-centric newsroom v6: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
+    print(f"  Story-centric newsroom v6.1: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
     print(f"  Group-only: {summary_counts['GROUPED_NO_ACTION']}; eligible suppressions: {summary_counts['WOULD_SUPPRESS_DUPLICATE']}; major updates: {summary_counts['WOULD_PUBLISH_MAJOR_UPDATE']}")
     return shadow
 
@@ -6360,6 +6366,113 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
 
 
 
+
+def enforce_canonical_redirects(archive, articles_dir, output_root, current_run_redirects=None):
+    """Apply every canonical redirect after all article pages have been generated.
+
+    This is the production-critical enforcement pass. Earlier versions wrote a
+    redirect page before article generation, allowing the later permalink loop to
+    overwrite it with the duplicate article. V6.1 always runs last, removes redirect
+    sources from archive-driven surfaces, and verifies the final HTML contents.
+    """
+    output_root = Path(output_root)
+    articles_dir = Path(articles_dir)
+    data_dir = output_root / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    manifest_path = data_dir / "canonical-redirects.json"
+    payload = _read_json_file(manifest_path, {"redirects": []})
+    merged = {r.get("source_slug"): r for r in payload.get("redirects", []) if r.get("source_slug")}
+    for record in current_run_redirects or []:
+        if record.get("source_slug"):
+            merged[record["source_slug"]] = record
+    records = list(merged.values())[-CANONICAL_REDIRECT_LIMIT:]
+
+    source_slugs = {r["source_slug"] for r in records if r.get("source_slug")}
+    cleaned = [e for e in (archive or []) if e.get("slug") not in source_slugs]
+    verification = []
+    for record in records:
+        source = record.get("source_slug", "")
+        target = record.get("target_slug", "")
+        if not source or not target or source == target:
+            continue
+        path = articles_dir / f"{source}.html"
+        html = _render_canonical_redirect_page(source, target, record.get("target_headline", ""))
+        path.write_text(html, encoding="utf-8")
+        rendered = path.read_text(encoding="utf-8")
+        verification.append({
+            "source_slug": source,
+            "target_slug": target,
+            "file_exists": path.exists(),
+            "contains_target": _redirect_target_path(target) in rendered,
+            "contains_noindex": 'noindex,follow' in rendered,
+            "contains_replace": 'window.location.replace' in rendered,
+            "passed": path.exists() and _redirect_target_path(target) in rendered
+                      and 'noindex,follow' in rendered and 'window.location.replace' in rendered,
+        })
+
+    run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    manifest_path.write_text(json.dumps({
+        "schema_version": 2,
+        "updated_at": run_id,
+        "redirect_count": len(records),
+        "redirects": records,
+        "verification": verification,
+        "all_redirect_pages_verified": all(v["passed"] for v in verification) if verification else True,
+    }, indent=2, ensure_ascii=False), encoding="utf-8")
+    rules = [f"/articles/{r['source_slug']}.html /articles/{r['target_slug']}.html 301!"
+             for r in records if r.get("source_slug") and r.get("target_slug")]
+    (output_root / "_redirects").write_text("\n".join(rules) + ("\n" if rules else ""), encoding="utf-8")
+    return cleaned, verification
+
+
+def write_story_regression_report(output_root, archive, redirect_verification):
+    """Fail-safe regression report for production-gating known editorial cases."""
+    output_root = Path(output_root)
+    data_dir = output_root / "data"
+    stories_payload = _read_json_file(data_dir / "stories.json", {"stories": []})
+    stories = stories_payload.get("stories", [])
+    manifest = _read_json_file(data_dir / "canonical-redirects.json", {"redirects": []})
+    redirects = manifest.get("redirects", [])
+    hoarding_key = "2026-07-stuart-martin-animal-hoarding"
+    hoarding_stories = []
+    for story in stories:
+        members = story.get("articles", []) or []
+        if any(_known_event_key(" ".join([m.get("headline", ""), m.get("teaser", "")])) == hoarding_key for m in members):
+            hoarding_stories.append(story)
+    hoarding_redirects = [r for r in redirects if "hoarding" in (r.get("reason", "") + " " + r.get("source_headline", "")).lower()
+                          or r.get("source_slug") in {
+        "2026-07-21-stuart-woman-arrested-after-deputies-rescue-about-80-cats-from-home-in-worst-hoa",
+        "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-hoarding-case-sh",
+    }]
+    expected_sources = {
+        "2026-07-21-stuart-woman-arrested-after-deputies-rescue-about-80-cats-from-home-in-worst-hoa",
+        "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-hoarding-case-sh",
+    }
+    redirect_sources = {r.get("source_slug") for r in hoarding_redirects}
+    archive_slugs = {e.get("slug") for e in archive or []}
+    checks = {
+        "hoarding_is_one_story": len(hoarding_stories) == 1,
+        "hoarding_canonical_is_custom": len(hoarding_stories) == 1 and bool(hoarding_stories[0].get("canonical_is_custom")),
+        "both_known_duplicate_redirects_exist": expected_sources <= redirect_sources,
+        "redirect_sources_removed_from_archive": not bool(expected_sources & archive_slugs),
+        "all_redirect_html_verified": all(v.get("passed") for v in redirect_verification) if redirect_verification else False,
+    }
+    report = {
+        "schema_version": 1,
+        "engine_version": "story-centric-newsroom-v6.1",
+        "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "production_gate_passed": all(checks.values()),
+        "checks": checks,
+        "hoarding_story_ids": [s.get("story_id") for s in hoarding_stories],
+        "hoarding_redirect_sources": sorted(redirect_sources),
+    }
+    (data_dir / "story-regression-report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if not report["production_gate_passed"]:
+        print("  WARNING: Story regression production gate FAILED; inspect data/story-regression-report.json")
+    else:
+        print("  Story regression production gate PASSED")
+    return report
+
 def write_story_health_report(output_root, archive, current_run_redirects=None):
     """Write a compact operational health snapshot for the Story Engine.
 
@@ -6440,7 +6553,7 @@ def write_story_health_report(output_root, archive, current_run_redirects=None):
 
     report = {
         "schema_version": 2,
-        "engine_version": "story-centric-newsroom-v6",
+        "engine_version": "story-centric-newsroom-v6.1",
         "generated_at": run_id,
         "active_window_days": 7,
         "stories": {
@@ -6465,6 +6578,7 @@ def write_story_health_report(output_root, archive, current_run_redirects=None):
         "actions": {
             "redirects_created_this_run": len(current_run_redirects),
             "redirects_cumulative": len(redirects),
+            "actual_guarded_suppressions_this_run": int(suppression.get("suppressions_this_run", 0) or 0),
             "actual_guarded_suppressions_retained": len(suppressions),
             "custom_overrides_last_shadow_run": custom_overrides,
             "major_updates_last_shadow_run": major_updates,
@@ -6753,7 +6867,14 @@ def write_archives(all_categories, top_cat):
             })
             new_count += 1
 
+    # FINAL production enforcement: article generation above may have recreated a
+    # known duplicate permalink. Reapply all cumulative redirects now, then build
+    # archive/RSS/sitemaps only from the cleaned archive.
+    archive, _redirect_verification = enforce_canonical_redirects(
+        archive, articles_dir, OUTPUT_DIR, current_run_redirects=_canonical_redirects
+    )
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
+    write_story_regression_report(OUTPUT_DIR, archive, _redirect_verification)
     write_story_health_report(OUTPUT_DIR, archive, current_run_redirects=_canonical_redirects)
     (OUTPUT_DIR / "archive.html").write_text(render_archive_page(archive), encoding="utf-8")
     (OUTPUT_DIR / "sitemap.xml").write_text(update_sitemap(archive), encoding="utf-8")
