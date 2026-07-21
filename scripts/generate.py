@@ -4273,16 +4273,16 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
       .article-wrap {{ padding: 34px 20px 72px; }}
       .article-banner-slot {{ width: 100%; height: auto; min-height: 0; max-height: none; margin-bottom: 22px; }}
       .article-ad-banner {{ aspect-ratio: auto; overflow: visible; border-radius: 0; }}
-      .article-house-banner {{ aspect-ratio: 970 / 250; max-height: none; border-radius: 10px; overflow: hidden; }}
-      .article-house-banner {{ display: flex; align-items: center; grid-template-columns: none; gap: 0; min-height: 0; padding: 14px 18px; }}
+      .article-house-banner {{ aspect-ratio: auto; max-height: none; border-radius: 10px; overflow: visible; }}
+      .article-house-banner {{ display: block; grid-template-columns: none; min-height: 0; padding: 16px 17px 17px; }}
       .article-house-mark {{ display: none; }}
-      .article-house-copy {{ width: 100%; gap: 5px; }}
-      .article-house-label {{ font-size: 8px; padding: 2px 7px; }}
-      .article-house-headline {{ display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; font-size: clamp(17px, 5.3vw, 22px); line-height: 1.05; }}
-      .article-house-text {{ display: none; }}
-      .article-house-resource {{ margin-left: auto; min-width: 0; max-width: 44%; padding: 9px 10px; }}
-      .article-house-resource span {{ display: none; }}
-      .article-house-resource strong {{ font-size: 10px; line-height: 1.25; }}
+      .article-house-copy {{ display: block; width: 100%; gap: 0; }}
+      .article-house-label {{ display: inline-block; margin: 0 0 8px; font-size: 8px; padding: 2px 7px; }}
+      .article-house-headline {{ display: block; margin: 0 0 7px; overflow: visible; -webkit-box-orient: initial; -webkit-line-clamp: unset; line-clamp: unset; font-size: clamp(17px, 4.8vw, 21px); line-height: 1.1; text-wrap: wrap; white-space: normal; text-overflow: clip; }}
+      .article-house-text {{ display: block; margin: 0; max-width: none; font-size: clamp(11px, 3.1vw, 13px); line-height: 1.4; }}
+      .article-house-resource {{ display: block; margin: 11px 0 0; min-width: 0; max-width: none; padding: 9px 10px; }}
+      .article-house-resource span {{ display: block; }}
+      .article-house-resource strong {{ display: block; font-size: 10px; line-height: 1.3; }}
       .article-editorial-grid {{ grid-template-columns: 1fr; gap: 40px; }}
       .article-side-rail {{ position: static; display: grid; }}
       .article-headline {{ font-size: clamp(34px, 9vw, 54px); margin-bottom: 28px; }}
@@ -7150,7 +7150,7 @@ def _repair_article_shells(output_root):
 .article-house-headline{display:block!important;color:#0b1210!important;font-family:Georgia,serif!important;font-size:clamp(19px,2.4vw,29px)!important;line-height:1.12!important}
 .article-house-text{display:block!important;max-width:650px!important;color:#5f6863!important;font-size:clamp(11px,1.3vw,14px)!important;line-height:1.45!important}
 .article-house-resource{display:grid!important;min-width:205px!important;max-width:260px!important;padding:13px 15px!important;border:1px solid rgba(8,112,117,.22)!important;border-radius:10px!important;background:rgba(255,255,255,.82)!important;color:#0b1210!important;text-decoration:none!important}
-@media(max-width:800px){.article-wrap>.article-banner-slot{margin-bottom:22px!important}.article-wrap>.article-house-banner{display:flex!important;aspect-ratio:auto!important;min-height:104px!important;max-height:132px!important;padding:14px 18px!important;gap:0!important}.article-house-mark{display:none!important}.article-house-copy{gap:4px!important}.article-house-headline{font-size:clamp(16px,5vw,21px)!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}.article-house-text{display:none!important}.article-house-resource{margin-left:12px!important;min-width:0!important;max-width:42%!important;padding:8px 9px!important}}
+@media(max-width:800px){.article-wrap>.article-banner-slot{margin-bottom:22px!important}.article-wrap>.article-house-banner{display:block!important;aspect-ratio:auto!important;min-height:0!important;max-height:none!important;height:auto!important;padding:16px 17px 17px!important;overflow:visible!important}.article-house-mark{display:none!important}.article-house-copy{display:block!important;width:100%!important;gap:0!important}.article-house-label{display:inline-block!important;margin:0 0 8px!important}.article-house-headline{display:block!important;margin:0 0 7px!important;font-size:clamp(17px,4.8vw,21px)!important;line-height:1.1!important;-webkit-line-clamp:unset!important;line-clamp:unset!important;-webkit-box-orient:initial!important;overflow:visible!important;white-space:normal!important;text-overflow:clip!important;text-wrap:wrap!important}.article-house-text{display:block!important;margin:0!important;max-width:none!important;font-size:clamp(11px,3.1vw,13px)!important;line-height:1.4!important}.article-house-resource{display:block!important;margin:11px 0 0!important;min-width:0!important;max-width:none!important;padding:9px 10px!important}}
 </style>
 """
 
@@ -7167,7 +7167,13 @@ def _repair_article_shells(output_root):
         headline = _extract(r'<h1[^>]*>(.*?)</h1>', html)
         category = _extract(r'class="article-category"[^>]*>(.*?)</', html)
         body_excerpt = _extract(r'class="article-body"[^>]*>(.*?)</div>', html)
-        if 'id="tct-banner-critical"' not in html:
+        critical_style_pattern = r'<style\s+id=["\']tct-banner-critical["\'][^>]*>.*?</style>'
+        if re.search(critical_style_pattern, html, re.I | re.S):
+            updated_html = re.sub(critical_style_pattern, critical_banner_css.strip(), html, count=1, flags=re.I | re.S)
+            if updated_html != html:
+                html = updated_html
+                changed = True
+        else:
             html = html.replace('</head>', critical_banner_css + '\n</head>', 1)
             changed = True
 
