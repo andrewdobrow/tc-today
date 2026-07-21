@@ -3335,12 +3335,15 @@ def render_index(all_categories, top_cat):
         return None
 
     support_card = """
-      <a href="/advertise.html" class="grid-card support-grid-card" data-cat="all" data-support-card="true">
-        <div class="support-card-inner">
-          <span class="support-card-eyebrow">Local Business?</span>
-          <h2 class="support-card-headline">Put your business in front of Treasure Coast locals.</h2>
-          <p class="support-card-text">We cover Martin, St. Lucie &amp; Indian River counties with no paywall, so every reader sees your ad. Reach local customers for less than the cost of a single newspaper spot.</p>
-          <span class="support-card-cta">Start advertising &rarr;</span>
+      <a href="/advertise.html" class="grid-card tct-advertise-card" data-cat="all" data-support-card="true" aria-label="Advertise with Treasure Coast Today">
+        <div class="tct-advertise-card-inner">
+          <span class="tct-advertise-kicker">Grow your local business</span>
+          <h2 class="tct-advertise-headline">Reach readers across the Treasure Coast.</h2>
+          <p class="tct-advertise-copy">Connect with customers in Martin, St. Lucie and Indian River counties through banner ads, sponsored articles, business spotlights and social media promotion.</p>
+          <span class="tct-advertise-options" aria-hidden="true">
+            <span>Banner ads</span><span>Featured articles</span><span>Social promotion</span>
+          </span>
+          <span class="tct-advertise-cta">Explore advertising options <b>&rarr;</b></span>
         </div>
       </a>"""
 
