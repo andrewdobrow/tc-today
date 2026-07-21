@@ -1,5 +1,5 @@
 """
-Treasure Coast Today - news generation pipeline — Editorial Redesign v2
+Treasure Coast Today - news generation pipeline — Editorial Redesign v3 — Structural Layout Fix
 Covers Martin, St. Lucie, and Indian River counties.
 Runs 4x/day via GitHub Actions.
 """
@@ -3199,16 +3199,18 @@ def render_index(all_categories, top_cat):
         _urgency_text = f"{cat_label} {hero.get('headline','')}".strip().lower()
         urgency_cls = " live" if _urgency_text.startswith("live") else (" developing" if _urgency_text.startswith("developing") else (" breaking" if hero.get("is_breaking") or _urgency_text.startswith("breaking") else ""))
         return f"""
-    <section class="hero{fade}" data-cat-hero="{cat_key}"{display}>
+    <section class="hero hero-v3{fade}" data-cat-hero="{cat_key}"{display}>
       {section_label}
-      <a class="hero-inner hero-link" href="{article_url}" style="text-decoration:none;color:inherit;display:block">
-        {img_html}
-        <span class="tag{urgency_cls}">{cat_label}</span>
-        <h1>{hero["headline"]}</h1>
-        <p class="hero-summary">{preview}...</p>
-        <div class="hero-foot">
-          <span class="meta">{pub_time}</span>
-          <span class="hero-readmore">Read full story &rarr;</span>
+      <a class="hero-v3-link" href="{article_url}" aria-label="Read: {hero['headline']}">
+        <div class="hero-v3-media">{img_html}</div>
+        <div class="hero-v3-content">
+          <span class="tag hero-v3-tag{urgency_cls}">{cat_label}</span>
+          <h1 class="hero-v3-headline">{hero["headline"]}</h1>
+          <p class="hero-summary hero-v3-summary">{preview}...</p>
+          <div class="hero-foot hero-v3-foot">
+            <span class="meta">{pub_time}</span>
+            <span class="hero-readmore">Read full story &rarr;</span>
+          </div>
         </div>
       </a>
     </section>"""
@@ -3523,6 +3525,93 @@ def render_index(all_categories, top_cat):
     )
     _footer = _page_footer()
 
+    _live_masthead_script = r'''
+  <script>
+  (() => {
+    const timeEl = document.getElementById('tct-live-time');
+    const weatherEl = document.getElementById('tct-live-weather');
+    const iconEl = document.getElementById('tct-weather-icon');
+    const tempEl = document.getElementById('tct-weather-temp');
+    const conditionEl = document.getElementById('tct-weather-condition');
+
+    function updateTreasureCoastClock() {
+      if (!timeEl) return;
+      const now = new Date();
+      const datePart = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        weekday: 'short', month: 'short', day: 'numeric'
+      }).format(now);
+      const timePart = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        hour: 'numeric', minute: '2-digit', hour12: true,
+        timeZoneName: 'short'
+      }).format(now);
+      timeEl.textContent = `${datePart} · ${timePart}`;
+      timeEl.dateTime = now.toISOString();
+    }
+
+    const weatherCodes = {
+      0: ['☀', 'Clear'],
+      1: ['🌤', 'Mostly clear'],
+      2: ['⛅', 'Partly cloudy'],
+      3: ['☁', 'Cloudy'],
+      45: ['🌫', 'Fog'], 48: ['🌫', 'Fog'],
+      51: ['🌦', 'Light drizzle'], 53: ['🌦', 'Drizzle'], 55: ['🌧', 'Heavy drizzle'],
+      56: ['🌧', 'Freezing drizzle'], 57: ['🌧', 'Freezing drizzle'],
+      61: ['🌦', 'Light rain'], 63: ['🌧', 'Rain'], 65: ['🌧', 'Heavy rain'],
+      66: ['🌧', 'Freezing rain'], 67: ['🌧', 'Freezing rain'],
+      71: ['🌨', 'Light snow'], 73: ['🌨', 'Snow'], 75: ['❄', 'Heavy snow'], 77: ['🌨', 'Snow grains'],
+      80: ['🌦', 'Rain showers'], 81: ['🌧', 'Rain showers'], 82: ['⛈', 'Heavy showers'],
+      85: ['🌨', 'Snow showers'], 86: ['🌨', 'Snow showers'],
+      95: ['⛈', 'Thunderstorms'], 96: ['⛈', 'Storms with hail'], 99: ['⛈', 'Storms with hail']
+    };
+
+    function paintWeather(data) {
+      if (!data || typeof data.temperature !== 'number') return;
+      const [icon, label] = weatherCodes[data.code] || ['◌', 'Local weather'];
+      iconEl.textContent = icon;
+      tempEl.textContent = `${Math.round(data.temperature)}°`;
+      conditionEl.textContent = label;
+      weatherEl.title = `Treasure Coast: ${Math.round(data.temperature)}°F, ${label}`;
+    }
+
+    async function updateTreasureCoastWeather() {
+      if (!weatherEl) return;
+      const cacheKey = 'tct-weather-v1';
+      const maxAge = 20 * 60 * 1000;
+      try {
+        const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null');
+        if (cached && Date.now() - cached.savedAt < maxAge) {
+          paintWeather(cached);
+          return;
+        }
+      } catch (_) {}
+
+      try {
+        const url = 'https://api.open-meteo.com/v1/forecast?latitude=27.1975&longitude=-80.2528&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=America%2FNew_York';
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`Weather request failed: ${response.status}`);
+        const result = await response.json();
+        const data = {
+          temperature: result.current && result.current.temperature_2m,
+          code: result.current && result.current.weather_code,
+          savedAt: Date.now()
+        };
+        paintWeather(data);
+        try { localStorage.setItem(cacheKey, JSON.stringify(data)); } catch (_) {}
+      } catch (_) {
+        conditionEl.textContent = 'Local weather';
+      }
+    }
+
+    updateTreasureCoastClock();
+    window.setInterval(updateTreasureCoastClock, 30000);
+    updateTreasureCoastWeather();
+    window.setInterval(updateTreasureCoastWeather, 20 * 60 * 1000);
+  })();
+  </script>
+    '''
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3546,8 +3635,15 @@ def render_index(all_categories, top_cat):
   </header>
   <div class="newsroom-strip">
     <div class="newsroom-strip-inner">
-      <span>Local news for Martin, St. Lucie &amp; Indian River counties</span>
-      <div class="newsroom-strip-actions"><a href="/weather.html">Local Weather</a><a href="/advertise.html">Support TCT</a></div>
+      <span class="newsroom-local-label">Local news for Martin, St. Lucie &amp; Indian River counties</span>
+      <div class="newsroom-live-tools" aria-label="Current Treasure Coast time and weather">
+        <time id="tct-live-time" class="newsroom-live-time" datetime=""></time>
+        <a id="tct-live-weather" class="newsroom-live-weather" href="/weather.html" aria-label="View local weather">
+          <span id="tct-weather-icon" class="newsroom-weather-icon" aria-hidden="true">◌</span>
+          <span id="tct-weather-temp">--°</span>
+          <span id="tct-weather-condition">Local weather</span>
+        </a>
+      </div>
     </div>
   </div>
   <main class="homepage-v2">
@@ -3567,6 +3663,7 @@ def render_index(all_categories, top_cat):
     {older_section}
   </main>
 {_footer}
+{_live_masthead_script}
 </body>
 </html>"""
 
@@ -4042,7 +4139,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
 <head>
 {head}
   <style>
-    .article-wrap {{ max-width: 760px; margin: 0 auto; padding: 34px 24px 88px; position: relative; }}
+    .article-wrap {{ max-width: 1180px; margin: 0 auto; padding: 52px 28px 96px; position: relative; }}
     .article-meta {{ display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }}
     .article-category {{ font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }}
     .article-date {{ font-size: 11px; color: var(--text-muted); }}
@@ -4051,9 +4148,22 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-byline a:hover {{ text-decoration: underline; }}
     .article-times {{ display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }}
     .article-published {{ font-size: 12px; color: var(--text-muted); }}
-    .article-headline {{ font-family: "Fraunces", serif; font-size: clamp(30px, 4.4vw, 48px); font-weight: 600; line-height: 1.1; letter-spacing: -.03em; color: var(--text); margin-bottom: 28px; text-wrap: balance; }}
-    .article-hero-image {{ margin: 0 0 34px; }}
-    .article-hero-image img {{ width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px; display: block; }}
+    .article-headline {{ max-width: 920px; font-family: "Fraunces", serif; font-size: clamp(38px, 5vw, 68px); font-weight: 600; line-height: 1.02; letter-spacing: -.045em; color: var(--text); margin: 0 0 38px; text-wrap: balance; overflow-wrap: anywhere; }}
+    .article-editorial-grid {{ display: grid; grid-template-columns: minmax(0, 760px) minmax(260px, 320px); gap: clamp(42px, 6vw, 82px); align-items: start; }}
+    .article-main-column {{ min-width: 0; }}
+    .article-side-rail {{ min-width: 0; position: sticky; top: 118px; display: grid; gap: 24px; }}
+    .article-side-rail .related-section {{ margin: 0; padding: 24px; border: 1px solid var(--border); border-top: 4px solid var(--accent); border-radius: 10px; background: var(--surface); }}
+    .article-side-rail .related-title {{ margin: 0 0 16px; font-family: "Fraunces", serif; font-size: 22px; line-height: 1.15; }}
+    .article-side-rail .related-list {{ list-style: none; padding: 0; margin: 0; }}
+    .article-side-rail .related-item {{ padding: 14px 0; border-top: 1px solid var(--border); }}
+    .article-side-rail .related-item:first-child {{ border-top: 0; padding-top: 0; }}
+    .article-side-rail .related-link {{ display: grid; gap: 6px; color: inherit; text-decoration: none; }}
+    .article-side-rail .related-headline {{ font-weight: 700; line-height: 1.28; }}
+    .article-side-rail .related-date {{ font-size: 11px; color: var(--text-muted); }}
+    .article-side-rail .article-ad-banner {{ display: block; margin: 0; }}
+    .article-side-rail .article-ad-banner img {{ width: 100%; height: auto; display: block; border-radius: 10px; }}
+    .article-hero-image {{ margin: 0 0 34px; width: 100%; }}
+    .article-hero-image img {{ width: 100%; aspect-ratio: 16 / 9; max-height: 560px; object-fit: cover; border-radius: 12px; display: block; }}
     .article-body p {{ font-size: 17px; line-height: 1.86; color: var(--text-secondary); margin-bottom: 22px; text-wrap: pretty; }}
     .article-body blockquote {{ margin: 34px 0; padding: 4px 0 4px 24px; border-left: 4px solid var(--accent); font-family: "Fraunces", serif; font-size: 22px; line-height: 1.5; color: var(--text); }}
     .article-reading-progress {{ position: fixed; top: 0; left: 0; z-index: 10000; width: 0; height: 3px; background: var(--accent); pointer-events: none; transition: width 70ms linear; }}
@@ -4087,12 +4197,32 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-more {{ font-family: "Fraunces", serif; font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 16px; }}
     .article-more-link {{ display: inline-block; color: var(--accent); font-size: 14px; font-weight: 500; text-decoration: none; }}
     .article-more-link:hover {{ opacity: .7; }}
+
+    @media (max-width: 900px) {{
+      .article-wrap {{ padding: 34px 20px 72px; }}
+      .article-editorial-grid {{ grid-template-columns: 1fr; gap: 40px; }}
+      .article-side-rail {{ position: static; }}
+      .article-headline {{ font-size: clamp(34px, 9vw, 54px); margin-bottom: 28px; }}
+      .article-hero-image img {{ max-height: none; }}
+    }}
   </style>
 </head>
 <body>
   <div class="article-reading-progress" aria-hidden="true"></div>
 {header}
-{ad_banner}
+  <div class="newsroom-strip">
+    <div class="newsroom-strip-inner">
+      <span class="newsroom-local-label">Local news for Martin, St. Lucie &amp; Indian River counties</span>
+      <div class="newsroom-live-tools" aria-label="Current Treasure Coast time and weather">
+        <time id="tct-live-time" class="newsroom-live-time" datetime=""></time>
+        <a id="tct-live-weather" class="newsroom-live-weather" href="/weather.html" aria-label="View local weather">
+          <span id="tct-weather-icon" class="newsroom-weather-icon" aria-hidden="true">◌</span>
+          <span id="tct-weather-temp">--°</span>
+          <span id="tct-weather-condition">Local weather</span>
+        </a>
+      </div>
+    </div>
+  </div>
   <main>
     <div class="article-wrap">
       <div class="article-meta">
@@ -4133,7 +4263,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
           <p class="article-more">More local news</p>
           <a href="/?cat={category_key}" class="article-more-link">More {category_label} &rarr;</a>
         </div>
-        <aside class="article-side-rail">{related_html}</aside>
+        <aside class="article-side-rail">{related_html}{ad_banner}</aside>
       </div>
     </div>
   </main>
@@ -4164,6 +4294,28 @@ function tctCopyLink(btn) {{
     setTimeout(function() {{ btn.innerHTML = orig; }}, 1500);
   }}).catch(function(){{}});
 }}
+</script>
+
+<script>
+(() => {{
+  const timeEl = document.getElementById('tct-live-time');
+  const weatherEl = document.getElementById('tct-live-weather');
+  const iconEl = document.getElementById('tct-weather-icon');
+  const tempEl = document.getElementById('tct-weather-temp');
+  const conditionEl = document.getElementById('tct-weather-condition');
+  function updateClock() {{
+    if (!timeEl) return;
+    const now = new Date();
+    const datePart = new Intl.DateTimeFormat('en-US', {{timeZone:'America/New_York',weekday:'short',month:'short',day:'numeric'}}).format(now);
+    const timePart = new Intl.DateTimeFormat('en-US', {{timeZone:'America/New_York',hour:'numeric',minute:'2-digit',hour12:true,timeZoneName:'short'}}).format(now);
+    timeEl.textContent = `${{datePart}} · ${{timePart}}`;
+    timeEl.dateTime = now.toISOString();
+  }}
+  const codes={{0:['☀','Clear'],1:['🌤','Mostly clear'],2:['⛅','Partly cloudy'],3:['☁','Cloudy'],45:['🌫','Fog'],48:['🌫','Fog'],51:['🌦','Light drizzle'],53:['🌦','Drizzle'],55:['🌧','Heavy drizzle'],61:['🌦','Light rain'],63:['🌧','Rain'],65:['🌧','Heavy rain'],80:['🌦','Rain showers'],81:['🌧','Rain showers'],82:['⛈','Heavy showers'],95:['⛈','Thunderstorms'],96:['⛈','Storms with hail'],99:['⛈','Storms with hail']}};
+  function paint(d){{if(!d||typeof d.temperature!=='number')return;const [i,l]=codes[d.code]||['◌','Local weather'];iconEl.textContent=i;tempEl.textContent=`${{Math.round(d.temperature)}}°`;conditionEl.textContent=l;weatherEl.title=`Treasure Coast: ${{Math.round(d.temperature)}}°F, ${{l}}`;}}
+  async function updateWeather(){{if(!weatherEl)return;const key='tct-weather-v1',age=20*60*1000;try{{const c=JSON.parse(localStorage.getItem(key)||'null');if(c&&Date.now()-c.savedAt<age){{paint(c);return;}}}}catch(_){{}}try{{const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=27.1975&longitude=-80.2528&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=America%2FNew_York',{{cache:'no-store'}});if(!r.ok)throw new Error();const j=await r.json();const d={{temperature:j.current&&j.current.temperature_2m,code:j.current&&j.current.weather_code,savedAt:Date.now()}};paint(d);try{{localStorage.setItem(key,JSON.stringify(d));}}catch(_){{}}}}catch(_){{if(conditionEl)conditionEl.textContent='Local weather';}}}}
+  updateClock();setInterval(updateClock,30000);updateWeather();setInterval(updateWeather,20*60*1000);
+}})();
 </script>
 </body>
 </html>"""
