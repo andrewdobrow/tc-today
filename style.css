@@ -2530,3 +2530,194 @@ footer { background:linear-gradient(90deg,#103f2b,#174f37); color:#fff; margin-t
   }
   #tct-weather-condition { display: none; }
 }
+
+
+/* ============================================================
+   TCT Editorial Redesign v3.1
+   Square editorial hero + strict height containment
+   ============================================================ */
+
+/* The lead row is sized by the square media panel, not by headline length. */
+.lead-layout {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 352px) !important;
+  gap: 28px !important;
+  align-items: stretch !important;
+}
+
+.lead-primary,
+.lead-primary > .hero-v3,
+.hero-v3-link {
+  min-height: 0 !important;
+}
+
+.hero-v3-link {
+  grid-template-columns: minmax(0, 1fr) minmax(330px, .64fr) !important;
+  align-items: stretch !important;
+}
+
+/* A true square. Remove every earlier min-height that made the card excessively tall. */
+.hero-v3-media {
+  min-height: 0 !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1 !important;
+}
+
+.hero-v3-media .hero-image-wrap {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+}
+
+.hero-v3-media img,
+.hero-v3-media .hero-image {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* The content column is contained within the square panel's height. */
+.hero-v3-content {
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  justify-content: flex-start !important;
+  padding: clamp(30px, 3.2vw, 48px) !important;
+}
+
+.hero-v3 .hero-v3-tag {
+  margin-bottom: 16px !important;
+}
+
+.hero-v3 .hero-v3-headline {
+  flex: 0 1 auto;
+  margin-bottom: 18px !important;
+  font-size: clamp(34px, 3.15vw, 56px) !important;
+  line-height: .98 !important;
+  letter-spacing: -.042em !important;
+  text-wrap: balance;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+}
+
+.hero-v3 .hero-v3-summary {
+  display: -webkit-box !important;
+  flex: 0 1 auto;
+  margin-bottom: 18px !important;
+  overflow: hidden !important;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  font-size: clamp(14px, 1.05vw, 17px) !important;
+  line-height: 1.55 !important;
+}
+
+.hero-v3 .hero-v3-foot {
+  flex: 0 0 auto;
+  margin-top: auto !important;
+  padding-top: 16px !important;
+}
+
+/* The Latest News rail exactly follows the hero row height. */
+.latest-rail {
+  min-height: 0 !important;
+  height: 100% !important;
+  max-height: none !important;
+  display: flex !important;
+  flex-direction: column;
+  overflow: hidden !important;
+}
+
+.latest-list {
+  min-height: 0 !important;
+  flex: 1 1 auto;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}
+
+/* Keep article ad assets confined to the right rail under the unified template. */
+.article-side-rail > .article-ad-banner {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+.article-side-rail > .article-ad-banner img {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+}
+
+/* Defensive rule: no legacy article banner may sit above the article metadata. */
+.article-wrap > .article-ad-banner,
+main > .article-ad-banner,
+body > .article-ad-banner {
+  display: none !important;
+}
+
+@media (max-width: 1180px) {
+  .lead-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 320px) !important;
+    gap: 22px !important;
+  }
+
+  .hero-v3-link {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, .7fr) !important;
+  }
+
+  .hero-v3 .hero-v3-headline {
+    font-size: clamp(31px, 3.6vw, 48px) !important;
+  }
+
+  .hero-v3 .hero-v3-summary {
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+  }
+}
+
+@media (max-width: 900px) {
+  .lead-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-v3-link {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-v3-media {
+    aspect-ratio: 16 / 10 !important;
+  }
+
+  .hero-v3-content {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .hero-v3 .hero-v3-summary {
+    display: block !important;
+    overflow: visible !important;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+
+  .latest-rail {
+    height: auto !important;
+    max-height: 560px !important;
+  }
+}
+
+/* v3.2 article banner slot is rendered by the article template.
+   These defensive rules prevent legacy ad styles from changing its footprint. */
+.article-wrap > .article-banner-slot {
+  width: min(100%, 970px);
+  aspect-ratio: 970 / 250;
+  max-height: 250px;
+  margin-left: auto;
+  margin-right: auto;
+}
