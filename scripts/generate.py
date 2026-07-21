@@ -3196,12 +3196,14 @@ def render_index(all_categories, top_cat):
             label_cls = "county-section-label" if cat_key in COUNTY_KEYS else "topic-section-label"
             section_label = f'<div class="{label_cls}"><h2 class="county-label-text">{seo_text}</h2></div>'
         hl_escaped = hero["headline"].replace('"', "&quot;")
+        _urgency_text = f"{cat_label} {hero.get('headline','')}".strip().lower()
+        urgency_cls = " live" if _urgency_text.startswith("live") else (" developing" if _urgency_text.startswith("developing") else (" breaking" if hero.get("is_breaking") or _urgency_text.startswith("breaking") else ""))
         return f"""
     <section class="hero{fade}" data-cat-hero="{cat_key}"{display}>
       {section_label}
       <a class="hero-inner hero-link" href="{article_url}" style="text-decoration:none;color:inherit;display:block">
         {img_html}
-        <span class="tag">{cat_label}</span>
+        <span class="tag{urgency_cls}">{cat_label}</span>
         <h1>{hero["headline"]}</h1>
         <p class="hero-summary">{preview}...</p>
         <div class="hero-foot">
@@ -3380,13 +3382,15 @@ def render_index(all_categories, top_cat):
                 fb_img, _ = get_fallback_image("top_news", card.get("headline", ""), sequential=True)
             img_url = fb_img or f"{SITE_URL}/images/fallback/local_gov-1.jpg"
         topnews_attr = ' data-topnews="true"' if id(card) in topnews_ids else ""
+        _urgency_text = f"{cl} {card.get('headline','')}".strip().lower()
+        urgency_cls = " live" if _urgency_text.startswith("live") else (" developing" if _urgency_text.startswith("developing") else (" breaking" if card.get("is_breaking") or _urgency_text.startswith("breaking") else ""))
         cards_html += f"""
       <a href="{permalink}" class="grid-card fade-in" data-cat="{ck}"{topnews_attr}>
         <div class="grid-card-image-wrap">
           <img class="grid-card-image" src="{img_url}" alt="" loading="lazy">
         </div>
         <div class="grid-card-body">
-          <span class="grid-card-tag">{cl}</span>
+          <span class="grid-card-tag{urgency_cls}">{cl}</span>
           <h2 class="grid-card-headline">{card["headline"]}</h2>
           <span class="grid-card-time">{card_time}</span>
         </div>
@@ -3960,12 +3964,15 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         </ul>
       </section>"""
 
+    _urgency_text = f"{category_label} {hero.get('headline','')}".strip().lower()
+    urgency_cls = " live" if _urgency_text.startswith("live") else (" developing" if _urgency_text.startswith("developing") else (" breaking" if hero.get("is_breaking") or _urgency_text.startswith("breaking") else ""))
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 {head}
   <style>
-    .article-wrap {{ max-width: 740px; margin: 0 auto; padding: 20px 24px 80px; }}
+    .article-wrap {{ max-width: 760px; margin: 0 auto; padding: 34px 24px 88px; position: relative; }}
     .article-meta {{ display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }}
     .article-category {{ font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }}
     .article-date {{ font-size: 11px; color: var(--text-muted); }}
@@ -3974,10 +3981,12 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-byline a:hover {{ text-decoration: underline; }}
     .article-times {{ display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }}
     .article-published {{ font-size: 12px; color: var(--text-muted); }}
-    .article-headline {{ font-family: "Fraunces", serif; font-size: clamp(26px, 4vw, 42px); font-weight: 600; line-height: 1.15; letter-spacing: -.02em; color: var(--text); margin-bottom: 24px; }}
-    .article-hero-image {{ margin: 0 0 28px; }}
+    .article-headline {{ font-family: "Fraunces", serif; font-size: clamp(30px, 4.4vw, 48px); font-weight: 600; line-height: 1.1; letter-spacing: -.03em; color: var(--text); margin-bottom: 28px; text-wrap: balance; }}
+    .article-hero-image {{ margin: 0 0 34px; }}
     .article-hero-image img {{ width: 100%; max-height: 420px; object-fit: cover; border-radius: 10px; display: block; }}
-    .article-body p {{ font-size: 17px; line-height: 1.8; color: var(--text-secondary); margin-bottom: 20px; }}
+    .article-body p {{ font-size: 17px; line-height: 1.86; color: var(--text-secondary); margin-bottom: 22px; text-wrap: pretty; }}
+    .article-body blockquote {{ margin: 34px 0; padding: 4px 0 4px 24px; border-left: 4px solid var(--accent); font-family: "Fraunces", serif; font-size: 22px; line-height: 1.5; color: var(--text); }}
+    .article-reading-progress {{ position: fixed; top: 0; left: 0; z-index: 10000; width: 0; height: 3px; background: var(--accent); pointer-events: none; transition: width 70ms linear; }}
     .article-body .article-section {{ font-family: "Fraunces", serif; font-size: 24px; font-weight: 600; color: var(--text); margin: 36px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }}
     .article-body .article-subhead {{ font-size: 18px; font-weight: 700; color: var(--text); margin: 26px 0 8px; }}
     .article-body strong {{ color: var(--text); font-weight: 700; }}
@@ -4011,12 +4020,13 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
   </style>
 </head>
 <body>
+  <div class="article-reading-progress" aria-hidden="true"></div>
 {header}
 {ad_banner}
   <main>
     <div class="article-wrap">
       <div class="article-meta">
-        <span class="article-category">{category_label}</span>
+        <span class="article-category{urgency_cls}">{category_label}</span>
         <span class="article-byline">By <a href="/author/andrew-dobrow.html" rel="author">Andrew Dobrow</a></span>
       </div>
       <div class="article-times">
@@ -4055,6 +4065,18 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
   </main>
 {footer}
 <script>
+function tctUpdateReadingProgress() {{
+  const bar = document.querySelector('.article-reading-progress');
+  if (!bar) return;
+  const root = document.documentElement;
+  const max = root.scrollHeight - root.clientHeight;
+  const pct = max > 0 ? Math.min(100, Math.max(0, (root.scrollTop / max) * 100)) : 0;
+  bar.style.width = pct + '%';
+}}
+window.addEventListener('scroll', tctUpdateReadingProgress, {{ passive: true }});
+window.addEventListener('resize', tctUpdateReadingProgress);
+tctUpdateReadingProgress();
+
 function tctShare() {{
   const data = {{ title: document.title, text: {headline_js}, url: window.location.href }};
   if (navigator.share) {{ navigator.share(data).catch(function(){{}}); }}
@@ -5586,6 +5608,42 @@ def _page_head(title, description, canonical_path="", structured_data=None, imag
   <meta name="google-adsense-account" content="ca-pub-9679836198092378">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/style.css">
+  <style id="tct-mobile-overflow-fix">
+    html, body {{ width: 100%; max-width: 100%; overflow-x: clip; }}
+    *, *::before, *::after {{ box-sizing: border-box; }}
+    img, video, iframe, svg, canvas, table {{ max-width: 100%; }}
+    img, video, svg, canvas {{ height: auto; }}
+    main, header, footer, section, article, aside, nav, div {{ min-width: 0; }}
+    p, h1, h2, h3, h4, a, span, li {{ overflow-wrap: anywhere; word-break: normal; }}
+    @media (max-width: 700px) {{
+      body {{ margin: 0; width: 100%; }}
+      .header-inner, .header-top, .header-actions, .category-nav,
+      .page-wrap, .site-wrap, .content-wrap, .main-wrap, .article-wrap,
+      .archive-wrap, .author-wrap, .policy-wrap, .about-wrap, .adv-wrap,
+      .hero, .hero-grid, .section-grid, .news-grid, .cards-grid, .card-grid,
+      .content-grid, .latest-grid, .story-grid, .footer-inner {{
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+      }}
+      .hero-grid, .section-grid, .news-grid, .cards-grid, .card-grid,
+      .content-grid, .latest-grid, .story-grid, .adv-row, .adv-stats {{
+        grid-template-columns: minmax(0, 1fr) !important;
+      }}
+      .header-inner, .header-top, .header-actions, .category-nav,
+      .hero, .card, .story-card, .article-card {{
+        flex-wrap: wrap;
+      }}
+      .category-nav {{
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+        scrollbar-width: none;
+      }}
+      .category-nav::-webkit-scrollbar {{ display: none; }}
+      pre, code {{ max-width: 100%; white-space: pre-wrap; overflow-wrap: anywhere; }}
+      table {{ display: block; overflow-x: auto; }}
+    }}
+  </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 {schema}
