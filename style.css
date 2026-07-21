@@ -1768,3 +1768,310 @@ footer { background:linear-gradient(90deg,#103f2b,#174f37); color:#fff; margin-t
   .footer-v2 { grid-template-columns:1fr; }
   .wordmark-full { font-size:8px; }
 }
+
+/* ==========================================================
+   TCT EDITORIAL REDESIGN V2.1 — layout corrections
+   ========================================================== */
+
+/* 1. SEO-useful masthead strip without sacrificing readability. */
+.newsroom-strip-inner > span {
+  text-transform: none;
+  letter-spacing: .01em;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* 2. Keep the lead module compact, balanced and visually complete. */
+@media (min-width: 1051px) {
+  .lead-layout {
+    align-items: stretch;
+  }
+
+  .lead-primary,
+  .lead-primary .hero,
+  .lead-primary .hero-inner {
+    height: 100%;
+  }
+
+  .lead-primary .hero-inner {
+    grid-template-columns: minmax(430px, 48%) minmax(0, 1fr);
+    min-height: 520px;
+  }
+
+  .lead-primary .hero-image-wrap {
+    aspect-ratio: 1 / 1;
+    min-height: 520px;
+  }
+
+  .lead-primary .hero-image {
+    min-height: 520px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+
+  .latest-rail {
+    height: 100%;
+  }
+
+  .latest-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .latest-item {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding-top: 13px;
+    padding-bottom: 13px;
+  }
+
+  .top-stories-v2 {
+    margin-top: 24px;
+  }
+}
+
+/* 3. Keep the entire desktop navigation on one line. */
+@media (min-width: 761px) {
+  .header-inner {
+    max-width: 1680px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    column-gap: 16px;
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .category-nav {
+    flex-wrap: nowrap !important;
+    justify-content: center;
+    align-content: initial;
+    gap: 2px 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    white-space: nowrap;
+  }
+
+  .category-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cat-btn {
+    flex: 0 0 auto;
+    padding-left: 3px;
+    padding-right: 3px;
+    font-size: clamp(10px, .72vw, 12px);
+  }
+}
+
+/* 4. Mobile header: logo/action row plus a single horizontal category scroller. */
+@media (max-width: 760px) {
+  .header-inner {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "brand actions"
+      "nav nav";
+    row-gap: 8px;
+    column-gap: 10px;
+    padding: 9px 12px 7px;
+  }
+
+  .header-top {
+    grid-area: brand;
+    width: auto !important;
+  }
+
+  .header-actions {
+    grid-area: actions;
+    width: auto !important;
+  }
+
+  .category-nav {
+    grid-area: nav;
+    display: flex !important;
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 1px 5px;
+    mask-image: linear-gradient(to right, #000 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, #000 92%, transparent 100%);
+  }
+
+  .category-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-nav .cat-btn {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+    scroll-snap-align: start;
+    padding: 7px 8px;
+    font-size: 12px;
+  }
+
+  .support-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+}
+
+/* 5. Article pages: mockup-style main column with a compact related rail. */
+.article-wrap {
+  max-width: 1080px !important;
+  padding-top: 30px !important;
+}
+
+.article-headline {
+  max-width: 900px;
+  font-size: clamp(38px, 4.4vw, 58px) !important;
+  line-height: 1.04 !important;
+  margin-bottom: 24px !important;
+}
+
+.article-editorial-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 760px) minmax(230px, 280px);
+  gap: 32px;
+  align-items: start;
+}
+
+.article-main-column {
+  min-width: 0;
+}
+
+.article-hero-image {
+  width: 100%;
+  margin: 0 0 28px !important;
+}
+
+.article-hero-image img {
+  width: 100% !important;
+  max-width: 760px !important;
+  height: auto !important;
+  max-height: 470px !important;
+  object-fit: cover !important;
+  border-radius: 8px !important;
+}
+
+.article-body,
+.article-share,
+.article-more,
+.article-more-link,
+.article-divider {
+  max-width: 680px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.article-body p {
+  font-size: 17px !important;
+  line-height: 1.78 !important;
+}
+
+.article-side-rail {
+  position: sticky;
+  top: 112px;
+}
+
+.article-side-rail:empty {
+  display: none;
+}
+
+.article-side-rail .related-section {
+  max-width: none;
+  margin: 0;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.article-side-rail .related-title {
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.article-side-rail .related-link {
+  display: block;
+  padding: 13px 0;
+}
+
+.article-side-rail .related-headline {
+  display: block;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+.article-side-rail .related-date {
+  display: block;
+  margin-top: 5px;
+  font-size: 10px;
+}
+
+@media (max-width: 900px) {
+  .article-wrap {
+    max-width: 780px !important;
+  }
+
+  .article-editorial-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .article-side-rail {
+    position: static;
+  }
+
+  .article-side-rail .related-section {
+    max-width: 680px;
+    margin: 34px auto 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .newsroom-strip-inner > span {
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lead-primary .hero-image-wrap,
+  .lead-primary .hero-image {
+    aspect-ratio: 4 / 3;
+    min-height: 0;
+    height: auto;
+    max-height: none;
+  }
+
+  .article-wrap {
+    padding: 24px 15px 64px !important;
+  }
+
+  .article-headline {
+    font-size: clamp(30px, 9vw, 40px) !important;
+  }
+
+  .article-hero-image img {
+    max-height: 360px !important;
+  }
+
+  .article-body p {
+    font-size: 16px !important;
+    line-height: 1.72 !important;
+  }
+}
