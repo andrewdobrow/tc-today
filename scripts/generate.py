@@ -5085,7 +5085,7 @@ def _persist_story_decision_logs(data_dir, decisions, run_id):
         if not key or key in processed:
             continue
         record = dict(decision)
-        record.update({"run_id": run_id, "engine_version": "persistent-story-stage-guarded-v5.1"})
+        record.update({"run_id": run_id, "engine_version": "persistent-story-stage-canonical-v5.2"})
         new_records.append(record)
         processed[key] = {"run_id": run_id, "decision": decision.get("decision", ""), "slug": decision.get("slug", "")}
     if new_records:
@@ -5336,7 +5336,7 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
         "mode": EVENT_PIPELINE_MODE,
         "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
         "non_destructive": True,
-        "engine": "persistent-story-stage-guarded-v5.1",
+        "engine": "persistent-story-stage-canonical-v5.2",
         "article_count": len(items),
         "story_count": len(stories),
         "stories": stories,
@@ -5345,7 +5345,7 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
         "schema_version": 5,
         "mode": EVENT_PIPELINE_MODE,
         "non_destructive": True,
-        "engine": "persistent-story-stage-guarded-v5.1",
+        "engine": "persistent-story-stage-canonical-v5.2",
         "summary": {
             "articles_analyzed": len(items),
             "stories_identified": len(stories),
@@ -5366,7 +5366,7 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
     appended = _persist_story_decision_logs(data_dir, decisions, run_id)
     # Keep the familiar audit filename as a small pointer for existing workflow artifacts.
     (data_dir / "event-audit.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  Story engine guarded v5.1: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
+    print(f"  Story engine canonical v5.2: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
     print(f"  Shadow decisions: {summary_counts['WOULD_SUPPRESS_DUPLICATE']} suppress, {summary_counts['WOULD_PUBLISH_MAJOR_UPDATE']} major update, {summary_counts['WOULD_PUBLISH_CUSTOM_OVERRIDE']} custom override, {summary_counts['WOULD_REVIEW']} review")
     print("  Story engine is NON-DESTRUCTIVE; publication output was not changed")
     return shadow
@@ -6152,6 +6152,291 @@ def confirm_same_story(new_headline, new_teaser, existing_entry):
         return False
 
 
+CANONICAL_CLEANUP_CONFIDENCE = 95
+CANONICAL_REDIRECT_LIMIT = 5000
+
+
+def _redirect_target_path(slug):
+    return f"/articles/{slug}.html"
+
+
+def _render_canonical_redirect_page(source_slug, target_slug, target_headline=""):
+    """Static-host-safe redirect fallback."""
+    target_path = _redirect_target_path(target_slug)
+    target_url = f"{SITE_URL}{target_path}"
+    safe_title = re.sub(r"[<>]", "", target_headline or "Article moved")
+    return f'''<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{safe_title} | {SITE_NAME}</title>
+  <link rel="canonical" href="{target_url}">
+  <meta name="robots" content="noindex,follow">
+  <meta http-equiv="refresh" content="0; url={target_url}">
+  <script>window.location.replace({json.dumps(target_url)});</script>
+</head>
+<body>
+  <p>This article has moved to <a href="{target_url}">{safe_title}</a>.</p>
+</body>
+</html>'''
+
+
+def _canonical_candidate_score(entry):
+    return (
+        1 if entry.get("is_custom") or entry.get("authoritative_custom") else 0,
+        int(entry.get("article_word_count", 0) or 0),
+        entry.get("lastmod") or entry.get("date") or "",
+    )
+
+
+def _strict_custom_duplicate_pair(candidate, canonical):
+    if not candidate or not canonical or candidate.get("slug") == canonical.get("slug"):
+        return False, 0
+    if candidate.get("is_custom") or candidate.get("authoritative_custom"):
+        return False, 0
+    if not (canonical.get("is_custom") or canonical.get("authoritative_custom")):
+        return False, 0
+    a = _event_audit_item(candidate, "archive")
+    b = _event_audit_item(canonical, "archive")
+    if _is_significant_story_update(a, b) or _is_significant_story_update(b, a):
+        return False, 0
+    if not _same_story_topic(a, b):
+        return False, 0
+    confidence = _story_match_confidence(a, b)
+    known_a = _known_event_key(_story_text(a))
+    known_b = _known_event_key(_story_text(b))
+    if known_a and known_a == known_b:
+        confidence = max(confidence, 99)
+    return confidence >= CANONICAL_CLEANUP_CONFIDENCE, confidence
+
+
+def apply_canonical_story_cleanup(archive, articles_dir, output_root):
+    """Consolidate proven feed duplicates into authoritative custom articles."""
+    archive = list(archive or [])
+    customs = [e for e in archive if e.get("slug") and
+               (e.get("is_custom") or e.get("authoritative_custom"))]
+    redirects = []
+    removed_slugs = set()
+
+    for candidate in archive:
+        if not candidate.get("slug") or candidate.get("slug") in removed_slugs:
+            continue
+        best = None
+        best_confidence = 0
+        for canonical in customs:
+            ok, confidence = _strict_custom_duplicate_pair(candidate, canonical)
+            if ok and (confidence, _canonical_candidate_score(canonical)) > (best_confidence, _canonical_candidate_score(best or {})):
+                best = canonical
+                best_confidence = confidence
+        if not best:
+            continue
+        removed_slugs.add(candidate["slug"])
+        redirects.append({
+            "source_slug": candidate["slug"],
+            "source_headline": candidate.get("headline", ""),
+            "target_slug": best["slug"],
+            "target_headline": best.get("headline", ""),
+            "story_stage": _story_stage(_story_text(_event_audit_item(candidate, "archive"))),
+            "match_confidence": best_confidence,
+            "canonical_is_custom": True,
+            "reason": "High-confidence duplicate consolidated into authoritative custom coverage.",
+        })
+
+    known_animal_sources = {
+        "2026-07-21-stuart-woman-arrested-after-deputies-rescue-about-80-cats-from-home-in-worst-hoa",
+        "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-hoarding-case-sh",
+    }
+    animal_customs = [e for e in customs if re.search(r"\b(80|eighty)\b", _story_text(_event_audit_item(e, "archive")), re.I)
+                      and re.search(r"\bcat", _story_text(_event_audit_item(e, "archive")), re.I)
+                      and re.search(r"\bhoard", _story_text(_event_audit_item(e, "archive")), re.I)]
+    if animal_customs:
+        canonical = max(animal_customs, key=_canonical_candidate_score)
+        existing_sources = {r["source_slug"] for r in redirects}
+        for source_slug in sorted(known_animal_sources - existing_sources):
+            if source_slug == canonical.get("slug"):
+                continue
+            redirects.append({
+                "source_slug": source_slug,
+                "source_headline": "Previously published animal-hoarding duplicate",
+                "target_slug": canonical["slug"],
+                "target_headline": canonical.get("headline", ""),
+                "story_stage": "canonical-migration",
+                "match_confidence": 100,
+                "canonical_is_custom": True,
+                "reason": "Migration of a known duplicate previously removed by an older cleanup block.",
+            })
+            removed_slugs.add(source_slug)
+
+    cleaned = [e for e in archive if e.get("slug") not in removed_slugs]
+    if not redirects:
+        return cleaned, []
+
+    for record in redirects:
+        redirect_file = articles_dir / f"{record['source_slug']}.html"
+        redirect_file.write_text(
+            _render_canonical_redirect_page(record["source_slug"], record["target_slug"], record["target_headline"]),
+            encoding="utf-8",
+        )
+
+    data_dir = output_root / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    manifest_path = data_dir / "canonical-redirects.json"
+    old_manifest = _read_json_file(manifest_path, {"redirects": []})
+    merged = {r.get("source_slug"): r for r in old_manifest.get("redirects", []) if r.get("source_slug")}
+    for r in redirects:
+        merged[r["source_slug"]] = r
+    merged_records = list(merged.values())[-CANONICAL_REDIRECT_LIMIT:]
+    run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    manifest_path.write_text(json.dumps({
+        "schema_version": 1,
+        "updated_at": run_id,
+        "redirect_count": len(merged_records),
+        "redirects": merged_records,
+    }, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    log_path = data_dir / "canonical-cleanup-history.jsonl"
+    with log_path.open("a", encoding="utf-8") as fh:
+        for r in redirects:
+            fh.write(json.dumps({**r, "run_id": run_id, "action_taken": True}, ensure_ascii=False) + "\n")
+
+    redirect_rules = [
+        f"/articles/{r['source_slug']}.html /articles/{r['target_slug']}.html 301!"
+        for r in merged_records
+    ]
+    (output_root / "_redirects").write_text("\n".join(redirect_rules) + "\n", encoding="utf-8")
+    print(f"  Canonical Story Manager redirected {len(redirects)} duplicate URL(s) to custom canonical coverage")
+    return cleaned, redirects
+
+
+
+def write_story_health_report(output_root, archive, current_run_redirects=None):
+    """Write a compact operational health snapshot for the Story Engine.
+
+    The report intentionally separates cumulative totals from actions taken in the
+    current run so a quiet healthy run is not confused with a failed run.
+    """
+    output_root = Path(output_root)
+    data_dir = output_root / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"
+
+    stories_payload = _read_json_file(data_dir / "stories.json", {"stories": []})
+    stories = stories_payload.get("stories", []) if isinstance(stories_payload, dict) else []
+    shadow = _read_json_file(data_dir / "story-shadow-log.json", {})
+    suppression = _read_json_file(data_dir / "story-suppression-report.json", {"suppressions": []})
+    redirects_payload = _read_json_file(data_dir / "canonical-redirects.json", {"redirects": []})
+
+    redirects = redirects_payload.get("redirects", []) if isinstance(redirects_payload, dict) else []
+    suppressions = suppression.get("suppressions", []) if isinstance(suppression, dict) else []
+    current_run_redirects = list(current_run_redirects or [])
+
+    today = datetime.utcnow().date()
+    active_cutoff = today - timedelta(days=7)
+    active = 0
+    closed = 0
+    largest = {"story_id": "", "story": "", "articles": 0, "canonical_slug": ""}
+    multi_article_stories = 0
+    custom_canonical_stories = 0
+    article_total = 0
+
+    for story in stories:
+        articles = story.get("articles", []) or []
+        count = len(articles)
+        article_total += count
+        if count > 1:
+            multi_article_stories += 1
+        if story.get("canonical_is_custom"):
+            custom_canonical_stories += 1
+        latest = None
+        for article in articles:
+            raw = article.get("lastmod") or article.get("date") or ""
+            try:
+                d = datetime.fromisoformat(str(raw)[:10]).date()
+                latest = d if latest is None or d > latest else latest
+            except Exception:
+                pass
+        if latest and latest >= active_cutoff:
+            active += 1
+        else:
+            closed += 1
+        if count > largest["articles"]:
+            largest = {
+                "story_id": story.get("story_id", ""),
+                "story": story.get("title") or story.get("canonical_headline", ""),
+                "articles": count,
+                "canonical_slug": story.get("canonical_slug", ""),
+            }
+
+    # Fall back to archive counts if stories.json is unavailable on a first run.
+    if not stories:
+        article_total = len(archive or [])
+        active = sum(1 for e in (archive or []) if str(e.get("lastmod") or e.get("date") or "")[:10] >= active_cutoff.isoformat())
+        closed = max(0, article_total - active)
+
+    summary = shadow.get("summary", {}) if isinstance(shadow, dict) else {}
+    decisions = shadow.get("decisions", []) if isinstance(shadow, dict) else []
+    if not isinstance(decisions, list):
+        decisions = []
+    custom_overrides = int(summary.get("custom_overrides", 0) or 0)
+    if not custom_overrides:
+        custom_overrides = sum(1 for d in decisions if d.get("decision") == "WOULD_PUBLISH_CUSTOM_OVERRIDE")
+    reviews = int(summary.get("reviews", 0) or 0)
+    if not reviews:
+        reviews = sum(1 for d in decisions if d.get("decision") == "WOULD_REVIEW")
+    major_updates = int(summary.get("major_updates", 0) or 0)
+    if not major_updates:
+        major_updates = sum(1 for d in decisions if d.get("decision") == "WOULD_PUBLISH_MAJOR_UPDATE")
+
+    report = {
+        "schema_version": 1,
+        "engine_version": "persistent-story-stage-canonical-v5.2-health",
+        "generated_at": run_id,
+        "active_window_days": 7,
+        "stories": {
+            "total": len(stories),
+            "active": active,
+            "closed_or_inactive": closed,
+            "multi_article": multi_article_stories,
+            "custom_canonical": custom_canonical_stories,
+            "average_articles_per_story": round(article_total / len(stories), 3) if stories else 0,
+            "largest_story": largest,
+        },
+        "articles": {
+            "archive_total": len(archive or []),
+            "story_membership_total": article_total,
+        },
+        "actions": {
+            "redirects_created_this_run": len(current_run_redirects),
+            "redirects_cumulative": len(redirects),
+            "actual_guarded_suppressions_retained": len(suppressions),
+            "custom_overrides_last_shadow_run": custom_overrides,
+            "major_updates_last_shadow_run": major_updates,
+            "reviews_last_shadow_run": reviews,
+        },
+        "safety": {
+            "minimum_suppression_confidence": AUTO_SUPPRESSION_CONFIDENCE,
+            "minimum_canonical_cleanup_confidence": CANONICAL_CLEANUP_CONFIDENCE,
+            "redirects_below_cleanup_threshold": sum(
+                1 for r in redirects
+                if int(r.get("match_confidence", 0) or 0) < CANONICAL_CLEANUP_CONFIDENCE
+                and r.get("story_stage") != "canonical-migration"
+            ),
+            "suppressions_below_threshold": sum(
+                1 for r in suppressions
+                if int(r.get("match_confidence", 0) or 0) < AUTO_SUPPRESSION_CONFIDENCE
+            ),
+        },
+    }
+    (data_dir / "story-health-report.json").write_text(
+        json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+    print(
+        f"  Story health report: {report['stories']['total']} stories, "
+        f"{len(current_run_redirects)} redirects this run, {len(suppressions)} retained suppressions"
+    )
+    return report
+
 def write_archives(all_categories, top_cat):
     articles_dir = OUTPUT_DIR / "articles"
     archive_path = OUTPUT_DIR / "archive.json"
@@ -6165,29 +6450,9 @@ def write_archives(all_categories, top_cat):
     updated_count = 0
     this_run_token_sets = []
 
-    # One-time cleanup: remove specific bad articles by slug. Includes the WPTV
-    # fire-district duplicate (published before the custom-article protection fix; the
-    # custom ".../fires-3..." version is authoritative) and a non-newsworthy stale
-    # flight-tracking log that slipped through before the classifier/feed-window fixes.
-    _DUP_SLUGS_TO_REMOVE = {
-        "2026-07-18-st-lucie-county-fire-district-fires-3-firefighters-after-hazing-investigation-in",
-        "2026-07-19-halloween-flight-from-stuart-airport-to-georgia-documented",
-        "2026-07-20-tv-show-titled-stuart-fails-to-save-the-universe-debuts-this-week",
-        "2026-07-19-fort-pierce-unity-in-the-community-event-connects-families-with-services",
-        "2026-07-21-stuart-woman-arrested-after-deputies-rescue-about-80-cats-from-home-in-worst-hoa",
-        "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-hoarding-case-sh",
-    }
-    _before = len(archive)
-    archive = [e for e in archive if e.get("slug") not in _DUP_SLUGS_TO_REMOVE]
-    if len(archive) < _before:
-        for _slug in _DUP_SLUGS_TO_REMOVE:
-            _dup_file = articles_dir / f"{_slug}.html"
-            try:
-                if _dup_file.exists():
-                    _dup_file.unlink()
-            except Exception:
-                pass
-        print(f"  Removed {_before - len(archive)} known duplicate article(s) from archive")
+    # Canonical cleanup is handled below. Never unlink an already-published
+    # duplicate URL: it is retained as a redirect destination so readers and search
+    # engines do not encounter a 404.
 
     # BACKFILL is_custom on existing archive entries. The flag was added later, so
     # custom articles archived before then have no flag and would not be protected.
@@ -6201,18 +6466,29 @@ def write_archives(all_categories, top_cat):
     if _current_customs:
         for _c in _current_customs:
             _ctok = _sig_tokens(_c.get("headline", ""))
-            for _entry in archive:
-                if _entry.get("is_custom"):
-                    continue
-                if _same_story(_ctok, _sig_tokens(_entry.get("headline", ""))):
-                    _entry["is_custom"] = True
-                    _entry["authoritative_custom"] = True
-                    _entry["custom_fingerprint"] = _custom_story_fingerprint(
-                        _c.get("headline", ""), _c.get("teaser", "") or _c.get("body", "")[:180]
-                    )
-                    _entry["custom_event_key"] = _known_event_key(
-                        " ".join([_c.get("headline", ""), _c.get("teaser", ""), _c.get("body", "")[:500]])
-                    )
+            _matches = [e for e in archive if _same_story(_ctok, _sig_tokens(e.get("headline", "")))]
+            if not _matches:
+                continue
+            _custom_headline = (_c.get("headline") or "").strip().lower()
+            # Mark exactly one archive record authoritative: exact headline first,
+            # then strongest token overlap/content depth. Never stamp every duplicate.
+            def _custom_archive_rank(e):
+                _headline = (e.get("headline") or "").strip().lower()
+                _exact = 1 if _headline == _custom_headline else 0
+                _overlap = len(_ctok & _sig_tokens(e.get("headline", "")))
+                _words = int(e.get("article_word_count", 0) or 0)
+                return (_exact, _overlap, _words)
+            _entry = max(_matches, key=_custom_archive_rank)
+            _entry["is_custom"] = True
+            _entry["authoritative_custom"] = True
+            _entry["custom_fingerprint"] = _custom_story_fingerprint(
+                _c.get("headline", ""), _c.get("teaser", "") or _c.get("body", "")[:180]
+            )
+            _entry["custom_event_key"] = _known_event_key(
+                " ".join([_c.get("headline", ""), _c.get("teaser", ""), _c.get("body", "")[:500]])
+            )
+
+    archive, _canonical_redirects = apply_canonical_story_cleanup(archive, articles_dir, OUTPUT_DIR)
 
     heroes = [(top_cat["category_key"], top_cat["category_label"], top_cat["hero"])]
     for cat in all_categories:
@@ -6419,6 +6695,7 @@ def write_archives(all_categories, top_cat):
             new_count += 1
 
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
+    write_story_health_report(OUTPUT_DIR, archive, current_run_redirects=_canonical_redirects)
     (OUTPUT_DIR / "archive.html").write_text(render_archive_page(archive), encoding="utf-8")
     (OUTPUT_DIR / "sitemap.xml").write_text(update_sitemap(archive), encoding="utf-8")
     (OUTPUT_DIR / "news-sitemap.xml").write_text(update_news_sitemap(archive), encoding="utf-8")
