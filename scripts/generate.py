@@ -5061,8 +5061,15 @@ def _read_json_file(path, default):
 
 
 def _article_log_key(item):
-    return (item.get("slug") or item.get("link") or item.get("source_url") or
+    """Return a stable key without letting diagnostics hide real actions.
+
+    A shadow recommendation and an enforcement action may concern the same slug,
+    but they are different audit events and must both remain observable.
+    """
+    base = (item.get("slug") or item.get("link") or item.get("source_url") or
             hashlib.sha1(((item.get("headline") or "") + "|" + (item.get("date") or "")).encode("utf-8")).hexdigest())
+    scope = "action" if item.get("action_taken") is True or item.get("decision") == "SUPPRESSED_DUPLICATE" else "diagnostic"
+    return f"{scope}:{base}" if base else ""
 
 
 def _persist_story_decision_logs(data_dir, decisions, run_id):
@@ -5078,7 +5085,7 @@ def _persist_story_decision_logs(data_dir, decisions, run_id):
         if not key or key in processed:
             continue
         record = dict(decision)
-        record.update({"run_id": run_id, "engine_version": "persistent-story-stage-guarded-v5"})
+        record.update({"run_id": run_id, "engine_version": "persistent-story-stage-guarded-v5.1"})
         new_records.append(record)
         processed[key] = {"run_id": run_id, "decision": decision.get("decision", ""), "slug": decision.get("slug", "")}
     if new_records:
@@ -5091,12 +5098,23 @@ def _persist_story_decision_logs(data_dir, decisions, run_id):
     processed_path.write_text(json.dumps({"schema_version": 5, "updated_at": run_id, "processed": processed}, indent=2, ensure_ascii=False), encoding="utf-8")
 
     prior_report = _read_json_file(report_path, {"schema_version": 5, "suppressions": []})
-    suppressions = list(prior_report.get("suppressions", [])) if isinstance(prior_report, dict) else []
-    suppressions.extend([r for r in new_records if r.get("decision") in {"SUPPRESSED_DUPLICATE", "WOULD_SUPPRESS_DUPLICATE"}])
+    prior_suppressions = list(prior_report.get("suppressions", [])) if isinstance(prior_report, dict) else []
+    # v5.1 migration: remove legacy shadow recommendations from this action-only report.
+    suppressions = [r for r in prior_suppressions
+                    if r.get("decision") == "SUPPRESSED_DUPLICATE"
+                    and r.get("action_taken") is True
+                    and int(r.get("match_confidence", 0) or 0) >= AUTO_SUPPRESSION_CONFIDENCE]
+    actual_new_suppressions = [r for r in new_records
+                               if r.get("decision") == "SUPPRESSED_DUPLICATE"
+                               and r.get("action_taken") is True
+                               and int(r.get("match_confidence", 0) or 0) >= AUTO_SUPPRESSION_CONFIDENCE]
+    suppressions.extend(actual_new_suppressions)
     suppressions = suppressions[-SUPPRESSION_REPORT_LIMIT:]
     report_path.write_text(json.dumps({
         "schema_version": 5,
         "updated_at": run_id,
+        "report_type": "actual_guarded_suppressions_only",
+        "minimum_confidence": AUTO_SUPPRESSION_CONFIDENCE,
         "retained_suppressions": len(suppressions),
         "suppressions": suppressions,
     }, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -5318,7 +5336,7 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
         "mode": EVENT_PIPELINE_MODE,
         "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
         "non_destructive": True,
-        "engine": "persistent-story-stage-guarded-v5",
+        "engine": "persistent-story-stage-guarded-v5.1",
         "article_count": len(items),
         "story_count": len(stories),
         "stories": stories,
@@ -5327,7 +5345,7 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
         "schema_version": 5,
         "mode": EVENT_PIPELINE_MODE,
         "non_destructive": True,
-        "engine": "persistent-story-stage-guarded-v5",
+        "engine": "persistent-story-stage-guarded-v5.1",
         "summary": {
             "articles_analyzed": len(items),
             "stories_identified": len(stories),
@@ -5348,7 +5366,7 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
     appended = _persist_story_decision_logs(data_dir, decisions, run_id)
     # Keep the familiar audit filename as a small pointer for existing workflow artifacts.
     (data_dir / "event-audit.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  Story engine guarded v5: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
+    print(f"  Story engine guarded v5.1: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
     print(f"  Shadow decisions: {summary_counts['WOULD_SUPPRESS_DUPLICATE']} suppress, {summary_counts['WOULD_PUBLISH_MAJOR_UPDATE']} major update, {summary_counts['WOULD_PUBLISH_CUSTOM_OVERRIDE']} custom override, {summary_counts['WOULD_REVIEW']} review")
     print("  Story engine is NON-DESTRUCTIVE; publication output was not changed")
     return shadow
