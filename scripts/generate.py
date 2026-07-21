@@ -4833,20 +4833,123 @@ def _event_audit_id(item, index=0):
     return (base or f"event-{index+1}")[:120]
 
 
+def _audit_date_value(item):
+    raw = str(item.get("date") or item.get("lastmod") or item.get("published") or "")[:10]
+    try:
+        return datetime.strptime(raw, "%Y-%m-%d").date()
+    except Exception:
+        return None
+
+
+def _audit_headline_tokens(item):
+    return _sig_tokens(item.get("headline", ""))
+
+
+def _audit_locations(text):
+    """Extract specific locality anchors. Broad words such as Florida and county
+    are intentionally excluded because they create topic-level false positives."""
+    t = re.sub(r"[^a-z0-9]+", " ", (text or "").lower())
+    places = {
+        "port st lucie": "port-st-lucie", "st lucie": "st-lucie",
+        "fort pierce": "fort-pierce", "stuart": "stuart",
+        "hobe sound": "hobe-sound", "jensen beach": "jensen-beach",
+        "palm city": "palm-city", "vero beach": "vero-beach",
+        "sebastian": "sebastian", "fellsmere": "fellsmere",
+        "indian river": "indian-river", "martin county": "martin-county",
+        "st lucie county": "st-lucie-county", "indian river county": "indian-river-county",
+        "jupiter island": "jupiter-island", "lake worth": "lake-worth",
+        "north palm beach": "north-palm-beach", "boca raton": "boca-raton",
+        "palm beach county": "palm-beach-county", "miami dade": "miami-dade",
+        "ocala": "ocala", "marion county": "marion-county",
+        "kennedy space center": "kennedy-space-center", "clover park": "clover-park",
+        "i 95": "i-95", "interstate 95": "i-95",
+    }
+    return {value for phrase, value in places.items() if re.search(r"\b" + re.escape(phrase) + r"\b", t)}
+
+
+def _audit_action_families(text):
+    t = re.sub(r"[^a-z0-9]+", " ", (text or "").lower())
+    families = {
+        "arrest-charge": r"\b(arrest|arrested|charged|indicted|custody|booked)\b",
+        "crash": r"\b(crash|collision|wreck|vehicle fire|airlifted|hospitalized)\b",
+        "shooting-homicide": r"\b(shooting|shot|murder|homicide|killed|dead|body found|body recovered)\b",
+        "fire": r"\b(fire|burned|burning|arson)\b",
+        "vote-law": r"\b(vote|ballot|amendment|legislature|bill|signed|veto|lawsuit|court ruling)\b",
+        "development": r"\b(development|redevelopment|demolition|construction|annexation)\b",
+        "event-celebration": r"\b(festival|celebration|fireworks|parade|anniversary|event|schedule)\b",
+        "sports-game": r"\b(win|loss|defeat|victory|game|series|homestand|sweep|score)\b",
+        "closure-traffic": r"\b(closure|closed|traffic|roadwork|parking|enforcement|citation)\b",
+        "rescue-animal": r"\b(rescue|rescued|animal|animals|cat|cats|dog|dogs|hoarding)\b",
+        "health-outbreak": r"\b(outbreak|cases|bacteria|e coli|cyclospora|health warning)\b",
+    }
+    return {name for name, rx in families.items() if re.search(rx, t)}
+
+
+def _audit_numbers(text):
+    return {n for n in re.findall(r"\b\d{2,}\b", text or "") if not re.fullmatch(r"20\d{2}", n)}
+
+
+def _audit_same_event_strict(a, b):
+    """Conservative Phase-1 matcher. It favors false negatives over false
+    positives because this report will eventually drive pre-generation suppression."""
+    if not a or not b:
+        return False
+    ta, tb = _story_text(a), _story_text(b)
+    ka, kb = _known_event_key(ta), _known_event_key(tb)
+    if ka or kb:
+        return bool(ka and kb and ka == kb)
+
+    da, db = _audit_date_value(a), _audit_date_value(b)
+    day_gap = abs((da - db).days) if da and db else None
+    if day_gap is not None and day_gap > 10:
+        return False
+
+    ha, hb = _audit_headline_tokens(a), _audit_headline_tokens(b)
+    shared_h = _shared_tokens(ha, hb)
+    distinctive_h = [t for t in shared_h if t not in GENERIC_TOKENS]
+    denom = max(1, min(len(ha), len(hb)))
+    title_overlap = len(shared_h) / denom
+
+    la, lb = _audit_locations(ta), _audit_locations(tb)
+    if la and lb and not (la & lb):
+        return False
+
+    aa, ab = _audit_action_families(ta), _audit_action_families(tb)
+    if aa and ab and not (aa & ab):
+        return False
+
+    na, nb = _audit_numbers(a.get("headline", "")), _audit_numbers(b.get("headline", ""))
+    if na and nb and not (na & nb) and title_overlap < 0.72:
+        return False
+
+    # Near-identical syndicated headlines.
+    if len(distinctive_h) >= 4 and title_overlap >= 0.58:
+        return True
+
+    # Reworded headlines need both a concrete place and action agreement.
+    if la & lb and aa & ab and len(distinctive_h) >= 3 and title_overlap >= 0.42:
+        return True
+
+    # Strong combined-text evidence may recover a detail moved into the teaser/body,
+    # but still requires headline anchors and a short time window.
+    full_a, full_b = _sig_tokens(ta), _sig_tokens(tb)
+    shared_full = _shared_tokens(full_a, full_b)
+    distinctive_full = [t for t in shared_full if t not in GENERIC_TOKENS]
+    if (day_gap is None or day_gap <= 4) and len(distinctive_h) >= 3 and len(distinctive_full) >= 7:
+        return bool((la & lb) or (aa & ab))
+    return False
+
+
 def build_event_audit(archive, current_customs=None, live_categories=None, output_dir=None):
-    """Build Phase-1 registry and reports. This function is read-only except for
-    writing data/events.json and data/event-audit.json.
-    """
+    """Build the refined Phase-1 registry and reports. This is non-destructive:
+    only data/events.json and data/event-audit.json are written."""
     if EVENT_PIPELINE_MODE not in {"audit", "shadow"}:
         print(f"  Event pipeline disabled (mode={EVENT_PIPELINE_MODE})")
         return None
 
     items = [_event_audit_item(e, "archive") for e in (archive or []) if e.get("headline")]
-    known_slugs = {i.get("slug") for i in items if i.get("slug")}
     for c in (current_customs or []):
         normalized = _event_audit_item(c, "custom")
-        # A current custom may already be represented in archive. Merge its authority
-        # metadata into that item instead of creating an artificial duplicate.
         existing = None
         if normalized.get("slug"):
             existing = next((i for i in items if i.get("slug") == normalized.get("slug")), None)
@@ -4861,41 +4964,27 @@ def build_event_audit(archive, current_customs=None, live_categories=None, outpu
         else:
             items.append(normalized)
 
-    # Union-find groups matching articles into candidate real-world events. Nothing
-    # is removed; uncertain results are merely reported for review.
-    parent = list(range(len(items)))
-    def find(x):
-        while parent[x] != x:
-            parent[x] = parent[parent[x]]
-            x = parent[x]
-        return x
-    def union(a, b):
-        ra, rb = find(a), find(b)
-        if ra != rb:
-            parent[rb] = ra
+    # Complete-link clustering prevents one vague bridge article from joining several
+    # unrelated stories into a giant topic cluster. A candidate must match every
+    # existing member of the group, not merely one article in a union-find chain.
+    ordered_items = sorted(items, key=lambda x: (_audit_date_value(x) or datetime.min.date(), x.get("headline", "")))
+    groups = []
+    for item in ordered_items:
+        eligible = []
+        for idx, members in enumerate(groups):
+            if all(_audit_same_event_strict(item, member) for member in members):
+                eligible.append((idx, max((_story_priority(m) for m in members), default=(0, 0))))
+        if eligible:
+            best_idx = max(eligible, key=lambda x: x[1])[0]
+            groups[best_idx].append(item)
+        else:
+            groups.append([item])
 
-    for i in range(len(items)):
-        for j in range(i + 1, len(items)):
-            # Keep broad historical matching conservative: require the shared event
-            # matcher and do not merge a genuine milestone update into its predecessor.
-            if not _same_event_items(items[i], items[j]):
-                continue
-            if _is_significant_story_update(items[i], items[j]) or _is_significant_story_update(items[j], items[i]):
-                continue
-            union(i, j)
-
-    groups = {}
-    for idx, item in enumerate(items):
-        groups.setdefault(find(idx), []).append(item)
-
-    events = []
-    duplicate_groups = []
-    used_ids = set()
-    for n, members in enumerate(groups.values()):
+    events, duplicate_groups, used_ids = [], [], set()
+    for n, members in enumerate(groups):
         canonical = max(members, key=_story_priority)
         eid = _event_audit_id(canonical, n)
-        original = eid
-        suffix = 2
+        original, suffix = eid, 2
         while eid in used_ids:
             eid = f"{original}-{suffix}"
             suffix += 1
@@ -4907,10 +4996,8 @@ def build_event_audit(archive, current_customs=None, live_categories=None, outpu
             "canonical_is_custom": bool(canonical.get("is_custom") or canonical.get("authoritative_custom")),
             "article_count": len(members),
             "articles": [{
-                "slug": m.get("slug", ""),
-                "headline": m.get("headline", ""),
-                "date": m.get("date", ""),
-                "category_key": m.get("category_key", ""),
+                "slug": m.get("slug", ""), "headline": m.get("headline", ""),
+                "date": m.get("date", ""), "category_key": m.get("category_key", ""),
                 "is_custom": bool(m.get("is_custom") or m.get("authoritative_custom")),
                 "origin": m.get("origin", "archive"),
             } for m in sorted(members, key=_story_priority, reverse=True)],
@@ -4922,22 +5009,17 @@ def build_event_audit(archive, current_customs=None, live_categories=None, outpu
     out = Path(output_dir or OUTPUT_DIR) / "data"
     out.mkdir(parents=True, exist_ok=True)
     registry = {
-        "schema_version": 1,
-        "mode": EVENT_PIPELINE_MODE,
+        "schema_version": 2, "mode": EVENT_PIPELINE_MODE,
         "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-        "non_destructive": True,
-        "article_count": len(items),
-        "event_count": len(events),
-        "candidate_duplicate_group_count": len(duplicate_groups),
-        "events": events,
+        "non_destructive": True, "matcher": "strict-complete-link-v2",
+        "article_count": len(items), "event_count": len(events),
+        "candidate_duplicate_group_count": len(duplicate_groups), "events": events,
     }
     audit = {
-        "schema_version": 1,
-        "mode": EVENT_PIPELINE_MODE,
-        "non_destructive": True,
+        "schema_version": 2, "mode": EVENT_PIPELINE_MODE, "non_destructive": True,
+        "matcher": "strict-complete-link-v2",
         "summary": {
-            "articles_analyzed": len(items),
-            "likely_unique_events": len(events),
+            "articles_analyzed": len(items), "likely_unique_events": len(events),
             "candidate_duplicate_groups": len(duplicate_groups),
             "candidate_duplicate_articles": sum(max(0, e["article_count"] - 1) for e in duplicate_groups),
         },
@@ -4946,7 +5028,7 @@ def build_event_audit(archive, current_customs=None, live_categories=None, outpu
     }
     (out / "events.json").write_text(json.dumps(registry, indent=2, ensure_ascii=False), encoding="utf-8")
     (out / "event-audit.json").write_text(json.dumps(audit, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  Event audit: {len(items)} articles -> {len(events)} candidate events; {len(duplicate_groups)} duplicate group(s)")
+    print(f"  Event audit v2: {len(items)} articles -> {len(events)} candidate events; {len(duplicate_groups)} duplicate group(s)")
     print("  Event audit is NON-DESTRUCTIVE; publication output was not changed")
     return audit
 
