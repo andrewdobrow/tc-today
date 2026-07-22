@@ -1,5 +1,5 @@
 """
-Treasure Coast Today - news generation pipeline - v6.5.10 Eastern-Time Freshness Bugfix
+Treasure Coast Today - news generation pipeline - v6.5.18 Authoritative Custom Canonicals + Atomic Publishing
 Covers Martin, St. Lucie, and Indian River counties.
 Runs 4x/day via GitHub Actions.
 """
@@ -8402,6 +8402,106 @@ def _write_canonical_integrity_report(archive, data_dir):
     return corrupt
 
 
+
+
+def _find_authoritative_custom_canonical(item, archive):
+    """Return the hand-written canonical that owns this event, if one exists.
+
+    Custom stories are immutable event anchors. Matching is deliberately stronger than
+    ordinary headline similarity: exact published slug, exact custom fingerprint, and
+    narrow known-event keys are checked before any feed story may create a new URL.
+    """
+    item = item or {}
+    incoming_slug = slugify(str(item.get("slug") or "")) if item.get("slug") else ""
+    incoming_text = " ".join([
+        item.get("headline", ""), item.get("teaser", ""), item.get("body", "")[:1200]
+    ])
+    incoming_key = _known_event_key(incoming_text)
+    incoming_fp = _custom_story_fingerprint(
+        item.get("headline", ""), item.get("teaser", "") or item.get("body", "")[:180]
+    )
+
+    candidates = []
+    for entry in archive or []:
+        if not (entry.get("is_custom") or entry.get("authoritative_custom")):
+            continue
+        score = 0
+        if incoming_slug and incoming_slug == entry.get("slug"):
+            score += 100
+        if incoming_fp and incoming_fp == entry.get("custom_fingerprint"):
+            score += 90
+        entry_key = entry.get("custom_event_key") or _known_event_key(" ".join([
+            entry.get("headline", ""), entry.get("teaser", ""), entry.get("body", "")[:1200]
+        ]))
+        if incoming_key and entry_key and incoming_key == entry_key:
+            score += 80
+        if _same_event_text(incoming_text, " ".join([
+            entry.get("headline", ""), entry.get("teaser", ""), entry.get("body", "")[:1200]
+        ])):
+            score += 30
+        if score:
+            candidates.append((score, int(entry.get("article_word_count", 0) or 0), entry))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda row: (row[0], row[1]), reverse=True)
+    return candidates[0][2]
+
+
+def _atomic_write_verified_article(path, html, expected_headline, expected_body):
+    """Stage, verify, and atomically commit one article page.
+
+    A permalink is never exposed to homepage/RSS generation until its complete HTML
+    has been written and verified. Any failure leaves the previously published file
+    untouched.
+    """
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    staged = path.with_name(path.name + ".staged")
+    try:
+        staged.write_text(html, encoding="utf-8")
+        _verify_canonical_permalink(staged, expected_headline, expected_body)
+        os.replace(staged, path)
+    finally:
+        if staged.exists():
+            staged.unlink()
+    if not path.exists() or path.stat().st_size < 500:
+        raise RuntimeError(f"Atomic article commit failed: {path}")
+
+
+def _assert_presentation_targets_exist(all_categories, top_cat, archive, articles_dir):
+    """Fail closed if any rendered hero/card points at a missing article file.
+
+    Before failing, try one safe repair: resolve the item back to an authoritative
+    custom canonical or another verified archive canonical and hydrate it atomically.
+    """
+    failures = []
+    items = [top_cat.get("hero")]
+    for cat in all_categories:
+        items.extend([cat.get("hero")] + list(cat.get("cards", [])))
+    for item in items:
+        if not item or item.get("_section_placeholder"):
+            continue
+        slug = item.get("_archived_slug") or item.get("slug")
+        if not slug:
+            canonical = _find_authoritative_custom_canonical(item, archive) or find_presentation_canonical(item, archive)
+            if canonical:
+                _hydrate_presentation_item(item, canonical)
+                slug = canonical.get("slug")
+        path = Path(articles_dir) / f"{slug}.html" if slug else None
+        if not path or not path.exists():
+            canonical = _find_authoritative_custom_canonical(item, archive) or find_presentation_canonical(item, archive)
+            if canonical:
+                candidate = Path(articles_dir) / f"{canonical.get('slug','')}.html"
+                if candidate.exists():
+                    _hydrate_presentation_item(item, canonical)
+                    continue
+            failures.append({"headline": item.get("headline", ""), "slug": slug or ""})
+    if failures:
+        raise RuntimeError(
+            "Presentation publish aborted because permalink target(s) are missing: "
+            + json.dumps(failures[:10], ensure_ascii=False)
+        )
+
 def write_archives(all_categories, top_cat):
     articles_dir = OUTPUT_DIR / "articles"
     archive_path = OUTPUT_DIR / "archive.json"
@@ -8531,7 +8631,13 @@ def write_archives(all_categories, top_cat):
             continue
 
         source_url = hero.get("link", "")
-        existing   = find_canonical_event_entry(hero, archive)
+        # Custom canonicals own their event before ordinary fuzzy/semantic matching.
+        # This catches syndicated headline rewrites such as the July 2026 St. Lucie
+        # firefighter hazing story and guarantees the hand-written URL always wins.
+        _authoritative_custom = _find_authoritative_custom_canonical(hero, archive)
+        existing = _authoritative_custom or find_canonical_event_entry(hero, archive)
+        if _authoritative_custom and not hero.get("is_custom"):
+            print(f"  CUSTOM CANONICAL PREEMPTION: '{headline[:55]}' -> '{existing.get('slug','')}'")
         _relationship = "SAME_EVENT" if existing else "DISTINCT"
         _related_canonical = None
 
@@ -8569,13 +8675,18 @@ def write_archives(all_categories, top_cat):
                 elif _relationship != "SAME_EVENT":
                     existing = None
 
-        # Hand-written custom coverage is authoritative for SAME_EVENT updates only.
-        # A RELATED_ANGLE is allowed to publish separately and cross-link; it is never
-        # dropped merely because it shares a topic with a custom article.
+        # Hand-written custom coverage is the authoritative canonical anchor. A feed
+        # item may never create a second URL for the same event. Non-significant
+        # duplicates are hydrated back to the custom record so hero/cards/Latest News
+        # all point to the existing live page. A truly significant milestone may
+        # rewrite the complete article at that same custom permalink.
         if existing and existing.get("is_custom") and not hero.get("is_custom"):
-            print(f"  PROTECTED: dropping feed story '{headline[:45]}' — already covered "
-                  f"by custom article '{existing.get('headline','')[:45]}'")
-            continue
+            if not _is_significant_story_update(hero, existing):
+                _hydrate_presentation_item(hero, existing)
+                print(f"  PROTECTED CUSTOM CANONICAL: ignored duplicate '{headline[:45]}' and restored "
+                      f"'{existing.get('slug','')}' everywhere")
+                continue
+            print(f"  SIGNIFICANT CUSTOM UPDATE: rewriting authoritative permalink '{existing.get('slug','')}'")
 
         # FRESHNESS LOCK: a source may republish an old development with a new RSS
         # timestamp or slightly changed wording. When the deterministic matcher points
@@ -8684,10 +8795,11 @@ def write_archives(all_categories, top_cat):
             _related = [e for e in archive
                         if e.get("category_key") == cat_key and e.get("slug") != slug]
             _related.sort(key=lambda e: _effective_story_datetime(e), reverse=True)
-            _article_path.write_text(
-                render_article_page(hero, cat_label, cat_key, today, slug, related=_related), encoding="utf-8"
+            _atomic_write_verified_article(
+                _article_path,
+                render_article_page(hero, cat_label, cat_key, today, slug, related=_related),
+                headline, hero.get("body", "")
             )
-            _verify_canonical_permalink(_article_path, headline, hero.get("body", ""))
             # If a custom article is writing here, permanently mark the entry custom so
             # it can never be overwritten by a later feed story (see the PROTECTED guard).
             if hero.get("is_custom"):
@@ -8719,8 +8831,11 @@ def write_archives(all_categories, top_cat):
             _related = [e for e in archive
                         if e.get("category_key") == cat_key and e.get("slug") != slug]
             _related.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
-            (articles_dir / f"{slug}.html").write_text(
-                render_article_page(hero, cat_label, cat_key, today, slug, related=_related), encoding="utf-8"
+            _new_article_path = articles_dir / f"{slug}.html"
+            _atomic_write_verified_article(
+                _new_article_path,
+                render_article_page(hero, cat_label, cat_key, today, slug, related=_related),
+                headline, hero.get("body", "")
             )
             _new_archive_entry = {
                 "slug": slug, "headline": headline,
@@ -8784,7 +8899,13 @@ def write_archives(all_categories, top_cat):
     if _top_canonical:
         _hydrate_presentation_item(top_cat["hero"], _top_canonical)
 
-    archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
+    # Transaction boundary: no homepage/category/RSS state is committed unless every
+    # presentation object resolves to an article file that already exists on disk.
+    _assert_presentation_targets_exist(all_categories, top_cat, archive, articles_dir)
+
+    _archive_stage = archive_path.with_name(archive_path.name + ".staged")
+    _archive_stage.write_text(json.dumps(archive, indent=2), encoding="utf-8")
+    os.replace(_archive_stage, archive_path)
     write_story_regression_report(OUTPUT_DIR, archive, _redirect_verification)
     write_story_health_report(OUTPUT_DIR, archive, current_run_redirects=_canonical_redirects)
     (OUTPUT_DIR / "archive.html").write_text(render_archive_page(archive), encoding="utf-8")
