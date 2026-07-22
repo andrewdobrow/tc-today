@@ -3288,17 +3288,35 @@ def render_index(all_categories, top_cat):
             seo_text  = SECTION_LABELS[cat_key]
             label_cls = "county-section-label" if cat_key in COUNTY_KEYS else "topic-section-label"
             section_label = f'<div class="{label_cls}"><h2 class="county-label-text">{seo_text}</h2></div>'
-        hl_escaped = hero["headline"].replace('"', "&quot;")
-        _urgency_text = f"{cat_label} {hero.get('headline','')}".strip().lower()
+        headline_text = hero.get("headline", "")
+        hl_escaped = headline_text.replace('"', "&quot;")
+        # Responsive hero typography: preserve the full editorial headline while
+        # scaling only unusually long headlines. Word count is included because
+        # many short words can wrap more aggressively than character count alone.
+        _headline_len = len(headline_text.strip())
+        _headline_words = len(headline_text.split())
+        if _headline_len > 145 or _headline_words > 22:
+            _headline_size_class = " hero-v3-headline--ultra"
+            _content_size_class = " hero-v3-content--ultra"
+        elif _headline_len > 112 or _headline_words > 17:
+            _headline_size_class = " hero-v3-headline--very-long"
+            _content_size_class = " hero-v3-content--very-long"
+        elif _headline_len > 82 or _headline_words > 13:
+            _headline_size_class = " hero-v3-headline--long"
+            _content_size_class = " hero-v3-content--long"
+        else:
+            _headline_size_class = ""
+            _content_size_class = ""
+        _urgency_text = f"{cat_label} {headline_text}".strip().lower()
         urgency_cls = " live" if _urgency_text.startswith("live") else (" developing" if _urgency_text.startswith("developing") else (" breaking" if hero.get("is_breaking") or _urgency_text.startswith("breaking") else ""))
         return f"""
     <section class="hero hero-v3{fade}" data-cat-hero="{cat_key}"{display}>
       {section_label}
       <a class="hero-v3-link" href="{article_url}" aria-label="Read: {hero['headline']}">
         <div class="hero-v3-media">{img_html}</div>
-        <div class="hero-v3-content">
+        <div class="hero-v3-content{_content_size_class}">
           <span class="tag hero-v3-tag{urgency_cls}">{cat_label}</span>
-          <h1 class="hero-v3-headline">{hero["headline"]}</h1>
+          <h1 class="hero-v3-headline{_headline_size_class}">{headline_text}</h1>
           <p class="hero-summary hero-v3-summary">{preview}...</p>
           <div class="hero-foot hero-v3-foot">
             <span class="meta">{pub_time}</span>
@@ -3730,10 +3748,95 @@ def render_index(all_categories, top_cat):
   </script>
     '''
 
+    _hero_typography_css = r"""
+  <style id="tct-responsive-hero-typography">
+    /* The full hero headline is always retained. Longer headlines scale down
+       and receive more of the content column; the teaser yields space first. */
+    .hero-v3-link {
+      min-height: 0;
+    }
+    .hero-v3-content {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .hero-v3-headline {
+      margin-bottom: clamp(0.65rem, 1.15vw, 1rem);
+      font-size: clamp(2.55rem, 3.35vw, 4.05rem);
+      line-height: 0.98;
+      letter-spacing: -0.035em;
+      overflow: visible;
+      max-height: none;
+    }
+    .hero-v3-headline--long {
+      font-size: clamp(2.2rem, 2.85vw, 3.45rem);
+      line-height: 0.99;
+      letter-spacing: -0.032em;
+    }
+    .hero-v3-headline--very-long {
+      font-size: clamp(1.92rem, 2.42vw, 2.95rem);
+      line-height: 1.01;
+      letter-spacing: -0.028em;
+    }
+    .hero-v3-headline--ultra {
+      font-size: clamp(1.68rem, 2.08vw, 2.5rem);
+      line-height: 1.03;
+      letter-spacing: -0.022em;
+    }
+    .hero-v3-summary {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      overflow: hidden;
+      margin-bottom: 0;
+    }
+    .hero-v3-content--long .hero-v3-summary {
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+    }
+    .hero-v3-content--very-long .hero-v3-summary,
+    .hero-v3-content--ultra .hero-v3-summary {
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
+    }
+    .hero-v3-foot {
+      margin-top: auto;
+      flex: 0 0 auto;
+    }
+    @media (max-width: 1100px) {
+      .hero-v3-headline { font-size: clamp(2.15rem, 4vw, 3.35rem); }
+      .hero-v3-headline--long { font-size: clamp(1.95rem, 3.5vw, 2.85rem); }
+      .hero-v3-headline--very-long { font-size: clamp(1.72rem, 3.05vw, 2.45rem); }
+      .hero-v3-headline--ultra { font-size: clamp(1.52rem, 2.7vw, 2.12rem); }
+    }
+    @media (max-width: 760px) {
+      .hero-v3-content { overflow: visible; }
+      .hero-v3-headline,
+      .hero-v3-headline--long,
+      .hero-v3-headline--very-long,
+      .hero-v3-headline--ultra {
+        font-size: clamp(2rem, 9vw, 3rem);
+        line-height: 1;
+      }
+      .hero-v3-summary,
+      .hero-v3-content--long .hero-v3-summary,
+      .hero-v3-content--very-long .hero-v3-summary,
+      .hero-v3-content--ultra .hero-v3-summary {
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+      }
+    }
+  </style>
+    """
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 {_head}
+{_hero_typography_css}
 </head>
 <body>
   <header>
@@ -4605,37 +4708,55 @@ def render_rss_feed(all_categories, top_cat):
     archive = load_archive(OUTPUT_DIR / "archive.json")
 
     def make_item(article, cat_label):
-        headline = article.get("headline", "")
-        if not headline:
+        incoming_headline = article.get("headline", "")
+        if not incoming_headline:
             return None, None
-        matched     = find_matching_entry(headline, archive, article.get("link", ""), is_weather_alert=bool(article.get("is_weather_alert")))
+        matched = find_matching_entry(
+            incoming_headline,
+            archive,
+            article.get("link", ""),
+            is_weather_alert=bool(article.get("is_weather_alert")),
+        )
         if not matched:
-            return None, None  # No article page exists — skip
+            return None, None  # No canonical article page exists — skip
+
+        # RSS must be serialized from the evolved canonical record, not from whichever
+        # live card happened to match it during this run. Otherwise an older card can
+        # point at the updated permalink while carrying the pre-update title/teaser,
+        # which causes downstream automations such as Nextdoor to repost stale copy.
+        headline = matched.get("headline") or incoming_headline
+        teaser = (
+            matched.get("teaser")
+            or matched.get("body", "")[:300]
+            or article.get("teaser")
+            or article.get("body", "")[:300]
+        )
         article_url = f"{SITE_URL}/articles/{matched['slug']}.html"
-        teaser      = article.get("teaser") or article.get("body", "")[:300]
-        # Use OUR first-published time, not the source's. Nextdoor and other RSS
-        # consumers show pubDate as the story's age; featuring the source's timestamp
-        # made freshly republished stories look ancient. Prefer the archive's
-        # first_published (full Eastern timestamp); fall back to its date, then now.
+        rss_category = matched.get("category_label") or cat_label
+
+        # A genuinely evolved canonical is re-emitted at its editorial update time.
+        # Routine workflow runs never advance editorial_updated_at, so they cannot
+        # manufacture a fresh RSS item. Unmodified stories retain first_published.
         from email.utils import parsedate_to_datetime as _pdt
-        pub = matched.get("first_published")
-        if not pub:
+        pub_raw = matched.get("editorial_updated_at") or matched.get("first_published")
+        if not pub_raw:
             _d = matched.get("date", "")
             if _d:
-                pub = f"{_d} 09:00:00 -0400"  # older entries: date only, assume 9am ET
+                pub_raw = f"{_d} 09:00:00 -0400"  # legacy date-only rows
         try:
-            pub = formatdate(_pdt(pub).timestamp(), usegmt=True)
+            pub = formatdate(_pdt(pub_raw).timestamp(), usegmt=True)
         except Exception:
             pub = now_rfc
+
         item = f"""  <item>
     <title><![CDATA[{headline}]]></title>
     <link>{article_url}</link>
     <guid isPermaLink="true">{article_url}</guid>
     <description><![CDATA[{teaser}]]></description>
     <pubDate>{pub}</pubDate>
-    <category><![CDATA[{cat_label}]]></category>
+    <category><![CDATA[{rss_category}]]></category>
   </item>"""
-        return item, headline
+        return item, matched.get("slug") or article_url
 
     items = []
     seen  = set()
