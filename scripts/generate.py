@@ -17,17 +17,6 @@ from pathlib import Path
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
 
-# Production editorial engine integration — Phase 6.1 audit-only mode.
-# This is deliberately fail-open: if the package or state cannot be loaded, the
-# existing publication pipeline continues unchanged.
-try:
-    from tct_engine import EditorialEngine, route_editorial_result
-except Exception as _editorial_import_error:
-    EditorialEngine = None
-    route_editorial_result = None
-else:
-    _editorial_import_error = None
-
 # -- CONFIG --
 
 TCT_PRESENTATION_VERSION = "6.6-audited-unified-presentation"
@@ -275,7 +264,6 @@ def category_max_age_hours(category_key):
 
 
 OUTPUT_DIR   = Path(__file__).parent.parent
-EDITORIAL_STATE_PATH = OUTPUT_DIR / "data" / "editorial_state.json"
 SITE_URL     = "https://treasurecoast.today"
 SITE_NAME    = "Treasure Coast Today"
 
@@ -8569,64 +8557,8 @@ def ensure_all_category_sections(all_categories, min_cards=6):
     all_categories[:] = rebuilt
     return all_categories
 
-def _load_editorial_engine_audit():
-    """Load the persistent editorial engine without changing publication behavior."""
-    if EditorialEngine is None:
-        print(f"  Editorial audit disabled: {_editorial_import_error}")
-        return None
-    try:
-        EDITORIAL_STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
-        engine = EditorialEngine.load(EDITORIAL_STATE_PATH)
-        print(f"  Editorial audit state loaded: {EDITORIAL_STATE_PATH}")
-        return engine
-    except Exception as exc:
-        print(f"  Editorial audit load failed; continuing unchanged: {exc}")
-        return None
-
-
-def _audit_editorial_candidates(engine, headlines, category_key, audited_keys):
-    """Record and log engine decisions while leaving the live pipeline untouched."""
-    if engine is None or route_editorial_result is None:
-        return
-
-    for entry in headlines:
-        audit_key = (entry.get("link") or entry.get("title") or "").strip().lower()
-        if not audit_key or audit_key in audited_keys:
-            continue
-        audited_keys.add(audit_key)
-
-        try:
-            result = engine.process(
-                entry,
-                source=entry.get("feed_url") or entry.get("link") or "rss",
-                county=category_key if category_key in COUNTY_KEYS else "",
-            )
-            instruction = route_editorial_result(result)
-            print(
-                "  EDITORIAL AUDIT:",
-                instruction.route.value,
-                "| event:", instruction.event_key,
-                "| incoming:", instruction.incoming_article_id,
-                "| target:", instruction.target_article_id,
-            )
-        except Exception as exc:
-            print(f"  Editorial audit item failed; continuing unchanged: {exc}")
-
-
-def _save_editorial_engine_audit(engine):
-    if engine is None:
-        return
-    try:
-        engine.save(EDITORIAL_STATE_PATH)
-        print(f"  Editorial audit state saved: {EDITORIAL_STATE_PATH}")
-    except Exception as exc:
-        print(f"  Editorial audit save failed; publication output is unchanged: {exc}")
-
-
 def main():
     print("Treasure Coast Today — building site...")
-    editorial_engine = _load_editorial_engine_audit()
-    editorial_audited_keys = set()
     image_bank   = build_image_bank()
     content_bank = build_content_bank()
     used_bank_images = set()
@@ -8718,12 +8650,6 @@ def main():
             continue
 
         headlines = filter_category_headlines(cat_key, headlines, target=HEADLINES_PER_CATEGORY, min_keep=6)
-
-        # Phase 6.1: observe only. The engine records decisions, but no item is skipped,
-        # updated, replaced, or otherwise routed differently yet.
-        _audit_editorial_candidates(
-            editorial_engine, headlines, cat_key, editorial_audited_keys
-        )
 
         print(f"  {len(headlines)} publishable-source headlines fetched")
         try:
@@ -9078,11 +9004,6 @@ def main():
     (OUTPUT_DIR / "ownership.html").write_text(render_ownership_page(), encoding="utf-8")
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
     (OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat), encoding="utf-8")
-
-    # Persist audit memory only after the normal build completes. This does not alter
-    # publication decisions; update.yml already uses `git add -A`, so the state file
-    # will be committed automatically.
-    _save_editorial_engine_audit(editorial_engine)
 
     print(f"Done. {len(all_categories)} categories written.")
 
