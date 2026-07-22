@@ -3936,7 +3936,45 @@ def load_custom_articles():
 
     from datetime import timezone as _tz
     now = datetime.now(_tz.utc)
+
+    # custom_articles.json is an incoming publication queue, not a permanent
+    # inventory. Once a custom article has successfully reached archive.json, do
+    # not inject the same queued item again on every run. Archived custom stories
+    # remain authoritative through archive.json and the story engine.
+    #
+    # Set "republish": true on a queue item only when an intentional re-run is
+    # required. Removing the published item from custom_articles.json remains the
+    # normal workflow.
+    archived_custom_slugs = set()
+    archived_custom_fingerprints = set()
+    archived_custom_headlines = set()
+    archive_path = OUTPUT_DIR / "archive.json"
+    if archive_path.exists():
+        try:
+            archive_data = json.loads(archive_path.read_text(encoding="utf-8"))
+            if isinstance(archive_data, dict):
+                archive_data = archive_data.get("articles", archive_data.get("items", []))
+            if not isinstance(archive_data, list):
+                archive_data = []
+            for existing in archive_data:
+                if not isinstance(existing, dict) or not existing.get("is_custom"):
+                    continue
+                slug = slugify(str(existing.get("slug", "")))
+                if slug:
+                    archived_custom_slugs.add(slug)
+                headline = (existing.get("headline", "") or "").strip()
+                if headline:
+                    archived_custom_headlines.add(re.sub(r"[^a-z0-9]+", " ", headline.lower()).strip())
+                fp = existing.get("custom_story_fingerprint") or _custom_story_fingerprint(
+                    headline, existing.get("teaser", "")
+                )
+                if fp:
+                    archived_custom_fingerprints.add(fp)
+        except Exception as e:
+            print(f"  Custom queue archive check failed open: {e}")
+
     live = []
+    skipped_published = 0
     for art in data:
         # Skip expired
         expires = art.get("expires", "")
@@ -3949,6 +3987,29 @@ def load_custom_articles():
                 pass
         if not art.get("headline") or not art.get("body") or not art.get("category"):
             continue
+
+        # Skip a queue item already published as a custom archive entry. Use the
+        # explicit slug when supplied, otherwise use the durable custom fingerprint
+        # and a normalized-headline fallback. This prevents an old queued Mets recap
+        # (or any other custom story) from being reported as a fresh custom override.
+        if not art.get("republish"):
+            explicit_slug = slugify(str(art.get("slug", ""))) if art.get("slug") else ""
+            normalized_headline = re.sub(
+                r"[^a-z0-9]+", " ", (art.get("headline", "") or "").lower()
+            ).strip()
+            queue_fp = art.get("custom_story_fingerprint") or _custom_story_fingerprint(
+                art.get("headline", ""), art.get("teaser", "") or art.get("body", "")[:180]
+            )
+            already_published = (
+                (explicit_slug and explicit_slug in archived_custom_slugs)
+                or (queue_fp and queue_fp in archived_custom_fingerprints)
+                or (normalized_headline and normalized_headline in archived_custom_headlines)
+            )
+            if already_published:
+                skipped_published += 1
+                print(f"  Custom queue skip (already published): '{art.get('headline','')[:60]}'")
+                continue
+
         # Normalize into the same shape as generated articles
         art["is_custom"]       = True
         art["enriched"]        = True
@@ -3967,6 +4028,8 @@ def load_custom_articles():
         live.append(art)
     if live:
         print(f"  Custom articles loaded: {len(live)}")
+    if skipped_published:
+        print(f"  Custom queue ignored {skipped_published} already-published item(s)")
     return live
 
 
@@ -4995,7 +5058,7 @@ def _sanitize_authoritative_custom_archive(archive, articles_dir=None):
 
         canonical["is_custom"] = True
         canonical["authoritative_custom"] = True
-        canonical["custom_event_key"] = "2026-07-stuart-martin-80-cats-hoarding"
+        canonical["custom_event_key"] = "2026-07-stuart-martin-animal-hoarding"
         canonical["custom_fingerprint"] = _custom_story_fingerprint(
             canonical.get("headline", ""), canonical.get("teaser", "")
         )
@@ -5296,6 +5359,62 @@ def _audit_numbers(text):
     return {n for n in re.findall(r"\b\d{2,}\b", text or "") if not re.fullmatch(r"20\d{2}", n)}
 
 
+def _sports_event_compatible(a, b):
+    """Return True only when two sports items can plausibly describe the same game.
+
+    Recurring team coverage is unusually prone to false matches because every recap
+    repeats the same club, league and result vocabulary. Publication dates, opponents
+    and final scores therefore become hard identity signals for sports stories.
+    """
+    stage_a = _story_stage(_story_text(a))
+    stage_b = _story_stage(_story_text(b))
+    sports_stages = {"sports-preview", "sports-result"}
+    if stage_a not in sports_stages or stage_b not in sports_stages:
+        return True
+
+    # A recap may publish shortly after midnight, so allow a two-day window. Anything
+    # farther apart is a different game even when the same teams appear repeatedly.
+    da, db = _audit_date_value(a), _audit_date_value(b)
+    if da and db and abs((da - db).days) > 2:
+        return False
+
+    def scores(item):
+        text = _story_text(item)
+        return {tuple(map(int, pair)) for pair in re.findall(r"\b(\d{1,2})\s*[-–]\s*(\d{1,2})\b", text)}
+
+    scores_a, scores_b = scores(a), scores(b)
+    if scores_a and scores_b and not (scores_a & scores_b):
+        return False
+
+    team_patterns = {
+        "st-lucie-mets": r"\bst[.]? lucie mets\b",
+        "fort-myers-mussels": r"\b(?:fort myers )?(?:mighty )?mussels\b",
+        "palm-beach-cardinals": r"\bpalm beach cardinals\b|\bcardinals\b",
+        "clearwater-threshers": r"\bclearwater threshers\b|\bthreshers\b",
+        "tampa-tarpons": r"\btampa tarpons\b|\btarpons\b",
+        "lakeland-flying-tigers": r"\blakeland flying tigers\b|\bflying tigers\b",
+        "daytona-tortugas": r"\bdaytona tortugas\b|\btortugas\b",
+        "jupiter-hammerheads": r"\bjupiter hammerheads\b|\bhammerheads\b",
+    }
+
+    def teams(item):
+        text = _story_text(item).lower()
+        return {name for name, rx in team_patterns.items() if re.search(rx, text, re.I)}
+
+    teams_a, teams_b = teams(a), teams(b)
+    if teams_a and teams_b:
+        # Sharing only the frequently covered home club does not establish game identity.
+        shared = teams_a & teams_b
+        opponents_a = teams_a - {"st-lucie-mets"}
+        opponents_b = teams_b - {"st-lucie-mets"}
+        if opponents_a and opponents_b and not (opponents_a & opponents_b):
+            return False
+        if not shared and (opponents_a or opponents_b):
+            return False
+
+    return True
+
+
 def _same_story_topic(a, b):
     """Conservative topic matcher that deliberately ignores lifecycle stage.
 
@@ -5303,6 +5422,8 @@ def _same_story_topic(a, b):
     stage becomes a publishable major update in the shadow decision log.
     """
     if not a or not b:
+        return False
+    if not _sports_event_compatible(a, b):
         return False
     ta, tb = _story_text(a), _story_text(b)
     ka, kb = _known_event_key(ta), _known_event_key(tb)
@@ -5367,7 +5488,7 @@ def _story_match_confidence(a, b):
 def _story_entities(item):
     """Extract conservative entities for internal clustering and timelines.
 
-    V6.1 deliberately avoids treating title-cased headline fragments as people.
+    V6.2 deliberately avoids treating title-cased headline fragments as people.
     Person names are captured only in strong name contexts; known places and
     agencies remain deterministic and explainable.
     """
@@ -5521,7 +5642,7 @@ def _persist_story_decision_logs(data_dir, decisions, run_id):
         if not key or key in processed:
             continue
         record = dict(decision)
-        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v6.1"})
+        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v6.2.1"})
         new_records.append(record)
         processed[key] = {"run_id": run_id, "decision": decision.get("decision", ""), "slug": decision.get("slug", "")}
     if new_records:
@@ -5567,6 +5688,19 @@ def apply_guarded_story_suppression(all_categories, archive, current_customs=Non
     if EVENT_PIPELINE_MODE != "guarded":
         return []
     archive_items = [_event_audit_item(e, "archive") for e in (archive or []) if e.get("headline")]
+
+    # Register authoritative custom coverage before evaluating any live feed item.
+    # This closes the same-run race where a feed duplicate could be evaluated before
+    # the custom article had been written back to archive.json. Custom items are
+    # comparison anchors only: they can suppress a duplicate but can never themselves
+    # be removed by guarded enforcement.
+    authoritative_items = []
+    for custom in (current_customs or []):
+        normalized_custom = _event_audit_item(custom, "custom")
+        normalized_custom["is_custom"] = True
+        normalized_custom["authoritative_custom"] = True
+        authoritative_items.append(normalized_custom)
+
     accepted_live = []
     suppressions = []
 
@@ -5577,7 +5711,7 @@ def apply_guarded_story_suppression(all_categories, archive, current_customs=Non
         stage = _story_stage(_story_text(normalized))
         if stage == "general" or stage not in SAFE_AUTO_SUPPRESSION_STAGES:
             return None
-        candidates = archive_items + accepted_live
+        candidates = authoritative_items + archive_items + accepted_live
         matches = [prior for prior in candidates
                    if _story_stage(_story_text(prior)) == stage and _same_story_topic(normalized, prior)]
         if not matches:
@@ -5759,12 +5893,12 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
 
     data_dir = out_root / "data"; data_dir.mkdir(parents=True, exist_ok=True)
     run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"
-    registry = {"schema_version": 6.1, "mode": EVENT_PIPELINE_MODE, "generated_at": run_id,
-        "non_destructive": True, "engine": "story-centric-newsroom-v6.1", "article_count": len(items),
+    registry = {"schema_version": 6.2, "mode": EVENT_PIPELINE_MODE, "generated_at": run_id,
+        "non_destructive": True, "engine": "story-centric-newsroom-v6.2.1", "article_count": len(items),
         "story_count": len(stories), "clustering_threshold": STORY_CLUSTERING_CONFIDENCE,
         "live_action_threshold": AUTO_SUPPRESSION_CONFIDENCE, "stories": stories}
-    shadow = {"schema_version": 6.1, "mode": EVENT_PIPELINE_MODE, "non_destructive": True,
-        "engine": "story-centric-newsroom-v6.1", "generated_at": run_id,
+    shadow = {"schema_version": 6.2, "mode": EVENT_PIPELINE_MODE, "non_destructive": True,
+        "engine": "story-centric-newsroom-v6.2.1", "generated_at": run_id,
         "summary": {"articles_analyzed": len(items), "stories_identified": len(stories),
             "would_publish_new_story": summary_counts["WOULD_PUBLISH_NEW_STORY"],
             "would_publish_major_update": summary_counts["WOULD_PUBLISH_MAJOR_UPDATE"],
@@ -5774,12 +5908,12 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
             "clustered_85_89": bands["85-89"], "clustered_90_94": bands["90-94"],
             "eligible_95_plus": bands["95-100"]},
         "clustering_links": clustering_links, "decisions": decisions,
-        "notice": "V6.1 groups same-story matches at 85%+, but guarded live suppression remains limited to safe same-stage non-custom matches at 95%+. GROUPED_NO_ACTION requires no human review."}
+        "notice": "V6.2 groups same-story matches at 85%+, but guarded live suppression remains limited to safe same-stage non-custom matches at 95%+. GROUPED_NO_ACTION requires no human review."}
     (data_dir / "stories.json").write_text(json.dumps(registry, indent=2, ensure_ascii=False), encoding="utf-8")
     (data_dir / "story-shadow-log.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
     appended = _persist_story_decision_logs(data_dir, decisions, run_id)
     (data_dir / "event-audit.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  Story-centric newsroom v6.1: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
+    print(f"  Story-centric newsroom v6.2.1: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
     print(f"  Group-only: {summary_counts['GROUPED_NO_ACTION']}; eligible suppressions: {summary_counts['WOULD_SUPPRESS_DUPLICATE']}; major updates: {summary_counts['WOULD_PUBLISH_MAJOR_UPDATE']}")
     return shadow
 
