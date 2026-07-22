@@ -1,5 +1,5 @@
 """
-Treasure Coast Today - news generation pipeline - v6.5.18 Authoritative Custom Canonicals + Atomic Publishing
+Treasure Coast Today - news generation pipeline - v6.5.19 Complete Leads + Authoritative Canonicals + Atomic Publishing
 Covers Martin, St. Lucie, and Indian River counties.
 Runs 4x/day via GitHub Actions.
 """
@@ -1175,6 +1175,8 @@ def _publishable_article(item, hero=False):
         return False
 
     body = (item.get("body", "") or "").strip()
+    if _article_lead_quality_issues(body, item.get("headline", "")):
+        return False
     min_words = MIN_HERO_BODY_WORDS if hero else MIN_CARD_BODY_WORDS
     if _word_count(body) < min_words:
         return False
@@ -1655,7 +1657,9 @@ LOCAL_SYSTEM_PROMPT = (
     "known, as a normal news article would. Never turn a gap in your input into a sentence, and never build "
     "analysis or speculation on top of a missing fact. If you find yourself about to explain what is missing, stop "
     "and omit it entirely. "
-    "Always produce a complete, readable article."
+    "Always produce a complete, readable article. Assume the reader knows nothing about the story. "
+    "Begin every article with a proper self-contained news lead that introduces the central event, location, timing, and significance before follow-up details. "
+    "Never begin with a continuation-style detail such as an injured person being released, an attorney returning to a scene, an official adding a comment, or a named source speaking unless the opening sentence also fully introduces the underlying event."
 )
 
 FLORIDA_SYSTEM_PROMPT = (
@@ -1673,7 +1677,9 @@ FLORIDA_SYSTEM_PROMPT = (
     "known, as a normal news article would. Never turn a gap in your input into a sentence, and never build "
     "analysis or speculation on top of a missing fact. If you find yourself about to explain what is missing, stop "
     "and omit it entirely. "
-    "Always produce a complete, readable article."
+    "Always produce a complete, readable article. Assume the reader knows nothing about the story. "
+    "Begin every article with a proper self-contained news lead that introduces the central event, location, timing, and significance before follow-up details. "
+    "Never begin with a continuation-style detail such as an injured person being released, an attorney returning to a scene, an official adding a comment, or a named source speaking unless the opening sentence also fully introduces the underlying event."
 )
 
 
@@ -1886,8 +1892,8 @@ Return ONLY valid JSON:
 Tasks:
 1. Pick the single most important/urgent story for Treasure Coast Florida residents. LOCAL stories (county commission decisions, local crime, school district news, local business, road/infrastructure, local sports) rank ABOVE national or state stories unless the national story has very direct local impact.
 2. Write an accurate, locally-framed headline. Name the specific county, city, or town in the headline when relevant.
-3. Write a complete, readable factual article of four full paragraphs covering what happened, who is affected locally, the context, and what happens next. Never write absence language.
-4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one to two sentences) and a body of two to three full paragraphs. Always preserve proper nouns — school names, road names, business names, people's names. If the source names specific schools, streets, or institutions, those names MUST appear in the card. Never write absence language. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
+3. Write a complete, readable factual article of four full paragraphs. You are writing the entire article from scratch, not continuing another article. Assume the reader knows nothing. Begin with a proper self-contained lead that summarizes the most newsworthy facts and introduces who, what, where, when, and why it matters. Do not begin with a follow-up detail, quote, attorney, official, victim status update, or named source before explaining the underlying event. Then cover who is affected locally, the context, and what happens next. Never write absence language.
+4. For the next {CARDS_PER_CATEGORY} most important stories write a teaser (one to two sentences) and a body of two to three full paragraphs. Each body must also be a complete standalone article written from scratch for a first-time reader, beginning with a proper lead rather than a follow-up detail. Always preserve proper nouns — school names, road names, business names, people's names. If the source names specific schools, streets, or institutions, those names MUST appear in the card. Never write absence language. Include an urgency_score (1-10). Cards MUST be different stories from the hero.
 
 Return ONLY valid JSON:
 {{
@@ -2734,7 +2740,7 @@ def enhance_card(card, content_bank, headlines):
             f"Write {target}. Use only confirmed facts from the source. "
             "Include concrete names, places, agencies, dates, numbers, votes, charges, locations, schools, roads, or businesses when present. "
             "Do not write generic background, typical patterns, community-impact filler, or advice unless explicitly stated in the source. "
-            "If the source lacks enough facts, write less and stop. No em dashes. Return only the rewritten body."
+            "You are writing the complete standalone article from scratch, not continuing the current body. Assume the reader knows nothing. Begin with a self-contained lead that introduces the central event, location, timing, and significance before any follow-up detail, quote, attorney, official, or victim update. If the source lacks enough facts, write less and stop. No em dashes. Return only the rewritten body."
         )
         resp = client.messages.create(
             model=MODEL_ARTICLES,
@@ -2770,7 +2776,7 @@ def enhance_hero_article(hero, full_text):
         f"Here is source material:\n\n{full_text}\n\n"
         "If the source material is clearly about a different story, location, or incident than the headline, "
         "return your original article exactly as written above with no changes. "
-        "Otherwise, rewrite your article using confirmed facts from the source. "
+        "Otherwise, rewrite the entire article from scratch using confirmed facts from the source. Assume the reader knows nothing. Begin with a proper self-contained lead that summarizes the central event, location, timing, and significance. Do not begin with a follow-up detail, quote, attorney, official, victim status update, or named source before explaining the underlying event. "
         "Write in your own words — paraphrase everything except direct quotes from named individuals. "
         "Do not invent details not in the source. Do not comment on absent information. "
         "Do not copy newsletter openers like 'Good morning'. "
@@ -8156,7 +8162,71 @@ def _plain_article_body_from_html(path):
     return "\n\n".join(cleaned)
 
 
-def _canonical_body_quality_issues(body):
+def _article_lead_quality_issues(body, headline=""):
+    """Return reasons the opening reads like the middle of another article.
+
+    The lead must orient a first-time reader before introducing follow-up reporting.
+    This intentionally fails closed: a thin or continuation-style opening is safer to
+    reject than publish as the permanent article.
+    """
+    body = (body or "").strip()
+    if not body:
+        return ["empty lead"]
+    first = re.split(r"\n\s*\n+", body, maxsplit=1)[0].strip()
+    first_clean = re.sub(r"^[\s\"'“”‘’]+", "", first)
+    low = first_clean.lower()
+    issues = []
+
+    continuation_starts = (
+        "the injured ", "the attorney ", "officials also ", "meanwhile", "baker ",
+        "he said", "she said", "the sheriff also ", "according to ",
+        "the victim ", "the child has since ", "the man has since ",
+        "the woman has since ", "investigators also ", "fedex also ",
+    )
+    if any(low.startswith(prefix) for prefix in continuation_starts):
+        issues.append("lead begins with a follow-up detail")
+
+    # A usable lead should be substantial enough to establish the event. Very short
+    # openings are usually captions, update fragments, or quote setups.
+    words = re.findall(r"\b[\w'’-]+\b", first_clean)
+    if len(words) < 22:
+        issues.append("lead is too short to establish context")
+
+    # Require an action/event verb and at least one concrete orientation signal.
+    event_verbs = re.compile(
+        r"\b(?:killed|died|injured|arrested|charged|sentenced|approved|rejected|opened|closed|"
+        r"announced|reported|found|rescued|released|collided|crashed|struck|fired|terminated|"
+        r"suspended|investigating|investigates|issued|lifted|began|will|has|have|was|were)\b",
+        re.I,
+    )
+    if not event_verbs.search(first_clean):
+        issues.append("lead does not clearly state what happened")
+
+    orientation = re.compile(
+        r"\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|today|yesterday|"
+        r"morning|afternoon|evening|night|county|city|road|street|avenue|boulevard|highway|"
+        r"port st\.? lucie|fort pierce|stuart|vero beach|sebastian|jensen beach|hobe sound|"
+        r"martin|st\.? lucie|indian river|florida)\b",
+        re.I,
+    )
+    if not orientation.search(first_clean):
+        issues.append("lead lacks clear location or timing context")
+
+    # The headline's distinctive terms should be represented in the opening so the
+    # article does not promise one angle and begin with another.
+    headline_terms = [t for t in _sig_tokens(headline or "") if t not in GENERIC_TOKENS]
+    lead_terms = set(_sig_tokens(first_clean))
+    if headline_terms:
+        distinct = set(headline_terms)
+        overlap = distinct & lead_terms
+        needed = 2 if len(distinct) >= 4 else 1
+        if len(overlap) < needed:
+            issues.append("lead does not match the headline's primary angle")
+
+    return issues
+
+
+def _canonical_body_quality_issues(body, headline=""):
     """Return structural problems that make a canonical article unsafe to publish.
 
     Canonical articles must read as one complete story. Repeated versions, appended
@@ -8168,6 +8238,8 @@ def _canonical_body_quality_issues(body):
     issues = []
     if not body:
         return ["empty body"]
+
+    issues.extend(_article_lead_quality_issues(body, headline))
 
     lowered = body.lower()
     forbidden = (
@@ -8238,19 +8310,20 @@ def _evolve_canonical_body(hero, existing, article_path):
     # Brand-new canonical content with no usable prior body can be used directly, but
     # it still must pass the same anti-duplication checks.
     if not old_body:
-        issues = _canonical_body_quality_issues(new_body)
+        issues = _canonical_body_quality_issues(new_body, hero.get("headline", ""))
         if issues:
             raise RuntimeError("Canonical body validation failed: " + "; ".join(issues[:8]))
         return new_body
 
     prompt = (
-        "Rewrite the following developing local-news story as ONE complete, coherent "
-        "article. The output will fully replace the current article at its permanent "
+        "Write the following developing local-news story as ONE complete, coherent article FROM SCRATCH. "
+        "Assume the reader knows nothing about the story. This is not a continuation, addendum, or update note. "
+        "The output will fully replace the current article at its permanent "
         "canonical URL. Use the previous article and the incoming report only as source "
         "material. Incorporate the newest verified development, retain important prior "
-        "context, and remove duplicated facts. Start with a self-contained lead that "
-        "states what happened and the latest status; do not begin in the middle of the "
-        "story. Use a logical chronology. Mention each fact, statistic, quote, and source "
+        "context, and remove duplicated facts. Begin with a proper self-contained lead that summarizes the most newsworthy facts and introduces who, what, where, when, and why it matters. "
+        "Do not begin with a follow-up detail, quote, attorney, official, victim status update, named source, or pronoun before explaining the underlying event. "
+        "Use a logical chronology. Mention each fact, statistic, quote, and source "
         "at most once unless repetition is essential for clarity. Do not add headings, "
         "notes, labels such as 'Earlier coverage,' markdown links, or commentary about "
         "the rewrite. Do not invent facts. Return only the finished article in plain "
@@ -8275,9 +8348,9 @@ def _evolve_canonical_body(hero, existing, article_path):
     # A clean incoming article is the only permissible fallback. The old article is
     # never concatenated to it.
     candidate = rewritten or new_body
-    issues = _canonical_body_quality_issues(candidate)
+    issues = _canonical_body_quality_issues(candidate, hero.get("headline", ""))
     if issues and rewritten:
-        fallback_issues = _canonical_body_quality_issues(new_body)
+        fallback_issues = _canonical_body_quality_issues(new_body, hero.get("headline", ""))
         if not fallback_issues:
             print("    Rewritten canonical failed validation; using clean incoming article only")
             candidate = new_body
