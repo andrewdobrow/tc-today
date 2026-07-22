@@ -18,13 +18,13 @@ from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as
 
 # Editorial engine shadow integration. This is deliberately fail-open: audit
 # failures are logged but can never stop or alter the existing publication path.
+_editorial_import_error = None
 try:
     from tct_engine import EditorialEngine, route_editorial_result
-except Exception as _editorial_import_error:
+except Exception as exc:
     EditorialEngine = None
     route_editorial_result = None
-else:
-    _editorial_import_error = None
+    _editorial_import_error = exc
 
 # -- CONFIG --
 
