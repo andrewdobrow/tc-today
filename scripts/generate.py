@@ -5216,6 +5216,46 @@ def _unified_live_event_dedupe(all_categories, archived_customs=None, current_cu
 EVENT_PIPELINE_MODE = os.environ.get("TCT_EVENT_PIPELINE_MODE", "guarded").strip().lower()
 
 
+def _audit_infer_category(headline, teaser="", body="", stored_category=""):
+    """Return a conservative beat category for diagnostics and guarded matching.
+
+    Historical archive rows can carry stale category metadata after a hero/card is
+    replaced. Strong content signals may correct the beat, but ambiguous county
+    stories retain their stored county category rather than being guessed.
+    """
+    text = re.sub(r"[^a-z0-9]+", " ", " ".join([headline or "", teaser or "", (body or "")[:1200]]).lower())
+    stored = (stored_category or "").strip()
+
+    sports_entity = re.search(r"\b(st lucie mets|mighty mussels|palm beach cardinals|clearwater threshers|tampa tarpons|baseball|football|basketball|soccer|softball|volleyball|golf|tennis)\b", text)
+    sports_event = re.search(r"\b(score|final|defeat|defeats|win|wins|won|loss|lost|victory|sweep|series|game|homestand|inning|innings|rbi|home run|touchdown|goal)\b", text)
+    if sports_entity and sports_event:
+        return "sports"
+
+    if re.search(r"\b(arrest|arrested|charged|indicted|homicide|murder|shooting|kidnapping|robbery|theft|child pornography|attempted murder|deputies seize|drug trafficking)\b", text):
+        return "crime"
+    if re.search(r"\b(school district|school board|superintendent|teacher|student|students|campus|elementary school|middle school|high school|graduation rate)\b", text):
+        return "schools"
+    if re.search(r"\b(city council|county commission|city commission|commissioners|ordinance|public workshop|public hearing|city hall|municipal|budget workshop|zoning|annexation)\b", text):
+        return "local_gov"
+    if re.search(r"\b(grand opening|opens|opening|business|restaurant|store|development|redevelopment|construction|demolition|real estate|property listing|airline route|jobs)\b", text):
+        return "business"
+    if re.search(r"\b(festival|concert|parade|fireworks|things to do|weekend events|celebration|arts festival|community event)\b", text):
+        return "things_to_do"
+
+    return stored
+
+
+def _audit_slug_headline_warning(slug, headline):
+    """Flag obvious stale-record corruption without penalizing normal rewrites."""
+    slug_text = re.sub(r"^20\d{2}-\d{2}-\d{2}-", "", slug or "").replace("-", " ")
+    slug_tokens = _sig_tokens(slug_text)
+    headline_tokens = _sig_tokens(headline or "")
+    if len(slug_tokens) < 5 or len(headline_tokens) < 4:
+        return False
+    shared = _shared_tokens(slug_tokens, headline_tokens)
+    return len(shared) < 2 and (len(shared) / max(1, min(len(slug_tokens), len(headline_tokens)))) < 0.18
+
+
 def _event_audit_item(item, origin="archive"):
     """Normalize an existing or custom article for the shadow story registry."""
     item = dict(item or {})
@@ -5223,6 +5263,8 @@ def _event_audit_item(item, origin="archive"):
     body = item.get("body") or item.get("article") or item.get("content") or ""
     teaser = item.get("teaser") or item.get("summary") or ""
     slug = item.get("slug") or ""
+    stored_category = item.get("category_key") or item.get("category") or ""
+    effective_category = _audit_infer_category(headline, teaser, body, stored_category)
     return {
         "headline": headline,
         "teaser": teaser,
@@ -5231,12 +5273,15 @@ def _event_audit_item(item, origin="archive"):
         "link": item.get("link") or (f"{SITE_URL}/articles/{slug}.html" if slug else ""),
         "date": item.get("date") or item.get("lastmod") or item.get("published") or "",
         "lastmod": item.get("lastmod") or item.get("date") or "",
-        "category_key": item.get("category_key") or item.get("category") or "",
+        "category_key": effective_category,
+        "stored_category_key": stored_category,
+        "category_corrected": bool(effective_category and stored_category and effective_category != stored_category),
         "category_label": item.get("category_label") or "",
         "source_url": item.get("source_url") or item.get("original_url") or item.get("feed_url") or "",
         "is_custom": bool(item.get("is_custom") or item.get("authoritative_custom") or origin == "custom"),
         "authoritative_custom": bool(item.get("authoritative_custom") or origin == "custom"),
         "origin": origin,
+        "record_integrity_warning": _audit_slug_headline_warning(slug, headline),
         "article_word_count": int(item.get("article_word_count", 0) or len(str(body).split())),
     }
 
@@ -5422,6 +5467,11 @@ def _same_story_topic(a, b):
     stage becomes a publishable major update in the shadow decision log.
     """
     if not a or not b:
+        return False
+    # A stale archive row whose slug and headline describe unrelated stories is not
+    # safe clustering input. Keep it visible in diagnostics, but never let it create
+    # a duplicate or major-update relationship.
+    if a.get("record_integrity_warning") or b.get("record_integrity_warning"):
         return False
     if not _sports_event_compatible(a, b):
         return False
@@ -5642,7 +5692,7 @@ def _persist_story_decision_logs(data_dir, decisions, run_id):
         if not key or key in processed:
             continue
         record = dict(decision)
-        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v6.2.1"})
+        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v6.2.2"})
         new_records.append(record)
         processed[key] = {"run_id": run_id, "decision": decision.get("decision", ""), "slug": decision.get("slug", "")}
     if new_records:
@@ -5852,6 +5902,9 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
             decisions.append({
                 "story_id": story_id, "slug": article.get("slug", ""), "headline": article.get("headline", ""),
                 "date": article.get("date", ""), "category_key": article.get("category_key", ""),
+                "stored_category_key": article.get("stored_category_key", ""),
+                "category_corrected": bool(article.get("category_corrected")),
+                "record_integrity_warning": bool(article.get("record_integrity_warning")),
                 "is_custom": bool(article.get("is_custom") or article.get("authoritative_custom")),
                 "story_stage": stage, "decision": decision, "reason": reason,
                 "match_confidence": confidence,
@@ -5880,7 +5933,11 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
             "article_count": len(members), "entities": _merge_story_entities(members),
             "timeline": _story_timeline(members), "stages": stage_records,
             "articles": [{"slug": m.get("slug", ""), "headline": m.get("headline", ""), "date": m.get("date", ""),
-                "category_key": m.get("category_key", ""), "is_custom": bool(m.get("is_custom") or m.get("authoritative_custom")),
+                "category_key": m.get("category_key", ""),
+                "stored_category_key": m.get("stored_category_key", ""),
+                "category_corrected": bool(m.get("category_corrected")),
+                "record_integrity_warning": bool(m.get("record_integrity_warning")),
+                "is_custom": bool(m.get("is_custom") or m.get("authoritative_custom")),
                 "origin": m.get("origin", "archive"), "story_stage": _story_stage(_story_text(m)),
                 "entities": _story_entities(m)} for m in chronological],
         })
@@ -5894,11 +5951,11 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
     data_dir = out_root / "data"; data_dir.mkdir(parents=True, exist_ok=True)
     run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"
     registry = {"schema_version": 6.2, "mode": EVENT_PIPELINE_MODE, "generated_at": run_id,
-        "non_destructive": True, "engine": "story-centric-newsroom-v6.2.1", "article_count": len(items),
+        "non_destructive": True, "engine": "story-centric-newsroom-v6.2.2", "article_count": len(items),
         "story_count": len(stories), "clustering_threshold": STORY_CLUSTERING_CONFIDENCE,
         "live_action_threshold": AUTO_SUPPRESSION_CONFIDENCE, "stories": stories}
     shadow = {"schema_version": 6.2, "mode": EVENT_PIPELINE_MODE, "non_destructive": True,
-        "engine": "story-centric-newsroom-v6.2.1", "generated_at": run_id,
+        "engine": "story-centric-newsroom-v6.2.2", "generated_at": run_id,
         "summary": {"articles_analyzed": len(items), "stories_identified": len(stories),
             "would_publish_new_story": summary_counts["WOULD_PUBLISH_NEW_STORY"],
             "would_publish_major_update": summary_counts["WOULD_PUBLISH_MAJOR_UPDATE"],
@@ -5908,12 +5965,12 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
             "clustered_85_89": bands["85-89"], "clustered_90_94": bands["90-94"],
             "eligible_95_plus": bands["95-100"]},
         "clustering_links": clustering_links, "decisions": decisions,
-        "notice": "V6.2 groups same-story matches at 85%+, but guarded live suppression remains limited to safe same-stage non-custom matches at 95%+. GROUPED_NO_ACTION requires no human review."}
+        "notice": "V6.2.2 corrects strong category mismatches and quarantines stale slug/headline records. It groups same-story matches at 85%+, but guarded live suppression remains limited to safe same-stage non-custom matches at 95%+. GROUPED_NO_ACTION requires no human review."}
     (data_dir / "stories.json").write_text(json.dumps(registry, indent=2, ensure_ascii=False), encoding="utf-8")
     (data_dir / "story-shadow-log.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
     appended = _persist_story_decision_logs(data_dir, decisions, run_id)
     (data_dir / "event-audit.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  Story-centric newsroom v6.2.1: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
+    print(f"  Story-centric newsroom v6.2.2: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
     print(f"  Group-only: {summary_counts['GROUPED_NO_ACTION']}; eligible suppressions: {summary_counts['WOULD_SUPPRESS_DUPLICATE']}; major updates: {summary_counts['WOULD_PUBLISH_MAJOR_UPDATE']}")
     return shadow
 
