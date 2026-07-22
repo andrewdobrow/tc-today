@@ -16,6 +16,16 @@ from pathlib import Path
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
 
+# Editorial engine shadow integration. This is deliberately fail-open: audit
+# failures are logged but can never stop or alter the existing publication path.
+try:
+    from tct_engine import EditorialEngine, route_editorial_result
+except Exception as _editorial_import_error:
+    EditorialEngine = None
+    route_editorial_result = None
+else:
+    _editorial_import_error = None
+
 # -- CONFIG --
 
 TCT_PRESENTATION_VERSION = "6.4-unified-presentation-hotfix"
@@ -171,6 +181,12 @@ OUTPUT_DIR   = Path(__file__).parent.parent
 SITE_URL     = "https://treasurecoast.today"
 SITE_NAME    = "Treasure Coast Today"
 SITE_TAGLINE = "Your Treasure Coast, every day."
+
+
+# Audit-only editorial engine persistence and decision log. Neither file is read by
+# the live publisher, homepage renderer, archive writer, or duplicate suppressor.
+EDITORIAL_STATE_PATH = OUTPUT_DIR / "data" / "editorial_state.json"
+EDITORIAL_AUDIT_LOG_PATH = OUTPUT_DIR / "data" / "editorial_audit.jsonl"
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -8045,8 +8061,92 @@ def ensure_all_category_sections(all_categories, min_cards=6):
     all_categories[:] = rebuilt
     return all_categories
 
+
+
+def _load_editorial_engine_audit():
+    """Load the shadow editorial engine without changing publication behavior."""
+    if EditorialEngine is None:
+        print(f"  Editorial audit disabled: {_editorial_import_error}")
+        return None
+    try:
+        EDITORIAL_STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
+        engine = EditorialEngine.load(EDITORIAL_STATE_PATH)
+        print(f"  Editorial audit state loaded: {EDITORIAL_STATE_PATH}")
+        return engine
+    except Exception as exc:
+        print(f"  Editorial audit load failed; continuing unchanged: {exc}")
+        return None
+
+
+def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, audit_rows):
+    """Observe candidate decisions only; never filter, reorder, or mutate live input."""
+    if engine is None or route_editorial_result is None:
+        return
+
+    for entry in headlines:
+        audit_key = (entry.get("link") or entry.get("title") or "").strip().lower()
+        if not audit_key or audit_key in audited_keys:
+            continue
+        audited_keys.add(audit_key)
+
+        try:
+            # Pass a shallow copy so an adapter can never mutate the live candidate.
+            result = engine.process(
+                dict(entry),
+                source=entry.get("feed_url") or entry.get("link") or "rss",
+                county=category_key if category_key in COUNTY_KEYS else "",
+            )
+            instruction = route_editorial_result(result)
+            route = getattr(getattr(instruction, "route", None), "value", None)
+            route = route or str(getattr(instruction, "route", "unknown"))
+            row = {
+                "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+                "category": category_key,
+                "headline": entry.get("title", ""),
+                "source_url": entry.get("link", ""),
+                "route": route,
+                "event_key": getattr(instruction, "event_key", ""),
+                "incoming_article_id": getattr(instruction, "incoming_article_id", ""),
+                "target_article_id": getattr(instruction, "target_article_id", ""),
+            }
+            audit_rows.append(row)
+            print(
+                "  EDITORIAL AUDIT:",
+                row["route"],
+                "| event:", row["event_key"],
+                "| incoming:", row["incoming_article_id"],
+                "| target:", row["target_article_id"],
+            )
+        except Exception as exc:
+            print(f"  Editorial audit item failed; continuing unchanged: {exc}")
+
+
+def _save_editorial_engine_audit(engine, audit_rows):
+    """Persist shadow state and observations; failures remain non-fatal."""
+    if engine is not None:
+        try:
+            EDITORIAL_STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
+            engine.save(EDITORIAL_STATE_PATH)
+            print(f"  Editorial audit state saved: {EDITORIAL_STATE_PATH}")
+        except Exception as exc:
+            print(f"  Editorial audit save failed; publication output is unchanged: {exc}")
+
+    if audit_rows:
+        try:
+            EDITORIAL_AUDIT_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+            with EDITORIAL_AUDIT_LOG_PATH.open("a", encoding="utf-8") as audit_file:
+                for row in audit_rows:
+                    audit_file.write(json.dumps(row, ensure_ascii=False) + "\n")
+            print(f"  Editorial audit logged {len(audit_rows)} unique candidate decision(s)")
+        except Exception as exc:
+            print(f"  Editorial audit log failed; publication output is unchanged: {exc}")
+
+
 def main():
     print("Treasure Coast Today — building site...")
+    editorial_engine = _load_editorial_engine_audit()
+    editorial_audited_keys = set()
+    editorial_audit_rows = []
     image_bank   = build_image_bank()
     content_bank = build_content_bank()
     used_bank_images = set()
@@ -8104,6 +8204,13 @@ def main():
         # Pull a wider candidate pool because broad WPTV feeds can contain several
         # sections' worth of local stories. Then rank/filter down to this category.
         headlines = fetch_headlines(cat_config["feeds"], limit=24, feed_cache=feed_cache)
+
+        # Shadow observation happens before live freshness, depth, and category gates.
+        # It receives copies and its result is intentionally ignored by production.
+        _audit_editorial_candidates(
+            editorial_engine, headlines, cat_key,
+            editorial_audited_keys, editorial_audit_rows,
+        )
 
         # Filter headlines older than 48 hours
         from datetime import timezone as _tz2
@@ -8492,6 +8599,9 @@ def main():
     (OUTPUT_DIR / "ownership.html").write_text(render_ownership_page(), encoding="utf-8")
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
     (OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat), encoding="utf-8")
+
+    # Save only after the normal production build has completed. This remains audit-only.
+    _save_editorial_engine_audit(editorial_engine, editorial_audit_rows)
 
     print(f"Done. {len(all_categories)} categories written.")
 
