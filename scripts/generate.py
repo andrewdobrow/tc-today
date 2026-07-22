@@ -5620,14 +5620,43 @@ def _story_base_id(item):
     return f"story-{re.sub(r'[^a-z0-9]+', '-', base).strip('-')[:55]}-{digest}"[:80]
 
 
+STORY_REGISTRY_SCHEMA = 7.0
+STORY_REGISTRY_FILENAME = "story-registry.json"
+
+
+def _atomic_write_json(path, payload):
+    """Write JSON atomically so a cancelled workflow cannot leave partial state."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp_path = path.with_name(path.name + ".tmp")
+    temp_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+    os.replace(temp_path, path)
+
+
+def _load_story_registry(out_dir):
+    """Load persistent editorial memory, failing open to an empty rebuildable registry."""
+    path = Path(out_dir) / "data" / STORY_REGISTRY_FILENAME
+    payload = _read_json_file(path, {})
+    if not isinstance(payload, dict) or not isinstance(payload.get("stories", []), list):
+        return {"schema_version": STORY_REGISTRY_SCHEMA, "stories": []}
+    return payload
+
+
 def _load_previous_story_membership(out_dir):
-    path = Path(out_dir) / "data" / "stories.json"
-    if not path.exists():
-        return {}, {}
-    try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
-        return {}, {}
+    """Prefer the persistent registry, then fall back to the rebuildable snapshot."""
+    data_dir = Path(out_dir) / "data"
+    paths = [data_dir / STORY_REGISTRY_FILENAME, data_dir / "stories.json"]
+    payload = {}
+    for path in paths:
+        if not path.exists():
+            continue
+        try:
+            candidate = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if isinstance(candidate, dict) and isinstance(candidate.get("stories", []), list):
+            payload = candidate
+            break
     by_slug, titles = {}, {}
     for story in payload.get("stories", []):
         sid = story.get("story_id")
@@ -5635,9 +5664,71 @@ def _load_previous_story_membership(out_dir):
             continue
         titles[sid] = story.get("title", "")
         for article in story.get("articles", []):
-            if article.get("slug"):
-                by_slug[article["slug"]] = sid
+            slug = article.get("slug")
+            if slug:
+                by_slug[slug] = sid
     return by_slug, titles
+
+
+def _merge_persistent_story_registry(previous_payload, computed_stories, run_id):
+    """Preserve stable identity and history while treating the archive as immutable input.
+
+    This never rewrites archive.json, article files, slugs, redirects, or public metadata.
+    The registry is editorial memory only and can be rebuilt from the archive at any time.
+    """
+    previous_by_id = {
+        s.get("story_id"): s for s in previous_payload.get("stories", [])
+        if isinstance(s, dict) and s.get("story_id")
+    }
+    merged = []
+    article_to_story = {}
+    for story in computed_stories:
+        current = dict(story)
+        prior = previous_by_id.get(current.get("story_id"), {})
+        current["created_at"] = prior.get("created_at") or prior.get("first_seen_at") or run_id
+        current["first_seen_at"] = prior.get("first_seen_at") or current["created_at"]
+        current["last_seen_at"] = run_id
+        current["registry_revision"] = int(prior.get("registry_revision", 0) or 0) + 1
+
+        aliases = []
+        for value in list(prior.get("aliases", [])) + [
+            prior.get("title", ""), prior.get("canonical_headline", ""),
+            current.get("title", ""), current.get("canonical_headline", "")
+        ]:
+            value = str(value or "").strip()
+            if value and value not in aliases:
+                aliases.append(value)
+        current["aliases"] = aliases[:50]
+
+        historical_slugs = []
+        for value in list(prior.get("historical_slugs", [])) + [
+            a.get("slug", "") for a in prior.get("articles", [])
+        ] + [a.get("slug", "") for a in current.get("articles", [])]:
+            value = str(value or "").strip()
+            if value and value not in historical_slugs:
+                historical_slugs.append(value)
+        current["historical_slugs"] = historical_slugs
+        current["archive_immutable"] = True
+        current["public_urls_changed"] = False
+        for slug in historical_slugs:
+            article_to_story[slug] = current.get("story_id")
+        merged.append(current)
+
+    return {
+        "schema_version": STORY_REGISTRY_SCHEMA,
+        "engine": "story-centric-newsroom-v7.0",
+        "generated_at": run_id,
+        "updated_at": run_id,
+        "mode": EVENT_PIPELINE_MODE,
+        "registry_role": "persistent-editorial-memory",
+        "rebuildable_from": ["archive.json", "custom_articles.json"],
+        "archive_immutable": True,
+        "public_urls_changed": False,
+        "story_count": len(merged),
+        "article_membership_count": len(article_to_story),
+        "article_to_story": article_to_story,
+        "stories": merged,
+    }
 
 
 
@@ -5692,7 +5783,7 @@ def _persist_story_decision_logs(data_dir, decisions, run_id):
         if not key or key in processed:
             continue
         record = dict(decision)
-        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v6.2.2"})
+        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v7.0"})
         new_records.append(record)
         processed[key] = {"run_id": run_id, "decision": decision.get("decision", ""), "slug": decision.get("slug", "")}
     if new_records:
@@ -5812,9 +5903,9 @@ def prior_membership_id(item, archive_items):
 def build_story_shadow(archive, current_customs=None, live_categories=None, output_dir=None):
     """Build persistent story records with clustering separated from live action.
 
-    V6 groups credible 85%+ matches into the same story, while guarded publication
-    still suppresses only safe same-stage duplicates at 95%+. The 85-94 band is
-    observational: it enriches the story graph but never removes or redirects content.
+    V7 keeps the same conservative guarded decisions while adding persistent story
+    identity in story-registry.json. The registry is internal, atomic, and rebuildable;
+    it never edits published URLs, archive records, redirects, or article pages.
     """
     if EVENT_PIPELINE_MODE not in {"audit", "shadow", "guarded"}:
         print(f"  Story engine disabled (mode={EVENT_PIPELINE_MODE})")
@@ -5950,12 +6041,15 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
 
     data_dir = out_root / "data"; data_dir.mkdir(parents=True, exist_ok=True)
     run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"
-    registry = {"schema_version": 6.2, "mode": EVENT_PIPELINE_MODE, "generated_at": run_id,
-        "non_destructive": True, "engine": "story-centric-newsroom-v6.2.2", "article_count": len(items),
+    previous_registry = _load_story_registry(out_root)
+    persistent_registry = _merge_persistent_story_registry(previous_registry, stories, run_id)
+    registry = {"schema_version": 7.0, "mode": EVENT_PIPELINE_MODE, "generated_at": run_id,
+        "non_destructive": True, "engine": "story-centric-newsroom-v7.0", "article_count": len(items),
         "story_count": len(stories), "clustering_threshold": STORY_CLUSTERING_CONFIDENCE,
-        "live_action_threshold": AUTO_SUPPRESSION_CONFIDENCE, "stories": stories}
+        "live_action_threshold": AUTO_SUPPRESSION_CONFIDENCE, "registry_file": STORY_REGISTRY_FILENAME,
+        "archive_immutable": True, "public_urls_changed": False, "stories": stories}
     shadow = {"schema_version": 6.2, "mode": EVENT_PIPELINE_MODE, "non_destructive": True,
-        "engine": "story-centric-newsroom-v6.2.2", "generated_at": run_id,
+        "engine": "story-centric-newsroom-v7.0", "generated_at": run_id,
         "summary": {"articles_analyzed": len(items), "stories_identified": len(stories),
             "would_publish_new_story": summary_counts["WOULD_PUBLISH_NEW_STORY"],
             "would_publish_major_update": summary_counts["WOULD_PUBLISH_MAJOR_UPDATE"],
@@ -5964,13 +6058,19 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
             "grouped_no_action": summary_counts["GROUPED_NO_ACTION"],
             "clustered_85_89": bands["85-89"], "clustered_90_94": bands["90-94"],
             "eligible_95_plus": bands["95-100"]},
+        "registry": {"file": STORY_REGISTRY_FILENAME, "persistent": True, "rebuildable": True,
+            "archive_immutable": True, "public_urls_changed": False,
+            "previous_story_count": len(previous_registry.get("stories", [])),
+            "current_story_count": len(persistent_registry.get("stories", [])),
+            "article_membership_count": persistent_registry.get("article_membership_count", 0)},
         "clustering_links": clustering_links, "decisions": decisions,
-        "notice": "V6.2.2 corrects strong category mismatches and quarantines stale slug/headline records. It groups same-story matches at 85%+, but guarded live suppression remains limited to safe same-stage non-custom matches at 95%+. GROUPED_NO_ACTION requires no human review."}
-    (data_dir / "stories.json").write_text(json.dumps(registry, indent=2, ensure_ascii=False), encoding="utf-8")
-    (data_dir / "story-shadow-log.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
+        "notice": "V7.0 adds a persistent, rebuildable story registry without changing published URLs, archive records, or live suppression thresholds. The archive remains immutable; the registry preserves stable story identities and editorial memory across runs."}
+    _atomic_write_json(data_dir / STORY_REGISTRY_FILENAME, persistent_registry)
+    _atomic_write_json(data_dir / "stories.json", registry)
+    _atomic_write_json(data_dir / "story-shadow-log.json", shadow)
     appended = _persist_story_decision_logs(data_dir, decisions, run_id)
     (data_dir / "event-audit.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  Story-centric newsroom v6.2.2: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
+    print(f"  Story-centric newsroom v7.0: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
     print(f"  Group-only: {summary_counts['GROUPED_NO_ACTION']}; eligible suppressions: {summary_counts['WOULD_SUPPRESS_DUPLICATE']}; major updates: {summary_counts['WOULD_PUBLISH_MAJOR_UPDATE']}")
     return shadow
 
