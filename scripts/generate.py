@@ -3258,7 +3258,11 @@ def render_index(all_categories, top_cat):
     }
 
     def hero_section(cat_key, cat_label, hero, visible=False):
-        preview    = hero.get("body", "")[:380].rstrip()
+        archive = load_archive(OUTPUT_DIR / "archive.json")
+        canonical = find_presentation_canonical(hero, archive)
+        if canonical:
+            _hydrate_presentation_item(hero, canonical)
+        preview    = (hero.get("teaser") or hero.get("body", ""))[:380].rstrip()
         paragraphs = make_paragraphs(hero.get("body", ""))
         img_url    = hero.get("image_url", "")
         img_credit = hero.get("image_credit", "")
@@ -3267,16 +3271,12 @@ def render_index(all_categories, top_cat):
         pub_time    = hero.get("published", "")
         display     = "" if visible else ' style="display:none"'
         fade        = " fade-in" if visible else ""
-        archive     = load_archive(OUTPUT_DIR / "archive.json")
         if hero.get("_section_placeholder"):
             article_url = f"{SITE_URL}/archive.html"
         elif hero.get("_archived_slug"):
             article_url = f"{SITE_URL}/articles/{hero['_archived_slug']}.html"
         else:
-            matched = find_matching_entry(
-                hero.get("headline", ""), archive, hero.get("link", ""),
-                is_weather_alert=bool(hero.get("is_weather_alert")),
-            )
+            matched = canonical or find_presentation_canonical(hero, archive)
             if matched:
                 slug = matched["slug"]
             else:
@@ -3441,8 +3441,9 @@ def render_index(all_categories, top_cat):
         # Backfill cards already carry their archived slug
         if card.get("_archived_slug"):
             return f"{SITE_URL}/articles/{card['_archived_slug']}.html"
-        matched = find_matching_entry(card.get("headline",""), archive_for_links, card.get("link",""), is_weather_alert=bool(card.get("is_weather_alert")))
+        matched = find_presentation_canonical(card, archive_for_links)
         if matched:
+            _hydrate_presentation_item(card, matched)
             return f"{SITE_URL}/articles/{matched['slug']}.html"
         # No archive entry means no article page exists — skip this card
         return None
@@ -3464,7 +3465,7 @@ def render_index(all_categories, top_cat):
         # Cards show when the canonical article was actually changed. A routine
         # workflow/build never advances editorial_updated_at. Stories that have never
         # evolved continue to show their original TCT publication timestamp.
-        matched = find_matching_entry(card.get("headline",""), archive_for_links, card.get("link",""), is_weather_alert=bool(card.get("is_weather_alert")))
+        matched = find_presentation_canonical(card, archive_for_links)
         raw = _story_display_timestamp(matched) if matched else card.get("published_raw") or card.get("published", "")
         dt = _parse_editorial_datetime(raw)
         if dt:
@@ -3592,12 +3593,7 @@ def render_index(all_categories, top_cat):
         _url = card_permalink(_latest_card)
         if not _url or _url in _latest_seen_urls:
             continue
-        _matched = find_matching_entry(
-            _latest_card.get("headline", ""),
-            archive_for_links,
-            _latest_card.get("link", ""),
-            is_weather_alert=bool(_latest_card.get("is_weather_alert")),
-        )
+        _matched = find_presentation_canonical(_latest_card, archive_for_links)
         _effective_dt = _effective_story_datetime(_matched or _latest_card)
         if _effective_dt < _latest_cutoff:
             continue
@@ -4711,12 +4707,7 @@ def render_rss_feed(all_categories, top_cat):
         incoming_headline = article.get("headline", "")
         if not incoming_headline:
             return None, None
-        matched = find_matching_entry(
-            incoming_headline,
-            archive,
-            article.get("link", ""),
-            is_weather_alert=bool(article.get("is_weather_alert")),
-        )
+        matched = find_presentation_canonical(article, archive)
         if not matched:
             return None, None  # No canonical article page exists — skip
 
@@ -5769,7 +5760,7 @@ def _persist_story_decision_logs(data_dir, decisions, run_id):
         if not key or key in processed:
             continue
         record = dict(decision)
-        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v6.1"})
+        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v6.5.14"})
         new_records.append(record)
         processed[key] = {"run_id": run_id, "decision": decision.get("decision", ""), "slug": decision.get("slug", "")}
     if new_records:
@@ -6019,11 +6010,11 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
     data_dir = out_root / "data"; data_dir.mkdir(parents=True, exist_ok=True)
     run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"
     registry = {"schema_version": 6.1, "mode": EVENT_PIPELINE_MODE, "generated_at": run_id,
-        "non_destructive": True, "engine": "story-centric-newsroom-v6.1", "article_count": len(items),
+        "non_destructive": True, "engine": "story-centric-newsroom-v6.5.14", "article_count": len(items),
         "story_count": len(stories), "clustering_threshold": STORY_CLUSTERING_CONFIDENCE,
         "live_action_threshold": AUTO_SUPPRESSION_CONFIDENCE, "stories": stories}
     shadow = {"schema_version": 6.1, "mode": EVENT_PIPELINE_MODE, "non_destructive": True,
-        "engine": "story-centric-newsroom-v6.1", "generated_at": run_id,
+        "engine": "story-centric-newsroom-v6.5.14", "generated_at": run_id,
         "summary": {"articles_analyzed": len(items), "stories_identified": len(stories),
             "would_publish_new_story": summary_counts["WOULD_PUBLISH_NEW_STORY"],
             "would_publish_major_update": summary_counts["WOULD_PUBLISH_MAJOR_UPDATE"],
@@ -6038,7 +6029,7 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
     (data_dir / "story-shadow-log.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
     appended = _persist_story_decision_logs(data_dir, decisions, run_id)
     (data_dir / "event-audit.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  Story-centric newsroom v6.5.8: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
+    print(f"  Story-centric newsroom v6.5.13: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
     print(f"  Group-only: {summary_counts['GROUPED_NO_ACTION']}; eligible suppressions: {summary_counts['WOULD_SUPPRESS_DUPLICATE']}; major updates: {summary_counts['WOULD_PUBLISH_MAJOR_UPDATE']}")
     return shadow
 
@@ -6062,6 +6053,55 @@ def _is_duplicate_headline(headline, existing_token_sets):
             return True
     return False
 
+
+
+def find_presentation_canonical(item, archive):
+    """Resolve the exact canonical record used for reader-facing presentation.
+
+    Presentation must never use fuzzy story matching because that can combine the
+    headline/teaser from one live item with the permalink of a related-but-distinct
+    article. Only an explicit archived slug, an exact normalized headline, or an exact
+    source URL plus exact headline is accepted here. Fuzzy matching remains available
+    to the guarded archival/update engine, but not to homepage/card/RSS rendering.
+    """
+    if not item:
+        return None
+    slug = item.get("_archived_slug") or item.get("canonical_slug")
+    if slug:
+        exact = next((e for e in archive if e.get("slug") == slug), None)
+        if exact:
+            return exact
+
+    def _norm_text(value):
+        return re.sub(r"[^a-z0-9]+", " ", str(value or "").lower()).strip()
+
+    headline_key = _norm_text(item.get("headline", ""))
+    if headline_key:
+        exact_headline = [e for e in archive if _norm_text(e.get("headline", "")) == headline_key]
+        if len(exact_headline) == 1:
+            return exact_headline[0]
+        if len(exact_headline) > 1:
+            source = re.sub(r"[?#].*$", "", str(item.get("link", "")).strip().rstrip("/").lower())
+            if source:
+                for e in exact_headline:
+                    e_source = re.sub(r"[?#].*$", "", str(e.get("source_url", "")).strip().rstrip("/").lower())
+                    if e_source and e_source == source:
+                        return e
+            return max(exact_headline, key=_effective_story_datetime)
+    return None
+
+
+def _hydrate_presentation_item(item, canonical):
+    """Bind display copy and URL identity atomically to one canonical record."""
+    if not item or not canonical:
+        return item
+    item["_archived_slug"] = canonical.get("slug", item.get("_archived_slug", ""))
+    for key in ("headline", "teaser", "body", "image_url", "category_key", "category_label",
+                "first_published", "editorial_updated_at", "lastmod"):
+        if canonical.get(key) not in (None, ""):
+            item[key] = canonical.get(key)
+    item["published_raw"] = _story_display_timestamp(canonical)
+    return item
 
 def find_matching_entry(headline, archive, source_url="", is_weather_alert=False):
     """Find an existing archive entry for this story using two-tier matching:
@@ -6912,50 +6952,116 @@ def write_data_json(all_categories, top_cat):
     print("  data.json written")
 
 
-def confirm_same_story(new_headline, new_teaser, existing_entry):
-    """Confirm that a candidate belongs to the same continuing news event.
+def classify_story_relationship(new_item, existing_entry):
+    """Classify how an incoming article relates to an existing canonical.
 
-    This function is called only after deterministic matching has already identified a
-    plausible archive candidate. The publication invariant is now one event = one URL:
-    arrests, rulings, contradictory reports, union responses and other developments
-    update the canonical article rather than spawning parallel articles.
+    Returns one of:
+      SAME_EVENT    - advances the same underlying case/event and may evolve the URL.
+      RELATED_ANGLE - reaction, profile, advice, analysis, consequence, or local response;
+                      must remain a separate permalink but may be cross-linked.
+      DISTINCT      - merely shares a broad topic and must remain fully independent.
+
+    This deliberately separates event identity from topical similarity. For example,
+    outbreak case-count updates are SAME_EVENT with earlier outbreak reporting, while a
+    profile of a resident growing vegetables because of outbreak fears is RELATED_ANGLE.
     """
-    old_headline = existing_entry.get("headline", "")
-    old_teaser = existing_entry.get("teaser", "")
+    new_item = new_item or {}
+    existing_entry = existing_entry or {}
+    new_headline = (new_item.get("headline") or "").strip()
+    new_teaser = (new_item.get("teaser") or new_item.get("body", "")[:500] or "").strip()
+    old_headline = (existing_entry.get("headline") or "").strip()
+    old_teaser = (existing_entry.get("teaser") or existing_entry.get("body", "")[:500] or "").strip()
 
-    # Stable event keys are conclusive and avoid an unnecessary model call.
-    new_key = _known_event_key(" ".join([new_headline, new_teaser or ""]))
-    old_key = _known_event_key(" ".join([old_headline, old_teaser or ""]))
+    new_key = _known_event_key(" ".join([new_headline, new_teaser]))
+    old_key = _known_event_key(" ".join([old_headline, old_teaser]))
     if new_key and old_key and new_key == old_key:
-        return True
+        return "SAME_EVENT"
 
     prompt = (
-        "Determine whether these two local-news items concern the SAME UNDERLYING "
-        "ONGOING CASE OR EVENT. A later development in the same case is SAME, even "
-        "when the angle changes substantially. Examples that are SAME: initial firing "
-        "then union objection; suspect sought then arrested; lawsuit filed after the "
-        "original death; police report contradicting an employer investigation; court "
-        "ruling in a previously reported dispute. DIFFERENT means a separate incident, "
-        "different business, different crime, different game, or different proceeding.\n\n"
-        f"EXISTING ARTICLE:\nHeadline: {old_headline}\nSummary: {old_teaser[:350]}\n\n"
-        f"NEW DEVELOPMENT:\nHeadline: {new_headline}\nSummary: {(new_teaser or '')[:350]}\n\n"
-        "Answer only SAME or DIFFERENT."
+        "Classify the relationship between two local-news articles. Choose exactly one label.\n\n"
+        "SAME_EVENT: The new article advances the same underlying incident, case, outbreak, "
+        "government action, court proceeding, investigation, game, closure, or other concrete "
+        "news event. New counts, arrests, rulings, identifications, official findings, reopening, "
+        "or status changes in that same event belong here.\n\n"
+        "RELATED_ANGLE: The articles concern the same broader issue, but the new article is a "
+        "reaction, human-interest profile, community response, advice/explainer, analysis, "
+        "consequence, business response, or behavior change. It deserves its own permalink and "
+        "must never replace the event article. Example: an outbreak case-count article versus a "
+        "resident growing food because of concern about the outbreak.\n\n"
+        "DISTINCT: They only share a broad topic or keywords and concern different events, people, "
+        "organizations, places, or proceedings.\n\n"
+        f"EXISTING ARTICLE:\nHeadline: {old_headline}\nSummary: {old_teaser[:500]}\n\n"
+        f"NEW ARTICLE:\nHeadline: {new_headline}\nSummary: {new_teaser[:500]}\n\n"
+        "Answer only SAME_EVENT, RELATED_ANGLE, or DISTINCT."
     )
     try:
         resp = client.messages.create(
-            model=MODEL_SELECTION, max_tokens=10,
+            model=MODEL_SELECTION, max_tokens=18,
             messages=[{"role": "user", "content": prompt}],
         )
-        answer = resp.content[0].text.strip().upper()
-        same = answer.startswith("SAME")
-        if not same:
-            print(f"    Canonical merge rejected: '{new_headline[:42]}' vs '{old_headline[:42]}'")
-        return same
+        answer = resp.content[0].text.strip().upper().replace(" ", "_")
+        if "RELATED" in answer:
+            return "RELATED_ANGLE"
+        if "SAME" in answer:
+            return "SAME_EVENT"
+        return "DISTINCT"
     except Exception as e:
-        # Candidate matching already passed deterministic safeguards. Splitting on a
-        # transient API error creates exactly the duplicate URLs this gate must prevent.
-        print(f"    Canonical merge check failed ({e}); overwrite blocked (fail closed)")
+        # Fail closed: an unavailable classifier must never permit a canonical overwrite.
+        print(f"    Story relationship check failed ({e}); treating as DISTINCT")
+        return "DISTINCT"
+
+
+def _append_related_angle_to_canonical(canonical, related_entry, articles_dir):
+    """Add a restrained cross-link paragraph to a related canonical without merging it.
+
+    The canonical headline, teaser, slug, publication date and RSS freshness are left
+    untouched. Only the body gains a short related-development paragraph, and duplicate
+    links are suppressed. This means a feature can enrich an outbreak article without
+    becoming the outbreak article or causing an automatic RSS repost.
+    """
+    if not canonical or not related_entry:
         return False
+    canonical_slug = canonical.get("slug", "")
+    related_slug = related_entry.get("slug", "")
+    if not canonical_slug or not related_slug or canonical_slug == related_slug:
+        return False
+
+    related_url = f"{SITE_URL}/articles/{related_slug}.html"
+    body = (canonical.get("body") or "").strip()
+    if related_url in body or f"/articles/{related_slug}.html" in body:
+        return False
+
+    headline = (related_entry.get("headline") or "Related local coverage").strip()
+    teaser = re.sub(r"\s+", " ", (related_entry.get("teaser") or "").strip())
+    if teaser:
+        teaser = re.split(r"(?<=[.!?])\s+", teaser)[0].strip()
+        if len(teaser) > 260:
+            teaser = teaser[:257].rsplit(" ", 1)[0] + "..."
+    paragraph = f"Related local response: [{headline}]({related_url})."
+    if teaser:
+        paragraph += f" {teaser}"
+
+    canonical["body"] = (body + "\n\n" + paragraph).strip() if body else paragraph
+    canonical["content_hash"] = _canonical_content_hash(
+        canonical.get("headline", ""), canonical.get("teaser", ""),
+        canonical.get("body", ""), canonical.get("image_url", "")
+    )
+    links = canonical.setdefault("related_angle_slugs", [])
+    if related_slug not in links:
+        links.append(related_slug)
+
+    article_path = Path(articles_dir) / f"{canonical_slug}.html"
+    if article_path.exists():
+        category_key = canonical.get("category_key", "top_news")
+        category_label = canonical.get("category_label") or CATEGORIES.get(category_key, {}).get("label", "Top News")
+        related = [e for e in []]
+        article_path.write_text(
+            render_article_page(canonical, category_label, category_key,
+                                canonical.get("date") or datetime.now(EASTERN).strftime("%Y-%m-%d"), canonical_slug, related=related),
+            encoding="utf-8"
+        )
+    print(f"  RELATED ANGLE: linked '{headline[:55]}' from canonical '{canonical.get('headline','')[:55]}'")
+    return True
 
 
 CANONICAL_CLEANUP_CONFIDENCE = 95
@@ -7265,7 +7371,7 @@ def write_story_regression_report(output_root, archive, redirect_verification):
     }
     report = {
         "schema_version": 1,
-        "engine_version": "story-centric-newsroom-v6.1.1",
+        "engine_version": "story-centric-newsroom-v6.5.14.1",
         "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
         "production_gate_passed": all(checks.values()),
         "checks": checks,
@@ -7359,7 +7465,7 @@ def write_story_health_report(output_root, archive, current_run_redirects=None):
 
     report = {
         "schema_version": 2,
-        "engine_version": "story-centric-newsroom-v6.1.1",
+        "engine_version": "story-centric-newsroom-v6.5.14.1",
         "generated_at": run_id,
         "active_window_days": 7,
         "stories": {
@@ -8177,6 +8283,8 @@ def write_archives(all_categories, top_cat):
 
         source_url = hero.get("link", "")
         existing   = find_canonical_event_entry(hero, archive)
+        _relationship = "SAME_EVENT" if existing else "DISTINCT"
+        _related_canonical = None
 
         # OVERRIDE for recurring series (weekly traffic reports, roundups, game recaps).
         # These share a title prefix and vocabulary, so the matcher treats each new
@@ -8194,35 +8302,31 @@ def write_archives(all_categories, top_cat):
             elif hero.get("unique_slug"):
                 existing = None
 
-        # HARD PROTECTION: an archived CUSTOM article is never overwritten by anything,
-        # and a feed story that matches one is DROPPED rather than published as its own
-        # duplicate. Custom articles are hand-written and authoritative; the custom
-        # version already covers this story, so a parallel WPTV/feed version at its own
-        # permalink is a pure duplicate. Clearing `existing` alone was not enough — it
-        # let the feed story fall through and create a NEW article, which is exactly the
-        # duplicate permalink this guard is meant to prevent. So we skip it entirely.
-        if existing and existing.get("is_custom") and not hero.get("is_custom"):
-            print(f"  PROTECTED: dropping feed story '{headline[:45]}' — already covered "
-                  f"by custom article '{existing.get('headline','')[:45]}'")
-            continue
-
-        # FINAL GATE BEFORE OVERWRITING A PUBLISHED PERMALINK.
-        # find_matching_entry uses token heuristics, which have wrongly merged distinct
-        # stories and destroyed live URLs. Before replacing the content at an existing
-        # URL, have the model confirm it is genuinely the same news event.
-        #
-        # Skipped when:
-        #   - the headline is unchanged (definitionally the same story, no risk), or
-        #   - it is a weather alert (matched on a stable event key, not fuzzy tokens).
-        # On refusal, existing is cleared -> a NEW article is created at a new URL and
-        # the published one is left intact.
+        # CLASSIFY EVENT IDENTITY BEFORE ANY OVERWRITE OR CUSTOM-story suppression.
+        # A topical or human-interest angle may be related to a canonical article but
+        # must receive its own permalink. Only SAME_EVENT may evolve an existing URL.
         if existing and not hero.get("is_weather_alert"):
             if not _hard_canonical_identity_gate(hero, existing):
                 print(f"  CANONICAL OVERWRITE BLOCKED: '{headline[:55]}' does not match immutable URL '{existing.get('slug','')}'")
                 existing = None
-            elif (existing.get("headline", "").strip().lower() != headline.strip().lower()):
-                if not confirm_same_story(headline, hero.get("teaser", "") or hero.get("body", "")[:250], existing):
+                _relationship = "DISTINCT"
+            elif existing.get("headline", "").strip().lower() != headline.strip().lower():
+                _relationship = classify_story_relationship(hero, existing)
+                if _relationship == "RELATED_ANGLE":
+                    _related_canonical = existing
                     existing = None
+                    hero["related_canonical_slug"] = _related_canonical.get("slug", "")
+                    print(f"  RELATED ANGLE: preserving separate permalink for '{headline[:55]}'")
+                elif _relationship != "SAME_EVENT":
+                    existing = None
+
+        # Hand-written custom coverage is authoritative for SAME_EVENT updates only.
+        # A RELATED_ANGLE is allowed to publish separately and cross-link; it is never
+        # dropped merely because it shares a topic with a custom article.
+        if existing and existing.get("is_custom") and not hero.get("is_custom"):
+            print(f"  PROTECTED: dropping feed story '{headline[:45]}' — already covered "
+                  f"by custom article '{existing.get('headline','')[:45]}'")
+            continue
 
         # FRESHNESS LOCK: a source may republish an old development with a new RSS
         # timestamp or slightly changed wording. When the deterministic matcher points
@@ -8230,6 +8334,7 @@ def write_archives(all_categories, top_cat):
         # leave the canonical HTML and metadata untouched. This prevents an old story
         # from receiving today's lastmod and resurfacing as the homepage hero.
         if existing and not hero.get("is_custom") and _same_published_milestone(hero, existing):
+            _hydrate_presentation_item(hero, existing)
             print(f"  REPUBLICATION: keeping canonical freshness for '{existing.get('headline','')[:55]}'")
             continue
 
@@ -8329,6 +8434,7 @@ def write_archives(all_categories, top_cat):
                 )
             if source_url:
                 existing["source_url"] = source_url
+            _hydrate_presentation_item(hero, existing)
             updated_count += 1
         else:
             # New story — create new page
@@ -8349,7 +8455,7 @@ def write_archives(all_categories, top_cat):
             (articles_dir / f"{slug}.html").write_text(
                 render_article_page(hero, cat_label, cat_key, today, slug, related=_related), encoding="utf-8"
             )
-            archive.append({
+            _new_archive_entry = {
                 "slug": slug, "headline": headline,
                 "teaser": hero.get("teaser","") or hero.get("body","")[:180],
                 "category_key": cat_key, "category_label": cat_label,
@@ -8381,7 +8487,14 @@ def write_archives(all_categories, top_cat):
                 "article_paragraph_count": _paragraph_count(hero.get("body", "")),
                 "event_url": hero.get("event_url", ""),
                 "event_link_text": hero.get("event_link_text", ""),
-            })
+            }
+            archive.append(_new_archive_entry)
+            _hydrate_presentation_item(hero, _new_archive_entry)
+            # A reaction/profile/explainer remains independent, then enriches the
+            # related event canonical with one restrained paragraph and direct link.
+            if _related_canonical is not None:
+                _new_archive_entry["related_canonical_slug"] = _related_canonical.get("slug", "")
+                _append_related_angle_to_canonical(_related_canonical, _new_archive_entry, articles_dir)
             new_count += 1
 
     # FINAL production enforcement: article generation above may have recreated a
@@ -8390,6 +8503,19 @@ def write_archives(all_categories, top_cat):
     archive, _redirect_verification = enforce_canonical_redirects(
         archive, articles_dir, OUTPUT_DIR, current_run_redirects=_canonical_redirects
     )
+    # Final atomic presentation synchronization. Every homepage/category object now
+    # carries the exact canonical slug and reader-visible copy from the same archive
+    # row. This prevents a headline/teaser from one story linking to another story's
+    # permalink, even when the two stories share a broad topic such as cyclospora.
+    for _cat in all_categories:
+        for _item in [_cat.get("hero")] + list(_cat.get("cards", [])):
+            _canonical = find_presentation_canonical(_item, archive)
+            if _canonical:
+                _hydrate_presentation_item(_item, _canonical)
+    _top_canonical = find_presentation_canonical(top_cat.get("hero"), archive)
+    if _top_canonical:
+        _hydrate_presentation_item(top_cat["hero"], _top_canonical)
+
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
     write_story_regression_report(OUTPUT_DIR, archive, _redirect_verification)
     write_story_health_report(OUTPUT_DIR, archive, current_run_redirects=_canonical_redirects)
