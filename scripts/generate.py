@@ -1,5 +1,5 @@
 """
-Treasure Coast Today - news generation pipeline - v6.5.6 Canonical Permalink Evolution
+Treasure Coast Today - news generation pipeline - v6.5.10 Eastern-Time Freshness Bugfix
 Covers Martin, St. Lucie, and Indian River counties.
 Runs 4x/day via GitHub Actions.
 """
@@ -11,7 +11,8 @@ import hashlib
 import feedparser
 import requests
 import anthropic
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
@@ -155,6 +156,10 @@ COUNTY_KEYS = {"martin", "st_lucie", "indian_river"}
 SIGNIFICANT_UPDATE_BOOST_RATIO = 0.70
 SIGNIFICANT_UPDATE_BOOST_HOURS = 72
 
+# Treasure Coast Today uses one editorial clock everywhere readers see or
+# compare freshness. ZoneInfo handles EST/EDT transitions automatically.
+EASTERN = ZoneInfo("America/New_York")
+
 def _parse_editorial_datetime(value):
     """Parse RFC822, ISO datetime, or YYYY-MM-DD into an aware UTC datetime."""
     from datetime import timezone as _tz
@@ -206,17 +211,18 @@ def _story_display_timestamp(entry):
             or "")
 
 def _effective_story_datetime(entry):
-    """Return an aware UTC datetime for card/archive ordering.
+    """Return an aware Eastern datetime for card/archive ordering.
 
     A real editorial modification ranks at its actual modification time. Stories
     that have never evolved rank at their immutable original publication time.
     Missing or malformed values sort last. Routine workflow runs do not affect
     this function because build timestamps and filesystem mtimes are ignored.
     """
-    from datetime import timezone as _tz
     raw = _story_display_timestamp(entry or {})
     parsed = _parse_editorial_datetime(raw)
-    return parsed or datetime(1900, 1, 1, tzinfo=_tz.utc)
+    if parsed is not None:
+        return parsed.astimezone(EASTERN)
+    return datetime(1900, 1, 1, tzinfo=EASTERN)
 
 def _editorial_freshness_dt(entry, now=None):
     """Return effective ranking time with a temporary partial milestone boost.
@@ -3560,7 +3566,7 @@ def render_index(all_categories, top_cat):
     # filling the rail with old high-urgency items. Routine workflow runs never
     # affect this ordering because _effective_story_datetime ignores build time.
     latest_items_html = ""
-    _latest_cutoff = datetime.now(timezone.utc) - timedelta(hours=120)  # rolling 5 days
+    _latest_cutoff = datetime.now(EASTERN) - timedelta(days=5)  # rolling 5 days, Eastern Time
     _latest_candidates = []
     _latest_seen_urls = set()
 
