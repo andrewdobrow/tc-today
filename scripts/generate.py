@@ -205,6 +205,19 @@ def _story_display_timestamp(entry):
             or entry.get("date")
             or "")
 
+def _effective_story_datetime(entry):
+    """Return an aware UTC datetime for card/archive ordering.
+
+    A real editorial modification ranks at its actual modification time. Stories
+    that have never evolved rank at their immutable original publication time.
+    Missing or malformed values sort last. Routine workflow runs do not affect
+    this function because build timestamps and filesystem mtimes are ignored.
+    """
+    from datetime import timezone as _tz
+    raw = _story_display_timestamp(entry or {})
+    parsed = _parse_editorial_datetime(raw)
+    return parsed or datetime(1900, 1, 1, tzinfo=_tz.utc)
+
 def _editorial_freshness_dt(entry, now=None):
     """Return effective ranking time with a temporary partial milestone boost.
 
@@ -5874,7 +5887,7 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
     (data_dir / "story-shadow-log.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
     appended = _persist_story_decision_logs(data_dir, decisions, run_id)
     (data_dir / "event-audit.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  Story-centric newsroom v6.1: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
+    print(f"  Story-centric newsroom v6.5.8: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
     print(f"  Group-only: {summary_counts['GROUPED_NO_ACTION']}; eligible suppressions: {summary_counts['WOULD_SUPPRESS_DUPLICATE']}; major updates: {summary_counts['WOULD_PUBLISH_MAJOR_UPDATE']}")
     return shadow
 
