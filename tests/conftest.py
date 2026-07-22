@@ -1,8 +1,6 @@
-import importlib.util
 import os
 import sys
 import types
-from pathlib import Path
 
 import pytest
 
@@ -33,9 +31,7 @@ def _install_dependency_stubs():
 def engine():
     _install_dependency_stubs()
     os.environ.setdefault("ANTHROPIC_API_KEY", "offline-test-key")
-    path = Path(__file__).resolve().parents[1] / "engine.py"
-    spec = importlib.util.spec_from_file_location("tct_engine", path)
-    module = importlib.util.module_from_spec(spec)
-    assert spec and spec.loader
-    spec.loader.exec_module(module)
-    return module
+
+    import tct_engine
+
+    return tct_engine
