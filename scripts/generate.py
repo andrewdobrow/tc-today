@@ -1,5 +1,5 @@
 """
-Treasure Coast Today - news generation pipeline - v6.5.19 Complete Leads + Authoritative Canonicals + Atomic Publishing
+Treasure Coast Today - news generation pipeline - v6.6.0 Audited Cleanup + Canonical Identity Repair + Atomic Publishing
 Covers Martin, St. Lucie, and Indian River counties.
 Runs 4x/day via GitHub Actions.
 """
@@ -19,7 +19,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as
 
 # -- CONFIG --
 
-TCT_PRESENTATION_VERSION = "6.4-unified-presentation-hotfix"
+TCT_PRESENTATION_VERSION = "6.6-audited-unified-presentation"
 
 CATEGORIES = {
     "local_gov": {
@@ -266,7 +266,6 @@ def category_max_age_hours(category_key):
 OUTPUT_DIR   = Path(__file__).parent.parent
 SITE_URL     = "https://treasurecoast.today"
 SITE_NAME    = "Treasure Coast Today"
-SITE_TAGLINE = "Your Treasure Coast, every day."
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -422,28 +421,8 @@ def extract_image(entry):
     return ""
 
 
-def extract_publisher_url(entry):
-    """Extract actual publisher URL from a Google News RSS entry."""
-    link = entry.get("link", "") or getattr(entry, "link", "")
-    if "news.google.com" not in link:
-        return link
-    for field in ["summary", "description"]:
-        val = entry.get(field, "") or getattr(entry, field, "")
-        if isinstance(val, list) and val:
-            html = val[0].get("value", "") if isinstance(val[0], dict) else str(val[0])
-        elif isinstance(val, str):
-            html = val
-        else:
-            continue
-        matches = re.findall(r'href=["\']?(https?://(?!news\.google)[^"\'>]+)', html)
-        if matches:
-            return matches[0]
-    return link
 
 
-def sanitize_text(text):
-    if not text: return ""
-    return text.replace("\\", " ").replace('"', "'").replace("\n", " ").replace("\r", " ").replace("\t", " ").strip()
 
 
 
@@ -477,145 +456,6 @@ def fetch_og_image(url):
     except Exception:
         return ""
 
-
-
-_EVENT_LINK_CACHE = {}
-
-
-def _event_link_root_host(host):
-    host = (host or "").lower().split(":", 1)[0].strip(".")
-    parts = [p for p in host.split(".") if p]
-    return ".".join(parts[-2:]) if len(parts) >= 2 else host
-
-
-def find_official_event_link(source_url, headline=""):
-    """Find a high-confidence official event/ticket/registration link in a source page.
-
-    The source article itself is never returned. Only real hrefs present on that page
-    are considered; no URL is guessed or fabricated. Low-confidence results are omitted.
-    """
-    if not source_url or not source_url.startswith("http"):
-        return "", ""
-    cache_key = (source_url, headline)
-    if cache_key in _EVENT_LINK_CACHE:
-        return _EVENT_LINK_CACHE[cache_key]
-
-    try:
-        from urllib.parse import urljoin, urlparse, parse_qs, unquote
-        import html as _html
-
-        resp = requests.get(
-            source_url,
-            timeout=10,
-            headers={"User-Agent": "Mozilla/5.0 (compatible; TCTBot/1.0)"},
-        )
-        if resp.status_code != 200:
-            _EVENT_LINK_CACHE[cache_key] = ("", "")
-            return "", ""
-
-        source_host = urlparse(source_url).netloc.lower().replace("www.", "")
-        source_root = _event_link_root_host(source_host)
-        page = resp.text[:600000]
-        candidates = []
-        stops = {
-            "this", "that", "with", "from", "will", "your", "about", "event",
-            "events", "week", "weekend", "local", "florida", "treasure", "coast",
-        }
-        headline_tokens = {
-            w for w in re.findall(r"[a-z0-9]+", (headline or "").lower())
-            if len(w) >= 5 and w not in stops
-        }
-        blocked_hosts = {
-            "facebook.com", "instagram.com", "twitter.com", "x.com", "youtube.com",
-            "linkedin.com", "tiktok.com", "pinterest.com", "google.com", "apple.com",
-        }
-        preferred_hosts = {
-            "eventbrite.com", "ticketmaster.com", "tickets.com", "etix.com",
-            "showclix.com", "universe.com", "simpletix.com", "humanitix.com",
-        }
-
-        anchor_pattern = r"<a\b[^>]*?href=[\"']([^\"']+)[\"'][^>]*>(.*?)</a>"
-        for match in re.finditer(anchor_pattern, page, re.IGNORECASE | re.DOTALL):
-            href = _html.unescape(match.group(1).strip())
-            anchor_html = match.group(2)
-            anchor = _html.unescape(re.sub(r"<[^>]+>", " ", anchor_html))
-            anchor = re.sub(r"\s+", " ", anchor).strip()
-            if not href or href.startswith(("#", "mailto:", "tel:", "javascript:")):
-                continue
-
-            url = urljoin(source_url, href)
-            parsed = urlparse(url)
-            host = parsed.netloc.lower().replace("www.", "")
-            if _event_link_root_host(host) == source_root:
-                query = parse_qs(parsed.query)
-                redirect_value = ""
-                for key in ("url", "u", "target", "redirect", "destination"):
-                    vals = query.get(key)
-                    if vals and vals[0].startswith("http"):
-                        redirect_value = unquote(vals[0])
-                        break
-                if redirect_value:
-                    url = redirect_value
-                    parsed = urlparse(url)
-                    host = parsed.netloc.lower().replace("www.", "")
-
-            root = _event_link_root_host(host)
-            if not host or root == source_root:
-                continue
-            if any(root == b or root.endswith("." + b) for b in blocked_hosts):
-                continue
-            lower_url = url.lower()
-            lower_anchor = anchor.lower()
-            if any(x in lower_url for x in (
-                "/privacy", "/terms", "/contact", "/advertis", "/author/",
-                "doubleclick", "googlesyndication", "utm_source=syndication",
-            )):
-                continue
-
-            score = 0
-            if root in preferred_hosts:
-                score += 7
-            if host.endswith(".gov") or root.endswith(".gov"):
-                score += 5
-            elif host.endswith(".org") or root.endswith(".org"):
-                score += 3
-
-            if any(term in lower_anchor for term in (
-                "official event", "event website", "official website", "visit website",
-            )):
-                score += 8
-            if any(term in lower_anchor for term in (
-                "buy tickets", "get tickets", "tickets", "register", "registration",
-                "rsvp", "reserve", "sign up",
-            )):
-                score += 7
-            if any(term in lower_anchor for term in (
-                "event details", "more information", "learn more", "full schedule",
-                "event page", "festival website", "details here",
-            )):
-                score += 5
-
-            candidate_tokens = set(re.findall(r"[a-z0-9]+", (anchor + " " + url).lower()))
-            overlap = len(headline_tokens & candidate_tokens)
-            score += min(overlap, 4)
-
-            if score >= 7:
-                label = anchor if 3 <= len(anchor) <= 80 else "Visit the official event page"
-                if lower_anchor in {"click here", "here", "website", "learn more"}:
-                    label = "Visit the official event page"
-                candidates.append((score, url, label))
-
-        if candidates:
-            candidates.sort(key=lambda x: x[0], reverse=True)
-            _, url, label = candidates[0]
-            result = (url, label)
-        else:
-            result = ("", "")
-    except Exception:
-        result = ("", "")
-
-    _EVENT_LINK_CACHE[cache_key] = result
-    return result
 
 
 def build_image_bank():
@@ -709,43 +549,6 @@ def match_image(headline, image_bank, cat_key="", used_images=None):
                     best_credit = get_image_credit(entry.get("source", ""))
 
     return best_img, best_credit
-
-
-PLACEHOLDER_URL_PATTERNS = [
-    "brand-icons", "brand_icons",
-    "default-image", "default_image", "defaultimage",
-    "top_image", "top-image",
-    "htv_default", "htv-default",
-    "news-slate", "news_slate",
-    "og-image.png", "og_image.png",
-    "eenewslogo", "site-logo", "site_logo",
-    "station-logo", "stationlogo",
-    "wpec-16x9", "wpbf", "wflx",
-    "aolfp/images", "cbsnewsstatic.com/hub",
-    "yimg.com/cv/apiv2",
-    "foxtv.com/img",
-    "gray.tv/gray/arc-fusion-assets",
-    "townnews.com/content/tncms/custom",
-    "bloximages",
-]
-
-def is_placeholder_image(img_url):
-    url_lower = img_url.lower()
-    return any(pat in url_lower for pat in PLACEHOLDER_URL_PATTERNS)
-
-
-def find_image(headline, entries):
-    """Match headline back to RSS entry for image, link, and publish time."""
-    h = headline.lower()[:50]
-    for entry in entries:
-        t = entry.get("title", "").lower()[:50]
-        if h in t or t in h:
-            return {
-                "image_url": entry.get("image_url", ""),
-                "link":      entry.get("link", ""),
-                "published": entry.get("published", ""),
-            }
-    return {"image_url": "", "link": "", "published": ""}
 
 
 def extract_publisher_url(entry):
@@ -2689,76 +2492,6 @@ def fetch_article_text(url, max_words=2500):
         return ""
 
 
-def enhance_card(card, content_bank, headlines):
-    """Rewrite a card from its exact source article, not fuzzy content-bank matches."""
-    headline = card.get("headline", "")
-    if not headline:
-        return card
-
-    source = None
-    idx = card.get("source_index")
-    if idx is not None:
-        try:
-            source = headlines[int(idx) - 1]
-        except Exception:
-            source = None
-
-    if not source:
-        return card
-
-    link = source.get("link", "")
-    is_thin = source.get("source_type") == "discovery_only" or any(d in link.lower() for d in THIN_SOURCE_DOMAINS)
-    source_text = source.get("article_text", "") or ""
-
-    # If article_text was not stored, try fetching it now — for open full sources
-    # AND aggregators (Google News links resolve to real publisher pages). This is
-    # what lets crime/things-to-do cards from Google News enrich instead of being dropped.
-    if not source_text and link and not is_thin and source.get("source_type") in ("full_source", "aggregator"):
-        source_text = fetch_article_text(link, max_words=2500)
-        if source_text and len(source_text.split()) >= 140:
-            source["article_text"] = source_text
-            source["source_quality"] = "full"
-
-    # Fallback only to the exact RSS summary for this same story, never the fuzzy bank.
-    if not source_text:
-        source_text = source.get("summary", "")
-
-    word_count = len(source_text.split())
-    if word_count < 80 or is_thin:
-        # Not enough verifiable material for a full rewrite. Keep Claude's original,
-        # but do not expand a paywalled/thin blurb into fake detail.
-        return card
-
-    try:
-        body = card.get("body", "")
-        target = "two fully developed paragraphs, about 170-240 words total" if word_count >= 140 else "one concise paragraph"
-        prompt = (
-            f"Rewrite this local news card using the exact source material below.\n\n"
-            f"Card headline: {headline}\n\n"
-            f"Current card body:\n{body}\n\n"
-            f"Exact source material:\n{source_text[:6000]}\n\n"
-            f"Write {target}. Use only confirmed facts from the source. "
-            "Include concrete names, places, agencies, dates, numbers, votes, charges, locations, schools, roads, or businesses when present. "
-            "Do not write generic background, typical patterns, community-impact filler, or advice unless explicitly stated in the source. "
-            "You are writing the complete standalone article from scratch, not continuing the current body. Assume the reader knows nothing. Begin with a self-contained lead that introduces the central event, location, timing, and significance before any follow-up detail, quote, attorney, official, or victim update. If the source lacks enough facts, write less and stop. No em dashes. Return only the rewritten body."
-        )
-        resp = client.messages.create(
-            model=MODEL_ARTICLES,
-            max_tokens=800,
-            messages=[{"role": "user", "content": prompt}]
-        )
-        enhanced = resp.content[0].text.strip()
-        explanation_signals = ["i cannot rewrite", "source material", "does not match", "cannot proceed"]
-        if enhanced and not any(s in enhanced.lower()[:150] for s in explanation_signals):
-            # Only accept a short rewrite if the source itself was short. Full sources should
-            # produce at least two useful paragraphs.
-            if word_count < 140 or len(enhanced.split()) >= 90:
-                card["body"] = strip_absence_language(strip_markdown(enhanced, headline))
-                card["enriched"] = True
-    except Exception:
-        pass
-
-    return card
 
 
 def enhance_hero_article(hero, full_text):
@@ -3899,209 +3632,10 @@ def slugify(text):
     return text[:80].strip("-")
 
 
-def _weather_phenomenon(event):
-    """Group NWS event names into a stable phenomenon key so a Watch and the
-    later Warning for the SAME hazard share one article (updated, not duplicated)."""
-    e = (event or "").lower()
-    if "hurricane" in e:            return "hurricane"
-    if "tropical storm" in e:       return "tropical-storm"
-    if "storm surge" in e:          return "storm-surge"
-    if "tornado" in e:              return "tornado"
-    if "flash flood" in e:          return "flash-flood"
-    if "flood" in e:                return "flood"
-    if "severe thunderstorm" in e:  return "severe-thunderstorm"
-    if "extreme wind" in e:         return "extreme-wind"
-    if "high wind" in e or "wind" in e: return "wind"
-    if "fire" in e or "red flag" in e:  return "fire"
-    # Fallback: slugify the event name
-    return re.sub(r"[^a-z0-9]+", "-", e).strip("-") or "weather"
 
 
-def _rewrite_alert_to_article(event, area, severity, headline_txt, desc, instr):
-    """Rewrite an NWS alert into a short article in the site's voice. Falls back
-    to the official NWS text if the rewrite fails — safety info must never be lost."""
-    source = "\n\n".join(filter(None, [
-        f"Alert: {event}",
-        f"Area: {area}" if area else "",
-        f"NWS headline: {headline_txt}" if headline_txt else "",
-        f"Details: {desc}" if desc else "",
-        f"Safety instructions: {instr}" if instr else "",
-    ]))
-    prompt = (
-        "You are writing a brief, factual local news article about an active National Weather "
-        "Service alert for the Treasure Coast of Florida (Martin, St. Lucie, Indian River counties).\n\n"
-        f"Official NWS alert information:\n\n{source}\n\n"
-        "Write a clear, calm, factual news article of 3-5 short paragraphs. Lead with what the alert "
-        "is, who it affects, and when it is in effect. Include the concrete details (timing, locations, "
-        "expected conditions, hazards). Preserve all safety instructions accurately in your own words — "
-        "do not omit or soften them. Do not invent details not in the source. Do not use alarmist "
-        "language, but convey appropriate seriousness. Plain, direct English. No em dashes. "
-        "Write only the article body, no headline."
-    )
-    try:
-        resp = client.messages.create(
-            model=MODEL_ARTICLES,
-            max_tokens=900,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        out = resp.content[0].text.strip()
-        if out and len(out.split()) >= 40:
-            return strip_markdown(out, "")
-    except Exception as e:
-        print(f"  Alert rewrite failed ({e}); using official NWS text")
-    # Fallback: official text, never lose safety info
-    parts = []
-    if headline_txt: parts.append(headline_txt.strip())
-    if desc: parts.append(desc)
-    if instr: parts.append("What to do: " + instr)
-    return "\n\n".join(parts)
 
 
-def load_weather_alerts():
-    """Fetch active Extreme/Severe NWS alerts for the three Treasure Coast counties
-    and rewrite them into articles. As an event evolves (e.g. Hurricane Watch then
-    Hurricane Warning for the same county), the SAME article updates in place rather
-    than creating duplicates, via a stable phenomenon+county event key.
-
-    County SAME codes: Martin FLC085, St. Lucie FLC111, Indian River FLC061.
-    """
-    from datetime import timezone as _tz
-    import urllib.request
-
-    ZONE_TO_COUNTY = {
-        "FLC085": ("martin", "Martin County"),
-        "FLC111": ("st_lucie", "St. Lucie County"),
-        "FLC061": ("indian_river", "Indian River County"),
-    }
-    zones = ",".join(ZONE_TO_COUNTY.keys())
-    url = f"https://api.weather.gov/alerts/active?zone={zones}"
-
-    try:
-        req = urllib.request.Request(url, headers={
-            "User-Agent": "(treasurecoast.today, weather@treasurecoast.today)",
-            "Accept": "application/geo+json",
-        })
-        raw = urllib.request.urlopen(req, timeout=12).read()
-        data = json.loads(raw)
-    except Exception as e:
-        print(f"  NWS alert fetch failed: {e}")
-        return []
-
-    now = datetime.now(_tz.utc)
-    features = data.get("features", [])
-
-    # Group alerts by stable event key (phenomenon + affected counties). When both
-    # a Watch and a Warning are active for the same hazard+area, keep the most
-    # severe / most recent so we publish ONE current article for the event.
-    events = {}
-    for f in features:
-        p = f.get("properties", {})
-        severity = (p.get("severity", "") or "").lower()
-        if severity not in ("extreme", "severe"):
-            continue
-
-        event = p.get("event", "Weather Alert")
-
-        # Which of our counties this alert affects
-        affected_zones = []
-        for geo in p.get("geocode", {}).get("SAME", []):
-            for zc in ZONE_TO_COUNTY:
-                if geo.endswith(zc[3:]):
-                    affected_zones.append(zc)
-        if not affected_zones:
-            for ugc in p.get("geocode", {}).get("UGC", []):
-                if ugc in ZONE_TO_COUNTY:
-                    affected_zones.append(ugc)
-        affected_zones = list(dict.fromkeys(affected_zones))
-        if not affected_zones:
-            continue
-
-        county_keys = tuple(sorted(ZONE_TO_COUNTY[z][0] for z in affected_zones))
-        phenom = _weather_phenomenon(event)
-        event_key = f"{phenom}:{'-'.join(county_keys)}"
-
-        # Sort key: severity rank, then most recent sent time
-        sev_rank = 0 if severity == "extreme" else 1
-        sent = p.get("sent", "") or ""
-        cand = (sev_rank, p, severity, affected_zones)
-
-        prev = events.get(event_key)
-        if prev is None:
-            events[event_key] = cand
-        else:
-            # Prefer extreme over severe; among equal severity, prefer the newer sent
-            if sev_rank < prev[0]:
-                events[event_key] = cand
-            elif sev_rank == prev[0] and sent > (prev[1].get("sent", "") or ""):
-                events[event_key] = cand
-
-    articles = []
-    for event_key, (sev_rank, p, severity, affected_zones) in events.items():
-        event = p.get("event", "Weather Alert")
-        area  = p.get("areaDesc", "")
-        desc  = (p.get("description", "") or "").strip()
-        instr = (p.get("instruction", "") or "").strip()
-        headline_txt = p.get("headline", "")
-
-        # Route: single county -> that county; multiple -> front-page via florida
-        if len(affected_zones) == 1:
-            ckey, clabel = ZONE_TO_COUNTY[affected_zones[0]]
-        else:
-            ckey, clabel = ("florida", "Florida")
-
-        # Urgency: full strength through the active window, then decay over the
-        # two hours after expiry, then drop out.
-        ends    = p.get("ends") or p.get("expires")
-        base    = 10 if severity == "extreme" else 8
-        urgency = base
-        exp_date = None
-        try:
-            end_dt = datetime.fromisoformat(ends.replace("Z", "+00:00")).astimezone(_tz.utc)
-            exp_date = (end_dt + timedelta(hours=2)).strftime("%Y-%m-%d")
-            mins_past_end = (now - end_dt).total_seconds() / 60
-            if mins_past_end <= 0:
-                urgency = base
-            elif mins_past_end <= 60:
-                urgency = base - 1
-            elif mins_past_end <= 120:
-                urgency = base - 3
-            else:
-                continue  # More than 2h past expiry — no longer news
-        except Exception:
-            pass
-        urgency = max(4, urgency)
-
-        # Rewrite into article voice (falls back to official text on failure)
-        body = _rewrite_alert_to_article(event, area, severity, headline_txt, desc, instr)
-
-        area_short = area.split(";")[0].strip() if area else clabel
-        headline = f"{event} issued for {area_short}"
-
-        # STABLE link keyed on the event, NOT the volatile NWS alert id. This is
-        # what makes an upgrade (Watch -> Warning) update the same article in place.
-        stable_link = f"{SITE_URL}/weather-alert/{event_key}"
-
-        articles.append({
-            "headline":       headline,
-            "body":           body,
-            "teaser":         (headline_txt or desc[:180]).strip(),
-            "category":       ckey,
-            "category_key":   ckey,
-            "category_label": clabel,
-            "image_url":      "",
-            "published":      now.strftime("%a, %d %b %Y %H:%M:%S +0000"),
-            "published_raw":  now.strftime("%a, %d %b %Y %H:%M:%S +0000"),
-            "expires":        exp_date or now.strftime("%Y-%m-%d"),
-            "urgency_score":  urgency,
-            "enriched":       True,
-            "is_weather_alert": True,
-            "weather_event_key": event_key,
-            "force_hero":     severity == "extreme",
-            "link":           stable_link,
-        })
-        print(f"  Weather alert [{severity}]: '{headline[:55]}' -> {ckey} (urgency {urgency}, key {event_key})")
-
-    return articles
 
 
 def load_custom_articles():
@@ -4860,7 +4394,7 @@ def update_news_sitemap(archive_entries):
     Eastern timestamp (not a date-only midnight-UTC value, which mis-orders everything
     and puts articles in the wrong timezone)."""
     from datetime import timedelta, timezone as _tz
-    from email.utils import parsedate_to_datetime, format_datetime
+    from email.utils import parsedate_to_datetime
     now = datetime.now(_tz.utc)
     cutoff = now - timedelta(hours=48)
 
@@ -5028,6 +4562,26 @@ def _known_event_key(text):
     has_scale = bool(words & {"70", "seventy", "80", "eighty"})
     if has_place and has_animals and has_case and has_action and has_scale:
         return "2026-07-stuart-martin-animal-hoarding"
+
+    # July 2026 East Midway Road dirt-bike/FedEx crash in St. Lucie County.
+    # Coverage has shifted among the fatal crash, a vigil for the 9-year-old, the
+    # surviving 12-year-old's hospital release, and broader bicycle-crash statistics.
+    # Those headline angles all refer to the same underlying incident when the
+    # identifying facts below are present. This deterministic key is evaluated by
+    # both the archive matcher and the hard canonical identity gate.
+    has_midway = ("midway" in words)
+    has_fedex = "fedex" in words
+    has_bike = bool(words & {"bike", "bicycle", "dirtbike"}) or ("dirt" in words and "bike" in words)
+    has_child_pair = (("9" in words or "nine" in words) and
+                      ("12" in words or "twelve" in words))
+    has_crash_context = bool(words & {"crash", "collision", "killed", "fatal",
+                                      "injured", "hospital", "vigil"})
+    if has_midway and has_fedex and has_bike and has_crash_context:
+        return "2026-07-east-midway-dirt-bike-fedex-crash"
+    # Some follow-ups omit FedEx from the headline but retain both children's ages
+    # and East Midway Road in the body. That combination is still event-specific.
+    if has_midway and has_bike and has_child_pair and has_crash_context:
+        return "2026-07-east-midway-dirt-bike-fedex-crash"
 
     # July 2026 St. Lucie County Fire District firefighter discipline / hazing saga.
     # Different outlets have framed the same continuing case as terminations, union
@@ -5210,44 +4764,6 @@ def _same_published_milestone(item, prior):
     ))
 
 
-def _matches_archived_custom(item, entry):
-    """Conservatively determine whether a feed item duplicates an archived custom story.
-
-    Custom articles are authoritative forever. Matching uses, in order: a narrow
-    known-event key, an exact durable fingerprint, the normal archive matcher (which
-    includes locality conflict checks), and a stronger combined headline+teaser test.
-    """
-    if not item or not entry or not (entry.get("is_custom") or entry.get("authoritative_custom")):
-        return False
-
-    item_head = item.get("headline", "")
-    item_text = " ".join([item_head, item.get("teaser", ""), item.get("body", "")[:500]])
-    entry_head = entry.get("headline", "")
-    entry_text = " ".join([entry_head, entry.get("teaser", ""), entry.get("body", "")[:1200]])
-
-    # Custom coverage remains the canonical page. Any status-changing development
-    # is merged into that page rather than published at a parallel permalink.
-
-    item_key = _known_event_key(item_text)
-    entry_key = entry.get("custom_event_key") or _known_event_key(entry_text)
-    if item_key and entry_key and item_key == entry_key:
-        return True
-
-    item_fp = _custom_story_fingerprint(item_head, item.get("teaser", ""))
-    entry_fp = entry.get("custom_fingerprint")
-    if item_fp and entry_fp and item_fp == entry_fp:
-        return True
-
-    if find_matching_entry(item_head, [entry], item.get("link", "")):
-        return True
-
-    # Reworded syndication can move important details from headline to teaser. Use a
-    # stricter combined-text match here to catch that without collapsing broad topics.
-    a = _sig_tokens(item_text)
-    b = _sig_tokens(entry_text)
-    shared = _shared_tokens(a, b)
-    distinctive = [t for t in shared if t not in GENERIC_TOKENS]
-    return len(shared) >= 6 and len(distinctive) >= 3
 
 
 
@@ -5313,23 +4829,6 @@ def _story_text(item):
     ]).strip()
 
 
-def _same_event_items(a, b):
-    """One shared event matcher for custom, feed, archive, hero and card stories."""
-    if not a or not b:
-        return False
-    ta, tb = _story_text(a), _story_text(b)
-    ka, kb = _known_event_key(ta), _known_event_key(tb)
-    if ka and kb:
-        return ka == kb
-    # Reuse the archive matcher because it includes URL and locality safeguards.
-    probe = dict(b)
-    probe.setdefault("slug", "__candidate__")
-    if find_matching_entry(a.get("headline", ""), [probe], a.get("link", "")):
-        return True
-    aa, bb = _sig_tokens(ta), _sig_tokens(tb)
-    shared = _shared_tokens(aa, bb)
-    distinctive = [t for t in shared if t not in GENERIC_TOKENS]
-    return len(shared) >= 6 and len(distinctive) >= 3
 
 
 def _story_priority(item):
@@ -5343,94 +4842,8 @@ def _story_priority(item):
     return (100, int(item.get("article_word_count", 0) or len((item.get("body") or "").split())))
 
 
-def _unified_archive_event_dedupe(archive, current_customs=None, articles_dir=None):
-    """Deduplicate archive stories with the same engine used for live stories.
-
-    Custom articles win their event group permanently. A later story survives only
-    when it contains a verified major milestone not present in the custom article.
-    """
-    archive = list(archive or [])
-    current_customs = list(current_customs or [])
-    authorities = [e for e in archive if e.get("is_custom") or e.get("authoritative_custom")] + current_customs
-    removed = []
-    kept = []
-    for entry in archive:
-        if entry.get("is_custom") or entry.get("authoritative_custom"):
-            kept.append(entry)
-            continue
-        duplicate_of = None
-        for custom in authorities:
-            if _same_event_items(entry, custom):
-                duplicate_of = custom
-                break
-        if duplicate_of:
-            removed.append(entry)
-        else:
-            kept.append(entry)
-
-    if removed and articles_dir is not None:
-        for entry in removed:
-            slug = entry.get("slug")
-            if not slug:
-                continue
-            try:
-                path = Path(articles_dir) / f"{slug}.html"
-                if path.exists():
-                    path.unlink()
-            except Exception:
-                pass
-    if removed:
-        print(f"  Unified event dedupe removed {len(removed)} archived duplicate article(s)")
-    return kept
 
 
-def _unified_live_event_dedupe(all_categories, archived_customs=None, current_customs=None):
-    """Run one event-level dedupe pass over every hero and card before ranking."""
-    authorities = list(archived_customs or []) + list(current_customs or [])
-    seen = []
-    removed = 0
-
-    # Process custom stories first so they become the event winner everywhere.
-    ordered = []
-    for cat in all_categories:
-        for role, item in [("hero", cat.get("hero"))] + [("card", c) for c in cat.get("cards", [])]:
-            if item:
-                ordered.append((cat, role, item))
-    ordered.sort(key=lambda x: _story_priority(x[2]), reverse=True)
-
-    winners = []
-    loser_ids = set()
-    for cat, role, item in ordered:
-        matched = None
-        for winner in winners:
-            if not _same_event_items(item, winner):
-                continue
-            # Every development in the same underlying event belongs to one canonical
-            # article. Milestones update that article; they never create a parallel URL.
-            matched = winner
-            break
-        if matched is None:
-            winners.append(item)
-        elif item is not matched:
-            loser_ids.add(id(item))
-
-    # Also suppress any live/archive-recovered copy of an authoritative custom story.
-    for cat, role, item in ordered:
-        if item.get("is_custom") or item.get("authoritative_custom"):
-            continue
-        if any(_same_event_items(item, custom) for custom in authorities):
-            loser_ids.add(id(item))
-
-    for cat in all_categories:
-        old_cards = list(cat.get("cards", []))
-        cat["cards"] = [c for c in old_cards if id(c) not in loser_ids]
-        removed += len(old_cards) - len(cat["cards"])
-        if cat.get("hero") is not None and id(cat["hero"]) in loser_ids:
-            cat["hero"] = cat["cards"].pop(0) if cat["cards"] else None
-            removed += 1
-    if removed:
-        print(f"  Unified event dedupe removed {removed} duplicate hero/card placement(s)")
-    return removed
 
 
 # -- STORY ENGINE PHASE 2: NON-DESTRUCTIVE SHADOW MODE ----------------------
@@ -5808,7 +5221,7 @@ def _persist_story_decision_logs(data_dir, decisions, run_id):
         if not key or key in processed:
             continue
         record = dict(decision)
-        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v6.5.14"})
+        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v6.5.21"})
         new_records.append(record)
         processed[key] = {"run_id": run_id, "decision": decision.get("decision", ""), "slug": decision.get("slug", "")}
     if new_records:
@@ -6011,7 +5424,13 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
             elif stage in seen_stages:
                 decision, reason = "GROUPED_NO_ACTION", f"Grouped into this story at {confidence}% confidence, but below the 95% live-action threshold."
             else:
-                decision, reason = "WOULD_PUBLISH_MAJOR_UPDATE", f"The story advanced to a new '{stage}' stage."
+                # "general" is a fallback classification, never an editorial
+                # advancement. It may group with the event, but cannot by itself
+                # authorize a canonical rewrite.
+                if stage == "general":
+                    decision, reason = "GROUPED_NO_ACTION", "Matched the existing event, but 'general' is not a material lifecycle stage."
+                else:
+                    decision, reason = "WOULD_PUBLISH_MAJOR_UPDATE", f"The story advanced to a new '{stage}' stage."
 
             decisions.append({
                 "story_id": story_id, "slug": article.get("slug", ""), "headline": article.get("headline", ""),
@@ -6058,11 +5477,11 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
     data_dir = out_root / "data"; data_dir.mkdir(parents=True, exist_ok=True)
     run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"
     registry = {"schema_version": 6.1, "mode": EVENT_PIPELINE_MODE, "generated_at": run_id,
-        "non_destructive": True, "engine": "story-centric-newsroom-v6.5.14", "article_count": len(items),
+        "non_destructive": True, "engine": "story-centric-newsroom-v6.5.21", "article_count": len(items),
         "story_count": len(stories), "clustering_threshold": STORY_CLUSTERING_CONFIDENCE,
         "live_action_threshold": AUTO_SUPPRESSION_CONFIDENCE, "stories": stories}
     shadow = {"schema_version": 6.1, "mode": EVENT_PIPELINE_MODE, "non_destructive": True,
-        "engine": "story-centric-newsroom-v6.5.14", "generated_at": run_id,
+        "engine": "story-centric-newsroom-v6.5.21", "generated_at": run_id,
         "summary": {"articles_analyzed": len(items), "stories_identified": len(stories),
             "would_publish_new_story": summary_counts["WOULD_PUBLISH_NEW_STORY"],
             "would_publish_major_update": summary_counts["WOULD_PUBLISH_MAJOR_UPDATE"],
@@ -7059,161 +6478,10 @@ def classify_story_relationship(new_item, existing_entry):
         return "DISTINCT"
 
 
-def _related_angle_fallback_link(related_entry):
-    """Return a safe, non-merged related-story link when context cannot be proven."""
-    slug = (related_entry or {}).get("slug", "")
-    headline = ((related_entry or {}).get("headline") or "Related local coverage").strip()
-    if not slug:
-        return ""
-    url = f"{SITE_URL}/articles/{slug}.html"
-    return f"**Related:** [{headline}]({url})"
 
 
-def _build_contextual_related_paragraph(canonical, related_entry):
-    """Create a concise bridge that explains why a related angle belongs.
-
-    The result must connect the related feature to the canonical event in two or three
-    sentences. It may not simply summarize the feature or list colorful details. When
-    the model cannot establish a supported causal/contextual connection, this function
-    returns an empty string and the caller uses only a Related link.
-    """
-    canonical = canonical or {}
-    related_entry = related_entry or {}
-    related_slug = related_entry.get("slug", "")
-    if not related_slug:
-        return ""
-
-    canonical_headline = (canonical.get("headline") or "").strip()
-    canonical_context = re.sub(r"\s+", " ", (
-        canonical.get("teaser") or canonical.get("body", "")[:1400] or ""
-    ).strip())
-    related_headline = (related_entry.get("headline") or "").strip()
-    related_context = re.sub(r"\s+", " ", (
-        related_entry.get("teaser") or related_entry.get("body", "")[:1400] or ""
-    ).strip())
-    related_url = f"{SITE_URL}/articles/{related_slug}.html"
-
-    prompt = (
-        "You are editing a local-news canonical article. Write one short contextual "
-        "bridge paragraph of exactly 2 or 3 sentences that explains WHY the related "
-        "story belongs in the canonical article. The first sentence must state the "
-        "connection to the canonical event (reaction, behavior change, local impact, "
-        "consequence, advice, or response). Use only facts supported by the supplied "
-        "text. Do not invent motive or causation. Do not merely list details from the "
-        "related story. Keep the paragraph under 90 words. End with a natural markdown "
-        "link to the related article using its headline. If the supplied text does not "
-        "support a clear connection, answer exactly NO_CONTEXT.\n\n"
-        f"CANONICAL HEADLINE: {canonical_headline}\n"
-        f"CANONICAL CONTEXT: {canonical_context[:1400]}\n\n"
-        f"RELATED HEADLINE: {related_headline}\n"
-        f"RELATED CONTEXT: {related_context[:1400]}\n"
-        f"RELATED URL: {related_url}\n"
-    )
-    try:
-        resp = client.messages.create(
-            model=MODEL_SELECTION,
-            max_tokens=220,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        paragraph = re.sub(r"\s+", " ", resp.content[0].text.strip())
-    except Exception as e:
-        print(f"    Related-angle context generation failed ({e}); using link only")
-        return ""
-
-    if not paragraph or paragraph.upper() == "NO_CONTEXT":
-        return ""
-
-    # Structural and editorial validation. Fail closed to a plain Related link.
-    sentences = [x.strip() for x in re.split(r"(?<=[.!?])\s+", paragraph) if x.strip()]
-    if len(sentences) not in (2, 3) or len(paragraph.split()) > 95:
-        return ""
-    if related_url not in paragraph and f"/articles/{related_slug}.html" not in paragraph:
-        return ""
-
-    connection_terms = (
-        "response", "reaction", "concern", "because", "prompt", "led", "influenc",
-        "impact", "effect", "amid", "as residents", "as families", "in light of",
-        "against that backdrop", "the outbreak", "the investigation", "the case",
-        "the crash", "the ruling", "the closure", "the recall", "food safety",
-    )
-    first_sentence = sentences[0].lower()
-    if not any(term in first_sentence for term in connection_terms):
-        return ""
-
-    # Reject list-heavy garden/profile copy that does not advance the canonical story.
-    list_markers = ("includes", "including", "pineapple", "bananas", "peppers", "herbs")
-    if sum(marker in paragraph.lower() for marker in list_markers) >= 3:
-        return ""
-
-    return paragraph
 
 
-def _append_related_angle_to_canonical(canonical, related_entry, articles_dir):
-    """Cross-link a related angle without merging story identities.
-
-    A related profile/reaction remains a separate permalink. The canonical receives
-    either a validated 2-3 sentence context bridge or, when the relationship cannot be
-    supported cleanly, only a Related link. Headline, teaser, slug, publication date,
-    and RSS freshness remain untouched.
-    """
-    if not canonical or not related_entry:
-        return False
-    canonical_slug = canonical.get("slug", "")
-    related_slug = related_entry.get("slug", "")
-    if not canonical_slug or not related_slug or canonical_slug == related_slug:
-        return False
-
-    body = (canonical.get("body") or "").strip()
-    start_marker = f"<!-- RELATED-ANGLE:{related_slug}:START -->"
-    end_marker = f"<!-- RELATED-ANGLE:{related_slug}:END -->"
-
-    contextual_paragraph = _build_contextual_related_paragraph(canonical, related_entry)
-    addition = contextual_paragraph or _related_angle_fallback_link(related_entry)
-    if not addition:
-        return False
-    block = f"{start_marker}\n{addition}\n{end_marker}"
-
-    # Idempotent replacement: reruns improve the same related block rather than append
-    # another paragraph. Older unmarked article prose is intentionally left untouched.
-    marker_pattern = re.compile(
-        re.escape(start_marker) + r".*?" + re.escape(end_marker), re.S
-    )
-    if marker_pattern.search(body):
-        new_body = marker_pattern.sub(block, body)
-        if new_body == body:
-            return False
-        canonical["body"] = new_body
-    else:
-        related_url = f"{SITE_URL}/articles/{related_slug}.html"
-        if related_url in body or f"/articles/{related_slug}.html" in body:
-            # A legacy unmarked link already exists. Do not append a duplicate or try
-            # to rewrite surrounding historical prose automatically.
-            return False
-        canonical["body"] = (body + "\n\n" + block).strip() if body else block
-
-    canonical["content_hash"] = _canonical_content_hash(
-        canonical.get("headline", ""), canonical.get("teaser", ""),
-        canonical.get("body", ""), canonical.get("image_url", "")
-    )
-    links = canonical.setdefault("related_angle_slugs", [])
-    if related_slug not in links:
-        links.append(related_slug)
-
-    article_path = Path(articles_dir) / f"{canonical_slug}.html"
-    if article_path.exists():
-        category_key = canonical.get("category_key", "top_news")
-        category_label = canonical.get("category_label") or CATEGORIES.get(category_key, {}).get("label", "Top News")
-        article_path.write_text(
-            render_article_page(
-                canonical, category_label, category_key,
-                canonical.get("date") or datetime.now(EASTERN).strftime("%Y-%m-%d"),
-                canonical_slug, related=[]
-            ),
-            encoding="utf-8"
-        )
-    mode = "context bridge" if contextual_paragraph else "link only"
-    print(f"  RELATED ANGLE ({mode}): linked '{related_entry.get('headline','')[:55]}' from canonical '{canonical.get('headline','')[:55]}'")
-    return True
 
 
 CANONICAL_CLEANUP_CONFIDENCE = 95
@@ -7523,7 +6791,7 @@ def write_story_regression_report(output_root, archive, redirect_verification):
     }
     report = {
         "schema_version": 1,
-        "engine_version": "story-centric-newsroom-v6.5.14.1",
+        "engine_version": "story-centric-newsroom-v6.5.21",
         "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
         "production_gate_passed": all(checks.values()),
         "checks": checks,
@@ -7617,7 +6885,7 @@ def write_story_health_report(output_root, archive, current_run_redirects=None):
 
     report = {
         "schema_version": 2,
-        "engine_version": "story-centric-newsroom-v6.5.14.1",
+        "engine_version": "story-centric-newsroom-v6.5.21",
         "generated_at": run_id,
         "active_window_days": 7,
         "stories": {
@@ -8403,22 +7671,42 @@ def _headline_proper_names(text):
 
 
 def _published_slug_still_matches_entry(entry):
-    """A published slug is an immutable identity checksum, not just a filename.
+    """Validate that a canonical record still belongs to the event encoded in its URL.
 
-    If the current headline no longer shares the people/topic encoded in the slug, the
-    archive record has already been overwritten by an unrelated story and must never
-    be used as a canonical update target.
+    Canonical headlines are intentionally allowed to evolve as an incident advances.
+    Comparing the immutable slug only with the *latest headline* falsely quarantines
+    legitimate continuing coverage (for example, an original crash URL whose headline
+    later becomes a vigil or hospital-release update). Validate against the complete
+    stored canonical record instead: headline, teaser and body.
     """
     slug_tokens = _slug_identity_tokens(entry.get("slug", ""))
-    headline_tokens = {t for t in _sig_tokens(entry.get("headline", "")) if t not in GENERIC_TOKENS}
-    if not slug_tokens or not headline_tokens:
+    entry_text = _story_text(entry or {})
+    content_tokens = {t for t in _sig_tokens(entry_text) if t not in GENERIC_TOKENS}
+    if not slug_tokens or not content_tokens:
         return True
-    shared = slug_tokens & headline_tokens
-    slug_names = _headline_proper_names(str(entry.get("slug", "")).replace("-", " " ).title())
-    current_names = _headline_proper_names(" ".join([entry.get("headline", ""), entry.get("teaser", "")]))
+
+    shared = slug_tokens & content_tokens
+
+    # A deterministic event key is conclusive even when the current headline no longer
+    # repeats the wording embedded in the original permalink.
+    slug_key = _known_event_key(str(entry.get("slug", "")).replace("-", " "))
+    content_key = _known_event_key(entry_text)
+    if slug_key and content_key:
+        return slug_key == content_key
+
+    # Proper-name conflicts are meaningful only when both sides contain real names.
+    # Named roads such as "Midway Road" are event anchors, not people, and are already
+    # handled by token overlap / known-event logic.
+    slug_names = _headline_proper_names(str(entry.get("slug", "")).replace("-", " ").title())
+    current_names = _headline_proper_names(entry_text)
     if slug_names and current_names and not (slug_names & current_names):
-        return False
-    return len(shared) >= 3 or (len(shared) / max(1, min(len(slug_tokens), len(headline_tokens)))) >= 0.35
+        # Do not reject solely on names when the full canonical body strongly matches
+        # the permalink identity; later reporting often adds officials or witnesses.
+        ratio = len(shared) / max(1, min(len(slug_tokens), len(content_tokens)))
+        if len(shared) < 4 and ratio < 0.45:
+            return False
+
+    return len(shared) >= 3 or (len(shared) / max(1, min(len(slug_tokens), len(content_tokens)))) >= 0.35
 
 
 def _hard_canonical_identity_gate(item, existing):
@@ -8739,7 +8027,16 @@ def write_archives(all_categories, top_cat):
                 existing = None
                 _relationship = "DISTINCT"
             elif existing.get("headline", "").strip().lower() != headline.strip().lower():
-                _relationship = classify_story_relationship(hero, existing)
+                # A shared deterministic event key is stronger than angle-based
+                # relationship classification. Do not let a vigil, hospital release,
+                # statistics sidebar, or other framing turn one known incident into a
+                # second permalink.
+                _incoming_event_key = _known_event_key(_story_text(hero))
+                _existing_event_key = _known_event_key(_story_text(existing))
+                if _incoming_event_key and _incoming_event_key == _existing_event_key:
+                    _relationship = "SAME_EVENT"
+                else:
+                    _relationship = classify_story_relationship(hero, existing)
                 if _relationship == "RELATED_ANGLE":
                     _related_canonical = existing
                     existing = None
