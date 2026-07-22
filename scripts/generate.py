@@ -1,5 +1,5 @@
 """
-Treasure Coast Today - news generation pipeline - v6.5.2 Canonical Freshness Lock
+Treasure Coast Today - news generation pipeline - v6.5.4 Significant Update Freshness Boost
 Covers Martin, St. Lucie, and Indian River counties.
 Runs 4x/day via GitHub Actions.
 """
@@ -147,6 +147,59 @@ HEADLINES_PER_CATEGORY = 12
 CARDS_PER_CATEGORY     = 6
 
 COUNTY_KEYS = {"martin", "st_lucie", "indian_river"}
+
+# A genuine milestone should regain prominence without pretending the story was
+# newly published. For 72 hours after a significant update, ranking moves the
+# story 70% of the way from its original publication time toward the update time.
+# Truly new reporting can still outrank it, and the boost expires automatically.
+SIGNIFICANT_UPDATE_BOOST_RATIO = 0.70
+SIGNIFICANT_UPDATE_BOOST_HOURS = 72
+
+def _parse_editorial_datetime(value):
+    """Parse RFC822, ISO datetime, or YYYY-MM-DD into an aware UTC datetime."""
+    from datetime import timezone as _tz
+    from email.utils import parsedate_to_datetime as _parse_rfc822
+    raw = str(value or "").strip()
+    if not raw:
+        return None
+    try:
+        dt = _parse_rfc822(raw)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=_tz.utc)
+        return dt.astimezone(_tz.utc)
+    except Exception:
+        pass
+    try:
+        dt = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=_tz.utc)
+        return dt.astimezone(_tz.utc)
+    except Exception:
+        pass
+    try:
+        return datetime.strptime(raw[:10], "%Y-%m-%d").replace(tzinfo=_tz.utc)
+    except Exception:
+        return None
+
+def _editorial_freshness_dt(entry, now=None):
+    """Return effective ranking time with a temporary partial milestone boost.
+
+    Original publication remains immutable. A significant update temporarily moves
+    the ranking timestamp 70% toward the update time, then fully expires after 72h.
+    Repairs, rewrites, and ordinary lastmod changes never receive this treatment.
+    """
+    from datetime import timezone as _tz
+    now = now or datetime.now(_tz.utc)
+    published = _parse_editorial_datetime(entry.get("first_published") or entry.get("date"))
+    if published is None:
+        published = datetime(1900, 1, 1, tzinfo=_tz.utc)
+    updated = _parse_editorial_datetime(entry.get("significant_update_at"))
+    if not updated or updated < published:
+        return published
+    age_hours = (now - updated).total_seconds() / 3600
+    if age_hours < 0 or age_hours > SIGNIFICANT_UPDATE_BOOST_HOURS:
+        return published
+    return published + (updated - published) * SIGNIFICANT_UPDATE_BOOST_RATIO
 
 def category_max_age_hours(category_key):
     """Different sections need different freshness windows.
@@ -2090,20 +2143,10 @@ Return ONLY valid JSON:
         # Fresh-development language always wins (e.g. "suspect arrested today" in an old story)
         if any(p in content for p in _fresh_override):
             return False
-        # If this story matches an archive entry we updated within the last 2 days,
-        # it is NOT stale — the content was refreshed on our site recently even if the
-        # original RSS published date is old (e.g. a "coming soon" story updated to
-        # "now open"). This prevents freshly-updated stories being swapped out.
-        try:
-            _m = find_matching_entry(item.get("headline",""), _stale_archive, item.get("link",""))
-            if _m:
-                _lm = _m.get("lastmod") or _m.get("date", "")
-                if _lm:
-                    _lmdt = datetime.strptime(_lm[:10], "%Y-%m-%d").replace(tzinfo=_tzc.utc)
-                    if (_now_c - _lmdt).days <= 2:
-                        return False
-        except Exception:
-            pass
+        # Do not use archive lastmod as proof of freshness. A canonical merge,
+        # presentation repair, or metadata rewrite can advance lastmod without a new
+        # editorial development. Genuine updates are already represented by fresh
+        # source timestamps and explicit fresh-development language above.
         # Past day-name reference (e.g. "on Thursday" when today is Saturday)
         for day in _stale_days:
             if f" {day} " in content or f" {day}," in content or f" {day}." in content or content.startswith(f"{day} "):
@@ -2222,8 +2265,17 @@ Return ONLY valid JSON:
                 }.get(category_key, [])
                 try:
                     _arch = load_archive(OUTPUT_DIR / "archive.json")
-                    _arch.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
                     from datetime import timezone as _tzf
+                    from email.utils import parsedate_to_datetime as _parse_rfc822
+
+                    def _archive_editorial_dt(entry):
+                        """Rank by immutable publication plus an active major-update boost."""
+                        return _editorial_freshness_dt(entry)
+
+                    # Sort category archive candidates by immutable publication time,
+                    # not lastmod. This prevents an old repaired/merged story from
+                    # becoming the Crime (or any category) hero over newer coverage.
+                    _arch.sort(key=_archive_editorial_dt, reverse=True)
                     _nowf = datetime.now(_tzf.utc)
                     for e in _arch:
                         # County pages match on place names; topic categories match on
@@ -2235,16 +2287,12 @@ Return ONLY valid JSON:
                         else:
                             if e.get("category_key") != category_key:
                                 continue
-                        _d = e.get("lastmod") or e.get("date","")
-                        try:
-                            _dt = datetime.strptime(_d[:10], "%Y-%m-%d").replace(tzinfo=_tzf.utc)
-                            # Topic categories may reach a little further back (7 days)
-                            # than counties (4) — a recent crime or business story is
-                            # still worth showing rather than an empty section.
-                            _max_age = 4 if _is_county else 7
-                            if (_nowf - _dt).days > _max_age:
-                                continue
-                        except Exception:
+                        _dt = _archive_editorial_dt(e)
+                        # Topic categories may reach a little further back (7 days)
+                        # than counties (4) — but age is measured from original
+                        # publication, never from lastmod or a repair timestamp.
+                        _max_age = 4 if _is_county else 7
+                        if (_dt.year == 1900) or ((_nowf - _dt).days > _max_age):
                             continue
                         _archive_candidate = {
                             "headline": e.get("headline",""),
@@ -2253,8 +2301,8 @@ Return ONLY valid JSON:
                             "summary": e.get("teaser",""),
                             "body": e.get("teaser",""),
                             "image_url": e.get("image_url",""),
-                            "published": e.get("lastmod") or e.get("date",""),
-                            "published_raw": e.get("lastmod") or e.get("date",""),
+                            "published": e.get("first_published") or e.get("date", ""),
+                            "published_raw": e.get("first_published") or e.get("date", ""),
                             "source_quality": "full",
                             "feed_url": e.get("feed_url", ""),
                             "enriched": True,
@@ -3243,7 +3291,7 @@ def render_index(all_categories, top_cat):
         _current_hls.add(cat["hero"].get("headline", "").strip().lower())
 
     _bf_archive = load_archive(OUTPUT_DIR / "archive.json")
-    _bf_archive.sort(key=lambda e: e.get("lastmod") or e.get("date", ""), reverse=True)
+    _bf_archive.sort(key=_editorial_freshness_dt, reverse=True)
     for e in _bf_archive:
         hl = (e.get("headline", "") or "").strip()
         if not hl or hl.lower() in _current_hls:
@@ -7832,6 +7880,7 @@ def write_archives(all_categories, top_cat):
             _old_headline = (existing.get("headline","") or "").strip()
             _old_teaser   = (existing.get("teaser","") or "").strip()
             _content_changed = (_new_headline != _old_headline) or (_new_teaser != _old_teaser)
+            _significant_update = _is_significant_story_update(hero, existing)
 
             _related = [e for e in archive
                         if e.get("category_key") == cat_key and e.get("slug") != slug]
@@ -7839,6 +7888,7 @@ def write_archives(all_categories, top_cat):
             (articles_dir / f"{slug}.html").write_text(
                 render_article_page(hero, cat_label, cat_key, today, slug, related=_related), encoding="utf-8"
             )
+            _prior_for_update = dict(existing)
             existing["headline"]  = headline
             existing["teaser"]    = hero.get("teaser","") or hero.get("body","")[:180]
             existing["image_url"] = hero.get("image_url","")
@@ -7847,9 +7897,22 @@ def write_archives(all_categories, top_cat):
             if hero.get("event_url"):
                 existing["event_url"] = hero.get("event_url")
                 existing["event_link_text"] = hero.get("event_link_text", "")
-            # Only advance lastmod (freshness/staleness, card ordering) on real change.
+            # Only advance lastmod on real change. A genuine milestone also gets a
+            # separate, temporary partial freshness boost; ordinary rewrites do not.
             if _content_changed:
                 existing["lastmod"] = today
+            if _significant_update:
+                existing["significant_update_at"] = _now_eastern_rfc822()
+                existing["significant_update_reason"] = ", ".join(sorted(
+                    _material_update_stages(" ".join([
+                        hero.get("headline", ""), hero.get("teaser", ""), hero.get("body", "")[:1200]
+                    ])) - _material_update_stages(" ".join([
+                        _prior_for_update.get("headline", ""), _prior_for_update.get("teaser", ""), _prior_for_update.get("body", "")[:1200]
+                    ]))
+                )) or "major milestone"
+                existing["freshness_boost_ratio"] = SIGNIFICANT_UPDATE_BOOST_RATIO
+                existing["freshness_boost_hours"] = SIGNIFICANT_UPDATE_BOOST_HOURS
+                print(f"  SIGNIFICANT UPDATE BOOST: '{headline[:55]}' for {SIGNIFICANT_UPDATE_BOOST_HOURS}h")
             # If a custom article is writing here, permanently mark the entry custom so
             # it can never be overwritten by a later feed story (see the PROTECTED guard).
             if hero.get("is_custom"):
@@ -8095,8 +8158,8 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             "body": body,
             "image_url": image_url,
             "image_credit": image_credit,
-            "published": e.get("lastmod") or e.get("date", ""),
-            "published_raw": e.get("lastmod") or e.get("date", ""),
+            "published": e.get("significant_update_at") or e.get("first_published") or e.get("date", ""),
+            "published_raw": e.get("significant_update_at") or e.get("first_published") or e.get("date", ""),
             "urgency_score": 2,
             "enriched": True,
             "source_quality": "archive",
