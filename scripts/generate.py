@@ -5099,6 +5099,14 @@ def _material_update_stages(text):
         "official_resolution": (
             r"\b(?:reopened|closure lifted|evacuation order lifted|boil water notice lifted|all clear issued)\b",
         ),
+        "hospital_release": (
+            r"\b(?:released|discharged) from (?:the )?hospital\b",
+            r"\b(?:recovering|recovers) at home\b",
+        ),
+        "official_cause": (
+            r"\b(?:cause|manner) (?:of death|of the fire|of the crash) (?:was|has been) (?:determined|released|confirmed)\b",
+            r"\b(?:investigators|officials|fhp|police) (?:determined|confirmed|said) (?:the )?cause\b",
+        ),
         "major_escalation": (
             r"\b(?:state of emergency|mandatory evacuation|evacuation ordered|declared a disaster)\b",
         ),
@@ -5109,11 +5117,44 @@ def _material_update_stages(text):
     return stages
 
 
+def _material_case_counts(text):
+    """Extract explicitly reported outbreak/case totals for significance checks.
+
+    Counts are considered only when they appear near case/outbreak/infection language,
+    avoiding unrelated numbers such as road addresses, ages, dates, or dollar amounts.
+    """
+    t = re.sub(r"\s+", " ", (text or "").lower())
+    counts = set()
+    patterns = (
+        r"\b(\d{1,6})\s+(?:confirmed\s+)?(?:cases?|infections?|illnesses?)\b",
+        r"\b(?:cases?|infections?|illnesses?)\s+(?:rose|rise|increased|climbed|grew|total(?:ed|ing)?|reached|now stand(?:s)? at|to)\s+(?:to\s+)?(\d{1,6})\b",
+        r"\b(?:outbreak|statewide total|case count)\D{0,35}(\d{1,6})\b",
+    )
+    for rx in patterns:
+        for m in re.finditer(rx, t):
+            try:
+                counts.add(int(m.group(1)))
+            except Exception:
+                pass
+    return counts
+
+
+def _significant_count_change(new_text, old_text):
+    """Return True for a clearly changed reported case/outbreak total."""
+    new_counts = _material_case_counts(new_text)
+    old_counts = _material_case_counts(old_text)
+    if not new_counts or not old_counts:
+        return False
+    # A newly reported maximum total is a material public-health development.
+    return max(new_counts) != max(old_counts)
+
+
 def _is_significant_story_update(item, prior):
     """True only when a matching event advances to a new major milestone.
 
     Example: an initial homicide report followed the next day by an arrest. Routine
-    rewrites, extra quotes, small count changes, and repeated reports remain blocked.
+    rewrites, extra quotes, and repeated reports remain blocked. A clearly changed
+    outbreak/case total is treated as a material public-health update.
     """
     if not item or not prior:
         return False
@@ -5126,13 +5167,14 @@ def _is_significant_story_update(item, prior):
     new_stages = _material_update_stages(new_text)
     old_stages = _material_update_stages(old_text)
     added = new_stages - old_stages
-    if not added:
+    count_changed = _significant_count_change(new_text, old_text)
+    if not added and not count_changed:
         return False
 
     # An arrest/charge is not a new milestone if the prior story already clearly
     # described custody or charges using different wording.
     custody_family = {"arrest", "criminal_charge"}
-    if added <= custody_family and old_stages & custody_family:
+    if added and added <= custody_family and old_stages & custody_family and not count_changed:
         return False
 
     return True
@@ -7011,13 +7053,102 @@ def classify_story_relationship(new_item, existing_entry):
         return "DISTINCT"
 
 
-def _append_related_angle_to_canonical(canonical, related_entry, articles_dir):
-    """Add a restrained cross-link paragraph to a related canonical without merging it.
+def _related_angle_fallback_link(related_entry):
+    """Return a safe, non-merged related-story link when context cannot be proven."""
+    slug = (related_entry or {}).get("slug", "")
+    headline = ((related_entry or {}).get("headline") or "Related local coverage").strip()
+    if not slug:
+        return ""
+    url = f"{SITE_URL}/articles/{slug}.html"
+    return f"**Related:** [{headline}]({url})"
 
-    The canonical headline, teaser, slug, publication date and RSS freshness are left
-    untouched. Only the body gains a short related-development paragraph, and duplicate
-    links are suppressed. This means a feature can enrich an outbreak article without
-    becoming the outbreak article or causing an automatic RSS repost.
+
+def _build_contextual_related_paragraph(canonical, related_entry):
+    """Create a concise bridge that explains why a related angle belongs.
+
+    The result must connect the related feature to the canonical event in two or three
+    sentences. It may not simply summarize the feature or list colorful details. When
+    the model cannot establish a supported causal/contextual connection, this function
+    returns an empty string and the caller uses only a Related link.
+    """
+    canonical = canonical or {}
+    related_entry = related_entry or {}
+    related_slug = related_entry.get("slug", "")
+    if not related_slug:
+        return ""
+
+    canonical_headline = (canonical.get("headline") or "").strip()
+    canonical_context = re.sub(r"\s+", " ", (
+        canonical.get("teaser") or canonical.get("body", "")[:1400] or ""
+    ).strip())
+    related_headline = (related_entry.get("headline") or "").strip()
+    related_context = re.sub(r"\s+", " ", (
+        related_entry.get("teaser") or related_entry.get("body", "")[:1400] or ""
+    ).strip())
+    related_url = f"{SITE_URL}/articles/{related_slug}.html"
+
+    prompt = (
+        "You are editing a local-news canonical article. Write one short contextual "
+        "bridge paragraph of exactly 2 or 3 sentences that explains WHY the related "
+        "story belongs in the canonical article. The first sentence must state the "
+        "connection to the canonical event (reaction, behavior change, local impact, "
+        "consequence, advice, or response). Use only facts supported by the supplied "
+        "text. Do not invent motive or causation. Do not merely list details from the "
+        "related story. Keep the paragraph under 90 words. End with a natural markdown "
+        "link to the related article using its headline. If the supplied text does not "
+        "support a clear connection, answer exactly NO_CONTEXT.\n\n"
+        f"CANONICAL HEADLINE: {canonical_headline}\n"
+        f"CANONICAL CONTEXT: {canonical_context[:1400]}\n\n"
+        f"RELATED HEADLINE: {related_headline}\n"
+        f"RELATED CONTEXT: {related_context[:1400]}\n"
+        f"RELATED URL: {related_url}\n"
+    )
+    try:
+        resp = client.messages.create(
+            model=MODEL_SELECTION,
+            max_tokens=220,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        paragraph = re.sub(r"\s+", " ", resp.content[0].text.strip())
+    except Exception as e:
+        print(f"    Related-angle context generation failed ({e}); using link only")
+        return ""
+
+    if not paragraph or paragraph.upper() == "NO_CONTEXT":
+        return ""
+
+    # Structural and editorial validation. Fail closed to a plain Related link.
+    sentences = [x.strip() for x in re.split(r"(?<=[.!?])\s+", paragraph) if x.strip()]
+    if len(sentences) not in (2, 3) or len(paragraph.split()) > 95:
+        return ""
+    if related_url not in paragraph and f"/articles/{related_slug}.html" not in paragraph:
+        return ""
+
+    connection_terms = (
+        "response", "reaction", "concern", "because", "prompt", "led", "influenc",
+        "impact", "effect", "amid", "as residents", "as families", "in light of",
+        "against that backdrop", "the outbreak", "the investigation", "the case",
+        "the crash", "the ruling", "the closure", "the recall", "food safety",
+    )
+    first_sentence = sentences[0].lower()
+    if not any(term in first_sentence for term in connection_terms):
+        return ""
+
+    # Reject list-heavy garden/profile copy that does not advance the canonical story.
+    list_markers = ("includes", "including", "pineapple", "bananas", "peppers", "herbs")
+    if sum(marker in paragraph.lower() for marker in list_markers) >= 3:
+        return ""
+
+    return paragraph
+
+
+def _append_related_angle_to_canonical(canonical, related_entry, articles_dir):
+    """Cross-link a related angle without merging story identities.
+
+    A related profile/reaction remains a separate permalink. The canonical receives
+    either a validated 2-3 sentence context bridge or, when the relationship cannot be
+    supported cleanly, only a Related link. Headline, teaser, slug, publication date,
+    and RSS freshness remain untouched.
     """
     if not canonical or not related_entry:
         return False
@@ -7026,22 +7157,34 @@ def _append_related_angle_to_canonical(canonical, related_entry, articles_dir):
     if not canonical_slug or not related_slug or canonical_slug == related_slug:
         return False
 
-    related_url = f"{SITE_URL}/articles/{related_slug}.html"
     body = (canonical.get("body") or "").strip()
-    if related_url in body or f"/articles/{related_slug}.html" in body:
+    start_marker = f"<!-- RELATED-ANGLE:{related_slug}:START -->"
+    end_marker = f"<!-- RELATED-ANGLE:{related_slug}:END -->"
+
+    contextual_paragraph = _build_contextual_related_paragraph(canonical, related_entry)
+    addition = contextual_paragraph or _related_angle_fallback_link(related_entry)
+    if not addition:
         return False
+    block = f"{start_marker}\n{addition}\n{end_marker}"
 
-    headline = (related_entry.get("headline") or "Related local coverage").strip()
-    teaser = re.sub(r"\s+", " ", (related_entry.get("teaser") or "").strip())
-    if teaser:
-        teaser = re.split(r"(?<=[.!?])\s+", teaser)[0].strip()
-        if len(teaser) > 260:
-            teaser = teaser[:257].rsplit(" ", 1)[0] + "..."
-    paragraph = f"Related local response: [{headline}]({related_url})."
-    if teaser:
-        paragraph += f" {teaser}"
+    # Idempotent replacement: reruns improve the same related block rather than append
+    # another paragraph. Older unmarked article prose is intentionally left untouched.
+    marker_pattern = re.compile(
+        re.escape(start_marker) + r".*?" + re.escape(end_marker), re.S
+    )
+    if marker_pattern.search(body):
+        new_body = marker_pattern.sub(block, body)
+        if new_body == body:
+            return False
+        canonical["body"] = new_body
+    else:
+        related_url = f"{SITE_URL}/articles/{related_slug}.html"
+        if related_url in body or f"/articles/{related_slug}.html" in body:
+            # A legacy unmarked link already exists. Do not append a duplicate or try
+            # to rewrite surrounding historical prose automatically.
+            return False
+        canonical["body"] = (body + "\n\n" + block).strip() if body else block
 
-    canonical["body"] = (body + "\n\n" + paragraph).strip() if body else paragraph
     canonical["content_hash"] = _canonical_content_hash(
         canonical.get("headline", ""), canonical.get("teaser", ""),
         canonical.get("body", ""), canonical.get("image_url", "")
@@ -7054,13 +7197,16 @@ def _append_related_angle_to_canonical(canonical, related_entry, articles_dir):
     if article_path.exists():
         category_key = canonical.get("category_key", "top_news")
         category_label = canonical.get("category_label") or CATEGORIES.get(category_key, {}).get("label", "Top News")
-        related = [e for e in []]
         article_path.write_text(
-            render_article_page(canonical, category_label, category_key,
-                                canonical.get("date") or datetime.now(EASTERN).strftime("%Y-%m-%d"), canonical_slug, related=related),
+            render_article_page(
+                canonical, category_label, category_key,
+                canonical.get("date") or datetime.now(EASTERN).strftime("%Y-%m-%d"),
+                canonical_slug, related=[]
+            ),
             encoding="utf-8"
         )
-    print(f"  RELATED ANGLE: linked '{headline[:55]}' from canonical '{canonical.get('headline','')[:55]}'")
+    mode = "context bridge" if contextual_paragraph else "link only"
+    print(f"  RELATED ANGLE ({mode}): linked '{related_entry.get('headline','')[:55]}' from canonical '{canonical.get('headline','')[:55]}'")
     return True
 
 
@@ -8010,35 +8156,138 @@ def _plain_article_body_from_html(path):
     return "\n\n".join(cleaned)
 
 
-def _evolve_canonical_body(hero, existing, article_path):
-    """Return the body that should live at the permanent canonical URL.
+def _canonical_body_quality_issues(body):
+    """Return structural problems that make a canonical article unsafe to publish.
 
-    A substantial new article replaces the prior body. A short incremental update is
-    placed first and the established context is retained beneath it, so accepting an
-    update can never leave the permalink showing only the stale pre-update version.
+    Canonical articles must read as one complete story. Repeated versions, appended
+    update blocks, related-angle markers, and near-duplicate paragraphs are rejected.
+    """
+    import difflib
+
+    body = (body or "").strip()
+    issues = []
+    if not body:
+        return ["empty body"]
+
+    lowered = body.lower()
+    forbidden = (
+        "earlier coverage:",
+        "<!-- related-angle:",
+        "updated coverage:",
+        "previously reported:",
+    )
+    for marker in forbidden:
+        if marker in lowered:
+            issues.append(f"append marker present: {marker}")
+
+    paragraphs = [re.sub(r"\s+", " ", p).strip()
+                  for p in re.split(r"\n\s*\n+", body) if p.strip()]
+    if len(paragraphs) < 2:
+        issues.append("fewer than two paragraphs")
+
+    # Detect exact and near-duplicate paragraphs. This catches stacked rewrites even
+    # when each generation changes a few words.
+    normalized = [re.sub(r"[^a-z0-9 ]+", " ", p.lower()) for p in paragraphs]
+    normalized = [re.sub(r"\s+", " ", p).strip() for p in normalized]
+    for i in range(len(normalized)):
+        if len(normalized[i].split()) < 12:
+            continue
+        for j in range(i + 1, len(normalized)):
+            if len(normalized[j].split()) < 12:
+                continue
+            ratio = difflib.SequenceMatcher(None, normalized[i], normalized[j]).ratio()
+            if ratio >= 0.76:
+                issues.append(f"near-duplicate paragraphs {i+1} and {j+1} ({ratio:.2f})")
+
+    # Repeated long sentences are another strong sign that multiple full versions were
+    # appended together.
+    sentences = [re.sub(r"\s+", " ", s).strip()
+                 for s in re.split(r"(?<=[.!?])\s+", body) if s.strip()]
+    sentence_norm = [re.sub(r"[^a-z0-9 ]+", " ", s.lower()).strip() for s in sentences]
+    for i in range(len(sentence_norm)):
+        if len(sentence_norm[i].split()) < 10:
+            continue
+        for j in range(i + 1, len(sentence_norm)):
+            if len(sentence_norm[j].split()) < 10:
+                continue
+            ratio = difflib.SequenceMatcher(None, sentence_norm[i], sentence_norm[j]).ratio()
+            if ratio >= 0.88:
+                issues.append(f"repeated sentence {i+1}/{j+1} ({ratio:.2f})")
+
+    return issues
+
+
+def _evolve_canonical_body(hero, existing, article_path):
+    """Create one complete replacement article for an existing canonical URL.
+
+    No article text is ever appended. The previous canonical and the incoming report
+    are treated only as source material for a fresh, unified rewrite. If the rewrite
+    fails structural validation, the build stops rather than publishing a duplicated
+    or Frankenstein article.
     """
     new_body = (hero.get("body") or "").strip()
     old_body = (existing.get("body") or "").strip()
     if not old_body:
         old_body = _plain_article_body_from_html(article_path)
+
     if not new_body:
-        return old_body
+        raise RuntimeError(
+            f"Canonical update has no incoming body for '{hero.get('headline','')[:80]}'"
+        )
+
+    # Brand-new canonical content with no usable prior body can be used directly, but
+    # it still must pass the same anti-duplication checks.
     if not old_body:
+        issues = _canonical_body_quality_issues(new_body)
+        if issues:
+            raise RuntimeError("Canonical body validation failed: " + "; ".join(issues[:8]))
         return new_body
 
-    new_words = _word_count(new_body)
-    old_words = _word_count(old_body)
-    # Enriched rewrites that carry most of the prior article's depth are complete
-    # replacements. Incremental briefs are layered above the previous context.
-    if new_words >= 180 and new_words >= int(old_words * 0.55):
-        return new_body
+    prompt = (
+        "Rewrite the following developing local-news story as ONE complete, coherent "
+        "article. The output will fully replace the current article at its permanent "
+        "canonical URL. Use the previous article and the incoming report only as source "
+        "material. Incorporate the newest verified development, retain important prior "
+        "context, and remove duplicated facts. Start with a self-contained lead that "
+        "states what happened and the latest status; do not begin in the middle of the "
+        "story. Use a logical chronology. Mention each fact, statistic, quote, and source "
+        "at most once unless repetition is essential for clarity. Do not add headings, "
+        "notes, labels such as 'Earlier coverage,' markdown links, or commentary about "
+        "the rewrite. Do not invent facts. Return only the finished article in plain "
+        "paragraphs separated by blank lines.\n\n"
+        f"UPDATED HEADLINE:\n{hero.get('headline','').strip()}\n\n"
+        f"PREVIOUS CANONICAL ARTICLE:\n{old_body[:12000]}\n\n"
+        f"INCOMING REPORT / NEW DEVELOPMENT:\n{new_body[:12000]}\n"
+    )
 
-    new_sig = re.sub(r'[^a-z0-9]+', ' ', new_body.lower()).strip()
-    old_sig = re.sub(r'[^a-z0-9]+', ' ', old_body.lower()).strip()
-    if new_sig and (new_sig in old_sig or old_sig in new_sig):
-        return new_body if new_words >= old_words else old_body
-    return new_body + "\n\nEarlier coverage:\n\n" + old_body
+    rewritten = ""
+    try:
+        resp = client.messages.create(
+            model=MODEL_SELECTION,
+            max_tokens=1800,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        rewritten = strip_markdown(resp.content[0].text.strip(), hero.get("headline", ""))
+        rewritten = re.sub(r"\n{3,}", "\n\n", rewritten).strip()
+    except Exception as e:
+        print(f"    Full canonical rewrite failed ({e}); validating incoming article as fallback")
 
+    # A clean incoming article is the only permissible fallback. The old article is
+    # never concatenated to it.
+    candidate = rewritten or new_body
+    issues = _canonical_body_quality_issues(candidate)
+    if issues and rewritten:
+        fallback_issues = _canonical_body_quality_issues(new_body)
+        if not fallback_issues:
+            print("    Rewritten canonical failed validation; using clean incoming article only")
+            candidate = new_body
+            issues = []
+    if issues:
+        raise RuntimeError(
+            f"Canonical rewrite rejected for '{hero.get('headline','')[:80]}': "
+            + "; ".join(issues[:10])
+        )
+    return candidate
 
 def _verify_canonical_permalink(path, expected_headline, expected_body):
     """Fail the build when a card update and its permanent article drift apart."""
@@ -8345,13 +8594,31 @@ def write_archives(all_categories, top_cat):
 
         this_run_token_sets.append(_sig_tokens(headline))
 
+        # HARD SIGNIFICANCE GATE: identifying the same event is necessary but not
+        # sufficient to modify its canonical article. Routine follow-ups, duplicate
+        # reports, extra quotes, wording changes, and non-material details leave the
+        # canonical page, headline, teaser, timestamp, cards, hero, Latest News and RSS
+        # completely untouched. Only a major new milestone reaches the full-rewrite path.
+        if existing and not hero.get("is_custom"):
+            _significant_update = _is_significant_story_update(hero, existing)
+            if not _significant_update:
+                _hydrate_presentation_item(hero, existing)
+                print(f"  NON-SIGNIFICANT FOLLOW-UP: canonical unchanged for '{existing.get('headline','')[:55]}'")
+                continue
+
         if existing:
-            # Same story — update existing page in place, keep original URL
+            # Same event + significant development — rewrite the existing canonical
+            # article in full while retaining its permanent URL.
             slug = existing["slug"]
             hero["first_published"] = existing.get("first_published") or existing.get("date", "")
 
             _significant_update = _is_significant_story_update(hero, existing)
             _prior_for_update = dict(existing)
+            if not _significant_update:
+                # Custom/manual rewrites are allowed only when explicitly supplied as
+                # custom content; automated feed updates have already been blocked above.
+                if not hero.get("is_custom"):
+                    raise RuntimeError("Non-significant update reached canonical rewrite path")
             _article_path = articles_dir / f"{slug}.html"
 
             # Compare complete reader-visible canonical payloads, not workflow metadata.
@@ -8362,8 +8629,8 @@ def write_archives(all_categories, top_cat):
                 existing.get("body", ""), existing.get("image_url", "")
             )
 
-            # Evolve the canonical document itself. Full rewrites replace the old body;
-            # short incremental updates are placed above the retained background.
+            # Rebuild the canonical document as one complete replacement article.
+            # Previous and incoming reporting are source material only; nothing is appended.
             hero["body"] = _evolve_canonical_body(hero, existing, _article_path)
             hero["teaser"] = hero.get("teaser", "") or hero.get("body", "")[:180]
             _final_image_url = hero.get("image_url","") or existing.get("image_url", "")
@@ -8490,11 +8757,12 @@ def write_archives(all_categories, top_cat):
             }
             archive.append(_new_archive_entry)
             _hydrate_presentation_item(hero, _new_archive_entry)
-            # A reaction/profile/explainer remains independent, then enriches the
-            # related event canonical with one restrained paragraph and direct link.
+            # Related angles always remain separate stories. They may retain a
+            # relationship pointer for future UI use, but they never modify, append to,
+            # or rewrite the event canonical article.
             if _related_canonical is not None:
                 _new_archive_entry["related_canonical_slug"] = _related_canonical.get("slug", "")
-                _append_related_angle_to_canonical(_related_canonical, _new_archive_entry, articles_dir)
+                print(f"  RELATED ANGLE: kept separate from canonical '{_related_canonical.get('headline','')[:55]}'")
             new_count += 1
 
     # FINAL production enforcement: article generation above may have recreated a
