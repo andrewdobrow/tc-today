@@ -3499,7 +3499,7 @@ def render_index(all_categories, top_cat):
         current_headlines.add(card.get("headline", "").strip().lower())
 
     older_archive = load_archive(OUTPUT_DIR / "archive.json")
-    older_archive.sort(key=lambda e: e.get("lastmod") or e.get("date", ""), reverse=True)
+    older_archive.sort(key=_effective_story_datetime, reverse=True)
 
     # Group older stories by category, up to 10 each, excluding current headlines
     older_by_cat = {}
@@ -3555,14 +3555,38 @@ def render_index(all_categories, top_cat):
     )
 
     # Editorial redesign modules: a compact latest-news rail and county panels.
+    # "Latest News" is chronological, not urgency-ranked. It uses the canonical
+    # article's true editorial timestamp and excludes stale stories rather than
+    # filling the rail with old high-urgency items. Routine workflow runs never
+    # affect this ordering because _effective_story_datetime ignores build time.
     latest_items_html = ""
-    for _latest in all_cards_display[:5]:
-        _url = card_permalink(_latest)
-        if not _url:
+    _latest_cutoff = datetime.now(timezone.utc) - timedelta(hours=120)  # rolling 5 days
+    _latest_candidates = []
+    _latest_seen_urls = set()
+
+    for _latest_card in all_cards_display:
+        _url = card_permalink(_latest_card)
+        if not _url or _url in _latest_seen_urls:
             continue
+        _matched = find_matching_entry(
+            _latest_card.get("headline", ""),
+            archive_for_links,
+            _latest_card.get("link", ""),
+            is_weather_alert=bool(_latest_card.get("is_weather_alert")),
+        )
+        _effective_dt = _effective_story_datetime(_matched or _latest_card)
+        if _effective_dt < _latest_cutoff:
+            continue
+        _latest_seen_urls.add(_url)
+        _latest_candidates.append((_effective_dt, _latest_card, _matched, _url))
+
+    _latest_candidates.sort(key=lambda item: item[0], reverse=True)
+
+    for _effective_dt, _latest, _matched, _url in _latest_candidates[:5]:
         _ltime = card_display_date(_latest)
-        _lcat = _latest.get("cat_label", "")
-        _lurgency_text = f"{_lcat} {_latest.get('headline','')}".strip().lower()
+        _lcat = (_matched or {}).get("category_label") or _latest.get("cat_label", "")
+        _display_headline = (_matched or {}).get("headline") or _latest.get("headline", "")
+        _lurgency_text = f"{_lcat} {_display_headline}".strip().lower()
         _lbadge = ""
         if _latest.get("is_breaking") or _lurgency_text.startswith("breaking"):
             _lbadge = '<span class="latest-status breaking">Breaking</span>'
@@ -3571,7 +3595,7 @@ def render_index(all_categories, top_cat):
         latest_items_html += f'''
           <a class="latest-item" href="{_url}">
             <div class="latest-item-top"><span class="latest-time">{_ltime}</span>{_lbadge}</div>
-            <h3>{_latest.get("headline", "")}</h3>
+            <h3>{_display_headline}</h3>
             <span class="latest-county">{_lcat}</span>
           </a>'''
 
