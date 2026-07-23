@@ -1,6 +1,7 @@
+from .story_registry import StoryRegistry
+
 """Editorial processing pipeline."""
 
-from .story_registry import StoryRegistry
 
 from __future__ import annotations
 
