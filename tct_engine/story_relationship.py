@@ -12,10 +12,16 @@ _STOP = {
     "the", "and", "for", "with", "from", "after", "before", "into",
     "county", "news", "update", "says", "said", "earlier", "reported",
 }
-_FOLLOW_UP_MARKERS = {
-    "arrest", "arrested", "charge", "charged", "charges", "reopen", "reopens",
-    "reopened", "identified", "dies", "died", "sentenced", "sentence", "trial",
-    "hearing", "lawsuit", "investigation", "continues", "recovered", "found",
+_FOLLOW_UP_MILESTONES = {
+    "arrest": {"arrest", "arrested", "charge", "charged", "charges"},
+    "identified": {"identified", "named", "identity"},
+    "death": {"dies", "died", "dead", "killed", "death"},
+    "sentencing": {"sentenced", "sentence", "sentencing"},
+    "court_action": {"trial", "hearing", "lawsuit", "sues", "sued", "indicted"},
+    "investigation": {"investigation", "reopen", "reopens", "reopened"},
+    "recovery": {"recovered", "found", "located", "rescued", "reunited"},
+    "release": {"released", "discharged", "returns", "returned"},
+    "resolution": {"contained", "resolved", "cleared", "reopened"},
 }
 _CASUALTY_WORDS = {"injured", "killed", "dead", "fatalities", "victims", "hurt"}
 
@@ -37,6 +43,21 @@ def _tokens(value: object) -> set[str]:
 
 def _overlap(left: set[str], right: set[str]) -> float:
     return len(left & right) / min(len(left), len(right)) if left and right else 0.0
+
+
+def _milestones(*values: object) -> set[str]:
+    tokens: set[str] = set()
+    for value in values:
+        if isinstance(value, (list, tuple, set, frozenset)):
+            for item in value:
+                tokens |= _tokens(item)
+        else:
+            tokens |= _tokens(value)
+    return {
+        milestone
+        for milestone, markers in _FOLLOW_UP_MILESTONES.items()
+        if tokens & markers
+    }
 
 
 def _numeric_casualty_signatures(facts: Iterable[str]) -> set[tuple[str, str]]:
@@ -101,6 +122,7 @@ class StoryRelationshipEngine:
         incoming_title_tokens = _tokens(title)
         incoming_event_tokens = _tokens(event_key.replace("-", " "))
         incoming_casualties = _numeric_casualty_signatures(incoming["facts"])
+        incoming_milestones = _milestones(title, incoming["facts"], event_key.replace("-", " "))
 
         best: StoryRelationship | None = None
 
@@ -152,7 +174,21 @@ class StoryRelationshipEngine:
             type_match = bool(incoming["types"] & known["types"])
             entity_match = bool(incoming["entities"] & known["entities"])
             fact_score = scores["facts"]
-            lifecycle_signal = bool(incoming_title_tokens & _FOLLOW_UP_MARKERS)
+            known_milestones = _milestones(
+                story.get("canonical_title", ""),
+                story.get("titles", ()),
+                known["facts"],
+                story.get("events", ()),
+            )
+            novel_milestones = incoming_milestones - known_milestones
+            novel_facts = incoming["facts"] - known["facts"]
+            novel_fact_ratio = (
+                len(novel_facts) / len(incoming["facts"])
+                if incoming["facts"]
+                else 0.0
+            )
+            lifecycle_signal = bool(novel_milestones)
+            distinct_event_signal = lifecycle_signal or novel_fact_ratio >= 0.34
 
             # Strong fact continuity plus concrete identity anchors is enough to
             # establish that a later event belongs to the same developing story.
@@ -160,6 +196,7 @@ class StoryRelationshipEngine:
                 type_match
                 and location_match
                 and fact_score >= 0.66
+                and distinct_event_signal
                 and (lifecycle_signal or agency_match or entity_match)
             )
             strong_agency_follow_up = (
@@ -167,12 +204,14 @@ class StoryRelationshipEngine:
                 and location_match
                 and agency_match
                 and fact_score >= 0.50
+                and distinct_event_signal
             )
             strong_entity_follow_up = (
                 type_match
                 and (location_match or agency_match)
                 and entity_match
                 and fact_score >= 0.40
+                and distinct_event_signal
             )
             lifecycle_follow_up = (
                 lifecycle_signal
@@ -227,6 +266,8 @@ class StoryRelationshipEngine:
                 f"Event type match: {type_match}",
                 f"Entity match: {entity_match}",
                 f"Lifecycle signal: {lifecycle_signal}",
+                f"Novel milestones: {', '.join(sorted(novel_milestones)) or 'none'}",
+                f"Novel fact ratio: {novel_fact_ratio:.2f}",
                 f"Confidence: {confidence:.2f}",
                 f"Threshold: {self.FOLLOW_UP_THRESHOLD:.2f}",
             )

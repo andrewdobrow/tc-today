@@ -13,11 +13,11 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.8.0"
-ENGINE_RELEASE = "story-lifecycle"
+ENGINE_VERSION = "1.8.1"
+ENGINE_RELEASE = "follow-up-detection"
 OBSERVABILITY_SCHEMA_VERSION = 4
 RESOLVER_VERSION = "2.1"
-RELATIONSHIP_ENGINE_VERSION = "1.1"
+RELATIONSHIP_ENGINE_VERSION = "1.2"
 
 
 def _utc_now() -> str:
