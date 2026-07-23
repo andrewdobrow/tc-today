@@ -23,7 +23,7 @@ class StoryRegistry:
                 "event_to_story": {},
                 "story_aliases": {}
 }
-            }
+            
 
     def save(self):
 
