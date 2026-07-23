@@ -96,6 +96,8 @@ class EditorialPipeline:
             locations=article.locations,
             agencies=article.agencies,
             event_types=article.event_types,
+            source=article.source,
+            is_custom=article.is_custom,
         )
 
         existing_snapshot = self._snapshots.get(article.event_key)
@@ -202,3 +204,12 @@ class EditorialPipeline:
 
     def get_story_timeline(self, story_id: str):
         return self._registry.get_timeline(story_id)
+
+    def get_story_importance(self, story_id: str):
+        return self._registry.get_importance(story_id)
+
+    def get_top_stories(self, limit: int = 10):
+        return self._registry.get_top_stories(limit=limit)
+
+    def get_breaking_stories(self):
+        return self._registry.get_breaking_stories()

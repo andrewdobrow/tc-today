@@ -16,6 +16,12 @@ from .canonical_story import (
     StoryCandidate,
     select_canonical_story,
 )
+from .story_importance import (
+    ImportanceLevel,
+    ImportanceReason,
+    StoryImportance,
+    StoryImportanceEngine,
+)
 from .story_evolution import (
     IncomingStoryUpdate,
     StorySnapshot,
@@ -63,6 +69,10 @@ __all__ = [
     "CanonicalStoryManager",
     "StoryCandidate",
     "select_canonical_story",
+    "ImportanceLevel",
+    "ImportanceReason",
+    "StoryImportance",
+    "StoryImportanceEngine",
     "IncomingStoryUpdate",
     "StorySnapshot",
     "StoryUpdateResult",
@@ -89,4 +99,4 @@ __all__ = [
     "route_editorial_result",
 ]
 
-__version__ = "0.1.0"
+__version__ = "1.1.0"

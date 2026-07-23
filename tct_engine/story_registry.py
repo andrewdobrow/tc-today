@@ -8,6 +8,7 @@ import re
 from pathlib import Path
 from typing import Any, Iterable
 
+from .story_importance import StoryImportance, StoryImportanceEngine, ImportanceLevel
 from .story_resolver import StoryResolver
 from .story_timeline import StoryTimeline, TimelineEntry
 
@@ -23,11 +24,12 @@ def _tokens(value: str) -> set[str]:
 
 
 class StoryRegistry:
-    SCHEMA_VERSION = 3
+    SCHEMA_VERSION = 4
 
     def __init__(self, filename: str | Path = "story-registry.json") -> None:
         self.path = Path(filename)
         self._resolver = StoryResolver()
+        self._importance = StoryImportanceEngine()
         self.data = self._load()
 
     def _empty(self) -> dict[str, Any]:
@@ -66,9 +68,12 @@ class StoryRegistry:
             story.setdefault("agencies", [])
             story.setdefault("event_types", [])
             story.setdefault("resolution_history", [])
+            story.setdefault("custom_article_count", 0)
+            story.setdefault("sources", [])
             story["timeline"] = StoryTimeline.from_list(
                 story.get("timeline", [])
             ).to_list()
+            story["importance"] = self._importance.score(story).to_dict()
 
         payload["schema"] = self.SCHEMA_VERSION
         return payload
@@ -109,6 +114,9 @@ class StoryRegistry:
             "event_types": [],
             "resolution_history": [],
             "timeline": [],
+            "custom_article_count": 0,
+            "sources": [],
+            "importance": StoryImportance(score=0, level=ImportanceLevel.LOW).to_dict(),
         }
         self.data["event_to_story"][event_key] = story_id
         return story_id
@@ -131,6 +139,8 @@ class StoryRegistry:
         locations: Iterable[str] = (),
         agencies: Iterable[str] = (),
         event_types: Iterable[str] = (),
+        source: str = "",
+        is_custom: bool = False,
     ) -> str:
         mapped = self.data["event_to_story"].get(event_key)
         if mapped:
@@ -142,7 +152,10 @@ class StoryRegistry:
                 locations=locations,
                 agencies=agencies,
                 event_types=event_types,
+                source=source,
+                is_custom=is_custom,
             )
+            self._recalculate_importance(story_id)
             self.save()
             return story_id
 
@@ -169,7 +182,10 @@ class StoryRegistry:
             locations=locations,
             agencies=agencies,
             event_types=event_types,
+            source=source,
+            is_custom=is_custom,
         )
+        self._recalculate_importance(story_id)
         story = self.data["stories"][story_id]
         story["resolution_history"].append(
             {
@@ -191,6 +207,8 @@ class StoryRegistry:
         locations: Iterable[str] = (),
         agencies: Iterable[str] = (),
         event_types: Iterable[str] = (),
+        source: str = "",
+        is_custom: bool = False,
     ) -> None:
         story = self.data["stories"][self._canonical_story_id(story_id)]
 
@@ -226,6 +244,20 @@ class StoryRegistry:
                 if str(value).strip()
             )
             story[field] = sorted(existing)
+
+        if source:
+            sources = set(story.get("sources", []))
+            sources.add(source)
+            story["sources"] = sorted(sources)
+        if is_custom:
+            story["custom_article_count"] = int(story.get("custom_article_count", 0)) + 1
+
+    def _recalculate_importance(self, story_id: str) -> StoryImportance:
+        canonical_id = self._canonical_story_id(story_id)
+        story = self.data["stories"][canonical_id]
+        importance = self._importance.score(story)
+        story["importance"] = importance.to_dict()
+        return importance
 
     def attach_event(
         self,
@@ -272,6 +304,13 @@ class StoryRegistry:
             primary[field] = sorted(set(primary[field]) | set(secondary[field]))
 
         primary["resolution_history"].extend(secondary["resolution_history"])
+        primary["custom_article_count"] = (
+            int(primary.get("custom_article_count", 0))
+            + int(secondary.get("custom_article_count", 0))
+        )
+        primary["sources"] = sorted(
+            set(primary.get("sources", [])) | set(secondary.get("sources", []))
+        )
 
         primary_timeline = StoryTimeline.from_list(primary.get("timeline", []))
         secondary_timeline = StoryTimeline.from_list(
@@ -281,6 +320,7 @@ class StoryRegistry:
         primary["timeline"] = primary_timeline.to_list()
         self.data["story_aliases"][secondary_story] = primary_story
         del self.data["stories"][secondary_story]
+        self._recalculate_importance(primary_story)
         self.save()
         return primary_story
 
@@ -305,6 +345,7 @@ class StoryRegistry:
             return False
 
         story["timeline"] = timeline.to_list()
+        self._recalculate_importance(canonical_id)
         if save:
             self.save()
         return True
@@ -324,6 +365,44 @@ class StoryRegistry:
     def get_story_for_event(self, event_key: str) -> dict[str, Any] | None:
         story_id = self.data["event_to_story"].get(event_key)
         return self.get_story(story_id) if story_id else None
+
+    def get_importance(self, story_id: str) -> StoryImportance | None:
+        canonical_id = self._canonical_story_id(story_id)
+        story = self.data["stories"].get(canonical_id)
+        if story is None:
+            return None
+        return StoryImportance.from_dict(story.get("importance"))
+
+    def get_top_stories(
+        self,
+        limit: int = 10,
+        *,
+        include_archived: bool = False,
+    ) -> tuple[dict[str, Any], ...]:
+        if limit < 0:
+            raise ValueError("limit must be non-negative")
+        stories = list(self.iter_stories())
+        if not include_archived:
+            stories = [
+                story for story in stories
+                if StoryImportance.from_dict(story.get("importance")).level
+                is not ImportanceLevel.ARCHIVED
+            ]
+        stories.sort(
+            key=lambda story: (
+                -StoryImportance.from_dict(story.get("importance")).score,
+                str(story.get("story_id", "")),
+            )
+        )
+        return tuple(stories[:limit])
+
+    def get_breaking_stories(self) -> tuple[dict[str, Any], ...]:
+        return tuple(
+            story
+            for story in self.get_top_stories(limit=len(self.data["stories"]))
+            if StoryImportance.from_dict(story.get("importance")).level
+            is ImportanceLevel.BREAKING
+        )
 
     def iter_stories(self) -> tuple[dict[str, Any], ...]:
         return tuple(

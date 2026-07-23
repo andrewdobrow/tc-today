@@ -167,6 +167,15 @@ class EditorialEngine:
     def get_story_timeline(self, story_id: str):
         return self._pipeline.get_story_timeline(story_id)
 
+    def get_story_importance(self, story_id: str):
+        return self._pipeline.get_story_importance(story_id)
+
+    def get_top_stories(self, limit: int = 10):
+        return self._pipeline.get_top_stories(limit=limit)
+
+    def get_breaking_stories(self):
+        return self._pipeline.get_breaking_stories()
+
     def save(self, path: str | Path) -> None:
         """Save replayable editorial state to a JSON file."""
 
