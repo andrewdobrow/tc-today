@@ -5,6 +5,7 @@ Runs 4x/day via GitHub Actions.
 """
 
 import os
+import sys
 import json
 import re
 import hashlib
@@ -15,6 +16,13 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
+
+# Ensure repository-root packages are importable when this file is executed as
+# ``python scripts/generate.py``. Python otherwise places only ``scripts/`` on
+# sys.path, which prevents the sibling ``tct_engine/`` package from loading.
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 
 # Editorial engine shadow integration. This is deliberately fail-open: audit
 # failures are logged but can never stop or alter the existing publication path.
@@ -187,6 +195,10 @@ SITE_TAGLINE = "Your Treasure Coast, every day."
 # the live publisher, homepage renderer, archive writer, or duplicate suppressor.
 EDITORIAL_STATE_PATH = OUTPUT_DIR / "data" / "editorial_state.json"
 EDITORIAL_AUDIT_LOG_PATH = OUTPUT_DIR / "data" / "editorial_audit.jsonl"
+# Keep the shadow engine's registry isolated from the authoritative v7.1
+# production registry. Phase 1 observes and scores; it never mutates publishing.
+EDITORIAL_REGISTRY_PATH = OUTPUT_DIR / "data" / "editorial_story_registry.json"
+EDITORIAL_OBSERVABILITY_PATH = OUTPUT_DIR / "data" / "editorial_observability.json"
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -8507,7 +8519,10 @@ def _load_editorial_engine_audit():
         return None
     try:
         EDITORIAL_STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
-        engine = EditorialEngine.load(EDITORIAL_STATE_PATH)
+        engine = EditorialEngine.load(
+            EDITORIAL_STATE_PATH,
+            registry_path=EDITORIAL_REGISTRY_PATH,
+        )
         print(f"  Editorial audit state loaded: {EDITORIAL_STATE_PATH}")
         return engine
     except Exception as exc:
@@ -8577,6 +8592,92 @@ def _save_editorial_engine_audit(engine, audit_rows):
             print(f"  Editorial audit logged {len(audit_rows)} unique candidate decision(s)")
         except Exception as exc:
             print(f"  Editorial audit log failed; publication output is unchanged: {exc}")
+
+
+def _write_editorial_observability(engine, audit_rows):
+    """Write deterministic shadow-engine metrics without altering publication."""
+    if engine is None:
+        return
+
+    try:
+        stories = list(engine.get_top_stories(limit=100000))
+        level_counts = {
+            "breaking": 0,
+            "high": 0,
+            "normal": 0,
+            "low": 0,
+            "archived": 0,
+        }
+        scores = []
+        for story in stories:
+            importance = story.get("importance", {}) or {}
+            level = str(importance.get("level", "low")).lower()
+            if level not in level_counts:
+                level = "low"
+            level_counts[level] += 1
+            try:
+                scores.append(int(importance.get("score", 0) or 0))
+            except (TypeError, ValueError):
+                scores.append(0)
+
+        route_counts = defaultdict(int)
+        for row in audit_rows:
+            route_counts[str(row.get("route", "unknown"))] += 1
+
+        top_stories = []
+        for story in stories[:10]:
+            importance = story.get("importance", {}) or {}
+            titles = story.get("titles", []) or []
+            top_stories.append({
+                "story_id": story.get("story_id", ""),
+                "title": titles[-1] if titles else "",
+                "score": int(importance.get("score", 0) or 0),
+                "level": importance.get("level", "low"),
+                "reasons": importance.get("reasons", []),
+                "event_count": len(story.get("events", []) or []),
+                "timeline_entries": len(story.get("timeline", []) or []),
+            })
+
+        report = {
+            "schema_version": 1,
+            "engine": "tct-engine-v1.1-shadow",
+            "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+            "mode": "observe_only",
+            "publication_behavior_changed": False,
+            "registry_path": str(EDITORIAL_REGISTRY_PATH.relative_to(OUTPUT_DIR)),
+            "audit": {
+                "candidates_processed": len(audit_rows),
+                "routes": dict(sorted(route_counts.items())),
+            },
+            "stories": {
+                "total": len(stories),
+                "importance_levels": level_counts,
+                "average_importance": round(sum(scores) / len(scores), 2) if scores else 0.0,
+                "top": top_stories,
+            },
+            "status": "healthy",
+        }
+
+        EDITORIAL_OBSERVABILITY_PATH.parent.mkdir(parents=True, exist_ok=True)
+        temporary = EDITORIAL_OBSERVABILITY_PATH.with_suffix(".json.tmp")
+        temporary.write_text(
+            json.dumps(report, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        temporary.replace(EDITORIAL_OBSERVABILITY_PATH)
+
+        print("  " + "=" * 55)
+        print("  TCT Editorial Engine — Phase 1 Observability")
+        print(f"  Shadow stories:          {len(stories)}")
+        print(f"  Candidates processed:    {len(audit_rows)}")
+        print(f"  Breaking / High:         {level_counts['breaking']} / {level_counts['high']}")
+        print(f"  Normal / Low:            {level_counts['normal']} / {level_counts['low']}")
+        print(f"  Average importance:      {report['stories']['average_importance']}")
+        print(f"  Report:                  {EDITORIAL_OBSERVABILITY_PATH}")
+        print("  Publication changes:     NONE (observe-only)")
+        print("  " + "=" * 55)
+    except Exception as exc:
+        print(f"  Editorial observability failed; publication output is unchanged: {exc}")
 
 
 def main():
@@ -9039,6 +9140,7 @@ def main():
 
     # Save only after the normal production build has completed. This remains audit-only.
     _save_editorial_engine_audit(editorial_engine, editorial_audit_rows)
+    _write_editorial_observability(editorial_engine, editorial_audit_rows)
 
     print(f"Done. {len(all_categories)} categories written.")
 
