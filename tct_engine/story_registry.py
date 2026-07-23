@@ -71,9 +71,9 @@ class StoryRegistry:
 
         self.save()
     def merge_events(
-    self,
-    primary_event: str,
-    secondary_event: str,
+        self,
+        primary_event: str,
+        secondary_event: str,
 ):
     """
     Merge two event keys into one persistent story.
