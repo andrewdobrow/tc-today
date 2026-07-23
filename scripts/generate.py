@@ -8560,6 +8560,11 @@ def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, a
                 "event_key": getattr(instruction, "event_key", ""),
                 "incoming_article_id": getattr(instruction, "incoming_article_id", ""),
                 "target_article_id": getattr(instruction, "target_article_id", ""),
+                "eligible": bool(getattr(result, "eligible", True)),
+                "eligibility_status": getattr(result, "eligibility_status", "publishable"),
+                "eligibility_reasons": list(getattr(result, "eligibility_reasons", ()) or ()),
+                "source_class": getattr(result, "source_class", "unknown"),
+                "source_trust": int(getattr(result, "source_trust", 50) or 0),
             }
             audit_rows.append(row)
             print(
@@ -8568,6 +8573,7 @@ def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, a
                 "| event:", row["event_key"],
                 "| incoming:", row["incoming_article_id"],
                 "| target:", row["target_article_id"],
+                "| eligibility:", row["eligibility_status"],
             )
         except Exception as exc:
             print(f"  Editorial audit item failed; continuing unchanged: {exc}")
@@ -8621,8 +8627,21 @@ def _write_editorial_observability(engine, audit_rows):
                 scores.append(0)
 
         route_counts = defaultdict(int)
+        eligibility_counts = defaultdict(int)
+        source_class_counts = defaultdict(int)
+        rejected_examples = []
         for row in audit_rows:
             route_counts[str(row.get("route", "unknown"))] += 1
+            eligibility_counts[str(row.get("eligibility_status", "publishable"))] += 1
+            source_class_counts[str(row.get("source_class", "unknown"))] += 1
+            if not row.get("eligible", True) and len(rejected_examples) < 20:
+                rejected_examples.append({
+                    "headline": row.get("headline", ""),
+                    "source_url": row.get("source_url", ""),
+                    "status": row.get("eligibility_status", "non_news"),
+                    "reasons": row.get("eligibility_reasons", []),
+                    "source_class": row.get("source_class", "unknown"),
+                })
 
         top_stories = []
         for story in stories[:10]:
@@ -8630,7 +8649,7 @@ def _write_editorial_observability(engine, audit_rows):
             titles = story.get("titles", []) or []
             top_stories.append({
                 "story_id": story.get("story_id", ""),
-                "title": titles[-1] if titles else "",
+                "title": story.get("canonical_title") or (titles[-1] if titles else ""),
                 "score": int(importance.get("score", 0) or 0),
                 "level": importance.get("level", "low"),
                 "reasons": importance.get("reasons", []),
@@ -8640,7 +8659,7 @@ def _write_editorial_observability(engine, audit_rows):
 
         report = {
             "schema_version": 1,
-            "engine": "tct-engine-v1.1-shadow",
+            "engine": "tct-engine-v1.2-editorial-judgment-shadow",
             "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
             "mode": "observe_only",
             "publication_behavior_changed": False,
@@ -8648,6 +8667,10 @@ def _write_editorial_observability(engine, audit_rows):
             "audit": {
                 "candidates_processed": len(audit_rows),
                 "routes": dict(sorted(route_counts.items())),
+                "eligibility": dict(sorted(eligibility_counts.items())),
+                "source_classes": dict(sorted(source_class_counts.items())),
+                "rejected_count": sum(1 for row in audit_rows if not row.get("eligible", True)),
+                "rejected_examples": rejected_examples,
             },
             "stories": {
                 "total": len(stories),
@@ -8667,9 +8690,10 @@ def _write_editorial_observability(engine, audit_rows):
         temporary.replace(EDITORIAL_OBSERVABILITY_PATH)
 
         print("  " + "=" * 55)
-        print("  TCT Editorial Engine — Phase 1 Observability")
+        print("  TCT Editorial Engine — v1.2 Editorial Judgment")
         print(f"  Shadow stories:          {len(stories)}")
         print(f"  Candidates processed:    {len(audit_rows)}")
+        print(f"  Ineligible rejected:     {report['audit']['rejected_count']}")
         print(f"  Breaking / High:         {level_counts['breaking']} / {level_counts['high']}")
         print(f"  Normal / Low:            {level_counts['normal']} / {level_counts['low']}")
         print(f"  Average importance:      {report['stories']['average_importance']}")
