@@ -55,7 +55,9 @@ class EditorialPipeline:
         article: PipelineArticle,
     ) -> EditorialPipelineResult:
 
-        existing_snapshot = self._snapshots.get(article.event_key)
+        story_id = self._registry.resolve_story(article.event_key)
+
+        existing_snapshot = self._snapshots.get(story_id)
         existing_canonical = self._stories.get(article.event_key)
 
         candidate = StoryCandidate(
