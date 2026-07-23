@@ -1,5 +1,7 @@
 """Editorial processing pipeline."""
 
+from .story_registry import StoryRegistry
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -48,6 +50,7 @@ class EditorialPipeline:
 
     def __init__(self) -> None:
         self._stories = CanonicalStoryManager()
+        self._registry = StoryRegistry()
         self._snapshots: dict[str, StorySnapshot] = {}
 
     def process(
@@ -59,6 +62,8 @@ class EditorialPipeline:
 
         existing_snapshot = self._snapshots.get(story_id)
         existing_canonical = self._stories.get(article.event_key)
+        
+        story_id = self._registry.resolve_story(article.event_key)
 
         candidate = StoryCandidate(
             article_id=article.article_id,
