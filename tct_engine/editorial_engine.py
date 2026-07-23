@@ -57,6 +57,7 @@ class EditorialEngine:
         *,
         custom_sources: set[str] | None = None,
         default_published_at: datetime | None = None,
+        registry_path: str | Path = "story-registry.json",
     ) -> None:
         self._custom_sources = (
             set(custom_sources)
@@ -71,7 +72,11 @@ class EditorialEngine:
             default_published_at=default_published_at,
         )
 
-        self._pipeline = EditorialPipeline()
+        self.registry_path = Path(registry_path)
+
+        self._pipeline = EditorialPipeline(
+            registry_path=self.registry_path,
+        )
 
         # A replayable journal provides persistence without exposing
         # private state from the lower-level pipeline components.
@@ -192,8 +197,16 @@ class EditorialEngine:
         path: str | Path,
         *,
         custom_sources: set[str] | None = None,
+        @classmethod
+    def load(
+        cls,
+        path: str | Path,
+        *,
+        custom_sources: set[str] | None = None,
         default_published_at: datetime | None = None,
+        registry_path: str | Path = "story-registry.json",
     ) -> EditorialEngine:
+    
         """Load saved state and rebuild the editorial pipeline."""
 
         state_path = Path(path)
@@ -201,6 +214,7 @@ class EditorialEngine:
         engine = cls(
             custom_sources=custom_sources,
             default_published_at=default_published_at,
+            registry_path=registry_path,
         )
 
         if not state_path.exists():
