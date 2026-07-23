@@ -188,12 +188,49 @@ class StoryRegistry:
         mapped = self.data["event_to_story"].get(event_key)
         if mapped:
             story_id = self._canonical_story_id(mapped)
+            mapped_story = self.get_story(story_id)
+            relationship = self._relationships.classify(
+                event_key=event_key,
+                title=title,
+                facts=facts,
+                locations=locations,
+                agencies=agencies,
+                event_types=event_types,
+                entities=entities,
+                stories=(mapped_story,) if mapped_story is not None else (),
+            )
+            relationship_won = bool(
+                relationship.attaches_to_story
+                and relationship.story_id
+                and self._canonical_story_id(str(relationship.story_id)) == story_id
+            )
+            relationship_value = (
+                StoryRelationshipType.FOLLOW_UP.value
+                if relationship_won
+                else StoryRelationshipType.SAME_EVENT.value
+            )
+            confidence = relationship.confidence if relationship_won else 1.0
+            reason = (
+                relationship.reason
+                if relationship_won
+                else "Exact event key already belongs to this story"
+            )
+            trace = (
+                list(relationship.decision_trace)
+                if relationship_won
+                else [
+                    "Relationship: same_event",
+                    "Exact event-key mapping: true",
+                    "No novel follow-up milestone: true",
+                    "Confidence: 1.00",
+                ]
+            )
             self.last_decision = {
                 "event_key": event_key,
-                "relationship": StoryRelationshipType.SAME_EVENT.value,
-                "confidence": 1.0,
-                "reason": "Exact event key already belongs to this story",
-                "decision_trace": ["Relationship: same_event", "Exact event-key mapping: true", "Confidence: 1.00"],
+                "relationship": relationship_value,
+                "confidence": round(confidence, 6),
+                "reason": reason,
+                "decision_trace": trace,
                 "matched_existing": True,
                 "story_id": story_id,
             }
@@ -212,6 +249,29 @@ class StoryRegistry:
                 source_trust=source_trust,
             )
             self._recalculate_importance(story_id)
+            story = self.data["stories"][story_id]
+            story["resolution_history"].append(
+                {
+                    "event_key": event_key,
+                    "confidence": round(confidence, 6),
+                    "reason": reason,
+                    "decision_trace": trace,
+                    "resolver_version": "2.1",
+                    "matched_existing": True,
+                    "relationship": relationship_value,
+                }
+            )
+            if relationship_won:
+                story.setdefault("relationship_history", []).append(
+                    {
+                        "event_key": event_key,
+                        "relationship": relationship_value,
+                        "confidence": round(confidence, 6),
+                        "reason": reason,
+                        "decision_trace": trace,
+                        "relationship_engine_version": "1.2",
+                    }
+                )
             self.save()
             return story_id
 
