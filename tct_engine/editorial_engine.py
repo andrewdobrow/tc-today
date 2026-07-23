@@ -70,6 +70,7 @@ class EditorialEngine:
         self._adapter = RSSArticleAdapter(
             custom_sources=self._custom_sources,
             default_published_at=default_published_at,
+            registry_path=registry_path,
         )
 
         self.registry_path = Path(registry_path)
