@@ -28,10 +28,15 @@ if str(_REPO_ROOT) not in sys.path:
 # failures are logged but can never stop or alter the existing publication path.
 _editorial_import_error = None
 try:
-    from tct_engine import EditorialEngine, route_editorial_result
+    from tct_engine import (
+        EditorialEngine,
+        route_editorial_result,
+        write_editorial_observability,
+    )
 except Exception as exc:
     EditorialEngine = None
     route_editorial_result = None
+    write_editorial_observability = None
     _editorial_import_error = exc
 
 # -- CONFIG --
@@ -8560,6 +8565,7 @@ def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, a
                 "event_key": getattr(instruction, "event_key", ""),
                 "incoming_article_id": getattr(instruction, "incoming_article_id", ""),
                 "target_article_id": getattr(instruction, "target_article_id", ""),
+                "story_id": getattr(result, "story_id", ""),
                 "eligible": bool(getattr(result, "eligible", True)),
                 "eligibility_status": getattr(result, "eligibility_status", "publishable"),
                 "eligibility_reasons": list(getattr(result, "eligibility_reasons", ()) or ()),
@@ -8601,102 +8607,48 @@ def _save_editorial_engine_audit(engine, audit_rows):
 
 
 def _write_editorial_observability(engine, audit_rows):
-    """Write deterministic shadow-engine metrics without altering publication."""
-    if engine is None:
+    """Delegate diagnostics to tct_engine; failures remain non-fatal."""
+    if engine is None or write_editorial_observability is None:
         return
 
     try:
-        stories = list(engine.get_top_stories(limit=100000))
-        level_counts = {
-            "breaking": 0,
-            "high": 0,
-            "normal": 0,
-            "low": 0,
-            "archived": 0,
-        }
-        scores = []
-        for story in stories:
-            importance = story.get("importance", {}) or {}
-            level = str(importance.get("level", "low")).lower()
-            if level not in level_counts:
-                level = "low"
-            level_counts[level] += 1
-            try:
-                scores.append(int(importance.get("score", 0) or 0))
-            except (TypeError, ValueError):
-                scores.append(0)
-
-        route_counts = defaultdict(int)
-        eligibility_counts = defaultdict(int)
-        source_class_counts = defaultdict(int)
-        rejected_examples = []
-        for row in audit_rows:
-            route_counts[str(row.get("route", "unknown"))] += 1
-            eligibility_counts[str(row.get("eligibility_status", "publishable"))] += 1
-            source_class_counts[str(row.get("source_class", "unknown"))] += 1
-            if not row.get("eligible", True) and len(rejected_examples) < 20:
-                rejected_examples.append({
-                    "headline": row.get("headline", ""),
-                    "source_url": row.get("source_url", ""),
-                    "status": row.get("eligibility_status", "non_news"),
-                    "reasons": row.get("eligibility_reasons", []),
-                    "source_class": row.get("source_class", "unknown"),
-                })
-
-        top_stories = []
-        for story in stories[:10]:
-            importance = story.get("importance", {}) or {}
-            titles = story.get("titles", []) or []
-            top_stories.append({
-                "story_id": story.get("story_id", ""),
-                "title": story.get("canonical_title") or (titles[-1] if titles else ""),
-                "score": int(importance.get("score", 0) or 0),
-                "level": importance.get("level", "low"),
-                "reasons": importance.get("reasons", []),
-                "event_count": len(story.get("events", []) or []),
-                "timeline_entries": len(story.get("timeline", []) or []),
-            })
-
-        report = {
-            "schema_version": 1,
-            "engine": "tct-engine-v1.2-editorial-judgment-shadow",
-            "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-            "mode": "observe_only",
-            "publication_behavior_changed": False,
-            "registry_path": str(EDITORIAL_REGISTRY_PATH.relative_to(OUTPUT_DIR)),
-            "audit": {
-                "candidates_processed": len(audit_rows),
-                "routes": dict(sorted(route_counts.items())),
-                "eligibility": dict(sorted(eligibility_counts.items())),
-                "source_classes": dict(sorted(source_class_counts.items())),
-                "rejected_count": sum(1 for row in audit_rows if not row.get("eligible", True)),
-                "rejected_examples": rejected_examples,
-            },
-            "stories": {
-                "total": len(stories),
-                "importance_levels": level_counts,
-                "average_importance": round(sum(scores) / len(scores), 2) if scores else 0.0,
-                "top": top_stories,
-            },
-            "status": "healthy",
-        }
-
-        EDITORIAL_OBSERVABILITY_PATH.parent.mkdir(parents=True, exist_ok=True)
-        temporary = EDITORIAL_OBSERVABILITY_PATH.with_suffix(".json.tmp")
-        temporary.write_text(
-            json.dumps(report, ensure_ascii=False, indent=2),
-            encoding="utf-8",
+        report = write_editorial_observability(
+            engine,
+            audit_rows,
+            EDITORIAL_OBSERVABILITY_PATH,
+            registry_path=str(EDITORIAL_REGISTRY_PATH.relative_to(OUTPUT_DIR)),
+            mode="observe_only",
         )
-        temporary.replace(EDITORIAL_OBSERVABILITY_PATH)
+        story_metrics = report.get("stories", {})
+        audit_metrics = report.get("audit", {})
+        relationship_metrics = report.get("relationships", {}).get("counts", {})
+        levels = story_metrics.get("importance_levels", {})
+        engine_info = report.get("engine", {})
 
         print("  " + "=" * 55)
-        print("  TCT Editorial Engine — v1.2 Editorial Judgment")
-        print(f"  Shadow stories:          {len(stories)}")
-        print(f"  Candidates processed:    {len(audit_rows)}")
-        print(f"  Ineligible rejected:     {report['audit']['rejected_count']}")
-        print(f"  Breaking / High:         {level_counts['breaking']} / {level_counts['high']}")
-        print(f"  Normal / Low:            {level_counts['normal']} / {level_counts['low']}")
-        print(f"  Average importance:      {report['stories']['average_importance']}")
+        print(
+            "  TCT Editorial Engine — "
+            f"v{engine_info.get('version', 'unknown')} "
+            f"{engine_info.get('release', '')}"
+        )
+        print(f"  Shadow stories:          {story_metrics.get('total', 0)}")
+        print(f"  Candidates processed:    {audit_metrics.get('candidates_processed', 0)}")
+        print(f"  Ineligible rejected:     {audit_metrics.get('rejected_count', 0)}")
+        print(
+            "  Same / Follow-up:        "
+            f"{relationship_metrics.get('same_event', 0)} / "
+            f"{relationship_metrics.get('follow_up', 0)}"
+        )
+        print(
+            "  Related / New story:     "
+            f"{relationship_metrics.get('related', 0)} / "
+            f"{relationship_metrics.get('new_story', 0)}"
+        )
+        print(
+            "  Breaking / High:         "
+            f"{levels.get('breaking', 0)} / {levels.get('high', 0)}"
+        )
+        print(f"  Average importance:      {story_metrics.get('average_importance', 0.0)}")
         print(f"  Report:                  {EDITORIAL_OBSERVABILITY_PATH}")
         print("  Publication changes:     NONE (observe-only)")
         print("  " + "=" * 55)
