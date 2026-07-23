@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .editorial_decision import EditorialAction
+from .editorial_eligibility import EditorialEligibilityEngine, EligibilityStatus
 from .editorial_pipeline import (
     EditorialPipeline,
     PipelineArticle,
@@ -35,6 +36,11 @@ class EditorialEngineResult:
     new_facts: tuple[str, ...]
     is_custom: bool
     story_id: str = ""
+    eligibility_status: str = "publishable"
+    eligibility_reasons: tuple[str, ...] = ()
+    source_class: str = "unknown"
+    source_trust: int = 50
+    eligible: bool = True
 
 
 class EditorialEngine:
@@ -66,6 +72,8 @@ class EditorialEngine:
         )
 
         self._default_published_at = default_published_at
+
+        self._eligibility = EditorialEligibilityEngine()
 
         self._adapter = RSSArticleAdapter(
             custom_sources=self._custom_sources,
@@ -107,6 +115,44 @@ class EditorialEngine:
         is_custom: bool | None,
         record_history: bool,
     ) -> EditorialEngineResult:
+        eligibility = self._eligibility.evaluate(entry, source=source)
+
+        # Non-news never reaches fact extraction, event resolution, timelines,
+        # importance scoring, or the persistent story registry.
+        if not eligibility.eligible:
+            import hashlib
+            title = str(entry.get("title") or "").strip()
+            url = str(entry.get("link") or "").strip()
+            article_id = str(entry.get("id") or entry.get("guid") or "").strip()
+            if not article_id:
+                article_id = "rejected_" + hashlib.sha256(
+                    f"{source}|{title}|{url}".encode("utf-8")
+                ).hexdigest()[:20]
+            if record_history:
+                self._history.append(
+                    {
+                        "entry": self._make_json_safe(dict(entry)),
+                        "source": source,
+                        "county": county,
+                        "is_custom": is_custom,
+                    }
+                )
+            return EditorialEngineResult(
+                action=EditorialAction.IGNORE,
+                article_id=article_id,
+                canonical_article_id="",
+                event_key="",
+                extracted_facts=(),
+                new_facts=(),
+                is_custom=bool(is_custom),
+                story_id="",
+                eligibility_status=eligibility.status.value,
+                eligibility_reasons=eligibility.reasons,
+                source_class=eligibility.source_profile.source_class,
+                source_trust=eligibility.source_profile.trust,
+                eligible=False,
+            )
+
         raw = self._adapter.convert(
             entry,
             source=source,
@@ -130,6 +176,8 @@ class EditorialEngine:
                 source=raw.source,
                 is_custom=raw.is_custom,
                 published_at=raw.published_at,
+                source_class=eligibility.source_profile.source_class,
+                source_trust=eligibility.source_profile.trust,
             )
         )
 
@@ -159,6 +207,11 @@ class EditorialEngine:
             new_facts=tuple(sorted(pipeline_result.new_facts)),
             is_custom=raw.is_custom,
             story_id=pipeline_result.story_id,
+            eligibility_status=eligibility.status.value,
+            eligibility_reasons=eligibility.reasons,
+            source_class=eligibility.source_profile.source_class,
+            source_trust=eligibility.source_profile.trust,
+            eligible=True,
         )
 
     def get_event(self, event_key: str):

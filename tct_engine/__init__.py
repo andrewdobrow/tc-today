@@ -5,6 +5,12 @@ This package contains the isolated, tested editorial intelligence that will
 eventually replace duplicated decision logic inside the production engine.
 """
 
+from .editorial_policy import EditorialPolicy, SourceProfile
+from .editorial_eligibility import (
+    EditorialEligibilityEngine,
+    EligibilityDecision,
+    EligibilityStatus,
+)
 from .event_identity import (
     ArticleIdentityInput,
     EventIdentity,
@@ -62,6 +68,11 @@ from .production_router import (
 )
 
 __all__ = [
+    "EditorialPolicy",
+    "SourceProfile",
+    "EditorialEligibilityEngine",
+    "EligibilityDecision",
+    "EligibilityStatus",
     "ArticleIdentityInput",
     "EventIdentity",
     "resolve_event_identity",
@@ -99,4 +110,4 @@ __all__ = [
     "route_editorial_result",
 ]
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"

@@ -11,6 +11,7 @@ from typing import Any, Iterable
 from .story_importance import StoryImportance, StoryImportanceEngine, ImportanceLevel
 from .story_resolver import StoryResolver
 from .story_timeline import StoryTimeline, TimelineEntry
+from .editorial_policy import EditorialPolicy
 
 _WORD_RE = re.compile(r"[a-z0-9]+")
 
@@ -30,6 +31,7 @@ class StoryRegistry:
         self.path = Path(filename)
         self._resolver = StoryResolver()
         self._importance = StoryImportanceEngine()
+        self._policy = EditorialPolicy()
         self.data = self._load()
 
     def _empty(self) -> dict[str, Any]:
@@ -70,6 +72,8 @@ class StoryRegistry:
             story.setdefault("resolution_history", [])
             story.setdefault("custom_article_count", 0)
             story.setdefault("sources", [])
+            story.setdefault("title_candidates", [])
+            story.setdefault("canonical_title", story.get("titles", [""])[0] if story.get("titles") else "")
             story["timeline"] = StoryTimeline.from_list(
                 story.get("timeline", [])
             ).to_list()
@@ -116,6 +120,8 @@ class StoryRegistry:
             "timeline": [],
             "custom_article_count": 0,
             "sources": [],
+            "title_candidates": [],
+            "canonical_title": "",
             "importance": StoryImportance(score=0, level=ImportanceLevel.LOW).to_dict(),
         }
         self.data["event_to_story"][event_key] = story_id
@@ -141,6 +147,8 @@ class StoryRegistry:
         event_types: Iterable[str] = (),
         source: str = "",
         is_custom: bool = False,
+        source_class: str = "unknown",
+        source_trust: int = 50,
     ) -> str:
         mapped = self.data["event_to_story"].get(event_key)
         if mapped:
@@ -154,6 +162,8 @@ class StoryRegistry:
                 event_types=event_types,
                 source=source,
                 is_custom=is_custom,
+                source_class=source_class,
+                source_trust=source_trust,
             )
             self._recalculate_importance(story_id)
             self.save()
@@ -184,6 +194,8 @@ class StoryRegistry:
             event_types=event_types,
             source=source,
             is_custom=is_custom,
+            source_class=source_class,
+            source_trust=source_trust,
         )
         self._recalculate_importance(story_id)
         story = self.data["stories"][story_id]
@@ -209,11 +221,38 @@ class StoryRegistry:
         event_types: Iterable[str] = (),
         source: str = "",
         is_custom: bool = False,
+        source_class: str = "unknown",
+        source_trust: int = 50,
     ) -> None:
         story = self.data["stories"][self._canonical_story_id(story_id)]
 
         if title and title not in story["titles"]:
             story["titles"].append(title)
+
+        if title:
+            candidates = story.setdefault("title_candidates", [])
+            candidate = {
+                "title": title,
+                "source": source,
+                "source_class": source_class,
+                "source_trust": int(source_trust),
+                "is_custom": bool(is_custom),
+                "priority": 100 if is_custom else self._policy.source_profile("").canonical_priority,
+            }
+            candidate["priority"] = 100 if is_custom else int(
+                self._policy.data.get("canonical_priority", {}).get(source_class, 50)
+            )
+            if candidate not in candidates:
+                candidates.append(candidate)
+            best = max(
+                candidates,
+                key=lambda item: (
+                    int(item.get("priority", 0)),
+                    int(item.get("source_trust", 0)),
+                    len(str(item.get("title", ""))),
+                ),
+            )
+            story["canonical_title"] = str(best.get("title", title))
 
         title_tokens = set(story["title_tokens"])
         title_tokens.update(_tokens(title))

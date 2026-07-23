@@ -33,6 +33,8 @@ class PipelineArticle:
     is_major: bool = False
     is_correction: bool = False
     published_at: datetime | None = None
+    source_class: str = "unknown"
+    source_trust: int = 50
 
 
 @dataclass(frozen=True, slots=True)
@@ -98,6 +100,8 @@ class EditorialPipeline:
             event_types=article.event_types,
             source=article.source,
             is_custom=article.is_custom,
+            source_class=article.source_class,
+            source_trust=article.source_trust,
         )
 
         existing_snapshot = self._snapshots.get(article.event_key)
