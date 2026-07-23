@@ -14,7 +14,12 @@ from .story_relationship import StoryRelationshipEngine, StoryRelationshipType
 from .story_timeline import StoryTimeline, TimelineEntry
 from .editorial_policy import EditorialPolicy
 from .local_relevance import classify_local_relevance
-from .editorial_proximity import classify_editorial_proximity, calculate_editorial_priority
+from .editorial_proximity import (
+    calculate_editorial_score,
+    classify_editorial_proximity,
+    latest_story_timestamp,
+    story_source_trust,
+)
 
 _WORD_RE = re.compile(r"[a-z0-9]+")
 
@@ -80,6 +85,8 @@ class StoryRegistry:
             story.setdefault("relationship_history", [])
             story.setdefault("editorial_proximity", {"score":35,"scope":"unknown","reason":"Not yet classified"})
             story.setdefault("editorial_priority", 0)
+            story.setdefault("editorial_score", int(story.get("editorial_priority", 0) or 0))
+            story.setdefault("score_breakdown", {})
             story.setdefault("custom_article_count", 0)
             story.setdefault("sources", [])
             story.setdefault("title_candidates", [])
@@ -132,6 +139,8 @@ class StoryRegistry:
             "relationship_history": [],
             "editorial_proximity": {"score":35,"scope":"unknown","reason":"Not yet classified"},
             "editorial_priority": 0,
+            "editorial_score": 0,
+            "score_breakdown": {},
             "timeline": [],
             "custom_article_count": 0,
             "sources": [],
@@ -403,7 +412,17 @@ class StoryRegistry:
         story["importance"] = importance.to_dict()
         proximity = classify_editorial_proximity(story)
         story["editorial_proximity"] = proximity.to_dict()
-        story["editorial_priority"] = calculate_editorial_priority(importance.score, proximity.score)
+        ranking = calculate_editorial_score(
+            importance.score,
+            proximity.score,
+            source_trust=story_source_trust(story),
+            published_at=latest_story_timestamp(story),
+        )
+        story["editorial_score"] = ranking.score
+        story["score_breakdown"] = ranking.to_dict()
+        # Retain the previous field so existing observability and integrations
+        # remain backward compatible during shadow evaluation.
+        story["editorial_priority"] = ranking.score
         return importance
 
     def attach_event(
@@ -539,7 +558,7 @@ class StoryRegistry:
             ]
         stories.sort(
             key=lambda story: (
-                -int(story.get("editorial_priority", 0) or 0),
+                -int(story.get("editorial_score", story.get("editorial_priority", 0)) or 0),
                 -StoryImportance.from_dict(story.get("importance")).score,
                 str(story.get("story_id", "")),
             )

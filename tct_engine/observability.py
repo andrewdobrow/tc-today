@@ -13,8 +13,8 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.6.1"
-ENGINE_RELEASE = "release-integrity"
+ENGINE_VERSION = "1.7.0"
+ENGINE_RELEASE = "editorial-ranking"
 OBSERVABILITY_SCHEMA_VERSION = 3
 RESOLVER_VERSION = "2.1"
 RELATIONSHIP_ENGINE_VERSION = "1.1"
@@ -127,7 +127,7 @@ def build_editorial_observability(
         locality_scores.append(_safe_int(locality.get("score"), 35))
         proximity = story.get("editorial_proximity") or {}
         proximity_scopes[str(proximity.get("scope") or "unknown")] += 1
-        priority_scores.append(_safe_int(story.get("editorial_priority")))
+        priority_scores.append(_safe_int(story.get("editorial_score", story.get("editorial_priority"))))
 
         for relation in story.get("relationship_history") or []:
             relationship = str(relation.get("relationship") or "unknown")
@@ -177,6 +177,8 @@ def build_editorial_observability(
                 "title": _story_title(story),
                 "score": _safe_int(importance.get("score")),
                 "editorial_priority": _safe_int(story.get("editorial_priority")),
+                "editorial_score": _safe_int(story.get("editorial_score", story.get("editorial_priority"))),
+                "score_breakdown": dict(story.get("score_breakdown") or {}),
                 "level": importance.get("level", "low"),
                 "importance_reasons": list(importance.get("reasons") or []),
                 "local_relevance": {

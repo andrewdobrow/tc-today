@@ -63,8 +63,12 @@ from .editorial_engine import (
 )
 from .editorial_proximity import (
     EditorialProximity,
-    classify_editorial_proximity,
+    EditorialScore,
     calculate_editorial_priority,
+    calculate_editorial_score,
+    classify_editorial_proximity,
+    latest_story_timestamp,
+    story_source_trust,
 )
 from .local_relevance import LocalRelevance, classify_local_relevance
 from .observability import (
@@ -123,8 +127,12 @@ __all__ = [
     "ENGINE_VERSION",
     "ENGINE_RELEASE",
     "EditorialProximity",
+    "EditorialScore",
     "classify_editorial_proximity",
     "calculate_editorial_priority",
+    "calculate_editorial_score",
+    "latest_story_timestamp",
+    "story_source_trust",
     "OBSERVABILITY_SCHEMA_VERSION",
     "build_editorial_observability",
     "write_editorial_observability",
@@ -133,4 +141,4 @@ __all__ = [
     "route_editorial_result",
 ]
 
-__version__ = "1.6.1"
+__version__ = "1.7.0"
