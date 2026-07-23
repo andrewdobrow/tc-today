@@ -193,3 +193,83 @@ def test_merge_recalculates_combined_importance(tmp_path):
     assert second != merged
     assert importance.score == 25
     assert {reason.code for reason in importance.reasons} == {"government_action", "court_action"}
+
+
+def test_editorial_score_is_explainable_and_local_first():
+    from datetime import timedelta
+
+    from tct_engine.editorial_proximity import calculate_editorial_score
+
+    now = datetime(2026, 7, 23, 12, tzinfo=timezone.utc)
+    local = calculate_editorial_score(
+        90,
+        100,
+        source_trust=80,
+        published_at=now - timedelta(hours=2),
+        reference_time=now,
+    )
+    florida = calculate_editorial_score(
+        100,
+        55,
+        source_trust=80,
+        published_at=now - timedelta(hours=2),
+        reference_time=now,
+    )
+
+    assert local.score > florida.score
+    assert local.to_dict() == {
+        "score": 98,
+        "importance": 90,
+        "proximity_multiplier": 1.0,
+        "freshness_multiplier": 1.0,
+        "source_multiplier": 1.09,
+        "source_trust": 80,
+        "age_hours": 2.0,
+    }
+
+
+def test_freshness_and_source_trust_affect_editorial_score():
+    from datetime import timedelta
+
+    from tct_engine.editorial_proximity import calculate_editorial_score
+
+    now = datetime(2026, 7, 23, 12, tzinfo=timezone.utc)
+    fresh_trusted = calculate_editorial_score(
+        70,
+        100,
+        source_trust=90,
+        published_at=now - timedelta(hours=1),
+        reference_time=now,
+    )
+    old_low_trust = calculate_editorial_score(
+        70,
+        100,
+        source_trust=20,
+        published_at=now - timedelta(days=10),
+        reference_time=now,
+    )
+
+    assert fresh_trusted.score == 78
+    assert old_low_trust.score == 35
+    assert fresh_trusted.score > old_low_trust.score
+
+
+def test_registry_persists_editorial_score_breakdown(tmp_path):
+    registry = StoryRegistry(tmp_path / "registry.json")
+    story_id = registry.resolve_article(
+        event_key="local-fatal-crash",
+        title="One killed in Port St. Lucie crash",
+        facts=("The fatal crash closed the road",),
+        locations=("Port St. Lucie",),
+        event_types=("crash",),
+        source="WPTV",
+        source_class="local_news",
+        source_trust=85,
+    )
+
+    story = registry.get_story(story_id)
+    assert story is not None
+    assert story["editorial_score"] == story["editorial_priority"]
+    assert story["score_breakdown"]["importance"] == 65
+    assert story["score_breakdown"]["proximity_multiplier"] == 1.0
+    assert story["score_breakdown"]["source_trust"] == 85
