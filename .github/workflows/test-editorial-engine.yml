@@ -26,9 +26,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install pytest
 
-      - name: Verify editorial engine import
-        run: |
-          python -c "import tct_engine; print('tct_engine import successful')"
+      - name: Validate editorial package
+        run: python scripts/validate_package.py
 
       - name: Run editorial engine tests
         run: |
