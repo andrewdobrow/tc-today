@@ -70,36 +70,35 @@ class StoryRegistry:
         self.data["event_to_story"][event_key] = story_id
 
         self.save()
-    def merge_events(
+        def merge_events(
         self,
         primary_event: str,
         secondary_event: str,
-):
-    """
-    Merge two event keys into one persistent story.
-    """
+    ):
+        """
+        Merge two event keys into one persistent story.
+        """
 
-    primary_story = self.resolve_story(primary_event)
-    secondary_story = self.resolve_story(secondary_event)
+        primary_story = self.resolve_story(primary_event)
+        secondary_story = self.resolve_story(secondary_event)
 
-    if primary_story == secondary_story:
+        if primary_story == secondary_story:
+            return primary_story
+
+        primary = self.data["stories"][primary_story]
+        secondary = self.data["stories"][secondary_story]
+
+        for event in secondary["events"]:
+
+            if event not in primary["events"]:
+                primary["events"].append(event)
+
+            self.data["event_to_story"][event] = primary_story
+
+        self.data["story_aliases"][secondary_story] = primary_story
+
+        del self.data["stories"][secondary_story]
+
+        self.save()
+
         return primary_story
-
-    primary = self.data["stories"][primary_story]
-    secondary = self.data["stories"][secondary_story]
-
-    for event in secondary["events"]:
-
-        if event not in primary["events"]:
-            primary["events"].append(event)
-
-        self.data["event_to_story"][event] = primary_story
-
-    self.data["story_aliases"][secondary_story] = primary_story
-
-    del self.data["stories"][secondary_story]
-
-    self.save()
-
-    return primary_story
-    
