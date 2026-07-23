@@ -42,7 +42,7 @@ def main() -> int:
     required_files = [
         repo_root / "tct_engine" / "editorial_proximity.py",
         repo_root / "tct_engine" / "observability.py",
-        repo_root / "generate.py",
+        repo_root / "scripts" / "generate.py",
     ]
     for path in required_files:
         if not path.is_file():
