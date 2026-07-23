@@ -1,9 +1,7 @@
-from .story_registry import StoryRegistry
-
 """Editorial processing pipeline."""
-
-
 from __future__ import annotations
+
+from .story_registry import StoryRegistry
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
