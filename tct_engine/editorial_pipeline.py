@@ -62,8 +62,6 @@ class EditorialPipeline:
         existing_snapshot = self._snapshots.get(story_id)
         existing_canonical = self._stories.get(article.event_key)
         
-        story_id = self._registry.resolve_story(article.event_key)
-
         candidate = StoryCandidate(
             article_id=article.article_id,
             event_key=article.event_key,
@@ -79,7 +77,7 @@ class EditorialPipeline:
 
         if existing_snapshot is None:
 
-            self._snapshots[article.event_key] = StorySnapshot(
+            self._snapshots[story_id] = StorySnapshot(
                 event_key=article.event_key,
                 facts=article.facts,
                 status=article.status,
@@ -113,7 +111,7 @@ class EditorialPipeline:
             ),
         )
 
-        self._snapshots[article.event_key] = StorySnapshot(
+        self._snapshots[story_id] = StorySnapshot(
             event_key=article.event_key,
             facts=article.facts,
             status=article.status,
