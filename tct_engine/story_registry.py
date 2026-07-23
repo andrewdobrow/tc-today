@@ -60,6 +60,10 @@ class StoryRegistry:
             story.setdefault("titles", [])
             story.setdefault("title_tokens", [])
             story.setdefault("fact_tokens", [])
+            story.setdefault("facts", [])
+            story.setdefault("locations", [])
+            story.setdefault("agencies", [])
+            story.setdefault("event_types", [])
             story.setdefault("resolution_history", [])
 
         payload["schema"] = self.SCHEMA_VERSION
@@ -95,6 +99,10 @@ class StoryRegistry:
             "titles": [],
             "title_tokens": [],
             "fact_tokens": [],
+            "facts": [],
+            "locations": [],
+            "agencies": [],
+            "event_types": [],
             "resolution_history": [],
         }
         self.data["event_to_story"][event_key] = story_id
@@ -115,11 +123,21 @@ class StoryRegistry:
         event_key: str,
         title: str,
         facts: Iterable[str],
+        locations: Iterable[str] = (),
+        agencies: Iterable[str] = (),
+        event_types: Iterable[str] = (),
     ) -> str:
         mapped = self.data["event_to_story"].get(event_key)
         if mapped:
             story_id = self._canonical_story_id(mapped)
-            self._enrich_story(story_id, title=title, facts=facts)
+            self._enrich_story(
+                story_id,
+                title=title,
+                facts=facts,
+                locations=locations,
+                agencies=agencies,
+                event_types=event_types,
+            )
             self.save()
             return story_id
 
@@ -127,6 +145,9 @@ class StoryRegistry:
             event_key=event_key,
             title=title,
             facts=facts,
+            locations=locations,
+            agencies=agencies,
+            event_types=event_types,
             stories=self.iter_stories(),
         )
 
@@ -136,7 +157,14 @@ class StoryRegistry:
         else:
             story_id = self._new_story(event_key)
 
-        self._enrich_story(story_id, title=title, facts=facts)
+        self._enrich_story(
+            story_id,
+            title=title,
+            facts=facts,
+            locations=locations,
+            agencies=agencies,
+            event_types=event_types,
+        )
         story = self.data["stories"][story_id]
         story["resolution_history"].append(
             {
@@ -155,6 +183,9 @@ class StoryRegistry:
         *,
         title: str,
         facts: Iterable[str],
+        locations: Iterable[str] = (),
+        agencies: Iterable[str] = (),
+        event_types: Iterable[str] = (),
     ) -> None:
         story = self.data["stories"][self._canonical_story_id(story_id)]
 
@@ -165,10 +196,31 @@ class StoryRegistry:
         title_tokens.update(_tokens(title))
         story["title_tokens"] = sorted(title_tokens)
 
+        fact_values = {str(value).strip() for value in story["facts"] if str(value).strip()}
+        fact_values.update(str(value).strip() for value in facts if str(value).strip())
+        story["facts"] = sorted(fact_values)
+
         fact_tokens = set(story["fact_tokens"])
-        for fact in facts:
-            fact_tokens.update(_tokens(str(fact)))
+        for fact in fact_values:
+            fact_tokens.update(_tokens(fact))
         story["fact_tokens"] = sorted(fact_tokens)
+
+        for field, values in (
+            ("locations", locations),
+            ("agencies", agencies),
+            ("event_types", event_types),
+        ):
+            existing = {
+                str(value).strip()
+                for value in story[field]
+                if str(value).strip()
+            }
+            existing.update(
+                str(value).strip()
+                for value in values
+                if str(value).strip()
+            )
+            story[field] = sorted(existing)
 
     def attach_event(
         self,
@@ -203,7 +255,15 @@ class StoryRegistry:
                 primary["events"].append(event_key)
             self.data["event_to_story"][event_key] = primary_story
 
-        for field in ("titles", "title_tokens", "fact_tokens"):
+        for field in (
+            "titles",
+            "title_tokens",
+            "fact_tokens",
+            "facts",
+            "locations",
+            "agencies",
+            "event_types",
+        ):
             primary[field] = sorted(set(primary[field]) | set(secondary[field]))
 
         primary["resolution_history"].extend(secondary["resolution_history"])

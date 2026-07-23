@@ -25,6 +25,9 @@ class PipelineArticle:
     url: str
     is_custom: bool
     facts: tuple[str, ...]
+    locations: tuple[str, ...] = ()
+    agencies: tuple[str, ...] = ()
+    event_types: tuple[str, ...] = ()
     status: str = "developing"
     is_major: bool = False
     is_correction: bool = False
@@ -64,6 +67,9 @@ class EditorialPipeline:
             event_key=article.event_key,
             title=article.title,
             facts=article.facts,
+            locations=article.locations,
+            agencies=article.agencies,
+            event_types=article.event_types,
         )
 
         existing_snapshot = self._snapshots.get(article.event_key)

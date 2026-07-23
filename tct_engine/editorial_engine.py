@@ -70,6 +70,7 @@ class EditorialEngine:
         self._adapter = RSSArticleAdapter(
             custom_sources=self._custom_sources,
             default_published_at=default_published_at,
+            registry_path=registry_path,
         )
 
         self.registry_path = Path(registry_path)
@@ -123,7 +124,10 @@ class EditorialEngine:
                 title=raw.title,
                 url=raw.url,
                 event_key=event_key,
-                facts=set(extracted.facts),
+                facts=tuple(extracted.facts),
+                locations=tuple(extracted.locations),
+                agencies=tuple(extracted.agencies),
+                event_types=tuple(extracted.event_types),
                 source=raw.source,
                 is_custom=raw.is_custom,
             )
@@ -200,7 +204,6 @@ class EditorialEngine:
         default_published_at: datetime | None = None,
         registry_path: str | Path = "story-registry.json",
     ) -> EditorialEngine:
-    
         """Load saved state and rebuild the editorial pipeline."""
 
         state_path = Path(path)
@@ -208,7 +211,6 @@ class EditorialEngine:
         engine = cls(
             custom_sources=custom_sources,
             default_published_at=default_published_at,
-            registry_path=registry_path,
         )
 
         if not state_path.exists():
