@@ -191,15 +191,15 @@ class EditorialEngine:
         # Atomic replacement helps prevent a partially written state file.
         temporary_path.replace(state_path)
 
-        @classmethod
-        def load(
-            cls,
-            path: str | Path,
-            *,
-            custom_sources: set[str] | None = None,
-            default_published_at: datetime | None = None,
-            registry_path: str | Path = "story-registry.json",
-        ) -> EditorialEngine:
+    @classmethod
+    def load(
+        cls,
+        path: str | Path,
+        *,
+        custom_sources: set[str] | None = None,
+        default_published_at: datetime | None = None,
+        registry_path: str | Path = "story-registry.json",
+    ) -> EditorialEngine:
     
         """Load saved state and rebuild the editorial pipeline."""
 
