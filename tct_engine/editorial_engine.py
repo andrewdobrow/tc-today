@@ -34,6 +34,7 @@ class EditorialEngineResult:
     extracted_facts: tuple[str, ...]
     new_facts: tuple[str, ...]
     is_custom: bool
+    story_id: str = ""
 
 
 class EditorialEngine:
@@ -148,6 +149,7 @@ class EditorialEngine:
             extracted_facts=tuple(sorted(extracted.facts)),
             new_facts=tuple(sorted(pipeline_result.new_facts)),
             is_custom=raw.is_custom,
+            story_id=pipeline_result.story_id,
         )
 
     def get_event(self, event_key: str):

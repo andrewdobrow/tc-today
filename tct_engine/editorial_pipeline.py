@@ -1,24 +1,19 @@
 """Editorial processing pipeline."""
-from __future__ import annotations
 
-from .story_registry import StoryRegistry
+from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from pathlib import Path
 
-from .canonical_story import (
-    CanonicalStoryManager,
-    StoryCandidate,
-)
-from .editorial_decision import (
-    EditorialDecisionInput,
-    decide_editorial_action,
-)
+from .canonical_story import CanonicalStoryManager, StoryCandidate
+from .editorial_decision import EditorialDecisionInput, decide_editorial_action
 from .story_evolution import (
     IncomingStoryUpdate,
     StorySnapshot,
     evaluate_story_update,
 )
+from .story_registry import StoryRegistry
 
 
 @dataclass(frozen=True, slots=True)
@@ -43,25 +38,37 @@ class EditorialPipelineResult:
     canonical_article_id: str
     new_facts: tuple[str, ...]
     is_major: bool
+    story_id: str = ""
 
 
 class EditorialPipeline:
+    """
+    Preserve event-level editorial decisions while assigning each event to a
+    persistent, potentially multi-event story.
+    """
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        *,
+        registry_path: str | Path = "story-registry.json",
+    ) -> None:
         self._stories = CanonicalStoryManager()
-        self._registry = StoryRegistry()
+        self._registry = StoryRegistry(registry_path)
         self._snapshots: dict[str, StorySnapshot] = {}
 
-    def process(
-        self,
-        article: PipelineArticle,
-    ) -> EditorialPipelineResult:
+    def process(self, article: PipelineArticle) -> EditorialPipelineResult:
+        # Story resolution is intentionally separate from event-level duplicate
+        # and update decisions. Different events may share one story, but their
+        # canonical candidates and snapshots remain event-scoped.
+        story_id = self._registry.resolve_article(
+            event_key=article.event_key,
+            title=article.title,
+            facts=article.facts,
+        )
 
-        story_id = self._registry.resolve_story(article.event_key)
-
-        existing_snapshot = self._snapshots.get(story_id)
+        existing_snapshot = self._snapshots.get(article.event_key)
         existing_canonical = self._stories.get(article.event_key)
-        
+
         candidate = StoryCandidate(
             article_id=article.article_id,
             event_key=article.event_key,
@@ -69,15 +76,13 @@ class EditorialPipeline:
             source=article.source,
             url=article.url,
             is_custom=article.is_custom,
-            published_at=article.published_at
-            or datetime.now(timezone.utc),
+            published_at=article.published_at or datetime.now(timezone.utc),
         )
 
         canonical = self._stories.add(candidate)
 
         if existing_snapshot is None:
-
-            self._snapshots[story_id] = StorySnapshot(
+            self._snapshots[article.event_key] = StorySnapshot(
                 event_key=article.event_key,
                 facts=article.facts,
                 status=article.status,
@@ -98,6 +103,7 @@ class EditorialPipeline:
                 canonical_article_id=canonical.canonical.article_id,
                 new_facts=article.facts,
                 is_major=article.is_major,
+                story_id=story_id,
             )
 
         update = evaluate_story_update(
@@ -111,7 +117,7 @@ class EditorialPipeline:
             ),
         )
 
-        self._snapshots[story_id] = StorySnapshot(
+        self._snapshots[article.event_key] = StorySnapshot(
             event_key=article.event_key,
             facts=article.facts,
             status=article.status,
@@ -136,7 +142,14 @@ class EditorialPipeline:
             canonical_article_id=canonical.canonical.article_id,
             new_facts=update.new_facts,
             is_major=article.is_major,
+            story_id=story_id,
         )
 
     def get_event(self, event_key: str):
         return self._stories.get(event_key)
+
+    def get_story(self, story_id: str):
+        return self._registry.get_story(story_id)
+
+    def get_story_for_event(self, event_key: str):
+        return self._registry.get_story_for_event(event_key)

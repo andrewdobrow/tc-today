@@ -1,82 +1,194 @@
+"""Persistent story identity and cross-event grouping."""
+
 from __future__ import annotations
 
 import json
+import os
+import re
 from pathlib import Path
+from typing import Any, Iterable
+
+from .story_resolver import StoryResolver
+
+_WORD_RE = re.compile(r"[a-z0-9]+")
+
+
+def _tokens(value: str) -> set[str]:
+    return {
+        token
+        for token in _WORD_RE.findall((value or "").lower())
+        if len(token) >= 3
+    }
 
 
 class StoryRegistry:
+    SCHEMA_VERSION = 2
 
-    def __init__(self, filename="story-registry.json"):
-
+    def __init__(self, filename: str | Path = "story-registry.json") -> None:
         self.path = Path(filename)
+        self._resolver = StoryResolver()
+        self.data = self._load()
 
-        if self.path.exists():
+    def _empty(self) -> dict[str, Any]:
+        return {
+            "schema": self.SCHEMA_VERSION,
+            "next_story_id": 1,
+            "stories": {},
+            "event_to_story": {},
+            "story_aliases": {},
+        }
 
-            self.data = json.loads(self.path.read_text())
+    def _load(self) -> dict[str, Any]:
+        if not self.path.exists():
+            return self._empty()
 
-        else:
+        payload = json.loads(self.path.read_text(encoding="utf-8"))
+        if not isinstance(payload, dict):
+            raise ValueError("Story registry must contain a JSON object")
 
-            self.data = {
-                "schema": 1,
-                "next_story_id": 1,
-                "stories": {},
-                "event_to_story": {},
-                "story_aliases": {},
-            }
+        payload.setdefault("schema", 1)
+        payload.setdefault("next_story_id", 1)
+        payload.setdefault("stories", {})
+        payload.setdefault("event_to_story", {})
+        payload.setdefault("story_aliases", {})
 
-    def save(self):
+        # Backward-compatible migration from the original minimal registry.
+        for story_id, story in payload["stories"].items():
+            story.setdefault("story_id", story_id)
+            story.setdefault("events", [])
+            story.setdefault("status", "developing")
+            story.setdefault("titles", [])
+            story.setdefault("title_tokens", [])
+            story.setdefault("fact_tokens", [])
+            story.setdefault("resolution_history", [])
 
-        self.path.write_text(
-            json.dumps(
-                self.data,
-                indent=2,
-                ensure_ascii=False,
-            )
+        payload["schema"] = self.SCHEMA_VERSION
+        return payload
+
+    def save(self) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = self.path.with_suffix(self.path.suffix + ".tmp")
+        temporary.write_text(
+            json.dumps(self.data, indent=2, ensure_ascii=False),
+            encoding="utf-8",
         )
+        os.replace(temporary, self.path)
 
-    def resolve_story(self, event_key):
+    def _canonical_story_id(self, story_id: str) -> str:
+        aliases = self.data["story_aliases"]
+        seen: set[str] = set()
+        current = story_id
 
-        mapping = self.data["event_to_story"]
+        while current in aliases and current not in seen:
+            seen.add(current)
+            current = aliases[current]
 
-        if event_key in mapping:
-            return mapping[event_key]
+        return current
 
+    def _new_story(self, event_key: str) -> str:
         story_id = f"story_{self.data['next_story_id']:06d}"
-
         self.data["next_story_id"] += 1
-
-        mapping[event_key] = story_id
-
         self.data["stories"][story_id] = {
             "story_id": story_id,
             "events": [event_key],
             "status": "developing",
+            "titles": [],
+            "title_tokens": [],
+            "fact_tokens": [],
+            "resolution_history": [],
         }
-
-        self.save()
-
+        self.data["event_to_story"][event_key] = story_id
         return story_id
 
-    def attach_event(self, story_id, event_key):
+    def resolve_story(self, event_key: str) -> str:
+        mapped = self.data["event_to_story"].get(event_key)
+        if mapped:
+            return self._canonical_story_id(mapped)
 
+        story_id = self._new_story(event_key)
+        self.save()
+        return story_id
+
+    def resolve_article(
+        self,
+        *,
+        event_key: str,
+        title: str,
+        facts: Iterable[str],
+    ) -> str:
+        mapped = self.data["event_to_story"].get(event_key)
+        if mapped:
+            story_id = self._canonical_story_id(mapped)
+            self._enrich_story(story_id, title=title, facts=facts)
+            self.save()
+            return story_id
+
+        resolution = self._resolver.resolve(
+            event_key=event_key,
+            title=title,
+            facts=facts,
+            stories=self.iter_stories(),
+        )
+
+        if resolution.merge and resolution.story_id:
+            story_id = self._canonical_story_id(resolution.story_id)
+            self.attach_event(story_id, event_key, save=False)
+        else:
+            story_id = self._new_story(event_key)
+
+        self._enrich_story(story_id, title=title, facts=facts)
         story = self.data["stories"][story_id]
+        story["resolution_history"].append(
+            {
+                "event_key": event_key,
+                "confidence": round(resolution.confidence, 6),
+                "reason": resolution.reason,
+                "matched_existing": bool(resolution.merge),
+            }
+        )
+        self.save()
+        return story_id
+
+    def _enrich_story(
+        self,
+        story_id: str,
+        *,
+        title: str,
+        facts: Iterable[str],
+    ) -> None:
+        story = self.data["stories"][self._canonical_story_id(story_id)]
+
+        if title and title not in story["titles"]:
+            story["titles"].append(title)
+
+        title_tokens = set(story["title_tokens"])
+        title_tokens.update(_tokens(title))
+        story["title_tokens"] = sorted(title_tokens)
+
+        fact_tokens = set(story["fact_tokens"])
+        for fact in facts:
+            fact_tokens.update(_tokens(str(fact)))
+        story["fact_tokens"] = sorted(fact_tokens)
+
+    def attach_event(
+        self,
+        story_id: str,
+        event_key: str,
+        *,
+        save: bool = True,
+    ) -> str:
+        canonical_id = self._canonical_story_id(story_id)
+        story = self.data["stories"][canonical_id]
 
         if event_key not in story["events"]:
             story["events"].append(event_key)
 
-        self.data["event_to_story"][event_key] = story_id
+        self.data["event_to_story"][event_key] = canonical_id
+        if save:
+            self.save()
+        return canonical_id
 
-        self.save()
-
-    def merge_events(
-        self,
-        primary_event: str,
-        secondary_event: str,
-    ):
-        """
-        Merge two event keys into one persistent story.
-        """
-
+    def merge_events(self, primary_event: str, secondary_event: str) -> str:
         primary_story = self.resolve_story(primary_event)
         secondary_story = self.resolve_story(secondary_event)
 
@@ -86,17 +198,31 @@ class StoryRegistry:
         primary = self.data["stories"][primary_story]
         secondary = self.data["stories"][secondary_story]
 
-        for event in secondary["events"]:
+        for event_key in secondary["events"]:
+            if event_key not in primary["events"]:
+                primary["events"].append(event_key)
+            self.data["event_to_story"][event_key] = primary_story
 
-            if event not in primary["events"]:
-                primary["events"].append(event)
+        for field in ("titles", "title_tokens", "fact_tokens"):
+            primary[field] = sorted(set(primary[field]) | set(secondary[field]))
 
-            self.data["event_to_story"][event] = primary_story
-
+        primary["resolution_history"].extend(secondary["resolution_history"])
         self.data["story_aliases"][secondary_story] = primary_story
-
         del self.data["stories"][secondary_story]
-
         self.save()
-
         return primary_story
+
+    def get_story(self, story_id: str) -> dict[str, Any] | None:
+        canonical_id = self._canonical_story_id(story_id)
+        story = self.data["stories"].get(canonical_id)
+        return dict(story) if story is not None else None
+
+    def get_story_for_event(self, event_key: str) -> dict[str, Any] | None:
+        story_id = self.data["event_to_story"].get(event_key)
+        return self.get_story(story_id) if story_id else None
+
+    def iter_stories(self) -> tuple[dict[str, Any], ...]:
+        return tuple(
+            dict(self.data["stories"][story_id])
+            for story_id in sorted(self.data["stories"])
+        )
