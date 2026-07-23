@@ -21,9 +21,8 @@ class StoryRegistry:
                 "next_story_id": 1,
                 "stories": {},
                 "event_to_story": {},
-                "story_aliases": {}
-}
-            
+                "story_aliases": {},
+            }
 
     def save(self):
 
@@ -31,7 +30,7 @@ class StoryRegistry:
             json.dumps(
                 self.data,
                 indent=2,
-                ensure_ascii=False
+                ensure_ascii=False,
             )
         )
 
@@ -40,7 +39,6 @@ class StoryRegistry:
         mapping = self.data["event_to_story"]
 
         if event_key in mapping:
-
             return mapping[event_key]
 
         story_id = f"story_{self.data['next_story_id']:06d}"
@@ -52,7 +50,7 @@ class StoryRegistry:
         self.data["stories"][story_id] = {
             "story_id": story_id,
             "events": [event_key],
-            "status": "developing"
+            "status": "developing",
         }
 
         self.save()
@@ -64,13 +62,13 @@ class StoryRegistry:
         story = self.data["stories"][story_id]
 
         if event_key not in story["events"]:
-
             story["events"].append(event_key)
 
         self.data["event_to_story"][event_key] = story_id
 
         self.save()
-        def merge_events(
+
+    def merge_events(
         self,
         primary_event: str,
         secondary_event: str,
