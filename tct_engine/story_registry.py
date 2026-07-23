@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from .story_resolver import StoryResolver
+from .story_timeline import StoryTimeline, TimelineEntry
 
 _WORD_RE = re.compile(r"[a-z0-9]+")
 
@@ -22,7 +23,7 @@ def _tokens(value: str) -> set[str]:
 
 
 class StoryRegistry:
-    SCHEMA_VERSION = 2
+    SCHEMA_VERSION = 3
 
     def __init__(self, filename: str | Path = "story-registry.json") -> None:
         self.path = Path(filename)
@@ -65,6 +66,9 @@ class StoryRegistry:
             story.setdefault("agencies", [])
             story.setdefault("event_types", [])
             story.setdefault("resolution_history", [])
+            story["timeline"] = StoryTimeline.from_list(
+                story.get("timeline", [])
+            ).to_list()
 
         payload["schema"] = self.SCHEMA_VERSION
         return payload
@@ -104,6 +108,7 @@ class StoryRegistry:
             "agencies": [],
             "event_types": [],
             "resolution_history": [],
+            "timeline": [],
         }
         self.data["event_to_story"][event_key] = story_id
         return story_id
@@ -267,10 +272,49 @@ class StoryRegistry:
             primary[field] = sorted(set(primary[field]) | set(secondary[field]))
 
         primary["resolution_history"].extend(secondary["resolution_history"])
+
+        primary_timeline = StoryTimeline.from_list(primary.get("timeline", []))
+        secondary_timeline = StoryTimeline.from_list(
+            secondary.get("timeline", [])
+        )
+        primary_timeline.extend(secondary_timeline.entries)
+        primary["timeline"] = primary_timeline.to_list()
         self.data["story_aliases"][secondary_story] = primary_story
         del self.data["stories"][secondary_story]
         self.save()
         return primary_story
+
+
+    def add_timeline_entry(
+        self,
+        story_id: str,
+        entry: TimelineEntry,
+        *,
+        save: bool = True,
+    ) -> bool:
+        """Append one distinct event milestone to a story timeline."""
+
+        canonical_id = self._canonical_story_id(story_id)
+        story = self.data["stories"].get(canonical_id)
+        if story is None:
+            raise KeyError(f"Unknown story ID: {story_id}")
+
+        timeline = StoryTimeline.from_list(story.get("timeline", []))
+        added = timeline.add(entry)
+        if not added:
+            return False
+
+        story["timeline"] = timeline.to_list()
+        if save:
+            self.save()
+        return True
+
+    def get_timeline(self, story_id: str) -> StoryTimeline | None:
+        canonical_id = self._canonical_story_id(story_id)
+        story = self.data["stories"].get(canonical_id)
+        if story is None:
+            return None
+        return StoryTimeline.from_list(story.get("timeline", []))
 
     def get_story(self, story_id: str) -> dict[str, Any] | None:
         canonical_id = self._canonical_story_id(story_id)

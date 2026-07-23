@@ -14,6 +14,7 @@ from .story_evolution import (
     evaluate_story_update,
 )
 from .story_registry import StoryRegistry
+from .story_timeline import TimelineEntry
 
 
 @dataclass(frozen=True, slots=True)
@@ -59,6 +60,31 @@ class EditorialPipeline:
         self._registry = StoryRegistry(registry_path)
         self._snapshots: dict[str, StorySnapshot] = {}
 
+    def _record_timeline_entry(
+        self,
+        *,
+        story_id: str,
+        article: PipelineArticle,
+        action: object,
+        canonical_article_id: str,
+    ) -> None:
+        action_value = getattr(action, "value", str(action))
+        self._registry.add_timeline_entry(
+            story_id,
+            TimelineEntry(
+                event_key=article.event_key,
+                article_id=article.article_id,
+                published_at=(
+                    article.published_at or datetime.now(timezone.utc)
+                ),
+                title=article.title,
+                source=article.source,
+                url=article.url,
+                editorial_action=str(action_value),
+                canonical_article_id=canonical_article_id,
+            ),
+        )
+
     def process(self, article: PipelineArticle) -> EditorialPipelineResult:
         # Story resolution is intentionally separate from event-level duplicate
         # and update decisions. Different events may share one story, but their
@@ -103,6 +129,13 @@ class EditorialPipeline:
                 )
             )
 
+            self._record_timeline_entry(
+                story_id=story_id,
+                article=article,
+                action=decision.action,
+                canonical_article_id=canonical.canonical.article_id,
+            )
+
             return EditorialPipelineResult(
                 action=decision.action,
                 event_key=article.event_key,
@@ -142,6 +175,13 @@ class EditorialPipeline:
             )
         )
 
+        self._record_timeline_entry(
+            story_id=story_id,
+            article=article,
+            action=decision.action,
+            canonical_article_id=canonical.canonical.article_id,
+        )
+
         return EditorialPipelineResult(
             action=decision.action,
             event_key=article.event_key,
@@ -159,3 +199,6 @@ class EditorialPipeline:
 
     def get_story_for_event(self, event_key: str):
         return self._registry.get_story_for_event(event_key)
+
+    def get_story_timeline(self, story_id: str):
+        return self._registry.get_timeline(story_id)

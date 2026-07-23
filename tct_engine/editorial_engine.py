@@ -129,6 +129,7 @@ class EditorialEngine:
                 event_types=tuple(extracted.event_types),
                 source=raw.source,
                 is_custom=raw.is_custom,
+                published_at=raw.published_at,
             )
         )
 
@@ -162,6 +163,9 @@ class EditorialEngine:
 
     def get_event(self, event_key: str):
         return self._pipeline.get_event(event_key)
+
+    def get_story_timeline(self, story_id: str):
+        return self._pipeline.get_story_timeline(story_id)
 
     def save(self, path: str | Path) -> None:
         """Save replayable editorial state to a JSON file."""
@@ -210,6 +214,7 @@ class EditorialEngine:
         engine = cls(
             custom_sources=custom_sources,
             default_published_at=default_published_at,
+            registry_path=registry_path,
         )
 
         if not state_path.exists():
