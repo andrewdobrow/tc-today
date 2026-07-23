@@ -8550,7 +8550,7 @@ def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, a
             # Pass a shallow copy so an adapter can never mutate the live candidate.
             result = engine.process(
                 dict(entry),
-                source=entry.get("feed_url") or entry.get("link") or "rss",
+                source=entry.get("link") or entry.get("feed_url") or "rss",
                 county=category_key if category_key in COUNTY_KEYS else "",
             )
             instruction = route_editorial_result(result)
@@ -8571,6 +8571,10 @@ def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, a
                 "eligibility_reasons": list(getattr(result, "eligibility_reasons", ()) or ()),
                 "source_class": getattr(result, "source_class", "unknown"),
                 "source_trust": int(getattr(result, "source_trust", 50) or 0),
+                "relationship": getattr(result, "relationship", "new_story"),
+                "relationship_confidence": float(getattr(result, "relationship_confidence", 0.0) or 0.0),
+                "relationship_reason": getattr(result, "relationship_reason", ""),
+                "decision_trace": list(getattr(result, "decision_trace", ()) or ()),
             }
             audit_rows.append(row)
             print(
