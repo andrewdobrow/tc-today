@@ -71,6 +71,11 @@ from .editorial_proximity import (
     story_source_trust,
 )
 from .local_relevance import LocalRelevance, classify_local_relevance
+from .story_lifecycle import (
+    StoryLifecycle,
+    StoryLifecycleState,
+    classify_story_lifecycle,
+)
 from .observability import (
     ENGINE_NAME,
     ENGINE_VERSION,
@@ -133,6 +138,9 @@ __all__ = [
     "calculate_editorial_score",
     "latest_story_timestamp",
     "story_source_trust",
+    "StoryLifecycle",
+    "StoryLifecycleState",
+    "classify_story_lifecycle",
     "OBSERVABILITY_SCHEMA_VERSION",
     "build_editorial_observability",
     "write_editorial_observability",
@@ -141,4 +149,4 @@ __all__ = [
     "route_editorial_result",
 ]
 
-__version__ = "1.7.0"
+__version__ = "1.8.0"

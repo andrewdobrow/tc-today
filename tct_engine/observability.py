@@ -13,9 +13,9 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.7.0"
-ENGINE_RELEASE = "editorial-ranking"
-OBSERVABILITY_SCHEMA_VERSION = 3
+ENGINE_VERSION = "1.8.0"
+ENGINE_RELEASE = "story-lifecycle"
+OBSERVABILITY_SCHEMA_VERSION = 4
 RESOLVER_VERSION = "2.1"
 RELATIONSHIP_ENGINE_VERSION = "1.1"
 
@@ -112,6 +112,7 @@ def build_editorial_observability(
     scores: list[int] = []
     priority_scores: list[int] = []
     locality_scores: list[int] = []
+    lifecycle_counts: Counter[str] = Counter()
 
     for story in stories:
         importance = story.get("importance") or {}
@@ -128,6 +129,8 @@ def build_editorial_observability(
         proximity = story.get("editorial_proximity") or {}
         proximity_scopes[str(proximity.get("scope") or "unknown")] += 1
         priority_scores.append(_safe_int(story.get("editorial_score", story.get("editorial_priority"))))
+        lifecycle = story.get("lifecycle") or {}
+        lifecycle_counts[str(lifecycle.get("state") or story.get("status") or "unknown")] += 1
 
         for relation in story.get("relationship_history") or []:
             relationship = str(relation.get("relationship") or "unknown")
@@ -192,6 +195,7 @@ def build_editorial_observability(
                 "timeline_entries": len(story.get("timeline") or []),
                 "relationship_decisions": len(story.get("relationship_history") or []),
                 "canonical_source_candidates": len(story.get("title_candidates") or []),
+                "lifecycle": dict(story.get("lifecycle") or {}),
             }
         )
 
@@ -231,6 +235,9 @@ def build_editorial_observability(
             "scopes": dict(sorted(proximity_scopes.items())),
             "average_priority": round(sum(priority_scores) / len(priority_scores), 2)
             if priority_scores else 0.0,
+        },
+        "story_lifecycle": {
+            "counts": dict(sorted(lifecycle_counts.items())),
         },
         "stories": {
             "total": len(stories),

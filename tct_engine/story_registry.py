@@ -14,6 +14,7 @@ from .story_relationship import StoryRelationshipEngine, StoryRelationshipType
 from .story_timeline import StoryTimeline, TimelineEntry
 from .editorial_policy import EditorialPolicy
 from .local_relevance import classify_local_relevance
+from .story_lifecycle import classify_story_lifecycle
 from .editorial_proximity import (
     calculate_editorial_score,
     classify_editorial_proximity,
@@ -33,7 +34,7 @@ def _tokens(value: str) -> set[str]:
 
 
 class StoryRegistry:
-    SCHEMA_VERSION = 6
+    SCHEMA_VERSION = 7
 
     def __init__(self, filename: str | Path = "story-registry.json") -> None:
         self.path = Path(filename)
@@ -72,6 +73,8 @@ class StoryRegistry:
             story.setdefault("story_id", story_id)
             story.setdefault("events", [])
             story.setdefault("status", "developing")
+            story.setdefault("lifecycle", {})
+            story.setdefault("lifecycle_history", [])
             story.setdefault("titles", [])
             story.setdefault("title_tokens", [])
             story.setdefault("fact_tokens", [])
@@ -95,6 +98,9 @@ class StoryRegistry:
                 story.get("timeline", [])
             ).to_list()
             story["importance"] = self._importance.score(story).to_dict()
+            lifecycle = classify_story_lifecycle(story)
+            story["lifecycle"] = lifecycle.to_dict()
+            story["status"] = lifecycle.state.value
 
         payload["schema"] = self.SCHEMA_VERSION
         return payload
@@ -125,7 +131,9 @@ class StoryRegistry:
         self.data["stories"][story_id] = {
             "story_id": story_id,
             "events": [event_key],
-            "status": "developing",
+            "status": "active",
+            "lifecycle": {},
+            "lifecycle_history": [],
             "titles": [],
             "title_tokens": [],
             "fact_tokens": [],
@@ -423,6 +431,19 @@ class StoryRegistry:
         # Retain the previous field so existing observability and integrations
         # remain backward compatible during shadow evaluation.
         story["editorial_priority"] = ranking.score
+        lifecycle = classify_story_lifecycle(story)
+        previous_state = str((story.get("lifecycle") or {}).get("state") or story.get("status") or "")
+        story["lifecycle"] = lifecycle.to_dict()
+        story["status"] = lifecycle.state.value
+        if previous_state and previous_state != lifecycle.state.value:
+            story.setdefault("lifecycle_history", []).append(
+                {
+                    "from": previous_state,
+                    "to": lifecycle.state.value,
+                    "reason": lifecycle.reason,
+                    "last_updated": lifecycle.last_updated,
+                }
+            )
         return importance
 
     def attach_event(
