@@ -1,25 +1,31 @@
 {
-  "schema_version": 1,
-  "engine": "tct-engine-v1.2-editorial-judgment-shadow",
-  "generated_at": "2026-07-23T08:48:43Z",
+  "schema_version": 2,
+  "engine": {
+    "name": "tct-editorial-engine",
+    "version": "1.5.0",
+    "release": "modular-observability",
+    "resolver_version": "2.1",
+    "relationship_engine_version": "1.0"
+  },
+  "generated_at": "2026-07-23T09:32:14Z",
   "mode": "observe_only",
   "publication_behavior_changed": false,
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 168,
+    "candidates_processed": 171,
     "routes": {
-      "skip": 151,
+      "skip": 154,
       "update_existing": 17
     },
     "eligibility": {
-      "listing": 10,
-      "publishable": 158
+      "listing": 8,
+      "publishable": 163
     },
     "source_classes": {
-      "local_news": 32,
-      "unknown": 136
+      "local_news": 30,
+      "unknown": 141
     },
-    "rejected_count": 10,
+    "rejected_count": 8,
     "rejected_examples": [
       {
         "headline": "300 Riomar Dr, Port Saint Lucie, FL 34952 - Realtor.com",
@@ -33,15 +39,6 @@
       {
         "headline": "13 Harbour Isle Dr W Ph 2, Fort Pierce, FL 34949 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNYi1Nbk5ZZi0xaktZT1JURUE0dU1ITlMyTENBWFFuclVRZ3dBYklpSVhUcEtXaVV2TDRYejlwWFIzUmJ5ZGIzZXRMVnF3eUxlQlFxQUVXRmNyc185NDA3T1dyRmFFTzZhb2R2QXpHdUNnM3FRT25SOWNxbFg1WXluc3FpeG9ySzJLcGUzSW92Vl9WUEd4RFU4QVkyejBhRjEt?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "unknown"
-      },
-      {
-        "headline": "1275 Winding Oaks Cir E Apt 706, Vero Beach, FL 32963 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE9nMmtLbnZZWVY1bGI1V0NNSjhYOTZvaE0ySl91OTA3ZEpGYXF6bGpkdjRDREpfWlEwcHFhb2kwd1pGb2N4VXlmSG51ZTZLR3cyT3F1bUs2SFBrM0MxSm1SaEpURm9ZMkRUVHNWTlZVM29ibXJRdTN2Rl9BVF8?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -101,17 +98,20 @@
           "Headline matches listing pattern 'realtor.com'"
         ],
         "source_class": "unknown"
-      },
-      {
-        "headline": "1934 Westminster Cir Unit 9-5, Vero Beach, FL 32966 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMingFBVV95cUxORXQ0U05ZcERvOVRDdkpKdGkyTjktQmpKNG5uZnlEZ1NSTEtKWEZzM0RzR3RHTVdLWmYzdnNBZEw0UEtld3I1Y05SOEk0SmI0Nkc5RUk1eGFjaUFwNWxtaER6anNGaVRnaVJwbkNJcjdhTUpVb2NJZ1czZzRhejExZDVLbWlQakdoZWpLdndIRnBUWEZGeGdPcDk3cDRWUQ?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "unknown"
       }
     ]
+  },
+  "relationships": {
+    "counts": {},
+    "examples": [],
+    "decision_trace_examples": []
+  },
+  "local_relevance": {
+    "scopes": {
+      "treasure_coast_local": 10,
+      "unknown": 1
+    },
+    "average_score": 94.09
   },
   "stories": {
     "total": 11,
@@ -129,7 +129,7 @@
         "title": "Surfside collapse victims' families react to federal report on what caused Champlain Towers to fall",
         "score": 100,
         "level": "breaking",
-        "reasons": [
+        "importance_reasons": [
           {
             "code": "fatality",
             "label": "Fatality reported",
@@ -161,15 +161,34 @@
             "points": 10
           }
         ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County",
+            "St. Lucie County",
+            "Indian River County"
+          ],
+          "places": [
+            "Stuart",
+            "Palm City",
+            "Port St. Lucie",
+            "Fort Pierce",
+            "Vero Beach",
+            "Sebastian"
+          ]
+        },
         "event_count": 1,
-        "timeline_entries": 1
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 171
       },
       {
         "story_id": "story_000006",
         "title": "Community gathers to honor 9-year-old boy killed in dirt bike and FedEx truck crash in St. Lucie County",
         "score": 75,
         "level": "high",
-        "reasons": [
+        "importance_reasons": [
           {
             "code": "fatality",
             "label": "Fatality reported",
@@ -186,15 +205,27 @@
             "points": 10
           }
         ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
         "event_count": 2,
-        "timeline_entries": 2
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 5
       },
       {
         "story_id": "story_000011",
         "title": "Family files lawsuit after 6-year-old girl dies in Port St. Lucie go-kart crash - WPBF",
         "score": 75,
         "level": "high",
-        "reasons": [
+        "importance_reasons": [
           {
             "code": "fatality",
             "label": "Fatality reported",
@@ -211,15 +242,27 @@
             "points": 10
           }
         ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Port St. Lucie"
+          ]
+        },
         "event_count": 1,
-        "timeline_entries": 1
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 1
       },
       {
         "story_id": "story_000004",
         "title": "Motorcyclist dies in Vero Beach crash after traveling at speeds of 113 mph, police say",
         "score": 65,
         "level": "high",
-        "reasons": [
+        "importance_reasons": [
           {
             "code": "fatality",
             "label": "Fatality reported",
@@ -231,15 +274,27 @@
             "points": 25
           }
         ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Vero Beach"
+          ]
+        },
         "event_count": 1,
-        "timeline_entries": 1
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 2
       },
       {
         "story_id": "story_000002",
         "title": "Fired St. Lucie County firefighters speak to WPTV for first time, call bug zapper incident 'joking around'",
         "score": 35,
         "level": "normal",
-        "reasons": [
+        "importance_reasons": [
           {
             "code": "public_safety",
             "label": "Public-safety event",
@@ -251,15 +306,26 @@
             "points": 10
           }
         ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County",
+            "Martin County"
+          ],
+          "places": []
+        },
         "event_count": 1,
-        "timeline_entries": 1
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 10
       },
       {
         "story_id": "story_000009",
         "title": "Rescued cats, dogs from Foxwoods home now in hands of local Humane Society - Hometown News Treasure Coast",
         "score": 35,
         "level": "normal",
-        "reasons": [
+        "importance_reasons": [
           {
             "code": "public_safety",
             "label": "Public-safety event",
@@ -271,68 +337,151 @@
             "points": 10
           }
         ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": [
+            "Stuart"
+          ]
+        },
         "event_count": 2,
-        "timeline_entries": 2
+        "timeline_entries": 2,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 5
       },
       {
         "story_id": "story_000003",
         "title": "Prayers answered: Owners reunited with pets rescued from alleged hoarding case in Martin County",
         "score": 25,
         "level": "normal",
-        "reasons": [
+        "importance_reasons": [
           {
             "code": "public_safety",
             "label": "Public-safety event",
             "points": 25
           }
         ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": [
+            "Hobe Sound"
+          ]
+        },
         "event_count": 1,
-        "timeline_entries": 1
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 1
       },
       {
         "story_id": "story_000005",
         "title": "Boynton Beach man demands answers after cemetery removes cherished items from parents' gravesite",
         "score": 25,
         "level": "normal",
-        "reasons": [
+        "importance_reasons": [
           {
             "code": "public_safety",
             "label": "Public-safety event",
             "points": 25
           }
         ],
+        "local_relevance": {
+          "scope": "unknown",
+          "score": 35,
+          "counties": [],
+          "places": []
+        },
         "event_count": 1,
-        "timeline_entries": 1
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 1
       },
       {
         "story_id": "story_000007",
         "title": "Rescued animals recovering, reuniting with owners after Martin County woman arrested in hoarding case",
         "score": 25,
         "level": "normal",
-        "reasons": [
+        "importance_reasons": [
           {
             "code": "public_safety",
             "label": "Public-safety event",
             "points": 25
           }
         ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": [
+            "Palm City"
+          ]
+        },
         "event_count": 1,
-        "timeline_entries": 1
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 1
       },
       {
         "story_id": "story_000008",
         "title": "Videos surface in St. Lucie County firefighter hazing controversy leading to terminations, suspensions",
         "score": 25,
         "level": "normal",
-        "reasons": [
+        "importance_reasons": [
           {
             "code": "public_safety",
             "label": "Public-safety event",
             "points": 25
           }
         ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
         "event_count": 1,
-        "timeline_entries": 1
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 2
+      },
+      {
+        "story_id": "story_000010",
+        "title": "Video shows Port St. Lucie home catch fire during storm - WPBF",
+        "score": 25,
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Port St. Lucie"
+          ]
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 1
       }
     ]
   },
