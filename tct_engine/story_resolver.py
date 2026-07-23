@@ -1,260 +1,75 @@
-"""Conservative, deterministic cross-event story resolution."""
-
+"""Resolver v2: conservative fact-based persistent story resolution."""
 from __future__ import annotations
-
 import re
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from typing import Any, Iterable, Mapping
 
-_WORD_RE = re.compile(r"[a-z0-9]+")
-_QUANTIFIED_FACT_RE = re.compile(r"^(\d+)\s+(.+)$")
-_STOP_WORDS = {
-    "a", "an", "and", "are", "as", "at", "be", "by", "for", "from",
-    "has", "have", "in", "is", "it", "of", "on", "or", "that", "the",
-    "this", "to", "was", "were", "with", "after", "before", "new",
-}
-_GENERIC_NEWS_TOKENS = {
-    "arrest", "arrested", "charges", "closed", "closes", "crash",
-    "deputies", "fire", "injured", "meeting", "person", "people",
-    "reported", "rescue", "rescued", "road", "woman", "county",
-}
+_WORD_RE=re.compile(r"[a-z0-9]+")
+_STOP={"the","and","for","with","from","after","before","into","county","news","update","says","said"}
 
+def _norm(v): return " ".join(str(v or "").casefold().split())
+def _set(vs): return {_norm(v) for v in vs if _norm(v)}
+def _tokens(v): return {x for x in _WORD_RE.findall(_norm(v)) if len(x)>=3 and x not in _STOP}
+def _overlap(a,b): return len(a&b)/min(len(a),len(b)) if a and b else 0.0
 
-def _normalize(value: str) -> str:
-    return " ".join((value or "").strip().lower().split())
-
-
-def _normalized_set(values: Iterable[str]) -> set[str]:
-    return {_normalize(str(value)) for value in values if _normalize(str(value))}
-
-
-def _tokens(value: str) -> set[str]:
-    return {
-        token
-        for token in _WORD_RE.findall((value or "").lower())
-        if len(token) >= 3 and token not in _STOP_WORDS
-    }
-
-
-def _jaccard(left: set[str], right: set[str]) -> float:
-    if not left or not right:
-        return 0.0
-    return len(left & right) / len(left | right)
-
-
-def _overlap_ratio(left: set[str], right: set[str]) -> float:
-    """Measure how much of the smaller evidence set is shared."""
-    if not left or not right:
-        return 0.0
-    return len(left & right) / min(len(left), len(right))
-
-
-def _fact_signature(value: str) -> tuple[str, str] | None:
-    """Return a normalized numeric fact signature for conflict detection."""
-    match = _QUANTIFIED_FACT_RE.match(_normalize(value))
-    if not match:
-        return None
-
-    number, subject = match.groups()
-    subject = re.sub(r"\bpeople\b", "person", subject)
-    subject = re.sub(r"\bcats\b", "cat", subject)
-    subject = re.sub(r"\bdogs\b", "dog", subject)
-    return number, subject
-
-
-def _has_quantified_conflict(left: set[str], right: set[str]) -> bool:
-    left_signatures = {
-        signature[1]: signature[0]
-        for value in left
-        if (signature := _fact_signature(value)) is not None
-    }
-    right_signatures = {
-        signature[1]: signature[0]
-        for value in right
-        if (signature := _fact_signature(value)) is not None
-    }
-
-    return any(
-        subject in right_signatures
-        and number != right_signatures[subject]
-        for subject, number in left_signatures.items()
-    )
-
-
-def _distinctive_title_tokens(
-    title_tokens: set[str],
-    locations: set[str],
-) -> set[str]:
-    location_tokens: set[str] = set()
-    for location in locations:
-        location_tokens.update(_tokens(location))
-
-    return title_tokens - _GENERIC_NEWS_TOKENS - location_tokens
-
+def _category(event_types:set[str], title:str)->str:
+    blob=" ".join(event_types)+" "+_norm(title)
+    if any(x in blob for x in ("crash","arrest","shoot","missing person","animal rescue","crime")): return "crime_public_safety"
+    if any(x in blob for x in ("meeting","government","budget","ordinance","commission","council")): return "government"
+    if any(x in blob for x in ("baseball","football","basketball","game","mets","cardinals")): return "sports"
+    if any(x in blob for x in ("storm","hurricane","tornado","weather","flood")): return "weather"
+    if any(x in blob for x in ("business","development","company","store","restaurant")): return "business"
+    return "general"
 
 @dataclass(frozen=True, slots=True)
 class StoryResolution:
-    story_id: str | None
+    story_id: str|None
     merge: bool
     confidence: float
     reason: str
-
+    decision_trace: tuple[str,...]=()
 
 class StoryResolver:
-    """Select an existing persistent story for a new event, conservatively."""
-
-    MERGE_THRESHOLD = 0.60
-
-    def resolve(
-        self,
-        *,
-        event_key: str,
-        title: str,
-        facts: Iterable[str],
-        locations: Iterable[str] = (),
-        agencies: Iterable[str] = (),
-        event_types: Iterable[str] = (),
-        stories: Iterable[Mapping[str, Any]],
-    ) -> StoryResolution:
-        incoming_facts = _normalized_set(facts)
-        incoming_locations = _normalized_set(locations)
-        incoming_agencies = _normalized_set(agencies)
-        incoming_event_types = _normalized_set(event_types)
-
-        incoming_event_tokens = _tokens(event_key.replace("-", " "))
-        incoming_title_tokens = _tokens(title)
-        incoming_distinctive_tokens = _distinctive_title_tokens(
-            incoming_title_tokens,
-            incoming_locations,
-        )
-
-        best_story_id: str | None = None
-        best_score = 0.0
-        best_reason = "no sufficiently similar active story"
-
-        for story in stories:
-            if story.get("status", "developing") == "archived":
+    MERGE_THRESHOLD=0.78
+    def resolve(self, *, event_key:str, title:str, facts:Iterable[str], locations:Iterable[str]=(), agencies:Iterable[str]=(), event_types:Iterable[str]=(), entities:Iterable[str]=(), published_at:datetime|None=None, stories:Iterable[Mapping[str,Any]])->StoryResolution:
+        inc={"facts":_set(facts),"locations":_set(locations),"agencies":_set(agencies),"types":_set(event_types),"entities":_set(entities)}
+        cat=_category(inc["types"], title); title_tokens=_tokens(title); event_tokens=_tokens(event_key.replace("-"," "))
+        best=None; best_score=0.0; best_trace=("No sufficiently supported match",)
+        for s in stories:
+            if s.get("status")=="archived": continue
+            sid=str(s.get("story_id","")).strip()
+            if not sid: continue
+            known={"facts":_set(s.get("facts",())),"locations":_set(s.get("locations",())),"agencies":_set(s.get("agencies",())),"types":_set(s.get("event_types",())),"entities":_set(s.get("entities",()))}
+            trace=[]
+            # Hard contradictions.
+            if inc["locations"] and known["locations"] and not inc["locations"]&known["locations"]:
                 continue
-
-            story_id = str(story.get("story_id", "")).strip()
-            if not story_id:
+            if inc["agencies"] and known["agencies"] and not inc["agencies"]&known["agencies"]:
                 continue
-
-            known_facts = _normalized_set(story.get("facts", ()))
-            known_locations = _normalized_set(story.get("locations", ()))
-            known_agencies = _normalized_set(story.get("agencies", ()))
-            known_event_types = _normalized_set(story.get("event_types", ()))
-
-            # Conflicting structured identity is a hard stop. This prevents
-            # same-topic stories in different counties or from different
-            # agencies from being merged merely because their generic facts
-            # and event types match.
-            if (
-                incoming_locations
-                and known_locations
-                and not (incoming_locations & known_locations)
-            ):
-                continue
-            if (
-                incoming_agencies
-                and known_agencies
-                and not (incoming_agencies & known_agencies)
-            ):
-                continue
-            if _has_quantified_conflict(incoming_facts, known_facts):
-                continue
-
-            fact_score = _overlap_ratio(incoming_facts, known_facts)
-            location_score = _overlap_ratio(incoming_locations, known_locations)
-            agency_score = _overlap_ratio(incoming_agencies, known_agencies)
-            event_type_score = _overlap_ratio(
-                incoming_event_types,
-                known_event_types,
-            )
-
-            event_tokens: set[str] = set()
-            for known_event in story.get("events", ()):
-                event_tokens.update(_tokens(str(known_event).replace("-", " ")))
-
-            title_tokens = set(story.get("title_tokens", ()))
-            event_key_score = _jaccard(incoming_event_tokens, event_tokens)
-            title_score = _jaccard(incoming_title_tokens, title_tokens)
-            known_distinctive_tokens = _distinctive_title_tokens(
-                title_tokens,
-                known_locations,
-            )
-            distinctive_overlap = bool(
-                incoming_distinctive_tokens & known_distinctive_tokens
-            )
-
-            # Structured evidence drives the decision. Event-key and title
-            # similarity are supporting signals only.
-            weighted_signals = []
-            if incoming_facts and known_facts:
-                weighted_signals.append((0.45, fact_score))
-            if incoming_locations and known_locations:
-                weighted_signals.append((0.15, location_score))
-            if incoming_agencies and known_agencies:
-                weighted_signals.append((0.20, agency_score))
-            if incoming_event_types and known_event_types:
-                weighted_signals.append((0.20, event_type_score))
-
-            available_weight = sum(weight for weight, _ in weighted_signals)
-            structured_score = (
-                sum(weight * value for weight, value in weighted_signals)
-                / available_weight
-                if available_weight
-                else 0.0
-            )
-            support_score = (0.60 * event_key_score) + (0.40 * title_score)
-            score = (0.90 * structured_score) + (0.10 * support_score)
-
-            shared_facts = len(incoming_facts & known_facts)
-            shared_locations = len(incoming_locations & known_locations)
-            shared_agencies = len(incoming_agencies & known_agencies)
-            shared_event_types = len(
-                incoming_event_types & known_event_types
-            )
-
-            # False splits are safer than false merges. Require meaningful
-            # factual overlap plus an identity anchor. A distinctive title
-            # token can supply that anchor; otherwise event-key similarity
-            # must be strong enough to indicate the same underlying incident.
-            identity_anchor = distinctive_overlap or event_key_score >= 0.50
-            eligible = identity_anchor and (
-                shared_facts >= 2
-                or (
-                    shared_facts >= 1
-                    and (
-                        shared_locations >= 1
-                        or shared_agencies >= 1
-                        or shared_event_types >= 1
-                    )
-                    and (event_key_score >= 0.35 or title_score >= 0.25)
-                )
-            )
-
-            if eligible and score > best_score:
-                best_story_id = story_id
-                best_score = score
-                best_reason = (
-                    f"facts={fact_score:.3f}, "
-                    f"locations={location_score:.3f}, "
-                    f"agencies={agency_score:.3f}, "
-                    f"event_types={event_type_score:.3f}, "
-                    f"event_key={event_key_score:.3f}, "
-                    f"title={title_score:.3f}, "
-                    f"distinctive_anchor={distinctive_overlap}"
-                )
-
-        should_merge = (
-            best_story_id is not None
-            and best_score >= self.MERGE_THRESHOLD
-        )
-
-        return StoryResolution(
-            story_id=best_story_id if should_merge else None,
-            merge=should_merge,
-            confidence=best_score,
-            reason=best_reason,
-        )
+            inc_cat=cat; known_cat=_category(known["types"], str(s.get("canonical_title", "")))
+            if inc_cat!="general" and known_cat!="general" and inc_cat!=known_cat: continue
+            scores={k:_overlap(inc[k],known[k]) for k in inc}
+            known_title=_tokens(str(s.get("canonical_title", ""))) | set(s.get("title_tokens",()))
+            title_score=len(title_tokens&known_title)/max(1,min(len(title_tokens),len(known_title)))
+            known_events=set()
+            for e in s.get("events",()): known_events |= _tokens(str(e).replace("-"," "))
+            event_score=len(event_tokens&known_events)/max(1,min(len(event_tokens),len(known_events)))
+            anchors=sum(bool(inc[k]&known[k]) for k in ("locations","agencies","types","entities"))
+            # Category-specific minimum evidence.
+            if inc_cat=="crime_public_safety": eligible=(anchors>=2 and (scores["facts"]>0 or scores["entities"]>0 or event_score>=.55))
+            elif inc_cat=="government": eligible=((scores["agencies"]>0 or scores["entities"]>0) and (scores["facts"]>0 or title_score>=.45))
+            elif inc_cat=="sports": eligible=((scores["entities"]>0 or title_score>=.55) and (scores["facts"]>0 or event_score>=.55))
+            elif inc_cat=="weather": eligible=(scores["types"]>0 and (scores["locations"]>0 or scores["entities"]>0))
+            elif inc_cat=="business": eligible=(scores["entities"]>0 and (scores["locations"]>0 or title_score>=.5))
+            else: eligible=(anchors>=2 and scores["facts"]>0)
+            weights={"facts":.25,"locations":.18,"agencies":.18,"types":.14,"entities":.25}
+            structured=sum(weights[k]*scores[k] for k in weights)
+            score=.88*structured+.07*title_score+.05*event_score
+            trace=[f"Category: {inc_cat}",f"Facts overlap: {scores['facts']:.2f}",f"Locations overlap: {scores['locations']:.2f}",f"Agencies overlap: {scores['agencies']:.2f}",f"Event types overlap: {scores['types']:.2f}",f"Entities overlap: {scores['entities']:.2f}",f"Title support: {title_score:.2f}",f"Event-key support: {event_score:.2f}",f"Identity anchors: {anchors}"]
+            if eligible and score>best_score:
+                best=sid; best_score=score; best_trace=tuple(trace)
+        merge=best is not None and best_score>=self.MERGE_THRESHOLD
+        if not merge:
+            return StoryResolution(None,False,best_score,"Created new story: conservative merge requirements were not met",best_trace+(f"Threshold: {self.MERGE_THRESHOLD:.2f}",))
+        return StoryResolution(best,True,best_score,"Merged into existing story using Resolver v2 structured evidence",best_trace+(f"Threshold passed: {self.MERGE_THRESHOLD:.2f}",))

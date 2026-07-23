@@ -173,6 +173,8 @@ class EditorialEngine:
                 locations=tuple(extracted.locations),
                 agencies=tuple(extracted.agencies),
                 event_types=tuple(extracted.event_types),
+                entities=tuple(extracted.entities),
+                county=raw.county or "",
                 source=raw.source,
                 is_custom=raw.is_custom,
                 published_at=raw.published_at,

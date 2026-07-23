@@ -29,6 +29,8 @@ class PipelineArticle:
     locations: tuple[str, ...] = ()
     agencies: tuple[str, ...] = ()
     event_types: tuple[str, ...] = ()
+    entities: tuple[str, ...] = ()
+    county: str = ""
     status: str = "developing"
     is_major: bool = False
     is_correction: bool = False
@@ -98,6 +100,9 @@ class EditorialPipeline:
             locations=article.locations,
             agencies=article.agencies,
             event_types=article.event_types,
+            entities=article.entities,
+            published_at=article.published_at,
+            county=article.county,
             source=article.source,
             is_custom=article.is_custom,
             source_class=article.source_class,

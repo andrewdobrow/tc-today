@@ -111,3 +111,4 @@ __all__ = [
 ]
 
 __version__ = "1.2.0"
+from .local_relevance import LocalRelevance, classify_local_relevance

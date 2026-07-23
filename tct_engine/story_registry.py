@@ -12,6 +12,7 @@ from .story_importance import StoryImportance, StoryImportanceEngine, Importance
 from .story_resolver import StoryResolver
 from .story_timeline import StoryTimeline, TimelineEntry
 from .editorial_policy import EditorialPolicy
+from .local_relevance import classify_local_relevance
 
 _WORD_RE = re.compile(r"[a-z0-9]+")
 
@@ -25,7 +26,7 @@ def _tokens(value: str) -> set[str]:
 
 
 class StoryRegistry:
-    SCHEMA_VERSION = 4
+    SCHEMA_VERSION = 5
 
     def __init__(self, filename: str | Path = "story-registry.json") -> None:
         self.path = Path(filename)
@@ -69,6 +70,8 @@ class StoryRegistry:
             story.setdefault("locations", [])
             story.setdefault("agencies", [])
             story.setdefault("event_types", [])
+            story.setdefault("entities", [])
+            story.setdefault("local_relevance", {"scope":"unknown","score":35,"counties":[],"places":[]})
             story.setdefault("resolution_history", [])
             story.setdefault("custom_article_count", 0)
             story.setdefault("sources", [])
@@ -116,6 +119,8 @@ class StoryRegistry:
             "locations": [],
             "agencies": [],
             "event_types": [],
+            "entities": [],
+            "local_relevance": {"scope":"unknown","score":35,"counties":[],"places":[]},
             "resolution_history": [],
             "timeline": [],
             "custom_article_count": 0,
@@ -145,6 +150,9 @@ class StoryRegistry:
         locations: Iterable[str] = (),
         agencies: Iterable[str] = (),
         event_types: Iterable[str] = (),
+        entities: Iterable[str] = (),
+        published_at=None,
+        county: str = "",
         source: str = "",
         is_custom: bool = False,
         source_class: str = "unknown",
@@ -160,6 +168,8 @@ class StoryRegistry:
                 locations=locations,
                 agencies=agencies,
                 event_types=event_types,
+                entities=entities,
+                county=county,
                 source=source,
                 is_custom=is_custom,
                 source_class=source_class,
@@ -176,6 +186,8 @@ class StoryRegistry:
             locations=locations,
             agencies=agencies,
             event_types=event_types,
+            entities=entities,
+            published_at=published_at,
             stories=self.iter_stories(),
         )
 
@@ -192,6 +204,8 @@ class StoryRegistry:
             locations=locations,
             agencies=agencies,
             event_types=event_types,
+            entities=entities,
+            county=county,
             source=source,
             is_custom=is_custom,
             source_class=source_class,
@@ -204,6 +218,8 @@ class StoryRegistry:
                 "event_key": event_key,
                 "confidence": round(resolution.confidence, 6),
                 "reason": resolution.reason,
+                "decision_trace": list(resolution.decision_trace),
+                "resolver_version": "2.0",
                 "matched_existing": bool(resolution.merge),
             }
         )
@@ -219,6 +235,9 @@ class StoryRegistry:
         locations: Iterable[str] = (),
         agencies: Iterable[str] = (),
         event_types: Iterable[str] = (),
+        entities: Iterable[str] = (),
+        published_at=None,
+        county: str = "",
         source: str = "",
         is_custom: bool = False,
         source_class: str = "unknown",
@@ -271,6 +290,7 @@ class StoryRegistry:
             ("locations", locations),
             ("agencies", agencies),
             ("event_types", event_types),
+            ("entities", entities),
         ):
             existing = {
                 str(value).strip()
@@ -283,6 +303,18 @@ class StoryRegistry:
                 if str(value).strip()
             )
             story[field] = sorted(existing)
+
+        locality = classify_local_relevance(
+            locations=story.get("locations", ()),
+            county=county,
+            text=" ".join([title, *story.get("facts", ()), *story.get("entities", ())]),
+        )
+        current = story.get("local_relevance", {})
+        if locality.score >= int(current.get("score", 0)):
+            story["local_relevance"] = {
+                "scope": locality.scope, "score": locality.score,
+                "counties": list(locality.counties), "places": list(locality.places),
+            }
 
         if source:
             sources = set(story.get("sources", []))
@@ -339,6 +371,7 @@ class StoryRegistry:
             "locations",
             "agencies",
             "event_types",
+            "entities",
         ):
             primary[field] = sorted(set(primary[field]) | set(secondary[field]))
 

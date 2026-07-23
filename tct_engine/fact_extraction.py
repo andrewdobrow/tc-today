@@ -28,6 +28,7 @@ class ExtractedArticleFacts:
     locations: tuple[str, ...]
     agencies: tuple[str, ...]
     event_types: tuple[str, ...]
+    entities: tuple[str, ...] = ()
 
 
 _LOCATION_PATTERNS = (
@@ -118,6 +119,7 @@ def extract_article_facts(
     locations = []
     agencies = []
     event_types = []
+    entities = []
 
     lower = text.lower()
 
@@ -160,6 +162,23 @@ def extract_article_facts(
         event_types.append("missing person")
         facts.append("missing person")
 
+
+    # Named organizations, roads, projects, teams and quoted proper names are
+    # durable identity anchors for Resolver v2.
+    entity_patterns = (
+        r"\b(?:Martin County|St\.? Lucie County|Indian River County) (?:Sheriff(?:\'s)? Office|Commission|School Board|Fire District)\b",
+        r"\b(?:Port St\.? Lucie|Stuart|Fort Pierce|Vero Beach|Sebastian) City Council\b",
+        r"\bSt\.? Lucie Mets\b",
+        r"\bPalm Beach Cardinals\b",
+        r"\b(?:State Road|S\.?R\.?|U\.?S\.?)\s*\d+[A-Za-z-]*\b",
+        r"\b[A-Z][A-Za-z0-9&.'-]+(?:\s+[A-Z][A-Za-z0-9&.'-]+){1,4}\b",
+    )
+    for pattern in entity_patterns:
+        for match in re.finditer(pattern, text):
+            value = match.group(0).strip()
+            if len(value) >= 5:
+                entities.append(value)
+
     return ExtractedArticleFacts(
         article_id=article.article_id,
         source=article.source,
@@ -168,4 +187,5 @@ def extract_article_facts(
         locations=_unique(locations),
         agencies=_unique(agencies),
         event_types=_unique(event_types),
+        entities=_unique(entities),
     )
