@@ -60,9 +60,10 @@ def test_processes_rss_entry_end_to_end():
     assert "cats rescued" in result.extracted_facts
 
 
-def test_duplicate_external_story_is_ignored():
+def test_duplicate_external_story_is_ignored(tmp_path):
     engine = EditorialEngine(
         default_published_at=DEFAULT_TIME,
+        registry_path=tmp_path / "registry.json",
     )
 
     engine.process(
@@ -97,11 +98,13 @@ def test_duplicate_external_story_is_ignored():
     assert result.event_key == "animal-rescue-stuart-cats"
     assert result.canonical_article_id == "wptv-cat-story"
     assert result.new_facts == ()
+    assert result.relationship == "same_event"
 
 
-def test_custom_tct_story_replaces_external_canonical():
+def test_custom_tct_story_replaces_external_canonical(tmp_path):
     engine = EditorialEngine(
         default_published_at=DEFAULT_TIME,
+        registry_path=tmp_path / "registry.json",
     )
 
     engine.process(
@@ -144,6 +147,7 @@ def test_custom_tct_story_replaces_external_canonical():
     assert result.is_custom is True
     assert "arrest made" in result.new_facts
     assert "animal cruelty" in result.new_facts
+    assert result.relationship == "follow_up"
 
 
 def test_later_external_duplicate_does_not_replace_custom_story():
@@ -193,9 +197,10 @@ def test_later_external_duplicate_does_not_replace_custom_story():
     assert result.is_custom is False
 
 
-def test_external_story_with_new_fact_updates_custom_story():
+def test_external_story_with_new_fact_updates_custom_story(tmp_path):
     engine = EditorialEngine(
         default_published_at=DEFAULT_TIME,
+        registry_path=tmp_path / "registry.json",
     )
 
     engine.process(
@@ -230,6 +235,7 @@ def test_external_story_with_new_fact_updates_custom_story():
     assert result.canonical_article_id == "tct-custom-cat-story"
     assert "arrest made" in result.new_facts
     assert "animal cruelty" in result.new_facts
+    assert result.relationship == "follow_up"
 
 
 def test_different_events_remain_separate():
@@ -290,3 +296,37 @@ def test_engine_can_retrieve_existing_event():
 
     assert event is not None
     assert event.canonical.article_id == "cat-story"
+
+def test_sparse_unknown_articles_do_not_collapse_into_one_event(tmp_path):
+    engine = EditorialEngine(
+        default_published_at=DEFAULT_TIME,
+        registry_path=tmp_path / "registry.json",
+    )
+
+    first = engine.process(
+        {
+            "id": "unknown-one",
+            "title": "Stuart commission reviews summer internship program",
+            "link": "https://example.com/unknown-one",
+            "summary": "Officials reviewed the program during a public meeting.",
+        },
+        source="WPTV",
+        county="Martin",
+    )
+    second = engine.process(
+        {
+            "id": "unknown-two",
+            "title": "Vero Beach nonprofit announces community fundraiser",
+            "link": "https://example.com/unknown-two",
+            "summary": "The organization announced a fundraiser for local families.",
+        },
+        source="WPTV",
+        county="Indian River",
+    )
+
+    assert first.event_key.startswith("unknown-event-")
+    assert second.event_key.startswith("unknown-event-")
+    assert first.event_key != second.event_key
+    assert first.story_id != second.story_id
+    assert first.action is EditorialAction.PUBLISH_NEW
+    assert second.action is EditorialAction.PUBLISH_NEW

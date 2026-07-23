@@ -119,3 +119,56 @@ def test_registry_keeps_duplicate_milestone_as_same_event(tmp_path):
 
     assert second_story == first_story
     assert registry.last_decision["relationship"] == "same_event"
+
+
+def test_registry_detects_follow_up_even_when_generated_event_key_is_unchanged(tmp_path):
+    registry = StoryRegistry(tmp_path / "registry.json")
+    event_key = "animal-rescue-stuart-cats"
+
+    first_story = registry.resolve_article(
+        event_key=event_key,
+        title="Deputies rescue 80 cats from Stuart home",
+        facts=("80 cats", "cats rescued", "animal cruelty"),
+        locations=("Stuart",),
+        agencies=("Martin County Sheriff's Office",),
+        event_types=("animal rescue",),
+        entities=("Gail Giustino",),
+    )
+    second_story = registry.resolve_article(
+        event_key=event_key,
+        title="Woman arrested after 80 cats rescued from Stuart home",
+        facts=("80 cats", "cats rescued", "animal cruelty", "arrest made"),
+        locations=("Stuart",),
+        agencies=("Martin County Sheriff's Office",),
+        event_types=("animal rescue",),
+        entities=("Gail Giustino",),
+    )
+
+    assert second_story == first_story
+    assert registry.last_decision["relationship"] == "follow_up"
+    assert "Novel milestones: arrest" in registry.last_decision["decision_trace"]
+
+
+def test_registry_keeps_repeated_same_key_milestone_as_same_event(tmp_path):
+    registry = StoryRegistry(tmp_path / "registry.json")
+    event_key = "animal-rescue-stuart-cats"
+    common = {
+        "event_key": event_key,
+        "facts": ("80 cats", "cats rescued", "animal cruelty", "arrest made"),
+        "locations": ("Stuart",),
+        "agencies": ("Martin County Sheriff's Office",),
+        "event_types": ("animal rescue",),
+        "entities": ("Gail Giustino",),
+    }
+
+    first_story = registry.resolve_article(
+        title="Woman arrested after 80 cats rescued from Stuart home",
+        **common,
+    )
+    second_story = registry.resolve_article(
+        title="Stuart woman arrested after deputies rescue 80 cats",
+        **common,
+    )
+
+    assert second_story == first_story
+    assert registry.last_decision["relationship"] == "same_event"
