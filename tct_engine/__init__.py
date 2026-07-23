@@ -61,6 +61,12 @@ from .editorial_engine import (
     EditorialEngineResult,
     EditorialStateError,
 )
+from .editorial_proximity import (
+    EditorialProximity,
+    classify_editorial_proximity,
+    calculate_editorial_priority,
+)
+from .local_relevance import LocalRelevance, classify_local_relevance
 from .observability import (
     ENGINE_NAME,
     ENGINE_VERSION,
@@ -116,6 +122,9 @@ __all__ = [
     "ENGINE_NAME",
     "ENGINE_VERSION",
     "ENGINE_RELEASE",
+    "EditorialProximity",
+    "classify_editorial_proximity",
+    "calculate_editorial_priority",
     "OBSERVABILITY_SCHEMA_VERSION",
     "build_editorial_observability",
     "write_editorial_observability",
@@ -124,5 +133,4 @@ __all__ = [
     "route_editorial_result",
 ]
 
-__version__ = "1.5.0"
-from .local_relevance import LocalRelevance, classify_local_relevance
+__version__ = "1.6.1"

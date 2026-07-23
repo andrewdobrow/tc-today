@@ -44,7 +44,7 @@ class EditorialEligibilityEngine:
         parsed = urlparse(url)
         domain = parsed.netloc.casefold().split(":", 1)[0].removeprefix("www.")
         path = parsed.path.casefold()
-        profile = self.policy.source_profile(domain)
+        profile = self.policy.source_profile_for(domain, source)
         title_fold = title.casefold()
         reasons: list[str] = []
 

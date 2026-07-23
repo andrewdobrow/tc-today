@@ -65,3 +65,29 @@ class EditorialPolicy:
             eligible=bool(selected.get("eligible", True)),
             canonical_priority=priority,
         )
+
+    def source_profile_for(self, domain: str = "", source: str = "") -> SourceProfile:
+        """Resolve a profile from the publisher domain, then a source/feed alias."""
+        profile = self.source_profile(domain)
+        if profile.source_class != "unknown":
+            return profile
+        source_fold = (source or "").casefold().strip()
+        aliases = self.data.get("source_aliases", {})
+        best_key = ""
+        best_profile = None
+        for key, value in aliases.items():
+            key_fold = str(key).casefold()
+            if key_fold and key_fold in source_fold and len(key_fold) > len(best_key):
+                best_key = key_fold
+                best_profile = value
+        if best_profile is None:
+            return profile
+        source_class = str(best_profile.get("class", "unknown"))
+        priority = int(self.data.get("canonical_priority", {}).get(source_class, 50))
+        return SourceProfile(
+            domain=domain or best_key,
+            source_class=source_class,
+            trust=max(0, min(100, int(best_profile.get("trust", 50)))),
+            eligible=bool(best_profile.get("eligible", True)),
+            canonical_priority=priority,
+        )

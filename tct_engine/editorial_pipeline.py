@@ -47,6 +47,10 @@ class EditorialPipelineResult:
     new_facts: tuple[str, ...]
     is_major: bool
     story_id: str = ""
+    relationship: str = "new_story"
+    relationship_confidence: float = 0.0
+    relationship_reason: str = ""
+    decision_trace: tuple[str, ...] = ()
 
 
 class EditorialPipeline:
@@ -108,6 +112,7 @@ class EditorialPipeline:
             source_class=article.source_class,
             source_trust=article.source_trust,
         )
+        relationship_decision = dict(self._registry.last_decision or {})
 
         existing_snapshot = self._snapshots.get(article.event_key)
         existing_canonical = self._stories.get(article.event_key)
@@ -154,6 +159,10 @@ class EditorialPipeline:
                 new_facts=article.facts,
                 is_major=article.is_major,
                 story_id=story_id,
+                relationship=str(relationship_decision.get("relationship", "new_story")),
+                relationship_confidence=float(relationship_decision.get("confidence", 0.0) or 0.0),
+                relationship_reason=str(relationship_decision.get("reason", "")),
+                decision_trace=tuple(relationship_decision.get("decision_trace", ()) or ()),
             )
 
         update = evaluate_story_update(
@@ -200,6 +209,10 @@ class EditorialPipeline:
             new_facts=update.new_facts,
             is_major=article.is_major,
             story_id=story_id,
+            relationship=str(relationship_decision.get("relationship", "new_story")),
+            relationship_confidence=float(relationship_decision.get("confidence", 0.0) or 0.0),
+            relationship_reason=str(relationship_decision.get("reason", "")),
+            decision_trace=tuple(relationship_decision.get("decision_trace", ()) or ()),
         )
 
     def get_event(self, event_key: str):

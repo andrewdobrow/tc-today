@@ -13,11 +13,11 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.5.0"
-ENGINE_RELEASE = "modular-observability"
-OBSERVABILITY_SCHEMA_VERSION = 2
+ENGINE_VERSION = "1.6.1"
+ENGINE_RELEASE = "release-integrity"
+OBSERVABILITY_SCHEMA_VERSION = 3
 RESOLVER_VERSION = "2.1"
-RELATIONSHIP_ENGINE_VERSION = "1.0"
+RELATIONSHIP_ENGINE_VERSION = "1.1"
 
 
 def _utc_now() -> str:
@@ -59,11 +59,42 @@ def build_editorial_observability(
     eligibility_counts: Counter[str] = Counter()
     source_class_counts: Counter[str] = Counter()
     rejected_examples: list[dict[str, Any]] = []
+    relationship_counts: Counter[str] = Counter()
+    decision_trace_examples: list[dict[str, Any]] = []
+    relationship_examples: list[dict[str, Any]] = []
+
+    has_current_relationships = any(bool(row.get("relationship")) for row in rows)
 
     for row in rows:
         route_counts[str(row.get("route") or "unknown")] += 1
         eligibility_counts[str(row.get("eligibility_status") or "publishable")] += 1
         source_class_counts[str(row.get("source_class") or "unknown")] += 1
+        relationship = str(row.get("relationship") or "")
+        if relationship:
+            relationship_counts[relationship] += 1
+            if len(relationship_examples) < 20:
+                relationship_examples.append({
+                    "story_id": row.get("story_id", ""),
+                    "title": row.get("headline", ""),
+                    "event_key": row.get("event_key", ""),
+                    "relationship": relationship,
+                    "confidence": row.get("relationship_confidence", 0),
+                    "reason": row.get("relationship_reason", ""),
+                    "decision_trace": list(row.get("decision_trace") or []),
+                })
+            trace = list(row.get("decision_trace") or [])
+            if trace and len(decision_trace_examples) < 20:
+                decision_trace_examples.append({
+                    "story_id": row.get("story_id", ""),
+                    "title": row.get("headline", ""),
+                    "event_key": row.get("event_key", ""),
+                    "relationship": relationship,
+                    "confidence": row.get("relationship_confidence", 0),
+                    "matched_existing": relationship in {"same_event", "follow_up"},
+                    "reason": row.get("relationship_reason", ""),
+                    "decision_trace": trace,
+                })
+
         if not bool(row.get("eligible", True)) and len(rejected_examples) < 20:
             rejected_examples.append(
                 {
@@ -76,12 +107,11 @@ def build_editorial_observability(
             )
 
     importance_levels: Counter[str] = Counter()
-    relationship_counts: Counter[str] = Counter()
     locality_scopes: Counter[str] = Counter()
+    proximity_scopes: Counter[str] = Counter()
     scores: list[int] = []
+    priority_scores: list[int] = []
     locality_scores: list[int] = []
-    decision_trace_examples: list[dict[str, Any]] = []
-    relationship_examples: list[dict[str, Any]] = []
 
     for story in stories:
         importance = story.get("importance") or {}
@@ -95,10 +125,14 @@ def build_editorial_observability(
         scope = str(locality.get("scope") or "unknown")
         locality_scopes[scope] += 1
         locality_scores.append(_safe_int(locality.get("score"), 35))
+        proximity = story.get("editorial_proximity") or {}
+        proximity_scopes[str(proximity.get("scope") or "unknown")] += 1
+        priority_scores.append(_safe_int(story.get("editorial_priority")))
 
         for relation in story.get("relationship_history") or []:
             relationship = str(relation.get("relationship") or "unknown")
-            relationship_counts[relationship] += 1
+            if not has_current_relationships:
+                relationship_counts[relationship] += 1
             if len(relationship_examples) < 20:
                 relationship_examples.append(
                     {
@@ -116,7 +150,7 @@ def build_editorial_observability(
             relationship = str(resolution.get("relationship") or "unknown")
             # Resolution records include SAME_EVENT and NEW_STORY decisions that may
             # not have a corresponding relationship_history record.
-            if relationship in {"same_event", "new_story"}:
+            if not has_current_relationships and relationship in {"same_event", "new_story"}:
                 relationship_counts[relationship] += 1
             trace = list(resolution.get("decision_trace") or [])
             if trace and len(decision_trace_examples) < 20:
@@ -142,6 +176,7 @@ def build_editorial_observability(
                 "story_id": story.get("story_id", ""),
                 "title": _story_title(story),
                 "score": _safe_int(importance.get("score")),
+                "editorial_priority": _safe_int(story.get("editorial_priority")),
                 "level": importance.get("level", "low"),
                 "importance_reasons": list(importance.get("reasons") or []),
                 "local_relevance": {
@@ -150,6 +185,7 @@ def build_editorial_observability(
                     "counties": list(locality.get("counties") or []),
                     "places": list(locality.get("places") or []),
                 },
+                "editorial_proximity": dict(story.get("editorial_proximity") or {}),
                 "event_count": len(story.get("events") or []),
                 "timeline_entries": len(story.get("timeline") or []),
                 "relationship_decisions": len(story.get("relationship_history") or []),
@@ -188,6 +224,11 @@ def build_editorial_observability(
             "average_score": round(sum(locality_scores) / len(locality_scores), 2)
             if locality_scores
             else 0.0,
+        },
+        "editorial_proximity": {
+            "scopes": dict(sorted(proximity_scopes.items())),
+            "average_priority": round(sum(priority_scores) / len(priority_scores), 2)
+            if priority_scores else 0.0,
         },
         "stories": {
             "total": len(stories),

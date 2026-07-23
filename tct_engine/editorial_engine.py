@@ -41,6 +41,10 @@ class EditorialEngineResult:
     source_class: str = "unknown"
     source_trust: int = 50
     eligible: bool = True
+    relationship: str = "new_story"
+    relationship_confidence: float = 0.0
+    relationship_reason: str = ""
+    decision_trace: tuple[str, ...] = ()
 
 
 class EditorialEngine:
@@ -214,6 +218,10 @@ class EditorialEngine:
             source_class=eligibility.source_profile.source_class,
             source_trust=eligibility.source_profile.trust,
             eligible=True,
+            relationship=pipeline_result.relationship,
+            relationship_confidence=pipeline_result.relationship_confidence,
+            relationship_reason=pipeline_result.relationship_reason,
+            decision_trace=pipeline_result.decision_trace,
         )
 
     def get_event(self, event_key: str):

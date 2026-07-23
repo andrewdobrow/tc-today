@@ -14,6 +14,7 @@ from .story_relationship import StoryRelationshipEngine, StoryRelationshipType
 from .story_timeline import StoryTimeline, TimelineEntry
 from .editorial_policy import EditorialPolicy
 from .local_relevance import classify_local_relevance
+from .editorial_proximity import classify_editorial_proximity, calculate_editorial_priority
 
 _WORD_RE = re.compile(r"[a-z0-9]+")
 
@@ -27,7 +28,7 @@ def _tokens(value: str) -> set[str]:
 
 
 class StoryRegistry:
-    SCHEMA_VERSION = 5
+    SCHEMA_VERSION = 6
 
     def __init__(self, filename: str | Path = "story-registry.json") -> None:
         self.path = Path(filename)
@@ -36,6 +37,7 @@ class StoryRegistry:
         self._importance = StoryImportanceEngine()
         self._policy = EditorialPolicy()
         self.data = self._load()
+        self.last_decision: dict[str, Any] = {}
 
     def _empty(self) -> dict[str, Any]:
         return {
@@ -76,6 +78,8 @@ class StoryRegistry:
             story.setdefault("local_relevance", {"scope":"unknown","score":35,"counties":[],"places":[]})
             story.setdefault("resolution_history", [])
             story.setdefault("relationship_history", [])
+            story.setdefault("editorial_proximity", {"score":35,"scope":"unknown","reason":"Not yet classified"})
+            story.setdefault("editorial_priority", 0)
             story.setdefault("custom_article_count", 0)
             story.setdefault("sources", [])
             story.setdefault("title_candidates", [])
@@ -126,6 +130,8 @@ class StoryRegistry:
             "local_relevance": {"scope":"unknown","score":35,"counties":[],"places":[]},
             "resolution_history": [],
             "relationship_history": [],
+            "editorial_proximity": {"score":35,"scope":"unknown","reason":"Not yet classified"},
+            "editorial_priority": 0,
             "timeline": [],
             "custom_article_count": 0,
             "sources": [],
@@ -165,6 +171,15 @@ class StoryRegistry:
         mapped = self.data["event_to_story"].get(event_key)
         if mapped:
             story_id = self._canonical_story_id(mapped)
+            self.last_decision = {
+                "event_key": event_key,
+                "relationship": StoryRelationshipType.SAME_EVENT.value,
+                "confidence": 1.0,
+                "reason": "Exact event key already belongs to this story",
+                "decision_trace": ["Relationship: same_event", "Exact event-key mapping: true", "Confidence: 1.00"],
+                "matched_existing": True,
+                "story_id": story_id,
+            }
             self._enrich_story(
                 story_id,
                 title=title,
@@ -233,6 +248,23 @@ class StoryRegistry:
         self._recalculate_importance(story_id)
         story = self.data["stories"][story_id]
         matched_existing = bool(resolution.merge) or bool(relationship and relationship.attaches_to_story)
+        relationship_value = (
+            relationship.relationship.value
+            if relationship is not None
+            else (StoryRelationshipType.SAME_EVENT.value if resolution.merge else StoryRelationshipType.NEW_STORY.value)
+        )
+        selected_confidence = relationship.confidence if relationship and relationship.attaches_to_story else resolution.confidence
+        selected_reason = relationship.reason if relationship and relationship.attaches_to_story else resolution.reason
+        selected_trace = list(relationship.decision_trace if relationship and relationship.attaches_to_story else resolution.decision_trace)
+        self.last_decision = {
+            "event_key": event_key,
+            "relationship": relationship_value,
+            "confidence": round(selected_confidence, 6),
+            "reason": selected_reason,
+            "decision_trace": selected_trace,
+            "matched_existing": matched_existing,
+            "story_id": story_id,
+        }
         story["resolution_history"].append(
             {
                 "event_key": event_key,
@@ -249,9 +281,7 @@ class StoryRegistry:
                 "resolver_version": "2.1",
                 "matched_existing": matched_existing,
                 "relationship": (
-                    relationship.relationship.value
-                    if relationship is not None
-                    else (StoryRelationshipType.SAME_EVENT.value if resolution.merge else StoryRelationshipType.NEW_STORY.value)
+                    relationship_value
                 ),
             }
         )
@@ -371,6 +401,9 @@ class StoryRegistry:
         story = self.data["stories"][canonical_id]
         importance = self._importance.score(story)
         story["importance"] = importance.to_dict()
+        proximity = classify_editorial_proximity(story)
+        story["editorial_proximity"] = proximity.to_dict()
+        story["editorial_priority"] = calculate_editorial_priority(importance.score, proximity.score)
         return importance
 
     def attach_event(
@@ -506,6 +539,7 @@ class StoryRegistry:
             ]
         stories.sort(
             key=lambda story: (
+                -int(story.get("editorial_priority", 0) or 0),
                 -StoryImportance.from_dict(story.get("importance")).score,
                 str(story.get("story_id", "")),
             )
