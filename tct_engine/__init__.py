@@ -61,6 +61,14 @@ from .editorial_engine import (
     EditorialEngineResult,
     EditorialStateError,
 )
+from .observability import (
+    ENGINE_NAME,
+    ENGINE_VERSION,
+    ENGINE_RELEASE,
+    OBSERVABILITY_SCHEMA_VERSION,
+    build_editorial_observability,
+    write_editorial_observability,
+)
 from .production_router import (
     ProductionInstruction,
     ProductionRoute,
@@ -105,10 +113,16 @@ __all__ = [
     "EditorialEngine",
     "EditorialEngineResult",
     "EditorialStateError",
+    "ENGINE_NAME",
+    "ENGINE_VERSION",
+    "ENGINE_RELEASE",
+    "OBSERVABILITY_SCHEMA_VERSION",
+    "build_editorial_observability",
+    "write_editorial_observability",
     "ProductionInstruction",
     "ProductionRoute",
     "route_editorial_result",
 ]
 
-__version__ = "1.2.0"
+__version__ = "1.5.0"
 from .local_relevance import LocalRelevance, classify_local_relevance
