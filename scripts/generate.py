@@ -5620,7 +5620,7 @@ def _story_base_id(item):
     return f"story-{re.sub(r'[^a-z0-9]+', '-', base).strip('-')[:55]}-{digest}"[:80]
 
 
-STORY_REGISTRY_SCHEMA = 7.0
+STORY_REGISTRY_SCHEMA = 7.1
 STORY_REGISTRY_FILENAME = "story-registry.json"
 
 
@@ -5643,7 +5643,7 @@ def _load_story_registry(out_dir):
 
 
 def _load_previous_story_membership(out_dir):
-    """Prefer the persistent registry, then fall back to the rebuildable snapshot."""
+    """Load authoritative prior membership plus metadata used for stable-ID selection."""
     data_dir = Path(out_dir) / "data"
     paths = [data_dir / STORY_REGISTRY_FILENAME, data_dir / "stories.json"]
     payload = {}
@@ -5657,34 +5657,101 @@ def _load_previous_story_membership(out_dir):
         if isinstance(candidate, dict) and isinstance(candidate.get("stories", []), list):
             payload = candidate
             break
-    by_slug, titles = {}, {}
+    by_slug, titles, metadata = {}, {}, {}
     for story in payload.get("stories", []):
         sid = story.get("story_id")
         if not sid:
             continue
         titles[sid] = story.get("title", "")
-        for article in story.get("articles", []):
+        articles = story.get("articles", []) or []
+        metadata[sid] = {
+            "created_at": story.get("created_at") or story.get("first_seen_at") or "",
+            "article_count": int(story.get("article_count", len(articles)) or len(articles)),
+            "registry_revision": int(story.get("registry_revision", 0) or 0),
+        }
+        for article in articles:
             slug = article.get("slug")
             if slug:
                 by_slug[slug] = sid
-    return by_slug, titles
+        for slug in story.get("historical_slugs", []) or []:
+            if slug:
+                by_slug.setdefault(slug, sid)
+    return by_slug, titles, metadata
+
+
+def _choose_stable_story_id(previous_ids, prior_metadata):
+    """Choose one permanent ID when a newly reconciled cluster contains old forks."""
+    ids = [sid for sid in previous_ids if sid]
+    if not ids:
+        return ""
+    counts = defaultdict(int)
+    for sid in ids:
+        counts[sid] += 1
+    def rank(sid):
+        meta = prior_metadata.get(sid, {})
+        created = meta.get("created_at") or "9999-12-31T23:59:59Z"
+        # Oldest ID wins, then the ID with the largest established membership.
+        return (created, -int(meta.get("article_count", 0) or 0), -counts[sid], sid)
+    return min(set(ids), key=rank)
+
+
+def _groups_should_reconcile(left, right):
+    """Conservatively merge two clusters that are demonstrably the same event."""
+    clean_left = [x for x in left if not x.get("record_integrity_warning")]
+    clean_right = [x for x in right if not x.get("record_integrity_warning")]
+    if not clean_left or not clean_right:
+        return False, 0
+    best = 0
+    for a in clean_left:
+        for b in clean_right:
+            if not _same_story_topic(a, b):
+                continue
+            confidence = _story_match_confidence(a, b)
+            best = max(best, confidence)
+            known_a = _known_event_key(_story_text(a))
+            known_b = _known_event_key(_story_text(b))
+            if known_a and known_a == known_b and confidence >= STORY_CLUSTERING_CONFIDENCE:
+                return True, confidence
+            if confidence >= AUTO_SUPPRESSION_CONFIDENCE:
+                return True, confidence
+    return False, best
+
+
+def _reconcile_topic_groups(topic_groups):
+    """Union obvious split clusters before assigning permanent story IDs."""
+    groups = [list(g) for g in topic_groups]
+    changed = True
+    while changed:
+        changed = False
+        for i in range(len(groups)):
+            if changed:
+                break
+            for j in range(i + 1, len(groups)):
+                merge, _ = _groups_should_reconcile(groups[i], groups[j])
+                if merge:
+                    groups[i].extend(groups[j])
+                    del groups[j]
+                    changed = True
+                    break
+    return groups
 
 
 def _merge_persistent_story_registry(previous_payload, computed_stories, run_id):
-    """Preserve stable identity and history while treating the archive as immutable input.
-
-    This never rewrites archive.json, article files, slugs, redirects, or public metadata.
-    The registry is editorial memory only and can be rebuilt from the archive at any time.
-    """
+    """Persist authoritative story identity, revisions, aliases, and confidence history."""
     previous_by_id = {
         s.get("story_id"): s for s in previous_payload.get("stories", [])
         if isinstance(s, dict) and s.get("story_id")
     }
     merged = []
     article_to_story = {}
+    active_ids = set()
+    retired_id_map = dict(previous_payload.get("retired_story_ids", {}) or {})
+
     for story in computed_stories:
         current = dict(story)
-        prior = previous_by_id.get(current.get("story_id"), {})
+        sid = current.get("story_id")
+        active_ids.add(sid)
+        prior = previous_by_id.get(sid, {})
         current["created_at"] = prior.get("created_at") or prior.get("first_seen_at") or run_id
         current["first_seen_at"] = prior.get("first_seen_at") or current["created_at"]
         current["last_seen_at"] = run_id
@@ -5698,7 +5765,7 @@ def _merge_persistent_story_registry(previous_payload, computed_stories, run_id)
             value = str(value or "").strip()
             if value and value not in aliases:
                 aliases.append(value)
-        current["aliases"] = aliases[:50]
+        current["aliases"] = aliases[:100]
 
         historical_slugs = []
         for value in list(prior.get("historical_slugs", [])) + [
@@ -5708,24 +5775,74 @@ def _merge_persistent_story_registry(previous_payload, computed_stories, run_id)
             if value and value not in historical_slugs:
                 historical_slugs.append(value)
         current["historical_slugs"] = historical_slugs
+
+        retired = []
+        for old_id in current.pop("reconciled_story_ids", []) or []:
+            if old_id and old_id != sid:
+                retired_id_map[old_id] = sid
+                retired.append(old_id)
+        current["retired_story_ids"] = sorted(set(list(prior.get("retired_story_ids", [])) + retired))
+
+        revision_entry = {
+            "run_id": run_id,
+            "revision": current["registry_revision"],
+            "article_count": current.get("article_count", 0),
+            "latest_stage": current.get("latest_stage", ""),
+            "latest_date": current.get("latest_date", ""),
+            "canonical_slug": current.get("canonical_slug", ""),
+        }
+        revisions = list(prior.get("revision_history", []))
+        if not revisions or revisions[-1] != revision_entry:
+            revisions.append(revision_entry)
+        current["revision_history"] = revisions[-100:]
+
+        confidence_history = list(prior.get("confidence_history", []))
+        for article in current.get("articles", []):
+            entry = {
+                "run_id": run_id,
+                "slug": article.get("slug", ""),
+                "confidence": article.get("attachment_confidence", 100),
+                "matched_prior_slug": article.get("matched_prior_slug", ""),
+                "attachment_basis": article.get("attachment_basis", ""),
+            }
+            if entry["slug"] and not any(
+                x.get("run_id") == run_id and x.get("slug") == entry["slug"]
+                for x in confidence_history[-max(1, len(current.get("articles", []))) * 2:]
+            ):
+                confidence_history.append(entry)
+        current["confidence_history"] = confidence_history[-500:]
+
         current["archive_immutable"] = True
         current["public_urls_changed"] = False
         for slug in historical_slugs:
-            article_to_story[slug] = current.get("story_id")
+            article_to_story[slug] = sid
         merged.append(current)
+
+    # Preserve prior stories that temporarily disappear from computed input. They become
+    # inactive rather than being deleted, keeping the registry fail-safe and reversible.
+    for sid, prior in previous_by_id.items():
+        if sid in active_ids or sid in retired_id_map:
+            continue
+        preserved = dict(prior)
+        preserved["status"] = "inactive"
+        preserved["last_registry_check_at"] = run_id
+        merged.append(preserved)
+        for slug in preserved.get("historical_slugs", []) or []:
+            article_to_story.setdefault(slug, sid)
 
     return {
         "schema_version": STORY_REGISTRY_SCHEMA,
-        "engine": "story-centric-newsroom-v7.0",
-        "generated_at": run_id,
+        "engine": "story-centric-newsroom-v7.1",
+        "generated_at": previous_payload.get("generated_at") or run_id,
         "updated_at": run_id,
         "mode": EVENT_PIPELINE_MODE,
-        "registry_role": "persistent-editorial-memory",
+        "registry_role": "authoritative-persistent-editorial-memory",
         "rebuildable_from": ["archive.json", "custom_articles.json"],
         "archive_immutable": True,
         "public_urls_changed": False,
         "story_count": len(merged),
         "article_membership_count": len(article_to_story),
+        "retired_story_ids": retired_id_map,
         "article_to_story": article_to_story,
         "stories": merged,
     }
@@ -5783,7 +5900,7 @@ def _persist_story_decision_logs(data_dir, decisions, run_id):
         if not key or key in processed:
             continue
         record = dict(decision)
-        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v7.0"})
+        record.update({"run_id": run_id, "engine_version": "story-centric-newsroom-v7.1"})
         new_records.append(record)
         processed[key] = {"run_id": run_id, "decision": decision.get("decision", ""), "slug": decision.get("slug", "")}
     if new_records:
@@ -5903,8 +6020,8 @@ def prior_membership_id(item, archive_items):
 def build_story_shadow(archive, current_customs=None, live_categories=None, output_dir=None):
     """Build persistent story records with clustering separated from live action.
 
-    V7 keeps the same conservative guarded decisions while adding persistent story
-    identity in story-registry.json. The registry is internal, atomic, and rebuildable;
+    V7.1 keeps guarded decisions while making persistent story
+    identity authoritative in story-registry.json. The registry is internal, atomic, and rebuildable;
     it never edits published URLs, archive records, redirects, or article pages.
     """
     if EVENT_PIPELINE_MODE not in {"audit", "shadow", "guarded"}:
@@ -5928,10 +6045,23 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
         else:
             items.append(normalized)
 
+    out_root = Path(output_dir or OUTPUT_DIR)
+    prior_membership, prior_titles, prior_metadata = _load_previous_story_membership(out_root)
+    for item in items:
+        item["_prior_story_id"] = prior_membership.get(item.get("slug", ""), "")
+
     ordered = sorted(items, key=lambda x: (_audit_date_value(x) or datetime.min.date(), x.get("headline", "")))
     topic_groups = []
+    group_prior_ids = []
     clustering_links = []
     for item in ordered:
+        locked_id = item.get("_prior_story_id")
+        if locked_id:
+            locked_idx = next((idx for idx, ids in enumerate(group_prior_ids) if locked_id in ids), None)
+            if locked_idx is not None:
+                topic_groups[locked_idx].append(item)
+                group_prior_ids[locked_idx].add(locked_id)
+                continue
         eligible = []
         for idx, members in enumerate(topic_groups):
             matches = [(m, _story_match_confidence(item, m)) for m in members if _same_story_topic(item, m)]
@@ -5943,6 +6073,8 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
         if eligible:
             idx, confidence, _, best_member = max(eligible, key=lambda x: (x[1], x[2]))
             topic_groups[idx].append(item)
+            if locked_id:
+                group_prior_ids[idx].add(locked_id)
             clustering_links.append({
                 "slug": item.get("slug", ""), "headline": item.get("headline", ""),
                 "matched_slug": best_member.get("slug", ""), "matched_headline": best_member.get("headline", ""),
@@ -5952,24 +6084,29 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
             })
         else:
             topic_groups.append([item])
+            group_prior_ids.append({locked_id} if locked_id else set())
 
-    out_root = Path(output_dir or OUTPUT_DIR)
-    prior_membership, prior_titles = _load_previous_story_membership(out_root)
+    topic_groups = _reconcile_topic_groups(topic_groups)
     used_ids, stories, decisions = set(), [], []
 
     for members in topic_groups:
         previous_ids = [prior_membership.get(m.get("slug")) for m in members if prior_membership.get(m.get("slug"))]
-        story_id = max(set(previous_ids), key=previous_ids.count) if previous_ids else _story_base_id(max(members, key=_story_priority))
-        base_id, suffix = story_id, 2
-        while story_id in used_ids:
-            story_id = f"{base_id}-{suffix}"; suffix += 1
+        story_id = _choose_stable_story_id(previous_ids, prior_metadata) if previous_ids else _story_base_id(max(members, key=_story_priority))
+        if story_id in used_ids:
+            # A permanent ID may not fork. A genuinely separate group receives a fresh ID.
+            story_id = _story_base_id(max(members, key=_story_priority))
+            base_id, suffix = story_id, 2
+            while story_id in used_ids:
+                story_id = f"{base_id}-{suffix}"; suffix += 1
         used_ids.add(story_id)
+        reconciled_story_ids = sorted(set(previous_ids) - {story_id})
 
         stage_buckets = defaultdict(list)
         for m in members:
             stage_buckets[_story_stage(_story_text(m))].append(m)
 
         chronological = sorted(members, key=lambda x: (_audit_date_value(x) or datetime.min.date(), x.get("headline", "")))
+        attachment_meta = {}
         seen_stages = set()
         first_article = chronological[0]
         for article in chronological:
@@ -5990,6 +6127,11 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
             else:
                 decision, reason = "WOULD_PUBLISH_MAJOR_UPDATE", f"The story advanced to a new '{stage}' stage."
 
+            attachment_meta[article.get("slug", "")] = {
+                "attachment_confidence": confidence,
+                "matched_prior_slug": best_prior.get("slug", "") if best_prior else "",
+                "attachment_basis": "registry_membership" if article.get("_prior_story_id") else ("new_story" if not best_prior else "content_match"),
+            }
             decisions.append({
                 "story_id": story_id, "slug": article.get("slug", ""), "headline": article.get("headline", ""),
                 "date": article.get("date", ""), "category_key": article.get("category_key", ""),
@@ -6017,6 +6159,7 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
         latest = max(chronological, key=lambda x: (_audit_date_value(x) or datetime.min.date(), _story_priority(x)))
         stories.append({
             "story_id": story_id, "title": prior_titles.get(story_id) or story_canonical.get("headline", ""),
+            "reconciled_story_ids": reconciled_story_ids,
             "status": "active" if ((_audit_date_value(latest) and (datetime.utcnow().date() - _audit_date_value(latest)).days <= 30)) else "archived",
             "latest_stage": _story_stage(_story_text(latest)), "latest_date": latest.get("date", ""),
             "canonical_slug": story_canonical.get("slug", ""), "canonical_headline": story_canonical.get("headline", ""),
@@ -6030,6 +6173,9 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
                 "record_integrity_warning": bool(m.get("record_integrity_warning")),
                 "is_custom": bool(m.get("is_custom") or m.get("authoritative_custom")),
                 "origin": m.get("origin", "archive"), "story_stage": _story_stage(_story_text(m)),
+                "attachment_confidence": attachment_meta.get(m.get("slug", ""), {}).get("attachment_confidence", 100),
+                "matched_prior_slug": attachment_meta.get(m.get("slug", ""), {}).get("matched_prior_slug", ""),
+                "attachment_basis": attachment_meta.get(m.get("slug", ""), {}).get("attachment_basis", ""),
                 "entities": _story_entities(m)} for m in chronological],
         })
 
@@ -6043,13 +6189,13 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
     run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"
     previous_registry = _load_story_registry(out_root)
     persistent_registry = _merge_persistent_story_registry(previous_registry, stories, run_id)
-    registry = {"schema_version": 7.0, "mode": EVENT_PIPELINE_MODE, "generated_at": run_id,
-        "non_destructive": True, "engine": "story-centric-newsroom-v7.0", "article_count": len(items),
+    registry = {"schema_version": 7.1, "mode": EVENT_PIPELINE_MODE, "generated_at": run_id,
+        "non_destructive": True, "engine": "story-centric-newsroom-v7.1", "article_count": len(items),
         "story_count": len(stories), "clustering_threshold": STORY_CLUSTERING_CONFIDENCE,
         "live_action_threshold": AUTO_SUPPRESSION_CONFIDENCE, "registry_file": STORY_REGISTRY_FILENAME,
         "archive_immutable": True, "public_urls_changed": False, "stories": stories}
     shadow = {"schema_version": 6.2, "mode": EVENT_PIPELINE_MODE, "non_destructive": True,
-        "engine": "story-centric-newsroom-v7.0", "generated_at": run_id,
+        "engine": "story-centric-newsroom-v7.1", "generated_at": run_id,
         "summary": {"articles_analyzed": len(items), "stories_identified": len(stories),
             "would_publish_new_story": summary_counts["WOULD_PUBLISH_NEW_STORY"],
             "would_publish_major_update": summary_counts["WOULD_PUBLISH_MAJOR_UPDATE"],
@@ -6064,13 +6210,13 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
             "current_story_count": len(persistent_registry.get("stories", [])),
             "article_membership_count": persistent_registry.get("article_membership_count", 0)},
         "clustering_links": clustering_links, "decisions": decisions,
-        "notice": "V7.0 adds a persistent, rebuildable story registry without changing published URLs, archive records, or live suppression thresholds. The archive remains immutable; the registry preserves stable story identities and editorial memory across runs."}
+        "notice": "V7.1 makes the persistent registry authoritative for story identity, reconciles duplicate story IDs conservatively, and records revision and attachment-confidence history without changing public URLs or archive records."}
     _atomic_write_json(data_dir / STORY_REGISTRY_FILENAME, persistent_registry)
     _atomic_write_json(data_dir / "stories.json", registry)
     _atomic_write_json(data_dir / "story-shadow-log.json", shadow)
     appended = _persist_story_decision_logs(data_dir, decisions, run_id)
     (data_dir / "event-audit.json").write_text(json.dumps(shadow, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"  Story-centric newsroom v7.0: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
+    print(f"  Story-centric newsroom v7.1: {len(items)} articles -> {len(stories)} persistent stories; {appended} new history records")
     print(f"  Group-only: {summary_counts['GROUPED_NO_ACTION']}; eligible suppressions: {summary_counts['WOULD_SUPPRESS_DUPLICATE']}; major updates: {summary_counts['WOULD_PUBLISH_MAJOR_UPDATE']}")
     return shadow
 
