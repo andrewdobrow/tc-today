@@ -1,11 +1,11 @@
 {
   "engine": "TCT Editorial Engine",
-  "version": "1.8.4",
-  "release": "canonical-redirect-enforcement",
+  "version": "1.8.5",
+  "release": "publisher-title-identity",
   "python_validated": "3.13.5",
-  "observability_schema_version": 5,
+  "observability_schema_version": 6,
   "package_modules": 25,
-  "public_exports": 61,
+  "public_exports": 63,
   "validation": {
     "package_imports": {
       "status": "passed",
@@ -13,7 +13,7 @@
     },
     "package_tests": {
       "status": "passed",
-      "tests_passed": 149
+      "tests_passed": 152
     },
     "production_contract_tests": {
       "status": "excluded",
@@ -25,18 +25,27 @@
     },
     "production_registry_migration": {
       "status": "passed",
-      "active_stories_before": 419,
-      "active_stories_after": 316,
-      "quarantined_corrupt_records": 8,
-      "exact_duplicate_groups_merged": 85,
-      "duplicate_story_records_removed": 95,
-      "remaining_exact_duplicate_title_groups": 0
+      "active_stories_before": 348,
+      "active_stories_after": 307,
+      "quarantined_corrupt_records_this_run": 0,
+      "quarantined_records_retained": 8,
+      "publisher_title_duplicate_groups_merged": 33,
+      "duplicate_story_records_removed": 41,
+      "remaining_exact_duplicate_title_groups": 0,
+      "remaining_publisher_title_duplicate_groups": 0
     },
     "publisher_redirect_regression": {
       "status": "passed",
       "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
       "legacy_sources_enforced": 3,
       "stale_target_replacement_tested": true
+    },
+    "publisher_title_identity": {
+      "status": "passed",
+      "publisher_suffix_variants_supported": true,
+      "ordinary_dash_subtitles_preserved": true,
+      "direct_source_canonical_priority_preserved": true,
+      "production_registry_groups_resolved": 33
     }
   },
   "files": [
@@ -52,8 +61,8 @@
     },
     {
       "path": "tct_engine/__init__.py",
-      "sha256": "674cd956e369571537f00d665fdfa804cf684ba421f8af7dc0e97a69cb6e372a",
-      "size_bytes": 4001
+      "sha256": "a1b785d05db8f7a8205b92fefa8442559d403d4c03e169bbe1e4a2fe847e2ced",
+      "size_bytes": 4121
     },
     {
       "path": "tct_engine/canonical_story.py",
@@ -122,8 +131,8 @@
     },
     {
       "path": "tct_engine/observability.py",
-      "sha256": "6343090649ad9db8c908a23fbdd3688d2da595f405d640b7f20db080ef09a7dc",
-      "size_bytes": 12104
+      "sha256": "c8107e91d8876e51d7408d30e23b85cecc9bf976dfd91a0c1b407f1b34b233d5",
+      "size_bytes": 12098
     },
     {
       "path": "tct_engine/production_router.py",
@@ -132,8 +141,8 @@
     },
     {
       "path": "tct_engine/registry_repair.py",
-      "sha256": "6a019103658f5adfcc06db0dd098ae875c8e42231dab4a5776c562e7c2a568eb",
-      "size_bytes": 14457
+      "sha256": "d972b9e128b2f895af821a96e00986fee4e6e97b5e2b425d287647c07bca7aeb",
+      "size_bytes": 17732
     },
     {
       "path": "tct_engine/rss_adapter.py",
@@ -162,8 +171,8 @@
     },
     {
       "path": "tct_engine/story_registry.py",
-      "sha256": "3c3a22ae7b950527b29c55525ebe16a603f905034d2994e23d1b7c39127815c0",
-      "size_bytes": 30295
+      "sha256": "1abd5e64350eb8cb14a50a7b4c3ffa26960602a56613794dfe8ab683ff81456c",
+      "size_bytes": 30343
     },
     {
       "path": "tct_engine/story_relationship.py",
@@ -262,8 +271,8 @@
     },
     {
       "path": "tests/test_registry_repair.py",
-      "sha256": "54565b52bd7890ebf2e71959dab55aa26efb967340b817b38ccead44c1153511",
-      "size_bytes": 8201
+      "sha256": "572fd393926408471395746ef33ec9ebbc116bc96c62bff616a5d35f337e6e9e",
+      "size_bytes": 11071
     },
     {
       "path": "tests/test_resolver_v2.py",
