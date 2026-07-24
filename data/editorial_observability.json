@@ -1,32 +1,32 @@
 {
-  "schema_version": 6,
+  "schema_version": 7,
   "engine": {
     "name": "tct-editorial-engine",
-    "version": "1.8.5",
-    "release": "publisher-title-identity",
-    "resolver_version": "2.2",
+    "version": "1.8.6",
+    "release": "incident-identity-consolidation",
+    "resolver_version": "2.3",
     "relationship_engine_version": "1.2"
   },
-  "generated_at": "2026-07-24T05:13:24Z",
+  "generated_at": "2026-07-24T06:01:40Z",
   "mode": "observe_only",
   "publication_behavior_changed": false,
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 170,
+    "candidates_processed": 172,
     "routes": {
-      "generate_new": 3,
-      "skip": 167
+      "generate_new": 6,
+      "skip": 166
     },
     "eligibility": {
-      "listing": 6,
-      "low_value": 138,
+      "listing": 5,
+      "low_value": 141,
       "publishable": 26
     },
     "source_classes": {
-      "aggregator": 144,
+      "aggregator": 146,
       "local_news": 26
     },
-    "rejected_count": 6,
+    "rejected_count": 5,
     "rejected_examples": [
       {
         "headline": "1051 S 37th St Unit 1051, Fort Pierce, FL 34947 - Realtor.com",
@@ -72,24 +72,27 @@
           "Headline matches listing pattern 'realtor.com'"
         ],
         "source_class": "aggregator"
-      },
-      {
-        "headline": "300 Riomar Dr, Port Saint Lucie, FL 34952 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNb0swelJ3LXUwRFBvcFZBTFNPdVkyQ1pWODQtTTBoSkhpZS13Q3U1NVBGb24wZThrckM3OWZqazlTcGUtWEE1NTF4QnlhMlFyX1NKSzFqSnYzMHB2ckpvYzlGV09LRDVadXpYbzdLb2lfZ2NNeTN3RkFoVTdFVVhybzdETERLdDNfb3o4aXEzQnBLQ0k?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
       }
     ]
   },
   "relationships": {
     "counts": {
-      "new_story": 9,
+      "new_story": 11,
       "same_event": 161
     },
     "examples": [
+      {
+        "story_id": "story_000455",
+        "title": "Okaloosa County School District Reminds Families to Take Advantage of Florida's Back-to-School Sales Tax Holiday - Okaloosa County School District",
+        "event_key": "unknown-event-60e509900d",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_000434",
         "title": "Palm Beach County District 6 commissioner candidates debate as voters weigh in on top concerns",
@@ -350,23 +353,22 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_000249",
-        "title": "Scientists warn Florida reefs could 'disappear' after restoration money dries up",
-        "event_key": "unknown-event-d196f4bdf3",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ],
     "decision_trace_examples": [
+      {
+        "story_id": "story_000455",
+        "title": "Okaloosa County School District Reminds Families to Take Advantage of Florida's Back-to-School Sales Tax Holiday - Okaloosa County School District",
+        "event_key": "unknown-event-60e509900d",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_000434",
         "title": "Palm Beach County District 6 commissioner candidates debate as voters weigh in on top concerns",
@@ -651,185 +653,79 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_000250",
-        "title": "When is tax-free week in Florida? Tax-free actually lasts for 1 month - St. Augustine Record",
-        "event_key": "unknown-event-70307b796e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ]
   },
   "local_relevance": {
     "scopes": {
-      "florida": 69,
-      "treasure_coast_local": 67,
-      "treasure_coast_region": 32,
-      "unknown": 142
+      "florida": 67,
+      "treasure_coast_local": 64,
+      "treasure_coast_region": 29,
+      "unknown": 145
     },
-    "average_score": 61.92
+    "average_score": 60.93
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 69,
-      "treasure_coast_local": 67,
-      "treasure_coast_region": 32,
-      "unknown": 142
+      "florida": 67,
+      "treasure_coast_local": 64,
+      "treasure_coast_region": 29,
+      "unknown": 145
     },
-    "average_priority": 7.18
+    "average_priority": 6.7
   },
   "story_lifecycle": {
     "counts": {
       "active": 194,
-      "developing": 116
+      "developing": 111
     }
   },
   "registry_health": {
-    "repair_version": 2,
+    "repair_version": 3,
     "changed": true,
     "status": "repaired",
-    "active_stories_before": 348,
-    "active_stories_after": 307,
+    "active_stories_before": 310,
+    "active_stories_after": 299,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
-    "duplicate_groups_merged": 33,
-    "duplicate_story_records_removed": 41,
+    "duplicate_groups_merged": 1,
+    "duplicate_story_records_removed": 11,
     "merged_story_ids": {
       "story_000003": [
-        "story_000121"
-      ],
-      "story_000016": [
-        "story_000032",
-        "story_000206"
-      ],
-      "story_000019": [
-        "story_000137",
-        "story_000279"
-      ],
-      "story_000021": [
-        "story_000120"
-      ],
-      "story_000033": [
-        "story_000037"
-      ],
-      "story_000040": [
-        "story_000128"
-      ],
-      "story_000047": [
-        "story_000145"
-      ],
-      "story_000049": [
-        "story_000427"
-      ],
-      "story_000089": [
-        "story_000442"
-      ],
-      "story_000093": [
-        "story_000437"
-      ],
-      "story_000276": [
-        "story_000153"
-      ],
-      "story_000170": [
-        "story_000188"
-      ],
-      "story_000197": [
-        "story_000226"
-      ],
-      "story_000200": [
-        "story_000228"
-      ],
-      "story_000236": [
-        "story_000402"
-      ],
-      "story_000238": [
-        "story_000269",
-        "story_000388"
-      ],
-      "story_000239": [
-        "story_000403"
-      ],
-      "story_000240": [
-        "story_000389"
-      ],
-      "story_000242": [
-        "story_000243",
-        "story_000261",
-        "story_000407",
-        "story_000435"
-      ],
-      "story_000244": [
-        "story_000397"
-      ],
-      "story_000245": [
-        "story_000404"
-      ],
-      "story_000250": [
-        "story_000419"
-      ],
-      "story_000251": [
-        "story_000260"
-      ],
-      "story_000253": [
-        "story_000350",
-        "story_000351"
-      ],
-      "story_000257": [
-        "story_000377"
-      ],
-      "story_000258": [
-        "story_000259"
-      ],
-      "story_000262": [
-        "story_000408"
-      ],
-      "story_000267": [
-        "story_000370"
-      ],
-      "story_000357": [
-        "story_000358",
-        "story_000450"
-      ],
-      "story_000382": [
-        "story_000399"
-      ],
-      "story_000384": [
-        "story_000400"
-      ],
-      "story_000433": [
-        "story_000391"
-      ],
-      "story_000423": [
-        "story_000424"
+        "story_000007",
+        "story_000009",
+        "story_000016",
+        "story_000025",
+        "story_000040",
+        "story_000041",
+        "story_000122",
+        "story_000129",
+        "story_000130",
+        "story_000131",
+        "story_000429"
       ]
     },
     "remaining_exact_duplicate_title_groups": 0,
-    "publisher_title_duplicate_groups_resolved": 33,
+    "publisher_title_duplicate_groups_resolved": 0,
     "remaining_publisher_title_duplicate_groups": 0,
-    "generated_at": "2026-07-24T04:56:29Z",
+    "incident_identity_groups_resolved": 1,
+    "incident_story_records_removed": 11,
+    "remaining_incident_identity_groups": 0,
+    "generated_at": "2026-07-24T05:42:49Z",
     "quarantined_story_records_retained": 8,
-    "active_story_count": 310
+    "active_story_count": 305
   },
   "stories": {
-    "total": 310,
+    "total": 305,
     "importance_levels": {
       "breaking": 0,
       "high": 4,
-      "normal": 65,
+      "normal": 60,
       "low": 241,
       "archived": 0
     },
-    "average_importance": 11.68,
+    "average_importance": 11.33,
     "top": [
       {
         "story_id": "story_000049",
@@ -844,7 +740,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 1.47
+          "age_hours": 2.24
         },
         "level": "high",
         "importance_reasons": [
@@ -887,7 +783,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 1.47,
+          "hours_since_update": 2.24,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -905,7 +801,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 21.29
+          "age_hours": 22.06
         },
         "level": "high",
         "importance_reasons": [
@@ -948,7 +844,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T07:40:14.261666+00:00",
-          "hours_since_update": 21.29,
+          "hours_since_update": 22.06,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -966,7 +862,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 22.61
+          "age_hours": 23.39
         },
         "level": "high",
         "importance_reasons": [
@@ -1004,14 +900,14 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 22.61,
+          "hours_since_update": 23.39,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
         "story_id": "story_000003",
-        "title": "Prayers answered: Owners reunited with pets rescued from alleged hoarding case in Martin County",
+        "title": "Rescued animals recovering, reuniting with owners after Martin County woman arrested in hoarding case",
         "score": 35,
         "editorial_priority": 40,
         "editorial_score": 40,
@@ -1022,7 +918,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 1.51
+          "age_hours": 2.3
         },
         "level": "normal",
         "importance_reasons": [
@@ -1044,6 +940,8 @@
             "Martin County"
           ],
           "places": [
+            "Stuart",
+            "Palm City",
             "Hobe Sound"
           ]
         },
@@ -1052,22 +950,22 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 3,
-        "timeline_entries": 3,
-        "relationship_decisions": 2,
-        "canonical_source_candidates": 3,
+        "event_count": 23,
+        "timeline_entries": 22,
+        "relationship_decisions": 19,
+        "canonical_source_candidates": 30,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 1.51,
-          "event_count": 3,
-          "timeline_entries": 3
+          "hours_since_update": 2.3,
+          "event_count": 23,
+          "timeline_entries": 22
         }
       },
       {
-        "story_id": "story_000014",
-        "title": "Martin County Fire Rescue could lose $16.5M if property tax reform passes in November",
+        "story_id": "story_000236",
+        "title": "New depositions reveal why a St. Lucie County firefighter turned in alleged hazing videos",
         "score": 35,
         "editorial_priority": 40,
         "editorial_score": 40,
@@ -1078,7 +976,61 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 5.75
+          "age_hours": 4.12
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 2,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-07-24T01:40:23.579334+00:00",
+          "hours_since_update": 4.12,
+          "event_count": 2,
+          "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_000014",
+        "title": "Martin County Fire Rescue could lose $16.5M if property tax reform passes in November",
+        "score": 35,
+        "editorial_priority": 38,
+        "editorial_score": 38,
+        "score_breakdown": {
+          "score": 38,
+          "importance": 35,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 6.54
         },
         "level": "normal",
         "importance_reasons": [
@@ -1114,7 +1066,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 5.75,
+          "hours_since_update": 6.54,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1123,16 +1075,16 @@
         "story_id": "story_000020",
         "title": "Fired St. Lucie County firefighters speak to WPTV for first time, call bug zapper incident 'joking around'",
         "score": 35,
-        "editorial_priority": 40,
-        "editorial_score": 40,
+        "editorial_priority": 38,
+        "editorial_score": 38,
         "score_breakdown": {
-          "score": 40,
+          "score": 38,
           "importance": 35,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 5.68
+          "age_hours": 6.46
         },
         "level": "normal",
         "importance_reasons": [
@@ -1168,110 +1120,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 5.68,
+          "hours_since_update": 6.46,
           "event_count": 2,
           "timeline_entries": 2
-        }
-      },
-      {
-        "story_id": "story_000236",
-        "title": "New depositions reveal why a St. Lucie County firefighter turned in alleged hazing videos",
-        "score": 35,
-        "editorial_priority": 40,
-        "editorial_score": 40,
-        "score_breakdown": {
-          "score": 40,
-          "importance": 35,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 3.33
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 2,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 3.33,
-          "event_count": 2,
-          "timeline_entries": 2
-        }
-      },
-      {
-        "story_id": "story_000142",
-        "title": "Florida family sues Urban Air after 6-year-old girl's death - Treasure Coast News",
-        "score": 40,
-        "editorial_priority": 37,
-        "editorial_score": 37,
-        "score_breakdown": {
-          "score": 37,
-          "importance": 40,
-          "proximity_multiplier": 0.95,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 5.66
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_region",
-          "score": 95,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 95,
-          "scope": "treasure_coast_region",
-          "reason": "Directly affects the Treasure Coast region"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 5.66,
-          "event_count": 1,
-          "timeline_entries": 1
         }
       },
       {
@@ -1287,7 +1138,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 3.38
+          "age_hours": 4.11
         },
         "level": "normal",
         "importance_reasons": [
@@ -1316,7 +1167,54 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 3.38,
+          "hours_since_update": 4.11,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000142",
+        "title": "Florida family sues Urban Air after 6-year-old girl's death - Treasure Coast News",
+        "score": 40,
+        "editorial_priority": 36,
+        "editorial_score": 36,
+        "score_breakdown": {
+          "score": 36,
+          "importance": 40,
+          "proximity_multiplier": 0.95,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 6.43
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_region",
+          "score": 95,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 95,
+          "scope": "treasure_coast_region",
+          "reason": "Directly affects the Treasure Coast region"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-07-23T23:17:09.519046+00:00",
+          "hours_since_update": 6.43,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1325,16 +1223,16 @@
         "story_id": "story_000386",
         "title": "National Weather Service confirms tornado in Sebastian, Florida - WPBF",
         "score": 35,
-        "editorial_priority": 34,
-        "editorial_score": 34,
+        "editorial_priority": 33,
+        "editorial_score": 33,
         "score_breakdown": {
-          "score": 34,
+          "score": 33,
           "importance": 35,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 5.7
+          "age_hours": 6.47
         },
         "level": "normal",
         "importance_reasons": [
@@ -1367,166 +1265,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 5.7,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000009",
-        "title": "Rescued cats, dogs from Foxwoods home now in hands of local Humane Society - Hometown News Treasure Coast",
-        "score": 35,
-        "editorial_priority": 33,
-        "editorial_score": 33,
-        "score_breakdown": {
-          "score": 33,
-          "importance": 35,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.0,
-          "source_trust": 50,
-          "age_hours": 21.3
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": [
-            "Stuart"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 3,
-        "timeline_entries": 2,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 10,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-23T07:40:14.261666+00:00",
-          "hours_since_update": 21.3,
-          "event_count": 3,
-          "timeline_entries": 2
-        }
-      },
-      {
-        "story_id": "story_000050",
-        "title": "Police investigate Fort Pierce restaurant shooting; no one hurt",
-        "score": 25,
-        "editorial_priority": 28,
-        "editorial_score": 28,
-        "score_breakdown": {
-          "score": 28,
-          "importance": 25,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 5.68
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 5.68,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000140",
-        "title": "Family of 6-year-old killed in go-karting accident at Florida Urban Air files wrongful death lawsuit - SNN News",
-        "score": 50,
-        "editorial_priority": 27,
-        "editorial_score": 27,
-        "score_breakdown": {
-          "score": 27,
-          "importance": 50,
-          "proximity_multiplier": 0.55,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 5.68
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "court_action",
-            "label": "Court action",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "florida",
-          "score": 65,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 55,
-          "scope": "florida",
-          "reason": "Florida-wide coverage with indirect local relevance"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 5.68,
+          "hours_since_update": 6.47,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1544,7 +1283,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 3.43
+          "age_hours": 4.23
         },
         "level": "normal",
         "importance_reasons": [
@@ -1578,58 +1317,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 3.43,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000007",
-        "title": "Rescued animals recovering, reuniting with owners after Martin County woman arrested in hoarding case",
-        "score": 25,
-        "editorial_priority": 27,
-        "editorial_score": 27,
-        "score_breakdown": {
-          "score": 27,
-          "importance": 25,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 22.61
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": [
-            "Palm City"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 22.61,
+          "hours_since_update": 4.23,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1647,7 +1335,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 22.61
+          "age_hours": 23.38
         },
         "level": "normal",
         "importance_reasons": [
@@ -1680,25 +1368,76 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 22.61,
+          "hours_since_update": 23.38,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
-        "story_id": "story_000107",
-        "title": "Mexican man killed after ICE encounter in Florida was on vacation, officials say",
-        "score": 40,
-        "editorial_priority": 25,
-        "editorial_score": 25,
+        "story_id": "story_000050",
+        "title": "Police investigate Fort Pierce restaurant shooting; no one hurt",
+        "score": 25,
+        "editorial_priority": 27,
+        "editorial_score": 27,
         "score_breakdown": {
-          "score": 25,
-          "importance": 40,
-          "proximity_multiplier": 0.55,
-          "freshness_multiplier": 1.0,
+          "score": 27,
+          "importance": 25,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 5.68
+          "age_hours": 6.45
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-07-23T23:17:09.519046+00:00",
+          "hours_since_update": 6.45,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000140",
+        "title": "Family of 6-year-old killed in go-karting accident at Florida Urban Air files wrongful death lawsuit - SNN News",
+        "score": 50,
+        "editorial_priority": 26,
+        "editorial_score": 26,
+        "score_breakdown": {
+          "score": 26,
+          "importance": 50,
+          "proximity_multiplier": 0.55,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 6.46
         },
         "level": "normal",
         "importance_reasons": [
@@ -1706,6 +1445,11 @@
             "code": "fatality",
             "label": "Fatality reported",
             "points": 40
+          },
+          {
+            "code": "court_action",
+            "label": "Court action",
+            "points": 10
           }
         ],
         "local_relevance": {
@@ -1727,14 +1471,14 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 5.68,
+          "hours_since_update": 6.46,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
-        "story_id": "story_000125",
-        "title": "Florida tax plan could cut 30% of Martin County firefighters - The Palm Beach Post",
+        "story_id": "story_000430",
+        "title": "'Taxpayers don't need this': St. Lucie County Fire District veteran supports fired firefighters - WPBF",
         "score": 25,
         "editorial_priority": 25,
         "editorial_score": 25,
@@ -1745,105 +1489,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 5.69
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 5.69,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000127",
-        "title": "Tax amendment could cost Martin County 116 firefighters - The Center Square",
-        "score": 25,
-        "editorial_priority": 25,
-        "editorial_score": 25,
-        "score_breakdown": {
-          "score": 25,
-          "importance": 25,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 5.68
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 5.68,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000138",
-        "title": "Fired St. Lucie County firefighters speak to WFLX for first time, call bug zapper incident ‘joking around’ - WFLX",
-        "score": 25,
-        "editorial_priority": 25,
-        "editorial_score": 25,
-        "score_breakdown": {
-          "score": 25,
-          "importance": 25,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 5.68
+          "age_hours": 2.24
         },
         "level": "normal",
         "importance_reasons": [
@@ -1873,8 +1519,261 @@
         "lifecycle": {
           "state": "active",
           "reason": "Single-event story is current",
+          "last_updated": "2026-07-24T03:30:12.419544+00:00",
+          "hours_since_update": 2.24,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000200",
+        "title": "Truck driver in deadly Florida Turnpike crash due in St. Lucie Co. court - cw34.com",
+        "score": 45,
+        "editorial_priority": 24,
+        "editorial_score": 24,
+        "score_breakdown": {
+          "score": 24,
+          "importance": 45,
+          "proximity_multiplier": 0.55,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 4.23
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "court_action",
+            "label": "Court action",
+            "points": 10
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "florida",
+          "score": 65,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 55,
+          "scope": "florida",
+          "reason": "Florida-wide coverage with indirect local relevance"
+        },
+        "event_count": 5,
+        "timeline_entries": 5,
+        "relationship_decisions": 5,
+        "canonical_source_candidates": 5,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-07-24T01:40:23.579334+00:00",
+          "hours_since_update": 4.23,
+          "event_count": 5,
+          "timeline_entries": 5
+        }
+      },
+      {
+        "story_id": "story_000107",
+        "title": "Mexican man killed after ICE encounter in Florida was on vacation, officials say",
+        "score": 40,
+        "editorial_priority": 24,
+        "editorial_score": 24,
+        "score_breakdown": {
+          "score": 24,
+          "importance": 40,
+          "proximity_multiplier": 0.55,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 6.45
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          }
+        ],
+        "local_relevance": {
+          "scope": "florida",
+          "score": 65,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 55,
+          "scope": "florida",
+          "reason": "Florida-wide coverage with indirect local relevance"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 5.68,
+          "hours_since_update": 6.45,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000010",
+        "title": "Video shows Port St. Lucie home catch fire during storm - WPBF",
+        "score": 25,
+        "editorial_priority": 24,
+        "editorial_score": 24,
+        "score_breakdown": {
+          "score": 24,
+          "importance": 25,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.0,
+          "source_trust": 50,
+          "age_hours": 23.55
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Port St. Lucie"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 3,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-07-23T06:21:14.232627+00:00",
+          "hours_since_update": 23.55,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000125",
+        "title": "Florida tax plan could cut 30% of Martin County firefighters - The Palm Beach Post",
+        "score": 25,
+        "editorial_priority": 23,
+        "editorial_score": 23,
+        "score_breakdown": {
+          "score": 23,
+          "importance": 25,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 6.46
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-07-23T23:17:09.519046+00:00",
+          "hours_since_update": 6.46,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000127",
+        "title": "Tax amendment could cost Martin County 116 firefighters - The Center Square",
+        "score": 25,
+        "editorial_priority": 23,
+        "editorial_score": 23,
+        "score_breakdown": {
+          "score": 23,
+          "importance": 25,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 6.46
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-07-23T23:17:09.519046+00:00",
+          "hours_since_update": 6.46,
           "event_count": 1,
           "timeline_entries": 1
         }
