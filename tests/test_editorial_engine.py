@@ -195,6 +195,9 @@ def test_later_external_duplicate_does_not_replace_custom_story():
     assert result.action is EditorialAction.IGNORE
     assert result.canonical_article_id == "tct-custom-cat-story"
     assert result.is_custom is False
+    assert result.canonical_is_custom is True
+    assert result.canonical_title == "Stuart woman arrested after deputies rescue 80 cats"
+    assert result.canonical_source == "Treasure Coast Today"
 
 
 def test_external_story_with_new_fact_updates_custom_story(tmp_path):

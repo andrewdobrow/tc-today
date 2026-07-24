@@ -71,3 +71,17 @@ def test_observability_write_is_atomic(tmp_path: Path):
     assert output.exists()
     assert not output.with_suffix(".json.tmp").exists()
     assert report["status"] == "healthy"
+
+
+def test_observability_reports_controlled_activation():
+    activation = {
+        "effective_mode": "enforce",
+        "publication_behavior_changed": True,
+        "applied_action_count": 1,
+    }
+    report = build_editorial_observability(
+        FakeEngine(), [], mode="enforce", activation=activation
+    )
+    assert report["mode"] == "enforce"
+    assert report["publication_behavior_changed"] is True
+    assert report["activation"]["applied_action_count"] == 1
