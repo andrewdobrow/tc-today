@@ -51,6 +51,11 @@ jobs:
         run: python scripts/generate.py
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Repository variables provide an immediate, no-code rollout control.
+          # Missing or invalid values always fall back to shadow mode.
+          TCT_ENGINE_MODE: ${{ vars.TCT_ENGINE_MODE || 'shadow' }}
+          TCT_ENGINE_MAX_ACTIONS: ${{ vars.TCT_ENGINE_MAX_ACTIONS || '8' }}
+          TCT_ENGINE_KILL_SWITCH: ${{ vars.TCT_ENGINE_KILL_SWITCH || 'false' }}
 
       - name: Commit and push
         id: push
