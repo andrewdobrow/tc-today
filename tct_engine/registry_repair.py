@@ -13,8 +13,9 @@ import re
 from typing import Any, Iterable, Mapping, MutableMapping
 
 from .incident_identity import build_story_incident_signature, compare_incident_signatures
+from .source_identity import story_source_identity_urls
 
-REPAIR_VERSION = 3
+REPAIR_VERSION = 4
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
@@ -271,6 +272,9 @@ class RegistryRepairReport:
     remaining_exact_duplicate_title_groups: int
     publisher_title_duplicate_groups_resolved: int
     remaining_publisher_title_duplicate_groups: int
+    source_identity_groups_resolved: int
+    source_story_records_removed: int
+    remaining_source_identity_groups: int
     incident_identity_groups_resolved: int
     incident_story_records_removed: int
     remaining_incident_identity_groups: int
@@ -296,6 +300,9 @@ class RegistryRepairReport:
             "remaining_exact_duplicate_title_groups": self.remaining_exact_duplicate_title_groups,
             "publisher_title_duplicate_groups_resolved": self.publisher_title_duplicate_groups_resolved,
             "remaining_publisher_title_duplicate_groups": self.remaining_publisher_title_duplicate_groups,
+            "source_identity_groups_resolved": self.source_identity_groups_resolved,
+            "source_story_records_removed": self.source_story_records_removed,
+            "remaining_source_identity_groups": self.remaining_source_identity_groups,
             "incident_identity_groups_resolved": self.incident_identity_groups_resolved,
             "incident_story_records_removed": self.incident_story_records_removed,
             "remaining_incident_identity_groups": self.remaining_incident_identity_groups,
@@ -374,8 +381,44 @@ def _incident_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[s
     return [component for component in components.values() if len(component) > 1]
 
 
+def _source_identity_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[str]]:
+    """Return components sharing an exact safe article identity URL."""
+
+    parent = {story_id: story_id for story_id in stories}
+
+    def find(story_id: str) -> str:
+        while parent[story_id] != story_id:
+            parent[story_id] = parent[parent[story_id]]
+            story_id = parent[story_id]
+        return story_id
+
+    def union(left: str, right: str) -> None:
+        a, b = find(left), find(right)
+        if a != b:
+            parent[b] = a
+
+    source_index: dict[str, list[str]] = {}
+    for story_id, story in stories.items():
+        for source_url in story_source_identity_urls(story):
+            source_index.setdefault(source_url, []).append(story_id)
+
+    for group in source_index.values():
+        unique = sorted(set(group))
+        for story_id in unique[1:]:
+            union(unique[0], story_id)
+
+    components: dict[str, set[str]] = {}
+    for story_id in stories:
+        components.setdefault(find(story_id), set()).add(story_id)
+    return [component for component in components.values() if len(component) > 1]
+
+
 def _count_incident_identity_groups(stories: Mapping[str, Mapping[str, Any]]) -> int:
     return len(_incident_components(stories))
+
+
+def _count_source_identity_groups(stories: Mapping[str, Mapping[str, Any]]) -> int:
+    return len(_source_identity_components(stories))
 
 
 def _count_exact_duplicate_title_groups(stories: Mapping[str, Mapping[str, Any]]) -> int:
@@ -436,6 +479,23 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
             del stories[secondary_id]
         merged_story_ids.setdefault(primary_id, []).extend(secondary_ids)
 
+    # Exact article URLs are stronger identity evidence than evolving headline
+    # text. Feed/search URLs are filtered by source_identity.py and cannot join
+    # unrelated stories.
+    source_groups_before = _count_source_identity_groups(stories)
+    source_components = _source_identity_components(stories)
+    source_removed = 0
+    for component in sorted(source_components, key=lambda group: min(_story_number(value) for value in group)):
+        primary_id = choose_primary_story_id(component, stories)
+        secondary_ids = sorted(component - {primary_id}, key=_story_number)
+        primary = stories[primary_id]
+        for secondary_id in secondary_ids:
+            merge_story_records(primary, stories[secondary_id])
+            aliases[secondary_id] = primary_id
+            del stories[secondary_id]
+            source_removed += 1
+        merged_story_ids.setdefault(primary_id, []).extend(secondary_ids)
+
     # Exact and publisher-attribution duplicates are resolved first.  The
     # incident layer then sees one record per literal headline identity and can
     # safely consolidate paraphrased coverage using independent evidence.
@@ -466,6 +526,7 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
     removed = sum(len(values) for values in merged_story_ids.values())
     remaining_duplicates = _count_exact_duplicate_title_groups(stories)
     remaining_publisher_duplicates = _count_publisher_title_duplicate_groups(stories)
+    remaining_source_groups = _count_source_identity_groups(stories)
     remaining_incident_groups = _count_incident_identity_groups(stories)
     report = RegistryRepairReport(
         repair_version=REPAIR_VERSION,
@@ -474,7 +535,9 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
         active_stories_after=len(stories),
         quarantined_story_ids=tuple(sorted(quarantine_reasons, key=_story_number)),
         quarantine_reasons=quarantine_reasons,
-        duplicate_groups_merged=len(exact_components) + len(incident_components),
+        duplicate_groups_merged=(
+            len(exact_components) + len(source_components) + len(incident_components)
+        ),
         duplicate_story_records_removed=removed,
         merged_story_ids={
             primary: tuple(dict.fromkeys(merged))
@@ -485,6 +548,11 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
             0, publisher_duplicate_groups_before - remaining_publisher_duplicates
         ),
         remaining_publisher_title_duplicate_groups=remaining_publisher_duplicates,
+        source_identity_groups_resolved=max(
+            0, source_groups_before - remaining_source_groups
+        ),
+        source_story_records_removed=source_removed,
+        remaining_source_identity_groups=remaining_source_groups,
         incident_identity_groups_resolved=max(
             0, incident_groups_before - remaining_incident_groups
         ),

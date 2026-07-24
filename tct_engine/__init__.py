@@ -62,6 +62,13 @@ from .incident_identity import (
     compare_story_incidents,
     find_matching_incident_story,
 )
+from .source_identity import (
+    SOURCE_IDENTITY_VERSION,
+    SourceIdentityMatch,
+    find_matching_source_story,
+    normalize_source_identity_url,
+    story_source_identity_urls,
+)
 from .rss_adapter import (
     RSSArticleAdapter,
     RSSArticleError,
@@ -150,6 +157,11 @@ __all__ = [
     "compare_incident_signatures",
     "compare_story_incidents",
     "find_matching_incident_story",
+    "SOURCE_IDENTITY_VERSION",
+    "SourceIdentityMatch",
+    "find_matching_source_story",
+    "normalize_source_identity_url",
+    "story_source_identity_urls",
     "RSSArticleAdapter",
     "RSSArticleError",
     "EditorialEngine",
@@ -183,4 +195,4 @@ __all__ = [
     "route_editorial_result",
 ]
 
-__version__ = "1.8.6"
+__version__ = "1.8.7"

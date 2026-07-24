@@ -26,6 +26,7 @@ from .editorial_proximity import (
     story_source_trust,
 )
 from .incident_identity import find_matching_incident_story
+from .source_identity import find_matching_source_story
 from .registry_repair import (
     choose_primary_story_id,
     is_sparse_event_key,
@@ -46,7 +47,7 @@ def _tokens(value: str) -> set[str]:
 
 
 class StoryRegistry:
-    SCHEMA_VERSION = 9
+    SCHEMA_VERSION = 10
 
     def __init__(self, filename: str | Path = "story-registry.json") -> None:
         self.path = Path(filename)
@@ -366,6 +367,95 @@ class StoryRegistry:
                 "event_key": event_key,
                 "relationship": StoryRelationshipType.SAME_EVENT.value,
                 "confidence": 1.0,
+                "reason": reason,
+                "decision_trace": trace,
+                "matched_existing": True,
+                "story_id": story_id,
+            }
+            self.save()
+            return story_id
+
+        source_match = find_matching_source_story(source, self.iter_stories())
+        if source_match.matched and source_match.story_id:
+            story_id = self._canonical_story_id(source_match.story_id)
+            matched_story = self.get_story(story_id)
+            relationship = self._relationships.classify(
+                event_key=event_key,
+                title=title,
+                facts=facts,
+                locations=locations,
+                agencies=agencies,
+                event_types=event_types,
+                entities=entities,
+                stories=(matched_story,) if matched_story is not None else (),
+            )
+            relationship_won = bool(
+                relationship.attaches_to_story
+                and relationship.story_id
+                and self._canonical_story_id(str(relationship.story_id)) == story_id
+            )
+            relationship_value = (
+                StoryRelationshipType.FOLLOW_UP.value
+                if relationship_won
+                else StoryRelationshipType.SAME_EVENT.value
+            )
+            confidence = (
+                max(source_match.confidence, relationship.confidence)
+                if relationship_won
+                else source_match.confidence
+            )
+            reason = (
+                relationship.reason
+                if relationship_won
+                else source_match.reason
+            )
+            trace = list(source_match.decision_trace)
+            if relationship_won:
+                trace.extend(relationship.decision_trace)
+
+            self.attach_event(story_id, event_key, save=False)
+            self._enrich_story(
+                story_id,
+                title=title,
+                facts=facts,
+                locations=locations,
+                agencies=agencies,
+                event_types=event_types,
+                entities=entities,
+                county=county,
+                source=source,
+                is_custom=is_custom,
+                source_class=source_class,
+                source_trust=source_trust,
+            )
+            self._recalculate_importance(story_id)
+            story = self.data["stories"][story_id]
+            story["resolution_history"].append(
+                {
+                    "event_key": event_key,
+                    "confidence": round(confidence, 6),
+                    "reason": reason,
+                    "decision_trace": trace,
+                    "resolver_version": "2.4",
+                    "matched_existing": True,
+                    "relationship": relationship_value,
+                }
+            )
+            if relationship_won:
+                story.setdefault("relationship_history", []).append(
+                    {
+                        "event_key": event_key,
+                        "relationship": relationship_value,
+                        "confidence": round(confidence, 6),
+                        "reason": reason,
+                        "decision_trace": trace,
+                        "relationship_engine_version": "1.2",
+                    }
+                )
+            self.last_decision = {
+                "event_key": event_key,
+                "relationship": relationship_value,
+                "confidence": round(confidence, 6),
                 "reason": reason,
                 "decision_trace": trace,
                 "matched_existing": True,
