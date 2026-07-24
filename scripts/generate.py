@@ -8615,15 +8615,21 @@ def validate_live_permalink_integrity(all_categories, top_cat=None, output_dir=N
     report = {
         "schema_version": 1,
         "engine_version": "1.9.2",
+        "status": "failed" if failures else "passed",
         "checked_hero_placements": checked,
         "passed": not failures,
         "failures": failures,
     }
     data_dir = root / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
-    (data_dir / "live-permalink-integrity.json").write_text(
-        json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
-    )
+    report_json = json.dumps(report, indent=2, ensure_ascii=False)
+    # Keep both report names during the v1.9 permalink-contract transition.
+    # ``live-permalink-integrity.json`` is the current production diagnostic;
+    # ``permalink-integrity.json`` remains a compatibility alias for the v1.9.1
+    # regression contract and downstream checks.  Both are written before a
+    # deployment-stopping exception so failure evidence is never lost.
+    for report_name in ("live-permalink-integrity.json", "permalink-integrity.json"):
+        (data_dir / report_name).write_text(report_json, encoding="utf-8")
     if failures:
         examples = "; ".join(
             f"{row['category_key']}: {row['headline'][:55]}"
