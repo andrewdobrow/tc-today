@@ -5285,10 +5285,30 @@ def _rebind_live_items_to_published_archive(all_categories, archive, current_cus
             items.append(category["hero"])
         items.extend(category.get("cards", []) or [])
         for item in items:
-            matched = find_matching_entry(
-                item.get("headline", ""), archive, item.get("link", ""),
-                is_weather_alert=bool(item.get("is_weather_alert")),
+            # Publication identity may have consolidated several rewritten archive
+            # rows after the earlier live-binding pass.  Prefer the persistent story
+            # ID carried by v1.9.3 so every surviving placement is rebound to the one
+            # canonical permalink chosen during archive reconciliation.
+            story_id = str(
+                item.get("_editorial_story_id")
+                or item.get("editorial_story_id")
+                or ""
             )
+            matched = None
+            if story_id:
+                story_entries = [
+                    entry for entry in archive
+                    if str(entry.get("editorial_story_id") or "") == story_id
+                    and entry.get("slug")
+                ]
+                if story_entries:
+                    matched = min(story_entries, key=_publication_canonical_key)
+
+            if not matched:
+                matched = find_matching_entry(
+                    item.get("headline", ""), archive, item.get("link", ""),
+                    is_weather_alert=bool(item.get("is_weather_alert")),
+                )
             if not matched:
                 # Custom-event matching is intentionally stronger than ordinary
                 # headline matching because custom TCT coverage is authoritative.
@@ -9856,6 +9876,25 @@ def main():
     # Archive first — creates all article pages and populates archive.json so the
     # homepage grid can link to permalinks that actually exist with matching slugs.
     _current_regression_report = write_archives(all_categories, top_cat)
+
+    # Publication identity reconciliation can remove duplicate archive rows and turn
+    # their old article files into redirects.  The initial permalink-binding pass ran
+    # before that reconciliation, so category heroes/cards may still reference a slug
+    # that has just been consolidated.  Reload the canonical archive and rebind every
+    # existing live placement by persistent story ID before the integrity gate runs.
+    _canonical_archive = load_archive(_archive_path)
+    _post_publication_rebound = _rebind_live_items_to_published_archive(
+        all_categories,
+        _canonical_archive,
+        current_customs=custom_articles,
+        articles_dir=OUTPUT_DIR / "articles",
+    )
+    if _post_publication_rebound:
+        print(
+            "  Post-publication permalink binding verified "
+            f"{_post_publication_rebound} canonical placement(s)"
+        )
+
     validate_live_permalink_integrity(all_categories, top_cat, OUTPUT_DIR)
     _current_gate_passed = bool((_current_regression_report or {}).get("production_gate_passed", False))
     _write_editorial_activation_report(
