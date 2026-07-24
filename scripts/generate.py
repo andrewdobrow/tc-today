@@ -24,17 +24,25 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
-# Editorial engine shadow integration. This is deliberately fail-open: audit
-# failures are logged but can never stop or alter the existing publication path.
+# Editorial engine integration. Import failures remain fail-open. Production
+# behavior changes only through the separately gated v1.9 activation controller.
 _editorial_import_error = None
 try:
     from tct_engine import (
+        ActivationConfig,
+        EngineMode,
         EditorialEngine,
+        apply_activation_to_categories,
+        build_activation_run,
         route_editorial_result,
         write_editorial_observability,
     )
 except Exception as exc:
+    ActivationConfig = None
+    EngineMode = None
     EditorialEngine = None
+    apply_activation_to_categories = None
+    build_activation_run = None
     route_editorial_result = None
     write_editorial_observability = None
     _editorial_import_error = exc
@@ -196,14 +204,16 @@ SITE_NAME    = "Treasure Coast Today"
 SITE_TAGLINE = "Your Treasure Coast, every day."
 
 
-# Audit-only editorial engine persistence and decision log. Neither file is read by
-# the live publisher, homepage renderer, archive writer, or duplicate suppressor.
+# Editorial engine persistence and decision logs. The activation controller reads
+# only current decisions plus the prior regression gate and can enforce a tiny allowlist.
 EDITORIAL_STATE_PATH = OUTPUT_DIR / "data" / "editorial_state.json"
 EDITORIAL_AUDIT_LOG_PATH = OUTPUT_DIR / "data" / "editorial_audit.jsonl"
-# Keep the shadow engine's registry isolated from the authoritative v7.1
-# production registry. Phase 1 observes and scores; it never mutates publishing.
+# Keep the editorial registry isolated from the authoritative v7.1 production
+# registry. Controlled activation can suppress placements but never rewrites this registry.
 EDITORIAL_REGISTRY_PATH = OUTPUT_DIR / "data" / "editorial_story_registry.json"
 EDITORIAL_OBSERVABILITY_PATH = OUTPUT_DIR / "data" / "editorial_observability.json"
+EDITORIAL_ACTIVATION_PATH = OUTPUT_DIR / "data" / "editorial_activation.json"
+EDITORIAL_ACTIVATION_HISTORY_PATH = OUTPUT_DIR / "data" / "editorial_activation_history.jsonl"
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -8377,12 +8387,13 @@ def write_archives(all_categories, top_cat):
         archive, articles_dir, OUTPUT_DIR, current_run_redirects=_canonical_redirects
     )
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
-    write_story_regression_report(OUTPUT_DIR, archive, _redirect_verification)
+    regression_report = write_story_regression_report(OUTPUT_DIR, archive, _redirect_verification)
     write_story_health_report(OUTPUT_DIR, archive, current_run_redirects=_canonical_redirects)
     (OUTPUT_DIR / "archive.html").write_text(render_archive_page(archive), encoding="utf-8")
     (OUTPUT_DIR / "sitemap.xml").write_text(update_sitemap(archive), encoding="utf-8")
     (OUTPUT_DIR / "news-sitemap.xml").write_text(update_news_sitemap(archive), encoding="utf-8")
     print(f"  Archived {new_count} new, updated {updated_count} existing ({len(archive)} total)")
+    return regression_report
 
 def classify_stories(feed_cache):
     """ONE batched LLM call assigns categories to every unique story across all feeds.
@@ -8718,6 +8729,11 @@ def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, a
                 "relationship_confidence": float(getattr(result, "relationship_confidence", 0.0) or 0.0),
                 "relationship_reason": getattr(result, "relationship_reason", ""),
                 "decision_trace": list(getattr(result, "decision_trace", ()) or ()),
+                "incoming_is_custom": bool(getattr(result, "is_custom", False)),
+                "canonical_is_custom": bool(getattr(result, "canonical_is_custom", False)),
+                "canonical_title": getattr(result, "canonical_title", ""),
+                "canonical_source": getattr(result, "canonical_source", ""),
+                "canonical_url": getattr(result, "canonical_url", ""),
             }
             audit_rows.append(row)
             print(
@@ -8753,18 +8769,96 @@ def _save_editorial_engine_audit(engine, audit_rows):
             print(f"  Editorial audit log failed; publication output is unchanged: {exc}")
 
 
-def _write_editorial_observability(engine, audit_rows):
+def _prepare_editorial_activation(engine, audit_rows):
+    """Build the controlled activation plan from current audit decisions."""
+    if engine is None or ActivationConfig is None or build_activation_run is None:
+        return None
+    try:
+        config = ActivationConfig.from_environment()
+        previous_gate = _read_json_file(
+            OUTPUT_DIR / "data" / "story-regression-report.json", {}
+        )
+        registry_health = engine.get_registry_health()
+        run = build_activation_run(
+            audit_rows,
+            config=config,
+            previous_regression_report=previous_gate,
+            registry_health=registry_health,
+        )
+        reasons = "; ".join(run.preflight.reasons) or "all activation preflight checks passed"
+        print(
+            f"  Editorial activation: requested={run.config.requested_mode.value} "
+            f"effective={run.preflight.effective_mode.value} — {reasons}"
+        )
+        return run
+    except Exception as exc:
+        print(f"  Editorial activation preflight failed; falling back to shadow: {exc}")
+        return None
+
+
+def _apply_editorial_activation(all_categories, activation_run):
+    """Apply only allowlisted deterministic actions after custom injection."""
+    if activation_run is None or apply_activation_to_categories is None:
+        return activation_run
+    try:
+        apply_activation_to_categories(all_categories, activation_run)
+        if activation_run.circuit_breaker_tripped:
+            print("  Editorial activation circuit breaker tripped; no engine actions applied")
+        elif activation_run.preflight.effective_mode.value == "enforce":
+            print(
+                "  Editorial activation enforced "
+                f"{len(activation_run.applied)} placement action(s) "
+                f"from {len(activation_run.recommendations)} recommendation(s)"
+            )
+        elif activation_run.preflight.effective_mode.value == "recommend":
+            print(
+                "  Editorial activation recommended "
+                f"{len(activation_run.recommendations)} action(s); publication unchanged"
+            )
+        return activation_run
+    except Exception as exc:
+        print(f"  Editorial activation apply failed; publication path remains unchanged: {exc}")
+        return activation_run
+
+
+def _write_editorial_activation_report(activation_run, *, current_gate_passed=None):
+    if activation_run is None:
+        return {}
+    try:
+        activation_run.current_regression_gate_passed = current_gate_passed
+        payload = activation_run.to_dict()
+        payload["generated_at"] = datetime.utcnow().isoformat(timespec="seconds") + "Z"
+        EDITORIAL_ACTIVATION_PATH.parent.mkdir(parents=True, exist_ok=True)
+        temporary = EDITORIAL_ACTIVATION_PATH.with_suffix(".json.tmp")
+        temporary.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+        temporary.replace(EDITORIAL_ACTIVATION_PATH)
+        if current_gate_passed is not None:
+            with EDITORIAL_ACTIVATION_HISTORY_PATH.open("a", encoding="utf-8") as history:
+                history.write(json.dumps(payload, ensure_ascii=False) + "\n")
+        return payload
+    except Exception as exc:
+        print(f"  Editorial activation report failed: {exc}")
+        return {}
+
+
+def _write_editorial_observability(engine, audit_rows, activation_run=None):
     """Delegate diagnostics to tct_engine; failures remain non-fatal."""
     if engine is None or write_editorial_observability is None:
         return
 
     try:
+        activation_payload = activation_run.to_dict() if activation_run is not None else None
+        mode = (
+            activation_run.preflight.effective_mode.value
+            if activation_run is not None else "shadow"
+        )
         report = write_editorial_observability(
             engine,
             audit_rows,
             EDITORIAL_OBSERVABILITY_PATH,
             registry_path=str(EDITORIAL_REGISTRY_PATH.relative_to(OUTPUT_DIR)),
-            mode="observe_only",
+            mode=mode,
+            activation=activation_payload,
         )
         story_metrics = report.get("stories", {})
         audit_metrics = report.get("audit", {})
@@ -8797,7 +8891,13 @@ def _write_editorial_observability(engine, audit_rows):
         )
         print(f"  Average importance:      {story_metrics.get('average_importance', 0.0)}")
         print(f"  Report:                  {EDITORIAL_OBSERVABILITY_PATH}")
-        print("  Publication changes:     NONE (observe-only)")
+        if activation_run is not None and activation_run.publication_behavior_changed:
+            print(
+                "  Publication changes:     "
+                f"{len(activation_run.applied)} controlled duplicate suppression(s)"
+            )
+        else:
+            print("  Publication changes:     NONE")
         print("  " + "=" * 55)
     except Exception as exc:
         print(f"  Editorial observability failed; publication output is unchanged: {exc}")
@@ -8808,6 +8908,7 @@ def main():
     editorial_engine = _load_editorial_engine_audit()
     editorial_audited_keys = set()
     editorial_audit_rows = []
+    editorial_activation_run = None
     image_bank   = build_image_bank()
     content_bank = build_content_bank()
     used_bank_images = set()
@@ -9184,6 +9285,16 @@ def main():
                     target.setdefault("cards", []).append(art)
                 print(f"  Custom article: '{art['headline'][:50]}' -> {ckey}")
 
+    # v1.9 controlled activation. The engine can remove only allowlisted,
+    # deterministic duplicate placements. Every other capability remains advisory.
+    editorial_activation_run = _prepare_editorial_activation(
+        editorial_engine, editorial_audit_rows
+    )
+    editorial_activation_run = _apply_editorial_activation(
+        all_categories, editorial_activation_run
+    )
+    _write_editorial_activation_report(editorial_activation_run)
+
     # PHASE 2 STORY ENGINE: guarded production mode. Only non-custom, same-story,
     # same-safe-stage matches at 95%+ confidence are removed from live output.
     # Everything uncertain, general-stage, or stage-advancing remains publishable.
@@ -9235,7 +9346,20 @@ def main():
 
     # Archive first — creates all article pages and populates archive.json so the
     # homepage grid can link to permalinks that actually exist with matching slugs.
-    write_archives(all_categories, top_cat)
+    _current_regression_report = write_archives(all_categories, top_cat)
+    _current_gate_passed = bool((_current_regression_report or {}).get("production_gate_passed", False))
+    _write_editorial_activation_report(
+        editorial_activation_run, current_gate_passed=_current_gate_passed
+    )
+    if (
+        editorial_activation_run is not None
+        and editorial_activation_run.publication_behavior_changed
+        and not _current_gate_passed
+    ):
+        raise RuntimeError(
+            "Controlled activation changed publication output but the current "
+            "story regression gate failed; deployment stopped"
+        )
 
     # Render and write homepage (now archive lookups resolve to real slugs)
     index_html = render_index(all_categories, top_cat)
@@ -9261,9 +9385,11 @@ def main():
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
     (OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat), encoding="utf-8")
 
-    # Save only after the normal production build has completed. This remains audit-only.
+    # Save only after the normal production build has completed.
     _save_editorial_engine_audit(editorial_engine, editorial_audit_rows)
-    _write_editorial_observability(editorial_engine, editorial_audit_rows)
+    _write_editorial_observability(
+        editorial_engine, editorial_audit_rows, editorial_activation_run
+    )
 
     print(f"Done. {len(all_categories)} categories written.")
 
