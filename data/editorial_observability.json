@@ -2,31 +2,31 @@
   "schema_version": 5,
   "engine": {
     "name": "tct-editorial-engine",
-    "version": "1.8.3",
-    "release": "registry-integrity-repair",
+    "version": "1.8.4",
+    "release": "canonical-redirect-enforcement",
     "resolver_version": "2.2",
     "relationship_engine_version": "1.2"
   },
-  "generated_at": "2026-07-24T03:44:30Z",
+  "generated_at": "2026-07-24T04:27:45Z",
   "mode": "observe_only",
   "publication_behavior_changed": false,
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 169,
+    "candidates_processed": 170,
     "routes": {
-      "generate_new": 16,
-      "skip": 153
+      "generate_new": 10,
+      "skip": 160
     },
     "eligibility": {
-      "listing": 5,
-      "low_value": 137,
-      "publishable": 27
+      "listing": 6,
+      "low_value": 136,
+      "publishable": 28
     },
     "source_classes": {
       "aggregator": 142,
-      "local_news": 27
+      "local_news": 28
     },
-    "rejected_count": 5,
+    "rejected_count": 6,
     "rejected_examples": [
       {
         "headline": "1051 S 37th St Unit 1051, Fort Pierce, FL 34947 - Realtor.com",
@@ -72,26 +72,49 @@
           "Headline matches listing pattern 'realtor.com'"
         ],
         "source_class": "aggregator"
+      },
+      {
+        "headline": "13 Harbour Isle Dr W Ph 2, Fort Pierce, FL 34949 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNYi1Nbk5ZZi0xaktZT1JURUE0dU1ITlMyTENBWFFuclVRZ3dBYklpSVhUcEtXaVV2TDRYejlwWFIzUmJ5ZGIzZXRMVnF3eUxlQlFxQUVXRmNyc185NDA3T1dyRmFFTzZhb2R2QXpHdUNnM3FRT25SOWNxbFg1WXluc3FpeG9ySzJLcGUzSW92Vl9WUEd4RFU4QVkyejBhRjEt?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
       }
     ]
   },
   "relationships": {
     "counts": {
-      "follow_up": 1,
-      "new_story": 17,
-      "same_event": 151
+      "new_story": 12,
+      "same_event": 158
     },
     "examples": [
       {
         "story_id": "story_000434",
         "title": "Palm Beach County District 6 commissioner candidates debate as voters weigh in on top concerns",
         "event_key": "unknown-event-8ce114073e",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_000397",
+        "title": "St. Lucie County could lose $63 million in funding if property tax goes away - cw34.com",
+        "event_key": "unknown-event-d00d1a3d32",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -261,12 +284,14 @@
         "story_id": "story_000435",
         "title": "Truck driver in deadly Turnpike crash absent from court; hearing reset for October - WCTI",
         "event_key": "traffic-crash-13b2db2602",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -338,20 +363,6 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_000249",
-        "title": "Scientists warn Florida reefs could 'disappear' after restoration money dries up",
-        "event_key": "unknown-event-d196f4bdf3",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ],
     "decision_trace_examples": [
@@ -359,13 +370,29 @@
         "story_id": "story_000434",
         "title": "Palm Beach County District 6 commissioner candidates debate as voters weigh in on top concerns",
         "event_key": "unknown-event-8ce114073e",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_000397",
+        "title": "St. Lucie County could lose $63 million in funding if property tax goes away - cw34.com",
+        "event_key": "unknown-event-d00d1a3d32",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -537,13 +564,15 @@
         "story_id": "story_000435",
         "title": "Truck driver in deadly Turnpike crash absent from court; hearing reset for October - WCTI",
         "event_key": "traffic-crash-13b2db2602",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -635,377 +664,57 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_000250",
-        "title": "When is tax-free week in Florida? Tax-free actually lasts for 1 month - St. Augustine Record",
-        "event_key": "unknown-event-70307b796e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ]
   },
   "local_relevance": {
     "scopes": {
       "florida": 79,
-      "treasure_coast_local": 81,
-      "treasure_coast_region": 32,
-      "unknown": 150
+      "treasure_coast_local": 82,
+      "treasure_coast_region": 33,
+      "unknown": 154
     },
-    "average_score": 62.94
+    "average_score": 62.82
   },
   "editorial_proximity": {
     "scopes": {
       "florida": 79,
-      "treasure_coast_local": 81,
-      "treasure_coast_region": 32,
-      "unknown": 150
+      "treasure_coast_local": 82,
+      "treasure_coast_region": 33,
+      "unknown": 154
     },
-    "average_priority": 6.63
+    "average_priority": 6.61
   },
   "story_lifecycle": {
     "counts": {
-      "active": 250,
-      "developing": 92
+      "active": 252,
+      "developing": 96
     }
   },
   "registry_health": {
     "repair_version": 1,
-    "changed": true,
-    "status": "repaired",
-    "active_stories_before": 419,
-    "active_stories_after": 316,
-    "quarantined_story_count": 8,
-    "quarantined_story_ids": [
-      "story_000001",
-      "story_000002",
-      "story_000006",
-      "story_000012",
-      "story_000034",
-      "story_000035",
-      "story_000039",
-      "story_000181"
-    ],
-    "quarantine_reasons": {
-      "story_000001": [
-        "legacy_unsuffixed_generic_event_key",
-        "impossible_title_fanout",
-        "unsupported_sparse_event_merge"
-      ],
-      "story_000002": [
-        "legacy_unsuffixed_generic_event_key",
-        "impossible_title_fanout",
-        "unsupported_sparse_event_merge"
-      ],
-      "story_000006": [
-        "legacy_unsuffixed_generic_event_key",
-        "impossible_title_fanout"
-      ],
-      "story_000012": [
-        "unsupported_sparse_event_merge"
-      ],
-      "story_000034": [
-        "unsupported_sparse_event_merge"
-      ],
-      "story_000035": [
-        "unsupported_sparse_event_merge"
-      ],
-      "story_000039": [
-        "unsupported_sparse_event_merge"
-      ],
-      "story_000181": [
-        "unsupported_sparse_event_merge"
-      ]
-    },
-    "duplicate_groups_merged": 85,
-    "duplicate_story_records_removed": 95,
-    "merged_story_ids": {
-      "story_000005": [
-        "story_000044"
-      ],
-      "story_000009": [
-        "story_000154"
-      ],
-      "story_000014": [
-        "story_000278"
-      ],
-      "story_000019": [
-        "story_000280"
-      ],
-      "story_000020": [
-        "story_000161"
-      ],
-      "story_000022": [
-        "story_000287"
-      ],
-      "story_000030": [
-        "story_000185"
-      ],
-      "story_000037": [
-        "story_000184",
-        "story_000190"
-      ],
-      "story_000040": [
-        "story_000157"
-      ],
-      "story_000041": [
-        "story_000158",
-        "story_000168"
-      ],
-      "story_000042": [
-        "story_000162"
-      ],
-      "story_000043": [
-        "story_000164",
-        "story_000174"
-      ],
-      "story_000045": [
-        "story_000308"
-      ],
-      "story_000051": [
-        "story_000284"
-      ],
-      "story_000052": [
-        "story_000286"
-      ],
-      "story_000053": [
-        "story_000288"
-      ],
-      "story_000054": [
-        "story_000171",
-        "story_000289"
-      ],
-      "story_000055": [
-        "story_000290"
-      ],
-      "story_000056": [
-        "story_000292"
-      ],
-      "story_000057": [
-        "story_000293"
-      ],
-      "story_000059": [
-        "story_000296"
-      ],
-      "story_000060": [
-        "story_000297"
-      ],
-      "story_000061": [
-        "story_000298"
-      ],
-      "story_000062": [
-        "story_000299"
-      ],
-      "story_000064": [
-        "story_000302"
-      ],
-      "story_000067": [
-        "story_000156"
-      ],
-      "story_000074": [
-        "story_000305"
-      ],
-      "story_000075": [
-        "story_000306"
-      ],
-      "story_000076": [
-        "story_000307"
-      ],
-      "story_000077": [
-        "story_000309"
-      ],
-      "story_000078": [
-        "story_000310"
-      ],
-      "story_000079": [
-        "story_000311"
-      ],
-      "story_000080": [
-        "story_000312"
-      ],
-      "story_000081": [
-        "story_000313"
-      ],
-      "story_000082": [
-        "story_000314"
-      ],
-      "story_000083": [
-        "story_000315"
-      ],
-      "story_000084": [
-        "story_000316"
-      ],
-      "story_000085": [
-        "story_000317"
-      ],
-      "story_000086": [
-        "story_000318"
-      ],
-      "story_000087": [
-        "story_000319"
-      ],
-      "story_000088": [
-        "story_000320"
-      ],
-      "story_000089": [
-        "story_000321"
-      ],
-      "story_000090": [
-        "story_000165",
-        "story_000195",
-        "story_000322"
-      ],
-      "story_000091": [
-        "story_000323"
-      ],
-      "story_000096": [
-        "story_000345"
-      ],
-      "story_000132": [
-        "story_000361"
-      ],
-      "story_000152": [
-        "story_000160"
-      ],
-      "story_000155": [
-        "story_000281"
-      ],
-      "story_000167": [
-        "story_000346"
-      ],
-      "story_000172": [
-        "story_000274"
-      ],
-      "story_000173": [
-        "story_000275"
-      ],
-      "story_000175": [
-        "story_000294"
-      ],
-      "story_000176": [
-        "story_000194",
-        "story_000304"
-      ],
-      "story_000177": [
-        "story_000342"
-      ],
-      "story_000178": [
-        "story_000343"
-      ],
-      "story_000179": [
-        "story_000344"
-      ],
-      "story_000180": [
-        "story_000363"
-      ],
-      "story_000182": [
-        "story_000229",
-        "story_000376"
-      ],
-      "story_000186": [
-        "story_000208",
-        "story_000273"
-      ],
-      "story_000191": [
-        "story_000283"
-      ],
-      "story_000192": [
-        "story_000392"
-      ],
-      "story_000196": [
-        "story_000375"
-      ],
-      "story_000199": [
-        "story_000271"
-      ],
-      "story_000200": [
-        "story_000372",
-        "story_000417"
-      ],
-      "story_000201": [
-        "story_000373"
-      ],
-      "story_000204": [
-        "story_000268"
-      ],
-      "story_000207": [
-        "story_000270"
-      ],
-      "story_000209": [
-        "story_000285"
-      ],
-      "story_000210": [
-        "story_000291"
-      ],
-      "story_000211": [
-        "story_000300"
-      ],
-      "story_000214": [
-        "story_000335"
-      ],
-      "story_000215": [
-        "story_000336"
-      ],
-      "story_000217": [
-        "story_000337"
-      ],
-      "story_000218": [
-        "story_000338"
-      ],
-      "story_000220": [
-        "story_000339"
-      ],
-      "story_000221": [
-        "story_000340"
-      ],
-      "story_000222": [
-        "story_000341"
-      ],
-      "story_000224": [
-        "story_000362"
-      ],
-      "story_000225": [
-        "story_000396"
-      ],
-      "story_000226": [
-        "story_000364"
-      ],
-      "story_000227": [
-        "story_000371"
-      ],
-      "story_000228": [
-        "story_000365"
-      ],
-      "story_000351": [
-        "story_000406"
-      ],
-      "story_000389": [
-        "story_000395"
-      ],
-      "story_000411": [
-        "story_000416"
-      ]
-    },
+    "changed": false,
+    "status": "clean",
+    "active_stories_before": 342,
+    "active_stories_after": 342,
+    "quarantined_story_count": 0,
+    "quarantined_story_ids": [],
+    "quarantine_reasons": {},
+    "duplicate_groups_merged": 0,
+    "duplicate_story_records_removed": 0,
+    "merged_story_ids": {},
     "remaining_exact_duplicate_title_groups": 0,
-    "generated_at": "2026-07-24T03:30:12Z",
+    "generated_at": "2026-07-24T04:11:03Z",
     "quarantined_story_records_retained": 8,
-    "active_story_count": 342
+    "active_story_count": 348
   },
   "stories": {
-    "total": 342,
+    "total": 348,
     "importance_levels": {
       "breaking": 0,
       "high": 5,
-      "normal": 72,
-      "low": 265,
+      "normal": 73,
+      "low": 270,
       "archived": 0
     },
     "average_importance": 10.85,
@@ -1023,7 +732,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.23
+          "age_hours": 4.92
         },
         "level": "high",
         "importance_reasons": [
@@ -1064,7 +773,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 4.23,
+          "hours_since_update": 4.92,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1082,7 +791,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.02
+          "age_hours": 0.71
         },
         "level": "high",
         "importance_reasons": [
@@ -1120,7 +829,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 0.02,
+          "hours_since_update": 0.71,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1138,7 +847,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 19.84
+          "age_hours": 20.53
         },
         "level": "high",
         "importance_reasons": [
@@ -1181,7 +890,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T07:40:14.261666+00:00",
-          "hours_since_update": 19.84,
+          "hours_since_update": 20.53,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1199,7 +908,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 21.17
+          "age_hours": 21.85
         },
         "level": "high",
         "importance_reasons": [
@@ -1237,7 +946,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 21.17,
+          "hours_since_update": 21.85,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1255,7 +964,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.05
+          "age_hours": 0.76
         },
         "level": "normal",
         "importance_reasons": [
@@ -1293,7 +1002,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 0.05,
+          "hours_since_update": 0.76,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1311,7 +1020,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.28
+          "age_hours": 5.0
         },
         "level": "normal",
         "importance_reasons": [
@@ -1347,7 +1056,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 4.28,
+          "hours_since_update": 5.0,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1365,7 +1074,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.24
+          "age_hours": 4.92
         },
         "level": "normal",
         "importance_reasons": [
@@ -1401,7 +1110,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 4.24,
+          "hours_since_update": 4.92,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1419,7 +1128,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 4.22
+          "age_hours": 4.9
         },
         "level": "normal",
         "importance_reasons": [
@@ -1448,7 +1157,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 4.22,
+          "hours_since_update": 4.9,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1466,7 +1175,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 1.91
+          "age_hours": 2.63
         },
         "level": "normal",
         "importance_reasons": [
@@ -1495,65 +1204,9 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 1.91,
+          "hours_since_update": 2.63,
           "event_count": 1,
           "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000009",
-        "title": "Rescued cats, dogs from Foxwoods home now in hands of local Humane Society - Hometown News Treasure Coast",
-        "score": 35,
-        "editorial_priority": 35,
-        "editorial_score": 35,
-        "score_breakdown": {
-          "score": 35,
-          "importance": 35,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.0,
-          "source_trust": 50,
-          "age_hours": 4.24
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": [
-            "Stuart"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 3,
-        "timeline_entries": 3,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 10,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 4.24,
-          "event_count": 3,
-          "timeline_entries": 3
         }
       },
       {
@@ -1569,7 +1222,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 4.25
+          "age_hours": 4.94
         },
         "level": "normal",
         "importance_reasons": [
@@ -1602,9 +1255,65 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 4.25,
+          "hours_since_update": 4.94,
           "event_count": 1,
           "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000009",
+        "title": "Rescued cats, dogs from Foxwoods home now in hands of local Humane Society - Hometown News Treasure Coast",
+        "score": 35,
+        "editorial_priority": 33,
+        "editorial_score": 33,
+        "score_breakdown": {
+          "score": 33,
+          "importance": 35,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.0,
+          "source_trust": 50,
+          "age_hours": 20.54
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County"
+          ],
+          "places": [
+            "Stuart"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 3,
+        "timeline_entries": 2,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 10,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-07-23T07:40:14.261666+00:00",
+          "hours_since_update": 20.54,
+          "event_count": 3,
+          "timeline_entries": 2
         }
       },
       {
@@ -1620,7 +1329,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.23
+          "age_hours": 4.92
         },
         "level": "normal",
         "importance_reasons": [
@@ -1653,7 +1362,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 4.23,
+          "hours_since_update": 4.92,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1671,7 +1380,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.26
+          "age_hours": 4.96
         },
         "level": "normal",
         "importance_reasons": [
@@ -1702,7 +1411,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 4.26,
+          "hours_since_update": 4.96,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1720,7 +1429,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 4.24
+          "age_hours": 4.92
         },
         "level": "normal",
         "importance_reasons": [
@@ -1754,7 +1463,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 4.24,
+          "hours_since_update": 4.92,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1772,7 +1481,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 1.95
+          "age_hours": 2.66
         },
         "level": "normal",
         "importance_reasons": [
@@ -1806,7 +1515,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 1.95,
+          "hours_since_update": 2.66,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1824,7 +1533,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 21.17
+          "age_hours": 21.86
         },
         "level": "normal",
         "importance_reasons": [
@@ -1857,7 +1566,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 21.17,
+          "hours_since_update": 21.86,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1875,7 +1584,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 21.17
+          "age_hours": 21.85
         },
         "level": "normal",
         "importance_reasons": [
@@ -1908,7 +1617,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 21.17,
+          "hours_since_update": 21.85,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1926,7 +1635,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.23
+          "age_hours": 4.92
         },
         "level": "normal",
         "importance_reasons": [
@@ -1955,7 +1664,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 4.23,
+          "hours_since_update": 4.92,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1973,7 +1682,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 4.24
+          "age_hours": 4.93
         },
         "level": "normal",
         "importance_reasons": [
@@ -2004,7 +1713,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 4.24,
+          "hours_since_update": 4.93,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2022,7 +1731,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 4.24
+          "age_hours": 4.93
         },
         "level": "normal",
         "importance_reasons": [
@@ -2053,7 +1762,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 4.24,
+          "hours_since_update": 4.93,
           "event_count": 1,
           "timeline_entries": 1
         }
