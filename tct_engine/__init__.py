@@ -17,7 +17,10 @@ from .activation import (
     apply_activation_to_categories,
     build_activation_preflight,
     build_activation_run,
+    extend_activation_run_with_guarded_suppressions,
     recommend_activation_action,
+    recommendation_from_guarded_suppression,
+    trip_activation_circuit_breaker,
 )
 from .editorial_policy import EditorialPolicy, SourceProfile
 from .editorial_eligibility import (
@@ -142,7 +145,10 @@ __all__ = [
     "apply_activation_to_categories",
     "build_activation_preflight",
     "build_activation_run",
+    "extend_activation_run_with_guarded_suppressions",
     "recommend_activation_action",
+    "recommendation_from_guarded_suppression",
+    "trip_activation_circuit_breaker",
     "EditorialPolicy",
     "SourceProfile",
     "EditorialEligibilityEngine",
@@ -221,4 +227,4 @@ __all__ = [
     "route_editorial_result",
 ]
 
-__version__ = "1.9.1"
+__version__ = "1.9.2"

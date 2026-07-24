@@ -15,7 +15,7 @@ import os
 from .registry_repair import normalize_identity_title
 from .source_identity import normalize_source_identity_url
 
-ACTIVATION_VERSION = "1.0"
+ACTIVATION_VERSION = "1.1"
 DEFAULT_MAX_ACTIONS = 8
 
 
@@ -82,6 +82,8 @@ class ActivationRecommendation:
     canonical_source: str
     canonical_url: str
     reason: str
+    category: str = ""
+    placement: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -100,6 +102,8 @@ class ActivationRecommendation:
             "canonical_source": self.canonical_source,
             "canonical_url": self.canonical_url,
             "reason": self.reason,
+            "category": self.category,
+            "placement": self.placement,
         }
 
 
@@ -143,6 +147,7 @@ class ActivationRun:
                 "exact_normalized_title_identity",
                 "publisher_attribution_title_identity",
                 "exact_safe_source_article_identity",
+                "guarded_same_story_stage_95",
             ],
             "observe_only_capabilities": [
                 "semantic_resolver_merges",
@@ -315,6 +320,91 @@ def build_activation_run(
     return run
 
 
+
+def recommendation_from_guarded_suppression(
+    record: Mapping[str, Any],
+) -> ActivationRecommendation:
+    """Convert an existing guarded suppression into an activation recommendation.
+
+    The guarded story engine already made these same-stage, 95%+ decisions in
+    production before v1.9.2. This adapter does not broaden the decision rule;
+    it only moves the existing action under activation preflight, kill-switch,
+    circuit-breaker, and reporting controls.
+    """
+
+    raw_confidence = float(record.get("match_confidence", 0.0) or 0.0)
+    confidence = raw_confidence / 100.0 if raw_confidence > 1.0 else raw_confidence
+    headline = str(record.get("headline") or "")
+    return ActivationRecommendation(
+        action=ActivationAction.SUPPRESS_DUPLICATE,
+        enforceable=bool(record.get("eligible_for_activation", True)),
+        evidence="guarded_same_story_stage_95",
+        confidence=confidence,
+        source_url=str(record.get("source_url") or ""),
+        headline=headline,
+        source_title_key=normalize_identity_title(
+            str(record.get("source_title") or headline)
+        ),
+        incoming_article_id=str(record.get("slug") or ""),
+        target_article_id=str(record.get("matched_prior_slug") or ""),
+        story_id=str(record.get("story_id") or ""),
+        canonical_is_custom=bool(record.get("matched_prior_is_custom", False)),
+        canonical_title=str(record.get("matched_prior_headline") or ""),
+        canonical_source=str(record.get("matched_prior_source") or ""),
+        canonical_url=str(record.get("matched_prior_source_url") or ""),
+        reason=str(record.get("reason") or "Existing guarded same-story suppression"),
+        category=str(record.get("category_key") or ""),
+        placement=str(record.get("placement") or ""),
+    )
+
+
+def extend_activation_run_with_guarded_suppressions(
+    run: ActivationRun,
+    records: Iterable[Mapping[str, Any]],
+) -> list[ActivationRecommendation]:
+    """Append unique guarded recommendations to an activation run."""
+
+    existing = {
+        (
+            rec.evidence,
+            rec.incoming_article_id,
+            rec.target_article_id,
+            rec.category,
+            rec.placement,
+        ): rec
+        for rec in run.recommendations
+    }
+    aligned: list[ActivationRecommendation] = []
+    for record in records:
+        rec = recommendation_from_guarded_suppression(record)
+        key = (
+            rec.evidence,
+            rec.incoming_article_id,
+            rec.target_article_id,
+            rec.category,
+            rec.placement,
+        )
+        if key not in existing:
+            run.recommendations.append(rec)
+            existing[key] = rec
+        aligned.append(existing[key])
+    return aligned
+
+
+def trip_activation_circuit_breaker(run: ActivationRun, reason: str) -> ActivationRun:
+    """Roll an activation run back to shadow mode before publication changes."""
+
+    run.circuit_breaker_tripped = True
+    run.applied.clear()
+    run.preflight = ActivationPreflight(
+        run.preflight.requested_mode,
+        EngineMode.SHADOW,
+        False,
+        (*run.preflight.reasons, reason),
+    )
+    run.after_placements = run.before_placements
+    return run
+
 def _count_placements(categories: Iterable[Mapping[str, Any]]) -> int:
     total = 0
     for category in categories:
@@ -380,16 +470,10 @@ def apply_activation_to_categories(
     # One source can appear in several category placements. The circuit breaker is
     # intentionally based on actual mutations as well as unique recommendations.
     if len(run.applied) > run.config.max_actions_per_run:
-        run.circuit_breaker_tripped = True
-        run.applied.clear()
-        run.preflight = ActivationPreflight(
-            run.preflight.requested_mode,
-            EngineMode.SHADOW,
-            False,
-            (*run.preflight.reasons, "actual placement actions exceeded maximum"),
+        trip_activation_circuit_breaker(
+            run, "actual placement actions exceeded maximum"
         )
         categories[:] = original_categories
-        run.after_placements = run.before_placements
         return run
 
     run.after_placements = _count_placements(categories)
