@@ -1,32 +1,68 @@
 {
-  "schema_version": 8,
+  "schema_version": 9,
   "engine": {
     "name": "tct-editorial-engine",
-    "version": "1.8.8",
-    "release": "hero-semantic-dedup-resilience",
+    "version": "1.9.0",
+    "release": "controlled-production-activation",
     "resolver_version": "2.4",
     "relationship_engine_version": "1.2"
   },
-  "generated_at": "2026-07-24T07:21:51Z",
-  "mode": "observe_only",
+  "generated_at": "2026-07-24T08:45:26Z",
+  "mode": "enforce",
   "publication_behavior_changed": false,
+  "activation": {
+    "activation_version": "1.0",
+    "requested_mode": "enforce",
+    "effective_mode": "enforce",
+    "preflight_passed": true,
+    "preflight_reasons": [],
+    "kill_switch": false,
+    "maximum_actions_per_run": 8,
+    "minimum_confidence": 1.0,
+    "recommendation_count": 0,
+    "enforceable_recommendation_count": 0,
+    "applied_action_count": 0,
+    "circuit_breaker_tripped": false,
+    "placements_before": 10,
+    "placements_after": 10,
+    "publication_behavior_changed": false,
+    "current_regression_gate_passed": true,
+    "recommendations": [],
+    "applied_actions": [],
+    "enforcement_allowlist": [
+      "custom_canonical_protection",
+      "exact_normalized_title_identity",
+      "publisher_attribution_title_identity",
+      "exact_safe_source_article_identity"
+    ],
+    "observe_only_capabilities": [
+      "semantic_resolver_merges",
+      "incident_identity_merges",
+      "follow_up_publication",
+      "ranking",
+      "hero_selection",
+      "lifecycle_presentation",
+      "canonical_replacement",
+      "article_updates"
+    ]
+  },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 169,
+    "candidates_processed": 168,
     "routes": {
-      "generate_new": 4,
-      "skip": 165
+      "generate_new": 1,
+      "skip": 167
     },
     "eligibility": {
-      "listing": 6,
-      "low_value": 136,
-      "publishable": 27
+      "listing": 7,
+      "low_value": 135,
+      "publishable": 26
     },
     "source_classes": {
       "aggregator": 142,
-      "local_news": 27
+      "local_news": 26
     },
-    "rejected_count": 6,
+    "rejected_count": 7,
     "rejected_examples": [
       {
         "headline": "2480 SE Garden Ter Unit 507, Port Saint Lucie, FL 34952 - Realtor.com",
@@ -47,6 +83,15 @@
         "source_class": "aggregator"
       },
       {
+        "headline": "1502 Avenue I Apt B, Fort Pierce, FL 34950 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPLU9XQzZYekI3Q2xtMGtPUnNJS3FUdTdIMVo1VXRiQzBUMFhoWnRkblg2eHZiQXJGdWhkM0FfVUJ2UzhKME0wWlU4NE52cmQ4WUh0Q2x5eUJoS1Jsd1E1UVprUGZpMEdhY3pMRWxSVEpQMHBwU2dsRzFkeVNSN2xERk5tc2NmNWZfeUgtZTFTTUlrZ21xczBPY01QVmZhVldabWQtZE1PbmpkSUFKRU9rTnZ3?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
+      {
         "headline": "231 SW Palm Dr Apt 107, Port Saint Lucie, FL 34986 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQSjZhM3ZtMGNGMkFTRDZwR0hfOWY4eDNaWkhXdUNFYWRpM1ljbGlJWUNoa3dtaFdhbUt2SnZUVEVWRzBlcFNTa1hXQnlfOEFNN0RsV3h2Mnp4a1RQOHVQUnY1cFU4WV9ZMUIwUVlhNVZycGVTMkxjZjJWQkR3bzd2X2xkdnJaMGhzeEJPYnlMaXZNMFNWVDFyZFpKZXlDUGs?oc=5",
         "status": "listing",
@@ -56,8 +101,8 @@
         "source_class": "aggregator"
       },
       {
-        "headline": "3702 NW Mediterranean Ln Unit 103, Jensen Beach, FL 34957 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPSEFvUTRWdWIzREp0UnRVVEhtY010Z0pTU1duRHo3Rmltcmp1M01CYXMtTkFMQUY0MjZNSHlvUWQ4ODdtdUNuNUtIQ2czazE5TlN4WlNJbnJ4YkhuTmZRZklSXzRkVW1nbnZUeWY1b21YQ2tkRll4WVI1NmtSckNUY2JOMlNKQ2Q0bjJiX01YT2hLTEtuWFdTM2prT0ROMUMy?oc=5",
+        "headline": "8 Botany Ln, Palm Coast, FL 32137 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOaUx3MmFNVmUyb3ozR0NtSElFLS1FZFlmNGpCLVA5cTBfZGcyWkFldVZjSmxPQXB3UU9KbVN2eUdvWXRLblFnRUxBTEhhVS13OUE1b3dZZTdFLVlDV3RkSFdoanJxVWVfZDdNTVNMRzZRaVA0YlIxOG5wUzdFYjg0ZS1jTGpBdV9uVXR0Wg?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -65,8 +110,8 @@
         "source_class": "aggregator"
       },
       {
-        "headline": "1502 Avenue I Apt B, Fort Pierce, FL 34950 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPLU9XQzZYekI3Q2xtMGtPUnNJS3FUdTdIMVo1VXRiQzBUMFhoWnRkblg2eHZiQXJGdWhkM0FfVUJ2UzhKME0wWlU4NE52cmQ4WUh0Q2x5eUJoS1Jsd1E1UVprUGZpMEdhY3pMRWxSVEpQMHBwU2dsRzFkeVNSN2xERk5tc2NmNWZfeUgtZTFTTUlrZ21xczBPY01QVmZhVldabWQtZE1PbmpkSUFKRU9rTnZ3?oc=5",
+        "headline": "3702 NW Mediterranean Ln Unit 103, Jensen Beach, FL 34957 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPSEFvUTRWdWIzREp0UnRVVEhtY010Z0pTU1duRHo3Rmltcmp1M01CYXMtTkFMQUY0MjZNSHlvUWQ4ODdtdUNuNUtIQ2czazE5TlN4WlNJbnJ4YkhuTmZRZklSXzRkVW1nbnZUeWY1b21YQ2tkRll4WVI1NmtSckNUY2JOMlNKQ2Q0bjJiX01YT2hLTEtuWFdTM2prT0ROMUMy?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -86,7 +131,7 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 8,
+      "new_story": 7,
       "same_event": 161
     },
     "examples": [
@@ -94,12 +139,14 @@
         "story_id": "story_000462",
         "title": "BEACHSIDE NEWS JULY 2026 - Vero Beach 32963",
         "event_key": "unknown-event-a153de4c1e",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -275,20 +322,6 @@
         ]
       },
       {
-        "story_id": "story_000245",
-        "title": "Okeechobee Co. School District doubles early learning enrollment after Pine View Academy renovation, expansion - WFLX",
-        "event_key": "unknown-event-6f074124d2",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_000241",
         "title": "FAA flight restrictions around Mar-a-Lago spark lawsuit, resident frustration",
         "event_key": "unknown-event-b99e37f634",
@@ -357,6 +390,20 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
+      },
+      {
+        "story_id": "story_000432",
+        "title": "Florida man arrested on drug, firearm charges after house fire - Treasure Coast News",
+        "event_key": "fire-f1c6d5d041",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
       }
     ],
     "decision_trace_examples": [
@@ -364,13 +411,15 @@
         "story_id": "story_000462",
         "title": "BEACHSIDE NEWS JULY 2026 - Vero Beach 32963",
         "event_key": "unknown-event-a153de4c1e",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -539,21 +588,6 @@
         ]
       },
       {
-        "story_id": "story_000245",
-        "title": "Okeechobee Co. School District doubles early learning enrollment after Pine View Academy renovation, expansion - WFLX",
-        "event_key": "unknown-event-6f074124d2",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_000241",
         "title": "FAA flight restrictions around Mar-a-Lago spark lawsuit, resident frustration",
         "event_key": "unknown-event-b99e37f634",
@@ -657,6 +691,21 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
+      },
+      {
+        "story_id": "story_000247",
+        "title": "Martin County school bus routes may change to improve efficiency and cut costs - WPBF",
+        "event_key": "unknown-event-d5da004537",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
       }
     ]
   },
@@ -676,20 +725,20 @@
       "treasure_coast_region": 28,
       "unknown": 142
     },
-    "average_priority": 6.66
+    "average_priority": 6.63
   },
   "story_lifecycle": {
     "counts": {
-      "active": 188,
-      "developing": 114
+      "active": 187,
+      "developing": 115
     }
   },
   "registry_health": {
     "repair_version": 4,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 300,
-    "active_stories_after": 300,
+    "active_stories_before": 302,
+    "active_stories_after": 302,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -705,7 +754,7 @@
     "incident_identity_groups_resolved": 0,
     "incident_story_records_removed": 0,
     "remaining_incident_identity_groups": 0,
-    "generated_at": "2026-07-24T07:01:17Z",
+    "generated_at": "2026-07-24T08:21:20Z",
     "quarantined_story_records_retained": 8,
     "active_story_count": 302
   },
@@ -718,7 +767,7 @@
       "low": 241,
       "archived": 0
     },
-    "average_importance": 11.19,
+    "average_importance": 11.23,
     "top": [
       {
         "story_id": "story_000049",
@@ -733,7 +782,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 3.56
+          "age_hours": 4.9
         },
         "level": "high",
         "importance_reasons": [
@@ -776,7 +825,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 3.56,
+          "hours_since_update": 4.9,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -785,16 +834,16 @@
         "story_id": "story_000011",
         "title": "Family files lawsuit after 6-year-old girl dies in Port St. Lucie go-kart crash - WPBF",
         "score": 75,
-        "editorial_priority": 71,
-        "editorial_score": 71,
+        "editorial_priority": 64,
+        "editorial_score": 64,
         "score_breakdown": {
-          "score": 71,
+          "score": 64,
           "importance": 75,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 0.85,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 23.38
+          "age_hours": 24.71
         },
         "level": "high",
         "importance_reasons": [
@@ -837,7 +886,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T07:40:14.261666+00:00",
-          "hours_since_update": 23.38,
+          "hours_since_update": 24.71,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -855,7 +904,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 24.71
+          "age_hours": 26.05
         },
         "level": "high",
         "importance_reasons": [
@@ -893,7 +942,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 24.71,
+          "hours_since_update": 26.05,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -911,7 +960,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 3.66
+          "age_hours": 5.02
         },
         "level": "normal",
         "importance_reasons": [
@@ -951,63 +1000,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 3.66,
+          "hours_since_update": 5.02,
           "event_count": 23,
           "timeline_entries": 22
-        }
-      },
-      {
-        "story_id": "story_000236",
-        "title": "New depositions reveal why a St. Lucie County firefighter turned in alleged hazing videos",
-        "score": 35,
-        "editorial_priority": 40,
-        "editorial_score": 40,
-        "score_breakdown": {
-          "score": 40,
-          "importance": 35,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 5.48
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 2,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 5.48,
-          "event_count": 2,
-          "timeline_entries": 2
         }
       },
       {
@@ -1023,7 +1018,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 7.9
+          "age_hours": 9.26
         },
         "level": "normal",
         "importance_reasons": [
@@ -1059,7 +1054,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 7.9,
+          "hours_since_update": 9.26,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1077,7 +1072,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 7.78
+          "age_hours": 9.12
         },
         "level": "normal",
         "importance_reasons": [
@@ -1113,56 +1108,63 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 7.78,
+          "hours_since_update": 9.12,
           "event_count": 2,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_000413",
-        "title": "Treasure Coast man loses wedding ring at beach weeks after wife’s death, strangers step in - WPEC",
-        "score": 40,
-        "editorial_priority": 37,
-        "editorial_score": 37,
+        "story_id": "story_000236",
+        "title": "New depositions reveal why a St. Lucie County firefighter turned in alleged hazing videos",
+        "score": 35,
+        "editorial_priority": 38,
+        "editorial_score": 38,
         "score_breakdown": {
-          "score": 37,
-          "importance": 40,
-          "proximity_multiplier": 0.95,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 5.45
+          "score": 38,
+          "importance": 35,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 6.84
         },
         "level": "normal",
         "importance_reasons": [
           {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
           }
         ],
         "local_relevance": {
-          "scope": "treasure_coast_region",
-          "score": 95,
-          "counties": [],
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
           "places": []
         },
         "editorial_proximity": {
-          "score": 95,
-          "scope": "treasure_coast_region",
-          "reason": "Directly affects the Treasure Coast region"
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 2,
+        "canonical_source_candidates": 2,
         "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 5.45,
-          "event_count": 1,
-          "timeline_entries": 1
+          "hours_since_update": 6.84,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       },
       {
@@ -1178,7 +1180,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 7.74
+          "age_hours": 9.08
         },
         "level": "normal",
         "importance_reasons": [
@@ -1207,7 +1209,54 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 7.74,
+          "hours_since_update": 9.08,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000413",
+        "title": "Treasure Coast man loses wedding ring at beach weeks after wife’s death, strangers step in - WPEC",
+        "score": 40,
+        "editorial_priority": 36,
+        "editorial_score": 36,
+        "score_breakdown": {
+          "score": 36,
+          "importance": 40,
+          "proximity_multiplier": 0.95,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 6.79
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_region",
+          "score": 95,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 95,
+          "scope": "treasure_coast_region",
+          "reason": "Directly affects the Treasure Coast region"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-07-24T01:40:23.579334+00:00",
+          "hours_since_update": 6.79,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1225,7 +1274,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 7.8
+          "age_hours": 9.14
         },
         "level": "normal",
         "importance_reasons": [
@@ -1258,7 +1307,110 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 7.8,
+          "hours_since_update": 9.14,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000050",
+        "title": "Police investigate Fort Pierce restaurant shooting; no one hurt",
+        "score": 25,
+        "editorial_priority": 27,
+        "editorial_score": 27,
+        "score_breakdown": {
+          "score": 27,
+          "importance": 25,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 9.11
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-07-23T23:17:09.519046+00:00",
+          "hours_since_update": 9.11,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000140",
+        "title": "Family of 6-year-old killed in go-karting accident at Florida Urban Air files wrongful death lawsuit - SNN News",
+        "score": 50,
+        "editorial_priority": 26,
+        "editorial_score": 26,
+        "score_breakdown": {
+          "score": 26,
+          "importance": 50,
+          "proximity_multiplier": 0.55,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 9.12
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "court_action",
+            "label": "Court action",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "florida",
+          "score": 65,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 55,
+          "scope": "florida",
+          "reason": "Florida-wide coverage with indirect local relevance"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-07-23T23:17:09.519046+00:00",
+          "hours_since_update": 9.12,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1267,16 +1419,16 @@
         "story_id": "story_000418",
         "title": "Central Florida father sentenced to 42 years for toddler's hot truck death - WESH",
         "score": 50,
-        "editorial_priority": 27,
-        "editorial_score": 27,
+        "editorial_priority": 26,
+        "editorial_score": 26,
         "score_breakdown": {
-          "score": 27,
+          "score": 26,
           "importance": 50,
           "proximity_multiplier": 0.55,
-          "freshness_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 5.56
+          "age_hours": 6.95
         },
         "level": "normal",
         "importance_reasons": [
@@ -1310,110 +1462,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 5.56,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000050",
-        "title": "Police investigate Fort Pierce restaurant shooting; no one hurt",
-        "score": 25,
-        "editorial_priority": 27,
-        "editorial_score": 27,
-        "score_breakdown": {
-          "score": 27,
-          "importance": 25,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 7.77
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 7.77,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000140",
-        "title": "Family of 6-year-old killed in go-karting accident at Florida Urban Air files wrongful death lawsuit - SNN News",
-        "score": 50,
-        "editorial_priority": 26,
-        "editorial_score": 26,
-        "score_breakdown": {
-          "score": 26,
-          "importance": 50,
-          "proximity_multiplier": 0.55,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 7.78
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "court_action",
-            "label": "Court action",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "florida",
-          "score": 65,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 55,
-          "scope": "florida",
-          "reason": "Florida-wide coverage with indirect local relevance"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 7.78,
+          "hours_since_update": 6.95,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1431,7 +1480,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 3.56
+          "age_hours": 4.9
         },
         "level": "normal",
         "importance_reasons": [
@@ -1462,7 +1511,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 3.56,
+          "hours_since_update": 4.9,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1480,7 +1529,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 3.73
+          "age_hours": 5.11
         },
         "level": "normal",
         "importance_reasons": [
@@ -1519,7 +1568,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 3.73,
+          "hours_since_update": 5.11,
           "event_count": 10,
           "timeline_entries": 10
         }
@@ -1537,7 +1586,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 7.77
+          "age_hours": 9.11
         },
         "level": "normal",
         "importance_reasons": [
@@ -1566,7 +1615,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 7.77,
+          "hours_since_update": 9.11,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1584,7 +1633,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 24.7
+          "age_hours": 26.04
         },
         "level": "normal",
         "importance_reasons": [
@@ -1617,7 +1666,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 24.7,
+          "hours_since_update": 26.04,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1635,7 +1684,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 7.78
+          "age_hours": 9.12
         },
         "level": "normal",
         "importance_reasons": [
@@ -1666,7 +1715,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 7.78,
+          "hours_since_update": 9.12,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1684,7 +1733,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 7.78
+          "age_hours": 9.11
         },
         "level": "normal",
         "importance_reasons": [
@@ -1715,7 +1764,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 7.78,
+          "hours_since_update": 9.11,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1733,7 +1782,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 7.78
+          "age_hours": 9.12
         },
         "level": "normal",
         "importance_reasons": [
@@ -1764,7 +1813,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 7.78,
+          "hours_since_update": 9.12,
           "event_count": 1,
           "timeline_entries": 1
         }
