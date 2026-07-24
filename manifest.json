@@ -1,7 +1,7 @@
 {
   "engine": "TCT Editorial Engine",
-  "version": "1.8.7",
-  "release": "source-article-identity",
+  "version": "1.8.8",
+  "release": "hero-semantic-dedup-resilience",
   "python_validated": "3.13.5",
   "observability_schema_version": 8,
   "package_modules": 27,
@@ -13,7 +13,7 @@
     },
     "package_tests": {
       "status": "passed",
-      "tests_passed": 165
+      "tests_passed": 174
     },
     "production_contract_tests": {
       "status": "excluded",
@@ -70,13 +70,22 @@
       "runtime_attachment_supported": true,
       "production_groups_consolidated": 5,
       "production_story_records_removed": 6
+    },
+    "hero_semantic_dedup_resilience": {
+      "status": "passed",
+      "empty_response_retry_supported": true,
+      "fenced_json_supported": true,
+      "prose_wrapped_array_supported": true,
+      "invalid_and_out_of_range_indexes_filtered": true,
+      "deterministic_fallback_preserved": true,
+      "global_ranking_parser_hardened": true
     }
   },
   "files": [
     {
       "path": "scripts/generate.py",
-      "sha256": "380abee3f98fd52363956880a436e254deed4552f51961494bbb162c8142bef8",
-      "size_bytes": 476730
+      "sha256": "82e61160e5bac965ef6ef10071e6b4f80a7d21d1bc9895fb22fbf1b425eeabd9",
+      "size_bytes": 480032
     },
     {
       "path": "scripts/validate_package.py",
@@ -85,7 +94,7 @@
     },
     {
       "path": "tct_engine/__init__.py",
-      "sha256": "3176f7a0b0775491de2dd2db22b0ac2210d032d8373e42866bf1446c425da764",
+      "sha256": "bca3fcfe9394b9feb28da18f25f2cc26e8d7390c1809ae5f973be71635fcf4d9",
       "size_bytes": 5007
     },
     {
@@ -160,8 +169,8 @@
     },
     {
       "path": "tct_engine/observability.py",
-      "sha256": "28e8d0830408d510490b370d6fb4f9a6b65149997a2f5c27c486faa4d4bce10f",
-      "size_bytes": 12097
+      "sha256": "1d91e054d47b59ac1c44f0c61dafc959d8c9da7a88bc976226ca1ab9be8fae13",
+      "size_bytes": 12104
     },
     {
       "path": "tct_engine/production_router.py",
@@ -372,6 +381,11 @@
       "path": "tests/test_source_identity.py",
       "sha256": "9858ac383487c08b5c8f7b97f5836ece702d71d03f9dfe9325f4deb907f09b4a",
       "size_bytes": 2504
+    },
+    {
+      "path": "tests/test_generation_json.py",
+      "sha256": "7900d2fbf2d1f800db42248f8c60a2c4477c92420a68ec65e7239d9370c8f0e3",
+      "size_bytes": 4829
     }
   ]
 }
