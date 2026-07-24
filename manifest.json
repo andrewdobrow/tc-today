@@ -1,19 +1,19 @@
 {
   "engine": "TCT Editorial Engine",
-  "version": "1.8.8",
-  "release": "hero-semantic-dedup-resilience",
+  "version": "1.9.0",
+  "release": "controlled-production-activation",
   "python_validated": "3.13.5",
-  "observability_schema_version": 8,
-  "package_modules": 27,
-  "public_exports": 76,
+  "observability_schema_version": 9,
+  "package_modules": 28,
+  "public_exports": 88,
   "validation": {
     "package_imports": {
       "status": "passed",
-      "modules_imported": 26
+      "modules_imported": 27
     },
     "package_tests": {
       "status": "passed",
-      "tests_passed": 174
+      "tests_passed": 186
     },
     "production_contract_tests": {
       "status": "excluded",
@@ -79,13 +79,57 @@
       "invalid_and_out_of_range_indexes_filtered": true,
       "deterministic_fallback_preserved": true,
       "global_ranking_parser_hardened": true
+    },
+    "controlled_production_activation": {
+      "status": "passed",
+      "activation_version": "1.0",
+      "default_mode": "shadow",
+      "supported_modes": [
+        "shadow",
+        "recommend",
+        "enforce"
+      ],
+      "previous_regression_gate_required": true,
+      "clean_registry_required": true,
+      "kill_switch_supported": true,
+      "maximum_actions_per_run_default": 8,
+      "placement_circuit_breaker_restores_original": true,
+      "current_gate_failure_stops_deployment": true,
+      "enforcement_allowlist": [
+        "custom_canonical_protection",
+        "exact_normalized_title_identity",
+        "publisher_attribution_title_identity",
+        "exact_safe_source_article_identity"
+      ],
+      "observe_only_capabilities": [
+        "semantic_resolver_merges",
+        "incident_identity_merges",
+        "follow_up_publication",
+        "ranking",
+        "hero_selection",
+        "lifecycle_presentation",
+        "canonical_replacement",
+        "article_updates"
+      ],
+      "latest_production_preflight_simulation": "passed",
+      "action_history_jsonl": true
     }
   },
   "files": [
     {
+      "path": ".github/workflows/test-editorial-engine.yml",
+      "sha256": "8921ea170ce861837c054bde4cd9c8e4327959851a7f10412ccdbdb76906a183",
+      "size_bytes": 1265
+    },
+    {
+      "path": ".github/workflows/update.yml",
+      "sha256": "5252c2ab23c43307c28148593cb77ba6a79019f27e079104366a64cba47733f5",
+      "size_bytes": 3216
+    },
+    {
       "path": "scripts/generate.py",
-      "sha256": "82e61160e5bac965ef6ef10071e6b4f80a7d21d1bc9895fb22fbf1b425eeabd9",
-      "size_bytes": 480032
+      "sha256": "ef3ec7c9420a5046c0576aef704ee2637515aafd6d27f65b5b78bc62dab798a7",
+      "size_bytes": 485881
     },
     {
       "path": "scripts/validate_package.py",
@@ -94,8 +138,13 @@
     },
     {
       "path": "tct_engine/__init__.py",
-      "sha256": "bca3fcfe9394b9feb28da18f25f2cc26e8d7390c1809ae5f973be71635fcf4d9",
-      "size_bytes": 5007
+      "sha256": "688f1b8d96e85a537ff03fd84e86032be545883ea02fa0fa21564301655aef1f",
+      "size_bytes": 5679
+    },
+    {
+      "path": "tct_engine/activation.py",
+      "sha256": "c31575499d36ba8c2cae27bc89b34429a4bf4c7b96f550019ef095f3578b9f91",
+      "size_bytes": 16453
     },
     {
       "path": "tct_engine/canonical_story.py",
@@ -114,8 +163,8 @@
     },
     {
       "path": "tct_engine/editorial_engine.py",
-      "sha256": "7a8aaf8fc009c17f78c002edf60fbb2627c29f8aa2d94efa4462de651b8012a3",
-      "size_bytes": 12086
+      "sha256": "69cf7ddb351310e1018e43c152b28b9d6b471caceef58a7ef618027e933b4f43",
+      "size_bytes": 12445
     },
     {
       "path": "tct_engine/editorial_pipeline.py",
@@ -169,8 +218,8 @@
     },
     {
       "path": "tct_engine/observability.py",
-      "sha256": "1d91e054d47b59ac1c44f0c61dafc959d8c9da7a88bc976226ca1ab9be8fae13",
-      "size_bytes": 12104
+      "sha256": "f2a4e4c4b8c8c576009ee3f5ad203a3f7b4cba279302570844f4b417baa356c0",
+      "size_bytes": 12345
     },
     {
       "path": "tct_engine/production_router.py",
@@ -186,6 +235,11 @@
       "path": "tct_engine/rss_adapter.py",
       "sha256": "34754cbc4e3e6c44cd9aa22aefa8e524c625f7b4c54675dbc7e4bedb5612370f",
       "size_bytes": 4993
+    },
+    {
+      "path": "tct_engine/source_identity.py",
+      "sha256": "18e467c3b8a3dbff5cb054ced499df5528c8cfeac1a4f1629dacf522e97c2227",
+      "size_bytes": 4706
     },
     {
       "path": "tct_engine/story_engine.py",
@@ -238,6 +292,16 @@
       "size_bytes": 2683
     },
     {
+      "path": "tests/test_activation.py",
+      "sha256": "4f54cab3ca4bcd6566716949a289786b0a994718f98acbc5abb0f1940bfff81a",
+      "size_bytes": 7257
+    },
+    {
+      "path": "tests/test_activation_workflow.py",
+      "sha256": "2f3d7b3b8909aea6ba054fab250c35ba316c61914702602d5a8d1857c3f79782",
+      "size_bytes": 550
+    },
+    {
       "path": "tests/test_canonical_identity.py",
       "sha256": "fd0bb34db6a0bd153d998d98fec7c423103de20451ad919f6138bcb181691564",
       "size_bytes": 2461
@@ -259,8 +323,8 @@
     },
     {
       "path": "tests/test_editorial_engine.py",
-      "sha256": "44d023dffbf626d830147dfb23b1ab11a9fba89558187e56692e632ace1c5f37",
-      "size_bytes": 9834
+      "sha256": "3ab3985c374f1a2fb7b099edeedc61f9b3def06999f831b2ddf15dcb43074d8c",
+      "size_bytes": 10032
     },
     {
       "path": "tests/test_editorial_persistence.py",
@@ -288,6 +352,11 @@
       "size_bytes": 5135
     },
     {
+      "path": "tests/test_generation_json.py",
+      "sha256": "7900d2fbf2d1f800db42248f8c60a2c4477c92420a68ec65e7239d9370c8f0e3",
+      "size_bytes": 4829
+    },
+    {
       "path": "tests/test_incident_identity.py",
       "sha256": "e1772977cd3a5cb0d16f6a4ac78f3f28ac7ff6ec5f85f3c3609ee5116c529d53",
       "size_bytes": 6388
@@ -299,8 +368,8 @@
     },
     {
       "path": "tests/test_observability.py",
-      "sha256": "3ae7582a88f6366fc7ca79c9c40b30eeeb29a2836d15393c0b6539279045d970",
-      "size_bytes": 2782
+      "sha256": "57f6983b6fe5246684cf03ee87c4525e07c34a9862e6087fc0df8f900d89e67e",
+      "size_bytes": 3255
     },
     {
       "path": "tests/test_package_integrity.py",
@@ -331,6 +400,11 @@
       "path": "tests/test_rss_adapter.py",
       "sha256": "3b54195f11d9fd183139b43a31a4856de0bb82b5d99f3bf779a4e98a01902de7",
       "size_bytes": 6262
+    },
+    {
+      "path": "tests/test_source_identity.py",
+      "sha256": "9858ac383487c08b5c8f7b97f5836ece702d71d03f9dfe9325f4deb907f09b4a",
+      "size_bytes": 2504
     },
     {
       "path": "tests/test_sprint4_local_judgment.py",
@@ -371,21 +445,6 @@
       "path": "tests/test_story_timelines.py",
       "sha256": "41f4222105e9744039a0252a1439884f8f701f7c27c7d192e441840985e8bbe8",
       "size_bytes": 4476
-    },
-    {
-      "path": "tct_engine/source_identity.py",
-      "sha256": "18e467c3b8a3dbff5cb054ced499df5528c8cfeac1a4f1629dacf522e97c2227",
-      "size_bytes": 4706
-    },
-    {
-      "path": "tests/test_source_identity.py",
-      "sha256": "9858ac383487c08b5c8f7b97f5836ece702d71d03f9dfe9325f4deb907f09b4a",
-      "size_bytes": 2504
-    },
-    {
-      "path": "tests/test_generation_json.py",
-      "sha256": "7900d2fbf2d1f800db42248f8c60a2c4477c92420a68ec65e7239d9370c8f0e3",
-      "size_bytes": 4829
     }
   ]
 }
