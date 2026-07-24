@@ -5,6 +5,20 @@ This package contains the isolated, tested editorial intelligence that will
 eventually replace duplicated decision logic inside the production engine.
 """
 
+from .activation import (
+    ACTIVATION_VERSION,
+    DEFAULT_MAX_ACTIONS,
+    ActivationAction,
+    ActivationConfig,
+    ActivationPreflight,
+    ActivationRecommendation,
+    ActivationRun,
+    EngineMode,
+    apply_activation_to_categories,
+    build_activation_preflight,
+    build_activation_run,
+    recommend_activation_action,
+)
 from .editorial_policy import EditorialPolicy, SourceProfile
 from .editorial_eligibility import (
     EditorialEligibilityEngine,
@@ -117,6 +131,18 @@ from .production_router import (
 )
 
 __all__ = [
+    "ACTIVATION_VERSION",
+    "DEFAULT_MAX_ACTIONS",
+    "ActivationAction",
+    "ActivationConfig",
+    "ActivationPreflight",
+    "ActivationRecommendation",
+    "ActivationRun",
+    "EngineMode",
+    "apply_activation_to_categories",
+    "build_activation_preflight",
+    "build_activation_run",
+    "recommend_activation_action",
     "EditorialPolicy",
     "SourceProfile",
     "EditorialEligibilityEngine",
@@ -195,4 +221,4 @@ __all__ = [
     "route_editorial_result",
 ]
 
-__version__ = "1.8.8"
+__version__ = "1.9.0"

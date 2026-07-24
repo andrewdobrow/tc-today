@@ -45,6 +45,10 @@ class EditorialEngineResult:
     relationship_confidence: float = 0.0
     relationship_reason: str = ""
     decision_trace: tuple[str, ...] = ()
+    canonical_is_custom: bool = False
+    canonical_title: str = ""
+    canonical_source: str = ""
+    canonical_url: str = ""
 
 
 class EditorialEngine:
@@ -222,6 +226,10 @@ class EditorialEngine:
             relationship_confidence=pipeline_result.relationship_confidence,
             relationship_reason=pipeline_result.relationship_reason,
             decision_trace=pipeline_result.decision_trace,
+            canonical_is_custom=bool(canonical.canonical.is_custom),
+            canonical_title=canonical.canonical.title,
+            canonical_source=canonical.canonical.source,
+            canonical_url=canonical.canonical.url,
         )
 
     def get_event(self, event_key: str):

@@ -1,4 +1,4 @@
-"""Observability reporting for the TCT editorial shadow engine.
+"""Observability reporting for the TCT editorial engine and activation layer.
 
 This module owns the diagnostics schema and version labels so production
 orchestration does not need to know the engine's internal data model.
@@ -13,9 +13,9 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.8.8"
-ENGINE_RELEASE = "hero-semantic-dedup-resilience"
-OBSERVABILITY_SCHEMA_VERSION = 8
+ENGINE_VERSION = "1.9.0"
+ENGINE_RELEASE = "controlled-production-activation"
+OBSERVABILITY_SCHEMA_VERSION = 9
 RESOLVER_VERSION = "2.4"
 RELATIONSHIP_ENGINE_VERSION = "1.2"
 
@@ -44,7 +44,8 @@ def build_editorial_observability(
     audit_rows: Iterable[Mapping[str, Any]],
     *,
     registry_path: str = "data/editorial_story_registry.json",
-    mode: str = "observe_only",
+    mode: str = "shadow",
+    activation: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Build a deterministic, JSON-safe diagnostics report.
 
@@ -215,7 +216,8 @@ def build_editorial_observability(
         },
         "generated_at": _utc_now(),
         "mode": mode,
-        "publication_behavior_changed": False,
+        "publication_behavior_changed": bool((activation or {}).get("publication_behavior_changed", False)),
+        "activation": dict(activation or {}),
         "registry_path": registry_path,
         "audit": {
             "candidates_processed": len(rows),
@@ -264,7 +266,8 @@ def write_editorial_observability(
     output_path: str | Path,
     *,
     registry_path: str = "data/editorial_story_registry.json",
-    mode: str = "observe_only",
+    mode: str = "shadow",
+    activation: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Atomically write the diagnostics report and return its payload."""
 
@@ -273,6 +276,7 @@ def write_editorial_observability(
         audit_rows,
         registry_path=registry_path,
         mode=mode,
+        activation=activation,
     )
     path = Path(output_path)
     path.parent.mkdir(parents=True, exist_ok=True)
