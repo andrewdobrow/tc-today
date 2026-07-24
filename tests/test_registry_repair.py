@@ -3,7 +3,11 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from tct_engine.registry_repair import repair_registry_payload
+from tct_engine.registry_repair import (
+    normalize_identity_title,
+    repair_registry_payload,
+    strip_publisher_suffix,
+)
 from tct_engine.story_registry import StoryRegistry
 
 
@@ -224,3 +228,79 @@ def test_story_registry_persists_repair_report_on_load(tmp_path: Path) -> None:
     assert registry.get_registry_health()["status"] == "repaired"
     assert persisted["schema"] == 8
     assert persisted["registry_repair"]["last_run"]["quarantined_story_count"] == 1
+
+
+def test_publisher_suffix_is_removed_only_for_identity_noise() -> None:
+    headline = "Big Taste of Martin County returns to support mentoring programs"
+
+    assert strip_publisher_suffix(f"{headline} - WPTV") == headline
+    assert strip_publisher_suffix(f"{headline} - cw34.com") == headline
+    assert normalize_identity_title(f"{headline} - WFLX") == normalize_identity_title(headline)
+    assert strip_publisher_suffix("Budget workshop - what residents should know") == (
+        "Budget workshop - what residents should know"
+    )
+
+
+def test_repair_merges_publisher_attribution_variants_and_keeps_direct_source() -> None:
+    headline = "Big Taste of Martin County returns to support mentoring programs"
+    direct = _story(
+        "story_000001",
+        events=["unknown-event-1111111111"],
+        titles=[headline],
+    )
+    direct["title_candidates"][0].update(
+        source="https://www.wptv.com/big-taste",
+        source_class="local_news",
+        source_trust=95,
+        priority=90,
+    )
+    aggregate = _story(
+        "story_000002",
+        events=["unknown-event-2222222222"],
+        titles=[f"{headline} - WFLX"],
+    )
+    aggregate["title_candidates"][0].update(
+        source="https://news.google.com/rss/article",
+        source_class="aggregator",
+        source_trust=45,
+        priority=40,
+    )
+    payload = {
+        "stories": {"story_000001": direct, "story_000002": aggregate},
+        "event_to_story": {},
+        "story_aliases": {},
+    }
+
+    report = repair_registry_payload(payload)
+
+    assert list(payload["stories"]) == ["story_000001"]
+    assert payload["stories"]["story_000001"]["canonical_title"] == headline
+    assert report.publisher_title_duplicate_groups_resolved == 1
+    assert report.remaining_publisher_title_duplicate_groups == 0
+
+
+def test_registry_matches_cross_feed_publisher_suffix_variants(tmp_path: Path) -> None:
+    registry = StoryRegistry(tmp_path / "registry.json")
+    headline = "TCCEED summer internship aims to keep young workers on the Treasure Coast"
+
+    first = registry.resolve_article(
+        event_key="unknown-event-1111111111",
+        title=headline,
+        facts=(),
+        source="https://www.wptv.com/story",
+        source_class="local_news",
+        source_trust=95,
+    )
+    second = registry.resolve_article(
+        event_key="unknown-event-2222222222",
+        title=f"{headline} - WFLX",
+        facts=(),
+        source="https://news.google.com/rss/article",
+        source_class="aggregator",
+        source_trust=45,
+    )
+
+    assert first == second
+    assert registry.last_decision["relationship"] == "same_event"
+    assert registry.last_decision["reason"] == "Exact normalized title already belongs to this story"
+    assert registry.get_story(first)["canonical_title"] == headline
