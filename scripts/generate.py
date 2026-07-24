@@ -8617,6 +8617,7 @@ def validate_live_permalink_integrity(all_categories, top_cat=None, output_dir=N
         "engine_version": "1.9.2",
         "status": "failed" if failures else "passed",
         "checked_hero_placements": checked,
+        "missing_count": len(failures),
         "passed": not failures,
         "failures": failures,
     }
