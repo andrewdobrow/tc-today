@@ -101,7 +101,7 @@ def test_registry_persists_importance_and_migrates_schema_3(tmp_path):
 
     registry = StoryRegistry(path)
     story = registry.get_story("story_000001")
-    assert registry.data["schema"] == 9
+    assert registry.data["schema"] == 10
     assert story["importance"]["score"] == 65
     assert story["importance"]["level"] == "high"
 

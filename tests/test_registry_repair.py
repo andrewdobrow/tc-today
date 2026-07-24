@@ -226,7 +226,7 @@ def test_story_registry_persists_repair_report_on_load(tmp_path: Path) -> None:
     persisted = json.loads(path.read_text(encoding="utf-8"))
 
     assert registry.get_registry_health()["status"] == "repaired"
-    assert persisted["schema"] == 9
+    assert persisted["schema"] == 10
     assert persisted["registry_repair"]["last_run"]["quarantined_story_count"] == 1
 
 
@@ -304,3 +304,69 @@ def test_registry_matches_cross_feed_publisher_suffix_variants(tmp_path: Path) -
     assert registry.last_decision["relationship"] == "same_event"
     assert registry.last_decision["reason"] == "Exact normalized title already belongs to this story"
     assert registry.get_story(first)["canonical_title"] == headline
+
+
+def test_registry_matches_same_article_url_across_evolving_headlines(tmp_path: Path) -> None:
+    registry = StoryRegistry(tmp_path / "registry.json")
+    source = "https://news.google.com/rss/articles/turnpike-case?oc=5"
+
+    first = registry.resolve_article(
+        event_key="traffic-crash-1111111111",
+        title="Truck driver in deadly Florida Turnpike crash due in St. Lucie court",
+        facts=("court hearing scheduled",),
+        locations=("St. Lucie County",),
+        source=source,
+    )
+    second = registry.resolve_article(
+        event_key="traffic-crash-2222222222",
+        title="Truck driver absent from court; hearing reset for October",
+        facts=("hearing reset for October",),
+        locations=("St. Lucie County",),
+        source="https://news.google.com/rss/articles/turnpike-case?utm_source=test",
+    )
+
+    assert first == second
+    assert registry.last_decision["relationship"] in {"same_event", "follow_up"}
+    assert "Exact source article URL" in registry.last_decision["reason"] or (
+        "follow-up" in registry.last_decision["reason"].casefold()
+    )
+    assert "Exact source article identity: true" in registry.last_decision["decision_trace"]
+
+
+def test_repair_merges_exact_article_url_but_not_shared_feed_url() -> None:
+    first = _story(
+        "story_000001",
+        events=["traffic-crash-1111111111"],
+        titles=["Truck driver due in court after deadly Turnpike crash"],
+    )
+    second = _story(
+        "story_000002",
+        events=["traffic-crash-2222222222"],
+        titles=["Truck driver absent from hearing; case reset for October"],
+    )
+    unrelated = _story(
+        "story_000003",
+        events=["unknown-event-3333333333"],
+        titles=["County commission approves road construction contract"],
+    )
+    article_url = "https://news.google.com/rss/articles/turnpike-case?oc=5"
+    feed_url = "https://www.wptv.com/news/local-news.rss"
+    first["sources"] = [article_url, feed_url]
+    second["sources"] = [article_url.replace("?oc=5", "?utm_source=test"), feed_url]
+    unrelated["sources"] = [feed_url]
+    payload = {
+        "stories": {
+            "story_000001": first,
+            "story_000002": second,
+            "story_000003": unrelated,
+        },
+        "event_to_story": {},
+        "story_aliases": {},
+    }
+
+    report = repair_registry_payload(payload)
+
+    assert set(payload["stories"]) == {"story_000001", "story_000003"}
+    assert report.source_identity_groups_resolved == 1
+    assert report.source_story_records_removed == 1
+    assert report.remaining_source_identity_groups == 0
