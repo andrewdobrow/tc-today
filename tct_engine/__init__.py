@@ -52,6 +52,16 @@ from .fact_extraction import (
     extract_article_facts,
 )
 from .event_key import generate_event_key
+from .incident_identity import (
+    INCIDENT_IDENTITY_VERSION,
+    IncidentIdentityMatch,
+    IncidentSignature,
+    build_incident_signature,
+    build_story_incident_signature,
+    compare_incident_signatures,
+    compare_story_incidents,
+    find_matching_incident_story,
+)
 from .rss_adapter import (
     RSSArticleAdapter,
     RSSArticleError,
@@ -132,6 +142,14 @@ __all__ = [
     "ExtractedArticleFacts",
     "extract_article_facts",
     "generate_event_key",
+    "INCIDENT_IDENTITY_VERSION",
+    "IncidentIdentityMatch",
+    "IncidentSignature",
+    "build_incident_signature",
+    "build_story_incident_signature",
+    "compare_incident_signatures",
+    "compare_story_incidents",
+    "find_matching_incident_story",
     "RSSArticleAdapter",
     "RSSArticleError",
     "EditorialEngine",
@@ -165,4 +183,4 @@ __all__ = [
     "route_editorial_result",
 ]
 
-__version__ = "1.8.5"
+__version__ = "1.8.6"

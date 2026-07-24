@@ -12,7 +12,9 @@ import itertools
 import re
 from typing import Any, Iterable, Mapping, MutableMapping
 
-REPAIR_VERSION = 2
+from .incident_identity import build_story_incident_signature, compare_incident_signatures
+
+REPAIR_VERSION = 3
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
@@ -269,6 +271,9 @@ class RegistryRepairReport:
     remaining_exact_duplicate_title_groups: int
     publisher_title_duplicate_groups_resolved: int
     remaining_publisher_title_duplicate_groups: int
+    incident_identity_groups_resolved: int
+    incident_story_records_removed: int
+    remaining_incident_identity_groups: int
     generated_at: str
 
     def to_dict(self) -> dict[str, Any]:
@@ -291,6 +296,9 @@ class RegistryRepairReport:
             "remaining_exact_duplicate_title_groups": self.remaining_exact_duplicate_title_groups,
             "publisher_title_duplicate_groups_resolved": self.publisher_title_duplicate_groups_resolved,
             "remaining_publisher_title_duplicate_groups": self.remaining_publisher_title_duplicate_groups,
+            "incident_identity_groups_resolved": self.incident_identity_groups_resolved,
+            "incident_story_records_removed": self.incident_story_records_removed,
+            "remaining_incident_identity_groups": self.remaining_incident_identity_groups,
             "generated_at": self.generated_at,
         }
 
@@ -331,6 +339,43 @@ def _duplicate_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[
     for story_id in stories:
         components.setdefault(find(story_id), set()).add(story_id)
     return [component for component in components.values() if len(component) > 1]
+
+
+def _incident_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[str]]:
+    """Return conservative high-confidence incident identity components."""
+
+    parent = {story_id: story_id for story_id in stories}
+
+    def find(story_id: str) -> str:
+        while parent[story_id] != story_id:
+            parent[story_id] = parent[parent[story_id]]
+            story_id = parent[story_id]
+        return story_id
+
+    def union(left: str, right: str) -> None:
+        a, b = find(left), find(right)
+        if a != b:
+            parent[b] = a
+
+    story_ids = sorted(stories, key=_story_number)
+    signatures = {
+        story_id: build_story_incident_signature(stories[story_id])
+        for story_id in story_ids
+    }
+    supported_ids = [story_id for story_id in story_ids if signatures[story_id].supported]
+    for index, left_id in enumerate(supported_ids):
+        for right_id in supported_ids[index + 1 :]:
+            if compare_incident_signatures(signatures[left_id], signatures[right_id]).matched:
+                union(left_id, right_id)
+
+    components: dict[str, set[str]] = {}
+    for story_id in story_ids:
+        components.setdefault(find(story_id), set()).add(story_id)
+    return [component for component in components.values() if len(component) > 1]
+
+
+def _count_incident_identity_groups(stories: Mapping[str, Mapping[str, Any]]) -> int:
+    return len(_incident_components(stories))
 
 
 def _count_exact_duplicate_title_groups(stories: Mapping[str, Mapping[str, Any]]) -> int:
@@ -378,9 +423,10 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
             del aliases[alias]
 
     publisher_duplicate_groups_before = _count_publisher_title_duplicate_groups(stories)
-    merged_story_ids: dict[str, tuple[str, ...]] = {}
-    components = _duplicate_components(stories)
-    for component in sorted(components, key=lambda group: min(_story_number(value) for value in group)):
+    merged_story_ids: dict[str, list[str]] = {}
+
+    exact_components = _duplicate_components(stories)
+    for component in sorted(exact_components, key=lambda group: min(_story_number(value) for value in group)):
         primary_id = choose_primary_story_id(component, stories)
         secondary_ids = sorted(component - {primary_id}, key=_story_number)
         primary = stories[primary_id]
@@ -388,13 +434,30 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
             merge_story_records(primary, stories[secondary_id])
             aliases[secondary_id] = primary_id
             del stories[secondary_id]
-        merged_story_ids[primary_id] = tuple(secondary_ids)
+        merged_story_ids.setdefault(primary_id, []).extend(secondary_ids)
+
+    # Exact and publisher-attribution duplicates are resolved first.  The
+    # incident layer then sees one record per literal headline identity and can
+    # safely consolidate paraphrased coverage using independent evidence.
+    incident_groups_before = _count_incident_identity_groups(stories)
+    incident_components = _incident_components(stories)
+    incident_removed = 0
+    for component in sorted(incident_components, key=lambda group: min(_story_number(value) for value in group)):
+        primary_id = choose_primary_story_id(component, stories)
+        secondary_ids = sorted(component - {primary_id}, key=_story_number)
+        primary = stories[primary_id]
+        for secondary_id in secondary_ids:
+            merge_story_records(primary, stories[secondary_id])
+            aliases[secondary_id] = primary_id
+            del stories[secondary_id]
+            incident_removed += 1
+        merged_story_ids.setdefault(primary_id, []).extend(secondary_ids)
 
     # Rebuild the event index from active records only. Quarantined records never
     # retain active mappings, and aliases are resolved to their chosen primary.
     event_to_story: dict[str, str] = {}
     for story_id, story in stories.items():
-        for event_key in story.get("events", ()):
+        for event_key in story.get("events", ( )):
             value = str(event_key or "").strip()
             if value:
                 event_to_story[value] = story_id
@@ -403,6 +466,7 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
     removed = sum(len(values) for values in merged_story_ids.values())
     remaining_duplicates = _count_exact_duplicate_title_groups(stories)
     remaining_publisher_duplicates = _count_publisher_title_duplicate_groups(stories)
+    remaining_incident_groups = _count_incident_identity_groups(stories)
     report = RegistryRepairReport(
         repair_version=REPAIR_VERSION,
         changed=bool(quarantine_reasons or removed),
@@ -410,14 +474,22 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
         active_stories_after=len(stories),
         quarantined_story_ids=tuple(sorted(quarantine_reasons, key=_story_number)),
         quarantine_reasons=quarantine_reasons,
-        duplicate_groups_merged=len(merged_story_ids),
+        duplicate_groups_merged=len(exact_components) + len(incident_components),
         duplicate_story_records_removed=removed,
-        merged_story_ids=merged_story_ids,
+        merged_story_ids={
+            primary: tuple(dict.fromkeys(merged))
+            for primary, merged in merged_story_ids.items()
+        },
         remaining_exact_duplicate_title_groups=remaining_duplicates,
         publisher_title_duplicate_groups_resolved=max(
             0, publisher_duplicate_groups_before - remaining_publisher_duplicates
         ),
         remaining_publisher_title_duplicate_groups=remaining_publisher_duplicates,
+        incident_identity_groups_resolved=max(
+            0, incident_groups_before - remaining_incident_groups
+        ),
+        incident_story_records_removed=incident_removed,
+        remaining_incident_identity_groups=remaining_incident_groups,
         generated_at=_utc_now(),
     )
 
@@ -428,3 +500,4 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
     repair_state["last_run"] = report.to_dict()
     repair_state["history"] = history[-10:]
     return report
+
