@@ -7149,6 +7149,19 @@ def confirm_same_story(new_headline, new_teaser, existing_entry):
 CANONICAL_CLEANUP_CONFIDENCE = 95
 CANONICAL_REDIRECT_LIMIT = 5000
 
+# Permanent publisher regression contract for the July 2026 Martin County
+# animal-hoarding story. These values are deliberately explicit: the canonical
+# target is a manually published TCT article, while the source slugs are URLs
+# that have existed publicly and must never be recreated as standalone pages.
+HOARDING_CANONICAL_SLUG = (
+    "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response"
+)
+HOARDING_REDIRECT_SOURCE_SLUGS = frozenset({
+    "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-animal-hoarding",
+    "2026-07-21-stuart-woman-arrested-after-deputies-rescue-about-80-cats-from-home-in-worst-hoa",
+    "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-hoarding-case-sh",
+})
+
 
 def _redirect_target_path(slug):
     return f"/articles/{slug}.html"
@@ -7182,6 +7195,21 @@ def _canonical_candidate_score(entry):
         int(entry.get("article_word_count", 0) or 0),
         entry.get("lastmod") or entry.get("date") or "",
     )
+
+
+def _upsert_canonical_redirect(redirects, record):
+    """Replace any earlier decision for one public source URL.
+
+    Redirect history may contain a stale target from an older canonical choice.
+    Appending another record is not sufficient because later dictionary merges can
+    preserve whichever duplicate happens to be encountered last. Keep one explicit
+    current-run decision per source slug instead.
+    """
+    source_slug = record.get("source_slug")
+    if not source_slug:
+        return
+    redirects[:] = [r for r in redirects if r.get("source_slug") != source_slug]
+    redirects.append(record)
 
 
 def _strict_custom_duplicate_pair(candidate, canonical):
@@ -7283,34 +7311,39 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
                 "reason": "Duplicate development consolidated under the single canonical event URL.",
             })
 
-    known_animal_sources = {
-        # Exact live generated duplicate.
-        "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-animal-hoarding",
-        # Older truncated variants retained for backward compatibility.
-        "2026-07-21-stuart-woman-arrested-after-deputies-rescue-about-80-cats-from-home-in-worst-hoa",
-        "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-hoarding-case-sh",
-    }
-    animal_customs = [e for e in customs if re.search(r"\b(80|eighty)\b", _story_text(_event_audit_item(e, "archive")), re.I)
-                      and re.search(r"\bcat", _story_text(_event_audit_item(e, "archive")), re.I)
-                      and re.search(r"\bhoard", _story_text(_event_audit_item(e, "archive")), re.I)]
-    if animal_customs:
-        canonical = next((e for e in animal_customs if e.get("slug") ==
-                          "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response"), None)
-        if canonical is None:
+    # Enforce the permanent hoarding-story canonical contract independently of
+    # headline wording. The canonical headline says "more than 70 animals," so a
+    # former text gate requiring "80" could silently skip this migration.
+    canonical = next(
+        (e for e in archive if e.get("slug") == HOARDING_CANONICAL_SLUG),
+        None,
+    )
+    if canonical is None:
+        animal_customs = [
+            e for e in customs
+            if re.search(r"\b(70|80|seventy|eighty)\b", _story_text(_event_audit_item(e, "archive")), re.I)
+            and re.search(r"\b(cat|animal)", _story_text(_event_audit_item(e, "archive")), re.I)
+            and re.search(r"\bhoard", _story_text(_event_audit_item(e, "archive")), re.I)
+        ]
+        if animal_customs:
             canonical = max(animal_customs, key=_canonical_candidate_score)
-        existing_sources = {r["source_slug"] for r in redirects}
-        for source_slug in sorted(known_animal_sources - existing_sources):
+
+    if canonical:
+        for source_slug in sorted(HOARDING_REDIRECT_SOURCE_SLUGS):
             if source_slug == canonical.get("slug"):
                 continue
-            redirects.append({
+            _upsert_canonical_redirect(redirects, {
                 "source_slug": source_slug,
                 "source_headline": "Previously published animal-hoarding duplicate",
                 "target_slug": canonical["slug"],
                 "target_headline": canonical.get("headline", ""),
                 "story_stage": "canonical-migration",
                 "match_confidence": 100,
-                "canonical_is_custom": True,
-                "reason": "Migration of a known duplicate previously removed by an older cleanup block.",
+                "canonical_is_custom": bool(
+                    canonical.get("is_custom") or canonical.get("authoritative_custom")
+                    or canonical.get("slug") == HOARDING_CANONICAL_SLUG
+                ),
+                "reason": "Permanent regression migration to the authoritative TCT hoarding story.",
             })
             removed_slugs.add(source_slug)
 
@@ -7429,25 +7462,32 @@ def write_story_regression_report(output_root, archive, redirect_verification):
         members = story.get("articles", []) or []
         if any(_known_event_key(" ".join([m.get("headline", ""), m.get("teaser", "")])) == hoarding_key for m in members):
             hoarding_stories.append(story)
-    hoarding_redirects = [r for r in redirects if "hoarding" in (r.get("reason", "") + " " + r.get("source_headline", "")).lower()
-                          or r.get("source_slug") in {
-        "2026-07-21-stuart-woman-arrested-after-deputies-rescue-about-80-cats-from-home-in-worst-hoa",
-        "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-hoarding-case-sh",
-    }]
-    expected_sources = {
+    hoarding_redirects = [
+        r for r in redirects
+        if r.get("source_slug") in HOARDING_REDIRECT_SOURCE_SLUGS
+        or "hoarding" in (r.get("reason", "") + " " + r.get("source_headline", "")).lower()
+    ]
+    exact_live_source = {
         "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-animal-hoarding",
     }
-    expected_target = "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response"
-    redirect_sources = {r.get("source_slug") for r in hoarding_redirects}
-    exact_live_redirect = next((r for r in redirects if r.get("source_slug") in expected_sources), None)
+    expected_target = HOARDING_CANONICAL_SLUG
+    redirect_by_source = {r.get("source_slug"): r for r in hoarding_redirects if r.get("source_slug")}
+    redirect_sources = set(redirect_by_source)
+    exact_live_redirect = next((redirect_by_source.get(slug) for slug in exact_live_source if redirect_by_source.get(slug)), None)
+    all_known_target_custom = all(
+        redirect_by_source.get(slug, {}).get("target_slug") == expected_target
+        for slug in HOARDING_REDIRECT_SOURCE_SLUGS
+    )
     archive_slugs = {e.get("slug") for e in archive or []}
     checks = {
         "hoarding_is_one_story": len(hoarding_stories) == 1,
         "hoarding_canonical_is_custom": len(hoarding_stories) == 1 and bool(hoarding_stories[0].get("canonical_is_custom")),
         "exact_custom_slug_is_canonical": len(hoarding_stories) == 1 and hoarding_stories[0].get("canonical_slug") == expected_target,
-        "exact_live_duplicate_redirect_exists": expected_sources <= redirect_sources,
+        "exact_live_duplicate_redirect_exists": exact_live_source <= redirect_sources,
         "exact_live_duplicate_targets_custom": bool(exact_live_redirect) and exact_live_redirect.get("target_slug") == expected_target,
-        "redirect_sources_removed_from_archive": not bool(expected_sources & archive_slugs),
+        "all_known_duplicate_redirects_exist": HOARDING_REDIRECT_SOURCE_SLUGS <= redirect_sources,
+        "all_known_duplicate_redirects_target_custom": all_known_target_custom,
+        "redirect_sources_removed_from_archive": not bool(HOARDING_REDIRECT_SOURCE_SLUGS & archive_slugs),
         "custom_article_remains_in_archive": expected_target in archive_slugs,
         "all_redirect_html_verified": all(v.get("passed") for v in redirect_verification) if redirect_verification else False,
     }
