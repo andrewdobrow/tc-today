@@ -6,6 +6,8 @@ on:
     paths:
       - "tct_engine/**"
       - "tests/**"
+      - "scripts/**"
+      - "manifest.json"
       - ".github/workflows/test-editorial-engine.yml"
 
 jobs:
@@ -24,7 +26,11 @@ jobs:
       - name: Install test dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pytest
+          # Keep this dependency set aligned with the production update workflow.
+          # Publisher regression tests import scripts/generate.py and therefore
+          # require the generator's runtime dependencies even though all network
+          # and AI calls remain disabled during tests.
+          python -m pip install feedparser anthropic requests json-repair pytest
 
       - name: Validate editorial package
         run: python scripts/validate_package.py
