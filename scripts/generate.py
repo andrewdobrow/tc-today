@@ -10,6 +10,7 @@ import json
 import re
 import hashlib
 import copy
+import time
 import feedparser
 import requests
 import anthropic
@@ -8160,12 +8161,31 @@ def _repair_article_shells(output_root):
         updated = raw[:body_match.start()] + replacement + raw[main_match.end():]
         return updated, updated != raw
 
-    checked = repaired = wrapped = unrepairable = header_normalized = 0
+    checked = repaired = wrapped = unrepairable = header_normalized = skipped_modern = 0
     for path in articles_dir.glob("*.html"):
         html = path.read_text(encoding="utf-8", errors="ignore")
         if 'http-equiv="refresh"' in html or "window.location.replace" in html:
             continue
         checked += 1
+
+        # This function is a legacy migration/repair pass, not a site-wide refresh.
+        # Current article pages are already rendered by render_article_page() with
+        # the canonical shell. Rebuilding their banners and related-story rails on
+        # every run rewrites hundreds of unchanged files and caused production jobs
+        # to exceed the workflow timeout. New or updated articles are rendered above;
+        # only structurally legacy pages need this repair pass.
+        modern_shell_tokens = (
+            'class="article-wrap"',
+            'class="article-meta"',
+            'class="article-banner-slot',
+            'class="article-editorial-grid"',
+            'class="article-side-rail"',
+            'class="newsroom-strip"',
+        )
+        if all(token in html for token in modern_shell_tokens):
+            skipped_modern += 1
+            continue
+
         if 'class="article-wrap"' not in html or 'class="article-meta"' not in html:
             continue
 
@@ -8239,11 +8259,12 @@ def _repair_article_shells(output_root):
 
     print(
         f"  Article shell repair: checked {checked}, repaired {repaired}, "
-        f"headers normalized {header_normalized}, legacy grids wrapped {wrapped}, "
-        f"unrepairable {unrepairable}"
+        f"skipped modern {skipped_modern}, headers normalized {header_normalized}, "
+        f"legacy grids wrapped {wrapped}, unrepairable {unrepairable}"
     )
-    return {"checked": checked, "repaired": repaired, "wrapped": wrapped,
-            "header_normalized": header_normalized, "unrepairable": unrepairable}
+    return {"checked": checked, "repaired": repaired, "skipped_modern": skipped_modern,
+            "wrapped": wrapped, "header_normalized": header_normalized,
+            "unrepairable": unrepairable}
 
 def _validate_presentation_contract(output_root):
     """Validate current presentation without blocking an urgent deploy on old archives.
@@ -9422,6 +9443,8 @@ def _write_editorial_observability(engine, audit_rows, activation_run=None):
 
 
 def main():
+    _build_started = time.perf_counter()
+    _stage_started = _build_started
     print("Treasure Coast Today — building site...")
     editorial_engine = _load_editorial_engine_audit()
     editorial_audited_keys = set()
@@ -9431,6 +9454,8 @@ def main():
     content_bank = build_content_bank()
     used_bank_images = set()
     all_categories = []
+    print(f"  Timing: state and content banks {time.perf_counter() - _stage_started:.1f}s")
+    _stage_started = time.perf_counter()
 
     # Pre-fetch all unique feed URLs once to avoid hammering WPTV with
     # duplicate requests across categories that share the same feeds.
@@ -9472,12 +9497,16 @@ def main():
                 f.cancel()
 
     print(f"  Feed cache: {sum(len(v) for v in feed_cache.values())} total entries across {len(feed_cache)} feeds")
+    print(f"  Timing: feed prefetch {time.perf_counter() - _stage_started:.1f}s")
+    _stage_started = time.perf_counter()
 
     # LLM classification pass: one batched call assigns categories to every story.
     # Replaces piecemeal banned-word lists with comprehension. On failure, this is
     # None and all filtering falls back to the keyword system automatically.
     global STORY_CLASSIFICATION
     STORY_CLASSIFICATION = classify_stories(feed_cache)
+    print(f"  Timing: LLM classification {time.perf_counter() - _stage_started:.1f}s")
+    _stage_started = time.perf_counter()
 
     for cat_key, cat_config in CATEGORIES.items():
         print(f"Processing: {cat_config['label']}...")
@@ -9742,6 +9771,8 @@ def main():
     # articles is no longer wanted. load_weather_alerts() is left defined but unused so
     # it can be re-enabled later if desired; the is_weather_alert plumbing elsewhere is
     # harmless and simply never fires now that nothing produces alerts.
+    print(f"  Timing: category generation and enrichment {time.perf_counter() - _stage_started:.1f}s")
+    _stage_started = time.perf_counter()
     custom_articles = load_custom_articles()
     all_injected = custom_articles
     if all_injected:
@@ -9873,6 +9904,9 @@ def main():
             top_cat["hero"]["image_url"]    = fb_img
             top_cat["hero"]["image_credit"] = fb_credit
 
+    print(f"  Timing: activation, shadow registry and hero selection {time.perf_counter() - _stage_started:.1f}s")
+    _stage_started = time.perf_counter()
+
     # Archive first — creates all article pages and populates archive.json so the
     # homepage grid can link to permalinks that actually exist with matching slugs.
     _current_regression_report = write_archives(all_categories, top_cat)
@@ -9896,6 +9930,8 @@ def main():
         )
 
     validate_live_permalink_integrity(all_categories, top_cat, OUTPUT_DIR)
+    print(f"  Timing: archive, publication identity and permalink gates {time.perf_counter() - _stage_started:.1f}s")
+    _stage_started = time.perf_counter()
     _current_gate_passed = bool((_current_regression_report or {}).get("production_gate_passed", False))
     _write_editorial_activation_report(
         editorial_activation_run, current_gate_passed=_current_gate_passed
@@ -9919,6 +9955,8 @@ def main():
     # mix of old and new article shells from reaching production.
     _repair_article_shells(OUTPUT_DIR)
     _validate_presentation_contract(OUTPUT_DIR)
+    print(f"  Timing: page rendering and presentation checks {time.perf_counter() - _stage_started:.1f}s")
+    _stage_started = time.perf_counter()
 
     # data.json
     write_data_json(all_categories, top_cat)
@@ -9940,6 +9978,8 @@ def main():
         editorial_engine, editorial_audit_rows, editorial_activation_run
     )
 
+    print(f"  Timing: final data and static pages {time.perf_counter() - _stage_started:.1f}s")
+    print(f"  Timing: total generator runtime {time.perf_counter() - _build_started:.1f}s")
     print(f"Done. {len(all_categories)} categories written.")
 
 
