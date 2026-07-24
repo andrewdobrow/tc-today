@@ -226,7 +226,7 @@ def test_story_registry_persists_repair_report_on_load(tmp_path: Path) -> None:
     persisted = json.loads(path.read_text(encoding="utf-8"))
 
     assert registry.get_registry_health()["status"] == "repaired"
-    assert persisted["schema"] == 8
+    assert persisted["schema"] == 9
     assert persisted["registry_repair"]["last_run"]["quarantined_story_count"] == 1
 
 
