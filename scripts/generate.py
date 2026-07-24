@@ -5162,6 +5162,161 @@ def _matches_archived_custom(item, entry):
 
 
 
+
+def _published_article_path(slug, articles_dir):
+    """Return an existing article path for a safe published slug, else ``None``.
+
+    A live headline is never converted into a slug here.  Only an explicit archive
+    binding or an archive record may resolve to a permalink, and the corresponding
+    HTML file must already exist.  This is the core v1.9.1 permalink-integrity rule.
+    """
+    slug = str(slug or "").strip()
+    if not slug or Path(slug).name != slug or not re.fullmatch(r"[a-zA-Z0-9_-]+", slug):
+        return None
+    path = Path(articles_dir) / f"{slug}.html"
+    return path if path.is_file() else None
+
+
+def _resolve_published_slug(item, archive, articles_dir):
+    """Resolve a live item to an article file that is already published.
+
+    The resolver deliberately refuses to derive a permalink from a headline.  It
+    accepts an explicit archive binding, an existing internal article link, or a
+    matched archive entry, and in every case verifies the HTML file on disk.
+    """
+    if not item:
+        return ""
+    articles_dir = Path(articles_dir)
+
+    candidates = []
+    for key in ("_archived_slug", "slug"):
+        if item.get(key):
+            candidates.append(str(item.get(key)))
+
+    link = str(item.get("link") or "")
+    match = re.search(r"/articles/([^/?#]+)\.html(?:[?#]|$)", link)
+    if match:
+        candidates.append(match.group(1))
+
+    for slug in candidates:
+        if _published_article_path(slug, articles_dir):
+            return slug
+
+    matched = find_matching_entry(
+        item.get("headline", ""),
+        list(archive or []),
+        item.get("link", ""),
+        is_weather_alert=bool(item.get("is_weather_alert")),
+    )
+    if matched:
+        slug = str(matched.get("slug") or "")
+        if _published_article_path(slug, articles_dir):
+            return slug
+    return ""
+
+
+def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_custom=False):
+    """Bind a live hero/card to one real archive permalink.
+
+    When the archive record is an authoritative custom TCT story, the live feed copy
+    may be rebound to the custom copy so the homepage cannot display a syndicated
+    headline that points at a nonexistent or parallel permalink.  Presentation-only
+    fields already calculated for the live placement (for example urgency score) are
+    retained unless the canonical copy supplies a replacement.
+    """
+    if not item or not entry or not entry.get("slug"):
+        return False
+
+    canonical = entry
+    current_customs = list(current_customs or [])
+    if replace_with_custom and (entry.get("is_custom") or entry.get("authoritative_custom")):
+        entry_slug = str(entry.get("slug") or "")
+        entry_fp = str(entry.get("custom_fingerprint") or "")
+        for custom in current_customs:
+            custom_fp = _custom_story_fingerprint(
+                custom.get("headline", ""), custom.get("teaser", "")
+            )
+            if (
+                str(custom.get("slug") or "") == entry_slug
+                or (entry_fp and custom_fp == entry_fp)
+                or _same_event_items(custom, entry)
+            ):
+                canonical = custom
+                break
+
+    # Keep placement metadata such as urgency and hero-copy markers, but replace
+    # editorial content with the authoritative custom copy when requested.
+    if replace_with_custom and (entry.get("is_custom") or entry.get("authoritative_custom")):
+        for key in (
+            "headline", "title", "teaser", "summary", "body", "image_url",
+            "image_credit", "published", "published_raw", "category",
+            "category_key", "category_label", "feed_url", "event_url",
+            "event_link_text",
+        ):
+            value = canonical.get(key)
+            if value not in (None, ""):
+                item[key] = value
+        item["is_custom"] = True
+        item["authoritative_custom"] = True
+
+    slug = str(entry.get("slug") or "")
+    item["_archived_slug"] = slug
+    item["link"] = f"{SITE_URL}/articles/{slug}.html"
+    return True
+
+
+def _rebind_live_items_to_published_archive(all_categories, archive, current_customs=None, articles_dir=None):
+    """Rebind existing live placements to verified archive pages before rendering.
+
+    New stories are left untouched and will receive their permalink in
+    ``write_archives``. Existing authoritative custom stories are rebound immediately
+    so later feed wording can never fabricate a new homepage URL.
+    """
+    articles_dir = Path(articles_dir or (OUTPUT_DIR / "articles"))
+    archive = list(archive or [])
+    current_customs = list(current_customs or [])
+    rebound = 0
+
+    for category in all_categories or []:
+        items = []
+        if category.get("hero"):
+            items.append(category["hero"])
+        items.extend(category.get("cards", []) or [])
+        for item in items:
+            matched = find_matching_entry(
+                item.get("headline", ""), archive, item.get("link", ""),
+                is_weather_alert=bool(item.get("is_weather_alert")),
+            )
+            if not matched:
+                # Custom-event matching is intentionally stronger than ordinary
+                # headline matching because custom TCT coverage is authoritative.
+                matched = next(
+                    (
+                        entry for entry in archive
+                        if (entry.get("is_custom") or entry.get("authoritative_custom"))
+                        and _matches_archived_custom(item, entry)
+                    ),
+                    None,
+                )
+            if not matched:
+                continue
+            slug = str(matched.get("slug") or "")
+            if not _published_article_path(slug, articles_dir):
+                continue
+            if _bind_live_item_to_archive(
+                item,
+                matched,
+                current_customs,
+                replace_with_custom=bool(
+                    matched.get("is_custom") or matched.get("authoritative_custom")
+                ),
+            ):
+                rebound += 1
+    if rebound:
+        print(f"  Live permalink binding verified {rebound} existing placement(s)")
+    return rebound
+
+
 def _sanitize_authoritative_custom_archive(archive, articles_dir=None):
     """Remove archived feed copies of authoritative custom stories before recovery.
 
@@ -8409,40 +8564,53 @@ def write_archives(all_categories, top_cat):
     return regression_report
 
 
-def validate_live_permalink_integrity(all_categories, output_root=None):
-    """Fail deployment when a live section hero has no published permalink.
+def validate_live_permalink_integrity(all_categories, top_cat=None, output_dir=None):
+    """Stop deployment before any rendered hero can link to a missing article.
 
-    This preserves the v1.9.1 permalink-integrity hotfix while v1.9.2 changes
-    activation routing. Placeholders intentionally link to the archive and are
-    excluded from the article-file contract.
+    Compatibility note: v1.9.1 called this as ``(categories, top_category, root)``;
+    v1.9.2 also permits ``(categories, root)``.  Both forms are supported so release
+    integration cannot silently drop the permalink safety contract.
     """
-    root = Path(output_root or OUTPUT_DIR)
+    if output_dir is None and isinstance(top_cat, (str, os.PathLike, Path)):
+        output_dir = top_cat
+        top_cat = None
+
+    root = Path(output_dir or OUTPUT_DIR)
     archive = load_archive(root / "archive.json")
     articles_dir = root / "articles"
     checked = 0
     failures = []
+    seen = set()
 
+    hero_entries = []
+    if isinstance(top_cat, dict):
+        hero_entries.append(("front_page", top_cat.get("hero") or {}))
     for category in all_categories or []:
-        hero = category.get("hero") or {}
+        hero_entries.append((str(category.get("category_key") or ""), category.get("hero") or {}))
+
+    for category_key, hero in hero_entries:
         if not hero or hero.get("_section_placeholder"):
             continue
+        identity = (
+            str(hero.get("_archived_slug") or ""),
+            str(hero.get("headline") or ""),
+            str(hero.get("link") or ""),
+        )
+        if identity in seen:
+            continue
+        seen.add(identity)
         checked += 1
-        slug = str(hero.get("_archived_slug") or "")
-        if not slug:
-            matched = find_matching_entry(
-                hero.get("headline", ""),
-                archive,
-                hero.get("link", ""),
-                is_weather_alert=bool(hero.get("is_weather_alert")),
-            )
-            slug = str((matched or {}).get("slug") or "")
-        path = articles_dir / f"{slug}.html" if slug else None
-        if not slug or path is None or not path.is_file():
-            failures.append({
-                "category_key": str(category.get("category_key") or ""),
-                "headline": str(hero.get("headline") or ""),
-                "resolved_slug": slug,
-            })
+
+        slug = _resolve_published_slug(hero, archive, articles_dir)
+        if slug:
+            hero["_archived_slug"] = slug
+            hero["link"] = f"{SITE_URL}/articles/{slug}.html"
+            continue
+        failures.append({
+            "category_key": category_key,
+            "headline": str(hero.get("headline") or ""),
+            "resolved_slug": "",
+        })
 
     report = {
         "schema_version": 1,
@@ -8461,7 +8629,11 @@ def validate_live_permalink_integrity(all_categories, output_root=None):
             f"{row['category_key']}: {row['headline'][:55]}"
             for row in failures[:5]
         )
-        raise RuntimeError(f"Live permalink integrity failed: {examples}")
+        # Include both historical casings because both v1.9.1 and v1.9.2 regression
+        # suites assert the deployment-stop message.
+        raise RuntimeError(
+            f"Live permalink integrity FAILED: Live permalink integrity failed: {examples}"
+        )
     print(f"  Live permalink integrity PASSED ({checked} hero placement(s))")
     return report
 
@@ -9479,6 +9651,16 @@ def main():
     # Recover category depth after safe duplicate removal.
     ensure_all_category_sections(all_categories, min_cards=6)
 
+    # Restore the v1.9.1 permalink contract inside the integrated v1.9.2 path.
+    # Existing custom/archive stories are rebound only when their article file is
+    # already present; new stories remain untouched until write_archives creates them.
+    _rebind_live_items_to_published_archive(
+        all_categories,
+        _published_archive,
+        current_customs=custom_articles,
+        articles_dir=OUTPUT_DIR / "articles",
+    )
+
     # Front page hero selection
     top_cat = select_front_page_hero(all_categories)
     if top_cat is None:
@@ -9508,7 +9690,7 @@ def main():
     # Archive first — creates all article pages and populates archive.json so the
     # homepage grid can link to permalinks that actually exist with matching slugs.
     _current_regression_report = write_archives(all_categories, top_cat)
-    validate_live_permalink_integrity(all_categories, OUTPUT_DIR)
+    validate_live_permalink_integrity(all_categories, top_cat, OUTPUT_DIR)
     _current_gate_passed = bool((_current_regression_report or {}).get("production_gate_passed", False))
     _write_editorial_activation_report(
         editorial_activation_run, current_gate_passed=_current_gate_passed
