@@ -3298,6 +3298,154 @@ def global_rank(all_cards, dedupe_against=None):
 
 
 
+def _safe_archive_slug(value):
+    """Validate an already-published slug without shortening or regenerating it."""
+    slug = str(value or "").strip().strip("/").lower()
+    return slug if re.fullmatch(r"[a-z0-9][a-z0-9-]*", slug) else ""
+
+
+def _resolve_published_slug(item, archive, articles_dir=None):
+    """Return only a permalink slug that is known to exist.
+
+    Homepage rendering runs after archive generation. It must never invent a slug
+    from a headline because archive protection or canonical matching may have kept
+    an older permalink instead of creating the newly-derived one.
+    """
+    item = item or {}
+    articles_dir = Path(articles_dir) if articles_dir is not None else None
+
+    def _exists(slug):
+        if not slug:
+            return False
+        return articles_dir is None or (articles_dir / f"{slug}.html").exists()
+
+    bound = _safe_archive_slug(item.get("_archived_slug", ""))
+    if bound and _exists(bound):
+        return bound
+
+    matched = find_matching_entry(
+        item.get("headline", ""),
+        archive or [],
+        item.get("link", "") or item.get("source_url", ""),
+        is_weather_alert=bool(item.get("is_weather_alert")),
+    )
+    if matched:
+        slug = _safe_archive_slug(matched.get("slug", ""))
+        if slug and _exists(slug):
+            item["_archived_slug"] = slug
+            return slug
+    return ""
+
+
+def _matching_current_custom(entry, current_customs):
+    """Find the active custom article represented by an authoritative archive row."""
+    entry = entry or {}
+    current_customs = current_customs or []
+    entry_slug = _safe_archive_slug(entry.get("slug", ""))
+    entry_headline = (entry.get("headline") or "").strip().lower()
+    entry_fp = entry.get("custom_fingerprint", "")
+
+    for custom in current_customs:
+        custom_slug = _safe_archive_slug(custom.get("slug", "")) if custom.get("slug") else ""
+        if entry_slug and custom_slug and entry_slug == custom_slug:
+            return custom
+        if entry_headline and (custom.get("headline") or "").strip().lower() == entry_headline:
+            return custom
+        if entry_fp:
+            candidate_fp = _custom_story_fingerprint(
+                custom.get("headline", ""),
+                custom.get("teaser", "") or custom.get("body", "")[:180],
+            )
+            if candidate_fp == entry_fp:
+                return custom
+    return None
+
+
+def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_custom=False):
+    """Bind a live hero/card object to the permalink actually retained in archive.
+
+    When a feed item is rejected because an authoritative custom article already
+    covers the event, optionally replace the live display object with that custom
+    article. This prevents a rejected feed headline from remaining on the homepage
+    with a fabricated, nonexistent URL.
+    """
+    item = item or {}
+    entry = entry or {}
+    slug = _safe_archive_slug(entry.get("slug", ""))
+    if not slug:
+        return False
+
+    if replace_with_custom and entry.get("is_custom"):
+        custom = _matching_current_custom(entry, current_customs)
+        if custom:
+            preserved = {
+                key: item[key]
+                for key in ("_is_hero_copy", "urgency_score", "is_breaking")
+                if key in item
+            }
+            item.clear()
+            item.update(dict(custom))
+            for key, value in preserved.items():
+                item.setdefault(key, value)
+
+    item["_archived_slug"] = slug
+    item["_canonical_archive_slug"] = slug
+    return True
+
+
+def validate_live_permalink_integrity(all_categories, top_cat, output_dir=None):
+    """Stop deployment before any rendered hero can link to a missing article."""
+    output_dir = Path(output_dir or OUTPUT_DIR)
+    articles_dir = output_dir / "articles"
+    archive = load_archive(output_dir / "archive.json")
+    checks = []
+    seen = set()
+
+    hero_entries = [("front_page", (top_cat or {}).get("hero", {}))]
+    hero_entries.extend(
+        (f"category:{cat.get('category_key', '')}", cat.get("hero", {}))
+        for cat in (all_categories or [])
+    )
+
+    for label, item in hero_entries:
+        if not item or item.get("_section_placeholder"):
+            continue
+        marker = id(item)
+        if marker in seen:
+            continue
+        seen.add(marker)
+        slug = _resolve_published_slug(item, archive, articles_dir)
+        exists = bool(slug and (articles_dir / f"{slug}.html").exists())
+        checks.append({
+            "placement": label,
+            "headline": item.get("headline", ""),
+            "slug": slug,
+            "exists": exists,
+        })
+
+    failures = [check for check in checks if not check["exists"]]
+    report = {
+        "schema_version": 1,
+        "status": "passed" if not failures else "failed",
+        "heroes_checked": len(checks),
+        "missing_count": len(failures),
+        "checks": checks,
+    }
+    data_dir = output_dir / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    (data_dir / "permalink-integrity.json").write_text(
+        json.dumps(report, indent=2), encoding="utf-8"
+    )
+    if failures:
+        details = "; ".join(
+            f"{failure['placement']}: {failure['headline'][:70]}"
+            for failure in failures
+        )
+        raise RuntimeError(f"Live permalink integrity FAILED: {details}")
+    print(f"  Live permalink integrity PASSED ({len(checks)} hero placement(s))")
+    return report
+
+
 def render_index(all_categories, top_cat):
     COUNTY_KEYS = {"martin", "st_lucie", "indian_river"}
     SECTION_LABELS = {
@@ -3325,19 +3473,15 @@ def render_index(all_categories, top_cat):
         archive     = load_archive(OUTPUT_DIR / "archive.json")
         if hero.get("_section_placeholder"):
             article_url = f"{SITE_URL}/archive.html"
-        elif hero.get("_archived_slug"):
-            article_url = f"{SITE_URL}/articles/{hero['_archived_slug']}.html"
         else:
-            matched = find_matching_entry(
-                hero.get("headline", ""), archive, hero.get("link", ""),
-                is_weather_alert=bool(hero.get("is_weather_alert")),
-            )
-            if matched:
-                slug = matched["slug"]
+            slug = _resolve_published_slug(hero, archive, OUTPUT_DIR / "articles")
+            if slug:
+                article_url = f"{SITE_URL}/articles/{slug}.html"
             else:
-                today = datetime.utcnow().strftime("%Y-%m-%d")
-                slug = f"{today}-{slugify(hero.get('headline', ''))}"
-            article_url = f"{SITE_URL}/articles/{slug}.html"
+                # Never fabricate a permalink from the current headline. If the
+                # publication-integrity gate was bypassed for any reason, degrade to
+                # the archive rather than emitting a guaranteed 404.
+                article_url = f"{SITE_URL}/archive.html"
         section_label = ""
         if cat_key in SECTION_LABELS:
             seo_text  = SECTION_LABELS[cat_key]
@@ -3475,13 +3619,10 @@ def render_index(all_categories, top_cat):
     archive_for_links = load_archive(OUTPUT_DIR / "archive.json")
 
     def card_permalink(card):
-        # Backfill cards already carry their archived slug
-        if card.get("_archived_slug"):
-            return f"{SITE_URL}/articles/{card['_archived_slug']}.html"
-        matched = find_matching_entry(card.get("headline",""), archive_for_links, card.get("link",""), is_weather_alert=bool(card.get("is_weather_alert")))
-        if matched:
-            return f"{SITE_URL}/articles/{matched['slug']}.html"
-        # No archive entry means no article page exists — skip this card
+        slug = _resolve_published_slug(card, archive_for_links, OUTPUT_DIR / "articles")
+        if slug:
+            return f"{SITE_URL}/articles/{slug}.html"
+        # No verified archive file means no article page exists — skip this card.
         return None
 
     support_card = """
@@ -8260,8 +8401,12 @@ def write_archives(all_categories, top_cat):
         # let the feed story fall through and create a NEW article, which is exactly the
         # duplicate permalink this guard is meant to prevent. So we skip it entirely.
         if existing and existing.get("is_custom") and not hero.get("is_custom"):
+            _bind_live_item_to_archive(
+                hero, existing, _current_customs, replace_with_custom=True
+            )
             print(f"  PROTECTED: dropping feed story '{headline[:45]}' — already covered "
-                  f"by custom article '{existing.get('headline','')[:45]}'")
+                  f"by custom article '{existing.get('headline','')[:45]}'; "
+                  f"live placement rebound to {existing.get('slug','')}")
             continue
 
         # FINAL GATE BEFORE OVERWRITING A PUBLISHED PERMALINK.
@@ -8289,6 +8434,7 @@ def write_archives(all_categories, top_cat):
         if existing:
             # Same story — update existing page in place, keep original URL
             slug = existing["slug"]
+            _bind_live_item_to_archive(hero, existing)
             hero["first_published"] = existing.get("first_published") or existing.get("date", "")
 
             # Detect whether the content genuinely changed (headline or teaser/body).
@@ -8343,6 +8489,8 @@ def write_archives(all_categories, top_cat):
             counter = 1
             while slug in existing_slugs:
                 slug = f"{base_slug}-{counter}"; counter += 1
+            hero["_archived_slug"] = slug
+            hero["_canonical_archive_slug"] = slug
             # Byline timestamp: brand-new article, first-published is now.
             hero["first_published"] = hero.get("first_published") or _now_eastern_rfc822()
             _related = [e for e in archive
@@ -9360,6 +9508,10 @@ def main():
             "Controlled activation changed publication output but the current "
             "story regression gate failed; deployment stopped"
         )
+
+    # Prove every rendered hero resolves to a file that was actually written.
+    # A failed check stops deployment, preserving the previous working site.
+    validate_live_permalink_integrity(all_categories, top_cat, OUTPUT_DIR)
 
     # Render and write homepage (now archive lookups resolve to real slugs)
     index_html = render_index(all_categories, top_cat)
