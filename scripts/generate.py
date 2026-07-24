@@ -39,6 +39,7 @@ try:
         trip_activation_circuit_breaker,
         route_editorial_result,
         write_editorial_observability,
+        build_publication_identity_index,
     )
 except Exception as exc:
     ActivationConfig = None
@@ -50,6 +51,7 @@ except Exception as exc:
     trip_activation_circuit_breaker = None
     route_editorial_result = None
     write_editorial_observability = None
+    build_publication_identity_index = None
     _editorial_import_error = exc
 
 # -- CONFIG --
@@ -8278,6 +8280,115 @@ def _validate_presentation_contract(output_root):
     else:
         print("  Presentation contract PASSED")
 
+
+def _load_publication_identity_index(registry_path=None):
+    """Load the persistent-story identity bridge used by permalink publication."""
+    if build_publication_identity_index is None:
+        return None
+    path = Path(registry_path or EDITORIAL_REGISTRY_PATH)
+    try:
+        payload = _read_json_file(path, {})
+        return build_publication_identity_index(payload)
+    except Exception as exc:
+        print(f"  Publication identity unavailable; retaining legacy archive matching: {exc}")
+        return None
+
+
+def _publication_story_id(item, identity_index):
+    if identity_index is None or not isinstance(item, dict):
+        return ""
+    existing = str(item.get("editorial_story_id") or item.get("_editorial_story_id") or "")
+    if existing and existing in identity_index.safe_story_ids:
+        return existing
+    try:
+        return identity_index.resolve(item)
+    except Exception:
+        return ""
+
+
+def _publication_canonical_key(entry):
+    """Custom first, then oldest public URL, then deeper copy as a tie-breaker."""
+    custom_rank = 0 if entry.get("is_custom") or entry.get("authoritative_custom") else 1
+    date = str(entry.get("date") or entry.get("lastmod") or "9999-99-99")
+    first_published = str(entry.get("first_published") or "")
+    quality = -int(entry.get("article_word_count", 0) or 0)
+    return (custom_rank, date, first_published, quality, str(entry.get("slug") or ""))
+
+
+def _reconcile_archive_publication_identity(archive, identity_index):
+    """Collapse archive rows that the persistent registry already proved identical.
+
+    This is deliberately narrower than semantic story merging. Only registry stories
+    with no follow-up/related relationship are eligible, and every archive row must
+    resolve through an exact safe source URL or an unambiguous normalized source title.
+    """
+    archive = list(archive or [])
+    if identity_index is None:
+        return archive, [], {
+            "status": "unavailable", "groups_resolved": 0,
+            "records_removed": 0, "remaining_duplicate_groups": 0,
+        }
+
+    groups = defaultdict(list)
+    for entry in archive:
+        story_id = _publication_story_id(entry, identity_index)
+        if story_id:
+            entry["editorial_story_id"] = story_id
+            groups[story_id].append(entry)
+
+    redirects = []
+    removed = set()
+    groups_resolved = 0
+    for story_id, members in groups.items():
+        active = [m for m in members if m.get("slug")]
+        if len(active) < 2:
+            continue
+        canonical = min(active, key=_publication_canonical_key)
+        canonical["editorial_story_id"] = story_id
+        group_removed = 0
+        for duplicate in active:
+            if duplicate is canonical or duplicate.get("slug") == canonical.get("slug"):
+                continue
+            source_slug = duplicate.get("slug", "")
+            if not source_slug:
+                continue
+            removed.add(source_slug)
+            group_removed += 1
+            redirects.append({
+                "source_slug": source_slug,
+                "source_headline": duplicate.get("headline", ""),
+                "target_slug": canonical.get("slug", ""),
+                "target_headline": canonical.get("headline", ""),
+                "story_stage": "duplicate-source-coverage",
+                "match_confidence": 100,
+                "canonical_is_custom": bool(
+                    canonical.get("is_custom") or canonical.get("authoritative_custom")
+                ),
+                "editorial_story_id": story_id,
+                "reason": (
+                    "Persistent editorial story identity consolidated rewritten "
+                    "source coverage under one public permalink."
+                ),
+            })
+        if group_removed:
+            groups_resolved += 1
+
+    cleaned = [entry for entry in archive if entry.get("slug") not in removed]
+    remaining = defaultdict(int)
+    for entry in cleaned:
+        story_id = str(entry.get("editorial_story_id") or "")
+        if story_id:
+            remaining[story_id] += 1
+    remaining_groups = sum(1 for count in remaining.values() if count > 1)
+    return cleaned, redirects, {
+        "status": "passed",
+        "identity_version": "1.0",
+        "groups_resolved": groups_resolved,
+        "records_removed": len(removed),
+        "remaining_duplicate_groups": remaining_groups,
+    }
+
+
 def write_archives(all_categories, top_cat):
     articles_dir = OUTPUT_DIR / "articles"
     archive_path = OUTPUT_DIR / "archive.json"
@@ -8331,6 +8442,15 @@ def write_archives(all_categories, top_cat):
 
     archive, _canonical_redirects = apply_canonical_story_cleanup(archive, articles_dir, OUTPUT_DIR)
 
+    # Bridge the persistent editorial registry into the permalink writer. Raw source
+    # articles may be rewritten into very different TCT headlines; source-backed
+    # story identity prevents those rewrites from becoming parallel public URLs.
+    _publication_identity = _load_publication_identity_index()
+    archive, _publication_redirects, _publication_report = (
+        _reconcile_archive_publication_identity(archive, _publication_identity)
+    )
+    _canonical_redirects.extend(_publication_redirects)
+
     heroes = [(top_cat["category_key"], top_cat["category_label"], top_cat["hero"])]
     for cat in all_categories:
         if cat["category_key"] != top_cat["category_key"]:
@@ -8380,10 +8500,19 @@ def write_archives(all_categories, top_cat):
         _item["_is_hero_copy"] = True
 
     _best_by_slug = {}
+    _publication_items_coalesced = 0
     for entry in all_articles:
-        k = _slug_key(entry[2].get("headline", ""))
+        _item = entry[2]
+        _story_id = _publication_story_id(_item, _publication_identity)
+        if _story_id:
+            _item["_editorial_story_id"] = _story_id
+            k = f"editorial-story:{_story_id}"
+        else:
+            k = _slug_key(_item.get("headline", ""))
         if not k:
             continue
+        if k in _best_by_slug:
+            _publication_items_coalesced += 1
         if k not in _best_by_slug or _copy_rank(entry) > _copy_rank(_best_by_slug[k]):
             _best_by_slug[k] = entry
     all_articles = list(_best_by_slug.values())
@@ -8402,7 +8531,18 @@ def write_archives(all_categories, top_cat):
             continue
 
         source_url = hero.get("link", "")
-        existing   = find_canonical_event_entry(hero, archive)
+        _editorial_story_id = _publication_story_id(hero, _publication_identity)
+        if _editorial_story_id:
+            hero["_editorial_story_id"] = _editorial_story_id
+            existing = next(
+                (entry for entry in archive
+                 if entry.get("editorial_story_id") == _editorial_story_id),
+                None,
+            )
+        else:
+            existing = None
+        if existing is None:
+            existing = find_canonical_event_entry(hero, archive)
 
         # OVERRIDE for recurring series (weekly traffic reports, roundups, game recaps).
         # These share a title prefix and vocabulary, so the matcher treats each new
@@ -8499,6 +8639,8 @@ def write_archives(all_categories, top_cat):
                 )
             if source_url:
                 existing["source_url"] = source_url
+            if _editorial_story_id:
+                existing["editorial_story_id"] = _editorial_story_id
             updated_count += 1
         else:
             # New story — create new page
@@ -8545,6 +8687,7 @@ def write_archives(all_categories, top_cat):
                 "article_paragraph_count": _paragraph_count(hero.get("body", "")),
                 "event_url": hero.get("event_url", ""),
                 "event_link_text": hero.get("event_link_text", ""),
+                "editorial_story_id": _editorial_story_id,
             })
             new_count += 1
 
@@ -8555,6 +8698,22 @@ def write_archives(all_categories, top_cat):
         archive, articles_dir, OUTPUT_DIR, current_run_redirects=_canonical_redirects
     )
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
+    _publication_report.update({
+        "generated_items_coalesced": _publication_items_coalesced,
+        "redirects_created": len(_publication_redirects),
+        "active_archive_records": len(archive),
+    })
+    _publication_report_path = OUTPUT_DIR / "data" / "publication-identity.json"
+    _publication_report_path.parent.mkdir(parents=True, exist_ok=True)
+    _publication_report_path.write_text(
+        json.dumps(_publication_report, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+    if _publication_redirects or _publication_items_coalesced:
+        print(
+            "  Publication identity consolidated "
+            f"{len(_publication_redirects)} archived duplicate URL(s) and "
+            f"{_publication_items_coalesced} duplicate generated placement(s)"
+        )
     regression_report = write_story_regression_report(OUTPUT_DIR, archive, _redirect_verification)
     write_story_health_report(OUTPUT_DIR, archive, current_run_redirects=_canonical_redirects)
     (OUTPUT_DIR / "archive.html").write_text(render_archive_page(archive), encoding="utf-8")

@@ -1,19 +1,19 @@
 {
   "engine": "TCT Editorial Engine",
-  "version": "1.9.1",
-  "release": "permalink-integrity-hotfix",
-  "python_validated": "3.13.5",
-  "observability_schema_version": 9,
-  "package_modules": 28,
-  "public_exports": 88,
+  "version": "1.9.3",
+  "release": "publication-canonical-enforcement",
+  "python_validated": "3.11.15 / 3.13.5",
+  "observability_schema_version": 11,
+  "package_modules": 29,
+  "public_exports": 94,
   "validation": {
     "package_imports": {
       "status": "passed",
-      "modules_imported": 27
+      "modules_imported": 28
     },
     "package_tests": {
       "status": "passed",
-      "tests_passed": 191
+      "tests_passed": 205
     },
     "production_contract_tests": {
       "status": "excluded",
@@ -82,7 +82,7 @@
     },
     "controlled_production_activation": {
       "status": "passed",
-      "activation_version": "1.0",
+      "activation_version": "1.1",
       "default_mode": "shadow",
       "supported_modes": [
         "shadow",
@@ -99,7 +99,8 @@
         "custom_canonical_protection",
         "exact_normalized_title_identity",
         "publisher_attribution_title_identity",
-        "exact_safe_source_article_identity"
+        "exact_safe_source_article_identity",
+        "guarded_same_story_stage_95"
       ],
       "observe_only_capabilities": [
         "semantic_resolver_merges",
@@ -114,14 +115,50 @@
       "latest_production_preflight_simulation": "passed",
       "action_history_jsonl": true
     },
-    "permalink_integrity_hotfix": {
+    "guarded_activation_integration": {
       "status": "passed",
-      "protected_custom_hero_rebound": true,
-      "existing_slug_preserved_without_reslugging": true,
-      "fabricated_headline_permalink_removed": true,
-      "deployment_gate_on_missing_hero_permalink": true,
-      "diagnostic_file": "data/permalink-integrity.json",
-      "regression_tests_added": 5
+      "activation_version": "1.1",
+      "existing_guarded_rule_preserved": true,
+      "safe_same_stage_minimum_confidence_percent": 95,
+      "quiet_cycle_zero_recommendations_supported": true,
+      "recommend_mode_never_mutates_publication": true,
+      "kill_switch_disables_guarded_actions": true,
+      "combined_action_circuit_breaker_rolls_back_preview": true,
+      "parallel_legacy_action_path_removed": true,
+      "guarded_actions_written_to_activation_report": true,
+      "guarded_actions_written_to_suppression_history": true
+    },
+    "live_permalink_integrity": {
+      "status": "passed",
+      "v1_9_1_hotfix_preserved": true,
+      "live_section_heroes_require_existing_article_files": true,
+      "section_placeholders_excluded": true,
+      "deployment_failure_report_written": true
+    },
+    "publication_canonical_enforcement": {
+      "status": "passed",
+      "identity_version": "1.0",
+      "persistent_story_id_carried_into_permalink_writer": true,
+      "rewritten_headlines_share_one_public_permalink": true,
+      "follow_up_relationships_remain_observe_only": true,
+      "custom_canonical_priority_preserved": true,
+      "duplicate_urls_redirect_to_canonical": true,
+      "current_run_generated_duplicates_coalesced_before_write": true,
+      "regression_cases": {
+        "big_taste_of_martin_county": {
+          "duplicates": 2,
+          "canonical_urls": 1
+        },
+        "fort_pierce_childcare_crisis": {
+          "duplicates": 3,
+          "canonical_urls": 1
+        }
+      },
+      "production_registry_simulation": {
+        "groups_resolved": 2,
+        "records_removed": 3,
+        "remaining_duplicate_groups": 0
+      }
     }
   },
   "files": [
@@ -137,8 +174,8 @@
     },
     {
       "path": "scripts/generate.py",
-      "sha256": "d0ceac65ecc2c8069194d4ecd281fdb580e5c518ad0dd258dd6a714a929cdd01",
-      "size_bytes": 491600
+      "sha256": "9010ae84751682d328fef93287f3501c7ac70138c1473fd96782f2f1eccaf57e",
+      "size_bytes": 507419
     },
     {
       "path": "scripts/validate_package.py",
@@ -147,13 +184,13 @@
     },
     {
       "path": "tct_engine/__init__.py",
-      "sha256": "5d09f8bdb4f231afec251928f2ba317bac7515486ab3b649361db2af16bf0d61",
-      "size_bytes": 5679
+      "sha256": "f5ff9c9b850b29c3f08f7f07c2f8177df9e3b44311fcc3ada69b3905ec3e5b57",
+      "size_bytes": 6203
     },
     {
       "path": "tct_engine/activation.py",
-      "sha256": "c31575499d36ba8c2cae27bc89b34429a4bf4c7b96f550019ef095f3578b9f91",
-      "size_bytes": 16453
+      "sha256": "7c83f67a63f597d5b1c6fcad1864af95a8d87f6af1e35a8eb9d8331c65fc0a2c",
+      "size_bytes": 19608
     },
     {
       "path": "tct_engine/canonical_story.py",
@@ -227,13 +264,18 @@
     },
     {
       "path": "tct_engine/observability.py",
-      "sha256": "d43e707c394ea198ac9eb459de53f1c65c4ee825b6b159a33338d9b779b22339",
-      "size_bytes": 12339
+      "sha256": "4fa088f40945a705e69f2c01228cd76ac57d74e4922cb5763d7c08beddc8aa5f",
+      "size_bytes": 12347
     },
     {
       "path": "tct_engine/production_router.py",
       "sha256": "07fe7909497097077f0cb3e3ad7ca78d834c02b56e0b8557cc867e0037162977",
       "size_bytes": 2932
+    },
+    {
+      "path": "tct_engine/publication_identity.py",
+      "sha256": "777232c92fd5e36c31eba05b692373e573e59ff0fe98191de9162f6f55f30b97",
+      "size_bytes": 5025
     },
     {
       "path": "tct_engine/registry_repair.py",
@@ -307,8 +349,8 @@
     },
     {
       "path": "tests/test_activation_workflow.py",
-      "sha256": "2f3d7b3b8909aea6ba054fab250c35ba316c61914702602d5a8d1857c3f79782",
-      "size_bytes": 550
+      "sha256": "615f9277c4954200cd0a03aff56cc2ace7bd09e3fa1f562e19adebd335737493",
+      "size_bytes": 925
     },
     {
       "path": "tests/test_canonical_identity.py",
@@ -366,9 +408,19 @@
       "size_bytes": 4829
     },
     {
+      "path": "tests/test_guarded_activation_integration.py",
+      "sha256": "e718c86d19e03771345517eb012895412eb7f717edf6aee25e1b6f01cf3b8a74",
+      "size_bytes": 6487
+    },
+    {
       "path": "tests/test_incident_identity.py",
       "sha256": "e1772977cd3a5cb0d16f6a4ac78f3f28ac7ff6ec5f85f3c3609ee5116c529d53",
       "size_bytes": 6388
+    },
+    {
+      "path": "tests/test_live_permalink_integrity.py",
+      "sha256": "011a49df36f1395ac2d417c210ca6201be81bc15000cf039e3354a0840f352bb",
+      "size_bytes": 2876
     },
     {
       "path": "tests/test_matcher_contract.py",
@@ -386,14 +438,14 @@
       "size_bytes": 926
     },
     {
-      "path": "tests/test_permalink_integrity.py",
-      "sha256": "c0afc71cd37275b4d2448ddbee4907eec3b660ea80adf5513b305987a9980b85",
-      "size_bytes": 4858
-    },
-    {
       "path": "tests/test_production_router.py",
       "sha256": "e271cabb3855d968b9e5bbb9867376845570b85f1702b636cf976cafd4741b99",
       "size_bytes": 3459
+    },
+    {
+      "path": "tests/test_publication_identity.py",
+      "sha256": "101e10b8aa811fafbc898c53897a1436eb4e3927936336d4af784fe53ecf6df0",
+      "size_bytes": 7113
     },
     {
       "path": "tests/test_publisher_redirects.py",

@@ -110,6 +110,11 @@ from .story_lifecycle import (
     StoryLifecycleState,
     classify_story_lifecycle,
 )
+from .publication_identity import (
+    PUBLICATION_IDENTITY_VERSION,
+    PublicationIdentityIndex,
+    build_publication_identity_index,
+)
 from .registry_repair import (
     REPAIR_VERSION,
     RegistryRepairReport,
@@ -225,6 +230,9 @@ __all__ = [
     "ProductionInstruction",
     "ProductionRoute",
     "route_editorial_result",
+    "PUBLICATION_IDENTITY_VERSION",
+    "PublicationIdentityIndex",
+    "build_publication_identity_index",
 ]
 
-__version__ = "1.9.2"
+__version__ = "1.9.3"
