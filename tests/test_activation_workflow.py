@@ -12,3 +12,11 @@ def test_production_workflow_exposes_activation_controls():
 def test_editorial_ci_runs_when_production_workflow_changes():
     text = Path(".github/workflows/test-editorial-engine.yml").read_text(encoding="utf-8")
     assert '".github/workflows/update.yml"' in text
+
+
+def test_guarded_suppressions_share_the_activation_control_path():
+    text = Path("scripts/generate.py").read_text(encoding="utf-8")
+    assert "editorial_activation_run, _live_suppressions = _apply_editorial_activation" in text
+    assert "guarded_preview" in text
+    assert "Editorial activation logged" in text
+    assert "Guarded story engine suppressed" not in text
