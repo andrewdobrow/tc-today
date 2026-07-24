@@ -28,6 +28,7 @@ from .editorial_proximity import (
 from .registry_repair import (
     choose_primary_story_id,
     is_sparse_event_key,
+    normalize_identity_title,
     normalize_title,
     repair_registry_payload,
 )
@@ -139,14 +140,14 @@ class StoryRegistry:
         return payload
 
     def _find_exact_title_story(self, title: str) -> str | None:
-        normalized = normalize_title(title)
+        normalized = normalize_identity_title(title)
         if len(normalized.split()) < 4:
             return None
 
         matches: list[str] = []
         for story_id, story in self.data["stories"].items():
             known_titles = [story.get("canonical_title", ""), *story.get("titles", ())]
-            if any(normalize_title(value) == normalized for value in known_titles):
+            if any(normalize_identity_title(value) == normalized for value in known_titles):
                 matches.append(story_id)
 
         if not matches:

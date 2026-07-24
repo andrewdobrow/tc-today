@@ -13,9 +13,9 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.8.4"
-ENGINE_RELEASE = "canonical-redirect-enforcement"
-OBSERVABILITY_SCHEMA_VERSION = 5
+ENGINE_VERSION = "1.8.5"
+ENGINE_RELEASE = "publisher-title-identity"
+OBSERVABILITY_SCHEMA_VERSION = 6
 RESOLVER_VERSION = "2.2"
 RELATIONSHIP_ENGINE_VERSION = "1.2"
 

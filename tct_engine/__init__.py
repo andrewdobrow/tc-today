@@ -80,7 +80,9 @@ from .registry_repair import (
     REPAIR_VERSION,
     RegistryRepairReport,
     is_sparse_event_key,
+    normalize_identity_title,
     normalize_title,
+    strip_publisher_suffix,
     repair_registry_payload,
 )
 from .observability import (
@@ -151,7 +153,9 @@ __all__ = [
     "REPAIR_VERSION",
     "RegistryRepairReport",
     "is_sparse_event_key",
+    "normalize_identity_title",
     "normalize_title",
+    "strip_publisher_suffix",
     "repair_registry_payload",
     "OBSERVABILITY_SCHEMA_VERSION",
     "build_editorial_observability",
@@ -161,4 +165,4 @@ __all__ = [
     "route_editorial_result",
 ]
 
-__version__ = "1.8.4"
+__version__ = "1.8.5"

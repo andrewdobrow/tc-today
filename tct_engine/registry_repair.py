@@ -12,11 +12,31 @@ import itertools
 import re
 from typing import Any, Iterable, Mapping, MutableMapping
 
-REPAIR_VERSION = 1
+REPAIR_VERSION = 2
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
 _WORD_RE = re.compile(r"[a-z0-9]+")
+
+_PUBLISHER_SUFFIX_RE = re.compile(
+    r"^(?P<head>.+?)\s+(?:-|–|—|\|)\s+(?P<tail>[^|–—]{2,80})\s*$"
+)
+_PUBLISHER_DOMAIN_RE = re.compile(r"^[a-z0-9.-]+\.(?:com|org|net|news|tv)$", re.IGNORECASE)
+_PUBLISHER_ACRONYM_RE = re.compile(r"^[A-Z0-9]{2,8}$")
+_PUBLISHER_ENDINGS = frozenset(
+    {
+        "news", "network", "post", "press", "record", "sentinel", "times",
+        "tribune", "journal", "herald", "observer", "courier", "living",
+    }
+)
+_KNOWN_PUBLISHER_SUFFIXES = frozenset(
+    {
+        "aol", "aol.com", "cw34.com", "fox23.com", "hometown news treasure coast",
+        "ksnb", "kktv", "latestly", "msn", "mynbc15.com", "nfhs network",
+        "southern living", "the times of india", "treasure coast news", "wcti",
+        "wflx", "wpbf", "wpec", "wptv", "wrdw", "wxii", "yahoo",
+    }
+)
 _STORY_ID_RE = re.compile(r"(\d+)$")
 _GENERIC_TITLE_TOKENS = frozenset(
     {
@@ -36,6 +56,39 @@ def _utc_now() -> str:
 
 def normalize_title(value: object) -> str:
     return " ".join(_WORD_RE.findall(str(value or "").casefold()))
+
+
+def strip_publisher_suffix(value: object) -> str:
+    """Remove a trailing publisher attribution without changing display copy.
+
+    Google News commonly emits the same headline as ``Headline - WPTV`` and
+    ``Headline - WFLX``. The suffix is identity noise, but ordinary headline
+    subtitles such as ``Budget workshop - what residents should know`` must
+    remain intact.
+    """
+
+    title = str(value or "").strip()
+    match = _PUBLISHER_SUFFIX_RE.match(title)
+    if not match:
+        return title
+
+    head = match.group("head").strip()
+    tail = match.group("tail").strip().strip(".")
+    folded = tail.casefold()
+    words = [word for word in _WORD_RE.findall(folded) if word]
+    publisher_like = bool(
+        folded in _KNOWN_PUBLISHER_SUFFIXES
+        or _PUBLISHER_DOMAIN_RE.fullmatch(tail)
+        or _PUBLISHER_ACRONYM_RE.fullmatch(tail)
+        or (words and len(words) <= 6 and words[-1] in _PUBLISHER_ENDINGS)
+    )
+    return head if publisher_like and len(normalize_title(head).split()) >= 4 else title
+
+
+def normalize_identity_title(value: object) -> str:
+    """Normalize a title for deterministic cross-feed identity matching."""
+
+    return normalize_title(strip_publisher_suffix(value))
 
 
 def _title_tokens(value: object) -> set[str]:
@@ -214,6 +267,8 @@ class RegistryRepairReport:
     duplicate_story_records_removed: int
     merged_story_ids: Mapping[str, tuple[str, ...]]
     remaining_exact_duplicate_title_groups: int
+    publisher_title_duplicate_groups_resolved: int
+    remaining_publisher_title_duplicate_groups: int
     generated_at: str
 
     def to_dict(self) -> dict[str, Any]:
@@ -234,6 +289,8 @@ class RegistryRepairReport:
                 primary: list(merged) for primary, merged in self.merged_story_ids.items()
             },
             "remaining_exact_duplicate_title_groups": self.remaining_exact_duplicate_title_groups,
+            "publisher_title_duplicate_groups_resolved": self.publisher_title_duplicate_groups_resolved,
+            "remaining_publisher_title_duplicate_groups": self.remaining_publisher_title_duplicate_groups,
             "generated_at": self.generated_at,
         }
 
@@ -257,7 +314,7 @@ def _duplicate_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[
     for story_id, story in stories.items():
         titles = [story.get("canonical_title", ""), *story.get("titles", ())]
         for title in titles:
-            normalized = normalize_title(title)
+            normalized = normalize_identity_title(title)
             if len(normalized.split()) >= 4:
                 title_index.setdefault(normalized, []).append(story_id)
         for event_key in story.get("events", ()):
@@ -281,6 +338,16 @@ def _count_exact_duplicate_title_groups(stories: Mapping[str, Mapping[str, Any]]
     for story_id, story in stories.items():
         for title in [story.get("canonical_title", ""), *story.get("titles", ())]:
             normalized = normalize_title(title)
+            if len(normalized.split()) >= 4:
+                title_index.setdefault(normalized, set()).add(story_id)
+    return sum(1 for story_ids in title_index.values() if len(story_ids) > 1)
+
+
+def _count_publisher_title_duplicate_groups(stories: Mapping[str, Mapping[str, Any]]) -> int:
+    title_index: dict[str, set[str]] = {}
+    for story_id, story in stories.items():
+        for title in [story.get("canonical_title", ""), *story.get("titles", ())]:
+            normalized = normalize_identity_title(title)
             if len(normalized.split()) >= 4:
                 title_index.setdefault(normalized, set()).add(story_id)
     return sum(1 for story_ids in title_index.values() if len(story_ids) > 1)
@@ -310,6 +377,7 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
         if alias in quarantined_ids or target in quarantined_ids:
             del aliases[alias]
 
+    publisher_duplicate_groups_before = _count_publisher_title_duplicate_groups(stories)
     merged_story_ids: dict[str, tuple[str, ...]] = {}
     components = _duplicate_components(stories)
     for component in sorted(components, key=lambda group: min(_story_number(value) for value in group)):
@@ -334,6 +402,7 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
 
     removed = sum(len(values) for values in merged_story_ids.values())
     remaining_duplicates = _count_exact_duplicate_title_groups(stories)
+    remaining_publisher_duplicates = _count_publisher_title_duplicate_groups(stories)
     report = RegistryRepairReport(
         repair_version=REPAIR_VERSION,
         changed=bool(quarantine_reasons or removed),
@@ -345,6 +414,10 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
         duplicate_story_records_removed=removed,
         merged_story_ids=merged_story_ids,
         remaining_exact_duplicate_title_groups=remaining_duplicates,
+        publisher_title_duplicate_groups_resolved=max(
+            0, publisher_duplicate_groups_before - remaining_publisher_duplicates
+        ),
+        remaining_publisher_title_duplicate_groups=remaining_publisher_duplicates,
         generated_at=_utc_now(),
     )
 
