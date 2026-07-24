@@ -1,7 +1,7 @@
 {
   "engine": "TCT Editorial Engine",
-  "version": "1.8.3",
-  "release": "registry-integrity-repair",
+  "version": "1.8.4",
+  "release": "canonical-redirect-enforcement",
   "python_validated": "3.13.5",
   "observability_schema_version": 5,
   "package_modules": 25,
@@ -13,7 +13,7 @@
     },
     "package_tests": {
       "status": "passed",
-      "tests_passed": 146
+      "tests_passed": 149
     },
     "production_contract_tests": {
       "status": "excluded",
@@ -25,19 +25,25 @@
     },
     "production_registry_migration": {
       "status": "passed",
-      "active_stories_before": 400,
-      "active_stories_after": 300,
+      "active_stories_before": 419,
+      "active_stories_after": 316,
       "quarantined_corrupt_records": 8,
-      "exact_duplicate_groups_merged": 83,
-      "duplicate_story_records_removed": 92,
+      "exact_duplicate_groups_merged": 85,
+      "duplicate_story_records_removed": 95,
       "remaining_exact_duplicate_title_groups": 0
+    },
+    "publisher_redirect_regression": {
+      "status": "passed",
+      "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+      "legacy_sources_enforced": 3,
+      "stale_target_replacement_tested": true
     }
   },
   "files": [
     {
       "path": "scripts/generate.py",
-      "sha256": "21ae890a64ba2485866d02515f4a8c6231ea77e919060c65d158e0f44c024e7c",
-      "size_bytes": 475242
+      "sha256": "380abee3f98fd52363956880a436e254deed4552f51961494bbb162c8142bef8",
+      "size_bytes": 476730
     },
     {
       "path": "scripts/validate_package.py",
@@ -46,7 +52,7 @@
     },
     {
       "path": "tct_engine/__init__.py",
-      "sha256": "b95ab5edde18e15188f69dadd8ba01a56489482c6866e85aac9bf5683928677c",
+      "sha256": "674cd956e369571537f00d665fdfa804cf684ba421f8af7dc0e97a69cb6e372a",
       "size_bytes": 4001
     },
     {
@@ -116,8 +122,8 @@
     },
     {
       "path": "tct_engine/observability.py",
-      "sha256": "d8e9284251cef7a57cbbc16c43215e67d43c9b48c9501e22cfbfb5e0e8babb37",
-      "size_bytes": 12099
+      "sha256": "6343090649ad9db8c908a23fbdd3688d2da595f405d640b7f20db080ef09a7dc",
+      "size_bytes": 12104
     },
     {
       "path": "tct_engine/production_router.py",
@@ -308,6 +314,11 @@
       "path": "tests/test_story_timelines.py",
       "sha256": "41f4222105e9744039a0252a1439884f8f701f7c27c7d192e441840985e8bbe8",
       "size_bytes": 4476
+    },
+    {
+      "path": "tests/test_publisher_redirects.py",
+      "sha256": "884960525ab794858937cc504bec216fc64ce08cc3daaae57c28ea7a59c472c8",
+      "size_bytes": 6054
     }
   ]
 }
