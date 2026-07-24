@@ -2998,6 +2998,107 @@ def select_front_page_hero(all_categories):
     return top_cat
 
 
+
+def _extract_model_text(response):
+    """Return all text blocks from an Anthropic response as one string."""
+    chunks = []
+    for block in getattr(response, "content", []) or []:
+        value = getattr(block, "text", None)
+        if value:
+            chunks.append(str(value))
+    return "\n".join(chunks).strip()
+
+
+def _parse_json_index_array(raw, max_index=None):
+    """Parse a model response that should contain a JSON array of 1-based indexes.
+
+    Accepts ordinary JSON, fenced JSON, or prose containing one array. Invalid,
+    duplicate, boolean, negative, zero, and out-of-range values are discarded.
+    Raises ValueError when no usable JSON array is present.
+    """
+    value = (raw or "").strip()
+    if not value:
+        raise ValueError("model returned an empty response")
+
+    value = re.sub(r"^```(?:json)?\s*", "", value, flags=re.IGNORECASE)
+    value = re.sub(r"\s*```$", "", value)
+
+    candidates = []
+    first = value.find("[")
+    last = value.rfind("]")
+    if first != -1 and last > first:
+        candidates.append(value[first:last + 1])
+    candidates.append(value)
+
+    last_error = None
+    for candidate in dict.fromkeys(candidates):
+        try:
+            try:
+                from json_repair import repair_json
+                parsed = json.loads(repair_json(candidate))
+            except Exception:
+                parsed = json.loads(candidate)
+
+            if not isinstance(parsed, list):
+                raise ValueError("response JSON was not an array")
+
+            cleaned = []
+            seen = set()
+            for item in parsed:
+                if isinstance(item, bool):
+                    continue
+                try:
+                    index = int(item)
+                except (TypeError, ValueError):
+                    continue
+                if index < 1:
+                    continue
+                if max_index is not None and index > max_index:
+                    continue
+                if index in seen:
+                    continue
+                seen.add(index)
+                cleaned.append(index)
+            return cleaned
+        except Exception as exc:
+            last_error = exc
+
+    raise ValueError(f"model returned no valid JSON index array: {last_error}")
+
+
+def _request_json_index_array(
+    prompt,
+    *,
+    model,
+    max_tokens,
+    max_index,
+    request_client=None,
+    attempts=2,
+):
+    """Request a validated JSON index array, retrying once after invalid output."""
+    active_client = request_client or client
+    errors = []
+
+    for attempt in range(1, max(1, attempts) + 1):
+        retry_prompt = prompt
+        if attempt > 1:
+            retry_prompt += (
+                "\n\nYour previous response was invalid. Return exactly one JSON array "
+                "such as [] or [2, 5]. Do not include prose or markdown."
+            )
+        try:
+            response = active_client.messages.create(
+                model=model,
+                max_tokens=max_tokens,
+                messages=[{"role": "user", "content": retry_prompt}],
+            )
+            raw = _extract_model_text(response)
+            return _parse_json_index_array(raw, max_index=max_index), attempt
+        except Exception as exc:
+            errors.append(f"attempt {attempt}: {exc}")
+
+    raise ValueError("; ".join(errors))
+
 def promote_duplicate_heroes(top_cat, all_categories):
     """Ensure no single story is the hero of more than one category. First removes
     exact/near-exact duplicate heroes deterministically (guaranteed, no LLM needed),
@@ -3074,17 +3175,20 @@ def promote_duplicate_heroes(top_cat, all_categories):
         "If none are duplicates, return []."
     )
     try:
-        resp = client.messages.create(
+        duplicate_indexes, attempts_used = _request_json_index_array(
+            prompt,
             model=MODEL_SELECTION,
             max_tokens=200,
-            messages=[{"role": "user", "content": prompt}]
+            max_index=len(others),
         )
-        raw = resp.content[0].text.strip()
-        if raw.startswith("```"):
-            raw = raw.split("```")[1].lstrip("json").strip()
-        dupes = set(int(x) for x in json.loads(raw))
+        dupes = set(duplicate_indexes)
+        if attempts_used > 1:
+            print("  Hero semantic dedup recovered valid JSON on retry")
     except Exception as e:
-        print(f"  Hero semantic dedup failed ({e}), deterministic pass already applied")
+        print(
+            "  Hero semantic dedup skipped after invalid model responses "
+            f"({e}); deterministic pass already applied"
+        )
         return
 
     for i, cat in enumerate(others):
@@ -3156,15 +3260,14 @@ def global_rank(all_cards, dedupe_against=None):
         "Example: [4, 1, 12, 7]"
     )
     try:
-        resp = client.messages.create(
+        indices, attempts_used = _request_json_index_array(
+            prompt,
             model=MODEL_SELECTION,
             max_tokens=600,
-            messages=[{"role": "user", "content": prompt}]
+            max_index=n,
         )
-        raw = resp.content[0].text.strip()
-        if raw.startswith("```"):
-            raw = raw.split("```")[1].lstrip("json").strip()
-        indices = json.loads(raw)
+        if attempts_used > 1:
+            print("  Global ranking recovered valid JSON on retry")
         seen, ranked = set(), []
         for idx in indices:
             i = int(idx) - 1
