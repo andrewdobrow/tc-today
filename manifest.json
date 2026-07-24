@@ -1,19 +1,19 @@
 {
   "engine": "TCT Editorial Engine",
-  "version": "1.8.6",
-  "release": "incident-identity-consolidation",
+  "version": "1.8.7",
+  "release": "source-article-identity",
   "python_validated": "3.13.5",
-  "observability_schema_version": 7,
-  "package_modules": 26,
-  "public_exports": 71,
+  "observability_schema_version": 8,
+  "package_modules": 27,
+  "public_exports": 76,
   "validation": {
     "package_imports": {
       "status": "passed",
-      "modules_imported": 25
+      "modules_imported": 26
     },
     "package_tests": {
       "status": "passed",
-      "tests_passed": 157
+      "tests_passed": 165
     },
     "production_contract_tests": {
       "status": "excluded",
@@ -25,16 +25,17 @@
     },
     "production_registry_migration": {
       "status": "passed",
-      "active_stories_before": 310,
+      "active_stories_before": 305,
       "active_stories_after": 299,
       "quarantined_corrupt_records_this_run": 0,
       "quarantined_records_retained": 8,
-      "incident_identity_groups_merged": 1,
-      "incident_story_records_removed": 11,
+      "source_identity_groups_merged": 5,
+      "source_story_records_removed": 6,
       "remaining_exact_duplicate_title_groups": 0,
       "remaining_publisher_title_duplicate_groups": 0,
+      "remaining_source_identity_groups": 0,
       "remaining_incident_identity_groups": 0,
-      "load_seconds": 0.184
+      "load_seconds": 0.217
     },
     "publisher_redirect_regression": {
       "status": "passed",
@@ -59,6 +60,16 @@
       "topic_only_animal_cruelty_rejected": true,
       "sparse_live_identity_supported": true,
       "custom_canonical_priority_preserved": true
+    },
+    "source_article_identity": {
+      "status": "passed",
+      "identity_version": "1.0",
+      "exact_article_urls_supported": true,
+      "feed_and_search_urls_rejected": true,
+      "tracking_parameters_normalized": true,
+      "runtime_attachment_supported": true,
+      "production_groups_consolidated": 5,
+      "production_story_records_removed": 6
     }
   },
   "files": [
@@ -74,8 +85,8 @@
     },
     {
       "path": "tct_engine/__init__.py",
-      "sha256": "065e74c42feaeee6cf934f5d5af933c690e26d318f90aee618a17a36e575e21a",
-      "size_bytes": 4658
+      "sha256": "3176f7a0b0775491de2dd2db22b0ac2210d032d8373e42866bf1446c425da764",
+      "size_bytes": 5007
     },
     {
       "path": "tct_engine/canonical_story.py",
@@ -149,8 +160,8 @@
     },
     {
       "path": "tct_engine/observability.py",
-      "sha256": "f01ff1e007c2712fd44bf784a227ecb6ec13270672acbf92dfec245989e6c34b",
-      "size_bytes": 12105
+      "sha256": "28e8d0830408d510490b370d6fb4f9a6b65149997a2f5c27c486faa4d4bce10f",
+      "size_bytes": 12097
     },
     {
       "path": "tct_engine/production_router.py",
@@ -159,8 +170,8 @@
     },
     {
       "path": "tct_engine/registry_repair.py",
-      "sha256": "f2aaa3a4804648dde1c1865dec514391b8322425a55d2dc2a18ac7a1932cd6e6",
-      "size_bytes": 21087
+      "sha256": "09bdfa2215e8823b8a1b601f3c346d6c0f7c4e951edda47ef7d232d3eacd12be",
+      "size_bytes": 24082
     },
     {
       "path": "tct_engine/rss_adapter.py",
@@ -189,8 +200,8 @@
     },
     {
       "path": "tct_engine/story_registry.py",
-      "sha256": "521d44aa424cc78288ca84a58a1255cd411f9dbff160f44541a6d66ae180418f",
-      "size_bytes": 34306
+      "sha256": "ba5fcac9f84d7ba0ed0720f768cb03650324f96e6864e14e72b620ca7aa044fa",
+      "size_bytes": 37874
     },
     {
       "path": "tct_engine/story_relationship.py",
@@ -299,8 +310,8 @@
     },
     {
       "path": "tests/test_registry_repair.py",
-      "sha256": "06f8e0f3d022a6fd79dc4b32e8fdbbd49bf05ed628dfef53f24d7baf9b5ddc5a",
-      "size_bytes": 11071
+      "sha256": "5a15297beb7eb94e1b95fca628359ba41cae48dddd5b19684af731271cbef8bb",
+      "size_bytes": 13675
     },
     {
       "path": "tests/test_resolver_v2.py",
@@ -324,8 +335,8 @@
     },
     {
       "path": "tests/test_story_importance.py",
-      "sha256": "a722abb842248f5c101f8533a87b5a8082eedafe03a896d364fdaaffab79fd02",
-      "size_bytes": 9129
+      "sha256": "9142a518d19d96bde9266f5561423f7246ea6261d7662333dd541bf1d26e313a",
+      "size_bytes": 9130
     },
     {
       "path": "tests/test_story_lifecycle.py",
@@ -351,6 +362,16 @@
       "path": "tests/test_story_timelines.py",
       "sha256": "41f4222105e9744039a0252a1439884f8f701f7c27c7d192e441840985e8bbe8",
       "size_bytes": 4476
+    },
+    {
+      "path": "tct_engine/source_identity.py",
+      "sha256": "18e467c3b8a3dbff5cb054ced499df5528c8cfeac1a4f1629dacf522e97c2227",
+      "size_bytes": 4706
+    },
+    {
+      "path": "tests/test_source_identity.py",
+      "sha256": "9858ac383487c08b5c8f7b97f5836ece702d71d03f9dfe9325f4deb907f09b4a",
+      "size_bytes": 2504
     }
   ]
 }
