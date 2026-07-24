@@ -235,3 +235,6 @@ class EditorialPipeline:
 
     def get_breaking_stories(self):
         return self._registry.get_breaking_stories()
+
+    def get_registry_health(self):
+        return self._registry.get_registry_health()

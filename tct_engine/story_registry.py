@@ -9,8 +9,12 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from .story_importance import StoryImportance, StoryImportanceEngine, ImportanceLevel
-from .story_resolver import StoryResolver
-from .story_relationship import StoryRelationshipEngine, StoryRelationshipType
+from .story_resolver import StoryResolution, StoryResolver
+from .story_relationship import (
+    StoryRelationship,
+    StoryRelationshipEngine,
+    StoryRelationshipType,
+)
 from .story_timeline import StoryTimeline, TimelineEntry
 from .editorial_policy import EditorialPolicy
 from .local_relevance import classify_local_relevance
@@ -20,6 +24,12 @@ from .editorial_proximity import (
     classify_editorial_proximity,
     latest_story_timestamp,
     story_source_trust,
+)
+from .registry_repair import (
+    choose_primary_story_id,
+    is_sparse_event_key,
+    normalize_title,
+    repair_registry_payload,
 )
 
 _WORD_RE = re.compile(r"[a-z0-9]+")
@@ -34,7 +44,7 @@ def _tokens(value: str) -> set[str]:
 
 
 class StoryRegistry:
-    SCHEMA_VERSION = 7
+    SCHEMA_VERSION = 8
 
     def __init__(self, filename: str | Path = "story-registry.json") -> None:
         self.path = Path(filename)
@@ -44,6 +54,12 @@ class StoryRegistry:
         self._policy = EditorialPolicy()
         self.data = self._load()
         self.last_decision: dict[str, Any] = {}
+        if bool(
+            ((self.data.get("registry_repair") or {}).get("last_run") or {}).get(
+                "changed", False
+            )
+        ):
+            self.save()
 
     def _empty(self) -> dict[str, Any]:
         return {
@@ -52,6 +68,8 @@ class StoryRegistry:
             "stories": {},
             "event_to_story": {},
             "story_aliases": {},
+            "quarantined_stories": {},
+            "registry_repair": {},
         }
 
     def _load(self) -> dict[str, Any]:
@@ -67,6 +85,8 @@ class StoryRegistry:
         payload.setdefault("stories", {})
         payload.setdefault("event_to_story", {})
         payload.setdefault("story_aliases", {})
+        payload.setdefault("quarantined_stories", {})
+        payload.setdefault("registry_repair", {})
 
         # Backward-compatible migration from the original minimal registry.
         for story_id, story in payload["stories"].items():
@@ -94,16 +114,44 @@ class StoryRegistry:
             story.setdefault("sources", [])
             story.setdefault("title_candidates", [])
             story.setdefault("canonical_title", story.get("titles", [""])[0] if story.get("titles") else "")
-            story["timeline"] = StoryTimeline.from_list(
-                story.get("timeline", [])
-            ).to_list()
+            story["timeline"] = StoryTimeline.from_list(story.get("timeline", [])).to_list()
+
+        repair_registry_payload(payload)
+
+        for story in payload["stories"].values():
             story["importance"] = self._importance.score(story).to_dict()
+            proximity = classify_editorial_proximity(story)
+            story["editorial_proximity"] = proximity.to_dict()
+            ranking = calculate_editorial_score(
+                int((story.get("importance") or {}).get("score", 0) or 0),
+                proximity.score,
+                source_trust=story_source_trust(story),
+                published_at=latest_story_timestamp(story),
+            )
+            story["editorial_score"] = ranking.score
+            story["editorial_priority"] = ranking.score
+            story["score_breakdown"] = ranking.to_dict()
             lifecycle = classify_story_lifecycle(story)
             story["lifecycle"] = lifecycle.to_dict()
             story["status"] = lifecycle.state.value
 
         payload["schema"] = self.SCHEMA_VERSION
         return payload
+
+    def _find_exact_title_story(self, title: str) -> str | None:
+        normalized = normalize_title(title)
+        if len(normalized.split()) < 4:
+            return None
+
+        matches: list[str] = []
+        for story_id, story in self.data["stories"].items():
+            known_titles = [story.get("canonical_title", ""), *story.get("titles", ())]
+            if any(normalize_title(value) == normalized for value in known_titles):
+                matches.append(story_id)
+
+        if not matches:
+            return None
+        return choose_primary_story_id(matches, self.data["stories"])
 
     def save(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -275,31 +323,104 @@ class StoryRegistry:
             self.save()
             return story_id
 
-        resolution = self._resolver.resolve(
-            event_key=event_key,
-            title=title,
-            facts=facts,
-            locations=locations,
-            agencies=agencies,
-            event_types=event_types,
-            entities=entities,
-            published_at=published_at,
-            stories=self.iter_stories(),
-        )
+        exact_title_story = self._find_exact_title_story(title)
+        if exact_title_story:
+            story_id = self._canonical_story_id(exact_title_story)
+            self.attach_event(story_id, event_key, save=False)
+            trace = [
+                "Relationship: same_event",
+                "Exact normalized title match: true",
+                "Confidence: 1.00",
+            ]
+            reason = "Exact normalized title already belongs to this story"
+            self._enrich_story(
+                story_id,
+                title=title,
+                facts=facts,
+                locations=locations,
+                agencies=agencies,
+                event_types=event_types,
+                entities=entities,
+                county=county,
+                source=source,
+                is_custom=is_custom,
+                source_class=source_class,
+                source_trust=source_trust,
+            )
+            self._recalculate_importance(story_id)
+            story = self.data["stories"][story_id]
+            story["resolution_history"].append(
+                {
+                    "event_key": event_key,
+                    "confidence": 1.0,
+                    "reason": reason,
+                    "decision_trace": trace,
+                    "resolver_version": "2.2",
+                    "matched_existing": True,
+                    "relationship": StoryRelationshipType.SAME_EVENT.value,
+                }
+            )
+            self.last_decision = {
+                "event_key": event_key,
+                "relationship": StoryRelationshipType.SAME_EVENT.value,
+                "confidence": 1.0,
+                "reason": reason,
+                "decision_trace": trace,
+                "matched_existing": True,
+                "story_id": story_id,
+            }
+            self.save()
+            return story_id
+
+        if is_sparse_event_key(event_key):
+            resolution = StoryResolution(
+                None,
+                False,
+                0.0,
+                "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+                (
+                    "Sparse event-key resolver guard: true",
+                    "Resolver same-event merge bypassed: true",
+                ),
+            )
+        else:
+            resolution = self._resolver.resolve(
+                event_key=event_key,
+                title=title,
+                facts=facts,
+                locations=locations,
+                agencies=agencies,
+                event_types=event_types,
+                entities=entities,
+                published_at=published_at,
+                stories=self.iter_stories(),
+            )
 
         # Evaluate follow-up relationships even when Resolver v2 finds a
         # high-confidence identity match. Previously the resolver won first,
         # causing the strongest follow-ups to be mislabeled as same_event.
-        relationship = self._relationships.classify(
-            event_key=event_key,
-            title=title,
-            facts=facts,
-            locations=locations,
-            agencies=agencies,
-            event_types=event_types,
-            entities=entities,
-            stories=self.iter_stories(),
-        )
+        if is_sparse_event_key(event_key):
+            relationship = StoryRelationship(
+                StoryRelationshipType.NEW_STORY,
+                None,
+                0.0,
+                "Sparse event keys require exact-title identity before attachment",
+                (
+                    "Relationship: new_story",
+                    "Sparse event-key relationship guard: true",
+                ),
+            )
+        else:
+            relationship = self._relationships.classify(
+                event_key=event_key,
+                title=title,
+                facts=facts,
+                locations=locations,
+                agencies=agencies,
+                event_types=event_types,
+                entities=entities,
+                stories=self.iter_stories(),
+            )
         relationship_won = bool(
             relationship.attaches_to_story and relationship.story_id
         )
@@ -661,6 +782,15 @@ class StoryRegistry:
             if StoryImportance.from_dict(story.get("importance")).level
             is ImportanceLevel.BREAKING
         )
+
+    def get_registry_health(self) -> dict[str, Any]:
+        repair = dict(self.data.get("registry_repair") or {})
+        last_run = dict(repair.get("last_run") or {})
+        last_run["quarantined_story_records_retained"] = len(
+            self.data.get("quarantined_stories") or {}
+        )
+        last_run["active_story_count"] = len(self.data.get("stories") or {})
+        return last_run
 
     def iter_stories(self) -> tuple[dict[str, Any], ...]:
         return tuple(

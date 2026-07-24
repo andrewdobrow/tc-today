@@ -76,6 +76,13 @@ from .story_lifecycle import (
     StoryLifecycleState,
     classify_story_lifecycle,
 )
+from .registry_repair import (
+    REPAIR_VERSION,
+    RegistryRepairReport,
+    is_sparse_event_key,
+    normalize_title,
+    repair_registry_payload,
+)
 from .observability import (
     ENGINE_NAME,
     ENGINE_VERSION,
@@ -141,6 +148,11 @@ __all__ = [
     "StoryLifecycle",
     "StoryLifecycleState",
     "classify_story_lifecycle",
+    "REPAIR_VERSION",
+    "RegistryRepairReport",
+    "is_sparse_event_key",
+    "normalize_title",
+    "repair_registry_payload",
     "OBSERVABILITY_SCHEMA_VERSION",
     "build_editorial_observability",
     "write_editorial_observability",
@@ -149,4 +161,4 @@ __all__ = [
     "route_editorial_result",
 ]
 
-__version__ = "1.8.0"
+__version__ = "1.8.3"

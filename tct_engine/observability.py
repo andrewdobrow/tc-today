@@ -13,10 +13,10 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.8.2"
-ENGINE_RELEASE = "event-key-collision-guard"
-OBSERVABILITY_SCHEMA_VERSION = 4
-RESOLVER_VERSION = "2.1"
+ENGINE_VERSION = "1.8.3"
+ENGINE_RELEASE = "registry-integrity-repair"
+OBSERVABILITY_SCHEMA_VERSION = 5
+RESOLVER_VERSION = "2.2"
 RELATIONSHIP_ENGINE_VERSION = "1.2"
 
 
@@ -54,6 +54,11 @@ def build_editorial_observability(
 
     rows = [dict(row) for row in audit_rows]
     stories = list(engine.get_top_stories(limit=100000))
+    registry_health = (
+        dict(engine.get_registry_health())
+        if hasattr(engine, "get_registry_health")
+        else {}
+    )
 
     route_counts: Counter[str] = Counter()
     eligibility_counts: Counter[str] = Counter()
@@ -239,6 +244,7 @@ def build_editorial_observability(
         "story_lifecycle": {
             "counts": dict(sorted(lifecycle_counts.items())),
         },
+        "registry_health": registry_health,
         "stories": {
             "total": len(stories),
             "importance_levels": {

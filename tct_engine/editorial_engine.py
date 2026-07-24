@@ -239,6 +239,9 @@ class EditorialEngine:
     def get_breaking_stories(self):
         return self._pipeline.get_breaking_stories()
 
+    def get_registry_health(self):
+        return self._pipeline.get_registry_health()
+
     def save(self, path: str | Path) -> None:
         """Save replayable editorial state to a JSON file."""
 
