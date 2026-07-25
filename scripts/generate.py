@@ -11,10 +11,12 @@ import re
 import hashlib
 import copy
 import time
+import threading
+from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 import feedparser
 import requests
 import anthropic
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
@@ -232,6 +234,221 @@ THIN_SOURCE_DOMAINS = ["tcpalm.com", "sun-sentinel.com", "palmbeachpost.com"]
 FULL_TEXT_DOMAINS = ["wptv.com", "wpbf.com", "cbs12.com", "wflx.com", "hometownnewstc.com", "floridapolitics.com"]
 
 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+
+# Persistent generation cache. The expensive source extraction and Claude work is
+# keyed to exact source/input fingerprints, so unchanged stories are reused while
+# new or materially changed stories still flow through the normal pipeline.
+GENERATION_CACHE_PATH = OUTPUT_DIR / "data" / "generation-cache.json"
+GENERATION_CACHE_SCHEMA_VERSION = 1
+GENERATION_PROMPT_VERSION = "v1.9.4-incremental-generation-1"
+_CACHE_MISS = object()
+
+
+def _utc_now_iso():
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def _parse_cache_time(value):
+    try:
+        return datetime.fromisoformat(str(value).replace("Z", "+00:00")).timestamp()
+    except Exception:
+        return 0.0
+
+
+def _cache_hash(value):
+    raw = json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(",", ":"), default=str)
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def _normalize_cache_url(url):
+    value = str(url or "").strip()
+    if not value:
+        return ""
+    try:
+        parts = urlsplit(value)
+        filtered = []
+        for key, val in parse_qsl(parts.query, keep_blank_values=True):
+            lower = key.lower()
+            if lower.startswith("utm_") or lower in {"gclid", "fbclid", "mc_cid", "mc_eid"}:
+                continue
+            filtered.append((key, val))
+        path = re.sub(r"/{2,}", "/", parts.path or "/")
+        return urlunsplit((parts.scheme.lower(), parts.netloc.lower(), path, urlencode(filtered, doseq=True), ""))
+    except Exception:
+        return value
+
+
+def _source_content_hint(source):
+    source = source or {}
+    return _cache_hash({
+        "title": source.get("title", ""),
+        "summary": source.get("summary", ""),
+        "published": source.get("published", ""),
+    })
+
+
+class PersistentGenerationCache:
+    """Small, atomic JSON cache for deterministic generation inputs and outputs."""
+
+    LIMITS = {
+        "source_text": 350,
+        "classifications": 1500,
+        "categories": 90,
+        "hero_enhancements": 400,
+        "card_enhancements": 900,
+    }
+
+    def __init__(self, path):
+        self.path = Path(path)
+        self.lock = threading.RLock()
+        self.dirty = False
+        self.stats = defaultdict(int)
+        self.payload = self._empty_payload()
+        self._load()
+
+    @staticmethod
+    def _empty_payload():
+        return {
+            "schema_version": GENERATION_CACHE_SCHEMA_VERSION,
+            "updated_at": "",
+            "source_text": {},
+            "classifications": {},
+            "categories": {},
+            "hero_enhancements": {},
+            "card_enhancements": {},
+        }
+
+    def _load(self):
+        try:
+            raw = json.loads(self.path.read_text(encoding="utf-8"))
+            if raw.get("schema_version") != GENERATION_CACHE_SCHEMA_VERSION:
+                return
+            for bucket in self.LIMITS:
+                if not isinstance(raw.get(bucket), dict):
+                    raw[bucket] = {}
+            self.payload = raw
+        except Exception:
+            self.payload = self._empty_payload()
+
+    def reset_stats(self):
+        with self.lock:
+            self.stats = defaultdict(int)
+
+    def get(self, bucket, key):
+        with self.lock:
+            entry = self.payload.get(bucket, {}).get(key)
+            if not isinstance(entry, dict) or "value" not in entry:
+                self.stats[f"{bucket}_miss"] += 1
+                return _CACHE_MISS
+            expires_at = _parse_cache_time(entry.get("expires_at"))
+            if expires_at and expires_at <= time.time():
+                self.payload[bucket].pop(key, None)
+                self.dirty = True
+                self.stats[f"{bucket}_expired"] += 1
+                return _CACHE_MISS
+            self.stats[f"{bucket}_hit"] += 1
+            return copy.deepcopy(entry["value"])
+
+    def put(self, bucket, key, value, ttl_seconds=None):
+        now = time.time()
+        entry = {
+            "cached_at": datetime.fromtimestamp(now, timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+            "expires_at": (
+                datetime.fromtimestamp(now + ttl_seconds, timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+                if ttl_seconds else ""
+            ),
+            "value": copy.deepcopy(value),
+        }
+        with self.lock:
+            self.payload.setdefault(bucket, {})[key] = entry
+            self.dirty = True
+            self.stats[f"{bucket}_write"] += 1
+
+    def _prune(self):
+        for bucket, limit in self.LIMITS.items():
+            entries = self.payload.setdefault(bucket, {})
+            if len(entries) <= limit:
+                continue
+            ordered = sorted(
+                entries.items(),
+                key=lambda pair: _parse_cache_time((pair[1] or {}).get("cached_at")),
+                reverse=True,
+            )
+            self.payload[bucket] = dict(ordered[:limit])
+
+    def save(self, force=False):
+        with self.lock:
+            if not self.dirty and not force:
+                return
+            self._prune()
+            self.payload["schema_version"] = GENERATION_CACHE_SCHEMA_VERSION
+            self.payload["updated_at"] = _utc_now_iso()
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            temporary = self.path.with_suffix(self.path.suffix + ".tmp")
+            temporary.write_text(
+                json.dumps(self.payload, indent=2, ensure_ascii=False),
+                encoding="utf-8",
+            )
+            os.replace(temporary, self.path)
+            self.dirty = False
+
+    def counts(self):
+        with self.lock:
+            return {bucket: len(self.payload.get(bucket, {})) for bucket in self.LIMITS}
+
+    def summary(self):
+        ordered = sorted(self.stats.items())
+        return ", ".join(f"{key}={value}" for key, value in ordered if value) or "no cache activity"
+
+
+GENERATION_CACHE = PersistentGenerationCache(GENERATION_CACHE_PATH)
+_SOURCE_FETCH_LOCKS = {}
+_SOURCE_FETCH_LOCKS_GUARD = threading.Lock()
+
+
+def _source_fetch_lock(cache_key):
+    with _SOURCE_FETCH_LOCKS_GUARD:
+        return _SOURCE_FETCH_LOCKS.setdefault(cache_key, threading.Lock())
+
+
+def _source_text_cache_key(url, max_words, content_hint=""):
+    return _cache_hash({
+        "version": GENERATION_PROMPT_VERSION,
+        "url": _normalize_cache_url(url),
+        "max_words": int(max_words or 0),
+        "content_hint": content_hint or "",
+    })
+
+
+def _classification_cache_key(story):
+    return _cache_hash({
+        "version": GENERATION_PROMPT_VERSION,
+        "title": story.get("title", ""),
+        "summary": story.get("summary", ""),
+    })
+
+
+def _category_generation_cache_key(category_key, headlines):
+    sources = []
+    for source in headlines or []:
+        body = source.get("article_text", "") or source.get("summary", "")
+        sources.append({
+            "title": source.get("title", ""),
+            "url": _normalize_cache_url(source.get("link", "")),
+            "published": source.get("published", ""),
+            "source_type": source.get("source_type", ""),
+            "source_quality": source.get("source_quality", ""),
+            "hero_eligible": source.get("hero_eligible", ""),
+            "category_match_score": source.get("category_match_score", ""),
+            "content_hash": hashlib.sha256(body.encode("utf-8")).hexdigest(),
+        })
+    return _cache_hash({
+        "version": GENERATION_PROMPT_VERSION,
+        "model_articles": MODEL_ARTICLES,
+        "model_selection": MODEL_SELECTION,
+        "category_key": category_key,
+        "sources": sources,
+    })
 
 # Populated once per run by classify_stories(); {headline_lower: set(category_keys)}.
 # None means classification unavailable -> keyword filtering is used instead.
@@ -912,7 +1129,7 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
             # last). The cap exists only to guard against a pathologically long or
             # junk-filled scraped page, not to save tokens — the savings were pennies and
             # the cost was dropping the exact facts the article is about.
-            full = fetch_article_text(link, max_words=2500)
+            full = fetch_article_text(link, max_words=2500, content_hint=_source_content_hint(h))
             if full and len(full.split()) >= 140:
                 h["article_text"] = full
                 h["source_quality"] = "full"
@@ -2552,7 +2769,7 @@ def find_content(headline, content_bank, max_entries=5):
 
 
 
-def fetch_article_text(url, max_words=2500):
+def fetch_article_text(url, max_words=2500, content_hint=""):
     """Fetch readable article body text.
 
     Uses trafilatura when available, then JSON-LD articleBody, then a paragraph fallback.
@@ -2560,6 +2777,37 @@ def fetch_article_text(url, max_words=2500):
     """
     if not url:
         return ""
+
+    cache_key = _source_text_cache_key(url, max_words, content_hint)
+    cached = GENERATION_CACHE.get("source_text", cache_key)
+    if cached is not _CACHE_MISS:
+        return str(cached.get("text", ""))
+
+    # Multiple category workers can encounter the same source at once. Only one
+    # worker performs the network extraction; the others recheck the cache after
+    # acquiring the per-source lock.
+    fetch_lock = _source_fetch_lock(cache_key)
+    fetch_lock.acquire()
+    cached = GENERATION_CACHE.get("source_text", cache_key)
+    if cached is not _CACHE_MISS:
+        fetch_lock.release()
+        return str(cached.get("text", ""))
+
+    def _finish(text):
+        text = str(text or "")
+        try:
+            # Successful extractions remain valid while the feed fingerprint is stable.
+            # Short-lived negative caching prevents repeatedly hammering blocked sources.
+            GENERATION_CACHE.put(
+                "source_text",
+                cache_key,
+                {"text": text, "word_count": len(text.split()), "url": _normalize_cache_url(url)},
+                ttl_seconds=86400 if text else 7200,
+            )
+            return text
+        finally:
+            fetch_lock.release()
+
     try:
         resp = requests.get(
             url,
@@ -2574,7 +2822,7 @@ def fetch_article_text(url, max_words=2500):
             },
         )
         if resp.status_code != 200:
-            return ""
+            return _finish("")
 
         html = resp.text
 
@@ -2606,7 +2854,7 @@ def fetch_article_text(url, max_words=2500):
             )
             cleaned = clean_article_text(extracted or "")
             if len(cleaned.split()) >= 140:
-                return cleaned
+                return _finish(cleaned)
         except Exception:
             pass
 
@@ -2630,23 +2878,31 @@ def fetch_article_text(url, max_words=2500):
                     if isinstance(c, dict) and c.get("articleBody"):
                         cleaned = clean_article_text(c.get("articleBody", ""))
                         if len(cleaned.split()) >= 140:
-                            return cleaned
+                            return _finish(cleaned)
 
         # 3. Fallback: paragraphs within <article>, then all paragraphs.
         article_match = re.search(r"<article[^>]*>(.*?)</article>", html, re.DOTALL | re.IGNORECASE)
         scope = article_match.group(1) if article_match else html
         paras = re.findall(r"<p[^>]*>(.*?)</p>", scope, re.DOTALL | re.IGNORECASE)
         cleaned = clean_article_text(" ".join(paras))
-        return cleaned if len(cleaned.split()) >= 80 else ""
+        return _finish(cleaned if len(cleaned.split()) >= 80 else "")
 
     except Exception:
-        return ""
+        return _finish("")
 
 
 def enhance_card(card, content_bank, headlines):
     """Rewrite a card from its exact source article, not fuzzy content-bank matches."""
     headline = card.get("headline", "")
     if not headline:
+        return card
+
+    # The category-generation call already receives the exact source body. Do not
+    # spend a second Claude request rewriting a card that already passes the final
+    # publication gate. This is the primary cold-cache runtime reduction.
+    if _publishable_article(card, hero=False):
+        card["enriched"] = True
+        GENERATION_CACHE.stats["card_second_pass_skipped"] += 1
         return card
 
     source = None
@@ -2668,7 +2924,7 @@ def enhance_card(card, content_bank, headlines):
     # AND aggregators (Google News links resolve to real publisher pages). This is
     # what lets crime/things-to-do cards from Google News enrich instead of being dropped.
     if not source_text and link and not is_thin and source.get("source_type") in ("full_source", "aggregator"):
-        source_text = fetch_article_text(link, max_words=2500)
+        source_text = fetch_article_text(link, max_words=2500, content_hint=_source_content_hint(source))
         if source_text and len(source_text.split()) >= 140:
             source["article_text"] = source_text
             source["source_quality"] = "full"
@@ -2721,6 +2977,8 @@ def enhance_hero_article(hero, full_text):
     # quality gate used before permalink creation. A 40-60 word blurb is not an article.
     if _publishable_article(hero, hero=True):
         hero["enriched"] = True
+        GENERATION_CACHE.stats["hero_second_pass_skipped"] += 1
+        return hero
     if not full_text or len(full_text.split()) < 100:
         return hero  # Not enough extra text to improve on; keep generated body
     body = hero.get("body", "")
@@ -8878,9 +9136,33 @@ def classify_stories(feed_cache):
     # preserved by feed order. 120 covers a typical run's unique stories.
     stories = stories[:120]
 
+    # Classifications are deterministic for the exact title + summary input. Only
+    # send new or materially changed stories to Claude; unchanged stories come from
+    # the persistent cache.
+    result = {}
+    uncached_stories = []
+    for story in stories:
+        cache_key = _classification_cache_key(story)
+        cached = GENERATION_CACHE.get("classifications", cache_key)
+        if cached is _CACHE_MISS:
+            story = dict(story)
+            story["_cache_key"] = cache_key
+            uncached_stories.append(story)
+            continue
+        cats = set(cached.get("categories", []))
+        result[story["title"].lower()] = cats or {"none"}
+
+    if not uncached_stories:
+        n_none = sum(1 for value in result.values() if value == {"none"})
+        print(
+            f"  Story classification cache: {len(result)} hit(s), 0 Claude request(s) "
+            f"({n_none} rejected as non-local)"
+        )
+        return result
+
     listing = "\n".join(
-        f"{i+1}. {s['title']}" + (f" — {s['summary'][:140]}" if s['summary'] else "")
-        for i, s in enumerate(stories)
+        f"{i+1}. {story['title']}" + (f" — {story['summary'][:140]}" if story['summary'] else "")
+        for i, story in enumerate(uncached_stories)
     )
 
     prompt = (
@@ -8946,22 +9228,36 @@ def classify_stories(feed_cache):
             raw = raw.split("```")[1].lstrip("json").strip()
         mapping = json.loads(raw)
     except Exception as e:
+        if result:
+            print(
+                f"  Story classification failed for {len(uncached_stories)} cache miss(es) ({e}); "
+                f"using {len(result)} cached classification(s) plus keyword fallback"
+            )
+            return result
         print(f"  Story classification failed ({e}); falling back to keyword filters")
         return None
 
     valid_keys = set(CATEGORIES.keys()) | {"none"}
-    result = {}
-    for i, s in enumerate(stories):
+    for i, story in enumerate(uncached_stories):
         cats = mapping.get(str(i + 1), [])
         if isinstance(cats, str):
             cats = [cats]
-        cats = {c for c in cats if c in valid_keys}
+        cats = {category for category in cats if category in valid_keys}
         if not cats:
             cats = {"none"}
-        result[s["title"].lower()] = cats
+        result[story["title"].lower()] = cats
+        GENERATION_CACHE.put(
+            "classifications",
+            story["_cache_key"],
+            {"title": story["title"], "categories": sorted(cats)},
+        )
 
-    n_none = sum(1 for v in result.values() if v == {"none"})
-    print(f"  Classified {len(result)} stories via LLM ({n_none} rejected as non-local)")
+    n_none = sum(1 for value in result.values() if value == {"none"})
+    cache_hits = len(stories) - len(uncached_stories)
+    print(
+        f"  Story classification: {cache_hits} cache hit(s), "
+        f"{len(uncached_stories)} Claude-classified ({n_none} rejected as non-local)"
+    )
     return result
 
 
@@ -9445,7 +9741,13 @@ def _write_editorial_observability(engine, audit_rows, activation_run=None):
 def main():
     _build_started = time.perf_counter()
     _stage_started = _build_started
+    GENERATION_CACHE.reset_stats()
     print("Treasure Coast Today — building site...")
+    _cache_counts = GENERATION_CACHE.counts()
+    print(
+        "  Generation cache loaded: "
+        + ", ".join(f"{bucket}={count}" for bucket, count in sorted(_cache_counts.items()))
+    )
     editorial_engine = _load_editorial_engine_audit()
     editorial_audited_keys = set()
     editorial_audit_rows = []
@@ -9505,6 +9807,9 @@ def main():
     # None and all filtering falls back to the keyword system automatically.
     global STORY_CLASSIFICATION
     STORY_CLASSIFICATION = classify_stories(feed_cache)
+    # Persist this checkpoint immediately. If a later publishing gate stops the run,
+    # the next attempt still avoids reclassifying unchanged stories.
+    GENERATION_CACHE.save()
     print(f"  Timing: LLM classification {time.perf_counter() - _stage_started:.1f}s")
     _stage_started = time.perf_counter()
 
@@ -9556,6 +9861,27 @@ def main():
         headlines = filter_category_headlines(cat_key, headlines, target=HEADLINES_PER_CATEGORY, min_keep=6)
 
         print(f"  {len(headlines)} publishable-source headlines fetched")
+        # Save source-extraction hits/misses before any Claude work. This keeps the
+        # expensive network cache durable at each category boundary.
+        GENERATION_CACHE.save()
+        _category_cache_key = _category_generation_cache_key(cat_key, headlines)
+        _cached_category = GENERATION_CACHE.get("categories", _category_cache_key)
+        if _cached_category is not _CACHE_MISS:
+            data = copy.deepcopy(_cached_category.get("data", {}))
+            if data.get("hero") and data.get("category_key") == cat_key:
+                all_categories.append(data)
+                GENERATION_CACHE.stats["category_generation_skipped"] += 1
+                print(
+                    f"  Incremental generation cache hit: reused {cat_config['label']} "
+                    f"hero + {len(data.get('cards', []))} card(s); no Claude generation or enrichment"
+                )
+                print(
+                    f"  Hero: {data['hero'].get('headline','')[:60]}... "
+                    f"(urgency: {data['hero'].get('urgency_score')}, "
+                    f"image: {'yes' if data['hero'].get('image_url') else 'no'})"
+                )
+                continue
+
         try:
             try:
                 data = generate_category_content(cat_key, cat_config["label"], headlines)
@@ -9581,11 +9907,13 @@ def main():
             source_img = data["hero"].get("image_url", "")
             src_idx = data["hero"].get("source_index")
             original_title = ""
+            hero_source = None
             if src_idx is not None:
                 try:
-                    original_title = headlines[int(src_idx) - 1].get("title", "")
+                    hero_source = headlines[int(src_idx) - 1]
+                    original_title = hero_source.get("title", "")
                 except Exception:
-                    pass
+                    hero_source = None
             bank_img, bank_credit = ("", "")
             if original_title:
                 bank_img, bank_credit = match_image(original_title, image_bank, cat_key, used_bank_images)
@@ -9631,7 +9959,7 @@ def main():
             # Try to fetch full article text for the hero — much richer than RSS summary
             fetched_text = ""
             if hero_link and not _is_thin_src:
-                fetched_text = fetch_article_text(hero_link)
+                fetched_text = fetch_article_text(hero_link, content_hint=_source_content_hint(hero_source))
                 if fetched_text:
                     print(f"  Hero article text fetched: {len(fetched_text.split())} words")
 
@@ -9752,6 +10080,18 @@ def main():
                                 _event_item["event_url"] = _event_url
                                 _event_item["event_link_text"] = _event_label
                                 print(f"  Official event link attached: {_event_url[:80]}")
+
+            # Store the fully generated, enriched and publication-gated section.
+            # The key includes every selected source's content hash, so a new or
+            # materially updated story invalidates only the affected category.
+            if data in all_categories:
+                GENERATION_CACHE.put(
+                    "categories",
+                    _category_cache_key,
+                    {"category_key": cat_key, "data": data},
+                    ttl_seconds=7 * 24 * 3600,
+                )
+                GENERATION_CACHE.save()
 
         except Exception as e:
             import traceback
@@ -9978,6 +10318,8 @@ def main():
         editorial_engine, editorial_audit_rows, editorial_activation_run
     )
 
+    GENERATION_CACHE.save(force=True)
+    print(f"  Generation cache activity: {GENERATION_CACHE.summary()}")
     print(f"  Timing: final data and static pages {time.perf_counter() - _stage_started:.1f}s")
     print(f"  Timing: total generator runtime {time.perf_counter() - _build_started:.1f}s")
     print(f"Done. {len(all_categories)} categories written.")
