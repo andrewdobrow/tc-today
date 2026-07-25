@@ -1374,6 +1374,76 @@ def _source_candidate_publishable(item):
         return False
     return _source_word_count(item) >= MIN_SOURCE_WORDS
 
+def _normalize_nonstory_text(text):
+    text = (text or "").replace("’", "'").replace("`", "'").lower()
+    text = re.sub(r"[^a-z0-9'& ]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _is_nonstory_placeholder(item):
+    """Identify section metadata that must never become a public article.
+
+    The category-writing model can occasionally answer with a status sentence such
+    as ``No Indian River County stories available in today's feed`` when the source
+    pool has no valid lead.  That text is navigation metadata, not journalism.
+    Manual/custom articles are deliberately exempt unless they carry the explicit
+    structural placeholder marker, preserving the custom-authority contract.
+    """
+    if not item:
+        return False
+    if item.get("_section_placeholder") or (item.get("source_quality") or "").lower() == "section_placeholder":
+        return True
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return False
+
+    headline = _normalize_nonstory_text(item.get("headline") or item.get("title"))
+    if not headline:
+        return False
+
+    status_patterns = (
+        r"^no .{1,90} stor(?:y|ies) (?:are )?available(?: in (?:today'?s|the) feed)?$",
+        r"^no (?:new |local |current |recent )?stor(?:y|ies) (?:are )?available(?: today| at this time)?$",
+        r"^(?:there are )?no (?:new |local |current |recent )?stor(?:y|ies)(?: available)?(?: for .{1,80})?$",
+        r"^(?:check back|please check back)(?: later)? for (?:more |new )?(?:stories|updates|coverage)$",
+    )
+    if any(re.fullmatch(pattern, headline) for pattern in status_patterns):
+        return True
+
+    # The deterministic structural fallback uses a generic ``<section> coverage``
+    # headline.  Only treat it as a placeholder when the item also lacks a real
+    # source/article identity, avoiding false positives on legitimate coverage.
+    if headline.endswith(" coverage") and not any(
+        item.get(key) for key in ("source_url", "feed_url", "source_title", "article_text")
+    ):
+        body = _normalize_nonstory_text(item.get("body") or item.get("teaser"))
+        if body.startswith("browse treasure coast today's latest") or body.startswith("browse treasure coast today s latest"):
+            return True
+    return False
+
+
+def _sanitize_nonstory_category(data, category_label=""):
+    """Remove model/status placeholders and promote a real card when possible."""
+    if not isinstance(data, dict):
+        return data
+    cards = [card for card in list(data.get("cards") or []) if not _is_nonstory_placeholder(card)]
+    removed_cards = len(list(data.get("cards") or [])) - len(cards)
+    hero = data.get("hero") or {}
+    removed_hero = _is_nonstory_placeholder(hero)
+    if removed_hero:
+        print(f"  NONSTORY BLOCK: rejected placeholder hero for {category_label}: '{hero.get('headline','')[:80]}'")
+        hero = {}
+    if removed_cards:
+        print(f"  NONSTORY BLOCK: rejected {removed_cards} placeholder card(s) for {category_label}")
+    if not hero and cards:
+        hero = cards.pop(0)
+        print(f"  NONSTORY BLOCK: promoted real card after placeholder removal for {category_label}")
+    data["hero"] = hero
+    data["cards"] = cards
+    if not hero or not hero.get("headline"):
+        data["_drop_category"] = True
+    return data
+
+
 def _publishable_article(item, hero=False):
     """Return True only when an item is substantial enough for a permalink.
 
@@ -1383,10 +1453,10 @@ def _publishable_article(item, hero=False):
     """
     if not item or not item.get("headline"):
         return False
+    if _is_nonstory_placeholder(item):
+        return False
     if item.get("is_custom") or item.get("is_weather_alert"):
         return True
-    if item.get("_section_placeholder"):
-        return False
     if item.get("_archive_only"):
         return bool(item.get("_archive_verified_quality"))
 
@@ -1467,6 +1537,8 @@ def _archive_article_body(entry):
         return ""
 
 def _archive_entry_publishable(entry):
+    if _is_nonstory_placeholder(entry):
+        return False
     if entry.get("is_custom"):
         return True
     wc, pc = _archive_article_metrics(entry)
@@ -4350,11 +4422,12 @@ def load_custom_articles():
     archived, and expired. Override flags:
       - force_hero: true    -> pin as that category's hero
       - pin_position: N     -> lock to grid slot N (1-indexed) regardless of score
-      - unique_slug: true   -> always get a fresh permalink; never overwrite a prior
-                               article. Use for recurring series (weekly traffic
-                               reports, roundups) whose editions share a title prefix
-                               and would otherwise overwrite each other.
-      - slug: "custom-slug" -> use this exact permalink (also implies unique_slug)
+      - slug: "custom-slug" -> publish or replace this exact permalink
+      - replace_slug: "..." -> explicitly replace an existing custom permalink
+      - update_existing: true -> opt into canonical matching and update-in-place
+
+    Custom articles create a fresh permalink by default. Their submitted headline,
+    teaser, and complete body are never rewritten or replaced by generated copy.
 
     Expected schema per entry:
       {
@@ -4392,6 +4465,7 @@ def load_custom_articles():
     archived_custom_slugs = set()
     archived_custom_fingerprints = set()
     archived_custom_headlines = set()
+    archived_custom_records = []
     archive_path = OUTPUT_DIR / "archive.json"
     if archive_path.exists():
         try:
@@ -4409,11 +4483,13 @@ def load_custom_articles():
                 headline = (existing.get("headline", "") or "").strip()
                 if headline:
                     archived_custom_headlines.add(re.sub(r"[^a-z0-9]+", " ", headline.lower()).strip())
-                fp = existing.get("custom_story_fingerprint") or _custom_story_fingerprint(
-                    headline, existing.get("teaser", "")
-                )
+                fp = (existing.get("custom_fingerprint")
+                      or existing.get("custom_story_fingerprint") or _custom_story_fingerprint(
+                          headline, existing.get("teaser", "")
+                      ))
                 if fp:
                     archived_custom_fingerprints.add(fp)
+                archived_custom_records.append(existing)
         except Exception as e:
             print(f"  Custom queue archive check failed open: {e}")
 
@@ -4444,18 +4520,59 @@ def load_custom_articles():
             queue_fp = art.get("custom_story_fingerprint") or _custom_story_fingerprint(
                 art.get("headline", ""), art.get("teaser", "") or art.get("body", "")[:180]
             )
-            already_published = (
-                (explicit_slug and explicit_slug in archived_custom_slugs)
-                or (queue_fp and queue_fp in archived_custom_fingerprints)
-                or (normalized_headline and normalized_headline in archived_custom_headlines)
-            )
-            if already_published:
+            queue_body_hash = _custom_body_hash(art.get("body", ""))
+
+            matched_records = []
+            for existing in archived_custom_records:
+                existing_slug = slugify(str(existing.get("slug", "")))
+                existing_headline = re.sub(
+                    r"[^a-z0-9]+", " ", (existing.get("headline", "") or "").lower()
+                ).strip()
+                existing_fp = (existing.get("custom_fingerprint")
+                               or existing.get("custom_story_fingerprint"))
+                if (
+                    (explicit_slug and existing_slug == explicit_slug)
+                    or (queue_fp and existing_fp and queue_fp == existing_fp)
+                    or (normalized_headline and existing_headline == normalized_headline)
+                ):
+                    matched_records.append(existing)
+
+            same_payload = False
+            for existing in matched_records:
+                saved_hash = str(existing.get("custom_body_hash") or "")
+                if saved_hash and saved_hash == queue_body_hash:
+                    same_payload = True
+                    break
+                # Legacy entries without a body hash are deliberately republished
+                # once. Word counts are not proof that the submitted copy survived; a
+                # generated rewrite can coincidentally have the same length. The repair
+                # run stores custom_body_hash, making every later run idempotent.
+
+            if same_payload:
                 skipped_published += 1
-                print(f"  Custom queue skip (already published): '{art.get('headline','')[:60]}'")
+                print(f"  Custom queue skip (exact payload already published): '{art.get('headline','')[:60]}'")
                 continue
+
+            # If the same custom headline was partially or incorrectly published,
+            # repair that exact permalink. A differently titled recurring edition is
+            # a new custom article and must receive a new URL by default.
+            exact_headline_match = next((
+                existing for existing in matched_records
+                if re.sub(r"[^a-z0-9]+", " ", (existing.get("headline", "") or "").lower()).strip()
+                   == normalized_headline
+            ), None)
+            if exact_headline_match and exact_headline_match.get("slug"):
+                art["replace_slug"] = exact_headline_match.get("slug")
+                art["_custom_payload_repair"] = True
+                print(
+                    "  Custom queue payload changed; repairing exact custom permalink: "
+                    f"'{art.get('headline','')[:60]}'"
+                )
 
         # Normalize into the same shape as generated articles
         art["is_custom"]       = True
+        art["authoritative_custom"] = True
+        art["custom_body_hash"] = _custom_body_hash(art.get("body", ""))
         art["enriched"]        = True
         art["link"]            = art.get("link", f"{SITE_URL}/")
         art["source_quality"]  = "full"
@@ -4931,6 +5048,8 @@ function tctCopyLink(btn) {{
 def render_archive_page(archive_entries):
     by_month = defaultdict(list)
     for e in sorted(archive_entries, key=lambda x: x.get("date",""), reverse=True):
+        if _is_nonstory_placeholder(e):
+            continue
         try:
             month = e["date"][:7]
             label = datetime.strptime(month, "%Y-%m").strftime("%B %Y")
@@ -5009,6 +5128,8 @@ def render_rss_feed(all_categories, top_cat):
     archive = load_archive(OUTPUT_DIR / "archive.json")
 
     def make_item(article, cat_label):
+        if _is_nonstory_placeholder(article):
+            return None, None
         headline = article.get("headline", "")
         if not headline:
             return None, None
@@ -5125,6 +5246,8 @@ def update_sitemap(archive_entries):
 
     article_urls = ""
     for e in archive_entries:
+        if _is_nonstory_placeholder(e):
+            continue
         lastmod = e.get("lastmod") or e.get("date", "")
         article_urls += f"""
   <url>
@@ -5174,6 +5297,8 @@ def update_news_sitemap(archive_entries):
     # Build (datetime, entry) pairs within the 48h window, newest first
     recent = []
     for e in archive_entries:
+        if _is_nonstory_placeholder(e):
+            continue
         dt = _iso(e)
         if dt is not None and dt >= cutoff:
             recent.append((dt, e))
@@ -5350,6 +5475,17 @@ def _custom_story_fingerprint(headline, teaser=""):
     """
     normalized = " ".join(sorted(_sig_tokens(f"{headline} {teaser}")))
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:24] if normalized else ""
+
+
+def _custom_body_hash(body):
+    """Exact-content identity for manually authored copy.
+
+    Custom copy is editorial source material, not an AI draft.  Normalizing only line
+    endings makes the hash stable across operating systems while still detecting any
+    substantive edit, deletion, truncation, or generated-content replacement.
+    """
+    normalized = str(body or "").replace("\r\n", "\n").replace("\r", "\n").strip()
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest() if normalized else ""
 
 
 def _material_update_stages(text):
@@ -7836,6 +7972,183 @@ def _render_canonical_redirect_page(source_slug, target_slug, target_headline=""
 </html>'''
 
 
+def _render_nonstory_redirect_page(headline=""):
+    """Return a noindex redirect for a URL that was never a real article."""
+    target_path = "/archive.html"
+    target_url = f"{SITE_URL}{target_path}"
+    safe_title = re.sub(r"[<>]", "", headline or "Treasure Coast Today archive")
+    return f'''<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{safe_title} | {SITE_NAME}</title>
+  <link rel="canonical" href="{target_url}">
+  <meta name="robots" content="noindex,follow">
+  <meta http-equiv="refresh" content="0; url={target_url}">
+  <script>window.location.replace({json.dumps(target_url)});</script>
+</head>
+<body>
+  <p>This page was not a published news article. Browse the <a href="{target_url}">Treasure Coast Today archive</a>.</p>
+</body>
+</html>'''
+
+
+def _purge_nonstory_archive_entries(archive, articles_dir, output_root):
+    """Remove synthetic status pages and preserve their URLs as noindex redirects."""
+    articles_dir = Path(articles_dir)
+    output_root = Path(output_root)
+    kept = []
+    removed = []
+    for entry in list(archive or []):
+        if _is_nonstory_placeholder(entry):
+            removed.append({
+                "slug": entry.get("slug", ""),
+                "headline": entry.get("headline", ""),
+                "category_key": entry.get("category_key", ""),
+            })
+            slug = entry.get("slug", "")
+            if slug:
+                articles_dir.mkdir(parents=True, exist_ok=True)
+                (articles_dir / f"{slug}.html").write_text(
+                    _render_nonstory_redirect_page(entry.get("headline", "")),
+                    encoding="utf-8",
+                )
+            continue
+        kept.append(entry)
+
+    data_dir = output_root / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "removed_count": len(removed),
+        "removed": removed,
+    }
+    (data_dir / "nonstory-purge.json").write_text(
+        json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+    if removed:
+        print(f"  NONSTORY PURGE: removed {len(removed)} synthetic article record(s) from archive/RSS/sitemaps")
+    return kept, report
+
+
+def validate_nonstory_publication_contract(all_categories, top_cat, output_root):
+    """Fail the deployment if section/status prose reaches any public surface."""
+    output_root = Path(output_root)
+    violations = []
+    checked_live = 0
+
+    placements = [("front_page", (top_cat or {}).get("hero") or {})]
+    for category in all_categories or []:
+        key = str(category.get("category_key") or "")
+        placements.append((f"{key}:hero", category.get("hero") or {}))
+        placements.extend((f"{key}:card", card) for card in category.get("cards") or [])
+    for surface, item in placements:
+        if not item:
+            continue
+        checked_live += 1
+        if _is_nonstory_placeholder(item):
+            violations.append({"surface": surface, "headline": item.get("headline", "")})
+
+    archive = load_archive(output_root / "archive.json")
+    for entry in archive:
+        if _is_nonstory_placeholder(entry):
+            violations.append({
+                "surface": "archive",
+                "headline": entry.get("headline", ""),
+                "slug": entry.get("slug", ""),
+            })
+
+    # RSS is checked independently so a future refactor cannot bypass the object gate.
+    rss_path = output_root / "feed.xml"
+    rss_titles = []
+    if rss_path.exists():
+        rss_text = rss_path.read_text(encoding="utf-8", errors="ignore")
+        rss_titles = re.findall(r"<title><!\[CDATA\[(.*?)\]\]></title>", rss_text, re.DOTALL)
+        custom_titles = {
+            _normalize_nonstory_text(e.get("headline", ""))
+            for e in archive if e.get("is_custom") or e.get("authoritative_custom")
+        }
+        for title in rss_titles:
+            probe = {"headline": title}
+            if _normalize_nonstory_text(title) in custom_titles:
+                probe["is_custom"] = True
+            if _is_nonstory_placeholder(probe):
+                violations.append({"surface": "rss", "headline": title})
+
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "status": "failed" if violations else "passed",
+        "passed": not violations,
+        "checked_live_placements": checked_live,
+        "checked_archive_entries": len(archive),
+        "checked_rss_items": len(rss_titles),
+        "violation_count": len(violations),
+        "violations": violations,
+    }
+    data_dir = output_root / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    (data_dir / "nonstory-publication-contract.json").write_text(
+        json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+    if violations:
+        raise RuntimeError(
+            "Nonstory publication contract FAILED: "
+            + "; ".join(v.get("headline", "") for v in violations[:5])
+        )
+    print(
+        "  Nonstory publication contract PASSED "
+        f"({checked_live} live placement(s), {len(archive)} archive record(s), "
+        f"{len(rss_titles)} RSS item(s))"
+    )
+    return report
+
+
+def _resolve_custom_publication_target(hero, archive, existing, headline):
+    """Return the explicit publication target for a custom article.
+
+    Custom submissions create a fresh permalink by default. Fuzzy matches and source
+    story IDs are not permission to overwrite an older manual article. Editors can
+    explicitly replace a page with ``slug``/``replace_slug`` or opt into normal
+    canonical update behavior with ``update_existing=true``.
+    """
+    if not (hero.get("is_custom") or hero.get("authoritative_custom")):
+        return existing, None, None
+
+    replace_slug = slugify(str(hero.get("replace_slug", ""))) if hero.get("replace_slug") else ""
+    explicit_slug = slugify(str(hero.get("slug", ""))) if hero.get("slug") else ""
+    target_slug = replace_slug or explicit_slug
+    if target_slug:
+        target = next((entry for entry in archive if entry.get("slug") == target_slug), None)
+        return target, (target_slug if target is None else None), None
+
+    if hero.get("update_existing"):
+        return existing, None, None
+
+    payload_identity = (
+        hero.get("custom_body_hash") or _custom_body_hash(hero.get("body", ""))
+        or _custom_story_fingerprint(headline, hero.get("teaser", ""))
+    )[:32]
+    return None, None, "custom:" + payload_identity
+
+
+def _publication_copy_rank(entry):
+    """Rank competing generated copies for one public story.
+
+    Manually authored custom copy is absolute editorial authority. It outranks hero
+    placement, images, body length, and every generated/feed version so coalescing can
+    never replace the submitted body while leaving only its headline on cards.
+    """
+    _ck, _cl, item = entry
+    is_custom = 1 if item.get("is_custom") or item.get("authoritative_custom") else 0
+    has_real_img = 1 if (item.get("image_url") and not item.get("image_from_google")) else 0
+    is_hero_copy = 1 if item.get("_is_hero_copy") else 0
+    body_words = _word_count(item.get("body", ""))
+    return (is_custom, has_real_img, is_hero_copy, body_words)
+
+
 def _canonical_candidate_score(entry):
     return (
         1 if entry.get("is_custom") or entry.get("authoritative_custom") else 0,
@@ -7911,6 +8224,57 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
             "reason": "High-confidence duplicate consolidated into authoritative custom coverage.",
         })
 
+    # Legacy migration: older generated pages often lack editorial_story_id, but
+    # several duplicates still carry the exact same external article URL. Exact safe
+    # source-article identity is deterministic and cannot merge different stories;
+    # feed/search/homepage URLs are rejected by the normalizer. This specifically
+    # cleans pre-registry duplicate permalinks without fuzzy headline guesses.
+    try:
+        from tct_engine.source_identity import normalize_source_identity_url
+    except Exception:
+        normalize_source_identity_url = lambda value: ""
+
+    source_groups = {}
+    for entry in archive:
+        if not entry.get("slug") or entry.get("slug") in removed_slugs:
+            continue
+        normalized_source = normalize_source_identity_url(entry.get("source_url", ""))
+        if normalized_source:
+            source_groups.setdefault(normalized_source, []).append(entry)
+
+    existing_redirect_sources = {r["source_slug"] for r in redirects}
+    for normalized_source, members in source_groups.items():
+        active = [m for m in members if m.get("slug") not in removed_slugs]
+        if len(active) < 2:
+            continue
+
+        def _exact_source_canonical_key(entry):
+            is_not_custom = 0 if (entry.get("is_custom") or entry.get("authoritative_custom")) else 1
+            date = str(entry.get("date") or entry.get("lastmod") or "9999-99-99")
+            first = str(entry.get("first_published") or "")
+            return (is_not_custom, date, first, entry.get("slug", ""))
+
+        canonical = min(active, key=_exact_source_canonical_key)
+        for duplicate in active:
+            source_slug = duplicate.get("slug", "")
+            if not source_slug or source_slug == canonical.get("slug") or source_slug in existing_redirect_sources:
+                continue
+            removed_slugs.add(source_slug)
+            existing_redirect_sources.add(source_slug)
+            redirects.append({
+                "source_slug": source_slug,
+                "source_headline": duplicate.get("headline", ""),
+                "target_slug": canonical.get("slug", ""),
+                "target_headline": canonical.get("headline", ""),
+                "story_stage": "legacy-exact-source-identity",
+                "match_confidence": 100,
+                "canonical_is_custom": bool(
+                    canonical.get("is_custom") or canonical.get("authoritative_custom")
+                ),
+                "normalized_source_url": normalized_source,
+                "reason": "Legacy duplicate consolidated by exact source article URL identity.",
+            })
+
     # Consolidate every stable known-event group, not only custom stories. The
     # canonical URL is the authoritative custom article when one exists; otherwise
     # it is the oldest published permalink. Later developments are represented by
@@ -7923,7 +8287,6 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
         if key:
             known_groups.setdefault(key, []).append(entry)
 
-    existing_redirect_sources = {r["source_slug"] for r in redirects}
     for event_key, members in known_groups.items():
         active = [m for m in members if m.get("slug") not in removed_slugs]
         if len(active) < 2:
@@ -8781,6 +9144,9 @@ def write_archives(all_categories, top_cat):
     archive       = _sanitize_authoritative_custom_archive(
         load_archive(archive_path), articles_dir
     )
+    archive, _nonstory_purge_report = _purge_nonstory_archive_entries(
+        archive, articles_dir, OUTPUT_DIR
+    )
     today         = datetime.utcnow().strftime("%Y-%m-%d")
     new_count     = 0
     updated_count = 0
@@ -8873,12 +9239,6 @@ def write_archives(all_categories, top_cat):
     def _slug_key(headline):
         return re.sub(r"[^a-z0-9 ]", "", (headline or "").lower()).strip()[:60]
 
-    def _copy_rank(entry):
-        _ck, _cl, item = entry
-        has_real_img = 1 if (item.get("image_url") and not item.get("image_from_google")) else 0
-        is_hero_copy = 1 if item.get("_is_hero_copy") else 0
-        return (has_real_img, is_hero_copy)
-
     # Tag hero copies so the ranker can prefer them
     for _ck, _cl, _item in heroes:
         _item["_is_hero_copy"] = True
@@ -8887,6 +9247,9 @@ def write_archives(all_categories, top_cat):
     _publication_items_coalesced = 0
     for entry in all_articles:
         _item = entry[2]
+        if _is_nonstory_placeholder(_item):
+            print(f"  NONSTORY BLOCK: skipped article/permalink for '{_item.get('headline','')[:80]}'")
+            continue
         _story_id = _publication_story_id(_item, _publication_identity)
         if _story_id:
             _item["_editorial_story_id"] = _story_id
@@ -8897,7 +9260,7 @@ def write_archives(all_categories, top_cat):
             continue
         if k in _best_by_slug:
             _publication_items_coalesced += 1
-        if k not in _best_by_slug or _copy_rank(entry) > _copy_rank(_best_by_slug[k]):
+        if k not in _best_by_slug or _publication_copy_rank(entry) > _publication_copy_rank(_best_by_slug[k]):
             _best_by_slug[k] = entry
     all_articles = list(_best_by_slug.values())
 
@@ -8928,21 +9291,20 @@ def write_archives(all_categories, top_cat):
         if existing is None:
             existing = find_canonical_event_entry(hero, archive)
 
-        # OVERRIDE for recurring series (weekly traffic reports, roundups, game recaps).
-        # These share a title prefix and vocabulary, so the matcher treats each new
-        # edition as an update of the last and OVERWRITES the previous permalink. A
-        # custom article can opt out:
-        #   "unique_slug": true      -> always create a fresh permalink this run, never
-        #                               overwrite a previous edition
-        #   "slug": "my-custom-slug" -> use this exact slug (also implies unique)
-        # Both only apply to custom articles.
+        # CUSTOM PUBLICATION CONTRACT. A manually submitted article is a complete,
+        # immutable editorial payload. It never fuzzy-merges into an older permalink
+        # by default. New recurring reports therefore receive new URLs automatically.
+        # An existing page is updated only when the editor explicitly supplies a slug,
+        # replace_slug, or update_existing=true.
         _forced_slug = None
-        if hero.get("is_custom"):
-            if hero.get("slug"):
-                _forced_slug = slugify(str(hero["slug"]))
-                existing = None
-            elif hero.get("unique_slug"):
-                existing = None
+        existing, _forced_slug, _custom_story_id = _resolve_custom_publication_target(
+            hero, archive, existing, headline
+        )
+        if _custom_story_id:
+            # Do not let the persistent source-story ID collapse recurring custom
+            # editions on a later run. Each submitted payload receives its own ID.
+            _editorial_story_id = _custom_story_id
+            hero["_editorial_story_id"] = _editorial_story_id
 
         # HARD PROTECTION: an archived CUSTOM article is never overwritten by anything,
         # and a feed story that matches one is DROPPED rather than published as its own
@@ -8966,7 +9328,7 @@ def write_archives(all_categories, top_cat):
         #   - it is a weather alert (matched on a stable event key, not fuzzy tokens).
         # On refusal, existing is cleared -> a NEW article is created at a new URL and
         # the published one is left intact.
-        if existing and not hero.get("is_weather_alert"):
+        if existing and not hero.get("is_weather_alert") and not (hero.get("is_custom") or hero.get("authoritative_custom")):
             if (existing.get("headline", "").strip().lower() != headline.strip().lower()):
                 if not confirm_same_story(headline, hero.get("teaser", "") or hero.get("body", "")[:250], existing):
                     existing = None
@@ -9018,6 +9380,9 @@ def write_archives(all_categories, top_cat):
                 existing["custom_fingerprint"] = _custom_story_fingerprint(
                     headline, hero.get("teaser", "") or hero.get("body", "")[:180]
                 )
+                existing["custom_body_hash"] = hero.get("custom_body_hash") or _custom_body_hash(
+                    hero.get("body", "")
+                )
                 existing["custom_event_key"] = _known_event_key(
                     " ".join([headline, hero.get("teaser", ""), hero.get("body", "")[:500]])
                 )
@@ -9064,6 +9429,9 @@ def write_archives(all_categories, top_cat):
                 "custom_fingerprint": _custom_story_fingerprint(
                     headline, hero.get("teaser", "") or hero.get("body", "")[:180]
                 ) if hero.get("is_custom") else "",
+                "custom_body_hash": (hero.get("custom_body_hash") or _custom_body_hash(
+                    hero.get("body", "")
+                )) if hero.get("is_custom") else "",
                 "custom_event_key": _known_event_key(
                     " ".join([headline, hero.get("teaser", ""), hero.get("body", "")[:500]])
                 ) if hero.get("is_custom") else "",
@@ -9132,7 +9500,7 @@ def validate_live_permalink_integrity(all_categories, top_cat=None, output_dir=N
         hero_entries.append((str(category.get("category_key") or ""), category.get("hero") or {}))
 
     for category_key, hero in hero_entries:
-        if not hero or hero.get("_section_placeholder"):
+        if not hero or _is_nonstory_placeholder(hero):
             continue
         identity = (
             str(hero.get("_archived_slug") or ""),
@@ -9930,7 +10298,8 @@ def main():
         _cached_category = GENERATION_CACHE.get("categories", _category_cache_key)
         if _cached_category is not _CACHE_MISS:
             data = copy.deepcopy(_cached_category.get("data", {}))
-            if data.get("hero") and data.get("category_key") == cat_key:
+            data = _sanitize_nonstory_category(data, cat_config["label"])
+            if data.get("hero") and not data.get("_drop_category") and data.get("category_key") == cat_key:
                 all_categories.append(data)
                 GENERATION_CACHE.stats["category_generation_skipped"] += 1
                 print(
@@ -9958,6 +10327,10 @@ def main():
             # Do not mark generated blurbs publishable merely because they crossed a
             # low word threshold. Final publication quality is checked after optional
             # source enrichment below.
+
+            # Status/empty-feed prose is never a story. Strip it before image,
+            # enrichment, caching, archive, RSS, or social syndication can see it.
+            data = _sanitize_nonstory_category(data, cat_config["label"])
 
             # If the category was dropped or produced no usable hero, skip it entirely
             # rather than crashing on data["hero"]["headline"] below.
@@ -10375,6 +10748,7 @@ def main():
     (OUTPUT_DIR / "ownership.html").write_text(render_ownership_page(), encoding="utf-8")
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
     (OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat), encoding="utf-8")
+    validate_nonstory_publication_contract(all_categories, top_cat, OUTPUT_DIR)
 
     # Save only after the normal production build has completed.
     _save_editorial_engine_audit(editorial_engine, editorial_audit_rows)

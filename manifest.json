@@ -1,75 +1,47 @@
 {
   "engine": "TCT Editorial Engine",
-  "version": "1.9.5",
-  "release": "bounded-feeds-and-incremental-registry",
-  "base_release": "1.9.4.1 incremental generation with workflow YAML correction",
-  "python_validated": "3.11 / 3.13",
-  "production_log_diagnosis": {
-    "total_generator_seconds": 1895.4,
-    "state_and_content_bank_seconds": 1118.5,
-    "category_generation_seconds": 351.1,
-    "activation_shadow_and_hero_seconds": 386.5,
-    "archive_permalink_seconds": 14.0,
-    "page_rendering_seconds": 5.9,
-    "finding": "Sequential duplicate RSS downloads and full stable-registry all-pairs rebuilding dominated runtime."
+  "version": "1.9.5.2",
+  "release": "nonstory-publication-lock-and-legacy-source-dedupe",
+  "base_release": "1.9.5.1 custom authority lock",
+  "severity": "production hotfix",
+  "incident": {
+    "symptom": "A generated status sentence saying no Indian River County stories were available was published as an article, entered RSS, and was syndicated to Nextdoor.",
+    "root_cause": "The category model returned section-status metadata in the hero object after zero hero-eligible sources were found. The pipeline had no deterministic nonstory classifier at the category, permalink, archive, RSS, or final deployment boundaries.",
+    "affected_slug": "2026-07-25-no-indian-river-county-stories-available-in-todays-feed"
   },
-  "changes": {
-    "single_bounded_feed_prefetch": true,
-    "category_content_and_image_feeds_downloaded_once": true,
-    "connect_timeout_seconds": 3.05,
-    "read_timeout_seconds": 8,
-    "feed_workers": 16,
-    "stable_story_membership_rehydrated_directly": true,
-    "only_new_or_unregistered_articles_clustered": true,
-    "only_groups_touched_by_new_articles_reconciled": true,
-    "first_registry_build_remains_full_rebuild": true,
-    "persistent_generation_cache_preserved": true,
-    "ninety_minute_safety_ceiling_preserved": true
+  "contracts": {
+    "model_status_sentences_never_publish": true,
+    "section_placeholders_never_receive_permalinks": true,
+    "section_placeholders_excluded_from_archive_rss_and_sitemaps": true,
+    "existing_placeholder_pages_removed_and_replaced_with_noindex_archive_redirects": true,
+    "final_nonstory_deployment_gate": true,
+    "custom_article_authority_preserved": true,
+    "legacy_exact_source_url_duplicates_consolidated": true,
+    "uncertain_legacy_similarity_not_auto_merged": true
+  },
+  "legacy_archive_simulation": {
+    "archive_records_checked": 617,
+    "exact_source_duplicate_urls_redirected": 19,
+    "exact_source_duplicate_groups": 6,
+    "childcare_duplicate_urls_redirected": 8,
+    "remaining_records_after_all_existing_and_new_canonical_rules": 598
   },
   "validation": {
-    "workflow_tests_passed": 214,
-    "focused_runtime_tests_passed": 11,
-    "package_modules_imported": 28,
-    "public_exports_verified": 94,
+    "workflow_relevant_tests_passed": 229,
+    "new_nonstory_and_legacy_migration_tests_passed": 11,
     "python_compilation": "passed",
-    "yaml_parse": "passed",
-    "production_snapshot_registry_benchmark": {
-      "articles": 617,
-      "stories": 551,
-      "seconds": 1.135,
-      "note": "Local CPU benchmark using the retained production archive and persistent story-registry snapshot."
-    }
+    "retained_archive_migration_simulation": "passed",
+    "excluded_local_fixture_files": [
+      "tests/test_canonical_identity.py",
+      "tests/test_matcher_contract.py"
+    ],
+    "exclusion_reason": "These retained local-only fixtures require an engine.py artifact absent from the production repository snapshot; they are unrelated to this generator hotfix."
   },
   "files": [
-    {
-      "path": ".github/workflows/update.yml",
-      "sha256": "f170f6694bf0a884ae77a36557a06176f747482c98e9bb83ae0529a88d963396",
-      "size_bytes": 4007
-    },
-    {
-      "path": "scripts/generate.py",
-      "sha256": "9a801cbd05d7f42de41b7c1d5c6d3a36535b261adfd7bde18860d92f8091cb3e",
-      "size_bytes": 528020
-    },
-    {
-      "path": "tct_engine/__init__.py",
-      "sha256": "0e8f09fb94c8a145d496d74e7851f11faa809413fcef303a972a8392914211b3",
-      "size_bytes": 6203
-    },
-    {
-      "path": "tct_engine/observability.py",
-      "sha256": "cf202c1de87aaef5e9761dfc7946adbdb0d91ca6ad678e2294b573ee0de154bf",
-      "size_bytes": 12352
-    },
-    {
-      "path": "tests/test_incremental_generation_cache.py",
-      "sha256": "76cf6e8c53418684707926f1203af457543fb6ea6bc20ce2f535788eeb6ec6ee",
-      "size_bytes": 7641
-    },
-    {
-      "path": "tests/test_runtime_bottlenecks.py",
-      "sha256": "68f89a407307a86183001a186f450511b5bff6825ba510237148294766b882d0",
-      "size_bytes": 5111
-    }
+    "scripts/generate.py",
+    "tct_engine/__init__.py",
+    "tct_engine/observability.py",
+    "tests/test_nonstory_publication_contract.py",
+    "manifest.json"
   ]
 }

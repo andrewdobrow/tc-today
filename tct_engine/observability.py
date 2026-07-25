@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.9.5"
+ENGINE_VERSION = "1.9.5.2"
 ENGINE_RELEASE = "bounded-feeds-and-incremental-registry"
 OBSERVABILITY_SCHEMA_VERSION = 11
 RESOLVER_VERSION = "2.4"
