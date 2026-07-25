@@ -235,7 +235,12 @@ THIN_SOURCE_DOMAINS = ["tcpalm.com", "sun-sentinel.com", "palmbeachpost.com"]
 # because its pages are paywalled and tend to produce thin/blocked extraction.
 FULL_TEXT_DOMAINS = ["wptv.com", "wpbf.com", "cbs12.com", "wflx.com", "hometownnewstc.com", "floridapolitics.com"]
 
-client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+# Keep module import side-effect free so offline validation and utility tests can
+# load generation helpers without requiring production secrets. GitHub production
+# supplies ANTHROPIC_API_KEY, so the runtime client is initialized there exactly
+# as before.
+_ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+client = anthropic.Anthropic(api_key=_ANTHROPIC_API_KEY) if _ANTHROPIC_API_KEY else None
 
 # Persistent generation cache. The expensive source extraction and Claude work is
 # keyed to exact source/input fingerprints, so unchanged stories are reused while

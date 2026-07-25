@@ -1,21 +1,18 @@
 {
-  "release": "v1.10.3",
-  "name": "Archive identity backfill",
-  "base": "v1.10.2.1",
+  "release": "v1.10.4.1",
+  "name": "Offline backfill test hotfix",
+  "base": "v1.10.4",
   "mode": "recommendation-only",
   "files": [
     "scripts/generate.py",
-    "tct_engine/__init__.py",
-    "tct_engine/observability.py",
-    "tct_engine/publication_identity.py",
-    "tests/test_post_publication_permalink_rebind.py",
-    "tests/test_publication_identity.py"
+    "tests/test_archive_identity_backfill.py"
   ],
   "behavior": {
     "live_ranking_enforcement": false,
     "hero_ranking_enforcement": false,
-    "slug_identity_bridge": true,
-    "live_story_id_propagation": true
+    "archive_identity_backfill": true,
+    "anthropic_client_initialized_when_key_present": true,
+    "offline_module_import_requires_secret": false
   },
-  "version": "1.10.4"
+  "version": "1.10.4.1"
 }
