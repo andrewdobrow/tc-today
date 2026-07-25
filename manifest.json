@@ -1,17 +1,20 @@
 {
-  "release": "v1.10.2.1",
-  "name": "Single-Candidate Freshness Audit Hotfix",
-  "base_release": "v1.10.2",
+  "release": "v1.10.3",
+  "name": "Publication Identity Coverage",
+  "base": "v1.10.2.1",
+  "mode": "recommendation-only",
   "files": [
     "scripts/generate.py",
-    "tests/test_hero_staleness_contract.py",
-    "manifest.json"
+    "tct_engine/__init__.py",
+    "tct_engine/observability.py",
+    "tct_engine/publication_identity.py",
+    "tests/test_post_publication_permalink_rebind.py",
+    "tests/test_publication_identity.py"
   ],
   "behavior": {
-    "single_candidate_still_freshness_checked": true,
-    "single_candidate_stale_exclusion_audited": true,
-    "same_day_never_stale": true,
-    "under_18_hours_never_stale": true,
-    "live_ranking_mutation": false
+    "live_ranking_enforcement": false,
+    "hero_ranking_enforcement": false,
+    "slug_identity_bridge": true,
+    "live_story_id_propagation": true
   }
 }

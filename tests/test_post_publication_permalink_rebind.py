@@ -54,6 +54,8 @@ def test_live_item_rebind_prefers_persistent_story_id_after_archive_consolidatio
     assert rebound == 1
     assert category["hero"]["_archived_slug"] == canonical_slug
     assert category["hero"]["link"].endswith(f"/articles/{canonical_slug}.html")
+    assert category["hero"]["editorial_story_id"] == "story_home_prices"
+    assert category["hero"]["_editorial_story_id"] == "story_home_prices"
 
 
 def test_main_rebinds_after_publication_identity_and_before_integrity_gate():

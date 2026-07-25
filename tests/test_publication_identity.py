@@ -156,3 +156,15 @@ def test_custom_permalink_wins_publication_identity_group():
     cleaned, redirects, _ = generate._reconcile_archive_publication_identity(archive, index)
     assert [entry["slug"] for entry in cleaned] == ["custom-childcare"]
     assert redirects[0]["target_slug"] == "custom-childcare"
+
+
+def test_known_article_slug_resolves_to_persistent_story_id():
+    payload = _registry_payload()
+    payload["stories"]["story_big_taste"]["canonical_slug"] = "2026-07-23-big-taste-returns"
+    payload["stories"]["story_big_taste"]["article_slugs"] = [
+        "2026-07-23-big-taste-returns",
+        "2026-07-23-big-taste-fundraiser",
+    ]
+    index = build_publication_identity_index(payload)
+    assert index.resolve({"slug": "2026-07-23-big-taste-returns"}) == "story_big_taste"
+    assert index.resolve({"link": "https://treasurecoast.today/articles/2026-07-23-big-taste-fundraiser.html?x=1"}) == "story_big_taste"

@@ -22,6 +22,7 @@ PUBLICATION_IDENTITY_VERSION = "1.0"
 class PublicationIdentityIndex:
     url_to_story: Mapping[str, str]
     title_to_story: Mapping[str, str]
+    slug_to_story: Mapping[str, str]
     safe_story_ids: frozenset[str]
     canonical_titles: Mapping[str, str]
 
@@ -29,8 +30,24 @@ class PublicationIdentityIndex:
         if not isinstance(item, Mapping):
             return ""
         for key in ("source_url", "link", "url"):
-            normalized = normalize_source_identity_url(item.get(key))
+            raw_url = str(item.get(key) or "")
+            normalized = normalize_source_identity_url(raw_url)
             story_id = self.url_to_story.get(normalized, "") if normalized else ""
+            if story_id and story_id in self.safe_story_ids:
+                return story_id
+            # TCT permalinks carry the canonical article slug even when the original
+            # source URL and rewritten headline no longer match the raw registry row.
+            if "/articles/" in raw_url:
+                slug = raw_url.split("/articles/", 1)[1].split("?", 1)[0].split("#", 1)[0]
+                if slug.endswith(".html"):
+                    slug = slug[:-5]
+                story_id = self.slug_to_story.get(slug.strip(), "")
+                if story_id and story_id in self.safe_story_ids:
+                    return story_id
+
+        for key in ("_archived_slug", "slug", "canonical_slug"):
+            slug = str(item.get(key) or "").strip()
+            story_id = self.slug_to_story.get(slug, "") if slug else ""
             if story_id and story_id in self.safe_story_ids:
                 return story_id
 
@@ -82,6 +99,7 @@ def build_publication_identity_index(
 ) -> PublicationIdentityIndex:
     url_candidates: dict[str, set[str]] = {}
     title_candidates: dict[str, set[str]] = {}
+    slug_candidates: dict[str, set[str]] = {}
     safe_story_ids: set[str] = set()
     canonical_titles: dict[str, str] = {}
 
@@ -100,6 +118,13 @@ def build_publication_identity_index(
             normalized = normalize_identity_title(title)
             if normalized:
                 title_candidates.setdefault(normalized, set()).add(story_id)
+
+        slugs: list[Any] = [story.get("canonical_slug"), story.get("slug")]
+        slugs.extend(story.get("article_slugs") or [])
+        for slug in slugs:
+            slug = str(slug or "").strip()
+            if slug:
+                slug_candidates.setdefault(slug, set()).add(story_id)
 
         urls: list[Any] = []
         urls.extend(story.get("sources") or [])
@@ -124,9 +149,15 @@ def build_publication_identity_index(
         for value, story_ids in title_candidates.items()
         if len(story_ids) == 1
     }
+    slug_to_story = {
+        value: next(iter(story_ids))
+        for value, story_ids in slug_candidates.items()
+        if len(story_ids) == 1
+    }
     return PublicationIdentityIndex(
         url_to_story=url_to_story,
         title_to_story=title_to_story,
+        slug_to_story=slug_to_story,
         safe_story_ids=frozenset(safe_story_ids),
         canonical_titles=canonical_titles,
     )

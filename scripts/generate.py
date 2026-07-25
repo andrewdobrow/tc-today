@@ -5776,6 +5776,13 @@ def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_c
     slug = str(entry.get("slug") or "")
     item["_archived_slug"] = slug
     item["link"] = f"{SITE_URL}/articles/{slug}.html"
+    # Preserve the publication identity bridge on every rebound placement. Ranking
+    # runs after publication and should consume this established identity instead of
+    # attempting to rediscover the story from rewritten display copy.
+    story_id = str(entry.get("editorial_story_id") or "").strip()
+    if story_id:
+        item["editorial_story_id"] = story_id
+        item["_editorial_story_id"] = story_id
     return True
 
 
