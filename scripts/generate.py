@@ -43,6 +43,7 @@ try:
         route_editorial_result,
         write_editorial_observability,
         build_publication_identity_index,
+        write_homepage_ranking_recommendations,
     )
 except Exception as exc:
     ActivationConfig = None
@@ -55,6 +56,7 @@ except Exception as exc:
     route_editorial_result = None
     write_editorial_observability = None
     build_publication_identity_index = None
+    write_homepage_ranking_recommendations = None
     _editorial_import_error = exc
 
 # -- CONFIG --
@@ -3859,6 +3861,30 @@ def render_index(all_categories, top_cat):
         all_cards_display = result
 
     archive_for_links = load_archive(OUTPUT_DIR / "archive.json")
+
+    # v1.10.0 ranking rollout: observe and explain only. The report compares the
+    # already-selected live homepage card order with the persistent editorial score
+    # order. It never mutates the hero, card sequence, custom pins, or rendered HTML.
+    if write_homepage_ranking_recommendations is not None:
+        try:
+            _ranking_report = write_homepage_ranking_recommendations(
+                all_cards_display,
+                top_cat.get("hero", {}),
+                registry_path=EDITORIAL_REGISTRY_PATH,
+                archive=archive_for_links,
+                output_path=OUTPUT_DIR / "data" / "homepage-ranking-recommendations.json",
+                max_recommendations=10,
+            )
+            _ranking_summary = _ranking_report.get("summary", {})
+            print(
+                "  Homepage ranking recommendations: "
+                f"{_ranking_summary.get('recommended_moves', 0)} move(s), "
+                f"{_ranking_summary.get('registry_matches', 0)}/"
+                f"{_ranking_summary.get('cards_observed', 0)} registry-matched; "
+                "observe-only"
+            )
+        except Exception as exc:
+            print(f"  Homepage ranking recommendations unavailable; live order unchanged: {exc}")
 
     def card_permalink(card):
         # Backfill cards already carry their archived slug

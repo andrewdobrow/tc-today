@@ -115,6 +115,12 @@ from .publication_identity import (
     PublicationIdentityIndex,
     build_publication_identity_index,
 )
+from .ranking_recommendations import (
+    RANKING_MODE,
+    RANKING_RECOMMENDATION_VERSION,
+    build_homepage_ranking_recommendations,
+    write_homepage_ranking_recommendations,
+)
 from .registry_repair import (
     REPAIR_VERSION,
     RegistryRepairReport,
@@ -230,9 +236,13 @@ __all__ = [
     "ProductionInstruction",
     "ProductionRoute",
     "route_editorial_result",
+    "RANKING_MODE",
+    "RANKING_RECOMMENDATION_VERSION",
+    "build_homepage_ranking_recommendations",
+    "write_homepage_ranking_recommendations",
     "PUBLICATION_IDENTITY_VERSION",
     "PublicationIdentityIndex",
     "build_publication_identity_index",
 ]
 
-__version__ = "1.9.5.3"
+__version__ = "1.10.0"
