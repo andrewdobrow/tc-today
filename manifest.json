@@ -1,50 +1,28 @@
 {
-  "release": "v1.10.5.3",
-  "name": "Custom Post-Publication Permalink Rebind",
-  "base": "v1.10.5.2",
-  "supersedes": [
-    "v1.10.5",
-    "v1.10.5.1",
-    "v1.10.5.2"
-  ],
+  "release": "v1.10.5.4",
+  "name": "Custom Publication Receipt Rebind",
+  "base": "v1.10.5.3",
   "mode": "recommendation-only",
-  "package_type": "cumulative-overlay",
+  "package_type": "incremental-overlay",
   "files": [
     "manifest.json",
     "scripts/generate.py",
     "tct_engine/__init__.py",
     "tct_engine/observability.py",
-    "tct_engine/publication_identity.py",
-    "tct_engine/ranking_recommendations.py",
-    "tests/test_archive_identity_backfill.py",
-    "tests/test_forward_publication_identity.py",
-    "tests/test_publication_identity.py",
-    "tests/test_ranking_recommendations.py",
-    "tests/test_custom_authority_contract.py",
-    "tests/test_forward_identity_contract_sync.py",
     "tests/test_custom_post_publication_rebind.py"
   ],
   "behavior": {
     "live_ranking_enforcement": false,
     "hero_ranking_enforcement": false,
-    "new_articles_receive_current_run_story_identity": true,
-    "recent_backfill_requires_exact_source_and_recent_date": true,
-    "legacy_archive_identity_is_not_guessed": true,
-    "archive_consolidation_requires_stamped_story_ids": true,
-    "custom_declared_category_enforced": true,
-    "noncustom_placements_cannot_rebind_to_custom_archive": true,
-    "unique_slug_field_honored": true,
-    "custom_body_fidelity_gate": true,
-    "recurring_custom_editions_keep_separate_urls": true,
-    "custom_post_publication_exact_payload_rebind": true
+    "custom_publication_receipt_recorded_at_write_time": true,
+    "custom_live_rebind_prefers_publication_receipt": true,
+    "archive_scan_is_compatibility_fallback_only": true,
+    "ambiguous_legacy_and_new_custom_rows_do_not_block_exact_rebind": true,
+    "forward_live_identity_contract_remains_fail_closed": true
   },
   "reports": [
-    "data/custom-category-contract.json",
-    "data/forward-publication-identity.json",
-    "data/forward-live-identity-contract.json",
-    "data/archive-identity-backfill.json",
-    "data/homepage-ranking-recommendations.json",
-    "data/custom-post-publication-rebind.json"
+    "data/custom-post-publication-rebind.json",
+    "data/forward-live-identity-contract.json"
   ],
-  "version": "1.10.5.3"
+  "version": "1.10.5.4"
 }

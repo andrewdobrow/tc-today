@@ -232,9 +232,10 @@ EDITORIAL_ACTIVATION_HISTORY_PATH = OUTPUT_DIR / "data" / "editorial_activation_
 # v1.10.5 forward publication identity. New generated articles are published only
 # when the current editorial decision can be carried directly into the archive row.
 # Historical rows remain readable, but unresolved legacy identity is not guessed.
-FORWARD_IDENTITY_VERSION = "1.1"
+FORWARD_IDENTITY_VERSION = "1.2"
 FORWARD_IDENTITY_RECENT_DAYS = 30
 CURRENT_RUN_EDITORIAL_IDENTITIES = {}
+CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -5775,6 +5776,54 @@ def _custom_story_fingerprint(headline, teaser=""):
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:24] if normalized else ""
 
 
+def _record_current_custom_publication(item, slug, story_id, category_key, action):
+    """Record the exact permalink chosen while publishing a custom payload.
+
+    This is a publication receipt, not a later identity guess. Recurring custom
+    editions can temporarily carry a quarantined legacy slug on a live placement.
+    The archive writer is the first component that definitively knows the new slug,
+    so it records that decision for the post-publication live rebind.
+    """
+    if not isinstance(item, dict) or not (
+        item.get("is_custom") or item.get("authoritative_custom")
+    ):
+        return None
+    slug = str(slug or "").strip()
+    if not slug:
+        return None
+
+    body_hash = str(
+        item.get("custom_body_hash") or _custom_body_hash(item.get("body", ""))
+    ).strip()
+    series_key = str(item.get("custom_series_key") or _custom_series_key(item) or "").strip()
+    edition_key = str(item.get("custom_edition_key") or _custom_edition_marker(item) or "").strip()
+    receipt = {
+        "headline": str(item.get("headline") or "").strip(),
+        "custom_body_hash": body_hash,
+        "custom_series_key": series_key,
+        "custom_edition_key": edition_key,
+        "slug": slug,
+        "editorial_story_id": str(story_id or "").strip(),
+        "category_key": str(category_key or item.get("category_key") or item.get("category") or "").strip(),
+        "action": str(action or "").strip(),
+        "unique_slug": bool(item.get("unique_slug")),
+        "series_repair": bool(item.get("_custom_series_permalink_repair")),
+    }
+    CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS.append(receipt)
+
+    # Update the exact object that was rendered. When this object is also the live
+    # placement, no later rebind is needed; cloned placements use the receipt above.
+    item["_archived_slug"] = slug
+    item["slug"] = slug
+    item["link"] = f"{SITE_URL}/articles/{slug}.html"
+    if receipt["editorial_story_id"]:
+        item["editorial_story_id"] = receipt["editorial_story_id"]
+        item["_editorial_story_id"] = receipt["editorial_story_id"]
+    if receipt["category_key"]:
+        item["category_key"] = receipt["category_key"]
+    return receipt
+
+
 def _custom_body_hash(body):
     """Exact-content identity for manually authored copy.
 
@@ -9843,6 +9892,8 @@ def _reconcile_archive_publication_identity(archive, identity_index):
 
 
 def write_archives(all_categories, top_cat):
+    global CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
+    CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
     articles_dir = OUTPUT_DIR / "articles"
     archive_path = OUTPUT_DIR / "archive.json"
     articles_dir.mkdir(exist_ok=True)
@@ -10268,6 +10319,15 @@ def write_archives(all_categories, top_cat):
                 )
             new_count += 1
 
+        if hero.get("is_custom") or hero.get("authoritative_custom"):
+            _record_current_custom_publication(
+                hero,
+                slug,
+                _editorial_story_id,
+                cat_key,
+                "updated" if existing else "created",
+            )
+
     # FINAL production enforcement: article generation above may have recreated a
     # known duplicate permalink. Reapply all cumulative redirects now, then build
     # archive/RSS/sitemaps only from the cleaned archive.
@@ -10318,21 +10378,31 @@ def write_archives(all_categories, top_cat):
 
 
 def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, output_dir=None):
-    """Bind current custom placements to the exact archive page just published.
+    """Bind live custom placements from the archive writer's exact publication receipt.
 
-    Recurring custom editions may enter the run carrying a quarantined legacy slug
-    from pre-publication recovery. ``write_archives`` correctly creates a new page,
-    but the generic archive rebind intentionally refuses to infer custom identity.
-    Resolve only from exact manual-payload evidence after archive publication.
+    Archive scanning is retained only as a compatibility fallback. The primary path
+    consumes the slug recorded at the moment the manual payload was written, avoiding
+    ambiguity when a corrupted legacy row and the new edition temporarily share the
+    same body hash or series metadata.
     """
     root = Path(output_dir or OUTPUT_DIR)
     archive = load_archive(root / "archive.json")
+    by_slug = {
+        str(entry.get("slug") or "").strip(): entry
+        for entry in archive
+        if isinstance(entry, dict) and entry.get("slug")
+    }
     custom_entries = [
         entry for entry in archive
         if isinstance(entry, dict)
         and (entry.get("is_custom") or entry.get("authoritative_custom"))
         and not entry.get("exclude_from_live_recovery")
     ]
+    receipts = [
+        dict(row) for row in CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
+        if isinstance(row, dict) and row.get("slug") and row.get("custom_body_hash")
+    ]
+
     by_body_hash = {}
     by_edition = {}
     for entry in custom_entries:
@@ -10352,7 +10422,58 @@ def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, out
         placements.append((f"{key}:hero", category.get("hero") or {}))
         placements.extend((f"{key}:card", card) for card in category.get("cards") or [])
 
+    def _receipt_for(item):
+        body_hash = str(
+            item.get("custom_body_hash") or _custom_body_hash(item.get("body", ""))
+        ).strip()
+        series_key = str(
+            item.get("custom_series_key") or _custom_series_key(item) or ""
+        ).strip()
+        edition_key = str(
+            item.get("custom_edition_key") or _custom_edition_marker(item) or ""
+        ).strip()
+        headline = str(item.get("headline") or "").strip()
+
+        candidates = []
+        for receipt in receipts:
+            receipt_slug = str(receipt.get("slug") or "").strip()
+            entry = by_slug.get(receipt_slug)
+            if not entry or entry.get("exclude_from_live_recovery"):
+                continue
+            exact_body = bool(body_hash and receipt.get("custom_body_hash") == body_hash)
+            exact_series = bool(
+                series_key and edition_key
+                and receipt.get("custom_series_key") == series_key
+                and receipt.get("custom_edition_key") == edition_key
+            )
+            exact_headline = bool(
+                headline and str(receipt.get("headline") or "").strip() == headline
+            )
+            if not exact_body and not (exact_series and exact_headline):
+                continue
+            aligned_slug = not _custom_series_slug_mismatch(item, receipt_slug)
+            score = (
+                1 if exact_body else 0,
+                1 if exact_series else 0,
+                1 if exact_headline else 0,
+                1 if aligned_slug else 0,
+                1 if receipt.get("unique_slug") else 0,
+                1 if receipt.get("series_repair") else 0,
+                1 if receipt.get("action") == "created" else 0,
+            )
+            candidates.append((score, receipt, entry))
+        if not candidates:
+            return None, None
+        candidates.sort(key=lambda row: row[0], reverse=True)
+        best_score = candidates[0][0]
+        best = [row for row in candidates if row[0] == best_score]
+        slugs = {str(row[1].get("slug") or "") for row in best}
+        if len(slugs) != 1:
+            return None, None
+        return best[0][2], "publication_receipt"
+
     rebound = []
+    unresolved = []
     seen_items = set()
     for surface, item in placements:
         if not isinstance(item, dict) or id(item) in seen_items:
@@ -10361,23 +10482,47 @@ def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, out
         if not (item.get("is_custom") or item.get("authoritative_custom")):
             continue
 
-        candidates = []
-        body_hash = str(item.get("custom_body_hash") or _custom_body_hash(item.get("body", ""))).strip()
-        if body_hash:
-            candidates = list(by_body_hash.get(body_hash, []))
-        if len(candidates) != 1:
-            series_key = str(item.get("custom_series_key") or _custom_series_key(item) or "").strip()
-            edition_key = str(item.get("custom_edition_key") or _custom_edition_marker(item) or "").strip()
-            edition_candidates = list(by_edition.get((series_key, edition_key), [])) if series_key and edition_key else []
-            exact_headline = [
-                entry for entry in edition_candidates
-                if str(entry.get("headline") or "").strip() == str(item.get("headline") or "").strip()
-            ]
-            candidates = exact_headline if len(exact_headline) == 1 else edition_candidates
-        if len(candidates) != 1:
+        entry, match_basis = _receipt_for(item)
+        body_hash = str(
+            item.get("custom_body_hash") or _custom_body_hash(item.get("body", ""))
+        ).strip()
+        if entry is None:
+            candidates = list(by_body_hash.get(body_hash, [])) if body_hash else []
+            if len(candidates) != 1:
+                series_key = str(
+                    item.get("custom_series_key") or _custom_series_key(item) or ""
+                ).strip()
+                edition_key = str(
+                    item.get("custom_edition_key") or _custom_edition_marker(item) or ""
+                ).strip()
+                edition_candidates = list(
+                    by_edition.get((series_key, edition_key), [])
+                ) if series_key and edition_key else []
+                exact_headline = [
+                    candidate for candidate in edition_candidates
+                    if str(candidate.get("headline") or "").strip()
+                    == str(item.get("headline") or "").strip()
+                ]
+                candidates = exact_headline if len(exact_headline) == 1 else edition_candidates
+            if len(candidates) == 1:
+                entry = candidates[0]
+                match_basis = (
+                    "custom_body_hash"
+                    if body_hash and entry.get("custom_body_hash") == body_hash
+                    else "custom_series_edition"
+                )
+
+        if entry is None:
+            unresolved.append({
+                "surface": surface,
+                "headline": item.get("headline", ""),
+                "current_slug": str(item.get("_archived_slug") or item.get("slug") or ""),
+                "custom_body_hash": body_hash,
+                "custom_series_key": str(item.get("custom_series_key") or _custom_series_key(item) or ""),
+                "custom_edition_key": str(item.get("custom_edition_key") or _custom_edition_marker(item) or ""),
+            })
             continue
 
-        entry = candidates[0]
         slug = str(entry.get("slug") or "").strip()
         if not slug:
             continue
@@ -10394,21 +10539,36 @@ def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, out
             "headline": item.get("headline", ""),
             "previous_slug": previous_slug,
             "slug": slug,
-            "match_basis": "custom_body_hash" if body_hash and entry.get("custom_body_hash") == body_hash else "custom_series_edition",
+            "match_basis": match_basis,
+            "changed": previous_slug != slug,
         })
 
+    data_dir = root / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    (data_dir / "custom-post-publication-rebind.json").write_text(
+        json.dumps({
+            "version": "1.10.5.4",
+            "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "publication_receipts": len(receipts),
+            "rebound_count": len(rebound),
+            "changed_count": sum(1 for row in rebound if row.get("changed")),
+            "unresolved_count": len(unresolved),
+            "rebound": rebound,
+            "unresolved": unresolved,
+        }, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
     if rebound:
-        data_dir = root / "data"
-        data_dir.mkdir(parents=True, exist_ok=True)
-        (data_dir / "custom-post-publication-rebind.json").write_text(
-            json.dumps({
-                "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-                "rebound_count": len(rebound),
-                "rebound": rebound,
-            }, indent=2, ensure_ascii=False),
-            encoding="utf-8",
+        print(
+            "  Custom post-publication permalink verified "
+            f"{len(rebound)} exact payload placement(s); "
+            f"{sum(1 for row in rebound if row.get('changed'))} slug correction(s)"
         )
-        print(f"  Custom post-publication permalink rebound {len(rebound)} exact payload placement(s)")
+    if unresolved:
+        print(
+            "  Custom post-publication permalink unresolved for "
+            f"{len(unresolved)} custom placement(s); final identity gate will block deployment"
+        )
     return rebound
 
 def validate_forward_live_identity(all_categories, top_cat=None, output_dir=None):
@@ -11333,11 +11493,12 @@ def _write_editorial_observability(engine, audit_rows, activation_run=None):
 
 
 def main():
-    global CURRENT_RUN_EDITORIAL_IDENTITIES
+    global CURRENT_RUN_EDITORIAL_IDENTITIES, CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
     _build_started = time.perf_counter()
     _stage_started = _build_started
     GENERATION_CACHE.reset_stats()
     CURRENT_RUN_EDITORIAL_IDENTITIES = {}
+    CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
     print("Treasure Coast Today — building site...")
     _cache_counts = GENERATION_CACHE.counts()
     print(
