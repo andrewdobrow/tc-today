@@ -790,15 +790,63 @@ def find_official_event_link(source_url, headline=""):
     return result
 
 
-def build_image_bank():
-    """Fetch images from RSS feeds that reliably include them (BBC, ESPN, TechCrunch)."""
+FEED_PREFETCH_WORKERS = 16
+FEED_CONNECT_TIMEOUT_SECONDS = 3.05
+FEED_READ_TIMEOUT_SECONDS = 8
+FEED_USER_AGENT = "TreasureCoastToday/1.0 (+https://treasurecoast.today)"
+
+
+def _empty_feed_document():
+    return feedparser.parse(b"")
+
+
+def _fetch_feed_document(url):
+    """Download one RSS document with explicit network bounds.
+
+    ``feedparser.parse(url)`` can block for minutes on a slow or half-open server.
+    Requests provides deterministic connect/read timeouts, and parsing bytes keeps
+    every feed fetch inside the same bounded concurrent prefetch stage.
+    """
+    try:
+        response = requests.get(
+            url,
+            headers={"User-Agent": FEED_USER_AGENT, "Accept": "application/rss+xml, application/xml, text/xml, */*"},
+            timeout=(FEED_CONNECT_TIMEOUT_SECONDS, FEED_READ_TIMEOUT_SECONDS),
+        )
+        response.raise_for_status()
+        return feedparser.parse(response.content)
+    except Exception as exc:
+        print(f"  Feed error ({url[:60]}): {exc}")
+        return _empty_feed_document()
+
+
+def _prefetch_feed_documents(urls):
+    """Fetch all unique RSS documents once, concurrently and with hard timeouts."""
+    ordered_urls = sorted({str(url).strip() for url in urls if str(url).strip()})
+    documents = {url: _empty_feed_document() for url in ordered_urls}
+    if not ordered_urls:
+        return documents
+    with ThreadPoolExecutor(max_workers=min(FEED_PREFETCH_WORKERS, len(ordered_urls))) as executor:
+        future_to_url = {executor.submit(_fetch_feed_document, url): url for url in ordered_urls}
+        for future in as_completed(future_to_url):
+            url = future_to_url[future]
+            try:
+                documents[url] = future.result()
+            except Exception as exc:
+                print(f"  Feed worker error ({url[:60]}): {exc}")
+    return documents
+
+
+def build_image_bank(feed_documents=None):
+    """Build the image bank from already-prefetched RSS documents."""
     bank = []
+    feed_documents = feed_documents or {}
     for url in IMAGE_BANK_FEEDS:
         try:
-            feed = feedparser.parse(url)
-            for entry in feed.entries[:60]:
+            feed = feed_documents[url] if url in feed_documents else _fetch_feed_document(url)
+            for entry in getattr(feed, "entries", [])[:60]:
                 title = entry.get("title", "").strip()
-                img   = extract_image(entry)
+                img = extract_image(entry)
                 if title and img:
                     bank.append({"title": title, "image_url": img, "source": url})
         except Exception as e:
@@ -2716,26 +2764,26 @@ def make_paragraphs(text):
     return "".join(out)
 
 
-def build_content_bank():
-    """Build a bank of rich publisher content from direct RSS feeds.
-    These have far richer summaries than Google News and no redirect issues.
-    """
+def build_content_bank(feed_documents=None):
+    """Build rich-content matches from the shared prefetched RSS documents."""
     bank = []
     seen = set()
+    feed_documents = feed_documents or {}
     for url in CONTENT_BANK_FEEDS:
         try:
-            feed = feedparser.parse(url)
-            for entry in feed.entries[:25]:
+            feed = feed_documents[url] if url in feed_documents else _fetch_feed_document(url)
+            for entry in getattr(feed, "entries", [])[:25]:
                 title = sanitize_text(entry.get("title", ""))
                 if not title or title.lower() in seen:
                     continue
                 seen.add(title.lower())
                 summary = entry.get("summary", entry.get("description", ""))[:4000]
                 if summary and len(summary) > 100:
+                    feed_meta = getattr(feed, "feed", {}) or {}
                     bank.append({
-                        "title":   title,
+                        "title": title,
                         "summary": summary,
-                        "source":  feed.feed.get("title", url),
+                        "source": feed_meta.get("title", url),
                     })
         except Exception as e:
             print(f"  Content bank feed error ({url[:50]}): {e}")
@@ -6288,9 +6336,20 @@ def _groups_should_reconcile(left, right):
     return False, best
 
 
-def _reconcile_topic_groups(topic_groups):
-    """Union obvious split clusters before assigning permanent story IDs."""
+def _reconcile_topic_groups(topic_groups, active_flags=None):
+    """Union obvious split clusters while avoiding full stable-registry rebuilds.
+
+    On the first registry build every group is active and behavior is unchanged.
+    On later runs, established prior groups are trusted as stable membership and only
+    groups touched by new/unregistered articles are compared against the registry.
+    This changes the hot path from all-pairs over 500+ stories to a few new groups
+    against the established set, while still allowing new evidence to reconcile a
+    prior split.
+    """
     groups = [list(g) for g in topic_groups]
+    active = list(active_flags) if active_flags is not None else [True] * len(groups)
+    if len(active) != len(groups):
+        active = [True] * len(groups)
     changed = True
     while changed:
         changed = False
@@ -6298,10 +6357,14 @@ def _reconcile_topic_groups(topic_groups):
             if changed:
                 break
             for j in range(i + 1, len(groups)):
+                if not (active[i] or active[j]):
+                    continue
                 merge, _ = _groups_should_reconcile(groups[i], groups[j])
                 if merge:
                     groups[i].extend(groups[j])
+                    active[i] = active[i] or active[j]
                     del groups[j]
+                    del active[j]
                     changed = True
                     break
     return groups
@@ -6632,15 +6695,37 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
     ordered = sorted(items, key=lambda x: (_audit_date_value(x) or datetime.min.date(), x.get("headline", "")))
     topic_groups = []
     group_prior_ids = []
+    group_active = []
+    prior_group_index = {}
     clustering_links = []
+    unregistered_items = []
+
+    # Rehydrate established membership directly. The prior registry is authoritative,
+    # so comparing the first member of every one of 500+ stable stories against every
+    # other story is both redundant and extremely expensive.
     for item in ordered:
         locked_id = item.get("_prior_story_id")
-        if locked_id:
-            locked_idx = next((idx for idx, ids in enumerate(group_prior_ids) if locked_id in ids), None)
-            if locked_idx is not None:
-                topic_groups[locked_idx].append(item)
-                group_prior_ids[locked_idx].add(locked_id)
-                continue
+        if not locked_id:
+            unregistered_items.append(item)
+            continue
+        idx = prior_group_index.get(locked_id)
+        if idx is None:
+            idx = len(topic_groups)
+            prior_group_index[locked_id] = idx
+            topic_groups.append([])
+            group_prior_ids.append({locked_id})
+            group_active.append(False)
+        topic_groups[idx].append(item)
+
+    print(
+        "  Story registry incremental membership: "
+        f"{len(ordered) - len(unregistered_items)} established, "
+        f"{len(unregistered_items)} new/unregistered"
+    )
+
+    # Only genuinely new/unregistered articles need content clustering. A group they
+    # touch becomes active for conservative split reconciliation below.
+    for item in unregistered_items:
         eligible = []
         for idx, members in enumerate(topic_groups):
             matches = [(m, _story_match_confidence(item, m)) for m in members if _same_story_topic(item, m)]
@@ -6652,8 +6737,7 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
         if eligible:
             idx, confidence, _, best_member = max(eligible, key=lambda x: (x[1], x[2]))
             topic_groups[idx].append(item)
-            if locked_id:
-                group_prior_ids[idx].add(locked_id)
+            group_active[idx] = True
             clustering_links.append({
                 "slug": item.get("slug", ""), "headline": item.get("headline", ""),
                 "matched_slug": best_member.get("slug", ""), "matched_headline": best_member.get("headline", ""),
@@ -6663,9 +6747,10 @@ def build_story_shadow(archive, current_customs=None, live_categories=None, outp
             })
         else:
             topic_groups.append([item])
-            group_prior_ids.append({locked_id} if locked_id else set())
+            group_prior_ids.append(set())
+            group_active.append(True)
 
-    topic_groups = _reconcile_topic_groups(topic_groups)
+    topic_groups = _reconcile_topic_groups(topic_groups, group_active)
     used_ids, stories, decisions = set(), [], []
 
     for members in topic_groups:
@@ -9752,54 +9837,31 @@ def main():
     editorial_audited_keys = set()
     editorial_audit_rows = []
     editorial_activation_run = None
-    image_bank   = build_image_bank()
-    content_bank = build_content_bank()
     used_bank_images = set()
     all_categories = []
-    print(f"  Timing: state and content banks {time.perf_counter() - _stage_started:.1f}s")
+    print(f"  Timing: editorial state load {time.perf_counter() - _stage_started:.1f}s")
     _stage_started = time.perf_counter()
 
-    # Pre-fetch all unique feed URLs once to avoid hammering WPTV with
-    # duplicate requests across categories that share the same feeds.
-    all_feed_urls = list({url for cat in CATEGORIES.values() for url in cat.get("feeds", [])})
-    print(f"  Pre-fetching {len(all_feed_urls)} unique feeds...")
-    feed_cache = {}
+    # Fetch category, content-bank and image-bank RSS documents in one bounded pass.
+    # The previous pipeline downloaded image/content feeds sequentially first, then
+    # downloaded many of the same feeds again for categories. One slow endpoint could
+    # therefore block startup for minutes before the normal prefetch timer even began.
+    category_feed_urls = {url for cat in CATEGORIES.values() for url in cat.get("feeds", [])}
+    all_feed_urls = category_feed_urls | set(CONTENT_BANK_FEEDS) | set(IMAGE_BANK_FEEDS)
+    print(f"  Pre-fetching {len(all_feed_urls)} unique feeds for categories and banks...")
+    feed_documents = _prefetch_feed_documents(all_feed_urls)
+    feed_cache = {
+        url: list(getattr(feed, "entries", []) or [])
+        for url, feed in feed_documents.items()
+        if url in category_feed_urls
+    }
+    print(f"  Feed cache: {sum(len(v) for v in feed_cache.values())} total entries across {len(feed_cache)} category feeds")
+    print(f"  Timing: bounded shared feed prefetch {time.perf_counter() - _stage_started:.1f}s")
+    _stage_started = time.perf_counter()
 
-    def _fetch_and_cache(url):
-        try:
-            import socket
-            old = socket.getdefaulttimeout()
-            socket.setdefaulttimeout(8)
-            feed = feedparser.parse(url)
-            socket.setdefaulttimeout(old)
-            return url, feed.entries
-        except Exception as e:
-            print(f"  Feed error ({url[:60]}): {e}")
-            return url, []
-
-    with ThreadPoolExecutor(max_workers=8) as ex:
-        futures = {ex.submit(_fetch_and_cache, url): url for url in all_feed_urls}
-        # Initialize all feeds to empty so any that never complete still have an entry
-        for url in all_feed_urls:
-            feed_cache.setdefault(url, [])
-        try:
-            for fut in as_completed(futures, timeout=45):
-                try:
-                    url, entries = fut.result(timeout=10)
-                    feed_cache[url] = entries
-                except Exception as e:
-                    feed_cache[futures[fut]] = []
-                    print(f"  Feed timeout ({futures[fut][:60]}): {e}")
-        except (FuturesTimeoutError, TimeoutError):
-            # Some feeds never finished within the overall window — proceed with
-            # whatever we have rather than crashing the whole run.
-            unfinished = [futures[f] for f in futures if not f.done()]
-            print(f"  {len(unfinished)} feed(s) did not finish in time; proceeding with cached results")
-            for f in futures:
-                f.cancel()
-
-    print(f"  Feed cache: {sum(len(v) for v in feed_cache.values())} total entries across {len(feed_cache)} feeds")
-    print(f"  Timing: feed prefetch {time.perf_counter() - _stage_started:.1f}s")
+    image_bank = build_image_bank(feed_documents)
+    content_bank = build_content_bank(feed_documents)
+    print(f"  Timing: image and content bank assembly {time.perf_counter() - _stage_started:.1f}s")
     _stage_started = time.perf_counter()
 
     # LLM classification pass: one batched call assigns categories to every story.
@@ -10190,12 +10252,14 @@ def main():
     )
     _write_editorial_activation_report(editorial_activation_run)
 
+    _shadow_started = time.perf_counter()
     _shadow = build_story_shadow(
         _published_archive,
         current_customs=custom_articles,
         live_categories=all_categories,
         output_dir=OUTPUT_DIR,
     )
+    print(f"  Timing: persistent story registry {time.perf_counter() - _shadow_started:.1f}s")
     if _live_suppressions:
         _data_dir = OUTPUT_DIR / "data"
         _run_id = datetime.utcnow().isoformat(timespec="seconds") + "Z"

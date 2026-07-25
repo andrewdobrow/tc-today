@@ -1,77 +1,75 @@
 {
   "engine": "TCT Editorial Engine",
-  "version": "1.9.4",
-  "release": "incremental-generation-cache",
-  "base_release": "1.9.3.2 with v1.9.3.3 active workflow correction",
+  "version": "1.9.5",
+  "release": "bounded-feeds-and-incremental-registry",
+  "base_release": "1.9.4.1 incremental generation with workflow YAML correction",
   "python_validated": "3.11 / 3.13",
+  "production_log_diagnosis": {
+    "total_generator_seconds": 1895.4,
+    "state_and_content_bank_seconds": 1118.5,
+    "category_generation_seconds": 351.1,
+    "activation_shadow_and_hero_seconds": 386.5,
+    "archive_permalink_seconds": 14.0,
+    "page_rendering_seconds": 5.9,
+    "finding": "Sequential duplicate RSS downloads and full stable-registry all-pairs rebuilding dominated runtime."
+  },
+  "changes": {
+    "single_bounded_feed_prefetch": true,
+    "category_content_and_image_feeds_downloaded_once": true,
+    "connect_timeout_seconds": 3.05,
+    "read_timeout_seconds": 8,
+    "feed_workers": 16,
+    "stable_story_membership_rehydrated_directly": true,
+    "only_new_or_unregistered_articles_clustered": true,
+    "only_groups_touched_by_new_articles_reconciled": true,
+    "first_registry_build_remains_full_rebuild": true,
+    "persistent_generation_cache_preserved": true,
+    "ninety_minute_safety_ceiling_preserved": true
+  },
   "validation": {
-    "workflow_test_suite": {
-      "status": "passed",
-      "tests_passed": 210,
-      "excluded_repository_root_contract_tests": 7
-    },
-    "incremental_cache_tests": {
-      "status": "passed",
-      "tests_passed": 7
-    },
-    "package_imports": {
-      "status": "passed",
-      "modules_imported": 28,
-      "public_exports_verified": 94
-    },
-    "python_compilation": {
-      "status": "passed"
-    },
-    "cold_run_reduction": {
-      "status": "passed",
-      "publishable_hero_second_pass_skipped": true,
-      "publishable_card_second_pass_skipped": true,
-      "category_generation_still_uses_full_source_text": true,
-      "maximum_redundant_second_pass_calls_removed_per_full_run": 63
-    },
-    "persistent_incremental_generation": {
-      "status": "passed",
-      "source_text_cache": true,
-      "source_text_ttl_hours": 24,
-      "negative_source_ttl_hours": 2,
-      "classification_cache_by_title_summary_hash": true,
-      "category_cache_by_exact_source_content_hash": true,
-      "category_cache_ttl_days": 7,
-      "material_source_change_invalidates_cache": true,
-      "tracking_parameters_normalized": true,
-      "same_source_concurrent_fetch_deduplicated": true,
-      "atomic_json_persistence": true,
-      "github_actions_cache_restored_between_runs": true,
-      "cache_file_excluded_from_git_history": true
-    },
-    "runtime_safety": {
-      "status": "passed",
-      "workflow_timeout_minutes": 90,
-      "active_workflow_marker": "tct-incremental-generation-v1.9.4",
-      "stage_timing_output_preserved": true,
-      "incremental_article_shell_repair_preserved": true
+    "workflow_tests_passed": 214,
+    "focused_runtime_tests_passed": 11,
+    "package_modules_imported": 28,
+    "public_exports_verified": 94,
+    "python_compilation": "passed",
+    "yaml_parse": "passed",
+    "production_snapshot_registry_benchmark": {
+      "articles": 617,
+      "stories": 551,
+      "seconds": 1.135,
+      "note": "Local CPU benchmark using the retained production archive and persistent story-registry snapshot."
     }
   },
   "files": [
     {
-      "path": ".gitignore",
-      "sha256": "e36834735fc6b1b51f81bce78ba3824d1f43a0e07604b933863b8610f20310e9",
-      "size_bytes": 58
-    },
-    {
       "path": ".github/workflows/update.yml",
-      "sha256": "12e34496fa64eb6ab04c4ccfb636c1fa59c68ef52dc72556d884bd726f07000d",
-      "size_bytes": 4004
+      "sha256": "f170f6694bf0a884ae77a36557a06176f747482c98e9bb83ae0529a88d963396",
+      "size_bytes": 4007
     },
     {
       "path": "scripts/generate.py",
-      "sha256": "d435e8d271702110dd6b9264eea11efbefd908b3501b9e88feabb530212ebcd2",
-      "size_bytes": 525010
+      "sha256": "9a801cbd05d7f42de41b7c1d5c6d3a36535b261adfd7bde18860d92f8091cb3e",
+      "size_bytes": 528020
+    },
+    {
+      "path": "tct_engine/__init__.py",
+      "sha256": "0e8f09fb94c8a145d496d74e7851f11faa809413fcef303a972a8392914211b3",
+      "size_bytes": 6203
+    },
+    {
+      "path": "tct_engine/observability.py",
+      "sha256": "cf202c1de87aaef5e9761dfc7946adbdb0d91ca6ad678e2294b573ee0de154bf",
+      "size_bytes": 12352
     },
     {
       "path": "tests/test_incremental_generation_cache.py",
-      "sha256": "28c486f76bfe65b49b430aa245fe893fa9d90a2852bbf0bb0a7d499ddc122e6d",
-      "size_bytes": 7648
+      "sha256": "76cf6e8c53418684707926f1203af457543fb6ea6bc20ce2f535788eeb6ec6ee",
+      "size_bytes": 7641
+    },
+    {
+      "path": "tests/test_runtime_bottlenecks.py",
+      "sha256": "68f89a407307a86183001a186f450511b5bff6825ba510237148294766b882d0",
+      "size_bytes": 5111
     }
   ]
 }

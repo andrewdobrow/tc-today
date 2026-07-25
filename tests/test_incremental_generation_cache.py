@@ -192,7 +192,7 @@ def test_production_workflow_restores_incremental_cache():
     assert "actions/cache@v4" in workflow
     assert "data/generation-cache.json" in workflow
     assert "timeout-minutes: 90" in workflow
-    assert "ACTIVE_WORKFLOW=tct-incremental-generation-v1.9.4" in workflow
+    assert "ACTIVE_WORKFLOW=tct-bounded-runtime-v1.9.5" in workflow
 
 
 def test_generation_cache_persists_across_process_runs(tmp_path: Path):
