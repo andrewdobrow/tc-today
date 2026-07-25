@@ -336,38 +336,42 @@ class EditorialEngine:
                 "Editorial state articles must be a list."
             )
 
-        for index, item in enumerate(articles):
-            if not isinstance(item, dict):
-                raise EditorialStateError(
-                    "Invalid article record at index "
-                    f"{index}."
+        registry_already_exists = Path(registry_path).exists()
+        with engine._pipeline.defer_registry_saves(
+            commit=not registry_already_exists
+        ):
+            for index, item in enumerate(articles):
+                if not isinstance(item, dict):
+                    raise EditorialStateError(
+                        "Invalid article record at index "
+                        f"{index}."
+                    )
+
+                entry = item.get("entry")
+                source = item.get("source")
+
+                if not isinstance(entry, dict):
+                    raise EditorialStateError(
+                        "Invalid article entry at index "
+                        f"{index}."
+                    )
+
+                if not isinstance(source, str) or not source.strip():
+                    raise EditorialStateError(
+                        "Invalid article source at index "
+                        f"{index}."
+                    )
+
+                county = item.get("county")
+                is_custom = item.get("is_custom")
+
+                engine._process(
+                    entry,
+                    source=source,
+                    county=county,
+                    is_custom=is_custom,
+                    record_history=False,
                 )
-
-            entry = item.get("entry")
-            source = item.get("source")
-
-            if not isinstance(entry, dict):
-                raise EditorialStateError(
-                    "Invalid article entry at index "
-                    f"{index}."
-                )
-
-            if not isinstance(source, str) or not source.strip():
-                raise EditorialStateError(
-                    "Invalid article source at index "
-                    f"{index}."
-                )
-
-            county = item.get("county")
-            is_custom = item.get("is_custom")
-
-            engine._process(
-                entry,
-                source=source,
-                county=county,
-                is_custom=is_custom,
-                record_history=False,
-            )
 
         # Preserve the original records exactly once. Replaying them above
         # rebuilds pipeline state but does not append them to history.

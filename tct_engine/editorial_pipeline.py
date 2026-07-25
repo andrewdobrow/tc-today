@@ -68,6 +68,10 @@ class EditorialPipeline:
         self._registry = StoryRegistry(registry_path)
         self._snapshots: dict[str, StorySnapshot] = {}
 
+    def defer_registry_saves(self, *, commit: bool = True):
+        """Return a context manager that batches persistent registry writes."""
+        return self._registry.defer_saves(commit=commit)
+
     def _record_timeline_entry(
         self,
         *,

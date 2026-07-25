@@ -1,47 +1,51 @@
 {
   "engine": "TCT Editorial Engine",
-  "version": "1.9.5.2",
-  "release": "nonstory-publication-lock-and-legacy-source-dedupe",
-  "base_release": "1.9.5.1 custom authority lock",
-  "severity": "production hotfix",
+  "version": "1.9.5.3",
+  "release": "batched-editorial-state-replay",
+  "base_release": "1.9.5.2 nonstory publication lock and legacy source dedupe",
+  "severity": "runtime hotfix",
   "incident": {
-    "symptom": "A generated status sentence saying no Indian River County stories were available was published as an article, entered RSS, and was syndicated to Nextdoor.",
-    "root_cause": "The category model returned section-status metadata in the hero object after zero hero-eligible sources were found. The pipeline had no deterministic nonstory classifier at the category, permalink, archive, RSS, or final deployment boundaries.",
-    "affected_slug": "2026-07-25-no-indian-river-county-stories-available-in-todays-feed"
+    "symptom": "The latest production run spent 1432.4 seconds loading editorial_state.json before feed processing began.",
+    "root_cause": "EditorialEngine.load replayed every historical audit record through StoryRegistry, and StoryRegistry.save atomically rewrote the approximately 19.6 MB persistent registry after each replayed article.",
+    "production_impact": "The full generator took 1663.3 seconds even though all work after state loading completed in about 231 seconds."
   },
   "contracts": {
-    "model_status_sentences_never_publish": true,
-    "section_placeholders_never_receive_permalinks": true,
-    "section_placeholders_excluded_from_archive_rss_and_sitemaps": true,
-    "existing_placeholder_pages_removed_and_replaced_with_noindex_archive_redirects": true,
-    "final_nonstory_deployment_gate": true,
-    "custom_article_authority_preserved": true,
-    "legacy_exact_source_url_duplicates_consolidated": true,
-    "uncertain_legacy_similarity_not_auto_merged": true
+    "existing_registry_replay_performs_zero_persistent_writes": true,
+    "missing_registry_replay_coalesces_to_one_atomic_write": true,
+    "failed_replay_does_not_commit_partial_registry": true,
+    "editorial_history_preserved_exactly_once": true,
+    "publication_and_identity_behavior_unchanged": true,
+    "custom_authority_lock_preserved": true,
+    "nonstory_publication_lock_preserved": true
   },
-  "legacy_archive_simulation": {
-    "archive_records_checked": 617,
-    "exact_source_duplicate_urls_redirected": 19,
-    "exact_source_duplicate_groups": 6,
-    "childcare_duplicate_urls_redirected": 8,
-    "remaining_records_after_all_existing_and_new_canonical_rules": 598
+  "benchmark": {
+    "registry_snapshot_bytes": 19568050,
+    "state_history_records": 999,
+    "observed_production_state_load_seconds_before": 1432.4,
+    "local_exact_registry_snapshot_load_seconds_after": 1.4,
+    "observed_production_total_seconds_before": 1663.3,
+    "estimated_remaining_runtime_without_state_replay_bug_seconds": 230.9
   },
   "validation": {
-    "workflow_relevant_tests_passed": 229,
-    "new_nonstory_and_legacy_migration_tests_passed": 11,
+    "workflow_relevant_tests_passed": 232,
+    "new_state_replay_tests_passed": 3,
+    "editorial_persistence_tests_passed": 7,
+    "package_validation": "28 modules imported and 94 public exports verified",
     "python_compilation": "passed",
-    "retained_archive_migration_simulation": "passed",
-    "excluded_local_fixture_files": [
+    "exact_registry_snapshot_benchmark": "passed",
+    "workflow_exclusions": [
       "tests/test_canonical_identity.py",
       "tests/test_matcher_contract.py"
     ],
-    "exclusion_reason": "These retained local-only fixtures require an engine.py artifact absent from the production repository snapshot; they are unrelated to this generator hotfix."
+    "exclusion_reason": "The production Test Editorial Engine workflow explicitly excludes these legacy fixtures because they require a separate engine.py artifact."
   },
   "files": [
-    "scripts/generate.py",
-    "tct_engine/__init__.py",
+    "tct_engine/story_registry.py",
+    "tct_engine/editorial_pipeline.py",
+    "tct_engine/editorial_engine.py",
     "tct_engine/observability.py",
-    "tests/test_nonstory_publication_contract.py",
+    "tct_engine/__init__.py",
+    "tests/test_editorial_state_replay_performance.py",
     "manifest.json"
   ]
 }

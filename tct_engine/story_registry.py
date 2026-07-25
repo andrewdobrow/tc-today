@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+from contextlib import contextmanager
 import re
 from pathlib import Path
 from typing import Any, Iterable
@@ -51,6 +52,8 @@ class StoryRegistry:
 
     def __init__(self, filename: str | Path = "story-registry.json") -> None:
         self.path = Path(filename)
+        self._save_defer_depth = 0
+        self._save_pending = False
         self._resolver = StoryResolver()
         self._relationships = StoryRelationshipEngine()
         self._importance = StoryImportanceEngine()
@@ -156,7 +159,7 @@ class StoryRegistry:
             return None
         return choose_primary_story_id(matches, self.data["stories"])
 
-    def save(self) -> None:
+    def _write(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         temporary = self.path.with_suffix(self.path.suffix + ".tmp")
         temporary.write_text(
@@ -164,6 +167,38 @@ class StoryRegistry:
             encoding="utf-8",
         )
         os.replace(temporary, self.path)
+
+    def save(self) -> None:
+        """Persist immediately unless a bulk operation has deferred writes."""
+        if self._save_defer_depth:
+            self._save_pending = True
+            return
+        self._write()
+
+    @contextmanager
+    def defer_saves(self, *, commit: bool = True):
+        """Coalesce repeated registry saves into at most one atomic write.
+
+        Historical state replay can use ``commit=False`` when an existing
+        persistent registry is already authoritative. The replayed state remains
+        available to the current process, but the multi-megabyte registry is not
+        rewritten once per historical article.
+        """
+        outermost = self._save_defer_depth == 0
+        self._save_defer_depth += 1
+        failed = False
+        try:
+            yield self
+        except Exception:
+            failed = True
+            raise
+        finally:
+            self._save_defer_depth -= 1
+            if outermost:
+                pending = self._save_pending
+                self._save_pending = False
+                if pending and commit and not failed:
+                    self._write()
 
     def _canonical_story_id(self, story_id: str) -> str:
         aliases = self.data["story_aliases"]
