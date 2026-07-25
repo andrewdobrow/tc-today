@@ -92,3 +92,65 @@ def test_unmatched_card_uses_explainable_fallback_without_enforcement():
     assert item["score"] == 56
     assert item["score_breakdown"]["basis"] == "live_urgency_fallback"
     assert report["summary"]["fallback_scores"] == 1
+
+
+def test_cross_category_placements_are_ranked_once_by_persistent_story():
+    registry = _registry()
+    cards = [
+        {"headline": "County issues evacuation order", "link": "https://source.test/evacuation", "cat_key": "crime"},
+        {"headline": "County issues evacuation order", "link": "https://source.test/evacuation?utm_source=rss", "cat_key": "st_lucie"},
+        {"headline": "Community festival announced", "link": "https://source.test/festival", "cat_key": "things_to_do"},
+    ]
+    report = build_homepage_ranking_recommendations(cards, {}, registry=registry)
+    assert report["summary"]["input_placements"] == 3
+    assert report["summary"]["unique_cards_observed"] == 2
+    assert report["summary"]["duplicate_placements_excluded"] == 1
+    assert report["current_order"].count("County issues evacuation order") == 1
+
+
+def test_archive_story_id_matches_before_fallback():
+    registry = _registry()
+    cards = [{"headline": "Rewritten evacuation headline", "_archived_slug": "evacuation-story", "urgency_score": 1}]
+    archive = [{
+        "slug": "evacuation-story",
+        "headline": "Rewritten evacuation headline",
+        "editorial_story_id": "story_high",
+    }]
+    report = build_homepage_ranking_recommendations(cards, {}, registry=registry, archive=archive)
+    item = report["items"][0]
+    assert item["story_id"] == "story_high"
+    assert item["match_basis"] == "persistent_story_id"
+    assert item["score_breakdown"]["basis"] == "persistent_story_registry"
+
+
+def test_custom_article_is_position_locked_even_without_registry_match():
+    cards = [
+        {"headline": "Generated low story", "urgency_score": 1},
+        {"headline": "Manual traffic report", "is_custom": True, "urgency_score": 1},
+        {"headline": "Generated high story", "urgency_score": 10},
+    ]
+    report = build_homepage_ranking_recommendations(cards, {}, registry={"stories": {}})
+    manual = next(item for item in report["items"] if item["headline"] == "Manual traffic report")
+    assert manual["current_position"] == 2
+    assert manual["recommended_position"] == 2
+    assert manual["position_locked"] is True
+    assert manual["position_lock_reason"] == "custom_article"
+    assert all(move["headline"] != "Manual traffic report" for move in report["recommendations"])
+
+
+def test_report_counts_unchanged_positions_after_deduplication():
+    report = build_homepage_ranking_recommendations(_cards(), {}, registry=_registry())
+    assert report["summary"]["recommended_moves"] == 2
+    assert report["summary"]["unchanged_positions"] == 0
+    assert report["summary"]["registry_match_rate"] == 1.0
+
+
+def test_low_registry_match_rate_is_explicitly_not_ready_for_enforcement():
+    cards = [
+        {"headline": "Matched", "story_id": "story_high"},
+        {"headline": "Unmatched one", "urgency_score": 5},
+        {"headline": "Unmatched two", "urgency_score": 4},
+    ]
+    report = build_homepage_ranking_recommendations(cards, {}, registry=_registry())
+    assert report["summary"]["enforcement_readiness"] == "not_ready"
+    assert "Fewer than 80%" in report["summary"]["enforcement_readiness_reason"]

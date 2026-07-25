@@ -3880,7 +3880,8 @@ def render_index(all_categories, top_cat):
                 "  Homepage ranking recommendations: "
                 f"{_ranking_summary.get('recommended_moves', 0)} move(s), "
                 f"{_ranking_summary.get('registry_matches', 0)}/"
-                f"{_ranking_summary.get('cards_observed', 0)} registry-matched; "
+                f"{_ranking_summary.get('unique_cards_observed', _ranking_summary.get('cards_observed', 0))} unique cards registry-matched; "
+                f"{_ranking_summary.get('duplicate_placements_excluded', 0)} duplicate placement(s) excluded; "
                 "observe-only"
             )
         except Exception as exc:

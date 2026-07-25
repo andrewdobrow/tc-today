@@ -1,10 +1,10 @@
 {
   "engine": "TCT Editorial Engine",
-  "version": "1.10.0",
-  "release": "homepage-ranking-recommendations",
-  "base_release": "1.9.5.3 batched editorial state replay",
+  "version": "1.10.1",
+  "release": "unique-homepage-ranking-correction",
+  "base_release": "1.10.0 homepage ranking recommendations",
   "severity": "controlled production expansion",
-  "purpose": "Observe and explain how the persistent editorial engine would reorder homepage cards without changing the live hero or card order.",
+  "purpose": "Deduplicate cross-category homepage placements before ranking, improve persistent story matching, lock all custom articles in place, and report enforcement readiness honestly.",
   "contracts": {
     "mode": "recommend",
     "hero_changes_enabled": false,
@@ -14,24 +14,25 @@
     "duplicate_enforcement_preserved": true,
     "custom_authority_lock_preserved": true,
     "nonstory_publication_lock_preserved": true,
-    "permalink_and_regression_gates_preserved": true
+    "permalink_and_regression_gates_preserved": true,
+    "deduplicate_cross_category_placements": true,
+    "custom_articles_position_locked": true,
+    "minimum_registry_match_rate_for_review": 0.8
   },
   "output": {
     "report": "data/homepage-ranking-recommendations.json",
     "maximum_reported_moves": 10,
-    "ranking_basis": "persistent editorial score with explainable live-urgency fallback for unmatched cards"
+    "ranking_basis": "one canonical recommendation item per unique story; persistent editorial score with labeled fallback for unmatched cards"
   },
   "validation": {
-    "workflow_relevant_tests_passed": 237,
-    "new_ranking_tests_passed": 5,
-    "package_integrity_tests_passed": 3,
+    "workflow_relevant_tests_passed": 242,
+    "focused_ranking_tests_passed": 10,
     "python_compilation": "passed",
-    "workflow_yaml_parsing": "passed",
     "workflow_exclusions": [
       "tests/test_canonical_identity.py",
       "tests/test_matcher_contract.py"
     ],
-    "exclusion_reason": "The production test workflow excludes legacy fixtures that require a separate engine.py artifact."
+    "exclusion_reason": "Legacy fixtures require a separate engine.py artifact not used by the production workflow."
   },
   "files": [
     "scripts/generate.py",
