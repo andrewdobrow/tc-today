@@ -9129,6 +9129,38 @@ def _publication_story_id(item, identity_index):
         return ""
 
 
+
+def _backfill_archive_editorial_story_ids(archive, identity_index, output_root=None):
+    """Permanently attach safe persistent story IDs to eligible archive rows."""
+    archive = list(archive or [])
+    report = {"version":"1.10.4","records_examined":len(archive),"already_identified":0,"resolved":0,"custom_isolated":0,"unmatched":0,"resolved_records":[],"unmatched_records":[]}
+    if identity_index is None:
+        report["status"] = "identity_index_unavailable"
+    else:
+        report["status"] = "complete"
+        for entry in archive:
+            existing = str(entry.get("editorial_story_id") or "").strip()
+            if existing and existing in identity_index.safe_story_ids:
+                report["already_identified"] += 1; continue
+            if entry.get("is_custom") or entry.get("authoritative_custom"):
+                report["custom_isolated"] += 1; continue
+            story_id = _publication_story_id(entry, identity_index)
+            if story_id:
+                entry["editorial_story_id"] = story_id
+                report["resolved"] += 1
+                report["resolved_records"].append({"slug":entry.get("slug",""),"headline":entry.get("headline",""),"editorial_story_id":story_id})
+            else:
+                report["unmatched"] += 1
+                report["unmatched_records"].append({"slug":entry.get("slug",""),"headline":entry.get("headline","")})
+    if output_root is not None:
+        path = Path(output_root) / "data" / "archive-identity-backfill.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_suffix(path.suffix + ".tmp")
+        tmp.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+        tmp.replace(path)
+    print("  Archive identity backfill: " f"{report['resolved']} resolved, {report['already_identified']} already identified, " f"{report['custom_isolated']} custom isolated, {report['unmatched']} unmatched")
+    return archive, report
+
 def _publication_canonical_key(entry):
     """Custom first, then oldest public URL, then deeper copy as a tie-breaker."""
     custom_rank = 0 if entry.get("is_custom") or entry.get("authoritative_custom") else 1
@@ -9276,6 +9308,9 @@ def write_archives(all_categories, top_cat):
         _reconcile_archive_publication_identity(archive, _publication_identity)
     )
     _canonical_redirects.extend(_publication_redirects)
+    archive, _archive_identity_backfill = _backfill_archive_editorial_story_ids(
+        archive, _publication_identity, OUTPUT_DIR
+    )
 
     heroes = [(top_cat["category_key"], top_cat["category_label"], top_cat["hero"])]
     for cat in all_categories:
@@ -9525,8 +9560,12 @@ def write_archives(all_categories, top_cat):
     archive, _redirect_verification = enforce_canonical_redirects(
         archive, articles_dir, OUTPUT_DIR, current_run_redirects=_canonical_redirects
     )
+    archive, _archive_identity_backfill = _backfill_archive_editorial_story_ids(
+        archive, _publication_identity, OUTPUT_DIR
+    )
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
     _publication_report.update({
+        "archive_identity_backfill": _archive_identity_backfill,
         "generated_items_coalesced": _publication_items_coalesced,
         "redirects_created": len(_publication_redirects),
         "active_archive_records": len(archive),
