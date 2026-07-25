@@ -1,30 +1,51 @@
 {
-  "release": "v1.10.5.5",
-  "name": "Custom Publication Write-Through",
-  "base": "v1.10.5.4",
-  "mode": "recommendation-only",
+  "release": "v1.11.0",
+  "name": "Exact Custom Publishing and Product Guides",
+  "base": "v1.10.5.5",
   "package_type": "incremental-overlay",
+  "mode": "ranking-observe-only",
   "files": [
     "manifest.json",
+    "PRODUCT_GUIDE_SCHEMA.md",
+    "scripts/__init__.py",
     "scripts/generate.py",
-    "tct_engine/__init__.py",
-    "tct_engine/observability.py",
-    "tests/test_custom_post_publication_rebind.py"
+    "data/custom-retirements.json",
+    "examples/product_guide.example.json",
+    "tests/test_custom_authority_contract.py",
+    "tests/test_custom_post_publication_rebind.py",
+    "tests/test_custom_exact_headline_and_product_guide.py"
   ],
-  "behavior": {
-    "live_ranking_enforcement": false,
-    "hero_ranking_enforcement": false,
-    "custom_clones_coalesce_by_exact_payload": true,
-    "runtime_archive_slug_is_not_editor_instruction": true,
-    "archive_writer_updates_all_live_custom_clones_immediately": true,
-    "generic_rebind_preserves_current_run_custom_slug": true,
-    "post_publication_archive_scan_is_verification_only": true,
-    "forward_live_identity_contract_remains_fail_closed": true
+  "custom_article_contract": {
+    "update_identity": "exact headline after trimming leading/trailing whitespace",
+    "body_changes_allowed": true,
+    "case_sensitive": true,
+    "punctuation_sensitive": true,
+    "internal_whitespace_sensitive": true,
+    "fuzzy_matching": false,
+    "body_hash_authorizes_overwrite": false,
+    "series_matching_authorizes_overwrite": false,
+    "source_or_story_id_authorizes_overwrite": false,
+    "different_headline_creates_new_article": true
   },
-  "reports": [
-    "data/custom-post-publication-rebind.json",
-    "data/forward-live-identity-contract.json",
-    "data/forward-publication-identity.json"
-  ],
-  "version": "1.10.5.5"
+  "legacy_retirement": {
+    "traffic_report_queue_entry_ignored": true,
+    "old_permalink_preserved": true,
+    "live_recovery_disabled": true,
+    "ranking_disabled": true,
+    "deployment_block_removed": true
+  },
+  "product_guide": {
+    "structured_products": true,
+    "inline_product_images": true,
+    "quick_picks": true,
+    "comparison_table": true,
+    "affiliate_disclosure": true,
+    "exact_link_preservation": true,
+    "sponsored_nofollow_links": true,
+    "mobile_cards": true,
+    "article_itemlist_product_schema": true,
+    "render_fidelity_gate": true
+  },
+  "ranking_enforcement": false,
+  "version": "1.11.0"
 }

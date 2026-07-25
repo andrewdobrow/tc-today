@@ -232,10 +232,15 @@ EDITORIAL_ACTIVATION_HISTORY_PATH = OUTPUT_DIR / "data" / "editorial_activation_
 # v1.10.5 forward publication identity. New generated articles are published only
 # when the current editorial decision can be carried directly into the archive row.
 # Historical rows remain readable, but unresolved legacy identity is not guessed.
-FORWARD_IDENTITY_VERSION = "1.2"
+FORWARD_IDENTITY_VERSION = "1.3"
 FORWARD_IDENTITY_RECENT_DAYS = 30
 CURRENT_RUN_EDITORIAL_IDENTITIES = {}
 CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
+CUSTOM_RETIREMENTS_PATH = OUTPUT_DIR / "data" / "custom-retirements.json"
+DEFAULT_AFFILIATE_DISCLOSURE = (
+    "As an Amazon Associate, Treasure Coast Today earns from qualifying purchases. "
+    "Prices and availability may change."
+)
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -4507,6 +4512,311 @@ def load_weather_alerts():
     return articles
 
 
+
+def _exact_custom_headline(value):
+    """The only automatic identity key permitted for a custom publication.
+
+    Leading and trailing whitespace are ignored because JSON editing can add it
+    accidentally. Capitalization, punctuation, apostrophes, dashes and all internal
+    wording remain significant. A changed headline is a new article.
+    """
+    return str(value or "").strip()
+
+
+def _load_custom_retirements(output_root=None):
+    root = Path(output_root or OUTPUT_DIR)
+    path = root / "data" / "custom-retirements.json"
+    if not path.exists():
+        return set()
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        print(f"  Custom retirement file ignored: {exc}")
+        return set()
+    if isinstance(data, dict):
+        data = data.get("headlines", data.get("retired", []))
+    if not isinstance(data, list):
+        return set()
+    result = set()
+    for row in data:
+        headline = row.get("headline") if isinstance(row, dict) else row
+        headline = _exact_custom_headline(headline)
+        if headline:
+            result.add(headline)
+    return result
+
+
+def _load_custom_retired_slugs(output_root=None):
+    root = Path(output_root or OUTPUT_DIR)
+    path = root / "data" / "custom-retirements.json"
+    if not path.exists():
+        return set()
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return set()
+    rows = data.get("slugs", []) if isinstance(data, dict) else []
+    result = set()
+    for row in rows if isinstance(rows, list) else []:
+        slug = row.get("slug") if isinstance(row, dict) else row
+        slug = str(slug or "").strip()
+        if slug:
+            result.add(slug)
+    return result
+
+
+def _is_retired_custom_item(item, output_root=None):
+    if not isinstance(item, dict):
+        return False
+    if item.get("retired") is True:
+        return True
+    if _exact_custom_headline(item.get("headline")) in _load_custom_retirements(output_root):
+        return True
+    slug = str(item.get("_archived_slug") or item.get("slug") or "").strip()
+    return bool(slug and slug in _load_custom_retired_slugs(output_root))
+
+
+def _product_guide_plaintext(item):
+    parts = [str(item.get("intro") or item.get("body") or "").strip()]
+    for product in item.get("products") or []:
+        if not isinstance(product, dict):
+            continue
+        parts.extend([
+            str(product.get("name") or "").strip(),
+            str(product.get("label") or "").strip(),
+            str(product.get("summary") or "").strip(),
+            str(product.get("best_for") or "").strip(),
+            " ".join(str(v).strip() for v in product.get("why_we_chose_it") or []),
+        ])
+    parts.append(str(item.get("closing") or "").strip())
+    return "\n\n".join(part for part in parts if part)
+
+
+def _normalize_product_guide(item):
+    """Validate and normalize a structured affiliate product guide in place."""
+    if str(item.get("article_type") or "").strip() != "product_guide":
+        return item
+    products = item.get("products")
+    if not isinstance(products, list) or not products:
+        raise ValueError("product_guide requires a non-empty products array")
+    normalized = []
+    for index, raw in enumerate(products, start=1):
+        if not isinstance(raw, dict):
+            raise ValueError(f"product_guide product {index} must be an object")
+        product = dict(raw)
+        name = str(product.get("name") or "").strip()
+        image_url = str(product.get("image_url") or "").strip()
+        affiliate_url = str(product.get("affiliate_url") or "").strip()
+        if not name:
+            raise ValueError(f"product_guide product {index} is missing name")
+        if not image_url.startswith(("https://", "http://")):
+            raise ValueError(f"product_guide product {index} has an invalid image_url")
+        if not affiliate_url.startswith(("https://", "http://")):
+            raise ValueError(f"product_guide product {index} has an invalid affiliate_url")
+        bullets = product.get("why_we_chose_it") or []
+        if isinstance(bullets, str):
+            bullets = [bullets]
+        if not isinstance(bullets, list):
+            raise ValueError(f"product_guide product {index} why_we_chose_it must be a list")
+        product["name"] = name
+        product["image_url"] = image_url
+        product["affiliate_url"] = affiliate_url
+        product["why_we_chose_it"] = [str(value).strip() for value in bullets if str(value).strip()]
+        product["button_text"] = str(product.get("button_text") or "View on Amazon").strip()
+        product["image_alt"] = str(product.get("image_alt") or name).strip()
+        normalized.append(product)
+    item["products"] = normalized
+    item["affiliate_disclosure"] = str(
+        item.get("affiliate_disclosure") or DEFAULT_AFFILIATE_DISCLOSURE
+    ).strip()
+    item["intro"] = str(item.get("intro") or item.get("body") or "").strip()
+    item["closing"] = str(item.get("closing") or "").strip()
+    item["body"] = _product_guide_plaintext(item)
+    item["product_count"] = len(normalized)
+    item["has_affiliate_links"] = True
+    return item
+
+
+def _render_product_guide_body(item):
+    import html as _html
+    disclosure = _html.escape(str(item.get("affiliate_disclosure") or DEFAULT_AFFILIATE_DISCLOSURE))
+    intro = make_paragraphs(str(item.get("intro") or ""), preserve_all=True)
+    products = item.get("products") or []
+    quick_items = []
+    cards = []
+    comparison_rows = []
+    for index, product in enumerate(products, start=1):
+        name = _html.escape(str(product.get("name") or ""))
+        image_url = _html.escape(str(product.get("image_url") or ""), quote=True)
+        affiliate_url = _html.escape(str(product.get("affiliate_url") or ""), quote=True)
+        image_alt = _html.escape(str(product.get("image_alt") or product.get("name") or ""), quote=True)
+        label = _html.escape(str(product.get("label") or ""))
+        summary = make_paragraphs(str(product.get("summary") or ""), preserve_all=True)
+        best_for = _html.escape(str(product.get("best_for") or ""))
+        button_text = _html.escape(str(product.get("button_text") or "View on Amazon"))
+        bullets = "".join(
+            f'<li>{_html.escape(str(value))}</li>'
+            for value in product.get("why_we_chose_it") or []
+        )
+        quick_items.append(
+            f'<li><span class="pg-rank">{index}</span><img src="{image_url}" alt="" loading="lazy">'
+            f'<a href="{affiliate_url}" target="_blank" rel="sponsored nofollow noopener noreferrer">{name}</a></li>'
+        )
+        cards.append(f"""
+        <section class="pg-product-card" id="product-{index}">
+          <div class="pg-product-image"><img src="{image_url}" alt="{image_alt}" loading="lazy"></div>
+          <div class="pg-product-copy">
+            {f'<span class="pg-label">{label}</span>' if label else ''}
+            <h2>{name}</h2>
+            {summary}
+            {f'<p class="pg-best-for"><strong>Best for:</strong> {best_for}</p>' if best_for else ''}
+            {f'<ul class="pg-reasons">{bullets}</ul>' if bullets else ''}
+            <a class="pg-amazon-button" href="{affiliate_url}" target="_blank" rel="sponsored nofollow noopener noreferrer">{button_text}</a>
+          </div>
+        </section>""")
+        comparison_rows.append(
+            '<tr>'
+            f'<td>{name}</td>'
+            f'<td>{best_for or "—"}</td>'
+            f'<td>{_html.escape(str(product.get("key_feature") or "—"))}</td>'
+            f'<td>{_html.escape(str(product.get("price_note") or "Check current price"))}</td>'
+            '</tr>'
+        )
+    closing = make_paragraphs(str(item.get("closing") or ""), preserve_all=True)
+    return f"""
+<style class="product-guide-styles">
+.product-guide {{ --pg-green:#0d5c36; --pg-soft:#f2f7f4; --pg-line:#dce8e1; }}
+.pg-disclosure {{ display:flex; gap:12px; padding:16px 18px; margin:0 0 24px; border:1px solid var(--pg-line); border-radius:12px; background:var(--pg-soft); font-size:14px; line-height:1.55; }}
+.pg-disclosure strong {{ color:var(--pg-green); }}
+.pg-intro {{ margin-bottom:28px; }}
+.pg-quick-picks {{ border:1px solid var(--pg-line); border-radius:14px; padding:18px; margin:0 0 28px; background:#fff; }}
+.pg-quick-picks h2 {{ margin:0 0 14px; font:700 18px/1.2 system-ui,sans-serif; color:var(--pg-green); text-transform:uppercase; letter-spacing:.04em; }}
+.pg-quick-picks ol {{ list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px 18px; }}
+.pg-quick-picks li {{ display:grid; grid-template-columns:28px 44px 1fr; gap:9px; align-items:center; min-width:0; }}
+.pg-quick-picks img {{ width:44px; height:44px; object-fit:contain; }}
+.pg-quick-picks a {{ color:var(--text); text-decoration:none; font-weight:650; line-height:1.25; }}
+.pg-rank {{ width:26px; height:26px; border-radius:50%; display:grid; place-items:center; background:var(--pg-green); color:#fff; font-weight:800; font-size:12px; }}
+.pg-product-card {{ display:grid; grid-template-columns:minmax(170px,30%) 1fr; gap:24px; padding:22px; margin:0 0 18px; border:1px solid var(--pg-line); border-radius:16px; background:#fff; box-shadow:0 8px 28px rgba(20,55,39,.06); }}
+.pg-product-image {{ display:grid; place-items:center; min-height:190px; border-radius:12px; background:#fafcfb; }}
+.pg-product-image img {{ width:100%; height:210px; object-fit:contain; }}
+.pg-product-copy h2 {{ margin:7px 0 8px; font-family:"Fraunces",serif; font-size:25px; line-height:1.2; }}
+.pg-product-copy p {{ margin:0 0 12px; font-size:16px; line-height:1.65; }}
+.pg-label {{ display:inline-block; padding:4px 8px; border-radius:5px; background:var(--pg-green); color:#fff; font-size:10px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; }}
+.pg-best-for {{ color:var(--text-secondary); }}
+.pg-reasons {{ margin:10px 0 18px; padding:0; list-style:none; }}
+.pg-reasons li {{ position:relative; padding-left:22px; margin:7px 0; line-height:1.45; }}
+.pg-reasons li::before {{ content:'✓'; position:absolute; left:0; color:var(--pg-green); font-weight:900; }}
+.pg-amazon-button {{ display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:10px 18px; border-radius:8px; background:var(--pg-green); color:#fff!important; text-decoration:none!important; font-weight:800; box-shadow:0 5px 14px rgba(13,92,54,.18); }}
+.pg-comparison {{ overflow-x:auto; margin:34px 0; border:1px solid var(--pg-line); border-radius:14px; }}
+.pg-comparison h2 {{ margin:0; padding:15px 18px; background:var(--pg-soft); color:var(--pg-green); font:800 16px/1.2 system-ui,sans-serif; text-transform:uppercase; letter-spacing:.04em; }}
+.pg-comparison table {{ width:100%; border-collapse:collapse; font-size:13px; }}
+.pg-comparison th,.pg-comparison td {{ padding:12px 14px; border-top:1px solid var(--pg-line); text-align:left; vertical-align:top; }}
+.pg-comparison th {{ color:var(--pg-green); font-size:11px; text-transform:uppercase; letter-spacing:.04em; }}
+.pg-closing {{ padding:22px; border-left:5px solid var(--pg-green); border-radius:0 12px 12px 0; background:var(--pg-soft); }}
+@media(max-width:720px) {{
+  .pg-quick-picks ol {{ grid-template-columns:1fr; }}
+  .pg-product-card {{ grid-template-columns:1fr; padding:17px; }}
+  .pg-product-image {{ min-height:170px; }}
+  .pg-product-image img {{ height:190px; }}
+  .pg-product-copy h2 {{ font-size:23px; }}
+  .pg-amazon-button {{ width:100%; }}
+}}
+</style>
+<div class="product-guide" data-product-count="{len(products)}">
+  <aside class="pg-disclosure"><strong>Affiliate disclosure</strong><span>{disclosure}</span></aside>
+  <div class="pg-intro">{intro}</div>
+  <nav class="pg-quick-picks" aria-label="Quick product picks"><h2>Quick Picks</h2><ol>{''.join(quick_items)}</ol></nav>
+  {''.join(cards)}
+  <section class="pg-comparison"><h2>At a glance: how they compare</h2><table><thead><tr><th>Product</th><th>Best for</th><th>Key feature</th><th>Price</th></tr></thead><tbody>{''.join(comparison_rows)}</tbody></table></section>
+  {f'<section class="pg-closing">{closing}</section>' if closing else ''}
+</div>"""
+
+
+def validate_product_guide_fidelity(item, page_html):
+    if str(item.get("article_type") or "") != "product_guide":
+        return True
+    import html as _html
+    page = str(page_html or "")
+    missing = []
+    disclosure = _html.escape(str(item.get("affiliate_disclosure") or DEFAULT_AFFILIATE_DISCLOSURE))
+    if disclosure not in page:
+        missing.append("affiliate_disclosure")
+    for index, product in enumerate(item.get("products") or [], start=1):
+        checks = {
+            f"product_{index}_name": _html.escape(str(product.get("name") or "")),
+            f"product_{index}_image": _html.escape(str(product.get("image_url") or ""), quote=True),
+            f"product_{index}_affiliate_url": _html.escape(str(product.get("affiliate_url") or ""), quote=True),
+        }
+        for label, value in checks.items():
+            if not value or value not in page:
+                missing.append(label)
+    if missing:
+        raise RuntimeError(
+            f"Product guide fidelity FAILED for '{item.get('headline','')[:60]}': "
+            + ", ".join(missing[:10])
+        )
+    return True
+
+
+def apply_custom_retirements_to_live(all_categories, top_cat=None, output_root=None):
+    retired = _load_custom_retirements(output_root)
+    if not retired:
+        return 0
+    removed = 0
+    for category in all_categories or []:
+        hero = category.get("hero")
+        if hero and (hero.get("is_custom") or hero.get("authoritative_custom")) and _is_retired_custom_item(hero, output_root):
+            cards = category.get("cards") or []
+            category["hero"] = cards.pop(0) if cards else None
+            category["cards"] = cards
+            removed += 1
+        kept = []
+        for card in category.get("cards") or []:
+            if (card.get("is_custom") or card.get("authoritative_custom")) and _is_retired_custom_item(card, output_root):
+                removed += 1
+                continue
+            kept.append(card)
+        category["cards"] = kept
+    if isinstance(top_cat, dict):
+        hero = top_cat.get("hero") or {}
+        if (hero.get("is_custom") or hero.get("authoritative_custom")) and _is_retired_custom_item(hero, output_root):
+            cards = top_cat.get("cards") or []
+            top_cat["hero"] = cards.pop(0) if cards else None
+            top_cat["cards"] = cards
+            removed += 1
+    if removed:
+        print(f"  Retired custom content removed from {removed} live placement(s)")
+    return removed
+
+
+def apply_custom_retirements_to_archive(output_root=None):
+    root = Path(output_root or OUTPUT_DIR)
+    retired = _load_custom_retirements(root)
+    retired_slugs = _load_custom_retired_slugs(root)
+    archive_path = root / "archive.json"
+    if not (retired or retired_slugs) or not archive_path.exists():
+        return 0
+    archive = load_archive(archive_path)
+    changed = 0
+    for entry in archive:
+        if not isinstance(entry, dict) or not (entry.get("is_custom") or entry.get("authoritative_custom")):
+            continue
+        entry_headline = _exact_custom_headline(entry.get("headline"))
+        entry_slug = str(entry.get("slug") or "").strip()
+        if entry_headline not in retired and entry_slug not in retired_slugs:
+            continue
+        if not entry.get("exclude_from_live_recovery") or entry.get("identity_quarantine_reason") != "editor_retired_custom_article":
+            changed += 1
+        entry["retired_custom"] = True
+        entry["ranking_eligible"] = False
+        entry["exclude_from_live_recovery"] = True
+        entry["identity_quarantine_reason"] = "editor_retired_custom_article"
+        entry["legacy_identity_status"] = "editor_retired"
+    if changed:
+        archive_path.write_text(json.dumps(archive, indent=2, ensure_ascii=False), encoding="utf-8")
+        print(f"  Retired {changed} custom archive record(s) from live recovery")
+    return changed
+
 def _declared_custom_category(item):
     """Return the normalized category explicitly assigned to a custom article."""
     if not isinstance(item, dict):
@@ -4652,94 +4962,57 @@ def validate_custom_category_placement(all_categories, output_root=None):
 
 
 def load_custom_articles():
-    """Load manually-submitted custom articles from custom_articles.json.
+    """Load manual publications using an exact-headline-only update contract.
 
-    Each article supports the same treatment as news articles: scored, ranked,
-    archived, and expired. Override flags:
-      - force_hero: true    -> pin as that category's hero
-      - pin_position: N     -> lock to grid slot N (1-indexed) regardless of score
-      - slug: "custom-slug" -> publish or replace this exact permalink
-      - replace_slug: "..." -> explicitly replace an existing custom permalink
-      - update_existing: true -> opt into canonical matching and update-in-place
-
-    Custom articles create a fresh permalink by default. Their submitted headline,
-    teaser, and complete body are never rewritten or replaced by generated copy.
-
-    Expected schema per entry:
-      {
-        "headline": "...",
-        "body": "full article text",
-        "category": "local_gov",
-        "image_url": "https://... (optional)",
-        "published": "Wed, 02 Jul 2026 14:00:00 +0000",
-        "expires": "2026-07-10",
-        "force_hero": false,
-        "pin_position": null,
-        "urgency_score": 7
-      }
+    The same headline updates the existing custom permalink and may replace the
+    complete body, image, category or product data. Any headline difference creates a
+    new article. No fuzzy, body-hash, recurring-series, source or story-ID matching is
+    allowed to authorize a custom overwrite.
     """
     path = OUTPUT_DIR / "custom_articles.json"
     if not path.exists():
         return []
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
-    except Exception as e:
-        print(f"  custom_articles.json parse error: {e}")
+    except Exception as exc:
+        print(f"  custom_articles.json parse error: {exc}")
+        return []
+    if not isinstance(data, list):
+        print("  custom_articles.json must contain an array")
         return []
 
     from datetime import timezone as _tz
     now = datetime.now(_tz.utc)
-
-    # custom_articles.json is an incoming publication queue, not a permanent
-    # inventory. Once a custom article has successfully reached archive.json, do
-    # not inject the same queued item again on every run. Archived custom stories
-    # remain authoritative through archive.json and the story engine.
-    #
-    # Set "republish": true on a queue item only when an intentional re-run is
-    # required. Removing the published item from custom_articles.json remains the
-    # normal workflow.
-    archived_custom_slugs = set()
-    archived_custom_fingerprints = set()
-    archived_custom_headlines = set()
-    archived_custom_records = []
-    archive_path = OUTPUT_DIR / "archive.json"
-    if archive_path.exists():
-        try:
-            archive_data = json.loads(archive_path.read_text(encoding="utf-8"))
-            if isinstance(archive_data, dict):
-                archive_data = archive_data.get("articles", archive_data.get("items", []))
-            if not isinstance(archive_data, list):
-                archive_data = []
-            for existing in archive_data:
-                if not isinstance(existing, dict) or not existing.get("is_custom"):
-                    continue
-                slug = slugify(str(existing.get("slug", "")))
-                if slug:
-                    archived_custom_slugs.add(slug)
-                headline = (existing.get("headline", "") or "").strip()
-                if headline:
-                    archived_custom_headlines.add(re.sub(r"[^a-z0-9]+", " ", headline.lower()).strip())
-                fp = (existing.get("custom_fingerprint")
-                      or existing.get("custom_story_fingerprint") or _custom_story_fingerprint(
-                          headline, existing.get("teaser", "")
-                      ))
-                if fp:
-                    archived_custom_fingerprints.add(fp)
-                archived_custom_records.append(existing)
-        except Exception as e:
-            print(f"  Custom queue archive check failed open: {e}")
+    retired = _load_custom_retirements(OUTPUT_DIR)
+    archive = load_archive(OUTPUT_DIR / "archive.json")
+    archived_by_exact_headline = {}
+    for existing in archive:
+        if not isinstance(existing, dict) or not (existing.get("is_custom") or existing.get("authoritative_custom")):
+            continue
+        headline = _exact_custom_headline(existing.get("headline"))
+        if not headline or headline in retired or existing.get("retired_custom"):
+            continue
+        archived_by_exact_headline.setdefault(headline, []).append(existing)
+    for rows in archived_by_exact_headline.values():
+        rows.sort(key=lambda row: (
+            str(row.get("first_published") or row.get("date") or ""),
+            str(row.get("slug") or ""),
+        ))
 
     live = []
     skipped_published = 0
-    for art in data:
-        # Preserve editor-supplied permalink instructions before any runtime archive
-        # binding mutates ``slug``/``replace_slug`` on the live placement. A slug
-        # inherited from the corrupted prior edition is not an explicit instruction.
-        art["_custom_requested_slug"] = str(art.get("slug") or "").strip()
-        art["_custom_requested_replace_slug"] = str(art.get("replace_slug") or "").strip()
-
-        # Skip expired
-        expires = art.get("expires", "")
+    retired_skips = 0
+    for raw in data:
+        if not isinstance(raw, dict):
+            continue
+        art = dict(raw)
+        headline = _exact_custom_headline(art.get("headline"))
+        if not headline:
+            continue
+        if art.get("retired") is True or headline in retired:
+            retired_skips += 1
+            continue
+        expires = str(art.get("expires") or "").strip()
         if expires:
             try:
                 exp_dt = datetime.strptime(expires, "%Y-%m-%d").replace(tzinfo=_tz.utc)
@@ -4747,123 +5020,59 @@ def load_custom_articles():
                     continue
             except Exception:
                 pass
-        if not art.get("headline") or not art.get("body") or not art.get("category"):
+        if not art.get("category"):
             continue
-
-        # Skip a queue item already published as a custom archive entry. Use the
-        # explicit slug when supplied, otherwise use the durable custom fingerprint
-        # and a normalized-headline fallback. This prevents an old queued Mets recap
-        # (or any other custom story) from being reported as a fresh custom override.
-        if not art.get("republish"):
-            explicit_slug = slugify(str(art.get("slug", ""))) if art.get("slug") else ""
-            normalized_headline = re.sub(
-                r"[^a-z0-9]+", " ", (art.get("headline", "") or "").lower()
-            ).strip()
-            queue_fp = art.get("custom_story_fingerprint") or _custom_story_fingerprint(
-                art.get("headline", ""), art.get("teaser", "") or art.get("body", "")[:180]
-            )
-            queue_body_hash = _custom_body_hash(art.get("body", ""))
-
-            matched_records = []
-            for existing in archived_custom_records:
-                existing_slug = slugify(str(existing.get("slug", "")))
-                existing_headline = re.sub(
-                    r"[^a-z0-9]+", " ", (existing.get("headline", "") or "").lower()
-                ).strip()
-                existing_fp = (existing.get("custom_fingerprint")
-                               or existing.get("custom_story_fingerprint"))
-                if (
-                    (explicit_slug and existing_slug == explicit_slug)
-                    or (queue_fp and existing_fp and queue_fp == existing_fp)
-                    or (normalized_headline and existing_headline == normalized_headline)
-                ):
-                    matched_records.append(existing)
-
-            same_payload = False
-            for existing in matched_records:
-                saved_hash = str(existing.get("custom_body_hash") or "")
-                if saved_hash and saved_hash == queue_body_hash:
-                    same_payload = True
-                    break
-                # Legacy entries without a body hash are deliberately republished
-                # once. Word counts are not proof that the submitted copy survived; a
-                # generated rewrite can coincidentally have the same length. The repair
-                # run stores custom_body_hash, making every later run idempotent.
-
-            series_mismatch_record = next((
-                existing for existing in matched_records
-                if _custom_series_slug_mismatch(art, existing.get("slug", ""))
-            ), None)
-            if series_mismatch_record:
-                # A recurring report was previously written into another edition's
-                # URL. Republish the exact manual payload under a fresh dated slug and
-                # retire the corrupted permalink after the new page is created.
-                art["_custom_series_permalink_repair"] = True
-                art["_superseded_custom_slug"] = series_mismatch_record.get("slug", "")
-                art["custom_series_key"] = _custom_series_key(art)
-                art["custom_edition_key"] = _custom_edition_marker(art)
-                art.pop("slug", None)
-                art.pop("replace_slug", None)
-                art["_custom_requested_slug"] = ""
-                art["_custom_requested_replace_slug"] = ""
-                print(
-                    "  Custom recurring-edition permalink repair queued: "
-                    f"'{art.get('headline','')[:60]}'"
-                )
-
-            if same_payload and not series_mismatch_record:
-                skipped_published += 1
-                print(f"  Custom queue skip (exact payload already published): '{art.get('headline','')[:60]}'")
+        try:
+            if str(art.get("article_type") or "") == "product_guide":
+                _normalize_product_guide(art)
+            elif not art.get("body"):
                 continue
+        except ValueError as exc:
+            raise RuntimeError(f"Custom article '{headline}' invalid: {exc}") from exc
 
-            # If the same custom headline was partially or incorrectly published,
-            # repair that exact permalink. A differently titled recurring edition is
-            # a new custom article and must receive a new URL by default.
-            exact_headline_match = next((
-                existing for existing in matched_records
-                if re.sub(r"[^a-z0-9]+", " ", (existing.get("headline", "") or "").lower()).strip()
-                   == normalized_headline
-            ), None)
-            if (
-                exact_headline_match
-                and exact_headline_match.get("slug")
-                and not series_mismatch_record
-                and not art.get("unique_slug")
-            ):
-                art["replace_slug"] = exact_headline_match.get("slug")
-                art["_custom_payload_repair"] = True
-                print(
-                    "  Custom queue payload changed; repairing exact custom permalink: "
-                    f"'{art.get('headline','')[:60]}'"
-                )
+        art["headline"] = headline
+        art["_custom_requested_slug"] = str(art.get("slug") or "").strip()
+        art["_custom_requested_replace_slug"] = ""
+        exact_matches = archived_by_exact_headline.get(headline, [])
+        exact_existing = exact_matches[0] if exact_matches else None
+        payload_hash = _custom_body_hash(art.get("body", ""))
+        if exact_existing:
+            saved_hash = str(exact_existing.get("custom_body_hash") or "")
+            product_signature = str(exact_existing.get("product_guide_hash") or "")
+            current_product_signature = _product_guide_hash(art) if str(art.get("article_type") or "") == "product_guide" else ""
+            if not art.get("republish") and saved_hash and saved_hash == payload_hash and product_signature == current_product_signature:
+                skipped_published += 1
+                print(f"  Custom queue skip (exact headline and payload already published): '{headline[:60]}'")
+                continue
+            art["replace_slug"] = exact_existing.get("slug", "")
+            art["_custom_requested_replace_slug"] = exact_existing.get("slug", "")
+            art["_custom_exact_headline_update"] = True
+            print(f"  Custom exact-headline update queued: '{headline[:60]}'")
+        else:
+            art.pop("replace_slug", None)
+            art.pop("update_existing", None)
 
-        # Normalize into the same shape as generated articles
-        art["is_custom"]       = True
+        art["is_custom"] = True
         art["authoritative_custom"] = True
-        art["custom_body_hash"] = _custom_body_hash(art.get("body", ""))
-        if _custom_series_key(art):
-            art["custom_series_key"] = _custom_series_key(art)
-            art["custom_edition_key"] = _custom_edition_marker(art)
-        art["enriched"]        = True
-        art["link"]            = art.get("link", f"{SITE_URL}/")
-        art["source_quality"]  = "full"
-        art["source_type"]     = "custom"
+        art["custom_body_hash"] = payload_hash
+        art["custom_headline_key"] = headline
+        art["enriched"] = True
+        art["link"] = art.get("link", f"{SITE_URL}/")
+        art["source_quality"] = "full"
+        art["source_type"] = "custom"
         art.setdefault("urgency_score", 6)
-        art.setdefault("teaser", art["body"][:180].rstrip())
+        art.setdefault("teaser", art.get("intro") or art.get("body", "")[:180].rstrip())
         art.setdefault("published", now.strftime("%a, %d %b %Y %H:%M:%S %z"))
-        art["published_raw"]   = art.get("published_raw", art["published"])
-        # Display-format the timestamp like every other article ("A few minutes ago",
-        # "3:45 PM ET", "Jul 15, 3:45 PM ET"). Without this, the raw RFC-822 string
-        # (e.g. "Fri, 17 Jul 2026 21:57:35 -0400") leaked onto the card, exposing the
-        # -0400 offset. Keep the raw value in published_raw for sorting and RSS.
+        art["published_raw"] = art.get("published_raw", art["published"])
         art["published"] = format_age(art["published_raw"]) or art["published_raw"]
         live.append(art)
     if live:
         print(f"  Custom articles loaded: {len(live)}")
     if skipped_published:
         print(f"  Custom queue ignored {skipped_published} already-published item(s)")
+    if retired_skips:
+        print(f"  Custom queue ignored {retired_skips} retired item(s)")
     return live
-
 
 def load_archive(archive_path):
     try:
@@ -4883,9 +5092,11 @@ def _custom_body_tokens(value):
 
 
 def validate_custom_body_fidelity(hero, page_html):
-    """Prove that the complete submitted custom body reached the article page."""
+    """Prove that the complete submitted custom payload reached the article page."""
     if not (hero.get("is_custom") or hero.get("authoritative_custom")):
         return True
+    if str(hero.get("article_type") or "") == "product_guide":
+        return validate_product_guide_fidelity(hero, page_html)
     import html as _html
     match = re.search(
         r'<div class="article-body">(.*?)</div>\s*<div class="article-share">',
@@ -4943,9 +5154,10 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     _hero_img = hero.get("image_url", "")
     _cat_og   = f"{SITE_URL}/og-{category_key}.png"
     image_url = _hero_img if (_hero_img and any(d in _hero_img for d in _reliable_domains)) else _cat_og
+    _is_product_guide = str(hero.get("article_type") or "") == "product_guide"
     structured_data = {
         "@context": "https://schema.org",
-        "@type":    "NewsArticle",
+        "@type":    "Article" if _is_product_guide else "NewsArticle",
         "headline": hero.get("headline", "")[:110],
         "description": description,
         "image":    [image_url] if image_url else [],
@@ -4977,10 +5189,30 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     }
     import json as _json
     schema_tag = f'  <script type="application/ld+json">{_json.dumps(structured_data)}</script>'
-    body       = make_paragraphs(
-        hero.get("body", ""),
-        preserve_all=bool(hero.get("is_custom") or hero.get("authoritative_custom")),
-    )
+    if _is_product_guide:
+        structured_data["mainEntity"] = {
+            "@type": "ItemList",
+            "numberOfItems": len(hero.get("products") or []),
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": index,
+                    "item": {
+                        "@type": "Product",
+                        "name": product.get("name", ""),
+                        "image": product.get("image_url", ""),
+                        "url": product.get("affiliate_url", ""),
+                    },
+                }
+                for index, product in enumerate(hero.get("products") or [], start=1)
+            ],
+        }
+        body = _render_product_guide_body(hero)
+    else:
+        body = make_paragraphs(
+            hero.get("body", ""),
+            preserve_all=bool(hero.get("is_custom") or hero.get("authoritative_custom")),
+        )
 
     # Optional user-service link for Things To Do coverage. This is an official event,
     # venue, ticket, or registration page extracted from a real href in the source page,
@@ -5803,25 +6035,12 @@ def _iter_live_custom_placements(all_categories, top_cat=None):
 
 
 def _same_custom_publication_payload(a, b):
-    """Return True only for the exact manual payload or exact recurring edition."""
+    """Live clones coalesce only when their custom headlines are exactly equal."""
     if not isinstance(a, dict) or not isinstance(b, dict):
         return False
-    a_hash = str(a.get("custom_body_hash") or _custom_body_hash(a.get("body", ""))).strip()
-    b_hash = str(b.get("custom_body_hash") or _custom_body_hash(b.get("body", ""))).strip()
-    if a_hash and b_hash and a_hash == b_hash:
-        return True
-    a_series = str(a.get("custom_series_key") or _custom_series_key(a) or "").strip()
-    b_series = str(b.get("custom_series_key") or _custom_series_key(b) or "").strip()
-    a_edition = str(a.get("custom_edition_key") or _custom_edition_marker(a) or "").strip()
-    b_edition = str(b.get("custom_edition_key") or _custom_edition_marker(b) or "").strip()
-    a_head = str(a.get("headline") or "").strip()
-    b_head = str(b.get("headline") or "").strip()
-    return bool(
-        a_series and a_series == b_series
-        and a_edition and a_edition == b_edition
-        and a_head and a_head == b_head
-    )
-
+    headline_a = _exact_custom_headline(a.get("headline"))
+    headline_b = _exact_custom_headline(b.get("headline"))
+    return bool(headline_a and headline_a == headline_b)
 
 def _bind_custom_publication_directly_to_live(
     all_categories, top_cat, published_item, slug, story_id, category_key
@@ -5886,7 +6105,10 @@ def _record_current_custom_publication(item, slug, story_id, category_key, actio
     series_key = str(item.get("custom_series_key") or _custom_series_key(item) or "").strip()
     edition_key = str(item.get("custom_edition_key") or _custom_edition_marker(item) or "").strip()
     receipt = {
-        "headline": str(item.get("headline") or "").strip(),
+        "headline": _exact_custom_headline(item.get("headline")),
+        "custom_headline_key": _exact_custom_headline(item.get("headline")),
+        "article_type": str(item.get("article_type") or "custom_article"),
+        "product_guide_hash": _product_guide_hash(item),
         "custom_body_hash": body_hash,
         "custom_series_key": series_key,
         "custom_edition_key": edition_key,
@@ -5923,6 +6145,19 @@ def _custom_body_hash(body):
     """
     normalized = str(body or "").replace("\r\n", "\n").replace("\r", "\n").strip()
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest() if normalized else ""
+
+
+def _product_guide_hash(item):
+    if not isinstance(item, dict) or str(item.get("article_type") or "") != "product_guide":
+        return ""
+    payload = {
+        "affiliate_disclosure": item.get("affiliate_disclosure", ""),
+        "intro": item.get("intro", ""),
+        "closing": item.get("closing", ""),
+        "products": item.get("products", []),
+    }
+    raw = json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
 _CUSTOM_MONTHS = (
@@ -8705,79 +8940,40 @@ def validate_nonstory_publication_contract(all_categories, top_cat, output_root)
 
 
 def _resolve_custom_publication_target(hero, archive, existing, headline):
-    """Return the explicit publication target for a custom article.
-
-    Custom submissions create a fresh permalink by default. Fuzzy matches and source
-    story IDs are not permission to overwrite an older manual article. Editors can
-    explicitly replace a page with ``slug``/``replace_slug`` or opt into normal
-    canonical update behavior with ``update_existing=true``.
-    """
+    """Authorize custom updates only through an exact headline match."""
     if not (hero.get("is_custom") or hero.get("authoritative_custom")):
         return existing, None, None
+    headline_key = _exact_custom_headline(headline)
+    matches = [
+        entry for entry in archive or []
+        if isinstance(entry, dict)
+        and (entry.get("is_custom") or entry.get("authoritative_custom"))
+        and not entry.get("retired_custom")
+        and _exact_custom_headline(entry.get("headline")) == headline_key
+    ]
+    matches.sort(key=lambda row: (
+        str(row.get("first_published") or row.get("date") or ""),
+        str(row.get("slug") or ""),
+    ))
+    target = matches[0] if matches else None
+    if target is not None:
+        story_id = str(target.get("editorial_story_id") or "").strip()
+        if not story_id:
+            story_id = "custom:" + hashlib.sha256(
+                ("headline|" + headline_key).encode("utf-8")
+            ).hexdigest()[:32]
+        return target, None, story_id
 
-    _replace_requested = (
-        hero.get("_custom_requested_replace_slug")
-        if "_custom_requested_replace_slug" in hero
-        else hero.get("replace_slug", "")
-    )
-    _slug_requested = (
+    requested_slug = (
         hero.get("_custom_requested_slug")
         if "_custom_requested_slug" in hero
-        else ("" if hero.get("_archived_slug") else hero.get("slug", ""))
+        else hero.get("slug", "")
     )
-    replace_slug = slugify(str(_replace_requested or "")) if _replace_requested else ""
-    explicit_slug = slugify(str(_slug_requested or "")) if _slug_requested else ""
-    target_slug = replace_slug or explicit_slug
-
-    # ``unique_slug`` is an explicit editor contract: publish this payload at a new
-    # permalink even when an older custom article has a similar headline or series
-    # identity. ``replace_slug`` remains the only override that permits an overwrite.
-    if hero.get("unique_slug") and not replace_slug:
-        payload_identity = (
-            hero.get("custom_body_hash") or _custom_body_hash(hero.get("body", ""))
-            or _custom_story_fingerprint(headline, hero.get("teaser", ""))
-        )[:32]
-        series_key = _custom_series_key(hero)
-        edition_key = _custom_edition_marker(hero)
-        identity_seed = "|".join(
-            part for part in (series_key, edition_key, payload_identity) if part
-        )
-        return None, (explicit_slug or None), "custom:" + hashlib.sha256(
-            identity_seed.encode("utf-8")
-        ).hexdigest()[:32]
-    if target_slug:
-        target = next((entry for entry in archive if entry.get("slug") == target_slug), None)
-        # ``replace_slug`` is explicit overwrite permission. A recurring edition's
-        # ordinary ``slug`` is not: if it points at another visible date range, create
-        # a new dated permalink instead of corrupting the previous edition.
-        if (
-            target
-            and not replace_slug
-            and not hero.get("update_existing")
-            and _custom_series_slug_mismatch(hero, target_slug)
-        ):
-            hero["_superseded_custom_slug"] = target_slug
-            hero["_custom_series_permalink_repair"] = True
-            return None, None, None
-        return target, (target_slug if target is None else None), None
-
-    if hero.get("update_existing"):
-        if existing is None:
-            existing = find_canonical_event_entry(hero, archive)
-        return existing, None, None
-
-    payload_identity = (
-        hero.get("custom_body_hash") or _custom_body_hash(hero.get("body", ""))
-        or _custom_story_fingerprint(headline, hero.get("teaser", ""))
-    )[:32]
-    series_key = _custom_series_key(hero)
-    edition_key = _custom_edition_marker(hero)
-    if series_key:
-        hero["custom_series_key"] = series_key
-        hero["custom_edition_key"] = edition_key
-    identity_seed = "|".join(part for part in (series_key, edition_key, payload_identity) if part)
-    return None, None, "custom:" + hashlib.sha256(identity_seed.encode("utf-8")).hexdigest()[:32]
-
+    forced_slug = slugify(str(requested_slug or "")) or None
+    story_id = "custom:" + hashlib.sha256(
+        ("headline|" + headline_key).encode("utf-8")
+    ).hexdigest()[:32]
+    return None, forced_slug, story_id
 
 def _publication_copy_rank(entry):
     """Rank competing generated copies for one public story.
@@ -8796,25 +8992,15 @@ def _publication_copy_rank(entry):
 
 
 def _publication_coalesce_key(item, identity_index=None):
-    """Return one current-run publication key for a generated/custom payload.
-
-    Custom placements can exist as both the live card object and a separately loaded
-    queue object.  Runtime permalink rebinding may stamp only the live clone with an
-    old story ID.  Coalescing custom copy by that inherited ID would publish the same
-    manual payload twice.  Exact custom payload identity therefore always wins over
-    persistent story identity at this pre-publication boundary.
-    """
+    """Use exact custom headlines and persistent generated-story IDs."""
     if not isinstance(item, dict):
         return ""
     if item.get("is_custom") or item.get("authoritative_custom"):
-        body_hash = str(
-            item.get("custom_body_hash") or _custom_body_hash(item.get("body", ""))
-        ).strip()
-        series_key = str(item.get("custom_series_key") or _custom_series_key(item) or "").strip()
-        edition_key = str(item.get("custom_edition_key") or _custom_edition_marker(item) or "").strip()
-        headline = re.sub(r"[^a-z0-9]+", " ", str(item.get("headline") or "").lower()).strip()
-        seed = "|".join(part for part in (body_hash, series_key, edition_key, headline) if part)
-        return "custom-payload:" + hashlib.sha256(seed.encode("utf-8")).hexdigest() if seed else ""
+        headline = _exact_custom_headline(item.get("headline"))
+        return (
+            "custom-headline:" + hashlib.sha256(headline.encode("utf-8")).hexdigest()
+            if headline else ""
+        )
     story_id = _publication_story_id(item, identity_index)
     if story_id:
         item["_editorial_story_id"] = story_id
@@ -10350,6 +10536,11 @@ def write_archives(all_categories, top_cat):
                 existing["custom_body_hash"] = hero.get("custom_body_hash") or _custom_body_hash(
                     hero.get("body", "")
                 )
+                existing["custom_headline_key"] = _exact_custom_headline(headline)
+                existing["article_type"] = str(hero.get("article_type") or "custom_article")
+                existing["product_guide_hash"] = _product_guide_hash(hero)
+                existing["product_count"] = len(hero.get("products") or [])
+                existing["has_affiliate_links"] = bool(hero.get("has_affiliate_links"))
                 existing["custom_event_key"] = _known_event_key(
                     " ".join([headline, hero.get("teaser", ""), hero.get("body", "")[:500]])
                 )
@@ -10424,6 +10615,11 @@ def write_archives(all_categories, top_cat):
                 "custom_body_hash": (hero.get("custom_body_hash") or _custom_body_hash(
                     hero.get("body", "")
                 )) if hero.get("is_custom") else "",
+                "custom_headline_key": _exact_custom_headline(headline) if hero.get("is_custom") else "",
+                "article_type": str(hero.get("article_type") or "custom_article") if hero.get("is_custom") else "",
+                "product_guide_hash": _product_guide_hash(hero) if hero.get("is_custom") else "",
+                "product_count": len(hero.get("products") or []) if hero.get("is_custom") else 0,
+                "has_affiliate_links": bool(hero.get("has_affiliate_links")) if hero.get("is_custom") else False,
                 "custom_event_key": _known_event_key(
                     " ".join([headline, hero.get("teaser", ""), hero.get("body", "")[:500]])
                 ) if hero.get("is_custom") else "",
@@ -10549,160 +10745,59 @@ def write_archives(all_categories, top_cat):
 
 
 def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, output_dir=None):
-    """Bind live custom placements from the archive writer's exact publication receipt.
-
-    Archive scanning is retained only as a compatibility fallback. The primary path
-    consumes the slug recorded at the moment the manual payload was written, avoiding
-    ambiguity when a corrupted legacy row and the new edition temporarily share the
-    same body hash or series metadata.
-    """
+    """Verify current custom permalinks using exact headline publication receipts."""
     root = Path(output_dir or OUTPUT_DIR)
     archive = load_archive(root / "archive.json")
-    by_slug = {
-        str(entry.get("slug") or "").strip(): entry
-        for entry in archive
-        if isinstance(entry, dict) and entry.get("slug")
-    }
-    custom_entries = [
-        entry for entry in archive
-        if isinstance(entry, dict)
-        and (entry.get("is_custom") or entry.get("authoritative_custom"))
-        and not entry.get("exclude_from_live_recovery")
-    ]
-    receipts = [
-        dict(row) for row in CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
-        if isinstance(row, dict) and row.get("slug") and row.get("custom_body_hash")
-    ]
-
-    by_body_hash = {}
-    by_edition = {}
-    for entry in custom_entries:
-        body_hash = str(entry.get("custom_body_hash") or "").strip()
-        if body_hash:
-            by_body_hash.setdefault(body_hash, []).append(entry)
-        edition_key = str(entry.get("custom_edition_key") or "").strip()
-        series_key = str(entry.get("custom_series_key") or "").strip()
-        if series_key and edition_key:
-            by_edition.setdefault((series_key, edition_key), []).append(entry)
-
-    placements = []
-    if isinstance(top_cat, dict):
-        placements.append(("front_page", top_cat.get("hero") or {}))
-    for category in all_categories or []:
-        key = str(category.get("category_key") or "")
-        placements.append((f"{key}:hero", category.get("hero") or {}))
-        placements.extend((f"{key}:card", card) for card in category.get("cards") or [])
-
-    def _receipt_for(item):
-        body_hash = str(
-            item.get("custom_body_hash") or _custom_body_hash(item.get("body", ""))
-        ).strip()
-        series_key = str(
-            item.get("custom_series_key") or _custom_series_key(item) or ""
-        ).strip()
-        edition_key = str(
-            item.get("custom_edition_key") or _custom_edition_marker(item) or ""
-        ).strip()
-        headline = str(item.get("headline") or "").strip()
-
-        candidates = []
-        for receipt in receipts:
-            receipt_slug = str(receipt.get("slug") or "").strip()
-            entry = by_slug.get(receipt_slug)
-            if not entry or entry.get("exclude_from_live_recovery"):
-                continue
-            exact_body = bool(body_hash and receipt.get("custom_body_hash") == body_hash)
-            exact_series = bool(
-                series_key and edition_key
-                and receipt.get("custom_series_key") == series_key
-                and receipt.get("custom_edition_key") == edition_key
-            )
-            exact_headline = bool(
-                headline and str(receipt.get("headline") or "").strip() == headline
-            )
-            if not exact_body and not (exact_series and exact_headline):
-                continue
-            aligned_slug = not _custom_series_slug_mismatch(item, receipt_slug)
-            score = (
-                1 if exact_body else 0,
-                1 if exact_series else 0,
-                1 if exact_headline else 0,
-                1 if aligned_slug else 0,
-                1 if receipt.get("unique_slug") else 0,
-                1 if receipt.get("series_repair") else 0,
-                1 if receipt.get("action") == "created" else 0,
-            )
-            candidates.append((score, receipt, entry))
-        if not candidates:
-            return None, None
-        candidates.sort(key=lambda row: row[0], reverse=True)
-        best_score = candidates[0][0]
-        best = [row for row in candidates if row[0] == best_score]
-        slugs = {str(row[1].get("slug") or "") for row in best}
-        if len(slugs) != 1:
-            return None, None
-        return best[0][2], "publication_receipt"
-
-    rebound = []
-    unresolved = []
-    seen_items = set()
-    for surface, item in placements:
-        if not isinstance(item, dict) or id(item) in seen_items:
+    retired = _load_custom_retirements(root)
+    by_slug = {str(row.get("slug") or "").strip(): row for row in archive if isinstance(row, dict) and row.get("slug")}
+    by_headline = {}
+    for row in archive:
+        if not isinstance(row, dict) or not (row.get("is_custom") or row.get("authoritative_custom")):
             continue
-        seen_items.add(id(item))
-        if not (item.get("is_custom") or item.get("authoritative_custom")):
+        headline = _exact_custom_headline(row.get("headline"))
+        if not headline or headline in retired or row.get("exclude_from_live_recovery"):
             continue
+        by_headline.setdefault(headline, []).append(row)
+    receipts = [row for row in CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS if isinstance(row, dict) and row.get("slug")]
+    receipts_by_headline = {}
+    for receipt in receipts:
+        headline = _exact_custom_headline(receipt.get("headline"))
+        if headline:
+            receipts_by_headline.setdefault(headline, []).append(receipt)
 
-        _direct_slug = str(item.get("_current_custom_publication_slug") or "").strip()
-        entry = by_slug.get(_direct_slug) if _direct_slug else None
-        if entry is not None and entry.get("exclude_from_live_recovery"):
-            entry = None
-        match_basis = "direct_publication_binding" if entry is not None else None
+    rebound, unresolved = [], []
+    for surface, item in _iter_live_custom_placements(all_categories, top_cat):
+        headline = _exact_custom_headline(item.get("headline"))
+        if not headline or headline in retired or item.get("retired"):
+            continue
+        entry = None
+        basis = None
+        direct_slug = str(item.get("_current_custom_publication_slug") or "").strip()
+        if direct_slug:
+            candidate = by_slug.get(direct_slug)
+            if candidate and _exact_custom_headline(candidate.get("headline")) == headline and not candidate.get("exclude_from_live_recovery"):
+                entry, basis = candidate, "direct_publication_binding"
         if entry is None:
-            entry, match_basis = _receipt_for(item)
-        body_hash = str(
-            item.get("custom_body_hash") or _custom_body_hash(item.get("body", ""))
-        ).strip()
+            receipt_rows = receipts_by_headline.get(headline, [])
+            created = [row for row in receipt_rows if row.get("action") == "created"]
+            selected = created[-1] if created else (receipt_rows[-1] if receipt_rows else None)
+            if selected:
+                candidate = by_slug.get(str(selected.get("slug") or ""))
+                if candidate and _exact_custom_headline(candidate.get("headline")) == headline and not candidate.get("exclude_from_live_recovery"):
+                    entry, basis = candidate, "exact_headline_publication_receipt"
         if entry is None:
-            candidates = list(by_body_hash.get(body_hash, [])) if body_hash else []
-            if len(candidates) != 1:
-                series_key = str(
-                    item.get("custom_series_key") or _custom_series_key(item) or ""
-                ).strip()
-                edition_key = str(
-                    item.get("custom_edition_key") or _custom_edition_marker(item) or ""
-                ).strip()
-                edition_candidates = list(
-                    by_edition.get((series_key, edition_key), [])
-                ) if series_key and edition_key else []
-                exact_headline = [
-                    candidate for candidate in edition_candidates
-                    if str(candidate.get("headline") or "").strip()
-                    == str(item.get("headline") or "").strip()
-                ]
-                candidates = exact_headline if len(exact_headline) == 1 else edition_candidates
+            candidates = by_headline.get(headline, [])
             if len(candidates) == 1:
-                entry = candidates[0]
-                match_basis = (
-                    "custom_body_hash"
-                    if body_hash and entry.get("custom_body_hash") == body_hash
-                    else "custom_series_edition"
-                )
-
+                entry, basis = candidates[0], "exact_headline_archive"
         if entry is None:
             unresolved.append({
                 "surface": surface,
-                "headline": item.get("headline", ""),
+                "headline": headline,
                 "current_slug": str(item.get("_archived_slug") or item.get("slug") or ""),
-                "custom_body_hash": body_hash,
-                "custom_series_key": str(item.get("custom_series_key") or _custom_series_key(item) or ""),
-                "custom_edition_key": str(item.get("custom_edition_key") or _custom_edition_marker(item) or ""),
+                "reason": "exact_headline_target_missing_or_ambiguous",
             })
             continue
-
         slug = str(entry.get("slug") or "").strip()
-        if not slug:
-            continue
         previous_slug = str(item.get("_archived_slug") or item.get("slug") or "").strip()
         item["_archived_slug"] = slug
         item["slug"] = slug
@@ -10715,39 +10810,30 @@ def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, out
         item["category_key"] = entry.get("category_key") or item.get("category_key")
         rebound.append({
             "surface": surface,
-            "headline": item.get("headline", ""),
+            "headline": headline,
             "previous_slug": previous_slug,
             "slug": slug,
-            "match_basis": match_basis,
+            "match_basis": basis,
             "changed": previous_slug != slug,
         })
 
     data_dir = root / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
-    (data_dir / "custom-post-publication-rebind.json").write_text(
-        json.dumps({
-            "version": "1.10.5.5",
-            "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-            "publication_receipts": len(receipts),
-            "rebound_count": len(rebound),
-            "changed_count": sum(1 for row in rebound if row.get("changed")),
-            "unresolved_count": len(unresolved),
-            "rebound": rebound,
-            "unresolved": unresolved,
-        }, indent=2, ensure_ascii=False),
-        encoding="utf-8",
-    )
+    (data_dir / "custom-post-publication-rebind.json").write_text(json.dumps({
+        "version": "1.11.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "identity_contract": "exact_headline_only",
+        "publication_receipts": len(receipts),
+        "rebound_count": len(rebound),
+        "changed_count": sum(1 for row in rebound if row.get("changed")),
+        "unresolved_count": len(unresolved),
+        "rebound": rebound,
+        "unresolved": unresolved,
+    }, indent=2, ensure_ascii=False), encoding="utf-8")
     if rebound:
-        print(
-            "  Custom post-publication permalink verified "
-            f"{len(rebound)} exact payload placement(s); "
-            f"{sum(1 for row in rebound if row.get('changed'))} slug correction(s)"
-        )
+        print(f"  Custom exact-headline permalink verified for {len(rebound)} placement(s)")
     if unresolved:
-        print(
-            "  Custom post-publication permalink unresolved for "
-            f"{len(unresolved)} custom placement(s); final identity gate will block deployment"
-        )
+        print(f"  Custom exact-headline permalink unresolved for {len(unresolved)} placement(s); final gate will block")
     return rebound
 
 def validate_forward_live_identity(all_categories, top_cat=None, output_dir=None):
@@ -10766,6 +10852,8 @@ def validate_forward_live_identity(all_categories, top_cat=None, output_dir=None
 
     for surface, item in placements:
         if not item or item.get("_section_placeholder") or _is_nonstory_placeholder(item):
+            continue
+        if (item.get("is_custom") or item.get("authoritative_custom")) and _is_retired_custom_item(item, root):
             continue
         checked += 1
         slug = str(item.get("_archived_slug") or item.get("slug") or "").strip()
@@ -12038,6 +12126,7 @@ def main():
     # harmless and simply never fires now that nothing produces alerts.
     print(f"  Timing: category generation and enrichment {time.perf_counter() - _stage_started:.1f}s")
     _stage_started = time.perf_counter()
+    apply_custom_retirements_to_archive(OUTPUT_DIR)
     custom_articles = load_custom_articles()
     all_injected = custom_articles
     if all_injected:
@@ -12066,17 +12155,10 @@ def main():
                 # multiple categories (e.g. a hazing investigation is crime AND
                 # st_lucie), so the feed can hero it in crime while the custom article
                 # only targets st_lucie, leaving the feed version to win the FRONT PAGE.
-                _art_tokens = _sig_tokens(art.get("headline", ""))
-
                 def _same_as_custom(item):
                     if not item:
                         return False
-                    # Permit only a major new milestone in the same underlying event.
-                    # Routine rewrites and incremental follow-ups remain suppressed.
-                    if _is_significant_story_update(item, art):
-                        return False
-                    return (_same_event_text(art.get("headline", ""), item.get("headline", ""))
-                            or _same_story(_art_tokens, _sig_tokens(item.get("headline", ""))))
+                    return _exact_custom_headline(item.get("headline")) == _exact_custom_headline(art.get("headline"))
 
                 # Sweep EVERY category: drop feed cards that are this story, and if a
                 # feed hero in ANY category is this story, remove it (promote a card, or
@@ -12136,6 +12218,7 @@ def main():
 
     # Recover category depth after safe duplicate removal.
     ensure_all_category_sections(all_categories, min_cards=6)
+    apply_custom_retirements_to_live(all_categories, output_root=OUTPUT_DIR)
 
     # Restore the v1.9.1 permalink contract inside the integrated v1.9.2 path.
     # Existing custom/archive stories are rebound only when their article file is
@@ -12147,6 +12230,7 @@ def main():
         articles_dir=OUTPUT_DIR / "articles",
     )
     _custom_category_repair_after_rebind = enforce_custom_category_placement(all_categories)
+    apply_custom_retirements_to_live(all_categories, output_root=OUTPUT_DIR)
 
     # Front page hero selection
     top_cat = select_front_page_hero(all_categories)
@@ -12180,6 +12264,7 @@ def main():
     # Archive first — creates all article pages and populates archive.json so the
     # homepage grid can link to permalinks that actually exist with matching slugs.
     _current_regression_report = write_archives(all_categories, top_cat)
+    apply_custom_retirements_to_archive(OUTPUT_DIR)
 
     # Publication identity reconciliation can remove duplicate archive rows and turn
     # their old article files into redirects.  The initial permalink-binding pass ran
@@ -12200,6 +12285,7 @@ def main():
         )
 
     enforce_custom_category_placement(all_categories)
+    apply_custom_retirements_to_live(all_categories, top_cat, OUTPUT_DIR)
     validate_custom_category_placement(all_categories, OUTPUT_DIR)
     _rebind_current_custom_editions_to_archive(all_categories, top_cat, OUTPUT_DIR)
     validate_forward_live_identity(all_categories, top_cat, OUTPUT_DIR)
