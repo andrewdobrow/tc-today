@@ -8964,11 +8964,21 @@ def _resolve_custom_publication_target(hero, archive, existing, headline):
             ).hexdigest()[:32]
         return target, None, story_id
 
-    requested_slug = (
-        hero.get("_custom_requested_slug")
-        if "_custom_requested_slug" in hero
-        else hero.get("slug", "")
-    )
+    # Preserve a diagnostic marker when a live/archive clone brought an older
+    # custom permalink into a differently titled submission. The stale slug is
+    # quarantined, not reused; the different headline receives a new identity.
+    if "_custom_requested_slug" not in hero and isinstance(existing, dict):
+        inherited_slug = slugify(str(hero.get("slug") or ""))
+        existing_slug = slugify(str(existing.get("slug") or ""))
+        if inherited_slug and inherited_slug == existing_slug:
+            hero["_superseded_custom_slug"] = existing_slug
+            hero["_custom_series_permalink_repair"] = True
+
+    # Only a slug explicitly captured from custom_articles.json may choose a
+    # new custom permalink. ``hero["slug"]`` can be inherited from a stale
+    # archive/live placement and must never authorize reuse when the exact
+    # headline does not match.
+    requested_slug = hero.get("_custom_requested_slug", "")
     forced_slug = slugify(str(requested_slug or "")) or None
     story_id = "custom:" + hashlib.sha256(
         ("headline|" + headline_key).encode("utf-8")

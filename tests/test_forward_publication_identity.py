@@ -106,7 +106,7 @@ def test_recurring_custom_report_rejects_previous_edition_slug():
     )
     assert existing is None
     assert forced_slug is None
-    assert story_id is None
+    assert story_id.startswith("custom:")
     assert hero["_superseded_custom_slug"] == archive[0]["slug"]
 
 

@@ -1,51 +1,16 @@
 {
-  "release": "v1.11.0",
-  "name": "Exact Custom Publishing and Product Guides",
-  "base": "v1.10.5.5",
-  "package_type": "incremental-overlay",
-  "mode": "ranking-observe-only",
+  "release": "v1.11.0.1",
+  "name": "Exact Custom Slug Authority Hotfix",
+  "applies_over": "v1.11.0",
   "files": [
-    "manifest.json",
-    "PRODUCT_GUIDE_SCHEMA.md",
-    "scripts/__init__.py",
     "scripts/generate.py",
-    "data/custom-retirements.json",
-    "examples/product_guide.example.json",
-    "tests/test_custom_authority_contract.py",
-    "tests/test_custom_post_publication_rebind.py",
-    "tests/test_custom_exact_headline_and_product_guide.py"
+    "tests/test_forward_publication_identity.py"
   ],
-  "custom_article_contract": {
-    "update_identity": "exact headline after trimming leading/trailing whitespace",
-    "body_changes_allowed": true,
-    "case_sensitive": true,
-    "punctuation_sensitive": true,
-    "internal_whitespace_sensitive": true,
-    "fuzzy_matching": false,
-    "body_hash_authorizes_overwrite": false,
-    "series_matching_authorizes_overwrite": false,
-    "source_or_story_id_authorizes_overwrite": false,
-    "different_headline_creates_new_article": true
-  },
-  "legacy_retirement": {
-    "traffic_report_queue_entry_ignored": true,
-    "old_permalink_preserved": true,
-    "live_recovery_disabled": true,
-    "ranking_disabled": true,
-    "deployment_block_removed": true
-  },
-  "product_guide": {
-    "structured_products": true,
-    "inline_product_images": true,
-    "quick_picks": true,
-    "comparison_table": true,
-    "affiliate_disclosure": true,
-    "exact_link_preservation": true,
-    "sponsored_nofollow_links": true,
-    "mobile_cards": true,
-    "article_itemlist_product_schema": true,
-    "render_fidelity_gate": true
-  },
-  "ranking_enforcement": false,
-  "version": "1.11.0"
+  "contract": {
+    "custom_update_key": "exact headline only",
+    "runtime_inherited_slug_authoritative": false,
+    "explicit_custom_json_slug_authoritative_for_new_article": true,
+    "different_headline_gets_new_story_id": true,
+    "stale_runtime_slug_is_quarantined": true
+  }
 }
