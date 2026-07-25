@@ -1,8 +1,12 @@
 {
-  "release": "v1.10.5.2",
-  "name": "Forward Identity Contract Sync",
-  "base": "v1.10.4.1",
-  "supersedes": ["v1.10.5", "v1.10.5.1"],
+  "release": "v1.10.5.3",
+  "name": "Custom Post-Publication Permalink Rebind",
+  "base": "v1.10.5.2",
+  "supersedes": [
+    "v1.10.5",
+    "v1.10.5.1",
+    "v1.10.5.2"
+  ],
   "mode": "recommendation-only",
   "package_type": "cumulative-overlay",
   "files": [
@@ -17,7 +21,8 @@
     "tests/test_publication_identity.py",
     "tests/test_ranking_recommendations.py",
     "tests/test_custom_authority_contract.py",
-    "tests/test_forward_identity_contract_sync.py"
+    "tests/test_forward_identity_contract_sync.py",
+    "tests/test_custom_post_publication_rebind.py"
   ],
   "behavior": {
     "live_ranking_enforcement": false,
@@ -30,14 +35,16 @@
     "noncustom_placements_cannot_rebind_to_custom_archive": true,
     "unique_slug_field_honored": true,
     "custom_body_fidelity_gate": true,
-    "recurring_custom_editions_keep_separate_urls": true
+    "recurring_custom_editions_keep_separate_urls": true,
+    "custom_post_publication_exact_payload_rebind": true
   },
   "reports": [
     "data/custom-category-contract.json",
     "data/forward-publication-identity.json",
     "data/forward-live-identity-contract.json",
     "data/archive-identity-backfill.json",
-    "data/homepage-ranking-recommendations.json"
+    "data/homepage-ranking-recommendations.json",
+    "data/custom-post-publication-rebind.json"
   ],
-  "version": "1.10.5.2"
+  "version": "1.10.5.3"
 }

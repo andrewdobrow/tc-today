@@ -10316,6 +10316,101 @@ def write_archives(all_categories, top_cat):
     return regression_report
 
 
+
+def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, output_dir=None):
+    """Bind current custom placements to the exact archive page just published.
+
+    Recurring custom editions may enter the run carrying a quarantined legacy slug
+    from pre-publication recovery. ``write_archives`` correctly creates a new page,
+    but the generic archive rebind intentionally refuses to infer custom identity.
+    Resolve only from exact manual-payload evidence after archive publication.
+    """
+    root = Path(output_dir or OUTPUT_DIR)
+    archive = load_archive(root / "archive.json")
+    custom_entries = [
+        entry for entry in archive
+        if isinstance(entry, dict)
+        and (entry.get("is_custom") or entry.get("authoritative_custom"))
+        and not entry.get("exclude_from_live_recovery")
+    ]
+    by_body_hash = {}
+    by_edition = {}
+    for entry in custom_entries:
+        body_hash = str(entry.get("custom_body_hash") or "").strip()
+        if body_hash:
+            by_body_hash.setdefault(body_hash, []).append(entry)
+        edition_key = str(entry.get("custom_edition_key") or "").strip()
+        series_key = str(entry.get("custom_series_key") or "").strip()
+        if series_key and edition_key:
+            by_edition.setdefault((series_key, edition_key), []).append(entry)
+
+    placements = []
+    if isinstance(top_cat, dict):
+        placements.append(("front_page", top_cat.get("hero") or {}))
+    for category in all_categories or []:
+        key = str(category.get("category_key") or "")
+        placements.append((f"{key}:hero", category.get("hero") or {}))
+        placements.extend((f"{key}:card", card) for card in category.get("cards") or [])
+
+    rebound = []
+    seen_items = set()
+    for surface, item in placements:
+        if not isinstance(item, dict) or id(item) in seen_items:
+            continue
+        seen_items.add(id(item))
+        if not (item.get("is_custom") or item.get("authoritative_custom")):
+            continue
+
+        candidates = []
+        body_hash = str(item.get("custom_body_hash") or _custom_body_hash(item.get("body", ""))).strip()
+        if body_hash:
+            candidates = list(by_body_hash.get(body_hash, []))
+        if len(candidates) != 1:
+            series_key = str(item.get("custom_series_key") or _custom_series_key(item) or "").strip()
+            edition_key = str(item.get("custom_edition_key") or _custom_edition_marker(item) or "").strip()
+            edition_candidates = list(by_edition.get((series_key, edition_key), [])) if series_key and edition_key else []
+            exact_headline = [
+                entry for entry in edition_candidates
+                if str(entry.get("headline") or "").strip() == str(item.get("headline") or "").strip()
+            ]
+            candidates = exact_headline if len(exact_headline) == 1 else edition_candidates
+        if len(candidates) != 1:
+            continue
+
+        entry = candidates[0]
+        slug = str(entry.get("slug") or "").strip()
+        if not slug:
+            continue
+        previous_slug = str(item.get("_archived_slug") or item.get("slug") or "").strip()
+        item["_archived_slug"] = slug
+        item["slug"] = slug
+        item["link"] = f"{SITE_URL}/articles/{slug}.html"
+        if entry.get("editorial_story_id"):
+            item["editorial_story_id"] = entry.get("editorial_story_id")
+            item["_editorial_story_id"] = entry.get("editorial_story_id")
+        item["category_key"] = entry.get("category_key") or item.get("category_key")
+        rebound.append({
+            "surface": surface,
+            "headline": item.get("headline", ""),
+            "previous_slug": previous_slug,
+            "slug": slug,
+            "match_basis": "custom_body_hash" if body_hash and entry.get("custom_body_hash") == body_hash else "custom_series_edition",
+        })
+
+    if rebound:
+        data_dir = root / "data"
+        data_dir.mkdir(parents=True, exist_ok=True)
+        (data_dir / "custom-post-publication-rebind.json").write_text(
+            json.dumps({
+                "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+                "rebound_count": len(rebound),
+                "rebound": rebound,
+            }, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+        print(f"  Custom post-publication permalink rebound {len(rebound)} exact payload placement(s)")
+    return rebound
+
 def validate_forward_live_identity(all_categories, top_cat=None, output_dir=None):
     """Block any live placement whose permalink identity is contradictory."""
     root = Path(output_dir or OUTPUT_DIR)
@@ -11766,6 +11861,7 @@ def main():
 
     enforce_custom_category_placement(all_categories)
     validate_custom_category_placement(all_categories, OUTPUT_DIR)
+    _rebind_current_custom_editions_to_archive(all_categories, top_cat, OUTPUT_DIR)
     validate_forward_live_identity(all_categories, top_cat, OUTPUT_DIR)
     validate_live_permalink_integrity(all_categories, top_cat, OUTPUT_DIR)
     print(f"  Timing: archive, publication identity and permalink gates {time.perf_counter() - _stage_started:.1f}s")
