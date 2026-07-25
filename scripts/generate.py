@@ -5975,7 +5975,10 @@ def _known_event_key(text):
                                             "response", "seized"))
     # Early official coverage said more than 70 animals; later reporting specified
     # about 80 cats. Those are count refinements, not separate events.
-    has_scale = bool(words & {"70", "seventy", "80", "eighty"})
+    has_scale = bool(words & {
+        "70", "seventy", "80", "eighty", "83", "92", "100",
+        "ninety", "hundred",
+    })
     if has_place and has_animals and has_case and has_action and has_scale:
         return "2026-07-stuart-martin-animal-hoarding"
 
@@ -6794,6 +6797,97 @@ def _unified_live_event_dedupe(all_categories, archived_customs=None, current_cu
             removed += 1
     if removed:
         print(f"  Unified event dedupe removed {removed} duplicate hero/card placement(s)")
+    return removed
+
+
+def _find_authoritative_custom_incident_match(item, archived_customs=None, current_customs=None):
+    """Return a proven authoritative custom covering the same incident.
+
+    This is deliberately stricter than ordinary topic similarity.  An exact narrow
+    known-event key is conclusive; otherwise the shared event matcher must also clear
+    the guarded 95% story-confidence threshold.  The function never treats a custom
+    article as its own duplicate.
+    """
+    if not item or item.get("is_custom") or item.get("authoritative_custom"):
+        return None, 0, ""
+    candidate = _event_audit_item(item, "live")
+    candidate_key = _known_event_key(_story_text(candidate))
+    authorities = []
+    for row in list(archived_customs or []) + list(current_customs or []):
+        if not row or not (row.get("is_custom") or row.get("authoritative_custom")):
+            continue
+        authorities.append(_event_audit_item(row, "custom"))
+
+    best = None
+    best_confidence = 0
+    best_basis = ""
+    for authority in authorities:
+        authority_key = _known_event_key(_story_text(authority))
+        if candidate_key and authority_key and candidate_key == authority_key:
+            return authority, 100, "exact_known_event_key"
+        if not _same_event_items(candidate, authority):
+            continue
+        confidence = _story_match_confidence(candidate, authority)
+        if confidence >= AUTO_SUPPRESSION_CONFIDENCE and confidence > best_confidence:
+            best = authority
+            best_confidence = confidence
+            best_basis = "high_confidence_custom_incident"
+    return best, best_confidence, best_basis
+
+
+def suppress_authoritative_custom_incidents_from_live(all_categories, archived_customs=None, current_customs=None):
+    """Remove feed copies of incidents already covered by authoritative custom work.
+
+    Unlike guarded stage suppression, this contract is cross-stage and cross-category.
+    It prevents a rescue/community-update wording change from surviving in Crime while
+    another copy is suppressed in Martin County.  Custom content itself is untouched.
+    """
+    removed = []
+    for category in all_categories or []:
+        category_key = str(category.get("category_key") or "")
+
+        hero = category.get("hero")
+        match, confidence, basis = _find_authoritative_custom_incident_match(
+            hero, archived_customs, current_customs
+        ) if hero else (None, 0, "")
+        if match:
+            removed.append({
+                "headline": hero.get("headline", ""),
+                "category_key": category_key,
+                "placement": "hero",
+                "canonical_slug": match.get("slug", ""),
+                "canonical_headline": match.get("headline", ""),
+                "confidence": confidence,
+                "basis": basis,
+            })
+            category["hero"] = None
+
+        kept_cards = []
+        for card in category.get("cards", []) or []:
+            match, confidence, basis = _find_authoritative_custom_incident_match(
+                card, archived_customs, current_customs
+            )
+            if match:
+                removed.append({
+                    "headline": card.get("headline", ""),
+                    "category_key": category_key,
+                    "placement": "card",
+                    "canonical_slug": match.get("slug", ""),
+                    "canonical_headline": match.get("headline", ""),
+                    "confidence": confidence,
+                    "basis": basis,
+                })
+            else:
+                kept_cards.append(card)
+        category["cards"] = kept_cards
+        if category.get("hero") is None and kept_cards:
+            category["hero"] = category["cards"].pop(0)
+
+    if removed:
+        print(
+            "  Authoritative custom incident lock removed "
+            f"{len(removed)} duplicate live placement(s)"
+        )
     return removed
 
 
@@ -8776,6 +8870,7 @@ HOARDING_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-animal-hoarding",
     "2026-07-21-stuart-woman-arrested-after-deputies-rescue-about-80-cats-from-home-in-worst-hoa",
     "2026-07-21-martin-county-deputies-rescue-80-cats-from-stuart-home-in-worst-hoarding-case-sh",
+    "2026-07-25-100-animals-rescued-in-worst-hoarding-case-martin-county-has-seen-owners-search",
 })
 
 
@@ -9368,6 +9463,12 @@ def write_story_regression_report(output_root, archive, redirect_verification):
         for slug in HOARDING_REDIRECT_SOURCE_SLUGS
     )
     archive_slugs = {e.get("slug") for e in archive or []}
+    active_hoarding_duplicates = [
+        e for e in archive or []
+        if e.get("slug") != expected_target
+        and not (e.get("is_custom") or e.get("authoritative_custom"))
+        and _known_event_key(_story_text(_event_audit_item(e, "archive"))) == hoarding_key
+    ]
     checks = {
         "hoarding_is_one_story": len(hoarding_stories) == 1,
         "hoarding_canonical_is_custom": len(hoarding_stories) == 1 and bool(hoarding_stories[0].get("canonical_is_custom")),
@@ -9378,6 +9479,7 @@ def write_story_regression_report(output_root, archive, redirect_verification):
         "all_known_duplicate_redirects_target_custom": all_known_target_custom,
         "redirect_sources_removed_from_archive": not bool(HOARDING_REDIRECT_SOURCE_SLUGS & archive_slugs),
         "custom_article_remains_in_archive": expected_target in archive_slugs,
+        "no_active_noncustom_hoarding_duplicates": not active_hoarding_duplicates,
         "all_redirect_html_verified": all(v.get("passed") for v in redirect_verification) if redirect_verification else False,
     }
     report = {
@@ -9388,6 +9490,10 @@ def write_story_regression_report(output_root, archive, redirect_verification):
         "checks": checks,
         "hoarding_story_ids": [s.get("story_id") for s in hoarding_stories],
         "hoarding_redirect_sources": sorted(redirect_sources),
+        "active_noncustom_hoarding_duplicates": [
+            {"slug": e.get("slug", ""), "headline": e.get("headline", "")}
+            for e in active_hoarding_duplicates
+        ],
     }
     (data_dir / "story-regression-report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     if not report["production_gate_passed"]:
@@ -10404,6 +10510,26 @@ def write_archives(all_categories, top_cat):
         normalized_source_url = _normalized_external_source_url(source_url)
         if normalized_source_url:
             hero["source_url"] = normalized_source_url
+
+        _custom_incident, _custom_incident_confidence, _custom_incident_basis = (
+            _find_authoritative_custom_incident_match(hero, archive, _current_customs)
+        )
+        if _custom_incident:
+            _forward_identity_report["publication_holds"].append({
+                "headline": headline,
+                "source_url": normalized_source_url,
+                "reason": "authoritative_custom_incident_already_published",
+                "canonical_slug": _custom_incident.get("slug", ""),
+                "canonical_headline": _custom_incident.get("headline", ""),
+                "confidence": _custom_incident_confidence,
+                "basis": _custom_incident_basis,
+            })
+            print(
+                "  AUTHORITATIVE CUSTOM INCIDENT LOCK: skipped feed page "
+                f"'{headline[:60]}' -> {_custom_incident.get('slug','')}"
+            )
+            continue
+
         _editorial_story_id = _publication_story_id(hero, _publication_identity)
         if _editorial_story_id:
             hero["editorial_story_id"] = _editorial_story_id
@@ -10705,9 +10831,17 @@ def write_archives(all_categories, top_cat):
                     f"{len(_direct_live_bindings)} live placement(s) to {slug}"
                 )
 
-    # FINAL production enforcement: article generation above may have recreated a
-    # known duplicate permalink. Reapply all cumulative redirects now, then build
-    # archive/RSS/sitemaps only from the cleaned archive.
+    # FINAL production enforcement: run canonical cleanup again after every page
+    # has been considered.  The pre-write cleanup cannot see a duplicate created in
+    # the current run; this second pass converts any same-run escape into a redirect
+    # before archive.json, RSS, sitemaps, ranking or the homepage are written.
+    archive, _same_run_canonical_redirects = apply_canonical_story_cleanup(
+        archive, articles_dir, OUTPUT_DIR
+    )
+    _canonical_redirects.extend(_same_run_canonical_redirects)
+
+    # Reapply all cumulative redirects now, then build archive/RSS/sitemaps only from
+    # the cleaned canonical archive.
     archive, _redirect_verification = enforce_canonical_redirects(
         archive, articles_dir, OUTPUT_DIR, current_run_redirects=_canonical_redirects
     )
@@ -12198,6 +12332,15 @@ def main():
     # rollback, and action log as exact deterministic identity suppressions.
     _archive_path = OUTPUT_DIR / "archive.json"
     _published_archive = load_archive(_archive_path)
+    _archived_custom_authorities = [
+        row for row in _published_archive
+        if row.get("is_custom") or row.get("authoritative_custom")
+    ]
+    suppress_authoritative_custom_incidents_from_live(
+        all_categories,
+        archived_customs=_archived_custom_authorities,
+        current_customs=custom_articles,
+    )
     editorial_activation_run = _prepare_editorial_activation(
         editorial_engine, editorial_audit_rows
     )
@@ -12228,6 +12371,11 @@ def main():
 
     # Recover category depth after safe duplicate removal.
     ensure_all_category_sections(all_categories, min_cards=6)
+    suppress_authoritative_custom_incidents_from_live(
+        all_categories,
+        archived_customs=_archived_custom_authorities,
+        current_customs=custom_articles,
+    )
     apply_custom_retirements_to_live(all_categories, output_root=OUTPUT_DIR)
 
     # Restore the v1.9.1 permalink contract inside the integrated v1.9.2 path.

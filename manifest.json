@@ -1,16 +1,28 @@
 {
-  "release": "v1.11.0.1",
-  "name": "Exact Custom Slug Authority Hotfix",
-  "applies_over": "v1.11.0",
+  "release": "v1.11.1",
+  "name": "Authoritative Custom Incident Lock",
+  "base": "v1.11.0.1",
+  "package_type": "incremental-overlay",
+  "mode": "ranking-observe-only",
   "files": [
+    "manifest.json",
     "scripts/generate.py",
-    "tests/test_forward_publication_identity.py"
+    "tests/test_authoritative_custom_incident_lock.py"
   ],
-  "contract": {
-    "custom_update_key": "exact headline only",
-    "runtime_inherited_slug_authoritative": false,
-    "explicit_custom_json_slug_authoritative_for_new_article": true,
-    "different_headline_gets_new_story_id": true,
-    "stale_runtime_slug_is_quarantined": true
-  }
+  "fixes": {
+    "cross_category_custom_incident_duplicates": true,
+    "same_run_duplicate_page_creation": true,
+    "post_generation_canonical_cleanup": true,
+    "july_25_hoarding_duplicate_redirect": true,
+    "dynamic_hoarding_regression_check": true,
+    "source_follow_up_does_not_create_parallel_page": true
+  },
+  "custom_article_contract": {
+    "manual_update_identity": "exact headline only",
+    "feed_story_may_overwrite_custom": false,
+    "proven_same_incident_feed_copy": "suppressed and canonicalized",
+    "unrelated_story_suppression": false
+  },
+  "ranking_enforcement": false,
+  "version": "1.11.1"
 }
