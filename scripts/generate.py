@@ -3217,8 +3217,9 @@ def select_front_page_hero(all_categories):
 
     eligible   = [c for c in all_categories if _is_eligible(c)]
     candidates = eligible if eligible else all_categories
-    if len(candidates) == 1:
-        return candidates[0]
+
+    # Even a one-candidate eligible pool must pass through the freshness audit.
+    # Returning here would bypass stale assessment and leave the ranking audit blind.
 
     # Compute age for each candidate so Claude can weight freshness
     from email.utils import parsedate_to_datetime

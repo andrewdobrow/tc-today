@@ -1,19 +1,17 @@
 {
-  "release": "v1.10.2",
-  "name": "Freshness Audit and Ranking Coverage",
-  "base_release": "v1.10.1",
+  "release": "v1.10.2.1",
+  "name": "Single-Candidate Freshness Audit Hotfix",
+  "base_release": "v1.10.2",
   "files": [
     "scripts/generate.py",
-    "tct_engine/ranking_recommendations.py",
-    "tests/test_ranking_recommendations.py",
     "tests/test_hero_staleness_contract.py",
     "manifest.json"
   ],
   "behavior": {
+    "single_candidate_still_freshness_checked": true,
+    "single_candidate_stale_exclusion_audited": true,
     "same_day_never_stale": true,
     "under_18_hours_never_stale": true,
-    "excluded_candidates_reported": true,
-    "recent_high_urgency_exclusion_blocks_readiness": true,
     "live_ranking_mutation": false
   }
 }
