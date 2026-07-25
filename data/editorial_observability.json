@@ -1,17 +1,17 @@
 {
-  "schema_version": 9,
+  "schema_version": 11,
   "engine": {
     "name": "tct-editorial-engine",
-    "version": "1.9.1",
-    "release": "permalink-integrity-hotfix",
+    "version": "1.9.3.2",
+    "release": "runtime-safety-and-incremental-repair",
     "resolver_version": "2.4",
     "relationship_engine_version": "1.2"
   },
-  "generated_at": "2026-07-24T17:29:32Z",
+  "generated_at": "2026-07-25T01:09:45Z",
   "mode": "enforce",
-  "publication_behavior_changed": false,
+  "publication_behavior_changed": true,
   "activation": {
-    "activation_version": "1.0",
+    "activation_version": "1.1",
     "requested_mode": "enforce",
     "effective_mode": "enforce",
     "preflight_passed": true,
@@ -19,21 +19,132 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 0,
-    "enforceable_recommendation_count": 0,
-    "applied_action_count": 0,
+    "recommendation_count": 2,
+    "enforceable_recommendation_count": 2,
+    "applied_action_count": 2,
     "circuit_breaker_tripped": false,
-    "placements_before": 7,
-    "placements_after": 7,
-    "publication_behavior_changed": false,
+    "placements_before": 10,
+    "placements_after": 8,
+    "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
-    "recommendations": [],
-    "applied_actions": [],
+    "recommendations": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.99,
+        "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/more-animals-rescued-in-martin-county-hoarding-case-as-owners-search-for-missing-pets",
+        "headline": "100 animals rescued in worst hoarding case Martin County has ever seen, owners search for missing pets",
+        "source_title_key": "100 animals rescued in worst hoarding case martin county has ever seen owners search for missing pets",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-2026-07-stuart-martin-animal-hoarding-66fe4aec",
+        "canonical_is_custom": false,
+        "canonical_title": "100 animals rescued in Martin County hoarding case west of Hobe Sound",
+        "canonical_source": "",
+        "canonical_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/more-animals-rescued-in-martin-county-hoarding-case-as-owners-search-for-missing-pets",
+        "reason": "Same story and safe normalized stage 'rescue' at 99% confidence.",
+        "category": "martin",
+        "placement": "hero"
+      },
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/3-arrested-in-death-of-3-month-old-in-st-lucie-county-who-died-from-dehydration-malnutrition",
+        "headline": "Three arrested in St. Lucie County death of 3-month-old who died from dehydration and malnutrition",
+        "source_title_key": "three arrested in st lucie county death of 3 month old who died from dehydration and malnutrition",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-1-5-2025-3-month-old-abuse-according-33c5e427",
+        "canonical_is_custom": false,
+        "canonical_title": "3 arrested in death of 3-month-old in St. Lucie County from dehydration and malnutrition",
+        "canonical_source": "",
+        "canonical_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/3-arrested-in-death-of-3-month-old-in-st-lucie-county-who-died-from-dehydration-malnutrition",
+        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
+        "category": "st_lucie",
+        "placement": "hero"
+      }
+    ],
+    "applied_actions": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.99,
+        "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/more-animals-rescued-in-martin-county-hoarding-case-as-owners-search-for-missing-pets",
+        "headline": "100 animals rescued in worst hoarding case Martin County has ever seen, owners search for missing pets",
+        "source_title_key": "100 animals rescued in worst hoarding case martin county has ever seen owners search for missing pets",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-2026-07-stuart-martin-animal-hoarding-66fe4aec",
+        "canonical_is_custom": false,
+        "canonical_title": "100 animals rescued in Martin County hoarding case west of Hobe Sound",
+        "canonical_source": "",
+        "canonical_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/more-animals-rescued-in-martin-county-hoarding-case-as-owners-search-for-missing-pets",
+        "reason": "Same story and safe normalized stage 'rescue' at 99% confidence.",
+        "category": "martin",
+        "placement": "hero",
+        "slug": "",
+        "source_title": "100 animals rescued in worst hoarding case Martin County has ever seen, owners search for missing pets",
+        "date": "4:04 PM ET",
+        "category_key": "martin",
+        "is_custom": false,
+        "story_stage": "rescue",
+        "decision": "SUPPRESSED_DUPLICATE",
+        "action_taken": true,
+        "eligible_for_activation": true,
+        "match_confidence": 99,
+        "matched_prior_slug": "",
+        "matched_prior_headline": "100 animals rescued in Martin County hoarding case west of Hobe Sound",
+        "matched_prior_source": "",
+        "matched_prior_source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/more-animals-rescued-in-martin-county-hoarding-case-as-owners-search-for-missing-pets",
+        "matched_prior_is_custom": false,
+        "activation_managed": true
+      },
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/3-arrested-in-death-of-3-month-old-in-st-lucie-county-who-died-from-dehydration-malnutrition",
+        "headline": "Three arrested in St. Lucie County death of 3-month-old who died from dehydration and malnutrition",
+        "source_title_key": "three arrested in st lucie county death of 3 month old who died from dehydration and malnutrition",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-1-5-2025-3-month-old-abuse-according-33c5e427",
+        "canonical_is_custom": false,
+        "canonical_title": "3 arrested in death of 3-month-old in St. Lucie County from dehydration and malnutrition",
+        "canonical_source": "",
+        "canonical_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/3-arrested-in-death-of-3-month-old-in-st-lucie-county-who-died-from-dehydration-malnutrition",
+        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
+        "category": "st_lucie",
+        "placement": "hero",
+        "slug": "",
+        "source_title": "Three arrested in St. Lucie County death of 3-month-old who died from dehydration and malnutrition",
+        "date": "4:35 PM ET",
+        "category_key": "st_lucie",
+        "is_custom": false,
+        "story_stage": "arrest-or-charges",
+        "decision": "SUPPRESSED_DUPLICATE",
+        "action_taken": true,
+        "eligible_for_activation": true,
+        "match_confidence": 98,
+        "matched_prior_slug": "",
+        "matched_prior_headline": "3 arrested in death of 3-month-old in St. Lucie County from dehydration and malnutrition",
+        "matched_prior_source": "",
+        "matched_prior_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/3-arrested-in-death-of-3-month-old-in-st-lucie-county-who-died-from-dehydration-malnutrition",
+        "matched_prior_is_custom": false,
+        "activation_managed": true
+      }
+    ],
     "enforcement_allowlist": [
       "custom_canonical_protection",
       "exact_normalized_title_identity",
       "publisher_attribution_title_identity",
-      "exact_safe_source_article_identity"
+      "exact_safe_source_article_identity",
+      "guarded_same_story_stage_95"
     ],
     "observe_only_capabilities": [
       "semantic_resolver_merges",
@@ -48,25 +159,26 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 166,
+    "candidates_processed": 160,
     "routes": {
-      "generate_new": 24,
-      "skip": 142
+      "generate_new": 60,
+      "skip": 99,
+      "update_existing": 1
     },
     "eligibility": {
-      "listing": 7,
-      "low_value": 132,
-      "publishable": 27
+      "listing": 4,
+      "low_value": 124,
+      "publishable": 32
     },
     "source_classes": {
-      "aggregator": 139,
-      "local_news": 27
+      "aggregator": 128,
+      "local_news": 32
     },
-    "rejected_count": 7,
+    "rejected_count": 4,
     "rejected_examples": [
       {
-        "headline": "2480 SE Garden Ter Unit 507, Port Saint Lucie, FL 34952 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOd01WUVQ5V3pIZGhOUWRxcFRlbElYd05xLTV1OGl6R0RQcmw0YzUxalFfNDl4YU9mdlBaMXlYVzdNcngwS01DNVNXM0xGYmdKYmZWQjN2Z3dQajdDNEoyVDBzWUpNREdBM3kydzdYV3VIbmJiQlZuUW9sZDFaRkM0Z3pPWW5oQm4xRlRBSkZtT19pZzlmSmx0MDJUY1pFRXJseENUa3RaOXJQRzRBYk4yTmxIWi1Jb1dR?oc=5",
+        "headline": "5760 36th Pl, Vero Beach, FL 32966 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOdDVXc1FTclBXRzhIeVBFTjlfbWdERmJwTUd1NkV6UXIwQTBhbEhPZFVTQ0JxZjMtOHlJUlNvMTBzV3RxVzZCNVQ0RHkyZEF1cUh2eEFLdUJRWlNhbkdTcXVIRE01VHRGbzRSSUhicl9NbkFhUjJuR3oyemllTXpBdVF1QnJEVTVZVl9zZmVn?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -74,8 +186,8 @@
         "source_class": "aggregator"
       },
       {
-        "headline": "3638 NW Mediterranean Ln Unit 208, Jensen Beach, FL 34957 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOeWwwUWtkakVsVDhiQUQwQlZjV1hBakNqSHA2OEdpeXd4aVRlMTVxY2xZdUpTb0hPQUtuUnZZVVQ4SUtidXlUVjUyeHFuMl9uZVZUcFNmRV84akNPZVh6SXhxZXd3RUdjZjJqVUNqVVR0Qkt2S1NhS3dtZ3lCeUNXa2VLdWcwQ3Q3XzlqN3hoWWZrRUIzSkw0RklVNXNrbGNi?oc=5",
+        "headline": "1315 Bayshore Dr Apt 202, Fort Pierce, FL 34949 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPazVDRkxWaDV5ZkJYeEdFcGswU3M2NEJYS3cwYlhoaEVFMnV0UnN2OEpTSVRRVW9xeDJVemNXczFQQWczaFpJTGowcWRCbWwxdm9yY3JwRVczRzVZSmdZWkY1a2k2VEVyT1k2dEVING12OFI1YUhmQ2c4TElEZHdNUXI1bXUzME5UZVNSM2l2eU80NXMxZDcwYlVTT3FtMDg?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -83,8 +195,8 @@
         "source_class": "aggregator"
       },
       {
-        "headline": "3702 NW Mediterranean Ln Unit 103, Jensen Beach, FL 34957 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPSEFvUTRWdWIzREp0UnRVVEhtY010Z0pTU1duRHo3Rmltcmp1M01CYXMtTkFMQUY0MjZNSHlvUWQ4ODdtdUNuNUtIQ2czazE5TlN4WlNJbnJ4YkhuTmZRZklSXzRkVW1nbnZUeWY1b21YQ2tkRll4WVI1NmtSckNUY2JOMlNKQ2Q0bjJiX01YT2hLTEtuWFdTM2prT0ROMUMy?oc=5",
+        "headline": "804 N Cinnamon Rd, North Palm Beach, FL 33408 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQSnNCdHRsS0pnUnhKWmRZQ0x1cGZQOVVrOGpkVHpkc1FjekdxRUxHZTBJeXFwVTlfX29QZlA3R0FxZjlqNXFiUW8yUG1kZEVTT3NwQ2Z6aEdQN2RZVy1kcnRZNWxoUmc0TVpRaEtNSmdrZG9BUXViSTdCajNvZ3pscWsyZEJBcDVvLWctelB2cmZJei04TWZFZmFB?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -92,35 +204,8 @@
         "source_class": "aggregator"
       },
       {
-        "headline": "231 SW Palm Dr Apt 107, Port Saint Lucie, FL 34986 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQSjZhM3ZtMGNGMkFTRDZwR0hfOWY4eDNaWkhXdUNFYWRpM1ljbGlJWUNoa3dtaFdhbUt2SnZUVEVWRzBlcFNTa1hXQnlfOEFNN0RsV3h2Mnp4a1RQOHVQUnY1cFU4WV9ZMUIwUVlhNVZycGVTMkxjZjJWQkR3bzd2X2xkdnJaMGhzeEJPYnlMaXZNMFNWVDFyZFpKZXlDUGs?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
-      },
-      {
-        "headline": "8 Botany Ln, Palm Coast, FL 32137 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOaUx3MmFNVmUyb3ozR0NtSElFLS1FZFlmNGpCLVA5cTBfZGcyWkFldVZjSmxPQXB3UU9KbVN2eUdvWXRLblFnRUxBTEhhVS13OUE1b3dZZTdFLVlDV3RkSFdoanJxVWVfZDdNTVNMRzZRaVA0YlIxOG5wUzdFYjg0ZS1jTGpBdV9uVXR0Wg?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
-      },
-      {
-        "headline": "1502 Avenue I Apt B, Fort Pierce, FL 34950 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPLU9XQzZYekI3Q2xtMGtPUnNJS3FUdTdIMVo1VXRiQzBUMFhoWnRkblg2eHZiQXJGdWhkM0FfVUJ2UzhKME0wWlU4NE52cmQ4WUh0Q2x5eUJoS1Jsd1E1UVprUGZpMEdhY3pMRWxSVEpQMHBwU2dsRzFkeVNSN2xERk5tc2NmNWZfeUgtZTFTTUlrZ21xczBPY01QVmZhVldabWQtZE1PbmpkSUFKRU9rTnZ3?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
-      },
-      {
-        "headline": "1051 S 37th St Unit 1051, Fort Pierce, FL 34947 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxORWVISXNoZFpENFRhU09VQThwY2FGRkdsSU01T1NkaDZJT2xCNk9fQWFaNm1ISnZuWFE1MEI0eE9MRm81b01mRmdYOUd1dWFGSUFlRllzZ3ItSENWYUJPQmVOMlJ0UXY3bG1lbVdSbnhMTkRYb2hrWVcxcnU1cnhWQWExZGpJSU1yTDNhakdKSHlEVEIyVllTakRhMTQxSmRWS1BoSWxDLXM4a0E?oc=5",
+        "headline": "311 16th St N Unit B, Fort Pierce, FL 34950 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOaVhYLVk3Ul9mUlExYVp5MTlNQ0U2bHlrWGJlaEdPemYzZ3pCOF9YdHRpQkpJN2ZSZEkwYU1sWVFyWWdrbHo5ZExKQjhpT0dLWFEzM0RIQWFTVDZiWnljaFhxbXJGUWxxaUxYQXRXN0dWMUNnZ1ZXZGNsOXhFMS1TQVBaeGZjckd0Qm5hSlhELUg0WEFkM254c0pmcF9IRnlPQVFNamhkSC10Zw?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -131,14 +216,14 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 26,
-      "same_event": 140
+      "new_story": 50,
+      "same_event": 110
     },
     "examples": [
       {
-        "story_id": "story_000515",
-        "title": "Palm Beach County school officers prep with summer safety training",
-        "event_key": "unknown-event-5d28c2f39d",
+        "story_id": "story_000534",
+        "title": "Boca Raton brothers with muscular dystrophy get surprise from soccer legend Cristiano Ronaldo",
+        "event_key": "unknown-event-8e5ea04323",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -148,15 +233,160 @@
         ]
       },
       {
-        "story_id": "story_000516",
-        "title": "Messi may be Miami's most famous Argentine. Florida wildlife officials are far more worried about this other one. - CBS News",
-        "event_key": "unknown-event-3566399455",
+        "story_id": "story_000535",
+        "title": "Delray Beach driver's auto insurance quote jumped from $587 to $940 in just a few days",
+        "event_key": "unknown-event-ef48f988f3",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000536",
+        "title": "3 arrested in death of 3-month-old in St. Lucie County who died from dehydration, malnutrition",
+        "event_key": "unknown-event-160bfd5d14",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000537",
+        "title": "Florida housing market: Treasure Coast single-family home prices on the rise",
+        "event_key": "unknown-event-5710016c84",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000003",
+        "title": "More animals rescued in Martin County hoarding case as owners search for missing pets",
+        "event_key": "animal-rescue-hobe-sound-cats",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_000483",
+        "title": "Scooter duo attacked 13-year-old walking home, gold chain ripped from neck: PBSO report - cw34.com",
+        "event_key": "unknown-event-38c0d8524f",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "",
+        "title": "5760 36th Pl, Vero Beach, FL 32966 - Realtor.com",
+        "event_key": "",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "",
+        "decision_trace": []
+      },
+      {
+        "story_id": "",
+        "title": "1315 Bayshore Dr Apt 202, Fort Pierce, FL 34949 - Realtor.com",
+        "event_key": "",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "",
+        "decision_trace": []
+      },
+      {
+        "story_id": "story_000538",
+        "title": "Florida police open $30 million training facility - Treasure Coast News",
+        "event_key": "unknown-event-569fbb8eb0",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000539",
+        "title": "$30 million Port St. Lucie Police Training Facility ribbon cutting - Treasure Coast News",
+        "event_key": "unknown-event-7fe4a79cdf",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000540",
+        "title": "3-year-old in critical condition after head gets stuck in kitchen play set in Boynton Beach",
+        "event_key": "fire-02b1e794d0",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000541",
+        "title": "South Carolina set to open Democratic presidential primary again",
+        "event_key": "unknown-event-25bf935a5d",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000515",
+        "title": "Palm Beach County school officers prep with summer safety training",
+        "event_key": "unknown-event-5d28c2f39d",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_000516",
+        "title": "Messi may be Miami's most famous Argentine. Florida wildlife officials are far more worried about this other one. - CBS News",
+        "event_key": "unknown-event-3566399455",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -230,183 +460,23 @@
         ]
       },
       {
-        "story_id": "story_000480",
-        "title": "Bicyclist hit, killed by Tri-Rail train in Lake Worth Beach",
-        "event_key": "traffic-crash-030d3b058d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000247",
-        "title": "Martin County school bus routes may change to improve efficiency and cut costs - WPBF",
-        "event_key": "unknown-event-d5da004537",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000481",
-        "title": "Central Florida company, owned by congressional candidate, used subpar materials, lawsuit says - Orlando Sentinel",
-        "event_key": "unknown-event-4486029ca2",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000464",
-        "title": "Florida county eyes early redistricting amid population explosion - Treasure Coast News",
-        "event_key": "unknown-event-b60d65b0c0",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000466",
-        "title": "5-year-old watches as Florida armed man attacks barbers during robbery - cw34.com",
-        "event_key": "unknown-event-217adaf72a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000465",
-        "title": "When is the first day of school in Northwest Arkansas, River Valley in 2026? - AOL.com",
-        "event_key": "unknown-event-ebc3b673dc",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000462",
-        "title": "BEACHSIDE NEWS JULY 2026 - Vero Beach 32963",
-        "event_key": "unknown-event-a153de4c1e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "",
-        "title": "2480 SE Garden Ter Unit 507, Port Saint Lucie, FL 34952 - Realtor.com",
-        "event_key": "",
+        "story_id": "story_000542",
+        "title": "LIVE: School back in session in Jackson County for 2026-27 school year - WLOX",
+        "event_key": "unknown-event-7d6d185168",
         "relationship": "new_story",
         "confidence": 0.0,
-        "reason": "",
-        "decision_trace": []
-      },
-      {
-        "story_id": "",
-        "title": "3638 NW Mediterranean Ln Unit 208, Jensen Beach, FL 34957 - Realtor.com",
-        "event_key": "",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "",
-        "decision_trace": []
-      },
-      {
-        "story_id": "story_000455",
-        "title": "Okaloosa County School District Reminds Families to Take Advantage of Florida's Back-to-School Sales Tax Holiday - Okaloosa County School District",
-        "event_key": "unknown-event-60e509900d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000434",
-        "title": "Palm Beach County District 6 commissioner candidates debate as voters weigh in on top concerns",
-        "event_key": "unknown-event-8ce114073e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000244",
-        "title": "St. Lucie County could lose $63 million in funding if property tax goes away - cw34.com",
-        "event_key": "unknown-event-d00d1a3d32",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000401",
-        "title": "Former Gadsden County principal sues school board, citing Florida whistleblower law - wtwcfox",
-        "event_key": "unknown-event-2d34b25331",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       }
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_000515",
-        "title": "Palm Beach County school officers prep with summer safety training",
-        "event_key": "unknown-event-5d28c2f39d",
+        "story_id": "story_000534",
+        "title": "Boca Raton brothers with muscular dystrophy get surprise from soccer legend Cristiano Ronaldo",
+        "event_key": "unknown-event-8e5ea04323",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -417,9 +487,9 @@
         ]
       },
       {
-        "story_id": "story_000516",
-        "title": "Messi may be Miami's most famous Argentine. Florida wildlife officials are far more worried about this other one. - CBS News",
-        "event_key": "unknown-event-3566399455",
+        "story_id": "story_000535",
+        "title": "Delray Beach driver's auto insurance quote jumped from $587 to $940 in just a few days",
+        "event_key": "unknown-event-ef48f988f3",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -427,6 +497,143 @@
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000536",
+        "title": "3 arrested in death of 3-month-old in St. Lucie County who died from dehydration, malnutrition",
+        "event_key": "unknown-event-160bfd5d14",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000537",
+        "title": "Florida housing market: Treasure Coast single-family home prices on the rise",
+        "event_key": "unknown-event-5710016c84",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000003",
+        "title": "More animals rescued in Martin County hoarding case as owners search for missing pets",
+        "event_key": "animal-rescue-hobe-sound-cats",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_000483",
+        "title": "Scooter duo attacked 13-year-old walking home, gold chain ripped from neck: PBSO report - cw34.com",
+        "event_key": "unknown-event-38c0d8524f",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_000538",
+        "title": "Florida police open $30 million training facility - Treasure Coast News",
+        "event_key": "unknown-event-569fbb8eb0",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000539",
+        "title": "$30 million Port St. Lucie Police Training Facility ribbon cutting - Treasure Coast News",
+        "event_key": "unknown-event-7fe4a79cdf",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000540",
+        "title": "3-year-old in critical condition after head gets stuck in kitchen play set in Boynton Beach",
+        "event_key": "fire-02b1e794d0",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000541",
+        "title": "South Carolina set to open Democratic presidential primary again",
+        "event_key": "unknown-event-25bf935a5d",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000515",
+        "title": "Palm Beach County school officers prep with summer safety training",
+        "event_key": "unknown-event-5d28c2f39d",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_000516",
+        "title": "Messi may be Miami's most famous Argentine. Florida wildlife officials are far more worried about this other one. - CBS News",
+        "event_key": "unknown-event-3566399455",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -505,6 +712,19 @@
         ]
       },
       {
+        "story_id": "story_000542",
+        "title": "LIVE: School back in session in Jackson County for 2026-27 school year - WLOX",
+        "event_key": "unknown-event-7d6d185168",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_000480",
         "title": "Bicyclist hit, killed by Tri-Rail train in Lake Worth Beach",
         "event_key": "traffic-crash-030d3b058d",
@@ -523,171 +743,6 @@
         "story_id": "story_000247",
         "title": "Martin County school bus routes may change to improve efficiency and cut costs - WPBF",
         "event_key": "unknown-event-d5da004537",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000481",
-        "title": "Central Florida company, owned by congressional candidate, used subpar materials, lawsuit says - Orlando Sentinel",
-        "event_key": "unknown-event-4486029ca2",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000464",
-        "title": "Florida county eyes early redistricting amid population explosion - Treasure Coast News",
-        "event_key": "unknown-event-b60d65b0c0",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000466",
-        "title": "5-year-old watches as Florida armed man attacks barbers during robbery - cw34.com",
-        "event_key": "unknown-event-217adaf72a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000465",
-        "title": "When is the first day of school in Northwest Arkansas, River Valley in 2026? - AOL.com",
-        "event_key": "unknown-event-ebc3b673dc",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000462",
-        "title": "BEACHSIDE NEWS JULY 2026 - Vero Beach 32963",
-        "event_key": "unknown-event-a153de4c1e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000455",
-        "title": "Okaloosa County School District Reminds Families to Take Advantage of Florida's Back-to-School Sales Tax Holiday - Okaloosa County School District",
-        "event_key": "unknown-event-60e509900d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000434",
-        "title": "Palm Beach County District 6 commissioner candidates debate as voters weigh in on top concerns",
-        "event_key": "unknown-event-8ce114073e",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000244",
-        "title": "St. Lucie County could lose $63 million in funding if property tax goes away - cw34.com",
-        "event_key": "unknown-event-d00d1a3d32",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000401",
-        "title": "Former Gadsden County principal sues school board, citing Florida whistleblower law - wtwcfox",
-        "event_key": "unknown-event-2d34b25331",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000253",
-        "title": "Big Taste of Martin County returns to support Big Brothers Big Sisters mentoring programs - WFLX",
-        "event_key": "unknown-event-cb5841ed81",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000235",
-        "title": "Shores residents want help paying for mandated septic-to-sewer switches - Vero News",
-        "event_key": "unknown-event-9082492529",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -703,34 +758,34 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 94,
-      "treasure_coast_local": 76,
-      "treasure_coast_region": 39,
-      "unknown": 163
+      "florida": 101,
+      "treasure_coast_local": 90,
+      "treasure_coast_region": 43,
+      "unknown": 184
     },
-    "average_score": 62.15
+    "average_score": 62.42
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 94,
-      "treasure_coast_local": 76,
-      "treasure_coast_region": 39,
-      "unknown": 163
+      "florida": 101,
+      "treasure_coast_local": 90,
+      "treasure_coast_region": 43,
+      "unknown": 184
     },
-    "average_priority": 6.13
+    "average_priority": 5.96
   },
   "story_lifecycle": {
     "counts": {
-      "active": 253,
-      "developing": 119
+      "active": 290,
+      "developing": 128
     }
   },
   "registry_health": {
     "repair_version": 4,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 353,
-    "active_stories_after": 353,
+    "active_stories_before": 372,
+    "active_stories_after": 372,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -746,20 +801,20 @@
     "incident_identity_groups_resolved": 0,
     "incident_story_records_removed": 0,
     "remaining_incident_identity_groups": 0,
-    "generated_at": "2026-07-24T17:00:17Z",
+    "generated_at": "2026-07-25T00:38:10Z",
     "quarantined_story_records_retained": 8,
-    "active_story_count": 372
+    "active_story_count": 418
   },
   "stories": {
-    "total": 372,
+    "total": 418,
     "importance_levels": {
       "breaking": 0,
-      "high": 5,
-      "normal": 67,
-      "low": 300,
+      "high": 6,
+      "normal": 76,
+      "low": 336,
       "archived": 0
     },
-    "average_importance": 10.4,
+    "average_importance": 10.36,
     "top": [
       {
         "story_id": "story_000049",
@@ -774,7 +829,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 13.58
+          "age_hours": 21.21
         },
         "level": "high",
         "importance_reasons": [
@@ -817,7 +872,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 13.58,
+          "hours_since_update": 21.21,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -835,7 +890,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 33.38
+          "age_hours": 41.01
         },
         "level": "high",
         "importance_reasons": [
@@ -878,7 +933,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T07:40:14.261666+00:00",
-          "hours_since_update": 33.38,
+          "hours_since_update": 41.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -896,7 +951,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 34.73
+          "age_hours": 42.36
         },
         "level": "high",
         "importance_reasons": [
@@ -934,9 +989,63 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 34.73,
+          "hours_since_update": 42.36,
           "event_count": 1,
           "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000536",
+        "title": "3 arrested in death of 3-month-old in St. Lucie County who died from dehydration, malnutrition",
+        "score": 50,
+        "editorial_priority": 57,
+        "editorial_score": 57,
+        "score_breakdown": {
+          "score": 57,
+          "importance": 50,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 0.34
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-07-25T00:38:10.414050+00:00",
+          "hours_since_update": 0.34,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       },
       {
@@ -952,7 +1061,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.35
+          "age_hours": 0.4
         },
         "level": "normal",
         "importance_reasons": [
@@ -984,22 +1093,22 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 24,
-        "timeline_entries": 23,
+        "event_count": 26,
+        "timeline_entries": 25,
         "relationship_decisions": 19,
-        "canonical_source_candidates": 31,
+        "canonical_source_candidates": 34,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-24T17:00:17.641437+00:00",
-          "hours_since_update": 0.35,
-          "event_count": 24,
-          "timeline_entries": 23
+          "last_updated": "2026-07-25T00:38:10.414050+00:00",
+          "hours_since_update": 0.4,
+          "event_count": 26,
+          "timeline_entries": 25
         }
       },
       {
-        "story_id": "story_000487",
-        "title": "Death By Distribution Among Charges Filed Against Man Wanted In Martin County & Jailed In Catawba County - WHKY",
+        "story_id": "story_000545",
+        "title": "3 arrested in death of 3-month-old boy in Fort Pierce last year - WPBF",
         "score": 40,
         "editorial_priority": 39,
         "editorial_score": 39,
@@ -1010,7 +1119,112 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 1.63
+          "age_hours": 0.34
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-07-25T00:38:10.414050+00:00",
+          "hours_since_update": 0.34,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000236",
+        "title": "New depositions reveal why a St. Lucie County firefighter turned in alleged hazing videos",
+        "score": 35,
+        "editorial_priority": 38,
+        "editorial_score": 38,
+        "score_breakdown": {
+          "score": 38,
+          "importance": 35,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 23.31
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 2,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-07-24T01:40:23.579334+00:00",
+          "hours_since_update": 23.31,
+          "event_count": 2,
+          "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_000487",
+        "title": "Death By Distribution Among Charges Filed Against Man Wanted In Martin County & Jailed In Catawba County - WHKY",
+        "score": 40,
+        "editorial_priority": 37,
+        "editorial_score": 37,
+        "score_breakdown": {
+          "score": 37,
+          "importance": 40,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 9.26
         },
         "level": "normal",
         "importance_reasons": [
@@ -1041,7 +1255,101 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T15:40:29.610573+00:00",
-          "hours_since_update": 1.63,
+          "hours_since_update": 9.26,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000548",
+        "title": "Florida death of 3-month-old results in three arrests - Treasure Coast News",
+        "score": 40,
+        "editorial_priority": 37,
+        "editorial_score": 37,
+        "score_breakdown": {
+          "score": 37,
+          "importance": 40,
+          "proximity_multiplier": 0.95,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 0.34
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_region",
+          "score": 95,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 95,
+          "scope": "treasure_coast_region",
+          "reason": "Directly affects the Treasure Coast region"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-07-25T00:38:10.414050+00:00",
+          "hours_since_update": 0.34,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000413",
+        "title": "Treasure Coast man loses wedding ring at beach weeks after wife’s death, strangers step in - WPEC",
+        "score": 40,
+        "editorial_priority": 36,
+        "editorial_score": 36,
+        "score_breakdown": {
+          "score": 36,
+          "importance": 40,
+          "proximity_multiplier": 0.95,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 23.14
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_region",
+          "score": 95,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 95,
+          "scope": "treasure_coast_region",
+          "reason": "Directly affects the Treasure Coast region"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-07-24T01:40:23.579334+00:00",
+          "hours_since_update": 23.14,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1050,16 +1358,16 @@
         "story_id": "story_000014",
         "title": "Martin County Fire Rescue could lose $16.5M if property tax reform passes in November",
         "score": 35,
-        "editorial_priority": 38,
-        "editorial_score": 38,
+        "editorial_priority": 34,
+        "editorial_score": 34,
         "score_breakdown": {
-          "score": 38,
+          "score": 34,
           "importance": 35,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 17.97
+          "age_hours": 25.61
         },
         "level": "normal",
         "importance_reasons": [
@@ -1095,7 +1403,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 17.97,
+          "hours_since_update": 25.61,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1104,16 +1412,16 @@
         "story_id": "story_000020",
         "title": "Fired St. Lucie County firefighters speak to WPTV for first time, call bug zapper incident 'joking around'",
         "score": 35,
-        "editorial_priority": 38,
-        "editorial_score": 38,
+        "editorial_priority": 34,
+        "editorial_score": 34,
         "score_breakdown": {
-          "score": 38,
+          "score": 34,
           "importance": 35,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 17.79
+          "age_hours": 25.43
         },
         "level": "normal",
         "importance_reasons": [
@@ -1149,61 +1457,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 17.79,
-          "event_count": 2,
-          "timeline_entries": 2
-        }
-      },
-      {
-        "story_id": "story_000236",
-        "title": "New depositions reveal why a St. Lucie County firefighter turned in alleged hazing videos",
-        "score": 35,
-        "editorial_priority": 38,
-        "editorial_score": 38,
-        "score_breakdown": {
-          "score": 38,
-          "importance": 35,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 15.63
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 2,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 15.63,
+          "hours_since_update": 25.43,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1212,16 +1466,16 @@
         "story_id": "story_000142",
         "title": "Florida family sues Urban Air after 6-year-old girl's death - Treasure Coast News",
         "score": 40,
-        "editorial_priority": 36,
-        "editorial_score": 36,
+        "editorial_priority": 32,
+        "editorial_score": 32,
         "score_breakdown": {
-          "score": 36,
+          "score": 32,
           "importance": 40,
           "proximity_multiplier": 0.95,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 17.73
+          "age_hours": 25.36
         },
         "level": "normal",
         "importance_reasons": [
@@ -1250,54 +1504,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 17.73,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000413",
-        "title": "Treasure Coast man loses wedding ring at beach weeks after wife’s death, strangers step in - WPEC",
-        "score": 40,
-        "editorial_priority": 36,
-        "editorial_score": 36,
-        "score_breakdown": {
-          "score": 36,
-          "importance": 40,
-          "proximity_multiplier": 0.95,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 15.5
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_region",
-          "score": 95,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 95,
-          "scope": "treasure_coast_region",
-          "reason": "Directly affects the Treasure Coast region"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 15.5,
+          "hours_since_update": 25.36,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1306,16 +1513,16 @@
         "story_id": "story_000386",
         "title": "National Weather Service confirms tornado in Sebastian, Florida - WPBF",
         "score": 35,
-        "editorial_priority": 33,
-        "editorial_score": 33,
+        "editorial_priority": 29,
+        "editorial_score": 29,
         "score_breakdown": {
-          "score": 33,
+          "score": 29,
           "importance": 35,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 17.84
+          "age_hours": 25.47
         },
         "level": "normal",
         "importance_reasons": [
@@ -1348,14 +1555,14 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 17.84,
+          "hours_since_update": 25.47,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
-        "story_id": "story_000514",
-        "title": "Florida Father Sentenced to 42 Years in Toddler Hot Car Death - WIOD",
+        "story_id": "story_000533",
+        "title": "A toddler died in hot car in Florida while his dad drank at a bar. Sentence now handed down - Tampa Bay Times",
         "score": 50,
         "editorial_priority": 27,
         "editorial_score": 27,
@@ -1366,7 +1573,111 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 1.69
+          "age_hours": 0.41
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "florida",
+          "score": 65,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 55,
+          "scope": "florida",
+          "reason": "Florida-wide coverage with indirect local relevance"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-07-25T00:38:10.414050+00:00",
+          "hours_since_update": 0.41,
+          "event_count": 2,
+          "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_000418",
+        "title": "Central Florida father sentenced to 42 years for toddler's hot truck death - WESH",
+        "score": 50,
+        "editorial_priority": 26,
+        "editorial_score": 26,
+        "score_breakdown": {
+          "score": 26,
+          "importance": 50,
+          "proximity_multiplier": 0.55,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 23.24
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "court_action",
+            "label": "Court action",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "florida",
+          "score": 65,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 55,
+          "scope": "florida",
+          "reason": "Florida-wide coverage with indirect local relevance"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-07-24T01:40:23.579334+00:00",
+          "hours_since_update": 23.24,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000514",
+        "title": "Florida Father Sentenced to 42 Years in Toddler Hot Car Death - WIOD",
+        "score": 50,
+        "editorial_priority": 26,
+        "editorial_score": 26,
+        "score_breakdown": {
+          "score": 26,
+          "importance": 50,
+          "proximity_multiplier": 0.55,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 9.27
         },
         "level": "normal",
         "importance_reasons": [
@@ -1400,58 +1711,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T15:40:29.610573+00:00",
-          "hours_since_update": 1.69,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000050",
-        "title": "Police investigate Fort Pierce restaurant shooting; no one hurt",
-        "score": 25,
-        "editorial_priority": 27,
-        "editorial_score": 27,
-        "score_breakdown": {
-          "score": 27,
-          "importance": 25,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 17.78
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 17.78,
+          "hours_since_update": 9.27,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1460,16 +1720,16 @@
         "story_id": "story_000480",
         "title": "Bicyclist hit, killed by Tri-Rail train in Lake Worth Beach",
         "score": 65,
-        "editorial_priority": 26,
-        "editorial_score": 26,
+        "editorial_priority": 25,
+        "editorial_score": 25,
         "score_breakdown": {
-          "score": 26,
+          "score": 25,
           "importance": 65,
           "proximity_multiplier": 0.35,
-          "freshness_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 1.61
+          "age_hours": 9.28
         },
         "level": "high",
         "importance_reasons": [
@@ -1503,176 +1763,25 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T15:40:29.610573+00:00",
-          "hours_since_update": 1.61,
+          "hours_since_update": 9.28,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
-        "story_id": "story_000140",
-        "title": "Family of 6-year-old killed in go-karting accident at Florida Urban Air files wrongful death lawsuit - SNN News",
-        "score": 50,
-        "editorial_priority": 26,
-        "editorial_score": 26,
-        "score_breakdown": {
-          "score": 26,
-          "importance": 50,
-          "proximity_multiplier": 0.55,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 17.79
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "court_action",
-            "label": "Court action",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "florida",
-          "score": 65,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 55,
-          "scope": "florida",
-          "reason": "Florida-wide coverage with indirect local relevance"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 17.79,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000418",
-        "title": "Central Florida father sentenced to 42 years for toddler's hot truck death - WESH",
-        "score": 50,
-        "editorial_priority": 26,
-        "editorial_score": 26,
-        "score_breakdown": {
-          "score": 26,
-          "importance": 50,
-          "proximity_multiplier": 0.55,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 15.59
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "court_action",
-            "label": "Court action",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "florida",
-          "score": 65,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 55,
-          "scope": "florida",
-          "reason": "Florida-wide coverage with indirect local relevance"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 15.59,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000107",
-        "title": "Mexican man killed after ICE encounter in Florida was on vacation, officials say",
-        "score": 40,
-        "editorial_priority": 24,
-        "editorial_score": 24,
-        "score_breakdown": {
-          "score": 24,
-          "importance": 40,
-          "proximity_multiplier": 0.55,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 17.79
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          }
-        ],
-        "local_relevance": {
-          "scope": "florida",
-          "score": 65,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 55,
-          "scope": "florida",
-          "reason": "Florida-wide coverage with indirect local relevance"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 17.79,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000008",
-        "title": "Videos surface in St. Lucie County firefighter hazing controversy leading to terminations, suspensions",
+        "story_id": "story_000549",
+        "title": "Shots fired at Orchard Grove apartments; no injuries reported - Sebastian Daily",
         "score": 25,
-        "editorial_priority": 24,
-        "editorial_score": 24,
+        "editorial_priority": 25,
+        "editorial_score": 25,
         "score_breakdown": {
-          "score": 24,
+          "score": 25,
           "importance": 25,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 34.95
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 0.34
         },
         "level": "normal",
         "importance_reasons": [
@@ -1686,10 +1795,10 @@
           "scope": "treasure_coast_local",
           "score": 100,
           "counties": [
-            "St. Lucie County"
+            "Indian River County"
           ],
           "places": [
-            "Fort Pierce"
+            "Sebastian"
           ]
         },
         "editorial_proximity": {
@@ -1699,88 +1808,31 @@
         },
         "event_count": 1,
         "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 4,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
         "lifecycle": {
           "state": "active",
           "reason": "Single-event story is current",
-          "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 34.95,
+          "last_updated": "2026-07-25T00:38:10.414050+00:00",
+          "hours_since_update": 0.34,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
-        "story_id": "story_000200",
-        "title": "Truck driver in deadly Turnpike crash absent from court; hearing reset for October - mynbc15.com",
-        "score": 45,
-        "editorial_priority": 23,
-        "editorial_score": 23,
-        "score_breakdown": {
-          "score": 23,
-          "importance": 45,
-          "proximity_multiplier": 0.55,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 13.86
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "court_action",
-            "label": "Court action",
-            "points": 10
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "florida",
-          "score": 65,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 55,
-          "scope": "florida",
-          "reason": "Florida-wide coverage with indirect local relevance"
-        },
-        "event_count": 10,
-        "timeline_entries": 10,
-        "relationship_decisions": 10,
-        "canonical_source_candidates": 10,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 13.86,
-          "event_count": 10,
-          "timeline_entries": 10
-        }
-      },
-      {
-        "story_id": "story_000125",
-        "title": "Florida tax plan could cut 30% of Martin County firefighters - The Palm Beach Post",
+        "story_id": "story_000567",
+        "title": "Families visit Humane Society in search of pets rescued from Martin County home - WPBF",
         "score": 25,
-        "editorial_priority": 23,
-        "editorial_score": 23,
+        "editorial_priority": 25,
+        "editorial_score": 25,
         "score_breakdown": {
-          "score": 23,
+          "score": 25,
           "importance": 25,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 17.8
+          "age_hours": 0.4
         },
         "level": "normal",
         "importance_reasons": [
@@ -1810,8 +1862,8 @@
         "lifecycle": {
           "state": "active",
           "reason": "Single-event story is current",
-          "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 17.8,
+          "last_updated": "2026-07-25T00:38:10.414050+00:00",
+          "hours_since_update": 0.4,
           "event_count": 1,
           "timeline_entries": 1
         }
