@@ -44,6 +44,7 @@ try:
         write_editorial_observability,
         build_publication_identity_index,
         write_homepage_ranking_recommendations,
+        normalize_source_identity_url,
     )
 except Exception as exc:
     ActivationConfig = None
@@ -57,6 +58,7 @@ except Exception as exc:
     write_editorial_observability = None
     build_publication_identity_index = None
     write_homepage_ranking_recommendations = None
+    normalize_source_identity_url = None
     _editorial_import_error = exc
 
 # -- CONFIG --
@@ -226,6 +228,13 @@ EDITORIAL_REGISTRY_PATH = OUTPUT_DIR / "data" / "editorial_story_registry.json"
 EDITORIAL_OBSERVABILITY_PATH = OUTPUT_DIR / "data" / "editorial_observability.json"
 EDITORIAL_ACTIVATION_PATH = OUTPUT_DIR / "data" / "editorial_activation.json"
 EDITORIAL_ACTIVATION_HISTORY_PATH = OUTPUT_DIR / "data" / "editorial_activation_history.jsonl"
+
+# v1.10.5 forward publication identity. New generated articles are published only
+# when the current editorial decision can be carried directly into the archive row.
+# Historical rows remain readable, but unresolved legacy identity is not guessed.
+FORWARD_IDENTITY_VERSION = "1.1"
+FORWARD_IDENTITY_RECENT_DAYS = 30
+CURRENT_RUN_EDITORIAL_IDENTITIES = {}
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -2732,7 +2741,7 @@ def canonical_image_url(url):
     return re.sub(r"[?#].*$", "", url.strip())
 
 
-def make_paragraphs(text):
+def make_paragraphs(text, preserve_all=False):
     if not text:
         return ""
     # Split on double newlines first, fall back to single newlines
@@ -2832,10 +2841,18 @@ def make_paragraphs(text):
         # Sub-header: line starting with "### "
         elif p.startswith("### "):
             out.append(f'<h3 class="article-subhead">{_inline(p[4:].strip())}</h3>')
-        # Regular paragraph — keep short lines only if they are not stray fragments.
-        # A header-like short line (Title Case, no ending period) is rendered as a
-        # subhead rather than dropped; genuine short fragments are still skipped.
-        elif len(p) > 30:
+        # Markdown bullet block. Custom articles preserve every submitted item and
+        # render it as a real list rather than flattening or dropping short lines.
+        elif preserve_all and all(
+            (not line.strip()) or line.lstrip().startswith("- ")
+            for line in p.splitlines()
+        ) and any(line.lstrip().startswith("- ") for line in p.splitlines()):
+            items = [line.lstrip()[2:].strip() for line in p.splitlines() if line.lstrip().startswith("- ")]
+            out.append("<ul>" + "".join(f"<li>{_inline(item)}</li>" for item in items) + "</ul>")
+        # Regular paragraph — generated copy may still drop stray fragments, but a
+        # manually submitted custom article is an immutable payload and preserves
+        # every non-empty paragraph regardless of length.
+        elif preserve_all or len(p) > 30:
             out.append(f"<p>{_inline(p)}</p>")
         elif p and not p.endswith((".", "!", "?", ":")) and p[0:1].isupper():
             # Short standalone label line (e.g. a date sub-header) — keep as subhead
@@ -4489,6 +4506,150 @@ def load_weather_alerts():
     return articles
 
 
+def _declared_custom_category(item):
+    """Return the normalized category explicitly assigned to a custom article."""
+    if not isinstance(item, dict):
+        return ""
+    key = str(item.get("category") or item.get("category_key") or "").strip()
+    return key if key in CATEGORIES else ""
+
+
+def _custom_placement_identity(item):
+    if not isinstance(item, dict):
+        return ""
+    return str(
+        item.get("custom_body_hash")
+        or item.get("editorial_story_id")
+        or item.get("_editorial_story_id")
+        or _custom_story_fingerprint(item.get("headline", ""), item.get("teaser", ""))
+        or item.get("headline", "")
+    )
+
+
+def enforce_custom_category_placement(all_categories):
+    """Keep authoritative custom content only in its declared category container.
+
+    Permalink rebinding must never turn an unrelated category hero into a custom
+    article merely because a legacy archive matcher found a broad topical overlap.
+    This repair is deterministic and runs before hero selection.
+    """
+    all_categories = all_categories or []
+    cat_by_key = {str(cat.get("category_key") or ""): cat for cat in all_categories}
+    moves = []
+
+    for cat in list(all_categories):
+        container_key = str(cat.get("category_key") or "")
+        hero = cat.get("hero")
+        if hero and (hero.get("is_custom") or hero.get("authoritative_custom")):
+            expected = _declared_custom_category(hero)
+            if expected and expected != container_key:
+                cat["hero"] = (cat.get("cards") or []).pop(0) if cat.get("cards") else None
+                moves.append((hero, container_key, expected, "hero"))
+
+        kept = []
+        for card in cat.get("cards") or []:
+            if card.get("is_custom") or card.get("authoritative_custom"):
+                expected = _declared_custom_category(card)
+                if expected and expected != container_key:
+                    moves.append((card, container_key, expected, "card"))
+                    continue
+            kept.append(card)
+        cat["cards"] = kept
+
+    for item, source_key, expected, placement in moves:
+        target = cat_by_key.get(expected)
+        if target is None:
+            target = {
+                "category_key": expected,
+                "category_label": CATEGORIES.get(expected, {}).get(
+                    "label", expected.replace("_", " ").title()
+                ),
+                "hero": None,
+                "cards": [],
+            }
+            all_categories.append(target)
+            cat_by_key[expected] = target
+
+        identity = _custom_placement_identity(item)
+        target_items = [target.get("hero")] + list(target.get("cards") or [])
+        if any(
+            existing
+            and (existing.get("is_custom") or existing.get("authoritative_custom"))
+            and _custom_placement_identity(existing) == identity
+            for existing in target_items
+        ):
+            continue
+
+        if item.get("force_hero"):
+            if target.get("hero"):
+                target.setdefault("cards", []).insert(0, target["hero"])
+            target["hero"] = item
+        elif target.get("hero") is None:
+            target["hero"] = item
+        else:
+            target.setdefault("cards", []).append(item)
+
+        print(
+            "  Custom category repair: "
+            f"'{item.get('headline','')[:55]}' {source_key}:{placement} -> {expected}"
+        )
+
+    return {
+        "moved": len(moves),
+        "placements": [
+            {
+                "headline": item.get("headline", ""),
+                "from_category": source,
+                "to_category": expected,
+                "placement": placement,
+            }
+            for item, source, expected, placement in moves
+        ],
+    }
+
+
+def validate_custom_category_placement(all_categories, output_root=None):
+    """Fail closed if a custom article remains outside its declared category."""
+    violations = []
+    checked = 0
+    for cat in all_categories or []:
+        container_key = str(cat.get("category_key") or "")
+        for placement, item in [("hero", cat.get("hero"))] + [
+            ("card", card) for card in cat.get("cards") or []
+        ]:
+            if not item or not (item.get("is_custom") or item.get("authoritative_custom")):
+                continue
+            checked += 1
+            expected = _declared_custom_category(item)
+            if expected and expected != container_key:
+                violations.append({
+                    "headline": item.get("headline", ""),
+                    "placement": placement,
+                    "container_category": container_key,
+                    "declared_category": expected,
+                })
+    report = {
+        "version": "1.10.5.1",
+        "passed": not violations,
+        "checked_custom_placements": checked,
+        "violation_count": len(violations),
+        "violations": violations,
+    }
+    if output_root is not None:
+        path = Path(output_root) / "data" / "custom-category-contract.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if violations:
+        raise RuntimeError(
+            "Custom category contract FAILED: "
+            + "; ".join(
+                f"{row['headline'][:45]} ({row['container_category']} -> {row['declared_category']})"
+                for row in violations[:5]
+            )
+        )
+    return report
+
+
 def load_custom_articles():
     """Load manually-submitted custom articles from custom_articles.json.
 
@@ -4622,7 +4783,26 @@ def load_custom_articles():
                 # generated rewrite can coincidentally have the same length. The repair
                 # run stores custom_body_hash, making every later run idempotent.
 
-            if same_payload:
+            series_mismatch_record = next((
+                existing for existing in matched_records
+                if _custom_series_slug_mismatch(art, existing.get("slug", ""))
+            ), None)
+            if series_mismatch_record:
+                # A recurring report was previously written into another edition's
+                # URL. Republish the exact manual payload under a fresh dated slug and
+                # retire the corrupted permalink after the new page is created.
+                art["_custom_series_permalink_repair"] = True
+                art["_superseded_custom_slug"] = series_mismatch_record.get("slug", "")
+                art["custom_series_key"] = _custom_series_key(art)
+                art["custom_edition_key"] = _custom_edition_marker(art)
+                art.pop("slug", None)
+                art.pop("replace_slug", None)
+                print(
+                    "  Custom recurring-edition permalink repair queued: "
+                    f"'{art.get('headline','')[:60]}'"
+                )
+
+            if same_payload and not series_mismatch_record:
                 skipped_published += 1
                 print(f"  Custom queue skip (exact payload already published): '{art.get('headline','')[:60]}'")
                 continue
@@ -4635,7 +4815,12 @@ def load_custom_articles():
                 if re.sub(r"[^a-z0-9]+", " ", (existing.get("headline", "") or "").lower()).strip()
                    == normalized_headline
             ), None)
-            if exact_headline_match and exact_headline_match.get("slug"):
+            if (
+                exact_headline_match
+                and exact_headline_match.get("slug")
+                and not series_mismatch_record
+                and not art.get("unique_slug")
+            ):
                 art["replace_slug"] = exact_headline_match.get("slug")
                 art["_custom_payload_repair"] = True
                 print(
@@ -4647,6 +4832,9 @@ def load_custom_articles():
         art["is_custom"]       = True
         art["authoritative_custom"] = True
         art["custom_body_hash"] = _custom_body_hash(art.get("body", ""))
+        if _custom_series_key(art):
+            art["custom_series_key"] = _custom_series_key(art)
+            art["custom_edition_key"] = _custom_edition_marker(art)
         art["enriched"]        = True
         art["link"]            = art.get("link", f"{SITE_URL}/")
         art["source_quality"]  = "full"
@@ -4675,6 +4863,39 @@ def load_archive(archive_path):
     except Exception:
         pass
     return []
+
+
+def _custom_body_tokens(value):
+    text = str(value or "")
+    # Rendered Markdown links retain their label but not the destination in visible
+    # article text. Normalize the submitted source the same way before comparing.
+    text = re.sub(r"\[([^\]]+)\]\(((?:https?://|mailto:)[^)\s]+)\)", r"\1", text)
+    return re.findall(r"[a-z0-9]+", text.lower())
+
+
+def validate_custom_body_fidelity(hero, page_html):
+    """Prove that the complete submitted custom body reached the article page."""
+    if not (hero.get("is_custom") or hero.get("authoritative_custom")):
+        return True
+    import html as _html
+    match = re.search(
+        r'<div class="article-body">(.*?)</div>\s*<div class="article-share">',
+        str(page_html or ""),
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    if not match:
+        raise RuntimeError(
+            f"Custom body fidelity FAILED for '{hero.get('headline','')[:60]}': article body missing"
+        )
+    rendered_text = _html.unescape(re.sub(r"<[^>]+>", " ", match.group(1)))
+    source_tokens = _custom_body_tokens(hero.get("body", ""))
+    rendered_tokens = _custom_body_tokens(rendered_text)
+    if source_tokens != rendered_tokens:
+        raise RuntimeError(
+            f"Custom body fidelity FAILED for '{hero.get('headline','')[:60]}': "
+            f"submitted_tokens={len(source_tokens)} rendered_tokens={len(rendered_tokens)}"
+        )
+    return True
 
 
 def render_article_page(hero, category_label, category_key, pub_date, slug, related=None):
@@ -4747,7 +4968,10 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     }
     import json as _json
     schema_tag = f'  <script type="application/ld+json">{_json.dumps(structured_data)}</script>'
-    body       = make_paragraphs(hero.get("body", ""))
+    body       = make_paragraphs(
+        hero.get("body", ""),
+        preserve_all=bool(hero.get("is_custom") or hero.get("authoritative_custom")),
+    )
 
     # Optional user-service link for Things To Do coverage. This is an official event,
     # venue, ticket, or registration page extracted from a real href in the source page,
@@ -5562,6 +5786,94 @@ def _custom_body_hash(body):
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest() if normalized else ""
 
 
+_CUSTOM_MONTHS = (
+    "january", "february", "march", "april", "may", "june",
+    "july", "august", "september", "october", "november", "december",
+)
+
+
+def _parse_any_datetime(value):
+    raw = str(value or "").strip()
+    if not raw:
+        return None
+    try:
+        from email.utils import parsedate_to_datetime
+        parsed = parsedate_to_datetime(raw)
+        if parsed is not None:
+            return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
+    except Exception:
+        pass
+    try:
+        parsed = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
+    except Exception:
+        pass
+    try:
+        return datetime.strptime(raw[:10], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    except Exception:
+        return None
+
+
+def _custom_series_key(item):
+    """Return an explicit or narrowly inferred recurring custom-series key."""
+    if not isinstance(item, dict):
+        return ""
+    explicit = slugify(str(item.get("series_key") or item.get("custom_series_key") or ""))
+    if explicit:
+        return explicit
+    text = " ".join([
+        str(item.get("headline") or ""),
+        str(item.get("category") or item.get("category_key") or ""),
+    ]).lower()
+    if "traffic report" in text and ("treasure coast" in text or "i-95" in text or "road" in text):
+        return "treasure-coast-traffic-report"
+    return ""
+
+
+def _custom_edition_marker(item):
+    """Extract a human-visible edition marker such as ``july-26-31``."""
+    if not isinstance(item, dict):
+        return ""
+    explicit = slugify(str(item.get("edition_key") or item.get("custom_edition_key") or ""))
+    if explicit:
+        return explicit
+    headline = str(item.get("headline") or "").lower()
+    month_pattern = "|".join(_CUSTOM_MONTHS)
+    match = re.search(
+        rf"\b({month_pattern})\s+(\d{{1,2}})(?:\s*(?:-|–|—|to|through)\s*(\d{{1,2}}))?\b",
+        headline,
+        re.I,
+    )
+    if match:
+        pieces = [match.group(1).lower(), str(int(match.group(2)))]
+        if match.group(3):
+            pieces.append(str(int(match.group(3))))
+        return "-".join(pieces)
+    published = str(item.get("published_raw") or item.get("published") or "")
+    parsed = _parse_any_datetime(published)
+    return parsed.date().isoformat() if parsed else ""
+
+
+def _custom_series_slug_mismatch(item, slug):
+    """Detect a recurring edition published under another edition's permalink."""
+    series_key = _custom_series_key(item)
+    if not series_key:
+        return False
+    slug = slugify(str(slug or ""))
+    if not slug:
+        return False
+    marker = _custom_edition_marker(item)
+    # A recurring series only requires a new permalink when the editor supplied a
+    # visible edition marker (for example, July 26-31). Generic same-headline
+    # corrections remain explicit payload repairs of the existing custom page.
+    if not marker:
+        return False
+    if marker not in slug:
+        return True
+    # When an edition is explicit, the series name must also remain recognizable.
+    return not all(part in slug for part in series_key.split("-") if len(part) > 2)
+
+
 def _material_update_stages(text):
     """Return major editorial milestones explicitly present in a story.
 
@@ -5734,6 +6046,27 @@ def _resolve_published_slug(item, archive, articles_dir):
     return ""
 
 
+def _find_exact_archive_source_entry(item, archive):
+    """Resolve only exact external source identity; never fuzzy headline overlap."""
+    if not isinstance(item, dict):
+        return None
+    candidates = [
+        item.get("source_url"), item.get("_source_url"), item.get("original_url"), item.get("link")
+    ]
+    normalized = next((_normalized_external_source_url(value) for value in candidates if _normalized_external_source_url(value)), "")
+    if not normalized:
+        return None
+    matches = [
+        entry for entry in archive or []
+        if _normalized_external_source_url(
+            entry.get("source_url") or entry.get("original_url") or entry.get("link")
+        ) == normalized
+    ]
+    if not matches:
+        return None
+    return min(matches, key=_publication_canonical_key)
+
+
 def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_custom=False):
     """Bind a live hero/card to one real archive permalink.
 
@@ -5768,8 +6101,7 @@ def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_c
     if replace_with_custom and (entry.get("is_custom") or entry.get("authoritative_custom")):
         for key in (
             "headline", "title", "teaser", "summary", "body", "image_url",
-            "image_credit", "published", "published_raw", "category",
-            "category_key", "category_label", "feed_url", "event_url",
+            "image_credit", "published", "published_raw", "feed_url", "event_url",
             "event_link_text",
         ):
             value = canonical.get(key)
@@ -5777,6 +6109,11 @@ def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_c
                 item[key] = value
         item["is_custom"] = True
         item["authoritative_custom"] = True
+
+    current_link = str(item.get("link") or "")
+    if _normalized_external_source_url(current_link):
+        item.setdefault("_source_url", current_link)
+        item.setdefault("source_url", _normalized_external_source_url(current_link))
 
     slug = str(entry.get("slug") or "")
     item["_archived_slug"] = slug
@@ -5788,6 +6125,8 @@ def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_c
     if story_id:
         item["editorial_story_id"] = story_id
         item["_editorial_story_id"] = story_id
+    item["ranking_eligible"] = bool(entry.get("ranking_eligible", bool(story_id)))
+    item["legacy_identity_status"] = entry.get("legacy_identity_status", "identified" if story_id else "")
     return True
 
 
@@ -5828,14 +6167,23 @@ def _rebind_live_items_to_published_archive(all_categories, archive, current_cus
                 if story_entries:
                     matched = min(story_entries, key=_publication_canonical_key)
 
-            if not matched:
-                matched = find_matching_entry(
-                    item.get("headline", ""), archive, item.get("link", ""),
-                    is_weather_alert=bool(item.get("is_weather_alert")),
+            if not matched and item.get("_archive_only") and item.get("_archived_slug"):
+                matched = next(
+                    (entry for entry in archive if entry.get("slug") == item.get("_archived_slug")),
+                    None,
                 )
-            if not matched:
-                # Custom-event matching is intentionally stronger than ordinary
-                # headline matching because custom TCT coverage is authoritative.
+            # Forward publication identity never falls back from a missing story ID
+            # to fuzzy headline matching. Exact external article identity is the only
+            # safe bridge for an un-stamped current placement.
+            if not matched and not story_id and not item.get("_archive_only"):
+                matched = _find_exact_archive_source_entry(item, archive)
+            if not matched and (item.get("is_custom") or item.get("authoritative_custom")):
+                # A custom placement may recover its own archived permalink. Never
+                # replace a non-custom live item in-place with custom content: doing
+                # so leaves the item inside the original category container and was
+                # able to turn a Florida traffic report into a Sports hero. Cross-
+                # category feed duplicates are handled by custom injection and the
+                # guarded suppression layer instead.
                 matched = next(
                     (
                         entry for entry in archive
@@ -8201,18 +8549,55 @@ def _resolve_custom_publication_target(hero, archive, existing, headline):
     replace_slug = slugify(str(hero.get("replace_slug", ""))) if hero.get("replace_slug") else ""
     explicit_slug = slugify(str(hero.get("slug", ""))) if hero.get("slug") else ""
     target_slug = replace_slug or explicit_slug
+
+    # ``unique_slug`` is an explicit editor contract: publish this payload at a new
+    # permalink even when an older custom article has a similar headline or series
+    # identity. ``replace_slug`` remains the only override that permits an overwrite.
+    if hero.get("unique_slug") and not replace_slug:
+        payload_identity = (
+            hero.get("custom_body_hash") or _custom_body_hash(hero.get("body", ""))
+            or _custom_story_fingerprint(headline, hero.get("teaser", ""))
+        )[:32]
+        series_key = _custom_series_key(hero)
+        edition_key = _custom_edition_marker(hero)
+        identity_seed = "|".join(
+            part for part in (series_key, edition_key, payload_identity) if part
+        )
+        return None, (explicit_slug or None), "custom:" + hashlib.sha256(
+            identity_seed.encode("utf-8")
+        ).hexdigest()[:32]
     if target_slug:
         target = next((entry for entry in archive if entry.get("slug") == target_slug), None)
+        # ``replace_slug`` is explicit overwrite permission. A recurring edition's
+        # ordinary ``slug`` is not: if it points at another visible date range, create
+        # a new dated permalink instead of corrupting the previous edition.
+        if (
+            target
+            and not replace_slug
+            and not hero.get("update_existing")
+            and _custom_series_slug_mismatch(hero, target_slug)
+        ):
+            hero["_superseded_custom_slug"] = target_slug
+            hero["_custom_series_permalink_repair"] = True
+            return None, None, None
         return target, (target_slug if target is None else None), None
 
     if hero.get("update_existing"):
+        if existing is None:
+            existing = find_canonical_event_entry(hero, archive)
         return existing, None, None
 
     payload_identity = (
         hero.get("custom_body_hash") or _custom_body_hash(hero.get("body", ""))
         or _custom_story_fingerprint(headline, hero.get("teaser", ""))
     )[:32]
-    return None, None, "custom:" + payload_identity
+    series_key = _custom_series_key(hero)
+    edition_key = _custom_edition_marker(hero)
+    if series_key:
+        hero["custom_series_key"] = series_key
+        hero["custom_edition_key"] = edition_key
+    identity_seed = "|".join(part for part in (series_key, edition_key, payload_identity) if part)
+    return None, None, "custom:" + hashlib.sha256(identity_seed.encode("utf-8")).hexdigest()[:32]
 
 
 def _publication_copy_rank(entry):
@@ -8363,6 +8748,16 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
     known_groups = {}
     for entry in archive:
         if not entry.get("slug"):
+            continue
+        # Unresolved legacy rows stay intact. Known-event consolidation is allowed
+        # only after publication identity is explicit, or when a custom article is
+        # the authoritative canonical record.
+        if not (
+            entry.get("editorial_story_id")
+            or entry.get("is_custom")
+            or entry.get("authoritative_custom")
+            or entry.get("slug") == HOARDING_CANONICAL_SLUG
+        ):
             continue
         key = _known_event_key(_story_text(_event_audit_item(entry, "archive")))
         if key:
@@ -9126,45 +9521,188 @@ def _publication_story_id(item, identity_index):
     if identity_index is None or not isinstance(item, dict):
         return ""
     existing = str(item.get("editorial_story_id") or item.get("_editorial_story_id") or "")
-    if existing and existing in identity_index.safe_story_ids:
+    if existing and existing in getattr(identity_index, "all_story_ids", identity_index.safe_story_ids):
         return existing
     try:
+        # Current generated copy must resolve from the exact source article that the
+        # editorial engine processed this run. Title/slug recovery is legacy-only.
+        if not item.get("_archive_only"):
+            resolver = getattr(identity_index, "resolve_source", None)
+            return resolver(item) if callable(resolver) else ""
         return identity_index.resolve(item)
     except Exception:
         return ""
 
 
 
-def _backfill_archive_editorial_story_ids(archive, identity_index, output_root=None):
-    """Permanently attach safe persistent story IDs to eligible archive rows."""
-    archive = list(archive or [])
-    report = {"version":"1.10.4","records_examined":len(archive),"already_identified":0,"resolved":0,"custom_isolated":0,"unmatched":0,"resolved_records":[],"unmatched_records":[]}
-    if identity_index is None:
-        report["status"] = "identity_index_unavailable"
+def _archive_record_datetime(entry):
+    for key in ("lastmod", "date", "first_published"):
+        parsed = _parse_any_datetime((entry or {}).get(key))
+        if parsed is not None:
+            return parsed.astimezone(timezone.utc)
+    return None
+
+
+def _slug_date(slug):
+    match = re.match(r"^(\d{4}-\d{2}-\d{2})-", str(slug or ""))
+    if not match:
+        return None
+    try:
+        return datetime.strptime(match.group(1), "%Y-%m-%d").replace(tzinfo=timezone.utc)
+    except ValueError:
+        return None
+
+
+def _archive_headline_slug_alignment(entry):
+    """Return deterministic evidence that a live archive label still fits its URL."""
+    headline = str((entry or {}).get("headline") or "")
+    slug = str((entry or {}).get("slug") or "")
+    if not headline or not slug:
+        return {"aligned": False, "reason": "missing_headline_or_slug", "token_similarity": 0.0}
+    if _custom_series_slug_mismatch(entry, slug):
+        return {"aligned": False, "reason": "recurring_custom_edition_slug_mismatch", "token_similarity": 0.0}
+
+    slug_without_date = re.sub(r"^\d{4}-\d{2}-\d{2}-", "", slug)
+    stop = {
+        "the", "a", "an", "and", "or", "of", "to", "in", "on", "at", "for", "from",
+        "with", "after", "before", "as", "is", "are", "was", "were", "this", "that",
+        "new", "says", "say", "florida", "county", "story", "today",
+    }
+    headline_tokens = {t for t in re.sub(r"[^a-z0-9]+", " ", headline.lower()).split() if len(t) > 2 and t not in stop}
+    slug_tokens = {t for t in re.sub(r"[^a-z0-9]+", " ", slug_without_date.lower()).split() if len(t) > 2 and t not in stop}
+    union = headline_tokens | slug_tokens
+    similarity = len(headline_tokens & slug_tokens) / len(union) if union else 1.0
+    slug_dt = _slug_date(slug)
+    record_dt = _archive_record_datetime(entry)
+    date_gap_days = None
+    if slug_dt and record_dt:
+        date_gap_days = (record_dt.date() - slug_dt.date()).days
+
+    # Substantial headline/URL drift several days after the original URL was created
+    # is the signature of the historical overwrite bug. Keep uncertain old pages in
+    # the archive, but never recover them onto a live surface.
+    if date_gap_days is not None and date_gap_days >= 5 and similarity < 0.28:
+        return {
+            "aligned": False,
+            "reason": "headline_slug_event_drift",
+            "token_similarity": round(similarity, 4),
+            "date_gap_days": date_gap_days,
+        }
+    return {
+        "aligned": True,
+        "reason": "aligned",
+        "token_similarity": round(similarity, 4),
+        "date_gap_days": date_gap_days,
+    }
+
+
+def _classify_archive_identity_record(entry, now=None):
+    now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    alignment = _archive_headline_slug_alignment(entry)
+    existing = str((entry or {}).get("editorial_story_id") or "").strip()
+    record_dt = _archive_record_datetime(entry)
+    age_days = (now - record_dt).total_seconds() / 86400 if record_dt else None
+
+    entry["ranking_eligible"] = bool(existing)
+    entry.pop("exclude_from_live_recovery", None)
+    entry.pop("identity_quarantine_reason", None)
+    if not alignment.get("aligned"):
+        entry["legacy_identity_status"] = "quarantined_live_mismatch"
+        entry["ranking_eligible"] = False
+        entry["exclude_from_live_recovery"] = True
+        entry["identity_quarantine_reason"] = alignment.get("reason", "identity_mismatch")
+    elif existing:
+        entry["legacy_identity_status"] = "identified"
+        entry["ranking_eligible"] = True
+    elif age_days is not None and age_days <= FORWARD_IDENTITY_RECENT_DAYS:
+        entry["legacy_identity_status"] = "recent_unresolved"
+        entry["ranking_eligible"] = False
     else:
-        report["status"] = "complete"
-        for entry in archive:
-            existing = str(entry.get("editorial_story_id") or "").strip()
-            if existing and existing in identity_index.safe_story_ids:
-                report["already_identified"] += 1; continue
-            if entry.get("is_custom") or entry.get("authoritative_custom"):
-                report["custom_isolated"] += 1; continue
-            story_id = _publication_story_id(entry, identity_index)
+        entry["legacy_identity_status"] = "legacy_unresolved"
+        entry["ranking_eligible"] = False
+    return {**alignment, "age_days": round(age_days, 2) if age_days is not None else None}
+
+
+def _backfill_archive_editorial_story_ids(archive, identity_index, output_root=None, now=None):
+    """Resolve only recent records by exact source URL and quarantine legacy identity.
+
+    v1.10.4 attempted to replay identity across the entire archive. v1.10.5 keeps
+    historical pages intact and searchable, but only the last 30 days are eligible for
+    exact-source migration. No title, slug, or semantic guess can attach an old record.
+    """
+    archive = list(archive or [])
+    now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    report = {
+        "version": "1.10.5",
+        "scope_days": FORWARD_IDENTITY_RECENT_DAYS,
+        "records_examined": len(archive),
+        "already_identified": 0,
+        "resolved": 0,
+        "custom_isolated": 0,
+        "recent_unmatched": 0,
+        "legacy_unresolved": 0,
+        "quarantined_live_mismatches": 0,
+        "resolved_records": [],
+        "quarantined_records": [],
+    }
+    report["status"] = "complete" if identity_index is not None else "identity_index_unavailable"
+
+    for entry in archive:
+        existing = str(entry.get("editorial_story_id") or "").strip()
+        record_dt = _archive_record_datetime(entry)
+        age_days = (now - record_dt).total_seconds() / 86400 if record_dt else None
+        is_recent = age_days is not None and age_days <= FORWARD_IDENTITY_RECENT_DAYS
+        if existing and (
+            identity_index is None
+            or existing in getattr(identity_index, "all_story_ids", getattr(identity_index, "safe_story_ids", {existing}))
+        ):
+            report["already_identified"] += 1
+        elif entry.get("is_custom") or entry.get("authoritative_custom"):
+            report["custom_isolated"] += 1
+        elif identity_index is not None and is_recent:
+            resolver = getattr(identity_index, "resolve_source", None)
+            story_id = resolver(entry) if callable(resolver) else ""
             if story_id:
                 entry["editorial_story_id"] = story_id
+                entry["identity_origin"] = "recent_exact_source_backfill"
                 report["resolved"] += 1
-                report["resolved_records"].append({"slug":entry.get("slug",""),"headline":entry.get("headline",""),"editorial_story_id":story_id})
+                report["resolved_records"].append({
+                    "slug": entry.get("slug", ""),
+                    "headline": entry.get("headline", ""),
+                    "editorial_story_id": story_id,
+                    "basis": "exact_source_url",
+                })
             else:
-                report["unmatched"] += 1
-                report["unmatched_records"].append({"slug":entry.get("slug",""),"headline":entry.get("headline","")})
+                report["recent_unmatched"] += 1
+        else:
+            report["legacy_unresolved"] += 1
+
+        classification = _classify_archive_identity_record(entry, now=now)
+        if entry.get("exclude_from_live_recovery"):
+            report["quarantined_live_mismatches"] += 1
+            report["quarantined_records"].append({
+                "slug": entry.get("slug", ""),
+                "headline": entry.get("headline", ""),
+                "reason": entry.get("identity_quarantine_reason", ""),
+                "token_similarity": classification.get("token_similarity"),
+                "date_gap_days": classification.get("date_gap_days"),
+            })
+
     if output_root is not None:
         path = Path(output_root) / "data" / "archive-identity-backfill.json"
         path.parent.mkdir(parents=True, exist_ok=True)
         tmp = path.with_suffix(path.suffix + ".tmp")
         tmp.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
         tmp.replace(path)
-    print("  Archive identity backfill: " f"{report['resolved']} resolved, {report['already_identified']} already identified, " f"{report['custom_isolated']} custom isolated, {report['unmatched']} unmatched")
+    print(
+        "  Forward archive identity: "
+        f"{report['resolved']} recent exact-source resolved, "
+        f"{report['already_identified']} identified, "
+        f"{report['legacy_unresolved']} legacy unresolved, "
+        f"{report['quarantined_live_mismatches']} live mismatch quarantine(s)"
+    )
     return archive, report
+
 
 def _publication_canonical_key(entry):
     """Custom first, then oldest public URL, then deeper copy as a tie-breaker."""
@@ -9173,6 +9711,60 @@ def _publication_canonical_key(entry):
     first_published = str(entry.get("first_published") or "")
     quality = -int(entry.get("article_word_count", 0) or 0)
     return (custom_rank, date, first_published, quality, str(entry.get("slug") or ""))
+
+
+def _find_forward_publication_target(item, archive, story_id=""):
+    """Find an update target using explicit identity only."""
+    story_id = str(story_id or "").strip()
+    route = str(item.get("_editorial_route") or "").strip().lower()
+    if story_id and route != "generate_new":
+        matches = [
+            entry for entry in archive or []
+            if str(entry.get("editorial_story_id") or "").strip() == story_id
+            and entry.get("slug")
+        ]
+        if matches:
+            return min(matches, key=_publication_canonical_key), "persistent_story_id"
+
+    exact_source = _find_exact_archive_source_entry(item, archive)
+    if exact_source is not None:
+        existing_id = str(exact_source.get("editorial_story_id") or "").strip()
+        if not story_id or not existing_id or existing_id == story_id:
+            return exact_source, "exact_source_url"
+
+    if item.get("is_weather_alert") and item.get("weather_event_key"):
+        weather_key = item.get("weather_event_key")
+        match = next(
+            (entry for entry in archive or [] if entry.get("weather_event_key") == weather_key),
+            None,
+        )
+        if match:
+            return match, "weather_event_key"
+    return None, "new_publication"
+
+
+def _forward_publication_target_valid(item, entry, story_id, basis):
+    if entry is None:
+        return True, "new_publication"
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return True, "explicit_custom_target"
+    entry_story_id = str(entry.get("editorial_story_id") or "").strip()
+    story_id = str(story_id or "").strip()
+    if story_id and entry_story_id and story_id != entry_story_id:
+        return False, "persistent_story_id_conflict"
+    if basis == "persistent_story_id" and story_id and entry_story_id == story_id:
+        return True, basis
+    if basis == "exact_source_url":
+        incoming = _normalized_external_source_url(
+            item.get("source_url") or item.get("_source_url") or item.get("link")
+        )
+        existing = _normalized_external_source_url(
+            entry.get("source_url") or entry.get("original_url") or entry.get("link")
+        )
+        return (incoming == existing and bool(incoming)), basis if incoming == existing else "source_identity_conflict"
+    if basis == "weather_event_key":
+        return True, basis
+    return False, "unverified_update_target"
 
 
 def _reconcile_archive_publication_identity(archive, identity_index):
@@ -9191,9 +9783,10 @@ def _reconcile_archive_publication_identity(archive, identity_index):
 
     groups = defaultdict(list)
     for entry in archive:
-        story_id = _publication_story_id(entry, identity_index)
+        story_id = str(entry.get("editorial_story_id") or "").strip()
+        if story_id and story_id not in identity_index.safe_story_ids:
+            story_id = ""
         if story_id:
-            entry["editorial_story_id"] = story_id
             groups[story_id].append(entry)
 
     redirects = []
@@ -9264,6 +9857,18 @@ def write_archives(all_categories, top_cat):
     new_count     = 0
     updated_count = 0
     this_run_token_sets = []
+    _forward_identity_report = {
+        "version": FORWARD_IDENTITY_VERSION,
+        "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "new_articles_stamped": 0,
+        "existing_articles_preserved": 0,
+        "exact_source_updates": 0,
+        "publication_holds": [],
+        "target_conflicts": [],
+        "custom_series_repairs": [],
+        "custom_payloads_verified": 0,
+        "legacy_archive_scope_days": FORWARD_IDENTITY_RECENT_DAYS,
+    }
 
     # Canonical cleanup is handled below. Never unlink an already-published
     # duplicate URL: it is retained as a redirect destination so readers and search
@@ -9309,13 +9914,13 @@ def write_archives(all_categories, top_cat):
     # articles may be rewritten into very different TCT headlines; source-backed
     # story identity prevents those rewrites from becoming parallel public URLs.
     _publication_identity = _load_publication_identity_index()
+    archive, _archive_identity_backfill = _backfill_archive_editorial_story_ids(
+        archive, _publication_identity, OUTPUT_DIR
+    )
     archive, _publication_redirects, _publication_report = (
         _reconcile_archive_publication_identity(archive, _publication_identity)
     )
     _canonical_redirects.extend(_publication_redirects)
-    archive, _archive_identity_backfill = _backfill_archive_editorial_story_ids(
-        archive, _publication_identity, OUTPUT_DIR
-    )
 
     heroes = [(top_cat["category_key"], top_cat["category_label"], top_cat["hero"])]
     for cat in all_categories:
@@ -9393,19 +9998,19 @@ def write_archives(all_categories, top_cat):
             print(f"  Skipped thin article before permalink creation: {headline[:60]}")
             continue
 
-        source_url = hero.get("link", "")
+        source_url = (
+            hero.get("source_url") or hero.get("_source_url") or hero.get("link", "")
+        )
+        normalized_source_url = _normalized_external_source_url(source_url)
+        if normalized_source_url:
+            hero["source_url"] = normalized_source_url
         _editorial_story_id = _publication_story_id(hero, _publication_identity)
         if _editorial_story_id:
+            hero["editorial_story_id"] = _editorial_story_id
             hero["_editorial_story_id"] = _editorial_story_id
-            existing = next(
-                (entry for entry in archive
-                 if entry.get("editorial_story_id") == _editorial_story_id),
-                None,
-            )
-        else:
-            existing = None
-        if existing is None:
-            existing = find_canonical_event_entry(hero, archive)
+        existing, _target_basis = _find_forward_publication_target(
+            hero, archive, _editorial_story_id
+        )
 
         # CUSTOM PUBLICATION CONTRACT. A manually submitted article is a complete,
         # immutable editorial payload. It never fuzzy-merges into an older permalink
@@ -9420,7 +10025,60 @@ def write_archives(all_categories, top_cat):
             # Do not let the persistent source-story ID collapse recurring custom
             # editions on a later run. Each submitted payload receives its own ID.
             _editorial_story_id = _custom_story_id
+            hero["editorial_story_id"] = _editorial_story_id
             hero["_editorial_story_id"] = _editorial_story_id
+        elif hero.get("is_custom") or hero.get("authoritative_custom"):
+            _editorial_story_id = str((existing or {}).get("editorial_story_id") or "").strip()
+            if not _editorial_story_id:
+                custom_seed = "|".join(filter(None, [
+                    _custom_series_key(hero),
+                    _custom_edition_marker(hero),
+                    hero.get("custom_body_hash") or _custom_body_hash(hero.get("body", "")),
+                ]))
+                _editorial_story_id = "custom:" + hashlib.sha256(
+                    custom_seed.encode("utf-8")
+                ).hexdigest()[:32]
+            hero["editorial_story_id"] = _editorial_story_id
+            hero["_editorial_story_id"] = _editorial_story_id
+
+        if existing is not None and _target_basis == "new_publication":
+            # Explicit custom targeting may have selected an archive row after the
+            # initial forward lookup.
+            _target_basis = "explicit_custom_target"
+
+        if not (hero.get("is_custom") or hero.get("authoritative_custom") or hero.get("is_weather_alert")):
+            if not _editorial_story_id and existing is not None:
+                _editorial_story_id = str(existing.get("editorial_story_id") or "").strip()
+                if _editorial_story_id:
+                    hero["editorial_story_id"] = _editorial_story_id
+                    hero["_editorial_story_id"] = _editorial_story_id
+            if not _editorial_story_id:
+                _forward_identity_report["publication_holds"].append({
+                    "headline": headline,
+                    "source_url": normalized_source_url,
+                    "reason": "missing_current_run_persistent_story_id",
+                })
+                print(
+                    f"  FORWARD IDENTITY HOLD: '{headline[:60]}' has no current persistent story ID"
+                )
+                continue
+
+        _target_valid, _target_reason = _forward_publication_target_valid(
+            hero, existing, _editorial_story_id, _target_basis
+        )
+        if not _target_valid:
+            _forward_identity_report["target_conflicts"].append({
+                "headline": headline,
+                "candidate_slug": (existing or {}).get("slug", ""),
+                "story_id": _editorial_story_id,
+                "reason": _target_reason,
+            })
+            print(
+                f"  FORWARD IDENTITY QUARANTINE: refused target "
+                f"'{(existing or {}).get('slug','')}' for '{headline[:55]}' ({_target_reason})"
+            )
+            existing = None
+            _target_basis = "new_publication_after_conflict"
 
         # HARD PROTECTION: an archived CUSTOM article is never overwritten by anything,
         # and a feed story that matches one is DROPPED rather than published as its own
@@ -9433,21 +10091,6 @@ def write_archives(all_categories, top_cat):
             print(f"  PROTECTED: dropping feed story '{headline[:45]}' — already covered "
                   f"by custom article '{existing.get('headline','')[:45]}'")
             continue
-
-        # FINAL GATE BEFORE OVERWRITING A PUBLISHED PERMALINK.
-        # find_matching_entry uses token heuristics, which have wrongly merged distinct
-        # stories and destroyed live URLs. Before replacing the content at an existing
-        # URL, have the model confirm it is genuinely the same news event.
-        #
-        # Skipped when:
-        #   - the headline is unchanged (definitionally the same story, no risk), or
-        #   - it is a weather alert (matched on a stable event key, not fuzzy tokens).
-        # On refusal, existing is cleared -> a NEW article is created at a new URL and
-        # the published one is left intact.
-        if existing and not hero.get("is_weather_alert") and not (hero.get("is_custom") or hero.get("authoritative_custom")):
-            if (existing.get("headline", "").strip().lower() != headline.strip().lower()):
-                if not confirm_same_story(headline, hero.get("teaser", "") or hero.get("body", "")[:250], existing):
-                    existing = None
 
         # Skip cross-category duplicates within the same run
         if not existing and _is_duplicate_headline(headline, this_run_token_sets):
@@ -9474,9 +10117,13 @@ def write_archives(all_categories, top_cat):
             _related = [e for e in archive
                         if e.get("category_key") == cat_key and e.get("slug") != slug]
             _related.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
-            (articles_dir / f"{slug}.html").write_text(
-                render_article_page(hero, cat_label, cat_key, today, slug, related=_related), encoding="utf-8"
+            _page_html = render_article_page(
+                hero, cat_label, cat_key, today, slug, related=_related
             )
+            validate_custom_body_fidelity(hero, _page_html)
+            (articles_dir / f"{slug}.html").write_text(_page_html, encoding="utf-8")
+            if hero.get("is_custom") or hero.get("authoritative_custom"):
+                _forward_identity_report["custom_payloads_verified"] += 1
             existing["headline"]  = headline
             existing["teaser"]    = hero.get("teaser","") or hero.get("body","")[:180]
             existing["image_url"] = hero.get("image_url","")
@@ -9502,10 +10149,28 @@ def write_archives(all_categories, top_cat):
                 existing["custom_event_key"] = _known_event_key(
                     " ".join([headline, hero.get("teaser", ""), hero.get("body", "")[:500]])
                 )
-            if source_url:
-                existing["source_url"] = source_url
+                existing["custom_series_key"] = _custom_series_key(hero)
+                existing["custom_edition_key"] = _custom_edition_marker(hero)
+            if normalized_source_url:
+                existing["source_url"] = normalized_source_url
+            if hero.get("source_headline"):
+                existing["source_headline"] = hero.get("source_headline")
+            if hero.get("_editorial_event_key"):
+                existing["editorial_event_key"] = hero.get("_editorial_event_key")
+            if hero.get("_editorial_route"):
+                existing["editorial_route"] = hero.get("_editorial_route")
             if _editorial_story_id:
                 existing["editorial_story_id"] = _editorial_story_id
+                existing["identity_origin"] = (
+                    hero.get("_editorial_identity_origin") or "forward_publication_update"
+                )
+                existing["legacy_identity_status"] = "identified"
+                existing["ranking_eligible"] = True
+                existing.pop("exclude_from_live_recovery", None)
+                existing.pop("identity_quarantine_reason", None)
+            if _target_basis == "exact_source_url":
+                _forward_identity_report["exact_source_updates"] += 1
+            _forward_identity_report["existing_articles_preserved"] += 1
             updated_count += 1
         else:
             # New story — create new page
@@ -9523,9 +10188,13 @@ def write_archives(all_categories, top_cat):
             _related = [e for e in archive
                         if e.get("category_key") == cat_key and e.get("slug") != slug]
             _related.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
-            (articles_dir / f"{slug}.html").write_text(
-                render_article_page(hero, cat_label, cat_key, today, slug, related=_related), encoding="utf-8"
+            _page_html = render_article_page(
+                hero, cat_label, cat_key, today, slug, related=_related
             )
+            validate_custom_body_fidelity(hero, _page_html)
+            (articles_dir / f"{slug}.html").write_text(_page_html, encoding="utf-8")
+            if hero.get("is_custom") or hero.get("authoritative_custom"):
+                _forward_identity_report["custom_payloads_verified"] += 1
             archive.append({
                 "slug": slug, "headline": headline,
                 "teaser": hero.get("teaser","") or hero.get("body","")[:180],
@@ -9538,7 +10207,10 @@ def write_archives(all_categories, top_cat):
                 "first_published": _now_eastern_rfc822(),
                 "image_url": hero.get("image_url",""),
                 "feed_url": hero.get("feed_url",""),
-                "source_url": hero.get("link",""),
+                "source_url": normalized_source_url,
+                "source_headline": hero.get("source_headline", ""),
+                "editorial_event_key": hero.get("_editorial_event_key", ""),
+                "editorial_route": hero.get("_editorial_route", ""),
                 "is_weather_alert": bool(hero.get("is_weather_alert")),
                 "is_custom": bool(hero.get("is_custom")),
                 "authoritative_custom": bool(hero.get("is_custom")),
@@ -9551,12 +10223,49 @@ def write_archives(all_categories, top_cat):
                 "custom_event_key": _known_event_key(
                     " ".join([headline, hero.get("teaser", ""), hero.get("body", "")[:500]])
                 ) if hero.get("is_custom") else "",
+                "custom_series_key": _custom_series_key(hero) if hero.get("is_custom") else "",
+                "custom_edition_key": _custom_edition_marker(hero) if hero.get("is_custom") else "",
                 "article_word_count": _word_count(hero.get("body", "")),
                 "article_paragraph_count": _paragraph_count(hero.get("body", "")),
                 "event_url": hero.get("event_url", ""),
                 "event_link_text": hero.get("event_link_text", ""),
                 "editorial_story_id": _editorial_story_id,
+                "identity_origin": (
+                    hero.get("_editorial_identity_origin")
+                    or ("custom_payload_identity" if hero.get("is_custom") else "forward_publication_create")
+                ),
+                "legacy_identity_status": "identified",
+                "ranking_eligible": True,
             })
+            _forward_identity_report["new_articles_stamped"] += 1
+
+            superseded_custom_slug = str(hero.get("_superseded_custom_slug") or "").strip()
+            if superseded_custom_slug and superseded_custom_slug != slug:
+                # Different report editions are different articles. Preserve the old
+                # HTML page instead of redirecting it to the new week, but quarantine
+                # any stale archive metadata so it cannot recover as a live hero/card.
+                for prior_entry in archive:
+                    if prior_entry.get("slug") != superseded_custom_slug:
+                        continue
+                    prior_entry["legacy_identity_status"] = "custom_series_superseded"
+                    prior_entry["ranking_eligible"] = False
+                    prior_entry["exclude_from_live_recovery"] = True
+                    prior_entry["identity_quarantine_reason"] = (
+                        "recurring_custom_edition_superseded"
+                    )
+                _forward_identity_report["custom_series_repairs"].append({
+                    "source_slug": superseded_custom_slug,
+                    "target_slug": slug,
+                    "headline": headline,
+                    "series_key": _custom_series_key(hero),
+                    "edition_key": _custom_edition_marker(hero),
+                    "old_page_preserved": True,
+                    "redirect_created": False,
+                })
+                print(
+                    "  Custom recurring edition separated: "
+                    f"preserved {superseded_custom_slug}; published {slug}"
+                )
             new_count += 1
 
     # FINAL production enforcement: article generation above may have recreated a
@@ -9569,8 +10278,20 @@ def write_archives(all_categories, top_cat):
         archive, _publication_identity, OUTPUT_DIR
     )
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
+    _forward_identity_report.update({
+        "archive_identity": _archive_identity_backfill,
+        "active_archive_records": len(archive),
+        "publication_behavior": "forward_identity_required",
+    })
+    _forward_identity_path = OUTPUT_DIR / "data" / "forward-publication-identity.json"
+    _forward_identity_path.parent.mkdir(parents=True, exist_ok=True)
+    _forward_identity_path.write_text(
+        json.dumps(_forward_identity_report, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
     _publication_report.update({
         "archive_identity_backfill": _archive_identity_backfill,
+        "forward_publication_identity": _forward_identity_report,
         "generated_items_coalesced": _publication_items_coalesced,
         "redirects_created": len(_publication_redirects),
         "active_archive_records": len(archive),
@@ -9593,6 +10314,94 @@ def write_archives(all_categories, top_cat):
     (OUTPUT_DIR / "news-sitemap.xml").write_text(update_news_sitemap(archive), encoding="utf-8")
     print(f"  Archived {new_count} new, updated {updated_count} existing ({len(archive)} total)")
     return regression_report
+
+
+def validate_forward_live_identity(all_categories, top_cat=None, output_dir=None):
+    """Block any live placement whose permalink identity is contradictory."""
+    root = Path(output_dir or OUTPUT_DIR)
+    archive = load_archive(root / "archive.json")
+    by_slug = {str(entry.get("slug") or ""): entry for entry in archive if entry.get("slug")}
+    violations = []
+    checked = 0
+
+    placements = [("front_page", (top_cat or {}).get("hero") or {})]
+    for category in all_categories or []:
+        key = str(category.get("category_key") or "")
+        placements.append((f"{key}:hero", category.get("hero") or {}))
+        placements.extend((f"{key}:card", card) for card in category.get("cards") or [])
+
+    for surface, item in placements:
+        if not item or item.get("_section_placeholder") or _is_nonstory_placeholder(item):
+            continue
+        checked += 1
+        slug = str(item.get("_archived_slug") or item.get("slug") or "").strip()
+        if not slug:
+            link = str(item.get("link") or "")
+            if "/articles/" in link:
+                slug = link.split("/articles/", 1)[1].split("?", 1)[0].split("#", 1)[0]
+                if slug.endswith(".html"):
+                    slug = slug[:-5]
+        entry = by_slug.get(slug)
+        if entry is None:
+            violations.append({
+                "surface": surface,
+                "headline": item.get("headline", ""),
+                "slug": slug,
+                "reason": "archive_entry_missing",
+            })
+            continue
+        if entry.get("exclude_from_live_recovery"):
+            violations.append({
+                "surface": surface,
+                "headline": item.get("headline", ""),
+                "slug": slug,
+                "reason": entry.get("identity_quarantine_reason") or "archive_identity_quarantined",
+            })
+            continue
+        item_story_id = str(
+            item.get("editorial_story_id") or item.get("_editorial_story_id") or ""
+        ).strip()
+        archive_story_id = str(entry.get("editorial_story_id") or "").strip()
+        if item_story_id and archive_story_id and item_story_id != archive_story_id:
+            violations.append({
+                "surface": surface,
+                "headline": item.get("headline", ""),
+                "slug": slug,
+                "reason": "live_archive_story_id_conflict",
+                "live_story_id": item_story_id,
+                "archive_story_id": archive_story_id,
+            })
+            continue
+        if not item.get("_archive_only") and not archive_story_id:
+            violations.append({
+                "surface": surface,
+                "headline": item.get("headline", ""),
+                "slug": slug,
+                "reason": "forward_published_article_missing_story_id",
+            })
+
+    report = {
+        "version": FORWARD_IDENTITY_VERSION,
+        "generated_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "status": "failed" if violations else "passed",
+        "passed": not violations,
+        "checked_live_placements": checked,
+        "violation_count": len(violations),
+        "violations": violations,
+    }
+    path = root / "data" / "forward-live-identity-contract.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if violations:
+        raise RuntimeError(
+            "Forward live identity contract FAILED: "
+            + "; ".join(
+                f"{row.get('headline','')[:45]} ({row.get('reason','')})"
+                for row in violations[:5]
+            )
+        )
+    print(f"  Forward live identity contract PASSED ({checked} live placement(s))")
+    return report
 
 
 def validate_live_permalink_integrity(all_categories, top_cat=None, output_dir=None):
@@ -9846,10 +10655,15 @@ def ensure_all_category_sections(all_categories, min_cards=6):
     archive = _sanitize_authoritative_custom_archive(
         load_archive(OUTPUT_DIR / "archive.json"), OUTPUT_DIR / "articles"
     )
+    archive, _ = _backfill_archive_editorial_story_ids(
+        archive, _load_publication_identity_index(), output_root=None
+    )
     archive.sort(key=lambda e: e.get("lastmod") or e.get("date", ""), reverse=True)
 
     def entry_matches(e, category_key):
         if not e.get("headline") or not e.get("slug"):
+            return False
+        if e.get("exclude_from_live_recovery"):
             return False
         if not _archive_entry_publishable(e):
             return False
@@ -9893,6 +10707,12 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             "_archived_slug": e["slug"],
             "_archive_only": True,
             "_archive_verified_quality": True,
+            "editorial_story_id": e.get("editorial_story_id", ""),
+            "_editorial_story_id": e.get("editorial_story_id", ""),
+            "is_custom": bool(e.get("is_custom") or e.get("authoritative_custom")),
+            "authoritative_custom": bool(e.get("is_custom") or e.get("authoritative_custom")),
+            "ranking_eligible": bool(e.get("ranking_eligible")),
+            "legacy_identity_status": e.get("legacy_identity_status", ""),
             "article_word_count": _archive_article_metrics(e)[0],
         }
 
@@ -9989,6 +10809,111 @@ def ensure_all_category_sections(all_categories, min_cards=6):
 
 
 
+def _normalized_external_source_url(value):
+    """Return one deterministic external article identity, never a TCT permalink."""
+    raw = str(value or "").strip()
+    if not raw or "/articles/" in raw and "treasurecoast.today" in raw.lower():
+        return ""
+    if normalize_source_identity_url is not None:
+        try:
+            return normalize_source_identity_url(raw) or ""
+        except Exception:
+            pass
+    try:
+        parts = urlsplit(raw)
+    except ValueError:
+        return ""
+    if not parts.scheme or not parts.netloc:
+        return ""
+    query = [
+        (key, val) for key, val in parse_qsl(parts.query, keep_blank_values=True)
+        if not key.lower().startswith("utm_") and key.lower() not in {"gclid", "fbclid", "oc"}
+    ]
+    return urlunsplit((parts.scheme.lower(), parts.netloc.lower(), parts.path.rstrip("/"), urlencode(query), ""))
+
+
+def _remember_current_run_editorial_identity(entry, row):
+    """Persist the exact current-run registry decision for later publication.
+
+    The generated headline may be a substantial rewrite of the source title. The
+    source URL is the durable bridge between the audit decision and the final TCT
+    article, so no fuzzy title recovery is needed at permalink-write time.
+    """
+    if not isinstance(entry, dict) or not isinstance(row, dict):
+        return False
+    story_id = str(row.get("story_id") or "").strip()
+    source_url = _normalized_external_source_url(row.get("source_url") or entry.get("link"))
+    if not story_id or not source_url:
+        return False
+    record = {
+        "story_id": story_id,
+        "event_key": str(row.get("event_key") or ""),
+        "source_url": source_url,
+        "source_headline": str(entry.get("title") or row.get("headline") or ""),
+        "route": str(row.get("route") or ""),
+    }
+    prior = CURRENT_RUN_EDITORIAL_IDENTITIES.get(source_url)
+    # The same source URL must never point to two different persistent stories in
+    # one run. Mark it ambiguous rather than silently choosing one.
+    if prior and prior.get("story_id") != story_id:
+        CURRENT_RUN_EDITORIAL_IDENTITIES[source_url] = {"ambiguous": True, "source_url": source_url}
+        return False
+    CURRENT_RUN_EDITORIAL_IDENTITIES[source_url] = record
+    entry["editorial_story_id"] = story_id
+    entry["_editorial_story_id"] = story_id
+    entry["_editorial_event_key"] = record["event_key"]
+    entry["_editorial_route"] = record["route"]
+    entry["_editorial_identity_origin"] = "current_run_editorial_decision"
+    return True
+
+
+def _stamp_current_run_story_ids(data, headlines):
+    """Attach exact current-run story IDs to generated or cached category copy."""
+    if not isinstance(data, dict):
+        return 0
+    headlines = list(headlines or [])
+    stamped = 0
+    for item in [data.get("hero")] + list(data.get("cards") or []):
+        if not isinstance(item, dict) or item.get("is_custom") or item.get("authoritative_custom"):
+            continue
+        # Never trust a cached identity without re-verifying it against this run's
+        # exact source decision.
+        for key in (
+            "editorial_story_id", "_editorial_story_id", "_editorial_event_key",
+            "_editorial_route", "_editorial_identity_origin",
+        ):
+            item.pop(key, None)
+        source = None
+        idx = item.get("source_index")
+        if idx is not None:
+            try:
+                source = headlines[int(idx) - 1]
+            except (IndexError, TypeError, ValueError):
+                source = None
+        source_url = ""
+        if isinstance(source, dict):
+            source_url = source.get("link", "")
+        if not source_url:
+            source_url = item.get("source_url") or item.get("_source_url") or item.get("link", "")
+        normalized = _normalized_external_source_url(source_url)
+        identity = CURRENT_RUN_EDITORIAL_IDENTITIES.get(normalized, {}) if normalized else {}
+        if identity.get("ambiguous"):
+            continue
+        story_id = str(identity.get("story_id") or (source or {}).get("editorial_story_id") or "").strip()
+        if not story_id:
+            continue
+        item["editorial_story_id"] = story_id
+        item["_editorial_story_id"] = story_id
+        item["_editorial_event_key"] = str(identity.get("event_key") or (source or {}).get("_editorial_event_key") or "")
+        item["_editorial_route"] = str(identity.get("route") or (source or {}).get("_editorial_route") or "")
+        item["_editorial_identity_origin"] = "current_run_editorial_decision"
+        item["source_url"] = normalized or str(source_url or "")
+        if isinstance(source, dict) and source.get("title"):
+            item["source_headline"] = source.get("title")
+        stamped += 1
+    return stamped
+
+
 def _load_editorial_engine_audit():
     """Load the shadow editorial engine without changing publication behavior."""
     if EditorialEngine is None:
@@ -10053,6 +10978,7 @@ def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, a
                 "canonical_source": getattr(result, "canonical_source", ""),
                 "canonical_url": getattr(result, "canonical_url", ""),
             }
+            _remember_current_run_editorial_identity(entry, row)
             audit_rows.append(row)
             print(
                 "  EDITORIAL AUDIT:",
@@ -10312,9 +11238,11 @@ def _write_editorial_observability(engine, audit_rows, activation_run=None):
 
 
 def main():
+    global CURRENT_RUN_EDITORIAL_IDENTITIES
     _build_started = time.perf_counter()
     _stage_started = _build_started
     GENERATION_CACHE.reset_stats()
+    CURRENT_RUN_EDITORIAL_IDENTITIES = {}
     print("Treasure Coast Today — building site...")
     _cache_counts = GENERATION_CACHE.counts()
     print(
@@ -10418,6 +11346,7 @@ def main():
         _cached_category = GENERATION_CACHE.get("categories", _category_cache_key)
         if _cached_category is not _CACHE_MISS:
             data = copy.deepcopy(_cached_category.get("data", {}))
+            _stamp_current_run_story_ids(data, headlines)
             data = _sanitize_nonstory_category(data, cat_config["label"])
             if data.get("hero") and not data.get("_drop_category") and data.get("category_key") == cat_key:
                 all_categories.append(data)
@@ -10640,6 +11569,12 @@ def main():
             # The key includes every selected source's content hash, so a new or
             # materially updated story invalidates only the affected category.
             if data in all_categories:
+                _stamped_story_ids = _stamp_current_run_story_ids(data, headlines)
+                if _stamped_story_ids:
+                    print(
+                        f"  Forward identity stamped {_stamped_story_ids} generated placement(s) "
+                        "from current-run editorial decisions"
+                    )
                 GENERATION_CACHE.put(
                     "categories",
                     _category_cache_key,
@@ -10729,6 +11664,8 @@ def main():
                     target.setdefault("cards", []).append(art)
                 print(f"  Custom article: '{art['headline'][:50]}' -> {ckey}")
 
+    _custom_category_repair = enforce_custom_category_placement(all_categories)
+
     # v1.9.2 controlled activation. The existing guarded same-story/stage
     # suppressions now pass through the same preflight, kill switch, action cap,
     # rollback, and action log as exact deterministic identity suppressions.
@@ -10774,6 +11711,7 @@ def main():
         current_customs=custom_articles,
         articles_dir=OUTPUT_DIR / "articles",
     )
+    _custom_category_repair_after_rebind = enforce_custom_category_placement(all_categories)
 
     # Front page hero selection
     top_cat = select_front_page_hero(all_categories)
@@ -10826,6 +11764,9 @@ def main():
             f"{_post_publication_rebound} canonical placement(s)"
         )
 
+    enforce_custom_category_placement(all_categories)
+    validate_custom_category_placement(all_categories, OUTPUT_DIR)
+    validate_forward_live_identity(all_categories, top_cat, OUTPUT_DIR)
     validate_live_permalink_integrity(all_categories, top_cat, OUTPUT_DIR)
     print(f"  Timing: archive, publication identity and permalink gates {time.perf_counter() - _stage_started:.1f}s")
     _stage_started = time.perf_counter()
