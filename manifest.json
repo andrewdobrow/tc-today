@@ -1,46 +1,19 @@
 {
-  "engine": "TCT Editorial Engine",
-  "version": "1.10.1",
-  "release": "unique-homepage-ranking-correction",
-  "base_release": "1.10.0 homepage ranking recommendations",
-  "severity": "controlled production expansion",
-  "purpose": "Deduplicate cross-category homepage placements before ranking, improve persistent story matching, lock all custom articles in place, and report enforcement readiness honestly.",
-  "contracts": {
-    "mode": "recommend",
-    "hero_changes_enabled": false,
-    "card_reordering_enabled": false,
-    "publication_behavior_changed": false,
-    "custom_pin_positions_preserved": true,
-    "duplicate_enforcement_preserved": true,
-    "custom_authority_lock_preserved": true,
-    "nonstory_publication_lock_preserved": true,
-    "permalink_and_regression_gates_preserved": true,
-    "deduplicate_cross_category_placements": true,
-    "custom_articles_position_locked": true,
-    "minimum_registry_match_rate_for_review": 0.8
-  },
-  "output": {
-    "report": "data/homepage-ranking-recommendations.json",
-    "maximum_reported_moves": 10,
-    "ranking_basis": "one canonical recommendation item per unique story; persistent editorial score with labeled fallback for unmatched cards"
-  },
-  "validation": {
-    "workflow_relevant_tests_passed": 242,
-    "focused_ranking_tests_passed": 10,
-    "python_compilation": "passed",
-    "workflow_exclusions": [
-      "tests/test_canonical_identity.py",
-      "tests/test_matcher_contract.py"
-    ],
-    "exclusion_reason": "Legacy fixtures require a separate engine.py artifact not used by the production workflow."
-  },
+  "release": "v1.10.2",
+  "name": "Freshness Audit and Ranking Coverage",
+  "base_release": "v1.10.1",
   "files": [
     "scripts/generate.py",
     "tct_engine/ranking_recommendations.py",
-    "tct_engine/observability.py",
-    "tct_engine/__init__.py",
     "tests/test_ranking_recommendations.py",
-    "tests/test_ranking_recommendation_integration.py",
+    "tests/test_hero_staleness_contract.py",
     "manifest.json"
-  ]
+  ],
+  "behavior": {
+    "same_day_never_stale": true,
+    "under_18_hours_never_stale": true,
+    "excluded_candidates_reported": true,
+    "recent_high_urgency_exclusion_blocks_readiness": true,
+    "live_ranking_mutation": false
+  }
 }

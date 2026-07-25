@@ -154,3 +154,24 @@ def test_low_registry_match_rate_is_explicitly_not_ready_for_enforcement():
     report = build_homepage_ranking_recommendations(cards, {}, registry=_registry())
     assert report["summary"]["enforcement_readiness"] == "not_ready"
     assert "Fewer than 80%" in report["summary"]["enforcement_readiness_reason"]
+
+
+def test_recent_high_urgency_exclusion_blocks_enforcement_readiness():
+    report = build_homepage_ranking_recommendations(
+        _cards(),
+        {},
+        registry=_registry(),
+        excluded_candidates=[{
+            "headline": "3 arrested in death of 3-month-old",
+            "category_key": "st_lucie",
+            "urgency_score": 9,
+            "stale": True,
+            "reason": "past_day_reference:thursday",
+            "date_value": "2026-07-25",
+            "age_hours": 2.0,
+        }],
+    )
+    assert report["summary"]["recent_high_urgency_exclusions"] == 1
+    assert report["summary"]["enforcement_readiness"] == "not_ready"
+    assert "Recent high-urgency" in report["summary"]["enforcement_readiness_reason"]
+    assert report["excluded_candidates"][0]["headline"].startswith("3 arrested")

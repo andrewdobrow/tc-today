@@ -3170,6 +3170,8 @@ def format_age(published_str):
         return ""
 
 
+HERO_PREFILTER_AUDIT = []
+
 def select_front_page_hero(all_categories):
     """Use Claude to pick the most front-page-worthy hero across all categories.
     This is a HYPERLOCAL site — the best hero is the story that matters most to
@@ -3244,47 +3246,85 @@ def select_front_page_hero(all_categories):
         "breaking", "moments ago", "earlier today",
     ]
 
-    def _is_stale(cat):
-        hero = cat["hero"]
-        content = (hero.get("teaser", "") + " " + hero.get("body", "")[:800]).lower()
-        # Fresh-development language wins regardless of timestamp
-        if any(p in content for p in _fresh_dev_phrases):
-            return False
-        # Check for past day-name references (e.g. "Thursday" when today is Saturday)
-        for day in _stale_day_names:
-            # Check the day appears as a standalone word
-            if f" {day} " in content or content.startswith(f"{day} ") or f" {day}." in content or f" {day}," in content:
-                return True
-        # Check for stale-event phrases
-        if any(p in content for p in _stale_event_phrases):
-            return True
-        # Check timestamp — 18+ hours old with no fresh-development language is stale.
-        # published_raw holds the real RFC-822 timestamp; published is a display
-        # string ("Jul 2, 3:45 PM ET") so check the raw field first.
-        for _datefield in ("published_raw", "date", "published"):
-            pub = hero.get(_datefield, "")
+    def _parse_hero_datetime(hero):
+        """Return the first trustworthy publication datetime and its source field."""
+        for _datefield in ("published_raw", "date", "published", "lastmod", "updated"):
+            pub = str(hero.get(_datefield, "") or "").strip()
             if not pub:
                 continue
             try:
-                if ("," in pub and ":" in pub) or pub.count(":") >= 1 and any(m in pub for m in ["GMT","+0","-0","Mon","Tue","Wed","Thu","Fri","Sat","Sun"]):
-                    dt = parsedate_to_datetime(pub).astimezone(_tz.utc)
-                elif "-" in pub[:10]:
+                if ("," in pub and ":" in pub) or (pub.count(":") >= 1 and any(m in pub for m in ["GMT", "+0", "-0", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"])):
+                    dt = parsedate_to_datetime(pub)
+                    if dt.tzinfo is None:
+                        dt = dt.replace(tzinfo=_tz.utc)
+                    return dt.astimezone(_tz.utc), _datefield, pub
+                if "-" in pub[:10]:
+                    # Date-only values are publication dates, not midnight-expiry timestamps.
                     dt = datetime.strptime(pub[:10], "%Y-%m-%d").replace(tzinfo=_tz.utc)
-                else:
-                    continue  # Display string we can't reliably parse — skip
-                hrs = (_now - dt).total_seconds() / 3600
-                if hrs >= 18:
-                    return True
-                return False  # Got a valid parse and it's fresh — done
+                    return dt, _datefield, pub
             except Exception:
                 continue
-        return False
+        return None, "", ""
 
-    fresh_candidates = [c for c in candidates if not _is_stale(c)]
+    def _stale_assessment(cat):
+        hero = cat["hero"]
+        content = (hero.get("teaser", "") + " " + hero.get("body", "")[:800]).lower()
+        dt, date_field, raw_date = _parse_hero_datetime(hero)
+        age_hours = None
+        same_day = False
+        if dt is not None:
+            age_hours = (_now - dt).total_seconds() / 3600
+            # Same publication calendar date is never stale. This protects fresh
+            # same-day reporting whose body legitimately mentions an earlier weekday.
+            same_day = dt.date() == _now.date()
+            if same_day or age_hours < 18:
+                return {
+                    "stale": False,
+                    "reason": "same_day_publication" if same_day else "published_within_18_hours",
+                    "date_field": date_field,
+                    "date_value": raw_date,
+                    "age_hours": round(age_hours, 2),
+                }
+
+        if any(p in content for p in _fresh_dev_phrases):
+            return {"stale": False, "reason": "fresh_development_language", "date_field": date_field, "date_value": raw_date, "age_hours": age_hours}
+
+        for day in _stale_day_names:
+            if f" {day} " in content or content.startswith(f"{day} ") or f" {day}." in content or f" {day}," in content:
+                return {"stale": True, "reason": f"past_day_reference:{day}", "date_field": date_field, "date_value": raw_date, "age_hours": age_hours}
+        if any(p in content for p in _stale_event_phrases):
+            phrase = next(p for p in _stale_event_phrases if p in content)
+            return {"stale": True, "reason": f"stale_event_phrase:{phrase}", "date_field": date_field, "date_value": raw_date, "age_hours": age_hours}
+        if age_hours is not None and age_hours >= 18:
+            return {"stale": True, "reason": "published_18_plus_hours_ago", "date_field": date_field, "date_value": raw_date, "age_hours": round(age_hours, 2)}
+        return {"stale": False, "reason": "no_reliable_stale_signal", "date_field": date_field, "date_value": raw_date, "age_hours": age_hours}
+
+    def _is_stale(cat):
+        return bool(_stale_assessment(cat).get("stale"))
+
+    global HERO_PREFILTER_AUDIT
+    HERO_PREFILTER_AUDIT = []
+    fresh_candidates = []
+    for _candidate in candidates:
+        _assessment = _stale_assessment(_candidate)
+        _audit_row = {
+            "headline": _candidate.get("hero", {}).get("headline", ""),
+            "category_key": _candidate.get("category_key", ""),
+            "urgency_score": int(_candidate.get("hero", {}).get("urgency_score", 0) or 0),
+            **_assessment,
+        }
+        if _assessment.get("stale"):
+            HERO_PREFILTER_AUDIT.append(_audit_row)
+        else:
+            fresh_candidates.append(_candidate)
     if fresh_candidates:
-        filtered_out = [c["hero"].get("headline", "")[:60] for c in candidates if c not in fresh_candidates]
-        if filtered_out:
-            print(f"  Hero pre-filter excluded {len(filtered_out)} stale candidate(s): {filtered_out}")
+        if HERO_PREFILTER_AUDIT:
+            for _row in HERO_PREFILTER_AUDIT:
+                print(
+                    "  Hero pre-filter excluded stale candidate: "
+                    f"{_row['headline'][:60]} | reason={_row['reason']} | "
+                    f"date={_row.get('date_value') or 'unknown'} | age_hours={_row.get('age_hours')}"
+                )
         candidates = fresh_candidates
     else:
         print(f"  Hero pre-filter: no fresh candidates, keeping all for Claude to decide")
@@ -3874,6 +3914,7 @@ def render_index(all_categories, top_cat):
                 archive=archive_for_links,
                 output_path=OUTPUT_DIR / "data" / "homepage-ranking-recommendations.json",
                 max_recommendations=10,
+                excluded_candidates=HERO_PREFILTER_AUDIT,
             )
             _ranking_summary = _ranking_report.get("summary", {})
             print(

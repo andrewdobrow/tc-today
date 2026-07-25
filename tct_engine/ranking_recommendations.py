@@ -234,6 +234,7 @@ def build_homepage_ranking_recommendations(
     archive: Sequence[Mapping[str, Any]] = (),
     max_recommendations: int = 10,
     generated_at: str | None = None,
+    excluded_candidates: Sequence[Mapping[str, Any]] = (),
 ) -> dict[str, Any]:
     """Return a deduplicated recommendation report without mutating cards or hero."""
     original_snapshot = deepcopy(list(cards))
@@ -336,6 +337,15 @@ def build_homepage_ranking_recommendations(
     now = generated_at or datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
     matched = sum(1 for row in unique_rows if row["story_id"])
     fallback = len(unique_rows) - matched
+    excluded_candidates = [dict(row) for row in excluded_candidates]
+    recent_high_urgency_exclusions = [
+        row for row in excluded_candidates
+        if int(row.get("urgency_score", 0) or 0) >= 8
+        and (row.get("age_hours") is None or float(row.get("age_hours") or 0) < 24)
+    ]
+    match_ready = bool(len(unique_rows) > 0 and matched / len(unique_rows) >= 0.8)
+    exclusion_ready = not recent_high_urgency_exclusions
+    enforcement_ready = match_ready and exclusion_ready
     return {
         "schema_version": 2,
         "version": RANKING_RECOMMENDATION_VERSION,
@@ -366,11 +376,17 @@ def build_homepage_ranking_recommendations(
             "recommended_moves": len(moves),
             "unchanged_positions": len(unique_rows) - len(moves),
             "reported_moves": min(len(moves), max_recommendations),
-            "enforcement_readiness": "eligible_for_review" if (len(unique_rows) > 0 and matched / len(unique_rows) >= 0.8) else "not_ready",
+            "excluded_candidates": len(excluded_candidates),
+            "recent_high_urgency_exclusions": len(recent_high_urgency_exclusions),
+            "enforcement_readiness": "eligible_for_review" if enforcement_ready else "not_ready",
             "enforcement_readiness_reason": (
-                "At least 80% of unique cards matched persistent story IDs"
-                if (len(unique_rows) > 0 and matched / len(unique_rows) >= 0.8)
-                else "Fewer than 80% of unique cards matched persistent story IDs"
+                "At least 80% of unique cards matched persistent story IDs and no recent high-urgency candidate was filtered"
+                if enforcement_ready
+                else (
+                    "Recent high-urgency candidate was excluded before ranking"
+                    if recent_high_urgency_exclusions
+                    else "Fewer than 80% of unique cards matched persistent story IDs"
+                )
             ),
         },
         "current_order": [row["headline"] for row in sorted(unique_rows, key=lambda row: row["current_position"])],
@@ -378,6 +394,8 @@ def build_homepage_ranking_recommendations(
         "recommendations": moves[:max_recommendations],
         "items": sorted(recommended, key=lambda row: row["recommended_position"]),
         "excluded_duplicate_placements": duplicate_placements,
+        "excluded_candidates": excluded_candidates,
+        "recent_high_urgency_exclusions": recent_high_urgency_exclusions,
     }
 
 
@@ -389,6 +407,7 @@ def write_homepage_ranking_recommendations(
     archive: Sequence[Mapping[str, Any]],
     output_path: Path,
     max_recommendations: int = 10,
+    excluded_candidates: Sequence[Mapping[str, Any]] = (),
 ) -> dict[str, Any]:
     registry = _load_json(Path(registry_path), {})
     report = build_homepage_ranking_recommendations(
@@ -397,6 +416,7 @@ def write_homepage_ranking_recommendations(
         registry=registry,
         archive=archive,
         max_recommendations=max_recommendations,
+        excluded_candidates=excluded_candidates,
     )
     _atomic_write_json(Path(output_path), report)
     return report
