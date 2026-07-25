@@ -2,12 +2,12 @@
   "schema_version": 11,
   "engine": {
     "name": "tct-editorial-engine",
-    "version": "1.9.5.2",
-    "release": "bounded-feeds-and-incremental-registry",
+    "version": "1.9.5.3",
+    "release": "batched-editorial-state-replay",
     "resolver_version": "2.4",
     "relationship_engine_version": "1.2"
   },
-  "generated_at": "2026-07-25T03:09:03Z",
+  "generated_at": "2026-07-25T04:00:50Z",
   "mode": "enforce",
   "publication_behavior_changed": true,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 3,
     "applied_action_count": 3,
     "circuit_breaker_tripped": false,
-    "placements_before": 14,
-    "placements_after": 11,
+    "placements_before": 13,
+    "placements_after": 10,
     "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
     "recommendations": [
@@ -213,21 +213,21 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 160,
+    "candidates_processed": 162,
     "routes": {
-      "generate_new": 6,
-      "skip": 154
+      "generate_new": 4,
+      "skip": 158
     },
     "eligibility": {
-      "listing": 4,
-      "low_value": 123,
-      "publishable": 33
+      "listing": 3,
+      "low_value": 128,
+      "publishable": 31
     },
     "source_classes": {
-      "aggregator": 127,
-      "local_news": 33
+      "aggregator": 131,
+      "local_news": 31
     },
-    "rejected_count": 4,
+    "rejected_count": 3,
     "rejected_examples": [
       {
         "headline": "5760 36th Pl, Vero Beach, FL 32966 - Realtor.com",
@@ -248,15 +248,6 @@
         "source_class": "aggregator"
       },
       {
-        "headline": "804 N Cinnamon Rd, North Palm Beach, FL 33408 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQSnNCdHRsS0pnUnhKWmRZQ0x1cGZQOVVrOGpkVHpkc1FjekdxRUxHZTBJeXFwVTlfX29QZlA3R0FxZjlqNXFiUW8yUG1kZEVTT3NwQ2Z6aEdQN2RZVy1kcnRZNWxoUmc0TVpRaEtNSmdrZG9BUXViSTdCajNvZ3pscWsyZEJBcDVvLWctelB2cmZJei04TWZFZmFB?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
-      },
-      {
         "headline": "311 16th St N Unit B, Fort Pierce, FL 34950 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOaVhYLVk3Ul9mUlExYVp5MTlNQ0U2bHlrWGJlaEdPemYzZ3pCOF9YdHRpQkpJN2ZSZEkwYU1sWVFyWWdrbHo5ZExKQjhpT0dLWFEzM0RIQWFTVDZiWnljaFhxbXJGUWxxaUxYQXRXN0dWMUNnZ1ZXZGNsOXhFMS1TQVBaeGZjckd0Qm5hSlhELUg0WEFkM254c0pmcF9IRnlPQVFNamhkSC10Zw?oc=5",
         "status": "listing",
@@ -269,10 +260,24 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 6,
-      "same_event": 154
+      "new_story": 7,
+      "same_event": 155
     },
     "examples": [
+      {
+        "story_id": "story_000465",
+        "title": "When is the first day of school in Northwest Arkansas, River Valley in 2026? - AOL.com",
+        "event_key": "unknown-event-ebc3b673dc",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
       {
         "story_id": "story_000534",
         "title": "Boca Raton brothers with muscular dystrophy get surprise from soccer legend Cristiano Ronaldo",
@@ -474,20 +479,6 @@
         ]
       },
       {
-        "story_id": "story_000516",
-        "title": "Messi may be Miami's most famous Argentine. Florida wildlife officials are far more worried about this other one. - CBS News",
-        "event_key": "unknown-event-3566399455",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_000476",
         "title": "The Mall at Wellington Green hosts tax-free shopping, shoe drive and teacher celebration",
         "event_key": "unknown-event-c36e4a94e3",
@@ -530,9 +521,9 @@
         ]
       },
       {
-        "story_id": "story_000479",
-        "title": "Downtown Delray Beach proves to be a major economic driver with new visitor data",
-        "event_key": "unknown-event-19b1d5eae9",
+        "story_id": "story_000478",
+        "title": "Aileen Rodriguez rolls out trove of institutional backing in Hillsborough Commission bid - Florida Politics",
+        "event_key": "unknown-event-862199bbbd",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -545,6 +536,21 @@
       }
     ],
     "decision_trace_examples": [
+      {
+        "story_id": "story_000465",
+        "title": "When is the first day of school in Northwest Arkansas, River Valley in 2026? - AOL.com",
+        "event_key": "unknown-event-ebc3b673dc",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
       {
         "story_id": "story_000534",
         "title": "Boca Raton brothers with muscular dystrophy get surprise from soccer legend Cristiano Ronaldo",
@@ -741,21 +747,6 @@
         ]
       },
       {
-        "story_id": "story_000516",
-        "title": "Messi may be Miami's most famous Argentine. Florida wildlife officials are far more worried about this other one. - CBS News",
-        "event_key": "unknown-event-3566399455",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_000476",
         "title": "The Mall at Wellington Green hosts tax-free shopping, shoe drive and teacher celebration",
         "event_key": "unknown-event-c36e4a94e3",
@@ -801,6 +792,21 @@
         ]
       },
       {
+        "story_id": "story_000478",
+        "title": "Aileen Rodriguez rolls out trove of institutional backing in Hillsborough Commission bid - Florida Politics",
+        "event_key": "unknown-event-862199bbbd",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_000479",
         "title": "Downtown Delray Beach proves to be a major economic driver with new visitor data",
         "event_key": "unknown-event-19b1d5eae9",
@@ -829,45 +835,30 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_000480",
-        "title": "Bicyclist hit, killed by Tri-Rail train in Lake Worth Beach",
-        "event_key": "traffic-crash-030d3b058d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ]
   },
   "local_relevance": {
     "scopes": {
-      "florida": 104,
-      "treasure_coast_local": 92,
+      "florida": 105,
+      "treasure_coast_local": 94,
       "treasure_coast_region": 43,
-      "unknown": 189
+      "unknown": 190
     },
-    "average_score": 62.29
+    "average_score": 62.41
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 104,
-      "treasure_coast_local": 92,
+      "florida": 105,
+      "treasure_coast_local": 94,
       "treasure_coast_region": 43,
-      "unknown": 189
+      "unknown": 190
     },
-    "average_priority": 6.04
+    "average_priority": 5.91
   },
   "story_lifecycle": {
     "counts": {
-      "active": 298,
+      "active": 302,
       "developing": 130
     }
   },
@@ -875,8 +866,8 @@
     "repair_version": 4,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 426,
-    "active_stories_after": 426,
+    "active_stories_before": 428,
+    "active_stories_after": 428,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -892,35 +883,35 @@
     "incident_identity_groups_resolved": 0,
     "incident_story_records_removed": 0,
     "remaining_incident_identity_groups": 0,
-    "generated_at": "2026-07-25T02:41:21Z",
+    "generated_at": "2026-07-25T03:57:44Z",
     "quarantined_story_records_retained": 8,
-    "active_story_count": 428
+    "active_story_count": 432
   },
   "stories": {
-    "total": 428,
+    "total": 432,
     "importance_levels": {
       "breaking": 0,
       "high": 6,
       "normal": 80,
-      "low": 342,
+      "low": 346,
       "archived": 0
     },
-    "average_importance": 10.54,
+    "average_importance": 10.44,
     "top": [
       {
         "story_id": "story_000049",
         "title": "Community gathers to honor 9-year-old boy killed in dirt bike and FedEx truck crash in St. Lucie County",
         "score": 75,
-        "editorial_priority": 81,
-        "editorial_score": 81,
+        "editorial_priority": 72,
+        "editorial_score": 72,
         "score_breakdown": {
-          "score": 81,
+          "score": 72,
           "importance": 75,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 23.28
+          "age_hours": 24.46
         },
         "level": "high",
         "importance_reasons": [
@@ -963,7 +954,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 23.28,
+          "hours_since_update": 24.46,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -981,7 +972,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 43.07
+          "age_hours": 44.29
         },
         "level": "high",
         "importance_reasons": [
@@ -1024,7 +1015,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T07:40:14.261666+00:00",
-          "hours_since_update": 43.07,
+          "hours_since_update": 44.29,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1042,7 +1033,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 44.43
+          "age_hours": 45.61
         },
         "level": "high",
         "importance_reasons": [
@@ -1080,7 +1071,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 44.43,
+          "hours_since_update": 45.61,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1098,7 +1089,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 2.46
+          "age_hours": 3.33
         },
         "level": "normal",
         "importance_reasons": [
@@ -1134,7 +1125,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-25T00:38:10.414050+00:00",
-          "hours_since_update": 2.46,
+          "hours_since_update": 3.33,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1152,7 +1143,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 0.45
+          "age_hours": 1.31
         },
         "level": "normal",
         "importance_reasons": [
@@ -1190,7 +1181,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-25T02:41:20.731485+00:00",
-          "hours_since_update": 0.45,
+          "hours_since_update": 1.31,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1208,7 +1199,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.45
+          "age_hours": 1.31
         },
         "level": "normal",
         "importance_reasons": [
@@ -1248,7 +1239,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-25T02:41:20.731485+00:00",
-          "hours_since_update": 0.45,
+          "hours_since_update": 1.31,
           "event_count": 28,
           "timeline_entries": 27
         }
@@ -1266,7 +1257,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 11.36
+          "age_hours": 12.29
         },
         "level": "normal",
         "importance_reasons": [
@@ -1297,7 +1288,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T15:40:29.610573+00:00",
-          "hours_since_update": 11.36,
+          "hours_since_update": 12.29,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1315,7 +1306,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 2.46
+          "age_hours": 3.33
         },
         "level": "normal",
         "importance_reasons": [
@@ -1344,7 +1335,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T00:38:10.414050+00:00",
-          "hours_since_update": 2.46,
+          "hours_since_update": 3.33,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1362,7 +1353,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 27.71
+          "age_hours": 28.68
         },
         "level": "normal",
         "importance_reasons": [
@@ -1398,7 +1389,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 27.71,
+          "hours_since_update": 28.68,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1416,7 +1407,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 27.5
+          "age_hours": 28.68
         },
         "level": "normal",
         "importance_reasons": [
@@ -1452,7 +1443,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 27.5,
+          "hours_since_update": 28.68,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1470,7 +1461,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 25.42
+          "age_hours": 26.3
         },
         "level": "normal",
         "importance_reasons": [
@@ -1506,7 +1497,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 25.42,
+          "hours_since_update": 26.3,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1524,7 +1515,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 1.32
+          "age_hours": 2.19
         },
         "level": "normal",
         "importance_reasons": [
@@ -1557,7 +1548,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T01:48:58.139068+00:00",
-          "hours_since_update": 1.32,
+          "hours_since_update": 2.19,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1575,7 +1566,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 27.42
+          "age_hours": 28.68
         },
         "level": "normal",
         "importance_reasons": [
@@ -1604,7 +1595,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 27.42,
+          "hours_since_update": 28.68,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1622,7 +1613,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 25.22
+          "age_hours": 26.29
         },
         "level": "normal",
         "importance_reasons": [
@@ -1651,7 +1642,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 25.22,
+          "hours_since_update": 26.29,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1669,7 +1660,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 27.55
+          "age_hours": 28.68
         },
         "level": "normal",
         "importance_reasons": [
@@ -1702,7 +1693,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 27.55,
+          "hours_since_update": 28.68,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1720,7 +1711,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 2.5
+          "age_hours": 3.37
         },
         "level": "normal",
         "importance_reasons": [
@@ -1754,7 +1745,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-25T00:38:10.414050+00:00",
-          "hours_since_update": 2.5,
+          "hours_since_update": 3.37,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1772,7 +1763,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 11.37
+          "age_hours": 12.29
         },
         "level": "normal",
         "importance_reasons": [
@@ -1806,7 +1797,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T15:40:29.610573+00:00",
-          "hours_since_update": 11.37,
+          "hours_since_update": 12.29,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1824,7 +1815,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 11.42
+          "age_hours": 12.29
         },
         "level": "high",
         "importance_reasons": [
@@ -1858,7 +1849,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T15:40:29.610573+00:00",
-          "hours_since_update": 11.42,
+          "hours_since_update": 12.29,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1876,7 +1867,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 2.42
+          "age_hours": 3.33
         },
         "level": "normal",
         "importance_reasons": [
@@ -1909,7 +1900,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T00:38:10.414050+00:00",
-          "hours_since_update": 2.42,
+          "hours_since_update": 3.33,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1927,7 +1918,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 2.5
+          "age_hours": 3.36
         },
         "level": "normal",
         "importance_reasons": [
@@ -1958,7 +1949,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T00:38:10.414050+00:00",
-          "hours_since_update": 2.5,
+          "hours_since_update": 3.36,
           "event_count": 1,
           "timeline_entries": 1
         }
