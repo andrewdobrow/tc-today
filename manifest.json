@@ -1,7 +1,7 @@
 {
-  "release": "v1.10.5.4",
-  "name": "Custom Publication Receipt Rebind",
-  "base": "v1.10.5.3",
+  "release": "v1.10.5.5",
+  "name": "Custom Publication Write-Through",
+  "base": "v1.10.5.4",
   "mode": "recommendation-only",
   "package_type": "incremental-overlay",
   "files": [
@@ -14,15 +14,17 @@
   "behavior": {
     "live_ranking_enforcement": false,
     "hero_ranking_enforcement": false,
-    "custom_publication_receipt_recorded_at_write_time": true,
-    "custom_live_rebind_prefers_publication_receipt": true,
-    "archive_scan_is_compatibility_fallback_only": true,
-    "ambiguous_legacy_and_new_custom_rows_do_not_block_exact_rebind": true,
+    "custom_clones_coalesce_by_exact_payload": true,
+    "runtime_archive_slug_is_not_editor_instruction": true,
+    "archive_writer_updates_all_live_custom_clones_immediately": true,
+    "generic_rebind_preserves_current_run_custom_slug": true,
+    "post_publication_archive_scan_is_verification_only": true,
     "forward_live_identity_contract_remains_fail_closed": true
   },
   "reports": [
     "data/custom-post-publication-rebind.json",
-    "data/forward-live-identity-contract.json"
+    "data/forward-live-identity-contract.json",
+    "data/forward-publication-identity.json"
   ],
-  "version": "1.10.5.4"
+  "version": "1.10.5.5"
 }

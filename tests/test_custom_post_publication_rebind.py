@@ -171,3 +171,119 @@ def test_archive_writer_publication_receipt_updates_rendered_custom_object():
     assert item["_archived_slug"] == "2026-07-25-weekly-custom-report-july-26-31"
     assert item["editorial_story_id"] == "custom:receipt"
     assert generate.CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS[-1]["slug"] == item["_archived_slug"]
+
+
+def test_custom_live_clone_and_queue_copy_coalesce_by_exact_payload_not_stale_story_id():
+    generate = _load_generate_module()
+    body = "Complete weekly traffic report body."
+    body_hash = generate._custom_body_hash(body)
+    live = {
+        "headline": "Treasure Coast Traffic Report: I-95 Ramp Closures July 26-31",
+        "body": body,
+        "is_custom": True,
+        "authoritative_custom": True,
+        "unique_slug": True,
+        "custom_body_hash": body_hash,
+        "custom_series_key": "treasure-coast-traffic-report",
+        "custom_edition_key": "july-26-31",
+        "editorial_story_id": "custom:legacy-edition",
+        "_editorial_story_id": "custom:legacy-edition",
+        "_archived_slug": "2026-07-10-traffic-report-july-12-17",
+        "slug": "2026-07-10-traffic-report-july-12-17",
+    }
+    queue = {
+        "headline": live["headline"],
+        "body": body,
+        "is_custom": True,
+        "authoritative_custom": True,
+        "unique_slug": True,
+        "custom_body_hash": body_hash,
+        "custom_series_key": "treasure-coast-traffic-report",
+        "custom_edition_key": "july-26-31",
+    }
+    assert generate._publication_coalesce_key(live, None) == generate._publication_coalesce_key(queue, None)
+
+
+def test_runtime_bound_legacy_slug_is_not_treated_as_editor_requested_unique_slug():
+    generate = _load_generate_module()
+    item = {
+        "headline": "Treasure Coast Traffic Report: I-95 Ramp Closures July 26-31",
+        "body": "Complete manual report.",
+        "is_custom": True,
+        "authoritative_custom": True,
+        "unique_slug": True,
+        "_custom_requested_slug": "",
+        "_custom_requested_replace_slug": "",
+        "_archived_slug": "2026-07-10-traffic-report-july-12-17",
+        "slug": "2026-07-10-traffic-report-july-12-17",
+    }
+    existing, forced_slug, story_id = generate._resolve_custom_publication_target(
+        item, [], None, item["headline"]
+    )
+    assert existing is None
+    assert forced_slug is None
+    assert story_id.startswith("custom:")
+
+
+def test_direct_publication_binding_updates_all_live_clones_and_survives_generic_rebind(tmp_path):
+    generate = _load_generate_module()
+    body = "Complete weekly traffic report with every closure and detour."
+    body_hash = generate._custom_body_hash(body)
+    old_slug = "2026-07-10-traffic-report-july-12-17"
+    new_slug = "2026-07-25-traffic-report-july-26-31"
+    story_id = "custom:new-edition"
+    queue = {
+        "headline": "Treasure Coast Traffic Report: I-95 Ramp Closures July 26-31",
+        "body": body,
+        "category": "florida",
+        "category_key": "florida",
+        "is_custom": True,
+        "authoritative_custom": True,
+        "unique_slug": True,
+        "custom_body_hash": body_hash,
+        "custom_series_key": "treasure-coast-traffic-report",
+        "custom_edition_key": "july-26-31",
+    }
+    live_one = dict(queue, _archived_slug=old_slug, slug=old_slug,
+                    link=f"{generate.SITE_URL}/articles/{old_slug}.html")
+    live_two = dict(queue, _archived_slug=old_slug, slug=old_slug,
+                    link=f"{generate.SITE_URL}/articles/{old_slug}.html")
+    categories = [{"category_key": "florida", "hero": live_one, "cards": [live_two]}]
+    rows = generate._bind_custom_publication_directly_to_live(
+        categories, None, queue, new_slug, story_id, "florida"
+    )
+    assert len(rows) == 2
+    for item in (live_one, live_two):
+        assert item["_current_custom_publication_slug"] == new_slug
+        assert item["_archived_slug"] == new_slug
+        assert item["editorial_story_id"] == story_id
+
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    (articles / f"{old_slug}.html").write_text("old", encoding="utf-8")
+    (articles / f"{new_slug}.html").write_text("new", encoding="utf-8")
+    archive = [
+        {
+            "slug": old_slug,
+            "headline": queue["headline"],
+            "is_custom": True,
+            "authoritative_custom": True,
+            "editorial_story_id": "custom:legacy-edition",
+            "custom_body_hash": body_hash,
+        },
+        {
+            "slug": new_slug,
+            "headline": queue["headline"],
+            "is_custom": True,
+            "authoritative_custom": True,
+            "editorial_story_id": story_id,
+            "custom_body_hash": body_hash,
+            "category_key": "florida",
+        },
+    ]
+    generate._rebind_live_items_to_published_archive(
+        categories, archive, current_customs=[queue], articles_dir=articles
+    )
+    for item in (live_one, live_two):
+        assert item["_archived_slug"] == new_slug
+        assert item["editorial_story_id"] == story_id

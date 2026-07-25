@@ -4732,6 +4732,12 @@ def load_custom_articles():
     live = []
     skipped_published = 0
     for art in data:
+        # Preserve editor-supplied permalink instructions before any runtime archive
+        # binding mutates ``slug``/``replace_slug`` on the live placement. A slug
+        # inherited from the corrupted prior edition is not an explicit instruction.
+        art["_custom_requested_slug"] = str(art.get("slug") or "").strip()
+        art["_custom_requested_replace_slug"] = str(art.get("replace_slug") or "").strip()
+
         # Skip expired
         expires = art.get("expires", "")
         if expires:
@@ -4798,6 +4804,8 @@ def load_custom_articles():
                 art["custom_edition_key"] = _custom_edition_marker(art)
                 art.pop("slug", None)
                 art.pop("replace_slug", None)
+                art["_custom_requested_slug"] = ""
+                art["_custom_requested_replace_slug"] = ""
                 print(
                     "  Custom recurring-edition permalink repair queued: "
                     f"'{art.get('headline','')[:60]}'"
@@ -5776,6 +5784,86 @@ def _custom_story_fingerprint(headline, teaser=""):
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:24] if normalized else ""
 
 
+def _iter_live_custom_placements(all_categories, top_cat=None):
+    """Yield each distinct live custom placement once with its surface label."""
+    seen = set()
+    placements = []
+    if isinstance(top_cat, dict):
+        placements.append(("front_page", top_cat.get("hero") or {}))
+    for category in all_categories or []:
+        key = str(category.get("category_key") or "")
+        placements.append((f"{key}:hero", category.get("hero") or {}))
+        placements.extend((f"{key}:card", card) for card in category.get("cards") or [])
+    for surface, item in placements:
+        if not isinstance(item, dict) or id(item) in seen:
+            continue
+        seen.add(id(item))
+        if item.get("is_custom") or item.get("authoritative_custom"):
+            yield surface, item
+
+
+def _same_custom_publication_payload(a, b):
+    """Return True only for the exact manual payload or exact recurring edition."""
+    if not isinstance(a, dict) or not isinstance(b, dict):
+        return False
+    a_hash = str(a.get("custom_body_hash") or _custom_body_hash(a.get("body", ""))).strip()
+    b_hash = str(b.get("custom_body_hash") or _custom_body_hash(b.get("body", ""))).strip()
+    if a_hash and b_hash and a_hash == b_hash:
+        return True
+    a_series = str(a.get("custom_series_key") or _custom_series_key(a) or "").strip()
+    b_series = str(b.get("custom_series_key") or _custom_series_key(b) or "").strip()
+    a_edition = str(a.get("custom_edition_key") or _custom_edition_marker(a) or "").strip()
+    b_edition = str(b.get("custom_edition_key") or _custom_edition_marker(b) or "").strip()
+    a_head = str(a.get("headline") or "").strip()
+    b_head = str(b.get("headline") or "").strip()
+    return bool(
+        a_series and a_series == b_series
+        and a_edition and a_edition == b_edition
+        and a_head and a_head == b_head
+    )
+
+
+def _bind_custom_publication_directly_to_live(
+    all_categories, top_cat, published_item, slug, story_id, category_key
+):
+    """Apply the archive writer's exact slug directly to every live copy.
+
+    The live card/hero objects are often clones of the queue object rendered by
+    ``write_archives``.  Binding them here, at the moment the slug is selected,
+    removes the need to rediscover the new edition from archive metadata later.
+    """
+    slug = str(slug or "").strip()
+    if not slug or not isinstance(published_item, dict):
+        return []
+    story_id = str(story_id or "").strip()
+    category_key = str(category_key or published_item.get("category_key")
+                       or published_item.get("category") or "").strip()
+    rows = []
+    for surface, item in _iter_live_custom_placements(all_categories, top_cat):
+        if item is not published_item and not _same_custom_publication_payload(item, published_item):
+            continue
+        previous_slug = str(item.get("_archived_slug") or item.get("slug") or "").strip()
+        item["_archived_slug"] = slug
+        item["slug"] = slug
+        item["link"] = f"{SITE_URL}/articles/{slug}.html"
+        item["_current_custom_publication_slug"] = slug
+        item["_current_custom_publication_bound"] = True
+        if story_id:
+            item["editorial_story_id"] = story_id
+            item["_editorial_story_id"] = story_id
+        if category_key:
+            item["category_key"] = category_key
+            item["category"] = category_key
+        rows.append({
+            "surface": surface,
+            "headline": str(item.get("headline") or ""),
+            "previous_slug": previous_slug,
+            "slug": slug,
+            "changed": previous_slug != slug,
+        })
+    return rows
+
+
 def _record_current_custom_publication(item, slug, story_id, category_key, action):
     """Record the exact permalink chosen while publishing a custom payload.
 
@@ -5816,6 +5904,8 @@ def _record_current_custom_publication(item, slug, story_id, category_key, actio
     item["_archived_slug"] = slug
     item["slug"] = slug
     item["link"] = f"{SITE_URL}/articles/{slug}.html"
+    item["_current_custom_publication_slug"] = slug
+    item["_current_custom_publication_bound"] = True
     if receipt["editorial_story_id"]:
         item["editorial_story_id"] = receipt["editorial_story_id"]
         item["_editorial_story_id"] = receipt["editorial_story_id"]
@@ -6197,6 +6287,36 @@ def _rebind_live_items_to_published_archive(all_categories, archive, current_cus
             items.append(category["hero"])
         items.extend(category.get("cards", []) or [])
         for item in items:
+            # A current-run custom publication receipt is authoritative. Never let
+            # the generic archive resolver replace its new edition slug with the
+            # quarantined legacy permalink that triggered the repair.
+            _direct_custom_slug = str(
+                item.get("_current_custom_publication_slug") or ""
+            ).strip()
+            if (
+                _direct_custom_slug
+                and (item.get("is_custom") or item.get("authoritative_custom"))
+            ):
+                _direct_entry = next(
+                    (entry for entry in archive if str(entry.get("slug") or "") == _direct_custom_slug),
+                    None,
+                )
+                if (
+                    _direct_entry
+                    and not _direct_entry.get("exclude_from_live_recovery")
+                    and _published_article_path(_direct_custom_slug, articles_dir)
+                ):
+                    if _bind_live_item_to_archive(
+                        item, _direct_entry, current_customs, replace_with_custom=True
+                    ):
+                        item["_current_custom_publication_slug"] = _direct_custom_slug
+                        item["_current_custom_publication_bound"] = True
+                        rebound += 1
+                    continue
+                # Do not fall back to the old custom URL. The final identity gate
+                # will stop deployment if the exact publication receipt is missing.
+                continue
+
             # Publication identity may have consolidated several rewritten archive
             # rows after the earlier live-binding pass.  Prefer the persistent story
             # ID carried by v1.9.3 so every surviving placement is rebound to the one
@@ -8595,8 +8715,18 @@ def _resolve_custom_publication_target(hero, archive, existing, headline):
     if not (hero.get("is_custom") or hero.get("authoritative_custom")):
         return existing, None, None
 
-    replace_slug = slugify(str(hero.get("replace_slug", ""))) if hero.get("replace_slug") else ""
-    explicit_slug = slugify(str(hero.get("slug", ""))) if hero.get("slug") else ""
+    _replace_requested = (
+        hero.get("_custom_requested_replace_slug")
+        if "_custom_requested_replace_slug" in hero
+        else hero.get("replace_slug", "")
+    )
+    _slug_requested = (
+        hero.get("_custom_requested_slug")
+        if "_custom_requested_slug" in hero
+        else ("" if hero.get("_archived_slug") else hero.get("slug", ""))
+    )
+    replace_slug = slugify(str(_replace_requested or "")) if _replace_requested else ""
+    explicit_slug = slugify(str(_slug_requested or "")) if _slug_requested else ""
     target_slug = replace_slug or explicit_slug
 
     # ``unique_slug`` is an explicit editor contract: publish this payload at a new
@@ -8663,6 +8793,34 @@ def _publication_copy_rank(entry):
     body_words = _word_count(item.get("body", ""))
     return (is_custom, has_real_img, is_hero_copy, body_words)
 
+
+
+def _publication_coalesce_key(item, identity_index=None):
+    """Return one current-run publication key for a generated/custom payload.
+
+    Custom placements can exist as both the live card object and a separately loaded
+    queue object.  Runtime permalink rebinding may stamp only the live clone with an
+    old story ID.  Coalescing custom copy by that inherited ID would publish the same
+    manual payload twice.  Exact custom payload identity therefore always wins over
+    persistent story identity at this pre-publication boundary.
+    """
+    if not isinstance(item, dict):
+        return ""
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        body_hash = str(
+            item.get("custom_body_hash") or _custom_body_hash(item.get("body", ""))
+        ).strip()
+        series_key = str(item.get("custom_series_key") or _custom_series_key(item) or "").strip()
+        edition_key = str(item.get("custom_edition_key") or _custom_edition_marker(item) or "").strip()
+        headline = re.sub(r"[^a-z0-9]+", " ", str(item.get("headline") or "").lower()).strip()
+        seed = "|".join(part for part in (body_hash, series_key, edition_key, headline) if part)
+        return "custom-payload:" + hashlib.sha256(seed.encode("utf-8")).hexdigest() if seed else ""
+    story_id = _publication_story_id(item, identity_index)
+    if story_id:
+        item["_editorial_story_id"] = story_id
+        return f"editorial-story:{story_id}"
+    headline_key = re.sub(r"[^a-z0-9 ]", "", str(item.get("headline") or "").lower()).strip()[:60]
+    return f"headline:{headline_key}" if headline_key else ""
 
 def _canonical_candidate_score(entry):
     return (
@@ -10022,12 +10180,7 @@ def write_archives(all_categories, top_cat):
         if _is_nonstory_placeholder(_item):
             print(f"  NONSTORY BLOCK: skipped article/permalink for '{_item.get('headline','')[:80]}'")
             continue
-        _story_id = _publication_story_id(_item, _publication_identity)
-        if _story_id:
-            _item["_editorial_story_id"] = _story_id
-            k = f"editorial-story:{_story_id}"
-        else:
-            k = _slug_key(_item.get("headline", ""))
+        k = _publication_coalesce_key(_item, _publication_identity)
         if not k:
             continue
         if k in _best_by_slug:
@@ -10320,13 +10473,31 @@ def write_archives(all_categories, top_cat):
             new_count += 1
 
         if hero.get("is_custom") or hero.get("authoritative_custom"):
-            _record_current_custom_publication(
+            _receipt = _record_current_custom_publication(
                 hero,
                 slug,
                 _editorial_story_id,
                 cat_key,
                 "updated" if existing else "created",
             )
+            _direct_live_bindings = _bind_custom_publication_directly_to_live(
+                all_categories,
+                top_cat,
+                hero,
+                slug,
+                _editorial_story_id,
+                cat_key,
+            )
+            if _receipt is not None:
+                _receipt["live_placements_bound"] = len(_direct_live_bindings)
+                _receipt["live_slug_corrections"] = sum(
+                    1 for row in _direct_live_bindings if row.get("changed")
+                )
+            if _direct_live_bindings:
+                print(
+                    "  Custom publication directly bound "
+                    f"{len(_direct_live_bindings)} live placement(s) to {slug}"
+                )
 
     # FINAL production enforcement: article generation above may have recreated a
     # known duplicate permalink. Reapply all cumulative redirects now, then build
@@ -10482,7 +10653,13 @@ def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, out
         if not (item.get("is_custom") or item.get("authoritative_custom")):
             continue
 
-        entry, match_basis = _receipt_for(item)
+        _direct_slug = str(item.get("_current_custom_publication_slug") or "").strip()
+        entry = by_slug.get(_direct_slug) if _direct_slug else None
+        if entry is not None and entry.get("exclude_from_live_recovery"):
+            entry = None
+        match_basis = "direct_publication_binding" if entry is not None else None
+        if entry is None:
+            entry, match_basis = _receipt_for(item)
         body_hash = str(
             item.get("custom_body_hash") or _custom_body_hash(item.get("body", ""))
         ).strip()
@@ -10530,6 +10707,8 @@ def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, out
         item["_archived_slug"] = slug
         item["slug"] = slug
         item["link"] = f"{SITE_URL}/articles/{slug}.html"
+        item["_current_custom_publication_slug"] = slug
+        item["_current_custom_publication_bound"] = True
         if entry.get("editorial_story_id"):
             item["editorial_story_id"] = entry.get("editorial_story_id")
             item["_editorial_story_id"] = entry.get("editorial_story_id")
@@ -10547,7 +10726,7 @@ def _rebind_current_custom_editions_to_archive(all_categories, top_cat=None, out
     data_dir.mkdir(parents=True, exist_ok=True)
     (data_dir / "custom-post-publication-rebind.json").write_text(
         json.dumps({
-            "version": "1.10.5.4",
+            "version": "1.10.5.5",
             "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "publication_receipts": len(receipts),
             "rebound_count": len(rebound),
