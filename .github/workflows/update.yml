@@ -1,4 +1,6 @@
-name: Update Treasure Coast Today
+name: Update Treasure Coast Today — Incremental Generation v1.9.4
+
+run-name: "TCT update v1.9.4 • ${{ github.ref_name }} • ${{ github.sha }}"
 
 on:
   workflow_dispatch:
@@ -14,14 +16,29 @@ concurrency:
 
 jobs:
   update:
+    name: Update site — incremental generation v1.9.4 (90-minute safety ceiling)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 90
     outputs:
       committed: ${{ steps.push.outputs.committed }}
 
     steps:
+      - name: Runtime safety revision
+        run: |
+          echo "ACTIVE_WORKFLOW=tct-incremental-generation-v1.9.4"
+          echo "JOB_TIMEOUT_MINUTES=90"
+          echo "GITHUB_SHA=$GITHUB_SHA"
+
       - name: Checkout repo
         uses: actions/checkout@v4
+
+      - name: Restore persistent generation cache
+        uses: actions/cache@v4
+        with:
+          path: data/generation-cache.json
+          key: tct-generation-cache-v1-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            tct-generation-cache-v1-${{ github.ref_name }}-
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -43,12 +60,12 @@ jobs:
             --ignore=tests/test_matcher_contract.py
 
       - name: Clean up duplicate archives
-        run: python cleanup_archive.py
+        run: /usr/bin/time -f "Cleanup elapsed: %E" python cleanup_archive.py
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 
       - name: Generate news
-        run: python scripts/generate.py
+        run: /usr/bin/time -f "Generate elapsed: %E" python -u scripts/generate.py
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           # Repository variables provide an immediate, no-code rollout control.
