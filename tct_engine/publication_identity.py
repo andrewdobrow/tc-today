@@ -23,8 +23,27 @@ class PublicationIdentityIndex:
     url_to_story: Mapping[str, str]
     title_to_story: Mapping[str, str]
     slug_to_story: Mapping[str, str]
+    all_story_ids: frozenset[str]
     safe_story_ids: frozenset[str]
     canonical_titles: Mapping[str, str]
+
+    def resolve_source(self, item: Mapping[str, Any] | None) -> str:
+        """Resolve only an exact external source-article URL.
+
+        This intentionally excludes title and TCT-slug recovery. It is the safe
+        method for limited recent-archive migration and forward publication.
+        """
+        if not isinstance(item, Mapping):
+            return ""
+        for key in ("source_url", "original_url", "canonical_source", "link", "url"):
+            raw_url = str(item.get(key) or "")
+            if not raw_url or "/articles/" in raw_url:
+                continue
+            normalized = normalize_source_identity_url(raw_url)
+            story_id = self.url_to_story.get(normalized, "") if normalized else ""
+            if story_id and story_id in self.safe_story_ids:
+                return story_id
+        return ""
 
     def resolve(self, item: Mapping[str, Any] | None) -> str:
         if not isinstance(item, Mapping):
@@ -101,11 +120,13 @@ def build_publication_identity_index(
     title_candidates: dict[str, set[str]] = {}
     slug_candidates: dict[str, set[str]] = {}
     safe_story_ids: set[str] = set()
+    all_story_ids: set[str] = set()
     canonical_titles: dict[str, str] = {}
 
     for story_id, story in _story_items(payload):
         if not story_id:
             continue
+        all_story_ids.add(story_id)
         canonical_titles[story_id] = str(story.get("canonical_title") or "")
         if _is_safe_duplicate_story(story):
             safe_story_ids.add(story_id)
@@ -158,6 +179,7 @@ def build_publication_identity_index(
         url_to_story=url_to_story,
         title_to_story=title_to_story,
         slug_to_story=slug_to_story,
+        all_story_ids=frozenset(all_story_ids),
         safe_story_ids=frozenset(safe_story_ids),
         canonical_titles=canonical_titles,
     )

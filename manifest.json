@@ -1,30 +1,43 @@
 {
-  "release": "v1.10.5.1",
-  "name": "Custom Publication Boundary",
-  "base": "v1.10.5",
+  "release": "v1.10.5.2",
+  "name": "Forward Identity Contract Sync",
+  "base": "v1.10.4.1",
+  "supersedes": ["v1.10.5", "v1.10.5.1"],
   "mode": "recommendation-only",
+  "package_type": "cumulative-overlay",
   "files": [
     "manifest.json",
     "scripts/generate.py",
     "tct_engine/__init__.py",
     "tct_engine/observability.py",
-    "tests/test_custom_authority_contract.py"
+    "tct_engine/publication_identity.py",
+    "tct_engine/ranking_recommendations.py",
+    "tests/test_archive_identity_backfill.py",
+    "tests/test_forward_publication_identity.py",
+    "tests/test_publication_identity.py",
+    "tests/test_ranking_recommendations.py",
+    "tests/test_custom_authority_contract.py",
+    "tests/test_forward_identity_contract_sync.py"
   ],
   "behavior": {
     "live_ranking_enforcement": false,
     "hero_ranking_enforcement": false,
+    "new_articles_receive_current_run_story_identity": true,
+    "recent_backfill_requires_exact_source_and_recent_date": true,
+    "legacy_archive_identity_is_not_guessed": true,
+    "archive_consolidation_requires_stamped_story_ids": true,
     "custom_declared_category_enforced": true,
     "noncustom_placements_cannot_rebind_to_custom_archive": true,
     "unique_slug_field_honored": true,
-    "custom_body_rendered_without_omissions": true,
     "custom_body_fidelity_gate": true,
-    "recurring_custom_editions_keep_separate_urls": true,
-    "old_recurring_edition_page_preserved": true
+    "recurring_custom_editions_keep_separate_urls": true
   },
   "reports": [
     "data/custom-category-contract.json",
     "data/forward-publication-identity.json",
-    "data/forward-live-identity-contract.json"
+    "data/forward-live-identity-contract.json",
+    "data/archive-identity-backfill.json",
+    "data/homepage-ranking-recommendations.json"
   ],
-  "version": "1.10.5.1"
+  "version": "1.10.5.2"
 }

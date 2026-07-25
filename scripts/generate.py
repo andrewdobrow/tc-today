@@ -4629,7 +4629,7 @@ def validate_custom_category_placement(all_categories, output_root=None):
                     "declared_category": expected,
                 })
     report = {
-        "version": "1.10.5.1",
+        "version": "1.10.5.2",
         "passed": not violations,
         "checked_custom_placements": checked,
         "violation_count": len(violations),

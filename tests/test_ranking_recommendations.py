@@ -175,3 +175,27 @@ def test_recent_high_urgency_exclusion_blocks_enforcement_readiness():
     assert report["summary"]["enforcement_readiness"] == "not_ready"
     assert "Recent high-urgency" in report["summary"]["enforcement_readiness_reason"]
     assert report["excluded_candidates"][0]["headline"].startswith("3 arrested")
+
+
+def test_unresolved_legacy_archive_card_is_excluded_from_ranking():
+    cards = [{
+        "headline": "Legacy archive story",
+        "_archived_slug": "legacy-story",
+        "_archive_only": True,
+        "legacy_identity_status": "legacy_unresolved",
+        "ranking_eligible": False,
+        "urgency_score": 10,
+    }]
+    archive = [{
+        "slug": "legacy-story",
+        "headline": "Legacy archive story",
+        "legacy_identity_status": "legacy_unresolved",
+        "ranking_eligible": False,
+    }]
+    report = build_homepage_ranking_recommendations(
+        cards, {}, registry={"stories": {}}, archive=archive
+    )
+    assert report["summary"]["legacy_identity_placements_excluded"] == 1
+    assert report["summary"]["unique_cards_observed"] == 0
+    assert report["items"] == []
+    assert report["excluded_legacy_identity_placements"][0]["slug"] == "legacy-story"

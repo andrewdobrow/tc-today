@@ -1,0 +1,148 @@
+from datetime import datetime, timezone
+import importlib.util
+import sys
+import types
+from pathlib import Path
+
+
+def _load_generate():
+    if "feedparser" not in sys.modules:
+        feedparser = types.ModuleType("feedparser")
+        feedparser.parse = lambda *args, **kwargs: types.SimpleNamespace(entries=[])
+        sys.modules["feedparser"] = feedparser
+    if "anthropic" not in sys.modules:
+        anthropic = types.ModuleType("anthropic")
+
+        class _Anthropic:
+            def __init__(self, *args, **kwargs):
+                self.messages = types.SimpleNamespace(create=lambda *args, **kwargs: None)
+
+        anthropic.Anthropic = _Anthropic
+        sys.modules["anthropic"] = anthropic
+    path = Path(__file__).parents[1] / "scripts" / "generate.py"
+    spec = importlib.util.spec_from_file_location("generate_forward_identity_test", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_current_run_decision_stamps_generated_rewrite_by_exact_source_url():
+    g = _load_generate()
+    g.CURRENT_RUN_EDITORIAL_IDENTITIES = {
+        "https://source.test/news/article": {
+            "story_id": "story-current",
+            "event_key": "event-current",
+            "route": "generate_new",
+        }
+    }
+    headlines = [{"title": "Original source title", "link": "https://source.test/news/article?utm_source=rss"}]
+    data = {
+        "hero": {
+            "headline": "Substantially rewritten TCT headline",
+            "source_index": 1,
+            "link": "https://source.test/news/article?utm_source=rss",
+        },
+        "cards": [],
+    }
+    assert g._stamp_current_run_story_ids(data, headlines) == 1
+    assert data["hero"]["editorial_story_id"] == "story-current"
+    assert data["hero"]["_editorial_route"] == "generate_new"
+    assert data["hero"]["source_headline"] == "Original source title"
+
+
+def test_forward_target_never_reuses_fuzzy_unrelated_slug():
+    g = _load_generate()
+    item = {
+        "headline": "Leon County judge to rule on ballot eligibility",
+        "source_url": "https://source.test/ballot-case",
+        "editorial_story_id": "story-ballot",
+        "_editorial_route": "generate_new",
+    }
+    archive = [{
+        "slug": "2026-06-12-police-union-backs-paul-renner",
+        "headline": "Police union backs Paul Renner",
+        "source_url": "https://source.test/endorsement",
+    }]
+    target, basis = g._find_forward_publication_target(item, archive, "story-ballot")
+    assert target is None
+    assert basis == "new_publication"
+
+
+def test_forward_target_updates_same_exact_source_and_preserves_identity():
+    g = _load_generate()
+    item = {
+        "headline": "Updated headline",
+        "source_url": "https://source.test/news/article?utm_medium=rss",
+        "editorial_story_id": "story-one",
+        "_editorial_route": "update_existing",
+    }
+    archive = [{
+        "slug": "2026-07-24-original",
+        "headline": "Original headline",
+        "source_url": "https://source.test/news/article",
+        "editorial_story_id": "story-one",
+    }]
+    target, basis = g._find_forward_publication_target(item, archive, "story-one")
+    assert target["slug"] == "2026-07-24-original"
+    assert basis == "persistent_story_id"
+    assert g._forward_publication_target_valid(item, target, "story-one", basis)[0] is True
+
+
+def test_recurring_custom_report_rejects_previous_edition_slug():
+    g = _load_generate()
+    hero = {
+        "headline": "Treasure Coast Traffic Report: I-95 Work Planned July 26-31",
+        "body": "Complete manually authored report body.",
+        "is_custom": True,
+        "slug": "2026-07-10-treasure-coast-traffic-report-july-12-17",
+    }
+    archive = [{
+        "slug": "2026-07-10-treasure-coast-traffic-report-july-12-17",
+        "headline": "Treasure Coast Traffic Report: Work Planned July 12-17",
+        "is_custom": True,
+    }]
+    existing, forced_slug, story_id = g._resolve_custom_publication_target(
+        hero, archive, archive[0], hero["headline"]
+    )
+    assert existing is None
+    assert forced_slug is None
+    assert story_id is None
+    assert hero["_superseded_custom_slug"] == archive[0]["slug"]
+
+
+def test_recurring_custom_edition_alignment_detects_old_date_range():
+    g = _load_generate()
+    entry = {
+        "slug": "2026-07-10-treasure-coast-traffic-report-july-12-17",
+        "headline": "Treasure Coast Traffic Report: I-95 Work Planned July 26-31",
+        "is_custom": True,
+        "lastmod": "2026-07-25",
+    }
+    result = g._archive_headline_slug_alignment(entry)
+    assert result["aligned"] is False
+    assert result["reason"] == "recurring_custom_edition_slug_mismatch"
+
+
+def test_forward_live_identity_contract_rejects_story_id_conflict(tmp_path):
+    g = _load_generate()
+    (tmp_path / "data").mkdir()
+    (tmp_path / "archive.json").write_text(
+        '[{"slug":"one","headline":"One","editorial_story_id":"story-a","ranking_eligible":true}]',
+        encoding="utf-8",
+    )
+    categories = [{
+        "category_key": "crime",
+        "hero": {
+            "headline": "One",
+            "_archived_slug": "one",
+            "link": "https://treasurecoast.today/articles/one.html",
+            "editorial_story_id": "story-b",
+        },
+        "cards": [],
+    }]
+    try:
+        g.validate_forward_live_identity(categories, categories[0], tmp_path)
+    except RuntimeError as exc:
+        assert "story_id_conflict" in str(exc)
+    else:
+        raise AssertionError("expected forward live identity contract to fail")

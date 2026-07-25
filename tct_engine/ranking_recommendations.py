@@ -9,7 +9,7 @@ import re
 from typing import Any, Iterable, Mapping, Sequence
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
-RANKING_RECOMMENDATION_VERSION = "1.1"
+RANKING_RECOMMENDATION_VERSION = "1.2"
 RANKING_MODE = "recommend"
 
 
@@ -126,7 +126,7 @@ def _archive_indexes(
 def _explicit_story_id(item: Mapping[str, Any] | None) -> str:
     if not item:
         return ""
-    for key in ("editorial_story_id", "story_id", "_story_id", "persistent_story_id"):
+    for key in ("editorial_story_id", "_editorial_story_id", "story_id", "_story_id", "persistent_story_id"):
         value = str(item.get(key) or "").strip()
         if value:
             return value
@@ -244,8 +244,36 @@ def build_homepage_ranking_recommendations(
     unique_rows: list[dict[str, Any]] = []
     identity_to_row: dict[str, dict[str, Any]] = {}
     duplicate_placements: list[dict[str, Any]] = []
+    legacy_identity_exclusions: list[dict[str, Any]] = []
 
     for placement_position, card in enumerate(cards, start=1):
+        slug = str(card.get("_archived_slug") or card.get("slug") or "").strip()
+        archive_entry_hint = archive_by_slug.get(slug) if slug else archive_by_title.get(
+            _norm_title(str(card.get("headline") or ""))
+        )
+        legacy_status = str(
+            card.get("legacy_identity_status")
+            or (archive_entry_hint or {}).get("legacy_identity_status")
+            or ""
+        )
+        ranking_eligible = card.get("ranking_eligible")
+        if ranking_eligible is None and archive_entry_hint is not None:
+            ranking_eligible = archive_entry_hint.get("ranking_eligible")
+        unresolved_archive = bool(card.get("_archive_only")) and not _explicit_story_id(card) and not _explicit_story_id(archive_entry_hint)
+        if ranking_eligible is False or legacy_status in {
+            "legacy_unresolved", "recent_unresolved", "quarantined_live_mismatch"
+        } or unresolved_archive:
+            legacy_identity_exclusions.append({
+                "headline": str(card.get("headline") or ""),
+                "placement_position": placement_position,
+                "slug": slug,
+                "legacy_identity_status": legacy_status or "archive_unresolved",
+                "reason": (
+                    (archive_entry_hint or {}).get("identity_quarantine_reason")
+                    or "unresolved_legacy_identity_excluded_from_ranking"
+                ),
+            })
+            continue
         story, match_basis, archive_entry = _resolve_story(
             card,
             by_id=by_id,
@@ -363,10 +391,12 @@ def build_homepage_ranking_recommendations(
             "custom_articles_position_locked": True,
             "custom_pin_positions_preserved": True,
             "deduplicate_cross_category_placements": True,
+            "unresolved_legacy_archive_excluded": True,
             "max_reported_recommendations": max_recommendations,
         },
         "summary": {
             "input_placements": len(cards),
+            "legacy_identity_placements_excluded": len(legacy_identity_exclusions),
             "unique_cards_observed": len(unique_rows),
             "cards_observed": len(unique_rows),
             "duplicate_placements_excluded": len(duplicate_placements),
@@ -394,6 +424,7 @@ def build_homepage_ranking_recommendations(
         "recommendations": moves[:max_recommendations],
         "items": sorted(recommended, key=lambda row: row["recommended_position"]),
         "excluded_duplicate_placements": duplicate_placements,
+        "excluded_legacy_identity_placements": legacy_identity_exclusions,
         "excluded_candidates": excluded_candidates,
         "recent_high_urgency_exclusions": recent_high_urgency_exclusions,
     }

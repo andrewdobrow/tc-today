@@ -116,6 +116,7 @@ def test_archive_reconciliation_creates_redirects_and_keeps_oldest_permalink():
             "source_url": "https://www.wptv.com/shining-a-light/big-taste-of-martin-county-returns",
             "first_published": "Wed, 23 Jul 2026 10:00:00 -0400",
             "date": "2026-07-23",
+            "editorial_story_id": "story_big_taste",
         },
         {
             "slug": "2026-07-23-big-taste-fundraiser",
@@ -123,6 +124,7 @@ def test_archive_reconciliation_creates_redirects_and_keeps_oldest_permalink():
             "source_url": "https://news.google.com/rss/articles/BIGTASTE?oc=5",
             "first_published": "Wed, 23 Jul 2026 11:00:00 -0400",
             "date": "2026-07-23",
+            "editorial_story_id": "story_big_taste",
         },
     ]
     cleaned, redirects, report = generate._reconcile_archive_publication_identity(archive, index)
@@ -143,6 +145,7 @@ def test_custom_permalink_wins_publication_identity_group():
             "headline": "Fort Pierce child care crisis forces mother to leave nursing job",
             "source_url": "https://news.google.com/rss/articles/CHILDCARE?oc=5",
             "first_published": "Wed, 22 Jul 2026 08:00:00 -0400",
+            "editorial_story_id": "story_childcare",
         },
         {
             "slug": "custom-childcare",
@@ -151,6 +154,7 @@ def test_custom_permalink_wins_publication_identity_group():
             "first_published": "Wed, 22 Jul 2026 09:00:00 -0400",
             "is_custom": True,
             "authoritative_custom": True,
+            "editorial_story_id": "story_childcare",
         },
     ]
     cleaned, redirects, _ = generate._reconcile_archive_publication_identity(archive, index)
@@ -168,3 +172,10 @@ def test_known_article_slug_resolves_to_persistent_story_id():
     index = build_publication_identity_index(payload)
     assert index.resolve({"slug": "2026-07-23-big-taste-returns"}) == "story_big_taste"
     assert index.resolve({"link": "https://treasurecoast.today/articles/2026-07-23-big-taste-fundraiser.html?x=1"}) == "story_big_taste"
+
+
+def test_index_tracks_all_story_ids_but_source_enforcement_remains_duplicate_safe():
+    index = build_publication_identity_index(_registry_payload())
+    assert "story_followup" in index.all_story_ids
+    assert "story_followup" not in index.safe_story_ids
+    assert index.resolve_source({"source_url": "https://example.com/arrest"}) == ""
