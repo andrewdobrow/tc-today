@@ -183,3 +183,37 @@ def test_structural_fallback_still_blocks_sports_when_identity_is_unresolved():
 
     assert selected is local_gov
     assert generate.FRONT_PAGE_HERO_AUDIT["selection_reason"] == "structural_non_sports_fallback"
+
+
+def test_active_queue_custom_is_fresh_even_if_recovery_marker_survives():
+    generate = _load_generate_module()
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    old = (datetime.now(timezone.utc) - timedelta(days=2)).strftime("%Y-%m-%d")
+
+    stale_housing = _category(
+        "local_gov",
+        "Local Government",
+        _item(
+            "Treasure Coast home prices rise after two years of decline",
+            old,
+            6,
+            body="Housing prices were reported two days ago.",
+        ),
+    )
+    active_custom = _item(
+        "Port St. Lucie Police Unveil New $28 Million Training Facility",
+        today,
+        2,
+        body="Port St. Lucie police unveiled the new training facility today.",
+        archive_only=True,
+        custom=True,
+    )
+    active_custom["_custom_active_queue"] = True
+    st_lucie = _category("st_lucie", "St. Lucie County", active_custom)
+
+    selected = generate.select_front_page_hero([stale_housing, st_lucie])
+
+    assert selected is st_lucie
+    assert generate.FRONT_PAGE_HERO_AUDIT["selection_reason"] == "only_fresh_candidate"
+    assert generate.FRONT_PAGE_HERO_AUDIT["selected"]["archive_only"] is False
+    assert generate.FRONT_PAGE_HERO_AUDIT["selected"]["active_custom_queue"] is True

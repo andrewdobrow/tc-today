@@ -3391,7 +3391,7 @@ def select_front_page_hero(all_categories):
             score += 8
         if candidate.get("_source_placement") == "hero":
             score += 1
-        if item.get("_archive_only"):
+        if item.get("_archive_only") and not item.get("_custom_active_queue"):
             score -= 35
         assessment = _stale_assessment(candidate)
         age = assessment.get("age_hours")
@@ -3418,7 +3418,8 @@ def select_front_page_hero(all_categories):
             "placement": candidate.get("_source_placement", ""),
             "urgency_score": int(item.get("urgency_score", 0) or 0),
             "priority_score": _priority(candidate),
-            "archive_only": bool(item.get("_archive_only")),
+            "archive_only": bool(item.get("_archive_only") and not item.get("_custom_active_queue")),
+            "active_custom_queue": bool(item.get("_custom_active_queue")),
             "is_custom": bool(item.get("is_custom") or item.get("authoritative_custom")),
             "major_sports": bool(candidate.get("category_key") == "sports" and _is_major_sports_story(item)),
             **assessment,
@@ -3463,7 +3464,7 @@ def select_front_page_hero(all_categories):
                 )
         selected = source.get("hero") or selected_item
         FRONT_PAGE_HERO_AUDIT = {
-            "version": "1.11.3.0",
+            "version": "1.11.3.1",
             "generated_at": datetime.now(_tz.utc).isoformat(timespec="seconds"),
             "selection_reason": reason,
             "selected": {
@@ -3471,7 +3472,8 @@ def select_front_page_hero(all_categories):
                 "category_key": source.get("category_key", candidate.get("category_key", "")),
                 "category_label": source.get("category_label", candidate.get("category_label", "")),
                 "urgency_score": int(selected.get("urgency_score", 0) or 0),
-                "archive_only": bool(selected.get("_archive_only")),
+                "archive_only": bool(selected.get("_archive_only") and not selected.get("_custom_active_queue")),
+                "active_custom_queue": bool(selected.get("_custom_active_queue")),
                 "is_custom": bool(selected.get("is_custom") or selected.get("authoritative_custom")),
             },
             "candidates": sorted(
@@ -3529,7 +3531,11 @@ def select_front_page_hero(all_categories):
         candidate_pool = structural
         return _materialize(max(structural, key=_priority), "structural_non_sports_fallback")
 
-    active_candidates = [c for c in candidate_pool if not (c.get("hero") or {}).get("_archive_only")]
+    active_candidates = [
+        c for c in candidate_pool
+        if not (c.get("hero") or {}).get("_archive_only")
+        or (c.get("hero") or {}).get("_custom_active_queue")
+    ]
     working = active_candidates if active_candidates else list(candidate_pool)
 
     forced = [c for c in working if (c.get("hero") or {}).get("force_hero")]
@@ -5220,19 +5226,43 @@ def load_custom_articles():
             product_signature = str(exact_existing.get("product_guide_hash") or "")
             current_product_signature = _product_guide_hash(art) if str(art.get("article_type") or "") == "product_guide" else ""
             if not art.get("republish") and saved_hash and saved_hash == payload_hash and product_signature == current_product_signature:
+                # An unchanged queue entry is still an ACTIVE editorial placement.
+                # Removing it from this run forces archive recovery to reintroduce the
+                # story as ``_archive_only``, which in turn makes a freshly published
+                # original TCT article ineligible for front-page selection. Preserve
+                # the established permalink and first-publication time, but mark the
+                # payload as a no-op so write_archives does not rewrite it.
+                slug = str(exact_existing.get("slug") or "")
+                art["replace_slug"] = slug
+                art["_custom_requested_replace_slug"] = slug
+                art["_custom_exact_headline_update"] = True
+                art["_custom_payload_unchanged"] = True
+                art["_custom_active_queue"] = True
+                art["_archived_slug"] = slug
+                art["slug"] = slug or art.get("slug", "")
+                if slug:
+                    art["link"] = f"{SITE_URL}/articles/{slug}.html"
+                for key in (
+                    "first_published", "date", "lastmod", "published_raw",
+                    "editorial_story_id", "ranking_eligible", "legacy_identity_status",
+                ):
+                    if exact_existing.get(key) not in (None, ""):
+                        art[key] = exact_existing.get(key)
                 skipped_published += 1
-                print(f"  Custom queue skip (exact headline and payload already published): '{headline[:60]}'")
-                continue
-            art["replace_slug"] = exact_existing.get("slug", "")
-            art["_custom_requested_replace_slug"] = exact_existing.get("slug", "")
-            art["_custom_exact_headline_update"] = True
-            print(f"  Custom exact-headline update queued: '{headline[:60]}'")
+                print(f"  Custom active queue retained (payload unchanged): '{headline[:60]}'")
+            else:
+                art["replace_slug"] = exact_existing.get("slug", "")
+                art["_custom_requested_replace_slug"] = exact_existing.get("slug", "")
+                art["_custom_exact_headline_update"] = True
+                art["_custom_active_queue"] = True
+                print(f"  Custom exact-headline update queued: '{headline[:60]}'")
         else:
             art.pop("replace_slug", None)
             art.pop("update_existing", None)
 
         art["is_custom"] = True
         art["authoritative_custom"] = True
+        art["_custom_active_queue"] = True
         art["custom_body_hash"] = payload_hash
         art["custom_headline_key"] = headline
         art["enriched"] = True
@@ -5241,14 +5271,24 @@ def load_custom_articles():
         art["source_type"] = "custom"
         art.setdefault("urgency_score", 6)
         art.setdefault("teaser", art.get("intro") or art.get("body", "")[:180].rstrip())
-        art.setdefault("published", now.strftime("%a, %d %b %Y %H:%M:%S %z"))
-        art["published_raw"] = art.get("published_raw", art["published"])
-        art["published"] = format_age(art["published_raw"]) or art["published_raw"]
+        if art.get("_custom_payload_unchanged"):
+            stable_raw = (
+                art.get("published_raw")
+                or art.get("first_published")
+                or art.get("date")
+                or now.strftime("%a, %d %b %Y %H:%M:%S %z")
+            )
+            art["published_raw"] = stable_raw
+            art["published"] = format_age(stable_raw) or stable_raw
+        else:
+            art.setdefault("published", now.strftime("%a, %d %b %Y %H:%M:%S %z"))
+            art["published_raw"] = art.get("published_raw", art["published"])
+            art["published"] = format_age(art["published_raw"]) or art["published_raw"]
         live.append(art)
     if live:
         print(f"  Custom articles loaded: {len(live)}")
     if skipped_published:
-        print(f"  Custom queue ignored {skipped_published} already-published item(s)")
+        print(f"  Custom queue retained {skipped_published} unchanged published item(s) as active placement(s)")
     if retired_skips:
         print(f"  Custom queue ignored {retired_skips} retired item(s)")
     return live
@@ -10828,9 +10868,23 @@ def write_archives(all_categories, top_cat):
         this_run_token_sets.append(_sig_tokens(headline))
 
         if existing:
-            # Same story — update existing page in place, keep original URL
+            # Same story — update existing page in place, keep original URL. An
+            # unchanged active custom queue entry is retained for live placement and
+            # hero consideration, but its already-verified article page and archive
+            # row do not need to be rewritten on every scheduled run.
             slug = existing["slug"]
             hero["first_published"] = existing.get("first_published") or existing.get("date", "")
+            hero["_archived_slug"] = slug
+            hero["link"] = f"{SITE_URL}/articles/{slug}.html"
+            if hero.get("_custom_payload_unchanged") and (hero.get("is_custom") or hero.get("authoritative_custom")):
+                if _published_article_path(slug, articles_dir):
+                    if existing.get("editorial_story_id"):
+                        hero["editorial_story_id"] = existing.get("editorial_story_id")
+                        hero["_editorial_story_id"] = existing.get("editorial_story_id")
+                    hero["ranking_eligible"] = existing.get("ranking_eligible", True)
+                    hero["legacy_identity_status"] = existing.get("legacy_identity_status", "identified")
+                    _forward_identity_report["existing_articles_preserved"] += 1
+                    continue
 
             # Detect whether the content genuinely changed (headline or teaser/body).
             # This drives lastmod, which feeds freshness/staleness and card ordering.

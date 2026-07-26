@@ -214,3 +214,54 @@ def test_write_archives_publishes_queue_payload_when_live_clone_is_archive_only(
     assert matching[0]["is_custom"] is True
     assert matching[0]["product_count"] == 2
     assert (tmp_path / "articles" / f"{guide['slug']}.html").exists()
+
+
+def test_unchanged_published_custom_remains_active_queue_item(tmp_path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(g, "OUTPUT_DIR", tmp_path)
+    headline = "Port St. Lucie Police Unveil New $28 Million Training Facility"
+    body = "The police department unveiled a new training facility."
+    slug = "2026-07-25-port-st-lucie-police-unveil-28-million-training-facility"
+    queue = [{
+        "headline": headline,
+        "body": body,
+        "category": "st_lucie",
+        "image_url": "/images/psltrainingfacility.png",
+        "slug": slug,
+        "urgency_score": 2,
+    }]
+    archive = [{
+        "slug": slug,
+        "headline": headline,
+        "teaser": body,
+        "category_key": "st_lucie",
+        "category_label": "St. Lucie County",
+        "date": "2026-07-26",
+        "first_published": "Sat, 25 Jul 2026 23:59:00 -0400",
+        "published_raw": "Sat, 25 Jul 2026 23:59:00 -0400",
+        "lastmod": "2026-07-26",
+        "is_custom": True,
+        "authoritative_custom": True,
+        "custom_body_hash": g._custom_body_hash(body),
+        "product_guide_hash": "",
+        "editorial_story_id": "custom:psl-training",
+        "ranking_eligible": True,
+        "legacy_identity_status": "identified",
+    }]
+    (tmp_path / "custom_articles.json").write_text(json.dumps(queue), encoding="utf-8")
+    (tmp_path / "archive.json").write_text(json.dumps(archive), encoding="utf-8")
+    (tmp_path / "articles").mkdir()
+    (tmp_path / "articles" / f"{slug}.html").write_text("<html>published</html>", encoding="utf-8")
+
+    loaded = g.load_custom_articles()
+
+    assert len(loaded) == 1
+    item = loaded[0]
+    assert item["headline"] == headline
+    assert item["_custom_payload_unchanged"] is True
+    assert item["_custom_active_queue"] is True
+    assert item["_archived_slug"] == slug
+    assert item["link"].endswith(f"/articles/{slug}.html")
+    assert item["published_raw"] == archive[0]["published_raw"]
+    assert item["editorial_story_id"] == "custom:psl-training"
+    assert "_archive_only" not in item
