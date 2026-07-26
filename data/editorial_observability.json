@@ -2,12 +2,12 @@
   "schema_version": 11,
   "engine": {
     "name": "tct-editorial-engine",
-    "version": "1.11.2.1",
-    "release": "hurricane-guide-queue-hotfix",
+    "version": "1.11.2.3",
+    "release": "custom-queue-fail-closed",
     "resolver_version": "2.4",
     "relationship_engine_version": "1.2"
   },
-  "generated_at": "2026-07-26T02:26:02Z",
+  "generated_at": "2026-07-26T02:47:39Z",
   "mode": "enforce",
   "publication_behavior_changed": true,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 2,
     "applied_action_count": 2,
     "circuit_breaker_tripped": false,
-    "placements_before": 8,
-    "placements_after": 6,
+    "placements_before": 11,
+    "placements_after": 9,
     "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
     "recommendations": [
@@ -159,18 +159,18 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 166,
+    "candidates_processed": 165,
     "routes": {
-      "generate_new": 1,
-      "skip": 165
+      "generate_new": 3,
+      "skip": 162
     },
     "eligibility": {
       "listing": 14,
-      "low_value": 121,
+      "low_value": 120,
       "publishable": 31
     },
     "source_classes": {
-      "aggregator": 135,
+      "aggregator": 134,
       "local_news": 31
     },
     "rejected_count": 14,
@@ -305,10 +305,24 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 15,
-      "same_event": 151
+      "new_story": 17,
+      "same_event": 148
     },
     "examples": [
+      {
+        "story_id": "story_000201",
+        "title": "Florida Amazon layoff toll to reach 1,000+ for warehouse renovations - AOL.com",
+        "event_key": "unknown-event-3d9e1561f7",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
       {
         "story_id": "",
         "title": "1315 Bayshore Dr Apt 202, Fort Pierce, FL 34949 - Realtor.com",
@@ -544,13 +558,16 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
+      }
+    ],
+    "decision_trace_examples": [
       {
-        "story_id": "story_000539",
-        "title": "$30 million Port St. Lucie Police Training Facility ribbon cutting - Treasure Coast News",
-        "event_key": "unknown-event-7fe4a79cdf",
+        "story_id": "story_000201",
+        "title": "Florida Amazon layoff toll to reach 1,000+ for warehouse renovations - AOL.com",
+        "event_key": "unknown-event-3d9e1561f7",
         "relationship": "same_event",
         "confidence": 1.0,
+        "matched_existing": true,
         "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
@@ -558,9 +575,7 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      }
-    ],
-    "decision_trace_examples": [
+      },
       {
         "story_id": "story_000030",
         "title": "Florida County Would be Hardest-Hit by Amendment 3 Property-Tax Reform - The Boca Raton Tribune",
@@ -817,21 +832,6 @@
         ]
       },
       {
-        "story_id": "story_000516",
-        "title": "Messi may be Miami's most famous Argentine. Florida wildlife officials are far more worried about this other one. - CBS News",
-        "event_key": "unknown-event-3566399455",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_000604",
         "title": "New details in investigation into Florida infant's death; 3 arrested - Treasure Coast News",
         "event_key": "unknown-event-53439826f2",
@@ -868,22 +868,22 @@
       "florida": 126,
       "treasure_coast_local": 101,
       "treasure_coast_region": 52,
-      "unknown": 223
+      "unknown": 226
     },
-    "average_score": 61.82
+    "average_score": 61.66
   },
   "editorial_proximity": {
     "scopes": {
       "florida": 126,
       "treasure_coast_local": 101,
       "treasure_coast_region": 52,
-      "unknown": 223
+      "unknown": 226
     },
-    "average_priority": 5.32
+    "average_priority": 5.3
   },
   "story_lifecycle": {
     "counts": {
-      "active": 213,
+      "active": 216,
       "developing": 134,
       "ongoing": 155
     }
@@ -892,8 +892,8 @@
     "repair_version": 4,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 501,
-    "active_stories_after": 501,
+    "active_stories_before": 502,
+    "active_stories_after": 502,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -909,20 +909,20 @@
     "incident_identity_groups_resolved": 0,
     "incident_story_records_removed": 0,
     "remaining_incident_identity_groups": 0,
-    "generated_at": "2026-07-26T02:21:32Z",
+    "generated_at": "2026-07-26T02:43:10Z",
     "quarantined_story_records_retained": 8,
-    "active_story_count": 502
+    "active_story_count": 505
   },
   "stories": {
-    "total": 502,
+    "total": 505,
     "importance_levels": {
       "breaking": 0,
       "high": 7,
-      "normal": 88,
-      "low": 407,
+      "normal": 89,
+      "low": 409,
       "archived": 0
     },
-    "average_importance": 9.83,
+    "average_importance": 9.84,
     "top": [
       {
         "story_id": "story_000049",
@@ -937,7 +937,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 46.86
+          "age_hours": 47.22
         },
         "level": "high",
         "importance_reasons": [
@@ -980,7 +980,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 46.86,
+          "hours_since_update": 47.22,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -998,7 +998,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 66.69
+          "age_hours": 67.05
         },
         "level": "high",
         "importance_reasons": [
@@ -1041,7 +1041,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T07:40:14.261666+00:00",
-          "hours_since_update": 66.69,
+          "hours_since_update": 67.05,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1059,7 +1059,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 68.01
+          "age_hours": 68.37
         },
         "level": "high",
         "importance_reasons": [
@@ -1097,7 +1097,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 68.01,
+          "hours_since_update": 68.37,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1115,7 +1115,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 25.73
+          "age_hours": 26.1
         },
         "level": "normal",
         "importance_reasons": [
@@ -1151,7 +1151,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-25T00:38:10.414050+00:00",
-          "hours_since_update": 25.73,
+          "hours_since_update": 26.1,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1160,16 +1160,16 @@
         "story_id": "story_000545",
         "title": "3 arrested in death of 3-month-old boy in Fort Pierce last year - WPBF",
         "score": 50,
-        "editorial_priority": 47,
-        "editorial_score": 47,
+        "editorial_priority": 42,
+        "editorial_score": 42,
         "score_breakdown": {
-          "score": 47,
+          "score": 42,
           "importance": 50,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 23.68
+          "age_hours": 24.04
         },
         "level": "normal",
         "importance_reasons": [
@@ -1207,7 +1207,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-25T02:41:20.731485+00:00",
-          "hours_since_update": 23.68,
+          "hours_since_update": 24.04,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1225,7 +1225,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 1.74
+          "age_hours": 2.1
         },
         "level": "normal",
         "importance_reasons": [
@@ -1265,7 +1265,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-26T00:40:31.160092+00:00",
-          "hours_since_update": 1.74,
+          "hours_since_update": 2.1,
           "event_count": 33,
           "timeline_entries": 32
         }
@@ -1283,7 +1283,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 4.59
+          "age_hours": 4.95
         },
         "level": "normal",
         "importance_reasons": [
@@ -1312,7 +1312,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T21:46:21.313430+00:00",
-          "hours_since_update": 4.59,
+          "hours_since_update": 4.95,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1330,7 +1330,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 51.07
+          "age_hours": 51.43
         },
         "level": "normal",
         "importance_reasons": [
@@ -1366,7 +1366,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 51.07,
+          "hours_since_update": 51.43,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1384,7 +1384,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 51.07
+          "age_hours": 51.43
         },
         "level": "normal",
         "importance_reasons": [
@@ -1420,7 +1420,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 51.07,
+          "hours_since_update": 51.43,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1438,7 +1438,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 48.7
+          "age_hours": 49.06
         },
         "level": "normal",
         "importance_reasons": [
@@ -1474,7 +1474,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 48.7,
+          "hours_since_update": 49.06,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1492,7 +1492,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 34.68
+          "age_hours": 35.05
         },
         "level": "normal",
         "importance_reasons": [
@@ -1523,7 +1523,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T15:40:29.610573+00:00",
-          "hours_since_update": 34.68,
+          "hours_since_update": 35.05,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1541,7 +1541,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 51.07
+          "age_hours": 51.43
         },
         "level": "normal",
         "importance_reasons": [
@@ -1570,7 +1570,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 51.07,
+          "hours_since_update": 51.43,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1588,7 +1588,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 48.69
+          "age_hours": 49.05
         },
         "level": "normal",
         "importance_reasons": [
@@ -1617,7 +1617,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 48.69,
+          "hours_since_update": 49.05,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1635,7 +1635,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 25.72
+          "age_hours": 26.1
         },
         "level": "normal",
         "importance_reasons": [
@@ -1664,7 +1664,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T00:38:10.414050+00:00",
-          "hours_since_update": 25.72,
+          "hours_since_update": 26.1,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1682,7 +1682,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 51.07
+          "age_hours": 51.43
         },
         "level": "normal",
         "importance_reasons": [
@@ -1715,7 +1715,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 51.07,
+          "hours_since_update": 51.43,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1733,7 +1733,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 24.54
+          "age_hours": 24.9
         },
         "level": "normal",
         "importance_reasons": [
@@ -1766,7 +1766,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T01:48:58.139068+00:00",
-          "hours_since_update": 24.54,
+          "hours_since_update": 24.9,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1784,7 +1784,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.59
+          "age_hours": 4.95
         },
         "level": "high",
         "importance_reasons": [
@@ -1818,7 +1818,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T21:46:21.313430+00:00",
-          "hours_since_update": 4.59,
+          "hours_since_update": 4.95,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1836,7 +1836,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 68.01
+          "age_hours": 68.37
         },
         "level": "normal",
         "importance_reasons": [
@@ -1869,7 +1869,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 68.01,
+          "hours_since_update": 68.37,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1887,7 +1887,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 51.07
+          "age_hours": 51.43
         },
         "level": "normal",
         "importance_reasons": [
@@ -1920,7 +1920,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 51.07,
+          "hours_since_update": 51.43,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1938,7 +1938,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 51.07
+          "age_hours": 51.43
         },
         "level": "normal",
         "importance_reasons": [
@@ -1972,7 +1972,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 51.07,
+          "hours_since_update": 51.43,
           "event_count": 1,
           "timeline_entries": 1
         }
