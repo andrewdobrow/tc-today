@@ -244,7 +244,7 @@ DEFAULT_AFFILIATE_DISCLOSURE = (
 # Product-guide output embeds component CSS in each permanent article page. Include
 # this version in the publication signature so presentation fixes republish existing
 # guides even when their editorial copy and product data are unchanged.
-PRODUCT_GUIDE_TEMPLATE_VERSION = "1.3-mobile-image-containment"
+PRODUCT_GUIDE_TEMPLATE_VERSION = "1.4-natural-aspect-image-containment"
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -544,45 +544,40 @@ def get_image_credit(source_url):
     return ""
 
 
-# Local fallback images — /images/fallback/ in repo
+# Branded fallback graphics. These are intentionally non-photographic TCT assets,
+# so a missing source image never implies that an AI-generated or unrelated scene is
+# connected to the story. A real editorial photo pool can be inserted ahead of this
+# layer later without changing any of the existing call sites.
 FALLBACK_IMAGE_MAP = {
-    "local_gov":    ["local_gov-1.jpg",    "local_gov-2.jpg",    "local_gov-3.jpg"],
-    "crime":        ["crime-1.jpg",        "crime-2.jpg",        "crime-3.jpg"],
-    "business":     ["business-1.jpg",     "business-2.jpg",     "business-3.jpg"],
-    "sports":       ["sports-1.jpg",       "sports-2.jpg",       "sports-3.jpg"],
-    "things_to_do": ["things_to_do-1.jpg", "things_to_do-2.jpg", "things_to_do-3.jpg"],
-    "florida":      ["florida-1.jpg",      "florida-2.jpg",      "florida-3.jpg"],
-    "martin":       ["martin-1.jpg",       "martin-2.jpg",       "martin-3.jpg"],
-    "st_lucie":     ["st_lucie-1.jpg",     "st_lucie-2.jpg",     "st_lucie-3.jpg"],
-    "indian_river": ["indian_river-1.jpg", "indian_river-2.jpg", "indian_river-3.jpg"],
-    "top_news":     ["local_gov-1.jpg",    "crime-1.jpg",        "business-1.jpg"],
+    "local_gov":    ["og-local_gov.png"],
+    "crime":        ["og-crime.png"],
+    "business":     ["og-business.png"],
+    "sports":       ["og-sports.png"],
+    "things_to_do": ["og-things_to_do.png"],
+    "florida":      ["og-florida.png"],
+    "martin":       ["og-martin.png"],
+    "st_lucie":     ["og-st_lucie.png"],
+    "indian_river": ["og-indian_river.png"],
+    "top_news":     ["og-image.png"],
 }
 
-# Tracks how many times each category's fallback has been used this run,
-# so fallbacks cycle sequentially instead of repeating.
-_FALLBACK_ROTATION = {}
-
 def get_fallback_image(category_key, headline="", sequential=False):
+    """Return the category's branded TCT fallback graphic.
+
+    ``headline`` and ``sequential`` remain in the signature for compatibility with
+    existing render paths. Branded fallbacks are deterministic and are not rotated.
+    No photo credit is returned because these assets are graphics, not photographs.
+    """
+    del headline, sequential
     base_names = FALLBACK_IMAGE_MAP.get(category_key, FALLBACK_IMAGE_MAP["top_news"])
-    available = []
     for base in base_names:
-        stem = base.rsplit(".", 1)[0]
-        for ext in ["jpg", "jpeg", "png", "webp"]:
-            path = OUTPUT_DIR / "images" / "fallback" / f"{stem}.{ext}"
-            if path.exists():
-                available.append(f"{stem}.{ext}")
-                break
-    if not available:
-        return "", ""
-    if sequential:
-        # Cycle through available images in order per category
-        n = _FALLBACK_ROTATION.get(category_key, 0)
-        idx = n % len(available)
-        _FALLBACK_ROTATION[category_key] = n + 1
-    else:
-        seed = headline or category_key or "top_news"
-        idx  = int(hashlib.sha256(seed.encode("utf-8")).hexdigest(), 16) % len(available)
-    return f"{SITE_URL}/images/fallback/{available[idx]}", "Treasure Coast Today"
+        if (OUTPUT_DIR / base).exists():
+            return f"{SITE_URL}/{base}", ""
+
+    generic = "og-image.png"
+    if (OUTPUT_DIR / generic).exists():
+        return f"{SITE_URL}/{generic}", ""
+    return "", ""
 
 def upscale_image_url(url):
     """Upscale BBC CDN images by replacing the size segment with 1024."""
@@ -4181,12 +4176,10 @@ def render_index(all_categories, top_cat):
         img_url   = card.get("image_url", "")
         if not img_url:
             fb_img, _ = get_fallback_image(ck, card.get("headline", ""), sequential=True)
-            # Never fall back to the og social-share image on-page. If the category
-            # fallback is somehow unavailable, use the generic top_news fallback, then
-            # a guaranteed local image — the og-*.png files are for social cards only.
+            # If the category graphic is unavailable, use the generic TCT graphic.
             if not fb_img:
                 fb_img, _ = get_fallback_image("top_news", card.get("headline", ""), sequential=True)
-            img_url = fb_img or f"{SITE_URL}/images/fallback/local_gov-1.jpg"
+            img_url = fb_img or f"{SITE_URL}/og-image.png"
         topnews_attr = ' data-topnews="true"' if id(card) in topnews_ids else ""
         _urgency_text = f"{cl} {card.get('headline','')}".strip().lower()
         urgency_cls = " live" if _urgency_text.startswith("live") else (" developing" if _urgency_text.startswith("developing") else (" breaking" if card.get("is_breaking") or _urgency_text.startswith("breaking") else ""))
@@ -4898,8 +4891,8 @@ def _render_product_guide_body(item):
 .pg-quick-picks a {{ color:var(--text); text-decoration:none; font-weight:650; line-height:1.25; }}
 .pg-rank {{ width:26px; height:26px; border-radius:50%; display:grid; place-items:center; background:var(--pg-green); color:#fff; font-weight:800; font-size:12px; }}
 .pg-product-card {{ display:grid; grid-template-columns:minmax(170px,30%) minmax(0,1fr); gap:24px; min-width:0; overflow:hidden; padding:22px; margin:0 0 18px; border:1px solid var(--pg-line); border-radius:16px; background:#fff; box-shadow:0 8px 28px rgba(20,55,39,.06); }}
-.pg-product-image {{ box-sizing:border-box; display:grid; place-items:center; width:100%; min-width:0; height:230px; min-height:230px; overflow:hidden; padding:18px; border-radius:12px; background:#fafcfb; }}
-.pg-product-image img {{ display:block; width:100%; height:100%; max-width:100%; max-height:100%; object-fit:contain; object-position:center; }}
+.pg-product-image {{ box-sizing:border-box; display:flex; align-items:center; justify-content:center; width:100%; min-width:0; min-height:230px; padding:18px; border-radius:12px; background:#fafcfb; }}
+.pg-product-image img {{ display:block!important; width:auto!important; height:auto!important; max-width:100%!important; max-height:280px!important; aspect-ratio:auto!important; object-fit:contain!important; object-position:center!important; }}
 .pg-product-copy h2 {{ margin:7px 0 8px; font-family:"Fraunces",serif; font-size:25px; line-height:1.2; }}
 .pg-product-copy p {{ margin:0 0 12px; font-size:16px; line-height:1.65; }}
 .pg-label {{ display:inline-block; padding:4px 8px; border-radius:5px; background:var(--pg-green); color:#fff; font-size:10px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; }}
@@ -4919,8 +4912,8 @@ def _render_product_guide_body(item):
   .pg-disclosure strong {{ white-space:normal; }}
   .pg-quick-picks ol {{ grid-template-columns:1fr; }}
   .pg-product-card {{ grid-template-columns:minmax(0,1fr); padding:17px; }}
-  .pg-product-image {{ width:100%; height:210px; min-height:210px; padding:16px; }}
-  .pg-product-image img {{ width:100%; height:100%; max-width:100%; max-height:100%; object-fit:contain; object-position:center; }}
+  .pg-product-image {{ width:100%; min-height:0; padding:16px; }}
+  .pg-product-image img {{ width:auto!important; height:auto!important; max-width:100%!important; max-height:320px!important; aspect-ratio:auto!important; object-fit:contain!important; object-position:center!important; }}
   .pg-product-copy h2 {{ font-size:23px; }}
   .pg-amazon-button {{ width:100%; }}
 }}
@@ -5564,12 +5557,12 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     img_html   = ""
     _art_img   = hero.get("image_url", "")
     if not _art_img:
-        # No real image — use the category fallback so the page isn't text-only.
-        # Never use the og-*.png social-share image here; those are for social cards.
+        # No real image — use the branded category graphic so the page is not
+        # paired with an unrelated or synthetic photograph.
         _fb, _ = get_fallback_image(category_key, hero.get("headline", ""))
         if not _fb:
             _fb, _ = get_fallback_image("top_news", hero.get("headline", ""))
-        _art_img = _fb or f"{SITE_URL}/images/fallback/local_gov-1.jpg"
+        _art_img = _fb or f"{SITE_URL}/og-image.png"
     if _art_img:
         credit   = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
         img_html = f'<figure class="article-hero-image"><img src="{_art_img}" alt="{hero["headline"]}" loading="eager">{credit}</figure>'
