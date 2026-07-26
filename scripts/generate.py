@@ -3464,7 +3464,7 @@ def select_front_page_hero(all_categories):
                 )
         selected = source.get("hero") or selected_item
         FRONT_PAGE_HERO_AUDIT = {
-            "version": "1.11.3.2",
+            "version": "1.11.3.4",
             "generated_at": datetime.now(_tz.utc).isoformat(timespec="seconds"),
             "selection_reason": reason,
             "selected": {
@@ -4730,6 +4730,35 @@ def _load_custom_retired_slugs(output_root=None):
     return result
 
 
+def _load_custom_purge_slugs(output_root=None):
+    """Return exact retired slugs whose public article content must be removed.
+
+    Headline retirement remains the authoritative queue/live-placement block. A hard
+    public purge is deliberately slug-scoped so a contaminated live placement cannot
+    erase a different custom article's established permalink.
+    """
+    root = Path(output_root or OUTPUT_DIR)
+    path = root / "data" / "custom-retirements.json"
+    if not path.exists():
+        return set()
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return set()
+    rows = data.get("slugs", []) if isinstance(data, dict) else []
+    result = set()
+    for row in rows if isinstance(rows, list) else []:
+        if not isinstance(row, dict):
+            continue
+        action = str(row.get("action") or "").strip().lower()
+        if action != "purge" and row.get("purge") is not True:
+            continue
+        slug = str(row.get("slug") or "").strip()
+        if slug:
+            result.add(slug)
+    return result
+
+
 def _is_retired_custom_item(item, output_root=None):
     if not isinstance(item, dict):
         return False
@@ -4954,21 +4983,63 @@ def apply_custom_retirements_to_live(all_categories, top_cat=None, output_root=N
     return removed
 
 
+def _render_retired_custom_redirect_page(headline="", category_key=""):
+    """Remove retired article content while preserving a noindex path handoff."""
+    target_path = f"/{category_key}.html" if category_key in CATEGORIES else "/archive.html"
+    target_url = f"{SITE_URL}{target_path}"
+    safe_title = re.sub(r"[<>]", "", headline or "Removed article")
+    return f'''<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{safe_title} | {SITE_NAME}</title>
+  <link rel="canonical" href="{target_url}">
+  <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="refresh" content="0; url={target_url}">
+  <script>window.location.replace({json.dumps(target_url)});</script>
+</head>
+<body>
+  <p>This article has been removed. Continue to <a href="{target_url}">{SITE_NAME}</a>.</p>
+</body>
+</html>'''
+
+
 def apply_custom_retirements_to_archive(output_root=None):
     root = Path(output_root or OUTPUT_DIR)
     retired = _load_custom_retirements(root)
     retired_slugs = _load_custom_retired_slugs(root)
+    purge_slugs = _load_custom_purge_slugs(root)
     archive_path = root / "archive.json"
     if not (retired or retired_slugs) or not archive_path.exists():
         return 0
     archive = load_archive(archive_path)
+    kept = []
     changed = 0
+    purged = []
+    articles_dir = root / "articles"
     for entry in archive:
         if not isinstance(entry, dict) or not (entry.get("is_custom") or entry.get("authoritative_custom")):
+            kept.append(entry)
             continue
         entry_headline = _exact_custom_headline(entry.get("headline"))
         entry_slug = str(entry.get("slug") or "").strip()
         if entry_headline not in retired and entry_slug not in retired_slugs:
+            kept.append(entry)
+            continue
+        if entry_slug in purge_slugs:
+            purged.append({
+                "headline": entry_headline,
+                "slug": entry_slug,
+                "category_key": str(entry.get("category_key") or ""),
+            })
+            articles_dir.mkdir(parents=True, exist_ok=True)
+            (articles_dir / f"{entry_slug}.html").write_text(
+                _render_retired_custom_redirect_page(
+                    entry_headline, str(entry.get("category_key") or "")
+                ),
+                encoding="utf-8",
+            )
             continue
         if not entry.get("exclude_from_live_recovery") or entry.get("identity_quarantine_reason") != "editor_retired_custom_article":
             changed += 1
@@ -4977,10 +5048,29 @@ def apply_custom_retirements_to_archive(output_root=None):
         entry["exclude_from_live_recovery"] = True
         entry["identity_quarantine_reason"] = "editor_retired_custom_article"
         entry["legacy_identity_status"] = "editor_retired"
-    if changed:
-        archive_path.write_text(json.dumps(archive, indent=2, ensure_ascii=False), encoding="utf-8")
-        print(f"  Retired {changed} custom archive record(s) from live recovery")
-    return changed
+        kept.append(entry)
+
+    if changed or purged:
+        archive_path.write_text(json.dumps(kept, indent=2, ensure_ascii=False), encoding="utf-8")
+        if changed:
+            print(f"  Retired {changed} custom archive record(s) from live recovery")
+    if purged:
+        # Public discovery surfaces are derived from the post-retirement archive so a
+        # purged custom URL cannot remain listed after its article content is removed.
+        (root / "archive.html").write_text(render_archive_page(kept), encoding="utf-8")
+        (root / "sitemap.xml").write_text(update_sitemap(kept), encoding="utf-8")
+        (root / "news-sitemap.xml").write_text(update_news_sitemap(kept), encoding="utf-8")
+        data_dir = root / "data"
+        data_dir.mkdir(parents=True, exist_ok=True)
+        (data_dir / "custom-retirement-report.json").write_text(json.dumps({
+            "schema_version": 1,
+            "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "quarantined_count": changed,
+            "purged_count": len(purged),
+            "purged": purged,
+        }, indent=2, ensure_ascii=False), encoding="utf-8")
+        print(f"  Purged {len(purged)} retired custom article(s) from public archive and discovery surfaces")
+    return changed + len(purged)
 
 def _declared_custom_category(item):
     """Return the normalized category explicitly assigned to a custom article."""
@@ -5175,6 +5265,7 @@ def load_custom_articles():
     skipped_published = 0
     retired_skips = 0
     queued_headlines = set()
+    queued_slugs = {}
     for index, raw in enumerate(data, start=1):
         if not isinstance(raw, dict):
             raise RuntimeError(
@@ -5191,6 +5282,16 @@ def load_custom_articles():
                 "Keep one authoritative queue entry per headline."
             )
         queued_headlines.add(headline)
+        requested_slug = slugify(str(art.get("slug") or ""))
+        if requested_slug:
+            prior_headline = queued_slugs.get(requested_slug)
+            if prior_headline and prior_headline != headline:
+                raise RuntimeError(
+                    "custom_articles.json reuses slug "
+                    f"'{requested_slug}' for both '{prior_headline}' and '{headline}'. "
+                    "Each custom headline requires a unique requested slug."
+                )
+            queued_slugs[requested_slug] = headline
         if art.get("retired") is True or headline in retired:
             retired_skips += 1
             continue
@@ -6238,6 +6339,85 @@ def _custom_story_fingerprint(headline, teaser=""):
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest()[:24] if normalized else ""
 
 
+def _archive_custom_headline_key(entry):
+    """Return the immutable custom headline identity stored on an archive row.
+
+    Newer rows carry ``custom_headline_key``. Legacy rows fall back to their persisted
+    headline, but only before any current-run custom backfill mutates metadata. This
+    prevents a routine sports recap from inheriting another game's custom identity.
+    """
+    if not isinstance(entry, dict):
+        return ""
+    return _exact_custom_headline(
+        entry.get("custom_headline_key") or entry.get("headline")
+    )
+
+
+def _backfill_active_custom_archive_authority(archive, current_customs):
+    """Backfill legacy custom metadata without fuzzy cross-article matching.
+
+    Exact custom headlines are authoritative. A narrow known-event key is also safe
+    for the explicitly supported continuing incidents. Generic token overlap is not
+    safe for recurring beats such as St. Lucie Mets game recaps, where team names and
+    comeback language repeat across distinct games.
+    """
+    archive = list(archive or [])
+    stamped = 0
+    for current in current_customs or []:
+        if not isinstance(current, dict):
+            continue
+        headline = _exact_custom_headline(current.get("headline"))
+        if not headline:
+            continue
+        exact_matches = [
+            entry for entry in archive
+            if _archive_custom_headline_key(entry) == headline
+        ]
+        matches = exact_matches
+        if not matches:
+            current_text = " ".join([
+                current.get("headline", ""), current.get("teaser", ""),
+                current.get("body", "")[:500],
+            ])
+            current_event = _known_event_key(current_text)
+            if current_event:
+                matches = [
+                    entry for entry in archive
+                    if (
+                        entry.get("custom_event_key")
+                        or _known_event_key(" ".join([
+                            entry.get("headline", ""), entry.get("teaser", ""),
+                            entry.get("body", "")[:500],
+                        ]))
+                    ) == current_event
+                ]
+        if not matches:
+            continue
+
+        def rank(entry):
+            exact = 1 if _archive_custom_headline_key(entry) == headline else 0
+            words = int(entry.get("article_word_count", 0) or 0)
+            first = str(entry.get("first_published") or entry.get("date") or "")
+            return (exact, words, first)
+
+        entry = max(matches, key=rank)
+        entry["is_custom"] = True
+        entry["authoritative_custom"] = True
+        entry["custom_headline_key"] = headline
+        entry["custom_fingerprint"] = _custom_story_fingerprint(
+            current.get("headline", ""),
+            current.get("teaser", "") or current.get("body", "")[:180],
+        )
+        event_key = _known_event_key(" ".join([
+            current.get("headline", ""), current.get("teaser", ""),
+            current.get("body", "")[:500],
+        ]))
+        if event_key:
+            entry["custom_event_key"] = event_key
+        stamped += 1
+    return stamped
+
+
 def _iter_live_custom_placements(all_categories, top_cat=None):
     """Yield each distinct live custom placement once with its surface label."""
     seen = set()
@@ -6793,6 +6973,34 @@ def _rebind_live_items_to_published_archive(all_categories, archive, current_cus
                 # will stop deployment if the exact publication receipt is missing.
                 continue
 
+            # Custom placement identity is stricter than persistent story identity.
+            # The story registry can correctly group recurring coverage under one
+            # broader beat/story relationship, but two manual articles with different
+            # exact headlines are still separate publications and permalinks. Resolve
+            # current custom placements here before the generic story-ID bridge.
+            if item.get("is_custom") or item.get("authoritative_custom"):
+                item_headline = _exact_custom_headline(item.get("headline"))
+                matched = next(
+                    (
+                        entry for entry in archive
+                        if (entry.get("is_custom") or entry.get("authoritative_custom"))
+                        and _archive_custom_headline_key(entry) == item_headline
+                    ),
+                    None,
+                )
+                if not matched:
+                    # New custom article: leave its requested slug and editorial copy
+                    # untouched so write_archives can create the new permalink.
+                    continue
+                slug = str(matched.get("slug") or "")
+                if not _published_article_path(slug, articles_dir):
+                    continue
+                if _bind_live_item_to_archive(
+                    item, matched, current_customs, replace_with_custom=True
+                ):
+                    rebound += 1
+                continue
+
             # Publication identity may have consolidated several rewritten archive
             # rows after the earlier live-binding pass.  Prefer the persistent story
             # ID carried by v1.9.3 so every surviving placement is rebound to the one
@@ -6822,21 +7030,6 @@ def _rebind_live_items_to_published_archive(all_categories, archive, current_cus
             # safe bridge for an un-stamped current placement.
             if not matched and not story_id and not item.get("_archive_only"):
                 matched = _find_exact_archive_source_entry(item, archive)
-            if not matched and (item.get("is_custom") or item.get("authoritative_custom")):
-                # A custom placement may recover its own archived permalink. Never
-                # replace a non-custom live item in-place with custom content: doing
-                # so leaves the item inside the original category container and was
-                # able to turn a Florida traffic report into a Sports hero. Cross-
-                # category feed duplicates are handled by custom injection and the
-                # guarded suppression layer instead.
-                matched = next(
-                    (
-                        entry for entry in archive
-                        if (entry.get("is_custom") or entry.get("authoritative_custom"))
-                        and _matches_archived_custom(item, entry)
-                    ),
-                    None,
-                )
             if not matched:
                 continue
             slug = str(matched.get("slug") or "")
@@ -9273,7 +9466,12 @@ def validate_nonstory_publication_contract(all_categories, top_cat, output_root)
 
 
 def _resolve_custom_publication_target(hero, archive, existing, headline):
-    """Authorize custom updates only through an exact headline match."""
+    """Authorize custom updates only through immutable exact-headline identity.
+
+    A new custom headline may never reuse an archive slug already owned by another
+    article. This fails closed whether the collision came from a queue editing error,
+    a persistent-story false match, or a stale live/archive clone.
+    """
     if not (hero.get("is_custom") or hero.get("authoritative_custom")):
         return existing, None, None
     headline_key = _exact_custom_headline(headline)
@@ -9282,7 +9480,7 @@ def _resolve_custom_publication_target(hero, archive, existing, headline):
         if isinstance(entry, dict)
         and (entry.get("is_custom") or entry.get("authoritative_custom"))
         and not entry.get("retired_custom")
-        and _exact_custom_headline(entry.get("headline")) == headline_key
+        and _archive_custom_headline_key(entry) == headline_key
     ]
     matches.sort(key=lambda row: (
         str(row.get("first_published") or row.get("date") or ""),
@@ -9313,6 +9511,24 @@ def _resolve_custom_publication_target(hero, archive, existing, headline):
     # headline does not match.
     requested_slug = hero.get("_custom_requested_slug", "")
     forced_slug = slugify(str(requested_slug or "")) or None
+    if forced_slug:
+        collision = next(
+            (
+                entry for entry in archive or []
+                if slugify(str(entry.get("slug") or "")) == forced_slug
+                and _archive_custom_headline_key(entry) != headline_key
+            ),
+            None,
+        )
+        if collision is not None:
+            raise RuntimeError(
+                "Custom publication slug collision: "
+                f"'{headline_key}' requested '{forced_slug}', but that permalink "
+                f"already belongs to '{collision.get('headline', '')}'. "
+                "Use a new unique slug; generation stopped before any article page "
+                "could be overwritten."
+            )
+
     story_id = "custom:" + hashlib.sha256(
         ("headline|" + headline_key).encode("utf-8")
     ).hexdigest()[:32]
@@ -10627,39 +10843,15 @@ def write_archives(all_categories, top_cat):
     # duplicate URL: it is retained as a redirect destination so readers and search
     # engines do not encounter a 404.
 
-    # BACKFILL is_custom on existing archive entries. The flag was added later, so
-    # custom articles archived before then have no flag and would not be protected.
-    # Match each currently-loaded custom article to its archive entry (by fuzzy
-    # headline) and stamp the flag, so the protection guard below reliably fires even
-    # for custom articles first published before the flag existed.
+    # Backfill custom metadata only through immutable exact-headline identity or a
+    # narrow known-event key. Generic fuzzy matching is unsafe for recurring beats
+    # such as baseball recaps, where different games share teams and vocabulary.
     try:
         _current_customs = load_custom_articles()
     except Exception:
         _current_customs = []
     if _current_customs:
-        for _c in _current_customs:
-            _ctok = _sig_tokens(_c.get("headline", ""))
-            _matches = [e for e in archive if _same_story(_ctok, _sig_tokens(e.get("headline", "")))]
-            if not _matches:
-                continue
-            _custom_headline = (_c.get("headline") or "").strip().lower()
-            # Mark exactly one archive record authoritative: exact headline first,
-            # then strongest token overlap/content depth. Never stamp every duplicate.
-            def _custom_archive_rank(e):
-                _headline = (e.get("headline") or "").strip().lower()
-                _exact = 1 if _headline == _custom_headline else 0
-                _overlap = len(_ctok & _sig_tokens(e.get("headline", "")))
-                _words = int(e.get("article_word_count", 0) or 0)
-                return (_exact, _overlap, _words)
-            _entry = max(_matches, key=_custom_archive_rank)
-            _entry["is_custom"] = True
-            _entry["authoritative_custom"] = True
-            _entry["custom_fingerprint"] = _custom_story_fingerprint(
-                _c.get("headline", ""), _c.get("teaser", "") or _c.get("body", "")[:180]
-            )
-            _entry["custom_event_key"] = _known_event_key(
-                " ".join([_c.get("headline", ""), _c.get("teaser", ""), _c.get("body", "")[:500]])
-            )
+        _backfill_active_custom_archive_authority(archive, _current_customs)
 
     archive, _canonical_redirects = apply_canonical_story_cleanup(archive, articles_dir, OUTPUT_DIR)
 

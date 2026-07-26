@@ -6,6 +6,7 @@ from __future__ import annotations
 import importlib
 import json
 import pkgutil
+import re
 import sys
 from pathlib import Path
 
@@ -29,6 +30,7 @@ def validate_custom_queue(path: Path) -> list[str]:
 
     errors: list[str] = []
     headlines: set[str] = set()
+    slugs: dict[str, str] = {}
     for index, item in enumerate(data, start=1):
         label = f"custom_articles.json item {index}"
         if not isinstance(item, dict):
@@ -41,6 +43,17 @@ def validate_custom_queue(path: Path) -> list[str]:
         if headline in headlines:
             errors.append(f"{label} duplicates exact headline: {headline}")
         headlines.add(headline)
+        requested_slug = re.sub(
+            r"[^a-z0-9]+", "-", str(item.get("slug") or "").strip().lower()
+        ).strip("-")
+        if requested_slug:
+            prior_headline = slugs.get(requested_slug)
+            if prior_headline and prior_headline != headline:
+                errors.append(
+                    f"{label} ('{headline}') reuses slug '{requested_slug}' "
+                    f"already assigned to '{prior_headline}'"
+                )
+            slugs[requested_slug] = headline
         if item.get("retired") is True:
             continue
         if not str(item.get("category") or "").strip():

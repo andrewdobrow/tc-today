@@ -93,3 +93,53 @@ def test_repository_custom_queue_satisfies_validation_contract():
     # Editorial queue contents are expected to grow and change. CI validates the
     # queue structure instead of hard-coding an exact set of active headlines.
     assert validate_custom_queue(Path("custom_articles.json")) == []
+
+
+def test_duplicate_requested_slug_fails_generator_loading(tmp_path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(g, "OUTPUT_DIR", tmp_path)
+    rows = [
+        {
+            "headline": "First article",
+            "body": "copy",
+            "category": "florida",
+            "slug": "same-custom-slug",
+        },
+        {
+            "headline": "Second article",
+            "body": "copy",
+            "category": "sports",
+            "slug": "same-custom-slug",
+        },
+    ]
+    (tmp_path / "custom_articles.json").write_text(
+        json.dumps(rows), encoding="utf-8"
+    )
+
+    with pytest.raises(RuntimeError, match="reuses slug"):
+        g.load_custom_articles()
+
+
+def test_duplicate_requested_slug_fails_package_validation(tmp_path):
+    from scripts.validate_package import validate_custom_queue
+
+    rows = [
+        {
+            "headline": "First article",
+            "body": "copy",
+            "category": "florida",
+            "slug": "same-custom-slug",
+        },
+        {
+            "headline": "Second article",
+            "body": "copy",
+            "category": "sports",
+            "slug": "same-custom-slug",
+        },
+    ]
+    path = tmp_path / "custom_articles.json"
+    path.write_text(json.dumps(rows), encoding="utf-8")
+
+    errors = validate_custom_queue(path)
+    assert len(errors) == 1
+    assert "reuses slug 'same-custom-slug'" in errors[0]
