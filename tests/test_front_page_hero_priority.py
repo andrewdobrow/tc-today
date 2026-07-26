@@ -1,0 +1,185 @@
+import importlib.util
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+
+def _load_generate_module():
+    path = Path("scripts/generate.py")
+    spec = importlib.util.spec_from_file_location("scripts.generate_front_page_priority_test", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
+def _item(headline, when, urgency, *, body=None, archive_only=False, custom=False):
+    article = {
+        "headline": headline,
+        "teaser": body or headline,
+        "body": body or headline,
+        "published_raw": when,
+        "date": when,
+        "urgency_score": urgency,
+        "source_quality": "archive" if archive_only else "full",
+        "enriched": True,
+    }
+    if archive_only:
+        article["_archive_only"] = True
+        article["_archive_verified_quality"] = True
+        article["ranking_eligible"] = True
+    if custom:
+        article["is_custom"] = True
+        article["authoritative_custom"] = True
+        article["category"] = "st_lucie"
+    return article
+
+
+def _category(key, label, hero, cards=None):
+    return {
+        "category_key": key,
+        "category_label": label,
+        "hero": hero,
+        "cards": list(cards or []),
+    }
+
+
+def test_fresh_custom_card_can_replace_stale_section_hero_and_archive_sports():
+    generate = _load_generate_module()
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    old = (datetime.now(timezone.utc) - timedelta(days=3)).strftime("%Y-%m-%d")
+
+    sports = _category(
+        "sports",
+        "Sports",
+        _item(
+            "Zayas Homers Twice as St. Lucie Mets Cruise Past Mighty Mussels",
+            old,
+            6,
+            body="The Mets won a routine game three days ago at Clover Park.",
+            archive_only=True,
+        ),
+    )
+    stale_county_hero = _item(
+        "Treasure Coast home prices rose earlier this week",
+        old,
+        6,
+        body="Martin and St. Lucie County home prices were reported earlier this week.",
+    )
+    fresh_custom = _item(
+        "Port St. Lucie Police Unveil New $28 Million Training Facility",
+        today,
+        6,
+        body=(
+            "Port St. Lucie police unveiled the new training facility today. "
+            "The building includes an indoor range and simulation technology."
+        ),
+        custom=True,
+    )
+    st_lucie = _category(
+        "st_lucie",
+        "St. Lucie County",
+        stale_county_hero,
+        cards=[fresh_custom],
+    )
+
+    selected = generate.select_front_page_hero([sports, st_lucie])
+
+    assert selected is st_lucie
+    assert selected["hero"]["headline"] == fresh_custom["headline"]
+    assert any(card["headline"] == stale_county_hero["headline"] for card in selected["cards"])
+    assert generate.FRONT_PAGE_HERO_AUDIT["selection_reason"] == "only_fresh_candidate"
+    assert generate.FRONT_PAGE_HERO_AUDIT["selected"]["archive_only"] is False
+
+
+def test_no_fresh_candidates_uses_non_sports_deterministic_fallback():
+    generate = _load_generate_module()
+    old = (datetime.now(timezone.utc) - timedelta(days=3)).strftime("%Y-%m-%d")
+
+    sports = _category(
+        "sports",
+        "Sports",
+        _item(
+            "St. Lucie Mets win routine series game",
+            old,
+            6,
+            body="The Mets won a routine baseball game three days ago at Clover Park.",
+        ),
+    )
+    local_gov = _category(
+        "local_gov",
+        "Local Government",
+        _item(
+            "Port St. Lucie council approves infrastructure plan",
+            old,
+            4,
+            body="Port St. Lucie council approved the infrastructure plan earlier this week.",
+        ),
+    )
+
+    selected = generate.select_front_page_hero([sports, local_gov])
+
+    assert selected is local_gov
+    assert generate.FRONT_PAGE_HERO_AUDIT["selection_reason"] == "deterministic_stale_fallback"
+
+
+def test_archive_only_sports_is_last_resort_when_archive_non_sports_exists():
+    generate = _load_generate_module()
+    old = (datetime.now(timezone.utc) - timedelta(days=4)).strftime("%Y-%m-%d")
+
+    sports = _category(
+        "sports",
+        "Sports",
+        _item(
+            "St. Lucie Mets win old game",
+            old,
+            6,
+            body="The Mets won an old game at Clover Park.",
+            archive_only=True,
+        ),
+    )
+    crime = _category(
+        "crime",
+        "Crime & Safety",
+        _item(
+            "Fort Pierce police investigation remains active",
+            old,
+            4,
+            body="Fort Pierce police said the investigation remains active.",
+            archive_only=True,
+        ),
+    )
+
+    selected = generate.select_front_page_hero([sports, crime])
+
+    assert selected is crime
+    assert generate.FRONT_PAGE_HERO_AUDIT["selected"]["category_key"] == "crime"
+
+
+def test_structural_fallback_still_blocks_sports_when_identity_is_unresolved():
+    generate = _load_generate_module()
+    old = (datetime.now(timezone.utc) - timedelta(days=5)).strftime("%Y-%m-%d")
+
+    sports_item = _item(
+        "St. Lucie Mets win another old game",
+        old,
+        6,
+        body="The Mets won a routine old game at Clover Park.",
+        archive_only=True,
+    )
+    sports_item["ranking_eligible"] = False
+    gov_item = _item(
+        "Stuart commission discusses long-term budget",
+        old,
+        3,
+        body="The Stuart commission discussed its long-term budget.",
+        archive_only=True,
+    )
+    gov_item["ranking_eligible"] = False
+
+    sports = _category("sports", "Sports", sports_item)
+    local_gov = _category("local_gov", "Local Government", gov_item)
+
+    selected = generate.select_front_page_hero([sports, local_gov])
+
+    assert selected is local_gov
+    assert generate.FRONT_PAGE_HERO_AUDIT["selection_reason"] == "structural_non_sports_fallback"

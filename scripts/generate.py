@@ -3199,112 +3199,125 @@ def format_age(published_str):
 
 
 HERO_PREFILTER_AUDIT = []
+FRONT_PAGE_HERO_AUDIT = {}
 
 def select_front_page_hero(all_categories):
-    """Use Claude to pick the most front-page-worthy hero across all categories.
-    This is a HYPERLOCAL site — the best hero is the story that matters most to
-    Treasure Coast residents right now. Local tragedies, local government, and
-    local public-safety stories are all legitimately hero-worthy; scale is measured
-    locally, not nationally."""
+    """Select the strongest current front-page story across every live placement.
+
+    Section heroes are editorial layout choices, not the complete candidate pool. A
+    fresh custom article or strong card must be able to outrank an older recovered
+    section hero. Archive-only stories remain available as a structural last resort,
+    but routine sports recaps cannot lead while any viable non-sports story exists.
+    """
     if not all_categories:
         return None
 
-    def _is_eligible(cat):
-        # County stories CAN be the front-page hero — the biggest local story of the
-        # day often comes from a county section. But Florida (statewide) news must
-        # NEVER be the front-page hero; the front page is for local Treasure Coast
-        # news. Florida still has its own category hero, just never leads the site.
-        if cat["category_key"] == "florida":
+    from email.utils import parsedate_to_datetime
+    from datetime import timezone as _tz, timedelta
+
+    _now = datetime.now(_tz.utc)
+
+    def _candidate_view(cat, item, placement, card_index=None):
+        return {
+            "category_key": cat.get("category_key", ""),
+            "category_label": cat.get("category_label", ""),
+            "hero": item,
+            "cards": cat.get("cards", []),
+            "_source_category": cat,
+            "_source_placement": placement,
+            "_source_card_index": card_index,
+        }
+
+    def _is_major_sports_story(item):
+        text = " ".join([
+            str(item.get("headline") or ""),
+            str(item.get("teaser") or ""),
+            str(item.get("body") or "")[:500],
+        ]).lower()
+        major_terms = [
+            "championship", "state title", "national title", "playoff berth",
+            "wins state", "wins national", "olympic", "world series",
+            "drafted", "signs with", "record-setting", "record setting",
+        ]
+        urgency = int(item.get("urgency_score", 0) or 0)
+        return urgency >= 8 or any(term in text for term in major_terms)
+
+    def _is_eligible(candidate):
+        cat_key = candidate.get("category_key", "")
+        item = candidate.get("hero") or {}
+        if not item.get("headline") or item.get("_section_placeholder"):
             return False
-        # The front-page hero must have a genuine local (or at least Florida)
-        # connection. A national story with no geographic markers — e.g. a national
-        # sports league announcement — can live in its section but must never lead
-        # a hyperlocal front page. County heroes are inherently local, so they pass.
-        if cat["category_key"] in ("martin", "st_lucie", "indian_river"):
+        if item.get("ranking_eligible") is False:
+            return False
+        if cat_key == "florida":
+            return False
+        if candidate.get("_source_placement") == "card":
+            if not _publishable_article(item, hero=True):
+                return False
+            if not _hero_eligible(cat_key, item):
+                return False
+        if cat_key in COUNTY_KEYS:
             return True
-        hero = cat.get("hero", {})
-        blob = (hero.get("headline", "") + " " + hero.get("body", "")).lower()
-        _fl_markers = [
+        blob = " ".join([
+            str(item.get("headline") or ""),
+            str(item.get("teaser") or ""),
+            str(item.get("body") or "")[:900],
+        ]).lower()
+        local_markers = [
             "florida", "treasure coast", "martin county", "st. lucie", "st lucie",
             "indian river", "stuart", "jensen beach", "palm city", "hobe sound",
             "port salerno", "port st. lucie", "port st lucie", "fort pierce",
             "vero beach", "sebastian", "fellsmere", "indiantown", "jupiter island",
             "hutchinson island", "mets", "clover park", "roger dean",
         ]
-        # Any topic category's front-page hero must have a local or Florida marker.
-        # National/global content (e.g. a worldwide survey, a national sports league)
-        # can appear in its section but must never lead a hyperlocal front page.
-        if not _has_any(blob, _fl_markers):
-            return False
-        return True
+        return _has_any(blob, local_markers)
 
-    def _fp_score(cat):
-        score = int(cat["hero"].get("urgency_score", 0) or 0)
-        cap   = CATEGORIES.get(cat["category_key"], {}).get("front_page_cap", 10)
-        return min(score, cap)
+    def _parse_hero_datetime(item):
+        for datefield in ("published_raw", "date", "first_published", "lastmod", "updated", "published"):
+            raw = str(item.get(datefield, "") or "").strip()
+            if not raw:
+                continue
+            try:
+                if ("," in raw and ":" in raw) or (
+                    raw.count(":") >= 1
+                    and any(marker in raw for marker in ["GMT", "+0", "-0", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"])
+                ):
+                    dt = parsedate_to_datetime(raw)
+                    if dt.tzinfo is None:
+                        dt = dt.replace(tzinfo=_tz.utc)
+                    return dt.astimezone(_tz.utc), datefield, raw
+                if "-" in raw[:10]:
+                    dt = datetime.strptime(raw[:10], "%Y-%m-%d").replace(tzinfo=_tz.utc)
+                    return dt, datefield, raw
+            except Exception:
+                continue
+        return None, "", ""
 
-    eligible   = [c for c in all_categories if _is_eligible(c)]
-    candidates = eligible if eligible else all_categories
-
-    # Even a one-candidate eligible pool must pass through the freshness audit.
-    # Returning here would bypass stale assessment and leave the ranking audit blind.
-
-    # Compute age for each candidate so Claude can weight freshness
-    from email.utils import parsedate_to_datetime
-    from datetime import timezone as _tz, timedelta
-    _now = datetime.now(_tz.utc)
-
-    # HARD pre-filter: exclude candidates that are clearly stale events.
-    # This runs before Claude sees anything, so Claude cannot pick a known-stale story.
-    # A candidate is filtered out if:
-    #   (1) its timestamp is more than 18 hours old AND content has no fresh-development language, OR
-    #   (2) its content explicitly mentions a past day-name when today is a different day
-    _today_name      = _now.strftime("%A").lower()
-    _yesterday_name  = (_now - timedelta(days=1)).strftime("%A").lower()
-    _two_days_name   = (_now - timedelta(days=2)).strftime("%A").lower()
-    _three_days_name = (_now - timedelta(days=3)).strftime("%A").lower()
-    _stale_day_names = {_yesterday_name, _two_days_name, _three_days_name}
-
-    _stale_event_phrases = [
+    stale_day_names = {
+        (_now - timedelta(days=1)).strftime("%A").lower(),
+        (_now - timedelta(days=2)).strftime("%A").lower(),
+        (_now - timedelta(days=3)).strftime("%A").lower(),
+    }
+    stale_event_phrases = [
         "yesterday", "two days ago", "three days ago", "earlier this week",
         "last week", "days ago", "happened on", "occurred on",
     ]
-    _fresh_dev_phrases = [
+    fresh_dev_phrases = [
         "today", "this morning", "this afternoon", "this evening",
         "hours ago", "minutes ago", "just announced", "just released",
         "breaking", "moments ago", "earlier today",
     ]
 
-    def _parse_hero_datetime(hero):
-        """Return the first trustworthy publication datetime and its source field."""
-        for _datefield in ("published_raw", "date", "published", "lastmod", "updated"):
-            pub = str(hero.get(_datefield, "") or "").strip()
-            if not pub:
-                continue
-            try:
-                if ("," in pub and ":" in pub) or (pub.count(":") >= 1 and any(m in pub for m in ["GMT", "+0", "-0", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"])):
-                    dt = parsedate_to_datetime(pub)
-                    if dt.tzinfo is None:
-                        dt = dt.replace(tzinfo=_tz.utc)
-                    return dt.astimezone(_tz.utc), _datefield, pub
-                if "-" in pub[:10]:
-                    # Date-only values are publication dates, not midnight-expiry timestamps.
-                    dt = datetime.strptime(pub[:10], "%Y-%m-%d").replace(tzinfo=_tz.utc)
-                    return dt, _datefield, pub
-            except Exception:
-                continue
-        return None, "", ""
-
-    def _stale_assessment(cat):
-        hero = cat["hero"]
-        content = (hero.get("teaser", "") + " " + hero.get("body", "")[:800]).lower()
-        dt, date_field, raw_date = _parse_hero_datetime(hero)
+    def _stale_assessment(candidate):
+        item = candidate.get("hero") or {}
+        content = " ".join([
+            str(item.get("teaser") or ""),
+            str(item.get("body") or "")[:900],
+        ]).lower()
+        dt, date_field, raw_date = _parse_hero_datetime(item)
         age_hours = None
-        same_day = False
         if dt is not None:
             age_hours = (_now - dt).total_seconds() / 3600
-            # Same publication calendar date is never stale. This protects fresh
-            # same-day reporting whose body legitimately mentions an earlier weekday.
             same_day = dt.date() == _now.date()
             if same_day or age_hours < 18:
                 return {
@@ -3314,155 +3327,301 @@ def select_front_page_hero(all_categories):
                     "date_value": raw_date,
                     "age_hours": round(age_hours, 2),
                 }
-
-        if any(p in content for p in _fresh_dev_phrases):
-            return {"stale": False, "reason": "fresh_development_language", "date_field": date_field, "date_value": raw_date, "age_hours": age_hours}
-
-        for day in _stale_day_names:
+        if any(phrase in content for phrase in fresh_dev_phrases):
+            return {
+                "stale": False,
+                "reason": "fresh_development_language",
+                "date_field": date_field,
+                "date_value": raw_date,
+                "age_hours": round(age_hours, 2) if age_hours is not None else None,
+            }
+        for day in stale_day_names:
             if f" {day} " in content or content.startswith(f"{day} ") or f" {day}." in content or f" {day}," in content:
-                return {"stale": True, "reason": f"past_day_reference:{day}", "date_field": date_field, "date_value": raw_date, "age_hours": age_hours}
-        if any(p in content for p in _stale_event_phrases):
-            phrase = next(p for p in _stale_event_phrases if p in content)
-            return {"stale": True, "reason": f"stale_event_phrase:{phrase}", "date_field": date_field, "date_value": raw_date, "age_hours": age_hours}
+                return {
+                    "stale": True,
+                    "reason": f"past_day_reference:{day}",
+                    "date_field": date_field,
+                    "date_value": raw_date,
+                    "age_hours": round(age_hours, 2) if age_hours is not None else None,
+                }
+        if any(phrase in content for phrase in stale_event_phrases):
+            phrase = next(phrase for phrase in stale_event_phrases if phrase in content)
+            return {
+                "stale": True,
+                "reason": f"stale_event_phrase:{phrase}",
+                "date_field": date_field,
+                "date_value": raw_date,
+                "age_hours": round(age_hours, 2) if age_hours is not None else None,
+            }
         if age_hours is not None and age_hours >= 18:
-            return {"stale": True, "reason": "published_18_plus_hours_ago", "date_field": date_field, "date_value": raw_date, "age_hours": round(age_hours, 2)}
-        return {"stale": False, "reason": "no_reliable_stale_signal", "date_field": date_field, "date_value": raw_date, "age_hours": age_hours}
+            return {
+                "stale": True,
+                "reason": "published_18_plus_hours_ago",
+                "date_field": date_field,
+                "date_value": raw_date,
+                "age_hours": round(age_hours, 2),
+            }
+        return {
+            "stale": False,
+            "reason": "no_reliable_stale_signal",
+            "date_field": date_field,
+            "date_value": raw_date,
+            "age_hours": round(age_hours, 2) if age_hours is not None else None,
+        }
 
-    def _is_stale(cat):
-        return bool(_stale_assessment(cat).get("stale"))
+    def _priority(candidate):
+        item = candidate.get("hero") or {}
+        urgency = int(item.get("urgency_score", 0) or 0)
+        cap = CATEGORIES.get(candidate.get("category_key", ""), {}).get("front_page_cap", 10)
+        score = min(urgency, cap) * 10
+        category_bonus = {
+            "local_gov": 24,
+            "crime": 22,
+            "business": 16,
+            "martin": 14,
+            "st_lucie": 14,
+            "indian_river": 14,
+            "things_to_do": 2,
+            "sports": -24,
+        }
+        score += category_bonus.get(candidate.get("category_key", ""), 0)
+        if item.get("force_hero"):
+            score += 1000
+        if item.get("is_custom") or item.get("authoritative_custom"):
+            score += 8
+        if candidate.get("_source_placement") == "hero":
+            score += 1
+        if item.get("_archive_only"):
+            score -= 35
+        assessment = _stale_assessment(candidate)
+        age = assessment.get("age_hours")
+        if age is not None:
+            if age < 6:
+                score += 18
+            elif age < 18:
+                score += 10
+            elif age < 36:
+                score -= 4
+            elif age < 72:
+                score -= 18
+            else:
+                score -= 35
+        return score
 
+    def _candidate_audit(candidate):
+        item = candidate.get("hero") or {}
+        assessment = _stale_assessment(candidate)
+        return {
+            "headline": item.get("headline", ""),
+            "category_key": candidate.get("category_key", ""),
+            "category_label": candidate.get("category_label", ""),
+            "placement": candidate.get("_source_placement", ""),
+            "urgency_score": int(item.get("urgency_score", 0) or 0),
+            "priority_score": _priority(candidate),
+            "archive_only": bool(item.get("_archive_only")),
+            "is_custom": bool(item.get("is_custom") or item.get("authoritative_custom")),
+            "major_sports": bool(candidate.get("category_key") == "sports" and _is_major_sports_story(item)),
+            **assessment,
+        }
+
+    def _materialize(candidate, reason):
+        global FRONT_PAGE_HERO_AUDIT
+        source = candidate.get("_source_category") or candidate
+        placement = candidate.get("_source_placement")
+        selected_item = candidate.get("hero") or {}
+        if placement == "card":
+            cards = list(source.get("cards") or [])
+            idx = candidate.get("_source_card_index")
+            if not isinstance(idx, int) or idx < 0 or idx >= len(cards) or cards[idx] is not selected_item:
+                idx = next((i for i, card in enumerate(cards) if card is selected_item), None)
+            if idx is None:
+                selected_key = (
+                    str(selected_item.get("editorial_story_id") or selected_item.get("_editorial_story_id") or ""),
+                    str(selected_item.get("headline") or "").strip().lower(),
+                    str(selected_item.get("link") or ""),
+                )
+                idx = next((
+                    i for i, card in enumerate(cards)
+                    if (
+                        str(card.get("editorial_story_id") or card.get("_editorial_story_id") or ""),
+                        str(card.get("headline") or "").strip().lower(),
+                        str(card.get("link") or ""),
+                    ) == selected_key
+                ), None)
+            if idx is not None:
+                promoted = cards.pop(idx)
+                old_hero = source.get("hero")
+                source["hero"] = promoted
+                if old_hero and old_hero.get("headline") and old_hero is not promoted:
+                    old_key = str(old_hero.get("headline") or "").strip().lower()
+                    if all(str(card.get("headline") or "").strip().lower() != old_key for card in cards):
+                        cards.insert(0, old_hero)
+                source["cards"] = cards
+                print(
+                    f"  Front page candidate promoted from {source.get('category_label','')} card: "
+                    f"{promoted.get('headline','')[:60]}"
+                )
+        selected = source.get("hero") or selected_item
+        FRONT_PAGE_HERO_AUDIT = {
+            "version": "1.11.3.0",
+            "generated_at": datetime.now(_tz.utc).isoformat(timespec="seconds"),
+            "selection_reason": reason,
+            "selected": {
+                "headline": selected.get("headline", ""),
+                "category_key": source.get("category_key", candidate.get("category_key", "")),
+                "category_label": source.get("category_label", candidate.get("category_label", "")),
+                "urgency_score": int(selected.get("urgency_score", 0) or 0),
+                "archive_only": bool(selected.get("_archive_only")),
+                "is_custom": bool(selected.get("is_custom") or selected.get("authoritative_custom")),
+            },
+            "candidates": sorted(
+                [_candidate_audit(row) for row in candidate_pool],
+                key=lambda row: row.get("priority_score", 0),
+                reverse=True,
+            ),
+        }
+        print(
+            f"  Front page hero: [{source.get('category_label', candidate.get('category_label',''))}] "
+            f"{selected.get('headline','')[:60]} ({reason})"
+        )
+        return source
+
+    candidate_pool = []
+    seen = set()
+    for cat in all_categories:
+        placements = [("hero", cat.get("hero"), None)]
+        placements.extend(("card", card, index) for index, card in enumerate(cat.get("cards") or []))
+        for placement, item, index in placements:
+            if not isinstance(item, dict) or not item.get("headline"):
+                continue
+            candidate = _candidate_view(cat, item, placement, index)
+            if not _is_eligible(candidate):
+                continue
+            identity = (
+                str(item.get("editorial_story_id") or item.get("_editorial_story_id") or ""),
+                re.sub(r"[^a-z0-9]+", " ", str(item.get("headline") or "").lower()).strip(),
+                str(item.get("link") or item.get("source_link") or ""),
+            )
+            if identity in seen:
+                continue
+            seen.add(identity)
+            candidate_pool.append(candidate)
+
+    if not candidate_pool:
+        # Final structural fallback: never hand control back to the legacy main()
+        # max-score branch, which cannot distinguish archive recovery from current
+        # reporting. Keep the site renderable while still preferring non-sports and
+        # non-Florida section leads.
+        structural = []
+        for cat in all_categories:
+            item = cat.get("hero") or {}
+            if not item.get("headline") or item.get("_section_placeholder"):
+                continue
+            structural.append(_candidate_view(cat, item, "hero"))
+        non_florida = [c for c in structural if c.get("category_key") != "florida"]
+        if non_florida:
+            structural = non_florida
+        non_sports = [c for c in structural if c.get("category_key") != "sports"]
+        if non_sports:
+            structural = non_sports
+        if not structural:
+            return None
+        candidate_pool = structural
+        return _materialize(max(structural, key=_priority), "structural_non_sports_fallback")
+
+    active_candidates = [c for c in candidate_pool if not (c.get("hero") or {}).get("_archive_only")]
+    working = active_candidates if active_candidates else list(candidate_pool)
+
+    forced = [c for c in working if (c.get("hero") or {}).get("force_hero")]
+    if forced:
+        return _materialize(max(forced, key=_priority), "explicit_force_hero")
+
+    fresh_candidates = []
     global HERO_PREFILTER_AUDIT
     HERO_PREFILTER_AUDIT = []
-    fresh_candidates = []
-    for _candidate in candidates:
-        _assessment = _stale_assessment(_candidate)
-        _audit_row = {
-            "headline": _candidate.get("hero", {}).get("headline", ""),
-            "category_key": _candidate.get("category_key", ""),
-            "urgency_score": int(_candidate.get("hero", {}).get("urgency_score", 0) or 0),
-            **_assessment,
-        }
-        if _assessment.get("stale"):
-            HERO_PREFILTER_AUDIT.append(_audit_row)
+    for candidate in working:
+        assessment = _stale_assessment(candidate)
+        if assessment.get("stale"):
+            HERO_PREFILTER_AUDIT.append(_candidate_audit(candidate))
         else:
-            fresh_candidates.append(_candidate)
+            fresh_candidates.append(candidate)
+
     if fresh_candidates:
-        if HERO_PREFILTER_AUDIT:
-            for _row in HERO_PREFILTER_AUDIT:
-                print(
-                    "  Hero pre-filter excluded stale candidate: "
-                    f"{_row['headline'][:60]} | reason={_row['reason']} | "
-                    f"date={_row.get('date_value') or 'unknown'} | age_hours={_row.get('age_hours')}"
-                )
-        candidates = fresh_candidates
+        for row in HERO_PREFILTER_AUDIT:
+            print(
+                "  Hero pre-filter excluded stale candidate: "
+                f"{row['headline'][:60]} | reason={row['reason']} | "
+                f"date={row.get('date_value') or 'unknown'} | age_hours={row.get('age_hours')}"
+            )
+        working = fresh_candidates
+        non_sports = [c for c in working if c.get("category_key") != "sports"]
+        if non_sports:
+            working = [
+                c for c in working
+                if c.get("category_key") != "sports" or _is_major_sports_story(c.get("hero") or {})
+            ]
+        selection_mode = "fresh_live_candidate"
     else:
-        print(f"  Hero pre-filter: no fresh candidates, keeping all for Claude to decide")
+        print("  Hero pre-filter: no fresh live candidates; using deterministic stale fallback")
+        non_sports = [c for c in working if c.get("category_key") != "sports"]
+        if non_sports:
+            working = non_sports
+        return _materialize(max(working, key=_priority), "deterministic_stale_fallback")
 
-    if len(candidates) == 1:
-        print(f"  Front page hero: [{candidates[0]['category_label']}] {candidates[0]['hero'].get('headline','')[:60]} (only fresh candidate)")
-        return candidates[0]
+    working = sorted(working, key=_priority, reverse=True)[:12]
+    if len(working) == 1:
+        return _materialize(working[0], "only_fresh_candidate")
 
-    def _age_label(cat):
-        pub = cat["hero"].get("published", "")
-        if not pub:
+    def _age_label(candidate):
+        assessment = _stale_assessment(candidate)
+        age = assessment.get("age_hours")
+        if age is None:
             return "unknown age"
-        try:
-            dt  = parsedate_to_datetime(pub).astimezone(_tz.utc)
-            hrs = (_now - dt).total_seconds() / 3600
-            if hrs < 1:
-                mins = max(1, int((_now - dt).total_seconds() / 60))
-                return f"{mins} minutes ago"
-            if hrs < 24:
-                return f"{int(hrs)} hours ago"
-            days = int(hrs / 24)
-            return f"{days} day{'s' if days != 1 else ''} ago"
-        except Exception:
-            return "unknown age"
+        if age < 1:
+            return f"{max(1, int(age * 60))} minutes ago"
+        if age < 24:
+            return f"{int(age)} hours ago"
+        days = int(age / 24)
+        return f"{days} day{'s' if days != 1 else ''} ago"
 
     listing = "\n\n".join(
-        f"{i+1}. [{c['category_label']}] (timestamp: {_age_label(c)}) {c['hero'].get('headline','')}\n"
-        f"   Content: {(c['hero'].get('teaser','') + ' ' + c['hero'].get('body','')[:500]).strip()}"
-        for i, c in enumerate(candidates)
+        f"{i+1}. [{candidate['category_label']}] (timestamp: {_age_label(candidate)}) "
+        f"{candidate['hero'].get('headline','')}\n"
+        f"   Content: {(candidate['hero'].get('teaser','') + ' ' + candidate['hero'].get('body','')[:500]).strip()}"
+        for i, candidate in enumerate(working)
     )
-    _today_label = _now.strftime("%A, %B %d, %Y")
-    _yesterday   = (_now - timedelta(days=1)).strftime("%A")
-    _two_days    = (_now - timedelta(days=2)).strftime("%A")
-    _three_days  = (_now - timedelta(days=3)).strftime("%A")
+    today_label = _now.strftime("%A, %B %d, %Y")
     prompt = (
-        f"TODAY IS: {_today_label}\n"
-        f"Yesterday was {_yesterday}. Two days ago was {_two_days}. Three days ago was {_three_days}.\n"
-        "Use this date context to evaluate when events actually happened.\n\n"
-        "You are selecting the SINGLE most front-page-worthy story for Treasure Coast Today, a LOCAL news site covering Martin, St. Lucie, and Indian River counties in Florida.\n\n"
+        f"TODAY IS: {today_label}\n\n"
+        "Select the SINGLE strongest front-page story for Treasure Coast Today, a hyperlocal news site "
+        "covering Martin, St. Lucie, and Indian River counties. All listed candidates have already passed "
+        "hard freshness, locality, publication-quality, and archive-safety gates.\n\n"
         f"{listing}\n\n"
-        "AUDIENCE: Local Treasure Coast residents who want to know what's happening in their community.\n"
-        "\n"
-        "This is a HYPERLOCAL news site. The best hero is the story that matters MOST to people living in "
-        "Martin, St. Lucie, and Indian River counties RIGHT NOW. Local relevance is everything — a story about "
-        "a local fire, a county commission decision, a major local business opening, a local crime, a road project, "
-        "or a school issue is exactly what belongs on the front page. Do NOT undervalue local tragedies or local "
-        "events the way a national outlet would. A deadly house fire in Hobe Sound, a fatal crash on US-1, or a "
-        "major arrest in Fort Pierce IS front-page news here — that is the entire point of local journalism.\n"
-        "\n"
-        "PICK THE HERO BY LOCAL IMPACT AND FRESHNESS:\n"
-        "- Prefer the story that affects the most local residents or that the community is most likely talking about today.\n"
-        "- Breaking or very recent local news beats older local news.\n"
-        "- A significant local tragedy (fatal fire, deadly crash, homicide, major accident) is hero-worthy when it is "
-        "recent and local — do not demote it just because it involves few people. Scale is measured locally, not nationally.\n"
-        "- Local government decisions, major development/business news, and public-safety stories are all strong heroes.\n"
-        "- Sports and routine event listings are weaker heroes and usually belong as cards unless it is genuinely major "
-        "local sports news (a local team championship, a local athlete reaching a national stage).\n"
-        "- Avoid obituaries and routine announcements as heroes.\n"
-        "\n"
-        "STATEWIDE AND POLITICAL STORIES: A story in the 'Florida' category can lead ONLY when it "
-        "directly and concretely affects Treasure Coast residents' daily lives (for example: a property "
-        "insurance change, a hurricane threatening the state, a new law taking effect, a cost-of-living or "
-        "utility change). Statewide POLITICAL stories with no direct local impact — campaign fundraising "
-        "totals, primary horse-race coverage, party or legislature intrigue, a governor's political "
-        "maneuvering — must NEVER be the front-page hero. If the only strong Florida candidate is political "
-        "insider news, pick a LOCAL story instead, even a smaller one. A modest Martin, St. Lucie, or Indian "
-        "River story always beats statewide political horse-race coverage on this front page.\n"
-        "\n"
-        "FRESHNESS IS CRITICAL: This is a daily news site. A story from today or last night should almost always beat "
-        "a story from two or three days ago. Look at the timestamp on each candidate. If a candidate is 2+ days old "
-        "and there is any reasonably significant story from today or yesterday, pick the fresher one. Only pick an "
-        "older story if it is dramatically more important than everything fresh available (e.g. a major ongoing local "
-        "tragedy with new developments). A 3-day-old story should never lead when fresh local news exists.\n"
-        "\n"
-        "THINK FIRST, THEN ANSWER. For each candidate, briefly assess in one short line: (a) how recent the event is "
-        "(check the timestamp), and (b) how much it matters to local Treasure Coast residents. Then state your pick, "
-        "favoring the story that is both recent AND locally significant.\n"
-        "\n"
-        "Format your response EXACTLY like this:\n"
-        "Reasoning: <one line per candidate, very brief>\n"
-        "PICK: <number>\n"
+        "Rank local impact first and freshness second. Major public safety, local government, infrastructure, "
+        "and consequential development stories outrank routine events and routine sports results. A routine "
+        "baseball game recap must not beat a meaningful local civic or public-safety story. Custom reporting is "
+        "editorially authoritative but should win only when its impact and freshness justify it.\n\n"
+        "Return exactly:\nReasoning: <brief comparison>\nPICK: <number>\n"
     )
     try:
-        resp = client.messages.create(
+        response = client.messages.create(
             model=MODEL_SELECTION,
             max_tokens=500,
-            messages=[{"role": "user", "content": prompt}]
+            messages=[{"role": "user", "content": prompt}],
         )
-        raw = resp.content[0].text.strip()
-        import re as _re
-        # Prefer the explicit PICK: line; fall back to last number in the text
-        pick_match = _re.search(r"PICK:\s*(\d+)", raw, _re.IGNORECASE)
+        raw = response.content[0].text.strip()
+        pick_match = re.search(r"PICK:\s*(\d+)", raw, re.IGNORECASE)
         if pick_match:
             idx = int(pick_match.group(1)) - 1
         else:
-            nums = _re.findall(r"\d+", raw)
+            nums = re.findall(r"\d+", raw)
             idx = int(nums[-1]) - 1 if nums else -1
-        if 0 <= idx < len(candidates):
-            chosen = candidates[idx]
-            print(f"  Front page hero: [{chosen['category_label']}] {chosen['hero'].get('headline','')[:60]}")
-            return chosen
-    except Exception as e:
-        print(f"  Front page hero selection failed ({e}), falling back to score-based")
+        if 0 <= idx < len(working):
+            return _materialize(working[idx], "model_choice_within_guarded_pool")
+    except Exception as exc:
+        print(f"  Front page hero selection failed ({exc}), using deterministic priority")
 
-    # Fallback: score-based selection
-    top_cat = max(candidates, key=_fp_score)
-    if _fp_score(top_cat) < 5:
-        top_cat = max(all_categories, key=_fp_score)
-    return top_cat
+    return _materialize(max(working, key=_priority), selection_mode + "_priority_fallback")
 
 
 
@@ -12440,6 +12599,13 @@ def main():
         top_cat  = max(eligible if eligible else all_categories,
                        key=lambda c: min(int(c["hero"].get("urgency_score",0) or 0),
                                          CATEGORIES.get(c["category_key"],{}).get("front_page_cap",10)))
+
+    _hero_audit_path = OUTPUT_DIR / "data" / "front-page-hero-selection.json"
+    _hero_audit_path.parent.mkdir(parents=True, exist_ok=True)
+    _hero_audit_path.write_text(
+        json.dumps(FRONT_PAGE_HERO_AUDIT, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
 
     # Promote duplicate heroes
     promote_duplicate_heroes(top_cat, all_categories)
