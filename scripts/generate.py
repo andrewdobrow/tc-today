@@ -5980,70 +5980,152 @@ def render_archive_page(archive_entries):
 </html>"""
 
 
-def render_rss_feed(all_categories, top_cat):
-    """Generate an RSS feed featuring all articles (heroes and cards) from the run."""
-    from email.utils import formatdate, parsedate_to_datetime
+def _rss_publication_datetime(entry):
+    """Return a stable UTC timestamp for RSS ordering and pubDate output."""
+    from email.utils import parsedate_to_datetime
 
-    now_rfc = formatdate(usegmt=True)
-    archive = load_archive(OUTPUT_DIR / "archive.json")
-
-    def make_item(article, cat_label):
-        if _is_nonstory_placeholder(article):
-            return None, None
-        headline = article.get("headline", "")
-        if not headline:
-            return None, None
-        matched     = find_matching_entry(headline, archive, article.get("link", ""), is_weather_alert=bool(article.get("is_weather_alert")))
-        if not matched:
-            return None, None  # No article page exists — skip
-        article_url = f"{SITE_URL}/articles/{matched['slug']}.html"
-        teaser      = article.get("teaser") or article.get("body", "")[:300]
-        # Use OUR first-published time, not the source's. Nextdoor and other RSS
-        # consumers show pubDate as the story's age; featuring the source's timestamp
-        # made freshly republished stories look ancient. Prefer the archive's
-        # first_published (full Eastern timestamp); fall back to its date, then now.
-        from email.utils import parsedate_to_datetime as _pdt
-        pub = matched.get("first_published")
-        if not pub:
-            _d = matched.get("date", "")
-            if _d:
-                pub = f"{_d} 09:00:00 -0400"  # older entries: date only, assume 9am ET
+    raw = str(
+        entry.get("first_published")
+        or entry.get("published_raw")
+        or entry.get("date")
+        or ""
+    ).strip()
+    if raw:
         try:
-            pub = formatdate(_pdt(pub).timestamp(), usegmt=True)
+            parsed = parsedate_to_datetime(raw)
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            return parsed.astimezone(timezone.utc)
         except Exception:
-            pub = now_rfc
-        item = f"""  <item>
-    <title><![CDATA[{headline}]]></title>
-    <link>{article_url}</link>
-    <guid isPermaLink="true">{article_url}</guid>
-    <description><![CDATA[{teaser}]]></description>
-    <pubDate>{pub}</pubDate>
-    <category><![CDATA[{cat_label}]]></category>
-  </item>"""
-        return item, headline
+            pass
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", raw):
+            try:
+                parsed = datetime.strptime(raw, "%Y-%m-%d")
+                return parsed.replace(
+                    hour=9, tzinfo=timezone(timedelta(hours=-4))
+                ).astimezone(timezone.utc)
+            except Exception:
+                pass
+        try:
+            parsed = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            return parsed.astimezone(timezone.utc)
+        except Exception:
+            pass
+    return datetime.now(timezone.utc)
+
+
+def render_rss_feed(all_categories, top_cat, max_items=100):
+    """Generate a publication-ledger RSS feed from the canonical archive.
+
+    RSS consumers such as Nextdoor must see every newly published article even when
+    homepage ranking, category caps, deduplication, or archive recovery removes that
+    article from the current live card grid. The canonical archive is the source of
+    truth for published permalinks; homepage/category placement is not.
+    """
+    from email.utils import format_datetime
+    import html as _html
+
+    now = datetime.now(timezone.utc)
+    now_rfc = format_datetime(now, usegmt=True)
+    archive = load_archive(OUTPUT_DIR / "archive.json")
+    # Newly created or updated custom publications are placed first so polling
+    # automations encounter the editor-authored item immediately. Their stable GUID
+    # and original pubDate are preserved, so unchanged queue items do not repost.
+    current_custom_slugs = {
+        str(row.get("slug") or "").strip()
+        for row in CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
+        if isinstance(row, dict)
+        and row.get("action") in {"created", "updated"}
+        and str(row.get("slug") or "").strip()
+    }
+
+    # Live objects can contain a fuller teaser/image than older archive rows. Use
+    # them only as display enrichment; archive slug and publication time remain
+    # authoritative.
+    live_by_slug = {}
+    live_by_headline = {}
+    for cat in all_categories or []:
+        for item in [cat.get("hero")] + list(cat.get("cards") or []):
+            if not isinstance(item, dict):
+                continue
+            slug = str(item.get("_archived_slug") or item.get("slug") or "").strip()
+            headline = _exact_custom_headline(item.get("headline"))
+            if slug:
+                live_by_slug.setdefault(slug, item)
+            if headline:
+                live_by_headline.setdefault(headline, item)
+    if isinstance(top_cat, dict):
+        item = top_cat.get("hero")
+        if isinstance(item, dict):
+            slug = str(item.get("_archived_slug") or item.get("slug") or "").strip()
+            headline = _exact_custom_headline(item.get("headline"))
+            if slug:
+                live_by_slug.setdefault(slug, item)
+            if headline:
+                live_by_headline.setdefault(headline, item)
+
+    candidates = []
+    seen_slugs = set()
+    for row in archive:
+        if not isinstance(row, dict):
+            continue
+        slug = str(row.get("slug") or "").strip()
+        headline = str(row.get("headline") or "").strip()
+        if not slug or not headline or slug in seen_slugs:
+            continue
+        if row.get("retired_custom") or row.get("exclude_from_live_recovery"):
+            continue
+        if _is_nonstory_placeholder(row):
+            continue
+        seen_slugs.add(slug)
+        enriched = dict(row)
+        live = live_by_slug.get(slug) or live_by_headline.get(_exact_custom_headline(headline))
+        if isinstance(live, dict):
+            for key in ("teaser", "body", "image_url", "category_key", "category"):
+                if live.get(key) not in (None, ""):
+                    enriched[key] = live.get(key)
+        published_dt = _rss_publication_datetime(enriched)
+        candidates.append((slug in current_custom_slugs, published_dt, slug, enriched))
+
+    candidates.sort(key=lambda row: (row[0], row[1], row[2]), reverse=True)
+    candidates = candidates[: max(1, int(max_items or 100))]
+
+    def _cdata(value):
+        return str(value or "").replace("]]>", "]]]]><![CDATA[>")
 
     items = []
-    seen  = set()
-
-    # Front page hero first
-    item, hl = make_item(top_cat["hero"], top_cat["category_label"])
-    if item:
-        items.append(item)
-        seen.add(hl)
-
-    # Every category hero + all cards
-    for cat in all_categories:
-        cat_label = cat["category_label"]
-        articles  = [cat["hero"]] + cat.get("cards", [])
-        for art in articles:
-            item, hl = make_item(art, cat_label)
-            if item and hl not in seen:
-                items.append(item)
-                seen.add(hl)
+    for _custom_priority, published_dt, slug, article in candidates:
+        headline = str(article.get("headline") or "").strip()
+        article_url = f"{SITE_URL}/articles/{slug}.html"
+        teaser = str(article.get("teaser") or article.get("body") or "").strip()[:1200]
+        cat_key = str(article.get("category_key") or article.get("category") or "").strip()
+        cat_label = CATEGORIES.get(cat_key, {}).get(
+            "label", cat_key.replace("_", " ").title() if cat_key else "Treasure Coast News"
+        )
+        pub_rfc = format_datetime(published_dt.astimezone(timezone.utc), usegmt=True)
+        image_url = str(article.get("image_url") or "").strip()
+        if image_url.startswith("/"):
+            image_url = f"{SITE_URL}{image_url}"
+        media_xml = ""
+        if image_url.startswith(("http://", "https://")):
+            media_xml = (
+                f'\n    <media:content url="{_html.escape(image_url, quote=True)}" '
+                'medium="image" />'
+            )
+        items.append(f"""  <item>
+    <title><![CDATA[{_cdata(headline)}]]></title>
+    <link>{_html.escape(article_url)}</link>
+    <guid isPermaLink="true">{_html.escape(article_url)}</guid>
+    <description><![CDATA[{_cdata(teaser)}]]></description>
+    <pubDate>{pub_rfc}</pubDate>
+    <category><![CDATA[{_cdata(cat_label)}]]></category>{media_xml}
+  </item>""")
 
     items_xml = "\n".join(items)
     return f"""<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
   <channel>
     <title>Treasure Coast Today</title>
     <link>{SITE_URL}</link>
@@ -6054,6 +6136,50 @@ def render_rss_feed(all_categories, top_cat):
 {items_xml}
   </channel>
 </rss>"""
+
+
+def validate_custom_rss_publication_contract(output_root=None):
+    """Fail closed if a current custom publication receipt is absent from RSS."""
+    root = Path(output_root or OUTPUT_DIR)
+    feed_path = root / "feed.xml"
+    feed_text = feed_path.read_text(encoding="utf-8", errors="ignore") if feed_path.exists() else ""
+    rss_guids = set(re.findall(r"<guid[^>]*>(.*?)</guid>", feed_text, flags=re.DOTALL))
+    expected = []
+    for receipt in CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS:
+        if not isinstance(receipt, dict) or receipt.get("action") not in {"created", "updated"}:
+            continue
+        slug = str(receipt.get("slug") or "").strip()
+        if not slug:
+            continue
+        expected.append({
+            "headline": str(receipt.get("headline") or ""),
+            "slug": slug,
+            "action": str(receipt.get("action") or ""),
+            "url": f"{SITE_URL}/articles/{slug}.html",
+        })
+    missing = [row for row in expected if row["url"] not in rss_guids]
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "passed": not missing,
+        "checked_current_custom_publications": len(expected),
+        "rss_item_count": len(rss_guids),
+        "expected": expected,
+        "missing": missing,
+    }
+    report_path = root / "data" / "rss-publication-contract.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if missing:
+        raise RuntimeError(
+            "Custom RSS publication contract FAILED: "
+            + "; ".join(f"{row['headline'][:55]} ({row['slug']})" for row in missing[:5])
+        )
+    print(
+        "  Custom RSS publication contract PASSED "
+        f"({len(expected)} current custom publication(s), {len(rss_guids)} RSS item(s))"
+    )
+    return report
 
 
 def update_sitemap(archive_entries):
@@ -12945,6 +13071,7 @@ def main():
     (OUTPUT_DIR / "ownership.html").write_text(render_ownership_page(), encoding="utf-8")
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
     (OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat), encoding="utf-8")
+    validate_custom_rss_publication_contract(OUTPUT_DIR)
     validate_nonstory_publication_contract(all_categories, top_cat, OUTPUT_DIR)
 
     # Save only after the normal production build has completed.
