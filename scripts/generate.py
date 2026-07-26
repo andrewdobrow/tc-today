@@ -3464,7 +3464,7 @@ def select_front_page_hero(all_categories):
                 )
         selected = source.get("hero") or selected_item
         FRONT_PAGE_HERO_AUDIT = {
-            "version": "1.11.3.1",
+            "version": "1.11.3.2",
             "generated_at": datetime.now(_tz.utc).isoformat(timespec="seconds"),
             "selection_reason": reason,
             "selected": {

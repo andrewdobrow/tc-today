@@ -87,10 +87,9 @@ def test_package_validator_reports_queue_parse_location(tmp_path):
     ]
 
 
-def test_repository_queue_contains_both_active_custom_articles():
-    queue = json.loads(Path("custom_articles.json").read_text(encoding="utf-8"))
-    headlines = {item["headline"] for item in queue}
-    assert headlines == {
-        "Hurricane Season Ready: 12 Treasure Coast Essentials to Stock Up On",
-        "Port St. Lucie Police Unveil New $28 Million Training Facility",
-    }
+def test_repository_custom_queue_satisfies_validation_contract():
+    from scripts.validate_package import validate_custom_queue
+
+    # Editorial queue contents are expected to grow and change. CI validates the
+    # queue structure instead of hard-coding an exact set of active headlines.
+    assert validate_custom_queue(Path("custom_articles.json")) == []
