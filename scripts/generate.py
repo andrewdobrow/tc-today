@@ -4693,12 +4693,12 @@ def _render_product_guide_body(item):
 .pg-quick-picks h2 {{ margin:0 0 14px; font:700 18px/1.2 system-ui,sans-serif; color:var(--pg-green); text-transform:uppercase; letter-spacing:.04em; }}
 .pg-quick-picks ol {{ list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px 18px; }}
 .pg-quick-picks li {{ display:grid; grid-template-columns:28px 44px 1fr; gap:9px; align-items:center; min-width:0; }}
-.pg-quick-picks img {{ width:44px; height:44px; object-fit:contain; }}
+.pg-quick-picks img {{ display:block; width:44px; height:44px; object-fit:contain; object-position:center; }}
 .pg-quick-picks a {{ color:var(--text); text-decoration:none; font-weight:650; line-height:1.25; }}
 .pg-rank {{ width:26px; height:26px; border-radius:50%; display:grid; place-items:center; background:var(--pg-green); color:#fff; font-weight:800; font-size:12px; }}
 .pg-product-card {{ display:grid; grid-template-columns:minmax(170px,30%) 1fr; gap:24px; padding:22px; margin:0 0 18px; border:1px solid var(--pg-line); border-radius:16px; background:#fff; box-shadow:0 8px 28px rgba(20,55,39,.06); }}
-.pg-product-image {{ display:grid; place-items:center; min-height:190px; border-radius:12px; background:#fafcfb; }}
-.pg-product-image img {{ width:100%; height:210px; object-fit:contain; }}
+.pg-product-image {{ display:grid; place-items:center; height:230px; min-height:230px; overflow:hidden; padding:18px; border-radius:12px; background:#fafcfb; }}
+.pg-product-image img {{ display:block; width:auto; max-width:100%; height:auto; max-height:100%; object-fit:contain; object-position:center; }}
 .pg-product-copy h2 {{ margin:7px 0 8px; font-family:"Fraunces",serif; font-size:25px; line-height:1.2; }}
 .pg-product-copy p {{ margin:0 0 12px; font-size:16px; line-height:1.65; }}
 .pg-label {{ display:inline-block; padding:4px 8px; border-radius:5px; background:var(--pg-green); color:#fff; font-size:10px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; }}
@@ -4716,8 +4716,8 @@ def _render_product_guide_body(item):
 @media(max-width:720px) {{
   .pg-quick-picks ol {{ grid-template-columns:1fr; }}
   .pg-product-card {{ grid-template-columns:1fr; padding:17px; }}
-  .pg-product-image {{ min-height:170px; }}
-  .pg-product-image img {{ height:190px; }}
+  .pg-product-image {{ height:210px; min-height:210px; padding:16px; }}
+  .pg-product-image img {{ width:auto; max-width:100%; height:auto; max-height:100%; }}
   .pg-product-copy h2 {{ font-size:23px; }}
   .pg-amazon-button {{ width:100%; }}
 }}
