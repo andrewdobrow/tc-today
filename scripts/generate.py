@@ -241,6 +241,10 @@ DEFAULT_AFFILIATE_DISCLOSURE = (
     "As an Amazon Associate, Treasure Coast Today earns from qualifying purchases. "
     "Prices and availability may change."
 )
+# Product-guide output embeds component CSS in each permanent article page. Include
+# this version in the publication signature so presentation fixes republish existing
+# guides even when their editorial copy and product data are unchanged.
+PRODUCT_GUIDE_TEMPLATE_VERSION = "1.1-responsive-disclosure"
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -4881,8 +4885,9 @@ def _render_product_guide_body(item):
     return f"""
 <style class="product-guide-styles">
 .product-guide {{ --pg-green:#0d5c36; --pg-soft:#f2f7f4; --pg-line:#dce8e1; }}
-.pg-disclosure {{ display:flex; gap:12px; padding:16px 18px; margin:0 0 24px; border:1px solid var(--pg-line); border-radius:12px; background:var(--pg-soft); font-size:14px; line-height:1.55; }}
-.pg-disclosure strong {{ color:var(--pg-green); }}
+.pg-disclosure {{ display:grid; grid-template-columns:max-content minmax(0,1fr); column-gap:18px; row-gap:6px; align-items:start; padding:17px 20px; margin:0 0 24px; border:1px solid var(--pg-line); border-radius:12px; background:var(--pg-soft); font-size:14px; line-height:1.55; }}
+.pg-disclosure strong {{ color:var(--pg-green); white-space:nowrap; line-height:1.55; }}
+.pg-disclosure span {{ min-width:0; overflow-wrap:anywhere; }}
 .pg-intro {{ margin-bottom:28px; }}
 .pg-quick-picks {{ border:1px solid var(--pg-line); border-radius:14px; padding:18px; margin:0 0 28px; background:#fff; }}
 .pg-quick-picks h2 {{ margin:0 0 14px; font:700 18px/1.2 system-ui,sans-serif; color:var(--pg-green); text-transform:uppercase; letter-spacing:.04em; }}
@@ -4909,6 +4914,8 @@ def _render_product_guide_body(item):
 .pg-comparison th {{ color:var(--pg-green); font-size:11px; text-transform:uppercase; letter-spacing:.04em; }}
 .pg-closing {{ padding:22px; border-left:5px solid var(--pg-green); border-radius:0 12px 12px 0; background:var(--pg-soft); }}
 @media(max-width:720px) {{
+  .pg-disclosure {{ grid-template-columns:1fr; gap:5px; padding:15px 16px; font-size:13px; line-height:1.5; }}
+  .pg-disclosure strong {{ white-space:normal; }}
   .pg-quick-picks ol {{ grid-template-columns:1fr; }}
   .pg-product-card {{ grid-template-columns:1fr; padding:17px; }}
   .pg-product-image {{ height:210px; min-height:210px; padding:16px; }}
@@ -6680,6 +6687,7 @@ def _product_guide_hash(item):
     if not isinstance(item, dict) or str(item.get("article_type") or "") != "product_guide":
         return ""
     payload = {
+        "template_version": PRODUCT_GUIDE_TEMPLATE_VERSION,
         "affiliate_disclosure": item.get("affiliate_disclosure", ""),
         "intro": item.get("intro", ""),
         "closing": item.get("closing", ""),
