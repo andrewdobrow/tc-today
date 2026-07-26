@@ -2,7 +2,7 @@
 
 From weather alerts and backup power to water storage, lighting and first aid, these 12 practical products can help fill common gaps in a Treasure Coast hurricane kit.
 
-**Affiliate disclosure:** Treasure Coast Today may earn a commission from qualifying purchases made through links in this article. Prices, product details and availability may change.
+**Affiliate disclosure:** Treasure Coast Today may earn a commission from qualifying purchases made through links in this article, at no additional cost to you.
 
 Hurricane preparation on the Treasure Coast works best when it happens before a storm enters the forecast cone. Even a relatively short outage can mean dark rooms, dead phones, limited internet access and no easy way to open shelf-stable food. A longer disruption can make stored water, backup charging, cooling and basic repair supplies much more important.
 

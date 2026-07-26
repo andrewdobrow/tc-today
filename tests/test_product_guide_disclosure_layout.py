@@ -31,10 +31,7 @@ def _guide():
         "headline": "Responsive disclosure test",
         "category": "florida",
         "intro": "Prepare early.",
-        "affiliate_disclosure": (
-            "Treasure Coast Today may earn a commission from qualifying purchases "
-            "made through links in this article."
-        ),
+        "affiliate_disclosure": "Old article-level disclosure that must not be published.",
         "products": [
             {
                 "name": "Emergency Radio",
@@ -56,6 +53,22 @@ def test_affiliate_disclosure_uses_nonshrinking_grid_and_mobile_stack():
     assert ".pg-disclosure span { min-width:0; overflow-wrap:anywhere; }" in html
     assert ".pg-disclosure { grid-template-columns:1fr; gap:5px;" in html
     assert ".pg-disclosure strong { white-space:normal; }" in html
+
+
+
+def test_affiliate_disclosure_is_canonical_sitewide_copy():
+    g = _load_generate()
+    guide = _guide()
+    g._normalize_product_guide(guide)
+    html = g._render_product_guide_body(guide)
+
+    expected = (
+        "Treasure Coast Today may earn a commission from qualifying purchases made "
+        "through links in this article, at no additional cost to you."
+    )
+    assert guide["affiliate_disclosure"] == expected
+    assert expected in html
+    assert "Old article-level disclosure" not in html
 
 
 def test_product_guide_template_version_changes_publication_signature(monkeypatch):

@@ -238,13 +238,13 @@ CURRENT_RUN_EDITORIAL_IDENTITIES = {}
 CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
 CUSTOM_RETIREMENTS_PATH = OUTPUT_DIR / "data" / "custom-retirements.json"
 DEFAULT_AFFILIATE_DISCLOSURE = (
-    "As an Amazon Associate, Treasure Coast Today earns from qualifying purchases. "
-    "Prices and availability may change."
+    "Treasure Coast Today may earn a commission from qualifying purchases made "
+    "through links in this article, at no additional cost to you."
 )
 # Product-guide output embeds component CSS in each permanent article page. Include
 # this version in the publication signature so presentation fixes republish existing
 # guides even when their editorial copy and product data are unchanged.
-PRODUCT_GUIDE_TEMPLATE_VERSION = "1.1-responsive-disclosure"
+PRODUCT_GUIDE_TEMPLATE_VERSION = "1.2-canonical-disclosure"
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -4825,9 +4825,10 @@ def _normalize_product_guide(item):
         product["image_alt"] = str(product.get("image_alt") or name).strip()
         normalized.append(product)
     item["products"] = normalized
-    item["affiliate_disclosure"] = str(
-        item.get("affiliate_disclosure") or DEFAULT_AFFILIATE_DISCLOSURE
-    ).strip()
+    # Affiliate disclosure language is a site-wide publishing policy, not an
+    # article-level override. Normalize every product guide to the canonical copy so
+    # future guides cannot drift and existing guides are corrected on regeneration.
+    item["affiliate_disclosure"] = DEFAULT_AFFILIATE_DISCLOSURE
     item["intro"] = str(item.get("intro") or item.get("body") or "").strip()
     item["closing"] = str(item.get("closing") or "").strip()
     item["body"] = _product_guide_plaintext(item)
