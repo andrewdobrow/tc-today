@@ -2,12 +2,12 @@
   "schema_version": 11,
   "engine": {
     "name": "tct-editorial-engine",
-    "version": "1.11.4.1",
-    "release": "custom-rss-publication-contract",
+    "version": "1.11.4.3",
+    "release": "canonical-affiliate-disclosure",
     "resolver_version": "2.4",
     "relationship_engine_version": "1.2"
   },
-  "generated_at": "2026-07-26T04:42:19Z",
+  "generated_at": "2026-07-26T05:04:53Z",
   "mode": "enforce",
   "publication_behavior_changed": true,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 2,
     "applied_action_count": 2,
     "circuit_breaker_tripped": false,
-    "placements_before": 10,
-    "placements_after": 8,
+    "placements_before": 11,
+    "placements_after": 9,
     "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
     "recommendations": [
@@ -159,18 +159,18 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 168,
+    "candidates_processed": 167,
     "routes": {
-      "generate_new": 6,
-      "skip": 162
+      "generate_new": 2,
+      "skip": 165
     },
     "eligibility": {
       "listing": 14,
-      "low_value": 124,
+      "low_value": 123,
       "publishable": 30
     },
     "source_classes": {
-      "aggregator": 138,
+      "aggregator": 137,
       "local_news": 30
     },
     "rejected_count": 14,
@@ -305,8 +305,8 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 20,
-      "same_event": 148
+      "new_story": 16,
+      "same_event": 151
     },
     "examples": [
       {
@@ -837,24 +837,22 @@
         ]
       },
       {
-        "story_id": "story_000604",
-        "title": "New details in investigation into Florida infant's death; 3 arrested - Treasure Coast News",
-        "event_key": "unknown-event-53439826f2",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
+        "story_id": "story_000678",
+        "title": "Multi-state search continues for woman accused of killing man, leaving him in shallow grave - WFLX",
+        "event_key": "unknown-event-a417374ec6",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
-        "story_id": "story_000605",
-        "title": "Loxahatchee man accused of causing movie theater chaos, hiding on nearby rooftop - WPEC",
-        "event_key": "unknown-event-5fdc481bbc",
+        "story_id": "story_000604",
+        "title": "New details in investigation into Florida infant's death; 3 arrested - Treasure Coast News",
+        "event_key": "unknown-event-53439826f2",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -870,35 +868,35 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 128,
+      "florida": 129,
       "treasure_coast_local": 103,
       "treasure_coast_region": 55,
-      "unknown": 230
+      "unknown": 231
     },
-    "average_score": 61.81
+    "average_score": 61.77
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 128,
+      "florida": 129,
       "treasure_coast_local": 103,
       "treasure_coast_region": 55,
-      "unknown": 230
+      "unknown": 231
     },
-    "average_priority": 5.38
+    "average_priority": 5.36
   },
   "story_lifecycle": {
     "counts": {
-      "active": 209,
+      "active": 208,
       "developing": 134,
-      "ongoing": 173
+      "ongoing": 176
     }
   },
   "registry_health": {
     "repair_version": 4,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 510,
-    "active_stories_after": 510,
+    "active_stories_before": 516,
+    "active_stories_after": 516,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -914,20 +912,20 @@
     "incident_identity_groups_resolved": 0,
     "incident_story_records_removed": 0,
     "remaining_incident_identity_groups": 0,
-    "generated_at": "2026-07-26T04:36:35Z",
+    "generated_at": "2026-07-26T04:59:35Z",
     "quarantined_story_records_retained": 8,
-    "active_story_count": 516
+    "active_story_count": 518
   },
   "stories": {
-    "total": 516,
+    "total": 518,
     "importance_levels": {
       "breaking": 0,
       "high": 8,
       "normal": 90,
-      "low": 418,
+      "low": 420,
       "archived": 0
     },
-    "average_importance": 9.88,
+    "average_importance": 9.85,
     "top": [
       {
         "story_id": "story_000049",
@@ -942,7 +940,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 49.11
+          "age_hours": 49.49
         },
         "level": "high",
         "importance_reasons": [
@@ -985,7 +983,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 49.11,
+          "hours_since_update": 49.49,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -1003,7 +1001,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 68.94
+          "age_hours": 69.32
         },
         "level": "high",
         "importance_reasons": [
@@ -1046,7 +1044,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T07:40:14.261666+00:00",
-          "hours_since_update": 68.94,
+          "hours_since_update": 69.32,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1064,7 +1062,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 1.46
+          "age_hours": 1.83
         },
         "level": "high",
         "importance_reasons": [
@@ -1100,7 +1098,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-26T03:14:09.762329+00:00",
-          "hours_since_update": 1.46,
+          "hours_since_update": 1.83,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1118,7 +1116,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 70.26
+          "age_hours": 70.64
         },
         "level": "high",
         "importance_reasons": [
@@ -1156,7 +1154,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 70.26,
+          "hours_since_update": 70.64,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1174,7 +1172,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 28.0
+          "age_hours": 28.37
         },
         "level": "normal",
         "importance_reasons": [
@@ -1210,7 +1208,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-25T00:38:10.414050+00:00",
-          "hours_since_update": 28.0,
+          "hours_since_update": 28.37,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1228,7 +1226,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 25.94
+          "age_hours": 26.31
         },
         "level": "normal",
         "importance_reasons": [
@@ -1266,7 +1264,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-25T02:41:20.731485+00:00",
-          "hours_since_update": 25.94,
+          "hours_since_update": 26.31,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1284,7 +1282,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.94
+          "age_hours": 1.32
         },
         "level": "normal",
         "importance_reasons": [
@@ -1324,7 +1322,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-26T03:44:54.054010+00:00",
-          "hours_since_update": 0.94,
+          "hours_since_update": 1.32,
           "event_count": 34,
           "timeline_entries": 33
         }
@@ -1342,7 +1340,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 6.86
+          "age_hours": 7.23
         },
         "level": "normal",
         "importance_reasons": [
@@ -1371,7 +1369,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T21:46:21.313430+00:00",
-          "hours_since_update": 6.86,
+          "hours_since_update": 7.23,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1389,7 +1387,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 53.32
+          "age_hours": 53.71
         },
         "level": "normal",
         "importance_reasons": [
@@ -1425,7 +1423,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 53.32,
+          "hours_since_update": 53.71,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1443,7 +1441,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 53.32
+          "age_hours": 53.71
         },
         "level": "normal",
         "importance_reasons": [
@@ -1479,7 +1477,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 53.32,
+          "hours_since_update": 53.71,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1497,7 +1495,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 50.97
+          "age_hours": 51.34
         },
         "level": "normal",
         "importance_reasons": [
@@ -1533,7 +1531,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 50.97,
+          "hours_since_update": 51.34,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1551,7 +1549,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 36.94
+          "age_hours": 37.32
         },
         "level": "normal",
         "importance_reasons": [
@@ -1582,7 +1580,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T15:40:29.610573+00:00",
-          "hours_since_update": 36.94,
+          "hours_since_update": 37.32,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1600,7 +1598,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 53.32
+          "age_hours": 53.71
         },
         "level": "normal",
         "importance_reasons": [
@@ -1629,7 +1627,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 53.32,
+          "hours_since_update": 53.71,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1647,7 +1645,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 50.94
+          "age_hours": 51.32
         },
         "level": "normal",
         "importance_reasons": [
@@ -1676,7 +1674,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 50.94,
+          "hours_since_update": 51.32,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1694,7 +1692,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 28.0
+          "age_hours": 28.37
         },
         "level": "normal",
         "importance_reasons": [
@@ -1723,7 +1721,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T00:38:10.414050+00:00",
-          "hours_since_update": 28.0,
+          "hours_since_update": 28.37,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1741,7 +1739,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 53.32
+          "age_hours": 53.71
         },
         "level": "normal",
         "importance_reasons": [
@@ -1774,7 +1772,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 53.32,
+          "hours_since_update": 53.71,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1792,7 +1790,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 26.79
+          "age_hours": 27.18
         },
         "level": "normal",
         "importance_reasons": [
@@ -1825,7 +1823,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T01:48:58.139068+00:00",
-          "hours_since_update": 26.79,
+          "hours_since_update": 27.18,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1843,7 +1841,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 6.84
+          "age_hours": 7.22
         },
         "level": "high",
         "importance_reasons": [
@@ -1877,7 +1875,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T21:46:21.313430+00:00",
-          "hours_since_update": 6.84,
+          "hours_since_update": 7.22,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1895,7 +1893,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 70.26
+          "age_hours": 70.64
         },
         "level": "normal",
         "importance_reasons": [
@@ -1928,7 +1926,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 70.26,
+          "hours_since_update": 70.64,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1946,7 +1944,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 53.32
+          "age_hours": 53.71
         },
         "level": "normal",
         "importance_reasons": [
@@ -1979,7 +1977,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 53.32,
+          "hours_since_update": 53.71,
           "event_count": 1,
           "timeline_entries": 1
         }
