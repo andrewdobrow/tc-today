@@ -1,4 +1,4 @@
-"""Observe-only homepage ranking recommendations for controlled production rollout."""
+"""Confidence-gated homepage ranking recommendations for controlled production rollout."""
 from __future__ import annotations
 
 from copy import deepcopy
@@ -9,8 +9,63 @@ import re
 from typing import Any, Iterable, Mapping, Sequence
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
-RANKING_RECOMMENDATION_VERSION = "1.2"
+RANKING_RECOMMENDATION_VERSION = "1.3"
 RANKING_MODE = "recommend"
+
+
+
+
+_TITLE_STOPWORDS = {
+    "a", "an", "and", "as", "at", "by", "for", "from", "in", "into",
+    "is", "of", "on", "or", "the", "to", "with", "after", "before",
+    "new", "says", "say", "said",
+}
+
+
+def _title_tokens(value: str) -> set[str]:
+    return {
+        token
+        for token in re.findall(r"[a-z0-9]+", str(value or "").lower())
+        if len(token) > 2 and token not in _TITLE_STOPWORDS
+    }
+
+
+def _titles_strongly_overlap(left: str, right: str) -> bool:
+    left_tokens = _title_tokens(left)
+    right_tokens = _title_tokens(right)
+    if not left_tokens or not right_tokens:
+        return False
+    shared = left_tokens & right_tokens
+    if len(shared) < 4:
+        return False
+    containment = len(shared) / min(len(left_tokens), len(right_tokens))
+    union = left_tokens | right_tokens
+    jaccard = len(shared) / len(union) if union else 0.0
+    return containment >= 0.70 or jaccard >= 0.55
+
+
+def _story_titles(story: Mapping[str, Any]) -> list[str]:
+    values = [story.get("canonical_title", ""), story.get("title", "")]
+    values.extend(story.get("titles") or [])
+    values.extend(
+        candidate.get("title", "")
+        for candidate in story.get("title_candidates", [])
+        if isinstance(candidate, Mapping)
+    )
+    values.extend(
+        entry.get("title", "")
+        for entry in story.get("timeline", [])
+        if isinstance(entry, Mapping)
+    )
+    return [str(value or "") for value in values if str(value or "").strip()]
+
+
+def _same_story(left: Mapping[str, Any] | None, right: Mapping[str, Any] | None) -> bool:
+    if left is None or right is None:
+        return False
+    left_id = str(left.get("story_id") or "").strip()
+    right_id = str(right.get("story_id") or "").strip()
+    return bool(left_id and left_id == right_id)
 
 
 def _norm_title(value: str) -> str:
@@ -142,21 +197,29 @@ def _resolve_story(
     by_slug: Mapping[str, Mapping[str, Any]],
     archive_by_slug: Mapping[str, Mapping[str, Any]],
     archive_by_title: Mapping[str, Mapping[str, Any]],
-) -> tuple[Mapping[str, Any] | None, str, Mapping[str, Any] | None]:
+) -> tuple[
+    Mapping[str, Any] | None,
+    str,
+    Mapping[str, Any] | None,
+    str,
+    list[str],
+    str,
+]:
+    """Resolve a card to a story only when identity evidence corroborates it.
+
+    Live placements can carry stale persistent story IDs after archive recovery or
+    earlier grouping mistakes. A bare ID is therefore not sufficient for ranking
+    enforcement. Exact slug, source URL, exact title, or strong title overlap must
+    corroborate the relationship. Conflicts remain observable and lock the card in
+    place rather than silently influencing deterministic order.
+    """
+
     archive_entry = None
     slug = str(card.get("_archived_slug") or card.get("slug") or "").strip()
     if slug:
         archive_entry = archive_by_slug.get(slug)
     if archive_entry is None:
         archive_entry = archive_by_title.get(_norm_title(str(card.get("headline") or "")))
-
-    for candidate in (card, archive_entry):
-        story_id = _explicit_story_id(candidate)
-        if story_id and story_id in by_id:
-            return by_id[story_id], "persistent_story_id", archive_entry
-
-    if slug and slug in by_slug:
-        return by_slug[slug], "canonical_slug", archive_entry
 
     candidate_urls = [card.get("link", ""), card.get("source_url", ""), card.get("original_url", "")]
     if archive_entry:
@@ -165,19 +228,84 @@ def _resolve_story(
             archive_entry.get("link", ""),
             archive_entry.get("original_url", ""),
         ])
-    for url in candidate_urls:
-        story = by_url.get(_norm_url(str(url or "")))
-        if story is not None:
-            return story, "source_url", archive_entry
 
     candidate_titles = [card.get("headline", "")]
     if archive_entry:
         candidate_titles.append(archive_entry.get("headline", ""))
+
+    explicit_warning = ""
+    explicit_ids = []
+    for candidate in (card, archive_entry):
+        story_id = _explicit_story_id(candidate)
+        if story_id and story_id not in explicit_ids:
+            explicit_ids.append(story_id)
+
+    for story_id in explicit_ids:
+        story = by_id.get(story_id)
+        if story is None:
+            explicit_warning = f"persistent_story_id_not_found:{story_id}"
+            continue
+
+        evidence: list[str] = []
+        if slug and _same_story(by_slug.get(slug), story):
+            evidence.append("canonical_slug")
+        for url in candidate_urls:
+            resolved = by_url.get(_norm_url(str(url or "")))
+            if _same_story(resolved, story):
+                evidence.append("source_url")
+                break
+        for title in candidate_titles:
+            resolved = by_title.get(_norm_title(str(title or "")))
+            if _same_story(resolved, story):
+                evidence.append("exact_title")
+                break
+        if not evidence:
+            story_titles = _story_titles(story)
+            if any(
+                _titles_strongly_overlap(str(title or ""), story_title)
+                for title in candidate_titles
+                for story_title in story_titles
+            ):
+                evidence.append("strong_title_overlap")
+
+        if evidence:
+            confidence = "high" if evidence[0] != "strong_title_overlap" else "medium"
+            return (
+                story,
+                f"persistent_story_id+{evidence[0]}",
+                archive_entry,
+                confidence,
+                evidence,
+                explicit_warning,
+            )
+        explicit_warning = f"uncorroborated_persistent_story_id:{story_id}"
+
+    if slug and slug in by_slug:
+        story = by_slug[slug]
+        warning = explicit_warning
+        if explicit_ids and str(story.get("story_id") or "") not in explicit_ids:
+            warning = (warning + ";" if warning else "") + "persistent_story_id_conflicts_with_slug"
+        return story, "canonical_slug", archive_entry, "high", ["canonical_slug"], warning
+
+    for url in candidate_urls:
+        story = by_url.get(_norm_url(str(url or "")))
+        if story is not None:
+            warning = explicit_warning
+            if explicit_ids and str(story.get("story_id") or "") not in explicit_ids:
+                warning = (warning + ";" if warning else "") + "persistent_story_id_conflicts_with_source"
+            return story, "source_url", archive_entry, "high", ["source_url"], warning
+
     for title in candidate_titles:
         story = by_title.get(_norm_title(str(title or "")))
         if story is not None:
-            return story, "title", archive_entry
-    return None, "unmatched", archive_entry
+            warning = explicit_warning
+            if explicit_ids and str(story.get("story_id") or "") not in explicit_ids:
+                warning = (warning + ";" if warning else "") + "persistent_story_id_conflicts_with_title"
+            return story, "title", archive_entry, "high", ["exact_title"], warning
+
+    if explicit_warning:
+        return None, "uncorroborated_persistent_story_id", archive_entry, "low", [], explicit_warning
+    return None, "unmatched", archive_entry, "unmatched", [], ""
 
 
 def _score_card(card: Mapping[str, Any], story: Mapping[str, Any] | None) -> tuple[int, dict[str, Any]]:
@@ -274,7 +402,14 @@ def build_homepage_ranking_recommendations(
                 ),
             })
             continue
-        story, match_basis, archive_entry = _resolve_story(
+        (
+            story,
+            match_basis,
+            archive_entry,
+            identity_confidence,
+            identity_evidence,
+            identity_warning,
+        ) = _resolve_story(
             card,
             by_id=by_id,
             by_url=by_url,
@@ -301,7 +436,8 @@ def build_homepage_ranking_recommendations(
         current_position = len(unique_rows) + 1
         custom = bool(card.get("is_custom") or card.get("authoritative_custom"))
         pin_position = card.get("pin_position")
-        position_locked = custom or bool(pin_position)
+        identity_locked = bool(identity_warning) or identity_confidence in {"low", "medium"}
+        position_locked = custom or bool(pin_position) or identity_locked
         row = {
             "current_position": current_position,
             "recommended_position": current_position,
@@ -313,6 +449,9 @@ def build_homepage_ranking_recommendations(
             "score": score,
             "score_breakdown": breakdown,
             "match_basis": match_basis,
+            "identity_confidence": identity_confidence,
+            "identity_evidence": list(identity_evidence),
+            "identity_warning": identity_warning,
             "identity": identity_key,
             "identity_basis": identity_basis,
             "placement_count": 1,
@@ -321,7 +460,14 @@ def build_homepage_ranking_recommendations(
             "pin_position": pin_position,
             "custom": custom,
             "position_locked": position_locked,
-            "position_lock_reason": "custom_article" if custom else ("pin_position" if pin_position else ""),
+            "position_lock_reason": (
+                "custom_article" if custom
+                else "pin_position" if pin_position
+                else "identity_conflict" if identity_warning
+                else "medium_identity_confidence" if identity_confidence == "medium"
+                else "low_identity_confidence" if identity_confidence == "low"
+                else ""
+            ),
         }
         unique_rows.append(row)
         identity_to_row[identity_key] = row
@@ -364,7 +510,24 @@ def build_homepage_ranking_recommendations(
 
     now = generated_at or datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
     matched = sum(1 for row in unique_rows if row["story_id"])
+    high_confidence_matches = sum(
+        1 for row in unique_rows
+        if row["story_id"] and row.get("identity_confidence") == "high"
+    )
     fallback = len(unique_rows) - matched
+    identity_warnings = [
+        {
+            "headline": row["headline"],
+            "current_position": row["current_position"],
+            "story_id": row["story_id"],
+            "match_basis": row["match_basis"],
+            "identity_confidence": row.get("identity_confidence", ""),
+            "identity_warning": row.get("identity_warning", ""),
+            "position_lock_reason": row.get("position_lock_reason", ""),
+        }
+        for row in unique_rows
+        if row.get("identity_warning") or row.get("identity_confidence") in {"low", "medium"}
+    ]
     excluded_candidates = [dict(row) for row in excluded_candidates]
     recent_high_urgency_exclusions = [
         row for row in excluded_candidates
@@ -372,10 +535,11 @@ def build_homepage_ranking_recommendations(
         and (row.get("age_hours") is None or float(row.get("age_hours") or 0) < 24)
     ]
     match_ready = bool(len(unique_rows) > 0 and matched / len(unique_rows) >= 0.8)
+    confidence_ready = not identity_warnings
     exclusion_ready = not recent_high_urgency_exclusions
-    enforcement_ready = match_ready and exclusion_ready
+    enforcement_ready = match_ready and confidence_ready and exclusion_ready
     return {
-        "schema_version": 2,
+        "schema_version": 3,
         "version": RANKING_RECOMMENDATION_VERSION,
         "mode": RANKING_MODE,
         "generated_at": now,
@@ -392,6 +556,8 @@ def build_homepage_ranking_recommendations(
             "custom_pin_positions_preserved": True,
             "deduplicate_cross_category_placements": True,
             "unresolved_legacy_archive_excluded": True,
+            "uncorroborated_story_ids_position_locked": True,
+            "identity_conflicts_block_enforcement": True,
             "max_reported_recommendations": max_recommendations,
         },
         "summary": {
@@ -401,8 +567,11 @@ def build_homepage_ranking_recommendations(
             "cards_observed": len(unique_rows),
             "duplicate_placements_excluded": len(duplicate_placements),
             "registry_matches": matched,
+            "high_confidence_registry_matches": high_confidence_matches,
+            "identity_warning_count": len(identity_warnings),
             "fallback_scores": fallback,
             "registry_match_rate": round((matched / len(unique_rows)), 4) if unique_rows else 1.0,
+            "high_confidence_match_rate": round((high_confidence_matches / len(unique_rows)), 4) if unique_rows else 1.0,
             "recommended_moves": len(moves),
             "unchanged_positions": len(unique_rows) - len(moves),
             "reported_moves": min(len(moves), max_recommendations),
@@ -410,10 +579,12 @@ def build_homepage_ranking_recommendations(
             "recent_high_urgency_exclusions": len(recent_high_urgency_exclusions),
             "enforcement_readiness": "eligible_for_review" if enforcement_ready else "not_ready",
             "enforcement_readiness_reason": (
-                "At least 80% of unique cards matched persistent story IDs and no recent high-urgency candidate was filtered"
+                "At least 80% of unique cards matched persistent story IDs, every identity was corroborated, and no recent high-urgency candidate was filtered"
                 if enforcement_ready
                 else (
-                    "Recent high-urgency candidate was excluded before ranking"
+                    "Persistent story identity conflict or non-high-confidence story match detected"
+                    if identity_warnings
+                    else "Recent high-urgency candidate was excluded before ranking"
                     if recent_high_urgency_exclusions
                     else "Fewer than 80% of unique cards matched persistent story IDs"
                 )
@@ -425,6 +596,7 @@ def build_homepage_ranking_recommendations(
         "items": sorted(recommended, key=lambda row: row["recommended_position"]),
         "excluded_duplicate_placements": duplicate_placements,
         "excluded_legacy_identity_placements": legacy_identity_exclusions,
+        "identity_warnings": identity_warnings,
         "excluded_candidates": excluded_candidates,
         "recent_high_urgency_exclusions": recent_high_urgency_exclusions,
     }

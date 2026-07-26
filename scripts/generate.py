@@ -4096,7 +4096,7 @@ def render_index(all_categories, top_cat):
 
     archive_for_links = load_archive(OUTPUT_DIR / "archive.json")
 
-    # v1.10.0 ranking rollout: observe and explain only. The report compares the
+    # v1.11.4.0 ranking rollout: confidence-gated observe and explain only. The report compares the
     # already-selected live homepage card order with the persistent editorial score
     # order. It never mutates the hero, card sequence, custom pins, or rendered HTML.
     if write_homepage_ranking_recommendations is not None:
@@ -4114,8 +4114,9 @@ def render_index(all_categories, top_cat):
             print(
                 "  Homepage ranking recommendations: "
                 f"{_ranking_summary.get('recommended_moves', 0)} move(s), "
-                f"{_ranking_summary.get('registry_matches', 0)}/"
-                f"{_ranking_summary.get('unique_cards_observed', _ranking_summary.get('cards_observed', 0))} unique cards registry-matched; "
+                f"{_ranking_summary.get('high_confidence_registry_matches', _ranking_summary.get('registry_matches', 0))}/"
+                f"{_ranking_summary.get('unique_cards_observed', _ranking_summary.get('cards_observed', 0))} unique cards high-confidence matched; "
+                f"{_ranking_summary.get('identity_warning_count', 0)} identity warning(s); "
                 f"{_ranking_summary.get('duplicate_placements_excluded', 0)} duplicate placement(s) excluded; "
                 "observe-only"
             )

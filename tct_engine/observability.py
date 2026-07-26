@@ -13,8 +13,8 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.11.3.4"
-ENGINE_RELEASE = "custom-public-purge"
+ENGINE_VERSION = "1.11.4.0"
+ENGINE_RELEASE = "ranking-identity-confidence-gate"
 OBSERVABILITY_SCHEMA_VERSION = 11
 RESOLVER_VERSION = "2.4"
 RELATIONSHIP_ENGINE_VERSION = "1.2"

@@ -25,6 +25,7 @@ def _registry():
                 "editorial_score": 95,
                 "score_breakdown": {"score": 95, "importance": 100},
                 "timeline": [{"title": "County issues evacuation order", "url": "https://source.test/evacuation"}],
+                "article_slugs": ["evacuation-story"],
             },
         }
     }
@@ -119,7 +120,7 @@ def test_archive_story_id_matches_before_fallback():
     report = build_homepage_ranking_recommendations(cards, {}, registry=registry, archive=archive)
     item = report["items"][0]
     assert item["story_id"] == "story_high"
-    assert item["match_basis"] == "persistent_story_id"
+    assert item["match_basis"] == "persistent_story_id+canonical_slug"
     assert item["score_breakdown"]["basis"] == "persistent_story_registry"
 
 
@@ -147,7 +148,7 @@ def test_report_counts_unchanged_positions_after_deduplication():
 
 def test_low_registry_match_rate_is_explicitly_not_ready_for_enforcement():
     cards = [
-        {"headline": "Matched", "story_id": "story_high"},
+        {"headline": "County issues evacuation order", "story_id": "story_high", "link": "https://source.test/evacuation"},
         {"headline": "Unmatched one", "urgency_score": 5},
         {"headline": "Unmatched two", "urgency_score": 4},
     ]
@@ -199,3 +200,101 @@ def test_unresolved_legacy_archive_card_is_excluded_from_ranking():
     assert report["summary"]["unique_cards_observed"] == 0
     assert report["items"] == []
     assert report["excluded_legacy_identity_placements"][0]["slug"] == "legacy-story"
+
+
+def test_uncorroborated_explicit_story_id_is_locked_and_blocks_enforcement():
+    registry = _registry()
+    cards = [{
+        "headline": "Martin and St. Lucie counties report five confirmed cases of cyclosporiasis",
+        "story_id": "story_low",
+        "urgency_score": 7,
+        "cat_key": "local_gov",
+    }]
+
+    report = build_homepage_ranking_recommendations(cards, {}, registry=registry)
+
+    item = report["items"][0]
+    assert item["story_id"] == ""
+    assert item["match_basis"] == "uncorroborated_persistent_story_id"
+    assert item["identity_confidence"] == "low"
+    assert item["position_locked"] is True
+    assert item["position_lock_reason"] == "identity_conflict"
+    assert report["summary"]["identity_warning_count"] == 1
+    assert report["summary"]["enforcement_readiness"] == "not_ready"
+    assert "identity conflict" in report["summary"]["enforcement_readiness_reason"].lower()
+
+
+def test_exact_title_fallback_corrects_conflicting_explicit_story_id_but_locks_move():
+    registry = _registry()
+    registry["stories"]["story_health"] = {
+        "story_id": "story_health",
+        "canonical_title": "Martin and St. Lucie counties report five confirmed cases of cyclosporiasis",
+        "editorial_score": 70,
+        "score_breakdown": {"score": 70, "importance": 70},
+        "timeline": [],
+    }
+    cards = [{
+        "headline": "Martin and St. Lucie counties report five confirmed cases of cyclosporiasis",
+        "story_id": "story_low",
+        "urgency_score": 7,
+        "cat_key": "local_gov",
+    }]
+
+    report = build_homepage_ranking_recommendations(cards, {}, registry=registry)
+
+    item = report["items"][0]
+    assert item["story_id"] == "story_health"
+    assert item["match_basis"] == "title"
+    assert item["identity_confidence"] == "high"
+    assert "persistent_story_id_conflicts_with_title" in item["identity_warning"]
+    assert item["position_locked"] is True
+    assert report["summary"]["identity_warning_count"] == 1
+    assert report["summary"]["enforcement_readiness"] == "not_ready"
+
+
+def test_corroborated_story_id_remains_high_confidence_and_movable():
+    cards = [{
+        "headline": "County issues evacuation order",
+        "story_id": "story_high",
+        "link": "https://source.test/evacuation?utm_source=rss",
+        "cat_key": "crime",
+    }]
+
+    report = build_homepage_ranking_recommendations(cards, {}, registry=_registry())
+
+    item = report["items"][0]
+    assert item["story_id"] == "story_high"
+    assert item["identity_confidence"] == "high"
+    assert "source_url" in item["identity_evidence"]
+    assert item["identity_warning"] == ""
+    assert item["position_locked"] is False
+    assert report["summary"]["identity_warning_count"] == 0
+
+
+def test_strong_title_overlap_is_medium_confidence_and_stays_observe_only():
+    registry = {
+        "stories": {
+            "story_evac": {
+                "story_id": "story_evac",
+                "canonical_title": "St. Lucie County issues mandatory evacuation order for coastal residents",
+                "editorial_score": 90,
+                "score_breakdown": {"score": 90, "importance": 95},
+                "timeline": [],
+            }
+        }
+    }
+    cards = [{
+        "headline": "Mandatory evacuation order issued for St. Lucie County coastal residents",
+        "story_id": "story_evac",
+        "cat_key": "st_lucie",
+    }]
+
+    report = build_homepage_ranking_recommendations(cards, {}, registry=registry)
+
+    item = report["items"][0]
+    assert item["story_id"] == "story_evac"
+    assert item["identity_confidence"] == "medium"
+    assert item["position_locked"] is True
+    assert item["position_lock_reason"] == "medium_identity_confidence"
+    assert report["summary"]["identity_warning_count"] == 1
+    assert report["summary"]["enforcement_readiness"] == "not_ready"
