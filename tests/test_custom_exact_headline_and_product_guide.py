@@ -162,3 +162,36 @@ def test_retired_traffic_article_is_skipped_removed_and_quarantined(tmp_path, mo
     archive = json.loads((tmp_path / "archive.json").read_text())
     assert archive[0]["exclude_from_live_recovery"] is True
     assert archive[0]["identity_quarantine_reason"] == "editor_retired_custom_article"
+
+def test_traffic_retirement_does_not_swallow_product_guide(tmp_path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(g, "OUTPUT_DIR", tmp_path)
+    traffic_headline = "Treasure Coast Traffic Report: I-95 Ramp Closures and Road Work Planned July 26-31"
+    guide = _guide()
+    guide["expires"] = "2099-01-01"
+    guide["unique_slug"] = True
+
+    (tmp_path / "data").mkdir()
+    (tmp_path / "data" / "custom-retirements.json").write_text(json.dumps({
+        "headlines": [{"headline": traffic_headline}],
+        "slugs": [{"slug": "legacy-retired-traffic-report"}],
+    }), encoding="utf-8")
+    (tmp_path / "custom_articles.json").write_text(json.dumps([
+        {
+            "headline": traffic_headline,
+            "body": "retired traffic copy",
+            "category": "florida",
+            "expires": "2099-01-01",
+            "unique_slug": True,
+        },
+        guide,
+    ]), encoding="utf-8")
+    (tmp_path / "archive.json").write_text("[]", encoding="utf-8")
+
+    loaded = g.load_custom_articles()
+
+    assert [item["headline"] for item in loaded] == [guide["headline"]]
+    assert loaded[0]["article_type"] == "product_guide"
+    assert loaded[0]["product_count"] == len(guide["products"])
+    assert g._is_retired_custom_item(loaded[0], tmp_path) is False
+
