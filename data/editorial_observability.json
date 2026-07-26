@@ -2,12 +2,12 @@
   "schema_version": 11,
   "engine": {
     "name": "tct-editorial-engine",
-    "version": "1.11.2.3",
-    "release": "custom-queue-fail-closed",
+    "version": "1.11.3.0",
+    "release": "front-page-hero-priority",
     "resolver_version": "2.4",
     "relationship_engine_version": "1.2"
   },
-  "generated_at": "2026-07-26T02:47:39Z",
+  "generated_at": "2026-07-26T03:19:39Z",
   "mode": "enforce",
   "publication_behavior_changed": true,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 2,
     "applied_action_count": 2,
     "circuit_breaker_tripped": false,
-    "placements_before": 11,
-    "placements_after": 9,
+    "placements_before": 9,
+    "placements_after": 7,
     "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
     "recommendations": [
@@ -159,21 +159,21 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 165,
+    "candidates_processed": 169,
     "routes": {
-      "generate_new": 3,
-      "skip": 162
+      "generate_new": 4,
+      "skip": 165
     },
     "eligibility": {
-      "listing": 14,
-      "low_value": 120,
-      "publishable": 31
+      "listing": 15,
+      "low_value": 124,
+      "publishable": 30
     },
     "source_classes": {
-      "aggregator": 134,
-      "local_news": 31
+      "aggregator": 139,
+      "local_news": 30
     },
-    "rejected_count": 14,
+    "rejected_count": 15,
     "rejected_examples": [
       {
         "headline": "1315 Bayshore Dr Apt 202, Fort Pierce, FL 34949 - Realtor.com",
@@ -223,6 +223,15 @@
       {
         "headline": "5760 36th Pl, Vero Beach, FL 32966 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOdDVXc1FTclBXRzhIeVBFTjlfbWdERmJwTUd1NkV6UXIwQTBhbEhPZFVTQ0JxZjMtOHlJUlNvMTBzV3RxVzZCNVQ0RHkyZEF1cUh2eEFLdUJRWlNhbkdTcXVIRE01VHRGbzRSSUhicl9NbkFhUjJuR3oyemllTXpBdVF1QnJEVTVZVl9zZmVn?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
+      {
+        "headline": "A Standoff in a Citrus Grove: Why Florida Homeowners Are Fuming Over New Golf Course in Their Neighborhood - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE9kQWFNZ29oc2dLbU9MOG15cjNZaDdUWUM5WERIM0pyZThtNVI1LVBmLTdSYUdIQzZqSzFrVHRJUEJnRERyWWd6dDdZRTQ5akNkY2IzeFI0Ump3amhfZWd2WElDYTNNQ0lRSEEzcXRNMm1yMzBmaTZndnZIdw?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -305,10 +314,34 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 17,
-      "same_event": 148
+      "new_story": 19,
+      "same_event": 150
     },
     "examples": [
+      {
+        "story_id": "story_000667",
+        "title": "Port St Lucie City Council District 1 candidates interviewed by TCPalm - Treasure Coast News",
+        "event_key": "unknown-event-dfcea847f4",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000668",
+        "title": "Port St. Lucie mayor candidates interviewed by TCPalm Editorial Board - Treasure Coast News",
+        "event_key": "unknown-event-8370d9cc2d",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_000201",
         "title": "Florida Amazon layoff toll to reach 1,000+ for warehouse renovations - AOL.com",
@@ -535,32 +568,35 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "",
-        "title": "5760 36th Pl, Vero Beach, FL 32966 - Realtor.com",
-        "event_key": "",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "",
-        "decision_trace": []
-      },
-      {
-        "story_id": "story_000538",
-        "title": "Florida police open $30 million training facility - Treasure Coast News",
-        "event_key": "unknown-event-569fbb8eb0",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ],
     "decision_trace_examples": [
+      {
+        "story_id": "story_000667",
+        "title": "Port St Lucie City Council District 1 candidates interviewed by TCPalm - Treasure Coast News",
+        "event_key": "unknown-event-dfcea847f4",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000668",
+        "title": "Port St. Lucie mayor candidates interviewed by TCPalm Editorial Board - Treasure Coast News",
+        "event_key": "unknown-event-8370d9cc2d",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_000201",
         "title": "Florida Amazon layoff toll to reach 1,000+ for warehouse renovations - AOL.com",
@@ -802,36 +838,6 @@
         ]
       },
       {
-        "story_id": "story_000541",
-        "title": "South Carolina set to open Democratic presidential primary again",
-        "event_key": "unknown-event-25bf935a5d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000515",
-        "title": "Palm Beach County school officers prep with summer safety training",
-        "event_key": "unknown-event-5d28c2f39d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_000604",
         "title": "New details in investigation into Florida infant's death; 3 arrested - Treasure Coast News",
         "event_key": "unknown-event-53439826f2",
@@ -865,25 +871,25 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 126,
-      "treasure_coast_local": 101,
-      "treasure_coast_region": 52,
+      "florida": 127,
+      "treasure_coast_local": 103,
+      "treasure_coast_region": 53,
       "unknown": 226
     },
-    "average_score": 61.66
+    "average_score": 61.89
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 126,
-      "treasure_coast_local": 101,
-      "treasure_coast_region": 52,
+      "florida": 127,
+      "treasure_coast_local": 103,
+      "treasure_coast_region": 53,
       "unknown": 226
     },
-    "average_priority": 5.3
+    "average_priority": 5.41
   },
   "story_lifecycle": {
     "counts": {
-      "active": 216,
+      "active": 220,
       "developing": 134,
       "ongoing": 155
     }
@@ -892,8 +898,8 @@
     "repair_version": 4,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 502,
-    "active_stories_after": 502,
+    "active_stories_before": 505,
+    "active_stories_after": 505,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -909,20 +915,20 @@
     "incident_identity_groups_resolved": 0,
     "incident_story_records_removed": 0,
     "remaining_incident_identity_groups": 0,
-    "generated_at": "2026-07-26T02:43:10Z",
+    "generated_at": "2026-07-26T03:14:10Z",
     "quarantined_story_records_retained": 8,
-    "active_story_count": 505
+    "active_story_count": 509
   },
   "stories": {
-    "total": 505,
+    "total": 509,
     "importance_levels": {
       "breaking": 0,
-      "high": 7,
+      "high": 8,
       "normal": 89,
-      "low": 409,
+      "low": 412,
       "archived": 0
     },
-    "average_importance": 9.84,
+    "average_importance": 9.92,
     "top": [
       {
         "story_id": "story_000049",
@@ -937,7 +943,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 47.22
+          "age_hours": 47.73
         },
         "level": "high",
         "importance_reasons": [
@@ -980,7 +986,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 47.22,
+          "hours_since_update": 47.73,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -998,7 +1004,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 67.05
+          "age_hours": 67.57
         },
         "level": "high",
         "importance_reasons": [
@@ -1041,7 +1047,61 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T07:40:14.261666+00:00",
-          "hours_since_update": 67.05,
+          "hours_since_update": 67.57,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000670",
+        "title": "Indian River County Fire Rescue firefighter Geoffrey Lang dies in off-duty incident - WPBF",
+        "score": 65,
+        "editorial_priority": 64,
+        "editorial_score": 64,
+        "score_breakdown": {
+          "score": 64,
+          "importance": 65,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 0.08
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-07-26T03:14:09.762329+00:00",
+          "hours_since_update": 0.08,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1059,7 +1119,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 68.37
+          "age_hours": 68.88
         },
         "level": "high",
         "importance_reasons": [
@@ -1097,7 +1157,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 68.37,
+          "hours_since_update": 68.88,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1115,7 +1175,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 26.1
+          "age_hours": 26.62
         },
         "level": "normal",
         "importance_reasons": [
@@ -1151,7 +1211,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-25T00:38:10.414050+00:00",
-          "hours_since_update": 26.1,
+          "hours_since_update": 26.62,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1169,7 +1229,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 24.04
+          "age_hours": 24.57
         },
         "level": "normal",
         "importance_reasons": [
@@ -1207,7 +1267,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-25T02:41:20.731485+00:00",
-          "hours_since_update": 24.04,
+          "hours_since_update": 24.57,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1225,7 +1285,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 2.1
+          "age_hours": 2.63
         },
         "level": "normal",
         "importance_reasons": [
@@ -1265,7 +1325,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-26T00:40:31.160092+00:00",
-          "hours_since_update": 2.1,
+          "hours_since_update": 2.63,
           "event_count": 33,
           "timeline_entries": 32
         }
@@ -1283,7 +1343,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 4.95
+          "age_hours": 5.48
         },
         "level": "normal",
         "importance_reasons": [
@@ -1312,7 +1372,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T21:46:21.313430+00:00",
-          "hours_since_update": 4.95,
+          "hours_since_update": 5.48,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1330,7 +1390,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 51.43
+          "age_hours": 51.95
         },
         "level": "normal",
         "importance_reasons": [
@@ -1366,7 +1426,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 51.43,
+          "hours_since_update": 51.95,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1384,7 +1444,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 51.43
+          "age_hours": 51.95
         },
         "level": "normal",
         "importance_reasons": [
@@ -1420,7 +1480,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 51.43,
+          "hours_since_update": 51.95,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1438,7 +1498,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 49.06
+          "age_hours": 49.59
         },
         "level": "normal",
         "importance_reasons": [
@@ -1474,7 +1534,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 49.06,
+          "hours_since_update": 49.59,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1492,7 +1552,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 35.05
+          "age_hours": 35.56
         },
         "level": "normal",
         "importance_reasons": [
@@ -1523,7 +1583,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-24T15:40:29.610573+00:00",
-          "hours_since_update": 35.05,
+          "hours_since_update": 35.56,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1541,7 +1601,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 51.43
+          "age_hours": 51.95
         },
         "level": "normal",
         "importance_reasons": [
@@ -1570,7 +1630,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 51.43,
+          "hours_since_update": 51.95,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1588,7 +1648,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 49.05
+          "age_hours": 49.56
         },
         "level": "normal",
         "importance_reasons": [
@@ -1617,7 +1677,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-24T01:40:23.579334+00:00",
-          "hours_since_update": 49.05,
+          "hours_since_update": 49.56,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1635,7 +1695,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 26.1
+          "age_hours": 26.62
         },
         "level": "normal",
         "importance_reasons": [
@@ -1664,7 +1724,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T00:38:10.414050+00:00",
-          "hours_since_update": 26.1,
+          "hours_since_update": 26.62,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1682,7 +1742,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 51.43
+          "age_hours": 51.95
         },
         "level": "normal",
         "importance_reasons": [
@@ -1715,7 +1775,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 51.43,
+          "hours_since_update": 51.95,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1733,7 +1793,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 24.9
+          "age_hours": 25.42
         },
         "level": "normal",
         "importance_reasons": [
@@ -1766,7 +1826,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T01:48:58.139068+00:00",
-          "hours_since_update": 24.9,
+          "hours_since_update": 25.42,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1784,7 +1844,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.95
+          "age_hours": 5.47
         },
         "level": "high",
         "importance_reasons": [
@@ -1818,7 +1878,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-25T21:46:21.313430+00:00",
-          "hours_since_update": 4.95,
+          "hours_since_update": 5.47,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1836,7 +1896,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 68.37
+          "age_hours": 68.88
         },
         "level": "normal",
         "importance_reasons": [
@@ -1869,7 +1929,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 68.37,
+          "hours_since_update": 68.88,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1887,7 +1947,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 51.43
+          "age_hours": 51.95
         },
         "level": "normal",
         "importance_reasons": [
@@ -1920,59 +1980,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 51.43,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000140",
-        "title": "Family of 6-year-old killed in go-karting accident at Florida Urban Air files wrongful death lawsuit - SNN News",
-        "score": 50,
-        "editorial_priority": 23,
-        "editorial_score": 23,
-        "score_breakdown": {
-          "score": 23,
-          "importance": 50,
-          "proximity_multiplier": 0.55,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 51.43
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "court_action",
-            "label": "Court action",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "florida",
-          "score": 65,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 55,
-          "scope": "florida",
-          "reason": "Florida-wide coverage with indirect local relevance"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Story is older than 48 hours but remains within the active news window",
-          "last_updated": "2026-07-23T23:17:09.519046+00:00",
-          "hours_since_update": 51.43,
+          "hours_since_update": 51.95,
           "event_count": 1,
           "timeline_entries": 1
         }
