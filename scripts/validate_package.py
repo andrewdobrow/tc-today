@@ -4,9 +4,55 @@
 from __future__ import annotations
 
 import importlib
+import json
 import pkgutil
 import sys
 from pathlib import Path
+
+
+def validate_custom_queue(path: Path) -> list[str]:
+    """Return actionable errors for the authoritative custom publication queue."""
+    if not path.exists():
+        return []
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [
+            "custom_articles.json invalid JSON at "
+            f"line {exc.lineno}, column {exc.colno}: {exc.msg}"
+        ]
+    except OSError as exc:
+        return [f"custom_articles.json could not be read: {exc}"]
+
+    if not isinstance(data, list):
+        return ["custom_articles.json must contain a top-level JSON array"]
+
+    errors: list[str] = []
+    headlines: set[str] = set()
+    for index, item in enumerate(data, start=1):
+        label = f"custom_articles.json item {index}"
+        if not isinstance(item, dict):
+            errors.append(f"{label} must be a JSON object")
+            continue
+        headline = str(item.get("headline") or "").strip()
+        if not headline:
+            errors.append(f"{label} is missing a non-empty headline")
+            continue
+        if headline in headlines:
+            errors.append(f"{label} duplicates exact headline: {headline}")
+        headlines.add(headline)
+        if item.get("retired") is True:
+            continue
+        if not str(item.get("category") or "").strip():
+            errors.append(f"{label} ('{headline}') is missing a category")
+        if str(item.get("article_type") or "") == "product_guide":
+            if not str(item.get("intro") or "").strip():
+                errors.append(f"{label} ('{headline}') is missing product-guide intro")
+            if not isinstance(item.get("products"), list) or not item.get("products"):
+                errors.append(f"{label} ('{headline}') requires a non-empty products array")
+        elif not str(item.get("body") or "").strip():
+            errors.append(f"{label} ('{headline}') is missing a non-empty body")
+    return errors
 
 
 def main() -> int:
@@ -47,6 +93,8 @@ def main() -> int:
     for path in required_files:
         if not path.is_file():
             errors.append(f"required file is missing: {path.relative_to(repo_root)}")
+
+    errors.extend(validate_custom_queue(repo_root / "custom_articles.json"))
 
     if errors:
         print("Package validation failed:", file=sys.stderr)

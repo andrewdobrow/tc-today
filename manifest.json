@@ -1,18 +1,21 @@
 {
-  "release": "v1.11.2.1",
-  "name": "Hurricane guide publication queue hotfix",
-  "apply_over": "v1.11.2",
-  "article_headline": "Hurricane Season Ready: 12 Treasure Coast Essentials to Stock Up On",
+  "release": "v1.11.2.3",
+  "name": "Custom queue fail-closed and two-article recovery",
+  "apply_over": [
+    "v1.11.2.1",
+    "v1.11.2.2"
+  ],
   "fix_scope": [
-    "queue prepared hurricane product guide",
-    "prove exact traffic retirement cannot swallow product guides",
-    "update stale editorial engine footer"
+    "publish the hurricane guide and Port St. Lucie police facility article from one valid queue",
+    "fail package validation and generation on malformed custom queue JSON",
+    "retain the custom archive rebind guard from v1.11.2.2",
+    "trigger editorial tests when custom queue or retirement registry changes"
   ],
   "files": [
     {
       "path": "custom_articles.json",
-      "bytes": 23390,
-      "sha256": "1f371f180d1b72f00e577b34bb0659b8c7bd3518787090a86fb918e8441b6022"
+      "bytes": 17751,
+      "sha256": "9e5852a41bbcf4e70b90bb53783dec4b7d73743d8be7cb6cdd49d7a4f66502bd"
     },
     {
       "path": "data/custom-retirements.json",
@@ -20,9 +23,24 @@
       "sha256": "0637a2bd19b4d1c740fbd52550813ff2432a390f837bb69a054bcd8763b6e0ad"
     },
     {
+      "path": "scripts/generate.py",
+      "bytes": 631021,
+      "sha256": "c1db9fbeb9993fa559866c914a3ff6e7a6e929602867c018414ea048a00c1e5c"
+    },
+    {
+      "path": "scripts/validate_package.py",
+      "bytes": 4025,
+      "sha256": "c94cc86f68bd4fadb461ab75cfcdf11e880f2f2aabed12684d385bdc564b62f8"
+    },
+    {
       "path": "tct_engine/observability.py",
-      "bytes": 12345,
-      "sha256": "a679429d75439cc61663b3f326cb910de8b692a9498e9a334f75932d7e4cfacd"
+      "bytes": 12341,
+      "sha256": "1d5119c2298aa837f1ac6937dcd432a2ec0db9e7d4826d454768a4785ddd2455"
+    },
+    {
+      "path": "tests/test_custom_archive_recovery_write_through.py",
+      "bytes": 8278,
+      "sha256": "7a5bd44889bbf28bee0fcda1960a3b5c1703d8e474e754b71f063a2c5d94180d"
     },
     {
       "path": "tests/test_custom_exact_headline_and_product_guide.py",
@@ -30,14 +48,24 @@
       "sha256": "a4af5106e7c907f428566e5d4fa29cb243bea3039d6bb2ad8287a2305d1bad18"
     },
     {
-      "path": "PATCH_NOTES_v1.11.2.1.md",
-      "bytes": 2326,
-      "sha256": "a337c04c873e82d6f39c6146040c886eda23f4327bc94ec021ecd1e6b2a66567"
+      "path": "tests/test_custom_queue_fail_closed.py",
+      "bytes": 3345,
+      "sha256": "b505d1020fe40c6b7ecf7a695b2097c96e7461cc4ad7549af2da976e8c3ccbf0"
     },
     {
-      "path": "hurricane-guide-queue-hotfix-validation-v1.11.2.1.json",
-      "bytes": 1076,
-      "sha256": "8c934804e3819b5808d2e21a8d4c4919b9bb54e9e54b62f279bd10bfc7debb75"
+      "path": ".github/workflows/test-editorial-engine.yml",
+      "bytes": 1335,
+      "sha256": "36c665f0396e91ec41cd8dcb203624a21fdd59e9cd0290836ef0bb7236635058"
+    },
+    {
+      "path": "PATCH_NOTES_v1.11.2.3.md",
+      "bytes": 2329,
+      "sha256": "0c486115e57011e5f09992236801a7f409c633c049291078f371259644fc4c05"
+    },
+    {
+      "path": "custom-queue-fail-closed-validation-v1.11.2.3.json",
+      "bytes": 909,
+      "sha256": "19db09b95cc5b45f7cc1f1de1bea57679556962af82bcc86977ae19b58dbf792"
     }
   ]
 }

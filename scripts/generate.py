@@ -4974,12 +4974,19 @@ def load_custom_articles():
         return []
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
-    except Exception as exc:
-        print(f"  custom_articles.json parse error: {exc}")
-        return []
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            "custom_articles.json is invalid JSON at "
+            f"line {exc.lineno}, column {exc.colno}: {exc.msg}. "
+            "Generation stopped because silently dropping custom articles is not allowed."
+        ) from exc
+    except OSError as exc:
+        raise RuntimeError(f"custom_articles.json could not be read: {exc}") from exc
     if not isinstance(data, list):
-        print("  custom_articles.json must contain an array")
-        return []
+        raise RuntimeError(
+            "custom_articles.json must contain a top-level JSON array. "
+            "Generation stopped because silently dropping custom articles is not allowed."
+        )
 
     from datetime import timezone as _tz
     now = datetime.now(_tz.utc)
@@ -5002,13 +5009,23 @@ def load_custom_articles():
     live = []
     skipped_published = 0
     retired_skips = 0
-    for raw in data:
+    queued_headlines = set()
+    for index, raw in enumerate(data, start=1):
         if not isinstance(raw, dict):
-            continue
+            raise RuntimeError(
+                f"custom_articles.json item {index} must be a JSON object, "
+                f"not {type(raw).__name__}."
+            )
         art = dict(raw)
         headline = _exact_custom_headline(art.get("headline"))
         if not headline:
-            continue
+            raise RuntimeError(f"custom_articles.json item {index} is missing a non-empty headline.")
+        if headline in queued_headlines:
+            raise RuntimeError(
+                f"custom_articles.json contains the exact headline more than once: '{headline}'. "
+                "Keep one authoritative queue entry per headline."
+            )
+        queued_headlines.add(headline)
         if art.get("retired") is True or headline in retired:
             retired_skips += 1
             continue
@@ -5020,13 +5037,16 @@ def load_custom_articles():
                     continue
             except Exception:
                 pass
-        if not art.get("category"):
-            continue
+        if not str(art.get("category") or "").strip():
+            raise RuntimeError(
+                f"Custom article '{headline}' is missing a category. "
+                "Generation stopped before publication."
+            )
         try:
             if str(art.get("article_type") or "") == "product_guide":
                 _normalize_product_guide(art)
-            elif not art.get("body"):
-                continue
+            elif not str(art.get("body") or "").strip():
+                raise ValueError("missing non-empty body")
         except ValueError as exc:
             raise RuntimeError(f"Custom article '{headline}' invalid: {exc}") from exc
 
@@ -6458,20 +6478,24 @@ def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_c
 
     canonical = entry
     current_customs = list(current_customs or [])
+    current_custom_payload = None
     if replace_with_custom and (entry.get("is_custom") or entry.get("authoritative_custom")):
-        entry_slug = str(entry.get("slug") or "")
-        entry_fp = str(entry.get("custom_fingerprint") or "")
-        for custom in current_customs:
-            custom_fp = _custom_story_fingerprint(
-                custom.get("headline", ""), custom.get("teaser", "")
+        # Current custom copy may refresh an archived custom placement only through
+        # the exact-headline authority contract. Broad event similarity, fingerprints,
+        # or inherited slugs must never swap a different manual article into this
+        # archive placement. That previously allowed an archived Sports custom story
+        # to absorb a new Florida product guide while retaining ``_archive_only``.
+        entry_headline = _exact_custom_headline(entry.get("headline"))
+        if entry_headline:
+            current_custom_payload = next(
+                (
+                    custom for custom in current_customs
+                    if _exact_custom_headline(custom.get("headline")) == entry_headline
+                ),
+                None,
             )
-            if (
-                str(custom.get("slug") or "") == entry_slug
-                or (entry_fp and custom_fp == entry_fp)
-                or _same_event_items(custom, entry)
-            ):
-                canonical = custom
-                break
+        if current_custom_payload is not None:
+            canonical = current_custom_payload
 
     # Keep placement metadata such as urgency and hero-copy markers, but replace
     # editorial content with the authoritative custom copy when requested.
@@ -6479,13 +6503,28 @@ def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_c
         for key in (
             "headline", "title", "teaser", "summary", "body", "image_url",
             "image_credit", "published", "published_raw", "feed_url", "event_url",
-            "event_link_text",
+            "event_link_text", "category", "category_key", "category_label",
+            "article_type", "products", "product_count", "has_affiliate_links",
+            "custom_body_hash", "custom_headline_key",
         ):
             value = canonical.get(key)
             if value not in (None, ""):
                 item[key] = value
         item["is_custom"] = True
         item["authoritative_custom"] = True
+        if current_custom_payload is not None:
+            declared_category = _declared_custom_category(current_custom_payload)
+            if declared_category:
+                item["category"] = declared_category
+                item["category_key"] = declared_category
+                item["category_label"] = CATEGORIES.get(declared_category, {}).get(
+                    "label", declared_category.replace("_", " ").title()
+                )
+            # This is now active current-run editorial copy, not merely a recovered
+            # archive shell. Leaving the marker in place makes write_archives silently
+            # skip it before permalink creation.
+            item.pop("_archive_only", None)
+            item.pop("_archive_verified_quality", None)
 
     current_link = str(item.get("link") or "")
     if _normalized_external_source_url(current_link):
@@ -9089,10 +9128,14 @@ def _publication_copy_rank(entry):
     """
     _ck, _cl, item = entry
     is_custom = 1 if item.get("is_custom") or item.get("authoritative_custom") else 0
+    active_custom_payload = 1 if is_custom and not item.get("_archive_only") else 0
     has_real_img = 1 if (item.get("image_url") and not item.get("image_from_google")) else 0
     is_hero_copy = 1 if item.get("_is_hero_copy") else 0
     body_words = _word_count(item.get("body", ""))
-    return (is_custom, has_real_img, is_hero_copy, body_words)
+    # A current queue payload must outrank an archive-recovery clone, even when the
+    # clone is currently a hero. Otherwise the clone wins coalescing and is then
+    # silently skipped by the archive-only guard before the custom permalink exists.
+    return (is_custom, active_custom_payload, has_real_img, is_hero_copy, body_words)
 
 
 
