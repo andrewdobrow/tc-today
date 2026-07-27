@@ -39,7 +39,7 @@ def test_legacy_ai_urls_are_migration_inputs_not_active_pool_entries():
     assert 'if "/images/fallback/" in path:' in source
 
 
-def test_engine_release_identifies_emergency_nonstory_hero_guard():
+def test_engine_release_identifies_category_generation_failure_containment():
     observability = (ROOT / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'ENGINE_VERSION = "1.11.6.0"' in observability
-    assert 'ENGINE_RELEASE = "retrospective-follow-up-observability"' in observability
+    assert 'ENGINE_VERSION = "1.11.6.1"' in observability
+    assert 'ENGINE_RELEASE = "category-generation-failure-containment"' in observability

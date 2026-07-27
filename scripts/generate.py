@@ -226,6 +226,7 @@ EDITORIAL_AUDIT_LOG_PATH = OUTPUT_DIR / "data" / "editorial_audit.jsonl"
 # registry. Controlled activation can suppress placements but never rewrites this registry.
 EDITORIAL_REGISTRY_PATH = OUTPUT_DIR / "data" / "editorial_story_registry.json"
 EDITORIAL_OBSERVABILITY_PATH = OUTPUT_DIR / "data" / "editorial_observability.json"
+CATEGORY_GENERATION_REPORT_PATH = OUTPUT_DIR / "data" / "category-generation-report.json"
 EDITORIAL_ACTIVATION_PATH = OUTPUT_DIR / "data" / "editorial_activation.json"
 EDITORIAL_ACTIVATION_HISTORY_PATH = OUTPUT_DIR / "data" / "editorial_activation_history.jsonl"
 
@@ -245,6 +246,26 @@ DEFAULT_AFFILIATE_DISCLOSURE = (
 # this version in the publication signature so presentation fixes republish existing
 # guides even when their editorial copy and product data are unchanged.
 PRODUCT_GUIDE_TEMPLATE_VERSION = "1.7-compact-auto-sized-product-media"
+
+# Category generation is the largest remaining runtime risk. Bound each model call
+# and the combined retry window so one malformed or stalled response cannot hold the
+# full site build indefinitely. Values can be tuned in production without code edits.
+def _positive_float_env(name, default):
+    try:
+        value = float(os.environ.get(name, default))
+    except (TypeError, ValueError):
+        value = float(default)
+    return value if value > 0 else float(default)
+
+CATEGORY_MODEL_CALL_TIMEOUT_SECONDS = _positive_float_env(
+    "TCT_CATEGORY_MODEL_CALL_TIMEOUT_SECONDS", 120
+)
+CATEGORY_GENERATION_BUDGET_SECONDS = _positive_float_env(
+    "TCT_CATEGORY_GENERATION_BUDGET_SECONDS", 180
+)
+CATEGORY_GENERATION_MAX_ATTEMPTS = 2
+CATEGORY_GENERATION_MIN_RETRY_SECONDS = 15
+CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 1
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -490,8 +511,6 @@ CONTENT_BANK_FEEDS = [
     "https://www.wptv.com/news/local-news.rss",
     "https://www.wptv.com/news/education/back-to-school.rss",
     "https://www.wptv.com/news/state.rss",
-    "https://www.wptv.com/feeds/rss/news",
-    "https://www.wptv.com/feeds/rss/local",
     "https://news.google.com/rss/search?q=treasure+coast+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
     "https://news.google.com/rss/search?q=martin+county+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
     "https://news.google.com/rss/search?q=port+st+lucie+florida+when:3d&hl=en-US&gl=US&ceid=US:en",
@@ -2828,7 +2847,7 @@ def strip_markdown(text, headline=""):
     return text
 
 
-def generate_category_content(category_key, category_label, headlines):
+def generate_category_content(category_key, category_label, headlines, request_timeout_seconds=None):
     # Build headlines with raw published strings for Claude to copy back
     def sanitize(text):
         if not text:
@@ -2983,17 +3002,29 @@ Return ONLY valid JSON:
 """
 
 
-    response = client.messages.create(
-        model=MODEL_ARTICLES,
-        max_tokens=5600,
-        system=[{
+    request_kwargs = {
+        "model": MODEL_ARTICLES,
+        "max_tokens": 5600,
+        "system": [{
             "type": "text",
             "text": system_prompt,
             "cache_control": {"type": "ephemeral"}
         }],
-        messages=[{"role": "user", "content": prompt}],
-        extra_headers={"anthropic-beta": "prompt-caching-2024-07-31"},
-    )
+        "messages": [{"role": "user", "content": prompt}],
+        "extra_headers": {"anthropic-beta": "prompt-caching-2024-07-31"},
+    }
+    request_client = client
+    if request_timeout_seconds is not None:
+        request_timeout = max(1.0, float(request_timeout_seconds))
+        # The Anthropic SDK retries transient failures by default. Disable those
+        # hidden retries here because this pipeline owns a visible, bounded retry
+        # policy and must keep the entire category inside its declared budget.
+        if hasattr(client, "with_options"):
+            request_client = client.with_options(timeout=request_timeout, max_retries=0)
+        else:
+            # Offline test clients generally expose only messages.create().
+            request_kwargs["timeout"] = request_timeout
+    response = request_client.messages.create(**request_kwargs)
 
     raw = response.content[0].text.strip()
     if raw.startswith("```"):
@@ -3045,6 +3076,11 @@ Return ONLY valid JSON:
 
     # Use source_index to attach original RSS link and image directly — no fuzzy matching needed
     def attach_source(item, headlines):
+        # Model responses occasionally contain ``"hero": null`` or null card
+        # entries. Treat those as an empty result that the caller can recover from;
+        # never dereference None and turn a controlled category miss into a traceback.
+        if not isinstance(item, dict):
+            return {}
         idx = item.get("source_index")
         if idx is not None:
             try:
@@ -3078,11 +3114,16 @@ Return ONLY valid JSON:
         item["published"] = format_age(raw_pub)
         return item
 
-    data["hero"] = attach_source(data["hero"], headlines)
+    data["hero"] = attach_source(data.get("hero"), headlines)
     data["hero"]["body"] = strip_absence_language(strip_markdown(data["hero"].get("body", ""), data["hero"].get("headline", "")))
-    for card in data.get("cards", []):
-        attach_source(card, headlines)
+    normalized_cards = []
+    for card in data.get("cards", []) or []:
+        card = attach_source(card, headlines)
+        if not card:
+            continue
         card["body"] = strip_absence_language(strip_markdown(card.get("body", ""), card.get("headline", "")))
+        normalized_cards.append(card)
+    data["cards"] = normalized_cards
 
     # Enforce category lead eligibility in Python, not just by prompt. Claude can
     # still be tempted by a full-source off-topic item from a broad WPTV feed.
@@ -3483,6 +3524,182 @@ Return ONLY valid JSON:
                     data["_drop_category"] = True
 
     return data
+
+
+def _category_generation_error_code(exc):
+    name = type(exc).__name__.lower()
+    message = str(exc or "").lower()
+    if "timeout" in name or "timed out" in message or "timeout" in message:
+        return "model_timeout"
+    if isinstance(exc, (ValueError, json.JSONDecodeError)) or "json" in name or "json" in message:
+        return "invalid_json"
+    return "generation_exception"
+
+
+def _safe_exception_summary(exc, limit=240):
+    text = re.sub(r"\s+", " ", str(exc or "")).strip()
+    if not text:
+        text = type(exc).__name__
+    return text[:limit]
+
+
+def _run_category_generation_with_budget(category_key, category_label, headlines):
+    """Generate one category with a bounded two-attempt model budget.
+
+    This helper contains model failures inside the category boundary. It returns
+    ``(None, diagnostics)`` after a persistent failure so the normal permanent
+    archive recovery path can fill the section without a Python traceback.
+    """
+    started = time.perf_counter()
+    attempts = []
+    last_code = ""
+    last_summary = ""
+
+    for attempt_number in range(1, CATEGORY_GENERATION_MAX_ATTEMPTS + 1):
+        elapsed = time.perf_counter() - started
+        remaining = CATEGORY_GENERATION_BUDGET_SECONDS - elapsed
+        if remaining <= 0 or (
+            attempt_number > 1 and remaining < CATEGORY_GENERATION_MIN_RETRY_SECONDS
+        ):
+            last_code = "generation_budget_exhausted"
+            last_summary = (
+                f"No retry window remained inside the {CATEGORY_GENERATION_BUDGET_SECONDS:.0f}s "
+                "category generation budget"
+            )
+            break
+
+        request_timeout = min(CATEGORY_MODEL_CALL_TIMEOUT_SECONDS, remaining)
+        attempt_started = time.perf_counter()
+        try:
+            data = generate_category_content(
+                category_key,
+                category_label,
+                headlines,
+                request_timeout_seconds=request_timeout,
+            )
+            attempt_elapsed = time.perf_counter() - attempt_started
+            usable_hero = (
+                isinstance(data, dict)
+                and isinstance(data.get("hero"), dict)
+                and bool(str(data["hero"].get("headline") or "").strip())
+                and not data.get("_drop_category")
+            )
+            if usable_hero:
+                attempts.append({
+                    "attempt": attempt_number,
+                    "timeout_seconds": round(request_timeout, 1),
+                    "elapsed_seconds": round(attempt_elapsed, 3),
+                    "result": "success",
+                })
+                return data, {
+                    "status": "success",
+                    "attempt_count": len(attempts),
+                    "attempts": attempts,
+                    "model_elapsed_seconds": round(time.perf_counter() - started, 3),
+                    "failure_code": "",
+                    "failure_summary": "",
+                    "budget_seconds": CATEGORY_GENERATION_BUDGET_SECONDS,
+                }
+
+            last_code = "missing_or_null_hero"
+            last_summary = "Model response did not contain a usable hero after normalization"
+            attempts.append({
+                "attempt": attempt_number,
+                "timeout_seconds": round(request_timeout, 1),
+                "elapsed_seconds": round(attempt_elapsed, 3),
+                "result": last_code,
+                "error_summary": last_summary,
+            })
+        except Exception as exc:
+            attempt_elapsed = time.perf_counter() - attempt_started
+            last_code = _category_generation_error_code(exc)
+            last_summary = _safe_exception_summary(exc)
+            attempts.append({
+                "attempt": attempt_number,
+                "timeout_seconds": round(request_timeout, 1),
+                "elapsed_seconds": round(attempt_elapsed, 3),
+                "result": last_code,
+                "error_type": type(exc).__name__,
+                "error_summary": last_summary,
+            })
+
+        if attempt_number < CATEGORY_GENERATION_MAX_ATTEMPTS:
+            remaining_after = CATEGORY_GENERATION_BUDGET_SECONDS - (time.perf_counter() - started)
+            if remaining_after >= CATEGORY_GENERATION_MIN_RETRY_SECONDS:
+                print(
+                    f"  Category generation attempt {attempt_number} failed for {category_label}: "
+                    f"{last_code} ({last_summary}); retrying once with "
+                    f"{remaining_after:.0f}s remaining"
+                )
+
+    return None, {
+        "status": "failed",
+        "attempt_count": len(attempts),
+        "attempts": attempts,
+        "model_elapsed_seconds": round(time.perf_counter() - started, 3),
+        "failure_code": last_code or "generation_failed",
+        "failure_summary": last_summary or "Category generation failed without a usable response",
+        "budget_seconds": CATEGORY_GENERATION_BUDGET_SECONDS,
+    }
+
+
+def _finalize_category_generation_record(record, status, started, **updates):
+    record.update(updates)
+    record["status"] = status
+    record["elapsed_seconds"] = round(time.perf_counter() - started, 3)
+    record.pop("_started", None)
+    return record
+
+
+def _build_category_generation_report(records):
+    status_counts = defaultdict(int)
+    failure_counts = defaultdict(int)
+    total_attempts = 0
+    total_model_seconds = 0.0
+    archive_recovery_count = 0
+    for record in records:
+        status_counts[str(record.get("status") or "unknown")] += 1
+        failure_code = str(record.get("failure_code") or "")
+        if failure_code:
+            failure_counts[failure_code] += 1
+        total_attempts += int(record.get("attempt_count") or 0)
+        total_model_seconds += float(record.get("model_elapsed_seconds") or 0.0)
+        archive_recovery_count += int(bool(record.get("archive_recovery_requested")))
+
+    return {
+        "schema_version": CATEGORY_GENERATION_REPORT_SCHEMA_VERSION,
+        "generated_at": _utc_now_iso(),
+        "policy": {
+            "mode": "fail_closed_archive_recovery",
+            "model_call_timeout_seconds": CATEGORY_MODEL_CALL_TIMEOUT_SECONDS,
+            "category_generation_budget_seconds": CATEGORY_GENERATION_BUDGET_SECONDS,
+            "max_attempts": CATEGORY_GENERATION_MAX_ATTEMPTS,
+            "minimum_retry_window_seconds": CATEGORY_GENERATION_MIN_RETRY_SECONDS,
+            "removed_dead_feeds": [
+                "https://www.wptv.com/feeds/rss/news",
+                "https://www.wptv.com/feeds/rss/local",
+            ],
+        },
+        "summary": {
+            "category_count": len(records),
+            "statuses": dict(sorted(status_counts.items())),
+            "failures": dict(sorted(failure_counts.items())),
+            "model_attempt_count": total_attempts,
+            "model_elapsed_seconds": round(total_model_seconds, 3),
+            "archive_recovery_requested_count": archive_recovery_count,
+        },
+        "categories": records,
+    }
+
+
+def _write_category_generation_report(records, output_path=None):
+    report = _build_category_generation_report(records)
+    path = Path(output_path or CATEGORY_GENERATION_REPORT_PATH)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    temporary.replace(path)
+    return report
 
 
 # -- HTML GENERATION --
@@ -13257,7 +13474,7 @@ def _write_editorial_activation_report(activation_run, *, current_gate_passed=No
         return {}
 
 
-def _write_editorial_observability(engine, audit_rows, activation_run=None):
+def _write_editorial_observability(engine, audit_rows, activation_run=None, category_generation=None):
     """Delegate diagnostics to tct_engine; failures remain non-fatal."""
     if engine is None or write_editorial_observability is None:
         return
@@ -13276,6 +13493,13 @@ def _write_editorial_observability(engine, audit_rows, activation_run=None):
             mode=mode,
             activation=activation_payload,
         )
+        if category_generation:
+            report["category_generation"] = copy.deepcopy(category_generation)
+            temporary = EDITORIAL_OBSERVABILITY_PATH.with_suffix(".json.tmp")
+            temporary.write_text(
+                json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
+            )
+            temporary.replace(EDITORIAL_OBSERVABILITY_PATH)
         story_metrics = report.get("stories", {})
         audit_metrics = report.get("audit", {})
         relationship_metrics = report.get("relationships", {}).get("counts", {})
@@ -13313,6 +13537,13 @@ def _write_editorial_observability(engine, audit_rows, activation_run=None):
             f"{retrospective_metrics.get('activation_eligible_candidate_count', 0)} "
             "retrospective candidate(s); observe-only"
         )
+        category_metrics = report.get("category_generation", {}).get("summary", {})
+        if category_metrics:
+            print(
+                "  Category generation:    "
+                f"{category_metrics.get('model_attempt_count', 0)} model attempt(s); "
+                f"{category_metrics.get('archive_recovery_requested_count', 0)} recovery request(s)"
+            )
         print(
             "  Breaking / High:         "
             f"{levels.get('breaking', 0)} / {levels.get('high', 0)}"
@@ -13350,6 +13581,8 @@ def main():
     editorial_activation_run = None
     used_bank_images = set()
     all_categories = []
+    category_generation_records = []
+    category_generation_report = {}
     print(f"  Timing: editorial state load {time.perf_counter() - _stage_started:.1f}s")
     _stage_started = time.perf_counter()
 
@@ -13387,10 +13620,30 @@ def main():
     _stage_started = time.perf_counter()
 
     for cat_key, cat_config in CATEGORIES.items():
+        _category_started = time.perf_counter()
+        _category_record = {
+            "category_key": cat_key,
+            "category_label": cat_config["label"],
+            "status": "pending",
+            "fetched_candidate_count": 0,
+            "fresh_candidate_count": 0,
+            "publishable_source_count": 0,
+            "selected_source_count": 0,
+            "cache_hit": False,
+            "archive_recovery_requested": False,
+            "attempt_count": 0,
+            "attempts": [],
+            "model_elapsed_seconds": 0.0,
+            "failure_code": "",
+            "failure_summary": "",
+            "_started": _category_started,
+        }
+        category_generation_records.append(_category_record)
         print(f"Processing: {cat_config['label']}...")
         # Pull a wider candidate pool because broad WPTV feeds can contain several
         # sections' worth of local stories. Then rank/filter down to this category.
         headlines = fetch_headlines(cat_config["feeds"], limit=24, feed_cache=feed_cache)
+        _category_record["fetched_candidate_count"] = len(headlines)
 
         # Shadow observation happens before live freshness, depth, and category gates.
         # It receives copies and its result is intentionally ignored by production.
@@ -13410,12 +13663,17 @@ def main():
             except Exception:
                 return False
         fresh_h = [h for h in headlines if not _headline_stale(h)]
+        _category_record["fresh_candidate_count"] = len(fresh_h)
         if len(fresh_h) >= 6:
             headlines = fresh_h
         else:
             print(f"  Freshness guard: only {len(fresh_h)} fresh stories for {category_max_age_hours(cat_key)}h window; keeping wider pool")
         if not headlines:
-            print(f"  No headlines found for {cat_config['label']}, skipping.")
+            print(f"  No headlines found for {cat_config['label']}; using archive recovery")
+            _finalize_category_generation_record(
+                _category_record, "no_headlines", _category_started,
+                archive_recovery_requested=True,
+            )
             continue
 
         # Publication begins with source quality, not generated word count. Remove
@@ -13427,12 +13685,18 @@ def main():
         if _source_rejected:
             print(f"  Source-depth gate: rejected {_source_rejected} item(s) before article generation")
         headlines = _source_ready
+        _category_record["publishable_source_count"] = len(headlines)
         if not headlines:
             print(f"  No publishable source material for {cat_config['label']}; using archive recovery")
+            _finalize_category_generation_record(
+                _category_record, "no_publishable_sources", _category_started,
+                archive_recovery_requested=True,
+            )
             continue
 
         headlines = filter_category_headlines(cat_key, headlines, target=HEADLINES_PER_CATEGORY, min_keep=6)
 
+        _category_record["selected_source_count"] = len(headlines)
         print(f"  {len(headlines)} publishable-source headlines fetched")
         # Save source-extraction hits/misses before any Claude work. This keeps the
         # expensive network cache durable at each category boundary.
@@ -13455,18 +13719,40 @@ def main():
                     f"(urgency: {data['hero'].get('urgency_score')}, "
                     f"image: {'yes' if data['hero'].get('image_url') else 'no'})"
                 )
+                _finalize_category_generation_record(
+                    _category_record, "cache_hit", _category_started,
+                    cache_hit=True,
+                    live_hero_headline=data["hero"].get("headline", ""),
+                )
+                print(f"  Timing: {cat_config['label']} {_category_record['elapsed_seconds']:.1f}s (cache hit)")
                 continue
 
         try:
-            try:
-                data = generate_category_content(cat_key, cat_config["label"], headlines)
-            except (ValueError, json.JSONDecodeError) as first_generation_error:
-                # A blank/truncated model response should not erase an entire category.
-                # Retry once with the same grounded source set; the outer handler still
-                # isolates a persistent failure so the rest of the site can finish.
-                print(f"  Category generation returned invalid JSON for {cat_config['label']} "
-                      f"({first_generation_error}); retrying once")
-                data = generate_category_content(cat_key, cat_config["label"], headlines)
+            data, _generation_diagnostics = _run_category_generation_with_budget(
+                cat_key, cat_config["label"], headlines
+            )
+            _category_record["generation_status"] = _generation_diagnostics.get("status", "unknown")
+            _category_record.update({
+                key: value
+                for key, value in _generation_diagnostics.items()
+                if key != "status"
+            })
+            if data is None:
+                print(
+                    f"  Category generation contained for {cat_config['label']}: "
+                    f"{_category_record.get('failure_code')} "
+                    f"({_category_record.get('failure_summary')}); using archive recovery"
+                )
+                _finalize_category_generation_record(
+                    _category_record, "generation_failed_archive_recovery", _category_started,
+                    archive_recovery_requested=True,
+                )
+                print(
+                    f"  Timing: {cat_config['label']} {_category_record['elapsed_seconds']:.1f}s "
+                    f"(model {_category_record.get('model_elapsed_seconds', 0):.1f}s; "
+                    f"{_category_record.get('attempt_count', 0)} attempt(s))"
+                )
+                continue
 
             # Do not mark generated blurbs publishable merely because they crossed a
             # low word threshold. Final publication quality is checked after optional
@@ -13479,7 +13765,13 @@ def main():
             # If the category was dropped or produced no usable hero, skip it entirely
             # rather than crashing on data["hero"]["headline"] below.
             if data.get("_drop_category") or not data.get("hero") or not data["hero"].get("headline"):
-                print(f"  Skipping {cat_config['label']}: no usable hero produced")
+                print(f"  Skipping {cat_config['label']}: no usable hero produced; using archive recovery")
+                _finalize_category_generation_record(
+                    _category_record, "missing_hero_archive_recovery", _category_started,
+                    archive_recovery_requested=True,
+                    failure_code=_category_record.get("failure_code") or "missing_or_null_hero",
+                    failure_summary=_category_record.get("failure_summary") or "No usable hero remained after sanitization",
+                )
                 continue
 
             # Images — source_index already attached image_url, fall back to image bank
@@ -13579,7 +13871,13 @@ def main():
             # cards[0] promotion here was reintroducing category bleed after validation.
 
             if data.get("_drop_category"):
-                print(f"  Skipping {cat_config['label']}: no on-topic content")
+                print(f"  Skipping {cat_config['label']}: no on-topic content; using archive recovery")
+                _finalize_category_generation_record(
+                    _category_record, "off_topic_archive_recovery", _category_started,
+                    archive_recovery_requested=True,
+                    failure_code="no_on_topic_content",
+                    failure_summary="Generated category contained no on-topic hero after deterministic guards",
+                )
                 continue
 
             all_categories.append(data)
@@ -13678,11 +13976,61 @@ def main():
                 )
                 GENERATION_CACHE.save()
 
+            if _category_record.get("status") == "pending":
+                if data in all_categories:
+                    _finalize_category_generation_record(
+                        _category_record, "generated_live", _category_started,
+                        live_hero_headline=(data.get("hero") or {}).get("headline", ""),
+                        generated_card_count=len(data.get("cards", [])),
+                    )
+                else:
+                    _finalize_category_generation_record(
+                        _category_record, "quality_gate_archive_recovery", _category_started,
+                        archive_recovery_requested=True,
+                        failure_code="publication_quality_rejected",
+                        failure_summary="Generated content did not pass final publication quality gates",
+                    )
+            print(
+                f"  Timing: {cat_config['label']} {_category_record['elapsed_seconds']:.1f}s "
+                f"(model {_category_record.get('model_elapsed_seconds', 0):.1f}s; "
+                f"status={_category_record.get('status')})"
+            )
+
         except Exception as e:
-            import traceback
-            print(f"  Error for {cat_config['label']}: {e}")
-            print(traceback.format_exc())
+            _code = _category_generation_error_code(e)
+            _summary = _safe_exception_summary(e)
+            print(
+                f"  Category failure contained for {cat_config['label']}: "
+                f"{_code} ({_summary}); using archive recovery"
+            )
+            _finalize_category_generation_record(
+                _category_record, "category_exception_archive_recovery", _category_started,
+                archive_recovery_requested=True,
+                failure_code=_code,
+                failure_summary=_summary,
+            )
+            print(
+                f"  Timing: {cat_config['label']} {_category_record['elapsed_seconds']:.1f}s "
+                f"(status={_category_record.get('status')})"
+            )
             continue
+
+    for _record in category_generation_records:
+        if _record.get("status") == "pending":
+            _finalize_category_generation_record(
+                _record, "unknown_archive_recovery", _record.get("_started", time.perf_counter()),
+                archive_recovery_requested=True,
+                failure_code="unfinalized_category",
+                failure_summary="Category exited without a terminal generation status",
+            )
+    category_generation_report = _write_category_generation_report(category_generation_records)
+    _category_summary = category_generation_report.get("summary", {})
+    print(
+        "  Category generation report: "
+        f"{_category_summary.get('model_attempt_count', 0)} model attempt(s), "
+        f"{_category_summary.get('archive_recovery_requested_count', 0)} archive recovery request(s), "
+        f"{CATEGORY_GENERATION_REPORT_PATH}"
+    )
 
     if not all_categories:
         print("  No live categories passed this run; continuing to permanent archive recovery")
@@ -13970,7 +14318,8 @@ def main():
     # Save only after the normal production build has completed.
     _save_editorial_engine_audit(editorial_engine, editorial_audit_rows)
     _write_editorial_observability(
-        editorial_engine, editorial_audit_rows, editorial_activation_run
+        editorial_engine, editorial_audit_rows, editorial_activation_run,
+        category_generation=category_generation_report,
     )
     _save_editorial_image_rotation_state()
 
