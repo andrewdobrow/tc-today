@@ -244,7 +244,7 @@ DEFAULT_AFFILIATE_DISCLOSURE = (
 # Product-guide output embeds component CSS in each permanent article page. Include
 # this version in the publication signature so presentation fixes republish existing
 # guides even when their editorial copy and product data are unchanged.
-PRODUCT_GUIDE_TEMPLATE_VERSION = "1.5-bounded-contain-product-media"
+PRODUCT_GUIDE_TEMPLATE_VERSION = "1.6-scroll-safe-comparison-table"
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -2192,9 +2192,12 @@ def _is_nonstory_placeholder(item):
         return False
 
     status_patterns = (
-        r"^no .{1,90} stor(?:y|ies) (?:are )?available(?: in (?:today'?s|the) feed)?$",
-        r"^no (?:new |local |current |recent )?stor(?:y|ies) (?:are )?available(?: today| at this time)?$",
-        r"^(?:there are )?no (?:new |local |current |recent )?stor(?:y|ies)(?: available)?(?: for .{1,80})?$",
+        # Model/status prose may append a geography or coverage phrase after
+        # ``available``.  Treat the complete family as navigation metadata, never a
+        # publishable headline.  Custom/editor-authored work remains exempt above.
+        r"^no .{1,120} stor(?:y|ies) (?:are )?available(?: in (?:today'?s|the) feed)?(?: for .{1,120})?$",
+        r"^no (?:new |local |current |recent )?stor(?:y|ies) (?:are )?available(?: today| at this time)?(?: for .{1,120})?$",
+        r"^(?:there are )?no (?:new |local |current |recent )?stor(?:y|ies)(?: available)?(?: for .{1,120})?$",
         r"^(?:check back|please check back)(?: later)? for (?:more |new )?(?:stories|updates|coverage)$",
     )
     if any(re.fullmatch(pattern, headline) for pattern in status_patterns):
@@ -4014,7 +4017,7 @@ def select_front_page_hero(all_categories):
     def _is_eligible(candidate):
         cat_key = candidate.get("category_key", "")
         item = candidate.get("hero") or {}
-        if not item.get("headline") or item.get("_section_placeholder"):
+        if not item.get("headline") or _is_nonstory_placeholder(item):
             return False
         if item.get("ranking_eligible") is False:
             return False
@@ -4286,7 +4289,7 @@ def select_front_page_hero(all_categories):
         structural = []
         for cat in all_categories:
             item = cat.get("hero") or {}
-            if not item.get("headline") or item.get("_section_placeholder"):
+            if not item.get("headline") or _is_nonstory_placeholder(item):
                 continue
             structural.append(_candidate_view(cat, item, "hero"))
         non_florida = [c for c in structural if c.get("category_key") != "florida"]
@@ -5684,11 +5687,15 @@ def _render_product_guide_body(item):
 .pg-reasons li {{ position:relative; padding-left:22px; margin:7px 0; line-height:1.45; }}
 .pg-reasons li::before {{ content:'✓'; position:absolute; left:0; color:var(--pg-green); font-weight:900; }}
 .pg-amazon-button {{ display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:10px 18px; border-radius:8px; background:var(--pg-green); color:#fff!important; text-decoration:none!important; font-weight:800; box-shadow:0 5px 14px rgba(13,92,54,.18); }}
-.pg-comparison {{ overflow-x:auto; margin:34px 0; border:1px solid var(--pg-line); border-radius:14px; }}
+.pg-comparison {{ box-sizing:border-box; width:100%; max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; overscroll-behavior-inline:contain; margin:34px 0; border:1px solid var(--pg-line); border-radius:14px; }}
 .pg-comparison h2 {{ margin:0; padding:15px 18px; background:var(--pg-soft); color:var(--pg-green); font:800 16px/1.2 system-ui,sans-serif; text-transform:uppercase; letter-spacing:.04em; }}
-.pg-comparison table {{ width:100%; border-collapse:collapse; font-size:13px; }}
-.pg-comparison th,.pg-comparison td {{ padding:12px 14px; border-top:1px solid var(--pg-line); text-align:left; vertical-align:top; }}
-.pg-comparison th {{ color:var(--pg-green); font-size:11px; text-transform:uppercase; letter-spacing:.04em; }}
+.pg-comparison table {{ width:100%; min-width:760px; border-collapse:collapse; table-layout:auto; font-size:13px; }}
+.pg-comparison th,.pg-comparison td {{ padding:12px 14px; border-top:1px solid var(--pg-line); text-align:left; vertical-align:top; overflow-wrap:normal!important; word-break:normal!important; hyphens:none!important; }}
+.pg-comparison th {{ color:var(--pg-green); font-size:11px; text-transform:uppercase; letter-spacing:.04em; white-space:nowrap; }}
+.pg-comparison th:nth-child(1),.pg-comparison td:nth-child(1) {{ min-width:190px; }}
+.pg-comparison th:nth-child(2),.pg-comparison td:nth-child(2) {{ min-width:260px; }}
+.pg-comparison th:nth-child(3),.pg-comparison td:nth-child(3) {{ min-width:180px; }}
+.pg-comparison th:nth-child(4),.pg-comparison td:nth-child(4) {{ min-width:110px; white-space:nowrap; }}
 .pg-closing {{ padding:22px; border-left:5px solid var(--pg-green); border-radius:0 12px 12px 0; background:var(--pg-soft); }}
 @media(max-width:720px) {{
   .pg-disclosure {{ grid-template-columns:1fr; gap:5px; padding:15px 16px; font-size:13px; line-height:1.5; }}
@@ -5699,6 +5706,8 @@ def _render_product_guide_body(item):
   .pg-product-image img {{ width:100%!important; height:100%!important; min-width:0!important; min-height:0!important; max-width:100%!important; max-height:100%!important; aspect-ratio:auto!important; object-fit:contain!important; object-position:center!important; }}
   .pg-product-copy h2 {{ font-size:23px; }}
   .pg-amazon-button {{ width:100%; }}
+  .pg-comparison table {{ min-width:760px; }}
+  .pg-comparison th,.pg-comparison td {{ overflow-wrap:normal!important; word-break:normal!important; hyphens:none!important; }}
 }}
 </style>
 <div class="product-guide" data-product-count="{len(products)}">
@@ -13805,10 +13814,32 @@ def main():
     # Front page hero selection
     top_cat = select_front_page_hero(all_categories)
     if top_cat is None:
-        eligible = [c for c in all_categories if CATEGORIES.get(c["category_key"],{}).get("front_page_hero", True)]
-        top_cat  = max(eligible if eligible else all_categories,
-                       key=lambda c: min(int(c["hero"].get("urgency_score",0) or 0),
-                                         CATEGORIES.get(c["category_key"],{}).get("front_page_cap",10)))
+        # A missing real hero is a deployment failure, not permission to promote a
+        # section/status placeholder.  Prefer any real eligible section lead; fail
+        # closed when none exists so synthetic prose can never become the homepage.
+        eligible = [
+            c for c in all_categories
+            if CATEGORIES.get(c.get("category_key", ""), {}).get("front_page_hero", True)
+            and isinstance(c.get("hero"), dict)
+            and c["hero"].get("headline")
+            and not _is_nonstory_placeholder(c["hero"])
+        ]
+        if not eligible:
+            raise RuntimeError(
+                "Front page hero contract FAILED: no real publishable story is available; "
+                "refusing to publish a section/status placeholder"
+            )
+        top_cat = max(
+            eligible,
+            key=lambda c: min(
+                int(c["hero"].get("urgency_score", 0) or 0),
+                CATEGORIES.get(c.get("category_key", ""), {}).get("front_page_cap", 10),
+            ),
+        )
+    if _is_nonstory_placeholder((top_cat or {}).get("hero") or {}):
+        raise RuntimeError(
+            "Front page hero contract FAILED: selected hero is section/status metadata"
+        )
 
     _hero_audit_path = OUTPUT_DIR / "data" / "front-page-hero-selection.json"
     _hero_audit_path.parent.mkdir(parents=True, exist_ok=True)

@@ -271,3 +271,68 @@ def test_final_contract_independently_blocks_placeholder_in_first_rss_item(tmp_p
     report = json.loads((tmp_path / "data" / "nonstory-publication-contract.json").read_text())
     assert report["checked_rss_items"] == 1
     assert any(v["surface"] == "rss" for v in report["violations"])
+
+
+def test_treasure_coast_coverage_status_headline_is_nonstory():
+    generate = _load_generate_module()
+    item = _bad_item(
+        headline="No local government stories available for Treasure Coast coverage",
+        teaser="No local government stories are available for Treasure Coast coverage.",
+        category_key="local_gov",
+    )
+
+    assert generate._is_nonstory_placeholder(item) is True
+    assert generate._publishable_article(item, hero=True) is False
+
+
+def test_front_page_selector_rejects_fresh_status_headline_and_uses_real_stale_story():
+    generate = _load_generate_module()
+    status = _bad_item(
+        headline="No local government stories available for Treasure Coast coverage",
+        teaser="No local government stories are available for Treasure Coast coverage.",
+        category_key="local_gov",
+        published="Sun, 27 Jul 2026 03:00:00 +0000",
+        published_raw="Sun, 27 Jul 2026 03:00:00 +0000",
+        urgency_score=1,
+    )
+    real = {
+        "headline": "St. Lucie County approves final budget hearing schedule",
+        "teaser": "County commissioners approved the public budget hearing schedule.",
+        "body": "St. Lucie County commissioners approved the public budget hearing schedule. " * 30,
+        "category_key": "business",
+        "source_quality": "archive",
+        "published": "Fri, 24 Jul 2026 20:05:14 GMT",
+        "published_raw": "Fri, 24 Jul 2026 20:05:14 GMT",
+        "urgency_score": 4,
+        "ranking_eligible": True,
+    }
+    categories = [
+        {"category_key": "local_gov", "category_label": "Local Government", "hero": status, "cards": []},
+        {"category_key": "business", "category_label": "Business & Development", "hero": real, "cards": []},
+    ]
+
+    selected = generate.select_front_page_hero(categories)
+
+    assert selected is categories[1]
+    assert selected["hero"]["headline"] == real["headline"]
+
+
+def test_archive_purge_catches_treasure_coast_coverage_status_page(tmp_path: Path):
+    generate = _load_generate_module()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    slug = "2026-07-27-no-local-government-stories-available-for-treasure-coast-coverage"
+    (articles / f"{slug}.html").write_text("<html>bad article</html>", encoding="utf-8")
+    archive = [{
+        "slug": slug,
+        "headline": "No local government stories available for Treasure Coast coverage",
+        "category_key": "local_gov",
+    }]
+
+    kept, report = generate._purge_nonstory_archive_entries(archive, articles, tmp_path)
+
+    assert kept == []
+    assert report["removed_count"] == 1
+    redirect = (articles / f"{slug}.html").read_text(encoding="utf-8")
+    assert "noindex,follow" in redirect
+    assert "/archive.html" in redirect

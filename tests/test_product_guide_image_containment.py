@@ -57,4 +57,4 @@ def test_quick_pick_thumbnails_remain_contained_and_unchanged():
 
 
 def test_template_version_forces_existing_guides_to_republish():
-    assert 'PRODUCT_GUIDE_TEMPLATE_VERSION = "1.5-bounded-contain-product-media"' in _source()
+    assert 'PRODUCT_GUIDE_TEMPLATE_VERSION = "1.6-scroll-safe-comparison-table"' in _source()
