@@ -7,17 +7,20 @@ orchestration does not need to know the engine's internal data model.
 from __future__ import annotations
 
 import json
+import re
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
+from .story_relationship import detect_advisory_follow_up_evidence
+
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.11.5.3"
-ENGINE_RELEASE = "compact-auto-sized-product-media"
-OBSERVABILITY_SCHEMA_VERSION = 12
+ENGINE_VERSION = "1.11.6.0"
+ENGINE_RELEASE = "retrospective-follow-up-observability"
+OBSERVABILITY_SCHEMA_VERSION = 13
 RESOLVER_VERSION = "2.4"
-RELATIONSHIP_ENGINE_VERSION = "1.3"
+RELATIONSHIP_ENGINE_VERSION = "1.4"
 
 
 def _utc_now() -> str:
@@ -37,6 +40,253 @@ def _story_title(story: Mapping[str, Any]) -> str:
         return canonical
     titles = story.get("titles") or []
     return str(titles[-1]).strip() if titles else ""
+
+
+_RETROSPECTIVE_STOP_WORDS = {
+    "the", "and", "for", "with", "from", "after", "before", "into",
+    "county", "news", "update", "says", "said", "earlier", "reported",
+    "florida", "local", "treasure", "coast",
+}
+_RETROSPECTIVE_SOCIAL_MARKERS = (
+    "facebook.com", "instagram.com", "x.com", "twitter.com", "tiktok.com",
+    "reddit.com", "youtube.com", "youtu.be", "threads.net", "nextdoor.com",
+)
+_RETROSPECTIVE_LOW_VALUE_TITLE_PATTERNS = (
+    r"^expert (?:breaks down|explains)\b",
+    r"^what to know\b",
+    r"^watch(?: below|:)\b",
+    r"^video:\s*",
+    r"^photos?:\s*",
+    r"^opinion:\s*",
+    r"^analysis:\s*",
+    r"^live updates?\b",
+    r"^a happy ending\b",
+)
+_RETROSPECTIVE_HIGH_CONFIDENCE = 0.80
+
+
+def _normalized_text(value: object) -> str:
+    return " ".join(str(value or "").casefold().split())
+
+
+def _retrospective_tokens(value: object) -> set[str]:
+    return {
+        token
+        for token in re.findall(r"[a-z0-9]+", _normalized_text(value))
+        if len(token) >= 3 and token not in _RETROSPECTIVE_STOP_WORDS
+    }
+
+
+def _retrospective_overlap(left: object, right: object) -> float:
+    left_tokens = _retrospective_tokens(left)
+    right_tokens = _retrospective_tokens(right)
+    if not left_tokens or not right_tokens:
+        return 0.0
+    return len(left_tokens & right_tokens) / min(len(left_tokens), len(right_tokens))
+
+
+def _timeline_datetime(value: object) -> datetime:
+    try:
+        parsed = datetime.fromisoformat(str(value or "").replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return datetime.min.replace(tzinfo=timezone.utc)
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def _timeline_entry_payload(entry: Mapping[str, Any]) -> dict[str, Any]:
+    return {
+        "article_id": str(entry.get("article_id") or ""),
+        "event_key": str(entry.get("event_key") or ""),
+        "published_at": str(entry.get("published_at") or ""),
+        "title": str(entry.get("title") or ""),
+        "source": str(entry.get("source") or ""),
+        "url": str(entry.get("url") or ""),
+    }
+
+
+def _retrospective_exclusion_reasons(entry: Mapping[str, Any]) -> tuple[str, ...]:
+    title = _normalized_text(entry.get("title"))
+    source_blob = " ".join((
+        title,
+        _normalized_text(entry.get("source")),
+        _normalized_text(entry.get("url")),
+    ))
+    reasons: list[str] = []
+    if any(marker in source_blob for marker in _RETROSPECTIVE_SOCIAL_MARKERS):
+        reasons.append("social_source")
+    if len(_retrospective_tokens(title)) < 5:
+        reasons.append("insufficient_title_detail")
+    if any(re.search(pattern, title) for pattern in _RETROSPECTIVE_LOW_VALUE_TITLE_PATTERNS):
+        reasons.append("low_value_title")
+    return tuple(reasons)
+
+
+def _build_retrospective_follow_up_observability(
+    stories: Iterable[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Inspect persisted timelines for milestone transitions without changing them.
+
+    Timeline order and title evidence are treated conservatively.  Ambiguous
+    transitions are still reported for review, but blocking conflicts prevent them
+    from becoming activation evidence.
+    """
+
+    candidates: list[dict[str, Any]] = []
+    milestone_counts: Counter[str] = Counter()
+    blocking_conflicts: Counter[str] = Counter()
+    exclusion_reasons: Counter[str] = Counter()
+    excluded_entry_count = 0
+    transitions_examined = 0
+    timeline_entries_examined = 0
+    stories_with_timelines = 0
+
+    for story in stories:
+        raw_timeline = story.get("timeline") or []
+        timeline = [dict(entry) for entry in raw_timeline if isinstance(entry, Mapping)]
+        if len(timeline) < 2:
+            continue
+        timeline.sort(key=lambda entry: (
+            _timeline_datetime(entry.get("published_at")),
+            str(entry.get("article_id") or ""),
+        ))
+        stories_with_timelines += 1
+        known_milestones: set[str] = set()
+        previous_eligible: dict[str, Any] | None = None
+
+        for entry in timeline:
+            timeline_entries_examined += 1
+            excluded = _retrospective_exclusion_reasons(entry)
+            if excluded:
+                excluded_entry_count += 1
+                exclusion_reasons.update(excluded)
+                continue
+
+            evidence = detect_advisory_follow_up_evidence(
+                entry.get("title"), entry.get("event_key")
+            )
+            milestones = set(evidence)
+            if previous_eligible is not None:
+                transitions_examined += 1
+                novel_milestones = milestones - known_milestones
+                if novel_milestones:
+                    prior_title_overlap = _retrospective_overlap(
+                        previous_eligible.get("title"), entry.get("title")
+                    )
+                    canonical_title_overlap = _retrospective_overlap(
+                        story.get("canonical_title"), entry.get("title")
+                    )
+                    same_timestamp = (
+                        _timeline_datetime(previous_eligible.get("published_at"))
+                        == _timeline_datetime(entry.get("published_at"))
+                    )
+                    conflicts: list[str] = []
+                    if same_timestamp:
+                        conflicts.append("same_timestamp_order_uncertain")
+                    if max(prior_title_overlap, canonical_title_overlap) < 0.22:
+                        conflicts.append("weak_title_continuity")
+                    terminal = novel_milestones & {
+                        "death", "resolution", "opening", "closure"
+                    }
+                    if len(terminal) > 1:
+                        conflicts.append("multiple_terminal_milestones")
+
+                    confidence = (
+                        0.58
+                        + 0.16 * min(1.0, prior_title_overlap)
+                        + 0.14 * min(1.0, canonical_title_overlap)
+                        + 0.08 * float(not same_timestamp)
+                        + 0.08 * float(len(novel_milestones) == 1)
+                        - 0.16 * float("weak_title_continuity" in conflicts)
+                    )
+                    confidence = max(0.0, min(1.0, confidence))
+                    reason_codes = [
+                        "retrospective_timeline_transition",
+                        "novel_milestone",
+                        "persistent_story_identity",
+                    ]
+                    if prior_title_overlap >= 0.35:
+                        reason_codes.append("prior_title_continuity")
+                    if canonical_title_overlap >= 0.35:
+                        reason_codes.append("canonical_title_continuity")
+                    if not same_timestamp:
+                        reason_codes.append("chronology_supported")
+                    activation_eligible = (
+                        confidence >= _RETROSPECTIVE_HIGH_CONFIDENCE
+                        and not conflicts
+                    )
+                    if activation_eligible:
+                        reason_codes.append("activation_evidence_candidate")
+
+                    milestone_counts.update(novel_milestones)
+                    blocking_conflicts.update(conflicts)
+                    candidates.append({
+                        "story_id": str(story.get("story_id") or ""),
+                        "story_title": _story_title(story),
+                        "milestones": sorted(novel_milestones),
+                        "matched_phrases": {
+                            milestone: list(evidence.get(milestone, ()))
+                            for milestone in sorted(novel_milestones)
+                        },
+                        "confidence": round(confidence, 6),
+                        "activation_eligible": activation_eligible,
+                        "blocking_conflicts": conflicts,
+                        "reason_codes": reason_codes,
+                        "prior_title_overlap": round(prior_title_overlap, 6),
+                        "canonical_title_overlap": round(canonical_title_overlap, 6),
+                        "prior_article": _timeline_entry_payload(previous_eligible),
+                        "newer_article": _timeline_entry_payload(entry),
+                        "candidate_trace": [
+                            "Follow-up candidate mode: retrospective_observe_only",
+                            f"Story: {story.get('story_id') or ''}",
+                            f"Novel milestones: {', '.join(sorted(novel_milestones))}",
+                            f"Prior title overlap: {prior_title_overlap:.2f}",
+                            f"Canonical title overlap: {canonical_title_overlap:.2f}",
+                            f"Same timestamp: {same_timestamp}",
+                            f"Blocking conflicts: {', '.join(conflicts) or 'none'}",
+                            f"Candidate confidence: {confidence:.2f}",
+                            f"Activation eligible: {activation_eligible}",
+                        ],
+                    })
+
+            known_milestones.update(milestones)
+            previous_eligible = entry
+
+    candidates.sort(key=lambda candidate: (
+        not bool(candidate.get("activation_eligible")),
+        -float(candidate.get("confidence") or 0.0),
+        str(candidate.get("story_id") or ""),
+        str((candidate.get("newer_article") or {}).get("published_at") or ""),
+    ))
+    high_confidence_count = sum(
+        1 for candidate in candidates
+        if float(candidate.get("confidence") or 0.0) >= _RETROSPECTIVE_HIGH_CONFIDENCE
+    )
+    activation_eligible_count = sum(
+        1 for candidate in candidates if candidate.get("activation_eligible")
+    )
+    return {
+        "mode": "retrospective_observe_only",
+        "publication_behavior_changed": False,
+        "stories_with_timelines": stories_with_timelines,
+        "timeline_entries_examined": timeline_entries_examined,
+        "transitions_examined": transitions_examined,
+        "candidate_count": len(candidates),
+        "high_confidence_candidate_count": high_confidence_count,
+        "activation_eligible_candidate_count": activation_eligible_count,
+        "milestones": dict(sorted(milestone_counts.items())),
+        "blocking_conflicts": dict(sorted(blocking_conflicts.items())),
+        "excluded_entry_count": excluded_entry_count,
+        "exclusion_reasons": dict(sorted(exclusion_reasons.items())),
+        "examples": candidates[:50],
+        "review_ready": bool(candidates),
+        "enforcement_ready": False,
+        "enforcement_readiness_reason": (
+            "Retrospective candidates are evidence for manual review only. "
+            "No relationship, grouping, ranking or publication behavior changes."
+        ),
+    }
 
 
 def build_editorial_observability(
@@ -214,6 +464,8 @@ def build_editorial_observability(
                     }
                 )
 
+    retrospective_follow_up = _build_retrospective_follow_up_observability(stories)
+
     top_stories: list[dict[str, Any]] = []
     for story in stories[:20]:
         importance = story.get("importance") or {}
@@ -281,10 +533,18 @@ def build_editorial_observability(
             "milestones": dict(sorted(follow_up_candidate_milestones.items())),
             "reason_codes": dict(sorted(follow_up_candidate_reason_codes.items())),
             "examples": follow_up_candidate_examples,
+            "retrospective_candidate_count": retrospective_follow_up["candidate_count"],
+            "retrospective_high_confidence_candidate_count": retrospective_follow_up[
+                "high_confidence_candidate_count"
+            ],
+            "retrospective_activation_eligible_candidate_count": retrospective_follow_up[
+                "activation_eligible_candidate_count"
+            ],
+            "retrospective": retrospective_follow_up,
             "enforcement_ready": False,
             "enforcement_readiness_reason": (
-                "Observe-only candidate evidence must be reviewed across production runs "
-                "before broader follow-up grouping is activated."
+                "Current-run and retrospective candidate evidence must be manually reviewed "
+                "across production runs before broader follow-up grouping is activated."
             ),
         },
         "local_relevance": {

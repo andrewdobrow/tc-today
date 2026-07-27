@@ -13279,6 +13279,8 @@ def _write_editorial_observability(engine, audit_rows, activation_run=None):
         story_metrics = report.get("stories", {})
         audit_metrics = report.get("audit", {})
         relationship_metrics = report.get("relationships", {}).get("counts", {})
+        follow_up_metrics = report.get("follow_up_detection", {})
+        retrospective_metrics = follow_up_metrics.get("retrospective", {})
         levels = story_metrics.get("importance_levels", {})
         engine_info = report.get("engine", {})
 
@@ -13300,6 +13302,16 @@ def _write_editorial_observability(engine, audit_rows, activation_run=None):
             "  Related / New story:     "
             f"{relationship_metrics.get('related', 0)} / "
             f"{relationship_metrics.get('new_story', 0)}"
+        )
+        print(
+            "  Follow-up candidates:    "
+            f"current={follow_up_metrics.get('candidate_count', 0)} / "
+            f"retrospective={retrospective_metrics.get('candidate_count', 0)}"
+        )
+        print(
+            "  Activation evidence:     "
+            f"{retrospective_metrics.get('activation_eligible_candidate_count', 0)} "
+            "retrospective candidate(s); observe-only"
         )
         print(
             "  Breaking / High:         "

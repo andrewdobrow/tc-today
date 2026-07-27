@@ -23,14 +23,75 @@ _FOLLOW_UP_MILESTONES = {
     "release": {"released", "discharged", "returns", "returned"},
     "resolution": {"contained", "resolved", "cleared", "reopened"},
 }
-_ADVISORY_FOLLOW_UP_MILESTONES = {
-    **_FOLLOW_UP_MILESTONES,
-    "approval": {"approve", "approved", "approves", "adopt", "adopted", "adopts", "passed"},
-    "rejection": {"reject", "rejected", "rejects", "deny", "denied", "denies", "veto", "vetoed"},
-    "opening": {"opens", "opened", "launch", "launched", "launches", "groundbreaking", "breaks"},
-    "closure": {"closes", "closed", "cancel", "canceled", "cancelled", "ends", "ending"},
-    "election_result": {"elected", "wins", "won", "winner"},
-    "funding": {"awarded", "funded", "funding", "grant"},
+# Observe-only milestone detection uses phrase-aware regular expressions.  These
+# patterns are intentionally stricter than the live follow-up vocabulary above:
+# generic words such as ``breaks``, ``ending`` and ``wins`` caused false-positive
+# production diagnostics (for example, "expert breaks down" and "happy ending").
+_ADVISORY_FOLLOW_UP_PATTERNS: Mapping[str, tuple[str, ...]] = {
+    "arrest": (
+        r"\barrest(?:ed|s|ing)?\b",
+        r"\bcharg(?:e|ed|es|ing)\b",
+        r"\btaken into custody\b",
+    ),
+    "identified": (
+        r"\bidentified\b",
+        r"\bidentity (?:was )?released\b",
+        r"\bnamed as\b",
+    ),
+    "death": (r"\b(?:dies|died|dead|killed|death)\b",),
+    "sentencing": (r"\b(?:sentenced|sentencing)\b",),
+    "court_action": (
+        r"\b(?:trial|hearing|lawsuit|sues|sued|indicted|indictment|arraigned|convicted)\b",
+        r"\bpleads? guilty\b",
+        r"\bfound guilty\b",
+    ),
+    "investigation": (
+        r"\binvestigation\b",
+        r"\breopen(?:s|ed|ing)? (?:the )?investigation\b",
+    ),
+    "recovery": (
+        r"\b(?:safely located|located safe|found safe|found alive|recovered|rescued|reunited)\b",
+        r"\bmissing .{0,40}\b(?:located|found)\b",
+    ),
+    "release": (
+        r"\breleased (?:from|on)\b",
+        r"\bdischarged\b",
+        r"\breturns? home\b",
+        r"\breturned home\b",
+    ),
+    "resolution": (
+        r"\b(?:contained|resolved|cleared)\b",
+        r"\b(?:road|bridge|causeway|lane|lanes|highway|intersection) (?:reopens?|reopened)\b",
+        r"\b(?:all )?lanes? (?:reopen|reopened)\b",
+        r"\bevacuation (?:order )?lifted\b",
+    ),
+    "approval": (
+        r"\b(?:approves?|approved|adopts?|adopted)\b",
+        r"\bpass(?:es|ed)? (?:the )?(?:measure|ordinance|budget|plan|proposal|resolution|bill)\b",
+    ),
+    "rejection": (r"\b(?:rejects?|rejected|denies|denied|vetoes|vetoed)\b",),
+    "opening": (
+        r"\b(?:opens?|opened|launches?|launched|groundbreaking)\b",
+        r"\bbreaks? ground\b",
+        r"\bground (?:is )?broken\b",
+    ),
+    "closure": (
+        r"\b(?:closes?|closed) (?:the )?(?:store|school|road|bridge|facility|business|office|route|service|program|park|beach|airport|plant|location)\b",
+        r"\b(?:cancels?|canceled|cancelled) (?:the )?(?:route|service|event|program|project|flight|flights)\b",
+        r"\bends? (?:the )?(?:route|service|program|operations|operation|season|project)\b",
+        r"\bshuts? down\b",
+    ),
+    "election_result": (
+        r"\belected\b",
+        r"\bwins? (?:the )?(?:election|race|seat|primary)\b",
+        r"\bwon (?:the )?(?:election|race|seat|primary)\b",
+        r"\bdeclared (?:the )?winner\b",
+    ),
+    "funding": (
+        r"\b(?:awarded|receives?|received|secures?|secured) (?:a |an |the )?(?:\$[\d.,]+ )?(?:grant|funding)\b",
+        r"\bgrant (?:awarded|approved|funded)\b",
+        r"\bfunding (?:approved|awarded|secured)\b",
+    ),
 }
 _CASUALTY_WORDS = {"injured", "killed", "dead", "fatalities", "victims", "hurt"}
 
@@ -73,8 +134,49 @@ def _milestones(*values: object) -> set[str]:
     return _milestones_for(_FOLLOW_UP_MILESTONES, *values)
 
 
+def _advisory_text(*values: object) -> str:
+    parts: list[str] = []
+    for value in values:
+        if isinstance(value, (list, tuple, set, frozenset)):
+            parts.extend(_norm(item) for item in value if _norm(item))
+        elif _norm(value):
+            parts.append(_norm(value))
+    return " ".join(parts)
+
+
+def detect_advisory_follow_up_evidence(*values: object) -> dict[str, tuple[str, ...]]:
+    """Return phrase-level evidence for observe-only follow-up milestones.
+
+    This helper is also used by retrospective timeline observability so live and
+    historical diagnostics share one deterministic vocabulary.  It does not
+    authorize story grouping or publication changes.
+    """
+
+    text = _advisory_text(*values)
+    evidence: dict[str, tuple[str, ...]] = {}
+    if not text:
+        return evidence
+    for milestone, patterns in _ADVISORY_FOLLOW_UP_PATTERNS.items():
+        matches: set[str] = set()
+        for pattern in patterns:
+            matches.update(
+                _norm(match.group(0))
+                for match in re.finditer(pattern, text, flags=re.IGNORECASE)
+                if _norm(match.group(0))
+            )
+        if matches:
+            evidence[milestone] = tuple(sorted(matches))
+    return evidence
+
+
+def detect_advisory_follow_up_milestones(*values: object) -> set[str]:
+    """Return observe-only follow-up milestone names found in supplied text."""
+
+    return set(detect_advisory_follow_up_evidence(*values))
+
+
 def _advisory_milestones(*values: object) -> set[str]:
-    return _milestones_for(_ADVISORY_FOLLOW_UP_MILESTONES, *values)
+    return detect_advisory_follow_up_milestones(*values)
 
 
 def _numeric_casualty_signatures(facts: Iterable[str]) -> set[tuple[str, str]]:

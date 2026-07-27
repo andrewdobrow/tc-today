@@ -187,3 +187,150 @@ def test_observability_exports_follow_up_candidate_readiness():
     assert section["milestones"] == {"approval": 1}
     assert section["current_relationships"] == {"same_event": 1}
     assert section["enforcement_ready"] is False
+
+
+def test_phrase_aware_advisory_milestones_reject_generic_breaks_and_ending():
+    from tct_engine.story_relationship import detect_advisory_follow_up_milestones
+
+    assert detect_advisory_follow_up_milestones(
+        "Private racetrack resort breaks ground in St. Lucie County"
+    ) == {"opening"}
+    assert "opening" not in detect_advisory_follow_up_milestones(
+        "Expert breaks down the psychology of animal hoarding"
+    )
+    assert "closure" not in detect_advisory_follow_up_milestones(
+        "A happy ending for families reunited with their pets"
+    )
+    assert "closure" in detect_advisory_follow_up_milestones(
+        "JetBlue cancels the route between Vero Beach and New York"
+    )
+
+
+class _TimelineEngine(_FakeEngine):
+    def __init__(self, stories):
+        self._stories = stories
+
+    def get_top_stories(self, limit=100000):
+        return list(self._stories)[:limit]
+
+
+def _timeline_entry(article_id, published_at, title, *, source="https://www.wptv.com/story"):
+    return {
+        "event_key": f"unknown-event-{article_id}",
+        "article_id": article_id,
+        "published_at": published_at,
+        "title": title,
+        "source": source,
+        "url": source,
+    }
+
+
+def test_retrospective_observability_finds_missing_person_recovery():
+    story = {
+        "story_id": "story_000695",
+        "status": "developing",
+        "canonical_title": (
+            "West Palm Beach police seek public's help finding missing "
+            "10-year-old boy traveling with his aunt"
+        ),
+        "timeline": [
+            _timeline_entry(
+                "one",
+                "2026-07-26T15:40:30+00:00",
+                "West Palm Beach police seek public's help finding missing "
+                "10-year-old boy traveling with his aunt",
+            ),
+            _timeline_entry(
+                "two",
+                "2026-07-26T20:40:28+00:00",
+                "Missing 10-Year-Old safely located in Tennessee, "
+                "West Palm Beach Police say",
+            ),
+        ],
+    }
+
+    report = build_editorial_observability(_TimelineEngine([story]), [])
+    section = report["follow_up_detection"]
+    retrospective = section["retrospective"]
+
+    assert section["candidate_count"] == 0
+    assert section["retrospective_candidate_count"] == 1
+    assert retrospective["candidate_count"] == 1
+    assert retrospective["activation_eligible_candidate_count"] == 1
+    example = retrospective["examples"][0]
+    assert example["milestones"] == ["recovery"]
+    assert example["activation_eligible"] is True
+    assert example["blocking_conflicts"] == []
+    assert example["prior_article"]["article_id"] == "one"
+    assert example["newer_article"]["article_id"] == "two"
+    assert "safely located" in example["matched_phrases"]["recovery"]
+    assert retrospective["publication_behavior_changed"] is False
+    assert retrospective["enforcement_ready"] is False
+
+
+def test_retrospective_observability_blocks_same_timestamp_order():
+    story = {
+        "story_id": "story_000010",
+        "status": "developing",
+        "canonical_title": "Riverland project proposed in Port St. Lucie",
+        "timeline": [
+            _timeline_entry(
+                "one",
+                "2026-07-26T15:40:30+00:00",
+                "Riverland project proposed in Port St. Lucie",
+            ),
+            _timeline_entry(
+                "two",
+                "2026-07-26T15:40:30+00:00",
+                "Port St. Lucie approves Riverland project",
+            ),
+        ],
+    }
+
+    retrospective = build_editorial_observability(
+        _TimelineEngine([story]), []
+    )["follow_up_detection"]["retrospective"]
+
+    assert retrospective["candidate_count"] == 1
+    assert retrospective["activation_eligible_candidate_count"] == 0
+    assert retrospective["blocking_conflicts"] == {
+        "same_timestamp_order_uncertain": 1
+    }
+    assert retrospective["examples"][0]["activation_eligible"] is False
+
+
+def test_retrospective_observability_excludes_social_and_low_value_entries():
+    story = {
+        "story_id": "story_000003",
+        "status": "developing",
+        "canonical_title": "Deputies rescue animals from Stuart home",
+        "timeline": [
+            _timeline_entry(
+                "one",
+                "2026-07-23T10:00:00+00:00",
+                "Deputies rescue 92 animals from Stuart home",
+            ),
+            _timeline_entry(
+                "two",
+                "2026-07-24T10:00:00+00:00",
+                "Expert breaks down the psychology of animal hoarding after arrest",
+            ),
+            _timeline_entry(
+                "three",
+                "2026-07-25T10:00:00+00:00",
+                "A happy ending as families are reunited with rescued pets - facebook.com",
+                source="https://facebook.com/post/123",
+            ),
+        ],
+    }
+
+    retrospective = build_editorial_observability(
+        _TimelineEngine([story]), []
+    )["follow_up_detection"]["retrospective"]
+
+    assert retrospective["candidate_count"] == 0
+    assert retrospective["excluded_entry_count"] == 2
+    assert retrospective["exclusion_reasons"] == {
+        "low_value_title": 2,
+        "social_source": 1,
+    }

@@ -41,5 +41,5 @@ def test_legacy_ai_urls_are_migration_inputs_not_active_pool_entries():
 
 def test_engine_release_identifies_emergency_nonstory_hero_guard():
     observability = (ROOT / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'ENGINE_VERSION = "1.11.5.3"' in observability
-    assert 'ENGINE_RELEASE = "compact-auto-sized-product-media"' in observability
+    assert 'ENGINE_VERSION = "1.11.6.0"' in observability
+    assert 'ENGINE_RELEASE = "retrospective-follow-up-observability"' in observability
