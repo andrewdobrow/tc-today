@@ -36,7 +36,8 @@ Product guides live in `custom_articles.json` beside normal custom articles but 
 - Every product name, image URL and affiliate URL must appear in the rendered page or publication fails.
 - An affiliate disclosure appears before product content.
 - Product cards and Quick Picks stack into a single column on mobile.
-- Full product images render inside a bounded 230px mobile media viewport using `object-fit: contain`, so tall or portrait-oriented assets remain fully visible without expanding beyond the card.
+- Detailed product images use a centered 220 × 190 pixel mobile viewport and a 280 × 240 pixel desktop viewport. The image keeps automatic dimensions and is limited by `max-width` and `max-height`, so tall and wide source images cannot stretch the card.
+- The comparison table keeps readable column widths and scrolls horizontally on narrow screens rather than splitting words into fragments.
 - Product guides use `Article` plus `ItemList`/`Product` structured data.
 - Product guides never use fuzzy custom matching or recurring-series matching.
 - Only an exact headline match can update an existing custom page.

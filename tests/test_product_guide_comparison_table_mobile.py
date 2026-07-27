@@ -31,4 +31,4 @@ def test_comparison_cells_never_break_words_into_fragments():
 
 
 def test_comparison_layout_change_forces_existing_guides_to_republish():
-    assert 'PRODUCT_GUIDE_TEMPLATE_VERSION = "1.6-scroll-safe-comparison-table"' in _source()
+    assert 'PRODUCT_GUIDE_TEMPLATE_VERSION = "1.7-compact-auto-sized-product-media"' in _source()
