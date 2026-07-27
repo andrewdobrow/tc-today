@@ -236,7 +236,7 @@ EDITORIAL_ACTIVATION_HISTORY_PATH = OUTPUT_DIR / "data" / "editorial_activation_
 # v1.10.5 forward publication identity. New generated articles are published only
 # when the current editorial decision can be carried directly into the archive row.
 # Historical rows remain readable, but unresolved legacy identity is not guessed.
-FORWARD_IDENTITY_VERSION = "1.4"
+FORWARD_IDENTITY_VERSION = "1.5"
 FORWARD_IDENTITY_RECENT_DAYS = 30
 CURRENT_RUN_EDITORIAL_IDENTITIES = {}
 CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
@@ -8543,6 +8543,55 @@ def _archive_entry_live_identity_safe(entry):
     return bool(_archive_headline_slug_alignment(entry).get("aligned"))
 
 
+def _prospective_archive_update_alignment(item, entry, now=None):
+    """Evaluate the identity of an archive row *after* a proposed update.
+
+    The historical overwrite defect could remain hidden until ``lastmod`` advanced.
+    A row whose old timestamp was only two days after its slug date could appear safe,
+    then become a seven-day headline/slug drift immediately after the current article
+    was written.  Publication targeting must evaluate that future state before any
+    file or archive record is mutated.
+    """
+    if not isinstance(item, dict) or not isinstance(entry, dict):
+        return {"aligned": False, "reason": "missing_update_target", "prospective": True}
+    proposed = dict(entry)
+    incoming_headline = str(item.get("headline") or "").strip()
+    if incoming_headline:
+        proposed["headline"] = incoming_headline
+    now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    proposed["lastmod"] = now.date().isoformat()
+    alignment = _archive_headline_slug_alignment(proposed)
+    return {
+        **alignment,
+        "prospective": True,
+        "existing_headline": str(entry.get("headline") or ""),
+        "incoming_headline": incoming_headline,
+        "candidate_slug": str(entry.get("slug") or ""),
+        "prospective_lastmod": proposed["lastmod"],
+    }
+
+
+def _quarantine_archive_publication_target(entry, reason, item=None, now=None):
+    """Persistently remove an unsafe update target from every live/canonical path."""
+    if not isinstance(entry, dict):
+        return False
+    now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    entry["legacy_identity_status"] = "quarantined_live_mismatch"
+    entry["ranking_eligible"] = False
+    entry["exclude_from_live_recovery"] = True
+    entry["identity_quarantine_reason"] = str(reason or "archive_target_quarantined")
+    entry["identity_quarantine_persistent"] = True
+    entry["identity_quarantined_at"] = now.isoformat(timespec="seconds")
+    if isinstance(item, dict):
+        entry["identity_quarantine_incoming_headline"] = str(item.get("headline") or "")
+        source_url = _normalized_external_source_url(
+            item.get("source_url") or item.get("_source_url") or item.get("link")
+        )
+        if source_url:
+            entry["identity_quarantine_incoming_source_url"] = source_url
+    return True
+
+
 def _find_exact_archive_source_entry(item, archive):
     """Resolve exact external source identity only to a live-safe archive row."""
     if not isinstance(item, dict):
@@ -12302,11 +12351,23 @@ def _classify_archive_identity_record(entry, now=None):
     existing = str((entry or {}).get("editorial_story_id") or "").strip()
     record_dt = _archive_record_datetime(entry)
     age_days = (now - record_dt).total_seconds() / 86400 if record_dt else None
+    persistent_quarantine = bool(entry.get("identity_quarantine_persistent"))
+    persistent_reason = str(entry.get("identity_quarantine_reason") or "").strip()
 
     entry["ranking_eligible"] = bool(existing)
     entry.pop("exclude_from_live_recovery", None)
     entry.pop("identity_quarantine_reason", None)
-    if not alignment.get("aligned"):
+    if persistent_quarantine:
+        # A pre-write prospective mismatch is durable evidence. The stored row can
+        # still appear aligned because its unsafe incoming headline was never written;
+        # reclassification must not erase the quarantine and make that URL reusable.
+        entry["legacy_identity_status"] = "quarantined_live_mismatch"
+        entry["ranking_eligible"] = False
+        entry["exclude_from_live_recovery"] = True
+        entry["identity_quarantine_reason"] = (
+            persistent_reason or "persistent_archive_target_quarantine"
+        )
+    elif not alignment.get("aligned"):
         entry["legacy_identity_status"] = "quarantined_live_mismatch"
         entry["ranking_eligible"] = False
         entry["exclude_from_live_recovery"] = True
@@ -12320,7 +12381,11 @@ def _classify_archive_identity_record(entry, now=None):
     else:
         entry["legacy_identity_status"] = "legacy_unresolved"
         entry["ranking_eligible"] = False
-    return {**alignment, "age_days": round(age_days, 2) if age_days is not None else None}
+    return {
+        **alignment,
+        "persistent_quarantine": persistent_quarantine,
+        "age_days": round(age_days, 2) if age_days is not None else None,
+    }
 
 
 def _backfill_archive_editorial_story_ids(archive, identity_index, output_root=None, now=None):
@@ -12443,7 +12508,7 @@ def _find_forward_publication_target(item, archive, story_id=""):
     return None, "new_publication"
 
 
-def _forward_publication_target_valid(item, entry, story_id, basis):
+def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
     if entry is None:
         return True, "new_publication"
     if item.get("is_custom") or item.get("authoritative_custom"):
@@ -12457,6 +12522,25 @@ def _forward_publication_target_valid(item, entry, story_id, basis):
     story_id = str(story_id or "").strip()
     if story_id and entry_story_id and story_id != entry_story_id:
         return False, "persistent_story_id_conflict"
+
+    # Evaluate the row as it would exist after this update. A changed headline and
+    # current lastmod may expose an old overwritten URL that still looks safe before
+    # mutation. Such a row is quarantined and the current story receives a new slug.
+    incoming_headline = str(item.get("headline") or "").strip()
+    existing_headline = str(entry.get("headline") or "").strip()
+    incoming_teaser = str(item.get("teaser") or item.get("body", "")[:180]).strip()
+    existing_teaser = str(entry.get("teaser") or "").strip()
+    content_would_change = (
+        incoming_headline != existing_headline
+        or incoming_teaser != existing_teaser
+    )
+    if content_would_change:
+        prospective = _prospective_archive_update_alignment(item, entry, now=now)
+        if not prospective.get("aligned"):
+            return False, "prospective_" + str(
+                prospective.get("reason") or "headline_slug_event_drift"
+            )
+
     if basis == "persistent_story_id" and story_id and entry_story_id == story_id:
         return True, basis
     if basis == "exact_source_url":
@@ -12577,6 +12661,7 @@ def write_archives(all_categories, top_cat):
         "exact_source_updates": 0,
         "publication_holds": [],
         "target_conflicts": [],
+        "quarantined_update_targets": [],
         "custom_series_repairs": [],
         "custom_payloads_verified": 0,
         "legacy_archive_scope_days": FORWARD_IDENTITY_RECENT_DAYS,
@@ -12779,18 +12864,42 @@ def write_archives(all_categories, top_cat):
             hero, existing, _editorial_story_id, _target_basis
         )
         if not _target_valid:
+            _conflicted_target = existing
             _forward_identity_report["target_conflicts"].append({
                 "headline": headline,
-                "candidate_slug": (existing or {}).get("slug", ""),
+                "candidate_slug": (_conflicted_target or {}).get("slug", ""),
                 "story_id": _editorial_story_id,
                 "reason": _target_reason,
             })
+            if (
+                isinstance(_conflicted_target, dict)
+                and str(_target_reason).startswith("prospective_")
+            ):
+                _quarantine_archive_publication_target(
+                    _conflicted_target, _target_reason, hero
+                )
+                _forward_identity_report["quarantined_update_targets"].append({
+                    "headline": headline,
+                    "candidate_slug": _conflicted_target.get("slug", ""),
+                    "candidate_headline": _conflicted_target.get("headline", ""),
+                    "story_id": _editorial_story_id,
+                    "reason": _target_reason,
+                    "action": "preserve_old_page_and_mint_new_permalink",
+                })
             print(
                 f"  FORWARD IDENTITY QUARANTINE: refused target "
-                f"'{(existing or {}).get('slug','')}' for '{headline[:55]}' ({_target_reason})"
+                f"'{(_conflicted_target or {}).get('slug','')}' for '{headline[:55]}' ({_target_reason})"
             )
             existing = None
             _target_basis = "new_publication_after_conflict"
+            # Remove any stale inherited archive binding. The newly created article
+            # below will stamp its own slug and the post-publication story-ID rebind
+            # will update every category clone to that one canonical permalink.
+            if not (hero.get("is_custom") or hero.get("authoritative_custom")):
+                hero.pop("_archived_slug", None)
+                hero.pop("slug", None)
+                if str(hero.get("link") or "").startswith(f"{SITE_URL}/articles/"):
+                    hero["link"] = normalized_source_url or source_url
 
         # HARD PROTECTION: an archived CUSTOM article is never overwritten by anything,
         # and a feed story that matches one is DROPPED rather than published as its own
@@ -13225,12 +13334,17 @@ def validate_forward_live_identity(all_categories, top_cat=None, output_dir=None
                 "reason": "archive_entry_missing",
             })
             continue
-        if entry.get("exclude_from_live_recovery"):
+        _entry_alignment = _archive_headline_slug_alignment(entry)
+        if entry.get("exclude_from_live_recovery") or not _entry_alignment.get("aligned"):
             violations.append({
                 "surface": surface,
                 "headline": item.get("headline", ""),
                 "slug": slug,
-                "reason": entry.get("identity_quarantine_reason") or "archive_identity_quarantined",
+                "reason": (
+                    entry.get("identity_quarantine_reason")
+                    or _entry_alignment.get("reason")
+                    or "archive_identity_quarantined"
+                ),
             })
             continue
         item_story_id = str(
