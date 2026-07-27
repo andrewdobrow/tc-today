@@ -73,7 +73,55 @@ def test_inventory_includes_topic_og_and_prefers_webp_over_duplicate_formats(tmp
     assert reasons["topics/place"] == "non-image-or-placeholder"
 
 
-def test_exact_city_beats_topic_and_assignments_rotate_sequentially(tmp_path):
+def test_specific_topics_beat_exact_city_while_broad_topics_do_not(tmp_path):
+    generate = _configure(_load_generate(), tmp_path)
+    _image(tmp_path, "cities/port-st-lucie/city.png")
+    _image(tmp_path, "cities/fort-pierce/city.png")
+    _image(tmp_path, "cities/vero-beach/city.png")
+    _image(tmp_path, "cities/stuart/city.png")
+    _image(tmp_path, "topics/schools/school.png")
+    _image(tmp_path, "topics/roads-transportation/road.png")
+    _image(tmp_path, "topics/health/health.png")
+    _image(tmp_path, "topics/weather-environment/weather.png")
+    _image(tmp_path, "topics/crime-public-safety/crime.png")
+    _image(tmp_path, "topics/business-development/business.png")
+
+    cases = [
+        ("st_lucie", "Port St. Lucie school opens new campus", "topics/schools"),
+        ("st_lucie", "Fort Pierce bridge closure begins Monday", "topics/roads-transportation"),
+        ("indian_river", "Vero Beach hospital expands emergency room", "topics/health"),
+        ("martin", "Hurricane shelter opens in Stuart", "topics/weather-environment"),
+        ("crime", "Police investigate theft in Stuart", "cities/stuart"),
+        ("business", "New restaurant opens in Vero Beach", "cities/vero-beach"),
+    ]
+    for category, headline, expected_pool in cases:
+        pool_id, _images, basis = generate._editorial_pool_for_story(
+            category, headline, item={"headline": headline}
+        )
+        assert pool_id == expected_pool
+        if expected_pool.startswith("topics/") and expected_pool in {
+            "topics/schools", "topics/roads-transportation",
+            "topics/health", "topics/weather-environment",
+        }:
+            assert basis == "specific-topic-before-city"
+        else:
+            assert basis == "exact-city"
+
+
+def test_vero_beach_name_alone_does_not_trigger_weather_pool(tmp_path):
+    generate = _configure(_load_generate(), tmp_path)
+    _image(tmp_path, "cities/vero-beach/city.png")
+    _image(tmp_path, "topics/weather-environment/weather.png")
+
+    pool_id, _images, basis = generate._editorial_pool_for_story(
+        "business", "Vero Beach business celebrates grand opening", item={}
+    )
+
+    assert pool_id == "cities/vero-beach"
+    assert basis == "exact-city"
+
+
+def test_city_pool_still_rotates_sequentially_for_broad_topic_story(tmp_path):
     generate = _configure(_load_generate(), tmp_path)
     for name in ("a.png", "b.png", "c.png"):
         _image(tmp_path, f"cities/stuart/{name}")
@@ -83,8 +131,8 @@ def test_exact_city_beats_topic_and_assignments_rotate_sequentially(tmp_path):
     for index in range(4):
         url, credit = generate.get_fallback_image(
             "crime",
-            f"Police investigate incident in Stuart number {index}",
-            item={"headline": f"Police investigate incident in Stuart number {index}"},
+            f"Police investigate theft in Stuart number {index}",
+            item={"headline": f"Police investigate theft in Stuart number {index}"},
         )
         urls.append(url)
         assert credit == ""
@@ -95,12 +143,34 @@ def test_exact_city_beats_topic_and_assignments_rotate_sequentially(tmp_path):
         "https://treasurecoast.today/images/editorial/cities/stuart/c.png",
         "https://treasurecoast.today/images/editorial/cities/stuart/a.png",
     ]
-    same_url, _ = generate.get_fallback_image(
-        "crime",
-        "Police investigate incident in Stuart number 0",
-        item={"headline": "Police investigate incident in Stuart number 0"},
-    )
-    assert same_url == urls[0]
+
+
+def test_existing_assignment_reclassifies_when_policy_selects_new_pool(tmp_path):
+    generate = _configure(_load_generate(), tmp_path)
+    city = _image(tmp_path, "cities/port-st-lucie/city.png")
+    school = _image(tmp_path, "topics/schools/school.png")
+    headline = "Port St. Lucie school opens new campus"
+    item = {"headline": headline, "slug": "school-campus"}
+    story_key = generate._fallback_story_key("st_lucie", headline, item)
+    generate._EDITORIAL_IMAGE_ROTATION_STATE = {
+        "schema_version": 1,
+        "pool_cursors": {},
+        "pool_last_image": {},
+        "global_last_image": "",
+        "story_assignments": {
+            story_key: {
+                "image_url": f"https://treasurecoast.today/images/editorial/cities/port-st-lucie/{city.name}",
+                "pool_id": "cities/port-st-lucie",
+                "assigned_at": "2026-07-26T00:00:00+00:00",
+            }
+        },
+    }
+
+    selection = generate._select_editorial_fallback("st_lucie", headline, item=item)
+
+    assert selection["pool_id"] == "topics/schools"
+    assert selection["image_url"].endswith(f"/topics/schools/{school.name}")
+    assert selection["reused"] is False
 
 
 def test_county_pool_round_robins_city_folders_and_preserves_folder_sequence(tmp_path):
@@ -180,6 +250,36 @@ def test_archive_migration_updates_old_fallback_but_preserves_custom(tmp_path):
     html = (tmp_path / "articles" / "generated-story.html").read_text(encoding="utf-8")
     assert old_url not in html
     assert "crime-tape.png" in html
+
+
+def test_archive_migration_reclassifies_existing_editorial_city_fallback(tmp_path):
+    generate = _configure(_load_generate(), tmp_path)
+    city = _image(tmp_path, "cities/port-st-lucie/city.png")
+    school = _image(tmp_path, "topics/schools/school.png")
+    (tmp_path / "articles").mkdir()
+    old_url = f"https://treasurecoast.today/images/editorial/cities/port-st-lucie/{city.name}"
+    archive = [{
+        "slug": "psl-school-campus",
+        "headline": "Port St. Lucie school opens new campus",
+        "category_key": "st_lucie",
+        "image_url": old_url,
+        "image_source": "editorial_fallback",
+        "is_fallback_image": True,
+    }]
+    (tmp_path / "archive.json").write_text(json.dumps(archive), encoding="utf-8")
+    (tmp_path / "articles" / "psl-school-campus.html").write_text(
+        f'<meta property="og:image" content="{old_url}"><img src="{old_url}">',
+        encoding="utf-8",
+    )
+
+    report = generate.refresh_archive_editorial_fallbacks(tmp_path)
+    updated = json.loads((tmp_path / "archive.json").read_text(encoding="utf-8"))
+
+    assert report["updated"] == 1
+    assert updated[0]["image_url"].endswith(f"/topics/schools/{school.name}")
+    html = (tmp_path / "articles" / "psl-school-campus.html").read_text(encoding="utf-8")
+    assert old_url not in html
+    assert f"/topics/schools/{school.name}" in html
 
 
 def test_supplied_library_manifest_matches_optimized_assets():

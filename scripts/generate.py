@@ -566,7 +566,8 @@ FALLBACK_IMAGE_MAP = BRANDED_FALLBACK_IMAGE_MAP
 EDITORIAL_IMAGE_ROOT = OUTPUT_DIR / "images" / "editorial"
 EDITORIAL_IMAGE_ROTATION_PATH = OUTPUT_DIR / "data" / "editorial-image-rotation.json"
 EDITORIAL_IMAGE_REPORT_PATH = OUTPUT_DIR / "data" / "editorial-image-rotation-report.json"
-EDITORIAL_IMAGE_SCHEMA_VERSION = 1
+EDITORIAL_IMAGE_SCHEMA_VERSION = 2
+EDITORIAL_IMAGE_SELECTION_POLICY_VERSION = 2
 EDITORIAL_IMAGE_EXTENSIONS = {".webp", ".jpg", ".jpeg", ".png"}
 EDITORIAL_IMAGE_EXTENSION_PRIORITY = {".webp": 0, ".jpg": 1, ".jpeg": 2, ".png": 3}
 EDITORIAL_IMAGE_MAX_ASSIGNMENTS = 3000
@@ -603,6 +604,26 @@ EDITORIAL_CATEGORY_TOPIC = {
     "sports": "topics/sports",
     "things_to_do": "topics/things-to-do",
 }
+EDITORIAL_HIGH_SPECIFICITY_TOPIC_RULES = [
+    ("topics/roads-transportation", re.compile(
+        r"\b(?:road|roads|traffic|crash|collision|bridge|highway|interstate|i-95|"
+        r"turnpike|lane|lanes|closure|closed|transportation|fdot|rail|airport)\b", re.I
+    )),
+    ("topics/schools", re.compile(
+        r"\b(?:school|schools|student|students|teacher|teachers|classroom|education|"
+        r"district|campus|graduation|superintendent)\b", re.I
+    )),
+    ("topics/health", re.compile(
+        r"\b(?:health|hospital|medical|doctor|doctors|patient|patients|clinic|"
+        r"emergency room|disease|outbreak|public health)\b", re.I
+    )),
+    ("topics/weather-environment", re.compile(
+        r"\b(?:weather|storm|hurricane|tropical|flood|flooding|rain|wind|tornado|"
+        r"climate|environment|environmental|erosion|renourishment|lagoon|wildlife|"
+        r"water quality|red tide|sea turtle)\b", re.I
+    )),
+]
+
 EDITORIAL_TOPIC_RULES = [
     ("topics/roads-transportation", re.compile(
         r"\b(?:road|roads|traffic|crash|collision|bridge|highway|interstate|i-95|"
@@ -754,6 +775,19 @@ def _detect_editorial_city(text, category_key=""):
     return ""
 
 
+def _detect_high_specificity_editorial_topic(text):
+    """Return a subject pool that should visually outrank a named city.
+
+    These rules intentionally avoid bare geographic words such as ``beach`` and
+    ``river`` so place names like Vero Beach and Indian River do not accidentally
+    become weather/environment stories.
+    """
+    for folder, pattern in EDITORIAL_HIGH_SPECIFICITY_TOPIC_RULES:
+        if pattern.search(str(text or "")):
+            return folder
+    return ""
+
+
 def _detect_editorial_topic(text):
     for folder, pattern in EDITORIAL_TOPIC_RULES:
         if pattern.search(str(text or "")):
@@ -766,24 +800,22 @@ def _editorial_pool_for_story(category_key, headline="", item=None, inventory=No
     pools = inventory.get("pools", {})
     text = _fallback_story_blob(headline, item)
 
+    # Schools, roads/transportation, health, and weather/environment describe the
+    # visual subject more precisely than a city name. Use them first whenever the
+    # matching pool is populated.
+    specific_topic = _detect_high_specificity_editorial_topic(text)
+    if specific_topic and pools.get(specific_topic):
+        return specific_topic, list(pools[specific_topic]), "specific-topic-before-city"
+
     city = _detect_editorial_city(text, category_key)
     city_pool = f"cities/{city}" if city else ""
     if city_pool and pools.get(city_pool):
         return city_pool, list(pools[city_pool]), "exact-city"
 
     detected_topic = _detect_editorial_topic(text)
-    # Strong topical sections retain their own visual language. Local government
-    # may yield to an unmistakable school, road, weather, or health subject.
-    if category_key in {"crime", "business", "sports", "things_to_do"}:
-        category_topic = EDITORIAL_CATEGORY_TOPIC.get(category_key, "")
-        if pools.get(category_topic):
-            return category_topic, list(pools[category_topic]), "category-topic"
-    elif category_key == "local_gov":
-        if detected_topic in {
-            "topics/schools", "topics/roads-transportation",
-            "topics/weather-environment", "topics/health",
-        } and pools.get(detected_topic):
-            return detected_topic, list(pools[detected_topic]), "specific-topic"
+    # Broad category pools yield to an exact city, but remain stronger than county
+    # and regional fallbacks.
+    if category_key in {"crime", "business", "sports", "things_to_do", "local_gov"}:
         category_topic = EDITORIAL_CATEGORY_TOPIC.get(category_key, "")
         if pools.get(category_topic):
             return category_topic, list(pools[category_topic]), "category-topic"
@@ -839,6 +871,7 @@ def _load_editorial_image_rotation_state():
             payload = {}
         _EDITORIAL_IMAGE_ROTATION_STATE = {
             "schema_version": EDITORIAL_IMAGE_SCHEMA_VERSION,
+            "selection_policy_version": EDITORIAL_IMAGE_SELECTION_POLICY_VERSION,
             "pool_cursors": payload.get("pool_cursors") if isinstance(payload.get("pool_cursors"), dict) else {},
             "pool_last_image": payload.get("pool_last_image") if isinstance(payload.get("pool_last_image"), dict) else {},
             "global_last_image": str(payload.get("global_last_image") or ""),
@@ -872,7 +905,16 @@ def _select_editorial_fallback(category_key, headline="", item=None, force_new=F
         assignment = state["story_assignments"].get(story_key)
         if not force_new and isinstance(assignment, dict):
             assigned_url = str(assignment.get("image_url") or "")
-            if _editorial_image_file_exists(assigned_url):
+            assigned_path = urlsplit(assigned_url).path if assigned_url else ""
+            # Preserve stable assignments only while they still belong to the pool
+            # selected by the current policy. This deliberately reclassifies older
+            # city assignments when a school, road, health, or weather pool is now
+            # the more accurate visual match.
+            if (
+                str(assignment.get("pool_id") or "") == pool_id
+                and assigned_path in images
+                and _editorial_image_file_exists(assigned_url)
+            ):
                 selection = dict(assignment)
                 selection.update({"story_key": story_key, "reused": True})
                 _EDITORIAL_IMAGE_LAST_SELECTION[story_key] = selection
@@ -901,6 +943,7 @@ def _select_editorial_fallback(category_key, headline="", item=None, force_new=F
             "story_key": story_key,
             "headline": str(headline or (item or {}).get("headline") or "")[:180],
             "category_key": category_key,
+            "selection_policy_version": EDITORIAL_IMAGE_SELECTION_POLICY_VERSION,
             "pool_id": pool_id,
             "selection_basis": basis,
             "image_url": f"{SITE_URL}{selected}",
@@ -947,6 +990,18 @@ def get_fallback_image(category_key, headline="", sequential=False, item=None, f
     return _branded_fallback_image(category_key)
 
 
+def _is_managed_editorial_fallback_image(url):
+    """Return True for TCT-owned images managed by the editorial fallback pool."""
+    raw = str(url or "").strip()
+    if not raw:
+        return False
+    parsed = urlsplit(raw)
+    if parsed.netloc and "treasurecoast.today" not in parsed.netloc.lower():
+        return False
+    path = parsed.path if parsed.path else raw
+    return path.startswith("/images/editorial/")
+
+
 def _is_legacy_or_branded_fallback_image(url):
     raw = str(url or "").strip()
     if not raw:
@@ -987,12 +1042,13 @@ def _replace_article_fallback_references(article_path, old_urls, new_url):
 
 
 def refresh_archive_editorial_fallbacks(output_root=None):
-    """Migrate old AI/branded fallbacks to the sequential editorial image pool.
+    """Migrate managed fallbacks to the pool selected by the current policy.
 
-    Custom articles are excluded because their explicitly supplied imagery remains
-    authoritative. Existing real source images are also preserved. Archive metadata
-    and matching permanent article pages are updated together so cards and article
-    pages do not disagree about the selected fallback.
+    This includes retired AI/root OG images and existing ``/images/editorial/``
+    assignments whose topic/city pool is no longer correct. Custom articles are
+    excluded because their supplied imagery remains authoritative. Existing real
+    source images are also preserved. Archive metadata and matching permanent article
+    pages are updated together so cards and article pages do not disagree.
     """
     root = Path(output_root or OUTPUT_DIR)
     archive_path = root / "archive.json"
@@ -1010,7 +1066,12 @@ def refresh_archive_editorial_fallbacks(output_root=None):
             skipped_custom += 1
             continue
         old_url = str(entry.get("image_url") or "").strip()
-        if old_url and not _is_legacy_or_branded_fallback_image(old_url):
+        is_managed_editorial = _is_managed_editorial_fallback_image(old_url)
+        if (
+            old_url
+            and not _is_legacy_or_branded_fallback_image(old_url)
+            and not is_managed_editorial
+        ):
             continue
         category_key = str(entry.get("category_key") or "top_news")
         new_url, new_credit = get_fallback_image(
@@ -1081,6 +1142,7 @@ def _save_editorial_image_rotation_state():
     if _EDITORIAL_IMAGE_ROTATION_DIRTY or not EDITORIAL_IMAGE_ROTATION_PATH.exists():
         payload = {
             "schema_version": EDITORIAL_IMAGE_SCHEMA_VERSION,
+            "selection_policy_version": EDITORIAL_IMAGE_SELECTION_POLICY_VERSION,
             "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "pool_cursors": state.get("pool_cursors", {}),
             "pool_last_image": state.get("pool_last_image", {}),
@@ -1098,6 +1160,7 @@ def _save_editorial_image_rotation_state():
         pool_usage[row.get("pool_id", "")] += 1
     report = {
         "schema_version": EDITORIAL_IMAGE_SCHEMA_VERSION,
+        "selection_policy_version": EDITORIAL_IMAGE_SELECTION_POLICY_VERSION,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "editorial_image_count": inventory.get("image_count", 0),
         "pool_count": len(inventory.get("pools", {})),
@@ -1110,7 +1173,7 @@ def _save_editorial_image_rotation_state():
         "pool_usage_this_run": dict(sorted(pool_usage.items())),
         "assignments_this_run": _EDITORIAL_IMAGE_RUN_ASSIGNMENTS,
         "persistent_assignment_count": len(state.get("story_assignments", {})),
-        "rotation_contract": "stable-per-story-sequential-per-folder-no-immediate-repeat",
+        "rotation_contract": "specific-topic-before-city-stable-per-current-pool-sequential-no-immediate-repeat",
     }
     EDITORIAL_IMAGE_REPORT_PATH.write_text(
         json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
