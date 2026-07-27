@@ -118,7 +118,10 @@ document.querySelectorAll(".cat-btn").forEach(btn => {
         if (cat === "all") {
           show = card.dataset.topnews === "true";
         } else {
-          show = card.dataset.cat === cat;
+          const memberships = (card.dataset.cats || card.dataset.cat || "")
+            .split(/\s+/)
+            .filter(Boolean);
+          show = memberships.includes(cat);
         }
         card.style.display = show ? "flex" : "none";
       });

@@ -12,7 +12,8 @@ import hashlib
 import copy
 import time
 import threading
-from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
+import html as html_lib
+from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode, quote
 import feedparser
 import requests
 import anthropic
@@ -227,6 +228,8 @@ EDITORIAL_AUDIT_LOG_PATH = OUTPUT_DIR / "data" / "editorial_audit.jsonl"
 EDITORIAL_REGISTRY_PATH = OUTPUT_DIR / "data" / "editorial_story_registry.json"
 EDITORIAL_OBSERVABILITY_PATH = OUTPUT_DIR / "data" / "editorial_observability.json"
 CATEGORY_GENERATION_REPORT_PATH = OUTPUT_DIR / "data" / "category-generation-report.json"
+TRUSTED_SOURCE_RECOVERY_REPORT_PATH = OUTPUT_DIR / "data" / "trusted-source-recovery.json"
+CATEGORY_MEMBERSHIP_REPORT_PATH = OUTPUT_DIR / "data" / "category-membership-report.json"
 EDITORIAL_ACTIVATION_PATH = OUTPUT_DIR / "data" / "editorial_activation.json"
 EDITORIAL_ACTIVATION_HISTORY_PATH = OUTPUT_DIR / "data" / "editorial_activation_history.jsonl"
 
@@ -273,7 +276,28 @@ THIN_SOURCE_DOMAINS = ["tcpalm.com", "sun-sentinel.com", "palmbeachpost.com"]
 
 # Sources we can usually use for full article text. TCPalm stays discovery-only
 # because its pages are paywalled and tend to produce thin/blocked extraction.
-FULL_TEXT_DOMAINS = ["wptv.com", "wpbf.com", "cbs12.com", "wflx.com", "hometownnewstc.com", "floridapolitics.com"]
+FULL_TEXT_DOMAINS = [
+    "wptv.com", "wpbf.com", "cbs12.com", "cw34.com", "wflx.com",
+    "sebastiandaily.com", "hometownnewstc.com", "floridapolitics.com",
+]
+
+# Google News is useful for discovery, but its RSS entry is not enough source material
+# to write from. For trusted local publishers, resolve the Google wrapper back to the
+# publisher page and run the normal full-text quality gate. This recovers important
+# county stories when a publisher files an article under the wrong site section or
+# omits it from the expected county RSS feed.
+TRUSTED_AGGREGATOR_PUBLISHERS = {
+    "wptv": ("wptv.com",),
+    "wpbf": ("wpbf.com",),
+    "wpec": ("cbs12.com", "cw34.com"),
+    "cbs12": ("cbs12.com", "cw34.com"),
+    "cw34": ("cw34.com", "cbs12.com"),
+    "wflx": ("wflx.com",),
+    "sebastian daily": ("sebastiandaily.com",),
+    "hometown news": ("hometownnewstc.com",),
+}
+TRUSTED_SOURCE_RECOVERY_ROWS = []
+TRUSTED_SOURCE_RECOVERY_LOCK = threading.RLock()
 
 # Keep module import side-effect free so offline validation and utility tests can
 # load generation helpers without requiring production secrets. GitHub production
@@ -339,6 +363,7 @@ class PersistentGenerationCache:
 
     LIMITS = {
         "source_text": 350,
+        "source_resolutions": 500,
         "classifications": 1500,
         "categories": 90,
         "hero_enhancements": 400,
@@ -359,6 +384,7 @@ class PersistentGenerationCache:
             "schema_version": GENERATION_CACHE_SCHEMA_VERSION,
             "updated_at": "",
             "source_text": {},
+            "source_resolutions": {},
             "classifications": {},
             "categories": {},
             "hero_enhancements": {},
@@ -1778,6 +1804,168 @@ def find_image(headline, entries):
     return {"image_url": "", "link": "", "published": ""}
 
 
+def _trusted_publisher_identity(entry, title=""):
+    """Return normalized publisher name and allowed domains for a trusted RSS item."""
+    values = []
+    source = entry.get("source", {}) if isinstance(entry, dict) else {}
+    if isinstance(source, dict):
+        values.extend([source.get("title", ""), source.get("href", "")])
+    elif source:
+        values.append(str(source))
+    title = str(title or entry.get("title", "") or "")
+    if " - " in title:
+        values.append(title.rsplit(" - ", 1)[-1])
+    blob = " ".join(str(v or "") for v in values).lower()
+    for publisher, domains in TRUSTED_AGGREGATOR_PUBLISHERS.items():
+        if publisher in blob or any(domain in blob for domain in domains):
+            return publisher, tuple(domains)
+    return "", ()
+
+
+def _google_news_resolution_cache_key(url):
+    return _cache_hash({"google_news_url": _normalize_cache_url(url), "resolver": "batchexecute-v1"})
+
+
+def _google_news_token(url):
+    try:
+        path = urlsplit(str(url or "")).path
+    except Exception:
+        return ""
+    match = re.search(r"/(?:rss/)?articles/([^/?#]+)", path)
+    return match.group(1) if match else ""
+
+
+def _extract_google_rpc_url(text):
+    """Extract the publisher URL from a Google News batchexecute response."""
+    raw = str(text or "")
+    # Normal response: JSON appears after an anti-XSSI prefix and blank line. The
+    # third value contains another JSON string: ["garturlres", "https://..."]
+    for chunk in reversed([part.strip() for part in raw.split("\n\n") if part.strip()]):
+        try:
+            payload = json.loads(chunk)
+        except Exception:
+            continue
+        stack = [payload]
+        while stack:
+            value = stack.pop()
+            if isinstance(value, list):
+                if len(value) >= 3 and isinstance(value[2], str):
+                    try:
+                        inner = json.loads(value[2])
+                    except Exception:
+                        inner = None
+                    if (
+                        isinstance(inner, list) and len(inner) >= 2
+                        and inner[0] == "garturlres"
+                        and str(inner[1]).startswith("http")
+                    ):
+                        return html_lib.unescape(str(inner[1]))
+                stack.extend(value)
+            elif isinstance(value, dict):
+                stack.extend(value.values())
+    # Defensive fallback for slightly different RPC framing.
+    match = re.search(r'\\?"garturlres\\?"\s*,\s*\\?"(https?[^"\\]+(?:\\.[^"\\]*)*)', raw)
+    if not match:
+        return ""
+    candidate = match.group(1).replace(r"\/", "/").replace(r"\u0026", "&")
+    return html_lib.unescape(candidate)
+
+
+def resolve_google_news_url(url, expected_domains=()):
+    """Resolve a modern Google News RSS wrapper to its original publisher URL.
+
+    Positive results are cached for seven days. Negative results use a short cache so
+    a transient Google response cannot permanently hide an important local story.
+    """
+    raw_url = str(url or "").strip()
+    if "news.google.com" not in raw_url:
+        return raw_url
+    cache_key = _google_news_resolution_cache_key(raw_url)
+    cached = GENERATION_CACHE.get("source_resolutions", cache_key)
+    if cached is not _CACHE_MISS:
+        return str((cached or {}).get("resolved_url", ""))
+    token = _google_news_token(raw_url)
+    if not token:
+        GENERATION_CACHE.put("source_resolutions", cache_key, {"resolved_url": "", "reason": "missing_token"}, ttl_seconds=7200)
+        return ""
+    headers = {
+        "User-Agent": "Mozilla/5.0 (compatible; TCTBot/1.0; +https://treasurecoast.today)",
+        "Accept-Language": "en-US,en;q=0.9",
+    }
+    try:
+        landing = requests.get(
+            f"https://news.google.com/rss/articles/{token}",
+            timeout=6,
+            headers=headers,
+            allow_redirects=True,
+        )
+        # Older wrappers may redirect directly to the publisher.
+        direct = str(getattr(landing, "url", "") or "")
+        if direct and "news.google.com" not in direct:
+            resolved = direct
+        else:
+            body = str(getattr(landing, "text", "") or "")
+            sig = re.search(r'data-n-a-sg=["\']([^"\']+)', body)
+            ts = re.search(r'data-n-a-ts=["\']([^"\']+)', body)
+            if not sig or not ts:
+                raise ValueError("google_resolution_metadata_missing")
+            inner = (
+                '["garturlreq",[["X","X",["X","X"],null,null,1,1,'
+                '"US:en",null,1,null,null,null,null,null,0,1],"X","X",1,'
+                f'[1,1,1],1,1,null,0,0,null,0],"{token}",{ts.group(1)},'
+                f'"{sig.group(1)}"]'
+            )
+            payload = ["Fbv4je", inner]
+            rpc = requests.post(
+                "https://news.google.com/_/DotsSplashUi/data/batchexecute",
+                timeout=6,
+                headers={**headers, "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"},
+                data=f"f.req={quote(json.dumps([[payload]]))}",
+            )
+            resolved = _extract_google_rpc_url(getattr(rpc, "text", ""))
+        domain = get_domain(resolved)
+        allowed = tuple(str(d).lower() for d in expected_domains if d)
+        if not resolved or "news.google.com" in domain:
+            raise ValueError("publisher_url_not_resolved")
+        if allowed and not any(domain == d or domain.endswith("." + d) for d in allowed):
+            raise ValueError(f"resolved_domain_not_trusted:{domain}")
+        GENERATION_CACHE.put(
+            "source_resolutions", cache_key,
+            {"resolved_url": resolved, "domain": domain}, ttl_seconds=7 * 86400,
+        )
+        return resolved
+    except Exception as exc:
+        GENERATION_CACHE.put(
+            "source_resolutions", cache_key,
+            {"resolved_url": "", "reason": str(exc)[:180]}, ttl_seconds=7200,
+        )
+        return ""
+
+
+def _record_trusted_source_recovery(row):
+    with TRUSTED_SOURCE_RECOVERY_LOCK:
+        TRUSTED_SOURCE_RECOVERY_ROWS.append(copy.deepcopy(row))
+
+
+def write_trusted_source_recovery_report(output_path=None):
+    path = Path(output_path or TRUSTED_SOURCE_RECOVERY_REPORT_PATH)
+    with TRUSTED_SOURCE_RECOVERY_LOCK:
+        rows = copy.deepcopy(TRUSTED_SOURCE_RECOVERY_ROWS)
+    recovered = sum(1 for row in rows if row.get("result") == "recovered")
+    report = {
+        "schema_version": 1,
+        "generated_at": _utc_now_iso(),
+        "attempted": len(rows),
+        "recovered": recovered,
+        "failed": len(rows) - recovered,
+        "rows": rows,
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"  Trusted source recovery: {recovered}/{len(rows)} resolved to usable publisher pages")
+    return report
+
+
 def extract_publisher_url(entry):
     """Extract actual publisher URL from a Google News RSS entry.
     Google News embeds the publisher URL as an href in the description HTML.
@@ -1872,6 +2060,33 @@ def clean_summary(text):
     return text
 
 
+_OBITUARY_LISTING_STRONG_SIGNALS = [
+    "funeral home", "funeral and cremation", "funeral & cremation",
+    "cremation service", "cremation services", "in lieu of flowers",
+    "celebration of life", "laid to rest", "visitation will",
+    "services are being handled", "services being handled",
+    "arrangements by", "arrangements are", "arrangements entrusted",
+    "passed away peacefully", "entered into rest", "went to be with the lord",
+]
+
+def _looks_like_obituary_listing(title, text):
+    """Distinguish obituary listings from reported news about a person's death.
+
+    A reported death may legitimately say someone is survived by family. That phrase
+    alone must never suppress a public-safety or public-service news story.
+    """
+    title_blob = str(title or "").lower()
+    body_blob = str(text or "").lower()
+    if re.search(r"\bobituar(?:y|ies)\b", title_blob):
+        return True
+    strong_hits = sum(1 for signal in _OBITUARY_LISTING_STRONG_SIGNALS if signal in body_blob)
+    if strong_hits >= 2:
+        return True
+    if strong_hits >= 1 and ("survived by" in body_blob or "passed away" in body_blob):
+        return True
+    return False
+
+
 def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
     """Pull headlines, dedupe, fetch usable full article text for open sources, then limit."""
 
@@ -1907,22 +2122,11 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
 
     seen, entries = set(), []
 
-    # Obituary signals — filter these out entirely so they never become heroes
-    # OR cards. Specific to obituary/funeral listings; won't catch news coverage
-    # of notable deaths (which uses "dies", "killed", "death of" without this language).
-    _OBIT_SIGNALS = [
-        "survived by", "is survived by", "funeral home", "funeral & cremation",
-        "funeral and cremation", "cremation service", "cremation services",
-        "celebration of life", "laid to rest", "in lieu of flowers",
-        "visitation will", "visitation is", "services are being handled",
-        "services being handled", "arrangements by", "arrangements are",
-        "arrangements entrusted", "passed away peacefully", "passed away at",
-        "entered into rest", "went to be with the lord", "obituary", "obituaries",
-    ]
-
+    # Obituary listings are excluded, but reported deaths remain eligible. A phrase
+    # such as "survived by" alone is common in legitimate news coverage and is not
+    # enough to classify an item as an obituary.
     def _is_obituary(title, summary):
-        blob = (title + " " + (summary or "")).lower()
-        return any(sig in blob for sig in _OBIT_SIGNALS)
+        return _looks_like_obituary_listing(title, summary)
 
     for url, feed_entries in feed_results:
         try:
@@ -1932,8 +2136,10 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
                     continue
                 seen.add(title.lower())
 
+                raw_link = entry.get("link", "") or getattr(entry, "link", "")
                 link = extract_publisher_url(entry)
                 summary = extract_rss_text(entry)[:2500]
+                publisher_name, publisher_domains = _trusted_publisher_identity(entry, title)
 
                 # Skip obituaries entirely
                 if _is_obituary(title, summary):
@@ -1945,6 +2151,9 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
                     "title":       title,
                     "summary":     summary,
                     "link":        link,
+                    "aggregator_url": raw_link if "news.google.com" in str(raw_link) else "",
+                    "publisher_name": publisher_name,
+                    "publisher_domains": list(publisher_domains),
                     "feed_url":    url,
                     "source_type": source_type,
                     "source_quality": "unclassified",
@@ -1964,7 +2173,21 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
             return 0
 
     entries.sort(key=pub_sort, reverse=True)
-    result = entries[:limit]
+    result = list(entries[:limit])
+    # A busy broad feed can push a locally important trusted-publisher discovery just
+    # below the ordinary per-category cap. Give up to six additional local aggregator
+    # discoveries a recovery chance before the later category filter selects its final
+    # twelve. This does not promote them automatically; they still must resolve and
+    # pass the unchanged source-depth and category gates.
+    for candidate in entries[limit:limit + 30]:
+        if len(result) >= limit + 6:
+            break
+        if (
+            candidate.get("source_type") == "aggregator"
+            and candidate.get("publisher_name")
+            and _has_treasure_coast_locality(candidate)
+        ):
+            result.append(candidate)
 
     def enrich_one(h):
         link = h.get("link", "")
@@ -1975,8 +2198,48 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
             h["source_quality"] = "discovery_only"
             return h
 
-        # Google News aggregators — treat as brief minimum, don't penalize
+        # Trusted local Google News discoveries get one bounded publisher recovery
+        # attempt. The normal source-depth gate remains unchanged; we publish only
+        # when the resolved source yields enough verified text.
         if h.get("source_type") == "aggregator":
+            publisher = str(h.get("publisher_name") or "")
+            domains = tuple(h.get("publisher_domains") or ())
+            local = _has_treasure_coast_locality(h)
+            recovery_row = {
+                "headline": h.get("title", ""),
+                "publisher": publisher,
+                "aggregator_url": h.get("aggregator_url") or link,
+                "expected_domains": list(domains),
+                "locality_confirmed": bool(local),
+                "result": "not_attempted",
+                "resolved_url": "",
+                "source_word_count": 0,
+                "reason": "",
+            }
+            if publisher and domains and local:
+                resolved = resolve_google_news_url(h.get("aggregator_url") or link, domains)
+                recovery_row["resolved_url"] = resolved
+                if resolved:
+                    full = fetch_article_text(resolved, max_words=2500, content_hint=_source_content_hint(h))
+                    words = _word_count(full)
+                    recovery_row["source_word_count"] = words
+                    if words >= MIN_SOURCE_WORDS:
+                        h["aggregator_url"] = h.get("aggregator_url") or link
+                        h["link"] = resolved
+                        h["source_url"] = resolved
+                        h["source_type"] = classify_source(resolved)
+                        h["article_text"] = full
+                        h["source_quality"] = "full" if words >= 140 else "summary"
+                        h["source_recovery_status"] = "recovered"
+                        recovery_row["result"] = "recovered"
+                        _record_trusted_source_recovery(recovery_row)
+                        return h
+                    recovery_row["result"] = "insufficient_source_depth"
+                    recovery_row["reason"] = f"resolved publisher text had {words} words"
+                else:
+                    recovery_row["result"] = "resolution_failed"
+                    recovery_row["reason"] = "google wrapper did not resolve to the trusted publisher"
+                _record_trusted_source_recovery(recovery_row)
             h["source_quality"] = "brief" if summary_words >= 20 else "thin"
             return h
 
@@ -2142,6 +2405,117 @@ def _has_treasure_coast_locality(item):
     return "treasure coast" in raw or any(
         _county_locality_evidence(key, item) for key in COUNTY_KEYS
     )
+
+
+def _normalize_category_keys(values):
+    """Return valid category keys in the site's stable navigation order."""
+    if isinstance(values, str):
+        values = re.split(r"[\s,|]+", values)
+    valid = {str(value or "").strip() for value in (values or [])}
+    return [key for key in CATEGORIES if key in valid]
+
+
+def _item_category_memberships(item, primary_category="", extra_categories=None):
+    """Infer every valid category membership without inventing topic labels.
+
+    A canonical article keeps one primary editorial category, while deterministic
+    county locality and current-run classification may add secondary memberships.
+    """
+    item = item or {}
+    categories = set(_normalize_category_keys(item.get("category_keys") or []))
+    for candidate in (
+        primary_category, item.get("category_key"), item.get("cat_key"), item.get("category"),
+    ):
+        if candidate in CATEGORIES:
+            categories.add(candidate)
+    categories.update(_normalize_category_keys(extra_categories or []))
+
+    if STORY_CLASSIFICATION is not None:
+        for lookup in (
+            item.get("source_title", ""), item.get("source_headline", ""),
+            item.get("title", ""), item.get("headline", ""),
+        ):
+            key = str(lookup or "").strip().lower()
+            classified = STORY_CLASSIFICATION.get(key) if key else None
+            if classified:
+                categories.update(c for c in classified if c in CATEGORIES)
+                break
+
+    for county_key in COUNTY_KEYS:
+        if _county_locality_evidence(county_key, item):
+            categories.add(county_key)
+    return [key for key in CATEGORIES if key in categories]
+
+
+def _apply_category_memberships(item, primary_category="", extra_categories=None):
+    if not isinstance(item, dict):
+        return []
+    memberships = _item_category_memberships(item, primary_category, extra_categories)
+    item["category_keys"] = memberships
+    item["county_keys"] = [key for key in memberships if key in COUNTY_KEYS]
+    return memberships
+
+
+def _merge_category_memberships(target, source, primary_category=""):
+    extras = []
+    for item in (target or {}, source or {}):
+        extras.extend(_item_category_memberships(item))
+    return _apply_category_memberships(target, primary_category, extras)
+
+
+def _category_membership_contains(item, category_key):
+    return category_key in _item_category_memberships(item)
+
+
+def _backfill_archive_category_memberships(archive, output_root=None):
+    """Persist deterministic secondary county memberships on canonical archive rows."""
+    rows = list(archive or [])
+    changed = []
+    missing = []
+    for entry in rows:
+        before = _normalize_category_keys(entry.get("category_keys") or [])
+        after = _apply_category_memberships(entry, entry.get("category_key", ""))
+        added = [key for key in after if key not in before]
+        if added:
+            changed.append({
+                "slug": entry.get("slug", ""),
+                "headline": entry.get("headline", ""),
+                "primary_category": entry.get("category_key", ""),
+                "added_categories": added,
+                "category_keys": after,
+            })
+        for county_key in COUNTY_KEYS:
+            if _county_locality_evidence(county_key, entry) and county_key not in after:
+                missing.append({
+                    "slug": entry.get("slug", ""),
+                    "headline": entry.get("headline", ""),
+                    "missing_county": county_key,
+                })
+    report = {
+        "schema_version": 1,
+        "generated_at": _utc_now_iso(),
+        "policy": "one_canonical_article_with_multiple_category_memberships",
+        "archive_records_checked": len(rows),
+        "records_backfilled": len(changed),
+        "missing_county_memberships": len(missing),
+        "backfilled": changed,
+        "missing": missing,
+        "passed": not missing,
+    }
+    if output_root is not None:
+        path = Path(output_root) / "data" / "category-membership-report.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if missing:
+        raise RuntimeError(
+            "Category membership contract FAILED: "
+            f"{len(missing)} clear county membership(s) were not projected"
+        )
+    print(
+        "  Category membership contract PASSED "
+        f"({len(rows)} archive records; {len(changed)} backfilled)"
+    )
+    return rows, report
 
 
 # Publication quality gates. A category can fall back to older real reporting, but
@@ -2423,12 +2797,7 @@ def _hero_eligible(category_key, h):
     # including county pages. This is specific to obituary listings (funeral home
     # references, "survived by") and won't catch news coverage of notable deaths,
     # which uses "dies", "killed", "death of" without funeral-listing language.
-    _obit_signals = ["survived by", "is survived by", "funeral home",
-                     "funeral and cremation", "cremation service", "memorial service at",
-                     "laid to rest", "celebration of life", "visitation will",
-                     "in lieu of flowers", "services are being handled",
-                     "services being handled", "arrangements by", "arrangements are"]
-    if any(sig in text for sig in _obit_signals):
+    if _looks_like_obituary_listing(title, text):
         return False
 
     topic_terms = {
@@ -3134,19 +3503,12 @@ Return ONLY valid JSON:
         except Exception:
             return False
 
-    # Obituary check on the GENERATED content — catches obituaries whose RSS title
-    # was just a person's name (so the ingestion filter missed them) but whose
-    # written-up body contains funeral-listing language.
-    _OBIT_BODY_SIGNALS = [
-        "survived by", "funeral home", "funeral and cremation", "funeral & cremation",
-        "cremation service", "services are being handled", "services being handled",
-        "in lieu of flowers", "celebration of life", "laid to rest",
-        "visitation will", "arrangements by", "arrangements are",
-        "passed away peacefully", "entered into rest",
-    ]
+    # Obituary check on GENERATED content. Reported deaths remain eligible when the
+    # copy merely notes surviving relatives; funeral-listing structure is required.
     def _is_obituary_content(item):
-        blob = (item.get("headline", "") + " " + item.get("body", "")).lower()
-        return any(sig in blob for sig in _OBIT_BODY_SIGNALS)
+        return _looks_like_obituary_listing(
+            item.get("headline", ""), item.get("body", "")
+        )
 
     # If the hero is an obituary, swap in the first non-obituary card
     if _is_obituary_content(data.get("hero", {})) and data.get("cards"):
@@ -4899,10 +5261,15 @@ def _dedupe_homepage_cards_by_permalink(
             continue
         current = winners.get(key)
         if current is None:
+            _apply_category_memberships(card, card.get("cat_key") or card.get("category_key") or "")
             winners[key] = (index, card, permalink)
             continue
         current_index, current_card, current_permalink = current
+        combined_memberships = list(dict.fromkeys(
+            _item_category_memberships(current_card) + _item_category_memberships(card)
+        ))
         if _preference(card, index) > _preference(current_card, current_index):
+            _apply_category_memberships(card, card.get("cat_key") or card.get("category_key") or "", combined_memberships)
             removed.append({
                 "reason": "duplicate_permalink_replaced_by_preferred_placement",
                 "permalink": current_permalink,
@@ -4914,6 +5281,10 @@ def _dedupe_homepage_cards_by_permalink(
             })
             winners[key] = (index, card, permalink)
         else:
+            _apply_category_memberships(
+                current_card, current_card.get("cat_key") or current_card.get("category_key") or "",
+                combined_memberships,
+            )
             removed.append({
                 "reason": "duplicate_permalink",
                 "permalink": permalink,
@@ -5162,6 +5533,7 @@ def render_index(all_categories, top_cat):
         for card in cat.get("cards", []):
             card["cat_label"] = cat["category_label"]
             card["cat_key"]   = cat["category_key"]
+            _apply_category_memberships(card, cat["category_key"])
             all_cards_pool.append(card)
 
     # Only enriched cards appear on the homepage. Unenriched cards are dropped.
@@ -5198,6 +5570,8 @@ def render_index(all_categories, top_cat):
             "body":       e.get("teaser", ""),
             "cat_label":  e.get("category_label", ""),
             "cat_key":    e.get("category_key", ""),
+            "category_keys": _item_category_memberships(e, e.get("category_key", "")),
+            "county_keys": list(e.get("county_keys") or []),
             "image_url":  e.get("image_url", ""),
             "published":  e.get("lastmod") or e.get("date", ""),
             "published_raw": e.get("lastmod") or e.get("date", ""),
@@ -5222,27 +5596,8 @@ def render_index(all_categories, top_cat):
         enriched_pool.append(backfill_card)
         _current_hls.add(hl.lower())
 
-        # Cross-post to county pages: a story archived under a topic category (e.g.
-        # a Hobe Sound business opening under Business) also belongs on its county
-        # page. If the story names a county's places and it isn't already a county
-        # story, add a second backfill card tagged for that county so it shows in
-        # both places rather than vanishing from the county page.
-        if _bf_ckey not in COUNTY_KEYS:
-            _htext = (hl + " " + e.get("teaser", "")).lower()
-            _county_places = {
-                "martin": ["martin county", "stuart", "jensen beach", "palm city",
-                           "hobe sound", "port salerno", "jupiter island",
-                           "hutchinson island", "indiantown", "rio", "sewall"],
-                "st_lucie": ["st. lucie", "st lucie", "port st. lucie", "port st lucie",
-                             "fort pierce", "st. lucie west"],
-                "indian_river": ["indian river", "vero beach", "sebastian", "fellsmere"],
-            }
-            for _ckey, _places in _county_places.items():
-                if any(p in _htext for p in _places):
-                    _county_card = dict(backfill_card)
-                    _county_card["cat_key"]   = _ckey
-                    _county_card["cat_label"] = CATEGORIES[_ckey]["label"]
-                    enriched_pool.append(_county_card)
+        # Secondary county memberships remain on this one canonical card.
+        _apply_category_memberships(backfill_card, _bf_ckey, e.get("category_keys") or [])
 
     enriched_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
     topnews     = global_rank(enriched_pool, dedupe_against=top_cat["hero"].get("headline", ""))
@@ -5366,6 +5721,8 @@ def render_index(all_categories, top_cat):
             cards_html += support_card
         ck        = card.get("cat_key", "all")
         cl        = card.get("cat_label", "")
+        category_keys = _apply_category_memberships(card, ck)
+        data_cats = " ".join(category_keys)
         card_time = card_display_date(card)
         _restore_archive_source_image(card, archive_for_links)
         img_url   = card.get("image_url", "")
@@ -5391,7 +5748,7 @@ def render_index(all_categories, top_cat):
         _urgency_text = f"{cl} {card.get('headline','')}".strip().lower()
         urgency_cls = " live" if _urgency_text.startswith("live") else (" developing" if _urgency_text.startswith("developing") else (" breaking" if card.get("is_breaking") or _urgency_text.startswith("breaking") else ""))
         cards_html += f"""
-      <a href="{permalink}" class="grid-card fade-in" data-cat="{ck}"{topnews_attr}>
+      <a href="{permalink}" class="grid-card fade-in" data-cat="{ck}" data-cats="{data_cats}"{topnews_attr}>
         <div class="grid-card-image-wrap">
           <img class="grid-card-image" src="{img_url}" alt="" loading="lazy">
         </div>
@@ -5419,14 +5776,17 @@ def render_index(all_categories, top_cat):
     older_by_cat = {}
     for e in older_archive:
         hl = (e.get("headline", "") or "").strip()
-        ckey = e.get("category_key", "")
-        if not hl or not ckey or hl.lower() in current_headlines:
+        category_keys = _item_category_memberships(e, e.get("category_key", ""))
+        if not hl or not category_keys or hl.lower() in current_headlines:
             continue
         if not _archive_entry_publishable(e):
             continue
-        older_by_cat.setdefault(ckey, [])
-        if len(older_by_cat[ckey]) < 10:
-            older_by_cat[ckey].append(e)
+        for ckey in category_keys:
+            older_by_cat.setdefault(ckey, [])
+            if len(older_by_cat[ckey]) < 10 and not any(
+                prior.get("slug") == e.get("slug") for prior in older_by_cat[ckey]
+            ):
+                older_by_cat[ckey].append(e)
 
     older_sections_html = ""
     # Build an "More Stories" section for every category that has archived stories,
@@ -5495,7 +5855,9 @@ def render_index(all_categories, top_cat):
         ("st_lucie", "St. Lucie County", "Port St. Lucie · Fort Pierce"),
         ("indian_river", "Indian River County", "Vero Beach · Sebastian · Fellsmere"),
     ]:
-        _county_cards = [c for c in all_cards_display if c.get("cat_key") == _county_key][:3]
+        _county_cards = [
+            c for c in all_cards_display if _category_membership_contains(c, _county_key)
+        ][:3]
         if not _county_cards:
             continue
         _county_items = ""
@@ -12291,6 +12653,7 @@ def write_archives(all_categories, top_cat):
         _item["_is_hero_copy"] = True
 
     _best_by_slug = {}
+    _memberships_by_slug = defaultdict(set)
     _publication_items_coalesced = 0
     for entry in all_articles:
         _item = entry[2]
@@ -12300,13 +12663,21 @@ def write_archives(all_categories, top_cat):
         k = _publication_coalesce_key(_item, _publication_identity)
         if not k:
             continue
+        _memberships_by_slug[k].update(
+            _item_category_memberships(_item, entry[0])
+        )
         if k in _best_by_slug:
             _publication_items_coalesced += 1
         if k not in _best_by_slug or _publication_copy_rank(entry) > _publication_copy_rank(_best_by_slug[k]):
             _best_by_slug[k] = entry
+    for _coalesce_key, _entry in _best_by_slug.items():
+        _apply_category_memberships(
+            _entry[2], _entry[0], _memberships_by_slug.get(_coalesce_key, set())
+        )
     all_articles = list(_best_by_slug.values())
 
     for cat_key, cat_label, hero in all_articles:
+        _apply_category_memberships(hero, cat_key)
         # Archive recovery items already have permanent article pages. They are reused
         # for section continuity only and must not rewrite/degrade those pages from a
         # short archive teaser.
@@ -12482,6 +12853,7 @@ def write_archives(all_categories, top_cat):
             existing["headline"]  = headline
             existing["teaser"]    = hero.get("teaser","") or hero.get("body","")[:180]
             existing["image_url"] = hero.get("image_url","")
+            _merge_category_memberships(existing, hero, existing.get("category_key") or cat_key)
             existing["article_word_count"] = _word_count(hero.get("body", ""))
             existing["article_paragraph_count"] = _paragraph_count(hero.get("body", ""))
             if hero.get("event_url"):
@@ -12562,6 +12934,8 @@ def write_archives(all_categories, top_cat):
                 "slug": slug, "headline": headline,
                 "teaser": hero.get("teaser","") or hero.get("body","")[:180],
                 "category_key": cat_key, "category_label": cat_label,
+                "category_keys": _item_category_memberships(hero, cat_key),
+                "county_keys": [key for key in _item_category_memberships(hero, cat_key) if key in COUNTY_KEYS],
                 "date": today, "lastmod": today,
                 # Full timestamp of when WE first published this, in Eastern time,
                 # RFC-822. This is what the RSS feed uses for pubDate so Nextdoor and
@@ -12679,6 +13053,9 @@ def write_archives(all_categories, top_cat):
     )
     archive, _archive_identity_backfill = _backfill_archive_editorial_story_ids(
         archive, _publication_identity, OUTPUT_DIR
+    )
+    archive, _category_membership_report = _backfill_archive_category_memberships(
+        archive, OUTPUT_DIR
     )
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
     _forward_identity_report.update({
@@ -13177,7 +13554,7 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             # County archive recovery never trusts the old category_key by itself.
             # That old label may be exactly how a bad Stuart/Sebastian match entered.
             return _county_locality_evidence(category_key, probe)
-        return e.get("category_key") == category_key
+        return _category_membership_contains(e, category_key)
 
     def archived_story(e, category_key):
         label = CATEGORIES[category_key]["label"]
@@ -13201,6 +13578,8 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             "source_quality": "archive",
             "category_key": category_key,
             "category_label": label,
+            "category_keys": _item_category_memberships(e, category_key),
+            "county_keys": list(e.get("county_keys") or []),
             "link": f"{SITE_URL}/articles/{e['slug']}.html",
             "_archived_slug": e["slug"],
             "_archive_only": True,
@@ -14522,6 +14901,7 @@ def main():
     validate_nonstory_publication_contract(all_categories, top_cat, OUTPUT_DIR)
 
     # Save only after the normal production build has completed.
+    write_trusted_source_recovery_report()
     _save_editorial_engine_audit(editorial_engine, editorial_audit_rows)
     _write_editorial_observability(
         editorial_engine, editorial_audit_rows, editorial_activation_run,
