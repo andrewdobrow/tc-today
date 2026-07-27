@@ -51,6 +51,12 @@ class EditorialPipelineResult:
     relationship_confidence: float = 0.0
     relationship_reason: str = ""
     decision_trace: tuple[str, ...] = ()
+    follow_up_candidate_story_id: str = ""
+    follow_up_candidate_confidence: float = 0.0
+    follow_up_candidate_milestones: tuple[str, ...] = ()
+    follow_up_candidate_reason_codes: tuple[str, ...] = ()
+    follow_up_candidate_trace: tuple[str, ...] = ()
+    follow_up_candidate_mode: str = "observe_only"
 
 
 class EditorialPipeline:
@@ -167,6 +173,12 @@ class EditorialPipeline:
                 relationship_confidence=float(relationship_decision.get("confidence", 0.0) or 0.0),
                 relationship_reason=str(relationship_decision.get("reason", "")),
                 decision_trace=tuple(relationship_decision.get("decision_trace", ()) or ()),
+                follow_up_candidate_story_id=str(relationship_decision.get("follow_up_candidate_story_id", "")),
+                follow_up_candidate_confidence=float(relationship_decision.get("follow_up_candidate_confidence", 0.0) or 0.0),
+                follow_up_candidate_milestones=tuple(relationship_decision.get("follow_up_candidate_milestones", ()) or ()),
+                follow_up_candidate_reason_codes=tuple(relationship_decision.get("follow_up_candidate_reason_codes", ()) or ()),
+                follow_up_candidate_trace=tuple(relationship_decision.get("follow_up_candidate_trace", ()) or ()),
+                follow_up_candidate_mode=str(relationship_decision.get("follow_up_candidate_mode", "observe_only")),
             )
 
         update = evaluate_story_update(
@@ -217,6 +229,12 @@ class EditorialPipeline:
             relationship_confidence=float(relationship_decision.get("confidence", 0.0) or 0.0),
             relationship_reason=str(relationship_decision.get("reason", "")),
             decision_trace=tuple(relationship_decision.get("decision_trace", ()) or ()),
+            follow_up_candidate_story_id=str(relationship_decision.get("follow_up_candidate_story_id", "")),
+            follow_up_candidate_confidence=float(relationship_decision.get("follow_up_candidate_confidence", 0.0) or 0.0),
+            follow_up_candidate_milestones=tuple(relationship_decision.get("follow_up_candidate_milestones", ()) or ()),
+            follow_up_candidate_reason_codes=tuple(relationship_decision.get("follow_up_candidate_reason_codes", ()) or ()),
+            follow_up_candidate_trace=tuple(relationship_decision.get("follow_up_candidate_trace", ()) or ()),
+            follow_up_candidate_mode=str(relationship_decision.get("follow_up_candidate_mode", "observe_only")),
         )
 
     def get_event(self, event_key: str):

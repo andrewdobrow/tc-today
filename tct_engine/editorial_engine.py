@@ -45,6 +45,12 @@ class EditorialEngineResult:
     relationship_confidence: float = 0.0
     relationship_reason: str = ""
     decision_trace: tuple[str, ...] = ()
+    follow_up_candidate_story_id: str = ""
+    follow_up_candidate_confidence: float = 0.0
+    follow_up_candidate_milestones: tuple[str, ...] = ()
+    follow_up_candidate_reason_codes: tuple[str, ...] = ()
+    follow_up_candidate_trace: tuple[str, ...] = ()
+    follow_up_candidate_mode: str = "observe_only"
     canonical_is_custom: bool = False
     canonical_title: str = ""
     canonical_source: str = ""
@@ -226,6 +232,12 @@ class EditorialEngine:
             relationship_confidence=pipeline_result.relationship_confidence,
             relationship_reason=pipeline_result.relationship_reason,
             decision_trace=pipeline_result.decision_trace,
+            follow_up_candidate_story_id=pipeline_result.follow_up_candidate_story_id,
+            follow_up_candidate_confidence=pipeline_result.follow_up_candidate_confidence,
+            follow_up_candidate_milestones=pipeline_result.follow_up_candidate_milestones,
+            follow_up_candidate_reason_codes=pipeline_result.follow_up_candidate_reason_codes,
+            follow_up_candidate_trace=pipeline_result.follow_up_candidate_trace,
+            follow_up_candidate_mode=pipeline_result.follow_up_candidate_mode,
             canonical_is_custom=bool(canonical.canonical.is_custom),
             canonical_title=canonical.canonical.title,
             canonical_source=canonical.canonical.source,

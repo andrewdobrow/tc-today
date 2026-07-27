@@ -23,6 +23,15 @@ _FOLLOW_UP_MILESTONES = {
     "release": {"released", "discharged", "returns", "returned"},
     "resolution": {"contained", "resolved", "cleared", "reopened"},
 }
+_ADVISORY_FOLLOW_UP_MILESTONES = {
+    **_FOLLOW_UP_MILESTONES,
+    "approval": {"approve", "approved", "approves", "adopt", "adopted", "adopts", "passed"},
+    "rejection": {"reject", "rejected", "rejects", "deny", "denied", "denies", "veto", "vetoed"},
+    "opening": {"opens", "opened", "launch", "launched", "launches", "groundbreaking", "breaks"},
+    "closure": {"closes", "closed", "cancel", "canceled", "cancelled", "ends", "ending"},
+    "election_result": {"elected", "wins", "won", "winner"},
+    "funding": {"awarded", "funded", "funding", "grant"},
+}
 _CASUALTY_WORDS = {"injured", "killed", "dead", "fatalities", "victims", "hurt"}
 
 
@@ -45,7 +54,7 @@ def _overlap(left: set[str], right: set[str]) -> float:
     return len(left & right) / min(len(left), len(right)) if left and right else 0.0
 
 
-def _milestones(*values: object) -> set[str]:
+def _milestones_for(mapping: Mapping[str, set[str]], *values: object) -> set[str]:
     tokens: set[str] = set()
     for value in values:
         if isinstance(value, (list, tuple, set, frozenset)):
@@ -55,9 +64,17 @@ def _milestones(*values: object) -> set[str]:
             tokens |= _tokens(value)
     return {
         milestone
-        for milestone, markers in _FOLLOW_UP_MILESTONES.items()
+        for milestone, markers in mapping.items()
         if tokens & markers
     }
+
+
+def _milestones(*values: object) -> set[str]:
+    return _milestones_for(_FOLLOW_UP_MILESTONES, *values)
+
+
+def _advisory_milestones(*values: object) -> set[str]:
+    return _milestones_for(_ADVISORY_FOLLOW_UP_MILESTONES, *values)
 
 
 def _numeric_casualty_signatures(facts: Iterable[str]) -> set[tuple[str, str]]:
@@ -86,6 +103,11 @@ class StoryRelationship:
     confidence: float
     reason: str
     decision_trace: tuple[str, ...] = ()
+    candidate_story_id: str | None = None
+    candidate_confidence: float = 0.0
+    candidate_milestones: tuple[str, ...] = ()
+    candidate_reason_codes: tuple[str, ...] = ()
+    candidate_trace: tuple[str, ...] = ()
 
     @property
     def attaches_to_story(self) -> bool:
@@ -123,8 +145,12 @@ class StoryRelationshipEngine:
         incoming_event_tokens = _tokens(event_key.replace("-", " "))
         incoming_casualties = _numeric_casualty_signatures(incoming["facts"])
         incoming_milestones = _milestones(title, incoming["facts"], event_key.replace("-", " "))
+        incoming_advisory_milestones = _advisory_milestones(
+            title, incoming["facts"], event_key.replace("-", " ")
+        )
 
         best: StoryRelationship | None = None
+        best_advisory: StoryRelationship | None = None
 
         for story in stories:
             if story.get("status") == "archived":
@@ -141,12 +167,26 @@ class StoryRelationshipEngine:
                 "entities": _set(story.get("entities", ())),
             }
 
-            # Concrete contradictions always win over similarity.
-            if incoming["locations"] and known["locations"] and not incoming["locations"] & known["locations"]:
-                continue
-            if incoming["agencies"] and known["agencies"] and not incoming["agencies"] & known["agencies"]:
-                continue
-            if incoming["types"] and known["types"] and not incoming["types"] & known["types"]:
+            # Location and casualty contradictions remain hard stops. Agency and
+            # event-type conflicts still block live grouping, but are retained as
+            # observe-only diagnostics because legitimate follow-ups often move from
+            # one agency or lifecycle label to another (for example, rescue -> arrest).
+            location_conflict = bool(
+                incoming["locations"]
+                and known["locations"]
+                and not incoming["locations"] & known["locations"]
+            )
+            agency_conflict = bool(
+                incoming["agencies"]
+                and known["agencies"]
+                and not incoming["agencies"] & known["agencies"]
+            )
+            type_conflict = bool(
+                incoming["types"]
+                and known["types"]
+                and not incoming["types"] & known["types"]
+            )
+            if location_conflict:
                 continue
 
             known_casualties = _numeric_casualty_signatures(known["facts"])
@@ -181,6 +221,15 @@ class StoryRelationshipEngine:
                 story.get("events", ()),
             )
             novel_milestones = incoming_milestones - known_milestones
+            known_advisory_milestones = _advisory_milestones(
+                story.get("canonical_title", ""),
+                story.get("titles", ()),
+                known["facts"],
+                story.get("events", ()),
+            )
+            novel_advisory_milestones = (
+                incoming_advisory_milestones - known_advisory_milestones
+            )
             novel_facts = incoming["facts"] - known["facts"]
             novel_fact_ratio = (
                 len(novel_facts) / len(incoming["facts"])
@@ -189,6 +238,90 @@ class StoryRelationshipEngine:
             )
             lifecycle_signal = bool(novel_milestones)
             distinct_event_signal = lifecycle_signal or novel_fact_ratio >= 0.34
+
+            # Produce an observe-only candidate even when the current conservative
+            # relationship contract refuses to attach it. This gives production
+            # observability real examples to review before broader follow-up rules
+            # are allowed to change story grouping.
+            exact_event_anchor = event_key in {
+                str(value or "").strip() for value in story.get("events", ())
+            }
+            continuity_anchor = (agency_match or entity_match) and (
+                location_match or type_match
+            ) and (title_score >= 0.35 or fact_score >= 0.35)
+            advisory_eligible = bool(novel_advisory_milestones) and (
+                exact_event_anchor or continuity_anchor
+            )
+            if advisory_eligible:
+                advisory_confidence = min(
+                    1.0,
+                    0.38
+                    + 0.28 * float(exact_event_anchor)
+                    + 0.10 * float(location_match)
+                    + 0.10 * float(agency_match)
+                    + 0.08 * float(type_match)
+                    + 0.12 * float(entity_match)
+                    + 0.10 * min(1.0, title_score)
+                    + 0.10 * min(1.0, fact_score)
+                    - 0.08 * float(agency_conflict)
+                    - 0.06 * float(type_conflict),
+                )
+                reason_codes = ["novel_milestone"]
+                if exact_event_anchor:
+                    reason_codes.append("exact_event_key")
+                if location_match:
+                    reason_codes.append("location_match")
+                if agency_match:
+                    reason_codes.append("agency_match")
+                if type_match:
+                    reason_codes.append("event_type_match")
+                if entity_match:
+                    reason_codes.append("entity_match")
+                if title_score >= 0.35:
+                    reason_codes.append("title_continuity")
+                if fact_score >= 0.35:
+                    reason_codes.append("fact_continuity")
+                if agency_conflict:
+                    reason_codes.append("agency_conflict")
+                if type_conflict:
+                    reason_codes.append("event_type_conflict")
+                advisory_trace = (
+                    "Follow-up candidate mode: observe_only",
+                    f"Candidate story: {story_id}",
+                    f"Novel milestones: {', '.join(sorted(novel_advisory_milestones))}",
+                    f"Exact event-key anchor: {exact_event_anchor}",
+                    f"Facts overlap: {fact_score:.2f}",
+                    f"Title overlap: {title_score:.2f}",
+                    f"Location match: {location_match}",
+                    f"Agency match: {agency_match}",
+                    f"Event type match: {type_match}",
+                    f"Entity match: {entity_match}",
+                    f"Agency conflict: {agency_conflict}",
+                    f"Event type conflict: {type_conflict}",
+                    f"Candidate confidence: {advisory_confidence:.2f}",
+                )
+                advisory = StoryRelationship(
+                    StoryRelationshipType.NEW_STORY,
+                    None,
+                    0.0,
+                    "Created new story under the current conservative contract",
+                    ("Relationship: new_story",),
+                    candidate_story_id=story_id,
+                    candidate_confidence=advisory_confidence,
+                    candidate_milestones=tuple(sorted(novel_advisory_milestones)),
+                    candidate_reason_codes=tuple(reason_codes),
+                    candidate_trace=advisory_trace,
+                )
+                if (
+                    best_advisory is None
+                    or advisory.candidate_confidence > best_advisory.candidate_confidence
+                ):
+                    best_advisory = advisory
+
+            # Preserve current live grouping behavior for this release. Conflicting
+            # agencies or event types remain ineligible for an enforced follow-up.
+            if agency_conflict or type_conflict:
+                continue
 
             # Strong fact continuity plus concrete identity anchors is enough to
             # establish that a later event belongs to the same developing story.
@@ -277,12 +410,19 @@ class StoryRelationshipEngine:
                 confidence,
                 "Attached distinct event as a follow-up to an existing developing story",
                 trace,
+                candidate_story_id=story_id,
+                candidate_confidence=confidence,
+                candidate_milestones=tuple(sorted(novel_milestones)),
+                candidate_reason_codes=("enforced_follow_up",),
+                candidate_trace=trace,
             )
             if best is None or candidate.confidence > best.confidence:
                 best = candidate
 
         if best is not None:
             return best
+        if best_advisory is not None:
+            return best_advisory
         return StoryRelationship(
             StoryRelationshipType.NEW_STORY,
             None,

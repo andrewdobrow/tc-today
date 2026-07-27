@@ -13,11 +13,11 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.11.4.9.3"
-ENGINE_RELEASE = "fallback-subject-and-source-image-protection"
-OBSERVABILITY_SCHEMA_VERSION = 11
+ENGINE_VERSION = "1.11.5.0"
+ENGINE_RELEASE = "follow-up-candidate-observability"
+OBSERVABILITY_SCHEMA_VERSION = 12
 RESOLVER_VERSION = "2.4"
-RELATIONSHIP_ENGINE_VERSION = "1.2"
+RELATIONSHIP_ENGINE_VERSION = "1.3"
 
 
 def _utc_now() -> str:
@@ -68,6 +68,12 @@ def build_editorial_observability(
     relationship_counts: Counter[str] = Counter()
     decision_trace_examples: list[dict[str, Any]] = []
     relationship_examples: list[dict[str, Any]] = []
+    follow_up_candidate_count = 0
+    high_confidence_follow_up_candidate_count = 0
+    follow_up_candidate_milestones: Counter[str] = Counter()
+    follow_up_candidate_current_relationships: Counter[str] = Counter()
+    follow_up_candidate_reason_codes: Counter[str] = Counter()
+    follow_up_candidate_examples: list[dict[str, Any]] = []
 
     has_current_relationships = any(bool(row.get("relationship")) for row in rows)
 
@@ -99,6 +105,38 @@ def build_editorial_observability(
                     "matched_existing": relationship in {"same_event", "follow_up"},
                     "reason": row.get("relationship_reason", ""),
                     "decision_trace": trace,
+                })
+
+        candidate_story_id = str(row.get("follow_up_candidate_story_id") or "").strip()
+        candidate_confidence = float(row.get("follow_up_candidate_confidence") or 0.0)
+        candidate_milestones = [
+            str(value).strip()
+            for value in (row.get("follow_up_candidate_milestones") or [])
+            if str(value).strip()
+        ]
+        candidate_reason_codes = [
+            str(value).strip()
+            for value in (row.get("follow_up_candidate_reason_codes") or [])
+            if str(value).strip()
+        ]
+        if candidate_story_id:
+            follow_up_candidate_count += 1
+            if candidate_confidence >= 0.75:
+                high_confidence_follow_up_candidate_count += 1
+            follow_up_candidate_current_relationships[relationship or "unknown"] += 1
+            follow_up_candidate_milestones.update(candidate_milestones)
+            follow_up_candidate_reason_codes.update(candidate_reason_codes)
+            if len(follow_up_candidate_examples) < 25:
+                follow_up_candidate_examples.append({
+                    "headline": row.get("headline", ""),
+                    "event_key": row.get("event_key", ""),
+                    "current_story_id": row.get("story_id", ""),
+                    "current_relationship": relationship or "unknown",
+                    "candidate_story_id": candidate_story_id,
+                    "candidate_confidence": round(candidate_confidence, 6),
+                    "candidate_milestones": candidate_milestones,
+                    "candidate_reason_codes": candidate_reason_codes,
+                    "candidate_trace": list(row.get("follow_up_candidate_trace") or []),
                 })
 
         if not bool(row.get("eligible", True)) and len(rejected_examples) < 20:
@@ -231,6 +269,23 @@ def build_editorial_observability(
             "counts": dict(sorted(relationship_counts.items())),
             "examples": relationship_examples,
             "decision_trace_examples": decision_trace_examples,
+        },
+        "follow_up_detection": {
+            "mode": "observe_only",
+            "publication_behavior_changed": False,
+            "candidate_count": follow_up_candidate_count,
+            "high_confidence_candidate_count": high_confidence_follow_up_candidate_count,
+            "current_relationships": dict(
+                sorted(follow_up_candidate_current_relationships.items())
+            ),
+            "milestones": dict(sorted(follow_up_candidate_milestones.items())),
+            "reason_codes": dict(sorted(follow_up_candidate_reason_codes.items())),
+            "examples": follow_up_candidate_examples,
+            "enforcement_ready": False,
+            "enforcement_readiness_reason": (
+                "Observe-only candidate evidence must be reviewed across production runs "
+                "before broader follow-up grouping is activated."
+            ),
         },
         "local_relevance": {
             "scopes": dict(sorted(locality_scopes.items())),

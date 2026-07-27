@@ -67,6 +67,32 @@ class StoryRegistry:
         ):
             self.save()
 
+    @staticmethod
+    def _follow_up_candidate_fields(relationship: StoryRelationship | None) -> dict[str, Any]:
+        if relationship is None or not relationship.candidate_story_id:
+            return {
+                "follow_up_candidate_story_id": "",
+                "follow_up_candidate_confidence": 0.0,
+                "follow_up_candidate_milestones": [],
+                "follow_up_candidate_reason_codes": [],
+                "follow_up_candidate_trace": [],
+                "follow_up_candidate_mode": "observe_only",
+            }
+        return {
+            "follow_up_candidate_story_id": str(relationship.candidate_story_id),
+            "follow_up_candidate_confidence": round(
+                float(relationship.candidate_confidence or 0.0), 6
+            ),
+            "follow_up_candidate_milestones": list(
+                relationship.candidate_milestones or ()
+            ),
+            "follow_up_candidate_reason_codes": list(
+                relationship.candidate_reason_codes or ()
+            ),
+            "follow_up_candidate_trace": list(relationship.candidate_trace or ()),
+            "follow_up_candidate_mode": "observe_only",
+        }
+
     def _empty(self) -> dict[str, Any]:
         return {
             "schema": self.SCHEMA_VERSION,
@@ -320,6 +346,7 @@ class StoryRegistry:
                 "matched_existing": True,
                 "story_id": story_id,
             }
+            self.last_decision.update(self._follow_up_candidate_fields(relationship))
             self._enrich_story(
                 story_id,
                 title=title,
@@ -355,7 +382,7 @@ class StoryRegistry:
                         "confidence": round(confidence, 6),
                         "reason": reason,
                         "decision_trace": trace,
-                        "relationship_engine_version": "1.2",
+                        "relationship_engine_version": "1.3",
                     }
                 )
             self.save()
@@ -407,6 +434,7 @@ class StoryRegistry:
                 "matched_existing": True,
                 "story_id": story_id,
             }
+            self.last_decision.update(self._follow_up_candidate_fields(None))
             self.save()
             return story_id
 
@@ -484,7 +512,7 @@ class StoryRegistry:
                         "confidence": round(confidence, 6),
                         "reason": reason,
                         "decision_trace": trace,
-                        "relationship_engine_version": "1.2",
+                        "relationship_engine_version": "1.3",
                     }
                 )
             self.last_decision = {
@@ -496,6 +524,7 @@ class StoryRegistry:
                 "matched_existing": True,
                 "story_id": story_id,
             }
+            self.last_decision.update(self._follow_up_candidate_fields(relationship))
             self.save()
             return story_id
 
@@ -585,7 +614,7 @@ class StoryRegistry:
                         "confidence": round(confidence, 6),
                         "reason": reason,
                         "decision_trace": trace,
-                        "relationship_engine_version": "1.2",
+                        "relationship_engine_version": "1.3",
                     }
                 )
             self.last_decision = {
@@ -597,6 +626,7 @@ class StoryRegistry:
                 "matched_existing": True,
                 "story_id": story_id,
             }
+            self.last_decision.update(self._follow_up_candidate_fields(relationship))
             self.save()
             return story_id
 
@@ -628,6 +658,19 @@ class StoryRegistry:
         # high-confidence identity match. Previously the resolver won first,
         # causing the strongest follow-ups to be mislabeled as same_event.
         if is_sparse_event_key(event_key):
+            advisory_relationship = self._relationships.classify(
+                event_key=event_key,
+                title=title,
+                facts=facts,
+                locations=locations,
+                agencies=agencies,
+                event_types=event_types,
+                entities=entities,
+                stories=self.iter_stories(),
+            )
+            # Sparse keys remain prohibited from attaching in this release. Preserve
+            # only the observe-only candidate metadata so production can show which
+            # sparse new-story decisions may actually be follow-ups.
             relationship = StoryRelationship(
                 StoryRelationshipType.NEW_STORY,
                 None,
@@ -636,6 +679,25 @@ class StoryRegistry:
                 (
                     "Relationship: new_story",
                     "Sparse event-key relationship guard: true",
+                ),
+                candidate_story_id=(
+                    advisory_relationship.candidate_story_id
+                    or advisory_relationship.story_id
+                ),
+                candidate_confidence=(
+                    advisory_relationship.candidate_confidence
+                    or advisory_relationship.confidence
+                ),
+                candidate_milestones=advisory_relationship.candidate_milestones,
+                candidate_reason_codes=(
+                    advisory_relationship.candidate_reason_codes
+                    or (("would_be_enforced_follow_up",)
+                        if advisory_relationship.relationship is StoryRelationshipType.FOLLOW_UP
+                        else ())
+                ),
+                candidate_trace=(
+                    advisory_relationship.candidate_trace
+                    or advisory_relationship.decision_trace
                 ),
             )
         else:
@@ -699,6 +761,7 @@ class StoryRegistry:
             "matched_existing": matched_existing,
             "story_id": story_id,
         }
+        self.last_decision.update(self._follow_up_candidate_fields(relationship))
         story["resolution_history"].append(
             {
                 "event_key": event_key,
@@ -727,7 +790,7 @@ class StoryRegistry:
                     "confidence": round(selected_confidence, 6),
                     "reason": selected_reason,
                     "decision_trace": selected_trace,
-                    "relationship_engine_version": "1.2",
+                    "relationship_engine_version": "1.3",
                 }
             )
         self.save()
