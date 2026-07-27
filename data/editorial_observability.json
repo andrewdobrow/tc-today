@@ -2,12 +2,12 @@
   "schema_version": 13,
   "engine": {
     "name": "tct-editorial-engine",
-    "version": "1.11.6.1",
-    "release": "category-generation-failure-containment",
+    "version": "1.11.6.2",
+    "release": "homepage-permalink-uniqueness",
     "resolver_version": "2.4",
     "relationship_engine_version": "1.4"
   },
-  "generated_at": "2026-07-27T15:50:29Z",
+  "generated_at": "2026-07-27T17:57:16Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 0,
-    "placements_after": 0,
+    "placements_before": 4,
+    "placements_after": 4,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,35 +49,25 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 176,
+    "candidates_processed": 172,
     "routes": {
-      "generate_new": 54,
-      "skip": 121,
-      "update_existing": 1
+      "generate_new": 30,
+      "skip": 142
     },
     "eligibility": {
-      "listing": 9,
-      "low_value": 136,
-      "publishable": 31
+      "listing": 8,
+      "low_value": 135,
+      "publishable": 29
     },
     "source_classes": {
-      "aggregator": 145,
-      "local_news": 31
+      "aggregator": 143,
+      "local_news": 29
     },
-    "rejected_count": 9,
+    "rejected_count": 8,
     "rejected_examples": [
       {
         "headline": "10459 SE Terrapin Pl, Jupiter, FL 33469 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQeHNTUS13UDNBYzlXSXdUTVFCVDBCWWhmalkwSm9qbGtjcEVwekM4bU9SMVpTOFJ4aTBQME5fUk9mT2dCaVotR3Q0N2dVaC1ISU43SnM4S2t6RU4yMklyMTdnc3N3c0owZFBmdEZxcTdicWgyVWtPc0hoSjRRVmZSbHVRS0NhMEVPSjZzWmVHT3dxandHeFk4Ynpxa1pDbUo5c0E?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
-      },
-      {
-        "headline": "1258 SE McFarlane Ave, Port Saint Lucie, FL 34952 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPcXNyNGhEUnZOMUV4Q3A3cDM1YW9aTmZqNTRaUkJfNXVhS0g1RUduVnAyeUFad3dJV0l1RXZhdVhfWHMxcUswNV93aFNKcnZCeTFFbnNiRUFwdHM4VW9ObU4zVE1WVXpaM3MycEF2OXc4T3RNeHRFcTFnLW53THVYdTVNbDAwM1hPcHRKaUpkVGJuaWFQOWlTTWhqV3BLZw?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -130,8 +120,8 @@
         "source_class": "aggregator"
       },
       {
-        "headline": "9600 Crooked Stick Ln, Port Saint Lucie, FL 34986 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOMnRuLUpsZWlBNlBtd1FzLWxEMm8tZXZVZ0FSUXd6LTNqRzFIWTR0MXFCRzJkZTk2cDBBWUhCNThLRklZRXhXSlU0TDM4dWZDRDVuS2E4cnllTndNLURaZFhmaHoxeHltQnExZ01CcjhTNHdVYzlEVmxRQUxxX1k4Nzd5U0lfc1BIU25vcS1rbUVwdGRIakRrQm41R0FyZw?oc=5",
+        "headline": "1258 SE McFarlane Ave, Port Saint Lucie, FL 34952 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPcXNyNGhEUnZOMUV4Q3A3cDM1YW9aTmZqNTRaUkJfNXVhS0g1RUduVnAyeUFad3dJV0l1RXZhdVhfWHMxcUswNV93aFNKcnZCeTFFbnNiRUFwdHM4VW9ObU4zVE1WVXpaM3MycEF2OXc4T3RNeHRFcTFnLW53THVYdTVNbDAwM1hPcHRKaUpkVGJuaWFQOWlTTWhqV3BLZw?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -139,8 +129,8 @@
         "source_class": "aggregator"
       },
       {
-        "headline": "1864 Pelican Dr, Fort Pierce, FL 34982 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQWGpGdGEtWWpNQ0xBdVNJbnc0TVduaDFNNlhva0MtQjJiZkI1U0E5Z2dEaWQ2MVlnUF9EVDNMMUE2eWdBclludTFBRUg4NDYwc25tY3ZYbFVCaTk2WHJnQXNnTWxtRmtQOTRMVk5aUEo5dnZxZ2x5WktXZldlS3dsUkFUZ3Z3VjZVSnJLS25lLTdJcUxlOXZyYl9VeFh4NFp6UGVYMGRVX0ZuWElI?oc=5",
+        "headline": "9600 Crooked Stick Ln, Port Saint Lucie, FL 34986 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOMnRuLUpsZWlBNlBtd1FzLWxEMm8tZXZVZ0FSUXd6LTNqRzFIWTR0MXFCRzJkZTk2cDBBWUhCNThLRklZRXhXSlU0TDM4dWZDRDVuS2E4cnllTndNLURaZFhmaHoxeHltQnExZ01CcjhTNHdVYzlEVmxRQUxxX1k4Nzd5U0lfc1BIU25vcS1rbUVwdGRIakRrQm41R0FyZw?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -151,15 +141,14 @@
   },
   "relationships": {
     "counts": {
-      "follow_up": 1,
-      "new_story": 59,
-      "same_event": 116
+      "new_story": 38,
+      "same_event": 134
     },
     "examples": [
       {
-        "story_id": "story_000824",
-        "title": "TPS ends for Haitians and Syrians: What's next for Palm Beach County residents",
-        "event_key": "unknown-event-ff691f334e",
+        "story_id": "story_000874",
+        "title": "The Jellyfish Museum in Pompano Beach: Where ancient creatures reveal modern miracles",
+        "event_key": "unknown-event-348f37aac1",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -169,9 +158,49 @@
         ]
       },
       {
+        "story_id": "story_000875",
+        "title": "Florida politics recap: Governor's race heats up as property-tax fight heads to court",
+        "event_key": "unknown-event-52d34b669e",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000824",
+        "title": "TPS ends for Haitians and Syrians: What's next for Palm Beach County residents",
+        "event_key": "unknown-event-ff691f334e",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_000825",
         "title": "Do Florida public school still plan to start later? School starts soon - Tallahassee Democrat",
         "event_key": "unknown-event-602aba62f4",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_000876",
+        "title": "Do Florida public school still plan to start later? School starts soon - Palm Beach Daily News",
+        "event_key": "unknown-event-d8d3ec8ddf",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -184,39 +213,48 @@
         "story_id": "story_000549",
         "title": "Sebastian firefighter Geoffrey Lang dies at home after personal tragedy - Sebastian Daily",
         "event_key": "fire-sebastian",
-        "relationship": "follow_up",
-        "confidence": 0.922222,
-        "reason": "Attached distinct event as a follow-up to an existing developing story",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Relationship: follow_up",
-          "Facts overlap: 1.00",
-          "Location match: True",
-          "Agency match: False",
-          "Event type match: True",
-          "Entity match: True",
-          "Lifecycle signal: True",
-          "Novel milestones: death",
-          "Novel fact ratio: 0.00",
-          "Confidence: 0.92",
-          "Threshold: 0.68"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_000826",
         "title": "Free swim lessons make a splash in Belle Glade",
         "event_key": "unknown-event-675c4a7225",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_000827",
         "title": "Weekly Specials at Sebastian-Area Restaurants July 27 through Aug. 2 - Sebastian Daily",
         "event_key": "unknown-event-e0e059e5e7",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_000877",
+        "title": "SLO County school districts have seats up for grabs — but many have no candidates yet - Yahoo",
+        "event_key": "unknown-event-d262282238",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -229,24 +267,28 @@
         "story_id": "story_000828",
         "title": "Florida News That Impacts You – July 27th, 2026 - WJNO",
         "event_key": "unknown-event-7888c94877",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_000829",
         "title": "Puzzled by what's exempt during Florida school tax holiday? We have answers - Daytona Beach News-Journal",
         "event_key": "unknown-event-73041c9958",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -281,27 +323,6 @@
         "story_id": "story_000830",
         "title": "Port St. Lucie clears way for Tradition development - Hometown News Treasure Coast",
         "event_key": "unknown-event-96b71e8ad4",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
-        "story_id": "",
-        "title": "10459 SE Terrapin Pl, Jupiter, FL 33469 - Realtor.com",
-        "event_key": "",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "",
-        "decision_trace": []
-      },
-      {
-        "story_id": "story_000794",
-        "title": "When's the first day of school? We have dates for 28 districts, schools - AOL.com",
-        "event_key": "unknown-event-e57bdcd7b1",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -314,7 +335,7 @@
       },
       {
         "story_id": "",
-        "title": "1258 SE McFarlane Ave, Port Saint Lucie, FL 34952 - Realtor.com",
+        "title": "10459 SE Terrapin Pl, Jupiter, FL 33469 - Realtor.com",
         "event_key": "",
         "relationship": "new_story",
         "confidence": 0.0,
@@ -354,51 +375,23 @@
         "decision_trace": []
       },
       {
+        "story_id": "story_000760",
+        "title": "Greenacres' Astro Skate is home to some of the fastest roller speed skaters in the world",
+        "event_key": "unknown-event-7ebc199ddd",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_000465",
         "title": "When is the first day of school in Northwest Arkansas, River Valley in 2026? - AOL.com",
         "event_key": "unknown-event-ebc3b673dc",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000783",
-        "title": "Here's when every Ventura County district, college returns to school - AOL.com",
-        "event_key": "unknown-event-5dfa6a2774",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000695",
-        "title": "Missing 10-year-old safely located in Tennessee, West Palm Beach police say",
-        "event_key": "missing-person-ffed96853f",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000723",
-        "title": "Sacramento Democrats’ city council disrupted by anti-ICE Democrats - americanthinker.com",
-        "event_key": "unknown-event-7da0545e15",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -412,9 +405,9 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_000824",
-        "title": "TPS ends for Haitians and Syrians: What's next for Palm Beach County residents",
-        "event_key": "unknown-event-ff691f334e",
+        "story_id": "story_000874",
+        "title": "The Jellyfish Museum in Pompano Beach: Where ancient creatures reveal modern miracles",
+        "event_key": "unknown-event-348f37aac1",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -425,9 +418,52 @@
         ]
       },
       {
+        "story_id": "story_000875",
+        "title": "Florida politics recap: Governor's race heats up as property-tax fight heads to court",
+        "event_key": "unknown-event-52d34b669e",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000824",
+        "title": "TPS ends for Haitians and Syrians: What's next for Palm Beach County residents",
+        "event_key": "unknown-event-ff691f334e",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_000825",
         "title": "Do Florida public school still plan to start later? School starts soon - Tallahassee Democrat",
         "event_key": "unknown-event-602aba62f4",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_000876",
+        "title": "Do Florida public school still plan to start later? School starts soon - Palm Beach Daily News",
+        "event_key": "unknown-event-d8d3ec8ddf",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -441,41 +477,51 @@
         "story_id": "story_000549",
         "title": "Sebastian firefighter Geoffrey Lang dies at home after personal tragedy - Sebastian Daily",
         "event_key": "fire-sebastian",
-        "relationship": "follow_up",
-        "confidence": 0.922222,
+        "relationship": "same_event",
+        "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Attached distinct event as a follow-up to an existing developing story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Relationship: follow_up",
-          "Facts overlap: 1.00",
-          "Location match: True",
-          "Agency match: False",
-          "Event type match: True",
-          "Entity match: True",
-          "Lifecycle signal: True",
-          "Novel milestones: death",
-          "Novel fact ratio: 0.00",
-          "Confidence: 0.92",
-          "Threshold: 0.68"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_000826",
         "title": "Free swim lessons make a splash in Belle Glade",
         "event_key": "unknown-event-675c4a7225",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_000827",
         "title": "Weekly Specials at Sebastian-Area Restaurants July 27 through Aug. 2 - Sebastian Daily",
         "event_key": "unknown-event-e0e059e5e7",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_000877",
+        "title": "SLO County school districts have seats up for grabs — but many have no candidates yet - Yahoo",
+        "event_key": "unknown-event-d262282238",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -489,26 +535,30 @@
         "story_id": "story_000828",
         "title": "Florida News That Impacts You – July 27th, 2026 - WJNO",
         "event_key": "unknown-event-7888c94877",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_000829",
         "title": "Puzzled by what's exempt during Florida school tax holiday? We have answers - Daytona Beach News-Journal",
         "event_key": "unknown-event-73041c9958",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -545,19 +595,6 @@
         "story_id": "story_000830",
         "title": "Port St. Lucie clears way for Tradition development - Hometown News Treasure Coast",
         "event_key": "unknown-event-96b71e8ad4",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
-      },
-      {
-        "story_id": "story_000794",
-        "title": "When's the first day of school? We have dates for 28 districts, schools - AOL.com",
-        "event_key": "unknown-event-e57bdcd7b1",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -573,6 +610,21 @@
         "story_id": "story_000750",
         "title": "Indian River schools launching real-time 'Chipmunk' bus tracker for parents - cw34.com",
         "event_key": "unknown-event-00188553d9",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_000760",
+        "title": "Greenacres' Astro Skate is home to some of the fastest roller speed skaters in the world",
+        "event_key": "unknown-event-7ebc199ddd",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -630,21 +682,6 @@
         ]
       },
       {
-        "story_id": "story_000723",
-        "title": "Sacramento Democrats’ city council disrupted by anti-ICE Democrats - americanthinker.com",
-        "event_key": "unknown-event-7da0545e15",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
         "story_id": "story_000697",
         "title": "Indian River School District Adding Real-Time Bus Tracker to Parent App - Sebastian Daily",
         "event_key": "unknown-event-a60072b357",
@@ -658,179 +695,18 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_000698",
-        "title": "Jupiter couple sues Publix after frozen blueberries linked to E. coli outbreak sicken them",
-        "event_key": "unknown-event-b1b864a4b7",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000699",
-        "title": "Motorcyclist killed in crash with pickup truck on Southern Boulevard in West Palm Beach",
-        "event_key": "traffic-crash-e3a6953829",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000831",
-        "title": "Georgia Department of Corrections: Scams Targeting Families in Georgia - AllOnGeorgia",
-        "event_key": "unknown-event-cd8760597b",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
-        "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
-        ]
       }
     ]
   },
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 4,
-    "high_confidence_candidate_count": 4,
-    "current_relationships": {
-      "follow_up": 1,
-      "new_story": 3
-    },
-    "milestones": {
-      "arrest": 1,
-      "death": 1,
-      "recovery": 2
-    },
-    "reason_codes": {
-      "enforced_follow_up": 4
-    },
-    "examples": [
-      {
-        "headline": "Sebastian firefighter Geoffrey Lang dies at home after personal tragedy - Sebastian Daily",
-        "event_key": "fire-sebastian",
-        "current_story_id": "story_000549",
-        "current_relationship": "follow_up",
-        "candidate_story_id": "story_000549",
-        "candidate_confidence": 0.922222,
-        "candidate_milestones": [
-          "death"
-        ],
-        "candidate_reason_codes": [
-          "enforced_follow_up"
-        ],
-        "candidate_trace": [
-          "Relationship: follow_up",
-          "Facts overlap: 1.00",
-          "Location match: True",
-          "Agency match: False",
-          "Event type match: True",
-          "Entity match: True",
-          "Lifecycle signal: True",
-          "Novel milestones: death",
-          "Novel fact ratio: 0.00",
-          "Confidence: 0.92",
-          "Threshold: 0.68"
-        ]
-      },
-      {
-        "headline": "Dog missing for 5 years reunites with family after being found 600 miles away - WFLX",
-        "event_key": "missing-person-b3a9a5036a",
-        "current_story_id": "story_000838",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_000606",
-        "candidate_confidence": 0.883333,
-        "candidate_milestones": [
-          "recovery"
-        ],
-        "candidate_reason_codes": [
-          "enforced_follow_up"
-        ],
-        "candidate_trace": [
-          "Relationship: follow_up",
-          "Facts overlap: 1.00",
-          "Location match: False",
-          "Agency match: False",
-          "Event type match: True",
-          "Entity match: False",
-          "Lifecycle signal: True",
-          "Novel milestones: recovery",
-          "Novel fact ratio: 0.00",
-          "Confidence: 0.88",
-          "Threshold: 0.68"
-        ]
-      },
-      {
-        "headline": "Wife of Chiefs OC Eric Bieniemy shot near Washington DC; son in custody",
-        "event_key": "fire-60dc8be4ea",
-        "current_story_id": "story_000840",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_000546",
-        "candidate_confidence": 0.871111,
-        "candidate_milestones": [
-          "arrest"
-        ],
-        "candidate_reason_codes": [
-          "enforced_follow_up"
-        ],
-        "candidate_trace": [
-          "Relationship: follow_up",
-          "Facts overlap: 1.00",
-          "Location match: False",
-          "Agency match: False",
-          "Event type match: True",
-          "Entity match: False",
-          "Lifecycle signal: True",
-          "Novel milestones: arrest",
-          "Novel fact ratio: 0.50",
-          "Confidence: 0.87",
-          "Threshold: 0.68"
-        ]
-      },
-      {
-        "headline": "80 cats found in Florida home of mail carrier who collected strays along her route - AOL.com",
-        "event_key": "unknown-event-131f52a2cb",
-        "current_story_id": "story_000867",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_000471",
-        "candidate_confidence": 0.937619,
-        "candidate_milestones": [
-          "recovery"
-        ],
-        "candidate_reason_codes": [
-          "enforced_follow_up"
-        ],
-        "candidate_trace": [
-          "Relationship: follow_up",
-          "Facts overlap: 1.00",
-          "Location match: False",
-          "Agency match: False",
-          "Event type match: False",
-          "Entity match: False",
-          "Lifecycle signal: True",
-          "Novel milestones: recovery",
-          "Novel fact ratio: 0.00",
-          "Confidence: 0.94",
-          "Threshold: 0.68"
-        ]
-      }
-    ],
+    "candidate_count": 0,
+    "high_confidence_candidate_count": 0,
+    "current_relationships": {},
+    "milestones": {},
+    "reason_codes": {},
+    "examples": [],
     "retrospective_candidate_count": 4,
     "retrospective_high_confidence_candidate_count": 3,
     "retrospective_activation_eligible_candidate_count": 1,
@@ -1082,35 +958,35 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 174,
-      "treasure_coast_local": 123,
-      "treasure_coast_region": 76,
-      "unknown": 339
+      "florida": 182,
+      "treasure_coast_local": 128,
+      "treasure_coast_region": 77,
+      "unknown": 355
     },
-    "average_score": 59.96
+    "average_score": 59.8
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 174,
-      "treasure_coast_local": 123,
-      "treasure_coast_region": 76,
-      "unknown": 339
+      "florida": 182,
+      "treasure_coast_local": 128,
+      "treasure_coast_region": 77,
+      "unknown": 355
     },
-    "average_priority": 4.75
+    "average_priority": 4.64
   },
   "story_lifecycle": {
     "counts": {
-      "active": 250,
-      "developing": 49,
-      "ongoing": 413
+      "active": 280,
+      "developing": 46,
+      "ongoing": 416
     }
   },
   "registry_health": {
     "repair_version": 4,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 662,
-    "active_stories_after": 662,
+    "active_stories_before": 712,
+    "active_stories_after": 712,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -1126,20 +1002,20 @@
     "incident_identity_groups_resolved": 0,
     "incident_story_records_removed": 0,
     "remaining_incident_identity_groups": 0,
-    "generated_at": "2026-07-27T15:40:44Z",
+    "generated_at": "2026-07-27T17:43:42Z",
     "quarantined_story_records_retained": 8,
-    "active_story_count": 712
+    "active_story_count": 742
   },
   "stories": {
-    "total": 712,
+    "total": 742,
     "importance_levels": {
       "breaking": 0,
       "high": 16,
-      "normal": 121,
-      "low": 575,
+      "normal": 125,
+      "low": 601,
       "archived": 0
     },
-    "average_importance": 9.77,
+    "average_importance": 9.57,
     "top": [
       {
         "story_id": "story_000721",
@@ -1154,7 +1030,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 0.07
+          "age_hours": 2.15
         },
         "level": "high",
         "importance_reasons": [
@@ -1195,7 +1071,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-27T15:40:43.337919+00:00",
-          "hours_since_update": 0.07,
+          "hours_since_update": 2.15,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1213,7 +1089,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 19.14
+          "age_hours": 21.27
         },
         "level": "high",
         "importance_reasons": [
@@ -1249,7 +1125,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-26T20:40:28.231630+00:00",
-          "hours_since_update": 19.14,
+          "hours_since_update": 21.27,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1267,7 +1143,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 19.15
+          "age_hours": 21.26
         },
         "level": "high",
         "importance_reasons": [
@@ -1303,7 +1179,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-26T20:40:28.231630+00:00",
-          "hours_since_update": 19.15,
+          "hours_since_update": 21.26,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1321,7 +1197,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 10.25
+          "age_hours": 12.51
         },
         "level": "high",
         "importance_reasons": [
@@ -1357,7 +1233,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-27T05:25:57.652199+00:00",
-          "hours_since_update": 10.25,
+          "hours_since_update": 12.51,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1375,7 +1251,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 84.18
+          "age_hours": 86.23
         },
         "level": "high",
         "importance_reasons": [
@@ -1418,7 +1294,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-07-24T03:30:12.419544+00:00",
-          "hours_since_update": 84.18,
+          "hours_since_update": 86.23,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -1436,7 +1312,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 63.05
+          "age_hours": 65.1
         },
         "level": "high",
         "importance_reasons": [
@@ -1471,10 +1347,10 @@
         "relationship_decisions": 2,
         "canonical_source_candidates": 2,
         "lifecycle": {
-          "state": "ongoing",
-          "reason": "Story is older than 48 hours but remains within the active news window",
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-25T00:38:10.414050+00:00",
-          "hours_since_update": 63.05,
+          "hours_since_update": 65.1,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1492,7 +1368,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 36.45
+          "age_hours": 38.49
         },
         "level": "high",
         "importance_reasons": [
@@ -1528,7 +1404,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-26T03:14:09.762329+00:00",
-          "hours_since_update": 36.45,
+          "hours_since_update": 38.49,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1546,7 +1422,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.0,
           "source_trust": 50,
-          "age_hours": 104.01
+          "age_hours": 106.06
         },
         "level": "high",
         "importance_reasons": [
@@ -1589,7 +1465,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T07:40:14.261666+00:00",
-          "hours_since_update": 104.01,
+          "hours_since_update": 106.06,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1607,7 +1483,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 105.33
+          "age_hours": 107.37
         },
         "level": "high",
         "importance_reasons": [
@@ -1645,7 +1521,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-23T06:21:14.232627+00:00",
-          "hours_since_update": 105.33,
+          "hours_since_update": 107.37,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1663,7 +1539,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 0.14
+          "age_hours": 2.25
         },
         "level": "normal",
         "importance_reasons": [
@@ -1699,7 +1575,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-27T15:40:43.337919+00:00",
-          "hours_since_update": 0.14,
+          "hours_since_update": 2.25,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1717,7 +1593,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 63.09
+          "age_hours": 65.16
         },
         "level": "normal",
         "importance_reasons": [
@@ -1753,7 +1629,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-25T00:38:10.414050+00:00",
-          "hours_since_update": 63.09,
+          "hours_since_update": 65.16,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1771,7 +1647,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 19.03
+          "age_hours": 21.1
         },
         "level": "normal",
         "importance_reasons": [
@@ -1805,7 +1681,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-26T20:40:28.231630+00:00",
-          "hours_since_update": 19.03,
+          "hours_since_update": 21.1,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -1823,7 +1699,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 60.99
+          "age_hours": 63.04
         },
         "level": "normal",
         "importance_reasons": [
@@ -1861,63 +1737,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-25T02:41:20.731485+00:00",
-          "hours_since_update": 60.99,
+          "hours_since_update": 63.04,
           "event_count": 2,
           "timeline_entries": 2
-        }
-      },
-      {
-        "story_id": "story_000020",
-        "title": "Fired St. Lucie County firefighters speak to WPTV for first time, call bug zapper incident 'joking around'",
-        "score": 35,
-        "editorial_priority": 40,
-        "editorial_score": 40,
-        "score_breakdown": {
-          "score": 40,
-          "importance": 35,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 5.06
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 3,
-        "timeline_entries": 3,
-        "relationship_decisions": 2,
-        "canonical_source_candidates": 3,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-27T10:40:43.778348+00:00",
-          "hours_since_update": 5.06,
-          "event_count": 3,
-          "timeline_entries": 3
         }
       },
       {
@@ -1933,7 +1755,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 19.05
+          "age_hours": 21.13
         },
         "level": "normal",
         "importance_reasons": [
@@ -1973,9 +1795,63 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-26T20:40:28.231630+00:00",
-          "hours_since_update": 19.05,
+          "hours_since_update": 21.13,
           "event_count": 36,
           "timeline_entries": 35
+        }
+      },
+      {
+        "story_id": "story_000020",
+        "title": "Fired St. Lucie County firefighters speak to WPTV for first time, call bug zapper incident 'joking around'",
+        "score": 35,
+        "editorial_priority": 38,
+        "editorial_score": 38,
+        "score_breakdown": {
+          "score": 38,
+          "importance": 35,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 7.05
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 3,
+        "timeline_entries": 3,
+        "relationship_decisions": 2,
+        "canonical_source_candidates": 3,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-07-27T10:40:43.778348+00:00",
+          "hours_since_update": 7.05,
+          "event_count": 3,
+          "timeline_entries": 3
         }
       },
       {
@@ -1991,7 +1867,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 0.02
+          "age_hours": 2.09
         },
         "level": "normal",
         "importance_reasons": [
@@ -2020,7 +1896,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-27T15:40:43.337919+00:00",
-          "hours_since_update": 0.02,
+          "hours_since_update": 2.09,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2038,7 +1914,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 63.04
+          "age_hours": 65.09
         },
         "level": "normal",
         "importance_reasons": [
@@ -2067,7 +1943,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-25T00:38:10.414050+00:00",
-          "hours_since_update": 63.04,
+          "hours_since_update": 65.09,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2085,7 +1961,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 19.01
+          "age_hours": 21.06
         },
         "level": "normal",
         "importance_reasons": [
@@ -2119,7 +1995,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-26T20:40:28.231630+00:00",
-          "hours_since_update": 19.01,
+          "hours_since_update": 21.06,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2137,7 +2013,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 61.86
+          "age_hours": 63.91
         },
         "level": "normal",
         "importance_reasons": [
@@ -2170,7 +2046,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-25T01:48:58.139068+00:00",
-          "hours_since_update": 61.86,
+          "hours_since_update": 63.91,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2188,7 +2064,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 72.01
+          "age_hours": 74.05
         },
         "level": "normal",
         "importance_reasons": [
@@ -2219,7 +2095,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-24T15:40:29.610573+00:00",
-          "hours_since_update": 72.01,
+          "hours_since_update": 74.05,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2229,7 +2105,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 1,
-    "generated_at": "2026-07-27T15:50:00Z",
+    "generated_at": "2026-07-27T17:56:37Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -2244,213 +2120,179 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "generation_failed_archive_recovery": 6,
-        "no_publishable_sources": 3
+        "generated_live": 3,
+        "no_publishable_sources": 2,
+        "quality_gate_archive_recovery": 4
       },
       "failures": {
-        "generation_exception": 6
+        "publication_quality_rejected": 4
       },
-      "model_attempt_count": 12,
-      "model_elapsed_seconds": 2.315,
-      "archive_recovery_requested_count": 9
+      "model_attempt_count": 7,
+      "model_elapsed_seconds": 207.655,
+      "archive_recovery_requested_count": 6
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
-        "status": "generation_failed_archive_recovery",
-        "fetched_candidate_count": 24,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 5,
-        "selected_source_count": 5,
-        "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 2,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 0.148,
-            "result": "generation_exception",
-            "error_type": "BadRequestError",
-            "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 0.153,
-            "result": "generation_exception",
-            "error_type": "BadRequestError",
-            "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
-          }
-        ],
-        "model_elapsed_seconds": 0.302,
-        "failure_code": "generation_exception",
-        "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS",
-        "generation_status": "failed",
-        "budget_seconds": 180.0,
-        "elapsed_seconds": 64.592
-      },
-      {
-        "category_key": "crime",
-        "category_label": "Crime & Safety",
-        "status": "generation_failed_archive_recovery",
-        "fetched_candidate_count": 24,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 2,
-        "selected_source_count": 2,
-        "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 2,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 0.212,
-            "result": "generation_exception",
-            "error_type": "BadRequestError",
-            "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 0.165,
-            "result": "generation_exception",
-            "error_type": "BadRequestError",
-            "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
-          }
-        ],
-        "model_elapsed_seconds": 0.378,
-        "failure_code": "generation_exception",
-        "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS",
-        "generation_status": "failed",
-        "budget_seconds": 180.0,
-        "elapsed_seconds": 81.405
-      },
-      {
-        "category_key": "business",
-        "category_label": "Business & Development",
-        "status": "generation_failed_archive_recovery",
-        "fetched_candidate_count": 24,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 20,
-        "selected_source_count": 12,
-        "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 2,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 0.229,
-            "result": "generation_exception",
-            "error_type": "BadRequestError",
-            "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 0.179,
-            "result": "generation_exception",
-            "error_type": "BadRequestError",
-            "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
-          }
-        ],
-        "model_elapsed_seconds": 0.409,
-        "failure_code": "generation_exception",
-        "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS",
-        "generation_status": "failed",
-        "budget_seconds": 180.0,
-        "elapsed_seconds": 44.291
-      },
-      {
-        "category_key": "sports",
-        "category_label": "Sports",
-        "status": "generation_failed_archive_recovery",
+        "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
         "publishable_source_count": 6,
         "selected_source_count": 6,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 0.153,
-            "result": "generation_exception",
-            "error_type": "BadRequestError",
-            "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 0.165,
-            "result": "generation_exception",
-            "error_type": "BadRequestError",
-            "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
+            "elapsed_seconds": 43.086,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 0.318,
-        "failure_code": "generation_exception",
-        "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS",
-        "generation_status": "failed",
+        "model_elapsed_seconds": 43.086,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 71.588
+        "elapsed_seconds": 119.498
+      },
+      {
+        "category_key": "crime",
+        "category_label": "Crime & Safety",
+        "status": "quality_gate_archive_recovery",
+        "fetched_candidate_count": 24,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 4,
+        "selected_source_count": 4,
+        "cache_hit": false,
+        "archive_recovery_requested": true,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 5.069,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 5.069,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "elapsed_seconds": 70.707
+      },
+      {
+        "category_key": "business",
+        "category_label": "Business & Development",
+        "status": "generated_live",
+        "fetched_candidate_count": 24,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 16,
+        "selected_source_count": 11,
+        "cache_hit": false,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 59.013,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 59.013,
+        "failure_code": "",
+        "failure_summary": "",
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Treasure Coast single-family home prices rise after two-year decline",
+        "generated_card_count": 0,
+        "elapsed_seconds": 119.792
+      },
+      {
+        "category_key": "sports",
+        "category_label": "Sports",
+        "status": "quality_gate_archive_recovery",
+        "fetched_candidate_count": 24,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 6,
+        "selected_source_count": 6,
+        "cache_hit": false,
+        "archive_recovery_requested": true,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 65.834,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 65.834,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "elapsed_seconds": 138.496
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
-        "status": "generation_failed_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 7,
-        "selected_source_count": 7,
+        "publishable_source_count": 8,
+        "selected_source_count": 8,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 0.211,
-            "result": "generation_exception",
-            "error_type": "BadRequestError",
-            "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 0.343,
-            "result": "generation_exception",
-            "error_type": "BadRequestError",
-            "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
+            "elapsed_seconds": 9.445,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 0.554,
-        "failure_code": "generation_exception",
-        "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS",
-        "generation_status": "failed",
+        "model_elapsed_seconds": 9.445,
+        "failure_code": "",
+        "failure_summary": "",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 58.516
+        "live_hero_headline": "Big Taste of Martin County returns to Stuart in October to support youth mentoring programs",
+        "generated_card_count": 0,
+        "elapsed_seconds": 77.562
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
-        "status": "no_publishable_sources",
+        "status": "generated_live",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 0,
-        "selected_source_count": 0,
+        "publishable_source_count": 2,
+        "selected_source_count": 2,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 18.806,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 18.806,
         "failure_code": "",
         "failure_summary": "",
-        "elapsed_seconds": 94.101
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Florida governor's race heats up as Donalds challenges Jolly to debates, residency lawsuit threatens Fishback ballot spot",
+        "generated_card_count": 1,
+        "elapsed_seconds": 98.601
       },
       {
         "category_key": "martin",
@@ -2467,7 +2309,7 @@
         "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
-        "elapsed_seconds": 63.963
+        "elapsed_seconds": 57.818
       },
       {
         "category_key": "st_lucie",
@@ -2484,43 +2326,33 @@
         "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
-        "elapsed_seconds": 31.445
+        "elapsed_seconds": 30.221
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "generation_failed_archive_recovery",
+        "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 3,
-        "selected_source_count": 3,
+        "publishable_source_count": 5,
+        "selected_source_count": 5,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 0.233,
-            "result": "generation_exception",
-            "error_type": "BadRequestError",
-            "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 0.12,
-            "result": "generation_exception",
-            "error_type": "BadRequestError",
-            "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
+            "elapsed_seconds": 6.402,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 0.354,
-        "failure_code": "generation_exception",
-        "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS",
-        "generation_status": "failed",
+        "model_elapsed_seconds": 6.402,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 34.801
+        "elapsed_seconds": 44.771
       }
     ]
   }
