@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-27T10:51:36Z",
+  "generated_at": "2026-07-27T15:50:00Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,144 +15,196 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 1,
-      "generated_live": 1,
-      "missing_hero_archive_recovery": 2,
-      "no_publishable_sources": 3,
-      "quality_gate_archive_recovery": 2
+      "generation_failed_archive_recovery": 6,
+      "no_publishable_sources": 3
     },
     "failures": {
-      "missing_or_null_hero": 2,
-      "publication_quality_rejected": 2
+      "generation_exception": 6
     },
-    "model_attempt_count": 6,
-    "model_elapsed_seconds": 153.886,
-    "archive_recovery_requested_count": 7
+    "model_attempt_count": 12,
+    "model_elapsed_seconds": 2.315,
+    "archive_recovery_requested_count": 9
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "missing_hero_archive_recovery",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 3,
-      "selected_source_count": 3,
-      "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 5.465,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 5.465,
-      "failure_code": "missing_or_null_hero",
-      "failure_summary": "No usable hero remained after sanitization",
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "elapsed_seconds": 59.044
-    },
-    {
-      "category_key": "crime",
-      "category_label": "Crime & Safety",
-      "status": "missing_hero_archive_recovery",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 3,
-      "selected_source_count": 3,
-      "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 7.746,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 7.746,
-      "failure_code": "missing_or_null_hero",
-      "failure_summary": "No usable hero remained after sanitization",
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "elapsed_seconds": 69.365
-    },
-    {
-      "category_key": "business",
-      "category_label": "Business & Development",
-      "status": "generated_live",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 21,
-      "selected_source_count": 12,
-      "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 77.474,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 77.474,
-      "failure_code": "",
-      "failure_summary": "",
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Treasure Coast single-family home prices rise after two-year decline",
-      "generated_card_count": 3,
-      "elapsed_seconds": 130.259
-    },
-    {
-      "category_key": "sports",
-      "category_label": "Sports",
-      "status": "quality_gate_archive_recovery",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
       "publishable_source_count": 5,
       "selected_source_count": 5,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 55.594,
-          "result": "success"
+          "elapsed_seconds": 0.148,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.153,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
         }
       ],
-      "model_elapsed_seconds": 55.594,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
-      "generation_status": "success",
+      "model_elapsed_seconds": 0.302,
+      "failure_code": "generation_exception",
+      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 127.137
+      "elapsed_seconds": 64.592
+    },
+    {
+      "category_key": "crime",
+      "category_label": "Crime & Safety",
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 2,
+      "selected_source_count": 2,
+      "cache_hit": false,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.212,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.165,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
+        }
+      ],
+      "model_elapsed_seconds": 0.378,
+      "failure_code": "generation_exception",
+      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS",
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 81.405
+    },
+    {
+      "category_key": "business",
+      "category_label": "Business & Development",
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 20,
+      "selected_source_count": 12,
+      "cache_hit": false,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.229,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.179,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
+        }
+      ],
+      "model_elapsed_seconds": 0.409,
+      "failure_code": "generation_exception",
+      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS",
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 44.291
+    },
+    {
+      "category_key": "sports",
+      "category_label": "Sports",
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 6,
+      "selected_source_count": 6,
+      "cache_hit": false,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.153,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.165,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
+        }
+      ],
+      "model_elapsed_seconds": 0.318,
+      "failure_code": "generation_exception",
+      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS",
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 71.588
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
-      "status": "cache_hit",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 8,
-      "selected_source_count": 8,
-      "cache_hit": true,
-      "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "",
-      "failure_summary": "",
-      "live_hero_headline": "Big Taste of Martin County returns to Stuart in October to support youth mentoring",
-      "elapsed_seconds": 59.854
+      "publishable_source_count": 7,
+      "selected_source_count": 7,
+      "cache_hit": false,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.211,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.343,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
+        }
+      ],
+      "model_elapsed_seconds": 0.554,
+      "failure_code": "generation_exception",
+      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS",
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 58.516
     },
     {
       "category_key": "florida",
@@ -169,7 +221,7 @@
       "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
-      "elapsed_seconds": 74.966
+      "elapsed_seconds": 94.101
     },
     {
       "category_key": "martin",
@@ -186,7 +238,7 @@
       "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
-      "elapsed_seconds": 47.985
+      "elapsed_seconds": 63.963
     },
     {
       "category_key": "st_lucie",
@@ -203,12 +255,12 @@
       "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
-      "elapsed_seconds": 23.572
+      "elapsed_seconds": 31.445
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "quality_gate_archive_recovery",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
       "publishable_source_count": 3,
@@ -220,24 +272,26 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 5.91,
-          "result": "invalid_json",
-          "error_type": "ValueError",
-          "error_summary": "Model returned no JSON object (got 522 chars of non-JSON)"
+          "elapsed_seconds": 0.233,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
         },
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 1.697,
-          "result": "success"
+          "elapsed_seconds": 0.12,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS"
         }
       ],
-      "model_elapsed_seconds": 7.607,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
-      "generation_status": "success",
+      "model_elapsed_seconds": 0.354,
+      "failure_code": "generation_exception",
+      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CdS",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 44.979
+      "elapsed_seconds": 34.801
     }
   ]
 }
