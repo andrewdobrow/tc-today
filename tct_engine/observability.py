@@ -13,8 +13,8 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.11.4.6"
-ENGINE_RELEASE = "branded-og-fallbacks"
+ENGINE_VERSION = "1.11.4.8"
+ENGINE_RELEASE = "editorial-og-pool-rotation"
 OBSERVABILITY_SCHEMA_VERSION = 11
 RESOLVER_VERSION = "2.4"
 RELATIONSHIP_ENGINE_VERSION = "1.2"

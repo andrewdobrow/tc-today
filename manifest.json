@@ -1,71 +1,87 @@
 {
-  "release": "v1.11.2.3",
-  "name": "Custom queue fail-closed and two-article recovery",
-  "apply_over": [
-    "v1.11.2.1",
-    "v1.11.2.2"
-  ],
-  "fix_scope": [
-    "publish the hurricane guide and Port St. Lucie police facility article from one valid queue",
-    "fail package validation and generation on malformed custom queue JSON",
-    "retain the custom archive rebind guard from v1.11.2.2",
-    "trigger editorial tests when custom queue or retirement registry changes"
-  ],
+  "release": "v1.11.4.8",
+  "name": "Editorial OG Pool Rotation",
+  "base": "v1.11.4.7",
+  "package_type": "incremental-overlay",
+  "generated_at": "2026-07-26T23:37:26+00:00",
+  "engine_release": "editorial-og-pool-rotation",
+  "custom_articles_modified": false,
+  "image_contract": {
+    "usable_images": 55,
+    "active_pools": 20,
+    "topic_og_rotation_assets": 5,
+    "optimized_format": "webp",
+    "stable_per_story": true,
+    "sequential_per_pool": true,
+    "avoid_immediate_repeat": true,
+    "root_og_final_fallback": true
+  },
+  "validation": {
+    "package_validation": "passed: 29 modules, 98 public exports",
+    "ci_equivalent_tests": "336 passed",
+    "warnings": "17 existing datetime.utcnow deprecation warnings",
+    "github_actions": "not run"
+  },
   "files": [
     {
-      "path": "custom_articles.json",
-      "bytes": 17751,
-      "sha256": "9e5852a41bbcf4e70b90bb53783dec4b7d73743d8be7cb6cdd49d7a4f66502bd"
+      "path": "EDITORIAL_IMAGE_POOL.md",
+      "size_bytes": 4744,
+      "sha256": "7852e13516476f5684ae8aa8c488210dae11ce59bd0eea2e964956e272a30ddd"
     },
     {
-      "path": "data/custom-retirements.json",
-      "bytes": 550,
-      "sha256": "0637a2bd19b4d1c740fbd52550813ff2432a390f837bb69a054bcd8763b6e0ad"
+      "path": "PATCH_NOTES_v1.11.4.8.md",
+      "size_bytes": 1673,
+      "sha256": "7351f0289b63b5c59191b7bf6fa4ebc93aa433888f3b45d5c9698424881f5101"
+    },
+    {
+      "path": "data/editorial-image-library.json",
+      "size_bytes": 39504,
+      "sha256": "125432ccdcf859cddca29f83574c033fc046c72620edbae36de2983abf7a9621"
+    },
+    {
+      "path": "images/editorial/topics/business-development/og-business.webp",
+      "size_bytes": 50872,
+      "sha256": "b91bbf1888ff6de90c45410a9f16d650687e233775c88f713f5362b0c3829437"
+    },
+    {
+      "path": "images/editorial/topics/crime-public-safety/og-crime.webp",
+      "size_bytes": 46104,
+      "sha256": "97c413bf2d726b094d71a8392309050cc9651b9409a40b46e6ecc32dbab16421"
+    },
+    {
+      "path": "images/editorial/topics/local-government/og-local_gov.webp",
+      "size_bytes": 39424,
+      "sha256": "ca669dc955e7742b18aec1938e4d013cc1e738ee27fba53174218635a996c841"
+    },
+    {
+      "path": "images/editorial/topics/sports/og-sports.webp",
+      "size_bytes": 38264,
+      "sha256": "42f5c6251309d21a7ff37177afb49bbc01a23cddc4a4cff36131ba5d5e24b1ae"
+    },
+    {
+      "path": "images/editorial/topics/things-to-do/og-things_to_do.webp",
+      "size_bytes": 38696,
+      "sha256": "c1daef935f146cbd0239a1b01bd879e60399bde33b5db23b053619fdd77ea43c"
     },
     {
       "path": "scripts/generate.py",
-      "bytes": 631021,
-      "sha256": "c1db9fbeb9993fa559866c914a3ff6e7a6e929602867c018414ea048a00c1e5c"
-    },
-    {
-      "path": "scripts/validate_package.py",
-      "bytes": 4025,
-      "sha256": "c94cc86f68bd4fadb461ab75cfcdf11e880f2f2aabed12684d385bdc564b62f8"
+      "size_bytes": 677529,
+      "sha256": "ce6ea94e4820ba6ed292c81e6611ee69ee4052fb1056a135e552a2fbec0b967a"
     },
     {
       "path": "tct_engine/observability.py",
-      "bytes": 12341,
-      "sha256": "1d5119c2298aa837f1ac6937dcd432a2ec0db9e7d4826d454768a4785ddd2455"
+      "size_bytes": 12343,
+      "sha256": "3eca669ab942aec249c1ae6a81e427deb0f9206e43e1ef683adf56c6e22f0edc"
     },
     {
-      "path": "tests/test_custom_archive_recovery_write_through.py",
-      "bytes": 8278,
-      "sha256": "7a5bd44889bbf28bee0fcda1960a3b5c1703d8e474e754b71f063a2c5d94180d"
+      "path": "tests/test_branded_og_fallbacks.py",
+      "size_bytes": 1571,
+      "sha256": "93f60d94f679fb0dde25c18462a668f1575ad17ec6f307399e7a0164cf0bdf39"
     },
     {
-      "path": "tests/test_custom_exact_headline_and_product_guide.py",
-      "bytes": 8256,
-      "sha256": "a4af5106e7c907f428566e5d4fa29cb243bea3039d6bb2ad8287a2305d1bad18"
-    },
-    {
-      "path": "tests/test_custom_queue_fail_closed.py",
-      "bytes": 3345,
-      "sha256": "b505d1020fe40c6b7ecf7a695b2097c96e7461cc4ad7549af2da976e8c3ccbf0"
-    },
-    {
-      "path": ".github/workflows/test-editorial-engine.yml",
-      "bytes": 1335,
-      "sha256": "36c665f0396e91ec41cd8dcb203624a21fdd59e9cd0290836ef0bb7236635058"
-    },
-    {
-      "path": "PATCH_NOTES_v1.11.2.3.md",
-      "bytes": 2329,
-      "sha256": "0c486115e57011e5f09992236801a7f409c633c049291078f371259644fc4c05"
-    },
-    {
-      "path": "custom-queue-fail-closed-validation-v1.11.2.3.json",
-      "bytes": 909,
-      "sha256": "19db09b95cc5b45f7cc1f1de1bea57679556962af82bcc86977ae19b58dbf792"
+      "path": "tests/test_editorial_image_pool_rotation.py",
+      "size_bytes": 8539,
+      "sha256": "1444f8d1e690b012c2aa7933985fc3b1c77de37d8a7ae0e85a409a146ddf99de"
     }
   ]
 }

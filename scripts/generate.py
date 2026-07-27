@@ -544,11 +544,11 @@ def get_image_credit(source_url):
     return ""
 
 
-# Branded fallback graphics. These are intentionally non-photographic TCT assets,
-# so a missing source image never implies that an AI-generated or unrelated scene is
-# connected to the story. A real editorial photo pool can be inserted ahead of this
-# layer later without changing any of the existing call sites.
-FALLBACK_IMAGE_MAP = {
+# Editorial fallback image system. Real, reusable TCT images are selected before
+# branded OG graphics. Assignments are stable per story and rotate sequentially
+# through each folder so consecutive new stories do not repeatedly receive the
+# same image.
+BRANDED_FALLBACK_IMAGE_MAP = {
     "local_gov":    ["og-local_gov.png"],
     "crime":        ["og-crime.png"],
     "business":     ["og-business.png"],
@@ -560,24 +560,568 @@ FALLBACK_IMAGE_MAP = {
     "indian_river": ["og-indian_river.png"],
     "top_news":     ["og-image.png"],
 }
+# Compatibility alias for tests and older utility imports.
+FALLBACK_IMAGE_MAP = BRANDED_FALLBACK_IMAGE_MAP
 
-def get_fallback_image(category_key, headline="", sequential=False):
-    """Return the category's branded TCT fallback graphic.
+EDITORIAL_IMAGE_ROOT = OUTPUT_DIR / "images" / "editorial"
+EDITORIAL_IMAGE_ROTATION_PATH = OUTPUT_DIR / "data" / "editorial-image-rotation.json"
+EDITORIAL_IMAGE_REPORT_PATH = OUTPUT_DIR / "data" / "editorial-image-rotation-report.json"
+EDITORIAL_IMAGE_SCHEMA_VERSION = 1
+EDITORIAL_IMAGE_EXTENSIONS = {".webp", ".jpg", ".jpeg", ".png"}
+EDITORIAL_IMAGE_EXTENSION_PRIORITY = {".webp": 0, ".jpg": 1, ".jpeg": 2, ".png": 3}
+EDITORIAL_IMAGE_MAX_ASSIGNMENTS = 3000
 
-    ``headline`` and ``sequential`` remain in the signature for compatibility with
-    existing render paths. Branded fallbacks are deterministic and are not rotated.
-    No photo credit is returned because these assets are graphics, not photographs.
+EDITORIAL_CITY_PATTERNS = [
+    ("port-st-lucie", r"\bport st[.]?\s+lucie\b"),
+    ("fort-pierce", r"\bfort pierce\b"),
+    ("hobe-sound", r"\bhobe sound\b"),
+    ("jensen-beach", r"\bjensen beach\b"),
+    ("palm-city", r"\bpalm city\b"),
+    ("port-salerno", r"\bport salerno\b"),
+    ("vero-beach", r"\bvero beach\b"),
+    ("fellsmere", r"\bfellsmere\b"),
+    ("stuart", r"\bstuart\b"),
+    ("sebastian", r"\bsebastian\b"),
+]
+EDITORIAL_COUNTY_FOLDER = {
+    "martin": "counties/martin",
+    "st_lucie": "counties/st-lucie",
+    "indian_river": "counties/indian-river",
+}
+EDITORIAL_COUNTY_CITY_FOLDERS = {
+    "martin": [
+        "cities/stuart", "cities/jensen-beach", "cities/palm-city",
+        "cities/hobe-sound", "cities/port-salerno",
+    ],
+    "st_lucie": ["cities/port-st-lucie", "cities/fort-pierce"],
+    "indian_river": ["cities/vero-beach", "cities/sebastian", "cities/fellsmere"],
+}
+EDITORIAL_CATEGORY_TOPIC = {
+    "local_gov": "topics/local-government",
+    "crime": "topics/crime-public-safety",
+    "business": "topics/business-development",
+    "sports": "topics/sports",
+    "things_to_do": "topics/things-to-do",
+}
+EDITORIAL_TOPIC_RULES = [
+    ("topics/roads-transportation", re.compile(
+        r"\b(?:road|roads|traffic|crash|collision|bridge|highway|interstate|i-95|"
+        r"turnpike|lane|lanes|closure|closed|transportation|fdot|rail|airport)\b", re.I
+    )),
+    ("topics/weather-environment", re.compile(
+        r"\b(?:weather|storm|hurricane|tropical|flood|flooding|rain|wind|tornado|"
+        r"climate|environment|environmental|beach|ocean|lagoon|river|wildlife)\b", re.I
+    )),
+    ("topics/schools", re.compile(
+        r"\b(?:school|schools|student|students|teacher|teachers|classroom|education|"
+        r"district|campus|graduation|superintendent)\b", re.I
+    )),
+    ("topics/health", re.compile(
+        r"\b(?:health|hospital|medical|doctor|doctors|patient|patients|clinic|"
+        r"emergency room|disease|outbreak|public health)\b", re.I
+    )),
+    ("topics/crime-public-safety", re.compile(
+        r"\b(?:crime|police|sheriff|deputy|deputies|arrest|arrested|charged|shooting|"
+        r"homicide|murder|robbery|theft|fire rescue|firefighter|missing person)\b", re.I
+    )),
+    ("topics/sports", re.compile(
+        r"\b(?:sports|baseball|football|basketball|soccer|softball|golf|tennis|"
+        r"mets|cardinals|game|tournament|championship|athlete|athletics)\b", re.I
+    )),
+    ("topics/things-to-do", re.compile(
+        r"\b(?:festival|event|events|concert|show|fair|parade|museum|arts|art|"
+        r"entertainment|weekend|recreation|things to do)\b", re.I
+    )),
+    ("topics/business-development", re.compile(
+        r"\b(?:business|development|developer|construction|restaurant|store|opening|"
+        r"jobs|employer|real estate|housing|hotel|retail|commercial)\b", re.I
+    )),
+    ("topics/local-government", re.compile(
+        r"\b(?:government|commission|commissioner|council|mayor|budget|zoning|"
+        r"ordinance|city hall|county administration|election|tax|taxes)\b", re.I
+    )),
+]
+
+_EDITORIAL_IMAGE_LOCK = threading.RLock()
+_EDITORIAL_IMAGE_INVENTORY_CACHE = None
+_EDITORIAL_IMAGE_ROTATION_STATE = None
+_EDITORIAL_IMAGE_ROTATION_DIRTY = False
+_EDITORIAL_IMAGE_RUN_ASSIGNMENTS = []
+_EDITORIAL_IMAGE_LAST_SELECTION = {}
+
+
+def _editorial_image_inventory(refresh=False):
+    """Discover approved image files from ``images/editorial``.
+
+    Placeholder files, desktop metadata, and duplicate file stems are excluded.
+    Topic-level ``og-*`` graphics are approved rotation assets. When optimized WebP
+    and larger source formats share a stem, WebP is preferred deterministically.
     """
-    del headline, sequential
-    base_names = FALLBACK_IMAGE_MAP.get(category_key, FALLBACK_IMAGE_MAP["top_news"])
+    global _EDITORIAL_IMAGE_INVENTORY_CACHE
+    with _EDITORIAL_IMAGE_LOCK:
+        if _EDITORIAL_IMAGE_INVENTORY_CACHE is not None and not refresh:
+            return _EDITORIAL_IMAGE_INVENTORY_CACHE
+
+        grouped = defaultdict(list)
+        excluded = []
+        if EDITORIAL_IMAGE_ROOT.exists():
+            for path in sorted(EDITORIAL_IMAGE_ROOT.rglob("*"), key=lambda value: value.as_posix().lower()):
+                if not path.is_file():
+                    continue
+                rel = path.relative_to(EDITORIAL_IMAGE_ROOT)
+                suffix = path.suffix.lower()
+                if suffix not in EDITORIAL_IMAGE_EXTENSIONS:
+                    excluded.append({"path": rel.as_posix(), "reason": "non-image-or-placeholder"})
+                    continue
+                grouped[(rel.parent.as_posix(), path.stem.casefold())].append(path)
+
+        pools = defaultdict(list)
+        for (folder, _stem), candidates in sorted(grouped.items()):
+            candidates.sort(key=lambda path: (
+                EDITORIAL_IMAGE_EXTENSION_PRIORITY.get(path.suffix.lower(), 99),
+                path.name.casefold(),
+            ))
+            chosen = candidates[0]
+            for duplicate in candidates[1:]:
+                excluded.append({
+                    "path": duplicate.relative_to(EDITORIAL_IMAGE_ROOT).as_posix(),
+                    "reason": "duplicate-stem-alternate-format",
+                    "preferred": chosen.relative_to(EDITORIAL_IMAGE_ROOT).as_posix(),
+                })
+            rel = chosen.relative_to(EDITORIAL_IMAGE_ROOT).as_posix()
+            pools[folder].append(f"/images/editorial/{rel}")
+
+        normalized_pools = {
+            folder: sorted(images, key=lambda value: value.casefold())
+            for folder, images in sorted(pools.items())
+            if images
+        }
+        _EDITORIAL_IMAGE_INVENTORY_CACHE = {
+            "root": str(EDITORIAL_IMAGE_ROOT),
+            "pools": normalized_pools,
+            "image_count": sum(len(images) for images in normalized_pools.values()),
+            "excluded": sorted(excluded, key=lambda row: row.get("path", "").casefold()),
+        }
+        return _EDITORIAL_IMAGE_INVENTORY_CACHE
+
+
+def _round_robin_pool_images(folder_ids, pools):
+    """Combine folders while preserving each folder's own sequential order."""
+    folder_lists = [list(pools.get(folder, [])) for folder in folder_ids if pools.get(folder)]
+    if not folder_lists:
+        return []
+    combined = []
+    for index in range(max(len(images) for images in folder_lists)):
+        for images in folder_lists:
+            if index < len(images):
+                combined.append(images[index])
+    return combined
+
+
+def _fallback_story_blob(headline="", item=None):
+    item = item if isinstance(item, dict) else {}
+    return " ".join(filter(None, [
+        str(headline or ""),
+        str(item.get("headline") or item.get("title") or ""),
+        str(item.get("teaser") or item.get("summary") or ""),
+        str(item.get("body") or "")[:1600],
+        str(item.get("article_text") or "")[:1200],
+    ]))
+
+
+def _detect_editorial_city(text, category_key=""):
+    lower = str(text or "").lower()
+    for city, pattern in EDITORIAL_CITY_PATTERNS:
+        if not re.search(pattern, lower, re.I):
+            continue
+        # Stuart and Sebastian are also personal names. Require a county context or
+        # an explicit geographic phrase before treating them as city evidence.
+        if city == "stuart" and category_key != "martin":
+            if not re.search(
+                r"\b(?:in|near|downtown|city of|police in|officials in)\s+stuart\b|"
+                r"\bstuart,?\s+(?:florida|fla[.]?|fl)\b|\bstuart\s+(?:city|police|fire|road|bridge|business|restaurant|school)\b",
+                lower,
+            ):
+                continue
+        if city == "sebastian" and category_key != "indian_river":
+            if not re.search(
+                r"\b(?:in|near|downtown|city of|police in|officials in)\s+sebastian\b|"
+                r"\bsebastian,?\s+(?:florida|fla[.]?|fl)\b|\bsebastian\s+(?:city|police|river|inlet|road|business|restaurant|school)\b",
+                lower,
+            ):
+                continue
+        return city
+    return ""
+
+
+def _detect_editorial_topic(text):
+    for folder, pattern in EDITORIAL_TOPIC_RULES:
+        if pattern.search(str(text or "")):
+            return folder
+    return ""
+
+
+def _editorial_pool_for_story(category_key, headline="", item=None, inventory=None):
+    inventory = inventory or _editorial_image_inventory()
+    pools = inventory.get("pools", {})
+    text = _fallback_story_blob(headline, item)
+
+    city = _detect_editorial_city(text, category_key)
+    city_pool = f"cities/{city}" if city else ""
+    if city_pool and pools.get(city_pool):
+        return city_pool, list(pools[city_pool]), "exact-city"
+
+    detected_topic = _detect_editorial_topic(text)
+    # Strong topical sections retain their own visual language. Local government
+    # may yield to an unmistakable school, road, weather, or health subject.
+    if category_key in {"crime", "business", "sports", "things_to_do"}:
+        category_topic = EDITORIAL_CATEGORY_TOPIC.get(category_key, "")
+        if pools.get(category_topic):
+            return category_topic, list(pools[category_topic]), "category-topic"
+    elif category_key == "local_gov":
+        if detected_topic in {
+            "topics/schools", "topics/roads-transportation",
+            "topics/weather-environment", "topics/health",
+        } and pools.get(detected_topic):
+            return detected_topic, list(pools[detected_topic]), "specific-topic"
+        category_topic = EDITORIAL_CATEGORY_TOPIC.get(category_key, "")
+        if pools.get(category_topic):
+            return category_topic, list(pools[category_topic]), "category-topic"
+    elif detected_topic and pools.get(detected_topic):
+        return detected_topic, list(pools[detected_topic]), "detected-topic"
+
+    county_folder = EDITORIAL_COUNTY_FOLDER.get(category_key, "")
+    if county_folder and pools.get(county_folder):
+        return county_folder, list(pools[county_folder]), "county-folder"
+    if category_key in EDITORIAL_COUNTY_CITY_FOLDERS:
+        county_images = _round_robin_pool_images(
+            EDITORIAL_COUNTY_CITY_FOLDERS[category_key], pools
+        )
+        if county_images:
+            return f"county/{category_key}", county_images, "county-city-round-robin"
+
+    general_pool = "general/treasure-coast"
+    if pools.get(general_pool):
+        return general_pool, list(pools[general_pool]), "regional-general"
+    return "", [], "no-editorial-pool"
+
+
+def _fallback_story_key(category_key, headline="", item=None):
+    item = item if isinstance(item, dict) else {}
+    identity = ""
+    for key in (
+        "editorial_story_id", "_editorial_story_id", "_archived_slug", "slug",
+        "_current_custom_publication_slug", "source_url", "link",
+    ):
+        value = str(item.get(key) or "").strip()
+        if value:
+            identity = f"{key}:{value}"
+            break
+    if not identity:
+        normalized = re.sub(r"\s+", " ", str(headline or item.get("headline") or "").strip().lower())
+        identity = f"headline:{normalized}|category:{category_key}"
+    return hashlib.sha256(identity.encode("utf-8")).hexdigest()[:32]
+
+
+def _load_editorial_image_rotation_state():
+    global _EDITORIAL_IMAGE_ROTATION_STATE
+    with _EDITORIAL_IMAGE_LOCK:
+        if _EDITORIAL_IMAGE_ROTATION_STATE is not None:
+            return _EDITORIAL_IMAGE_ROTATION_STATE
+        payload = {}
+        if EDITORIAL_IMAGE_ROTATION_PATH.exists():
+            try:
+                payload = json.loads(EDITORIAL_IMAGE_ROTATION_PATH.read_text(encoding="utf-8"))
+            except Exception as exc:
+                print(f"  Editorial image rotation state reset after parse error: {exc}")
+                payload = {}
+        if not isinstance(payload, dict):
+            payload = {}
+        _EDITORIAL_IMAGE_ROTATION_STATE = {
+            "schema_version": EDITORIAL_IMAGE_SCHEMA_VERSION,
+            "pool_cursors": payload.get("pool_cursors") if isinstance(payload.get("pool_cursors"), dict) else {},
+            "pool_last_image": payload.get("pool_last_image") if isinstance(payload.get("pool_last_image"), dict) else {},
+            "global_last_image": str(payload.get("global_last_image") or ""),
+            "story_assignments": payload.get("story_assignments") if isinstance(payload.get("story_assignments"), dict) else {},
+        }
+        return _EDITORIAL_IMAGE_ROTATION_STATE
+
+
+def _editorial_image_file_exists(url):
+    raw = str(url or "").strip()
+    if not raw:
+        return False
+    path = urlsplit(raw).path if "://" in raw else raw
+    if not path.startswith("/images/editorial/"):
+        return False
+    return (OUTPUT_DIR / path.lstrip("/")).is_file()
+
+
+def _select_editorial_fallback(category_key, headline="", item=None, force_new=False, avoid_url=""):
+    global _EDITORIAL_IMAGE_ROTATION_DIRTY
+    inventory = _editorial_image_inventory()
+    pool_id, images, basis = _editorial_pool_for_story(
+        category_key, headline, item, inventory=inventory
+    )
+    if not images:
+        return None
+
+    state = _load_editorial_image_rotation_state()
+    story_key = _fallback_story_key(category_key, headline, item)
+    with _EDITORIAL_IMAGE_LOCK:
+        assignment = state["story_assignments"].get(story_key)
+        if not force_new and isinstance(assignment, dict):
+            assigned_url = str(assignment.get("image_url") or "")
+            if _editorial_image_file_exists(assigned_url):
+                selection = dict(assignment)
+                selection.update({"story_key": story_key, "reused": True})
+                _EDITORIAL_IMAGE_LAST_SELECTION[story_key] = selection
+                return selection
+
+        try:
+            cursor = int(state["pool_cursors"].get(pool_id, 0) or 0)
+        except Exception:
+            cursor = 0
+        index = cursor % len(images)
+        selected = images[index]
+        last_image = str(state["pool_last_image"].get(pool_id) or "")
+        global_last_image = str(state.get("global_last_image") or "")
+        avoid = str(avoid_url or "")
+        if len(images) > 1:
+            attempts = 0
+            while selected in {last_image, global_last_image, avoid} and attempts < len(images) - 1:
+                index = (index + 1) % len(images)
+                selected = images[index]
+                attempts += 1
+
+        state["pool_cursors"][pool_id] = index + 1
+        state["pool_last_image"][pool_id] = selected
+        state["global_last_image"] = selected
+        selection = {
+            "story_key": story_key,
+            "headline": str(headline or (item or {}).get("headline") or "")[:180],
+            "category_key": category_key,
+            "pool_id": pool_id,
+            "selection_basis": basis,
+            "image_url": f"{SITE_URL}{selected}",
+            "assigned_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "reused": False,
+        }
+        state["story_assignments"][story_key] = {
+            key: value for key, value in selection.items() if key != "reused"
+        }
+        _EDITORIAL_IMAGE_LAST_SELECTION[story_key] = selection
+        _EDITORIAL_IMAGE_RUN_ASSIGNMENTS.append(selection)
+        _EDITORIAL_IMAGE_ROTATION_DIRTY = True
+        return selection
+
+
+def _branded_fallback_image(category_key):
+    base_names = BRANDED_FALLBACK_IMAGE_MAP.get(
+        category_key, BRANDED_FALLBACK_IMAGE_MAP["top_news"]
+    )
     for base in base_names:
         if (OUTPUT_DIR / base).exists():
             return f"{SITE_URL}/{base}", ""
-
     generic = "og-image.png"
     if (OUTPUT_DIR / generic).exists():
         return f"{SITE_URL}/{generic}", ""
     return "", ""
+
+
+def get_fallback_image(category_key, headline="", sequential=False, item=None, force_new=False, avoid_url=""):
+    """Return a stable, sequentially rotated editorial fallback image.
+
+    The ``sequential`` argument remains for call-site compatibility; all new story
+    assignments now rotate sequentially by pool. Existing story assignments remain
+    stable across pages and workflow runs. Topic-level OG graphics participate in
+    their folder rotation; root OG graphics remain the final emergency fallback when
+    no eligible editorial pool exists.
+    """
+    del sequential
+    selection = _select_editorial_fallback(
+        category_key, headline, item=item, force_new=force_new, avoid_url=avoid_url
+    )
+    if selection:
+        return selection["image_url"], ""
+    return _branded_fallback_image(category_key)
+
+
+def _is_legacy_or_branded_fallback_image(url):
+    raw = str(url or "").strip()
+    if not raw:
+        return True
+    parsed = urlsplit(raw)
+    if parsed.netloc and "treasurecoast.today" not in parsed.netloc.lower():
+        return False
+    path = parsed.path.lower() if parsed.path else raw.lower()
+    if "/images/fallback/" in path:
+        return True
+    return bool(re.fullmatch(
+        r"/(?:og-(?:image|local_gov|crime|business|sports|things_to_do|florida|martin|st_lucie|indian_river)\.png)",
+        path,
+    ))
+
+
+def _replace_article_fallback_references(article_path, old_urls, new_url):
+    """Replace only known fallback image references in one existing article page."""
+    if not article_path.is_file() or not new_url:
+        return False
+    try:
+        html = article_path.read_text(encoding="utf-8")
+    except Exception:
+        return False
+    updated = html
+    for old in old_urls:
+        old = str(old or "").strip()
+        if not old:
+            continue
+        updated = updated.replace(old, new_url)
+        old_path = urlsplit(old).path if "://" in old else old
+        if old_path:
+            updated = updated.replace(old_path, urlsplit(new_url).path)
+    if updated == html:
+        return False
+    article_path.write_text(updated, encoding="utf-8")
+    return True
+
+
+def refresh_archive_editorial_fallbacks(output_root=None):
+    """Migrate old AI/branded fallbacks to the sequential editorial image pool.
+
+    Custom articles are excluded because their explicitly supplied imagery remains
+    authoritative. Existing real source images are also preserved. Archive metadata
+    and matching permanent article pages are updated together so cards and article
+    pages do not disagree about the selected fallback.
+    """
+    root = Path(output_root or OUTPUT_DIR)
+    archive_path = root / "archive.json"
+    archive = load_archive(archive_path)
+    if not isinstance(archive, list):
+        return {"updated": 0, "article_pages_updated": 0, "skipped_custom": 0}
+
+    updated_rows = []
+    article_pages_updated = 0
+    skipped_custom = 0
+    for entry in archive:
+        if not isinstance(entry, dict) or not entry.get("headline") or not entry.get("slug"):
+            continue
+        if entry.get("is_custom") or entry.get("authoritative_custom"):
+            skipped_custom += 1
+            continue
+        old_url = str(entry.get("image_url") or "").strip()
+        if old_url and not _is_legacy_or_branded_fallback_image(old_url):
+            continue
+        category_key = str(entry.get("category_key") or "top_news")
+        new_url, new_credit = get_fallback_image(
+            category_key, entry.get("headline", ""), item=entry
+        )
+        if not new_url or new_url == old_url:
+            continue
+
+        old_candidates = [
+            old_url,
+            f"{SITE_URL}/og-{category_key}.png",
+            f"{SITE_URL}/og-image.png",
+        ]
+        entry["image_url"] = new_url
+        entry["image_credit"] = new_credit
+        entry["image_source"] = "editorial_fallback"
+        entry["is_fallback_image"] = True
+        updated_rows.append({
+            "slug": entry.get("slug", ""),
+            "headline": entry.get("headline", ""),
+            "category_key": category_key,
+            "previous_image_url": old_url,
+            "image_url": new_url,
+        })
+        article_path = root / "articles" / f"{entry['slug']}.html"
+        if _replace_article_fallback_references(article_path, old_candidates, new_url):
+            article_pages_updated += 1
+
+    if updated_rows:
+        temporary = archive_path.with_suffix(".json.tmp")
+        temporary.write_text(json.dumps(archive, indent=2, ensure_ascii=False), encoding="utf-8")
+        temporary.replace(archive_path)
+
+    report = {
+        "schema_version": EDITORIAL_IMAGE_SCHEMA_VERSION,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "updated": len(updated_rows),
+        "article_pages_updated": article_pages_updated,
+        "skipped_custom": skipped_custom,
+        "updates": updated_rows,
+    }
+    report_path = root / "data" / "editorial-image-migration.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if updated_rows:
+        print(
+            "  Editorial fallback migration: "
+            f"{len(updated_rows)} archive record(s), "
+            f"{article_pages_updated} article page(s) updated"
+        )
+    return report
+
+def _save_editorial_image_rotation_state():
+    """Persist rotation only after all publication and presentation gates pass."""
+    global _EDITORIAL_IMAGE_ROTATION_DIRTY
+    state = _load_editorial_image_rotation_state()
+    assignments = state.get("story_assignments", {})
+    if len(assignments) > EDITORIAL_IMAGE_MAX_ASSIGNMENTS:
+        ordered = sorted(
+            assignments.items(),
+            key=lambda pair: str((pair[1] or {}).get("assigned_at") or ""),
+            reverse=True,
+        )[:EDITORIAL_IMAGE_MAX_ASSIGNMENTS]
+        state["story_assignments"] = dict(ordered)
+        _EDITORIAL_IMAGE_ROTATION_DIRTY = True
+
+    EDITORIAL_IMAGE_ROTATION_PATH.parent.mkdir(parents=True, exist_ok=True)
+    if _EDITORIAL_IMAGE_ROTATION_DIRTY or not EDITORIAL_IMAGE_ROTATION_PATH.exists():
+        payload = {
+            "schema_version": EDITORIAL_IMAGE_SCHEMA_VERSION,
+            "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "pool_cursors": state.get("pool_cursors", {}),
+            "pool_last_image": state.get("pool_last_image", {}),
+            "global_last_image": state.get("global_last_image", ""),
+            "story_assignments": state.get("story_assignments", {}),
+        }
+        temporary = EDITORIAL_IMAGE_ROTATION_PATH.with_suffix(".json.tmp")
+        temporary.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+        temporary.replace(EDITORIAL_IMAGE_ROTATION_PATH)
+        _EDITORIAL_IMAGE_ROTATION_DIRTY = False
+
+    inventory = _editorial_image_inventory()
+    pool_usage = defaultdict(int)
+    for row in _EDITORIAL_IMAGE_RUN_ASSIGNMENTS:
+        pool_usage[row.get("pool_id", "")] += 1
+    report = {
+        "schema_version": EDITORIAL_IMAGE_SCHEMA_VERSION,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "editorial_image_count": inventory.get("image_count", 0),
+        "pool_count": len(inventory.get("pools", {})),
+        "pools": {key: len(value) for key, value in inventory.get("pools", {}).items()},
+        "excluded": inventory.get("excluded", []),
+        "new_assignments_this_run": len(_EDITORIAL_IMAGE_RUN_ASSIGNMENTS),
+        "reused_story_assignments": max(
+            0, len(_EDITORIAL_IMAGE_LAST_SELECTION) - len(_EDITORIAL_IMAGE_RUN_ASSIGNMENTS)
+        ),
+        "pool_usage_this_run": dict(sorted(pool_usage.items())),
+        "assignments_this_run": _EDITORIAL_IMAGE_RUN_ASSIGNMENTS,
+        "persistent_assignment_count": len(state.get("story_assignments", {})),
+        "rotation_contract": "stable-per-story-sequential-per-folder-no-immediate-repeat",
+    }
+    EDITORIAL_IMAGE_REPORT_PATH.write_text(
+        json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+    print(
+        "  Editorial image rotation saved: "
+        f"{inventory.get('image_count', 0)} images across "
+        f"{len(inventory.get('pools', {}))} pools; "
+        f"{len(_EDITORIAL_IMAGE_RUN_ASSIGNMENTS)} new assignment(s)"
+    )
+    return report
 
 def upscale_image_url(url):
     """Upscale BBC CDN images by replacing the size segment with 1024."""
@@ -4174,11 +4718,11 @@ def render_index(all_categories, top_cat):
         cl        = card.get("cat_label", "")
         card_time = card_display_date(card)
         img_url   = card.get("image_url", "")
-        if not img_url:
-            fb_img, _ = get_fallback_image(ck, card.get("headline", ""), sequential=True)
+        if not img_url or (_is_legacy_or_branded_fallback_image(img_url) and not (card.get("is_custom") or card.get("authoritative_custom"))):
+            fb_img, _ = get_fallback_image(ck, card.get("headline", ""), sequential=True, item=card)
             # If the category graphic is unavailable, use the generic TCT graphic.
             if not fb_img:
-                fb_img, _ = get_fallback_image("top_news", card.get("headline", ""), sequential=True)
+                fb_img, _ = get_fallback_image("top_news", card.get("headline", ""), sequential=True, item=card)
             img_url = fb_img or f"{SITE_URL}/og-image.png"
         topnews_attr = ' data-topnews="true"' if id(card) in topnews_ids else ""
         _urgency_text = f"{cl} {card.get('headline','')}".strip().lower()
@@ -4296,8 +4840,8 @@ def render_index(all_categories, top_cat):
             if not _curl:
                 continue
             _cimg = _cc.get("image_url", "")
-            if not _cimg:
-                _cimg, _ = get_fallback_image(_county_key, _cc.get("headline", ""), sequential=True)
+            if not _cimg or (_is_legacy_or_branded_fallback_image(_cimg) and not (_cc.get("is_custom") or _cc.get("authoritative_custom"))):
+                _cimg, _ = get_fallback_image(_county_key, _cc.get("headline", ""), sequential=True, item=_cc)
             _county_items += f'''
               <a class="county-panel-story" href="{_curl}">
                 <img src="{_cimg}" alt="" loading="lazy">
@@ -5556,12 +6100,12 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
 
     img_html   = ""
     _art_img   = hero.get("image_url", "")
-    if not _art_img:
-        # No real image — use the branded category graphic so the page is not
-        # paired with an unrelated or synthetic photograph.
-        _fb, _ = get_fallback_image(category_key, hero.get("headline", ""))
+    if not _art_img or (_is_legacy_or_branded_fallback_image(_art_img) and not (hero.get("is_custom") or hero.get("authoritative_custom"))):
+        # No real source image — use the most specific reusable editorial photo,
+        # then fall back to the branded category graphic.
+        _fb, _ = get_fallback_image(category_key, hero.get("headline", ""), item=hero)
         if not _fb:
-            _fb, _ = get_fallback_image("top_news", hero.get("headline", ""))
+            _fb, _ = get_fallback_image("top_news", hero.get("headline", ""), item=hero)
         _art_img = _fb or f"{SITE_URL}/og-image.png"
     if _art_img:
         credit   = f'<figcaption class="img-credit">Photo: {hero["image_credit"]}</figcaption>' if hero.get("image_credit") else ""
@@ -11931,8 +12475,8 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             body = f"Read this {label.lower()} story from the Treasure Coast Today archive."
         image_url = e.get("image_url", "")
         image_credit = e.get("image_credit", "")
-        if not image_url:
-            image_url, image_credit = get_fallback_image(category_key, e.get("headline", ""))
+        if not image_url or (_is_legacy_or_branded_fallback_image(image_url) and not (e.get("is_custom") or e.get("authoritative_custom"))):
+            image_url, image_credit = get_fallback_image(category_key, e.get("headline", ""), item=e)
         return {
             "headline": e.get("headline", ""),
             "teaser": e.get("teaser", "") or body[:220],
@@ -12026,7 +12570,7 @@ def ensure_all_category_sections(all_categories, min_cards=6):
         # Absolute first-run safety. This should almost never be used once archive.json
         # contains stories, but it keeps the navigation and section structurally intact.
         if not category.get("hero"):
-            fallback_img, fallback_credit = get_fallback_image(category_key, config["label"])
+            fallback_img, fallback_credit = get_fallback_image(category_key, config["label"], item={"headline": config["label"]})
             category["hero"] = {
                 "headline": f"{config['label']} coverage",
                 "teaser": f"Browse Treasure Coast Today's latest {config['label'].lower()} reporting.",
@@ -12667,7 +13211,7 @@ def main():
 
             # Local fallback
             if not img:
-                fb_img, fb_credit = get_fallback_image(cat_key, data["hero"].get("headline", ""))
+                fb_img, fb_credit = get_fallback_image(cat_key, data["hero"].get("headline", ""), item=data["hero"])
                 if fb_img:
                     img    = fb_img
                     credit = fb_credit
@@ -12904,6 +13448,11 @@ def main():
 
     _custom_category_repair = enforce_custom_category_placement(all_categories)
 
+    # One-time and ongoing migration of known synthetic/branded fallback URLs into
+    # the real editorial image pool. Custom imagery and real source images are never
+    # touched. The rotation state is persisted only after the build passes every gate.
+    refresh_archive_editorial_fallbacks(OUTPUT_DIR)
+
     # v1.9.2 controlled activation. The existing guarded same-story/stage
     # suppressions now pass through the same preflight, kill switch, action cap,
     # rollback, and action log as exact deterministic identity suppressions.
@@ -12988,14 +13537,14 @@ def main():
     # Final fallback images for any promoted heroes without images
     for cat in all_categories:
         hero = cat.get("hero", {})
-        if not hero.get("image_url"):
-            fb_img, fb_credit = get_fallback_image(cat.get("category_key","local_gov"), hero.get("headline",""))
+        if not hero.get("image_url") or (_is_legacy_or_branded_fallback_image(hero.get("image_url")) and not (hero.get("is_custom") or hero.get("authoritative_custom"))):
+            fb_img, fb_credit = get_fallback_image(cat.get("category_key","local_gov"), hero.get("headline",""), item=hero)
             if fb_img:
                 hero["image_url"]    = fb_img
                 hero["image_credit"] = fb_credit
                 print(f"  {cat.get('category_key')}: fallback image applied after hero promotion")
-    if not top_cat.get("hero",{}).get("image_url"):
-        fb_img, fb_credit = get_fallback_image(top_cat.get("category_key","local_gov"), top_cat["hero"].get("headline",""))
+    if not top_cat.get("hero",{}).get("image_url") or (_is_legacy_or_branded_fallback_image(top_cat.get("hero",{}).get("image_url")) and not (top_cat.get("hero",{}).get("is_custom") or top_cat.get("hero",{}).get("authoritative_custom"))):
+        fb_img, fb_credit = get_fallback_image(top_cat.get("category_key","local_gov"), top_cat["hero"].get("headline",""), item=top_cat["hero"])
         if fb_img:
             top_cat["hero"]["image_url"]    = fb_img
             top_cat["hero"]["image_credit"] = fb_credit
@@ -13081,6 +13630,7 @@ def main():
     _write_editorial_observability(
         editorial_engine, editorial_audit_rows, editorial_activation_run
     )
+    _save_editorial_image_rotation_state()
 
     GENERATION_CACHE.save(force=True)
     print(f"  Generation cache activity: {GENERATION_CACHE.summary()}")
