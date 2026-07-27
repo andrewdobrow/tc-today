@@ -301,3 +301,111 @@ def test_supplied_library_manifest_matches_optimized_assets():
         "/images/editorial/topics/sports/og-sports.webp",
         "/images/editorial/topics/things-to-do/og-things_to_do.webp",
     }
+
+
+def test_airline_route_and_incidental_body_terms_do_not_use_roads_pool(tmp_path):
+    generate = _configure(_load_generate(), tmp_path)
+    _image(tmp_path, "cities/vero-beach/city.png")
+    _image(tmp_path, "topics/business-development/business.png")
+    _image(tmp_path, "topics/roads-transportation/road.png")
+
+    jetblue = {
+        "headline": "JetBlue cancels Vero Beach to JFK route in September, citing low demand",
+        "teaser": "The airline said passenger demand did not support the nonstop service.",
+        "body": "The flight used Vero Beach Regional Airport and connected travelers to New York.",
+    }
+    pool_id, _images, basis = generate._editorial_pool_for_story(
+        "business", jetblue["headline"], item=jetblue
+    )
+    assert pool_id == "cities/vero-beach"
+    assert basis == "exact-city"
+
+    racetrack = {
+        "headline": "Private racetrack resort community breaks ground in St. Lucie County on 650 acres",
+        "teaser": "The private membership development is building homes, garages and racing circuits.",
+        "body": (
+            "The project is off Okeechobee Road and will include street cars, "
+            "internal transportation routes and multiple tracks."
+        ),
+    }
+    pool_id, _images, basis = generate._editorial_pool_for_story(
+        "business", racetrack["headline"], item=racetrack
+    )
+    assert pool_id == "topics/business-development"
+    assert basis == "category-topic"
+
+
+def test_fatal_crash_public_safety_story_does_not_default_to_roads_pool(tmp_path):
+    generate = _configure(_load_generate(), tmp_path)
+    _image(tmp_path, "topics/crime-public-safety/crime.png")
+    _image(tmp_path, "topics/roads-transportation/road.png")
+
+    headline = (
+        "Community gathers to honor 9-year-old boy killed in dirt bike crash "
+        "with FedEx truck in St. Lucie County"
+    )
+    pool_id, _images, basis = generate._editorial_pool_for_story(
+        "crime",
+        headline,
+        item={
+            "headline": headline,
+            "teaser": "Family and neighbors gathered for a memorial after the child's death.",
+        },
+    )
+
+    assert pool_id == "topics/crime-public-safety"
+    assert basis == "category-topic"
+
+
+def test_exact_archive_source_image_restores_over_editorial_fallback(tmp_path):
+    generate = _configure(_load_generate(), tmp_path)
+    _image(tmp_path, "topics/roads-transportation/road.png")
+    headline = "Private racetrack resort community breaks ground in St. Lucie County on 650 acres"
+    source_url = "https://ewscripps.brightspotcdn.com/example-racetrack.jpg"
+    item = {
+        "headline": headline,
+        "slug": "racetrack-story",
+        "category_key": "business",
+        "image_url": "https://treasurecoast.today/images/editorial/topics/roads-transportation/road.png",
+        "image_source": "editorial_fallback",
+        "is_fallback_image": True,
+    }
+    archive = [{
+        "slug": "racetrack-story",
+        "headline": headline,
+        "category_key": "business",
+        "image_url": source_url,
+        "image_credit": "WPTV",
+        "image_source": "source_og",
+    }]
+
+    assert generate._restore_archive_source_image(item, archive) is True
+    assert item["image_url"] == source_url
+    assert item["image_credit"] == "WPTV"
+    assert item["is_fallback_image"] is False
+
+
+def test_archive_fallback_migration_runs_once_per_policy_version(tmp_path):
+    generate = _configure(_load_generate(), tmp_path)
+    _image(tmp_path, "topics/business-development/business.png")
+    (tmp_path / "articles").mkdir()
+    old_url = "https://treasurecoast.today/og-business.png"
+    archive = [{
+        "slug": "business-story",
+        "headline": "County business opens new facility",
+        "category_key": "business",
+        "image_url": old_url,
+    }]
+    (tmp_path / "archive.json").write_text(json.dumps(archive), encoding="utf-8")
+    (tmp_path / "articles" / "business-story.html").write_text(
+        f'<meta property="og:image" content="{old_url}"><img src="{old_url}">',
+        encoding="utf-8",
+    )
+
+    first = generate.refresh_archive_editorial_fallbacks(tmp_path)
+    second = generate.refresh_archive_editorial_fallbacks(tmp_path)
+
+    assert first["skipped"] is False
+    assert first["updated"] == 1
+    assert second["skipped"] is True
+    assert second["reason"] == "policy-version-already-migrated"

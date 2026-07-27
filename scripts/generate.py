@@ -567,7 +567,7 @@ EDITORIAL_IMAGE_ROOT = OUTPUT_DIR / "images" / "editorial"
 EDITORIAL_IMAGE_ROTATION_PATH = OUTPUT_DIR / "data" / "editorial-image-rotation.json"
 EDITORIAL_IMAGE_REPORT_PATH = OUTPUT_DIR / "data" / "editorial-image-rotation-report.json"
 EDITORIAL_IMAGE_SCHEMA_VERSION = 2
-EDITORIAL_IMAGE_SELECTION_POLICY_VERSION = 2
+EDITORIAL_IMAGE_SELECTION_POLICY_VERSION = 3
 EDITORIAL_IMAGE_EXTENSIONS = {".webp", ".jpg", ".jpeg", ".png"}
 EDITORIAL_IMAGE_EXTENSION_PRIORITY = {".webp": 0, ".jpg": 1, ".jpeg": 2, ".png": 3}
 EDITORIAL_IMAGE_MAX_ASSIGNMENTS = 3000
@@ -606,8 +606,9 @@ EDITORIAL_CATEGORY_TOPIC = {
 }
 EDITORIAL_HIGH_SPECIFICITY_TOPIC_RULES = [
     ("topics/roads-transportation", re.compile(
-        r"\b(?:road|roads|traffic|crash|collision|bridge|highway|interstate|i-95|"
-        r"turnpike|lane|lanes|closure|closed|transportation|fdot|rail|airport)\b", re.I
+        r"\b(?:road|roads|roadwork|traffic|bridge|causeway|highway|interstate|i-95|"
+        r"turnpike|lane|lanes|ramp|ramps|intersection|detour|closure|closed|"
+        r"transportation|fdot)\b", re.I
     )),
     ("topics/schools", re.compile(
         r"\b(?:school|schools|student|students|teacher|teachers|classroom|education|"
@@ -626,8 +627,9 @@ EDITORIAL_HIGH_SPECIFICITY_TOPIC_RULES = [
 
 EDITORIAL_TOPIC_RULES = [
     ("topics/roads-transportation", re.compile(
-        r"\b(?:road|roads|traffic|crash|collision|bridge|highway|interstate|i-95|"
-        r"turnpike|lane|lanes|closure|closed|transportation|fdot|rail|airport)\b", re.I
+        r"\b(?:road|roads|roadwork|traffic|bridge|causeway|highway|interstate|i-95|"
+        r"turnpike|lane|lanes|ramp|ramps|intersection|detour|closure|closed|"
+        r"transportation|fdot)\b", re.I
     )),
     ("topics/weather-environment", re.compile(
         r"\b(?:weather|storm|hurricane|tropical|flood|flooding|rain|wind|tornado|"
@@ -739,12 +741,27 @@ def _round_robin_pool_images(folder_ids, pools):
     return combined
 
 
-def _fallback_story_blob(headline="", item=None):
+def _fallback_story_subject_blob(headline="", item=None):
+    """Return the editorial subject signal used for topic-image selection.
+
+    Topic routing intentionally uses only the headline and concise summary fields.
+    Full article bodies commonly mention roads, airports, hospitals, schools, or
+    weather incidentally; allowing those references to control the image pool caused
+    unrelated business and public-safety stories to receive transportation photos.
+    """
     item = item if isinstance(item, dict) else {}
     return " ".join(filter(None, [
         str(headline or ""),
         str(item.get("headline") or item.get("title") or ""),
         str(item.get("teaser") or item.get("summary") or ""),
+    ]))
+
+
+def _fallback_story_blob(headline="", item=None):
+    """Return broader location evidence while keeping body text out of topic routing."""
+    item = item if isinstance(item, dict) else {}
+    return " ".join(filter(None, [
+        _fallback_story_subject_blob(headline, item),
         str(item.get("body") or "")[:1600],
         str(item.get("article_text") or "")[:1200],
     ]))
@@ -798,21 +815,22 @@ def _detect_editorial_topic(text):
 def _editorial_pool_for_story(category_key, headline="", item=None, inventory=None):
     inventory = inventory or _editorial_image_inventory()
     pools = inventory.get("pools", {})
-    text = _fallback_story_blob(headline, item)
+    subject_text = _fallback_story_subject_blob(headline, item)
+    location_text = _fallback_story_blob(headline, item)
 
-    # Schools, roads/transportation, health, and weather/environment describe the
-    # visual subject more precisely than a city name. Use them first whenever the
-    # matching pool is populated.
-    specific_topic = _detect_high_specificity_editorial_topic(text)
+    # Schools, infrastructure/traffic operations, health, and weather/environment
+    # describe the visual subject more precisely than a city name. Topic routing uses
+    # headline/summary evidence only so incidental body references cannot hijack it.
+    specific_topic = _detect_high_specificity_editorial_topic(subject_text)
     if specific_topic and pools.get(specific_topic):
         return specific_topic, list(pools[specific_topic]), "specific-topic-before-city"
 
-    city = _detect_editorial_city(text, category_key)
+    city = _detect_editorial_city(location_text, category_key)
     city_pool = f"cities/{city}" if city else ""
     if city_pool and pools.get(city_pool):
         return city_pool, list(pools[city_pool]), "exact-city"
 
-    detected_topic = _detect_editorial_topic(text)
+    detected_topic = _detect_editorial_topic(subject_text)
     # Broad category pools yield to an exact city, but remain stronger than county
     # and regional fallbacks.
     if category_key in {"crime", "business", "sports", "things_to_do", "local_gov"}:
@@ -876,6 +894,7 @@ def _load_editorial_image_rotation_state():
             "pool_last_image": payload.get("pool_last_image") if isinstance(payload.get("pool_last_image"), dict) else {},
             "global_last_image": str(payload.get("global_last_image") or ""),
             "story_assignments": payload.get("story_assignments") if isinstance(payload.get("story_assignments"), dict) else {},
+            "archive_migration_policy_version": int(payload.get("archive_migration_policy_version") or 0),
         }
         return _EDITORIAL_IMAGE_ROTATION_STATE
 
@@ -1018,6 +1037,100 @@ def _is_legacy_or_branded_fallback_image(url):
     ))
 
 
+def _is_real_source_image_url(url):
+    """Return True only for a non-fallback image supplied by a real story source."""
+    raw = str(url or "").strip()
+    return bool(
+        raw
+        and not _is_legacy_or_branded_fallback_image(raw)
+        and not _is_managed_editorial_fallback_image(raw)
+    )
+
+
+def _archive_entry_for_exact_live_item(item, archive):
+    """Resolve an archive row without fuzzy headline/image cross-contamination."""
+    if not isinstance(item, dict) or not isinstance(archive, list):
+        return None
+
+    slug_candidates = {
+        str(item.get(key) or "").strip()
+        for key in (
+            "_archived_slug", "slug", "_current_custom_publication_slug",
+            "_resolved_permalink_slug",
+        )
+        if str(item.get(key) or "").strip()
+    }
+    if slug_candidates:
+        for row in archive:
+            if isinstance(row, dict) and str(row.get("slug") or "").strip() in slug_candidates:
+                return row
+
+    story_ids = {
+        str(item.get(key) or "").strip()
+        for key in ("editorial_story_id", "_editorial_story_id")
+        if str(item.get(key) or "").strip()
+    }
+    if story_ids:
+        matches = [
+            row for row in archive
+            if isinstance(row, dict)
+            and str(row.get("editorial_story_id") or "").strip() in story_ids
+        ]
+        if len(matches) == 1:
+            return matches[0]
+
+    exact_headline = re.sub(
+        r"\s+", " ", str(item.get("headline") or item.get("title") or "").strip()
+    ).casefold()
+    if exact_headline:
+        matches = [
+            row for row in archive
+            if isinstance(row, dict)
+            and re.sub(r"\s+", " ", str(row.get("headline") or "").strip()).casefold()
+            == exact_headline
+        ]
+        if len(matches) == 1:
+            return matches[0]
+    return None
+
+
+def _restore_archive_source_image(item, archive):
+    """Restore a previously published source image before assigning any fallback."""
+    if not isinstance(item, dict):
+        return False
+    current = str(item.get("image_url") or "").strip()
+    if _is_real_source_image_url(current):
+        return False
+
+    row = _archive_entry_for_exact_live_item(item, archive)
+    if not isinstance(row, dict):
+        return False
+    candidate = str(row.get("image_url") or "").strip()
+    if not _is_real_source_image_url(candidate):
+        return False
+
+    item["image_url"] = candidate
+    item["image_credit"] = str(row.get("image_credit") or "")
+    item["image_source"] = str(row.get("image_source") or "archive_source_restore")
+    item["is_fallback_image"] = False
+    return True
+
+
+def restore_live_source_images_from_archive(categories, archive):
+    """Restore real archived source images on heroes/cards that lost image metadata."""
+    restored = 0
+    seen = set()
+    for category in categories or []:
+        if not isinstance(category, dict):
+            continue
+        for item in [category.get("hero")] + list(category.get("cards") or []):
+            if not isinstance(item, dict) or id(item) in seen:
+                continue
+            seen.add(id(item))
+            restored += int(_restore_archive_source_image(item, archive))
+    return restored
+
+
 def _replace_article_fallback_references(article_path, old_urls, new_url):
     """Replace only known fallback image references in one existing article page."""
     if not article_path.is_file() or not new_url:
@@ -1041,20 +1154,53 @@ def _replace_article_fallback_references(article_path, old_urls, new_url):
     return True
 
 
-def refresh_archive_editorial_fallbacks(output_root=None):
-    """Migrate managed fallbacks to the pool selected by the current policy.
+def refresh_archive_editorial_fallbacks(output_root=None, force=False):
+    """Migrate managed fallbacks once for each image-selection policy version.
 
-    This includes retired AI/root OG images and existing ``/images/editorial/``
-    assignments whose topic/city pool is no longer correct. Custom articles are
-    excluded because their supplied imagery remains authoritative. Existing real
-    source images are also preserved. Archive metadata and matching permanent article
-    pages are updated together so cards and article pages do not disagree.
+    A full archive pass is necessary when the selection policy changes, but repeating
+    that pass on every normal production run needlessly reopens hundreds of permanent
+    pages and advances large numbers of fallback assignments. The completed policy
+    version is stored with the rotation state and persisted only after all production
+    gates pass.
     """
+    global _EDITORIAL_IMAGE_ROTATION_DIRTY
+
     root = Path(output_root or OUTPUT_DIR)
+    report_path = root / "data" / "editorial-image-migration.json"
+    state = _load_editorial_image_rotation_state()
+    completed_version = int(state.get("archive_migration_policy_version") or 0)
+    if not force and completed_version >= EDITORIAL_IMAGE_SELECTION_POLICY_VERSION:
+        report = {
+            "schema_version": EDITORIAL_IMAGE_SCHEMA_VERSION,
+            "selection_policy_version": EDITORIAL_IMAGE_SELECTION_POLICY_VERSION,
+            "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "updated": 0,
+            "article_pages_updated": 0,
+            "skipped_custom": 0,
+            "skipped": True,
+            "reason": "policy-version-already-migrated",
+            "updates": [],
+        }
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text(
+            json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
+        print(
+            "  Editorial fallback migration skipped: "
+            f"policy v{EDITORIAL_IMAGE_SELECTION_POLICY_VERSION} already completed"
+        )
+        return report
+
     archive_path = root / "archive.json"
     archive = load_archive(archive_path)
     if not isinstance(archive, list):
-        return {"updated": 0, "article_pages_updated": 0, "skipped_custom": 0}
+        return {
+            "updated": 0,
+            "article_pages_updated": 0,
+            "skipped_custom": 0,
+            "skipped": False,
+            "reason": "archive-unavailable",
+        }
 
     updated_rows = []
     article_pages_updated = 0
@@ -1065,6 +1211,7 @@ def refresh_archive_editorial_fallbacks(output_root=None):
         if entry.get("is_custom") or entry.get("authoritative_custom"):
             skipped_custom += 1
             continue
+
         old_url = str(entry.get("image_url") or "").strip()
         is_managed_editorial = _is_managed_editorial_fallback_image(old_url)
         if (
@@ -1072,7 +1219,9 @@ def refresh_archive_editorial_fallbacks(output_root=None):
             and not _is_legacy_or_branded_fallback_image(old_url)
             and not is_managed_editorial
         ):
+            # Real source images are authoritative and never enter fallback migration.
             continue
+
         category_key = str(entry.get("category_key") or "top_news")
         new_url, new_credit = get_fallback_image(
             category_key, entry.get("headline", ""), item=entry
@@ -1102,27 +1251,38 @@ def refresh_archive_editorial_fallbacks(output_root=None):
 
     if updated_rows:
         temporary = archive_path.with_suffix(".json.tmp")
-        temporary.write_text(json.dumps(archive, indent=2, ensure_ascii=False), encoding="utf-8")
+        temporary.write_text(
+            json.dumps(archive, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
         temporary.replace(archive_path)
+
+    # Mark the policy complete in memory. The state writer commits this only after the
+    # remaining publication and presentation gates pass.
+    state["archive_migration_policy_version"] = EDITORIAL_IMAGE_SELECTION_POLICY_VERSION
+    _EDITORIAL_IMAGE_ROTATION_DIRTY = True
 
     report = {
         "schema_version": EDITORIAL_IMAGE_SCHEMA_VERSION,
+        "selection_policy_version": EDITORIAL_IMAGE_SELECTION_POLICY_VERSION,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "updated": len(updated_rows),
         "article_pages_updated": article_pages_updated,
         "skipped_custom": skipped_custom,
+        "skipped": False,
         "updates": updated_rows,
     }
-    report_path = root / "data" / "editorial-image-migration.json"
     report_path.parent.mkdir(parents=True, exist_ok=True)
-    report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
-    if updated_rows:
-        print(
-            "  Editorial fallback migration: "
-            f"{len(updated_rows)} archive record(s), "
-            f"{article_pages_updated} article page(s) updated"
-        )
+    report_path.write_text(
+        json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+    print(
+        "  Editorial fallback migration: "
+        f"{len(updated_rows)} archive record(s), "
+        f"{article_pages_updated} article page(s) updated for "
+        f"policy v{EDITORIAL_IMAGE_SELECTION_POLICY_VERSION}"
+    )
     return report
+
 
 def _save_editorial_image_rotation_state():
     """Persist rotation only after all publication and presentation gates pass."""
@@ -1148,6 +1308,9 @@ def _save_editorial_image_rotation_state():
             "pool_last_image": state.get("pool_last_image", {}),
             "global_last_image": state.get("global_last_image", ""),
             "story_assignments": state.get("story_assignments", {}),
+            "archive_migration_policy_version": int(
+                state.get("archive_migration_policy_version") or 0
+            ),
         }
         temporary = EDITORIAL_IMAGE_ROTATION_PATH.with_suffix(".json.tmp")
         temporary.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -4780,7 +4943,20 @@ def render_index(all_categories, top_cat):
         ck        = card.get("cat_key", "all")
         cl        = card.get("cat_label", "")
         card_time = card_display_date(card)
+        _restore_archive_source_image(card, archive_for_links)
         img_url   = card.get("image_url", "")
+        if not img_url or (
+            (
+                _is_legacy_or_branded_fallback_image(img_url)
+                or _is_managed_editorial_fallback_image(img_url)
+            )
+            and not (card.get("is_custom") or card.get("authoritative_custom"))
+        ):
+            # A real source image from the exact archived story always outranks a
+            # reusable fallback. Only select from the editorial pool when no such
+            # image exists.
+            _restore_archive_source_image(card, archive_for_links)
+            img_url = card.get("image_url", "")
         if not img_url or (_is_legacy_or_branded_fallback_image(img_url) and not (card.get("is_custom") or card.get("authoritative_custom"))):
             fb_img, _ = get_fallback_image(ck, card.get("headline", ""), sequential=True, item=card)
             # If the category graphic is unavailable, use the generic TCT graphic.
@@ -13637,6 +13813,19 @@ def main():
 
     # Promote duplicate heroes
     promote_duplicate_heroes(top_cat, all_categories)
+
+    # Promotion, deduplication, and archive rebinding can leave a live item without
+    # the real image already stored on its permanent article. Restore exact archived
+    # source images before considering any reusable fallback.
+    _image_restore_archive = load_archive(OUTPUT_DIR / "archive.json")
+    _restored_live_source_images = restore_live_source_images_from_archive(
+        all_categories, _image_restore_archive
+    )
+    if _restored_live_source_images:
+        print(
+            "  Restored "
+            f"{_restored_live_source_images} archived source image(s) to live placements"
+        )
 
     # Final fallback images for any promoted heroes without images
     for cat in all_categories:

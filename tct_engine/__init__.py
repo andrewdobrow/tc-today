@@ -245,4 +245,4 @@ __all__ = [
     "build_publication_identity_index",
 ]
 
-__version__ = "1.11.4.9.2"
+__version__ = "1.11.4.9.3"
