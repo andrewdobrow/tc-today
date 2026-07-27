@@ -75,3 +75,67 @@ def test_archive_reconciliation_requires_previously_stamped_story_ids():
     assert [entry["slug"] for entry in cleaned] == ["one-a", "one-b"]
     assert redirects == []
     assert report["records_removed"] == 0
+
+
+def test_archive_reconciliation_keeps_quarantined_drift_outside_canonical_group():
+    generate = _load_generate_module()
+    identity_index = types.SimpleNamespace(safe_story_ids={"story_one"})
+    archive = [
+        {
+            "slug": "2026-06-12-unrelated-old-event",
+            "headline": "Leon County judge to rule Monday on ballot eligibility",
+            "editorial_story_id": "story_one",
+            "exclude_from_live_recovery": True,
+            "identity_quarantine_reason": "headline_slug_event_drift",
+        },
+        {
+            "slug": "2026-07-26-leon-county-judge-to-rule-monday-on-ballot-eligibility",
+            "headline": "Leon County judge to rule Monday on ballot eligibility",
+            "date": "2026-07-26",
+            "lastmod": "2026-07-26",
+            "editorial_story_id": "story_one",
+        },
+    ]
+
+    cleaned, redirects, report = generate._reconcile_archive_publication_identity(
+        archive, identity_index
+    )
+
+    assert [row["slug"] for row in cleaned] == [row["slug"] for row in archive]
+    assert redirects == []
+    assert report["records_removed"] == 0
+
+
+def test_canonical_cleanup_does_not_redirect_repaired_page_back_to_quarantined_source(tmp_path):
+    generate = _load_generate_module()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    old_slug = "2026-06-12-unrelated-old-event"
+    repaired_slug = "2026-07-26-current-aligned-story"
+    (articles / f"{old_slug}.html").write_text("old", encoding="utf-8")
+    (articles / f"{repaired_slug}.html").write_text("new", encoding="utf-8")
+    archive = [
+        {
+            "slug": old_slug,
+            "headline": "Current aligned story",
+            "source_url": "https://source.test/current-story",
+            "exclude_from_live_recovery": True,
+            "identity_quarantine_reason": "headline_slug_event_drift",
+        },
+        {
+            "slug": repaired_slug,
+            "headline": "Current aligned story",
+            "date": "2026-07-26",
+            "lastmod": "2026-07-26",
+            "source_url": "https://source.test/current-story",
+            "editorial_story_id": "story_one",
+        },
+    ]
+
+    cleaned, redirects = generate.apply_canonical_story_cleanup(
+        archive, articles, tmp_path
+    )
+
+    assert [row["slug"] for row in cleaned] == [old_slug, repaired_slug]
+    assert redirects == []
+    assert (articles / f"{repaired_slug}.html").read_text(encoding="utf-8") == "new"

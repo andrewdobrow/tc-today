@@ -39,7 +39,7 @@ def test_legacy_ai_urls_are_migration_inputs_not_active_pool_entries():
     assert 'if "/images/fallback/" in path:' in source
 
 
-def test_engine_release_identifies_specific_topic_image_priority():
+def test_engine_release_identifies_quarantined_permalink_target_repair():
     observability = (ROOT / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'ENGINE_VERSION = "1.11.4.9"' in observability
-    assert 'ENGINE_RELEASE = "specific-topic-image-priority"' in observability
+    assert 'ENGINE_VERSION = "1.11.4.9.2"' in observability
+    assert 'ENGINE_RELEASE = "quarantined-permalink-target-repair"' in observability

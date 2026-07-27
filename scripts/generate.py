@@ -232,7 +232,7 @@ EDITORIAL_ACTIVATION_HISTORY_PATH = OUTPUT_DIR / "data" / "editorial_activation_
 # v1.10.5 forward publication identity. New generated articles are published only
 # when the current editorial decision can be carried directly into the archive row.
 # Historical rows remain readable, but unresolved legacy identity is not guessed.
-FORWARD_IDENTITY_VERSION = "1.3"
+FORWARD_IDENTITY_VERSION = "1.4"
 FORWARD_IDENTITY_RECENT_DAYS = 30
 CURRENT_RUN_EDITORIAL_IDENTITIES = {}
 CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
@@ -7558,8 +7558,24 @@ def _resolve_published_slug(item, archive, articles_dir):
     return ""
 
 
+def _archive_entry_live_identity_safe(entry):
+    """Return whether an archive row may own a current live permalink.
+
+    Historical overwrite bugs left some valid article files with a headline that no
+    longer agrees with the URL event. Those rows remain readable in the archive, but
+    they must never be selected as an update target, reconciliation canonical, or
+    live-placement binding. Re-evaluate alignment as a defense in depth because an
+    older archive may not yet carry the persisted quarantine fields.
+    """
+    if not isinstance(entry, dict) or not entry.get("slug"):
+        return False
+    if entry.get("exclude_from_live_recovery"):
+        return False
+    return bool(_archive_headline_slug_alignment(entry).get("aligned"))
+
+
 def _find_exact_archive_source_entry(item, archive):
-    """Resolve only exact external source identity; never fuzzy headline overlap."""
+    """Resolve exact external source identity only to a live-safe archive row."""
     if not isinstance(item, dict):
         return None
     candidates = [
@@ -7570,7 +7586,8 @@ def _find_exact_archive_source_entry(item, archive):
         return None
     matches = [
         entry for entry in archive or []
-        if _normalized_external_source_url(
+        if _archive_entry_live_identity_safe(entry)
+        and _normalized_external_source_url(
             entry.get("source_url") or entry.get("original_url") or entry.get("link")
         ) == normalized
     ]
@@ -7751,14 +7768,18 @@ def _rebind_live_items_to_published_archive(all_categories, archive, current_cus
                 story_entries = [
                     entry for entry in archive
                     if str(entry.get("editorial_story_id") or "") == story_id
-                    and entry.get("slug")
+                    and _archive_entry_live_identity_safe(entry)
                 ]
                 if story_entries:
                     matched = min(story_entries, key=_publication_canonical_key)
 
             if not matched and item.get("_archive_only") and item.get("_archived_slug"):
                 matched = next(
-                    (entry for entry in archive if entry.get("slug") == item.get("_archived_slug")),
+                    (
+                        entry for entry in archive
+                        if entry.get("slug") == item.get("_archived_slug")
+                        and _archive_entry_live_identity_safe(entry)
+                    ),
                     None,
                 )
             # Forward publication identity never falls back from a missing story ID
@@ -10396,6 +10417,11 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
     for entry in archive:
         if not entry.get("slug") or entry.get("slug") in removed_slugs:
             continue
+        # A quarantined headline/slug mismatch must remain outside exact-source
+        # canonicalization. Its source URL may belong to the replacement copy, but
+        # the historical permalink itself is not a safe canonical destination.
+        if not _archive_entry_live_identity_safe(entry):
+            continue
         normalized_source = normalize_source_identity_url(entry.get("source_url", ""))
         if normalized_source:
             source_groups.setdefault(normalized_source, []).append(entry)
@@ -10440,6 +10466,8 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
     known_groups = {}
     for entry in archive:
         if not entry.get("slug"):
+            continue
+        if not _archive_entry_live_identity_safe(entry):
             continue
         # Unresolved legacy rows stay intact. Known-event consolidation is allowed
         # only after publication identity is explicit, or when a custom article is
@@ -11424,7 +11452,7 @@ def _find_forward_publication_target(item, archive, story_id=""):
         matches = [
             entry for entry in archive or []
             if str(entry.get("editorial_story_id") or "").strip() == story_id
-            and entry.get("slug")
+            and _archive_entry_live_identity_safe(entry)
         ]
         if matches:
             return min(matches, key=_publication_canonical_key), "persistent_story_id"
@@ -11451,6 +11479,11 @@ def _forward_publication_target_valid(item, entry, story_id, basis):
         return True, "new_publication"
     if item.get("is_custom") or item.get("authoritative_custom"):
         return True, "explicit_custom_target"
+    if not _archive_entry_live_identity_safe(entry):
+        return False, (
+            entry.get("identity_quarantine_reason")
+            or "archive_target_quarantined"
+        )
     entry_story_id = str(entry.get("editorial_story_id") or "").strip()
     story_id = str(story_id or "").strip()
     if story_id and entry_story_id and story_id != entry_story_id:
@@ -11486,6 +11519,11 @@ def _reconcile_archive_publication_identity(archive, identity_index):
 
     groups = defaultdict(list)
     for entry in archive:
+        # Quarantined headline/slug drift is historical evidence, not a candidate
+        # canonical URL. Preserve the row and page, but keep it outside duplicate
+        # reconciliation so a newly repaired permalink is never redirected back to it.
+        if not _archive_entry_live_identity_safe(entry):
+            continue
         story_id = str(entry.get("editorial_story_id") or "").strip()
         if story_id and story_id not in identity_index.safe_story_ids:
             story_id = ""
@@ -11910,6 +11948,9 @@ def write_archives(all_categories, top_cat):
             (articles_dir / f"{slug}.html").write_text(_page_html, encoding="utf-8")
             if hero.get("is_custom") or hero.get("authoritative_custom"):
                 _forward_identity_report["custom_payloads_verified"] += 1
+            hero["_archived_slug"] = slug
+            hero["slug"] = slug
+            hero["link"] = f"{SITE_URL}/articles/{slug}.html"
             archive.append({
                 "slug": slug, "headline": headline,
                 "teaser": hero.get("teaser","") or hero.get("body","")[:180],

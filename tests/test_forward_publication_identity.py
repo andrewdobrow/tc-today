@@ -146,3 +146,80 @@ def test_forward_live_identity_contract_rejects_story_id_conflict(tmp_path):
         assert "story_id_conflict" in str(exc)
     else:
         raise AssertionError("expected forward live identity contract to fail")
+
+
+def test_quarantined_headline_slug_drift_is_never_reused_as_forward_target():
+    g = _load_generate()
+    item = {
+        "headline": "Leon County judge to rule Monday on ballot eligibility",
+        "source_url": "https://source.test/ballot-case",
+        "editorial_story_id": "story-ballot",
+        "_editorial_route": "update_existing",
+    }
+    quarantined = {
+        "slug": "2026-06-12-police-union-backs-paul-renner",
+        "headline": item["headline"],
+        "source_url": item["source_url"],
+        "editorial_story_id": "story-ballot",
+        "exclude_from_live_recovery": True,
+        "identity_quarantine_reason": "headline_slug_event_drift",
+    }
+
+    target, basis = g._find_forward_publication_target(
+        item, [quarantined], "story-ballot"
+    )
+
+    assert target is None
+    assert basis == "new_publication"
+    valid, reason = g._forward_publication_target_valid(
+        item, quarantined, "story-ballot", "exact_source_url"
+    )
+    assert valid is False
+    assert reason == "headline_slug_event_drift"
+
+
+def test_post_publication_rebind_prefers_repaired_slug_over_quarantined_older_slug(tmp_path):
+    g = _load_generate()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    (articles / "2026-06-12-police-union-backs-paul-renner.html").write_text(
+        "old", encoding="utf-8"
+    )
+    repaired_slug = "2026-07-26-leon-county-judge-to-rule-monday-on-ballot-eligibility"
+    (articles / f"{repaired_slug}.html").write_text("new", encoding="utf-8")
+    headline = "Leon County judge to rule Monday on ballot eligibility"
+    archive = [
+        {
+            "slug": "2026-06-12-police-union-backs-paul-renner",
+            "headline": headline,
+            "editorial_story_id": "story-ballot",
+            "exclude_from_live_recovery": True,
+            "identity_quarantine_reason": "headline_slug_event_drift",
+        },
+        {
+            "slug": repaired_slug,
+            "headline": headline,
+            "date": "2026-07-26",
+            "lastmod": "2026-07-26",
+            "editorial_story_id": "story-ballot",
+            "ranking_eligible": True,
+        },
+    ]
+    categories = [{
+        "category_key": "florida",
+        "hero": {
+            "headline": headline,
+            "editorial_story_id": "story-ballot",
+            "_editorial_story_id": "story-ballot",
+            "_archived_slug": archive[0]["slug"],
+        },
+        "cards": [],
+    }]
+
+    rebound = g._rebind_live_items_to_published_archive(
+        categories, archive, articles_dir=articles
+    )
+
+    assert rebound == 1
+    assert categories[0]["hero"]["_archived_slug"] == repaired_slug
+    assert categories[0]["hero"]["link"].endswith(f"/{repaired_slug}.html")
