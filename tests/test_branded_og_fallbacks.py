@@ -41,5 +41,5 @@ def test_legacy_ai_urls_are_migration_inputs_not_active_pool_entries():
 
 def test_engine_release_identifies_quarantined_permalink_target_repair():
     observability = (ROOT / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'ENGINE_VERSION = "1.11.5.0"' in observability
-    assert 'ENGINE_RELEASE = "follow-up-candidate-observability"' in observability
+    assert 'ENGINE_VERSION = "1.11.5.1"' in observability
+    assert 'ENGINE_RELEASE = "bounded-mobile-product-media"' in observability

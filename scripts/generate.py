@@ -244,7 +244,7 @@ DEFAULT_AFFILIATE_DISCLOSURE = (
 # Product-guide output embeds component CSS in each permanent article page. Include
 # this version in the publication signature so presentation fixes republish existing
 # guides even when their editorial copy and product data are unchanged.
-PRODUCT_GUIDE_TEMPLATE_VERSION = "1.4-natural-aspect-image-containment"
+PRODUCT_GUIDE_TEMPLATE_VERSION = "1.5-bounded-contain-product-media"
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -5673,9 +5673,9 @@ def _render_product_guide_body(item):
 .pg-quick-picks img {{ display:block; width:44px; height:44px; object-fit:contain; object-position:center; }}
 .pg-quick-picks a {{ color:var(--text); text-decoration:none; font-weight:650; line-height:1.25; }}
 .pg-rank {{ width:26px; height:26px; border-radius:50%; display:grid; place-items:center; background:var(--pg-green); color:#fff; font-weight:800; font-size:12px; }}
-.pg-product-card {{ display:grid; grid-template-columns:minmax(170px,30%) minmax(0,1fr); gap:24px; min-width:0; overflow:hidden; padding:22px; margin:0 0 18px; border:1px solid var(--pg-line); border-radius:16px; background:#fff; box-shadow:0 8px 28px rgba(20,55,39,.06); }}
-.pg-product-image {{ box-sizing:border-box; display:flex; align-items:center; justify-content:center; width:100%; min-width:0; min-height:230px; padding:18px; border-radius:12px; background:#fafcfb; }}
-.pg-product-image img {{ display:block!important; width:auto!important; height:auto!important; max-width:100%!important; max-height:280px!important; aspect-ratio:auto!important; object-fit:contain!important; object-position:center!important; }}
+.pg-product-card {{ box-sizing:border-box; display:grid; grid-template-columns:minmax(170px,30%) minmax(0,1fr); gap:24px; width:100%; max-width:100%; min-width:0; overflow:hidden; padding:22px; margin:0 0 18px; border:1px solid var(--pg-line); border-radius:16px; background:#fff; box-shadow:0 8px 28px rgba(20,55,39,.06); }}
+.pg-product-image {{ box-sizing:border-box; display:grid; place-items:center; width:100%; max-width:100%; min-width:0; height:280px; max-height:280px; overflow:hidden; padding:18px; border-radius:12px; background:#fafcfb; contain:layout paint; }}
+.pg-product-image img {{ display:block!important; width:100%!important; height:100%!important; min-width:0!important; min-height:0!important; max-width:100%!important; max-height:100%!important; aspect-ratio:auto!important; object-fit:contain!important; object-position:center!important; }}
 .pg-product-copy h2 {{ margin:7px 0 8px; font-family:"Fraunces",serif; font-size:25px; line-height:1.2; }}
 .pg-product-copy p {{ margin:0 0 12px; font-size:16px; line-height:1.65; }}
 .pg-label {{ display:inline-block; padding:4px 8px; border-radius:5px; background:var(--pg-green); color:#fff; font-size:10px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; }}
@@ -5694,9 +5694,9 @@ def _render_product_guide_body(item):
   .pg-disclosure {{ grid-template-columns:1fr; gap:5px; padding:15px 16px; font-size:13px; line-height:1.5; }}
   .pg-disclosure strong {{ white-space:normal; }}
   .pg-quick-picks ol {{ grid-template-columns:1fr; }}
-  .pg-product-card {{ grid-template-columns:minmax(0,1fr); padding:17px; }}
-  .pg-product-image {{ width:100%; min-height:0; padding:16px; }}
-  .pg-product-image img {{ width:auto!important; height:auto!important; max-width:100%!important; max-height:320px!important; aspect-ratio:auto!important; object-fit:contain!important; object-position:center!important; }}
+  .pg-product-card {{ grid-template-columns:minmax(0,1fr); width:100%; max-width:100%; padding:17px; }}
+  .pg-product-image {{ width:100%; max-width:100%; height:230px; max-height:230px; overflow:hidden; padding:12px; }}
+  .pg-product-image img {{ width:100%!important; height:100%!important; min-width:0!important; min-height:0!important; max-width:100%!important; max-height:100%!important; aspect-ratio:auto!important; object-fit:contain!important; object-position:center!important; }}
   .pg-product-copy h2 {{ font-size:23px; }}
   .pg-amazon-button {{ width:100%; }}
 }}
