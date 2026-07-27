@@ -4822,6 +4822,185 @@ def promote_duplicate_heroes(top_cat, all_categories):
                 print(f"  Promoted next card to hero for {cat['category_label']} (semantic duplicate of front page hero)")
 
 
+
+def _homepage_permalink_key(permalink):
+    """Return one canonical identity for a rendered TCT article permalink.
+
+    The homepage may intentionally source one story from several editorial categories,
+    but the public all-news grid must render that canonical article only once.  Query
+    strings, fragments, relative URLs and absolute site URLs therefore collapse to the
+    same key.
+    """
+    raw = str(permalink or "").strip()
+    if not raw:
+        return ""
+    try:
+        parsed = urlsplit(raw)
+        site_host = urlsplit(SITE_URL).netloc.lower()
+        host = (parsed.netloc or site_host).lower()
+        path = re.sub(r"/+", "/", parsed.path or "/")
+        if path != "/":
+            path = path.rstrip("/")
+        return f"{host}{path.lower()}"
+    except Exception:
+        return raw.split("#", 1)[0].split("?", 1)[0].rstrip("/").lower()
+
+
+def _dedupe_homepage_cards_by_permalink(
+    cards,
+    permalink_resolver,
+    *,
+    hero_permalink="",
+    topnews_ids=None,
+):
+    """Keep one homepage-grid placement per canonical article permalink.
+
+    Cross-category placement is still allowed on section/category surfaces.  This pass
+    affects only the front-page all-news card list.  Pinned and authoritative custom
+    placements win their permalink group; otherwise a model-ranked placement wins over
+    an appended fallback copy.
+    """
+    topnews_ids = set(topnews_ids or set())
+    hero_key = _homepage_permalink_key(hero_permalink)
+    winners = {}
+    unresolved_indices = set()
+    removed = []
+
+    def _preference(card, index):
+        pin = card.get("pin_position")
+        try:
+            urgency = int(card.get("urgency_score", 0) or 0)
+        except Exception:
+            urgency = 0
+        return (
+            1 if pin not in (None, "", 0, False) else 0,
+            1 if (card.get("is_custom") or card.get("authoritative_custom")) else 0,
+            1 if id(card) in topnews_ids else 0,
+            urgency,
+            -index,
+        )
+
+    for index, card in enumerate(list(cards or [])):
+        permalink = permalink_resolver(card)
+        key = _homepage_permalink_key(permalink)
+        if not key:
+            # Preserve the renderer's existing behavior; unresolved cards are skipped
+            # later because no permanent article page exists.
+            unresolved_indices.add(index)
+            continue
+        if hero_key and key == hero_key:
+            removed.append({
+                "reason": "duplicates_front_page_hero",
+                "permalink": permalink,
+                "headline": card.get("headline", ""),
+                "category_key": card.get("cat_key", ""),
+                "category_label": card.get("cat_label", ""),
+            })
+            continue
+        current = winners.get(key)
+        if current is None:
+            winners[key] = (index, card, permalink)
+            continue
+        current_index, current_card, current_permalink = current
+        if _preference(card, index) > _preference(current_card, current_index):
+            removed.append({
+                "reason": "duplicate_permalink_replaced_by_preferred_placement",
+                "permalink": current_permalink,
+                "headline": current_card.get("headline", ""),
+                "category_key": current_card.get("cat_key", ""),
+                "category_label": current_card.get("cat_label", ""),
+                "kept_headline": card.get("headline", ""),
+                "kept_category_key": card.get("cat_key", ""),
+            })
+            winners[key] = (index, card, permalink)
+        else:
+            removed.append({
+                "reason": "duplicate_permalink",
+                "permalink": permalink,
+                "headline": card.get("headline", ""),
+                "category_key": card.get("cat_key", ""),
+                "category_label": card.get("cat_label", ""),
+                "kept_headline": current_card.get("headline", ""),
+                "kept_category_key": current_card.get("cat_key", ""),
+            })
+
+    winner_indices = {index for index, _card, _permalink in winners.values()}
+    kept = [
+        card for index, card in enumerate(list(cards or []))
+        if index in winner_indices or index in unresolved_indices
+    ]
+    report = {
+        "schema_version": 1,
+        "policy": "one_visible_homepage_placement_per_canonical_permalink",
+        "input_card_count": len(list(cards or [])),
+        "resolved_unique_permalink_count": len(winners),
+        "unresolved_card_count": len(unresolved_indices),
+        "removed_count": len(removed),
+        "hero_permalink": hero_permalink or "",
+        "removed": removed,
+    }
+    return kept, report
+
+
+def validate_homepage_permalink_uniqueness(index_html, output_root):
+    """Fail closed when the rendered all-news homepage repeats an article URL."""
+    html = str(index_html or "")
+    visible_links = []
+    hero_match = re.search(
+        r'<section[^>]*data-cat-hero="all"[^>]*>.*?'
+        r'<a[^>]*class="hero-v3-link"[^>]*href="([^"]+)"',
+        html,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    if hero_match:
+        visible_links.append(("hero", hero_match.group(1)))
+    for href in re.findall(
+        r'<a\s+href="([^"]+)"\s+class="grid-card\s+fade-in"',
+        html,
+        flags=re.IGNORECASE,
+    ):
+        visible_links.append(("card", href))
+
+    seen = {}
+    duplicates = []
+    for placement, href in visible_links:
+        key = _homepage_permalink_key(href)
+        if not key:
+            continue
+        if key in seen:
+            duplicates.append({
+                "permalink": href,
+                "first_placement": seen[key],
+                "duplicate_placement": placement,
+            })
+        else:
+            seen[key] = placement
+
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "passed": not duplicates,
+        "checked_visible_article_links": len(visible_links),
+        "unique_permalink_count": len(seen),
+        "duplicate_count": len(duplicates),
+        "duplicates": duplicates,
+    }
+    output_root = Path(output_root)
+    report_path = output_root / "data" / "homepage-permalink-contract.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    if duplicates:
+        raise RuntimeError(
+            "Homepage permalink contract FAILED: "
+            f"{len(duplicates)} duplicate visible article permalink(s)"
+        )
+    print(
+        "  Homepage permalink uniqueness PASSED "
+        f"({len(visible_links)} visible article link(s))"
+    )
+    return report
+
+
 def global_rank(all_cards, dedupe_against=None):
     """Final global ranking — sends all headlines to Claude for true cross-category
     ordering AND semantic deduplication. Claude identifies stories that cover the same
@@ -5085,6 +5264,40 @@ def render_index(all_categories, top_cat):
 
     archive_for_links = load_archive(OUTPUT_DIR / "archive.json")
 
+    def card_permalink(card):
+        # Backfill cards already carry their archived slug.
+        if card.get("_archived_slug"):
+            return f"{SITE_URL}/articles/{card['_archived_slug']}.html"
+        matched = find_matching_entry(
+            card.get("headline", ""),
+            archive_for_links,
+            card.get("link", ""),
+            is_weather_alert=bool(card.get("is_weather_alert")),
+        )
+        if matched:
+            return f"{SITE_URL}/articles/{matched['slug']}.html"
+        # No archive entry means no article page exists — the renderer skips it.
+        return None
+
+    _hero_permalink = card_permalink(top_cat.get("hero", {}))
+    all_cards_display, _homepage_permalink_report = _dedupe_homepage_cards_by_permalink(
+        all_cards_display,
+        card_permalink,
+        hero_permalink=_hero_permalink,
+        topnews_ids=topnews_ids,
+    )
+    _homepage_permalink_report["generated_at"] = datetime.now(timezone.utc).isoformat()
+    _homepage_permalink_report_path = OUTPUT_DIR / "data" / "homepage-permalink-dedupe.json"
+    _homepage_permalink_report_path.parent.mkdir(parents=True, exist_ok=True)
+    _homepage_permalink_report_path.write_text(
+        json.dumps(_homepage_permalink_report, indent=2), encoding="utf-8"
+    )
+    if _homepage_permalink_report.get("removed_count"):
+        print(
+            "  Homepage permalink dedupe removed "
+            f"{_homepage_permalink_report['removed_count']} duplicate card placement(s)"
+        )
+
     # v1.11.4.0 ranking rollout: confidence-gated observe and explain only. The report compares the
     # already-selected live homepage card order with the persistent editorial score
     # order. It never mutates the hero, card sequence, custom pins, or rendered HTML.
@@ -5111,16 +5324,6 @@ def render_index(all_categories, top_cat):
             )
         except Exception as exc:
             print(f"  Homepage ranking recommendations unavailable; live order unchanged: {exc}")
-
-    def card_permalink(card):
-        # Backfill cards already carry their archived slug
-        if card.get("_archived_slug"):
-            return f"{SITE_URL}/articles/{card['_archived_slug']}.html"
-        matched = find_matching_entry(card.get("headline",""), archive_for_links, card.get("link",""), is_weather_alert=bool(card.get("is_weather_alert")))
-        if matched:
-            return f"{SITE_URL}/articles/{matched['slug']}.html"
-        # No archive entry means no article page exists — skip this card
-        return None
 
     support_card = """
       <a href="/advertise.html" class="grid-card tct-advertise-card" data-cat="all" data-support-card="true" aria-label="Advertise with Treasure Coast Today">
@@ -5154,11 +5357,12 @@ def render_index(all_categories, top_cat):
         return card.get("published", "")
 
     cards_html = ""
-    for i, card in enumerate(all_cards_display):
+    rendered_card_count = 0
+    for card in all_cards_display:
         permalink = card_permalink(card)
         if not permalink:
             continue  # No article page exists for this card — skip it
-        if i == 4:
+        if rendered_card_count == 4:
             cards_html += support_card
         ck        = card.get("cat_key", "all")
         cl        = card.get("cat_label", "")
@@ -5197,6 +5401,7 @@ def render_index(all_categories, top_cat):
           <span class="grid-card-time">{card_time}</span>
         </div>
       </a>"""
+        rendered_card_count += 1
 
     # -- OLDER: per-category archived stories no longer shown as current cards --
     # Top News ("all") gets no Older section. Each category gets up to 10 of its
@@ -14289,6 +14494,7 @@ def main():
 
     # Render and write homepage (now archive lookups resolve to real slugs)
     index_html = render_index(all_categories, top_cat)
+    validate_homepage_permalink_uniqueness(index_html, OUTPUT_DIR)
     (OUTPUT_DIR / "index.html").write_text(index_html, encoding="utf-8")
 
     # Normalize persistent article files, then stop the deployment if the unified

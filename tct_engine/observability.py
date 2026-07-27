@@ -16,8 +16,8 @@ from typing import Any, Iterable, Mapping
 from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.11.6.1"
-ENGINE_RELEASE = "category-generation-failure-containment"
+ENGINE_VERSION = "1.11.6.2"
+ENGINE_RELEASE = "homepage-permalink-uniqueness"
 OBSERVABILITY_SCHEMA_VERSION = 13
 RESOLVER_VERSION = "2.4"
 RELATIONSHIP_ENGINE_VERSION = "1.4"

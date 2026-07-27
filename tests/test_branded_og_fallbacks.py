@@ -41,5 +41,5 @@ def test_legacy_ai_urls_are_migration_inputs_not_active_pool_entries():
 
 def test_engine_release_identifies_category_generation_failure_containment():
     observability = (ROOT / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'ENGINE_VERSION = "1.11.6.1"' in observability
-    assert 'ENGINE_RELEASE = "category-generation-failure-containment"' in observability
+    assert 'ENGINE_VERSION = "1.11.6.2"' in observability
+    assert 'ENGINE_RELEASE = "homepage-permalink-uniqueness"' in observability

@@ -50,26 +50,25 @@ def test_explicit_replace_slug_cannot_override_different_headline():
     assert forced is None
 
 
-def test_exact_payload_is_retained_without_republication(tmp_path, monkeypatch):
+def test_exact_payload_is_retained_as_active_placement_without_republication(tmp_path, monkeypatch):
     g = _load_generate()
     monkeypatch.setattr(g, "OUTPUT_DIR", tmp_path)
     headline, body = "Custom city budget article", "budget " * 100
     (tmp_path / "archive.json").write_text(json.dumps([{
         "slug": "custom-city-budget", "headline": headline, "is_custom": True,
-        "custom_body_hash": g._custom_body_hash(body), "product_guide_hash": "",
-        "date": "2026-07-25", "first_published": "Sat, 25 Jul 2026 12:00:00 -0400"
+        "custom_body_hash": g._custom_body_hash(body), "product_guide_hash": ""
     }]), encoding="utf-8")
     (tmp_path / "custom_articles.json").write_text(json.dumps([{
         "headline": headline, "body": body, "category": "local_gov", "expires": "2099-01-01"
     }]), encoding="utf-8")
 
-    loaded = g.load_custom_articles()
+    retained = g.load_custom_articles()
 
-    assert len(loaded) == 1
-    assert loaded[0]["_custom_payload_unchanged"] is True
-    assert loaded[0]["_custom_active_queue"] is True
-    assert loaded[0]["_archived_slug"] == "custom-city-budget"
-    assert loaded[0]["published_raw"] == "Sat, 25 Jul 2026 12:00:00 -0400"
+    assert len(retained) == 1
+    assert retained[0]["_custom_payload_unchanged"] is True
+    assert retained[0]["_custom_active_queue"] is True
+    assert retained[0]["_archived_slug"] == "custom-city-budget"
+    assert retained[0]["link"].endswith("/articles/custom-city-budget.html")
 
 
 def test_changed_body_updates_exact_headline_in_place(tmp_path, monkeypatch):
