@@ -271,3 +271,80 @@ def test_unrelated_hometown_sports_title_with_publisher_suffix_is_not_fixture_ma
     assert assessment["is_preview"] is True
     assert assessment["expired"] is False
     assert assessment["event_end_date"] == "2026-08-09"
+
+
+def test_homepage_live_surface_filter_removes_archived_generated_preview():
+    expired = {
+        "headline": GENERATED_PREVIEW_HEADLINE,
+        "source_title": SERIES_PREVIEW_HEADLINE,
+        "teaser": "The Mets return to Clover Park for a seven-game series.",
+        "body": "The Mets return to Clover Park for a seven-game series.",
+        "category_key": "sports",
+        "category_keys": ["sports"],
+        "cat_key": "sports",
+        "published": "2026-07-28",
+        "_archived_slug": (
+            "2026-07-28-st-lucie-mets-host-fort-myers-for-seven-game-series"
+        ),
+        "link": (
+            "https://treasurecoast.today/articles/"
+            "2026-07-28-st-lucie-mets-host-fort-myers-for-seven-game-series.html"
+        ),
+    }
+
+    kept, rejected = generate._filter_expired_sports_live_placements(
+        [expired], RUN_DATE
+    )
+
+    assert kept == []
+    assert len(rejected) == 1
+    assert rejected[0]["headline"] == GENERATED_PREVIEW_HEADLINE
+    assert rejected[0]["reason"] == "sports_event_window_expired"
+    assert rejected[0]["event_end_date"] == "2026-07-26"
+    assert rejected[0]["slug"].startswith("2026-07-28-st-lucie-mets-host")
+
+
+def test_homepage_live_surface_filter_preserves_valid_and_custom_items():
+    future = _item(
+        headline="St. Lucie Mets host Dunedin for six-game series starting Tuesday",
+        body=(
+            "The Mets will host Dunedin at Clover Park from Tuesday, August 4 "
+            "through Sunday, August 9."
+        ),
+        category_key="sports",
+        category_keys=["sports"],
+        cat_key="sports",
+    )
+    custom_expired = _item(
+        is_custom=True,
+        authoritative_custom=True,
+        category_key="sports",
+        category_keys=["sports"],
+        cat_key="sports",
+    )
+    local_government = {
+        "headline": "Port St. Lucie council approves infrastructure plan",
+        "category_key": "local_gov",
+        "category_keys": ["local_gov"],
+        "cat_key": "local_gov",
+    }
+
+    kept, rejected = generate._filter_expired_sports_live_placements(
+        [future, custom_expired, local_government], RUN_DATE
+    )
+
+    assert kept == [future, custom_expired, local_government]
+    assert rejected == []
+
+
+def test_render_index_applies_expired_sports_filter_before_global_ranking():
+    import inspect
+
+    source = inspect.getsource(generate.render_index)
+    filter_call = source.index(
+        "enriched_pool, _expired_sports_live_suppressions = "
+        "_filter_expired_sports_live_placements("
+    )
+    global_rank_call = source.index("topnews     = global_rank(enriched_pool")
+    assert filter_call < global_rank_call
+    assert "sports-expired-preview-live-suppression.json" in source

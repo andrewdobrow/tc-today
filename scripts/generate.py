@@ -3478,6 +3478,42 @@ def _archive_sports_event_window_expired(entry, reference_time=None):
     return bool(_sports_event_window_assessment(probe, reference_time).get("expired"))
 
 
+def _filter_expired_sports_live_placements(items, reference_time=None):
+    """Remove expired Sports previews from homepage-facing live placement pools.
+
+    Category generation and category archive recovery already reject these previews.
+    This final renderer-side boundary prevents a recently archived generated copy from
+    re-entering Top Stories, Latest News, or county panels through homepage backfill.
+    Historical archive records and their article pages remain intact.
+    """
+    kept = []
+    rejected = []
+    for item in list(items or []):
+        category_keys = set(_item_category_memberships(item))
+        category_keys.update(
+            value for value in (item.get("category_key"), item.get("cat_key")) if value
+        )
+        if "sports" not in category_keys:
+            kept.append(item)
+            continue
+
+        assessment = _sports_event_window_assessment(item, reference_time)
+        if not assessment.get("expired"):
+            kept.append(item)
+            continue
+
+        rejected.append({
+            "headline": str(item.get("headline") or item.get("title") or ""),
+            "source_title": str(item.get("source_title") or ""),
+            "source_url": str(item.get("source_url") or item.get("link") or ""),
+            "slug": str(item.get("_archived_slug") or item.get("slug") or ""),
+            "reason": _SPORTS_PREVIEW_REASON,
+            "event_end_date": assessment.get("event_end_date", ""),
+            "event_dates": assessment.get("event_dates", []),
+        })
+    return kept, rejected
+
+
 def _sports_zero_candidate_fast_recovery(category_key, headlines):
     """Return True when Sports has no deterministic hero candidate.
 
@@ -6472,6 +6508,29 @@ def render_index(all_categories, top_cat):
 
         # Secondary county memberships remain on this one canonical card.
         _apply_category_memberships(backfill_card, _bf_ckey, e.get("category_keys") or [])
+
+    enriched_pool, _expired_sports_live_suppressions = _filter_expired_sports_live_placements(
+        enriched_pool
+    )
+    _expired_sports_live_report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "policy": "suppress_expired_sports_previews_from_homepage_live_surfaces",
+        "rejected_count": len(_expired_sports_live_suppressions),
+        "rejected": _expired_sports_live_suppressions,
+    }
+    _expired_sports_live_report_path = (
+        OUTPUT_DIR / "data" / "sports-expired-preview-live-suppression.json"
+    )
+    _expired_sports_live_report_path.parent.mkdir(parents=True, exist_ok=True)
+    _expired_sports_live_report_path.write_text(
+        json.dumps(_expired_sports_live_report, indent=2), encoding="utf-8"
+    )
+    if _expired_sports_live_suppressions:
+        print(
+            "  Homepage live-surface guard suppressed "
+            f"{len(_expired_sports_live_suppressions)} expired Sports preview(s)"
+        )
 
     enriched_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
     topnews     = global_rank(enriched_pool, dedupe_against=top_cat["hero"].get("headline", ""))
