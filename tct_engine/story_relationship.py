@@ -219,6 +219,59 @@ class StoryRelationship:
         } and bool(self.story_id)
 
 
+def _candidate_identity_anchor_codes(
+    *,
+    exact_event_anchor: bool,
+    location_match: bool,
+    agency_match: bool,
+    type_match: bool,
+    entity_match: bool,
+    title_score: float,
+    fact_score: float,
+) -> tuple[str, ...]:
+    """Return explainable identity-anchor codes for observe-only candidates.
+
+    Milestone words and generic fact overlap are not identity. A current-run
+    follow-up candidate must have either an exact event key or a corroborated
+    combination of place, agency, named entity, event type, and strong title/fact
+    continuity. This affects diagnostics only; live grouping remains governed by
+    the existing conservative relationship contract.
+    """
+    codes: list[str] = []
+    if exact_event_anchor:
+        codes.append("exact_event_key")
+    if location_match:
+        codes.append("location_match")
+    if agency_match:
+        codes.append("agency_match")
+    if type_match:
+        codes.append("event_type_match")
+    if entity_match:
+        codes.append("entity_match")
+    if title_score >= 0.35:
+        codes.append("title_continuity")
+    if fact_score >= 0.35:
+        codes.append("fact_continuity")
+
+    corroborated_pair = any(
+        (
+            location_match and agency_match,
+            location_match and entity_match,
+            agency_match and entity_match and title_score >= 0.45,
+        )
+    )
+    singular_named_anchor = (
+        (agency_match or entity_match)
+        and type_match
+        and title_score >= 0.70
+        and fact_score >= 0.50
+    )
+    qualified = exact_event_anchor or corroborated_pair or singular_named_anchor
+    if qualified:
+        codes.append("identity_anchor_qualified")
+    return tuple(codes)
+
+
 class StoryRelationshipEngine:
     """Conservatively groups distinct events into a persistent story."""
 
@@ -348,11 +401,17 @@ class StoryRelationshipEngine:
             exact_event_anchor = event_key in {
                 str(value or "").strip() for value in story.get("events", ())
             }
-            continuity_anchor = (agency_match or entity_match) and (
-                location_match or type_match
-            ) and (title_score >= 0.35 or fact_score >= 0.35)
+            identity_anchor_codes = _candidate_identity_anchor_codes(
+                exact_event_anchor=exact_event_anchor,
+                location_match=location_match,
+                agency_match=agency_match,
+                type_match=type_match,
+                entity_match=entity_match,
+                title_score=title_score,
+                fact_score=fact_score,
+            )
             advisory_eligible = bool(novel_advisory_milestones) and (
-                exact_event_anchor or continuity_anchor
+                "identity_anchor_qualified" in identity_anchor_codes
             )
             if advisory_eligible:
                 advisory_confidence = min(
@@ -368,21 +427,7 @@ class StoryRelationshipEngine:
                     - 0.08 * float(agency_conflict)
                     - 0.06 * float(type_conflict),
                 )
-                reason_codes = ["novel_milestone"]
-                if exact_event_anchor:
-                    reason_codes.append("exact_event_key")
-                if location_match:
-                    reason_codes.append("location_match")
-                if agency_match:
-                    reason_codes.append("agency_match")
-                if type_match:
-                    reason_codes.append("event_type_match")
-                if entity_match:
-                    reason_codes.append("entity_match")
-                if title_score >= 0.35:
-                    reason_codes.append("title_continuity")
-                if fact_score >= 0.35:
-                    reason_codes.append("fact_continuity")
+                reason_codes = ["novel_milestone", *identity_anchor_codes]
                 if agency_conflict:
                     reason_codes.append("agency_conflict")
                 if type_conflict:
@@ -515,7 +560,18 @@ class StoryRelationshipEngine:
                 candidate_story_id=story_id,
                 candidate_confidence=confidence,
                 candidate_milestones=tuple(sorted(novel_milestones)),
-                candidate_reason_codes=("enforced_follow_up",),
+                candidate_reason_codes=(
+                    "enforced_follow_up",
+                    *_candidate_identity_anchor_codes(
+                        exact_event_anchor=exact_event_anchor,
+                        location_match=location_match,
+                        agency_match=agency_match,
+                        type_match=type_match,
+                        entity_match=entity_match,
+                        title_score=title_score,
+                        fact_score=fact_score,
+                    ),
+                ),
                 candidate_trace=trace,
             )
             if best is None or candidate.confidence > best.confidence:

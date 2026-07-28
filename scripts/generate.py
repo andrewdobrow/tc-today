@@ -2732,6 +2732,81 @@ def _archive_entry_publishable(entry):
     return wc >= MIN_HERO_BODY_WORDS and (pc >= 2 or wc >= 180)
 
 
+def _sports_relevance_evidence(item):
+    """Require concrete athletic subject matter for Sports placements.
+
+    The classifier is intentionally broad, so a local museum opening or police
+    community event can occasionally be mislabeled as Sports. A Sports hero/card
+    must contain an actual sport, team/league, athlete role, competition, result,
+    roster transaction, or athletic award. Locality is enforced separately by
+    ``_hero_eligible``.
+    """
+    text = _text_for_category_match(item)
+    if not text:
+        return False
+
+    explicit_organizations = (
+        r"\bst\.? lucie mets\b",
+        r"\bflorida state league\b",
+        r"\bfsl\b",
+        r"\bminor league baseball\b",
+        r"\bmlb\b",
+        r"\bncaa\b",
+        r"\bfhsaa\b",
+        r"\b(?:varsity|junior varsity|jv)\b",
+        r"\bathletic(?:s| department| program)?\b",
+    )
+    sport_subjects = (
+        r"\bbaseball\b", r"\bfootball\b", r"\bbasketball\b",
+        r"\bsoftball\b", r"\bsoccer\b", r"\bvolleyball\b",
+        r"\btennis\b", r"\bgolf\b", r"\blacrosse\b",
+        r"\bwrestling\b", r"\btrack and field\b", r"\bcross country\b",
+        r"\bswimming\b", r"\bdiving\b", r"\bhockey\b",
+        r"\bpickleball\b", r"\bgymnastics\b", r"\bcheerleading\b",
+        r"\bspeed skating\b", r"\bmotorsports?\b", r"\bauto racing\b",
+        r"\brunning\b", r"\broad race\b",
+    )
+    athlete_roles = (
+        r"\bathlete\b", r"\bplayer\b", r"\bcoach\b", r"\bteam\b",
+        r"\bpitcher\b", r"\bbatter\b", r"\bcatcher\b",
+        r"\bquarterback\b", r"\brunning back\b", r"\bwide receiver\b",
+        r"\bgoalkeeper\b", r"\bgoalie\b", r"\bswimmer\b",
+        r"\brunner\b", r"\bgolfer\b", r"\bwrestler\b",
+    )
+    competitive_context = (
+        r"\bgame\b", r"\bmatch\b", r"\bmeet\b", r"\brace\b",
+        r"\btournament\b", r"\bchampionship\b", r"\bplayoffs?\b",
+        r"\bseason\b", r"\bscore\b", r"\bstandings\b", r"\brecord\b",
+        r"\bwin(?:s|ning)?\b", r"\bwon\b", r"\bloss\b", r"\blost\b",
+        r"\bdefeat(?:s|ed)?\b", r"\bbeats?\b", r"\bsweep(?:s|t)?\b",
+        r"\broster\b", r"\bdraft(?:ed)?\b", r"\bsign(?:s|ed|ing)\b",
+        r"\brecruit(?:ed|ing|ment)?\b", r"\bcommits?\b", r"\bcommitted\b",
+        r"\bplayer of the week\b", r"\bpitcher of the week\b",
+        r"\bathlete of the week\b", r"\bcoach of the year\b",
+        r"\bnamed .*\b(?:player|pitcher|athlete|coach)\b",
+        r"\bhome run\b", r"\brbi\b", r"\binnings?\b",
+        r"\btouchdown\b", r"\bgoal\b",
+    )
+    sports_facility = (
+        r"\bsports complex\b", r"\bathletic complex\b",
+        r"\bstadium\b", r"\bballpark\b", r"\bclover park\b",
+        r"\btraining camp\b",
+    )
+
+    has_org = any(re.search(pattern, text, re.I) for pattern in explicit_organizations)
+    has_subject = any(re.search(pattern, text, re.I) for pattern in sport_subjects)
+    has_role = any(re.search(pattern, text, re.I) for pattern in athlete_roles)
+    has_context = any(re.search(pattern, text, re.I) for pattern in competitive_context)
+    has_facility = any(re.search(pattern, text, re.I) for pattern in sports_facility)
+
+    return bool(
+        has_org
+        or has_facility
+        or (has_subject and (has_context or has_role))
+        or (has_role and has_context)
+    )
+
+
 # Hero selection is stricter than card inclusion. Cards may use softer fallback
 # logic to keep a section populated, but a section lead must clearly belong to
 # that section.
@@ -2858,6 +2933,8 @@ def _hero_eligible(category_key, h):
 
     if category_key in topic_terms:
         if _has_any(text, hard_negatives.get(category_key, [])):
+            return False
+        if category_key == "sports" and not _sports_relevance_evidence(h):
             return False
         # Block national / global syndicated filler that has no local hook. WPTV and
         # other feeds carry survey/study/ranking pieces ("Study finds Gen X most
@@ -4549,6 +4626,113 @@ def format_age(published_str):
         return ""
 
 
+def _format_category_hero_timestamp(item, archive_entries=None):
+    """Return a trustworthy human-readable timestamp for category heroes.
+
+    Generated category items often inherit a publisher timestamp. Some feeds expose
+    only a calendar date and normalize that value to midnight, which made newly
+    published category heroes display ``12:00 AM``. Once an article has been written,
+    its TCT archive row is the authoritative publication receipt and contains the
+    actual ``first_published`` time. Prefer that value. When only a date or a synthetic
+    midnight timestamp exists, show the date instead of pretending midnight was a
+    meaningful publication time.
+    """
+    archive_entries = archive_entries or []
+    matched = None
+    if isinstance(item, dict):
+        archived_slug = str(item.get("_archived_slug") or item.get("slug") or "").strip()
+        if archived_slug:
+            matched = next(
+                (
+                    entry
+                    for entry in archive_entries
+                    if str(entry.get("slug") or "").strip() == archived_slug
+                ),
+                None,
+            )
+        if matched is None:
+            headline_key = " ".join(
+                str(item.get("headline") or "").lower().split()
+            )
+            exact = [
+                entry
+                for entry in archive_entries
+                if " ".join(str(entry.get("headline") or "").lower().split())
+                == headline_key
+            ]
+            if len(exact) == 1:
+                matched = exact[0]
+        if matched is None:
+            matched = find_matching_entry(
+                item.get("headline", ""),
+                archive_entries,
+                item.get("link", ""),
+                is_weather_alert=bool(item.get("is_weather_alert")),
+            )
+
+    candidates = []
+    if matched:
+        candidates.extend(
+            [
+                matched.get("first_published"),
+                matched.get("published_raw"),
+            ]
+        )
+    if isinstance(item, dict):
+        candidates.extend(
+            [
+                item.get("first_published"),
+                item.get("published_raw"),
+                item.get("published"),
+            ]
+        )
+
+    for value in candidates:
+        raw = str(value or "").strip()
+        if not raw:
+            continue
+
+        # Preserve already-humanized relative labels.
+        lowered = raw.lower()
+        if any(token in lowered for token in ("ago", "yesterday", "a few minutes")):
+            return raw
+
+        parsed = None
+        try:
+            from email.utils import parsedate_to_datetime
+            parsed = parsedate_to_datetime(raw)
+        except Exception:
+            try:
+                parsed = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            except Exception:
+                parsed = None
+
+        if parsed is None:
+            # Date-only archive values should stay dates, not become midnight.
+            if re.fullmatch(r"\d{4}-\d{2}-\d{2}", raw):
+                try:
+                    dt = datetime.strptime(raw, "%Y-%m-%d")
+                    return f"{dt.strftime('%b')} {dt.day}, {dt.year}"
+                except Exception:
+                    return raw
+            return raw
+
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+
+        # A feed-supplied exact midnight is usually a date placeholder, not a real
+        # clock time. The archive's TCT first_published value normally prevents this
+        # branch for new stories; this is the safe fallback for legacy rows.
+        if parsed.hour == 0 and parsed.minute == 0 and parsed.second == 0:
+            return f"{parsed.strftime('%b')} {parsed.day}, {parsed.year}"
+
+        formatted = format_age(raw)
+        if formatted:
+            return formatted
+
+    return ""
+
+
 HERO_PREFILTER_AUDIT = []
 FRONT_PAGE_HERO_AUDIT = {}
 
@@ -5461,6 +5645,7 @@ def global_rank(all_cards, dedupe_against=None):
 
 def render_index(all_categories, top_cat):
     COUNTY_KEYS = {"martin", "st_lucie", "indian_river"}
+    archive = load_archive(OUTPUT_DIR / "archive.json")
     SECTION_LABELS = {
         "martin":       "Martin County News",
         "st_lucie":     "St. Lucie County News",
@@ -5480,10 +5665,9 @@ def render_index(all_categories, top_cat):
         img_credit = hero.get("image_credit", "")
         credit_html = f'<figcaption class="img-credit">Photo: {img_credit}</figcaption>' if img_url and img_credit else ""
         img_html    = f'<figure class="hero-image-wrap"><img class="hero-image" src="{img_url}" alt="" loading="lazy">{credit_html}</figure>' if img_url else ""
-        pub_time    = hero.get("published", "")
+        pub_time    = _format_category_hero_timestamp(hero, archive)
         display     = "" if visible else ' style="display:none"'
         fade        = " fade-in" if visible else ""
-        archive     = load_archive(OUTPUT_DIR / "archive.json")
         if hero.get("_section_placeholder"):
             article_url = f"{SITE_URL}/archive.html"
         elif hero.get("_archived_slug"):
@@ -14482,7 +14666,8 @@ def _write_editorial_observability(engine, audit_rows, activation_run=None, cate
         print(
             "  Follow-up candidates:    "
             f"current={follow_up_metrics.get('candidate_count', 0)} / "
-            f"retrospective={retrospective_metrics.get('candidate_count', 0)}"
+            f"retrospective={retrospective_metrics.get('candidate_count', 0)} / "
+            f"unanchored_suppressed={follow_up_metrics.get('unanchored_candidate_suppressed_count', 0)}"
         )
         print(
             "  Activation evidence:     "

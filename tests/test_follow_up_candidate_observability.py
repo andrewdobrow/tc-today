@@ -171,6 +171,7 @@ def test_observability_exports_follow_up_candidate_readiness():
                 "follow_up_candidate_reason_codes": [
                     "novel_milestone",
                     "title_continuity",
+                    "identity_anchor_qualified",
                 ],
                 "follow_up_candidate_trace": [
                     "Follow-up candidate mode: observe_only"
@@ -187,6 +188,54 @@ def test_observability_exports_follow_up_candidate_readiness():
     assert section["milestones"] == {"approval": 1}
     assert section["current_relationships"] == {"same_event": 1}
     assert section["enforcement_ready"] is False
+
+
+def test_observability_suppresses_legacy_unanchored_candidate_rows():
+    report = build_editorial_observability(
+        _FakeEngine(),
+        [
+            {
+                "route": "skip",
+                "eligible": True,
+                "relationship": "new_story",
+                "story_id": "story_000010",
+                "headline": "Unrelated death report",
+                "event_key": "unknown-event-unrelated",
+                "follow_up_candidate_story_id": "story_000001",
+                "follow_up_candidate_confidence": 0.91,
+                "follow_up_candidate_milestones": ["death"],
+                "follow_up_candidate_reason_codes": ["enforced_follow_up"],
+                "follow_up_candidate_trace": ["Location match: False"],
+            }
+        ],
+    )
+
+    section = report["follow_up_detection"]
+    assert section["candidate_count"] == 0
+    assert section["high_confidence_candidate_count"] == 0
+    assert section["unanchored_candidate_suppressed_count"] == 1
+
+
+def test_sparse_milestone_without_identity_anchor_is_not_exported(tmp_path: Path):
+    registry = StoryRegistry(tmp_path / "registry.json")
+    registry.resolve_article(
+        event_key="unknown-event-first",
+        title="Unrelated death investigation",
+        facts=("death reported",),
+        event_types=("death",),
+    )
+
+    registry.resolve_article(
+        event_key="unknown-event-second",
+        title="Another unrelated death investigation",
+        facts=("death reported",),
+        event_types=("death",),
+    )
+
+    assert registry.last_decision["relationship"] == "new_story"
+    assert registry.last_decision["follow_up_candidate_story_id"] == ""
+    assert registry.last_decision["follow_up_candidate_confidence"] == 0.0
+    assert registry.last_decision["follow_up_candidate_milestones"] == []
 
 
 def test_phrase_aware_advisory_milestones_reject_generic_breaks_and_ending():

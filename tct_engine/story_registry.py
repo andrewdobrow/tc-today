@@ -805,9 +805,21 @@ class StoryRegistry:
                 entities=entities,
                 stories=self.iter_stories(),
             )
+            advisory_reason_codes = tuple(
+                advisory_relationship.candidate_reason_codes
+                or (
+                    ("would_be_enforced_follow_up",)
+                    if advisory_relationship.relationship is StoryRelationshipType.FOLLOW_UP
+                    else ()
+                )
+            )
+            candidate_is_identity_anchored = (
+                "identity_anchor_qualified" in advisory_reason_codes
+            )
             # Sparse keys remain prohibited from attaching in this release. Preserve
-            # only the observe-only candidate metadata so production can show which
-            # sparse new-story decisions may actually be follow-ups.
+            # only identity-anchored observe-only candidate metadata so production can
+            # show which sparse new-story decisions may actually be follow-ups. A
+            # milestone plus generic fact overlap is not enough.
             relationship = StoryRelationship(
                 StoryRelationshipType.NEW_STORY,
                 None,
@@ -818,23 +830,36 @@ class StoryRegistry:
                     "Sparse event-key relationship guard: true",
                 ),
                 candidate_story_id=(
-                    advisory_relationship.candidate_story_id
-                    or advisory_relationship.story_id
+                    (
+                        advisory_relationship.candidate_story_id
+                        or advisory_relationship.story_id
+                    )
+                    if candidate_is_identity_anchored
+                    else None
                 ),
                 candidate_confidence=(
-                    advisory_relationship.candidate_confidence
-                    or advisory_relationship.confidence
+                    (
+                        advisory_relationship.candidate_confidence
+                        or advisory_relationship.confidence
+                    )
+                    if candidate_is_identity_anchored
+                    else 0.0
                 ),
-                candidate_milestones=advisory_relationship.candidate_milestones,
+                candidate_milestones=(
+                    advisory_relationship.candidate_milestones
+                    if candidate_is_identity_anchored
+                    else ()
+                ),
                 candidate_reason_codes=(
-                    advisory_relationship.candidate_reason_codes
-                    or (("would_be_enforced_follow_up",)
-                        if advisory_relationship.relationship is StoryRelationshipType.FOLLOW_UP
-                        else ())
+                    advisory_reason_codes if candidate_is_identity_anchored else ()
                 ),
                 candidate_trace=(
-                    advisory_relationship.candidate_trace
-                    or advisory_relationship.decision_trace
+                    (
+                        advisory_relationship.candidate_trace
+                        or advisory_relationship.decision_trace
+                    )
+                    if candidate_is_identity_anchored
+                    else ()
                 ),
             )
         else:

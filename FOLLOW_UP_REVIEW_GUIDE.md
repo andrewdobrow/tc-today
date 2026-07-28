@@ -29,6 +29,15 @@ Review:
 
 The current conservative relationship remains authoritative. These candidates do not change grouping.
 
+Beginning with v1.11.8.0, current-run candidates must also contain
+`identity_anchor_qualified` in `candidate_reason_codes`. A milestone word and generic
+fact overlap are not identity. Qualification requires either an exact event key or a
+corroborated combination of location, agency, named entity, event type, and strong
+title/fact continuity.
+
+The summary field `unanchored_candidate_suppressed_count` shows how many legacy or
+intermediate candidates were withheld because they lacked that evidence.
+
 ## Retrospective timeline candidates
 
 `follow_up_detection.retrospective.examples` examines transitions already stored inside persistent story timelines.
@@ -121,4 +130,6 @@ Do not activate follow-up grouping until production evidence includes:
 - stable results across two or three production runs;
 - a permanent regression test for every false positive.
 
-v1.11.6.0 remains fully observe-only. It does not modify story grouping, URLs, ranking, suppression, hero selection or publication.
+v1.11.8.0 remains fully observe-only for candidate activation. It does not activate
+broader follow-up grouping or modify URLs, ranking, suppression, hero selection or
+publication based on candidate diagnostics.

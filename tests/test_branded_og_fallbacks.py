@@ -41,5 +41,5 @@ def test_legacy_ai_urls_are_migration_inputs_not_active_pool_entries():
 
 def test_engine_release_identifies_live_publication_receipt_reconciliation():
     observability = (ROOT / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'ENGINE_VERSION = "1.11.7.4"' in observability
-    assert 'ENGINE_RELEASE = "live-publication-receipt-reconciliation"' in observability
+    assert 'ENGINE_VERSION = "1.11.8.0"' in observability
+    assert 'ENGINE_RELEASE = "identity-anchored-followups-sports-and-hero-time"' in observability

@@ -16,11 +16,11 @@ from typing import Any, Iterable, Mapping
 from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.11.7.4"
-ENGINE_RELEASE = "live-publication-receipt-reconciliation"
-OBSERVABILITY_SCHEMA_VERSION = 13
+ENGINE_VERSION = "1.11.8.0"
+ENGINE_RELEASE = "identity-anchored-followups-sports-and-hero-time"
+OBSERVABILITY_SCHEMA_VERSION = 14
 RESOLVER_VERSION = "2.4"
-RELATIONSHIP_ENGINE_VERSION = "1.4"
+RELATIONSHIP_ENGINE_VERSION = "1.5"
 
 
 def _utc_now() -> str:
@@ -320,6 +320,7 @@ def build_editorial_observability(
     relationship_examples: list[dict[str, Any]] = []
     follow_up_candidate_count = 0
     high_confidence_follow_up_candidate_count = 0
+    unanchored_follow_up_candidate_count = 0
     follow_up_candidate_milestones: Counter[str] = Counter()
     follow_up_candidate_current_relationships: Counter[str] = Counter()
     follow_up_candidate_reason_codes: Counter[str] = Counter()
@@ -369,7 +370,12 @@ def build_editorial_observability(
             for value in (row.get("follow_up_candidate_reason_codes") or [])
             if str(value).strip()
         ]
-        if candidate_story_id:
+        identity_anchor_qualified = (
+            "identity_anchor_qualified" in candidate_reason_codes
+        )
+        if candidate_story_id and not identity_anchor_qualified:
+            unanchored_follow_up_candidate_count += 1
+        if candidate_story_id and identity_anchor_qualified:
             follow_up_candidate_count += 1
             if candidate_confidence >= 0.75:
                 high_confidence_follow_up_candidate_count += 1
@@ -527,6 +533,7 @@ def build_editorial_observability(
             "publication_behavior_changed": False,
             "candidate_count": follow_up_candidate_count,
             "high_confidence_candidate_count": high_confidence_follow_up_candidate_count,
+            "unanchored_candidate_suppressed_count": unanchored_follow_up_candidate_count,
             "current_relationships": dict(
                 sorted(follow_up_candidate_current_relationships.items())
             ),
