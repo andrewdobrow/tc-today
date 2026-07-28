@@ -200,7 +200,7 @@ def test_category_generation_report_counts_expired_sports_previews():
             "sports_expired_event_preview_count": 0,
         },
     ])
-    assert report["schema_version"] == 2
+    assert report["schema_version"] == 3
     assert report["summary"]["sports_expired_event_preview_count"] == 1
     assert report["summary"]["model_attempt_count"] == 1
     assert report["summary"]["archive_recovery_requested_count"] == 1

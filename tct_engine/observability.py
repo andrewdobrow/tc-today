@@ -18,8 +18,8 @@ from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
 ENGINE_VERSION = "1.11.8.4"
-ENGINE_RELEASE = "first-responder-fallback-image-guard"
-OBSERVABILITY_SCHEMA_VERSION = 15
+ENGINE_RELEASE = "contextual-update-lead-guard"
+OBSERVABILITY_SCHEMA_VERSION = 16
 RESOLVER_VERSION = "2.4"
 RELATIONSHIP_ENGINE_VERSION = "1.5"
 

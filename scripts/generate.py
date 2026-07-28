@@ -270,7 +270,7 @@ CATEGORY_GENERATION_BUDGET_SECONDS = _positive_float_env(
 )
 CATEGORY_GENERATION_MAX_ATTEMPTS = 2
 CATEGORY_GENERATION_MIN_RETRY_SECONDS = 15
-CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 2
+CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 3
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -314,6 +314,7 @@ client = anthropic.Anthropic(api_key=_ANTHROPIC_API_KEY) if _ANTHROPIC_API_KEY e
 GENERATION_CACHE_PATH = OUTPUT_DIR / "data" / "generation-cache.json"
 GENERATION_CACHE_SCHEMA_VERSION = 1
 GENERATION_PROMPT_VERSION = "v1.9.4-incremental-generation-1"
+CATEGORY_GENERATION_PROMPT_VERSION = "v1.11.8.4-contextual-update-leads"
 _CACHE_MISS = object()
 
 
@@ -518,7 +519,7 @@ def _category_generation_cache_key(category_key, headlines):
             "content_hash": hashlib.sha256(body.encode("utf-8")).hexdigest(),
         })
     return _cache_hash({
-        "version": GENERATION_PROMPT_VERSION,
+        "version": CATEGORY_GENERATION_PROMPT_VERSION,
         "model_articles": MODEL_ARTICLES,
         "model_selection": MODEL_SELECTION,
         "category_key": category_key,
@@ -614,7 +615,7 @@ EDITORIAL_IMAGE_ROOT = OUTPUT_DIR / "images" / "editorial"
 EDITORIAL_IMAGE_ROTATION_PATH = OUTPUT_DIR / "data" / "editorial-image-rotation.json"
 EDITORIAL_IMAGE_REPORT_PATH = OUTPUT_DIR / "data" / "editorial-image-rotation-report.json"
 EDITORIAL_IMAGE_SCHEMA_VERSION = 2
-EDITORIAL_IMAGE_SELECTION_POLICY_VERSION = 4
+EDITORIAL_IMAGE_SELECTION_POLICY_VERSION = 3
 EDITORIAL_IMAGE_EXTENSIONS = {".webp", ".jpg", ".jpeg", ".png"}
 EDITORIAL_IMAGE_EXTENSION_PRIORITY = {".webp": 0, ".jpg": 1, ".jpeg": 2, ".png": 3}
 EDITORIAL_IMAGE_MAX_ASSIGNMENTS = 3000
@@ -652,13 +653,6 @@ EDITORIAL_CATEGORY_TOPIC = {
     "things_to_do": "topics/things-to-do",
 }
 EDITORIAL_HIGH_SPECIFICITY_TOPIC_RULES = [
-    # First-responder stories must remain visually anchored in public safety even
-    # when an official statement mentions mental health, health and well-being, or
-    # support services incidentally. This rule intentionally precedes health.
-    ("topics/crime-public-safety", re.compile(
-        r"\b(?:fire rescue|firefighter|firefighters|firefighter[/-]paramedic|"
-        r"paramedic|paramedics|first responder|first responders)\b", re.I
-    )),
     ("topics/roads-transportation", re.compile(
         r"\b(?:road|roads|roadwork|traffic|bridge|causeway|highway|interstate|i-95|"
         r"turnpike|lane|lanes|ramp|ramps|intersection|detour|closure|closed|"
@@ -669,17 +663,8 @@ EDITORIAL_HIGH_SPECIFICITY_TOPIC_RULES = [
         r"district|campus|graduation|superintendent)\b", re.I
     )),
     ("topics/health", re.compile(
-        # Bare ``health`` is deliberately excluded. Official condolences and public-
-        # safety stories often contain phrases such as ``mental health and well-being``
-        # without healthcare being the visual subject. Genuine healthcare stories
-        # still match clinical institutions, services, officials, or conditions.
-        r"\b(?:healthcare|health care|health department|health departments|"
-        r"health system|health systems|health center|health centers|health clinic|"
-        r"health clinics|health service|health services|health official|health officials|"
-        r"health agency|health agencies|health advisory|health advisories|health warning|"
-        r"health warnings|health emergency|hospital|hospitals|medical|doctor|doctors|"
-        r"patient|patients|clinic|clinics|emergency room|disease|outbreak|public health)\b",
-        re.I,
+        r"\b(?:health|hospital|medical|doctor|doctors|patient|patients|clinic|"
+        r"emergency room|disease|outbreak|public health)\b", re.I
     )),
     ("topics/weather-environment", re.compile(
         r"\b(?:weather|storm|hurricane|tropical|flood|flooding|rain|wind|tornado|"
@@ -703,17 +688,8 @@ EDITORIAL_TOPIC_RULES = [
         r"district|campus|graduation|superintendent)\b", re.I
     )),
     ("topics/health", re.compile(
-        # Bare ``health`` is deliberately excluded. Official condolences and public-
-        # safety stories often contain phrases such as ``mental health and well-being``
-        # without healthcare being the visual subject. Genuine healthcare stories
-        # still match clinical institutions, services, officials, or conditions.
-        r"\b(?:healthcare|health care|health department|health departments|"
-        r"health system|health systems|health center|health centers|health clinic|"
-        r"health clinics|health service|health services|health official|health officials|"
-        r"health agency|health agencies|health advisory|health advisories|health warning|"
-        r"health warnings|health emergency|hospital|hospitals|medical|doctor|doctors|"
-        r"patient|patients|clinic|clinics|emergency room|disease|outbreak|public health)\b",
-        re.I,
+        r"\b(?:health|hospital|medical|doctor|doctors|patient|patients|clinic|"
+        r"emergency room|disease|outbreak|public health)\b", re.I
     )),
     ("topics/crime-public-safety", re.compile(
         r"\b(?:crime|police|sheriff|deputy|deputies|arrest|arrested|charged|shooting|"
@@ -890,9 +866,8 @@ def _editorial_pool_for_story(category_key, headline="", item=None, inventory=No
     subject_text = _fallback_story_subject_blob(headline, item)
     location_text = _fallback_story_blob(headline, item)
 
-    # First responders, schools, infrastructure/traffic operations, health, and
-    # weather/environment describe the visual subject more precisely than a city name.
-    # Topic routing uses
+    # Schools, infrastructure/traffic operations, health, and weather/environment
+    # describe the visual subject more precisely than a city name. Topic routing uses
     # headline/summary evidence only so incidental body references cannot hijack it.
     specific_topic = _detect_high_specificity_editorial_topic(subject_text)
     if specific_topic and pools.get(specific_topic):
@@ -1000,8 +975,8 @@ def _select_editorial_fallback(category_key, headline="", item=None, force_new=F
             assigned_path = urlsplit(assigned_url).path if assigned_url else ""
             # Preserve stable assignments only while they still belong to the pool
             # selected by the current policy. This deliberately reclassifies older
-            # city assignments when a first-responder, school, road, health, or
-            # weather pool is now the more accurate visual match.
+            # city assignments when a school, road, health, or weather pool is now
+            # the more accurate visual match.
             if (
                 str(assignment.get("pool_id") or "") == pool_id
                 and assigned_path in images
@@ -3539,6 +3514,38 @@ def _filter_expired_sports_live_placements(items, reference_time=None):
         })
     return kept, rejected
 
+def _filter_contextless_update_live_placements(items):
+    """Suppress generated update articles whose lead omits the underlying event.
+
+    This is a live-surface guard only. Historical archive records and direct article
+    pages remain intact until a corrected generation updates them in place. Custom
+    TCT articles are never altered by this automated gate.
+    """
+    kept = []
+    rejected = []
+    for item in list(items or []):
+        if item.get("is_custom") or item.get("authoritative_custom"):
+            kept.append(item)
+            continue
+        probe = dict(item)
+        probe.setdefault("story_form", _source_story_form(probe))
+        diagnostics = _update_lead_diagnostics(probe, probe)
+        if not diagnostics.get("required") or diagnostics.get("passed"):
+            kept.append(item)
+            continue
+        rejected.append({
+            "headline": str(item.get("headline") or item.get("title") or ""),
+            "source_title": str(item.get("source_title") or ""),
+            "source_url": str(item.get("source_url") or item.get("link") or ""),
+            "slug": str(item.get("_archived_slug") or item.get("slug") or ""),
+            "reason": "contextless_update_lead",
+            "missing": diagnostics.get("missing", []),
+            "baseline_anchor": diagnostics.get("baseline_anchor", ""),
+            "novelty_anchor": diagnostics.get("novelty_anchor", ""),
+        })
+    return kept, rejected
+
+
 
 def _sports_zero_candidate_fast_recovery(category_key, headlines):
     """Return True when Sports has no deterministic hero candidate.
@@ -4009,6 +4016,145 @@ def strip_absence_language(text):
     return result.replace("<<PARA>>", "\n\n").strip()
 
 
+# Follow-up and update stories require a self-contained lead. The model is told
+# this explicitly, but publication also enforces it deterministically for stories
+# whose source title clearly signals an update.
+_UPDATE_SOURCE_PATTERNS = (
+    re.compile(r"\b(?:new|additional|latest)\s+details?\b", re.IGNORECASE),
+    re.compile(r"\b(?:update|follow[- ]?up)\b", re.IGNORECASE),
+    re.compile(
+        r"\b(?:investigators?|detectives?|police|deputies|officials?|prosecutors?|"
+        r"commissioners?|city|county|district|agency)\s+"
+        r"(?:reveal(?:s|ed)?|describe(?:s|d)?|explain(?:s|ed)?|"
+        r"release(?:s|d)?|identify(?:ies|ied)?)\b",
+        re.IGNORECASE,
+    ),
+)
+
+_UPDATE_BASELINE_ANCHORS = (
+    ("fatality", re.compile(r"\b(?:death|died|dead|killed|fatal(?:ity)?|homicide)\b", re.IGNORECASE)),
+    ("shooting", re.compile(r"\b(?:shooting|shot|gunfire)\b", re.IGNORECASE)),
+    ("crash", re.compile(r"\b(?:crash|collision|wreck)\b", re.IGNORECASE)),
+    ("fire", re.compile(r"\b(?:fire|blaze|burned|burning)\b", re.IGNORECASE)),
+    ("missing_person", re.compile(r"\b(?:missing|disappeared|located safe|found safe)\b", re.IGNORECASE)),
+    ("abuse_or_neglect", re.compile(r"\b(?:abuse|neglect|malnutrition|dehydration)\b", re.IGNORECASE)),
+    ("criminal_case", re.compile(r"\b(?:crime|criminal|investigation|case|suspect|victim)\b", re.IGNORECASE)),
+    ("legal_case", re.compile(r"\b(?:lawsuit|trial|hearing|court|appeal)\b", re.IGNORECASE)),
+    ("government_matter", re.compile(r"\b(?:proposal|application|ordinance|budget|project|rezoning|development)\b", re.IGNORECASE)),
+)
+
+_UPDATE_NOVELTY_ANCHORS = (
+    ("disclosure", re.compile(
+        r"\b(?:new details?|update|reveal(?:s|ed|ing)?|describe(?:s|d|ing)?|"
+        r"explain(?:s|ed|ing)?|release(?:s|d|ing)?|announce(?:s|d|ing)?)\b",
+        re.IGNORECASE,
+    )),
+    ("identity", re.compile(r"\b(?:identify|identifies|identified|name|names|named)\b", re.IGNORECASE)),
+    ("arrest_or_charge", re.compile(r"\b(?:arrest|arrests|arrested|charge|charges|charged)\b", re.IGNORECASE)),
+    ("decision", re.compile(r"\b(?:approve|approves|approved|reject|rejects|rejected|vote|votes|voted|rule|rules|ruled)\b", re.IGNORECASE)),
+    ("status_change", re.compile(r"\b(?:reopen|reopens|reopened|close|closes|closed|resume|resumes|resumed|suspend|suspends|suspended)\b", re.IGNORECASE)),
+)
+
+
+class ContextualUpdateLeadError(RuntimeError):
+    """Raised when an update hero omits the original event or the new development."""
+
+
+def _source_story_form(source):
+    """Classify only explicit source-title updates; ordinary breaking news stays standard."""
+    if not isinstance(source, dict):
+        return "standard"
+    title = str(source.get("source_title") or source.get("title") or source.get("headline") or "")
+    if any(pattern.search(title) for pattern in _UPDATE_SOURCE_PATTERNS):
+        return "update"
+    return "standard"
+
+
+def _first_body_paragraph(text):
+    value = str(text or "").strip()
+    if not value:
+        return ""
+    paragraphs = [part.strip() for part in re.split(r"\n\s*\n", value) if part.strip()]
+    return paragraphs[0] if paragraphs else value
+
+
+def _first_matching_anchor(text, anchor_groups):
+    value = str(text or "")
+    for name, pattern in anchor_groups:
+        if pattern.search(value):
+            return name, pattern
+    return "", None
+
+
+def _update_lead_diagnostics(item, source=None):
+    """Return a deterministic pass/fail assessment for an explicit update lead.
+
+    The lead must mention the highest-priority underlying-event anchor present in
+    the source and at least one source-indicated update/novelty signal. This catches
+    openings that jump directly into quotes, scene details, or procedure while never
+    explaining what originally happened.
+    """
+    source = source if isinstance(source, dict) else item
+    story_form = str(item.get("story_form") or _source_story_form(source))
+    if story_form != "update":
+        return {"required": False, "passed": True, "story_form": story_form}
+
+    lead = _first_body_paragraph(item.get("body", ""))
+    source_title = str(source.get("source_title") or source.get("title") or source.get("headline") or "")
+    source_text = " ".join([
+        source_title,
+        str(source.get("article_text") or source.get("source_summary") or source.get("summary") or source.get("body") or "")[:1800],
+    ])
+
+    baseline_name, baseline_pattern = _first_matching_anchor(source_text, _UPDATE_BASELINE_ANCHORS)
+    novelty_name, novelty_pattern = _first_matching_anchor(source_title, _UPDATE_NOVELTY_ANCHORS)
+    baseline_present = bool(not baseline_pattern or baseline_pattern.search(lead))
+    novelty_present = bool(not novelty_pattern or novelty_pattern.search(lead))
+    passed = bool(lead) and baseline_present and novelty_present
+
+    missing = []
+    if not lead:
+        missing.append("lead_missing")
+    if not baseline_present:
+        missing.append("original_event_context_missing")
+    if not novelty_present:
+        missing.append("new_development_missing")
+
+    return {
+        "required": True,
+        "passed": passed,
+        "story_form": story_form,
+        "lead_word_count": len(re.findall(r"\b\w+\b", lead)),
+        "baseline_anchor": baseline_name,
+        "baseline_present": baseline_present,
+        "novelty_anchor": novelty_name,
+        "novelty_present": novelty_present,
+        "missing": missing,
+        "source_title": source_title,
+        "headline": str(item.get("headline") or ""),
+    }
+
+
+def _archive_entry_has_contextless_update_lead(entry):
+    if not isinstance(entry, dict) or entry.get("is_custom") or entry.get("authoritative_custom"):
+        return False
+    story_form = _source_story_form({
+        "title": entry.get("source_title") or entry.get("headline"),
+    })
+    if story_form != "update":
+        return False
+    probe = dict(entry)
+    probe["story_form"] = story_form
+    probe["body"] = (
+        entry.get("body")
+        or entry.get("article_text")
+        or _archive_article_body(entry)
+        or entry.get("teaser")
+        or ""
+    )
+    return not _update_lead_diagnostics(probe, probe).get("passed", True)
+
+
 def strip_markdown(text, headline=""):
     """Remove markdown formatting and headline restatements from article text."""
     if not text:
@@ -4064,11 +4210,12 @@ def generate_category_content(category_key, category_label, headlines, request_t
         stype   = h.get("source_type", "unknown")
         hero_eligible = h.get("hero_eligible", "unknown")
         match_score = h.get("category_match_score", "")
+        story_form = _source_story_form(h)
         content = h.get("article_text", "") or h.get("summary", "")
         # 14000 chars (~2300 words): the input the model writes from. Set high enough
         # that a normal article is never truncated, so key facts (ranked lists, names,
         # numbers) always reach the model. Only a pathologically long page would be cut.
-        return f"{i+1}. {title} [source_type:{stype}] [source_quality:{quality}] [hero_eligible:{hero_eligible}] [category_match_score:{match_score}]{pub_str}\n   {sanitize(content)[:14000]}"
+        return f"{i+1}. {title} [source_type:{stype}] [source_quality:{quality}] [hero_eligible:{hero_eligible}] [category_match_score:{match_score}] [story_form:{story_form}]{pub_str}\n   {sanitize(content)[:14000]}"
     # Pre-filter headlines older than 48 hours before Claude sees them
     from datetime import timezone as _tz
     _now_utc = datetime.now(_tz.utc)
@@ -4159,10 +4306,18 @@ def generate_category_content(category_key, category_label, headlines, request_t
 
 """
 
+    lead_standard = """LEAD STANDARD:
+- Every article and card body must begin with a self-contained news lead that tells a reader with no prior knowledge what happened and what is new now.
+- For items marked [story_form:update], the FIRST paragraph must explicitly state BOTH the original incident, decision, dispute, or event AND the new development being reported.
+- Never open an update only with a quote, scene description, official reaction, investigative procedure, or newly disclosed detail before identifying the underlying event.
+- The lead must make sense without the headline or earlier TCT coverage.
+
+"""
+
     if is_florida:
         prompt = f"""{_date_context}Florida news headlines:{rule_line}
 
-{source_rules}{headlines_text}
+{source_rules}{lead_standard}{headlines_text}
 
 Tasks:
 1. Pick the single most important/urgent Florida statewide story. Prioritize broad impact — legislation, court rulings, economic news, environmental decisions, significant crimes or disasters anywhere in the state.
@@ -4179,7 +4334,7 @@ Return ONLY valid JSON:
     else:
         prompt = f"""{_date_context}Local Treasure Coast news headlines for {category_label}:{rule_line}
 
-{source_rules}{headlines_text}
+{source_rules}{lead_standard}{headlines_text}
 
 Tasks:
 1. Pick the single most important/urgent story for Treasure Coast Florida residents. LOCAL stories (county commission decisions, local crime, school district news, local business, road/infrastructure, local sports) rank ABOVE national or state stories unless the national story has very direct local impact.
@@ -4293,6 +4448,7 @@ Return ONLY valid JSON:
                 # keyword logic and rejects stories the classifier already approved —
                 # which is what was emptying whole categories of their heroes.
                 item["source_title"] = source.get("title", "")
+                item["story_form"] = _source_story_form(source)
                 item["feed_url"] = source.get("feed_url", "")
             except (IndexError, ValueError, TypeError):
                 item["link"]      = ""
@@ -4317,6 +4473,34 @@ Return ONLY valid JSON:
         card["body"] = strip_absence_language(strip_markdown(card.get("body", ""), card.get("headline", "")))
         normalized_cards.append(card)
     data["cards"] = normalized_cards
+
+    # Deterministic update-lead gate. A contextless update hero triggers the normal
+    # bounded category retry; contextless update cards are removed rather than
+    # published as standalone articles.
+    _contextual_update_lead_rejections = []
+    _hero_diag = _update_lead_diagnostics(data.get("hero", {}), data.get("hero", {}))
+    if _hero_diag.get("required") and not _hero_diag.get("passed"):
+        _contextual_update_lead_rejections.append({"surface": "hero", **_hero_diag})
+        raise ContextualUpdateLeadError(
+            "Contextless update lead for hero: "
+            + ",".join(_hero_diag.get("missing") or ["unknown"])
+            + f" — {_hero_diag.get('source_title','')[:120]}"
+        )
+
+    _contextual_cards = []
+    for _card in data.get("cards", []) or []:
+        _card_diag = _update_lead_diagnostics(_card, _card)
+        if _card_diag.get("required") and not _card_diag.get("passed"):
+            _contextual_update_lead_rejections.append({"surface": "card", **_card_diag})
+            print(
+                "  Contextual update-lead guard removed card: "
+                f"'{_card.get('headline','')[:65]}' "
+                f"({','.join(_card_diag.get('missing') or ['unknown'])})"
+            )
+            continue
+        _contextual_cards.append(_card)
+    data["cards"] = _contextual_cards
+    data["_contextual_update_lead_rejections"] = _contextual_update_lead_rejections
 
     # Enforce category lead eligibility in Python, not just by prompt. Claude can
     # still be tempted by a full-source off-topic item from a broad WPTV feed.
@@ -4715,6 +4899,8 @@ Return ONLY valid JSON:
 def _category_generation_error_code(exc):
     name = type(exc).__name__.lower()
     message = str(exc or "").lower()
+    if isinstance(exc, ContextualUpdateLeadError) or "contextless update lead" in message:
+        return "contextless_update_lead"
     if "timeout" in name or "timed out" in message or "timeout" in message:
         return "model_timeout"
     if isinstance(exc, (ValueError, json.JSONDecodeError)) or "json" in name or "json" in message:
@@ -4777,6 +4963,9 @@ def _run_category_generation_with_budget(category_key, category_label, headlines
                     "elapsed_seconds": round(attempt_elapsed, 3),
                     "result": "success",
                 })
+                _lead_rejections = list(
+                    data.get("_contextual_update_lead_rejections", []) or []
+                )
                 return data, {
                     "status": "success",
                     "attempt_count": len(attempts),
@@ -4785,6 +4974,8 @@ def _run_category_generation_with_budget(category_key, category_label, headlines
                     "failure_code": "",
                     "failure_summary": "",
                     "budget_seconds": CATEGORY_GENERATION_BUDGET_SECONDS,
+                    "contextual_update_lead_rejection_count": len(_lead_rejections),
+                    "contextual_update_lead_rejections": _lead_rejections,
                 }
 
             last_code = "missing_or_null_hero"
@@ -4844,6 +5035,7 @@ def _build_category_generation_report(records):
     total_model_seconds = 0.0
     archive_recovery_count = 0
     sports_expired_event_preview_count = 0
+    contextual_update_lead_rejection_count = 0
     for record in records:
         status_counts[str(record.get("status") or "unknown")] += 1
         failure_code = str(record.get("failure_code") or "")
@@ -4854,6 +5046,14 @@ def _build_category_generation_report(records):
         archive_recovery_count += int(bool(record.get("archive_recovery_requested")))
         sports_expired_event_preview_count += int(
             record.get("sports_expired_event_preview_count") or 0
+        )
+        contextual_update_lead_rejection_count += int(
+            record.get("contextual_update_lead_rejection_count") or 0
+        )
+        contextual_update_lead_rejection_count += sum(
+            1
+            for attempt in (record.get("attempts") or [])
+            if str(attempt.get("result") or "") == "contextless_update_lead"
         )
 
     return {
@@ -4878,6 +5078,7 @@ def _build_category_generation_report(records):
             "model_elapsed_seconds": round(total_model_seconds, 3),
             "archive_recovery_requested_count": archive_recovery_count,
             "sports_expired_event_preview_count": sports_expired_event_preview_count,
+            "contextual_update_lead_rejection_count": contextual_update_lead_rejection_count,
         },
         "categories": records,
     }
@@ -5272,6 +5473,13 @@ def enhance_card(card, content_bank, headlines):
     try:
         body = card.get("body", "")
         target = "two fully developed paragraphs, about 170-240 words total" if word_count >= 140 else "one concise paragraph"
+        update_lead_instruction = ""
+        if _source_story_form(source) == "update":
+            update_lead_instruction = (
+                " Because this is an update, the first paragraph must state both the "
+                "original event and the new development so it stands alone for readers "
+                "who did not see earlier coverage."
+            )
         prompt = (
             f"Rewrite this local news card using the exact source material below.\n\n"
             f"Card headline: {headline}\n\n"
@@ -5280,7 +5488,8 @@ def enhance_card(card, content_bank, headlines):
             f"Write {target}. Use only confirmed facts from the source. "
             "Include concrete names, places, agencies, dates, numbers, votes, charges, locations, schools, roads, or businesses when present. "
             "Do not write generic background, typical patterns, community-impact filler, or advice unless explicitly stated in the source. "
-            "If the source lacks enough facts, write less and stop. No em dashes. Return only the rewritten body."
+            f"If the source lacks enough facts, write less and stop.{update_lead_instruction} "
+            "No em dashes. Return only the rewritten body."
         )
         resp = client.messages.create(
             model=MODEL_ARTICLES,
@@ -5312,6 +5521,12 @@ def enhance_hero_article(hero, full_text):
     if not full_text or len(full_text.split()) < 100:
         return hero  # Not enough extra text to improve on; keep generated body
     body = hero.get("body", "")
+    update_lead_instruction = ""
+    if str(hero.get("story_form") or "") == "update":
+        update_lead_instruction = (
+            " The first paragraph must state both the original event and the new "
+            "development so the article stands alone without earlier coverage."
+        )
     prompt = (
         f"You wrote this article about: {hero.get('headline', '')}\n\n"
         f"Your original article:\n\n{body}\n\n"
@@ -5322,7 +5537,8 @@ def enhance_hero_article(hero, full_text):
         "Write in your own words — paraphrase everything except direct quotes from named individuals. "
         "Do not invent details not in the source. Do not comment on absent information. "
         "Do not copy newsletter openers like 'Good morning'. "
-        "Keep it 380-480 words in four paragraphs. Include the concrete facts from the source. Plain direct English. No em dashes."
+        f"Keep it 380-480 words in four paragraphs. Include the concrete facts from the source.{update_lead_instruction} "
+        "Plain direct English. No em dashes."
     )
     try:
         resp = client.messages.create(
@@ -6556,6 +6772,29 @@ def render_index(all_categories, top_cat):
         print(
             "  Homepage live-surface guard suppressed "
             f"{len(_expired_sports_live_suppressions)} expired Sports preview(s)"
+        )
+
+    enriched_pool, _contextless_update_live_suppressions = (
+        _filter_contextless_update_live_placements(enriched_pool)
+    )
+    _contextless_update_report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "policy": "suppress_generated_updates_without_self_contained_leads",
+        "rejected_count": len(_contextless_update_live_suppressions),
+        "rejected": _contextless_update_live_suppressions,
+    }
+    _contextless_update_report_path = (
+        OUTPUT_DIR / "data" / "contextual-update-lead-report.json"
+    )
+    _contextless_update_report_path.parent.mkdir(parents=True, exist_ok=True)
+    _contextless_update_report_path.write_text(
+        json.dumps(_contextless_update_report, indent=2), encoding="utf-8"
+    )
+    if _contextless_update_live_suppressions:
+        print(
+            "  Homepage update-lead guard suppressed "
+            f"{len(_contextless_update_live_suppressions)} contextless update article(s)"
         )
 
     enriched_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
@@ -14871,6 +15110,8 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             return False
         if not _archive_entry_publishable(e):
             return False
+        if _archive_entry_has_contextless_update_lead(e):
+            return False
         if category_key == "sports" and _archive_sports_event_window_expired(e):
             return False
         if category_key in COUNTY_KEYS:
@@ -14940,6 +15181,17 @@ def ensure_all_category_sections(all_categories, min_cards=6):
         category["category_label"] = config["label"]
         category["_drop_category"] = False
         category.setdefault("cards", [])
+
+        if category.get("hero") and _archive_entry_has_contextless_update_lead(category["hero"]):
+            print(
+                "  Permanent update-lead guard removed contextless hero from "
+                f"{config['label']}: '{category['hero'].get('headline','')[:55]}'"
+            )
+            category["hero"] = None
+        category["cards"] = [
+            card for card in category.get("cards", [])
+            if not _archive_entry_has_contextless_update_lead(card)
+        ]
 
         if category_key == "sports":
             if category.get("hero") and _sports_event_window_assessment(category["hero"]).get("expired"):
@@ -15573,6 +15825,8 @@ def main():
             "failure_summary": "",
             "sports_expired_event_preview_count": 0,
             "sports_expired_event_previews": [],
+            "contextual_update_lead_rejection_count": 0,
+            "contextual_update_lead_rejections": [],
             "_started": _category_started,
         }
         category_generation_records.append(_category_record)
@@ -15901,6 +16155,31 @@ def main():
                     try: _fut.result(timeout=10)
                     except Exception: pass
 
+            _final_hero_update_diag = _update_lead_diagnostics(data.get("hero", {}), data.get("hero", {}))
+            if _final_hero_update_diag.get("required") and not _final_hero_update_diag.get("passed"):
+                raise ContextualUpdateLeadError(
+                    "Contextless update lead after enrichment: "
+                    + ",".join(_final_hero_update_diag.get("missing") or ["unknown"])
+                    + f" — {_final_hero_update_diag.get('headline','')[:120]}"
+                )
+            _final_contextual_cards = []
+            for _card in data.get("cards", []) or []:
+                _final_card_update_diag = _update_lead_diagnostics(_card, _card)
+                if _final_card_update_diag.get("required") and not _final_card_update_diag.get("passed"):
+                    _category_record["contextual_update_lead_rejection_count"] = (
+                        int(_category_record.get("contextual_update_lead_rejection_count") or 0) + 1
+                    )
+                    _category_record.setdefault("contextual_update_lead_rejections", []).append(
+                        {"surface": "card_after_enrichment", **_final_card_update_diag}
+                    )
+                    print(
+                        "  Final update-lead guard removed enriched card: "
+                        f"'{_card.get('headline','')[:65]}'"
+                    )
+                    continue
+                _final_contextual_cards.append(_card)
+            data["cards"] = _final_contextual_cards
+
             _generated_logo_rejections = _sanitize_category_source_images(
                 data, stage="generated_category"
             )
@@ -16048,6 +16327,7 @@ def main():
         f"{_category_summary.get('model_attempt_count', 0)} model attempt(s), "
         f"{_category_summary.get('archive_recovery_requested_count', 0)} archive recovery request(s), "
         f"{_category_summary.get('sports_expired_event_preview_count', 0)} expired Sports preview(s), "
+        f"{_category_summary.get('contextual_update_lead_rejection_count', 0)} contextual update-lead rejection(s), "
         f"{CATEGORY_GENERATION_REPORT_PATH}"
     )
 
