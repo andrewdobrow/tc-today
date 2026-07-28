@@ -614,7 +614,7 @@ EDITORIAL_IMAGE_ROOT = OUTPUT_DIR / "images" / "editorial"
 EDITORIAL_IMAGE_ROTATION_PATH = OUTPUT_DIR / "data" / "editorial-image-rotation.json"
 EDITORIAL_IMAGE_REPORT_PATH = OUTPUT_DIR / "data" / "editorial-image-rotation-report.json"
 EDITORIAL_IMAGE_SCHEMA_VERSION = 2
-EDITORIAL_IMAGE_SELECTION_POLICY_VERSION = 3
+EDITORIAL_IMAGE_SELECTION_POLICY_VERSION = 4
 EDITORIAL_IMAGE_EXTENSIONS = {".webp", ".jpg", ".jpeg", ".png"}
 EDITORIAL_IMAGE_EXTENSION_PRIORITY = {".webp": 0, ".jpg": 1, ".jpeg": 2, ".png": 3}
 EDITORIAL_IMAGE_MAX_ASSIGNMENTS = 3000
@@ -652,6 +652,13 @@ EDITORIAL_CATEGORY_TOPIC = {
     "things_to_do": "topics/things-to-do",
 }
 EDITORIAL_HIGH_SPECIFICITY_TOPIC_RULES = [
+    # First-responder stories must remain visually anchored in public safety even
+    # when an official statement mentions mental health, health and well-being, or
+    # support services incidentally. This rule intentionally precedes health.
+    ("topics/crime-public-safety", re.compile(
+        r"\b(?:fire rescue|firefighter|firefighters|firefighter[/-]paramedic|"
+        r"paramedic|paramedics|first responder|first responders)\b", re.I
+    )),
     ("topics/roads-transportation", re.compile(
         r"\b(?:road|roads|roadwork|traffic|bridge|causeway|highway|interstate|i-95|"
         r"turnpike|lane|lanes|ramp|ramps|intersection|detour|closure|closed|"
@@ -662,8 +669,17 @@ EDITORIAL_HIGH_SPECIFICITY_TOPIC_RULES = [
         r"district|campus|graduation|superintendent)\b", re.I
     )),
     ("topics/health", re.compile(
-        r"\b(?:health|hospital|medical|doctor|doctors|patient|patients|clinic|"
-        r"emergency room|disease|outbreak|public health)\b", re.I
+        # Bare ``health`` is deliberately excluded. Official condolences and public-
+        # safety stories often contain phrases such as ``mental health and well-being``
+        # without healthcare being the visual subject. Genuine healthcare stories
+        # still match clinical institutions, services, officials, or conditions.
+        r"\b(?:healthcare|health care|health department|health departments|"
+        r"health system|health systems|health center|health centers|health clinic|"
+        r"health clinics|health service|health services|health official|health officials|"
+        r"health agency|health agencies|health advisory|health advisories|health warning|"
+        r"health warnings|health emergency|hospital|hospitals|medical|doctor|doctors|"
+        r"patient|patients|clinic|clinics|emergency room|disease|outbreak|public health)\b",
+        re.I,
     )),
     ("topics/weather-environment", re.compile(
         r"\b(?:weather|storm|hurricane|tropical|flood|flooding|rain|wind|tornado|"
@@ -687,8 +703,17 @@ EDITORIAL_TOPIC_RULES = [
         r"district|campus|graduation|superintendent)\b", re.I
     )),
     ("topics/health", re.compile(
-        r"\b(?:health|hospital|medical|doctor|doctors|patient|patients|clinic|"
-        r"emergency room|disease|outbreak|public health)\b", re.I
+        # Bare ``health`` is deliberately excluded. Official condolences and public-
+        # safety stories often contain phrases such as ``mental health and well-being``
+        # without healthcare being the visual subject. Genuine healthcare stories
+        # still match clinical institutions, services, officials, or conditions.
+        r"\b(?:healthcare|health care|health department|health departments|"
+        r"health system|health systems|health center|health centers|health clinic|"
+        r"health clinics|health service|health services|health official|health officials|"
+        r"health agency|health agencies|health advisory|health advisories|health warning|"
+        r"health warnings|health emergency|hospital|hospitals|medical|doctor|doctors|"
+        r"patient|patients|clinic|clinics|emergency room|disease|outbreak|public health)\b",
+        re.I,
     )),
     ("topics/crime-public-safety", re.compile(
         r"\b(?:crime|police|sheriff|deputy|deputies|arrest|arrested|charged|shooting|"
@@ -865,8 +890,9 @@ def _editorial_pool_for_story(category_key, headline="", item=None, inventory=No
     subject_text = _fallback_story_subject_blob(headline, item)
     location_text = _fallback_story_blob(headline, item)
 
-    # Schools, infrastructure/traffic operations, health, and weather/environment
-    # describe the visual subject more precisely than a city name. Topic routing uses
+    # First responders, schools, infrastructure/traffic operations, health, and
+    # weather/environment describe the visual subject more precisely than a city name.
+    # Topic routing uses
     # headline/summary evidence only so incidental body references cannot hijack it.
     specific_topic = _detect_high_specificity_editorial_topic(subject_text)
     if specific_topic and pools.get(specific_topic):
@@ -974,8 +1000,8 @@ def _select_editorial_fallback(category_key, headline="", item=None, force_new=F
             assigned_path = urlsplit(assigned_url).path if assigned_url else ""
             # Preserve stable assignments only while they still belong to the pool
             # selected by the current policy. This deliberately reclassifies older
-            # city assignments when a school, road, health, or weather pool is now
-            # the more accurate visual match.
+            # city assignments when a first-responder, school, road, health, or
+            # weather pool is now the more accurate visual match.
             if (
                 str(assignment.get("pool_id") or "") == pool_id
                 and assigned_path in images

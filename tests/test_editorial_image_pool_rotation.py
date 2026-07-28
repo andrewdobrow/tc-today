@@ -409,3 +409,158 @@ def test_archive_fallback_migration_runs_once_per_policy_version(tmp_path):
     assert first["updated"] == 1
     assert second["skipped"] is True
     assert second["reason"] == "policy-version-already-migrated"
+
+
+def test_first_responder_memorial_outranks_incidental_health_language(tmp_path):
+    generate = _configure(_load_generate(), tmp_path)
+    _image(tmp_path, "topics/crime-public-safety/public-safety.png")
+    _image(tmp_path, "topics/health/doctor.png")
+    _image(tmp_path, "topics/local-government/city-hall.png")
+
+    headlines = [
+        "Indian River County Board of Commissioners mourns loss of firefighter Geoffrey Lang",
+        "Indian River County government mourns firefighter who dedicated career to serving residents",
+    ]
+    for headline in headlines:
+        item = {
+            "headline": headline,
+            "teaser": (
+                "County commissioners extended condolences and emphasized the county's "
+                "commitment to supporting the mental health and well-being of first "
+                "responders and their families."
+            ),
+        }
+        pool_id, _images, basis = generate._editorial_pool_for_story(
+            "indian_river", headline, item=item
+        )
+
+        assert pool_id == "topics/crime-public-safety"
+        assert basis == "specific-topic-before-city"
+
+
+def test_incidental_health_and_well_being_phrase_does_not_trigger_medical_pool(tmp_path):
+    generate = _configure(_load_generate(), tmp_path)
+    _image(tmp_path, "topics/health/doctor.png")
+    _image(tmp_path, "topics/local-government/city-hall.png")
+
+    headline = "County commission expands employee support program"
+    item = {
+        "headline": headline,
+        "teaser": (
+            "Commissioners said the program supports the mental health and well-being "
+            "of county employees and their families."
+        ),
+    }
+    pool_id, _images, basis = generate._editorial_pool_for_story(
+        "indian_river", headline, item=item
+    )
+
+    assert pool_id == "topics/local-government"
+    assert basis == "detected-topic"
+
+
+def test_genuine_healthcare_language_still_selects_health_pool(tmp_path):
+    generate = _configure(_load_generate(), tmp_path)
+    _image(tmp_path, "topics/health/doctor.png")
+    _image(tmp_path, "topics/local-government/city-hall.png")
+
+    headline = "Indian River County Health Department opens new public health clinic"
+    pool_id, _images, basis = generate._editorial_pool_for_story(
+        "indian_river", headline, item={"headline": headline}
+    )
+
+    assert pool_id == "topics/health"
+    assert basis == "specific-topic-before-city"
+
+
+def test_policy_change_reclassifies_stored_health_image_for_first_responder_story(tmp_path):
+    generate = _configure(_load_generate(), tmp_path)
+    public_safety = _image(tmp_path, "topics/crime-public-safety/public-safety.png")
+    doctor = _image(tmp_path, "topics/health/doctor.png")
+    headline = "Indian River County Board of Commissioners mourns loss of firefighter Geoffrey Lang"
+    item = {
+        "headline": headline,
+        "slug": "indian-river-commissioners-mourn-geoffrey-lang",
+        "teaser": (
+            "The board emphasized support for the mental health and well-being of "
+            "first responders and their families."
+        ),
+    }
+    story_key = generate._fallback_story_key("indian_river", headline, item)
+    generate._EDITORIAL_IMAGE_ROTATION_STATE = {
+        "schema_version": 2,
+        "selection_policy_version": 3,
+        "pool_cursors": {},
+        "pool_last_image": {},
+        "global_last_image": "",
+        "archive_migration_policy_version": 3,
+        "story_assignments": {
+            story_key: {
+                "story_key": story_key,
+                "headline": headline,
+                "category_key": "indian_river",
+                "selection_policy_version": 3,
+                "pool_id": "topics/health",
+                "selection_basis": "specific-topic-before-city",
+                "image_url": (
+                    "https://treasurecoast.today/images/editorial/topics/health/"
+                    f"{doctor.name}"
+                ),
+                "assigned_at": "2026-07-28T00:00:00+00:00",
+            }
+        },
+    }
+
+    selection = generate._select_editorial_fallback(
+        "indian_river", headline, item=item
+    )
+
+    assert selection["pool_id"] == "topics/crime-public-safety"
+    assert selection["image_url"].endswith(
+        f"/topics/crime-public-safety/{public_safety.name}"
+    )
+    assert selection["selection_policy_version"] == 4
+    assert selection["reused"] is False
+
+
+def test_policy_v4_migration_repairs_geoffrey_lang_medical_fallback(tmp_path):
+    generate = _configure(_load_generate(), tmp_path)
+    public_safety = _image(tmp_path, "topics/crime-public-safety/public-safety.png")
+    doctor = _image(tmp_path, "topics/health/doctor.png")
+    (tmp_path / "articles").mkdir()
+    old_url = (
+        "https://treasurecoast.today/images/editorial/topics/health/"
+        f"{doctor.name}"
+    )
+    headline = "Indian River County Board of Commissioners mourns loss of firefighter Geoffrey Lang"
+    archive = [{
+        "slug": "indian-river-commissioners-mourn-geoffrey-lang",
+        "headline": headline,
+        "teaser": (
+            "Commissioners emphasized support for the mental health and well-being "
+            "of first responders and their families."
+        ),
+        "category_key": "indian_river",
+        "image_url": old_url,
+        "image_source": "editorial_fallback",
+        "is_fallback_image": True,
+    }]
+    (tmp_path / "archive.json").write_text(json.dumps(archive), encoding="utf-8")
+    article_path = tmp_path / "articles" / "indian-river-commissioners-mourn-geoffrey-lang.html"
+    article_path.write_text(
+        f'<meta property="og:image" content="{old_url}"><img src="{old_url}">',
+        encoding="utf-8",
+    )
+
+    report = generate.refresh_archive_editorial_fallbacks(tmp_path)
+    updated = json.loads((tmp_path / "archive.json").read_text(encoding="utf-8"))
+    html = article_path.read_text(encoding="utf-8")
+
+    assert report["selection_policy_version"] == 4
+    assert report["updated"] == 1
+    assert report["article_pages_updated"] == 1
+    assert updated[0]["image_url"].endswith(
+        f"/topics/crime-public-safety/{public_safety.name}"
+    )
+    assert old_url not in html
+    assert f"/topics/crime-public-safety/{public_safety.name}" in html
