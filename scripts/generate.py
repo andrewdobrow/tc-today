@@ -615,7 +615,7 @@ EDITORIAL_IMAGE_ROOT = OUTPUT_DIR / "images" / "editorial"
 EDITORIAL_IMAGE_ROTATION_PATH = OUTPUT_DIR / "data" / "editorial-image-rotation.json"
 EDITORIAL_IMAGE_REPORT_PATH = OUTPUT_DIR / "data" / "editorial-image-rotation-report.json"
 EDITORIAL_IMAGE_SCHEMA_VERSION = 2
-EDITORIAL_IMAGE_SELECTION_POLICY_VERSION = 3
+EDITORIAL_IMAGE_SELECTION_POLICY_VERSION = 4
 EDITORIAL_IMAGE_EXTENSIONS = {".webp", ".jpg", ".jpeg", ".png"}
 EDITORIAL_IMAGE_EXTENSION_PRIORITY = {".webp": 0, ".jpg": 1, ".jpeg": 2, ".png": 3}
 EDITORIAL_IMAGE_MAX_ASSIGNMENTS = 3000
@@ -653,6 +653,13 @@ EDITORIAL_CATEGORY_TOPIC = {
     "things_to_do": "topics/things-to-do",
 }
 EDITORIAL_HIGH_SPECIFICITY_TOPIC_RULES = [
+    # First-responder and fire-service stories are visually public-safety stories,
+    # even when an official condolence statement also mentions mental health or
+    # well-being resources. Keep this narrow so routine government copy does not
+    # broadly become crime imagery.
+    ("topics/crime-public-safety", re.compile(
+        r"\b(?:firefighter|firefighters|fire rescue|first responder|first responders)\b", re.I
+    )),
     ("topics/roads-transportation", re.compile(
         r"\b(?:road|roads|roadwork|traffic|bridge|causeway|highway|interstate|i-95|"
         r"turnpike|lane|lanes|ramp|ramps|intersection|detour|closure|closed|"
@@ -719,6 +726,24 @@ _EDITORIAL_IMAGE_ROTATION_STATE = None
 _EDITORIAL_IMAGE_ROTATION_DIRTY = False
 _EDITORIAL_IMAGE_RUN_ASSIGNMENTS = []
 _EDITORIAL_IMAGE_LAST_SELECTION = {}
+
+
+# These phrases often appear in condolence statements, employee-support copy, and
+# public-safety stories without making healthcare the article's central visual
+# subject. They are ignored only for health-pool matching; all other topic signals
+# remain available to the classifier.
+EDITORIAL_INCIDENTAL_HEALTH_CONTEXT_PATTERN = re.compile(
+    r"\b(?:mental\s+)?health\s+and\s+well[- ]?being\b"
+    r"|\bhealth\s+of\s+(?:personnel|employees|staff|first responders?)\b",
+    re.I,
+)
+
+
+def _editorial_topic_rule_matches(folder, pattern, text):
+    candidate = str(text or "")
+    if folder == "topics/health":
+        candidate = EDITORIAL_INCIDENTAL_HEALTH_CONTEXT_PATTERN.sub(" ", candidate)
+    return bool(pattern.search(candidate))
 
 
 def _editorial_image_inventory(refresh=False):
@@ -848,14 +873,14 @@ def _detect_high_specificity_editorial_topic(text):
     become weather/environment stories.
     """
     for folder, pattern in EDITORIAL_HIGH_SPECIFICITY_TOPIC_RULES:
-        if pattern.search(str(text or "")):
+        if _editorial_topic_rule_matches(folder, pattern, text):
             return folder
     return ""
 
 
 def _detect_editorial_topic(text):
     for folder, pattern in EDITORIAL_TOPIC_RULES:
-        if pattern.search(str(text or "")):
+        if _editorial_topic_rule_matches(folder, pattern, text):
             return folder
     return ""
 

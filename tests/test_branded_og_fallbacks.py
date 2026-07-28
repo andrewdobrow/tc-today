@@ -41,5 +41,5 @@ def test_legacy_ai_urls_are_migration_inputs_not_active_pool_entries():
 
 def test_engine_release_identifies_contextual_update_lead_guard():
     observability = (ROOT / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'ENGINE_VERSION = "1.11.8.4"' in observability
-    assert 'ENGINE_RELEASE = "contextual-update-lead-guard"' in observability
+    assert 'ENGINE_VERSION = "1.11.8.4.1"' in observability
+    assert 'ENGINE_RELEASE = "first-responder-image-fallback-hotfix"' in observability

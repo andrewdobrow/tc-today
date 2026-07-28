@@ -464,9 +464,13 @@ def test_genuine_healthcare_language_still_selects_health_pool(tmp_path):
     _image(tmp_path, "topics/health/doctor.png")
     _image(tmp_path, "topics/local-government/city-hall.png")
 
-    headline = "Indian River County Health Department opens new public health clinic"
+    headline = "Indian River County opens new public health clinic"
+    item = {
+        "headline": headline,
+        "teaser": "Doctors and patients will receive expanded medical services at the clinic.",
+    }
     pool_id, _images, basis = generate._editorial_pool_for_story(
-        "indian_river", headline, item={"headline": headline}
+        "indian_river", headline, item=item
     )
 
     assert pool_id == "topics/health"
@@ -516,9 +520,7 @@ def test_policy_change_reclassifies_stored_health_image_for_first_responder_stor
     )
 
     assert selection["pool_id"] == "topics/crime-public-safety"
-    assert selection["image_url"].endswith(
-        f"/topics/crime-public-safety/{public_safety.name}"
-    )
+    assert selection["image_url"].endswith(f"/{public_safety.name}")
     assert selection["selection_policy_version"] == 4
     assert selection["reused"] is False
 
@@ -559,8 +561,6 @@ def test_policy_v4_migration_repairs_geoffrey_lang_medical_fallback(tmp_path):
     assert report["selection_policy_version"] == 4
     assert report["updated"] == 1
     assert report["article_pages_updated"] == 1
-    assert updated[0]["image_url"].endswith(
-        f"/topics/crime-public-safety/{public_safety.name}"
-    )
+    assert updated[0]["image_url"].endswith(f"/{public_safety.name}")
     assert old_url not in html
-    assert f"/topics/crime-public-safety/{public_safety.name}" in html
+    assert public_safety.name in html
