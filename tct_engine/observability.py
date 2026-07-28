@@ -17,8 +17,8 @@ from .source_identity import normalize_source_identity_url
 from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.11.8.1"
-ENGINE_RELEASE = "retrospective-timeline-coherence-gate"
+ENGINE_VERSION = "1.11.8.2"
+ENGINE_RELEASE = "publisher-logo-guard-and-sports-fast-recovery"
 OBSERVABILITY_SCHEMA_VERSION = 15
 RESOLVER_VERSION = "2.4"
 RELATIONSHIP_ENGINE_VERSION = "1.5"

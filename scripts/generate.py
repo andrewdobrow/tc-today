@@ -230,6 +230,7 @@ EDITORIAL_OBSERVABILITY_PATH = OUTPUT_DIR / "data" / "editorial_observability.js
 CATEGORY_GENERATION_REPORT_PATH = OUTPUT_DIR / "data" / "category-generation-report.json"
 TRUSTED_SOURCE_RECOVERY_REPORT_PATH = OUTPUT_DIR / "data" / "trusted-source-recovery.json"
 CATEGORY_MEMBERSHIP_REPORT_PATH = OUTPUT_DIR / "data" / "category-membership-report.json"
+SOURCE_IMAGE_QUALITY_REPORT_PATH = OUTPUT_DIR / "data" / "source-image-quality-report.json"
 EDITORIAL_ACTIVATION_PATH = OUTPUT_DIR / "data" / "editorial_activation.json"
 EDITORIAL_ACTIVATION_HISTORY_PATH = OUTPUT_DIR / "data" / "editorial_activation_history.jsonl"
 
@@ -1089,6 +1090,7 @@ def _is_real_source_image_url(url):
         raw
         and not _is_legacy_or_branded_fallback_image(raw)
         and not _is_managed_editorial_fallback_image(raw)
+        and not _source_image_rejection_reason(raw)
     )
 
 
@@ -1197,6 +1199,78 @@ def _replace_article_fallback_references(article_path, old_urls, new_url):
         return False
     article_path.write_text(updated, encoding="utf-8")
     return True
+
+
+def repair_archive_publisher_logo_images(output_root=None):
+    """Replace rejected publisher branding in archive rows and permanent pages.
+
+    This migration does not depend on the affected story being selected live. It
+    guarantees that an already-published article with a cached publisher logo is
+    repaired during the next normal production run.
+    """
+    root = Path(output_root or OUTPUT_DIR)
+    archive_path = root / "archive.json"
+    articles_dir = root / "articles"
+    if not archive_path.is_file():
+        return {"updated": 0, "article_pages_updated": 0}
+
+    archive = load_archive(archive_path)
+    updated = 0
+    article_pages_updated = 0
+    for entry in archive:
+        if not isinstance(entry, dict):
+            continue
+        if entry.get("is_custom") or entry.get("authoritative_custom"):
+            continue
+        old_url = str(entry.get("image_url") or "").strip()
+        if not old_url:
+            continue
+        reason = _source_image_rejection_reason(
+            old_url,
+            source_url=str(entry.get("source_url") or ""),
+        )
+        if not reason:
+            continue
+        _record_source_image_rejection(
+            old_url,
+            reason,
+            stage="archive_publisher_logo_migration",
+            headline=str(entry.get("headline") or ""),
+            source_url=str(entry.get("source_url") or ""),
+        )
+        replacement, credit = get_fallback_image(
+            str(entry.get("category_key") or "local_gov"),
+            str(entry.get("headline") or ""),
+            item=entry,
+        )
+        if not replacement or replacement == old_url:
+            continue
+        entry["image_url"] = replacement
+        entry["image_credit"] = credit
+        entry["image_source"] = "publisher_logo_rejected_archive_migration"
+        entry["rejected_image_url"] = old_url
+        entry["image_rejection_reason"] = reason
+        updated += 1
+        slug = str(entry.get("slug") or "").strip()
+        if slug and _replace_article_fallback_references(
+            articles_dir / f"{slug}.html", [old_url], replacement
+        ):
+            article_pages_updated += 1
+
+    if updated:
+        archive_path.write_text(
+            json.dumps(archive, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+        print(
+            "  Publisher-logo archive migration: "
+            f"{updated} archive image(s) replaced; "
+            f"{article_pages_updated} article page(s) updated"
+        )
+    return {
+        "updated": updated,
+        "article_pages_updated": article_pages_updated,
+    }
 
 
 def refresh_archive_editorial_fallbacks(output_root=None, force=False):
@@ -1404,8 +1478,19 @@ def upscale_image_url(url):
 def extract_image(entry):
     """Try every known location for an image in an RSS entry."""
     def valid(u):
-        if not u or len(u) < 15: return False
-        return not any(x in u.lower() for x in ["1x1","pixel","spacer","tracking","data:"])
+        if not u or len(u) < 15:
+            return False
+        if any(x in u.lower() for x in ["1x1", "pixel", "spacer", "tracking", "data:"]):
+            return False
+        reason = _source_image_rejection_reason(u)
+        if reason:
+            _record_source_image_rejection(
+                u, reason, stage="rss_image_extraction",
+                headline=str(entry.get("title", "") or ""),
+                source_url=str(entry.get("link", "") or ""),
+            )
+            return False
+        return True
     for t in (getattr(entry,"media_thumbnail",None) or []):
         if isinstance(t,dict) and valid(t.get("url","")): return upscale_image_url(t["url"])
     for m in (getattr(entry,"media_content",None) or []):
@@ -1455,32 +1540,72 @@ def sanitize_text(text):
 
 
 
-def fetch_og_image(url):
-    """Fetch an article page and extract its og:image (or twitter:image) meta tag.
-    This is the most reliable image source because it comes from the article itself,
-    guaranteeing the image actually matches the story. Returns "" on any failure."""
+def fetch_og_image(url, headline=""):
+    """Return a story-specific social image while rejecting publisher branding.
+
+    News sites sometimes expose their masthead or station logo as ``og:image``.
+    Candidate URLs, image-alt metadata, and declared dimensions are validated before
+    acceptance. When the primary Open Graph image is branding, a valid Twitter image
+    can still be used. Returns ``""`` on failure or when every candidate is rejected.
+    """
     if not url:
         return ""
     try:
+        from urllib.parse import urljoin
         import re as _re_og
-        resp = requests.get(url, timeout=10,
-                            headers={"User-Agent": "Mozilla/5.0 (compatible; TCTBot/1.0)"})
+
+        resp = requests.get(
+            url,
+            timeout=10,
+            headers={"User-Agent": "Mozilla/5.0 (compatible; TCTBot/1.0)"},
+        )
         if resp.status_code != 200:
             return ""
-        html = resp.text[:200000]  # only need the <head>
-        # Try og:image then twitter:image, in either attribute order
-        patterns = [
-            r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)',
-            r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']',
-            r'<meta[^>]+name=["\']twitter:image["\'][^>]+content=["\']([^"\']+)',
-            r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+name=["\']twitter:image["\']',
-        ]
-        for pat in patterns:
-            m = _re_og.search(pat, html, _re_og.IGNORECASE)
-            if m:
-                img = m.group(1).strip()
-                if img.startswith("http"):
-                    return img
+        page = resp.text[:200000]
+
+        def _meta_values(key, attr="property"):
+            patterns = [
+                rf'<meta[^>]+{attr}=["\']{_re_og.escape(key)}["\'][^>]+content=["\']([^"\']+)',
+                rf'<meta[^>]+content=["\']([^"\']+)["\'][^>]+{attr}=["\']{_re_og.escape(key)}["\']',
+            ]
+            values = []
+            for pattern in patterns:
+                values.extend(_re_og.findall(pattern, page, _re_og.IGNORECASE))
+            return [html_lib.unescape(str(value).strip()) for value in values if str(value).strip()]
+
+        width_values = _meta_values("og:image:width")
+        height_values = _meta_values("og:image:height")
+        og_alt_text = " ".join(_meta_values("og:image:alt"))
+        twitter_alt_text = " ".join(_meta_values("twitter:image:alt", "name"))
+        width = width_values[0] if width_values else None
+        height = height_values[0] if height_values else None
+
+        candidates = []
+        candidates.extend((candidate, "og:image") for candidate in _meta_values("og:image"))
+        candidates.extend((candidate, "twitter:image") for candidate in _meta_values("twitter:image", "name"))
+        seen = set()
+        for candidate, source in candidates:
+            image_url = urljoin(url, candidate)
+            if image_url in seen:
+                continue
+            seen.add(image_url)
+            reason = _source_image_rejection_reason(
+                image_url,
+                source_url=url,
+                alt_text=og_alt_text if source == "og:image" else twitter_alt_text,
+                width=width if source == "og:image" else None,
+                height=height if source == "og:image" else None,
+            )
+            if reason:
+                _record_source_image_rejection(
+                    image_url,
+                    reason,
+                    stage="og_image_fetch",
+                    headline=headline,
+                    source_url=url,
+                )
+                continue
+            return image_url
         return ""
     except Exception:
         return ""
@@ -1776,18 +1901,159 @@ PLACEHOLDER_URL_PATTERNS = [
     "og-image.png", "og_image.png",
     "eenewslogo", "site-logo", "site_logo",
     "station-logo", "stationlogo",
-    "wpec-16x9", "wpbf", "wflx",
+    "publisher-logo", "publisher_logo",
+    "header-logo", "header_logo",
+    "masthead-logo", "masthead_logo",
+    "favicon", "apple-touch-icon",
+    "wpec-16x9",
     "aolfp/images", "cbsnewsstatic.com/hub",
     "yimg.com/cv/apiv2",
     "foxtv.com/img",
     "gray.tv/gray/arc-fusion-assets",
     "townnews.com/content/tncms/custom",
-    "bloximages",
+    "/content/tncms/custom/",
 ]
 
+_SOURCE_IMAGE_REJECTIONS = []
+_SOURCE_IMAGE_REJECTION_KEYS = set()
+
+
+def _coerce_image_dimension(value):
+    try:
+        return int(float(str(value or "").strip()))
+    except Exception:
+        return 0
+
+
+def _source_image_rejection_reason(
+    img_url, *, source_url="", alt_text="", width=None, height=None
+):
+    """Return a deterministic rejection reason for branding/non-story imagery."""
+    raw = html_lib.unescape(str(img_url or "").strip())
+    if not raw:
+        return "missing_image_url"
+    if raw.startswith("//"):
+        raw = "https:" + raw
+    if not raw.startswith(("http://", "https://", "/")):
+        return "invalid_image_url"
+
+    parsed = urlsplit(raw)
+    host = parsed.netloc.lower()
+    path = parsed.path.lower()
+    blob = f"{host}{path}".lower()
+
+    # TCT-managed editorial and user-supplied assets are not publisher branding.
+    if host and "treasurecoast.today" in host:
+        if _is_managed_editorial_fallback_image(raw):
+            return ""
+        if not _is_legacy_or_branded_fallback_image(raw):
+            return ""
+
+    if any(pattern in blob for pattern in PLACEHOLDER_URL_PATTERNS):
+        return "publisher_logo_or_placeholder_url"
+
+    filename_tokens = re.split(r"[/_.?=&%+-]+", blob)
+    branding_tokens = {
+        "logo", "logotype", "wordmark", "masthead", "brandmark",
+        "siteicon", "stationlogo", "publisherlogo", "favicon",
+    }
+    if branding_tokens.intersection(filename_tokens):
+        return "publisher_logo_url_token"
+
+    alt = re.sub(r"\s+", " ", str(alt_text or "").strip().lower())
+    if re.search(r"\b(?:logo|logotype|wordmark|masthead|brand mark|site icon)\b", alt):
+        return "publisher_logo_alt_text"
+
+    w = _coerce_image_dimension(width)
+    h = _coerce_image_dimension(height)
+    if w and h:
+        ratio = w / max(h, 1)
+        if w < 400 or h < 200:
+            return "undersized_social_image"
+        if ratio > 3.2 or ratio < 0.32:
+            return "publisher_logo_aspect_ratio"
+
+    return ""
+
+
+def _record_source_image_rejection(
+    img_url, reason, *, stage="", headline="", source_url=""
+):
+    key = (str(img_url or ""), str(reason or ""), str(stage or ""), str(headline or ""))
+    if key in _SOURCE_IMAGE_REJECTION_KEYS:
+        return
+    _SOURCE_IMAGE_REJECTION_KEYS.add(key)
+    _SOURCE_IMAGE_REJECTIONS.append({
+        "image_url": str(img_url or ""),
+        "reason": str(reason or ""),
+        "stage": str(stage or ""),
+        "headline": str(headline or ""),
+        "source_url": str(source_url or ""),
+    })
+
+
 def is_placeholder_image(img_url):
-    url_lower = img_url.lower()
-    return any(pat in url_lower for pat in PLACEHOLDER_URL_PATTERNS)
+    return bool(_source_image_rejection_reason(img_url))
+
+
+def _sanitize_publisher_logo_image(item, *, stage="live_item"):
+    if not isinstance(item, dict):
+        return False
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return False
+    image_url = str(item.get("image_url") or "").strip()
+    if not image_url:
+        return False
+    reason = _source_image_rejection_reason(
+        image_url,
+        source_url=str(item.get("source_url") or item.get("link") or ""),
+        alt_text=str(item.get("image_alt") or ""),
+    )
+    if not reason:
+        return False
+    _record_source_image_rejection(
+        image_url,
+        reason,
+        stage=stage,
+        headline=str(item.get("headline") or item.get("title") or ""),
+        source_url=str(item.get("source_url") or item.get("link") or ""),
+    )
+    item["rejected_image_url"] = image_url
+    item["image_rejection_reason"] = reason
+    item["image_url"] = ""
+    item["image_credit"] = ""
+    item["image_source"] = "publisher_logo_rejected"
+    item["is_fallback_image"] = False
+    return True
+
+
+def _sanitize_category_source_images(category, *, stage="category"):
+    rejected = 0
+    if not isinstance(category, dict):
+        return rejected
+    for item in [category.get("hero")] + list(category.get("cards") or []):
+        rejected += int(_sanitize_publisher_logo_image(item, stage=stage))
+    return rejected
+
+
+def _write_source_image_quality_report(output_path=None):
+    path = Path(output_path or SOURCE_IMAGE_QUALITY_REPORT_PATH)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    reason_counts = defaultdict(int)
+    stage_counts = defaultdict(int)
+    for row in _SOURCE_IMAGE_REJECTIONS:
+        reason_counts[row.get("reason", "unknown")] += 1
+        stage_counts[row.get("stage", "unknown")] += 1
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "rejected_count": len(_SOURCE_IMAGE_REJECTIONS),
+        "reason_counts": dict(sorted(reason_counts.items())),
+        "stage_counts": dict(sorted(stage_counts.items())),
+        "rejections": _SOURCE_IMAGE_REJECTIONS,
+    }
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    return report
 
 
 def find_image(headline, entries):
@@ -2805,6 +3071,18 @@ def _sports_relevance_evidence(item):
         or (has_subject and (has_context or has_role))
         or (has_role and has_context)
     )
+
+
+def _sports_zero_candidate_fast_recovery(category_key, headlines):
+    """Return True when Sports has no deterministic hero candidate.
+
+    There is no reason to spend two model attempts asking Claude to manufacture a
+    Sports lead from a pool that contains no actual athletic story. The verified
+    permanent archive is the safer and faster recovery path.
+    """
+    if category_key != "sports":
+        return False
+    return not any(_hero_eligible("sports", item) for item in (headlines or []))
 
 
 # Hero selection is stricter than card inclusion. Cards may use softer fallback
@@ -14841,6 +15119,22 @@ def main():
 
         _category_record["selected_source_count"] = len(headlines)
         print(f"  {len(headlines)} publishable-source headlines fetched")
+        if _sports_zero_candidate_fast_recovery(cat_key, headlines):
+            print(
+                "  Sports fast recovery: no deterministic hero candidate; "
+                "skipping Claude and using verified archive recovery"
+            )
+            _finalize_category_generation_record(
+                _category_record,
+                "sports_zero_candidate_archive_recovery",
+                _category_started,
+                archive_recovery_requested=True,
+                failure_code="no_sports_hero_candidates",
+                failure_summary=(
+                    "Selected Sports source pool contained no deterministic athletic hero candidate"
+                ),
+            )
+            continue
         # Save source-extraction hits/misses before any Claude work. This keeps the
         # expensive network cache durable at each category boundary.
         GENERATION_CACHE.save()
@@ -14850,6 +15144,21 @@ def main():
             data = copy.deepcopy(_cached_category.get("data", {}))
             _stamp_current_run_story_ids(data, headlines)
             data = _sanitize_nonstory_category(data, cat_config["label"])
+            _cached_logo_rejections = _sanitize_category_source_images(
+                data, stage="category_cache_reuse"
+            )
+            if _cached_logo_rejections:
+                print(
+                    f"  Publisher-logo guard removed {_cached_logo_rejections} "
+                    "cached image(s) before category reuse"
+                )
+                GENERATION_CACHE.put(
+                    "categories",
+                    _category_cache_key,
+                    {"category_key": cat_key, "data": data},
+                    ttl_seconds=7 * 24 * 3600,
+                )
+                GENERATION_CACHE.save()
             if data.get("hero") and not data.get("_drop_category") and data.get("category_key") == cat_key:
                 all_categories.append(data)
                 GENERATION_CACHE.stats["category_generation_skipped"] += 1
@@ -14933,14 +15242,33 @@ def main():
                 bank_img, bank_credit = match_image(original_title, image_bank, cat_key, used_bank_images)
             if not bank_img:
                 bank_img, bank_credit = match_image(data["hero"]["headline"], image_bank, cat_key, used_bank_images)
-            img    = source_img if (source_img and not data["hero"].get("image_from_google")) else ""
+            img = ""
+            if source_img and not data["hero"].get("image_from_google"):
+                _source_reason = _source_image_rejection_reason(
+                    source_img,
+                    source_url=str(data["hero"].get("link") or ""),
+                )
+                if _source_reason:
+                    _record_source_image_rejection(
+                        source_img,
+                        _source_reason,
+                        stage="generated_hero_source_image",
+                        headline=str(data["hero"].get("headline") or ""),
+                        source_url=str(data["hero"].get("link") or ""),
+                    )
+                    print(
+                        "  Publisher-logo guard rejected hero source image "
+                        f"({_source_reason})"
+                    )
+                else:
+                    img = source_img
             credit = bank_credit
 
             # og:image fetch as fallback
             if not img:
                 link = data["hero"].get("link", "")
                 if link:
-                    og_img = fetch_og_image(link)
+                    og_img = fetch_og_image(link, data["hero"].get("headline", ""))
                     if og_img:
                         img    = og_img
                         credit = get_image_credit(link)
@@ -15034,6 +15362,15 @@ def main():
                 for _fut in _ac(_futs, timeout=45):
                     try: _fut.result(timeout=10)
                     except Exception: pass
+
+            _generated_logo_rejections = _sanitize_category_source_images(
+                data, stage="generated_category"
+            )
+            if _generated_logo_rejections:
+                print(
+                    f"  Publisher-logo guard removed {_generated_logo_rejections} "
+                    "generated placement image(s)"
+                )
 
             # Final publication gate. A hero must be both on-topic and substantial
             # enough to deserve a standalone permalink. Thin cards are discarded; the
@@ -15250,6 +15587,7 @@ def main():
     # the real editorial image pool. Custom imagery and real source images are never
     # touched. The rotation state is persisted only after the build passes every gate.
     refresh_archive_editorial_fallbacks(OUTPUT_DIR)
+    repair_archive_publisher_logo_images(OUTPUT_DIR)
 
     # v1.9.2 controlled activation. The existing guarded same-story/stage
     # suppressions now pass through the same preflight, kill switch, action cap,
@@ -15353,6 +15691,16 @@ def main():
 
     # Promote duplicate heroes
     promote_duplicate_heroes(top_cat, all_categories)
+
+    _live_logo_rejections = sum(
+        _sanitize_category_source_images(category, stage="pre_archive_restore")
+        for category in all_categories
+    )
+    if _live_logo_rejections:
+        print(
+            f"  Publisher-logo guard cleared {_live_logo_rejections} live image(s) "
+            "before archive restoration"
+        )
 
     # Promotion, deduplication, and archive rebinding can leave a live item without
     # the real image already stored on its permanent article. Restore exact archived
@@ -15466,6 +15814,12 @@ def main():
     validate_nonstory_publication_contract(all_categories, top_cat, OUTPUT_DIR)
 
     # Save only after the normal production build has completed.
+    _source_image_report = _write_source_image_quality_report()
+    print(
+        "  Source-image quality: "
+        f"{_source_image_report.get('rejected_count', 0)} publisher logo/placeholder "
+        "candidate(s) rejected"
+    )
     write_trusted_source_recovery_report()
     _save_editorial_engine_audit(editorial_engine, editorial_audit_rows)
     _write_editorial_observability(
