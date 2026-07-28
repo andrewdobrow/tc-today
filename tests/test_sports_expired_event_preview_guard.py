@@ -204,3 +204,70 @@ def test_category_generation_report_counts_expired_sports_previews():
     assert report["summary"]["sports_expired_event_preview_count"] == 1
     assert report["summary"]["model_attempt_count"] == 1
     assert report["summary"]["archive_recovery_requested_count"] == 1
+
+
+def test_production_hometown_title_suffix_matches_permanent_event_fixture():
+    production_item = _item(
+        headline=(
+            "Mets back at Clover Park for series vs. Fort Myers - "
+            "Hometown News Treasure Coast"
+        ),
+        body=(
+            "The St. Lucie Mets are back at Clover Park for a seven-game homestand "
+            "against the Fort Myers Mighty Mussels."
+        ),
+        published="2026-07-28T05:21:13.289639+00:00",
+        link=(
+            "https://www.hometownnewstc.com/sports/"
+            "mets-back-at-clover-park-for-series-vs-fort-myers/"
+            "article_5fcaa9df-9494-53df-ad8d-4c96173246f8.html"
+        ),
+    )
+    assessment = generate._sports_event_window_assessment(production_item, RUN_DATE)
+    assert assessment["is_preview"] is True
+    assert assessment["expired"] is True
+    assert assessment["reason"] == "sports_event_window_expired"
+    assert assessment["event_dates"] == ["2026-07-21", "2026-07-26"]
+    assert assessment["event_end_date"] == "2026-07-26"
+
+
+def test_second_generated_headline_variant_cannot_return_from_archive(monkeypatch):
+    entry = {
+        "slug": "2026-07-28-st-lucie-mets-return-to-clover-park-for-seven-game-homestand",
+        "headline": (
+            "St. Lucie Mets return to Clover Park for seven-game homestand "
+            "against Fort Myers"
+        ),
+        "source_title": "",
+        "teaser": "The Mets return to Clover Park for a seven-game homestand.",
+        "category_key": "sports",
+        "date": "2026-07-28",
+        "first_published": "2026-07-28T05:21:13Z",
+    }
+    monkeypatch.setattr(
+        generate,
+        "_archive_article_body",
+        lambda candidate: "No reliable event date remains in the archived body.",
+    )
+    assert generate._archive_sports_event_window_expired(entry, RUN_DATE) is True
+
+
+def test_unrelated_hometown_sports_title_with_publisher_suffix_is_not_fixture_matched():
+    unrelated = _item(
+        headline=(
+            "Mets open August series against Dunedin - Hometown News Treasure Coast"
+        ),
+        body=(
+            "The Mets will host Dunedin from Tuesday, August 4 through Sunday, "
+            "August 9 at Clover Park."
+        ),
+        published="Mon, 27 Jul 2026 14:00:00 GMT",
+        link=(
+            "https://www.hometownnewstc.com/sports/"
+            "mets-open-august-series-against-dunedin/article_future.html"
+        ),
+    )
+    assessment = generate._sports_event_window_assessment(unrelated, RUN_DATE)
+    assert assessment["is_preview"] is True
+    assert assessment["expired"] is False
+    assert assessment["event_end_date"] == "2026-08-09"

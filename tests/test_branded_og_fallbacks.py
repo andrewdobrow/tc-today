@@ -39,7 +39,7 @@ def test_legacy_ai_urls_are_migration_inputs_not_active_pool_entries():
     assert 'if "/images/fallback/" in path:' in source
 
 
-def test_engine_release_identifies_sports_expired_event_preview_guard():
+def test_engine_release_identifies_sports_expired_event_preview_identity_hotfix():
     observability = (ROOT / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'ENGINE_VERSION = "1.11.8.3"' in observability
-    assert 'ENGINE_RELEASE = "sports-expired-event-preview-guard"' in observability
+    assert 'ENGINE_VERSION = "1.11.8.3.1"' in observability
+    assert 'ENGINE_RELEASE = "sports-expired-event-preview-identity-hotfix"' in observability
