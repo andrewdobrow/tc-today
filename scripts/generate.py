@@ -18,6 +18,7 @@ import feedparser
 import requests
 import anthropic
 from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError as FuturesTimeoutError
@@ -269,7 +270,7 @@ CATEGORY_GENERATION_BUDGET_SECONDS = _positive_float_env(
 )
 CATEGORY_GENERATION_MAX_ATTEMPTS = 2
 CATEGORY_GENERATION_MIN_RETRY_SECONDS = 15
-CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 1
+CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 2
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -3073,6 +3074,394 @@ def _sports_relevance_evidence(item):
     )
 
 
+
+_SPORTS_MONTH_NUMBERS = {
+    "jan": 1, "january": 1,
+    "feb": 2, "february": 2,
+    "mar": 3, "march": 3,
+    "apr": 4, "april": 4,
+    "may": 5,
+    "jun": 6, "june": 6,
+    "jul": 7, "july": 7,
+    "aug": 8, "august": 8,
+    "sep": 9, "sept": 9, "september": 9,
+    "oct": 10, "october": 10,
+    "nov": 11, "november": 11,
+    "dec": 12, "december": 12,
+}
+_SPORTS_WEEKDAY_NUMBERS = {
+    "monday": 0, "mon": 0,
+    "tuesday": 1, "tue": 1, "tues": 1,
+    "wednesday": 2, "wed": 2,
+    "thursday": 3, "thu": 3, "thur": 3, "thurs": 3,
+    "friday": 4, "fri": 4,
+    "saturday": 5, "sat": 5,
+    "sunday": 6, "sun": 6,
+}
+_SPORTS_MONTH_PATTERN = (
+    r"jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|"
+    r"jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|"
+    r"nov(?:ember)?|dec(?:ember)?"
+)
+_SPORTS_WEEKDAY_PATTERN = (
+    r"monday|tuesday|wednesday|thursday|friday|saturday|sunday|"
+    r"mon\.?|tue(?:s)?\.?|wed\.?|thu(?:r|rs)?\.?|fri\.?|sat\.?|sun\.?"
+)
+_SPORTS_PREVIEW_REASON = "sports_event_window_expired"
+_KNOWN_SPORTS_EVENT_WINDOWS = (
+    {
+        "source_title": "mets back at clover park for series vs fort myers",
+        "generated_headline": (
+            "st lucie mets host fort myers for seven game series at clover park "
+            "starting tuesday"
+        ),
+        "source_url_fragment": (
+            "/mets-back-at-clover-park-for-series-vs-fort-myers/n-6390598"
+        ),
+        "start_date": "2026-07-21",
+        "end_date": "2026-07-26",
+    },
+)
+
+
+def _normalized_sports_identity(value):
+    value = str(value or "").lower()
+    value = re.sub(r"[^a-z0-9]+", " ", value)
+    return re.sub(r"\s+", " ", value).strip()
+
+
+def _known_sports_event_dates(item):
+    item = item or {}
+    title_values = {
+        _normalized_sports_identity(item.get("source_title")),
+        _normalized_sports_identity(item.get("title")),
+        _normalized_sports_identity(item.get("headline")),
+    }
+    source_url = str(
+        item.get("source_url") or item.get("_source_url") or item.get("link") or ""
+    ).lower()
+    for known in _KNOWN_SPORTS_EVENT_WINDOWS:
+        if (
+            known["source_title"] in title_values
+            or known["generated_headline"] in title_values
+            or known["source_url_fragment"] in source_url
+        ):
+            return [
+                datetime.fromisoformat(known["start_date"]).date(),
+                datetime.fromisoformat(known["end_date"]).date(),
+            ]
+    return []
+
+
+def _sports_preview_blob(item):
+    """Return bounded source copy used only for deterministic event-window checks."""
+    item = item or {}
+    parts = [
+        item.get("source_title") or item.get("title") or item.get("headline") or "",
+        item.get("summary") or item.get("teaser") or "",
+        item.get("article_text") or item.get("body") or "",
+    ]
+    return " ".join(str(part or "") for part in parts)[:16000]
+
+
+def _sports_preview_evidence(item):
+    """Identify forward-looking sports previews without confusing them with recaps."""
+    item = item or {}
+    title = str(
+        item.get("source_title") or item.get("title") or item.get("headline") or ""
+    ).lower()
+    blob = _sports_preview_blob(item).lower()
+
+    title_result = bool(
+        re.search(r"\b\d{1,3}\s*[-–—]\s*\d{1,3}\b", title)
+        or re.search(
+            r"\b(?:beat|beats|defeat|defeats|defeated|won|wins|lost|falls?|rall(?:y|ies|ied)|"
+            r"shut(?:s)? out|walks? off|clinches?|captures?|claims?)\b",
+            title,
+        )
+    )
+    title_preview = bool(
+        re.search(
+            r"\b(?:host|hosts|hosting|visit|visits|face|faces|open|opens|begin|begins|"
+            r"start|starts|starting|return|returns|set to|scheduled to|will)\b",
+            title,
+        )
+        and re.search(
+            r"\b(?:game|games|match|meet|race|series|homestand|tournament|season|"
+            r"mets|baseball|football|basketball|soccer|softball|volleyball|hockey)\b",
+            title,
+        )
+    ) or bool(re.search(r"\b(?:preview|upcoming|schedule|tickets?|promotions?)\b", title))
+
+    if title_result:
+        return False
+    if title_preview:
+        return True
+
+    strong_body_preview = bool(
+        re.search(
+            r"\b(?:return|returns|back)\b.{0,100}\b(?:series|homestand)\b",
+            blob,
+        )
+        or re.search(
+            r"\b(?:six|seven|eight|nine|\d+)[ -]day,?\s+"
+            r"(?:six|seven|eight|nine|\d+)[ -]game series\b",
+            blob,
+        )
+    )
+    if strong_body_preview:
+        return True
+
+    body_preview = bool(
+        re.search(
+            r"\b(?:will host|will face|will play|set to host|set to face|scheduled to|"
+            r"upcoming|homestand|series begins|series opens|series starts|first pitch is|"
+            r"tickets are|promotion schedule|game schedule)\b",
+            blob,
+        )
+    )
+    body_result = bool(
+        re.search(r"\b\d{1,3}\s*[-–—]\s*\d{1,3}\b", blob)
+        and re.search(
+            r"\b(?:final|beat|defeat|won|lost|scored|rallied|innings?|struck out|"
+            r"earned the win|save|rbi|home run)\b",
+            blob,
+        )
+    )
+    return body_preview and not body_result
+
+
+def _sports_reference_datetime(item, reference_time=None):
+    """Resolve a stable timezone-aware anchor for year inference and expiry checks."""
+    if reference_time is None:
+        reference_time = datetime.now(timezone.utc)
+    if reference_time.tzinfo is None:
+        reference_time = reference_time.replace(tzinfo=timezone.utc)
+
+    raw = str((item or {}).get("published") or (item or {}).get("published_raw") or "").strip()
+    if raw:
+        try:
+            from email.utils import parsedate_to_datetime
+            parsed = parsedate_to_datetime(raw)
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            return parsed.astimezone(timezone.utc), reference_time.astimezone(timezone.utc)
+        except Exception:
+            pass
+        try:
+            parsed = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            return parsed.astimezone(timezone.utc), reference_time.astimezone(timezone.utc)
+        except Exception:
+            pass
+    return reference_time.astimezone(timezone.utc), reference_time.astimezone(timezone.utc)
+
+
+def _sports_event_year(month, explicit_year, anchor_date):
+    if explicit_year:
+        return int(explicit_year)
+    year = anchor_date.year
+    # Keep December/January previews near New Year attached to the closest season.
+    if month <= 2 and anchor_date.month >= 11:
+        year += 1
+    elif month >= 11 and anchor_date.month <= 2:
+        year -= 1
+    return year
+
+
+def _sports_safe_date(year, month, day):
+    try:
+        return datetime(int(year), int(month), int(day)).date()
+    except (TypeError, ValueError):
+        return None
+
+
+def _extract_sports_event_dates(item, reference_time=None):
+    """Extract explicit calendar dates from a preview and identify stated ranges."""
+    blob = _sports_preview_blob(item)
+    source_dt, now_dt = _sports_reference_datetime(item, reference_time)
+    anchor = source_dt.astimezone(ZoneInfo("America/New_York")).date()
+    known_dates = _known_sports_event_dates(item)
+    if known_dates:
+        return sorted(set(known_dates)), True, now_dt
+    dates = set()
+    explicit_range = False
+
+    def add_date(month_token, day_token, year_token=None, *, fallback_month=None, fallback_year=None):
+        token = str(month_token or "").lower().rstrip(".")
+        month = _SPORTS_MONTH_NUMBERS.get(token) if token else fallback_month
+        if not month:
+            return None
+        year = int(year_token) if year_token else (fallback_year or _sports_event_year(month, None, anchor))
+        parsed = _sports_safe_date(year, month, day_token)
+        if parsed:
+            dates.add(parsed)
+        return parsed
+
+    range_re = re.compile(
+        rf"\b(?P<m1>{_SPORTS_MONTH_PATTERN})\.?\s+(?P<d1>\d{{1,2}})(?:st|nd|rd|th)?"
+        rf"(?:,?\s*(?P<y1>20\d{{2}}))?\s*(?:-|–|—|to|through|until)\s*"
+        rf"(?:(?:{_SPORTS_WEEKDAY_PATTERN}),?\s*)?"
+        rf"(?:(?P<m2>{_SPORTS_MONTH_PATTERN})\.?\s+)?"
+        rf"(?P<d2>\d{{1,2}})(?:st|nd|rd|th)?(?:,?\s*(?P<y2>20\d{{2}}))?\b",
+        re.I,
+    )
+    for match in range_re.finditer(blob):
+        explicit_range = True
+        first = add_date(match.group("m1"), match.group("d1"), match.group("y1"))
+        first_month = first.month if first else _SPORTS_MONTH_NUMBERS.get(match.group("m1").lower().rstrip("."))
+        first_year = first.year if first else _sports_event_year(first_month, match.group("y1"), anchor)
+        second_month_token = match.group("m2")
+        second_month = (
+            _SPORTS_MONTH_NUMBERS.get(second_month_token.lower().rstrip("."))
+            if second_month_token else first_month
+        )
+        second_year = int(match.group("y2")) if match.group("y2") else first_year
+        if second_month and first_month and second_month < first_month and not match.group("y2"):
+            second_year += 1
+        add_date(
+            second_month_token,
+            match.group("d2"),
+            match.group("y2"),
+            fallback_month=second_month,
+            fallback_year=second_year,
+        )
+
+    single_re = re.compile(
+        rf"\b(?P<m>{_SPORTS_MONTH_PATTERN})\.?\s+(?P<d>\d{{1,2}})(?:st|nd|rd|th)?"
+        rf"(?:,?\s*(?P<y>20\d{{2}}))?\b",
+        re.I,
+    )
+    for match in single_re.finditer(blob):
+        add_date(match.group("m"), match.group("d"), match.group("y"))
+
+    numeric_re = re.compile(
+        r"(?<!\d)(?P<m>1[0-2]|0?[1-9])/(?P<d>3[01]|[12]\d|0?[1-9])"
+        r"(?:/(?P<y>20\d{2}|\d{2}))?(?!\d)"
+    )
+    for match in numeric_re.finditer(blob):
+        year_token = match.group("y")
+        if year_token and len(year_token) == 2:
+            year_token = f"20{year_token}"
+        add_date(
+            "",
+            match.group("d"),
+            year_token,
+            fallback_month=int(match.group("m")),
+            fallback_year=(int(year_token) if year_token else None),
+        )
+
+    weekday_range_re = re.compile(
+        rf"\b(?:from\s+)?(?P<w1>{_SPORTS_WEEKDAY_PATTERN})\s*"
+        rf"(?:-|–|—|to|through|until)\s*(?P<w2>{_SPORTS_WEEKDAY_PATTERN})\b",
+        re.I,
+    )
+    for match in weekday_range_re.finditer(blob):
+        first_token = match.group("w1").lower().rstrip(".")
+        second_token = match.group("w2").lower().rstrip(".")
+        first_weekday = _SPORTS_WEEKDAY_NUMBERS.get(first_token)
+        second_weekday = _SPORTS_WEEKDAY_NUMBERS.get(second_token)
+        if first_weekday is None or second_weekday is None:
+            continue
+        explicit_range = True
+        weekday_anchor = min(dates) if dates else anchor
+        previous_start = weekday_anchor - timedelta(
+            days=(weekday_anchor.weekday() - first_weekday) % 7
+        )
+        next_start = weekday_anchor + timedelta(
+            days=(first_weekday - weekday_anchor.weekday()) % 7
+        )
+        start_date = min(
+            (previous_start, next_start),
+            key=lambda candidate: (
+                abs((candidate - weekday_anchor).days), candidate < weekday_anchor
+            ),
+        )
+        end_date = start_date + timedelta(days=(second_weekday - first_weekday) % 7)
+        dates.add(start_date)
+        dates.add(end_date)
+
+    return sorted(dates), explicit_range, now_dt
+
+
+def _sports_event_window_assessment(item, reference_time=None):
+    """Return deterministic expiry evidence for one Sports source or placement."""
+    item = item or {}
+    base = {
+        "is_preview": False,
+        "expired": False,
+        "reason": "",
+        "event_dates": [],
+        "event_end_date": "",
+    }
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return {**base, "reason": "custom_article_exempt"}
+    if not _sports_preview_evidence(item):
+        return {**base, "reason": "not_a_sports_preview"}
+
+    dates, explicit_range, now_dt = _extract_sports_event_dates(item, reference_time)
+    result = {**base, "is_preview": True, "event_dates": [value.isoformat() for value in dates]}
+    if not dates:
+        result["reason"] = "event_date_not_resolved"
+        return result
+
+    blob = _sports_preview_blob(item).lower()
+    multi_day = bool(re.search(r"\b(?:series|homestand|tournament|camp|multi-day|weeklong)\b", blob))
+    if multi_day and len(dates) < 2 and not explicit_range:
+        result["reason"] = "event_end_not_resolved"
+        return result
+
+    event_end = max(dates)
+    today = now_dt.astimezone(ZoneInfo("America/New_York")).date()
+    expired = event_end < today
+    result.update({
+        "expired": expired,
+        "reason": _SPORTS_PREVIEW_REASON if expired else "event_window_open",
+        "event_end_date": event_end.isoformat(),
+        "reference_date": today.isoformat(),
+    })
+    return result
+
+
+def _filter_expired_sports_previews(category_key, headlines, reference_time=None):
+    """Remove only previews whose complete explicit event window has passed."""
+    items = list(headlines or [])
+    if category_key != "sports":
+        return items, []
+
+    kept = []
+    rejected = []
+    for item in items:
+        assessment = _sports_event_window_assessment(item, reference_time)
+        if not assessment.get("expired"):
+            kept.append(item)
+            continue
+        item["sports_rejection_reason"] = _SPORTS_PREVIEW_REASON
+        item["sports_event_end_date"] = assessment.get("event_end_date", "")
+        rejected.append({
+            "headline": str(item.get("title") or item.get("headline") or ""),
+            "source_url": str(item.get("source_url") or item.get("link") or ""),
+            "published": str(item.get("published") or item.get("published_raw") or ""),
+            "reason": _SPORTS_PREVIEW_REASON,
+            "event_end_date": assessment.get("event_end_date", ""),
+            "event_dates": assessment.get("event_dates", []),
+        })
+    return kept, rejected
+
+
+def _archive_sports_event_window_expired(entry, reference_time=None):
+    if not isinstance(entry, dict):
+        return False
+    probe = dict(entry)
+    probe.setdefault("title", entry.get("headline", ""))
+    probe.setdefault("source_title", entry.get("source_title", "") or entry.get("headline", ""))
+    probe.setdefault("summary", entry.get("teaser", ""))
+    probe.setdefault("article_text", _archive_article_body(entry))
+    probe.setdefault("published", entry.get("first_published") or entry.get("date") or "")
+    return bool(_sports_event_window_assessment(probe, reference_time).get("expired"))
+
+
 def _sports_zero_candidate_fast_recovery(category_key, headlines):
     """Return True when Sports has no deterministic hero candidate.
 
@@ -3094,6 +3483,8 @@ def _hero_eligible(category_key, h):
     quality = h.get("source_quality", "")
 
     if quality in {"thin", "brief", "discovery_only"}:
+        return False
+    if category_key == "sports" and _sports_event_window_assessment(h).get("expired"):
         return False
 
 
@@ -4374,6 +4765,7 @@ def _build_category_generation_report(records):
     total_attempts = 0
     total_model_seconds = 0.0
     archive_recovery_count = 0
+    sports_expired_event_preview_count = 0
     for record in records:
         status_counts[str(record.get("status") or "unknown")] += 1
         failure_code = str(record.get("failure_code") or "")
@@ -4382,6 +4774,9 @@ def _build_category_generation_report(records):
         total_attempts += int(record.get("attempt_count") or 0)
         total_model_seconds += float(record.get("model_elapsed_seconds") or 0.0)
         archive_recovery_count += int(bool(record.get("archive_recovery_requested")))
+        sports_expired_event_preview_count += int(
+            record.get("sports_expired_event_preview_count") or 0
+        )
 
     return {
         "schema_version": CATEGORY_GENERATION_REPORT_SCHEMA_VERSION,
@@ -4404,6 +4799,7 @@ def _build_category_generation_report(records):
             "model_attempt_count": total_attempts,
             "model_elapsed_seconds": round(total_model_seconds, 3),
             "archive_recovery_requested_count": archive_recovery_count,
+            "sports_expired_event_preview_count": sports_expired_event_preview_count,
         },
         "categories": records,
     }
@@ -6239,6 +6635,8 @@ def render_index(all_categories, top_cat):
     for e in older_archive:
         hl = (e.get("headline", "") or "").strip()
         category_keys = _item_category_memberships(e, e.get("category_key", ""))
+        if "sports" in category_keys and _archive_sports_event_window_expired(e):
+            category_keys = [key for key in category_keys if key != "sports"]
         if not hl or not category_keys or hl.lower() in current_headlines:
             continue
         if not _archive_entry_publishable(e):
@@ -14372,6 +14770,8 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             return False
         if not _archive_entry_publishable(e):
             return False
+        if category_key == "sports" and _archive_sports_event_window_expired(e):
+            return False
         if category_key in COUNTY_KEYS:
             probe = {
                 "headline": e.get("headline", ""),
@@ -14439,6 +14839,18 @@ def ensure_all_category_sections(all_categories, min_cards=6):
         category["category_label"] = config["label"]
         category["_drop_category"] = False
         category.setdefault("cards", [])
+
+        if category_key == "sports":
+            if category.get("hero") and _sports_event_window_assessment(category["hero"]).get("expired"):
+                print(
+                    "  Permanent Sports event-window guard removed expired hero: "
+                    f"'{category['hero'].get('headline','')[:55]}'"
+                )
+                category["hero"] = None
+            category["cards"] = [
+                card for card in category.get("cards", [])
+                if not _sports_event_window_assessment(card).get("expired")
+            ]
 
         # Permanent county safety: revalidate live and recovered content with contextual
         # geography. A stale archive category label or bare name like "Stuart" is not
@@ -14963,7 +15375,8 @@ def _write_editorial_observability(engine, audit_rows, activation_run=None, cate
             print(
                 "  Category generation:    "
                 f"{category_metrics.get('model_attempt_count', 0)} model attempt(s); "
-                f"{category_metrics.get('archive_recovery_requested_count', 0)} recovery request(s)"
+                f"{category_metrics.get('archive_recovery_requested_count', 0)} recovery request(s); "
+                f"{category_metrics.get('sports_expired_event_preview_count', 0)} expired Sports preview(s)"
             )
         print(
             "  Breaking / High:         "
@@ -15057,6 +15470,8 @@ def main():
             "model_elapsed_seconds": 0.0,
             "failure_code": "",
             "failure_summary": "",
+            "sports_expired_event_preview_count": 0,
+            "sports_expired_event_previews": [],
             "_started": _category_started,
         }
         category_generation_records.append(_category_record)
@@ -15112,6 +15527,28 @@ def main():
             _finalize_category_generation_record(
                 _category_record, "no_publishable_sources", _category_started,
                 archive_recovery_requested=True,
+            )
+            continue
+
+        headlines, _expired_sports_previews = _filter_expired_sports_previews(cat_key, headlines)
+        if _expired_sports_previews:
+            _category_record["sports_expired_event_preview_count"] = len(_expired_sports_previews)
+            _category_record["sports_expired_event_previews"] = _expired_sports_previews
+            for _expired in _expired_sports_previews:
+                print(
+                    "  Sports event-window guard: rejected expired preview "
+                    f"ending {_expired.get('event_end_date') or 'unknown'} — "
+                    f"'{_expired.get('headline','')[:72]}'"
+                )
+        if not headlines:
+            print("  Sports event-window guard removed every publishable source; using archive recovery")
+            _finalize_category_generation_record(
+                _category_record,
+                "sports_expired_event_preview_archive_recovery",
+                _category_started,
+                archive_recovery_requested=True,
+                failure_code=_SPORTS_PREVIEW_REASON,
+                failure_summary="Every publishable Sports source was an expired event preview",
             )
             continue
 
@@ -15509,6 +15946,7 @@ def main():
         "  Category generation report: "
         f"{_category_summary.get('model_attempt_count', 0)} model attempt(s), "
         f"{_category_summary.get('archive_recovery_requested_count', 0)} archive recovery request(s), "
+        f"{_category_summary.get('sports_expired_event_preview_count', 0)} expired Sports preview(s), "
         f"{CATEGORY_GENERATION_REPORT_PATH}"
     )
 
