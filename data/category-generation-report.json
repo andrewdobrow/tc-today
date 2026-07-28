@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-07-28T06:28:42Z",
+  "generated_at": "2026-07-28T06:49:19Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,14 +15,17 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 8,
-      "generated_live": 1
+      "cache_hit": 7,
+      "generated_live": 1,
+      "sports_zero_candidate_archive_recovery": 1
     },
-    "failures": {},
+    "failures": {
+      "no_sports_hero_candidates": 1
+    },
     "model_attempt_count": 1,
-    "model_elapsed_seconds": 41.745,
-    "archive_recovery_requested_count": 0,
-    "sports_expired_event_preview_count": 0
+    "model_elapsed_seconds": 66.009,
+    "archive_recovery_requested_count": 1,
+    "sports_expired_event_preview_count": 1
   },
   "categories": [
     {
@@ -31,7 +34,7 @@
       "status": "cache_hit",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 25,
-      "publishable_source_count": 17,
+      "publishable_source_count": 18,
       "selected_source_count": 12,
       "cache_hit": true,
       "archive_recovery_requested": false,
@@ -43,7 +46,7 @@
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "live_hero_headline": "Cyclist rides through Vero Beach on 2,600-mile journey from Key West to Maine",
-      "elapsed_seconds": 8.3
+      "elapsed_seconds": 8.195
     },
     {
       "category_key": "crime",
@@ -63,7 +66,7 @@
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "live_hero_headline": "Armed robbers force victim to withdraw cash at Wells Fargo ATM in Fort Pierce",
-      "elapsed_seconds": 7.575
+      "elapsed_seconds": 6.811
     },
     {
       "category_key": "business",
@@ -83,37 +86,38 @@
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "live_hero_headline": "Port St. Lucie bans gas station on Tradition commercial site after months of resident concerns",
-      "elapsed_seconds": 3.352
+      "elapsed_seconds": 2.642
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
-      "status": "generated_live",
+      "status": "sports_zero_candidate_archive_recovery",
       "fetched_candidate_count": 26,
       "fresh_candidate_count": 26,
-      "publishable_source_count": 11,
+      "publishable_source_count": 12,
       "selected_source_count": 7,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_sports_hero_candidates",
+      "failure_summary": "Selected Sports source pool contained no deterministic athletic hero candidate",
+      "sports_expired_event_preview_count": 1,
+      "sports_expired_event_previews": [
         {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 41.745,
-          "result": "success"
+          "headline": "Mets back at Clover Park for series vs. Fort Myers - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/sports/mets-back-at-clover-park-for-series-vs-fort-myers/article_5fcaa9df-9494-53df-ad8d-4c96173246f8.html",
+          "published": "Wed, 22 Jul 2026 02:00:00 GMT",
+          "reason": "sports_event_window_expired",
+          "event_end_date": "2026-07-26",
+          "event_dates": [
+            "2026-07-21",
+            "2026-07-26"
+          ]
         }
       ],
-      "model_elapsed_seconds": 41.745,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "St. Lucie Mets return to Clover Park for seven-game homestand against Fort Myers",
-      "generated_card_count": 0,
-      "elapsed_seconds": 51.05
+      "elapsed_seconds": 8.225
     },
     {
       "category_key": "things_to_do",
@@ -133,7 +137,7 @@
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "live_hero_headline": "Weekend activities include Christmas in July market in Palm City, Stuart Riverwalk concert",
-      "elapsed_seconds": 7.503
+      "elapsed_seconds": 7.525
     },
     {
       "category_key": "florida",
@@ -153,7 +157,7 @@
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "live_hero_headline": "Leon County judge rules James Fishback can remain on Florida governor ballot",
-      "elapsed_seconds": 7.181
+      "elapsed_seconds": 6.445
     },
     {
       "category_key": "martin",
@@ -173,27 +177,37 @@
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "live_hero_headline": "Indiantown Council rejects pause on data center applications despite resident pressure",
-      "elapsed_seconds": 7.865
+      "elapsed_seconds": 6.838
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "cache_hit",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 28,
-      "publishable_source_count": 12,
+      "status": "generated_live",
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 29,
+      "publishable_source_count": 13,
       "selected_source_count": 12,
-      "cache_hit": true,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 66.009,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 66.009,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "live_hero_headline": "3 arrested in St. Lucie County after 3-month-old dies from dehydration and malnutrition in Fort Pierce",
-      "elapsed_seconds": 4.952
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Three arrested in St. Lucie County after 3-month-old dies from dehydration and malnutrition",
+      "generated_card_count": 6,
+      "elapsed_seconds": 70.523
     },
     {
       "category_key": "indian_river",
@@ -201,7 +215,7 @@
       "status": "cache_hit",
       "fetched_candidate_count": 29,
       "fresh_candidate_count": 29,
-      "publishable_source_count": 20,
+      "publishable_source_count": 19,
       "selected_source_count": 12,
       "cache_hit": true,
       "archive_recovery_requested": false,
@@ -213,7 +227,7 @@
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "live_hero_headline": "Indian River County firefighter Geoffrey Lang dies following personal tragedy in Sebastian",
-      "elapsed_seconds": 3.328
+      "elapsed_seconds": 3.642
     }
   ]
 }
