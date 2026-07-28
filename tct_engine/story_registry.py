@@ -49,6 +49,89 @@ def _tokens(value: str) -> set[str]:
 
 class StoryRegistry:
     SCHEMA_VERSION = 10
+    RESOLUTION_HISTORY_LIMIT = 250
+    REGISTRY_MAX_BYTES = 50 * 1024 * 1024
+
+    @staticmethod
+    def _resolution_history_key(entry: dict[str, Any]) -> str:
+        """Return a deterministic key for one resolver decision record."""
+        return json.dumps(
+            entry, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+        )
+
+    @classmethod
+    def _compact_resolution_entries(
+        cls, entries: Iterable[dict[str, Any]] | None
+    ) -> tuple[list[dict[str, Any]], dict[str, int]]:
+        """Keep newest unique resolver decisions and discard replay duplicates."""
+        original = [entry for entry in (entries or ()) if isinstance(entry, dict)]
+        seen: set[str] = set()
+        newest_unique: list[dict[str, Any]] = []
+        for entry in reversed(original):
+            key = cls._resolution_history_key(entry)
+            if key in seen:
+                continue
+            seen.add(key)
+            newest_unique.append(entry)
+            if len(newest_unique) >= cls.RESOLUTION_HISTORY_LIMIT:
+                break
+        compacted = list(reversed(newest_unique))
+        unique_count = len({cls._resolution_history_key(entry) for entry in original})
+        return compacted, {
+            "entries_before": len(original),
+            "entries_after": len(compacted),
+            "duplicates_removed": max(0, len(original) - unique_count),
+            "unique_entries_truncated": max(0, unique_count - len(compacted)),
+        }
+
+    @classmethod
+    def _compact_payload_resolution_history(
+        cls, payload: dict[str, Any]
+    ) -> dict[str, int]:
+        totals = {
+            "entries_before": 0,
+            "entries_after": 0,
+            "duplicates_removed": 0,
+            "unique_entries_truncated": 0,
+            "stories_compacted": 0,
+        }
+        stories = payload.get("stories", {})
+        if not isinstance(stories, dict):
+            return totals
+        for story in stories.values():
+            if not isinstance(story, dict):
+                continue
+            compacted, stats = cls._compact_resolution_entries(
+                story.get("resolution_history")
+            )
+            if stats["entries_before"] != stats["entries_after"]:
+                totals["stories_compacted"] += 1
+            story["resolution_history"] = compacted
+            for key in (
+                "entries_before",
+                "entries_after",
+                "duplicates_removed",
+                "unique_entries_truncated",
+            ):
+                totals[key] += stats[key]
+        return totals
+
+    def _append_resolution_history(
+        self, story: dict[str, Any], entry: dict[str, Any]
+    ) -> bool:
+        """Append one resolver decision only when it adds new audit evidence."""
+        history = story.setdefault("resolution_history", [])
+        key = self._resolution_history_key(entry)
+        if any(
+            isinstance(existing, dict)
+            and self._resolution_history_key(existing) == key
+            for existing in history
+        ):
+            return False
+        history.append(entry)
+        if len(history) > self.RESOLUTION_HISTORY_LIMIT:
+            story["resolution_history"], _ = self._compact_resolution_entries(history)
+        return True
 
     def __init__(self, filename: str | Path = "story-registry.json") -> None:
         self.path = Path(filename)
@@ -60,11 +143,26 @@ class StoryRegistry:
         self._policy = EditorialPolicy()
         self.data = self._load()
         self.last_decision: dict[str, Any] = {}
-        if bool(
+        load_compaction = (self.data.get("history_compaction") or {}).get(
+            "last_load", {}
+        )
+        if int(load_compaction.get("duplicates_removed", 0) or 0) > 0:
+            print(
+                "  Editorial registry history compacted: "
+                f"{load_compaction.get('entries_before', 0)} -> "
+                f"{load_compaction.get('entries_after', 0)} entries "
+                f"({load_compaction.get('duplicates_removed', 0)} duplicates removed)"
+            )
+        repair_changed = bool(
             ((self.data.get("registry_repair") or {}).get("last_run") or {}).get(
                 "changed", False
             )
-        ):
+        )
+        history_compacted = bool(
+            int(load_compaction.get("duplicates_removed", 0) or 0)
+            or int(load_compaction.get("unique_entries_truncated", 0) or 0)
+        )
+        if repair_changed or history_compacted:
             self.save()
 
     @staticmethod
@@ -149,6 +247,19 @@ class StoryRegistry:
             story["timeline"] = StoryTimeline.from_list(story.get("timeline", [])).to_list()
 
         repair_registry_payload(payload)
+        compaction = self._compact_payload_resolution_history(payload)
+        previous_compaction = payload.get("history_compaction", {})
+        payload["history_compaction"] = {
+            "version": 1,
+            "resolution_history_limit_per_story": self.RESOLUTION_HISTORY_LIMIT,
+            "last_load": compaction,
+            "total_duplicates_removed": int(
+                (previous_compaction or {}).get("total_duplicates_removed", 0) or 0
+            ) + compaction["duplicates_removed"],
+            "total_unique_entries_truncated": int(
+                (previous_compaction or {}).get("total_unique_entries_truncated", 0) or 0
+            ) + compaction["unique_entries_truncated"],
+        }
 
         for story in payload["stories"].values():
             story["importance"] = self._importance.score(story).to_dict()
@@ -187,11 +298,33 @@ class StoryRegistry:
 
     def _write(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
+        compaction = self._compact_payload_resolution_history(self.data)
+        report = self.data.setdefault("history_compaction", {})
+        report.update({
+            "version": 1,
+            "resolution_history_limit_per_story": self.RESOLUTION_HISTORY_LIMIT,
+            "last_write": compaction,
+        })
+        report["total_duplicates_removed"] = int(
+            report.get("total_duplicates_removed", 0) or 0
+        ) + compaction["duplicates_removed"]
+        report["total_unique_entries_truncated"] = int(
+            report.get("total_unique_entries_truncated", 0) or 0
+        ) + compaction["unique_entries_truncated"]
+        serialized = json.dumps(self.data, indent=2, ensure_ascii=False)
+        size_bytes = len(serialized.encode("utf-8"))
+        report["last_serialized_bytes"] = size_bytes
+        report["max_serialized_bytes"] = self.REGISTRY_MAX_BYTES
+        # Re-serialize once so the recorded byte count is present in the file.
+        serialized = json.dumps(self.data, indent=2, ensure_ascii=False)
+        size_bytes = len(serialized.encode("utf-8"))
+        if size_bytes > self.REGISTRY_MAX_BYTES:
+            raise RuntimeError(
+                "Editorial story registry exceeds the 50 MiB safety ceiling after "
+                f"history compaction: {size_bytes / (1024 * 1024):.2f} MiB"
+            )
         temporary = self.path.with_suffix(self.path.suffix + ".tmp")
-        temporary.write_text(
-            json.dumps(self.data, indent=2, ensure_ascii=False),
-            encoding="utf-8",
-        )
+        temporary.write_text(serialized, encoding="utf-8")
         os.replace(temporary, self.path)
 
     def save(self) -> None:
@@ -363,7 +496,8 @@ class StoryRegistry:
             )
             self._recalculate_importance(story_id)
             story = self.data["stories"][story_id]
-            story["resolution_history"].append(
+            self._append_resolution_history(
+                story,
                 {
                     "event_key": event_key,
                     "confidence": round(confidence, 6),
@@ -414,7 +548,8 @@ class StoryRegistry:
             )
             self._recalculate_importance(story_id)
             story = self.data["stories"][story_id]
-            story["resolution_history"].append(
+            self._append_resolution_history(
+                story,
                 {
                     "event_key": event_key,
                     "confidence": 1.0,
@@ -493,7 +628,8 @@ class StoryRegistry:
             )
             self._recalculate_importance(story_id)
             story = self.data["stories"][story_id]
-            story["resolution_history"].append(
+            self._append_resolution_history(
+                story,
                 {
                     "event_key": event_key,
                     "confidence": round(confidence, 6),
@@ -595,7 +731,8 @@ class StoryRegistry:
             )
             self._recalculate_importance(story_id)
             story = self.data["stories"][story_id]
-            story["resolution_history"].append(
+            self._append_resolution_history(
+                story,
                 {
                     "event_key": event_key,
                     "confidence": round(confidence, 6),
@@ -762,7 +899,8 @@ class StoryRegistry:
             "story_id": story_id,
         }
         self.last_decision.update(self._follow_up_candidate_fields(relationship))
-        story["resolution_history"].append(
+        self._append_resolution_history(
+            story,
             {
                 "event_key": event_key,
                 "confidence": round(
@@ -971,7 +1109,12 @@ class StoryRegistry:
         ):
             primary[field] = sorted(set(primary[field]) | set(secondary[field]))
 
-        primary["resolution_history"].extend(secondary["resolution_history"])
+        primary["resolution_history"], _ = self._compact_resolution_entries(
+            [
+                *primary.get("resolution_history", ()),
+                *secondary.get("resolution_history", ()),
+            ]
+        )
         primary.setdefault("relationship_history", []).extend(secondary.get("relationship_history", []))
         primary["custom_article_count"] = (
             int(primary.get("custom_article_count", 0))
