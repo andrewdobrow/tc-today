@@ -14674,6 +14674,12 @@ def _write_editorial_observability(engine, audit_rows, activation_run=None, cate
             f"{retrospective_metrics.get('activation_eligible_candidate_count', 0)} "
             "retrospective candidate(s); observe-only"
         )
+        print(
+            "  Timeline coherence:      "
+            f"{retrospective_metrics.get('incoherent_transition_count', 0)} "
+            "incoherent transition(s) across "
+            f"{retrospective_metrics.get('incoherent_story_count', 0)} story timeline(s)"
+        )
         category_metrics = report.get("category_generation", {}).get("summary", {})
         if category_metrics:
             print(

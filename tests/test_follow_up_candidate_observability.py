@@ -383,3 +383,158 @@ def test_retrospective_observability_excludes_social_and_low_value_entries():
         "low_value_title": 2,
         "social_source": 1,
     }
+
+
+def test_retrospective_geoffrey_lang_to_unrelated_house_fire_is_incoherent():
+    story = {
+        "story_id": "story_000793",
+        "status": "developing",
+        "canonical_title": "Cat, hamster rescued after house fire in Palm Beach County",
+        "timeline": [
+            _timeline_entry(
+                "lang",
+                "2026-07-27T05:25:57+00:00",
+                "Indian River County Fire Rescue firefighter Geoffrey Lang dies in off-duty incident",
+                source="https://news.google.com/rss/articles/geoffrey-lang",
+            ),
+            _timeline_entry(
+                "pets",
+                "2026-07-28T03:51:43+00:00",
+                "Cat, hamster rescued after house fire in Palm Beach County",
+                source="https://www.wptv.com/news/local-news/palm-beach/cat-hamster-rescued-house-fire",
+            ),
+        ],
+    }
+    story["timeline"][0]["event_key"] = "fire-f2e4e9d745"
+    story["timeline"][1]["event_key"] = "animal-rescue-76e432cbef-cats"
+
+    retrospective = build_editorial_observability(
+        _TimelineEngine([story]), []
+    )["follow_up_detection"]["retrospective"]
+
+    assert retrospective["candidate_count"] == 1
+    assert retrospective["high_confidence_candidate_count"] == 0
+    assert retrospective["activation_eligible_candidate_count"] == 0
+    assert retrospective["identity_anchor_rejected_count"] == 1
+    assert retrospective["incoherent_transition_count"] == 1
+    assert retrospective["incoherent_story_count"] == 1
+    example = retrospective["examples"][0]
+    assert example["timeline_incoherent"] is True
+    assert example["identity_anchor_qualified"] is False
+    assert example["confidence"] < 0.80
+    assert "timeline_identity_unanchored" in example["blocking_conflicts"]
+    assert "timeline_incoherent" in example["reason_codes"]
+    assert retrospective["incoherent_stories"][0]["story_id"] == "story_000793"
+
+
+def test_retrospective_sebastian_shooting_to_firefighter_death_is_incoherent():
+    story = {
+        "story_id": "story_000549",
+        "status": "developing",
+        "canonical_title": (
+            "Indian River County firefighter/paramedic dies following "
+            "off-duty personal tragedy"
+        ),
+        "timeline": [
+            _timeline_entry(
+                "shooting",
+                "2026-07-25T00:38:10+00:00",
+                "Shots fired at Orchard Grove apartments; no injuries reported",
+                source="https://news.google.com/rss/articles/sebastian-shooting",
+            ),
+            _timeline_entry(
+                "death",
+                "2026-07-26T20:40:28+00:00",
+                "Indian River County firefighter/paramedic dies following off-duty personal tragedy",
+                source="https://news.google.com/rss/articles/geoffrey-lang-death",
+            ),
+        ],
+    }
+    story["timeline"][0]["event_key"] = "fire-sebastian"
+    story["timeline"][1]["event_key"] = "fire-f43e781d70"
+
+    retrospective = build_editorial_observability(
+        _TimelineEngine([story]), []
+    )["follow_up_detection"]["retrospective"]
+
+    assert retrospective["candidate_count"] == 1
+    assert retrospective["high_confidence_candidate_count"] == 0
+    assert retrospective["activation_eligible_candidate_count"] == 0
+    example = retrospective["examples"][0]
+    assert example["milestones"] == ["death"]
+    assert example["timeline_incoherent"] is True
+    assert example["identity_anchor_codes"][-1] == "identity_anchor_missing"
+    assert "timeline_identity_unanchored" in example["blocking_conflicts"]
+
+
+def test_retrospective_missing_child_recovery_retains_exact_source_anchor():
+    story = {
+        "story_id": "story_000695",
+        "status": "developing",
+        "canonical_title": (
+            "West Palm Beach police seek public's help finding missing "
+            "10-year-old boy traveling with his aunt"
+        ),
+        "timeline": [
+            _timeline_entry(
+                "missing",
+                "2026-07-26T15:40:30+00:00",
+                "West Palm Beach police seek public's help finding missing 10-year-old boy traveling with his aunt",
+                source="https://www.wptv.com/news/west-palm-beach/missing-10-year-old",
+            ),
+            _timeline_entry(
+                "located",
+                "2026-07-26T20:40:28+00:00",
+                "Missing 10-Year-Old safely located in Tennessee, West Palm Beach Police say",
+                source="https://www.wptv.com/news/west-palm-beach/missing-10-year-old",
+            ),
+        ],
+    }
+    story["timeline"][0]["event_key"] = "missing-person-a6668511e1"
+    story["timeline"][1]["event_key"] = "missing-person-ffed96853f"
+
+    retrospective = build_editorial_observability(
+        _TimelineEngine([story]), []
+    )["follow_up_detection"]["retrospective"]
+
+    assert retrospective["high_confidence_candidate_count"] == 1
+    assert retrospective["activation_eligible_candidate_count"] == 1
+    assert retrospective["incoherent_transition_count"] == 0
+    assert retrospective["incoherent_story_count"] == 0
+    example = retrospective["examples"][0]
+    assert example["identity_anchor_qualified"] is True
+    assert example["timeline_incoherent"] is False
+    assert "exact_source_article_identity" in example["identity_anchor_codes"]
+    assert "timeline_identity_unanchored" not in example["blocking_conflicts"]
+
+
+def test_retrospective_canonical_title_cannot_self_validate_unrelated_transition():
+    story = {
+        "story_id": "story_corrupt",
+        "status": "developing",
+        "canonical_title": "Indian River County firefighter Geoffrey Lang dies",
+        "timeline": [
+            _timeline_entry(
+                "prior",
+                "2026-07-25T00:00:00+00:00",
+                "Shots fired at Sebastian apartments with no injuries",
+                source="https://example.com/news/sebastian-shooting",
+            ),
+            _timeline_entry(
+                "newer",
+                "2026-07-26T00:00:00+00:00",
+                "Indian River County firefighter Geoffrey Lang dies",
+                source="https://example.com/news/geoffrey-lang",
+            ),
+        ],
+    }
+
+    retrospective = build_editorial_observability(
+        _TimelineEngine([story]), []
+    )["follow_up_detection"]["retrospective"]
+    example = retrospective["examples"][0]
+
+    assert example["canonical_title_overlap"] == 1.0
+    assert example["identity_anchor_qualified"] is False
+    assert example["activation_eligible"] is False
+    assert retrospective["high_confidence_candidate_count"] == 0

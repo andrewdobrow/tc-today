@@ -13,12 +13,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping
 
+from .source_identity import normalize_source_identity_url
 from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.11.8.0"
-ENGINE_RELEASE = "identity-anchored-followups-sports-and-hero-time"
-OBSERVABILITY_SCHEMA_VERSION = 14
+ENGINE_VERSION = "1.11.8.1"
+ENGINE_RELEASE = "retrospective-timeline-coherence-gate"
+OBSERVABILITY_SCHEMA_VERSION = 15
 RESOLVER_VERSION = "2.4"
 RELATIONSHIP_ENGINE_VERSION = "1.5"
 
@@ -85,6 +86,102 @@ def _retrospective_overlap(left: object, right: object) -> float:
     return len(left_tokens & right_tokens) / min(len(left_tokens), len(right_tokens))
 
 
+def _retrospective_event_family(value: object) -> str:
+    key = _normalized_text(value).replace(" ", "-")
+    if not key:
+        return ""
+    for family in ("animal-rescue", "traffic-crash", "missing-person", "fire"):
+        if key == family or key.startswith(f"{family}-"):
+            return family
+    return re.sub(r"-[0-9a-f]{8,}$", "", key)
+
+
+def _retrospective_source_identity(entry: Mapping[str, Any]) -> str:
+    for field in ("url", "source"):
+        normalized = normalize_source_identity_url(entry.get(field))
+        if normalized:
+            return normalized
+    return ""
+
+
+def _retrospective_pair_identity(
+    prior: Mapping[str, Any],
+    newer: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Validate identity independently of the persisted story assignment.
+
+    A shared persistent story ID is not evidence that two timeline entries belong
+    together. Retrospective transitions require an exact article/event anchor or
+    strong pairwise title continuity. Canonical-title similarity is intentionally
+    excluded because a corrupted story can simply adopt the newer unrelated title.
+    """
+
+    prior_title = prior.get("title")
+    newer_title = newer.get("title")
+    prior_tokens = _retrospective_tokens(prior_title)
+    newer_tokens = _retrospective_tokens(newer_title)
+    shared_tokens = prior_tokens & newer_tokens
+    title_overlap = _retrospective_overlap(prior_title, newer_title)
+
+    prior_event_key = _normalized_text(prior.get("event_key")).replace(" ", "-")
+    newer_event_key = _normalized_text(newer.get("event_key")).replace(" ", "-")
+    exact_event_key = bool(prior_event_key and prior_event_key == newer_event_key)
+    prior_family = _retrospective_event_family(prior_event_key)
+    newer_family = _retrospective_event_family(newer_event_key)
+    event_family_match = bool(
+        prior_family
+        and newer_family
+        and prior_family == newer_family
+        and prior_family != "unknown-event"
+    )
+
+    prior_source = _retrospective_source_identity(prior)
+    newer_source = _retrospective_source_identity(newer)
+    exact_source_identity = bool(prior_source and prior_source == newer_source)
+
+    strong_title_identity = title_overlap >= 0.45 and len(shared_tokens) >= 3
+    corroborated_family_identity = (
+        event_family_match
+        and title_overlap >= 0.20
+        and len(shared_tokens) >= 2
+    )
+    qualified = bool(
+        exact_source_identity
+        or exact_event_key
+        or strong_title_identity
+        or corroborated_family_identity
+    )
+
+    codes: list[str] = []
+    if exact_source_identity:
+        codes.append("exact_source_article_identity")
+    if exact_event_key:
+        codes.append("exact_event_key")
+    if event_family_match:
+        codes.append("event_family_match")
+    elif prior_family and newer_family and prior_family != newer_family:
+        codes.append("event_family_conflict")
+    if strong_title_identity:
+        codes.append("strong_pair_title_continuity")
+    elif title_overlap >= 0.35:
+        codes.append("moderate_pair_title_continuity")
+    if len(shared_tokens) >= 3:
+        codes.append("shared_discriminative_title_tokens")
+    codes.append("identity_anchor_qualified" if qualified else "identity_anchor_missing")
+
+    return {
+        "qualified": qualified,
+        "codes": codes,
+        "title_overlap": title_overlap,
+        "shared_title_tokens": sorted(shared_tokens),
+        "exact_source_identity": exact_source_identity,
+        "exact_event_key": exact_event_key,
+        "event_family_match": event_family_match,
+        "prior_event_family": prior_family,
+        "newer_event_family": newer_family,
+    }
+
+
 def _timeline_datetime(value: object) -> datetime:
     try:
         parsed = datetime.fromisoformat(str(value or "").replace("Z", "+00:00"))
@@ -128,19 +225,22 @@ def _build_retrospective_follow_up_observability(
 ) -> dict[str, Any]:
     """Inspect persisted timelines for milestone transitions without changing them.
 
-    Timeline order and title evidence are treated conservatively.  Ambiguous
-    transitions are still reported for review, but blocking conflicts prevent them
-    from becoming activation evidence.
+    Every candidate transition must independently prove article/event continuity.
+    Persisted story membership and canonical-title overlap remain useful context,
+    but cannot qualify a transition because incoherent historical timelines may
+    contain unrelated entries.
     """
 
     candidates: list[dict[str, Any]] = []
     milestone_counts: Counter[str] = Counter()
     blocking_conflicts: Counter[str] = Counter()
     exclusion_reasons: Counter[str] = Counter()
+    incoherent_stories: dict[str, dict[str, Any]] = {}
     excluded_entry_count = 0
     transitions_examined = 0
     timeline_entries_examined = 0
     stories_with_timelines = 0
+    identity_anchor_rejected_count = 0
 
     for story in stories:
         raw_timeline = story.get("timeline") or []
@@ -171,9 +271,8 @@ def _build_retrospective_follow_up_observability(
                 transitions_examined += 1
                 novel_milestones = milestones - known_milestones
                 if novel_milestones:
-                    prior_title_overlap = _retrospective_overlap(
-                        previous_eligible.get("title"), entry.get("title")
-                    )
+                    pair_identity = _retrospective_pair_identity(previous_eligible, entry)
+                    prior_title_overlap = float(pair_identity["title_overlap"])
                     canonical_title_overlap = _retrospective_overlap(
                         story.get("canonical_title"), entry.get("title")
                     )
@@ -186,6 +285,9 @@ def _build_retrospective_follow_up_observability(
                         conflicts.append("same_timestamp_order_uncertain")
                     if max(prior_title_overlap, canonical_title_overlap) < 0.22:
                         conflicts.append("weak_title_continuity")
+                    if not pair_identity["qualified"]:
+                        conflicts.append("timeline_identity_unanchored")
+                        identity_anchor_rejected_count += 1
                     terminal = novel_milestones & {
                         "death", "resolution", "opening", "closure"
                     }
@@ -200,24 +302,54 @@ def _build_retrospective_follow_up_observability(
                         + 0.08 * float(len(novel_milestones) == 1)
                         - 0.16 * float("weak_title_continuity" in conflicts)
                     )
+                    if not pair_identity["qualified"]:
+                        confidence = min(confidence, 0.74)
                     confidence = max(0.0, min(1.0, confidence))
+
                     reason_codes = [
                         "retrospective_timeline_transition",
                         "novel_milestone",
-                        "persistent_story_identity",
+                        "persistent_story_identity_untrusted",
+                        *pair_identity["codes"],
                     ]
                     if prior_title_overlap >= 0.35:
                         reason_codes.append("prior_title_continuity")
                     if canonical_title_overlap >= 0.35:
-                        reason_codes.append("canonical_title_continuity")
+                        reason_codes.append("canonical_title_continuity_context_only")
                     if not same_timestamp:
                         reason_codes.append("chronology_supported")
+                    if not pair_identity["qualified"]:
+                        reason_codes.append("timeline_incoherent")
+
                     activation_eligible = (
-                        confidence >= _RETROSPECTIVE_HIGH_CONFIDENCE
+                        pair_identity["qualified"]
+                        and confidence >= _RETROSPECTIVE_HIGH_CONFIDENCE
                         and not conflicts
                     )
                     if activation_eligible:
                         reason_codes.append("activation_evidence_candidate")
+
+                    prior_payload = _timeline_entry_payload(previous_eligible)
+                    newer_payload = _timeline_entry_payload(entry)
+                    if not pair_identity["qualified"]:
+                        story_id = str(story.get("story_id") or "")
+                        review = incoherent_stories.setdefault(story_id, {
+                            "story_id": story_id,
+                            "story_title": _story_title(story),
+                            "transition_count": 0,
+                            "blocking_reasons": Counter(),
+                            "examples": [],
+                        })
+                        review["transition_count"] += 1
+                        review["blocking_reasons"].update(["timeline_identity_unanchored"])
+                        if len(review["examples"]) < 5:
+                            review["examples"].append({
+                                "prior_article": prior_payload,
+                                "newer_article": newer_payload,
+                                "milestones": sorted(novel_milestones),
+                                "identity_anchor_codes": list(pair_identity["codes"]),
+                                "prior_title_overlap": round(prior_title_overlap, 6),
+                            })
 
                     milestone_counts.update(novel_milestones)
                     blocking_conflicts.update(conflicts)
@@ -231,18 +363,24 @@ def _build_retrospective_follow_up_observability(
                         },
                         "confidence": round(confidence, 6),
                         "activation_eligible": activation_eligible,
+                        "timeline_incoherent": not pair_identity["qualified"],
+                        "identity_anchor_qualified": bool(pair_identity["qualified"]),
+                        "identity_anchor_codes": list(pair_identity["codes"]),
+                        "shared_title_tokens": list(pair_identity["shared_title_tokens"]),
                         "blocking_conflicts": conflicts,
                         "reason_codes": reason_codes,
                         "prior_title_overlap": round(prior_title_overlap, 6),
                         "canonical_title_overlap": round(canonical_title_overlap, 6),
-                        "prior_article": _timeline_entry_payload(previous_eligible),
-                        "newer_article": _timeline_entry_payload(entry),
+                        "prior_article": prior_payload,
+                        "newer_article": newer_payload,
                         "candidate_trace": [
                             "Follow-up candidate mode: retrospective_observe_only",
                             f"Story: {story.get('story_id') or ''}",
                             f"Novel milestones: {', '.join(sorted(novel_milestones))}",
+                            f"Identity anchor qualified: {pair_identity['qualified']}",
+                            f"Identity anchor codes: {', '.join(pair_identity['codes'])}",
                             f"Prior title overlap: {prior_title_overlap:.2f}",
-                            f"Canonical title overlap: {canonical_title_overlap:.2f}",
+                            f"Canonical title overlap (context only): {canonical_title_overlap:.2f}",
                             f"Same timestamp: {same_timestamp}",
                             f"Blocking conflicts: {', '.join(conflicts) or 'none'}",
                             f"Candidate confidence: {confidence:.2f}",
@@ -254,6 +392,7 @@ def _build_retrospective_follow_up_observability(
             previous_eligible = entry
 
     candidates.sort(key=lambda candidate: (
+        bool(candidate.get("timeline_incoherent")),
         not bool(candidate.get("activation_eligible")),
         -float(candidate.get("confidence") or 0.0),
         str(candidate.get("story_id") or ""),
@@ -261,11 +400,27 @@ def _build_retrospective_follow_up_observability(
     ))
     high_confidence_count = sum(
         1 for candidate in candidates
-        if float(candidate.get("confidence") or 0.0) >= _RETROSPECTIVE_HIGH_CONFIDENCE
+        if candidate.get("identity_anchor_qualified")
+        and float(candidate.get("confidence") or 0.0) >= _RETROSPECTIVE_HIGH_CONFIDENCE
     )
     activation_eligible_count = sum(
         1 for candidate in candidates if candidate.get("activation_eligible")
     )
+
+    incoherent_story_rows: list[dict[str, Any]] = []
+    for row in incoherent_stories.values():
+        incoherent_story_rows.append({
+            "story_id": row["story_id"],
+            "story_title": row["story_title"],
+            "transition_count": row["transition_count"],
+            "blocking_reasons": dict(sorted(row["blocking_reasons"].items())),
+            "examples": row["examples"],
+        })
+    incoherent_story_rows.sort(key=lambda row: (
+        -int(row.get("transition_count") or 0),
+        str(row.get("story_id") or ""),
+    ))
+
     return {
         "mode": "retrospective_observe_only",
         "publication_behavior_changed": False,
@@ -275,16 +430,22 @@ def _build_retrospective_follow_up_observability(
         "candidate_count": len(candidates),
         "high_confidence_candidate_count": high_confidence_count,
         "activation_eligible_candidate_count": activation_eligible_count,
+        "identity_anchor_rejected_count": identity_anchor_rejected_count,
+        "incoherent_transition_count": identity_anchor_rejected_count,
+        "incoherent_story_count": len(incoherent_story_rows),
+        "incoherent_stories": incoherent_story_rows[:50],
         "milestones": dict(sorted(milestone_counts.items())),
         "blocking_conflicts": dict(sorted(blocking_conflicts.items())),
         "excluded_entry_count": excluded_entry_count,
         "exclusion_reasons": dict(sorted(exclusion_reasons.items())),
         "examples": candidates[:50],
-        "review_ready": bool(candidates),
+        "review_ready": bool(candidates or incoherent_story_rows),
         "enforcement_ready": False,
         "enforcement_readiness_reason": (
             "Retrospective candidates are evidence for manual review only. "
-            "No relationship, grouping, ranking or publication behavior changes."
+            "Incoherent timelines are quarantined from high-confidence and "
+            "activation evidence; no relationship, grouping, ranking or "
+            "publication behavior changes."
         ),
     }
 
