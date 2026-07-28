@@ -8696,6 +8696,248 @@ def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_c
     return True
 
 
+
+
+def _same_local_public_safety_death_incident(left, right):
+    """Narrow identity bridge for local first-responder death headline variants."""
+    a = " " + re.sub(r"[^a-z0-9]+", " ", str(left or "").lower()).strip() + " "
+    b = " " + re.sub(r"[^a-z0-9]+", " ", str(right or "").lower()).strip() + " "
+    county_phrases = ("martin county", "st lucie county", "indian river county")
+    same_county = any(f" {phrase} " in a and f" {phrase} " in b for phrase in county_phrases)
+    if not same_county:
+        return False
+    responder_terms = ("firefighter", "fire rescue", "paramedic")
+    if not any(term in a for term in responder_terms) or not any(term in b for term in responder_terms):
+        return False
+    death_terms = (" dies ", " died ", " death ", " mourn", " tragedy ", " killed ")
+    return any(term in a for term in death_terms) and any(term in b for term in death_terms)
+
+
+def _find_current_run_archive_duplicate(item, archive, articles_dir, today=None):
+    """Find one safe same-run archive owner for a skipped live placement.
+
+    ``write_archives`` intentionally skips thin copies and cross-category duplicates.
+    Those placement objects may still remain on category surfaces.  This resolver is
+    deliberately narrower than the general fuzzy archive matcher: it considers only
+    safe article files created or materially updated during the current run and
+    requires the same strong headline-token test already used by the duplicate guard.
+    """
+    if not isinstance(item, dict):
+        return None
+    headline = str(item.get("headline") or "").strip()
+    tokens = _sig_tokens(headline)
+    if len(tokens) < 3:
+        return None
+    articles_dir = Path(articles_dir)
+    today = str(today or datetime.now(timezone.utc).date().isoformat())
+    item_story_id = str(
+        item.get("_editorial_story_id") or item.get("editorial_story_id") or ""
+    ).strip()
+    item_source = _normalized_external_source_url(
+        item.get("source_url") or item.get("_source_url") or item.get("link")
+    )
+    item_memberships = set(_item_category_memberships(item, item.get("category_key")))
+    candidates = []
+    for entry in archive or []:
+        if not _archive_entry_live_identity_safe(entry):
+            continue
+        slug = str(entry.get("slug") or "").strip()
+        if not _published_article_path(slug, articles_dir):
+            continue
+        if today not in {
+            str(entry.get("date") or "")[:10],
+            str(entry.get("lastmod") or "")[:10],
+        }:
+            continue
+        entry_headline = str(entry.get("headline") or "")
+        entry_tokens = _sig_tokens(entry_headline)
+        token_match = _same_story(tokens, entry_tokens)
+        incident_anchor_match = _same_local_public_safety_death_incident(
+            headline, entry_headline
+        )
+        if not token_match and not incident_anchor_match:
+            continue
+        shared = _shared_tokens(tokens, entry_tokens)
+        distinctive = [token for token in shared if token not in GENERIC_TOKENS]
+        if token_match and (len(shared) < 4 or len(distinctive) < 2):
+            continue
+        entry_story_id = str(entry.get("editorial_story_id") or "").strip()
+        entry_source = _normalized_external_source_url(
+            entry.get("source_url") or entry.get("original_url") or entry.get("link")
+        )
+        score = len(shared) * 10 + len(distinctive) * 3
+        if incident_anchor_match:
+            score += 90
+        if item_story_id and entry_story_id and item_story_id == entry_story_id:
+            score += 100
+        if item_source and entry_source and item_source == entry_source:
+            score += 120
+        entry_memberships = set(_item_category_memberships(entry, entry.get("category_key")))
+        score += 4 * len(item_memberships & entry_memberships)
+        candidates.append((score, _publication_canonical_key(entry), entry))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda row: (-row[0], row[1]))
+    return candidates[0][2]
+
+
+def _live_archive_entry(item, archive_by_slug, articles_dir):
+    """Return the currently bound safe archive row for one live item, if any."""
+    if not isinstance(item, dict):
+        return None
+    slug = str(item.get("_archived_slug") or item.get("slug") or "").strip()
+    if not slug:
+        link = str(item.get("link") or "")
+        match = re.search(r"/articles/([^/?#]+)\.html(?:[?#]|$)", link)
+        if match:
+            slug = match.group(1)
+    entry = archive_by_slug.get(slug)
+    if not entry or not _archive_entry_live_identity_safe(entry):
+        return None
+    if not _published_article_path(slug, articles_dir):
+        return None
+    return entry
+
+
+def _reconcile_live_publication_receipts(
+    all_categories,
+    top_cat=None,
+    output_dir=None,
+    current_customs=None,
+):
+    """Remove or repair live placements intentionally skipped by publication.
+
+    A live category object must never survive with a TCT article URL unless an active,
+    safe archive row owns that URL.  First try to bind skipped same-run duplicates to
+    the canonical page that was actually written.  Remaining non-custom orphans are
+    removed, then category continuity is restored from verified archive content.
+    Custom publications stay fail-closed and are left for the final identity contract.
+    """
+    root = Path(output_dir or OUTPUT_DIR)
+    articles_dir = root / "articles"
+    archive = load_archive(root / "archive.json")
+    current_customs = list(current_customs or [])
+    archive_by_slug = {
+        str(entry.get("slug") or ""): entry
+        for entry in archive
+        if isinstance(entry, dict) and entry.get("slug")
+    }
+    rebound = []
+    removed_cards = []
+    removed_heroes = []
+    protected_unresolved = []
+
+    # A second, same-run-aware binding pass catches copies that were intentionally
+    # skipped by the archive writer after an equivalent page had already been made.
+    for category in all_categories or []:
+        for item in [category.get("hero")] + list(category.get("cards") or []):
+            if not isinstance(item, dict):
+                continue
+            if _live_archive_entry(item, archive_by_slug, articles_dir):
+                continue
+            matched = _find_current_run_archive_duplicate(
+                item, archive, articles_dir
+            )
+            if matched and _bind_live_item_to_archive(
+                item,
+                matched,
+                current_customs,
+                replace_with_custom=bool(
+                    matched.get("is_custom") or matched.get("authoritative_custom")
+                ),
+            ):
+                rebound.append({
+                    "category_key": category.get("category_key", ""),
+                    "headline": item.get("headline", ""),
+                    "slug": matched.get("slug", ""),
+                    "match_basis": "current_run_strong_headline_duplicate",
+                    "publication_skip_reason": item.get("_publication_skip_reason", ""),
+                })
+
+    archive_by_slug = {
+        str(entry.get("slug") or ""): entry
+        for entry in archive
+        if isinstance(entry, dict) and entry.get("slug")
+    }
+    for category in all_categories or []:
+        hero = category.get("hero")
+        if isinstance(hero, dict) and not _live_archive_entry(hero, archive_by_slug, articles_dir):
+            if hero.get("_section_placeholder") or _is_nonstory_placeholder(hero):
+                pass
+            elif hero.get("is_custom") or hero.get("authoritative_custom") or hero.get("is_weather_alert"):
+                protected_unresolved.append({
+                    "surface": f"{category.get('category_key','')}:hero",
+                    "headline": hero.get("headline", ""),
+                    "reason": "protected_publication_receipt_missing",
+                })
+            else:
+                removed_heroes.append({
+                    "category_key": category.get("category_key", ""),
+                    "headline": hero.get("headline", ""),
+                    "publication_skip_reason": hero.get("_publication_skip_reason", ""),
+                })
+                category["hero"] = None
+
+        kept_cards = []
+        for card in category.get("cards") or []:
+            if not isinstance(card, dict):
+                continue
+            if _live_archive_entry(card, archive_by_slug, articles_dir):
+                kept_cards.append(card)
+                continue
+            if card.get("_section_placeholder") or _is_nonstory_placeholder(card):
+                kept_cards.append(card)
+                continue
+            if card.get("is_custom") or card.get("authoritative_custom") or card.get("is_weather_alert"):
+                protected_unresolved.append({
+                    "surface": f"{category.get('category_key','')}:card",
+                    "headline": card.get("headline", ""),
+                    "reason": "protected_publication_receipt_missing",
+                })
+                kept_cards.append(card)
+                continue
+            removed_cards.append({
+                "category_key": category.get("category_key", ""),
+                "headline": card.get("headline", ""),
+                "publication_skip_reason": card.get("_publication_skip_reason", ""),
+            })
+        category["cards"] = kept_cards
+
+    if removed_heroes or removed_cards:
+        # Restore category depth only from archive rows that already own a verified
+        # article file. This cannot create a new permalink or weaken the final gate.
+        ensure_all_category_sections(all_categories)
+        _rebind_live_items_to_published_archive(
+            all_categories,
+            load_archive(root / "archive.json"),
+            current_customs=current_customs,
+            articles_dir=articles_dir,
+        )
+
+    report = {
+        "version": "1.11.7.4",
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "status": "passed" if not protected_unresolved else "protected_unresolved",
+        "rebound_count": len(rebound),
+        "removed_card_count": len(removed_cards),
+        "removed_hero_count": len(removed_heroes),
+        "protected_unresolved_count": len(protected_unresolved),
+        "rebound": rebound,
+        "removed_cards": removed_cards,
+        "removed_heroes": removed_heroes,
+        "protected_unresolved": protected_unresolved,
+    }
+    path = root / "data" / "live-publication-reconciliation.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(
+        "  Live publication reconciliation: "
+        f"{len(rebound)} rebound, {len(removed_cards)} card(s) removed, "
+        f"{len(removed_heroes)} hero(s) recovered"
+    )
+    return report
+
+
 def _rebind_live_items_to_published_archive(all_categories, archive, current_customs=None, articles_dir=None):
     """Rebind existing live placements to verified archive pages before rendering.
 
@@ -8803,8 +9045,18 @@ def _rebind_live_items_to_published_archive(all_categories, archive, current_cus
             # Forward publication identity never falls back from a missing story ID
             # to fuzzy headline matching. Exact external article identity is the only
             # safe bridge for an un-stamped current placement.
-            if not matched and not story_id and not item.get("_archive_only"):
+            if not matched and not item.get("_archive_only"):
                 matched = _find_exact_archive_source_entry(item, archive)
+                if matched:
+                    item["_post_publication_match_basis"] = "exact_external_source"
+            if not matched and not item.get("_archive_only"):
+                matched = _find_current_run_archive_duplicate(
+                    item, archive, articles_dir
+                )
+                if matched:
+                    item["_post_publication_match_basis"] = (
+                        "current_run_strong_headline_duplicate"
+                    )
             if not matched:
                 continue
             slug = str(matched.get("slug") or "")
@@ -12772,6 +13024,7 @@ def write_archives(all_categories, top_cat):
         if not headline:
             continue
         if not _publishable_article(hero, hero=bool(hero.get("_is_hero_copy"))):
+            hero["_publication_skip_reason"] = "thin_article_before_permalink"
             print(f"  Skipped thin article before permalink creation: {headline[:60]}")
             continue
 
@@ -12915,6 +13168,7 @@ def write_archives(all_categories, top_cat):
 
         # Skip cross-category duplicates within the same run
         if not existing and _is_duplicate_headline(headline, this_run_token_sets):
+            hero["_publication_skip_reason"] = "cross_category_duplicate"
             print(f"  Skipped cross-category duplicate: {headline[:60]}")
             continue
 
@@ -14967,6 +15221,12 @@ def main():
     apply_custom_retirements_to_live(all_categories, top_cat, OUTPUT_DIR)
     validate_custom_category_placement(all_categories, OUTPUT_DIR)
     _rebind_current_custom_editions_to_archive(all_categories, top_cat, OUTPUT_DIR)
+    _reconcile_live_publication_receipts(
+        all_categories,
+        top_cat,
+        OUTPUT_DIR,
+        current_customs=custom_articles,
+    )
     validate_forward_live_identity(all_categories, top_cat, OUTPUT_DIR)
     validate_live_permalink_integrity(all_categories, top_cat, OUTPUT_DIR)
     print(f"  Timing: archive, publication identity and permalink gates {time.perf_counter() - _stage_started:.1f}s")

@@ -16,8 +16,8 @@ from typing import Any, Iterable, Mapping
 from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.11.7.2"
-ENGINE_RELEASE = "registry-history-compaction-and-git-hygiene"
+ENGINE_VERSION = "1.11.7.4"
+ENGINE_RELEASE = "live-publication-receipt-reconciliation"
 OBSERVABILITY_SCHEMA_VERSION = 13
 RESOLVER_VERSION = "2.4"
 RELATIONSHIP_ENGINE_VERSION = "1.4"

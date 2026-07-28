@@ -39,7 +39,7 @@ def test_legacy_ai_urls_are_migration_inputs_not_active_pool_entries():
     assert 'if "/images/fallback/" in path:' in source
 
 
-def test_engine_release_identifies_prospective_permalink_quarantine_repair():
+def test_engine_release_identifies_live_publication_receipt_reconciliation():
     observability = (ROOT / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'ENGINE_VERSION = "1.11.7.2"' in observability
-    assert 'ENGINE_RELEASE = "registry-history-compaction-and-git-hygiene"' in observability
+    assert 'ENGINE_VERSION = "1.11.7.4"' in observability
+    assert 'ENGINE_RELEASE = "live-publication-receipt-reconciliation"' in observability
