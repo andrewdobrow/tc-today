@@ -3722,3 +3722,66 @@ main .article-wrap > .article-ad-banner {
     margin: 11px 0 0 !important;
   }
 }
+
+
+/* ============================================================
+   TCT v4.8 — natural desktop hero headline wrapping
+   Desktop hero copy determines the card height when necessary. A long
+   headline may make the row taller, but it is never flex-shrunk, line-clamped,
+   overlapped by the summary, or cut off by the fixed 2:1 presentation shell.
+   ============================================================ */
+@media (min-width: 901px) {
+  .lead-primary {
+    aspect-ratio: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .lead-primary > .hero-v3,
+  .lead-primary > .hero-v3 > .hero-v3-link,
+  .hero-v3-link {
+    height: auto !important;
+    min-height: clamp(460px, 31vw, 600px) !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+  }
+
+  .hero-v3-link {
+    align-items: stretch !important;
+  }
+
+  .hero-v3-media,
+  .hero-v3-content {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .hero-v3-content {
+    overflow: visible !important;
+  }
+
+  .hero-v3 .hero-v3-headline {
+    display: block !important;
+    flex: 0 0 auto !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    white-space: normal !important;
+    text-overflow: clip !important;
+    text-wrap: balance !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+    -webkit-box-orient: initial !important;
+    -webkit-line-clamp: unset !important;
+    line-clamp: unset !important;
+  }
+
+  .hero-v3 .hero-v3-summary {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+  }
+
+  .hero-v3 .hero-v3-foot {
+    flex: 0 0 auto !important;
+  }
+}

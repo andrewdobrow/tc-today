@@ -39,7 +39,7 @@ def test_legacy_ai_urls_are_migration_inputs_not_active_pool_entries():
     assert 'if "/images/fallback/" in path:' in source
 
 
-def test_engine_release_identifies_forward_identity_timestamp_hotfix():
+def test_engine_release_identifies_desktop_hero_natural_wrap():
     observability = (ROOT / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'ENGINE_VERSION = "1.11.8.4.2"' in observability
-    assert 'ENGINE_RELEASE = "forward-identity-timestamp-determinism-hotfix"' in observability
+    assert 'ENGINE_VERSION = "1.11.8.5"' in observability
+    assert 'ENGINE_RELEASE = "desktop-hero-natural-wrap"' in observability
