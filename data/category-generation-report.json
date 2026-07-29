@@ -1,6 +1,6 @@
 {
   "schema_version": 4,
-  "generated_at": "2026-07-29T02:57:03Z",
+  "generated_at": "2026-07-29T10:49:45Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,25 +15,28 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "generated_live": 9
+      "generated_live": 8,
+      "quality_gate_archive_recovery": 1
     },
-    "failures": {},
+    "failures": {
+      "publication_quality_rejected": 1
+    },
     "model_attempt_count": 9,
-    "model_elapsed_seconds": 451.347,
-    "archive_recovery_requested_count": 0,
+    "model_elapsed_seconds": 413.061,
+    "archive_recovery_requested_count": 1,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "category_eligibility_rejection_count": 9
+    "category_eligibility_rejection_count": 8
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "generated_live",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 13,
-      "selected_source_count": 4,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 14,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -41,11 +44,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 25.936,
+          "elapsed_seconds": 22.879,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 25.936,
+      "model_elapsed_seconds": 22.879,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -54,9 +57,35 @@
       "contextual_update_lead_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 13,
-      "category_eligibility_rejection_count": 9,
+      "category_eligibility_assessed_count": 14,
+      "category_eligibility_rejection_count": 8,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Fort Pierce pizza shop transforms patio into book haven, serving young readers",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-pizza-shop-transforms-patio-into-book-haven-serving-young-readers"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Gaming with Guardians let’s kids play video games against police officers",
+          "source_url": "https://www.wptv.com/news/region-n-palm-beach-county/tequesta/gaming-with-guardians-lets-kids-play-video-games-against-police-officers"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -129,59 +158,20 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "New K-8 school breaks ground in Fort Pierce, combining 3 St. Lucie County schools into one",
-          "source_url": "https://www.wptv.com/news/education/new-k-8-school-breaks-ground-in-fort-pierce-combining-3-st-lucie-county-schools-into-one"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Lucky Shuck in Jupiter hosting annual oyster eating contest for National Oyster Day",
-          "source_url": "https://www.wptv.com/shining-a-light/lucky-shuck-in-jupiter-hosting-annual-oyster-eating-contest-for-national-oyster-day"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Ballot lawsuit adds new twist to Wisconsin’s crowded governor primary",
-          "source_url": "https://www.wptv.com/politics/america-votes/ballot-lawsuit-adds-new-twist-to-wisconsins-crowded-governor-primary"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
           "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
           "competing_signals": [
             "crime_incident:hiding on roof"
           ],
           "headline": "2 men flee officers at 80 mph in Port St. Lucie, 1 found hiding on roof of home: Police - WPEC",
-          "source_url": "https://cbs12.com/news/local/suspect-drunk-driver-flees-port-st-lucie-police-80-mph-1-found-hiding-roof-of-home-white-acura-impaired-driving-k9-drone-footage-florida-news"
+          "source_url": "https://cbs12.com/news/florida/suspect-drunk-driver-flees-port-st-lucie-police-80-mph-1-found-hiding-roof-of-home-white-acura-impaired-driving-k9-drone-footage-florida-news"
         }
       ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County Fire Chief warns property tax reform could force closure of fire stations, cut 116 firefighters",
-      "generated_card_count": 1,
-      "elapsed_seconds": 37.324
+      "live_hero_headline": "Martin County fire chief warns property tax reform could force station closures, cut 116 firefighters",
+      "generated_card_count": 2,
+      "elapsed_seconds": 40.893
     },
     {
       "category_key": "crime",
@@ -189,7 +179,7 @@
       "status": "generated_live",
       "fetched_candidate_count": 29,
       "fresh_candidate_count": 29,
-      "publishable_source_count": 17,
+      "publishable_source_count": 16,
       "selected_source_count": 12,
       "cache_hit": false,
       "archive_recovery_requested": false,
@@ -198,11 +188,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 61.412,
+          "elapsed_seconds": 61.016,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 61.412,
+      "model_elapsed_seconds": 61.016,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -211,22 +201,22 @@
       "contextual_update_lead_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 17,
+      "category_eligibility_assessed_count": 16,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Three arrested in Fort Pierce after 3-month-old dies from dehydration, malnutrition",
-      "generated_card_count": 3,
-      "elapsed_seconds": 76.224
+      "live_hero_headline": "Three arrested in Fort Pierce infant death case after 3-month-old dies from dehydration and malnutrition",
+      "generated_card_count": 2,
+      "elapsed_seconds": 73.46
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "generated_live",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 17,
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 15,
       "selected_source_count": 12,
       "cache_hit": false,
       "archive_recovery_requested": false,
@@ -235,11 +225,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 86.2,
+          "elapsed_seconds": 73.121,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 86.2,
+      "model_elapsed_seconds": 73.121,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -248,23 +238,23 @@
       "contextual_update_lead_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 17,
+      "category_eligibility_assessed_count": 15,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie bans gas station on Tradition commercial site after months of resident concerns",
+      "live_hero_headline": "Fort Pierce pizza shop transforms outdoor patio into free reading room for children",
       "generated_card_count": 1,
-      "elapsed_seconds": 92.494
+      "elapsed_seconds": 80.201
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "generated_live",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 10,
-      "selected_source_count": 7,
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 8,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -272,11 +262,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 26.872,
+          "elapsed_seconds": 29.342,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 26.872,
+      "model_elapsed_seconds": 29.342,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -285,14 +275,14 @@
       "contextual_update_lead_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 10,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
       "live_hero_headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
       "generated_card_count": 0,
-      "elapsed_seconds": 36.563
+      "elapsed_seconds": 40.324
     },
     {
       "category_key": "things_to_do",
@@ -300,8 +290,8 @@
       "status": "generated_live",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 9,
-      "selected_source_count": 8,
+      "publishable_source_count": 10,
+      "selected_source_count": 9,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -309,11 +299,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 42.177,
+          "elapsed_seconds": 49.971,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 42.177,
+      "model_elapsed_seconds": 49.971,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -322,14 +312,14 @@
       "contextual_update_lead_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 10,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Vero Beach Museum of Art hosts free friendship bracelet workshop with recycled fishing line",
-      "generated_card_count": 1,
-      "elapsed_seconds": 57.357
+      "live_hero_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
+      "generated_card_count": 2,
+      "elapsed_seconds": 61.179
     },
     {
       "category_key": "florida",
@@ -337,43 +327,6 @@
       "status": "generated_live",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 7,
-      "selected_source_count": 7,
-      "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 69.824,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 69.825,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "category_eligibility_mode": "observe_only",
-      "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 7,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Florida carries out first double execution in more than six decades, including second-oldest prisoner in U.S. history",
-      "generated_card_count": 3,
-      "elapsed_seconds": 80.46
-    },
-    {
-      "category_key": "martin",
-      "category_label": "Martin County",
-      "status": "generated_live",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 25,
       "publishable_source_count": 5,
       "selected_source_count": 5,
       "cache_hit": false,
@@ -383,11 +336,48 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 41.471,
+          "elapsed_seconds": 62.745,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 41.471,
+      "model_elapsed_seconds": 62.745,
+      "failure_code": "",
+      "failure_summary": "",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "category_eligibility_mode": "observe_only",
+      "category_eligibility_policy": "future_explicit_contract",
+      "category_eligibility_assessed_count": 5,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Florida executes two inmates in single day, including 80-year-old man in second-oldest U.S. lethal injection",
+      "generated_card_count": 2,
+      "elapsed_seconds": 76.962
+    },
+    {
+      "category_key": "martin",
+      "category_label": "Martin County",
+      "status": "generated_live",
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 6,
+      "selected_source_count": 6,
+      "cache_hit": false,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 15.516,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 15.516,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -396,14 +386,14 @@
       "contextual_update_lead_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County fire chief warns property tax reform could force closure of three stations, cut 116 firefighters",
-      "generated_card_count": 3,
-      "elapsed_seconds": 49.638
+      "live_hero_headline": "Martin County fire chief warns property tax reform could force station closures, 116 firefighter layoffs",
+      "generated_card_count": 2,
+      "elapsed_seconds": 25.842
     },
     {
       "category_key": "st_lucie",
@@ -411,7 +401,7 @@
       "status": "generated_live",
       "fetched_candidate_count": 30,
       "fresh_candidate_count": 30,
-      "publishable_source_count": 13,
+      "publishable_source_count": 14,
       "selected_source_count": 12,
       "cache_hit": false,
       "archive_recovery_requested": false,
@@ -420,11 +410,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 78.005,
+          "elapsed_seconds": 73.846,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 78.005,
+      "model_elapsed_seconds": 73.846,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -433,51 +423,49 @@
       "contextual_update_lead_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 13,
+      "category_eligibility_assessed_count": 14,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "New $70 million K-8 school breaks ground in Fort Pierce, will consolidate three St. Lucie County campuses",
+      "live_hero_headline": "St. Lucie County breaks ground on $70 million K-8 school consolidating three Fort Pierce campuses",
       "generated_card_count": 6,
-      "elapsed_seconds": 86.597
+      "elapsed_seconds": 84.445
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generated_live",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 26,
-      "publishable_source_count": 13,
+      "status": "quality_gate_archive_recovery",
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 28,
+      "publishable_source_count": 15,
       "selected_source_count": 10,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 19.449,
+          "elapsed_seconds": 24.625,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 19.449,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 24.625,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 13,
+      "category_eligibility_assessed_count": 15,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Indian River County Fire Rescue visits Dodgertown Elementary for career fair",
-      "generated_card_count": 0,
-      "elapsed_seconds": 32.563
+      "elapsed_seconds": 37.377
     }
   ]
 }
