@@ -17,9 +17,9 @@ from .source_identity import normalize_source_identity_url
 from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.11.8.7"
-ENGINE_RELEASE = "durable-custom-sports-award-identity"
-OBSERVABILITY_SCHEMA_VERSION = 16
+ENGINE_VERSION = "1.11.8.8"
+ENGINE_RELEASE = "universal-lead-and-claim-integrity"
+OBSERVABILITY_SCHEMA_VERSION = 17
 RESOLVER_VERSION = "2.4"
 RELATIONSHIP_ENGINE_VERSION = "1.5"
 

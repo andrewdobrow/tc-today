@@ -233,13 +233,15 @@ CATEGORY_ELIGIBILITY_REPORT_PATH = OUTPUT_DIR / "data" / "category-eligibility-r
 TRUSTED_SOURCE_RECOVERY_REPORT_PATH = OUTPUT_DIR / "data" / "trusted-source-recovery.json"
 CATEGORY_MEMBERSHIP_REPORT_PATH = OUTPUT_DIR / "data" / "category-membership-report.json"
 SOURCE_IMAGE_QUALITY_REPORT_PATH = OUTPUT_DIR / "data" / "source-image-quality-report.json"
+ARTICLE_FRAMING_INTEGRITY_REPORT_PATH = OUTPUT_DIR / "data" / "article-framing-integrity-report.json"
+CLAIM_ALIGNED_PERMALINK_REPAIR_REPORT_PATH = OUTPUT_DIR / "data" / "claim-aligned-permalink-repair.json"
 EDITORIAL_ACTIVATION_PATH = OUTPUT_DIR / "data" / "editorial_activation.json"
 EDITORIAL_ACTIVATION_HISTORY_PATH = OUTPUT_DIR / "data" / "editorial_activation_history.jsonl"
 
 # v1.10.5 forward publication identity. New generated articles are published only
 # when the current editorial decision can be carried directly into the archive row.
 # Historical rows remain readable, but unresolved legacy identity is not guessed.
-FORWARD_IDENTITY_VERSION = "1.5"
+FORWARD_IDENTITY_VERSION = "1.6"
 FORWARD_IDENTITY_RECENT_DAYS = 30
 CURRENT_RUN_EDITORIAL_IDENTITIES = {}
 CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
@@ -271,7 +273,7 @@ CATEGORY_GENERATION_BUDGET_SECONDS = _positive_float_env(
 )
 CATEGORY_GENERATION_MAX_ATTEMPTS = 2
 CATEGORY_GENERATION_MIN_RETRY_SECONDS = 15
-CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 4
+CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 5
 CATEGORY_ELIGIBILITY_REPORT_SCHEMA_VERSION = 1
 CATEGORY_ELIGIBILITY_CONTRACT_VERSION = "1.0-local-government-central-action"
 
@@ -335,7 +337,7 @@ client = anthropic.Anthropic(api_key=_ANTHROPIC_API_KEY) if _ANTHROPIC_API_KEY e
 GENERATION_CACHE_PATH = OUTPUT_DIR / "data" / "generation-cache.json"
 GENERATION_CACHE_SCHEMA_VERSION = 1
 GENERATION_PROMPT_VERSION = "v1.9.4-incremental-generation-1"
-CATEGORY_GENERATION_PROMPT_VERSION = "v1.11.8.4-contextual-update-leads"
+CATEGORY_GENERATION_PROMPT_VERSION = "v1.11.8.8-universal-lead-claim-integrity"
 _CACHE_MISS = object()
 
 
@@ -4407,6 +4409,331 @@ def _archive_entry_has_contextless_update_lead(entry):
     return not _update_lead_diagnostics(probe, probe).get("passed", True)
 
 
+def _archive_entry_has_article_framing_failure(entry):
+    if not isinstance(entry, dict) or entry.get("is_custom") or entry.get("authoritative_custom"):
+        return False
+    probe = dict(entry)
+    probe["body"] = (
+        entry.get("body")
+        or entry.get("article_text")
+        or _archive_article_body(entry)
+        or entry.get("teaser")
+        or ""
+    )
+    return not _article_framing_diagnostics(probe, probe).get("passed", True)
+
+
+class ArticleFramingIntegrityError(RuntimeError):
+    """Raised when a generated article relies on its headline or changes its core claim."""
+
+
+_FRAMING_STOP_WORDS = {
+    "a", "an", "and", "are", "as", "at", "be", "been", "being", "by", "for",
+    "from", "has", "have", "in", "into", "is", "it", "its", "of", "on", "or",
+    "that", "the", "their", "this", "to", "was", "were", "will", "with",
+}
+
+# These are deliberately local and specific. County/city identity is a primary claim
+# for a hyperlocal publication, not a cosmetic keyword. Longest patterns appear first
+# so "Port St. Lucie" never collapses into the broader "St. Lucie" token family.
+_LOCAL_JURISDICTION_PATTERNS = (
+    ("port_st_lucie", re.compile(r"\bport\s+st\.?\s+lucie\b", re.I)),
+    ("st_lucie_county", re.compile(r"\bst\.?\s+lucie\s+county\b", re.I)),
+    ("indian_river_county", re.compile(r"\bindian\s+river\s+county\b", re.I)),
+    ("martin_county", re.compile(r"\bmartin\s+county\b", re.I)),
+    ("fort_pierce", re.compile(r"\bfort\s+pierce\b", re.I)),
+    ("vero_beach", re.compile(r"\bvero\s+beach\b", re.I)),
+    ("jensen_beach", re.compile(r"\bjensen\s+beach\b", re.I)),
+    ("hobe_sound", re.compile(r"\bhobe\s+sound\b", re.I)),
+    ("palm_city", re.compile(r"\bpalm\s+city\b", re.I)),
+    ("port_salerno", re.compile(r"\bport\s+salerno\b", re.I)),
+    ("jupiter_island", re.compile(r"\bjupiter\s+island\b", re.I)),
+    ("indian_town", re.compile(r"\bindiantown\b", re.I)),
+    ("fellsmere", re.compile(r"\bfellsmere\b", re.I)),
+    ("sebastian", re.compile(r"\bsebastian\b", re.I)),
+    ("stuart", re.compile(r"\bstuart\b", re.I)),
+)
+
+_OPAQUE_POLICY_REFERENCE_PATTERNS = (
+    re.compile(
+        r"\b(?:amendment|measure|proposition|resolution|ordinance|referendum)\s+"
+        r"(?:no\.?\s*)?(?:\d+[a-z0-9-]*|[a-z])\b",
+        re.I,
+    ),
+    re.compile(r"\b(?:house|senate)\s+bill\s+\d+[a-z-]*\b", re.I),
+    re.compile(r"\b(?:hb|sb)\s*\d+[a-z-]*\b", re.I),
+)
+
+_DEFINITION_SIGNAL_PATTERN = re.compile(
+    r"\b(?:which|that|would|will|seeks?|proposes?|raises?|increases?|expands?|"
+    r"reduces?|eliminates?|changes?|requires?|authorizes?|creates?|funds?|cuts?|"
+    r"allows?|bans?|prohibits?|exempts?|extends?|replaces?)\b",
+    re.I,
+)
+
+
+def _meaningful_framing_tokens(text):
+    return {
+        token
+        for token in re.findall(r"[a-z0-9]+", str(text or "").casefold())
+        if len(token) > 1 and token not in _FRAMING_STOP_WORDS
+    }
+
+
+def _extract_money_claims(text):
+    """Return normalized monetary magnitudes stated in prose or a URL slug."""
+    normalized = re.sub(r"[-_]", " ", str(text or "").lower())
+    claims = set()
+    pattern = re.compile(
+        r"(?<![a-z0-9])\$?\s*(\d+(?:\.\d+)?)\s*"
+        r"(billion|million|thousand|[bmk])\b(?:\s+dollars?)?",
+        re.I,
+    )
+    multipliers = {
+        "billion": 1_000_000_000,
+        "b": 1_000_000_000,
+        "million": 1_000_000,
+        "m": 1_000_000,
+        "thousand": 1_000,
+        "k": 1_000,
+    }
+    for match in pattern.finditer(normalized):
+        try:
+            value = float(match.group(1)) * multipliers[match.group(2).lower()]
+        except (TypeError, ValueError, KeyError):
+            continue
+        claims.add(int(round(value)))
+    return claims
+
+
+def _extract_jurisdiction_claims(text):
+    value = re.sub(r"[-_]", " ", str(text or ""))
+    return {
+        canonical
+        for canonical, pattern in _LOCAL_JURISDICTION_PATTERNS
+        if pattern.search(value)
+    }
+
+
+def _extract_opaque_policy_references(text):
+    value = re.sub(r"\s+", " ", str(text or "")).strip()
+    references = []
+    seen = set()
+    for pattern in _OPAQUE_POLICY_REFERENCE_PATTERNS:
+        for match in pattern.finditer(value):
+            normalized = re.sub(r"\s+", " ", match.group(0).casefold()).strip()
+            if normalized in seen:
+                continue
+            seen.add(normalized)
+            references.append({"text": match.group(0), "normalized": normalized})
+    return references
+
+
+def _lead_defines_policy_reference(lead, reference):
+    """Require the first paragraph to explain a named measure, not merely name it."""
+    lead_text = re.sub(r"\s+", " ", str(lead or "")).strip()
+    reference_text = str((reference or {}).get("text") or "").strip()
+    if not lead_text or not reference_text:
+        return False
+    matches = list(re.finditer(re.escape(reference_text), lead_text, re.I))
+    if not matches:
+        return False
+
+    # A definition normally appears in an appositive or in the same clause shortly
+    # after the reference. "If Amendment 3 passes" is intentionally insufficient.
+    # Check every occurrence because a lead may name the measure in its impact sentence
+    # and then define it in the next sentence of the same opening paragraph.
+    for match in matches:
+        window = lead_text[match.start(): match.start() + 260]
+        if re.search(
+            re.escape(reference_text)
+            + r"\s*,\s*(?:a|an|the)\b.{3,180}\b(?:that|which|would|will)\b",
+            window,
+            re.I,
+        ):
+            return True
+        if _DEFINITION_SIGNAL_PATTERN.search(window):
+            # "would" by itself can occur in an impact sentence. Require a concrete
+            # policy object or action in the same window so the reference is intelligible.
+            concrete = re.search(
+                r"\b(?:tax|exemption|revenue|property|budget|law|constitution|program|"
+                r"funding|rate|fee|zoning|development|benefit|coverage|eligibility|"
+                r"penalty|requirement|service|district|government|homestead)\b",
+                window,
+                re.I,
+            )
+            if concrete:
+                return True
+    return False
+
+
+def _lead_independence_diagnostics(item, source=None):
+    """Assess whether the opening paragraph stands alone without the headline."""
+    item = item if isinstance(item, dict) else {}
+    source = source if isinstance(source, dict) else item
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return {"required": False, "passed": True, "custom_exempt": True, "missing": []}
+
+    headline = str(item.get("headline") or item.get("title") or "").strip()
+    lead = _first_body_paragraph(item.get("body") or item.get("article_text") or item.get("teaser") or "")
+    missing = []
+    if not lead:
+        missing.append("lead_missing")
+
+    headline_tokens = _meaningful_framing_tokens(headline)
+    lead_tokens = _meaningful_framing_tokens(lead)
+    overlap_ratio = (
+        len(headline_tokens & lead_tokens) / len(headline_tokens)
+        if headline_tokens else 0.0
+    )
+    new_context_tokens = lead_tokens - headline_tokens
+    lead_word_count = len(re.findall(r"\b\w+\b", lead))
+    if (
+        lead
+        and len(headline_tokens) >= 5
+        and overlap_ratio >= 0.85
+        and len(new_context_tokens) <= 3
+        and lead_word_count <= max(22, len(headline_tokens) + 6)
+    ):
+        missing.append("headline_restatement_without_context")
+
+    reference_blob = " ".join([
+        headline,
+        str(source.get("source_title") or source.get("title") or ""),
+        lead,
+    ])
+    references = _extract_opaque_policy_references(reference_blob)
+    undefined = [
+        ref["text"]
+        for ref in references
+        if not _lead_defines_policy_reference(lead, ref)
+    ]
+    if undefined:
+        missing.append("named_measure_undefined_in_lead")
+
+    update_diag = _update_lead_diagnostics(item, source)
+    if update_diag.get("required") and not update_diag.get("passed"):
+        missing.extend(update_diag.get("missing") or [])
+
+    missing = list(dict.fromkeys(missing))
+    return {
+        "required": True,
+        "passed": not missing,
+        "headline": headline,
+        "lead": lead,
+        "lead_word_count": lead_word_count,
+        "headline_overlap_ratio": round(overlap_ratio, 3),
+        "new_context_token_count": len(new_context_tokens),
+        "opaque_references": [ref["text"] for ref in references],
+        "undefined_references": undefined,
+        "story_form": update_diag.get("story_form", _source_story_form(source)),
+        "update_diagnostics": update_diag,
+        "missing": missing,
+    }
+
+
+def _headline_lead_claim_diagnostics(item):
+    """Verify that headline amounts and jurisdictions are actually stated in the lead."""
+    item = item if isinstance(item, dict) else {}
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return {"required": False, "passed": True, "custom_exempt": True, "missing": []}
+
+    headline = str(item.get("headline") or item.get("title") or "").strip()
+    lead = _first_body_paragraph(item.get("body") or item.get("article_text") or item.get("teaser") or "")
+    headline_money = _extract_money_claims(headline)
+    lead_money = _extract_money_claims(lead)
+    headline_jurisdictions = _extract_jurisdiction_claims(headline)
+    lead_jurisdictions = _extract_jurisdiction_claims(lead)
+    headline_references = {
+        ref["normalized"] for ref in _extract_opaque_policy_references(headline)
+    }
+    lead_references = {
+        ref["normalized"] for ref in _extract_opaque_policy_references(lead)
+    }
+
+    missing = []
+    missing_money = sorted(headline_money - lead_money)
+    if missing_money:
+        missing.append("headline_money_claim_missing_from_lead")
+    missing_jurisdictions = sorted(headline_jurisdictions - lead_jurisdictions)
+    if missing_jurisdictions:
+        missing.append("headline_jurisdiction_missing_from_lead")
+    missing_references = sorted(headline_references - lead_references)
+    if missing_references:
+        missing.append("headline_named_measure_missing_from_lead")
+
+    return {
+        "required": True,
+        "passed": not missing,
+        "headline": headline,
+        "lead": lead,
+        "headline_money_claims": sorted(headline_money),
+        "lead_money_claims": sorted(lead_money),
+        "missing_money_claims": missing_money,
+        "headline_jurisdictions": sorted(headline_jurisdictions),
+        "lead_jurisdictions": sorted(lead_jurisdictions),
+        "missing_jurisdictions": missing_jurisdictions,
+        "headline_policy_references": sorted(headline_references),
+        "lead_policy_references": sorted(lead_references),
+        "missing_policy_references": missing_references,
+        "missing": missing,
+    }
+
+
+def _article_framing_diagnostics(item, source=None):
+    """Combined universal lead-independence and headline/lead claim contract."""
+    item = item if isinstance(item, dict) else {}
+    # Missing/null heroes are contained by the category-generation failure path.
+    # Do not misclassify absence as a prose-quality failure or bypass its existing
+    # structured retry/recovery diagnostics.
+    if not str(item.get("headline") or item.get("title") or "").strip() and not str(item.get("body") or "").strip():
+        return {"required": False, "passed": True, "empty_item": True, "missing": []}
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return {"required": False, "passed": True, "custom_exempt": True, "missing": []}
+    lead_diag = _lead_independence_diagnostics(item, source)
+    claim_diag = _headline_lead_claim_diagnostics(item)
+    missing = list(dict.fromkeys(
+        list(lead_diag.get("missing") or []) + list(claim_diag.get("missing") or [])
+    ))
+    return {
+        "required": True,
+        "passed": not missing,
+        "headline": str(item.get("headline") or item.get("title") or ""),
+        "missing": missing,
+        "lead_independence": lead_diag,
+        "claim_consistency": claim_diag,
+    }
+
+
+def _filter_article_framing_live_placements(items):
+    """Suppress generated articles that fail the universal framing contract."""
+    kept = []
+    rejected = []
+    for item in list(items or []):
+        if item.get("is_custom") or item.get("authoritative_custom"):
+            kept.append(item)
+            continue
+        probe = dict(item)
+        if probe.get("_archived_slug") and _word_count(probe.get("body", "")) < 45:
+            archive_body = _archive_article_body({"slug": probe.get("_archived_slug")})
+            if archive_body:
+                probe["body"] = archive_body
+        diagnostics = _article_framing_diagnostics(probe, probe)
+        if diagnostics.get("passed"):
+            kept.append(item)
+            continue
+        rejected.append({
+            "headline": str(item.get("headline") or item.get("title") or ""),
+            "source_title": str(item.get("source_title") or ""),
+            "source_url": str(item.get("source_url") or item.get("link") or ""),
+            "slug": str(item.get("_archived_slug") or item.get("slug") or ""),
+            "reason": "article_framing_integrity",
+            "missing": diagnostics.get("missing", []),
+            "lead_independence": diagnostics.get("lead_independence", {}),
+            "claim_consistency": diagnostics.get("claim_consistency", {}),
+        })
+    return kept, rejected
+
 def strip_markdown(text, headline=""):
     """Remove markdown formatting and headline restatements from article text."""
     if not text:
@@ -4558,11 +4885,13 @@ def generate_category_content(category_key, category_label, headlines, request_t
 
 """
 
-    lead_standard = """LEAD STANDARD:
+    lead_standard = """LEAD AND HEADLINE INTEGRITY STANDARD:
 - Every article and card body must begin with a self-contained news lead that tells a reader with no prior knowledge what happened and what is new now.
+- The lead must make sense without the headline. It must still make sense if the headline is completely removed. Do not use the headline as a substitute for context, and do not merely paraphrase it.
+- If the headline or lead names an amendment, bill, ordinance, referendum, resolution, program, proposal, measure, or numbered initiative, define what it would do in the FIRST paragraph. A phrase such as 'if Amendment 3 passes' is not a definition.
+- Every specific jurisdiction and monetary amount stated in the headline must also appear accurately in the FIRST paragraph. The headline and lead must describe the same government entity, amount, event, and central claim.
 - For items marked [story_form:update], the FIRST paragraph must explicitly state BOTH the original incident, decision, dispute, or event AND the new development being reported.
 - Never open an update only with a quote, scene description, official reaction, investigative procedure, or newly disclosed detail before identifying the underlying event.
-- The lead must make sense without the headline or earlier TCT coverage.
 
 """
 
@@ -4753,6 +5082,34 @@ Return ONLY valid JSON:
         _contextual_cards.append(_card)
     data["cards"] = _contextual_cards
     data["_contextual_update_lead_rejections"] = _contextual_update_lead_rejections
+
+    # Universal article-framing contract. Unlike the older update-only guard, this
+    # applies to every generated non-custom article. Heroes retry inside the bounded
+    # category budget; invalid cards are removed rather than published.
+    _article_framing_rejections = []
+    _hero_framing = _article_framing_diagnostics(data.get("hero", {}), data.get("hero", {}))
+    if _hero_framing.get("required") and not _hero_framing.get("passed"):
+        _article_framing_rejections.append({"surface": "hero", **_hero_framing})
+        raise ArticleFramingIntegrityError(
+            "Article framing integrity failed for hero: "
+            + ",".join(_hero_framing.get("missing") or ["unknown"])
+            + f" — {_hero_framing.get('headline','')[:120]}"
+        )
+
+    _framed_cards = []
+    for _card in data.get("cards", []) or []:
+        _card_framing = _article_framing_diagnostics(_card, _card)
+        if _card_framing.get("required") and not _card_framing.get("passed"):
+            _article_framing_rejections.append({"surface": "card", **_card_framing})
+            print(
+                "  Article-framing guard removed card: "
+                f"'{_card.get('headline','')[:65]}' "
+                f"({','.join(_card_framing.get('missing') or ['unknown'])})"
+            )
+            continue
+        _framed_cards.append(_card)
+    data["cards"] = _framed_cards
+    data["_article_framing_rejections"] = _article_framing_rejections
 
     # Enforce category lead eligibility in Python, not just by prompt. Claude can
     # still be tempted by a full-source off-topic item from a broad WPTV feed.
@@ -5153,6 +5510,8 @@ def _category_generation_error_code(exc):
     message = str(exc or "").lower()
     if isinstance(exc, ContextualUpdateLeadError) or "contextless update lead" in message:
         return "contextless_update_lead"
+    if isinstance(exc, ArticleFramingIntegrityError) or "article framing integrity" in message:
+        return "article_framing_integrity"
     if "timeout" in name or "timed out" in message or "timeout" in message:
         return "model_timeout"
     if isinstance(exc, (ValueError, json.JSONDecodeError)) or "json" in name or "json" in message:
@@ -5218,6 +5577,9 @@ def _run_category_generation_with_budget(category_key, category_label, headlines
                 _lead_rejections = list(
                     data.get("_contextual_update_lead_rejections", []) or []
                 )
+                _framing_rejections = list(
+                    data.get("_article_framing_rejections", []) or []
+                )
                 return data, {
                     "status": "success",
                     "attempt_count": len(attempts),
@@ -5228,6 +5590,8 @@ def _run_category_generation_with_budget(category_key, category_label, headlines
                     "budget_seconds": CATEGORY_GENERATION_BUDGET_SECONDS,
                     "contextual_update_lead_rejection_count": len(_lead_rejections),
                     "contextual_update_lead_rejections": _lead_rejections,
+                    "article_framing_rejection_count": len(_framing_rejections),
+                    "article_framing_rejections": _framing_rejections,
                 }
 
             last_code = "missing_or_null_hero"
@@ -5288,6 +5652,7 @@ def _build_category_generation_report(records):
     archive_recovery_count = 0
     sports_expired_event_preview_count = 0
     contextual_update_lead_rejection_count = 0
+    article_framing_rejection_count = 0
     category_eligibility_rejection_count = 0
     for record in records:
         status_counts[str(record.get("status") or "unknown")] += 1
@@ -5307,6 +5672,14 @@ def _build_category_generation_report(records):
             1
             for attempt in (record.get("attempts") or [])
             if str(attempt.get("result") or "") == "contextless_update_lead"
+        )
+        article_framing_rejection_count += int(
+            record.get("article_framing_rejection_count") or 0
+        )
+        article_framing_rejection_count += sum(
+            1
+            for attempt in (record.get("attempts") or [])
+            if str(attempt.get("result") or "") == "article_framing_integrity"
         )
         category_eligibility_rejection_count += int(
             record.get("category_eligibility_rejection_count") or 0
@@ -5335,6 +5708,7 @@ def _build_category_generation_report(records):
             "archive_recovery_requested_count": archive_recovery_count,
             "sports_expired_event_preview_count": sports_expired_event_preview_count,
             "contextual_update_lead_rejection_count": contextual_update_lead_rejection_count,
+            "article_framing_rejection_count": article_framing_rejection_count,
             "category_eligibility_rejection_count": category_eligibility_rejection_count,
         },
         "categories": records,
@@ -7109,6 +7483,26 @@ def render_index(all_categories, top_cat):
         print(
             "  Homepage update-lead guard suppressed "
             f"{len(_contextless_update_live_suppressions)} contextless update article(s)"
+        )
+
+    enriched_pool, _article_framing_live_suppressions = (
+        _filter_article_framing_live_placements(enriched_pool)
+    )
+    _article_framing_report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "policy": "universal_noncustom_lead_independence_and_claim_consistency",
+        "rejected_count": len(_article_framing_live_suppressions),
+        "rejected": _article_framing_live_suppressions,
+    }
+    ARTICLE_FRAMING_INTEGRITY_REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    ARTICLE_FRAMING_INTEGRITY_REPORT_PATH.write_text(
+        json.dumps(_article_framing_report, indent=2), encoding="utf-8"
+    )
+    if _article_framing_live_suppressions:
+        print(
+            "  Homepage article-framing guard suppressed "
+            f"{len(_article_framing_live_suppressions)} generated article(s)"
         )
 
     enriched_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
@@ -13076,6 +13470,295 @@ WARE_AWARD_REDIRECT_SOURCE_SLUGS = frozenset({
 })
 
 
+def _publication_slug_claim_diagnostics(item, entry):
+    """Compare the immutable URL claim with the current headline/lead claim.
+
+    A conservative automatic rebind requires both a jurisdiction change and a
+    monetary-amount change. That catches the Port St. Lucie/$48 million article
+    living under a St. Lucie County/$63 million URL without renaming ordinary
+    stylistic headline updates.
+    """
+    item = item if isinstance(item, dict) else {}
+    entry = entry if isinstance(entry, dict) else {}
+    slug = str(entry.get("slug") or "")
+    headline = str(item.get("headline") or item.get("title") or "")
+    lead = _first_body_paragraph(
+        item.get("body") or item.get("article_text") or item.get("teaser") or ""
+    )
+    headline_money = _extract_money_claims(headline)
+    lead_money = _extract_money_claims(lead)
+    current_money = headline_money & lead_money if headline_money and lead_money else headline_money or lead_money
+    slug_money = _extract_money_claims(slug)
+    headline_jurisdictions = _extract_jurisdiction_claims(headline)
+    lead_jurisdictions = _extract_jurisdiction_claims(lead)
+    current_jurisdictions = (
+        headline_jurisdictions & lead_jurisdictions
+        if headline_jurisdictions and lead_jurisdictions
+        else headline_jurisdictions or lead_jurisdictions
+    )
+    slug_jurisdictions = _extract_jurisdiction_claims(slug)
+    money_drift = bool(slug_money and current_money and slug_money.isdisjoint(current_money))
+    jurisdiction_drift = bool(
+        slug_jurisdictions
+        and current_jurisdictions
+        and slug_jurisdictions.isdisjoint(current_jurisdictions)
+    )
+    framing = _article_framing_diagnostics(item, item)
+    return {
+        "rebind_required": bool(
+            framing.get("passed") and money_drift and jurisdiction_drift
+        ),
+        "framing_passed": bool(framing.get("passed")),
+        "slug": slug,
+        "headline": headline,
+        "slug_money_claims": sorted(slug_money),
+        "current_money_claims": sorted(current_money),
+        "slug_jurisdictions": sorted(slug_jurisdictions),
+        "current_jurisdictions": sorted(current_jurisdictions),
+        "money_drift": money_drift,
+        "jurisdiction_drift": jurisdiction_drift,
+    }
+
+
+def _claim_aligned_slug(item, entry, archive, today=None):
+    headline = str((item or {}).get("headline") or "").strip()
+    if not headline:
+        return ""
+    old_slug = str((entry or {}).get("slug") or "")
+    date_match = re.match(r"^(20\d{2}-\d{2}-\d{2})-", old_slug)
+    date_prefix = (
+        date_match.group(1)
+        if date_match
+        else str((entry or {}).get("date") or today or datetime.utcnow().strftime("%Y-%m-%d"))[:10]
+    )
+    base = f"{date_prefix}-{slugify(headline)}"
+    occupied = {
+        str(row.get("slug") or "")
+        for row in archive or []
+        if row is not entry
+    }
+    candidate = base
+    counter = 1
+    while candidate in occupied:
+        candidate = f"{base}-{counter}"
+        counter += 1
+    return candidate
+
+
+def _rewrite_self_slug_in_article_html(html_text, old_slug, new_slug):
+    value = str(html_text or "")
+    old_path = f"/articles/{old_slug}.html"
+    new_path = f"/articles/{new_slug}.html"
+    value = value.replace(f"{SITE_URL}{old_path}", f"{SITE_URL}{new_path}")
+    value = value.replace(old_path, new_path)
+    return value
+
+
+def _migrate_archive_entry_to_claim_aligned_slug(
+    item, entry, archive, articles_dir, today=None, reason="primary_claim_slug_drift"
+):
+    diagnostics = _publication_slug_claim_diagnostics(item, entry)
+    if not diagnostics.get("rebind_required"):
+        return None
+    old_slug = str(entry.get("slug") or "")
+    new_slug = _claim_aligned_slug(item, entry, archive, today=today)
+    if not old_slug or not new_slug or old_slug == new_slug:
+        return None
+
+    articles_dir = Path(articles_dir)
+    old_path = articles_dir / f"{old_slug}.html"
+    new_path = articles_dir / f"{new_slug}.html"
+    if new_path.exists() and new_path != old_path:
+        return None
+    if old_path.exists():
+        old_html = old_path.read_text(encoding="utf-8", errors="ignore")
+        new_path.write_text(
+            _rewrite_self_slug_in_article_html(old_html, old_slug, new_slug),
+            encoding="utf-8",
+        )
+    old_headline = str(entry.get("headline") or item.get("headline") or "")
+    entry["slug"] = new_slug
+    entry["headline"] = str(item.get("headline") or entry.get("headline") or "")
+    entry["teaser"] = str(item.get("teaser") or item.get("body", "")[:300] or entry.get("teaser") or "")
+    entry["identity_origin"] = "claim_aligned_permalink_rebind"
+    entry["legacy_identity_status"] = "identified"
+    entry["ranking_eligible"] = True
+    entry.pop("exclude_from_live_recovery", None)
+    entry.pop("identity_quarantine_reason", None)
+
+    redirect = {
+        "source_slug": old_slug,
+        "source_headline": old_headline,
+        "target_slug": new_slug,
+        "target_headline": entry.get("headline", ""),
+        "story_stage": "claim-aligned-permalink-repair",
+        "match_confidence": 100,
+        "canonical_is_custom": False,
+        "editorial_story_id": str(entry.get("editorial_story_id") or ""),
+        "reason": reason,
+        "claim_diagnostics": diagnostics,
+    }
+    articles_dir.mkdir(parents=True, exist_ok=True)
+    old_path.write_text(
+        _render_canonical_redirect_page(old_slug, new_slug, entry.get("headline", "")),
+        encoding="utf-8",
+    )
+    return redirect
+
+
+def _repair_archive_claim_drifted_permalinks(archive, articles_dir, output_root):
+    """Repair historical URLs whose primary entity and amount no longer match copy."""
+    repaired = []
+    redirects = []
+    for entry in list(archive or []):
+        if entry.get("is_custom") or entry.get("authoritative_custom"):
+            continue
+        body = _archive_article_body(entry)
+        if not body:
+            continue
+        item = {
+            "headline": entry.get("headline", ""),
+            "teaser": entry.get("teaser", ""),
+            "body": body,
+            "source_title": entry.get("source_headline", ""),
+        }
+        redirect = _migrate_archive_entry_to_claim_aligned_slug(
+            item,
+            entry,
+            archive,
+            articles_dir,
+            today=str(entry.get("date") or "")[:10],
+            reason="archive_primary_claim_slug_drift",
+        )
+        if not redirect:
+            continue
+        redirects.append(redirect)
+        repaired.append({
+            "source_slug": redirect["source_slug"],
+            "target_slug": redirect["target_slug"],
+            "headline": redirect["target_headline"],
+            "claim_diagnostics": redirect.get("claim_diagnostics", {}),
+        })
+
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "policy": "rebind_only_when_jurisdiction_and_money_claim_both_drift",
+        "repaired_count": len(repaired),
+        "repaired": repaired,
+    }
+    report_path = Path(output_root) / "data" / "claim-aligned-permalink-repair.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    if repaired:
+        print(f"  Claim-aligned permalink repair migrated {len(repaired)} article URL(s)")
+    return archive, redirects, report
+
+
+def _plain_article_paragraphs_from_html(html_text):
+    match = re.search(
+        r'(<div class="article-body">)(.*?)(</div>\s*<div class="article-share">)',
+        str(html_text or ""),
+        re.I | re.S,
+    )
+    if not match:
+        return None, []
+    import html as _html
+    paragraphs = []
+    for block in re.findall(r"<p(?:\s[^>]*)?>(.*?)</p>", match.group(2), re.I | re.S):
+        plain = _html.unescape(re.sub(r"<[^>]+>", " ", block))
+        plain = re.sub(r"\s+", " ", plain).strip()
+        if plain:
+            paragraphs.append(plain)
+    return match, paragraphs
+
+
+def _repair_archive_article_lead_framing(archive, articles_dir, output_root):
+    """Promote an existing source-backed definition into a contextless first paragraph."""
+    repairs = []
+    articles_dir = Path(articles_dir)
+    for entry in list(archive or []):
+        if entry.get("is_custom") or entry.get("authoritative_custom"):
+            continue
+        slug = str(entry.get("slug") or "")
+        path = articles_dir / f"{slug}.html"
+        if not slug or not path.exists():
+            continue
+        html_text = path.read_text(encoding="utf-8", errors="ignore")
+        if '<div class="article-body">' not in html_text or "<a " in html_text.split('<div class="article-body">', 1)[-1].split('<div class="article-share">', 1)[0]:
+            continue
+        match, paragraphs = _plain_article_paragraphs_from_html(html_text)
+        if not match or len(paragraphs) < 2:
+            continue
+        item = {
+            "headline": entry.get("headline", ""),
+            "body": "\n\n".join(paragraphs),
+            "source_title": entry.get("source_headline", ""),
+        }
+        diagnostics = _lead_independence_diagnostics(item, item)
+        missing = list(diagnostics.get("missing") or [])
+        if missing != ["named_measure_undefined_in_lead"]:
+            continue
+        undefined = diagnostics.get("undefined_references") or []
+        definition_sentence = ""
+        definition_paragraph_index = None
+        for ref_text in undefined:
+            ref = {"text": ref_text, "normalized": ref_text.casefold()}
+            for paragraph_index, paragraph in enumerate(paragraphs[1:], start=1):
+                for sentence in re.split(r"(?<=[.!?])\s+", paragraph):
+                    sentence = sentence.strip()
+                    if sentence and _lead_defines_policy_reference(sentence, ref):
+                        definition_sentence = sentence
+                        definition_paragraph_index = paragraph_index
+                        break
+                if definition_sentence:
+                    break
+            if definition_sentence:
+                break
+        if not definition_sentence or definition_paragraph_index is None:
+            continue
+
+        repaired_paragraphs = list(paragraphs)
+        repaired_paragraphs[0] = (repaired_paragraphs[0].rstrip() + " " + definition_sentence).strip()
+        remainder = repaired_paragraphs[definition_paragraph_index].replace(definition_sentence, "", 1).strip()
+        remainder = re.sub(r"\s+", " ", remainder)
+        if remainder:
+            repaired_paragraphs[definition_paragraph_index] = remainder
+        else:
+            repaired_paragraphs.pop(definition_paragraph_index)
+        repaired_item = dict(item)
+        repaired_item["body"] = "\n\n".join(repaired_paragraphs)
+        if not _lead_independence_diagnostics(repaired_item, repaired_item).get("passed"):
+            continue
+
+        body_html = "".join(f"<p>{html_lib.escape(paragraph)}</p>" for paragraph in repaired_paragraphs)
+        new_html = html_text[:match.start(2)] + body_html + html_text[match.end(2):]
+        path.write_text(new_html, encoding="utf-8")
+        entry["teaser"] = repaired_paragraphs[0][:320]
+        entry["article_word_count"] = _word_count(repaired_item["body"])
+        entry["article_paragraph_count"] = len(repaired_paragraphs)
+        entry["lead_integrity_repaired"] = True
+        repairs.append({
+            "slug": slug,
+            "headline": entry.get("headline", ""),
+            "definition_promoted": definition_sentence,
+        })
+
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "policy": "promote_existing_named_measure_definition_into_first_paragraph",
+        "repaired_count": len(repairs),
+        "repaired": repairs,
+    }
+    path = Path(output_root) / "data" / "archive-lead-framing-repair.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    if repairs:
+        print(f"  Archive lead-framing repair updated {len(repairs)} article page(s)")
+    return archive, report
+
+
 def _redirect_target_path(slug):
     return f"/articles/{slug}.html"
 
@@ -14600,6 +15283,10 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
     if story_id and entry_story_id and story_id != entry_story_id:
         return False, "persistent_story_id_conflict"
 
+    claim_drift = _publication_slug_claim_diagnostics(item, entry)
+    if claim_drift.get("rebind_required"):
+        return False, "primary_claim_slug_drift_unrepaired"
+
     # Evaluate the row as it would exist after this update. A changed headline and
     # current lastmod may expose an old overwritten URL that still looks safe before
     # mutation. Such a row is quarantined and the current story receives a new slug.
@@ -14760,6 +15447,22 @@ def write_archives(all_categories, top_cat):
 
     archive, _canonical_redirects = apply_canonical_story_cleanup(archive, articles_dir, OUTPUT_DIR)
 
+    # Repair existing generated pages before forward publication decisions. The lead
+    # repair uses only facts already present later in the same article; the permalink
+    # repair is conservative and requires simultaneous jurisdiction and money drift.
+    archive, _archive_lead_framing_repair = _repair_archive_article_lead_framing(
+        archive, articles_dir, OUTPUT_DIR
+    )
+    archive, _claim_alignment_redirects, _claim_alignment_report = (
+        _repair_archive_claim_drifted_permalinks(
+            archive, articles_dir, OUTPUT_DIR
+        )
+    )
+    _canonical_redirects.extend(_claim_alignment_redirects)
+    _forward_identity_report["claim_aligned_permalink_repairs"] = list(
+        _claim_alignment_report.get("repaired") or []
+    )
+
     # Bridge the persistent editorial registry into the permalink writer. Raw source
     # articles may be rewritten into very different TCT headlines; source-backed
     # story identity prevents those rewrites from becoming parallel public URLs.
@@ -14916,6 +15619,33 @@ def write_archives(all_categories, top_cat):
             hero["editorial_story_id"] = _editorial_story_id
             hero["_editorial_story_id"] = _editorial_story_id
 
+        # If a prior model run left this story under a URL that states a different
+        # jurisdiction and monetary claim, rebind the same canonical archive row
+        # before validation. This creates one aligned URL plus a permanent redirect,
+        # never two live articles for the same exact source/story identity.
+        if existing is not None and not (hero.get("is_custom") or hero.get("authoritative_custom")):
+            _claim_rebind_redirect = _migrate_archive_entry_to_claim_aligned_slug(
+                hero,
+                existing,
+                archive,
+                articles_dir,
+                today=today,
+                reason="incoming_primary_claim_slug_drift",
+            )
+            if _claim_rebind_redirect:
+                _canonical_redirects.append(_claim_rebind_redirect)
+                _forward_identity_report.setdefault("claim_aligned_permalink_repairs", []).append({
+                    "source_slug": _claim_rebind_redirect.get("source_slug", ""),
+                    "target_slug": _claim_rebind_redirect.get("target_slug", ""),
+                    "headline": _claim_rebind_redirect.get("target_headline", ""),
+                    "claim_diagnostics": _claim_rebind_redirect.get("claim_diagnostics", {}),
+                })
+                print(
+                    "  Claim-aligned permalink rebind: "
+                    f"{_claim_rebind_redirect.get('source_slug','')} -> "
+                    f"{_claim_rebind_redirect.get('target_slug','')}"
+                )
+
         if existing is not None and _target_basis == "new_publication":
             # Explicit custom targeting may have selected an archive row after the
             # initial forward lookup.
@@ -14949,6 +15679,19 @@ def write_archives(all_categories, top_cat):
                 "story_id": _editorial_story_id,
                 "reason": _target_reason,
             })
+            if _target_reason == "primary_claim_slug_drift_unrepaired":
+                _forward_identity_report["publication_holds"].append({
+                    "headline": headline,
+                    "source_url": normalized_source_url,
+                    "candidate_slug": (_conflicted_target or {}).get("slug", ""),
+                    "reason": _target_reason,
+                    "action": "preserve_existing_page_and_hold_generated_rewrite",
+                })
+                print(
+                    "  PRIMARY CLAIM HOLD: preserved existing page and refused a "
+                    f"second permalink for '{headline[:60]}'"
+                )
+                continue
             if (
                 isinstance(_conflicted_target, dict)
                 and str(_target_reason).startswith("prospective_")
@@ -15739,6 +16482,8 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             return False
         if _archive_entry_has_contextless_update_lead(e):
             return False
+        if _archive_entry_has_article_framing_failure(e):
+            return False
         if category_key == "sports" and _archive_sports_event_window_expired(e):
             return False
         if category_key in COUNTY_KEYS:
@@ -15818,6 +16563,17 @@ def ensure_all_category_sections(all_categories, min_cards=6):
         category["cards"] = [
             card for card in category.get("cards", [])
             if not _archive_entry_has_contextless_update_lead(card)
+        ]
+
+        if category.get("hero") and _archive_entry_has_article_framing_failure(category["hero"]):
+            print(
+                "  Permanent article-framing guard removed hero from "
+                f"{config['label']}: '{category['hero'].get('headline','')[:55]}'"
+            )
+            category["hero"] = None
+        category["cards"] = [
+            card for card in category.get("cards", [])
+            if not _archive_entry_has_article_framing_failure(card)
         ]
 
         if category_key == "sports":
@@ -16454,6 +17210,8 @@ def main():
             "sports_expired_event_previews": [],
             "contextual_update_lead_rejection_count": 0,
             "contextual_update_lead_rejections": [],
+            "article_framing_rejection_count": 0,
+            "article_framing_rejections": [],
             "category_eligibility_mode": _category_contract_config(cat_key).get("mode", "observe_only"),
             "category_eligibility_policy": _category_contract_config(cat_key).get("policy", "unregistered_category"),
             "category_eligibility_assessed_count": 0,
@@ -16617,6 +17375,37 @@ def main():
                     ttl_seconds=7 * 24 * 3600,
                 )
                 GENERATION_CACHE.save()
+
+            _cached_framing_rejections = []
+            if data.get("hero"):
+                _cached_hero_framing = _article_framing_diagnostics(
+                    data.get("hero", {}), data.get("hero", {})
+                )
+                if _cached_hero_framing.get("required") and not _cached_hero_framing.get("passed"):
+                    _cached_framing_rejections.append({"surface": "cached_hero", **_cached_hero_framing})
+                    print(
+                        "  Article-framing guard invalidated cached hero: "
+                        f"'{data.get('hero', {}).get('headline','')[:65]}'"
+                    )
+                    data["hero"] = None
+            _cached_cards = []
+            for _cached_card in data.get("cards", []) or []:
+                _cached_card_framing = _article_framing_diagnostics(_cached_card, _cached_card)
+                if _cached_card_framing.get("required") and not _cached_card_framing.get("passed"):
+                    _cached_framing_rejections.append({
+                        "surface": "cached_card", **_cached_card_framing
+                    })
+                    continue
+                _cached_cards.append(_cached_card)
+            data["cards"] = _cached_cards
+            if _cached_framing_rejections:
+                _category_record["article_framing_rejection_count"] += len(
+                    _cached_framing_rejections
+                )
+                _category_record["article_framing_rejections"].extend(
+                    _cached_framing_rejections
+                )
+
             if data.get("hero") and not data.get("_drop_category") and data.get("category_key") == cat_key:
                 all_categories.append(data)
                 GENERATION_CACHE.stats["category_generation_skipped"] += 1
@@ -16846,6 +17635,33 @@ def main():
                 _final_contextual_cards.append(_card)
             data["cards"] = _final_contextual_cards
 
+            _final_hero_framing = _article_framing_diagnostics(
+                data.get("hero", {}), data.get("hero", {})
+            )
+            if _final_hero_framing.get("required") and not _final_hero_framing.get("passed"):
+                raise ArticleFramingIntegrityError(
+                    "Article framing integrity failed after enrichment: "
+                    + ",".join(_final_hero_framing.get("missing") or ["unknown"])
+                    + f" — {_final_hero_framing.get('headline','')[:120]}"
+                )
+            _final_framed_cards = []
+            for _card in data.get("cards", []) or []:
+                _final_card_framing = _article_framing_diagnostics(_card, _card)
+                if _final_card_framing.get("required") and not _final_card_framing.get("passed"):
+                    _category_record["article_framing_rejection_count"] = (
+                        int(_category_record.get("article_framing_rejection_count") or 0) + 1
+                    )
+                    _category_record.setdefault("article_framing_rejections", []).append(
+                        {"surface": "card_after_enrichment", **_final_card_framing}
+                    )
+                    print(
+                        "  Final article-framing guard removed enriched card: "
+                        f"'{_card.get('headline','')[:65]}'"
+                    )
+                    continue
+                _final_framed_cards.append(_card)
+            data["cards"] = _final_framed_cards
+
             _generated_logo_rejections = _sanitize_category_source_images(
                 data, stage="generated_category"
             )
@@ -16995,6 +17811,7 @@ def main():
         f"{_category_summary.get('archive_recovery_requested_count', 0)} archive recovery request(s), "
         f"{_category_summary.get('sports_expired_event_preview_count', 0)} expired Sports preview(s), "
         f"{_category_summary.get('contextual_update_lead_rejection_count', 0)} contextual update-lead rejection(s), "
+        f"{_category_summary.get('article_framing_rejection_count', 0)} article-framing rejection(s), "
         f"{_category_summary.get('category_eligibility_rejection_count', 0)} category-contract rejection(s), "
         f"{CATEGORY_GENERATION_REPORT_PATH}"
     )
