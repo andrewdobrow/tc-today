@@ -331,6 +331,6 @@ def test_release_version_and_report_schema_are_bumped():
     observability = importlib.import_module("tct_engine.observability")
 
     assert generate.CATEGORY_GENERATION_REPORT_SCHEMA_VERSION == 3
-    assert observability.ENGINE_VERSION == "1.11.8.4.1"
-    assert observability.ENGINE_RELEASE == "first-responder-image-fallback-hotfix"
+    assert observability.ENGINE_VERSION == "1.11.8.4.2"
+    assert observability.ENGINE_RELEASE == "forward-identity-timestamp-determinism-hotfix"
     assert observability.OBSERVABILITY_SCHEMA_VERSION == 16

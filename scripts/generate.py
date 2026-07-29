@@ -9774,8 +9774,14 @@ def _prospective_archive_update_alignment(item, entry, now=None):
     The historical overwrite defect could remain hidden until ``lastmod`` advanced.
     A row whose old timestamp was only two days after its slug date could appear safe,
     then become a seven-day headline/slug drift immediately after the current article
-    was written.  Publication targeting must evaluate that future state before any
+    was written. Publication targeting must evaluate that future state before any
     file or archive record is mutated.
+
+    An archive row with no stored publication timestamp is different: the current
+    wall clock cannot prove how long that row has carried its existing identity. Do
+    not manufacture age evidence from ``now`` alone. Exact source/story updates fail
+    open until a real archive timestamp exists, while dated legacy rows still receive
+    the prospective drift check.
     """
     if not isinstance(item, dict) or not isinstance(entry, dict):
         return {"aligned": False, "reason": "missing_update_target", "prospective": True}
@@ -9784,15 +9790,26 @@ def _prospective_archive_update_alignment(item, entry, now=None):
     if incoming_headline:
         proposed["headline"] = incoming_headline
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
-    proposed["lastmod"] = now.date().isoformat()
-    alignment = _archive_headline_slug_alignment(proposed)
+    prospective_lastmod = now.date().isoformat()
+    existing_record_dt = _archive_record_datetime(entry)
+    if existing_record_dt is None:
+        # Preserve deterministic exact-identity behavior for sparse legacy/test rows.
+        # Adding today's date before evaluation would make the decision change simply
+        # because midnight passed, even though the archive evidence did not change.
+        alignment = _archive_headline_slug_alignment(proposed)
+        timestamp_evidence = "missing_existing_archive_timestamp"
+    else:
+        proposed["lastmod"] = prospective_lastmod
+        alignment = _archive_headline_slug_alignment(proposed)
+        timestamp_evidence = "stored_archive_timestamp"
     return {
         **alignment,
         "prospective": True,
         "existing_headline": str(entry.get("headline") or ""),
         "incoming_headline": incoming_headline,
         "candidate_slug": str(entry.get("slug") or ""),
-        "prospective_lastmod": proposed["lastmod"],
+        "prospective_lastmod": prospective_lastmod,
+        "timestamp_evidence": timestamp_evidence,
     }
 
 

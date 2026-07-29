@@ -85,7 +85,40 @@ def test_forward_target_updates_same_exact_source_and_preserves_identity():
     target, basis = g._find_forward_publication_target(item, archive, "story-one")
     assert target["slug"] == "2026-07-24-original"
     assert basis == "persistent_story_id"
-    assert g._forward_publication_target_valid(item, target, "story-one", basis)[0] is True
+    valid, reason = g._forward_publication_target_valid(
+        item,
+        target,
+        "story-one",
+        basis,
+        now=datetime(2026, 7, 29, tzinfo=timezone.utc),
+    )
+    assert valid is True
+    assert reason == "persistent_story_id"
+
+
+def test_prospective_alignment_does_not_invent_age_for_undated_archive_row():
+    g = _load_generate()
+    entry = {
+        "slug": "2026-07-24-original",
+        "headline": "Original headline",
+        "source_url": "https://source.test/news/article",
+        "editorial_story_id": "story-one",
+    }
+    incoming = {
+        "headline": "Updated headline",
+        "source_url": "https://source.test/news/article?utm_medium=rss",
+        "editorial_story_id": "story-one",
+    }
+
+    result = g._prospective_archive_update_alignment(
+        incoming,
+        entry,
+        now=datetime(2026, 8, 15, tzinfo=timezone.utc),
+    )
+
+    assert result["aligned"] is True
+    assert result["timestamp_evidence"] == "missing_existing_archive_timestamp"
+    assert result["date_gap_days"] is None
 
 
 def test_recurring_custom_report_rejects_previous_edition_slug():
