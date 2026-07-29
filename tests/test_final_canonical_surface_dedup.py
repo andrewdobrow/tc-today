@@ -1,0 +1,369 @@
+from __future__ import annotations
+
+import importlib.util
+import json
+import sys
+import types
+from pathlib import Path
+
+import pytest
+
+
+def _load_generate():
+    if "feedparser" not in sys.modules:
+        feedparser = types.ModuleType("feedparser")
+        feedparser.parse = lambda *args, **kwargs: types.SimpleNamespace(entries=[])
+        sys.modules["feedparser"] = feedparser
+    if "anthropic" not in sys.modules:
+        anthropic = types.ModuleType("anthropic")
+
+        class _Anthropic:
+            def __init__(self, *args, **kwargs):
+                self.messages = types.SimpleNamespace(create=lambda *args, **kwargs: None)
+
+        anthropic.Anthropic = _Anthropic
+        sys.modules["anthropic"] = anthropic
+    path = Path(__file__).parents[1] / "scripts" / "generate.py"
+    spec = importlib.util.spec_from_file_location("generate_final_surface_test", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _identity_index(*safe_story_ids):
+    return types.SimpleNamespace(
+        safe_story_ids=set(safe_story_ids),
+        all_story_ids=set(safe_story_ids),
+    )
+
+
+def _resolver(card):
+    slug = card.get("_archived_slug") or card.get("slug")
+    return f"https://treasurecoast.today/articles/{slug}.html" if slug else None
+
+
+def _write_surface_files(root: Path, archive, redirects):
+    (root / "data").mkdir(parents=True, exist_ok=True)
+    (root / "archive.json").write_text(json.dumps(archive), encoding="utf-8")
+    (root / "data" / "canonical-redirects.json").write_text(
+        json.dumps({"redirects": redirects}), encoding="utf-8"
+    )
+
+
+def _homepage_html(hero_href, card_hrefs):
+    cards = "".join(
+        f'<a href="{href}" class="grid-card fade-in" data-cat="all"></a>'
+        for href in card_hrefs
+    )
+    return (
+        '<section class="hero hero-v3" data-cat-hero="all">'
+        f'<a class="hero-v3-link" href="{hero_href}"></a>'
+        "</section>"
+        + cards
+    )
+
+
+def test_ware_redirect_copy_and_custom_card_collapse_to_custom_canonical(tmp_path):
+    g = _load_generate()
+    custom_story_id = "custom:ware-award"
+    canonical = {
+        "slug": g.WARE_AWARD_CANONICAL_SLUG,
+        "headline": "St. Lucie Mets pitcher Conner Ware named FSL Pitcher of the Week",
+        "teaser": "Ware earned the weekly Florida State League pitching honor.",
+        "image_url": "https://treasurecoast.today/images/mets10.png",
+        "category_key": "sports",
+        "date": "2026-07-28",
+        "editorial_story_id": custom_story_id,
+        "is_custom": True,
+        "authoritative_custom": True,
+        "custom_event_key": "sports-award|st-lucie-mets|ware|pitcher-of-the-week|2026-07-27",
+    }
+    source_slug = next(iter(g.WARE_AWARD_REDIRECT_SOURCE_SLUGS))
+    redirects = {source_slug: g.WARE_AWARD_CANONICAL_SLUG}
+    context = g._build_final_canonical_surface_context(
+        [canonical], tmp_path, identity_index=_identity_index(), redirect_map=redirects
+    )
+    rss_copy = {
+        "headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
+        "_archived_slug": source_slug,
+        "cat_key": "st_lucie",
+        "cat_label": "St. Lucie County",
+        "urgency_score": 8,
+    }
+    custom_copy = {
+        **canonical,
+        "_archived_slug": g.WARE_AWARD_CANONICAL_SLUG,
+        "cat_key": "sports",
+        "cat_label": "Sports",
+        "urgency_score": 6,
+    }
+
+    kept, report = g._dedupe_homepage_cards_by_permalink(
+        [rss_copy, custom_copy],
+        _resolver,
+        topnews_ids={id(rss_copy), id(custom_copy)},
+        surface_context=context,
+    )
+
+    assert kept == [custom_copy]
+    assert kept[0]["_archived_slug"] == g.WARE_AWARD_CANONICAL_SLUG
+    assert kept[0]["headline"] == canonical["headline"]
+    assert set(kept[0]["category_keys"]) == {"sports", "st_lucie"}
+    assert report["resolved_unique_identity_count"] == 1
+    assert report["removed_count"] == 1
+    assert report["removed"][0]["identity_key"] == f"story:{custom_story_id}"
+
+
+def test_big_taste_redirect_source_is_rewritten_even_when_it_is_the_only_card(tmp_path):
+    g = _load_generate()
+    story_id = "story_000253"
+    canonical = {
+        "slug": g.BIG_TASTE_CANONICAL_SLUG,
+        "headline": "Big Taste of Martin County returns Oct. 6 to support youth mentoring programs",
+        "teaser": "The Stuart fundraiser supports Big Brothers Big Sisters mentoring programs.",
+        "category_key": "things_to_do",
+        "date": "2026-07-23",
+        "editorial_story_id": story_id,
+    }
+    source_slug = next(iter(g.BIG_TASTE_REDIRECT_SOURCE_SLUGS))
+    context = g._build_final_canonical_surface_context(
+        [canonical],
+        tmp_path,
+        identity_index=_identity_index(story_id),
+        redirect_map={source_slug: g.BIG_TASTE_CANONICAL_SLUG},
+    )
+    card = {
+        "headline": "Big Taste of Martin County fundraiser set for October in Stuart",
+        "_archived_slug": source_slug,
+        "editorial_story_id": story_id,
+        "cat_key": "things_to_do",
+        "cat_label": "Things To Do",
+    }
+
+    kept, report = g._dedupe_homepage_cards_by_permalink(
+        [card], _resolver, surface_context=context
+    )
+
+    assert kept == [card]
+    assert card["_archived_slug"] == g.BIG_TASTE_CANONICAL_SLUG
+    assert card["link"].endswith(f"/{g.BIG_TASTE_CANONICAL_SLUG}.html")
+    assert card["headline"] == canonical["headline"]
+    assert report["canonical_rewrite_count"] == 1
+    assert report["removed_count"] == 0
+
+
+def test_two_direct_slugs_with_same_safe_story_id_collapse_to_oldest_canonical(tmp_path):
+    g = _load_generate()
+    story_id = "story_execution_update"
+    old = {
+        "slug": "2026-07-20-florida-execution-case",
+        "headline": "Florida schedules execution in murder case",
+        "date": "2026-07-20",
+        "editorial_story_id": story_id,
+    }
+    newer = {
+        "slug": "2026-07-29-florida-executes-inmate-in-murder-case",
+        "headline": "Florida executes inmate in murder case",
+        "date": "2026-07-29",
+        "editorial_story_id": story_id,
+    }
+    context = g._build_final_canonical_surface_context(
+        [old, newer], tmp_path, identity_index=_identity_index(story_id), redirect_map={}
+    )
+    old_card = {**old, "_archived_slug": old["slug"], "cat_key": "florida"}
+    new_card = {
+        **newer,
+        "_archived_slug": newer["slug"],
+        "cat_key": "florida",
+        "urgency_score": 10,
+    }
+
+    kept, report = g._dedupe_homepage_cards_by_permalink(
+        [new_card, old_card], _resolver, surface_context=context
+    )
+
+    assert len(kept) == 1
+    assert kept[0]["_archived_slug"] == old["slug"]
+    assert kept[0]["headline"] == old["headline"]
+    assert report["removed_count"] == 1
+    assert report["removed"][0]["identity_basis"] == "persistent_story_id"
+
+
+def test_untrusted_shared_story_id_does_not_merge_distinct_direct_articles(tmp_path):
+    g = _load_generate()
+    story_id = "story_follow_up_family"
+    first = {
+        "slug": "first-stage",
+        "headline": "Investigation begins",
+        "date": "2026-07-20",
+        "editorial_story_id": story_id,
+    }
+    second = {
+        "slug": "later-arrest",
+        "headline": "Suspect arrested after investigation",
+        "date": "2026-07-29",
+        "editorial_story_id": story_id,
+    }
+    context = g._build_final_canonical_surface_context(
+        [first, second], tmp_path, identity_index=_identity_index(), redirect_map={}
+    )
+    cards = [
+        {**first, "_archived_slug": first["slug"], "cat_key": "crime"},
+        {**second, "_archived_slug": second["slug"], "cat_key": "crime"},
+    ]
+
+    kept, report = g._dedupe_homepage_cards_by_permalink(
+        cards, _resolver, surface_context=context
+    )
+
+    assert kept == cards
+    assert report["removed_count"] == 0
+    assert report["resolved_unique_identity_count"] == 2
+
+
+def test_card_matching_hero_safe_story_identity_is_removed_even_with_different_slug(tmp_path):
+    g = _load_generate()
+    story_id = "story_infant_case"
+    canonical = {
+        "slug": "2026-07-27-infant-case-arrests",
+        "headline": "Three arrested in infant death investigation",
+        "date": "2026-07-27",
+        "editorial_story_id": story_id,
+    }
+    variant = {
+        "slug": "2026-07-28-detective-describes-infant-case-home",
+        "headline": "Detective describes conditions in infant death case",
+        "date": "2026-07-28",
+        "editorial_story_id": story_id,
+    }
+    context = g._build_final_canonical_surface_context(
+        [canonical, variant], tmp_path, identity_index=_identity_index(story_id), redirect_map={}
+    )
+    card = {**variant, "_archived_slug": variant["slug"], "cat_key": "crime"}
+
+    kept, report = g._dedupe_homepage_cards_by_permalink(
+        [card],
+        _resolver,
+        hero_permalink=f"https://treasurecoast.today/articles/{canonical['slug']}.html",
+        surface_context=context,
+    )
+
+    assert kept == []
+    assert report["removed"][0]["reason"] == "duplicates_front_page_hero_identity"
+
+
+def test_final_surface_contract_rejects_redirect_source_link(tmp_path):
+    g = _load_generate()
+    canonical = {
+        "slug": g.WARE_AWARD_CANONICAL_SLUG,
+        "headline": "Ware named FSL Pitcher of the Week",
+        "date": "2026-07-28",
+        "editorial_story_id": "custom:ware-award",
+        "is_custom": True,
+    }
+    source_slug = next(iter(g.WARE_AWARD_REDIRECT_SOURCE_SLUGS))
+    _write_surface_files(tmp_path, [canonical], [{
+        "source_slug": source_slug,
+        "target_slug": g.WARE_AWARD_CANONICAL_SLUG,
+    }])
+    html = _homepage_html(
+        "https://treasurecoast.today/articles/unrelated-hero.html",
+        [f"https://treasurecoast.today/articles/{source_slug}.html"],
+    )
+
+    with pytest.raises(RuntimeError, match="Final canonical surface contract FAILED"):
+        g.validate_final_canonical_surface_uniqueness(
+            html, tmp_path, identity_index=_identity_index()
+        )
+
+    report = json.loads(
+        (tmp_path / "data" / "final-canonical-surface-contract.json").read_text()
+    )
+    assert report["redirect_source_link_count"] == 1
+    assert report["passed"] is False
+
+
+def test_final_surface_contract_rejects_two_direct_urls_for_same_safe_story(tmp_path):
+    g = _load_generate()
+    story_id = "story_same_event"
+    archive = [
+        {
+            "slug": "older-canonical",
+            "headline": "Original headline",
+            "date": "2026-07-20",
+            "editorial_story_id": story_id,
+        },
+        {
+            "slug": "newer-copy",
+            "headline": "Rewritten headline",
+            "date": "2026-07-29",
+            "editorial_story_id": story_id,
+        },
+    ]
+    _write_surface_files(tmp_path, archive, [])
+    html = _homepage_html(
+        "https://treasurecoast.today/articles/unique-hero.html",
+        [
+            "https://treasurecoast.today/articles/older-canonical.html",
+            "https://treasurecoast.today/articles/newer-copy.html",
+        ],
+    )
+
+    with pytest.raises(RuntimeError, match="Final canonical surface contract FAILED"):
+        g.validate_final_canonical_surface_uniqueness(
+            html, tmp_path, identity_index=_identity_index(story_id)
+        )
+
+    report = json.loads(
+        (tmp_path / "data" / "final-canonical-surface-contract.json").read_text()
+    )
+    assert report["canonical_duplicate_count"] == 1
+    assert report["redirect_source_link_count"] == 1
+
+
+def test_final_surface_contract_passes_for_unique_direct_canonical_links(tmp_path):
+    g = _load_generate()
+    archive = [
+        {"slug": "hero", "headline": "Hero", "date": "2026-07-29"},
+        {"slug": "one", "headline": "One", "date": "2026-07-29"},
+        {"slug": "two", "headline": "Two", "date": "2026-07-29"},
+    ]
+    _write_surface_files(tmp_path, archive, [])
+    html = _homepage_html(
+        "https://treasurecoast.today/articles/hero.html",
+        [
+            "https://treasurecoast.today/articles/one.html",
+            "https://treasurecoast.today/articles/two.html",
+        ],
+    )
+
+    report = g.validate_final_canonical_surface_uniqueness(
+        html, tmp_path, identity_index=_identity_index()
+    )
+
+    assert report["passed"] is True
+    assert report["canonical_duplicate_count"] == 0
+    assert report["redirect_source_link_count"] == 0
+
+
+def test_engine_release_identifies_final_canonical_surface_dedup():
+    root = Path(__file__).resolve().parents[1]
+    observability = (root / "tct_engine" / "observability.py").read_text(encoding="utf-8")
+    assert 'ENGINE_VERSION = "1.11.9.0"' in observability
+    assert 'ENGINE_RELEASE = "final-canonical-surface-dedup"' in observability
+
+
+def test_render_pipeline_uses_final_identity_context_and_fails_closed_before_write():
+    root = Path(__file__).resolve().parents[1]
+    source = (root / "scripts" / "generate.py").read_text(encoding="utf-8")
+    render_start = source.index("def render_index(all_categories, top_cat):")
+    render_end = source.index("def render_about_page", render_start)
+    render_source = source[render_start:render_end]
+    assert "_build_final_canonical_surface_context(archive, OUTPUT_DIR)" in render_source
+    assert "surface_context=_surface_context" in render_source
+    assert '"final-canonical-surface-dedup.json"' in render_source
+
+    final_gate = source.index("validate_final_canonical_surface_uniqueness(index_html, OUTPUT_DIR)")
+    literal_gate = source.index("validate_homepage_permalink_uniqueness(index_html, OUTPUT_DIR)")
+    index_write = source.index('(OUTPUT_DIR / "index.html").write_text(index_html')
+    assert final_gate < literal_gate < index_write

@@ -17,8 +17,8 @@ from .source_identity import normalize_source_identity_url
 from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.11.8.9"
-ENGINE_RELEASE = "published-story-skip-dedup"
+ENGINE_VERSION = "1.11.9.0"
+ENGINE_RELEASE = "final-canonical-surface-dedup"
 OBSERVABILITY_SCHEMA_VERSION = 17
 RESOLVER_VERSION = "2.4"
 RELATIONSHIP_ENGINE_VERSION = "1.5"

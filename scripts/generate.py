@@ -7030,6 +7030,280 @@ def promote_duplicate_heroes(top_cat, all_categories):
 
 
 
+def _normalize_existing_article_slug(value):
+    """Normalize an already-published slug without applying new-slug truncation."""
+    raw = str(value or "").strip().split("?", 1)[0].split("#", 1)[0]
+    raw = raw.rstrip("/").rsplit("/", 1)[-1]
+    if raw.lower().endswith(".html"):
+        raw = raw[:-5]
+    raw = raw.strip().lower()
+    return re.sub(r"[^a-z0-9_-]+", "-", raw).strip("-")
+
+
+def _article_slug_from_permalink(permalink):
+    """Extract one TCT article slug from an absolute or relative permalink."""
+    raw = str(permalink or "").strip()
+    if not raw:
+        return ""
+    try:
+        path = urlsplit(raw).path or raw
+    except Exception:
+        path = raw.split("?", 1)[0].split("#", 1)[0]
+    match = re.search(r"(?:^|/)articles/([^/?#]+?)(?:\.html)?/?$", path, flags=re.IGNORECASE)
+    if not match:
+        return ""
+    return _normalize_existing_article_slug(match.group(1))
+
+
+def _load_canonical_redirect_slug_map(output_root):
+    """Load cumulative article redirects as ``source_slug -> target_slug``.
+
+    Redirect history is part of publication identity. A live card pointing at a
+    redirect source is not a distinct story and must be rebound to the final target
+    before homepage ranking or deduplication.
+    """
+    root = Path(output_root)
+    payload = _read_json_file(root / "data" / "canonical-redirects.json", {"redirects": []})
+    rows = payload.get("redirects", []) if isinstance(payload, dict) else []
+    mapping = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        source = _normalize_existing_article_slug(row.get("source_slug"))
+        target = _normalize_existing_article_slug(row.get("target_slug"))
+        if source and target and source != target:
+            mapping[source] = target
+    return mapping
+
+
+def _follow_canonical_redirect_slug(slug, redirect_map, max_hops=24):
+    """Resolve a redirect chain without allowing cycles to escape publication."""
+    current = _normalize_existing_article_slug(slug)
+    if not current:
+        return "", []
+    visited = []
+    seen = set()
+    for _ in range(max_hops):
+        if current in seen:
+            break
+        seen.add(current)
+        target = _normalize_existing_article_slug((redirect_map or {}).get(current))
+        if not target or target == current:
+            break
+        visited.append(current)
+        current = target
+    return current, visited
+
+
+def _canonical_article_permalink(slug):
+    slug = _normalize_existing_article_slug(slug)
+    return f"{SITE_URL}/articles/{slug}.html" if slug else ""
+
+
+def _build_final_canonical_surface_context(
+    archive,
+    output_root,
+    *,
+    identity_index=None,
+    redirect_map=None,
+):
+    """Build immutable lookup state for final homepage canonicalization.
+
+    The final surface pass deliberately combines the four identity sources that can
+    survive earlier stages: cumulative redirects, archive publication records,
+    persistent editorial story IDs, and durable custom-event authority.
+    """
+    archive_rows = [row for row in (archive or []) if isinstance(row, dict)]
+    archive_by_slug = {
+        _normalize_existing_article_slug(row.get("slug")): row
+        for row in archive_rows
+        if _normalize_existing_article_slug(row.get("slug"))
+    }
+    if redirect_map is None:
+        redirect_map = _load_canonical_redirect_slug_map(output_root)
+    if identity_index is None:
+        registry_path = Path(output_root) / "data" / "editorial_story_registry.json"
+        identity_index = _load_publication_identity_index(registry_path)
+
+    safe_story_ids = set(getattr(identity_index, "safe_story_ids", set()) or set())
+    story_groups = defaultdict(list)
+    for row in archive_rows:
+        story_id = str(row.get("editorial_story_id") or "").strip()
+        if not story_id:
+            continue
+        if story_id.startswith("custom:") or story_id in safe_story_ids:
+            story_groups[story_id].append(row)
+
+    story_canonical_slugs = {}
+    for story_id, rows in story_groups.items():
+        canonical = min(rows, key=_publication_canonical_key)
+        canonical_slug, _ = _follow_canonical_redirect_slug(
+            canonical.get("slug", ""), redirect_map
+        )
+        if canonical_slug:
+            story_canonical_slugs[story_id] = canonical_slug
+
+    custom_event_groups = defaultdict(list)
+    for row in archive_rows:
+        event_key = str(
+            row.get("durable_custom_identity_key")
+            or row.get("custom_event_key")
+            or ""
+        ).strip()
+        if event_key:
+            custom_event_groups[event_key].append(row)
+    custom_event_canonical_slugs = {}
+    for event_key, rows in custom_event_groups.items():
+        canonical = min(rows, key=_publication_canonical_key)
+        canonical_slug, _ = _follow_canonical_redirect_slug(
+            canonical.get("slug", ""), redirect_map
+        )
+        if canonical_slug:
+            custom_event_canonical_slugs[event_key] = canonical_slug
+
+    return {
+        "archive": archive_rows,
+        "archive_by_slug": archive_by_slug,
+        "redirect_map": dict(redirect_map or {}),
+        "identity_index": identity_index,
+        "safe_story_ids": safe_story_ids,
+        "story_canonical_slugs": story_canonical_slugs,
+        "custom_event_canonical_slugs": custom_event_canonical_slugs,
+    }
+
+
+def _final_canonical_surface_identity(item, permalink, context):
+    """Resolve one live placement to its final public article identity."""
+    item = item if isinstance(item, dict) else {}
+    context = context or {}
+    raw_slug = _article_slug_from_permalink(permalink)
+    canonical_slug, redirect_sources = _follow_canonical_redirect_slug(
+        raw_slug, context.get("redirect_map", {})
+    )
+    archive_by_slug = context.get("archive_by_slug", {})
+    canonical_entry = archive_by_slug.get(canonical_slug)
+    raw_entry = archive_by_slug.get(raw_slug)
+
+    story_id = str(
+        (canonical_entry or {}).get("editorial_story_id")
+        or (raw_entry or {}).get("editorial_story_id")
+        or item.get("editorial_story_id")
+        or item.get("_editorial_story_id")
+        or ""
+    ).strip()
+    safe_story_ids = set(context.get("safe_story_ids", set()) or set())
+    story_id_safe = bool(
+        story_id and (story_id.startswith("custom:") or story_id in safe_story_ids)
+    )
+
+    if story_id_safe:
+        preferred_slug = context.get("story_canonical_slugs", {}).get(story_id, "")
+        preferred_slug, preferred_redirects = _follow_canonical_redirect_slug(
+            preferred_slug or canonical_slug, context.get("redirect_map", {})
+        )
+        if preferred_slug:
+            canonical_slug = preferred_slug
+            canonical_entry = archive_by_slug.get(canonical_slug) or canonical_entry
+        redirect_sources = list(dict.fromkeys(redirect_sources + preferred_redirects))
+
+    event_key = str(
+        (canonical_entry or {}).get("durable_custom_identity_key")
+        or (canonical_entry or {}).get("custom_event_key")
+        or (raw_entry or {}).get("durable_custom_identity_key")
+        or (raw_entry or {}).get("custom_event_key")
+        or item.get("durable_custom_identity_key")
+        or item.get("custom_event_key")
+        or ""
+    ).strip()
+    if event_key:
+        preferred_slug = context.get("custom_event_canonical_slugs", {}).get(event_key, "")
+        preferred_slug, preferred_redirects = _follow_canonical_redirect_slug(
+            preferred_slug or canonical_slug, context.get("redirect_map", {})
+        )
+        if preferred_slug:
+            canonical_slug = preferred_slug
+            canonical_entry = archive_by_slug.get(canonical_slug) or canonical_entry
+        redirect_sources = list(dict.fromkeys(redirect_sources + preferred_redirects))
+
+    if story_id_safe:
+        identity_key = f"story:{story_id}"
+        identity_basis = "persistent_story_id"
+    elif event_key:
+        identity_key = f"custom-event:{event_key}"
+        identity_basis = "durable_custom_event"
+    elif canonical_slug:
+        identity_key = f"slug:{canonical_slug}"
+        identity_basis = "canonical_slug"
+    else:
+        identity_key = _homepage_permalink_key(permalink)
+        identity_basis = "literal_permalink" if identity_key else "unresolved"
+
+    return {
+        "identity_key": identity_key,
+        "identity_basis": identity_basis,
+        "raw_slug": raw_slug,
+        "canonical_slug": canonical_slug,
+        "raw_permalink": str(permalink or ""),
+        "canonical_permalink": _canonical_article_permalink(canonical_slug)
+        if canonical_slug else str(permalink or ""),
+        "redirect_source": bool(raw_slug and raw_slug != canonical_slug),
+        "redirect_chain": redirect_sources,
+        "story_id": story_id if story_id_safe else "",
+        "custom_event_key": event_key,
+        "canonical_entry": canonical_entry,
+    }
+
+
+def _apply_final_canonical_surface_identity(item, identity):
+    """Rebind a placement to direct canonical metadata and URL in place."""
+    if not isinstance(item, dict) or not isinstance(identity, dict):
+        return False
+    canonical_slug = str(identity.get("canonical_slug") or "").strip()
+    canonical_entry = identity.get("canonical_entry") or {}
+    changed = False
+    if canonical_slug and item.get("_archived_slug") != canonical_slug:
+        item["_archived_slug"] = canonical_slug
+        changed = True
+    canonical_permalink = identity.get("canonical_permalink") or ""
+    if canonical_permalink and item.get("link") != canonical_permalink:
+        item["link"] = canonical_permalink
+        changed = True
+
+    story_id = identity.get("story_id") or canonical_entry.get("editorial_story_id") or ""
+    if story_id:
+        for key in ("editorial_story_id", "_editorial_story_id"):
+            if item.get(key) != story_id:
+                item[key] = story_id
+                changed = True
+
+    # Redirect-source and story-equivalent generated copies must display the
+    # canonical copy's headline and card metadata. This is what makes custom
+    # authority visible rather than merely changing the destination URL.
+    should_adopt_copy = bool(
+        canonical_entry
+        and (
+            identity.get("redirect_source")
+            or identity.get("identity_basis") in {
+                "persistent_story_id", "durable_custom_event"
+            }
+        )
+    )
+    if should_adopt_copy:
+        for key in ("headline", "teaser", "image_url", "image_credit"):
+            value = canonical_entry.get(key)
+            if value not in (None, "") and item.get(key) != value:
+                item[key] = value
+                changed = True
+        if canonical_entry.get("is_custom") or canonical_entry.get("authoritative_custom"):
+            if not item.get("is_custom"):
+                item["is_custom"] = True
+                changed = True
+            if not item.get("authoritative_custom"):
+                item["authoritative_custom"] = True
+                changed = True
+    return changed
+
+
 def _homepage_permalink_key(permalink):
     """Return one canonical identity for a rendered TCT article permalink.
 
@@ -7059,21 +7333,31 @@ def _dedupe_homepage_cards_by_permalink(
     *,
     hero_permalink="",
     topnews_ids=None,
+    surface_context=None,
 ):
-    """Keep one homepage-grid placement per canonical article permalink.
+    """Keep one homepage-grid placement per final canonical story identity.
 
     Cross-category placement is still allowed on section/category surfaces.  This pass
-    affects only the front-page all-news card list.  Pinned and authoritative custom
-    placements win their permalink group; otherwise a model-ranked placement wins over
-    an appended fallback copy.
+    affects only the front-page all-news card list. When ``surface_context`` is supplied,
+    redirect targets, persistent story IDs, and durable custom authority are resolved
+    before grouping. Pinned and authoritative custom placements win their identity
+    group; otherwise a model-ranked placement wins over an appended fallback copy.
     """
     topnews_ids = set(topnews_ids or set())
-    hero_key = _homepage_permalink_key(hero_permalink)
+    if surface_context:
+        hero_identity = _final_canonical_surface_identity(
+            {}, hero_permalink, surface_context
+        )
+        hero_key = hero_identity.get("identity_key", "")
+    else:
+        hero_identity = {}
+        hero_key = _homepage_permalink_key(hero_permalink)
     winners = {}
     unresolved_indices = set()
     removed = []
+    rewrites = []
 
-    def _preference(card, index):
+    def _preference(card, index, identity):
         pin = card.get("pin_position")
         try:
             urgency = int(card.get("urgency_score", 0) or 0)
@@ -7082,6 +7366,7 @@ def _dedupe_homepage_cards_by_permalink(
         return (
             1 if pin not in (None, "", 0, False) else 0,
             1 if (card.get("is_custom") or card.get("authoritative_custom")) else 0,
+            1 if not identity.get("redirect_source") else 0,
             1 if id(card) in topnews_ids else 0,
             urgency,
             -index,
@@ -7089,15 +7374,52 @@ def _dedupe_homepage_cards_by_permalink(
 
     for index, card in enumerate(list(cards or [])):
         permalink = permalink_resolver(card)
-        key = _homepage_permalink_key(permalink)
+        identity = (
+            _final_canonical_surface_identity(card, permalink, surface_context)
+            if surface_context
+            else {
+                "identity_key": _homepage_permalink_key(permalink),
+                "canonical_permalink": permalink,
+                "canonical_slug": _article_slug_from_permalink(permalink),
+                "identity_basis": "literal_permalink",
+                "redirect_source": False,
+            }
+        )
+        key = identity.get("identity_key", "")
         if not key:
             # Preserve the renderer's existing behavior; unresolved cards are skipped
             # later because no permanent article page exists.
             unresolved_indices.add(index)
             continue
+        if surface_context:
+            before = {
+                "headline": card.get("headline", ""),
+                "permalink": permalink or "",
+                "slug": card.get("_archived_slug") or card.get("slug") or "",
+            }
+            if _apply_final_canonical_surface_identity(card, identity):
+                rewrites.append({
+                    "reason": "rebound_to_final_canonical_identity",
+                    "identity_key": key,
+                    "identity_basis": identity.get("identity_basis", ""),
+                    "raw_slug": identity.get("raw_slug", ""),
+                    "canonical_slug": identity.get("canonical_slug", ""),
+                    "before": before,
+                    "after": {
+                        "headline": card.get("headline", ""),
+                        "permalink": identity.get("canonical_permalink", ""),
+                        "slug": card.get("_archived_slug") or "",
+                    },
+                })
+            permalink = identity.get("canonical_permalink") or permalink
         if hero_key and key == hero_key:
             removed.append({
-                "reason": "duplicates_front_page_hero",
+                "reason": (
+                    "duplicates_front_page_hero_identity"
+                    if surface_context else "duplicates_front_page_hero"
+                ),
+                "identity_key": key,
+                "identity_basis": identity.get("identity_basis", ""),
                 "permalink": permalink,
                 "headline": card.get("headline", ""),
                 "category_key": card.get("cat_key", ""),
@@ -7107,16 +7429,20 @@ def _dedupe_homepage_cards_by_permalink(
         current = winners.get(key)
         if current is None:
             _apply_category_memberships(card, card.get("cat_key") or card.get("category_key") or "")
-            winners[key] = (index, card, permalink)
+            winners[key] = (index, card, permalink, identity)
             continue
-        current_index, current_card, current_permalink = current
+        current_index, current_card, current_permalink, current_identity = current
         combined_memberships = list(dict.fromkeys(
             _item_category_memberships(current_card) + _item_category_memberships(card)
         ))
-        if _preference(card, index) > _preference(current_card, current_index):
+        if _preference(card, index, identity) > _preference(
+            current_card, current_index, current_identity
+        ):
             _apply_category_memberships(card, card.get("cat_key") or card.get("category_key") or "", combined_memberships)
             removed.append({
                 "reason": "duplicate_permalink_replaced_by_preferred_placement",
+                "identity_key": key,
+                "identity_basis": identity.get("identity_basis", ""),
                 "permalink": current_permalink,
                 "headline": current_card.get("headline", ""),
                 "category_key": current_card.get("cat_key", ""),
@@ -7124,7 +7450,7 @@ def _dedupe_homepage_cards_by_permalink(
                 "kept_headline": card.get("headline", ""),
                 "kept_category_key": card.get("cat_key", ""),
             })
-            winners[key] = (index, card, permalink)
+            winners[key] = (index, card, permalink, identity)
         else:
             _apply_category_memberships(
                 current_card, current_card.get("cat_key") or current_card.get("category_key") or "",
@@ -7132,6 +7458,8 @@ def _dedupe_homepage_cards_by_permalink(
             )
             removed.append({
                 "reason": "duplicate_permalink",
+                "identity_key": key,
+                "identity_basis": current_identity.get("identity_basis", ""),
                 "permalink": permalink,
                 "headline": card.get("headline", ""),
                 "category_key": card.get("cat_key", ""),
@@ -7140,19 +7468,28 @@ def _dedupe_homepage_cards_by_permalink(
                 "kept_category_key": current_card.get("cat_key", ""),
             })
 
-    winner_indices = {index for index, _card, _permalink in winners.values()}
+    winner_indices = {index for index, _card, _permalink, _identity in winners.values()}
     kept = [
         card for index, card in enumerate(list(cards or []))
         if index in winner_indices or index in unresolved_indices
     ]
     report = {
-        "schema_version": 1,
-        "policy": "one_visible_homepage_placement_per_canonical_permalink",
+        "schema_version": 2 if surface_context else 1,
+        "policy": (
+            "one_visible_homepage_placement_per_final_canonical_story_identity"
+            if surface_context
+            else "one_visible_homepage_placement_per_canonical_permalink"
+        ),
         "input_card_count": len(list(cards or [])),
         "resolved_unique_permalink_count": len(winners),
+        "resolved_unique_identity_count": len(winners),
         "unresolved_card_count": len(unresolved_indices),
         "removed_count": len(removed),
+        "canonical_rewrite_count": len(rewrites),
         "hero_permalink": hero_permalink or "",
+        "hero_identity_key": hero_key,
+        "hero_canonical_permalink": hero_identity.get("canonical_permalink", ""),
+        "rewrites": rewrites,
         "removed": removed,
     }
     return kept, report
@@ -7213,6 +7550,111 @@ def validate_homepage_permalink_uniqueness(index_html, output_root):
     print(
         "  Homepage permalink uniqueness PASSED "
         f"({len(visible_links)} visible article link(s))"
+    )
+    return report
+
+
+def validate_final_canonical_surface_uniqueness(
+    index_html,
+    output_root,
+    *,
+    identity_index=None,
+):
+    """Fail closed when primary homepage placements are canonically equivalent.
+
+    Literal URL uniqueness is insufficient because one URL may be a redirect source
+    and two direct URLs may still carry the same safe persistent story ID. This gate
+    evaluates the visible lead hero plus the Top News card grid after resolving the
+    cumulative redirect graph and publication identity index.
+    """
+    output_root = Path(output_root)
+    archive = load_archive(output_root / "archive.json")
+    context = _build_final_canonical_surface_context(
+        archive,
+        output_root,
+        identity_index=identity_index,
+    )
+    html = str(index_html or "")
+    visible_links = []
+    hero_match = re.search(
+        r'<section[^>]*data-cat-hero="all"[^>]*>.*?'
+        r'<a[^>]*class="hero-v3-link"[^>]*href="([^"]+)"',
+        html,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    if hero_match:
+        visible_links.append(("hero", hero_match.group(1)))
+    for href in re.findall(
+        r'<a\s+href="([^"]+)"\s+class="grid-card\s+fade-in"',
+        html,
+        flags=re.IGNORECASE,
+    ):
+        visible_links.append(("card", href))
+
+    seen = {}
+    duplicates = []
+    redirect_source_links = []
+    resolved = []
+    for placement, href in visible_links:
+        identity = _final_canonical_surface_identity({}, href, context)
+        key = identity.get("identity_key", "")
+        raw_slug = identity.get("raw_slug", "")
+        canonical_slug = identity.get("canonical_slug", "")
+        row = {
+            "placement": placement,
+            "href": href,
+            "raw_slug": raw_slug,
+            "canonical_slug": canonical_slug,
+            "canonical_permalink": identity.get("canonical_permalink", ""),
+            "identity_key": key,
+            "identity_basis": identity.get("identity_basis", ""),
+            "story_id": identity.get("story_id", ""),
+        }
+        resolved.append(row)
+        if raw_slug and canonical_slug and raw_slug != canonical_slug:
+            redirect_source_links.append(row)
+        if not key:
+            continue
+        if key in seen:
+            duplicates.append({
+                "identity_key": key,
+                "identity_basis": identity.get("identity_basis", ""),
+                "canonical_slug": canonical_slug,
+                "first": seen[key],
+                "duplicate": row,
+            })
+        else:
+            seen[key] = row
+
+    passed = not duplicates and not redirect_source_links
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "policy": (
+            "primary_homepage_links_must_be_direct_canonical_and_unique_by_"
+            "redirect_target_safe_story_id_or_custom_event"
+        ),
+        "passed": passed,
+        "checked_visible_article_links": len(visible_links),
+        "unique_canonical_identity_count": len(seen),
+        "redirect_source_link_count": len(redirect_source_links),
+        "canonical_duplicate_count": len(duplicates),
+        "redirect_source_links": redirect_source_links,
+        "duplicates": duplicates,
+        "resolved": resolved,
+    }
+    report_path = output_root / "data" / "final-canonical-surface-contract.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    if not passed:
+        raise RuntimeError(
+            "Final canonical surface contract FAILED: "
+            f"{len(redirect_source_links)} redirect-source link(s), "
+            f"{len(duplicates)} canonical-equivalent duplicate(s)"
+        )
+    print(
+        "  Final canonical surface contract PASSED "
+        f"({len(visible_links)} visible link(s), {len(seen)} canonical identity group(s))"
     )
     return report
 
@@ -7307,6 +7749,8 @@ def global_rank(all_cards, dedupe_against=None):
 def render_index(all_categories, top_cat):
     COUNTY_KEYS = {"martin", "st_lucie", "indian_river"}
     archive = load_archive(OUTPUT_DIR / "archive.json")
+    _surface_context = _build_final_canonical_surface_context(archive, OUTPUT_DIR)
+    _hero_canonical_rewrites = []
     SECTION_LABELS = {
         "martin":       "Martin County News",
         "st_lucie":     "St. Lucie County News",
@@ -7319,7 +7763,63 @@ def render_index(all_categories, top_cat):
         "florida":      "Florida News",
     }
 
+    def _raw_surface_permalink(item, *, allow_fallback=False):
+        if item.get("_section_placeholder"):
+            return f"{SITE_URL}/archive.html"
+        archived_slug = _normalize_existing_article_slug(item.get("_archived_slug"))
+        if archived_slug:
+            return _canonical_article_permalink(archived_slug)
+        item_link = str(item.get("link") or "")
+        linked_slug = _article_slug_from_permalink(item_link)
+        if linked_slug:
+            return _canonical_article_permalink(linked_slug)
+        matched = find_matching_entry(
+            item.get("headline", ""), archive, item_link,
+            is_weather_alert=bool(item.get("is_weather_alert")),
+        )
+        if matched:
+            return _canonical_article_permalink(matched.get("slug", ""))
+        if allow_fallback:
+            today = datetime.utcnow().strftime("%Y-%m-%d")
+            return _canonical_article_permalink(
+                f"{today}-{slugify(item.get('headline', ''))}"
+            )
+        return ""
+
+    def _surface_permalink(item, *, allow_fallback=False, placement=""):
+        raw_permalink = _raw_surface_permalink(item, allow_fallback=allow_fallback)
+        if not _article_slug_from_permalink(raw_permalink):
+            return raw_permalink
+        identity = _final_canonical_surface_identity(
+            item, raw_permalink, _surface_context
+        )
+        before = {
+            "headline": item.get("headline", ""),
+            "permalink": raw_permalink,
+            "slug": item.get("_archived_slug") or item.get("slug") or "",
+        }
+        if _apply_final_canonical_surface_identity(item, identity):
+            _hero_canonical_rewrites.append({
+                "placement": placement,
+                "identity_key": identity.get("identity_key", ""),
+                "identity_basis": identity.get("identity_basis", ""),
+                "raw_slug": identity.get("raw_slug", ""),
+                "canonical_slug": identity.get("canonical_slug", ""),
+                "before": before,
+                "after": {
+                    "headline": item.get("headline", ""),
+                    "permalink": identity.get("canonical_permalink", ""),
+                    "slug": item.get("_archived_slug") or "",
+                },
+            })
+        return identity.get("canonical_permalink") or raw_permalink
+
     def hero_section(cat_key, cat_label, hero, visible=False):
+        article_url = _surface_permalink(
+            hero,
+            allow_fallback=True,
+            placement=f"hero:{cat_key}",
+        )
         preview    = hero.get("body", "")[:380].rstrip()
         paragraphs = make_paragraphs(hero.get("body", ""))
         img_url    = hero.get("image_url", "")
@@ -7329,21 +7829,6 @@ def render_index(all_categories, top_cat):
         pub_time    = _format_category_hero_timestamp(hero, archive)
         display     = "" if visible else ' style="display:none"'
         fade        = " fade-in" if visible else ""
-        if hero.get("_section_placeholder"):
-            article_url = f"{SITE_URL}/archive.html"
-        elif hero.get("_archived_slug"):
-            article_url = f"{SITE_URL}/articles/{hero['_archived_slug']}.html"
-        else:
-            matched = find_matching_entry(
-                hero.get("headline", ""), archive, hero.get("link", ""),
-                is_weather_alert=bool(hero.get("is_weather_alert")),
-            )
-            if matched:
-                slug = matched["slug"]
-            else:
-                today = datetime.utcnow().strftime("%Y-%m-%d")
-                slug = f"{today}-{slugify(hero.get('headline', ''))}"
-            article_url = f"{SITE_URL}/articles/{slug}.html"
         section_label = ""
         if cat_key in SECTION_LABELS:
             seo_text  = SECTION_LABELS[cat_key]
@@ -7531,37 +8016,44 @@ def render_index(all_categories, top_cat):
     archive_for_links = load_archive(OUTPUT_DIR / "archive.json")
 
     def card_permalink(card):
-        # Backfill cards already carry their archived slug.
-        if card.get("_archived_slug"):
-            return f"{SITE_URL}/articles/{card['_archived_slug']}.html"
-        matched = find_matching_entry(
-            card.get("headline", ""),
-            archive_for_links,
-            card.get("link", ""),
-            is_weather_alert=bool(card.get("is_weather_alert")),
-        )
-        if matched:
-            return f"{SITE_URL}/articles/{matched['slug']}.html"
-        # No archive entry means no article page exists — the renderer skips it.
-        return None
+        # The dedupe pass needs the pre-resolution URL so it can report redirect-source
+        # rewrites. Winning cards are rebound in place, so later renderer calls return
+        # the direct canonical URL automatically.
+        return _raw_surface_permalink(card, allow_fallback=False) or None
 
-    _hero_permalink = card_permalink(top_cat.get("hero", {}))
+    _hero_permalink = _surface_permalink(
+        top_cat.get("hero", {}),
+        allow_fallback=True,
+        placement="hero:all-final",
+    )
     all_cards_display, _homepage_permalink_report = _dedupe_homepage_cards_by_permalink(
         all_cards_display,
         card_permalink,
         hero_permalink=_hero_permalink,
         topnews_ids=topnews_ids,
+        surface_context=_surface_context,
     )
     _homepage_permalink_report["generated_at"] = datetime.now(timezone.utc).isoformat()
+    _homepage_permalink_report["hero_rewrite_count"] = len(_hero_canonical_rewrites)
+    _homepage_permalink_report["hero_rewrites"] = _hero_canonical_rewrites
     _homepage_permalink_report_path = OUTPUT_DIR / "data" / "homepage-permalink-dedupe.json"
     _homepage_permalink_report_path.parent.mkdir(parents=True, exist_ok=True)
     _homepage_permalink_report_path.write_text(
         json.dumps(_homepage_permalink_report, indent=2), encoding="utf-8"
     )
+    (OUTPUT_DIR / "data" / "final-canonical-surface-dedup.json").write_text(
+        json.dumps(_homepage_permalink_report, indent=2), encoding="utf-8"
+    )
     if _homepage_permalink_report.get("removed_count"):
         print(
-            "  Homepage permalink dedupe removed "
+            "  Final canonical surface dedupe removed "
             f"{_homepage_permalink_report['removed_count']} duplicate card placement(s)"
+        )
+    if _homepage_permalink_report.get("canonical_rewrite_count") or _hero_canonical_rewrites:
+        print(
+            "  Final canonical surface binding rewrote "
+            f"{_homepage_permalink_report.get('canonical_rewrite_count', 0) + len(_hero_canonical_rewrites)} "
+            "redirect/story-equivalent placement(s) to direct canonical URLs"
         )
 
     # v1.11.4.0 ranking rollout: confidence-gated observe and explain only. The report compares the
@@ -18523,6 +19015,7 @@ def main():
 
     # Render and write homepage (now archive lookups resolve to real slugs)
     index_html = render_index(all_categories, top_cat)
+    validate_final_canonical_surface_uniqueness(index_html, OUTPUT_DIR)
     validate_homepage_permalink_uniqueness(index_html, OUTPUT_DIR)
     (OUTPUT_DIR / "index.html").write_text(index_html, encoding="utf-8")
 
