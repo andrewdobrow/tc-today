@@ -229,6 +229,7 @@ EDITORIAL_AUDIT_LOG_PATH = OUTPUT_DIR / "data" / "editorial_audit.jsonl"
 EDITORIAL_REGISTRY_PATH = OUTPUT_DIR / "data" / "editorial_story_registry.json"
 EDITORIAL_OBSERVABILITY_PATH = OUTPUT_DIR / "data" / "editorial_observability.json"
 CATEGORY_GENERATION_REPORT_PATH = OUTPUT_DIR / "data" / "category-generation-report.json"
+CATEGORY_ELIGIBILITY_REPORT_PATH = OUTPUT_DIR / "data" / "category-eligibility-report.json"
 TRUSTED_SOURCE_RECOVERY_REPORT_PATH = OUTPUT_DIR / "data" / "trusted-source-recovery.json"
 CATEGORY_MEMBERSHIP_REPORT_PATH = OUTPUT_DIR / "data" / "category-membership-report.json"
 SOURCE_IMAGE_QUALITY_REPORT_PATH = OUTPUT_DIR / "data" / "source-image-quality-report.json"
@@ -270,7 +271,27 @@ CATEGORY_GENERATION_BUDGET_SECONDS = _positive_float_env(
 )
 CATEGORY_GENERATION_MAX_ATTEMPTS = 2
 CATEGORY_GENERATION_MIN_RETRY_SECONDS = 15
-CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 3
+CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 4
+CATEGORY_ELIGIBILITY_REPORT_SCHEMA_VERSION = 1
+CATEGORY_ELIGIBILITY_CONTRACT_VERSION = "1.0-local-government-central-action"
+
+# The shared category-contract layer is rolled out one beat at a time. Existing
+# deterministic topic/geographic guards remain active everywhere; this map tracks
+# where the newer explicit semantic contract is enforced versus observed.
+CATEGORY_ELIGIBILITY_CONTRACTS = {
+    "local_gov": {
+        "mode": "enforce",
+        "policy": "central_government_action_required",
+    },
+    "crime": {"mode": "observe_only", "policy": "future_explicit_contract"},
+    "business": {"mode": "observe_only", "policy": "future_explicit_contract"},
+    "sports": {"mode": "observe_only", "policy": "existing_athletic_guard_retained"},
+    "things_to_do": {"mode": "observe_only", "policy": "future_explicit_contract"},
+    "florida": {"mode": "observe_only", "policy": "future_explicit_contract"},
+    "martin": {"mode": "existing_geographic_enforce", "policy": "county_locality"},
+    "st_lucie": {"mode": "existing_geographic_enforce", "policy": "county_locality"},
+    "indian_river": {"mode": "existing_geographic_enforce", "policy": "county_locality"},
+}
 
 # Sources that are paywalled or provide minimal content — skip article text fetching
 # and cap hero urgency scores to deprioritize them for hero selection
@@ -523,6 +544,11 @@ def _category_generation_cache_key(category_key, headlines):
         "model_articles": MODEL_ARTICLES,
         "model_selection": MODEL_SELECTION,
         "category_key": category_key,
+        # Invalidate only the category whose explicit contract changed. Other beat
+        # caches remain reusable because their generation policy is unchanged.
+        "category_eligibility_contract_version": (
+            CATEGORY_ELIGIBILITY_CONTRACT_VERSION if category_key == "local_gov" else ""
+        ),
         "sources": sources,
     })
 
@@ -3572,6 +3598,200 @@ def _filter_contextless_update_live_placements(items):
 
 
 
+
+def _category_contract_config(category_key):
+    return dict(CATEGORY_ELIGIBILITY_CONTRACTS.get(category_key, {
+        "mode": "observe_only",
+        "policy": "unregistered_category",
+    }))
+
+
+def _category_contract_hits(text, terms):
+    """Return phrase-aware contract terms found in normalized story text."""
+    normalized = re.sub(r"\s+", " ", str(text or "").lower()).strip()
+    hits = []
+    for term in terms:
+        phrase = re.sub(r"\s+", " ", str(term or "").lower()).strip()
+        if not phrase:
+            continue
+        pattern = r"(?<![a-z0-9])" + re.escape(phrase).replace(r"\ ", r"\s+") + r"(?![a-z0-9])"
+        if re.search(pattern, normalized):
+            hits.append(phrase)
+    return hits
+
+
+def _category_eligibility_contract_assessment(category_key, item):
+    """Evaluate the explicit per-category semantic contract.
+
+    The shared interface is intentionally broader than the first enforcement rule.
+    Local Government is enforced in v1.11.8.6. Other beats remain observe-only until
+    their own positive and negative fixtures are proven in production.
+    """
+    config = _category_contract_config(category_key)
+    base = {
+        "contract_version": CATEGORY_ELIGIBILITY_CONTRACT_VERSION,
+        "category_key": category_key,
+        "mode": config.get("mode", "observe_only"),
+        "policy": config.get("policy", "unregistered_category"),
+        "eligible": True,
+        "would_reject": False,
+        "reason": "contract_not_enforced",
+        "positive_signals": [],
+        "competing_signals": [],
+    }
+    if not isinstance(item, dict):
+        base.update({"eligible": False, "would_reject": True, "reason": "missing_story"})
+        return base
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        base.update({"eligible": True, "reason": "custom_authority_exempt"})
+        return base
+    if category_key != "local_gov":
+        return base
+
+    text = _text_for_category_match(item)
+    governing_body_terms = [
+        "city council", "town council", "village council", "county commission",
+        "county commissioners", "board of county commissioners", "school board",
+        "planning and zoning board", "planning board", "zoning board",
+        "community redevelopment agency", "city commission", "fire district board",
+    ]
+    government_entity_terms = governing_body_terms + [
+        "city manager", "county administrator", "school district", "public works",
+        "city hall", "county government", "municipal government", "elections office",
+        "county fire rescue", "city fire rescue", "parks and recreation",
+        "parks department", "county utilities", "city utilities",
+        "florida department of environmental protection",
+        "department of environmental protection",
+        "supervisor of elections", "fire district", "water district", "utility authority",
+        "city of port st. lucie", "city of fort pierce", "city of stuart",
+        "city of vero beach", "city of sebastian", "city of fellsmere",
+        "village of indiantown", "martin county government",
+        "st. lucie county government", "st lucie county government",
+        "indian river county government",
+    ]
+    local_jurisdiction_terms = [
+        "port st. lucie", "port st lucie", "fort pierce", "stuart", "vero beach",
+        "sebastian", "fellsmere", "indiantown", "martin county", "st. lucie county",
+        "st lucie county", "indian river county",
+    ]
+    decision_action_terms = [
+        "votes", "voted", "vote to", "approves", "approved", "rejects", "rejected",
+        "adopts", "adopted", "passes", "passed", "enacts", "enacted", "bans",
+        "banned", "pauses", "paused", "extends", "extended", "delays", "delayed",
+        "deadlocks", "deadlocked", "allocates", "allocated", "awards", "awarded",
+        "challenges", "challenged", "orders", "ordered", "fines", "fined",
+        "sets tax", "sets millage", "raises taxes", "cuts taxes", "seeks public input",
+    ]
+    jurisdiction_decision_terms = [
+        "votes", "voted", "vote to", "approves", "approved", "rejects", "rejected",
+        "adopts", "adopted", "enacts", "enacted", "bans", "banned", "pauses",
+        "paused", "deadlocks", "deadlocked", "allocates", "allocated",
+        "challenges", "challenged", "orders", "ordered", "fines", "fined",
+        "sets tax", "sets millage", "raises taxes", "cuts taxes",
+    ]
+    administrative_action_terms = [
+        "appoints", "appointed", "hires", "hired", "fires", "fired", "resigns",
+        "resigned", "launches", "launched", "opens registration", "begins registration",
+        "names new", "selects", "selected", "announces program", "announced program",
+        "cuts positions", "cut positions", "eliminates positions", "eliminated positions",
+        "closes school", "merges schools", "renews contract", "renewed contract",
+        "rebuilds", "rebuilding", "repairs", "changes service", "expands service",
+        "reduces service",
+    ]
+    intrinsic_policy_terms = [
+        "ordinance", "rezoning", "zoning", "land use", "development order", "millage",
+        "municipal budget", "county budget", "city budget", "budget workshop",
+        "public hearing", "public meeting", "public workshop", "referendum",
+        "moratorium", "tax rate", "property tax", "sales tax", "code enforcement",
+        "comprehensive plan", "charter amendment", "government contract",
+        "public contract", "waste management fee", "utility rate", "stormwater fee",
+        "impact fee", "service fee", "capital improvement", "road project",
+        "bridge project", "park renovation", "park rebuild", "procurement",
+        "request for proposals", "rfi", "rfp",
+    ]
+    local_election_terms = [
+        "city council election", "county commission election", "school board election",
+        "municipal election", "local ballot", "referendum election",
+        "supervisor of elections", "candidate forum",
+    ]
+
+    body_hits = _category_contract_hits(text, governing_body_terms)
+    entity_hits = _category_contract_hits(text, government_entity_terms)
+    jurisdiction_hits = _category_contract_hits(text, local_jurisdiction_terms)
+    decision_hits = _category_contract_hits(text, decision_action_terms)
+    jurisdiction_decision_hits = _category_contract_hits(text, jurisdiction_decision_terms)
+    administrative_hits = _category_contract_hits(text, administrative_action_terms)
+    policy_hits = _category_contract_hits(text, intrinsic_policy_terms)
+    election_hits = _category_contract_hits(text, local_election_terms)
+
+    positive_signals = []
+    if policy_hits:
+        positive_signals.append("intrinsic_policy:" + policy_hits[0])
+    if body_hits and decision_hits:
+        positive_signals.append("governing_body_action:" + body_hits[0] + "+" + decision_hits[0])
+    if entity_hits and administrative_hits:
+        positive_signals.append("government_administration:" + entity_hits[0] + "+" + administrative_hits[0])
+    if jurisdiction_hits and jurisdiction_decision_hits:
+        positive_signals.append(
+            "jurisdiction_decision:" + jurisdiction_hits[0] + "+" + jurisdiction_decision_hits[0]
+        )
+    if election_hits:
+        positive_signals.append("local_election:" + election_hits[0])
+
+    competing_groups = {
+        "crime_incident": [
+            "flee police", "police pursuit", "high-speed chase", "hiding on roof",
+            "arrested", "arrest", "charged", "robbery", "gunpoint", "shooting",
+            "homicide", "murder", "suspect", "victim", "burglary", "stabbing",
+            "fatal crash", "traffic stop", "deputies say", "police say",
+        ],
+        "community_feature": [
+            "cyclist", "bike ride", "bicycle ride", "fundraising ride", "charity ride",
+            "passes through", "honoring friend", "cross-country ride", "2,600-mile ride",
+            "2600-mile ride", "memorial ride",
+        ],
+        "sports_or_recreation": [
+            "game recap", "wins over", "defeats", "championship", "tournament",
+            "football game", "baseball game", "soccer match",
+        ],
+        "entertainment_event": ["concert", "festival", "art exhibition", "museum exhibition"],
+    }
+    competing_signals = []
+    for name, terms in competing_groups.items():
+        hits = _category_contract_hits(text, terms)
+        if hits:
+            competing_signals.append(name + ":" + hits[0])
+
+    eligible = bool(positive_signals)
+    reason = "central_government_action_confirmed" if eligible else "missing_central_government_action"
+    if not eligible and competing_signals:
+        reason = "competing_story_form_without_government_action"
+    base.update({
+        "eligible": eligible,
+        "would_reject": not eligible,
+        "reason": reason,
+        "positive_signals": positive_signals,
+        "competing_signals": competing_signals,
+    })
+    return base
+
+
+def _compact_category_contract_assessment(assessment, item=None):
+    return {
+        "contract_version": assessment.get("contract_version", ""),
+        "category_key": assessment.get("category_key", ""),
+        "mode": assessment.get("mode", ""),
+        "policy": assessment.get("policy", ""),
+        "eligible": bool(assessment.get("eligible")),
+        "would_reject": bool(assessment.get("would_reject")),
+        "reason": assessment.get("reason", ""),
+        "positive_signals": list(assessment.get("positive_signals") or []),
+        "competing_signals": list(assessment.get("competing_signals") or []),
+        "headline": str((item or {}).get("title") or (item or {}).get("headline") or ""),
+        "source_url": str((item or {}).get("link") or (item or {}).get("source_url") or ""),
+    }
+
+
 def _sports_zero_candidate_fast_recovery(category_key, headlines):
     """Return True when Sports has no deterministic hero candidate.
 
@@ -3597,6 +3817,9 @@ def _hero_eligible(category_key, h):
     if category_key == "sports" and _sports_event_window_assessment(h).get("expired"):
         return False
 
+    _contract_assessment = _category_eligibility_contract_assessment(category_key, h)
+    if _contract_assessment.get("mode") == "enforce" and not _contract_assessment.get("eligible"):
+        return False
 
     # LLM classification is a positive signal, never a bypass around deterministic
     # locality/topic safety rules. The previous early return here meant that one bad
@@ -3921,6 +4144,10 @@ def filter_category_headlines(category_key, headlines, target=HEADLINES_PER_CATE
 
     scored = []
     for h in headlines:
+        _contract = _category_eligibility_contract_assessment(category_key, h)
+        h["_category_eligibility_contract"] = _compact_category_contract_assessment(_contract, h)
+        if _contract.get("mode") == "enforce" and not _contract.get("eligible"):
+            continue
         # Classification-first: when the LLM classified this story, its assignment
         # dominates. Assigned to this category -> strong score. Assigned 'none'
         # (non-local filler) -> excluded entirely. Not in the map -> keyword score.
@@ -5061,6 +5288,7 @@ def _build_category_generation_report(records):
     archive_recovery_count = 0
     sports_expired_event_preview_count = 0
     contextual_update_lead_rejection_count = 0
+    category_eligibility_rejection_count = 0
     for record in records:
         status_counts[str(record.get("status") or "unknown")] += 1
         failure_code = str(record.get("failure_code") or "")
@@ -5079,6 +5307,9 @@ def _build_category_generation_report(records):
             1
             for attempt in (record.get("attempts") or [])
             if str(attempt.get("result") or "") == "contextless_update_lead"
+        )
+        category_eligibility_rejection_count += int(
+            record.get("category_eligibility_rejection_count") or 0
         )
 
     return {
@@ -5104,6 +5335,7 @@ def _build_category_generation_report(records):
             "archive_recovery_requested_count": archive_recovery_count,
             "sports_expired_event_preview_count": sports_expired_event_preview_count,
             "contextual_update_lead_rejection_count": contextual_update_lead_rejection_count,
+            "category_eligibility_rejection_count": category_eligibility_rejection_count,
         },
         "categories": records,
     }
@@ -5112,6 +5344,63 @@ def _build_category_generation_report(records):
 def _write_category_generation_report(records, output_path=None):
     report = _build_category_generation_report(records)
     path = Path(output_path or CATEGORY_GENERATION_REPORT_PATH)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    temporary.replace(path)
+    return report
+
+
+def _build_category_eligibility_report(records):
+    categories = []
+    total_assessed = 0
+    total_rejected = 0
+    for record in records:
+        assessed = int(record.get("category_eligibility_assessed_count") or 0)
+        rejected = list(record.get("category_eligibility_rejections") or [])
+        total_assessed += assessed
+        total_rejected += len(rejected)
+        config = _category_contract_config(record.get("category_key", ""))
+        categories.append({
+            "category_key": record.get("category_key", ""),
+            "category_label": record.get("category_label", ""),
+            "mode": config.get("mode", "observe_only"),
+            "policy": config.get("policy", "unregistered_category"),
+            "assessed_count": assessed,
+            "rejected_count": len(rejected),
+            "rejections": rejected,
+        })
+    return {
+        "schema_version": CATEGORY_ELIGIBILITY_REPORT_SCHEMA_VERSION,
+        "generated_at": _utc_now_iso(),
+        "contract_version": CATEGORY_ELIGIBILITY_CONTRACT_VERSION,
+        "rollout_policy": (
+            "shared_contract_interface; Local Government enforced; remaining topic "
+            "contracts observe-only until regression fixtures are production-validated"
+        ),
+        "summary": {
+            "assessed_count": total_assessed,
+            "rejected_count": total_rejected,
+            "enforced_categories": sorted(
+                key for key, value in CATEGORY_ELIGIBILITY_CONTRACTS.items()
+                if value.get("mode") == "enforce"
+            ),
+            "observe_only_categories": sorted(
+                key for key, value in CATEGORY_ELIGIBILITY_CONTRACTS.items()
+                if value.get("mode") == "observe_only"
+            ),
+            "existing_geographic_categories": sorted(
+                key for key, value in CATEGORY_ELIGIBILITY_CONTRACTS.items()
+                if value.get("mode") == "existing_geographic_enforce"
+            ),
+        },
+        "categories": categories,
+    }
+
+
+def _write_category_eligibility_report(records, output_path=None):
+    report = _build_category_eligibility_report(records)
+    path = Path(output_path or CATEGORY_ELIGIBILITY_REPORT_PATH)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -15869,6 +16158,11 @@ def main():
             "sports_expired_event_previews": [],
             "contextual_update_lead_rejection_count": 0,
             "contextual_update_lead_rejections": [],
+            "category_eligibility_mode": _category_contract_config(cat_key).get("mode", "observe_only"),
+            "category_eligibility_policy": _category_contract_config(cat_key).get("policy", "unregistered_category"),
+            "category_eligibility_assessed_count": 0,
+            "category_eligibility_rejection_count": 0,
+            "category_eligibility_rejections": [],
             "_started": _category_started,
         }
         category_generation_records.append(_category_record)
@@ -15949,7 +16243,41 @@ def main():
             )
             continue
 
+        _pre_contract_headlines = list(headlines)
         headlines = filter_category_headlines(cat_key, headlines, target=HEADLINES_PER_CATEGORY, min_keep=6)
+        _contract_rows = [
+            h.get("_category_eligibility_contract")
+            for h in _pre_contract_headlines
+            if isinstance(h.get("_category_eligibility_contract"), dict)
+        ]
+        _contract_rejections = [
+            row for row in _contract_rows
+            if row.get("mode") == "enforce" and not row.get("eligible")
+        ]
+        _category_record["category_eligibility_assessed_count"] = len(_contract_rows)
+        _category_record["category_eligibility_rejection_count"] = len(_contract_rejections)
+        _category_record["category_eligibility_rejections"] = _contract_rejections
+        if _contract_rejections:
+            print(
+                f"  Category eligibility contract: rejected {len(_contract_rejections)} "
+                f"{cat_config['label']} source(s) before generation"
+            )
+        if not headlines:
+            print(
+                f"  No source passed the enforced {cat_config['label']} eligibility contract; "
+                "using archive recovery"
+            )
+            _finalize_category_generation_record(
+                _category_record,
+                "category_eligibility_archive_recovery",
+                _category_started,
+                archive_recovery_requested=True,
+                failure_code="no_category_eligible_sources",
+                failure_summary=(
+                    f"No source passed {cat_config['label']} category eligibility contract"
+                ),
+            )
+            continue
 
         _category_record["selected_source_count"] = len(headlines)
         print(f"  {len(headlines)} publishable-source headlines fetched")
@@ -16363,6 +16691,7 @@ def main():
                 failure_summary="Category exited without a terminal generation status",
             )
     category_generation_report = _write_category_generation_report(category_generation_records)
+    category_eligibility_report = _write_category_eligibility_report(category_generation_records)
     _category_summary = category_generation_report.get("summary", {})
     print(
         "  Category generation report: "
@@ -16370,7 +16699,13 @@ def main():
         f"{_category_summary.get('archive_recovery_requested_count', 0)} archive recovery request(s), "
         f"{_category_summary.get('sports_expired_event_preview_count', 0)} expired Sports preview(s), "
         f"{_category_summary.get('contextual_update_lead_rejection_count', 0)} contextual update-lead rejection(s), "
+        f"{_category_summary.get('category_eligibility_rejection_count', 0)} category-contract rejection(s), "
         f"{CATEGORY_GENERATION_REPORT_PATH}"
+    )
+    print(
+        "  Category eligibility report: "
+        f"{category_eligibility_report.get('summary', {}).get('rejected_count', 0)} "
+        f"enforced rejection(s), {CATEGORY_ELIGIBILITY_REPORT_PATH}"
     )
 
     if not all_categories:
