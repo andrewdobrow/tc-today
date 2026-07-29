@@ -39,7 +39,7 @@ def test_legacy_ai_urls_are_migration_inputs_not_active_pool_entries():
     assert 'if "/images/fallback/" in path:' in source
 
 
-def test_engine_release_identifies_category_eligibility_contracts():
+def test_engine_release_identifies_durable_custom_sports_award_identity():
     observability = (ROOT / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'ENGINE_VERSION = "1.11.8.6"' in observability
-    assert 'ENGINE_RELEASE = "category-eligibility-contracts-local-government"' in observability
+    assert 'ENGINE_VERSION = "1.11.8.7"' in observability
+    assert 'ENGINE_RELEASE = "durable-custom-sports-award-identity"' in observability

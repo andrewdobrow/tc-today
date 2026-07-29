@@ -331,6 +331,6 @@ def test_release_version_and_report_schema_are_bumped():
     observability = importlib.import_module("tct_engine.observability")
 
     assert generate.CATEGORY_GENERATION_REPORT_SCHEMA_VERSION == 4
-    assert observability.ENGINE_VERSION == "1.11.8.6"
-    assert observability.ENGINE_RELEASE == "category-eligibility-contracts-local-government"
+    assert observability.ENGINE_VERSION == "1.11.8.7"
+    assert observability.ENGINE_RELEASE == "durable-custom-sports-award-identity"
     assert observability.OBSERVABILITY_SCHEMA_VERSION == 16

@@ -9626,7 +9626,7 @@ def _backfill_active_custom_archive_authority(archive, current_customs):
             current.get("headline", ""),
             current.get("teaser", "") or current.get("body", "")[:180],
         )
-        event_key = _known_event_key(" ".join([
+        event_key = _custom_event_identity_key(current) or _known_event_key(" ".join([
             current.get("headline", ""), current.get("teaser", ""),
             current.get("body", "")[:500],
         ]))
@@ -10669,10 +10669,208 @@ def _story_text(item):
     ]).strip()
 
 
+def _identity_item_date(item):
+    """Return one evidence-backed calendar date for durable custom identity."""
+    if not isinstance(item, dict):
+        return None
+    for key in (
+        "source_published", "published_raw", "published", "first_published",
+        "custom_edition_key", "date", "lastmod",
+    ):
+        raw = item.get(key)
+        if not raw:
+            continue
+        dt = _parse_any_datetime(raw)
+        if dt is not None:
+            return dt.date()
+        match = re.search(r"\b(20\d{2})-(\d{2})-(\d{2})\b", str(raw))
+        if match:
+            try:
+                return datetime.strptime(match.group(0), "%Y-%m-%d").date()
+            except Exception:
+                pass
+    return None
+
+
+def _sports_award_identity(item):
+    """Extract a narrow sports-award identity from custom, feed, or archive copy.
+
+    Weekly awards are recurring events, so team/player/award alone is not enough.
+    The identity also carries an explicit award window when available, otherwise the
+    evidence-backed publication ISO week. This prevents a second award later in the
+    season from collapsing into the first one.
+    """
+    if not isinstance(item, dict):
+        return None
+    raw = _story_text(item)
+    if not raw:
+        return None
+    folded = " " + re.sub(r"[^a-z0-9]+", " ", raw.lower()).strip() + " "
+
+    award_match = re.search(
+        r"\b(pitcher|player|hitter|athlete)\s+of\s+the\s+(week|month)\b",
+        folded,
+    )
+    if not award_match:
+        return None
+    award_role, award_period = award_match.groups()
+
+    team_patterns = {
+        "st-lucie-mets": r"\bst[.]?\s+lucie\s+mets\b",
+        "fort-myers-mighty-mussels": r"\bfort\s+myers\s+(?:mighty\s+)?mussels\b",
+        "palm-beach-cardinals": r"\bpalm\s+beach\s+cardinals\b",
+        "jupiter-hammerheads": r"\bjupiter\s+hammerheads\b",
+    }
+    team = next((key for key, rx in team_patterns.items() if re.search(rx, raw, re.I)), "")
+    if not team:
+        return None
+
+    league = ""
+    if re.search(r"\b(?:fsl|florida\s+state\s+league)\b", raw, re.I):
+        league = "fsl"
+    elif team in {
+        "st-lucie-mets", "fort-myers-mighty-mussels",
+        "palm-beach-cardinals", "jupiter-hammerheads",
+    }:
+        league = "fsl"
+
+    person = ""
+    name_patterns = (
+        r"\b(?:pitcher|player|hitter|athlete|outfielder|infielder|catcher|prospect)\s+"
+        r"([A-Z][A-Za-z'’.-]+(?:\s+[A-Z][A-Za-z'’.-]+){1,2})\s+"
+        r"(?:has\s+been\s+|was\s+)?named\b",
+        r"\b([A-Z][A-Za-z'’.-]+\s+[A-Z][A-Za-z'’.-]+)\s+"
+        r"(?:has\s+been\s+|was\s+)?named\s+(?:the\s+)?"
+        r"(?:(?:FSL|Florida\s+State\s+League)\s+)?"
+        r"(?:Pitcher|Player|Hitter|Athlete)\s+of\s+the\s+(?:Week|Month)\b",
+        r"\b([A-Z][A-Za-z'’.-]+)\s+named\s+"
+        r"(?:FSL|Florida\s+State\s+League)\s+"
+        r"(?:Pitcher|Player|Hitter|Athlete)\s+of\s+the\s+(?:Week|Month)\b",
+    )
+    for rx in name_patterns:
+        match = re.search(rx, raw)
+        if match:
+            person = re.sub(r"[^a-z0-9]+", "-", match.group(1).lower()).strip("-")
+            break
+    if not person:
+        return None
+
+    item_date = _identity_item_date(item)
+    explicit_start = explicit_end = None
+    month_names = {
+        "january": 1, "february": 2, "march": 3, "april": 4,
+        "may": 5, "june": 6, "july": 7, "august": 8,
+        "september": 9, "october": 10, "november": 11, "december": 12,
+    }
+    window = re.search(
+        r"\b(?:week\s+of\s+|for(?:\s+the\s+week\s+of)?\s+)?"
+        r"(january|february|march|april|may|june|july|august|september|october|november|december)"
+        r"\s+(\d{1,2})\s*[-–]\s*(\d{1,2})(?:,?\s*(20\d{2}))?\b",
+        raw,
+        re.I,
+    )
+    if window:
+        month = month_names[window.group(1).lower()]
+        year = int(window.group(4) or (item_date.year if item_date else datetime.now(timezone.utc).year))
+        try:
+            explicit_start = datetime(year, month, int(window.group(2))).date()
+            explicit_end = datetime(year, month, int(window.group(3))).date()
+        except ValueError:
+            explicit_start = explicit_end = None
+
+    return {
+        "kind": "sports_award",
+        "team": team,
+        "league": league,
+        "person": person,
+        "person_surname": person.split("-")[-1],
+        "award": f"{league}-{award_role}-of-{award_period}" if league else f"{award_role}-of-{award_period}",
+        "explicit_start": explicit_start,
+        "explicit_end": explicit_end,
+        "date": item_date,
+    }
+
+
+def _sports_award_period_compatible(left, right):
+    ls, le = left.get("explicit_start"), left.get("explicit_end")
+    rs, re_ = right.get("explicit_start"), right.get("explicit_end")
+    ld, rd = left.get("date"), right.get("date")
+    if ls and le and rs and re_:
+        return ls == rs and le == re_
+    if ls and le and rd:
+        return ls <= rd <= le + timedelta(days=4)
+    if rs and re_ and ld:
+        return rs <= ld <= re_ + timedelta(days=4)
+    if ld and rd:
+        return ld.isocalendar()[:2] == rd.isocalendar()[:2]
+    return False
+
+
+def _durable_custom_identity_match(candidate, authority):
+    """Return a deterministic cross-origin match for archived custom authority.
+
+    The first contract covers recurring sports awards. It intentionally requires the
+    same team, award, person and award/publication week, so ordinary game recaps and a
+    later award for the same player remain separate stories.
+    """
+    if not isinstance(candidate, dict) or not isinstance(authority, dict):
+        return False, ""
+    if not (authority.get("is_custom") or authority.get("authoritative_custom")):
+        return False, ""
+    left = _sports_award_identity(candidate)
+    right = _sports_award_identity(authority)
+    if not left or not right:
+        return False, ""
+    if left["team"] != right["team"] or left["award"] != right["award"]:
+        return False, ""
+    if left["person_surname"] != right["person_surname"]:
+        return False, ""
+    # When both sides carry full names, require the complete name to agree.
+    if "-" in left["person"] and "-" in right["person"] and left["person"] != right["person"]:
+        return False, ""
+    if not _sports_award_period_compatible(left, right):
+        return False, ""
+
+    shared = _shared_tokens(
+        _sig_tokens(candidate.get("headline", "")),
+        _sig_tokens(authority.get("headline", "")),
+    )
+    distinctive = [token for token in shared if token not in GENERIC_TOKENS]
+    if len(shared) < 4 or len(distinctive) < 3:
+        return False, ""
+    key = "|".join([
+        "sports-award", left["team"], left["person_surname"], left["award"],
+        str((left.get("explicit_end") or right.get("explicit_end") or left.get("date") or right.get("date")) or ""),
+    ])
+    return True, key
+
+
+def _custom_event_identity_key(item):
+    award = _sports_award_identity(item)
+    if not award:
+        return ""
+    period = award.get("explicit_end")
+    if period is None and award.get("date") is not None:
+        iso = award["date"].isocalendar()
+        period = f"{iso.year}-W{iso.week:02d}"
+    return "|".join([
+        "sports-award", award["team"], award["person_surname"],
+        award["award"], str(period or ""),
+    ])
+
+
 def _same_event_items(a, b):
     """One shared event matcher for custom, feed, archive, hero and card stories."""
     if not a or not b:
         return False
+    if a.get("is_custom") or a.get("authoritative_custom"):
+        matched, _basis = _durable_custom_identity_match(b, a)
+        if matched:
+            return True
+    if b.get("is_custom") or b.get("authoritative_custom"):
+        matched, _basis = _durable_custom_identity_match(a, b)
+        if matched:
+            return True
     ta, tb = _story_text(a), _story_text(b)
     ka, kb = _known_event_key(ta), _known_event_key(tb)
     if ka and kb:
@@ -10811,6 +11009,10 @@ def _find_authoritative_custom_incident_match(item, archived_customs=None, curre
     best_confidence = 0
     best_basis = ""
     for authority in authorities:
+        durable_match, durable_key = _durable_custom_identity_match(candidate, authority)
+        if durable_match:
+            authority["durable_custom_identity_key"] = durable_key
+            return authority, 100, "durable_custom_sports_award_identity"
         authority_key = _known_event_key(_story_text(authority))
         if candidate_key and authority_key and candidate_key == authority_key:
             return authority, 100, "exact_known_event_key"
@@ -12862,6 +13064,17 @@ HOARDING_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-07-25-100-animals-rescued-in-worst-hoarding-case-martin-county-has-seen-owners-search",
 })
 
+# Permanent custom-authority regression contract for the July 2026 Conner Ware
+# weekly award. The second URL was generated from the official RSS release after
+# TCT had already published the custom canonical article. It must remain a redirect
+# even after the custom queue entry expires or is replaced.
+WARE_AWARD_CANONICAL_SLUG = (
+    "2026-07-28-st-lucie-mets-pitcher-conner-ware-named-fsl-pitcher-of-the-week"
+)
+WARE_AWARD_REDIRECT_SOURCE_SLUGS = frozenset({
+    "2026-07-29-st-lucie-mets-pitcher-conner-ware-named-florida-state-league-pitcher-of-the-week",
+})
+
 
 def _redirect_target_path(slug):
     return f"/articles/{slug}.html"
@@ -13159,6 +13372,10 @@ def _strict_custom_duplicate_pair(candidate, canonical):
         return False, 0
     if not (canonical.get("is_custom") or canonical.get("authoritative_custom")):
         return False, 0
+    durable_match, durable_key = _durable_custom_identity_match(candidate, canonical)
+    if durable_match:
+        candidate["durable_custom_identity_key"] = durable_key
+        return True, 100
     a = _event_audit_item(candidate, "archive")
     b = _event_audit_item(canonical, "archive")
     # Major milestones are still part of the same event and must consolidate.
@@ -13354,6 +13571,39 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
             })
             removed_slugs.add(source_slug)
 
+    # Keep the escaped RSS copy of the Conner Ware weekly award permanently bound
+    # to Andrew's earlier custom article. This explicit redirect supplements the
+    # generic durable identity matcher so historical/static-host URLs cannot return.
+    ware_canonical = next(
+        (e for e in archive if e.get("slug") == WARE_AWARD_CANONICAL_SLUG),
+        None,
+    )
+    if ware_canonical:
+        ware_canonical["is_custom"] = True
+        ware_canonical["authoritative_custom"] = True
+        ware_key = _custom_event_identity_key(ware_canonical)
+        if ware_key:
+            ware_canonical["custom_event_key"] = ware_key
+        for source_slug in sorted(WARE_AWARD_REDIRECT_SOURCE_SLUGS):
+            _upsert_canonical_redirect(redirects, {
+                "source_slug": source_slug,
+                "source_headline": (
+                    "St. Lucie Mets pitcher Conner Ware named Florida State League "
+                    "Pitcher of the Week"
+                ),
+                "target_slug": ware_canonical["slug"],
+                "target_headline": ware_canonical.get("headline", ""),
+                "story_stage": "canonical-migration",
+                "match_confidence": 100,
+                "canonical_is_custom": True,
+                "event_key": ware_key,
+                "reason": (
+                    "Permanent regression migration to the authoritative TCT "
+                    "Conner Ware award story."
+                ),
+            })
+            removed_slugs.add(source_slug)
+
     cleaned = [e for e in archive if e.get("slug") not in removed_slugs]
     if not redirects:
         return cleaned, []
@@ -13492,6 +13742,30 @@ def write_story_regression_report(output_root, archive, redirect_verification):
         and not (e.get("is_custom") or e.get("authoritative_custom"))
         and _known_event_key(_story_text(_event_audit_item(e, "archive"))) == hoarding_key
     ]
+    ware_redirect_by_source = {
+        r.get("source_slug"): r for r in redirects
+        if r.get("source_slug") in WARE_AWARD_REDIRECT_SOURCE_SLUGS
+    }
+    ware_case_present = bool(
+        WARE_AWARD_CANONICAL_SLUG in archive_slugs
+        or WARE_AWARD_REDIRECT_SOURCE_SLUGS & archive_slugs
+        or ware_redirect_by_source
+    )
+    ware_redirects_valid = all(
+        ware_redirect_by_source.get(slug, {}).get("target_slug")
+        == WARE_AWARD_CANONICAL_SLUG
+        and bool(ware_redirect_by_source.get(slug, {}).get("canonical_is_custom"))
+        for slug in WARE_AWARD_REDIRECT_SOURCE_SLUGS
+    )
+    verification_by_source = {
+        row.get("source_slug"): row for row in (redirect_verification or [])
+        if row.get("source_slug")
+    }
+    ware_html_verified = all(
+        verification_by_source.get(slug, {}).get("passed") is True
+        for slug in WARE_AWARD_REDIRECT_SOURCE_SLUGS
+    )
+
     checks = {
         "hoarding_is_one_story": len(hoarding_stories) == 1,
         "hoarding_canonical_is_custom": len(hoarding_stories) == 1 and bool(hoarding_stories[0].get("canonical_is_custom")),
@@ -13504,6 +13778,21 @@ def write_story_regression_report(output_root, archive, redirect_verification):
         "custom_article_remains_in_archive": expected_target in archive_slugs,
         "no_active_noncustom_hoarding_duplicates": not active_hoarding_duplicates,
         "all_redirect_html_verified": all(v.get("passed") for v in redirect_verification) if redirect_verification else False,
+        # The Ware checks activate only when this known production case exists in the
+        # repository. This keeps first-run/unit fixtures unrelated to the case valid.
+        "ware_custom_article_remains_canonical": (
+            not ware_case_present or WARE_AWARD_CANONICAL_SLUG in archive_slugs
+        ),
+        "ware_duplicate_redirect_exists": (
+            not ware_case_present
+            or WARE_AWARD_REDIRECT_SOURCE_SLUGS <= set(ware_redirect_by_source)
+        ),
+        "ware_duplicate_targets_custom": not ware_case_present or ware_redirects_valid,
+        "ware_duplicate_removed_from_archive": (
+            not ware_case_present
+            or not bool(WARE_AWARD_REDIRECT_SOURCE_SLUGS & archive_slugs)
+        ),
+        "ware_redirect_html_verified": not ware_case_present or ware_html_verified,
     }
     report = {
         "schema_version": 1,
@@ -13517,6 +13806,11 @@ def write_story_regression_report(output_root, archive, redirect_verification):
             {"slug": e.get("slug", ""), "headline": e.get("headline", "")}
             for e in active_hoarding_duplicates
         ],
+        "ware_award_regression": {
+            "case_present": ware_case_present,
+            "canonical_slug": WARE_AWARD_CANONICAL_SLUG,
+            "redirect_sources": sorted(ware_redirect_by_source),
+        },
     }
     (data_dir / "story-regression-report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     if not report["production_gate_passed"]:
@@ -14772,7 +15066,7 @@ def write_archives(all_categories, top_cat):
                 existing["product_guide_hash"] = _product_guide_hash(hero)
                 existing["product_count"] = len(hero.get("products") or [])
                 existing["has_affiliate_links"] = bool(hero.get("has_affiliate_links"))
-                existing["custom_event_key"] = _known_event_key(
+                existing["custom_event_key"] = _custom_event_identity_key(hero) or _known_event_key(
                     " ".join([headline, hero.get("teaser", ""), hero.get("body", "")[:500]])
                 )
                 existing["custom_series_key"] = _custom_series_key(hero)
@@ -14856,8 +15150,10 @@ def write_archives(all_categories, top_cat):
                 "product_guide_hash": _product_guide_hash(hero) if hero.get("is_custom") else "",
                 "product_count": len(hero.get("products") or []) if hero.get("is_custom") else 0,
                 "has_affiliate_links": bool(hero.get("has_affiliate_links")) if hero.get("is_custom") else False,
-                "custom_event_key": _known_event_key(
-                    " ".join([headline, hero.get("teaser", ""), hero.get("body", "")[:500]])
+                "custom_event_key": (
+                    _custom_event_identity_key(hero) or _known_event_key(
+                        " ".join([headline, hero.get("teaser", ""), hero.get("body", "")[:500]])
+                    )
                 ) if hero.get("is_custom") else "",
                 "custom_series_key": _custom_series_key(hero) if hero.get("is_custom") else "",
                 "custom_edition_key": _custom_edition_marker(hero) if hero.get("is_custom") else "",
