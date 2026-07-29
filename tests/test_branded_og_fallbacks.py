@@ -41,5 +41,5 @@ def test_legacy_ai_urls_are_migration_inputs_not_active_pool_entries():
 
 def test_engine_release_identifies_universal_lead_and_claim_integrity():
     observability = (ROOT / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'ENGINE_VERSION = "1.11.8.8"' in observability
-    assert 'ENGINE_RELEASE = "universal-lead-and-claim-integrity"' in observability
+    assert 'ENGINE_VERSION = "1.11.8.9"' in observability
+    assert 'ENGINE_RELEASE = "published-story-skip-dedup"' in observability

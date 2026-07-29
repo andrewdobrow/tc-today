@@ -273,7 +273,7 @@ CATEGORY_GENERATION_BUDGET_SECONDS = _positive_float_env(
 )
 CATEGORY_GENERATION_MAX_ATTEMPTS = 2
 CATEGORY_GENERATION_MIN_RETRY_SECONDS = 15
-CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 5
+CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 6
 CATEGORY_ELIGIBILITY_REPORT_SCHEMA_VERSION = 1
 CATEGORY_ELIGIBILITY_CONTRACT_VERSION = "1.0-local-government-central-action"
 
@@ -5654,6 +5654,7 @@ def _build_category_generation_report(records):
     contextual_update_lead_rejection_count = 0
     article_framing_rejection_count = 0
     category_eligibility_rejection_count = 0
+    published_story_duplicate_suppression_count = 0
     for record in records:
         status_counts[str(record.get("status") or "unknown")] += 1
         failure_code = str(record.get("failure_code") or "")
@@ -5684,6 +5685,9 @@ def _build_category_generation_report(records):
         category_eligibility_rejection_count += int(
             record.get("category_eligibility_rejection_count") or 0
         )
+        published_story_duplicate_suppression_count += int(
+            record.get("published_story_duplicate_suppression_count") or 0
+        )
 
     return {
         "schema_version": CATEGORY_GENERATION_REPORT_SCHEMA_VERSION,
@@ -5710,6 +5714,7 @@ def _build_category_generation_report(records):
             "contextual_update_lead_rejection_count": contextual_update_lead_rejection_count,
             "article_framing_rejection_count": article_framing_rejection_count,
             "category_eligibility_rejection_count": category_eligibility_rejection_count,
+            "published_story_duplicate_suppression_count": published_story_duplicate_suppression_count,
         },
         "categories": records,
     }
@@ -13469,6 +13474,17 @@ WARE_AWARD_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-07-29-st-lucie-mets-pitcher-conner-ware-named-florida-state-league-pitcher-of-the-week",
 })
 
+# Permanent general-registry regression for the Big Taste of Martin County event.
+# The editorial registry correctly identified the WPTV source as an already-published
+# no-change story, but the forward overwrite guard quarantined the original permalink
+# and minted a second one. The oldest aligned page is the permanent canonical URL.
+BIG_TASTE_CANONICAL_SLUG = (
+    "2026-07-23-big-taste-of-martin-county-returns-oct-6-to-support-youth-mentoring-programs"
+)
+BIG_TASTE_REDIRECT_SOURCE_SLUGS = frozenset({
+    "2026-07-29-big-taste-of-martin-county-fundraiser-set-for-october-in-stuart",
+})
+
 
 def _publication_slug_claim_diagnostics(item, entry):
     """Compare the immutable URL claim with the current headline/lead claim.
@@ -14287,6 +14303,42 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
             })
             removed_slugs.add(source_slug)
 
+    # Permanent general-registry regression for the Big Taste fundraiser. The
+    # duplicate was not a custom-authority edge case: the registry had already
+    # classified the WPTV item as a no-change skip under the same persistent story.
+    # Keep the oldest aligned permalink and redirect the escaped July 29 copy.
+    big_taste_canonical = next(
+        (e for e in archive if e.get("slug") == BIG_TASTE_CANONICAL_SLUG),
+        None,
+    )
+    if big_taste_canonical:
+        big_taste_canonical.pop("exclude_from_live_recovery", None)
+        big_taste_canonical.pop("identity_quarantine_reason", None)
+        big_taste_canonical.pop("identity_quarantine_persistent", None)
+        big_taste_canonical["legacy_identity_status"] = "identified"
+        big_taste_canonical["ranking_eligible"] = True
+        for source_slug in sorted(BIG_TASTE_REDIRECT_SOURCE_SLUGS):
+            _upsert_canonical_redirect(redirects, {
+                "source_slug": source_slug,
+                "source_headline": (
+                    "Big Taste of Martin County fundraiser set for October in Stuart"
+                ),
+                "target_slug": big_taste_canonical["slug"],
+                "target_headline": big_taste_canonical.get("headline", ""),
+                "story_stage": "canonical-migration",
+                "match_confidence": 100,
+                "canonical_is_custom": bool(
+                    big_taste_canonical.get("is_custom")
+                    or big_taste_canonical.get("authoritative_custom")
+                ),
+                "editorial_story_id": big_taste_canonical.get("editorial_story_id", ""),
+                "reason": (
+                    "Permanent regression migration for a registry skip story that "
+                    "already had a published canonical TCT permalink."
+                ),
+            })
+            removed_slugs.add(source_slug)
+
     cleaned = [e for e in archive if e.get("slug") not in removed_slugs]
     if not redirects:
         return cleaned, []
@@ -14448,6 +14500,24 @@ def write_story_regression_report(output_root, archive, redirect_verification):
         verification_by_source.get(slug, {}).get("passed") is True
         for slug in WARE_AWARD_REDIRECT_SOURCE_SLUGS
     )
+    big_taste_redirect_by_source = {
+        r.get("source_slug"): r for r in redirects
+        if r.get("source_slug") in BIG_TASTE_REDIRECT_SOURCE_SLUGS
+    }
+    big_taste_case_present = bool(
+        BIG_TASTE_CANONICAL_SLUG in archive_slugs
+        or BIG_TASTE_REDIRECT_SOURCE_SLUGS & archive_slugs
+        or big_taste_redirect_by_source
+    )
+    big_taste_redirects_valid = all(
+        big_taste_redirect_by_source.get(slug, {}).get("target_slug")
+        == BIG_TASTE_CANONICAL_SLUG
+        for slug in BIG_TASTE_REDIRECT_SOURCE_SLUGS
+    )
+    big_taste_html_verified = all(
+        verification_by_source.get(slug, {}).get("passed") is True
+        for slug in BIG_TASTE_REDIRECT_SOURCE_SLUGS
+    )
 
     checks = {
         "hoarding_is_one_story": len(hoarding_stories) == 1,
@@ -14476,6 +14546,23 @@ def write_story_regression_report(output_root, archive, redirect_verification):
             or not bool(WARE_AWARD_REDIRECT_SOURCE_SLUGS & archive_slugs)
         ),
         "ware_redirect_html_verified": not ware_case_present or ware_html_verified,
+        "big_taste_canonical_preserved": (
+            not big_taste_case_present or BIG_TASTE_CANONICAL_SLUG in archive_slugs
+        ),
+        "big_taste_duplicate_redirect_exists": (
+            not big_taste_case_present
+            or BIG_TASTE_REDIRECT_SOURCE_SLUGS <= set(big_taste_redirect_by_source)
+        ),
+        "big_taste_duplicate_targets_oldest_canonical": (
+            not big_taste_case_present or big_taste_redirects_valid
+        ),
+        "big_taste_duplicate_removed_from_archive": (
+            not big_taste_case_present
+            or not bool(BIG_TASTE_REDIRECT_SOURCE_SLUGS & archive_slugs)
+        ),
+        "big_taste_redirect_html_verified": (
+            not big_taste_case_present or big_taste_html_verified
+        ),
     }
     report = {
         "schema_version": 1,
@@ -14493,6 +14580,11 @@ def write_story_regression_report(output_root, archive, redirect_verification):
             "case_present": ware_case_present,
             "canonical_slug": WARE_AWARD_CANONICAL_SLUG,
             "redirect_sources": sorted(ware_redirect_by_source),
+        },
+        "big_taste_regression": {
+            "case_present": big_taste_case_present,
+            "canonical_slug": BIG_TASTE_CANONICAL_SLUG,
+            "redirect_sources": sorted(big_taste_redirect_by_source),
         },
     }
     (data_dir / "story-regression-report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -15283,6 +15375,17 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
     if story_id and entry_story_id and story_id != entry_story_id:
         return False, "persistent_story_id_conflict"
 
+    route = str(item.get("_editorial_route") or item.get("editorial_route") or "").strip().lower()
+    if (
+        route == "skip"
+        and story_id
+        and entry_story_id == story_id
+        and basis in {"persistent_story_id", "exact_source_url"}
+    ):
+        # ``skip`` is a no-change decision. Preserve the existing canonical page;
+        # never reinterpret rewritten display copy as a proposed article update.
+        return True, "published_skip_preserve_existing"
+
     claim_drift = _publication_slug_claim_diagnostics(item, entry)
     if claim_drift.get("rebind_required"):
         return False, "primary_claim_slug_drift_unrepaired"
@@ -15323,42 +15426,105 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
 def _reconcile_archive_publication_identity(archive, identity_index):
     """Collapse archive rows that the persistent registry already proved identical.
 
-    This is deliberately narrower than semantic story merging. Only registry stories
-    with no follow-up/related relationship are eligible, and every archive row must
-    resolve through an exact safe source URL or an unambiguous normalized source title.
+    A legacy prospective-overwrite quarantine may be repaired only when the archive
+    row's current headline is still aligned with its own slug and another row with the
+    same safe persistent story ID independently corroborates the same event. This
+    closes the failure mode where a harmless rewritten headline quarantined the older
+    canonical page and forced a second permalink for the same exact source story.
     """
     archive = list(archive or [])
     if identity_index is None:
         return archive, [], {
             "status": "unavailable", "groups_resolved": 0,
             "records_removed": 0, "remaining_duplicate_groups": 0,
+            "prospective_quarantine_repairs": 0,
         }
+
+    def repairable_prospective_quarantine(entry):
+        reason = str((entry or {}).get("identity_quarantine_reason") or "")
+        return bool(
+            isinstance(entry, dict)
+            and entry.get("slug")
+            and reason.startswith("prospective_headline_slug_event_drift")
+            and _archive_headline_slug_alignment(entry).get("aligned")
+        )
 
     groups = defaultdict(list)
     for entry in archive:
-        # Quarantined headline/slug drift is historical evidence, not a candidate
-        # canonical URL. Preserve the row and page, but keep it outside duplicate
-        # reconciliation so a newly repaired permalink is never redirected back to it.
-        if not _archive_entry_live_identity_safe(entry):
-            continue
         story_id = str(entry.get("editorial_story_id") or "").strip()
         if story_id and story_id not in identity_index.safe_story_ids:
             story_id = ""
-        if story_id:
+        if not story_id:
+            continue
+        if _archive_entry_live_identity_safe(entry) or repairable_prospective_quarantine(entry):
             groups[story_id].append(entry)
 
     redirects = []
     removed = set()
     groups_resolved = 0
+    quarantine_repairs = 0
+    repaired_slugs = []
     for story_id, members in groups.items():
         active = [m for m in members if m.get("slug")]
         if len(active) < 2:
             continue
+
+        def independently_corroborated(left, right):
+            left_source = _normalized_external_source_url(
+                left.get("source_url") or left.get("original_url") or left.get("link")
+            )
+            right_source = _normalized_external_source_url(
+                right.get("source_url") or right.get("original_url") or right.get("link")
+            )
+            return bool(
+                (left_source and right_source and left_source == right_source)
+                or _same_event_items(left, right)
+            )
+
+        # Safe registry-backed rows keep the established publication-identity
+        # behavior: the persistent story ID is sufficient to consolidate them.
+        # Only a legacy prospective-overwrite quarantine needs extra evidence
+        # before it may re-enter the canonical group.
+        eligible = []
+        for member in active:
+            if not repairable_prospective_quarantine(member):
+                eligible.append(member)
+                continue
+            if any(
+                other is not member and independently_corroborated(member, other)
+                for other in active
+            ):
+                eligible.append(member)
+        active = eligible
+        if len(active) < 2:
+            continue
+
         canonical = min(active, key=_publication_canonical_key)
+        if repairable_prospective_quarantine(canonical):
+            canonical.pop("exclude_from_live_recovery", None)
+            canonical.pop("identity_quarantine_reason", None)
+            canonical.pop("identity_quarantine_persistent", None)
+            canonical.pop("identity_quarantined_at", None)
+            canonical.pop("identity_quarantine_incoming_headline", None)
+            canonical.pop("identity_quarantine_incoming_source_url", None)
+            canonical["legacy_identity_status"] = "identified"
+            canonical["ranking_eligible"] = True
+            quarantine_repairs += 1
+            repaired_slugs.append(canonical.get("slug", ""))
+
         canonical["editorial_story_id"] = story_id
         group_removed = 0
         for duplicate in active:
             if duplicate is canonical or duplicate.get("slug") == canonical.get("slug"):
+                continue
+            # Extra corroboration is required only when either side is a repaired
+            # prospective-overwrite quarantine. Ordinary safe rows were already
+            # proven identical by the persistent registry and retain the existing
+            # consolidation behavior.
+            if (
+                repairable_prospective_quarantine(canonical)
+                or repairable_prospective_quarantine(duplicate)
+            ) and not independently_corroborated(canonical, duplicate):
                 continue
             source_slug = duplicate.get("slug", "")
             if not source_slug:
@@ -15377,8 +15543,9 @@ def _reconcile_archive_publication_identity(archive, identity_index):
                 ),
                 "editorial_story_id": story_id,
                 "reason": (
-                    "Persistent editorial story identity consolidated rewritten "
-                    "source coverage under one public permalink."
+                    "Persistent editorial story identity and independent event "
+                    "corroboration consolidated duplicate source coverage under one "
+                    "public permalink."
                 ),
             })
         if group_removed:
@@ -15393,10 +15560,12 @@ def _reconcile_archive_publication_identity(archive, identity_index):
     remaining_groups = sum(1 for count in remaining.values() if count > 1)
     return cleaned, redirects, {
         "status": "passed",
-        "identity_version": "1.0",
+        "identity_version": "1.1",
         "groups_resolved": groups_resolved,
         "records_removed": len(removed),
         "remaining_duplicate_groups": remaining_groups,
+        "prospective_quarantine_repairs": quarantine_repairs,
+        "repaired_canonical_slugs": repaired_slugs,
     }
 
 
@@ -15667,6 +15836,32 @@ def write_archives(all_categories, top_cat):
                     f"  FORWARD IDENTITY HOLD: '{headline[:60]}' has no current persistent story ID"
                 )
                 continue
+
+        _skip_canonical, _skip_basis = _published_skip_canonical(hero, archive)
+        if _skip_canonical is not None:
+            _bind_live_item_to_archive(
+                hero,
+                _skip_canonical,
+                current_customs=_current_customs,
+                replace_with_custom=bool(
+                    _skip_canonical.get("is_custom")
+                    or _skip_canonical.get("authoritative_custom")
+                ),
+            )
+            _forward_identity_report.setdefault("published_skip_preservations", []).append({
+                "headline": headline,
+                "source_url": normalized_source_url,
+                "editorial_story_id": _editorial_story_id,
+                "canonical_slug": _skip_canonical.get("slug", ""),
+                "canonical_headline": _skip_canonical.get("headline", ""),
+                "basis": _skip_basis,
+                "action": "preserve_existing_page_no_rewrite",
+            })
+            print(
+                "  PUBLISHED STORY SKIP: preserved canonical page "
+                f"'{_skip_canonical.get('slug','')}' for '{headline[:60]}'"
+            )
+            continue
 
         _target_valid, _target_reason = _forward_publication_target_valid(
             hero, existing, _editorial_story_id, _target_basis
@@ -16706,6 +16901,8 @@ def _remember_current_run_editorial_identity(entry, row):
         "source_url": source_url,
         "source_headline": str(entry.get("title") or row.get("headline") or ""),
         "route": str(row.get("route") or ""),
+        "relationship": str(row.get("relationship") or ""),
+        "relationship_confidence": float(row.get("relationship_confidence") or 0.0),
     }
     prior = CURRENT_RUN_EDITORIAL_IDENTITIES.get(source_url)
     # The same source URL must never point to two different persistent stories in
@@ -16718,8 +16915,137 @@ def _remember_current_run_editorial_identity(entry, row):
     entry["_editorial_story_id"] = story_id
     entry["_editorial_event_key"] = record["event_key"]
     entry["_editorial_route"] = record["route"]
+    entry["_editorial_relationship"] = record["relationship"]
+    entry["_editorial_relationship_confidence"] = record["relationship_confidence"]
     entry["_editorial_identity_origin"] = "current_run_editorial_decision"
     return True
+
+
+def _published_skip_canonical(item, archive):
+    """Resolve a no-change registry decision to an already published TCT page.
+
+    This is a narrow deterministic enforcement path, not broad semantic activation.
+    It applies only when the current editorial decision is ``skip``, the source has a
+    persistent story ID, and an archive row with that same ID is independently
+    corroborated by exact source identity or the shared same-event matcher.
+
+    A prospective quarantine created by the old overwrite guard may participate only
+    when the row's *current* headline still aligns with its own slug. That permits the
+    next run to repair false quarantines without reviving genuinely drifted pages.
+    """
+    if not isinstance(item, dict):
+        return None, ""
+    route = str(item.get("_editorial_route") or item.get("editorial_route") or "").strip().lower()
+    story_id = str(item.get("editorial_story_id") or item.get("_editorial_story_id") or "").strip()
+    if route != "skip" or not story_id:
+        return None, ""
+
+    def usable(entry):
+        if not isinstance(entry, dict) or not entry.get("slug"):
+            return False
+        if str(entry.get("editorial_story_id") or "").strip() != story_id:
+            return False
+        if _archive_entry_live_identity_safe(entry):
+            return True
+        reason = str(entry.get("identity_quarantine_reason") or "")
+        return (
+            reason.startswith("prospective_headline_slug_event_drift")
+            and bool(_archive_headline_slug_alignment(entry).get("aligned"))
+        )
+
+    candidates = [entry for entry in (archive or []) if usable(entry)]
+    if not candidates:
+        return None, ""
+
+    incoming_source = _normalized_external_source_url(
+        item.get("source_url") or item.get("_source_url") or item.get("link")
+    )
+    corroborated = []
+    for entry in candidates:
+        existing_source = _normalized_external_source_url(
+            entry.get("source_url") or entry.get("original_url") or entry.get("link")
+        )
+        if incoming_source and existing_source and incoming_source == existing_source:
+            corroborated.append((entry, "exact_source_and_persistent_story_skip"))
+            continue
+        if _same_event_items(item, entry):
+            corroborated.append((entry, "same_event_and_persistent_story_skip"))
+            continue
+        relationship = str(
+            item.get("_editorial_relationship") or item.get("editorial_relationship") or ""
+        ).strip().lower()
+        try:
+            relationship_confidence = float(
+                item.get("_editorial_relationship_confidence")
+                or item.get("editorial_relationship_confidence")
+                or 0.0
+            )
+        except (TypeError, ValueError):
+            relationship_confidence = 0.0
+        if relationship == "same_event" and relationship_confidence >= 0.95:
+            corroborated.append((entry, "registry_same_event_and_persistent_story_skip"))
+
+    if not corroborated:
+        return None, ""
+    canonical = min((row[0] for row in corroborated), key=_publication_canonical_key)
+    basis = next(row[1] for row in corroborated if row[0] is canonical)
+    return canonical, basis
+
+
+def _filter_published_skip_candidates(headlines, archive, category_key=""):
+    """Remove already-published no-change sources before Claude sees them."""
+    kept, suppressed = [], []
+    for item in list(headlines or []):
+        canonical, basis = _published_skip_canonical(item, archive)
+        if canonical is None:
+            kept.append(item)
+            continue
+        suppressed.append({
+            "category_key": category_key,
+            "source_headline": item.get("title") or item.get("headline", ""),
+            "source_url": _normalized_external_source_url(item.get("link") or item.get("source_url")),
+            "editorial_story_id": item.get("editorial_story_id") or item.get("_editorial_story_id", ""),
+            "canonical_slug": canonical.get("slug", ""),
+            "canonical_headline": canonical.get("headline", ""),
+            "basis": basis,
+            "reason": "registry_skip_story_already_published",
+        })
+    return kept, suppressed
+
+
+def _suppress_published_skip_placements(data, archive, category_key=""):
+    """Drop cached/model placements that escaped the pre-generation source guard."""
+    if not isinstance(data, dict):
+        return []
+    suppressed = []
+
+    def duplicate(item, surface):
+        canonical, basis = _published_skip_canonical(item, archive)
+        if canonical is None:
+            return False
+        suppressed.append({
+            "category_key": category_key,
+            "surface": surface,
+            "headline": item.get("headline", ""),
+            "editorial_story_id": item.get("editorial_story_id") or item.get("_editorial_story_id", ""),
+            "canonical_slug": canonical.get("slug", ""),
+            "canonical_headline": canonical.get("headline", ""),
+            "basis": basis,
+            "reason": "published_skip_placement_suppressed",
+        })
+        return True
+
+    if isinstance(data.get("hero"), dict) and duplicate(data["hero"], "hero"):
+        data["hero"] = None
+    retained = []
+    for card in list(data.get("cards") or []):
+        if isinstance(card, dict) and duplicate(card, "card"):
+            continue
+        retained.append(card)
+    data["cards"] = retained
+    if not data.get("hero") and data["cards"]:
+        data["hero"] = data["cards"].pop(0)
+    return suppressed
 
 
 def _stamp_current_run_story_ids(data, headlines):
@@ -16735,7 +17061,8 @@ def _stamp_current_run_story_ids(data, headlines):
         # exact source decision.
         for key in (
             "editorial_story_id", "_editorial_story_id", "_editorial_event_key",
-            "_editorial_route", "_editorial_identity_origin",
+            "_editorial_route", "_editorial_relationship",
+            "_editorial_relationship_confidence", "_editorial_identity_origin",
         ):
             item.pop(key, None)
         source = None
@@ -16761,6 +17088,14 @@ def _stamp_current_run_story_ids(data, headlines):
         item["_editorial_story_id"] = story_id
         item["_editorial_event_key"] = str(identity.get("event_key") or (source or {}).get("_editorial_event_key") or "")
         item["_editorial_route"] = str(identity.get("route") or (source or {}).get("_editorial_route") or "")
+        item["_editorial_relationship"] = str(
+            identity.get("relationship") or (source or {}).get("_editorial_relationship") or ""
+        )
+        item["_editorial_relationship_confidence"] = float(
+            identity.get("relationship_confidence")
+            or (source or {}).get("_editorial_relationship_confidence")
+            or 0.0
+        )
         item["_editorial_identity_origin"] = "current_run_editorial_decision"
         item["source_url"] = normalized or str(source_url or "")
         if isinstance(source, dict) and source.get("title"):
@@ -16787,14 +17122,44 @@ def _load_editorial_engine_audit():
         return None
 
 
+def _stamp_known_current_run_identity(entry):
+    """Copy a previously audited source decision onto another feed-entry instance."""
+    if not isinstance(entry, dict):
+        return False
+    source_url = _normalized_external_source_url(
+        entry.get("link") or entry.get("source_url") or entry.get("_source_url")
+    )
+    identity = CURRENT_RUN_EDITORIAL_IDENTITIES.get(source_url, {}) if source_url else {}
+    if not identity or identity.get("ambiguous") or not identity.get("story_id"):
+        return False
+    entry["editorial_story_id"] = identity["story_id"]
+    entry["_editorial_story_id"] = identity["story_id"]
+    entry["_editorial_event_key"] = identity.get("event_key", "")
+    entry["_editorial_route"] = identity.get("route", "")
+    entry["_editorial_relationship"] = identity.get("relationship", "")
+    entry["_editorial_relationship_confidence"] = float(
+        identity.get("relationship_confidence") or 0.0
+    )
+    entry["_editorial_identity_origin"] = "current_run_editorial_decision_reuse"
+    return True
+
+
 def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, audit_rows):
-    """Observe candidate decisions only; never filter, reorder, or mutate live input."""
+    """Audit each unique source once and stamp its exact decision on every copy.
+
+    The registry remains non-mutating with respect to candidate order and category
+    selection. Downstream deterministic guards may use the stamped exact identity to
+    enforce already-published ``skip`` decisions without waiting for broad activation.
+    """
     if engine is None or route_editorial_result is None:
         return
 
     for entry in headlines:
         audit_key = (entry.get("link") or entry.get("title") or "").strip().lower()
-        if not audit_key or audit_key in audited_keys:
+        if not audit_key:
+            continue
+        if audit_key in audited_keys:
+            _stamp_known_current_run_identity(entry)
             continue
         audited_keys.add(audit_key)
 
@@ -17150,6 +17515,9 @@ def main():
     editorial_audit_rows = []
     editorial_activation_run = None
     used_bank_images = set()
+    # Current published identities are needed before model generation so a registry
+    # ``skip`` decision can suppress an already-published story at the source boundary.
+    _pre_generation_archive = load_archive(OUTPUT_DIR / "archive.json")
     all_categories = []
     category_generation_records = []
     category_generation_report = {}
@@ -17217,6 +17585,8 @@ def main():
             "category_eligibility_assessed_count": 0,
             "category_eligibility_rejection_count": 0,
             "category_eligibility_rejections": [],
+            "published_story_duplicate_suppression_count": 0,
+            "published_story_duplicate_suppressions": [],
             "_started": _category_started,
         }
         category_generation_records.append(_category_record)
@@ -17232,6 +17602,35 @@ def main():
             editorial_engine, headlines, cat_key,
             editorial_audited_keys, editorial_audit_rows,
         )
+
+        headlines, _published_story_suppressions = _filter_published_skip_candidates(
+            headlines, _pre_generation_archive, cat_key
+        )
+        if _published_story_suppressions:
+            _category_record["published_story_duplicate_suppression_count"] += len(
+                _published_story_suppressions
+            )
+            _category_record["published_story_duplicate_suppressions"].extend(
+                _published_story_suppressions
+            )
+            print(
+                f"  Published-story guard: suppressed {len(_published_story_suppressions)} "
+                "registry skip source(s) before generation"
+            )
+        if not headlines:
+            print(
+                f"  Every {cat_config['label']} source already has a published canonical page; "
+                "using archive recovery"
+            )
+            _finalize_category_generation_record(
+                _category_record,
+                "published_story_duplicate_archive_recovery",
+                _category_started,
+                archive_recovery_requested=True,
+                failure_code="all_sources_already_published",
+                failure_summary="Every source resolved to a published no-change story",
+            )
+            continue
 
         # Filter headlines older than 48 hours
         from datetime import timezone as _tz2
@@ -17359,6 +17758,20 @@ def main():
         if _cached_category is not _CACHE_MISS:
             data = copy.deepcopy(_cached_category.get("data", {}))
             _stamp_current_run_story_ids(data, headlines)
+            _cached_published_suppressions = _suppress_published_skip_placements(
+                data, _pre_generation_archive, cat_key
+            )
+            if _cached_published_suppressions:
+                _category_record["published_story_duplicate_suppression_count"] += len(
+                    _cached_published_suppressions
+                )
+                _category_record["published_story_duplicate_suppressions"].extend(
+                    _cached_published_suppressions
+                )
+                print(
+                    f"  Published-story guard removed {len(_cached_published_suppressions)} "
+                    "cached placement(s)"
+                )
             data = _sanitize_nonstory_category(data, cat_config["label"])
             _cached_logo_rejections = _sanitize_category_source_images(
                 data, stage="category_cache_reuse"
@@ -17747,6 +18160,20 @@ def main():
                         f"  Forward identity stamped {_stamped_story_ids} generated placement(s) "
                         "from current-run editorial decisions"
                     )
+                _generated_published_suppressions = _suppress_published_skip_placements(
+                    data, _pre_generation_archive, cat_key
+                )
+                if _generated_published_suppressions:
+                    _category_record["published_story_duplicate_suppression_count"] += len(
+                        _generated_published_suppressions
+                    )
+                    _category_record["published_story_duplicate_suppressions"].extend(
+                        _generated_published_suppressions
+                    )
+                    print(
+                        f"  Published-story guard removed {len(_generated_published_suppressions)} "
+                        "generated placement(s)"
+                    )
                 GENERATION_CACHE.put(
                     "categories",
                     _category_cache_key,
@@ -17813,6 +18240,7 @@ def main():
         f"{_category_summary.get('contextual_update_lead_rejection_count', 0)} contextual update-lead rejection(s), "
         f"{_category_summary.get('article_framing_rejection_count', 0)} article-framing rejection(s), "
         f"{_category_summary.get('category_eligibility_rejection_count', 0)} category-contract rejection(s), "
+        f"{_category_summary.get('published_story_duplicate_suppression_count', 0)} published-story duplicate suppression(s), "
         f"{CATEGORY_GENERATION_REPORT_PATH}"
     )
     print(

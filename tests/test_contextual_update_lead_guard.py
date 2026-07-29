@@ -330,7 +330,7 @@ def test_release_version_and_report_schema_are_bumped():
     generate = _load_generate_module()
     observability = importlib.import_module("tct_engine.observability")
 
-    assert generate.CATEGORY_GENERATION_REPORT_SCHEMA_VERSION == 5
-    assert observability.ENGINE_VERSION == "1.11.8.8"
-    assert observability.ENGINE_RELEASE == "universal-lead-and-claim-integrity"
+    assert generate.CATEGORY_GENERATION_REPORT_SCHEMA_VERSION == 6
+    assert observability.ENGINE_VERSION == "1.11.8.9"
+    assert observability.ENGINE_RELEASE == "published-story-skip-dedup"
     assert observability.OBSERVABILITY_SCHEMA_VERSION == 17

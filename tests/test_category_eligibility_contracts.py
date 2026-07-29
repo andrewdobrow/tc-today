@@ -217,5 +217,5 @@ def test_category_generation_report_counts_contract_rejections():
             "category_eligibility_rejection_count": 2,
         }
     ])
-    assert report["schema_version"] == 5
+    assert report["schema_version"] == 6
     assert report["summary"]["category_eligibility_rejection_count"] == 2
