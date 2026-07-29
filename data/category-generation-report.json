@@ -1,6 +1,6 @@
 {
-  "schema_version": 5,
-  "generated_at": "2026-07-29T20:47:24Z",
+  "schema_version": 6,
+  "generated_at": "2026-07-29T22:57:15Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,40 +15,44 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "generated_live": 9
+      "generated_live": 6,
+      "quality_gate_archive_recovery": 3
     },
-    "failures": {},
+    "failures": {
+      "publication_quality_rejected": 3
+    },
     "model_attempt_count": 9,
-    "model_elapsed_seconds": 268.316,
-    "archive_recovery_requested_count": 0,
+    "model_elapsed_seconds": 337.476,
+    "archive_recovery_requested_count": 3,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 2,
-    "category_eligibility_rejection_count": 8
+    "category_eligibility_rejection_count": 9,
+    "published_story_duplicate_suppression_count": 39
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generated_live",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 25,
+      "status": "quality_gate_archive_recovery",
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 10,
-      "selected_source_count": 2,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 9.002,
+          "elapsed_seconds": 7.289,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 9.002,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 7.289,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -58,7 +62,7 @@
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
       "category_eligibility_assessed_count": 10,
-      "category_eligibility_rejection_count": 8,
+      "category_eligibility_rejection_count": 9,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -70,8 +74,34 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Flashing traffic light at Glades Cut Off Road in St. Lucie County still not fully operational after 6 months",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/flashing-traffic-light-at-glades-cut-off-road-still-not-fully-operational-after-6-months"
+          "headline": "New radar installation aims to close South Florida's low-level weather detection gap",
+          "source_url": "https://www.wptv.com/wptv-investigates/new-radar-installation-aims-to-close-south-floridas-low-level-weather-detection-gap"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina",
+          "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -139,19 +169,6 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Fort Pierce pizza shop transforms patio into book haven, serving young readers",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-pizza-shop-transforms-patio-into-book-haven-serving-young-readers"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
           "headline": "Gaming with Guardians let’s kids play video games against police officers",
           "source_url": "https://www.wptv.com/news/region-n-palm-beach-county/tequesta/gaming-with-guardians-lets-kids-play-video-games-against-police-officers"
         },
@@ -169,20 +186,61 @@
           "source_url": "https://www.hometownnewstc.com/community_page/calendar/week-of-july-31/article_e12e0b23-48a7-5b16-8a2d-ff3d254e9872.html"
         }
       ],
+      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Flashing traffic light at Glades Cut Off Road in St. Lucie County still not fully operational after 6 months",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/flashing-traffic-light-at-glades-cut-off-road-still-not-fully-operational-after-6-months",
+          "editorial_story_id": "story_001294",
+          "canonical_slug": "2026-07-29-flashing-traffic-light-at-glades-cut-off-road-still-not-operational-after-6-mont",
+          "canonical_headline": "Flashing traffic light at Glades Cut Off Road still not operational after 6 months",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Martin County School District adjusts bus routes to save $255,000 - WPBF",
+          "source_url": "https://www.wpbf.com/article/martin-county-schools-new-bus-routes-2026/73292430",
+          "editorial_story_id": "story_001179",
+          "canonical_slug": "2026-07-29-martin-county-school-district-adjusts-bus-routes-to-save-255000",
+          "canonical_headline": "Martin County School District consolidates bus routes to save $255,000",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Fort Pierce pizza shop transforms patio into book haven, serving young readers",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-pizza-shop-transforms-patio-into-book-haven-serving-young-readers",
+          "editorial_story_id": "story_001178",
+          "canonical_slug": "2026-07-29-fort-pierce-pizza-shop-transforms-outdoor-patio-into-free-reading-room-for-child",
+          "canonical_headline": "Fort Pierce pizza shop transforms patio into free reading room for children",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Martin County leaders to hear how proposed property tax amendment could impact Fire Rescue - WPEC",
+          "source_url": "https://cbs12.com/news/local/martin-county-leaders-to-hear-how-proposed-property-tax-amendment-could-impact-fire-rescue",
+          "editorial_story_id": "story_001010",
+          "canonical_slug": "2026-07-28-martin-county-fire-rescue-could-lose-116-firefighters-under-proposed-property-ta",
+          "canonical_headline": "Martin County Fire Rescue could lose 116 firefighters if property tax amendment passes",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County School District consolidates bus routes to save $255,000",
-      "generated_card_count": 1,
-      "elapsed_seconds": 24.332
+      "elapsed_seconds": 26.719
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 30,
-      "publishable_source_count": 16,
-      "selected_source_count": 12,
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 10,
+      "selected_source_count": 9,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -190,11 +248,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 35.762,
+          "elapsed_seconds": 59.523,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 35.762,
+      "model_elapsed_seconds": 59.523,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -205,23 +263,106 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 16,
+      "category_eligibility_assessed_count": 10,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Flashing traffic light at Glades Cut Off Road in St. Lucie County still not fully operational after 6 months",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/flashing-traffic-light-at-glades-cut-off-road-still-not-fully-operational-after-6-months",
+          "editorial_story_id": "story_001294",
+          "canonical_slug": "2026-07-29-flashing-traffic-light-at-glades-cut-off-road-still-not-operational-after-6-mont",
+          "canonical_headline": "Flashing traffic light at Glades Cut Off Road still not operational after 6 months",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Stuart man arrested after leading police on chase, crashing into another vehicle - WPBF",
+          "source_url": "https://www.wpbf.com/article/stuart-police-chase-arrest-multi-agency/73297614",
+          "editorial_story_id": "story_001300",
+          "canonical_slug": "2026-07-29-stuart-man-arrested-after-leading-police-on-chase-crashing-into-vehicle",
+          "canonical_headline": "Stuart man arrested after leading police on chase, crashing into vehicle",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "SUV crashes into Port St. Lucie liquor store; driver charged with DUIPolice say driver fled on foot and was found hiding several blocks away - Hometown News Treasure Coast",
+          "source_url": "https://news.google.com/rss/articles/CBMikgJBVV95cUxPZTZQc3BabGJsM0pxcG9WTUlodlFvVm9nY3BCeWZYdjdhUHBzUmVXOUthdlZiZEpQSExxOXEtWVgtZE1CUnpxcjkweVZoaGpHT0ZpMUxsWXo0c2hjSFAyYkJ1RHZGU2pRSnFaRUljUjhaZlZTbElMX054YXIxSzB2eFN4OFgySjNIZWdPQkMyVDJJWFU3alI1bDl0U0FPWFpGb2lTenBRLW5NZ2c5RllEQmR6eldGZkJOU3E5dTRORWtnRmdmS1VsUTN2aUpBcm9FZndGUWl5SGVkREdkREU1ajlVWndMdWZKc3A0ejJvMlRzR1lzWU94UTRPYUdDd1lWanQtTXc0WkZ0dW9nVDNQLVFR",
+          "editorial_story_id": "story_000011",
+          "canonical_slug": "2026-07-29-man-crashes-suv-into-port-st-lucie-liquor-store-charged-with-dui",
+          "canonical_headline": "Man accused of DUI after crashing SUV into Port St. Lucie liquor store",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Fort Pierce pizza shop transforms patio into book haven, serving young readers",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-pizza-shop-transforms-patio-into-book-haven-serving-young-readers",
+          "editorial_story_id": "story_001178",
+          "canonical_slug": "2026-07-29-fort-pierce-pizza-shop-transforms-outdoor-patio-into-free-reading-room-for-child",
+          "canonical_headline": "Fort Pierce pizza shop transforms patio into free reading room for children",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Man accused of DUI after crashing SUV into Port St. Lucie liquor store - WPEC",
+          "source_url": "https://cbs12.com/news/local/man-accused-driving-under-influence-crashes-suv-3rd-base-liquor-store-fled-scene-on-foot-driving-under-influence-st-lucie-county-jail-port-st-lucie-police-department-florida-news",
+          "editorial_story_id": "story_000011",
+          "canonical_slug": "2026-07-29-man-crashes-suv-into-port-st-lucie-liquor-store-charged-with-dui",
+          "canonical_headline": "Man accused of DUI after crashing SUV into Port St. Lucie liquor store",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "St. Lucie County Sheriff’s investigator tells of ‘one of worst cases’ of child neglect she’s seen - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/news/st_lucie/st-lucie-county-sheriff-s-investigator-tells-of-one-of-worst-cases-of-child-neglect/article_5be34f62-b58c-5728-af5b-8adfcd3c408d.html",
+          "editorial_story_id": "story_001104",
+          "canonical_slug": "2026-07-28-st-lucie-detective-describes-conditions-in-fort-pierce-mobile-home-where-infant",
+          "canonical_headline": "St. Lucie detective calls Fort Pierce baby death case one of worst in 20-year career",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "'One of the worst cases': 3 arrested in St. Lucie County after baby dies from dehydration, malnutrition - WFLX",
+          "source_url": "https://www.wflx.com/2026/07/27/one-worst-cases-3-arrested-st-lucie-county-after-baby-dies-dehydration-malnutrition",
+          "editorial_story_id": "story_000910",
+          "canonical_slug": "2026-07-28-three-arrested-after-3-month-old-dies-from-dehydration-and-malnutrition-in-fort",
+          "canonical_headline": "Three arrested in Fort Pierce after 3-month-old dies from dehydration and malnutrition",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Investigators reveal horrific home conditions in Fort Pierce baby death case; arrests made - WPEC",
+          "source_url": "https://cbs12.com/news/local/investigators-reveal-horrific-home-conditions-in-fort-pierce-baby-death-case-arrests-made-three-month-old-3-mobile-july-27-2026",
+          "editorial_story_id": "story_000928",
+          "canonical_slug": "2026-07-28-st-lucie-sheriff-details-year-long-investigation-into-fort-pierce-infant-death",
+          "canonical_headline": "Mother, grandfather, and girlfriend arrested after 3-month-old dies from dehydration and malnutrition in Fort Pierce",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Three arrested in Fort Pierce after 3-month-old dies from dehydration and malnutrition",
+      "live_hero_headline": "New supplemental radar installed in Fort Myers expected to improve tornado and storm detection for Treasure Coast",
       "generated_card_count": 1,
-      "elapsed_seconds": 49.211
+      "elapsed_seconds": 70.237
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 15,
-      "selected_source_count": 12,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 12,
+      "selected_source_count": 11,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -229,11 +370,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 53.213,
+          "elapsed_seconds": 75.557,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 53.213,
+      "model_elapsed_seconds": 75.557,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -244,23 +385,66 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 15,
+      "category_eligibility_assessed_count": 12,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Flashing traffic light at Glades Cut Off Road in St. Lucie County still not fully operational after 6 months",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/flashing-traffic-light-at-glades-cut-off-road-still-not-fully-operational-after-6-months",
+          "editorial_story_id": "story_001294",
+          "canonical_slug": "2026-07-29-flashing-traffic-light-at-glades-cut-off-road-still-not-operational-after-6-mont",
+          "canonical_headline": "Flashing traffic light at Glades Cut Off Road still not operational after 6 months",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Fort Pierce pizza shop transforms patio into book haven, serving young readers",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-pizza-shop-transforms-patio-into-book-haven-serving-young-readers",
+          "editorial_story_id": "story_001178",
+          "canonical_slug": "2026-07-29-fort-pierce-pizza-shop-transforms-outdoor-patio-into-free-reading-room-for-child",
+          "canonical_headline": "Fort Pierce pizza shop transforms patio into free reading room for children",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "How property tax reform could impact fire service in Martin County, commissioners respond",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/how-property-tax-reform-could-impact-fire-service-in-martin-county-commissioners-respond",
+          "editorial_story_id": "story_001131",
+          "canonical_slug": "2026-07-29-martin-county-fire-chief-warns-property-tax-reform-could-force-station-closures",
+          "canonical_headline": "Martin County Fire Chief warns tax amendment could force 116 firefighter cuts, station closures",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "New K-8 school breaks ground in Fort Pierce, combining 3 St. Lucie County schools into one",
+          "source_url": "https://www.wptv.com/news/education/new-k-8-school-breaks-ground-in-fort-pierce-combining-3-st-lucie-county-schools-into-one",
+          "editorial_story_id": "story_001100",
+          "canonical_slug": "2026-07-28-70-million-k-8-school-breaks-ground-in-fort-pierce-will-consolidate-three-st-luc",
+          "canonical_headline": "New $70 million K-8 school breaks ground in Fort Pierce, will consolidate three St. Lucie County schools",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Fort Pierce pizza shop transforms patio into free reading room for children",
+      "live_hero_headline": "Fort Pierce residents fight plan to replace Museum Pointe Park with mega-yacht marina",
       "generated_card_count": 1,
-      "elapsed_seconds": 60.907
+      "elapsed_seconds": 82.975
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "generated_live",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 7,
-      "selected_source_count": 7,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 5,
+      "selected_source_count": 5,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -268,11 +452,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 33.416,
+          "elapsed_seconds": 50.484,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 33.416,
+      "model_elapsed_seconds": 50.484,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -283,176 +467,82 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "sports",
+          "source_headline": "Boston cyclist rides 2,600 miles from Key West to Maine to honor friend lost to colorectal cancer",
+          "source_url": "https://www.wptv.com/news/state/boston-cyclist-rides-2-600-miles-from-key-west-to-maine-to-honor-friend-lost-to-colorectal-cancer",
+          "editorial_story_id": "story_000907",
+          "canonical_slug": "2026-07-28-boston-cyclist-passes-through-vero-beach-on-2600-mile-ride-honoring-friend-lost",
+          "canonical_headline": "Cyclist rides through Vero Beach on 2,600-mile journey from Key West to Maine",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "sports",
+          "source_headline": "Indian River County Fire Rescue mourns off-duty death of firefighter Geoffrey Lang - WPEC",
+          "source_url": "https://cbs12.com/news/local/indian-river-county-fire-rescue-mourns-off-duty-death-of-firefighter-geoffrey-lang-treasure-coast-florida-firefighter-firefighter-dies-off-duty-death-firefighter-paramedic-first-responder-fire-rescue-indian-river-county-news-vero-beach-news",
+          "editorial_story_id": "story_000721",
+          "canonical_slug": "2026-07-28-vero-beach-police-department-honors-service-of-indian-river-county-firefighter",
+          "canonical_headline": "Vero Beach Police Department honors service of Indian River County firefighter",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "generation_status": "success",
       "budget_seconds": 180.0,
       "live_hero_headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
       "generated_card_count": 0,
-      "elapsed_seconds": 48.066
+      "elapsed_seconds": 63.482
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
-      "status": "generated_live",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 11,
-      "selected_source_count": 9,
-      "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 40.069,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 40.069,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
-      "category_eligibility_mode": "observe_only",
-      "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 11,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Vero Beach Museum of Art to host recycled fishing line bracelet workshop Aug. 8",
-      "generated_card_count": 2,
-      "elapsed_seconds": 53.31
-    },
-    {
-      "category_key": "florida",
-      "category_label": "Florida",
-      "status": "generated_live",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 4,
-      "selected_source_count": 4,
-      "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 19.157,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 19.157,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
-      "category_eligibility_mode": "observe_only",
-      "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 4,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Florida executes two inmates in single day for first time in more than 60 years",
-      "generated_card_count": 1,
-      "elapsed_seconds": 33.119
-    },
-    {
-      "category_key": "martin",
-      "category_label": "Martin County",
-      "status": "generated_live",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 25,
+      "fresh_candidate_count": 20,
       "publishable_source_count": 7,
       "selected_source_count": 6,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 18.813,
+          "elapsed_seconds": 23.902,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 18.813,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 23.902,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
-      "category_eligibility_mode": "existing_geographic_enforce",
-      "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County Fire Chief warns homestead exemption expansion could force station closures, firefighter layoffs",
-      "generated_card_count": 3,
-      "elapsed_seconds": 30.662
-    },
-    {
-      "category_key": "st_lucie",
-      "category_label": "St. Lucie County",
-      "status": "generated_live",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 30,
-      "publishable_source_count": 16,
-      "selected_source_count": 12,
-      "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 47.373,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 47.373,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 2,
+      "article_framing_rejection_count": 1,
       "article_framing_rejections": [
         {
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "New K-8 school breaks ground in Fort Pierce, combining Dan McCarty Middle, St. Lucie Elementary and Lawnwood Elementary",
+          "headline": "$9 million renovation underway at Adolph & Rose Levis Jewish Community Center in Boca Raton",
           "missing": [
-            "headline_jurisdiction_missing_from_lead"
+            "headline_money_claim_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "New K-8 school breaks ground in Fort Pierce, combining Dan McCarty Middle, St. Lucie Elementary and Lawnwood Elementary",
-            "lead": "The new school will be built on land behind Dan McCarty Middle School and is expected to welcome between 1,500 and 1,800 students when it opens. It will consolidate Dan McCarty Middle, St. Lucie Elementary and Lawnwood Elementary into a single campus. Superintendent Jon Prince said the project is moving forward on time, on budget and on schedule. Prince said the new facility will feature state-of-the-art technology and serve the north part of St. Lucie County.",
-            "lead_word_count": 81,
-            "headline_overlap_ratio": 0.643,
-            "new_context_token_count": 33,
+            "headline": "$9 million renovation underway at Adolph & Rose Levis Jewish Community Center in Boca Raton",
+            "lead": "Leaders at the Levis JCC say the 31,000-square-foot renovation will create a more accessible, welcoming and state-of-the-art campus aimed at serving future generations. The renovation includes upgraded gathering spaces, enhanced community areas and a new amphitheater designed to host arts, culture and educational programming.",
+            "lead_word_count": 50,
+            "headline_overlap_ratio": 0.273,
+            "new_context_token_count": 32,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -466,8 +556,272 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "New K-8 school breaks ground in Fort Pierce, combining Dan McCarty Middle, St. Lucie Elementary and Lawnwood Elementary",
-            "lead": "The new school will be built on land behind Dan McCarty Middle School and is expected to welcome between 1,500 and 1,800 students when it opens. It will consolidate Dan McCarty Middle, St. Lucie Elementary and Lawnwood Elementary into a single campus. Superintendent Jon Prince said the project is moving forward on time, on budget and on schedule. Prince said the new facility will feature state-of-the-art technology and serve the north part of St. Lucie County.",
+            "headline": "$9 million renovation underway at Adolph & Rose Levis Jewish Community Center in Boca Raton",
+            "lead": "Leaders at the Levis JCC say the 31,000-square-foot renovation will create a more accessible, welcoming and state-of-the-art campus aimed at serving future generations. The renovation includes upgraded gathering spaces, enhanced community areas and a new amphitheater designed to host arts, culture and educational programming.",
+            "headline_money_claims": [
+              9000000
+            ],
+            "lead_money_claims": [],
+            "missing_money_claims": [
+              9000000
+            ],
+            "headline_jurisdictions": [],
+            "lead_jurisdictions": [],
+            "missing_jurisdictions": [],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_money_claim_missing_from_lead"
+            ]
+          }
+        }
+      ],
+      "category_eligibility_mode": "observe_only",
+      "category_eligibility_policy": "future_explicit_contract",
+      "category_eligibility_assessed_count": 7,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "things_to_do",
+          "source_headline": "Fishing line finds new purpose - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/dining_and_entertainment/local_events/fishing-line-finds-new-purpose/article_d7d4f6f4-e60e-5854-b3f0-e865f071937e.html",
+          "editorial_story_id": "story_000810",
+          "canonical_slug": "2026-07-28-recycled-fishing-line-becomes-friendship-bracelets-at-vero-beach-museum-of-art",
+          "canonical_headline": "Vero Beach Museum of Art to host recycled fishing line bracelet workshop Aug. 8",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "things_to_do",
+          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-fun-things-across-treasure-coast-palm-beach-weekend-1784287590-1784895624/73255592",
+          "editorial_story_id": "story_000091",
+          "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
+          "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "things_to_do",
+          "source_headline": "St. Lucie County could lose $63 million in funding if property tax goes away - WPEC",
+          "source_url": "https://cbs12.com/news/local/south-florida-treasure-coast-news-st-lucie-county-could-lose-63-million-in-funding-if-property-tax-goes-away-port-st-lucie-community-center-city-budget-workshop-7-8-million-dollars-in-projects-from-the-budget",
+          "editorial_story_id": "story_000244",
+          "canonical_slug": "2026-07-28-st-lucie-county-could-lose-63-million-if-property-tax-amendment-passes",
+          "canonical_headline": "Port St. Lucie could lose $48 million over two years if property tax amendment passes",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "things_to_do",
+          "source_headline": "Big Taste of Martin County returns to support Big Brothers Big Sisters mentoring programs",
+          "source_url": "https://www.wptv.com/shining-a-light/big-taste-of-martin-county-returns-to-support-big-brothers-big-sisters-mentoring-programs",
+          "editorial_story_id": "story_000253",
+          "canonical_slug": "2026-07-23-big-taste-of-martin-county-returns-oct-6-to-support-youth-mentoring-programs",
+          "canonical_headline": "Big Brothers Big Sisters returns Big Taste of Martin County fundraiser to Stuart",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 49.177
+    },
+    {
+      "category_key": "florida",
+      "category_label": "Florida",
+      "status": "generated_live",
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
+      "cache_hit": false,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 18.559,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 18.559,
+      "failure_code": "",
+      "failure_summary": "",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
+      "category_eligibility_mode": "observe_only",
+      "category_eligibility_policy": "future_explicit_contract",
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Florida player beats 1-in-290 million odds to win Mega Millions jackpot",
+          "source_url": "https://www.wptv.com/us-news/florida-player-beats-1-in-290-million-odds-to-win-mega-millions-jackpot",
+          "editorial_story_id": "story_001243",
+          "canonical_slug": "2026-07-29-florida-ticket-wins-800-million-mega-millions-jackpot-sold-at-bradenton-wawa",
+          "canonical_headline": "Florida ticket wins $800 million Mega Millions jackpot sold at Bradenton Wawa",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "First of four new weather radars begins operation in Fort Myers to close Florida's low-level detection gap",
+      "generated_card_count": 2,
+      "elapsed_seconds": 32.784
+    },
+    {
+      "category_key": "martin",
+      "category_label": "Martin County",
+      "status": "generated_live",
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
+      "cache_hit": false,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 4.644,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 4.644,
+      "failure_code": "",
+      "failure_summary": "",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
+      "category_eligibility_mode": "existing_geographic_enforce",
+      "category_eligibility_policy": "county_locality",
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Stuart man arrested after leading police on chase, crashing into another vehicle - WPBF",
+          "source_url": "https://www.wpbf.com/article/stuart-police-chase-arrest-multi-agency/73297614",
+          "editorial_story_id": "story_001300",
+          "canonical_slug": "2026-07-29-stuart-man-arrested-after-leading-police-on-chase-crashing-into-vehicle",
+          "canonical_headline": "Stuart man arrested after leading police on chase, crashing into vehicle",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County fire chief warns homestead exemption expansion could lead to increased response time - WPBF",
+          "source_url": "https://www.wpbf.com/article/martin-county-fire-chief-homestead-exemption-expansion-station-closures-layoffs/73286022",
+          "editorial_story_id": "story_001119",
+          "canonical_slug": "2026-07-28-martin-county-fire-chief-warns-homestead-exemption-could-force-station-closures",
+          "canonical_headline": "Martin County Fire Chief warns homestead exemption expansion could force station closures, firefighter layoffs",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County moves to rewrite shark fishing rules to protect swimmers - WPBF",
+          "source_url": "https://www.wpbf.com/article/martin-county-florida-shark-fishing-beach-rules/73288368",
+          "editorial_story_id": "story_001155",
+          "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+          "canonical_headline": "Martin County moves to rewrite shark fishing rules after complaints about drones, chum",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County leaders to hear how proposed property tax amendment could impact Fire Rescue - WPEC",
+          "source_url": "https://cbs12.com/news/local/martin-county-leaders-to-hear-how-proposed-property-tax-amendment-could-impact-fire-rescue",
+          "editorial_story_id": "story_001010",
+          "canonical_slug": "2026-07-28-martin-county-fire-rescue-could-lose-116-firefighters-under-proposed-property-ta",
+          "canonical_headline": "Martin County Fire Rescue could lose 116 firefighters if property tax amendment passes",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Stuart driver arrested after police pursuit into Martin County, hit-and-run crash",
+      "generated_card_count": 0,
+      "elapsed_seconds": 18.605
+    },
+    {
+      "category_key": "st_lucie",
+      "category_label": "St. Lucie County",
+      "status": "generated_live",
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 6,
+      "selected_source_count": 5,
+      "cache_hit": false,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 63.901,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 63.901,
+      "failure_code": "",
+      "failure_summary": "",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Mother, grandfather, and girlfriend charged in malnutrition death of Fort Pierce infant",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Mother, grandfather, and girlfriend charged in malnutrition death of Fort Pierce infant",
+            "lead": "Nicole Maxwell, Robert Maxwell, 61, and Vikki Koon, 38, are facing charges in connection with the child's death. The arrests come nearly a year after the unnamed boy was rushed to the hospital on Aug. 20, 2025. Nicole Maxwell was arrested in Indian River County and is in the jail there. Robert Maxwell and Koon are in the St. Lucie County jail. Deputies, detectives, and crime scene investigators responded to Lawnwood Regional Medical Center after a child was brought to the emergency room by the child's grandparents. Medical personnel advised responding deputies that the child had been pronounced deceased and exhibited injuries and conditions consistent with possible neglect.",
+            "lead_word_count": 110,
+            "headline_overlap_ratio": 0.111,
+            "new_context_token_count": 57,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Mother, grandfather, and girlfriend charged in malnutrition death of Fort Pierce infant",
+            "lead": "Nicole Maxwell, Robert Maxwell, 61, and Vikki Koon, 38, are facing charges in connection with the child's death. The arrests come nearly a year after the unnamed boy was rushed to the hospital on Aug. 20, 2025. Nicole Maxwell was arrested in Indian River County and is in the jail there. Robert Maxwell and Koon are in the St. Lucie County jail. Deputies, detectives, and crime scene investigators responded to Lawnwood Regional Medical Center after a child was brought to the emergency room by the child's grandparents. Medical personnel advised responding deputies that the child had been pronounced deceased and exhibited injuries and conditions consistent with possible neglect.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
@@ -475,6 +829,7 @@
               "fort_pierce"
             ],
             "lead_jurisdictions": [
+              "indian_river_county",
               "st_lucie_county"
             ],
             "missing_jurisdictions": [
@@ -487,90 +842,124 @@
               "headline_jurisdiction_missing_from_lead"
             ]
           }
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Port St. Lucie officer resigns amid internal probe for leaving scene where man died by suicide",
-          "missing": [
-            "headline_jurisdiction_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Port St. Lucie officer resigns amid internal probe for leaving scene where man died by suicide",
-            "lead": "According to an internal affairs report, 23-year-old Officer Mathew Brown resigned on April 17, 2026, facing sustained findings for neglect of duty and inefficiency. Surveillance video from the Treasure Coast Church of God Worship Center showed Brown pulling behind a dark blue Porsche at 1:47 a.m. Brown shined his lights on the car, ran a license plate check and walked up to the passenger side. However, after looking through the window, Brown turned around and drove off without calling dispatch or checking on the person inside.",
-            "lead_word_count": 90,
-            "headline_overlap_ratio": 0.143,
-            "new_context_token_count": 60,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Port St. Lucie officer resigns amid internal probe for leaving scene where man died by suicide",
-            "lead": "According to an internal affairs report, 23-year-old Officer Mathew Brown resigned on April 17, 2026, facing sustained findings for neglect of duty and inefficiency. Surveillance video from the Treasure Coast Church of God Worship Center showed Brown pulling behind a dark blue Porsche at 1:47 a.m. Brown shined his lights on the car, ran a license plate check and walked up to the passenger side. However, after looking through the window, Brown turned around and drove off without calling dispatch or checking on the person inside.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "port_st_lucie"
-            ],
-            "lead_jurisdictions": [],
-            "missing_jurisdictions": [
-              "port_st_lucie"
-            ],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ]
-          }
         }
       ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 16,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Flashing traffic light at Glades Cut Off Road in St. Lucie County still not fully operational after 6 months",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/flashing-traffic-light-at-glades-cut-off-road-still-not-fully-operational-after-6-months",
+          "editorial_story_id": "story_001294",
+          "canonical_slug": "2026-07-29-flashing-traffic-light-at-glades-cut-off-road-still-not-operational-after-6-mont",
+          "canonical_headline": "Flashing traffic light at Glades Cut Off Road still not operational after 6 months",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fort Pierce resident shares concerns over proposed mega yacht marina at Museum Pointe - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-mega-yacht-marina-museum-pointe/73288198",
+          "editorial_story_id": "story_001162",
+          "canonical_slug": "2026-07-29-fort-pierce-residents-oppose-proposed-mega-yacht-marina-at-museum-pointe-over-co",
+          "canonical_headline": "Fort Pierce residents oppose proposed mega yacht marina at Museum Pointe over concerns for St. Lucie County Regional History Museum",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fort Pierce pizza shop transforms patio into book haven, serving young readers",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-pizza-shop-transforms-patio-into-book-haven-serving-young-readers",
+          "editorial_story_id": "story_001178",
+          "canonical_slug": "2026-07-29-fort-pierce-pizza-shop-transforms-outdoor-patio-into-free-reading-room-for-child",
+          "canonical_headline": "Fort Pierce pizza shop transforms patio into free reading room for children",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fort Pierce pizza shop transforms patio into book haven, serving young readers - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-pizza-shop-transforms-patio-into-book-haven-serving-young-readers",
+          "editorial_story_id": "story_001178",
+          "canonical_slug": "2026-07-29-fort-pierce-pizza-shop-transforms-outdoor-patio-into-free-reading-room-for-child",
+          "canonical_headline": "Fort Pierce pizza shop transforms patio into free reading room for children",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Flashing traffic light at Glades Cut Off Road in St. Lucie County still not fully operational after 6 months - WFLX",
+          "source_url": "https://www.wflx.com/2026/07/29/flashing-traffic-light-glades-cut-off-road-st-lucie-county-still-not-fully-operational-after-6-months",
+          "editorial_story_id": "story_001294",
+          "canonical_slug": "2026-07-29-flashing-traffic-light-at-glades-cut-off-road-still-not-operational-after-6-mont",
+          "canonical_headline": "Flashing traffic light at Glades Cut Off Road still not operational after 6 months",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Man accused of DUI after crashing SUV into Port St. Lucie liquor store - WPEC",
+          "source_url": "https://cbs12.com/news/local/man-accused-driving-under-influence-crashes-suv-3rd-base-liquor-store-fled-scene-on-foot-driving-under-influence-st-lucie-county-jail-port-st-lucie-police-department-florida-news",
+          "editorial_story_id": "story_000011",
+          "canonical_slug": "2026-07-29-man-crashes-suv-into-port-st-lucie-liquor-store-charged-with-dui",
+          "canonical_headline": "Man accused of DUI after crashing SUV into Port St. Lucie liquor store",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "New K-8 school breaks ground in Fort Pierce, combining 3 St. Lucie County schools into one - WPTV",
+          "source_url": "https://www.wptv.com/news/education/new-k-8-school-breaks-ground-in-fort-pierce-combining-3-st-lucie-county-schools-into-one",
+          "editorial_story_id": "story_001100",
+          "canonical_slug": "2026-07-28-70-million-k-8-school-breaks-ground-in-fort-pierce-will-consolidate-three-st-luc",
+          "canonical_headline": "New $70 million K-8 school breaks ground in Fort Pierce, will consolidate three St. Lucie County schools",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fort Pierce police seek public’s help identifying suspects in separate investigations - WPEC",
+          "source_url": "https://cbs12.com/news/local/florida-crime-news-fort-pierce-police-seek-publics-help-identifying-suspects-in-separate-investigations-vandalism-fort-pierce-recreation-center-vehicle-burglaries-hoodies-woman-",
+          "editorial_story_id": "story_001096",
+          "canonical_slug": "2026-07-28-fort-pierce-police-seek-help-identifying-suspects-in-recreation-center-vandalism",
+          "canonical_headline": "Fort Pierce police seek help identifying suspects in Recreation Center vandalism and vehicle burglaries",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Flashing traffic light at Glades Cut Off Road still not operational after 6 months",
-      "generated_card_count": 4,
-      "elapsed_seconds": 55.556
+      "live_hero_headline": "Fort Pierce residents oppose plan to convert Museum Pointe Park into mega-yacht marina",
+      "generated_card_count": 3,
+      "elapsed_seconds": 76.576
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generated_live",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 27,
-      "publishable_source_count": 9,
+      "status": "quality_gate_archive_recovery",
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 7,
       "selected_source_count": 6,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 11.511,
+          "elapsed_seconds": 33.617,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 11.511,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 33.617,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -579,14 +968,55 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Flashing traffic light at Glades Cut Off Road in St. Lucie County still not fully operational after 6 months",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/flashing-traffic-light-at-glades-cut-off-road-still-not-fully-operational-after-6-months",
+          "editorial_story_id": "story_001294",
+          "canonical_slug": "2026-07-29-flashing-traffic-light-at-glades-cut-off-road-still-not-operational-after-6-mont",
+          "canonical_headline": "Flashing traffic light at Glades Cut Off Road still not operational after 6 months",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Details about death, funeral for Indian River County Fire Rescue firefighter and paramedic released - WPBF",
+          "source_url": "https://www.wpbf.com/article/geoffrey-lang-death-indian-river-county-fire-rescue-firefighter-paramedic-funeral/73286311",
+          "editorial_story_id": "story_001125",
+          "canonical_slug": "2026-07-29-indian-river-county-firefighter-and-paramedic-died-by-suicide-in-sebastian-home",
+          "canonical_headline": "Indian River County firefighter and paramedic died by suicide in Sebastian, police report reveals",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Fort Pierce pizza shop transforms patio into book haven, serving young readers",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-pizza-shop-transforms-patio-into-book-haven-serving-young-readers",
+          "editorial_story_id": "story_001178",
+          "canonical_slug": "2026-07-29-fort-pierce-pizza-shop-transforms-outdoor-patio-into-free-reading-room-for-child",
+          "canonical_headline": "Fort Pierce pizza shop transforms patio into free reading room for children",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Indian River County Fire Rescue engages students at career fair - WPBF",
+          "source_url": "https://www.wpbf.com/article/indian-river-county-fire-rescue-dodgertown-students-career-fair-vero-beach/73289092",
+          "editorial_story_id": "story_001164",
+          "canonical_slug": "2026-07-29-indian-river-county-fire-rescue-participates-in-career-fair-at-dodgertown-elemen",
+          "canonical_headline": "Indian River County Fire Rescue firefighters meet students at Dodgertown Elementary career fair",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Indian River County firefighter and paramedic died by suicide in Sebastian, police report reveals",
-      "generated_card_count": 1,
-      "elapsed_seconds": 21.137
+      "elapsed_seconds": 47.565
     }
   ]
 }
