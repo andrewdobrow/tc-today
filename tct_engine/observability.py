@@ -17,7 +17,7 @@ from .source_identity import normalize_source_identity_url
 from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.12.0"
+ENGINE_VERSION = "1.12.0.1"
 ENGINE_RELEASE = "authoritative-story-publication-ledger"
 OBSERVABILITY_SCHEMA_VERSION = 18
 RESOLVER_VERSION = "3.0"

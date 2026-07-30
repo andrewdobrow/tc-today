@@ -20033,12 +20033,11 @@ def main():
     )
     validate_forward_live_identity(all_categories, top_cat, OUTPUT_DIR)
     validate_live_permalink_integrity(all_categories, top_cat, OUTPUT_DIR)
-    canonicalize_all_live_category_surfaces(
-        all_categories, top_cat, OUTPUT_DIR, identity_index=_publication_identity
-    )
-    validate_live_category_canonical_uniqueness(
-        all_categories, top_cat, OUTPUT_DIR, identity_index=_publication_identity
-    )
+    # These final-surface contracts intentionally load the persisted publication
+    # identity index themselves.  The index built inside write_archives() is local
+    # to that function and must never leak into main() as an undeclared variable.
+    canonicalize_all_live_category_surfaces(all_categories, top_cat, OUTPUT_DIR)
+    validate_live_category_canonical_uniqueness(all_categories, top_cat, OUTPUT_DIR)
     print(f"  Timing: archive, publication identity and permalink gates {time.perf_counter() - _stage_started:.1f}s")
     _stage_started = time.perf_counter()
     _current_gate_passed = bool((_current_regression_report or {}).get("production_gate_passed", False))
