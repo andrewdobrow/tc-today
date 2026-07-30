@@ -16663,12 +16663,44 @@ def _classify_archive_identity_record(entry, now=None):
     }
 
 
-def _backfill_archive_editorial_story_ids(archive, identity_index, output_root=None, now=None):
-    """Resolve only recent records by exact source URL and quarantine legacy identity.
+def _stable_authoritative_custom_story_id(entry):
+    """Return a durable publication-specific story ID for an archived custom article.
 
-    v1.10.4 attempted to replay identity across the entire archive. v1.10.5 keeps
-    historical pages intact and searchable, but only the last 30 days are eligible for
-    exact-source migration. No title, slug, or semantic guess can attach an old record.
+    Historical custom articles predate the persistent registry and may have no
+    ``editorial_story_id`` even though they already carry authoritative custom
+    identity.  The forward live contract requires every live publication to retain a
+    stable story identity.  Use only stored custom/publication fields and the canonical
+    slug, never fuzzy headline similarity.  Including the slug keeps recurring custom
+    editions isolated while making the backfill deterministic across runs.
+    """
+    if not (entry.get("is_custom") or entry.get("authoritative_custom")):
+        return ""
+    existing = str(entry.get("editorial_story_id") or "").strip()
+    if existing:
+        return existing
+    seed_parts = [
+        str(entry.get("custom_event_key") or "").strip(),
+        str(entry.get("custom_fingerprint") or "").strip(),
+        str(entry.get("custom_headline_key") or "").strip(),
+        str(entry.get("custom_series_key") or "").strip(),
+        str(entry.get("custom_edition_key") or "").strip(),
+        str(entry.get("publication_id") or entry.get("canonical_publication_id") or "").strip(),
+        str(entry.get("slug") or "").strip(),
+    ]
+    seed = "|".join(part for part in seed_parts if part)
+    if not seed:
+        return ""
+    return "custom:" + hashlib.sha256(seed.encode("utf-8")).hexdigest()[:32]
+
+
+def _backfill_archive_editorial_story_ids(archive, identity_index, output_root=None, now=None):
+    """Resolve recent source identity and deterministically identify custom archives.
+
+    Historical generated pages remain protected from speculative title/semantic
+    migration.  Authoritative custom pages are different: they already carry explicit
+    editor-owned identity and therefore receive a publication-specific deterministic
+    ``custom:`` story ID when one is missing.  This satisfies the live identity
+    invariant without collapsing recurring custom editions.
     """
     archive = list(archive or [])
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
@@ -16679,6 +16711,7 @@ def _backfill_archive_editorial_story_ids(archive, identity_index, output_root=N
         "already_identified": 0,
         "resolved": 0,
         "custom_isolated": 0,
+        "custom_backfilled": 0,
         "recent_unmatched": 0,
         "legacy_unresolved": 0,
         "quarantined_live_mismatches": 0,
@@ -16698,7 +16731,23 @@ def _backfill_archive_editorial_story_ids(archive, identity_index, output_root=N
         ):
             report["already_identified"] += 1
         elif entry.get("is_custom") or entry.get("authoritative_custom"):
-            report["custom_isolated"] += 1
+            custom_story_id = _stable_authoritative_custom_story_id(entry)
+            if custom_story_id:
+                entry["editorial_story_id"] = custom_story_id
+                entry["identity_origin"] = "authoritative_custom_archive_backfill"
+                entry["legacy_identity_status"] = "identified"
+                entry["ranking_eligible"] = True
+                report["custom_isolated"] += 1
+                report.setdefault("custom_backfilled", 0)
+                report["custom_backfilled"] += 1
+                report["resolved_records"].append({
+                    "slug": entry.get("slug", ""),
+                    "headline": entry.get("headline", ""),
+                    "editorial_story_id": custom_story_id,
+                    "basis": "authoritative_custom_publication_identity",
+                })
+            else:
+                report["custom_isolated"] += 1
         elif identity_index is not None and is_recent:
             resolver = getattr(identity_index, "resolve_source", None)
             story_id = resolver(entry) if callable(resolver) else ""
