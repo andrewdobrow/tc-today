@@ -10425,6 +10425,28 @@ def _known_event_key(text):
     if has_st_lucie and has_fire_org and has_discipline and has_case_signal:
         return "2026-07-st-lucie-firefighter-hazing-discipline"
 
+    # August 2025 Fort Pierce infant-death investigation and July 2026 arrests.
+    # Coverage varies between the death, homicide finding, arrest announcement and
+    # detective descriptions, but all belong to one persistent incident timeline.
+    has_infant = bool(words & {"infant", "baby", "child"}) or (("3" in words or "three" in words) and "month" in words and "old" in words)
+    has_fort_pierce = ("fort" in words and "pierce" in words) or has_st_lucie
+    has_death = bool(words & {"death", "dies", "died", "dead", "homicide", "manslaughter"})
+    has_neglect_cause = bool(words & {"dehydration", "malnutrition", "neglect", "starvation"})
+    has_arrest_case = bool(words & {"arrested", "arrest", "charged", "charges", "detective", "caregivers"})
+    has_maxwell_anchor = "maxwell" in words or "koon" in words
+    if has_fort_pierce and has_infant and has_death and has_neglect_cause and (has_arrest_case or has_maxwell_anchor):
+        return "2025-08-fort-pierce-infant-death-arrests"
+
+    # July 2026 Martin County Fire Rescue fiscal-impact coverage tied to the
+    # November property-tax/homestead proposal. Job cuts, station closures and
+    # dollar-loss estimates are developments of one government-policy story.
+    has_martin = "martin" in words and "county" in words
+    has_fire_rescue = "fire" in words and bool(words & {"rescue", "department", "station", "stations", "firefighters"})
+    has_property_reform = ("property" in words and "tax" in words) or "homestead" in words or "amendment" in words
+    has_fiscal_impact = bool(words & {"loss", "lose", "cuts", "jobs", "closure", "closures", "close", "million", "revenue"})
+    if has_martin and has_fire_rescue and has_property_reform and has_fiscal_impact:
+        return "2026-07-martin-fire-rescue-property-tax-impact"
+
     return ""
 
 
@@ -13977,6 +13999,21 @@ BIG_TASTE_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-07-29-big-taste-of-martin-county-fundraiser-set-for-october-in-stuart",
 })
 
+INFANT_DEATH_CANONICAL_SLUG = (
+    "2026-07-25-3-arrested-in-death-of-3-month-old-in-st-lucie-county-from-dehydration-and-malnu"
+)
+INFANT_DEATH_REDIRECT_SOURCE_SLUGS = frozenset({
+    "2026-07-28-three-arrested-after-3-month-old-dies-from-dehydration-and-malnutrition-in-fort",
+    "2026-07-30-three-arrested-after-3-month-old-dies-from-severe-dehydration-and-malnutrition-i",
+})
+
+MARTIN_FIRE_TAX_CANONICAL_SLUG = (
+    "2026-07-23-martin-county-fire-rescue-faces-165m-loss-if-property-tax-reform-passes-in-novem"
+)
+MARTIN_FIRE_TAX_REDIRECT_SOURCE_SLUGS = frozenset({
+    "2026-07-30-property-tax-reform-on-november-ballot-could-force-closure-of-martin-county-fire",
+})
+
 
 def _publication_slug_claim_diagnostics(item, entry):
     """Compare the immutable URL claim with the current headline/lead claim.
@@ -14828,6 +14865,46 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
                     "Permanent regression migration for a registry skip story that "
                     "already had a published canonical TCT permalink."
                 ),
+            })
+            removed_slugs.add(source_slug)
+
+    # Permanent incident-family repairs for event identities that were fragmented
+    # before the structured event-anchor contract existed. Future feed variants are
+    # matched by _known_event_key before publication; these redirects clean up URLs
+    # that already escaped into production.
+    for canonical_slug, source_slugs, source_headline, reason in (
+        (
+            INFANT_DEATH_CANONICAL_SLUG,
+            INFANT_DEATH_REDIRECT_SOURCE_SLUGS,
+            "Three arrested after 3-month-old dies from dehydration and malnutrition",
+            "Permanent incident migration for the Fort Pierce infant-death arrest story.",
+        ),
+        (
+            MARTIN_FIRE_TAX_CANONICAL_SLUG,
+            MARTIN_FIRE_TAX_REDIRECT_SOURCE_SLUGS,
+            "Property tax reform could force closure of Martin County fire stations",
+            "Permanent policy-story migration for Martin County Fire Rescue property-tax impacts.",
+        ),
+    ):
+        canonical = next((e for e in archive if e.get("slug") == canonical_slug), None)
+        if not canonical:
+            continue
+        canonical.pop("exclude_from_live_recovery", None)
+        canonical.pop("identity_quarantine_reason", None)
+        canonical["legacy_identity_status"] = "identified"
+        canonical["ranking_eligible"] = True
+        for source_slug in sorted(source_slugs):
+            _upsert_canonical_redirect(redirects, {
+                "source_slug": source_slug,
+                "source_headline": source_headline,
+                "target_slug": canonical_slug,
+                "target_headline": canonical.get("headline", ""),
+                "story_stage": "canonical-migration",
+                "match_confidence": 100,
+                "canonical_is_custom": bool(canonical.get("is_custom") or canonical.get("authoritative_custom")),
+                "editorial_story_id": canonical.get("editorial_story_id", ""),
+                "event_key": _known_event_key(" ".join([canonical.get("headline", ""), canonical.get("teaser", "")])),
+                "reason": reason,
             })
             removed_slugs.add(source_slug)
 
