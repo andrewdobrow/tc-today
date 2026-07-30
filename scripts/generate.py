@@ -8005,6 +8005,105 @@ def global_rank(all_cards, dedupe_against=None):
 
 
 
+LATEST_NEWS_RAIL_SCHEMA_VERSION = 1
+
+
+def _latest_news_publication_datetime(entry):
+    """Return the article's real TCT publication time for chronological surfaces.
+
+    ``Latest News`` is a publication stream, not an importance ranking. Prefer the
+    full ``first_published`` receipt written when TCT created the article. Legacy
+    rows without that receipt fall back to their publication date or dated slug.
+    Deliberately do not use ``lastmod``: routine archive reconciliation or an in-place
+    copy edit must not make an old article appear newly published.
+    """
+    if not isinstance(entry, dict):
+        return None
+    for key in ("first_published", "date"):
+        parsed = _parse_any_datetime(entry.get(key))
+        if parsed is not None:
+            return parsed.astimezone(timezone.utc)
+    return _slug_date(entry.get("slug"))
+
+
+def _select_latest_news_entries(archive_entries, limit=5):
+    """Select the newest canonical TCT publications in strict reverse chronology."""
+    try:
+        limit = max(0, int(limit))
+    except (TypeError, ValueError):
+        limit = 5
+    if limit == 0:
+        return []
+
+    candidates = []
+    seen_publications = set()
+    for entry in archive_entries or []:
+        if not isinstance(entry, dict) or not _archive_entry_publishable(entry):
+            continue
+        slug = _normalize_existing_article_slug(entry.get("canonical_slug") or entry.get("slug"))
+        if not slug:
+            continue
+        publication_key = str(
+            entry.get("canonical_publication_id")
+            or entry.get("publication_id")
+            or slug
+        ).strip()
+        if publication_key in seen_publications:
+            continue
+        published_at = _latest_news_publication_datetime(entry)
+        if published_at is None:
+            continue
+        normalized = dict(entry)
+        normalized["slug"] = slug
+        normalized["_latest_published_at"] = published_at.isoformat()
+        candidates.append((published_at, slug, normalized))
+        seen_publications.add(publication_key)
+
+    candidates.sort(key=lambda row: (row[0], row[1]), reverse=True)
+    return [row[2] for row in candidates[:limit]]
+
+
+def _write_latest_news_rail_contract(entries, archive_entries, output_root):
+    """Persist and fail closed when the Latest News rail is not chronological."""
+    selected = list(entries or [])
+    selected_times = [_latest_news_publication_datetime(entry) for entry in selected]
+    descending = all(
+        selected_times[index] is not None
+        and selected_times[index + 1] is not None
+        and selected_times[index] >= selected_times[index + 1]
+        for index in range(max(0, len(selected_times) - 1))
+    )
+    expected = _select_latest_news_entries(archive_entries, limit=len(selected))
+    expected_slugs = [str(entry.get("slug") or "") for entry in expected]
+    selected_slugs = [str(entry.get("slug") or "") for entry in selected]
+    passed = descending and selected_slugs == expected_slugs
+    report = {
+        "schema_version": LATEST_NEWS_RAIL_SCHEMA_VERSION,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "policy": "strict_reverse_tct_publication_chronology",
+        "passed": passed,
+        "limit": len(selected),
+        "selected_slugs": selected_slugs,
+        "selected_publication_times": [
+            value.isoformat() if value is not None else "" for value in selected_times
+        ],
+        "expected_slugs": expected_slugs,
+    }
+    path = Path(output_root) / "data" / "latest-news-rail-contract.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    if not passed:
+        raise RuntimeError(
+            "Latest News rail contract FAILED: entries are not the newest canonical "
+            "TCT publications in reverse chronological order"
+        )
+    print(
+        "  Latest News rail contract PASSED "
+        f"({len(selected_slugs)} strictly chronological publication(s))"
+    )
+    return report
+
+
 def render_index(all_categories, top_cat):
     COUNTY_KEYS = {"martin", "st_lucie", "indian_river"}
     archive = load_archive(OUTPUT_DIR / "archive.json")
@@ -8492,14 +8591,21 @@ def render_index(all_categories, top_cat):
         ]
     )
 
-    # Editorial redesign modules: a compact latest-news rail and county panels.
+    # Editorial redesign modules: Latest News is an independent chronological
+    # publication stream. It must never inherit Top Stories importance ranking.
+    latest_entries = _select_latest_news_entries(archive_for_links, limit=5)
+    _write_latest_news_rail_contract(latest_entries, archive_for_links, OUTPUT_DIR)
     latest_items_html = ""
-    for _latest in all_cards_display[:5]:
-        _url = card_permalink(_latest)
-        if not _url:
+    for _latest in latest_entries:
+        _slug = _normalize_existing_article_slug(_latest.get("slug"))
+        if not _slug:
             continue
-        _ltime = card_display_date(_latest)
-        _lcat = _latest.get("cat_label", "")
+        _url = _canonical_article_permalink(_slug)
+        _ltime = _format_category_hero_timestamp(_latest, archive_for_links)
+        _latest_category_key = str(_latest.get("category_key") or "")
+        _lcat = str(_latest.get("category_label") or "").strip()
+        if not _lcat and _latest_category_key in CATEGORIES:
+            _lcat = CATEGORIES[_latest_category_key]["label"]
         _lurgency_text = f"{_lcat} {_latest.get('headline','')}".strip().lower()
         _lbadge = ""
         if _latest.get("is_breaking") or _lurgency_text.startswith("breaking"):
