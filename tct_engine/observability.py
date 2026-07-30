@@ -17,10 +17,10 @@ from .source_identity import normalize_source_identity_url
 from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.11.9.1"
-ENGINE_RELEASE = "persistent-incident-anchor-dedup"
-OBSERVABILITY_SCHEMA_VERSION = 17
-RESOLVER_VERSION = "2.4"
+ENGINE_VERSION = "1.12.0"
+ENGINE_RELEASE = "authoritative-story-publication-ledger"
+OBSERVABILITY_SCHEMA_VERSION = 18
+RESOLVER_VERSION = "3.0"
 RELATIONSHIP_ENGINE_VERSION = "1.5"
 
 

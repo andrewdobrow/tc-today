@@ -12,10 +12,15 @@ import itertools
 import re
 from typing import Any, Iterable, Mapping, MutableMapping
 
-from .incident_identity import build_story_incident_signature, compare_incident_signatures
+from .incident_identity import (
+    build_story_incident_signature,
+    compare_incident_signatures,
+    named_person_death_subjects,
+    timeline_incident_anchor,
+)
 from .source_identity import story_source_identity_urls
 
-REPAIR_VERSION = 4
+REPAIR_VERSION = 5
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
@@ -278,6 +283,10 @@ class RegistryRepairReport:
     incident_identity_groups_resolved: int
     incident_story_records_removed: int
     remaining_incident_identity_groups: int
+    selective_incident_anchor_groups_repaired: int
+    selective_timeline_entries_moved: int
+    contaminated_story_records_preserved: int
+    incident_anchor_to_story_count: int
     generated_at: str
 
     def to_dict(self) -> dict[str, Any]:
@@ -306,6 +315,10 @@ class RegistryRepairReport:
             "incident_identity_groups_resolved": self.incident_identity_groups_resolved,
             "incident_story_records_removed": self.incident_story_records_removed,
             "remaining_incident_identity_groups": self.remaining_incident_identity_groups,
+            "selective_incident_anchor_groups_repaired": self.selective_incident_anchor_groups_repaired,
+            "selective_timeline_entries_moved": self.selective_timeline_entries_moved,
+            "contaminated_story_records_preserved": self.contaminated_story_records_preserved,
+            "incident_anchor_to_story_count": self.incident_anchor_to_story_count,
             "generated_at": self.generated_at,
         }
 
@@ -369,7 +382,15 @@ def _incident_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[s
         story_id: build_story_incident_signature(stories[story_id])
         for story_id in story_ids
     }
-    supported_ids = [story_id for story_id in story_ids if signatures[story_id].supported]
+    # Named-person death anchors are repaired at timeline-entry granularity.
+    # Whole-record merging would drag unrelated entries from already contaminated
+    # stories into the canonical incident.
+    supported_ids = [
+        story_id
+        for story_id in story_ids
+        if signatures[story_id].supported
+        and signatures[story_id].family != "named_person_death"
+    ]
     for index, left_id in enumerate(supported_ids):
         for right_id in supported_ids[index + 1 :]:
             if compare_incident_signatures(signatures[left_id], signatures[right_id]).matched:
@@ -379,6 +400,211 @@ def _incident_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[s
     for story_id in story_ids:
         components.setdefault(find(story_id), set()).add(story_id)
     return [component for component in components.values() if len(component) > 1]
+
+
+
+def _selective_named_person_death_repair(
+    stories: MutableMapping[str, MutableMapping[str, Any]],
+    aliases: MutableMapping[str, str],
+) -> tuple[int, int, int, dict[str, str], dict[str, list[str]]]:
+    """Consolidate anchored timeline entries without merging contamination.
+
+    Legacy generic ``fire-<location>`` keys allowed unrelated fire, shots-fired,
+    animal-rescue and firefighter-death entries to coexist in one story record.
+    This repair moves only timeline entries carrying the exact named-person death
+    anchor. Unrelated entries stay in their original story.
+    """
+
+    evidence: dict[str, dict[str, list[dict[str, Any]]]] = {}
+    subjects_by_story: dict[str, tuple[str, ...]] = {}
+    for story_id, story in stories.items():
+        subjects = named_person_death_subjects(story)
+        subjects_by_story[story_id] = subjects
+        for entry in story.get("timeline", ()) or ():
+            if not isinstance(entry, Mapping):
+                continue
+            anchor = timeline_incident_anchor(entry, inherited_subjects=subjects)
+            if anchor:
+                evidence.setdefault(anchor, {}).setdefault(story_id, []).append(dict(entry))
+
+    groups_repaired = 0
+    entries_moved = 0
+    contaminated_preserved = 0
+    anchor_to_story: dict[str, str] = {}
+    moved_by_primary: dict[str, list[str]] = {}
+
+    for anchor, by_story in sorted(evidence.items()):
+        if len(by_story) < 2:
+            only = next(iter(by_story), "")
+            if only:
+                anchor_to_story[anchor] = only
+                stories[only].setdefault("incident_anchors", [])
+                if anchor not in stories[only]["incident_anchors"]:
+                    stories[only]["incident_anchors"].append(anchor)
+            continue
+
+        def _primary_key(story_id: str) -> tuple[float, int, int, int, int, int]:
+            story = stories[story_id]
+            matching = len(by_story[story_id])
+            total = len(list(story.get("timeline", ()) or ()))
+            purity = matching / total if total else 0.0
+            custom, priority, trust = _canonical_candidate_priority(story)
+            return (purity, matching, int(custom), priority, trust, -_story_number(story_id))
+
+        primary_id = max(by_story, key=_primary_key)
+        primary = stories[primary_id]
+        primary.setdefault("incident_anchors", [])
+        if anchor not in primary["incident_anchors"]:
+            primary["incident_anchors"].append(anchor)
+        primary["events"] = sorted(
+            {str(value) for value in primary.get("events", ()) if str(value).strip()}
+            | {anchor}
+        )
+        anchor_to_story[anchor] = primary_id
+        moved_by_primary.setdefault(primary_id, [])
+
+        for secondary_id in sorted(set(by_story) - {primary_id}, key=_story_number):
+            if secondary_id not in stories:
+                continue
+            secondary = stories[secondary_id]
+            secondary_subjects = subjects_by_story.get(secondary_id, ())
+            moving_entries = by_story[secondary_id]
+            moving_event_keys = {
+                str(entry.get("event_key") or "").strip()
+                for entry in moving_entries
+                if str(entry.get("event_key") or "").strip()
+            }
+            moving_article_ids = {
+                str(entry.get("article_id") or "").strip()
+                for entry in moving_entries
+                if str(entry.get("article_id") or "").strip()
+            }
+
+            primary["timeline"] = _unique_dicts(
+                [*primary.get("timeline", ()), *moving_entries],
+                ("event_key", "article_id", "url", "title"),
+            )
+            primary["events"] = sorted(
+                {str(value) for value in primary.get("events", ()) if str(value).strip()}
+                | moving_event_keys
+            )
+
+            def _title_anchor(value: object) -> str:
+                return timeline_incident_anchor(
+                    {"title": str(value or "")},
+                    inherited_subjects=secondary_subjects,
+                )
+
+            moving_titles = [
+                str(value)
+                for value in secondary.get("titles", ())
+                if _title_anchor(value) == anchor
+            ]
+            primary["titles"] = sorted(
+                {str(value) for value in primary.get("titles", ()) if str(value).strip()}
+                | set(moving_titles)
+                | {str(entry.get("title") or "").strip() for entry in moving_entries if str(entry.get("title") or "").strip()}
+            )
+
+            moving_candidates = [
+                dict(candidate)
+                for candidate in secondary.get("title_candidates", ()) or ()
+                if isinstance(candidate, Mapping)
+                and _title_anchor(candidate.get("title")) == anchor
+            ]
+            primary["title_candidates"] = _unique_dicts(
+                [*primary.get("title_candidates", ()), *moving_candidates],
+                ("title", "source", "source_class", "source_trust", "is_custom", "priority"),
+            )
+            primary["sources"] = sorted(
+                {str(value) for value in primary.get("sources", ()) if str(value).strip()}
+                | {
+                    str(entry.get("source") or entry.get("url") or "").strip()
+                    for entry in moving_entries
+                    if str(entry.get("source") or entry.get("url") or "").strip()
+                }
+            )
+
+            remaining_timeline = [
+                dict(entry)
+                for entry in secondary.get("timeline", ()) or ()
+                if not (
+                    str(entry.get("article_id") or "").strip() in moving_article_ids
+                    or str(entry.get("event_key") or "").strip() in moving_event_keys
+                )
+            ]
+            secondary["timeline"] = remaining_timeline
+            secondary["events"] = [
+                value for value in secondary.get("events", ())
+                if str(value or "").strip() not in moving_event_keys
+            ]
+            secondary["titles"] = [
+                value for value in secondary.get("titles", ())
+                if _title_anchor(value) != anchor
+            ]
+            secondary["title_candidates"] = [
+                candidate
+                for candidate in secondary.get("title_candidates", ()) or ()
+                if not (
+                    isinstance(candidate, Mapping)
+                    and _title_anchor(candidate.get("title")) == anchor
+                )
+            ]
+            secondary["sources"] = sorted(
+                {
+                    str(entry.get("source") or entry.get("url") or "").strip()
+                    for entry in remaining_timeline
+                    if str(entry.get("source") or entry.get("url") or "").strip()
+                }
+            )
+
+            entries_moved += len(moving_entries)
+            moved_by_primary[primary_id].append(secondary_id)
+            if remaining_timeline:
+                contaminated_preserved += 1
+                secondary["identity_contamination_repaired"] = True
+                secondary["detached_incident_anchor"] = anchor
+                secondary["canonical_title"] = _select_canonical_title(secondary)
+                # Remove the named subject when no remaining title refers to it.
+                remaining_text = " ".join(
+                    [
+                        *[str(entry.get("title") or "") for entry in remaining_timeline],
+                        *[str(value) for value in secondary.get("titles", ())],
+                    ]
+                ).casefold()
+                secondary["entities"] = [
+                    value
+                    for value in secondary.get("entities", ())
+                    if str(value or "").casefold() in remaining_text
+                    or str(value or "").casefold() not in {
+                        str(subject).casefold() for subject in secondary_subjects
+                    }
+                ]
+            else:
+                aliases[secondary_id] = primary_id
+                del stories[secondary_id]
+
+        primary["canonical_title"] = _select_canonical_title(primary)
+        primary["custom_article_count"] = sum(
+            1 for candidate in primary.get("title_candidates", ())
+            if bool(candidate.get("is_custom", False))
+        )
+        groups_repaired += 1
+
+    # Re-evaluate anchors after moves so clean one-story groups are indexed too.
+    for story_id, story in stories.items():
+        for anchor in story.get("incident_anchors", ()) or ():
+            if str(anchor or "").strip():
+                anchor_to_story[str(anchor)] = story_id
+        subjects = named_person_death_subjects(story)
+        for entry in story.get("timeline", ()) or ():
+            if not isinstance(entry, Mapping):
+                continue
+            anchor = timeline_incident_anchor(entry, inherited_subjects=subjects)
+            if anchor:
+                anchor_to_story.setdefault(anchor, story_id)
+
+    return groups_repaired, entries_moved, contaminated_preserved, anchor_to_story, moved_by_primary
 
 
 def _source_identity_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[str]]:
@@ -496,9 +722,22 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
             source_removed += 1
         merged_story_ids.setdefault(primary_id, []).extend(secondary_ids)
 
+    # Named-person death incidents are repaired at timeline-entry granularity.
+    # This prevents a contaminated legacy story from dragging unrelated fire or
+    # animal-rescue entries into the canonical death story.
+    (
+        selective_groups,
+        selective_entries_moved,
+        contaminated_preserved,
+        incident_anchor_to_story,
+        selective_moved_by_primary,
+    ) = _selective_named_person_death_repair(stories, aliases)
+    for primary_id, secondary_ids in selective_moved_by_primary.items():
+        merged_story_ids.setdefault(primary_id, []).extend(secondary_ids)
+
     # Exact and publisher-attribution duplicates are resolved first.  The
-    # incident layer then sees one record per literal headline identity and can
-    # safely consolidate paraphrased coverage using independent evidence.
+    # remaining whole-record incident layer is used only for families whose
+    # records are safe to merge as a unit (currently mass animal hoarding).
     incident_groups_before = _count_incident_identity_groups(stories)
     incident_components = _incident_components(stories)
     incident_removed = 0
@@ -522,6 +761,15 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
             if value:
                 event_to_story[value] = story_id
     payload["event_to_story"] = event_to_story
+    # Structured incident anchors are a first-class registry index.  New feed
+    # coverage can resolve directly to the canonical story before generic event
+    # keys or semantic similarity are considered.
+    incident_anchor_to_story = {
+        anchor: aliases.get(story_id, story_id)
+        for anchor, story_id in incident_anchor_to_story.items()
+        if aliases.get(story_id, story_id) in stories
+    }
+    payload["incident_anchor_to_story"] = incident_anchor_to_story
 
     removed = sum(len(values) for values in merged_story_ids.values())
     remaining_duplicates = _count_exact_duplicate_title_groups(stories)
@@ -530,7 +778,7 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
     remaining_incident_groups = _count_incident_identity_groups(stories)
     report = RegistryRepairReport(
         repair_version=REPAIR_VERSION,
-        changed=bool(quarantine_reasons or removed),
+        changed=bool(quarantine_reasons or removed or selective_entries_moved),
         active_stories_before=before,
         active_stories_after=len(stories),
         quarantined_story_ids=tuple(sorted(quarantine_reasons, key=_story_number)),
@@ -558,6 +806,10 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
         ),
         incident_story_records_removed=incident_removed,
         remaining_incident_identity_groups=remaining_incident_groups,
+        selective_incident_anchor_groups_repaired=selective_groups,
+        selective_timeline_entries_moved=selective_entries_moved,
+        contaminated_story_records_preserved=contaminated_preserved,
+        incident_anchor_to_story_count=len(incident_anchor_to_story),
         generated_at=_utc_now(),
     )
 

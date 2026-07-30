@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import importlib.util
-import json
 import sys
 import types
 from datetime import datetime, timezone
@@ -44,11 +43,9 @@ def _legacy_vigil_target():
     }
 
 
-def test_prospective_update_rejects_vigil_target_before_lastmod_exposes_drift():
+def test_persistent_story_update_keeps_canonical_despite_headline_slug_drift():
     g = _load_generate()
     target = _legacy_vigil_target()
-    assert g._archive_entry_live_identity_safe(target) is True
-
     incoming = {
         "headline": target["headline"],
         "teaser": "The community held a vigil as relatives remembered the 9-year-old boy.",
@@ -63,11 +60,11 @@ def test_prospective_update_rejects_vigil_target_before_lastmod_exposes_drift():
         "persistent_story_id",
         now=datetime(2026, 7, 27, tzinfo=timezone.utc),
     )
-    assert valid is False
-    assert reason == "prospective_headline_slug_event_drift"
+    assert valid is True
+    assert reason == "persistent_story_id"
 
 
-def test_both_production_vigil_headlines_trigger_prospective_quarantine():
+def test_exact_source_headline_evolution_keeps_existing_canonical():
     g = _load_generate()
     for headline in (
         "Community gathers to honor 9-year-old boy killed in dirt bike crash with FedEx truck in St. Lucie County",
@@ -87,41 +84,22 @@ def test_both_production_vigil_headlines_trigger_prospective_quarantine():
             "exact_source_url",
             now=datetime(2026, 7, 27, tzinfo=timezone.utc),
         )
-        assert valid is False
-        assert reason == "prospective_headline_slug_event_drift"
+        assert valid is True
+        assert reason == "exact_source_url"
 
 
-def test_quarantined_old_target_cannot_become_canonical_or_live_binding(tmp_path):
+def test_legacy_false_quarantine_is_repaired_and_duplicate_redirected(tmp_path):
     g = _load_generate()
     old = _legacy_vigil_target()
-    incoming = {
-        "headline": "Community holds vigil for 9-year-old boy killed in dirt bike crash with FedEx truck",
-        "source_url": old["source_url"],
-    }
-    assert g._quarantine_archive_publication_target(
-        old,
-        "prospective_headline_slug_event_drift",
-        incoming,
-        now=datetime(2026, 7, 27, tzinfo=timezone.utc),
-    )
-    assert old["exclude_from_live_recovery"] is True
-    assert old["ranking_eligible"] is False
-    assert old["identity_quarantine_reason"] == "prospective_headline_slug_event_drift"
-    assert old["identity_quarantine_persistent"] is True
-
-    # The normal post-write archive backfill must not erase a prospective quarantine.
-    rows, report = g._backfill_archive_editorial_story_ids(
-        [old], None, tmp_path, now=datetime(2026, 7, 27, tzinfo=timezone.utc)
-    )
-    old = rows[0]
-    assert old["exclude_from_live_recovery"] is True
-    assert old["identity_quarantine_reason"] == "prospective_headline_slug_event_drift"
-    assert report["quarantined_live_mismatches"] == 1
+    old["exclude_from_live_recovery"] = True
+    old["ranking_eligible"] = False
+    old["identity_quarantine_reason"] = "prospective_headline_slug_event_drift"
+    old["identity_quarantine_persistent"] = True
 
     new_slug = "2026-07-27-community-holds-vigil-for-9-year-old-boy-killed-in-dirt-bike-crash"
     new = {
         "slug": new_slug,
-        "headline": incoming["headline"],
+        "headline": "Community holds vigil for 9-year-old boy killed in dirt bike crash with FedEx truck",
         "teaser": "The community gathered to remember the child.",
         "category_key": "crime",
         "date": "2026-07-27",
@@ -131,50 +109,18 @@ def test_quarantined_old_target_cannot_become_canonical_or_live_binding(tmp_path
         "legacy_identity_status": "identified",
         "ranking_eligible": True,
     }
-    articles = tmp_path / "articles"
-    articles.mkdir()
-    (articles / f"{old['slug']}.html").write_text("<html>old preserved page</html>", encoding="utf-8")
-    (articles / f"{new_slug}.html").write_text("<html>new canonical page</html>", encoding="utf-8")
+    identity_index = types.SimpleNamespace(safe_story_ids={"story-vigil"})
 
-    cleaned, redirects = g.apply_canonical_story_cleanup([old, new], articles, tmp_path)
-    assert {row["slug"] for row in cleaned} == {old["slug"], new_slug}
-    assert redirects == []
-
-    categories = [
-        {
-            "category_key": "crime",
-            "hero": {
-                "headline": "Community gathers to honor 9-year-old boy killed",
-                "_archived_slug": old["slug"],
-                "link": f"https://treasurecoast.today/articles/{old['slug']}.html",
-                "editorial_story_id": "story-vigil",
-                "_editorial_story_id": "story-vigil",
-            },
-            "cards": [],
-        },
-        {
-            "category_key": "st_lucie",
-            "hero": {
-                "headline": "Community holds vigil for 9-year-old boy killed",
-                "_archived_slug": old["slug"],
-                "link": f"https://treasurecoast.today/articles/{old['slug']}.html",
-                "editorial_story_id": "story-vigil",
-                "_editorial_story_id": "story-vigil",
-            },
-            "cards": [],
-        },
-    ]
-    rebound = g._rebind_live_items_to_published_archive(
-        categories, [old, new], articles_dir=articles
+    cleaned, redirects, ledger, report = g._reconcile_canonical_publication_ledger(
+        [old, new], identity_index, tmp_path
     )
-    assert rebound == 2
-    assert all(cat["hero"]["_archived_slug"] == new_slug for cat in categories)
-    assert all(cat["hero"]["link"].endswith(f"/{new_slug}.html") for cat in categories)
 
-    (tmp_path / "archive.json").write_text(
-        json.dumps([old, new]), encoding="utf-8"
-    )
-    (tmp_path / "data").mkdir(exist_ok=True)
-    report = g.validate_forward_live_identity(categories, categories[0], tmp_path)
+    assert [row["slug"] for row in cleaned] == [old["slug"]]
+    assert old.get("exclude_from_live_recovery") is None
+    assert old.get("identity_quarantine_reason") is None
+    assert old["ranking_eligible"] is True
+    assert redirects[0]["source_slug"] == new_slug
+    assert redirects[0]["target_slug"] == old["slug"]
+    assert ledger["key_to_slug"]["story:story-vigil"] == old["slug"]
     assert report["passed"] is True
-    assert report["violation_count"] == 0
+    assert report["false_quarantines_repaired"] == 1

@@ -15,6 +15,7 @@ from .editorial_pipeline import (
     PipelineArticle,
 )
 from .event_key import generate_event_key
+from .incident_identity import incident_anchor_key
 from .fact_extraction import extract_article_facts
 from .rss_adapter import RSSArticleAdapter
 
@@ -175,7 +176,26 @@ class EditorialEngine:
         )
 
         extracted = extract_article_facts(raw)
-        event_key = generate_event_key(extracted)
+        # Structured incident anchors outrank generic event-type/location keys.
+        # Only identity families that are safe as a primary event key enter the
+        # registry before the legacy resolver. Broader consolidation families remain
+        # publication-time aliases so they cannot change established event behavior.
+        structured_anchor = incident_anchor_key(
+            titles=(raw.title,),
+            facts=extracted.facts,
+            locations=extracted.locations,
+            agencies=extracted.agencies,
+            event_types=extracted.event_types,
+            entities=extracted.entities,
+            body=raw.body,
+        )
+        if structured_anchor.startswith((
+            "named-person-death:",
+            "infrastructure-condition:",
+        )):
+            event_key = structured_anchor
+        else:
+            event_key = generate_event_key(extracted)
 
         pipeline_result = self._pipeline.process(
             PipelineArticle(

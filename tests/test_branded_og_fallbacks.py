@@ -40,6 +40,8 @@ def test_legacy_ai_urls_are_migration_inputs_not_active_pool_entries():
 
 
 def test_engine_version_is_compatible_with_final_canonical_surface_dedup():
-    observability = (ROOT / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'OBSERVABILITY_SCHEMA_VERSION = 17' in observability
-    assert 'ENGINE_VERSION = "1.11.' in observability
+    import tct_engine.observability as observability
+
+    version = tuple(int(part) for part in observability.ENGINE_VERSION.split("."))
+    assert observability.OBSERVABILITY_SCHEMA_VERSION >= 17
+    assert version >= (1, 11, 9, 0)

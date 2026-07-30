@@ -111,7 +111,10 @@ def test_ware_redirect_copy_and_custom_card_collapse_to_custom_canonical(tmp_pat
     assert set(kept[0]["category_keys"]) == {"sports", "st_lucie"}
     assert report["resolved_unique_identity_count"] == 1
     assert report["removed_count"] == 1
-    assert report["removed"][0]["identity_key"] == f"story:{custom_story_id}"
+    assert report["removed"][0]["identity_key"] == (
+        "custom-event:sports-award|st-lucie-mets|ware|"
+        "pitcher-of-the-week|2026-07-27"
+    )
 
 
 def test_big_taste_redirect_source_is_rewritten_even_when_it_is_the_only_card(tmp_path):

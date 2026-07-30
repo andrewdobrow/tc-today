@@ -78,6 +78,9 @@ from .incident_identity import (
     compare_incident_signatures,
     compare_story_incidents,
     find_matching_incident_story,
+    incident_anchor_key,
+    named_person_death_subjects,
+    timeline_incident_anchor,
 )
 from .source_identity import (
     SOURCE_IDENTITY_VERSION,
@@ -200,6 +203,9 @@ __all__ = [
     "compare_incident_signatures",
     "compare_story_incidents",
     "find_matching_incident_story",
+    "incident_anchor_key",
+    "named_person_death_subjects",
+    "timeline_incident_anchor",
     "SOURCE_IDENTITY_VERSION",
     "SourceIdentityMatch",
     "find_matching_source_story",
@@ -245,4 +251,4 @@ __all__ = [
     "build_publication_identity_index",
 ]
 
-__version__ = "1.11.8.2"
+__version__ = "1.12.0"

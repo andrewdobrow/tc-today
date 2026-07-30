@@ -47,6 +47,7 @@ try:
         build_publication_identity_index,
         write_homepage_ranking_recommendations,
         normalize_source_identity_url,
+        incident_anchor_key,
     )
 except Exception as exc:
     ActivationConfig = None
@@ -61,6 +62,7 @@ except Exception as exc:
     build_publication_identity_index = None
     write_homepage_ranking_recommendations = None
     normalize_source_identity_url = None
+    incident_anchor_key = None
     _editorial_import_error = exc
 
 # -- CONFIG --
@@ -3044,6 +3046,46 @@ def _archive_article_body(entry):
     except Exception:
         return ""
 
+def _durable_incident_anchor(item, include_archive_body=False):
+    """Return one deterministic structured incident identity for any article-like item.
+
+    This identity is independent of mutable headlines, model classifications and
+    persistent story IDs. It is intentionally usable at feed intake, publication,
+    archive migration and final rendering so one fragmented registry cannot create
+    several public URLs for the same named real-world incident.
+    """
+    if not isinstance(item, dict) or incident_anchor_key is None:
+        return ""
+    existing = str(item.get("incident_anchor_key") or "").strip()
+    if existing:
+        return existing
+    body = str(item.get("body") or item.get("article_text") or "")
+    if include_archive_body and not body:
+        body = _archive_article_body(item)
+    try:
+        key = incident_anchor_key(
+            titles=(
+                item.get("headline", ""),
+                item.get("source_headline", ""),
+                item.get("title", ""),
+                item.get("source_title", ""),
+                item.get("teaser", ""),
+            ),
+            facts=item.get("facts", ()) or (),
+            locations=item.get("locations", ()) or (),
+            agencies=item.get("agencies", ()) or (),
+            event_types=item.get("event_types", ()) or (),
+            entities=item.get("entities", ()) or (),
+            body=body,
+        )
+    except Exception:
+        return ""
+    key = str(key or "").strip()
+    if key:
+        item["incident_anchor_key"] = key
+    return key
+
+
 def _archive_entry_publishable(entry):
     if _is_nonstory_placeholder(entry):
         return False
@@ -4295,6 +4337,7 @@ _UPDATE_BASELINE_ANCHORS = (
     ("criminal_case", re.compile(r"\b(?:crime|criminal|investigation|case|suspect|victim)\b", re.IGNORECASE)),
     ("legal_case", re.compile(r"\b(?:lawsuit|trial|hearing|court|appeal)\b", re.IGNORECASE)),
     ("government_matter", re.compile(r"\b(?:proposal|application|ordinance|budget|project|rezoning|development)\b", re.IGNORECASE)),
+    ("infrastructure_issue", re.compile(r"\b(?:traffic signal|traffic light|stoplight|bridge|road|intersection|crossing|station|facility|outage)\b", re.IGNORECASE)),
 )
 
 _UPDATE_NOVELTY_ANCHORS = (
@@ -4307,6 +4350,7 @@ _UPDATE_NOVELTY_ANCHORS = (
     ("arrest_or_charge", re.compile(r"\b(?:arrest|arrests|arrested|charge|charges|charged)\b", re.IGNORECASE)),
     ("decision", re.compile(r"\b(?:approve|approves|approved|reject|rejects|rejected|vote|votes|voted|rule|rules|ruled)\b", re.IGNORECASE)),
     ("status_change", re.compile(r"\b(?:reopen|reopens|reopened|close|closes|closed|resume|resumes|resumed|suspend|suspends|suspended)\b", re.IGNORECASE)),
+    ("continuing_status", re.compile(r"\b(?:still|remains?|continues?|now|after\s+\d+|months?|weeks?|days?)\b", re.IGNORECASE)),
 )
 
 
@@ -4315,9 +4359,14 @@ class ContextualUpdateLeadError(RuntimeError):
 
 
 def _source_story_form(source):
-    """Classify only explicit source-title updates; ordinary breaking news stays standard."""
+    """Classify update copy from authoritative story routing or explicit title cues."""
     if not isinstance(source, dict):
         return "standard"
+    route = str(
+        source.get("_editorial_route") or source.get("editorial_route") or ""
+    ).strip().lower()
+    if route in {"update_existing", "replace_canonical", "publish_major_update"}:
+        return "update"
     title = str(source.get("source_title") or source.get("title") or source.get("headline") or "")
     if any(pattern.search(title) for pattern in _UPDATE_SOURCE_PATTERNS):
         return "update"
@@ -7100,6 +7149,29 @@ def _canonical_article_permalink(slug):
     return f"{SITE_URL}/articles/{slug}.html" if slug else ""
 
 
+def _incident_canonical_key(entry):
+    """Choose one durable public URL for a structured real-world incident.
+
+    Custom reporting remains authoritative. Otherwise preserve the oldest public URL,
+    prefer a headline centered on the named subject and death itself over a secondary
+    agency-reaction angle, then use article depth and the slug only as tie-breakers.
+    """
+    item = entry if isinstance(entry, dict) else {}
+    custom_rank = 0 if item.get("is_custom") or item.get("authoritative_custom") else 1
+    date = str(item.get("date") or item.get("lastmod") or "9999-99-99")
+    first = str(item.get("first_published") or "")
+    headline = str(item.get("headline") or "")
+    folded = headline.casefold()
+    anchor = str(item.get("incident_anchor_key") or "")
+    subject_tokens = [token for token in anchor.split(":", 1)[-1].split("-") if token]
+    explicit_subject = all(token in folded for token in subject_tokens) if subject_tokens else False
+    central_death = bool(re.search(r"\b(?:dies?|died|death|dead|killed|suicide)\b", folded))
+    reaction_angle = bool(re.search(r"\b(?:mourns?|honors?|tribute|remember)\b", folded))
+    central_rank = -int(explicit_subject) - int(central_death) + int(reaction_angle)
+    quality = -int(item.get("article_word_count", 0) or 0)
+    return (custom_rank, date, first, central_rank, quality, str(item.get("slug") or ""))
+
+
 def _build_final_canonical_surface_context(
     archive,
     output_root,
@@ -7107,13 +7179,15 @@ def _build_final_canonical_surface_context(
     identity_index=None,
     redirect_map=None,
 ):
-    """Build immutable lookup state for final homepage canonicalization.
+    """Build immutable lookup state for every final public surface.
 
-    The final surface pass deliberately combines the four identity sources that can
-    survive earlier stages: cumulative redirects, archive publication records,
-    persistent editorial story IDs, and durable custom-event authority.
+    Canonical identity no longer depends only on a registry story ID. Structured
+    incident anchors are independently reconstructed from archive copy so fragmented
+    or contaminated registry records cannot produce parallel public URLs.
     """
     archive_rows = [row for row in (archive or []) if isinstance(row, dict)]
+    for row in archive_rows:
+        _durable_incident_anchor(row, include_archive_body=True)
     archive_by_slug = {
         _normalize_existing_article_slug(row.get("slug")): row
         for row in archive_rows
@@ -7129,11 +7203,8 @@ def _build_final_canonical_surface_context(
     story_groups = defaultdict(list)
     for row in archive_rows:
         story_id = str(row.get("editorial_story_id") or "").strip()
-        if not story_id:
-            continue
-        if story_id.startswith("custom:") or story_id in safe_story_ids:
+        if story_id and (story_id.startswith("custom:") or story_id in safe_story_ids):
             story_groups[story_id].append(row)
-
     story_canonical_slugs = {}
     for story_id, rows in story_groups.items():
         canonical = min(rows, key=_publication_canonical_key)
@@ -7161,6 +7232,20 @@ def _build_final_canonical_surface_context(
         if canonical_slug:
             custom_event_canonical_slugs[event_key] = canonical_slug
 
+    incident_groups = defaultdict(list)
+    for row in archive_rows:
+        anchor = str(row.get("incident_anchor_key") or "").strip()
+        if anchor:
+            incident_groups[anchor].append(row)
+    incident_anchor_canonical_slugs = {}
+    for anchor, rows in incident_groups.items():
+        canonical = min(rows, key=_incident_canonical_key)
+        canonical_slug, _ = _follow_canonical_redirect_slug(
+            canonical.get("slug", ""), redirect_map
+        )
+        if canonical_slug:
+            incident_anchor_canonical_slugs[anchor] = canonical_slug
+
     return {
         "archive": archive_rows,
         "archive_by_slug": archive_by_slug,
@@ -7169,11 +7254,12 @@ def _build_final_canonical_surface_context(
         "safe_story_ids": safe_story_ids,
         "story_canonical_slugs": story_canonical_slugs,
         "custom_event_canonical_slugs": custom_event_canonical_slugs,
+        "incident_anchor_canonical_slugs": incident_anchor_canonical_slugs,
     }
 
 
 def _final_canonical_surface_identity(item, permalink, context):
-    """Resolve one live placement to its final public article identity."""
+    """Resolve one placement through custom, incident, registry and URL identity."""
     item = item if isinstance(item, dict) else {}
     context = context or {}
     raw_slug = _article_slug_from_permalink(permalink)
@@ -7183,6 +7269,25 @@ def _final_canonical_surface_identity(item, permalink, context):
     archive_by_slug = context.get("archive_by_slug", {})
     canonical_entry = archive_by_slug.get(canonical_slug)
     raw_entry = archive_by_slug.get(raw_slug)
+
+    event_key = str(
+        (canonical_entry or {}).get("durable_custom_identity_key")
+        or (canonical_entry or {}).get("custom_event_key")
+        or (raw_entry or {}).get("durable_custom_identity_key")
+        or (raw_entry or {}).get("custom_event_key")
+        or item.get("durable_custom_identity_key")
+        or item.get("custom_event_key")
+        or ""
+    ).strip()
+
+    incident_anchor = str(
+        (canonical_entry or {}).get("incident_anchor_key")
+        or (raw_entry or {}).get("incident_anchor_key")
+        or item.get("incident_anchor_key")
+        or ""
+    ).strip()
+    if not incident_anchor:
+        incident_anchor = _durable_incident_anchor(item)
 
     story_id = str(
         (canonical_entry or {}).get("editorial_story_id")
@@ -7196,47 +7301,38 @@ def _final_canonical_surface_identity(item, permalink, context):
         story_id and (story_id.startswith("custom:") or story_id in safe_story_ids)
     )
 
-    if story_id_safe:
-        preferred_slug = context.get("story_canonical_slugs", {}).get(story_id, "")
-        preferred_slug, preferred_redirects = _follow_canonical_redirect_slug(
-            preferred_slug or canonical_slug, context.get("redirect_map", {})
-        )
-        if preferred_slug:
-            canonical_slug = preferred_slug
-            canonical_entry = archive_by_slug.get(canonical_slug) or canonical_entry
-        redirect_sources = list(dict.fromkeys(redirect_sources + preferred_redirects))
-
-    event_key = str(
-        (canonical_entry or {}).get("durable_custom_identity_key")
-        or (canonical_entry or {}).get("custom_event_key")
-        or (raw_entry or {}).get("durable_custom_identity_key")
-        or (raw_entry or {}).get("custom_event_key")
-        or item.get("durable_custom_identity_key")
-        or item.get("custom_event_key")
-        or ""
-    ).strip()
+    # Resolve authority in descending order. A structured incident anchor must outrank
+    # a fragmented story ID; otherwise five IDs for one death still appear unique.
     if event_key:
         preferred_slug = context.get("custom_event_canonical_slugs", {}).get(event_key, "")
-        preferred_slug, preferred_redirects = _follow_canonical_redirect_slug(
-            preferred_slug or canonical_slug, context.get("redirect_map", {})
-        )
-        if preferred_slug:
-            canonical_slug = preferred_slug
-            canonical_entry = archive_by_slug.get(canonical_slug) or canonical_entry
-        redirect_sources = list(dict.fromkeys(redirect_sources + preferred_redirects))
-
-    if story_id_safe:
-        identity_key = f"story:{story_id}"
-        identity_basis = "persistent_story_id"
-    elif event_key:
         identity_key = f"custom-event:{event_key}"
         identity_basis = "durable_custom_event"
+    elif incident_anchor:
+        preferred_slug = context.get("incident_anchor_canonical_slugs", {}).get(
+            incident_anchor, ""
+        )
+        identity_key = f"incident:{incident_anchor}"
+        identity_basis = "structured_incident_anchor"
+    elif story_id_safe:
+        preferred_slug = context.get("story_canonical_slugs", {}).get(story_id, "")
+        identity_key = f"story:{story_id}"
+        identity_basis = "persistent_story_id"
     elif canonical_slug:
+        preferred_slug = canonical_slug
         identity_key = f"slug:{canonical_slug}"
         identity_basis = "canonical_slug"
     else:
+        preferred_slug = ""
         identity_key = _homepage_permalink_key(permalink)
         identity_basis = "literal_permalink" if identity_key else "unresolved"
+
+    preferred_slug, preferred_redirects = _follow_canonical_redirect_slug(
+        preferred_slug or canonical_slug, context.get("redirect_map", {})
+    )
+    if preferred_slug:
+        canonical_slug = preferred_slug
+        canonical_entry = archive_by_slug.get(canonical_slug) or canonical_entry
+    redirect_sources = list(dict.fromkeys(redirect_sources + preferred_redirects))
 
     return {
         "identity_key": identity_key,
@@ -7250,6 +7346,7 @@ def _final_canonical_surface_identity(item, permalink, context):
         "redirect_chain": redirect_sources,
         "story_id": story_id if story_id_safe else "",
         "custom_event_key": event_key,
+        "incident_anchor_key": incident_anchor,
         "canonical_entry": canonical_entry,
     }
 
@@ -7275,16 +7372,21 @@ def _apply_final_canonical_surface_identity(item, identity):
             if item.get(key) != story_id:
                 item[key] = story_id
                 changed = True
+    incident_anchor = identity.get("incident_anchor_key") or canonical_entry.get(
+        "incident_anchor_key"
+    ) or ""
+    if incident_anchor and item.get("incident_anchor_key") != incident_anchor:
+        item["incident_anchor_key"] = incident_anchor
+        changed = True
 
-    # Redirect-source and story-equivalent generated copies must display the
-    # canonical copy's headline and card metadata. This is what makes custom
-    # authority visible rather than merely changing the destination URL.
     should_adopt_copy = bool(
         canonical_entry
         and (
             identity.get("redirect_source")
             or identity.get("identity_basis") in {
-                "persistent_story_id", "durable_custom_event"
+                "persistent_story_id",
+                "durable_custom_event",
+                "structured_incident_anchor",
             }
         )
     )
@@ -7493,6 +7595,163 @@ def _dedupe_homepage_cards_by_permalink(
         "removed": removed,
     }
     return kept, report
+
+
+def _live_item_permalink(item):
+    if not isinstance(item, dict):
+        return ""
+    link = str(item.get("link") or "").strip()
+    if link:
+        return link
+    slug = _normalize_existing_article_slug(
+        item.get("_archived_slug") or item.get("slug")
+    )
+    return _canonical_article_permalink(slug) if slug else ""
+
+
+def canonicalize_all_live_category_surfaces(
+    all_categories,
+    top_cat,
+    output_root,
+    *,
+    identity_index=None,
+):
+    """Rebind and deduplicate every category hero/card set before rendering.
+
+    Earlier final-surface enforcement covered only the front-page lead and Top News
+    grid. County tabs could therefore retain five different URLs for one incident.
+    This pass applies the exact same canonical identity contract to every category.
+    """
+    output_root = Path(output_root)
+    archive = load_archive(output_root / "archive.json")
+    context = _build_final_canonical_surface_context(
+        archive, output_root, identity_index=identity_index
+    )
+    categories = [c for c in (all_categories or []) if isinstance(c, dict)]
+    reports = []
+    total_removed = 0
+    total_rewritten = 0
+    for category in categories:
+        category_key = str(category.get("category_key") or "")
+        hero = category.get("hero") if isinstance(category.get("hero"), dict) else {}
+        hero_permalink = _live_item_permalink(hero)
+        hero_identity = _final_canonical_surface_identity(hero, hero_permalink, context)
+        hero_rewritten = _apply_final_canonical_surface_identity(hero, hero_identity)
+        if hero_rewritten:
+            hero_permalink = hero_identity.get("canonical_permalink") or hero_permalink
+            total_rewritten += 1
+
+        cards = list(category.get("cards") or [])
+        kept, report = _dedupe_homepage_cards_by_permalink(
+            cards,
+            _live_item_permalink,
+            hero_permalink=hero_permalink,
+            surface_context=context,
+        )
+        category["cards"] = kept
+        total_removed += int(report.get("removed_count", 0) or 0)
+        total_rewritten += int(report.get("canonical_rewrite_count", 0) or 0)
+        reports.append({
+            "category_key": category_key,
+            "category_label": category.get("category_label", ""),
+            "hero_rewritten": bool(hero_rewritten),
+            **report,
+        })
+
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "policy": "one_direct_canonical_placement_per_structured_incident_in_every_category",
+        "category_count": len(categories),
+        "removed_count": total_removed,
+        "canonical_rewrite_count": total_rewritten,
+        "categories": reports,
+    }
+    path = output_root / "data" / "live-category-canonical-dedup.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if total_removed or total_rewritten:
+        print(
+            "  Live category canonicalization removed "
+            f"{total_removed} duplicate placement(s) and rewrote "
+            f"{total_rewritten} canonical placement(s)"
+        )
+    return report
+
+
+def validate_live_category_canonical_uniqueness(
+    all_categories,
+    top_cat,
+    output_root,
+    *,
+    identity_index=None,
+):
+    """Fail closed if any county/topic category still exposes a duplicate incident."""
+    output_root = Path(output_root)
+    archive = load_archive(output_root / "archive.json")
+    context = _build_final_canonical_surface_context(
+        archive, output_root, identity_index=identity_index
+    )
+    violations = []
+    resolved = []
+    checked = 0
+    for category in [c for c in (all_categories or []) if isinstance(c, dict)]:
+        category_key = str(category.get("category_key") or "")
+        placements = [("hero", category.get("hero") or {})]
+        placements.extend(("card", card) for card in category.get("cards") or [])
+        seen = {}
+        for placement, item in placements:
+            if not isinstance(item, dict) or not item.get("headline"):
+                continue
+            checked += 1
+            permalink = _live_item_permalink(item)
+            identity = _final_canonical_surface_identity(item, permalink, context)
+            row = {
+                "category_key": category_key,
+                "placement": placement,
+                "headline": item.get("headline", ""),
+                "href": permalink,
+                "identity_key": identity.get("identity_key", ""),
+                "identity_basis": identity.get("identity_basis", ""),
+                "raw_slug": identity.get("raw_slug", ""),
+                "canonical_slug": identity.get("canonical_slug", ""),
+                "incident_anchor_key": identity.get("incident_anchor_key", ""),
+            }
+            resolved.append(row)
+            if identity.get("redirect_source"):
+                violations.append({**row, "reason": "redirect_source_live_placement"})
+            key = identity.get("identity_key", "")
+            if key and key in seen:
+                violations.append({
+                    **row,
+                    "reason": "duplicate_canonical_identity_in_category",
+                    "first": seen[key],
+                })
+            elif key:
+                seen[key] = row
+
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "passed": not violations,
+        "checked_live_placements": checked,
+        "violation_count": len(violations),
+        "violations": violations,
+        "resolved": resolved,
+    }
+    path = output_root / "data" / "live-category-canonical-contract.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if violations:
+        raise RuntimeError(
+            "Live category canonical contract FAILED: "
+            f"{len(violations)} redirect-source or duplicate incident placement(s)"
+        )
+    print(
+        "  Live category canonical contract PASSED "
+        f"({checked} placement(s) across {len(all_categories or [])} categories)"
+    )
+    return report
 
 
 def validate_homepage_permalink_uniqueness(index_html, output_root):
@@ -14563,12 +14822,393 @@ def _publication_coalesce_key(item, identity_index=None):
             "custom-headline:" + hashlib.sha256(headline.encode("utf-8")).hexdigest()
             if headline else ""
         )
+    incident_anchor = _durable_incident_anchor(item)
+    if incident_anchor:
+        return f"incident-anchor:{incident_anchor}"
     story_id = _publication_story_id(item, identity_index)
     if story_id:
         item["_editorial_story_id"] = story_id
         return f"editorial-story:{story_id}"
     headline_key = re.sub(r"[^a-z0-9 ]", "", str(item.get("headline") or "").lower()).strip()[:60]
     return f"headline:{headline_key}" if headline_key else ""
+
+
+CANONICAL_PUBLICATION_LEDGER_VERSION = "1.0"
+
+
+def _stable_publication_id(slug):
+    slug = str(slug or "").strip()
+    if not slug:
+        return ""
+    return "publication:" + hashlib.sha256(slug.encode("utf-8")).hexdigest()[:24]
+
+
+def _ensure_publication_identity_fields(entry, canonical_slug=""):
+    if not isinstance(entry, dict):
+        return entry
+    slug = str(entry.get("slug") or entry.get("_archived_slug") or "").strip()
+    if not slug:
+        return entry
+    publication_id = str(entry.get("publication_id") or "").strip() or _stable_publication_id(slug)
+    canonical_slug = str(canonical_slug or entry.get("canonical_slug") or slug).strip()
+    canonical_publication_id = (
+        str(entry.get("canonical_publication_id") or "").strip()
+        if canonical_slug == slug
+        else ""
+    ) or _stable_publication_id(canonical_slug)
+    entry["publication_id"] = publication_id
+    entry["canonical_slug"] = canonical_slug
+    entry["canonical_publication_id"] = canonical_publication_id
+    return entry
+
+
+def _publication_ledger_identity_keys(item, identity_index=None, *, include_archive_body=False):
+    """Return deterministic identities that may own one canonical TCT permalink.
+
+    Exact source identity, the persistent story ID and structured incident identity
+    are independent evidence channels. The publication writer may use any one of them
+    to find an existing canonical, but historical auto-redirects use only safe story
+    IDs or independently structured incident/source identity.
+    """
+    if not isinstance(item, dict):
+        return ()
+    keys = []
+    anchor = _durable_incident_anchor(item, include_archive_body=include_archive_body)
+    if anchor:
+        keys.append(f"incident:{anchor}")
+
+    story_id = str(
+        item.get("editorial_story_id")
+        or item.get("_editorial_story_id")
+        or ""
+    ).strip()
+    if not story_id and identity_index is not None:
+        try:
+            story_id = str(identity_index.resolve(item) or "").strip()
+        except Exception:
+            story_id = ""
+    if story_id:
+        keys.append(f"story:{story_id}")
+
+    source_url = _normalized_external_source_url(
+        item.get("source_url")
+        or item.get("_source_url")
+        or item.get("original_url")
+        or item.get("link")
+        or item.get("url")
+    )
+    if source_url:
+        keys.append(f"source:{source_url}")
+
+    custom_event = str(
+        item.get("custom_event_key")
+        or item.get("durable_custom_identity_key")
+        or ""
+    ).strip()
+    if custom_event:
+        keys.append(f"custom-event:{custom_event}")
+
+    weather_event = str(item.get("weather_event_key") or "").strip()
+    if weather_event:
+        keys.append(f"weather:{weather_event}")
+    return tuple(dict.fromkeys(keys))
+
+
+def _publication_ledger_candidate_safe(entry):
+    if not isinstance(entry, dict) or not entry.get("slug"):
+        return False
+    if _is_nonstory_placeholder(entry):
+        return False
+    if _archive_entry_live_identity_safe(entry):
+        return True
+    reason = str(entry.get("identity_quarantine_reason") or "")
+    # This quarantine was created by treating a changed headline as a changed story.
+    # A canonical publication ledger must be able to repair that exact failure.
+    return reason.startswith("prospective_headline_slug_event_drift")
+
+
+def _repair_false_permalink_quarantine(entry, *, reason="canonical_publication_ledger"):
+    if not isinstance(entry, dict):
+        return False
+    quarantine = str(entry.get("identity_quarantine_reason") or "")
+    if not quarantine.startswith("prospective_headline_slug_event_drift"):
+        return False
+    entry.pop("exclude_from_live_recovery", None)
+    entry.pop("identity_quarantine_reason", None)
+    entry["legacy_identity_status"] = "identified"
+    entry["ranking_eligible"] = True
+    entry["identity_origin"] = reason
+    return True
+
+
+def _generic_same_event_publication_match(left, right):
+    """Conservative universal fallback when registry IDs fragmented.
+
+    The publication ledger normally relies on structured incident identity,
+    persistent story ID or exact source identity. This final deterministic check
+    prevents a strongly corroborated same event with different IDs and source URLs
+    from reaching the new-slug branch. It deliberately requires both independent
+    same-event matchers plus high confidence and a bounded time window.
+    """
+    if not isinstance(left, dict) or not isinstance(right, dict):
+        return False
+    if _is_nonstory_placeholder(left) or _is_nonstory_placeholder(right):
+        return False
+    left_date = _audit_date_value(left)
+    right_date = _audit_date_value(right)
+    if left_date and right_date and abs((left_date - right_date).days) > 45:
+        return False
+    if not _same_event_items(left, right):
+        return False
+    if not _same_story_topic(left, right):
+        return False
+    left_anchor = _durable_incident_anchor(left, include_archive_body=True)
+    right_anchor = _durable_incident_anchor(right, include_archive_body=True)
+    if left_anchor or right_anchor:
+        return bool(left_anchor and left_anchor == right_anchor)
+    left_known = _known_event_key(_story_text(left))
+    right_known = _known_event_key(_story_text(right))
+    if left_known or right_known:
+        return bool(left_known and left_known == right_known)
+    return _story_match_confidence(left, right) >= 90
+
+
+def _build_canonical_publication_ledger(archive, identity_index=None):
+    """Build the authoritative one-story/one-publication lookup used by the writer."""
+    archive = [entry for entry in (archive or []) if isinstance(entry, dict)]
+    by_slug = {
+        str(entry.get("slug") or "").strip(): entry
+        for entry in archive
+        if entry.get("slug")
+    }
+    key_members = defaultdict(list)
+    for entry in archive:
+        if not _publication_ledger_candidate_safe(entry):
+            continue
+        _ensure_publication_identity_fields(entry)
+        for key in _publication_ledger_identity_keys(
+            entry, identity_index, include_archive_body=True
+        ):
+            key_members[key].append(entry)
+
+    key_to_slug = {}
+    key_conflicts = {}
+    safe_story_ids = set(getattr(identity_index, "safe_story_ids", set()) or set())
+    for key, members in key_members.items():
+        unique = {str(row.get("slug") or ""): row for row in members if row.get("slug")}
+        if not unique:
+            continue
+        canonical = min(unique.values(), key=_publication_canonical_key)
+        key_to_slug[key] = canonical.get("slug", "")
+        enforce_conflict = not key.startswith("story:") or key.split(":", 1)[1] in safe_story_ids
+        if len(unique) > 1 and enforce_conflict:
+            key_conflicts[key] = sorted(unique)
+    return {
+        "version": CANONICAL_PUBLICATION_LEDGER_VERSION,
+        "by_slug": by_slug,
+        "key_to_slug": key_to_slug,
+        "key_conflicts": key_conflicts,
+        "entry_count": len(by_slug),
+        "identity_key_count": len(key_to_slug),
+    }
+
+
+def _canonical_publication_ledger_target(item, ledger, identity_index=None):
+    if not isinstance(item, dict) or not isinstance(ledger, dict):
+        return None, "", ()
+    keys = _publication_ledger_identity_keys(item, identity_index)
+    slugs = {
+        ledger.get("key_to_slug", {}).get(key)
+        for key in keys
+        if ledger.get("key_to_slug", {}).get(key)
+    }
+    slugs.discard(None)
+    candidates = [
+        ledger.get("by_slug", {}).get(slug)
+        for slug in slugs
+        if ledger.get("by_slug", {}).get(slug)
+    ]
+    if not candidates:
+        # Universal fail-closed fallback: when upstream registry IDs fragmented,
+        # compare the proposed publication with every safe existing canonical.
+        # Strong same-event evidence reuses the established permalink rather than
+        # allowing a model-generated headline to mint another URL.
+        candidates = [
+            entry
+            for entry in ledger.get("by_slug", {}).values()
+            if _publication_ledger_candidate_safe(entry)
+            and _generic_same_event_publication_match(item, entry)
+        ]
+        if not candidates:
+            return None, "", keys
+        canonical = min(candidates, key=_publication_canonical_key)
+        return canonical, "high-confidence-same-event", keys
+    canonical = min(candidates, key=_publication_canonical_key)
+    matched_keys = tuple(
+        key for key in keys
+        if ledger.get("key_to_slug", {}).get(key) == canonical.get("slug")
+    )
+    basis = "+".join(key.split(":", 1)[0] for key in matched_keys) or "publication_ledger"
+    return canonical, basis, keys
+
+
+def _reconcile_canonical_publication_ledger(archive, identity_index, output_root):
+    """Collapse connected duplicate publication records before new writing begins.
+
+    Structured incident anchors, exact source URLs and safe duplicate-story IDs form
+    a connected identity graph. Each connected component may retain one live slug.
+    Follow-up/related story IDs are not used for historical auto-redirects, preserving
+    room for a future explicit major-update publication contract.
+    """
+    archive = [entry for entry in (archive or []) if isinstance(entry, dict)]
+    safe_story_ids = set(getattr(identity_index, "safe_story_ids", set()) or set())
+    parent = list(range(len(archive)))
+
+    def find(index):
+        while parent[index] != index:
+            parent[index] = parent[parent[index]]
+            index = parent[index]
+        return index
+
+    def union(left, right):
+        a, b = find(left), find(right)
+        if a != b:
+            parent[b] = a
+
+    key_owner = {}
+    identity_keys_by_index = {}
+    for index, entry in enumerate(archive):
+        if not _publication_ledger_candidate_safe(entry):
+            continue
+        keys = []
+        for key in _publication_ledger_identity_keys(
+            entry, identity_index, include_archive_body=True
+        ):
+            if key.startswith("story:") and key.split(":", 1)[1] not in safe_story_ids:
+                continue
+            keys.append(key)
+            if key in key_owner:
+                union(index, key_owner[key])
+            else:
+                key_owner[key] = index
+        identity_keys_by_index[index] = tuple(keys)
+
+    # Historical universal reconciliation. Proven same-event pairs may have
+    # different story IDs and different source URLs because the old pipeline
+    # fragmented identity before publication. Collapse only high-confidence,
+    # time-bounded pairs; uncertain cases remain separate and visible for review.
+    candidate_indexes = sorted(identity_keys_by_index)
+    generic_pair_edges = []
+    for offset, left_index in enumerate(candidate_indexes):
+        left = archive[left_index]
+        for right_index in candidate_indexes[offset + 1:]:
+            right = archive[right_index]
+            if _generic_same_event_publication_match(left, right):
+                union(left_index, right_index)
+                generic_pair_edges.append((left_index, right_index))
+
+    components = defaultdict(list)
+    for index in identity_keys_by_index:
+        components[find(index)].append(index)
+
+    removed = set()
+    redirects = []
+    groups = []
+    repaired_quarantines = 0
+    for indexes in components.values():
+        members = [archive[index] for index in indexes if archive[index].get("slug")]
+        unique_slugs = {str(row.get("slug") or "") for row in members}
+        if len(unique_slugs) < 2:
+            if members and _repair_false_permalink_quarantine(members[0]):
+                repaired_quarantines += 1
+            continue
+        canonical = min(members, key=_publication_canonical_key)
+        canonical_slug = str(canonical.get("slug") or "")
+        if _repair_false_permalink_quarantine(canonical):
+            repaired_quarantines += 1
+        merged_memberships = set(_item_category_memberships(canonical, canonical.get("category_key")))
+        component_keys = set()
+        for index in indexes:
+            component_keys.update(identity_keys_by_index.get(index, ()))
+        index_set = set(indexes)
+        for left_index, right_index in generic_pair_edges:
+            if left_index in index_set and right_index in index_set:
+                pair_seed = "|".join(sorted([
+                    str(archive[left_index].get("slug") or ""),
+                    str(archive[right_index].get("slug") or ""),
+                ]))
+                component_keys.add(
+                    "same-event:" + hashlib.sha256(
+                        pair_seed.encode("utf-8")
+                    ).hexdigest()[:16]
+                )
+        for duplicate in members:
+            slug = str(duplicate.get("slug") or "")
+            merged_memberships.update(
+                _item_category_memberships(duplicate, duplicate.get("category_key"))
+            )
+            if not slug or slug == canonical_slug:
+                continue
+            removed.add(slug)
+            _ensure_publication_identity_fields(duplicate, canonical_slug)
+            redirects.append({
+                "source_slug": slug,
+                "source_headline": duplicate.get("headline", ""),
+                "target_slug": canonical_slug,
+                "target_headline": canonical.get("headline", ""),
+                "story_stage": "canonical-publication-ledger",
+                "match_confidence": 100,
+                "canonical_is_custom": bool(
+                    canonical.get("is_custom") or canonical.get("authoritative_custom")
+                ),
+                "identity_keys": sorted(component_keys),
+                "source_publication_id": duplicate.get("publication_id", ""),
+                "canonical_publication_id": _stable_publication_id(canonical_slug),
+                "reason": (
+                    "Canonical publication ledger enforced one live permalink for "
+                    "the same proven story or incident."
+                ),
+            })
+        _apply_category_memberships(
+            canonical,
+            canonical.get("category_key"),
+            merged_memberships,
+        )
+        _ensure_publication_identity_fields(canonical, canonical_slug)
+        groups.append({
+            "canonical_slug": canonical_slug,
+            "canonical_headline": canonical.get("headline", ""),
+            "removed_slugs": sorted(unique_slugs - {canonical_slug}),
+            "identity_keys": sorted(component_keys),
+        })
+
+    cleaned = [entry for entry in archive if entry.get("slug") not in removed]
+    ledger = _build_canonical_publication_ledger(cleaned, identity_index)
+    report = {
+        "schema_version": 1,
+        "version": CANONICAL_PUBLICATION_LEDGER_VERSION,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "passed": not ledger.get("key_conflicts"),
+        "archive_records_before": len(archive),
+        "archive_records_after": len(cleaned),
+        "groups_collapsed": len(groups),
+        "records_redirected": len(redirects),
+        "false_quarantines_repaired": repaired_quarantines,
+        "generic_same_event_edges": len(generic_pair_edges),
+        "identity_key_count": ledger.get("identity_key_count", 0),
+        "remaining_identity_conflicts": ledger.get("key_conflicts", {}),
+        "groups": groups,
+    }
+    path = Path(output_root) / "data" / "canonical-publication-ledger.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if not report["passed"]:
+        raise RuntimeError(
+            "Canonical publication ledger FAILED: unresolved identity keys own "
+            "multiple live permalinks"
+        )
+    return cleaned, redirects, ledger, report
+
 
 def _canonical_candidate_score(entry):
     return (
@@ -14620,6 +15260,9 @@ def _strict_custom_duplicate_pair(candidate, canonical):
 def apply_canonical_story_cleanup(archive, articles_dir, output_root):
     """Consolidate all proven duplicate developments into one canonical article."""
     archive = list(archive or [])
+    articles_dir = Path(articles_dir)
+    articles_dir.mkdir(parents=True, exist_ok=True)
+    output_root = Path(output_root)
     customs = [e for e in archive if e.get("slug") and
                (e.get("is_custom") or e.get("authoritative_custom"))]
     redirects = []
@@ -14761,6 +15404,53 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
                 "canonical_is_custom": bool(canonical.get("is_custom") or canonical.get("authoritative_custom")),
                 "event_key": event_key,
                 "reason": "Duplicate development consolidated under the single canonical event URL.",
+            })
+
+    # Global structured-incident consolidation. This is independent of the
+    # mutable registry and works even when one incident was fragmented across many
+    # story IDs. It also runs against historical archive pages so existing escapes
+    # are migrated in the same deployment.
+    incident_groups = defaultdict(list)
+    for entry in archive:
+        slug = str(entry.get("slug") or "").strip()
+        if not slug or slug in removed_slugs:
+            continue
+        anchor = _durable_incident_anchor(entry, include_archive_body=True)
+        if anchor:
+            incident_groups[anchor].append(entry)
+
+    for anchor, members in incident_groups.items():
+        active = [m for m in members if m.get("slug") not in removed_slugs]
+        if len(active) < 2:
+            continue
+        canonical = min(active, key=_incident_canonical_key)
+        canonical["incident_anchor_key"] = anchor
+        for duplicate in active:
+            source_slug = str(duplicate.get("slug") or "")
+            if not source_slug or source_slug == canonical.get("slug"):
+                continue
+            _merge_category_memberships(
+                canonical,
+                duplicate,
+                canonical.get("category_key") or duplicate.get("category_key") or "",
+            )
+            removed_slugs.add(source_slug)
+            existing_redirect_sources.add(source_slug)
+            _upsert_canonical_redirect(redirects, {
+                "source_slug": source_slug,
+                "source_headline": duplicate.get("headline", ""),
+                "target_slug": canonical.get("slug", ""),
+                "target_headline": canonical.get("headline", ""),
+                "story_stage": "structured-incident-anchor",
+                "match_confidence": 100,
+                "canonical_is_custom": bool(
+                    canonical.get("is_custom") or canonical.get("authoritative_custom")
+                ),
+                "incident_anchor_key": anchor,
+                "reason": (
+                    "Duplicate public URL consolidated by the global structured "
+                    "incident identity contract."
+                ),
             })
 
     # Enforce the permanent hoarding-story canonical contract independently of
@@ -15007,6 +15697,64 @@ def enforce_canonical_redirects(archive, articles_dir, output_root, current_run_
              for r in records if r.get("source_slug") and r.get("target_slug")]
     (output_root / "_redirects").write_text("\n".join(rules) + ("\n" if rules else ""), encoding="utf-8")
     return cleaned, verification
+
+
+def validate_archive_incident_uniqueness(archive, output_root):
+    """Fail closed when the canonical archive contains parallel incident URLs."""
+    output_root = Path(output_root)
+    redirect_map = _load_canonical_redirect_slug_map(output_root)
+    groups = defaultdict(list)
+    redirect_sources = []
+    checked = 0
+    for entry in [row for row in (archive or []) if isinstance(row, dict)]:
+        slug = _normalize_existing_article_slug(entry.get("slug"))
+        if not slug:
+            continue
+        checked += 1
+        if slug in redirect_map:
+            redirect_sources.append({
+                "slug": slug,
+                "target_slug": redirect_map.get(slug, ""),
+                "headline": entry.get("headline", ""),
+            })
+        anchor = _durable_incident_anchor(entry, include_archive_body=True)
+        if anchor:
+            groups[anchor].append({
+                "slug": slug,
+                "headline": entry.get("headline", ""),
+                "editorial_story_id": entry.get("editorial_story_id", ""),
+            })
+    duplicates = [
+        {"incident_anchor_key": anchor, "articles": rows}
+        for anchor, rows in sorted(groups.items())
+        if len({row["slug"] for row in rows}) > 1
+    ]
+    passed = not duplicates and not redirect_sources
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "passed": passed,
+        "checked_archive_entries": checked,
+        "structured_incident_group_count": len(groups),
+        "duplicate_incident_group_count": len(duplicates),
+        "active_redirect_source_count": len(redirect_sources),
+        "duplicate_incident_groups": duplicates,
+        "active_redirect_sources": redirect_sources,
+    }
+    path = output_root / "data" / "global-incident-identity-contract.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if not passed:
+        raise RuntimeError(
+            "Global incident identity contract FAILED: "
+            f"{len(duplicates)} duplicate incident group(s), "
+            f"{len(redirect_sources)} active redirect source(s)"
+        )
+    print(
+        "  Global incident identity contract PASSED "
+        f"({checked} archive record(s), {len(groups)} structured incident group(s))"
+    )
+    return report
 
 
 def write_story_regression_report(output_root, archive, redirect_verification):
@@ -15949,15 +16697,43 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
         route == "skip"
         and story_id
         and entry_story_id == story_id
-        and basis in {"persistent_story_id", "exact_source_url"}
+        and (basis in {"persistent_story_id", "exact_source_url"} or str(basis).startswith("canonical_publication_ledger"))
     ):
         # ``skip`` is a no-change decision. Preserve the existing canonical page;
         # never reinterpret rewritten display copy as a proposed article update.
         return True, "published_skip_preserve_existing"
 
+    # Once the authoritative ledger or the same persistent story has selected a
+    # canonical, a headline/slug wording difference can never force a new permalink.
+    # Primary-claim drift remains separately guarded below.
+    ledger_basis = str(basis or "").startswith("canonical_publication_ledger")
+    same_persistent_story = bool(
+        basis == "persistent_story_id"
+        and story_id
+        and entry_story_id == story_id
+    )
+    incoming_source = _normalized_external_source_url(
+        item.get("source_url") or item.get("_source_url") or item.get("link")
+    )
+    existing_source = _normalized_external_source_url(
+        entry.get("source_url") or entry.get("original_url") or entry.get("link")
+    )
+    same_exact_source = bool(
+        basis == "exact_source_url"
+        and incoming_source
+        and incoming_source == existing_source
+    )
+
     claim_drift = _publication_slug_claim_diagnostics(item, entry)
     if claim_drift.get("rebind_required"):
         return False, "primary_claim_slug_drift_unrepaired"
+
+    if ledger_basis:
+        return True, str(basis)
+    if same_persistent_story:
+        return True, basis
+    if same_exact_source:
+        return True, basis
 
     # Evaluate the row as it would exist after this update. A changed headline and
     # current lastmod may expose an old overwritten URL that still looks safe before
@@ -16212,6 +16988,22 @@ def write_archives(all_categories, top_cat):
         _reconcile_archive_publication_identity(archive, _publication_identity)
     )
     _canonical_redirects.extend(_publication_redirects)
+    archive, _ledger_redirects, _publication_ledger, _publication_ledger_report = (
+        _reconcile_canonical_publication_ledger(
+            archive, _publication_identity, OUTPUT_DIR
+        )
+    )
+    _canonical_redirects.extend(_ledger_redirects)
+    _forward_identity_report["canonical_publication_ledger"] = {
+        "version": CANONICAL_PUBLICATION_LEDGER_VERSION,
+        "groups_collapsed": _publication_ledger_report.get("groups_collapsed", 0),
+        "records_redirected": _publication_ledger_report.get("records_redirected", 0),
+        "false_quarantines_repaired": _publication_ledger_report.get(
+            "false_quarantines_repaired", 0
+        ),
+        "write_barrier_holds": [],
+        "update_context_holds": [],
+    }
 
     heroes = [(top_cat["category_key"], top_cat["category_label"], top_cat["hero"])]
     for cat in all_categories:
@@ -16356,6 +17148,69 @@ def write_archives(all_categories, top_cat):
                 ).hexdigest()[:32]
             hero["editorial_story_id"] = _editorial_story_id
             hero["_editorial_story_id"] = _editorial_story_id
+
+        # AUTHORITATIVE WRITE BARRIER. Story identity is a publication constraint,
+        # not advisory metadata. Any proven incident/story/source identity that
+        # already owns a canonical TCT slug must reuse that slug before validation.
+        if not (hero.get("is_custom") or hero.get("authoritative_custom")):
+            _ledger_existing, _ledger_basis, _ledger_keys = (
+                _canonical_publication_ledger_target(
+                    hero, _publication_ledger, _publication_identity
+                )
+            )
+            if _ledger_existing is not None:
+                _repair_false_permalink_quarantine(
+                    _ledger_existing, reason="canonical_publication_write_barrier"
+                )
+                existing = _ledger_existing
+                _target_basis = f"canonical_publication_ledger:{_ledger_basis}"
+                hero["canonical_publication_id"] = _stable_publication_id(
+                    existing.get("slug", "")
+                )
+                hero["canonical_slug"] = existing.get("slug", "")
+                # A fragmented registry may call this generate_new even though a
+                # structured incident/source identity already owns a page. Recast it
+                # as an in-place update candidate; a later context gate may still
+                # preserve the old copy if the new lead is not self-contained.
+                if str(hero.get("_editorial_route") or "").lower() == "generate_new":
+                    hero["_editorial_route"] = "update_existing"
+                    hero["story_form"] = "update"
+                    hero["_publication_route_repaired"] = (
+                        "generate_new_to_update_existing_by_ledger"
+                    )
+                if str(hero.get("_editorial_route") or "").lower() == "skip":
+                    _bind_live_item_to_archive(
+                        hero,
+                        existing,
+                        current_customs=_current_customs,
+                        replace_with_custom=bool(
+                            existing.get("is_custom")
+                            or existing.get("authoritative_custom")
+                        ),
+                    )
+                    _ledger_skip_record = {
+                        "headline": headline,
+                        "source_url": normalized_source_url,
+                        "editorial_story_id": _editorial_story_id,
+                        "canonical_slug": existing.get("slug", ""),
+                        "canonical_headline": existing.get("headline", ""),
+                        "identity_keys": list(_ledger_keys),
+                        "basis": f"canonical_publication_ledger:{_ledger_basis}",
+                        "action": "preserve_existing_page_no_rewrite",
+                    }
+                    _forward_identity_report["canonical_publication_ledger"][
+                        "write_barrier_holds"
+                    ].append(dict(_ledger_skip_record))
+                    # Keep the established audit surface populated while the
+                    # canonical ledger becomes the authoritative write barrier.
+                    _forward_identity_report.setdefault(
+                        "published_skip_preservations", []
+                    ).append(dict(_ledger_skip_record))
+                    print(
+                        "  CANONICAL LEDGER SKIP: preserved "
+                        f"'{existing.get('slug','')}' for '{headline[:60]}'"
+                    )
+                    continue
 
         # If a prior model run left this story under a URL that states a different
         # jurisdiction and monetary claim, rebind the same canonical archive row
@@ -16506,6 +17361,30 @@ def write_archives(all_categories, top_cat):
 
         this_run_token_sets.append(_sig_tokens(headline))
 
+        # Recheck immediately before the only slug-creation branch. This second
+        # lookup includes canonicals created earlier in the same run and makes it
+        # impossible for a later category clone or rewritten headline to mint a
+        # parallel URL.
+        if existing is None and not (hero.get("is_custom") or hero.get("authoritative_custom")):
+            _barrier_existing, _barrier_basis, _barrier_keys = (
+                _canonical_publication_ledger_target(
+                    hero, _publication_ledger, _publication_identity
+                )
+            )
+            if _barrier_existing is not None:
+                existing = _barrier_existing
+                _target_basis = f"canonical_publication_write_barrier:{_barrier_basis}"
+                hero["_editorial_route"] = "update_existing"
+                hero["story_form"] = "update"
+                _forward_identity_report["canonical_publication_ledger"][
+                    "write_barrier_holds"
+                ].append({
+                    "headline": headline,
+                    "canonical_slug": existing.get("slug", ""),
+                    "identity_keys": list(_barrier_keys),
+                    "action": "reuse_existing_canonical_before_slug_creation",
+                })
+
         if existing:
             # Same story — update existing page in place, keep original URL. An
             # unchanged active custom queue entry is retained for live placement and
@@ -16515,6 +17394,51 @@ def write_archives(all_categories, top_cat):
             hero["first_published"] = existing.get("first_published") or existing.get("date", "")
             hero["_archived_slug"] = slug
             hero["link"] = f"{SITE_URL}/articles/{slug}.html"
+            _ensure_publication_identity_fields(existing, slug)
+            hero["publication_id"] = existing.get("publication_id", "")
+            hero["canonical_publication_id"] = existing.get(
+                "canonical_publication_id", ""
+            )
+            hero["canonical_slug"] = slug
+
+            _route = str(
+                hero.get("_editorial_route") or hero.get("editorial_route") or ""
+            ).strip().lower()
+            if (
+                _route in {"update_existing", "replace_canonical"}
+                and not (hero.get("is_custom") or hero.get("authoritative_custom"))
+            ):
+                hero["story_form"] = "update"
+                _context_source = dict(hero)
+                _context_source["title"] = (
+                    hero.get("source_headline") or hero.get("headline") or ""
+                )
+                _context_source["article_text"] = " ".join(filter(None, [
+                    str(existing.get("headline") or ""),
+                    str(existing.get("teaser") or ""),
+                    str(hero.get("body") or ""),
+                ]))
+                _context_diagnostics = _article_framing_diagnostics(
+                    hero, _context_source
+                )
+                if not _context_diagnostics.get("passed", False):
+                    _forward_identity_report["canonical_publication_ledger"][
+                        "update_context_holds"
+                    ].append({
+                        "headline": headline,
+                        "canonical_slug": slug,
+                        "missing": _context_diagnostics.get("missing", []),
+                        "action": "preserve_existing_page_contextless_update_rejected",
+                    })
+                    hero["_publication_skip_reason"] = (
+                        "contextless_update_preserve_existing"
+                    )
+                    print(
+                        "  UPDATE CONTEXT HOLD: preserved canonical page "
+                        f"'{slug}' because the replacement lead did not stand alone"
+                    )
+                    continue
+
             if hero.get("_custom_payload_unchanged") and (hero.get("is_custom") or hero.get("authoritative_custom")):
                 if _published_article_path(slug, articles_dir):
                     if existing.get("editorial_story_id"):
@@ -16551,6 +17475,9 @@ def write_archives(all_categories, top_cat):
             _merge_category_memberships(existing, hero, existing.get("category_key") or cat_key)
             existing["article_word_count"] = _word_count(hero.get("body", ""))
             existing["article_paragraph_count"] = _paragraph_count(hero.get("body", ""))
+            _incident_anchor = _durable_incident_anchor(hero)
+            if _incident_anchor:
+                existing["incident_anchor_key"] = _incident_anchor
             if hero.get("event_url"):
                 existing["event_url"] = hero.get("event_url")
                 existing["event_link_text"] = hero.get("event_link_text", "")
@@ -16641,6 +17568,7 @@ def write_archives(all_categories, top_cat):
                 "feed_url": hero.get("feed_url",""),
                 "source_url": normalized_source_url,
                 "source_headline": hero.get("source_headline", ""),
+                "incident_anchor_key": _durable_incident_anchor(hero),
                 "editorial_event_key": hero.get("_editorial_event_key", ""),
                 "editorial_route": hero.get("_editorial_route", ""),
                 "is_weather_alert": bool(hero.get("is_weather_alert")),
@@ -16676,6 +17604,15 @@ def write_archives(all_categories, top_cat):
                 "legacy_identity_status": "identified",
                 "ranking_eligible": True,
             })
+            _ensure_publication_identity_fields(archive[-1], slug)
+            hero["publication_id"] = archive[-1].get("publication_id", "")
+            hero["canonical_publication_id"] = archive[-1].get(
+                "canonical_publication_id", ""
+            )
+            hero["canonical_slug"] = slug
+            _publication_ledger = _build_canonical_publication_ledger(
+                archive, _publication_identity
+            )
             _forward_identity_report["new_articles_stamped"] += 1
 
             superseded_custom_slug = str(hero.get("_superseded_custom_slug") or "").strip()
@@ -16734,6 +17671,17 @@ def write_archives(all_categories, top_cat):
                     f"{len(_direct_live_bindings)} live placement(s) to {slug}"
                 )
 
+    archive, _same_run_ledger_redirects, _publication_ledger, _same_run_ledger_report = (
+        _reconcile_canonical_publication_ledger(
+            archive, _publication_identity, OUTPUT_DIR
+        )
+    )
+    _canonical_redirects.extend(_same_run_ledger_redirects)
+    _forward_identity_report["canonical_publication_ledger"].update({
+        "same_run_groups_collapsed": _same_run_ledger_report.get("groups_collapsed", 0),
+        "same_run_records_redirected": _same_run_ledger_report.get("records_redirected", 0),
+    })
+
     # FINAL production enforcement: run canonical cleanup again after every page
     # has been considered.  The pre-write cleanup cannot see a duplicate created in
     # the current run; this second pass converts any same-run escape into a redirect
@@ -16754,6 +17702,7 @@ def write_archives(all_categories, top_cat):
     archive, _category_membership_report = _backfill_archive_category_memberships(
         archive, OUTPUT_DIR
     )
+    validate_archive_incident_uniqueness(archive, OUTPUT_DIR)
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
     _forward_identity_report.update({
         "archive_identity": _archive_identity_backfill,
@@ -17472,6 +18421,7 @@ def _remember_current_run_editorial_identity(entry, row):
         "route": str(row.get("route") or ""),
         "relationship": str(row.get("relationship") or ""),
         "relationship_confidence": float(row.get("relationship_confidence") or 0.0),
+        "new_facts": list(row.get("new_facts") or []),
     }
     prior = CURRENT_RUN_EDITORIAL_IDENTITIES.get(source_url)
     # The same source URL must never point to two different persistent stories in
@@ -17486,6 +18436,9 @@ def _remember_current_run_editorial_identity(entry, row):
     entry["_editorial_route"] = record["route"]
     entry["_editorial_relationship"] = record["relationship"]
     entry["_editorial_relationship_confidence"] = record["relationship_confidence"]
+    entry["_editorial_new_facts"] = list(record.get("new_facts") or [])
+    if record["route"] in {"update_existing", "replace_canonical"}:
+        entry["story_form"] = "update"
     entry["_editorial_identity_origin"] = "current_run_editorial_decision"
     return True
 
@@ -17517,10 +18470,7 @@ def _published_skip_canonical(item, archive):
         if _archive_entry_live_identity_safe(entry):
             return True
         reason = str(entry.get("identity_quarantine_reason") or "")
-        return (
-            reason.startswith("prospective_headline_slug_event_drift")
-            and bool(_archive_headline_slug_alignment(entry).get("aligned"))
-        )
+        return reason.startswith("prospective_headline_slug_event_drift")
 
     candidates = [entry for entry in (archive or []) if usable(entry)]
     if not candidates:
@@ -17665,6 +18615,11 @@ def _stamp_current_run_story_ids(data, headlines):
             or (source or {}).get("_editorial_relationship_confidence")
             or 0.0
         )
+        item["_editorial_new_facts"] = list(
+            identity.get("new_facts") or (source or {}).get("_editorial_new_facts") or []
+        )
+        if item["_editorial_route"] in {"update_existing", "replace_canonical"}:
+            item["story_form"] = "update"
         item["_editorial_identity_origin"] = "current_run_editorial_decision"
         item["source_url"] = normalized or str(source_url or "")
         if isinstance(source, dict) and source.get("title"):
@@ -17709,6 +18664,9 @@ def _stamp_known_current_run_identity(entry):
     entry["_editorial_relationship_confidence"] = float(
         identity.get("relationship_confidence") or 0.0
     )
+    entry["_editorial_new_facts"] = list(identity.get("new_facts") or [])
+    if str(identity.get("route") or "") in {"update_existing", "replace_canonical"}:
+        entry["story_form"] = "update"
     entry["_editorial_identity_origin"] = "current_run_editorial_decision_reuse"
     return True
 
@@ -17760,6 +18718,7 @@ def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, a
                 "relationship": getattr(result, "relationship", "new_story"),
                 "relationship_confidence": float(getattr(result, "relationship_confidence", 0.0) or 0.0),
                 "relationship_reason": getattr(result, "relationship_reason", ""),
+                "new_facts": list(getattr(result, "new_facts", ()) or ()),
                 "decision_trace": list(getattr(result, "decision_trace", ()) or ()),
                 "follow_up_candidate_story_id": getattr(result, "follow_up_candidate_story_id", ""),
                 "follow_up_candidate_confidence": float(getattr(result, "follow_up_candidate_confidence", 0.0) or 0.0),
@@ -19074,6 +20033,12 @@ def main():
     )
     validate_forward_live_identity(all_categories, top_cat, OUTPUT_DIR)
     validate_live_permalink_integrity(all_categories, top_cat, OUTPUT_DIR)
+    canonicalize_all_live_category_surfaces(
+        all_categories, top_cat, OUTPUT_DIR, identity_index=_publication_identity
+    )
+    validate_live_category_canonical_uniqueness(
+        all_categories, top_cat, OUTPUT_DIR, identity_index=_publication_identity
+    )
     print(f"  Timing: archive, publication identity and permalink gates {time.perf_counter() - _stage_started:.1f}s")
     _stage_started = time.perf_counter()
     _current_gate_passed = bool((_current_regression_report or {}).get("production_gate_passed", False))

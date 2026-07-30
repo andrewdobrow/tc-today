@@ -1,10 +1,22 @@
-"""Deterministic high-confidence incident identity signatures.
+"""Deterministic, structured incident identity signatures.
 
-This module closes the gap between exact headline identity and broad semantic
-similarity.  It intentionally supports only incident families with enough
-independent anchors to merge safely.  The first supported family is a mass
-animal-hoarding/rescue incident, added from a production regression where the
-same Martin County case fragmented into many persistent stories.
+The identity layer sits between exact URL/title matching and broad semantic
+similarity.  It only emits an anchor when the article contains enough
+independent evidence that two differently framed reports describe the same
+real-world incident.
+
+Supported families:
+
+* ``mass_animal_hoarding`` — a large local animal-hoarding/rescue case.
+* ``named_person_death`` — death, mourning, memorial and cause-of-death
+  coverage centered on one explicitly named person.
+* ``infrastructure_condition`` — continuing coverage of one named public asset
+  experiencing the same operational condition.
+
+The second family is intentionally generic rather than case-specific.  It
+prevents one death from fragmenting into parallel stories when different
+publishers emphasize the agency response, condolences, personal background,
+location, or cause of death.
 """
 from __future__ import annotations
 
@@ -13,7 +25,7 @@ from datetime import datetime, timezone
 import re
 from typing import Any, Iterable, Mapping
 
-INCIDENT_IDENTITY_VERSION = "1.0"
+INCIDENT_IDENTITY_VERSION = "3.0"
 
 _WORD_RE = re.compile(r"[a-z0-9]+")
 _ANIMAL_QUANTITY_RE = re.compile(r"\b(\d{1,3})\s+(?:cats?|dogs?|animals?|pets?)\b", re.IGNORECASE)
@@ -25,6 +37,70 @@ _ANIMAL_ACTION_RE = re.compile(
     re.IGNORECASE,
 )
 _POSTAL_ROLE_RE = re.compile(r"\b(?:mail carrier|postal worker)\b", re.IGNORECASE)
+
+# A public-asset condition requires three independent anchors: one asset type,
+# one named road/asset location and one operational-state phrase. This is broad
+# enough for headline rewrites but narrow enough to avoid merging crashes or
+# construction projects that merely mention the same road.
+_INFRASTRUCTURE_ASSET_RE = re.compile(
+    r"\b(?:traffic\s+(?:signal|light)|stoplight|rail(?:road)?\s+crossing|"
+    r"drawbridge|bridge|fire\s+station|school|facility)\b",
+    re.IGNORECASE,
+)
+_INFRASTRUCTURE_NONOP_RE = re.compile(
+    r"\b(?:not\s+(?:fully\s+)?(?:operational|working|functioning)|"
+    r"out\s+of\s+service|inoperable|malfunction(?:ing|s|ed)?|"
+    r"still\s+flashing|flashing\s+(?:for|since|after))\b",
+    re.IGNORECASE,
+)
+_NAMED_ROAD_RE = re.compile(
+    r"\b([A-Z][A-Za-z0-9'’.-]*(?:\s+[A-Z][A-Za-z0-9'’.-]*){0,6}\s+"
+    r"(?:Road|Rd\.?|Street|St\.?|Avenue|Ave\.?|Boulevard|Blvd\.?|"
+    r"Drive|Dr\.?|Highway|Hwy\.?|Parkway|Pkwy\.?|Lane|Ln\.?|"
+    r"Trail|Causeway|Bridge))\b"
+)
+_INFRASTRUCTURE_ASSET_CANONICAL = (
+    (re.compile(r"\b(?:traffic\s+(?:signal|light)|stoplight)\b", re.I), "traffic-signal"),
+    (re.compile(r"\b(?:rail(?:road)?\s+crossing)\b", re.I), "rail-crossing"),
+    (re.compile(r"\b(?:drawbridge|bridge)\b", re.I), "bridge"),
+    (re.compile(r"\bfire\s+station\b", re.I), "fire-station"),
+    (re.compile(r"\bschool\b", re.I), "school"),
+    (re.compile(r"\bfacility\b", re.I), "facility"),
+)
+
+# A death story can be framed as the death itself, a mourning statement, a
+# memorial, a cause-of-death disclosure, or a tribute.  All remain one
+# persistent incident when the same named person is the subject.
+_DEATH_CONTEXT_RE = re.compile(
+    r"\b(?:dies?|died|dead|death|deceased|killed|murdered|suicide|fatal(?:ity)?|"
+    r"passes? away|passed away|mourns?|mourning|memorial|tribute|funeral|"
+    r"celebration of life|loss of|remember(?:ed|ing)?|honor(?:s|ed|ing)? (?:the )?life)\b",
+    re.IGNORECASE,
+)
+
+# Common role words are allowed around a person's name but are not part of the
+# identity.  The patterns deliberately require a conventional first/last name.
+_PERSON_TOKEN = r"[A-Z][A-Za-z'’-]{1,30}"
+_FULL_NAME_RE = re.compile(rf"\b({_PERSON_TOKEN}(?:\s+{_PERSON_TOKEN}){{1,2}})\b")
+
+_ORGANIZATION_NAME_WORDS = frozenset(
+    {
+        "county", "city", "department", "office", "commission", "board",
+        "district", "rescue", "police", "sheriff", "school", "university",
+        "hospital", "association", "foundation", "authority", "council",
+        "administration", "government", "news", "daily", "times", "post",
+        "network", "fire", "florida", "treasure", "coast", "river", "beach",
+        "springs", "department", "paramedic", "firefighter",
+    }
+)
+_PERSON_NAME_STOPWORDS = frozenset(
+    {
+        "Indian River", "Martin County", "St Lucie", "St. Lucie",
+        "Port St", "Port St.", "Fort Pierce", "Vero Beach", "Palm Beach",
+        "Coral Springs", "Sebastian Police", "Fire Rescue", "County Fire",
+        "Treasure Coast", "Florida State", "United States", "Palm City",
+    }
+)
 
 _STOPWORDS = frozenset(
     {
@@ -69,9 +145,6 @@ _SYNONYMS = {
     "worker": "postalworker",
 }
 
-# The engine is intentionally Treasure Coast specific.  Nearby city names are
-# normalized to their county so Stuart, Palm City and Hobe Sound do not appear
-# to be conflicting locations for the same Martin County incident.
 _AREA_TERMS: Mapping[str, tuple[str, ...]] = {
     "martin-county": (
         "martin county", "stuart", "hobe sound", "palm city", "port salerno",
@@ -109,6 +182,10 @@ def _parse_datetime(value: object) -> datetime | None:
     if parsed.tzinfo is None:
         parsed = parsed.replace(tzinfo=timezone.utc)
     return parsed.astimezone(timezone.utc)
+
+
+def _slug(value: str) -> str:
+    return "-".join(_WORD_RE.findall(str(value or "").casefold()))
 
 
 def _semantic_tokens(text: str) -> frozenset[str]:
@@ -158,9 +235,217 @@ def _markers(text: str, quantities: Iterable[int]) -> frozenset[str]:
     return frozenset(result)
 
 
-def _incident_family(title_text: str, quantities: Iterable[int]) -> str:
-    """Return a supported family only when the title has incident-level anchors."""
+def _valid_person_name(value: object) -> str:
+    name = " ".join(str(value or "").strip().split())
+    if not name or name in _PERSON_NAME_STOPWORDS:
+        return ""
+    words = name.replace(".", "").split()
+    # Proper-name scans often capture a leading occupational title. Remove only
+    # a narrow role vocabulary; never drop arbitrary first words.
+    if len(words) == 3 and re.sub(r"[^a-z]", "", words[0].casefold()) in {
+        "firefighter", "paramedic", "officer", "deputy", "chief", "captain",
+        "detective", "teacher", "coach", "doctor", "dr", "senator", "mayor",
+    }:
+        words = words[1:]
+        name = " ".join(words)
+    # Use a deliberately conservative personal-name shape. Two-word names cover
+    # the overwhelming majority of local incident subjects. A three-word name is
+    # accepted only when the middle element is an initial.
+    if len(words) == 3 and len(re.sub(r"[^A-Za-z]", "", words[1])) != 1:
+        return ""
+    if not 2 <= len(words) <= 3:
+        return ""
+    folded_words = [re.sub(r"[^a-z]", "", word.casefold()) for word in words]
+    if any(not word for word in folded_words):
+        return ""
+    rejected = {
+        "county", "city", "department", "office", "commission", "board",
+        "district", "rescue", "police", "sheriff", "school", "university",
+        "hospital", "association", "foundation", "authority", "council",
+        "administration", "government", "news", "daily", "times", "post",
+        "network", "fire", "florida", "treasure", "coast", "river", "beach",
+        "springs", "paramedic", "firefighter", "dies", "died", "death",
+        "mourns", "mourn", "following", "personal", "tragedy", "officials",
+        "service", "resident", "who", "began", "his", "her", "career",
+        "here", "after", "orchard", "grove", "wptv", "wflx", "wpbf",
+        "wpec", "cw34", "tapinto", "yahoo", "canada",
+    }
+    if set(folded_words) & rejected:
+        return ""
+    # Publisher acronyms and sentence fragments are not people.
+    if any(word.isupper() and len(word) >= 3 for word in words):
+        return ""
+    return name
 
+
+def _named_people(text: str, entities: Iterable[object] = ()) -> tuple[str, ...]:
+    """Extract the central named subject of death/mourning coverage.
+
+    Articles often quote commissioners, spokespeople and family representatives near
+    death language. Treating every nearby proper name as an incident subject caused
+    the real person to become ambiguous. Candidates are therefore scored by repeated
+    mentions, headline position and explicit subject-role/death syntax, while quoted
+    officials and ``NAME said`` constructions are penalized.
+    """
+    scores: dict[str, float] = {}
+    display: dict[str, str] = {}
+    for match in _FULL_NAME_RE.finditer(text):
+        valid = _valid_person_name(match.group(1))
+        if not valid:
+            continue
+        start, end = match.span()
+        context = text[max(0, start - 120): min(len(text), end + 120)]
+        if not _DEATH_CONTEXT_RE.search(context):
+            continue
+        key = _slug(valid)
+        display.setdefault(key, valid)
+        score = 2.0
+        # Headlines/source headlines are concatenated first and provide the strongest
+        # framing evidence. Repeated appearances further identify the true subject.
+        if start < 420:
+            score += 4.0
+        if re.search(
+            rf"(?:firefighter|paramedic|officer|deputy|teacher|coach|doctor|chief|captain)"
+            rf"[/\s]+{re.escape(valid)}\b",
+            context,
+            re.IGNORECASE,
+        ):
+            score += 5.0
+        if re.search(
+            rf"\b{re.escape(valid)}\b[^.!?]{{0,45}}\b(?:dies?|died|death|dead|killed|suicide|"
+            rf"passed away|mourned|remembered)\b",
+            context,
+            re.IGNORECASE,
+        ) or re.search(
+            rf"\b(?:death|loss|mourning|mourns?|memorial|tribute)\b[^.!?]{{0,55}}\b{re.escape(valid)}\b",
+            context,
+            re.IGNORECASE,
+        ):
+            score += 5.0
+        # Names introducing attribution are generally sources, not the deceased.
+        if re.search(
+            rf"\b{re.escape(valid)}\b\s+(?:said|says|told|wrote|added|called|announced|explained)\b",
+            context,
+            re.IGNORECASE,
+        ):
+            score -= 7.0
+        if re.search(
+            rf"(?:spokes(?:man|woman|person)|administrator|commissioner|chairman|mayor|chief|"
+            rf"sheriff|detective|attorney)\s+{re.escape(valid)}\b",
+            context,
+            re.IGNORECASE,
+        ):
+            score -= 6.0
+        scores[key] = scores.get(key, 0.0) + score
+
+    if scores:
+        ranked = sorted(scores, key=lambda key: (scores[key], key), reverse=True)
+        top = ranked[0]
+        second_score = scores[ranked[1]] if len(ranked) > 1 else float("-inf")
+        # Require a clear central subject when several names occur. Ambiguous stories
+        # fail open rather than merging different deaths.
+        if scores[top] >= 5.0 and (len(ranked) == 1 or scores[top] - second_score >= 3.0):
+            return (display[top],)
+        return ()
+
+    # Entity extraction is a fallback for headlines such as "firefighter dies
+    # following personal tragedy" where the person's name appears only in structured
+    # extraction. It remains conservative and requires one unique valid name.
+    candidates = [
+        valid
+        for valid in (_valid_person_name(entity) for entity in entities)
+        if valid
+    ]
+    unique = {_slug(value): value for value in candidates}
+    return tuple(unique.values()) if len(unique) == 1 else ()
+
+
+def _infrastructure_condition_anchor(text: str) -> str:
+    if not _INFRASTRUCTURE_ASSET_RE.search(text):
+        return ""
+    if not _INFRASTRUCTURE_NONOP_RE.search(text):
+        return ""
+    asset_type = ""
+    for pattern, canonical in _INFRASTRUCTURE_ASSET_CANONICAL:
+        if pattern.search(text):
+            asset_type = canonical
+            break
+    if not asset_type:
+        return ""
+    roads: list[str] = []
+    for match in _NAMED_ROAD_RE.finditer(text):
+        road = match.group(1).strip()
+        if len(road.split()) < 2:
+            continue
+        roads.append(_slug(road))
+    unique_roads = tuple(dict.fromkeys(roads))
+    if len(unique_roads) != 1:
+        return ""
+    return f"infrastructure-condition:{asset_type}:{unique_roads[0]}:nonoperational"
+
+
+def _named_person_death_anchor(
+    text: str,
+    *,
+    entities: Iterable[object] = (),
+) -> tuple[str, tuple[str, ...]]:
+    if not _DEATH_CONTEXT_RE.search(text):
+        return "", ()
+    people = _named_people(text, entities)
+    if len(people) != 1:
+        return "", people
+    return f"named-person-death:{_slug(people[0])}", people
+
+
+def incident_anchor_key(
+    *,
+    titles: Iterable[object],
+    facts: Iterable[object] = (),
+    locations: Iterable[object] = (),
+    agencies: Iterable[object] = (),
+    event_types: Iterable[object] = (),
+    entities: Iterable[object] = (),
+    body: object = "",
+) -> str:
+    """Return a durable structured anchor for one article, or ``""``.
+
+    The function is safe to call from the feed pipeline, archive migration and
+    final rendering pass.  It does not depend on model output or mutable story IDs.
+    """
+
+    title_values = [str(value or "").strip() for value in titles if str(value or "").strip()]
+    full_text = " | ".join(
+        [
+            *title_values,
+            str(body or ""),
+            *[str(value or "") for value in facts],
+            *[str(value or "") for value in locations],
+            *[str(value or "") for value in agencies],
+            *[str(value or "") for value in event_types],
+            *[str(value or "") for value in entities],
+        ]
+    )
+    anchor, _people = _named_person_death_anchor(full_text, entities=entities)
+    if anchor:
+        return anchor
+
+    infrastructure_anchor = _infrastructure_condition_anchor(full_text)
+    if infrastructure_anchor:
+        return infrastructure_anchor
+
+    quantities = _animal_quantities(full_text)
+    family = _animal_incident_family(" | ".join(title_values), quantities)
+    if family == "mass_animal_hoarding":
+        areas = sorted(_area_groups(full_text))
+        area = areas[0] if len(areas) == 1 else ""
+        # A mass-rescue anchor without a local area remains comparison-driven;
+        # avoid emitting an overly broad global key.
+        if area:
+            return f"mass-animal-hoarding:{area}"
+    return ""
+
+
+def _animal_incident_family(title_text: str, quantities: Iterable[int]) -> str:
     animal = bool(_ANIMAL_RE.search(title_text))
     plural_animal = bool(_PLURAL_ANIMAL_RE.search(title_text))
     explicit_hoarding = bool(_HOARDING_RE.search(title_text))
@@ -176,15 +461,27 @@ def _incident_family(title_text: str, quantities: Iterable[int]) -> str:
 @dataclass(frozen=True, slots=True)
 class IncidentSignature:
     family: str
+    anchor_key: str
+    subjects: tuple[str, ...]
     tokens: frozenset[str]
     quantities: tuple[int, ...]
     area_groups: frozenset[str]
     markers: frozenset[str]
     published_at: tuple[datetime, ...]
+    evidence_title_count: int = 0
+    total_title_count: int = 0
 
     @property
     def supported(self) -> bool:
         return bool(self.family)
+
+    @property
+    def evidence_ratio(self) -> float:
+        return (
+            self.evidence_title_count / self.total_title_count
+            if self.total_title_count
+            else 0.0
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -205,12 +502,14 @@ def build_incident_signature(
     event_types: Iterable[object] = (),
     entities: Iterable[object] = (),
     published_at: Iterable[object] = (),
+    body: object = "",
 ) -> IncidentSignature:
     title_values = [str(value or "").strip() for value in titles if str(value or "").strip()]
     title_text = " | ".join(title_values)
     full_text = " | ".join(
         [
             title_text,
+            str(body or ""),
             *[str(value or "") for value in facts],
             *[str(value or "") for value in locations],
             *[str(value or "") for value in agencies],
@@ -224,20 +523,82 @@ def build_incident_signature(
         for parsed in (_parse_datetime(value) for value in published_at)
         if parsed is not None
     )
+
+    anchor, people = _named_person_death_anchor(full_text, entities=entities)
+    if anchor:
+        evidence_titles = sum(bool(_DEATH_CONTEXT_RE.search(value)) for value in title_values)
+        return IncidentSignature(
+            family="named_person_death",
+            anchor_key=anchor,
+            subjects=people,
+            tokens=_semantic_tokens(full_text),
+            quantities=quantities,
+            area_groups=_area_groups(full_text),
+            markers=_markers(full_text, quantities),
+            published_at=timestamps,
+            evidence_title_count=evidence_titles,
+            total_title_count=len(title_values),
+        )
+
+    infrastructure_anchor = _infrastructure_condition_anchor(full_text)
+    if infrastructure_anchor:
+        evidence_titles = sum(
+            bool(_INFRASTRUCTURE_ASSET_RE.search(value) and _INFRASTRUCTURE_NONOP_RE.search(value))
+            for value in title_values
+        )
+        return IncidentSignature(
+            family="infrastructure_condition",
+            anchor_key=infrastructure_anchor,
+            subjects=(),
+            tokens=_semantic_tokens(full_text),
+            quantities=quantities,
+            area_groups=_area_groups(full_text),
+            markers=_markers(full_text, quantities),
+            published_at=timestamps,
+            evidence_title_count=evidence_titles,
+            total_title_count=len(title_values),
+        )
+
+    family = _animal_incident_family(title_text, quantities)
     return IncidentSignature(
-        family=_incident_family(title_text, quantities),
+        family=family,
+        anchor_key=incident_anchor_key(
+            titles=title_values,
+            facts=facts,
+            locations=locations,
+            agencies=agencies,
+            event_types=event_types,
+            entities=entities,
+            body=body,
+        ),
+        subjects=(),
         tokens=_semantic_tokens(full_text),
         quantities=quantities,
         area_groups=_area_groups(full_text),
         markers=_markers(full_text, quantities),
         published_at=timestamps,
+        evidence_title_count=len(title_values) if family else 0,
+        total_title_count=len(title_values),
     )
 
 
 def build_story_incident_signature(story: Mapping[str, Any]) -> IncidentSignature:
     timeline = list(story.get("timeline", ()) or ())
+    candidate_titles = [
+        candidate.get("title", "")
+        for candidate in story.get("title_candidates", ()) or ()
+        if isinstance(candidate, Mapping)
+    ]
+    timeline_titles = [
+        entry.get("title", "") for entry in timeline if isinstance(entry, Mapping)
+    ]
     return build_incident_signature(
-        titles=[story.get("canonical_title", ""), *story.get("titles", ())],
+        titles=[
+            story.get("canonical_title", ""),
+            *story.get("titles", ()),
+            *candidate_titles,
+            *timeline_titles,
+        ],
         facts=story.get("facts", ()),
         locations=story.get("locations", ()),
         agencies=story.get("agencies", ()),
@@ -245,6 +606,44 @@ def build_story_incident_signature(story: Mapping[str, Any]) -> IncidentSignatur
         entities=story.get("entities", ()),
         published_at=[entry.get("published_at") for entry in timeline],
     )
+
+
+def named_person_death_subjects(story: Mapping[str, Any]) -> tuple[str, ...]:
+    """Return unique named death subjects visible anywhere in a story record."""
+
+    signature = build_story_incident_signature(story)
+    if signature.family != "named_person_death":
+        return ()
+    return signature.subjects
+
+
+def timeline_incident_anchor(
+    entry: Mapping[str, Any],
+    *,
+    inherited_subjects: Iterable[object] = (),
+) -> str:
+    """Resolve a timeline entry without inheriting unrelated story text.
+
+    A no-name headline such as "firefighter/paramedic dies following personal
+    tragedy" may inherit one unambiguous named subject from the containing
+    story.  A title without death/mourning language never inherits the anchor,
+    which lets repair detach an unrelated fire or animal-rescue entry from a
+    contaminated story.
+    """
+
+    title = str(entry.get("title") or "").strip()
+    if not title or not _DEATH_CONTEXT_RE.search(title):
+        return ""
+    direct = incident_anchor_key(titles=(title,), entities=())
+    if direct:
+        return direct
+    subjects = tuple(
+        value for value in (_valid_person_name(item) for item in inherited_subjects) if value
+    )
+    unique = { _slug(value): value for value in subjects }
+    if len(unique) == 1:
+        return f"named-person-death:{next(iter(unique))}"
+    return ""
 
 
 def _quantity_compatible(left: Iterable[int], right: Iterable[int]) -> bool:
@@ -263,6 +662,66 @@ def compare_incident_signatures(
 ) -> IncidentIdentityMatch:
     if not left.supported or left.family != right.family:
         return IncidentIdentityMatch(False, 0.0, "No supported shared incident family", ())
+
+    if left.family == "named_person_death":
+        if not left.anchor_key or left.anchor_key != right.anchor_key:
+            return IncidentIdentityMatch(
+                False,
+                0.0,
+                "Named-person death subjects differ",
+                (
+                    f"Left anchor: {left.anchor_key or 'none'}",
+                    f"Right anchor: {right.anchor_key or 'none'}",
+                ),
+            )
+        age_gap_days: float | None = None
+        if left.published_at and right.published_at:
+            age_gap_days = min(
+                abs((a - b).total_seconds()) / 86400.0
+                for a in left.published_at
+                for b in right.published_at
+            )
+        return IncidentIdentityMatch(
+            True,
+            0.995,
+            "Exact named-person death anchor matched",
+            (
+                "Incident family: named_person_death",
+                f"Incident anchor: {left.anchor_key}",
+                "Named subject match: true",
+                f"Left evidence ratio: {left.evidence_ratio:.2f}",
+                f"Right evidence ratio: {right.evidence_ratio:.2f}",
+                (
+                    f"Publication gap days: {age_gap_days:.2f}"
+                    if age_gap_days is not None
+                    else "Publication gap days: unknown"
+                ),
+                "Confidence: 0.99",
+            ),
+        )
+
+    if left.family == "infrastructure_condition":
+        if not left.anchor_key or left.anchor_key != right.anchor_key:
+            return IncidentIdentityMatch(
+                False,
+                0.0,
+                "Named infrastructure conditions differ",
+                (
+                    f"Left anchor: {left.anchor_key or 'none'}",
+                    f"Right anchor: {right.anchor_key or 'none'}",
+                ),
+            )
+        return IncidentIdentityMatch(
+            True,
+            0.995,
+            "Exact named-infrastructure condition anchor matched",
+            (
+                "Incident family: infrastructure_condition",
+                f"Incident anchor: {left.anchor_key}",
+                "Named asset and operational state match: true",
+                "Confidence: 0.99",
+            ),
+        )
 
     if left.area_groups and right.area_groups and not (left.area_groups & right.area_groups):
         return IncidentIdentityMatch(
@@ -361,6 +820,16 @@ def compare_story_incidents(
     )
 
 
+def _story_anchor_evidence(story: Mapping[str, Any], anchor_key: str) -> tuple[int, int]:
+    subjects = named_person_death_subjects(story)
+    timeline = [entry for entry in story.get("timeline", ()) if isinstance(entry, Mapping)]
+    matching = sum(
+        timeline_incident_anchor(entry, inherited_subjects=subjects) == anchor_key
+        for entry in timeline
+    )
+    return matching, len(timeline)
+
+
 def find_matching_incident_story(
     *,
     title: str,
@@ -384,19 +853,28 @@ def find_matching_incident_story(
     if not incoming.supported:
         return IncidentIdentityMatch(False, 0.0, "Incoming article has no supported incident signature", ())
 
-    matches: list[IncidentIdentityMatch] = []
+    matches: list[tuple[IncidentIdentityMatch, float, int, int]] = []
     for story in stories:
         match = compare_incident_signatures(incoming, build_story_incident_signature(story))
-        if match.matched:
-            matches.append(
+        if not match.matched:
+            continue
+        matching_entries, total_entries = _story_anchor_evidence(story, incoming.anchor_key)
+        purity = matching_entries / total_entries if total_entries else 0.0
+        matches.append(
+            (
                 IncidentIdentityMatch(
                     True,
                     match.confidence,
                     match.reason,
                     match.decision_trace,
                     str(story.get("story_id") or "") or None,
-                )
+                ),
+                purity,
+                matching_entries,
+                -int(re.sub(r"\D", "", str(story.get("story_id") or "999999")) or 999999),
             )
+        )
     if not matches:
         return IncidentIdentityMatch(False, 0.0, "No existing story met the incident identity threshold", ())
-    return max(matches, key=lambda item: (item.confidence, str(item.story_id or "")))
+    # Prefer a clean story record over a larger but contaminated aggregate.
+    return max(matches, key=lambda item: (item[1], item[2], item[0].confidence, item[3]))[0]
