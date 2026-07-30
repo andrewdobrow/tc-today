@@ -239,6 +239,7 @@ ARTICLE_FRAMING_INTEGRITY_REPORT_PATH = OUTPUT_DIR / "data" / "article-framing-i
 CLAIM_ALIGNED_PERMALINK_REPAIR_REPORT_PATH = OUTPUT_DIR / "data" / "claim-aligned-permalink-repair.json"
 EDITORIAL_ACTIVATION_PATH = OUTPUT_DIR / "data" / "editorial_activation.json"
 EDITORIAL_ACTIVATION_HISTORY_PATH = OUTPUT_DIR / "data" / "editorial_activation_history.jsonl"
+CANONICAL_HERO_FRESHNESS_REPORT_PATH = OUTPUT_DIR / "data" / "canonical-hero-freshness-contract.json"
 
 # v1.10.5 forward publication identity. New generated articles are published only
 # when the current editorial decision can be carried directly into the archive row.
@@ -6566,10 +6567,256 @@ def _format_category_hero_timestamp(item, archive_entries=None):
     return ""
 
 
+
+CANONICAL_HERO_FRESHNESS_VERSION = "1.0"
+CANONICAL_HERO_FRESHNESS_MAX_AGE_HOURS = 18
+
+
+def _parse_publication_timestamp(value):
+    """Parse RFC-822, ISO-8601, or date-only publication values as UTC."""
+    raw = str(value or "").strip()
+    if not raw:
+        return None
+    try:
+        from email.utils import parsedate_to_datetime
+        parsed = parsedate_to_datetime(raw)
+    except Exception:
+        parsed = None
+    if parsed is None:
+        try:
+            parsed = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        except Exception:
+            try:
+                parsed = datetime.strptime(raw[:10], "%Y-%m-%d")
+            except Exception:
+                return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def _canonical_hero_freshness_assessment(item, now=None):
+    """Return freshness using the final canonical publication, never source recency.
+
+    Once a live placement has been rebound to an archive record, only a validated
+    meaningful-update timestamp or the canonical first-publication timestamp may
+    make it fresh. ``lastmod``, image repairs, redirect reconciliation, and an
+    incoming source's publication date are deliberately ignored.
+    """
+    item = item if isinstance(item, dict) else {}
+    now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    canonical_bound = bool(
+        item.get("_canonical_freshness_bound")
+        or item.get("canonical_slug")
+        or item.get("_archived_slug")
+    )
+    meaningful_validated = bool(item.get("meaningful_update_validated"))
+    candidates = []
+    if meaningful_validated:
+        candidates.append(("last_meaningful_update_at", item.get("last_meaningful_update_at")))
+    candidates.extend([
+        ("first_published", item.get("first_published")),
+        ("date", item.get("date")),
+    ])
+    if not canonical_bound:
+        candidates.extend([
+            ("published_raw", item.get("published_raw")),
+            ("published", item.get("published")),
+        ])
+
+    timestamp = None
+    field = ""
+    raw = ""
+    for candidate_field, candidate_value in candidates:
+        parsed = _parse_publication_timestamp(candidate_value)
+        if parsed is None:
+            continue
+        timestamp = parsed
+        field = candidate_field
+        raw = str(candidate_value or "")
+        break
+
+    if timestamp is None:
+        return {
+            "stale": bool(canonical_bound),
+            "reason": "canonical_timestamp_missing" if canonical_bound else "source_timestamp_missing",
+            "date_field": "",
+            "date_value": "",
+            "age_hours": None,
+            "canonical_bound": canonical_bound,
+            "meaningful_update_validated": meaningful_validated,
+        }
+
+    age_hours = max(0.0, (now - timestamp).total_seconds() / 3600)
+    stale = age_hours >= CANONICAL_HERO_FRESHNESS_MAX_AGE_HOURS
+    if field == "last_meaningful_update_at":
+        reason = "validated_meaningful_update_fresh" if not stale else "validated_meaningful_update_stale"
+    elif canonical_bound:
+        reason = "canonical_publication_fresh" if not stale else "canonical_publication_stale"
+    else:
+        reason = "source_publication_fresh" if not stale else "source_publication_stale"
+    return {
+        "stale": stale,
+        "reason": reason,
+        "date_field": field,
+        "date_value": raw,
+        "age_hours": round(age_hours, 2),
+        "canonical_bound": canonical_bound,
+        "meaningful_update_validated": meaningful_validated,
+    }
+
+
+def _record_validated_meaningful_update(existing, item, diagnostics, *, changed, now=None):
+    """Stamp hero freshness only for a changed, contextual, genuine update."""
+    route = str(
+        (item or {}).get("_editorial_route") or (item or {}).get("editorial_route") or ""
+    ).strip().lower()
+    valid = bool(
+        isinstance(existing, dict)
+        and isinstance(item, dict)
+        and changed
+        and route in {"update_existing", "replace_canonical"}
+        and (diagnostics or {}).get("required")
+        and (diagnostics or {}).get("passed")
+        and (diagnostics or {}).get("baseline_present")
+        and (diagnostics or {}).get("novelty_present")
+    )
+    if not valid:
+        return False
+    now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    stamp = now.isoformat(timespec="seconds").replace("+00:00", "Z")
+    existing["last_meaningful_update_at"] = stamp
+    existing["meaningful_update_validated"] = True
+    existing["meaningful_update_basis"] = "contextual_update_contract"
+    item["last_meaningful_update_at"] = stamp
+    item["meaningful_update_validated"] = True
+    item["meaningful_update_basis"] = "contextual_update_contract"
+    item["_canonical_freshness_bound"] = True
+    return True
+
+
+def _write_canonical_hero_freshness_report(report):
+    path = CANONICAL_HERO_FRESHNESS_REPORT_PATH
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    return report
+
+
+def enforce_final_canonical_hero_freshness(all_categories, top_cat, output_root=None):
+    """Re-evaluate the homepage hero after final canonical publication binding.
+
+    A fresh feed item can be rebound to an old canonical only after archive writing.
+    This final barrier prevents the feed timestamp from surviving that rebind. When a
+    fresh canonical alternative exists, the stale hero is deterministically replaced.
+    """
+    output_root = Path(output_root or OUTPUT_DIR)
+    now = datetime.now(timezone.utc)
+    before = (top_cat or {}).get("hero") or {}
+    before_assessment = _canonical_hero_freshness_assessment(before, now=now)
+
+    fresh_candidates = []
+    for category in all_categories or []:
+        for placement, item in [("hero", category.get("hero"))] + [
+            ("card", card) for card in (category.get("cards") or [])
+        ]:
+            if not isinstance(item, dict) or not item.get("headline"):
+                continue
+            if _is_nonstory_placeholder(item) or item.get("ranking_eligible") is False:
+                continue
+            category_key = str(category.get("category_key") or "")
+            if category_key == "florida":
+                continue
+            if placement == "card" and (
+                not _publishable_article(item, hero=True)
+                or not _hero_eligible(category_key, item)
+            ):
+                continue
+            if category_key not in COUNTY_KEYS:
+                local_blob = " ".join([
+                    str(item.get("headline") or ""),
+                    str(item.get("teaser") or ""),
+                    str(item.get("body") or "")[:900],
+                ]).lower()
+                local_markers = (
+                    "florida", "treasure coast", "martin county", "st. lucie",
+                    "st lucie", "indian river", "stuart", "jensen beach",
+                    "palm city", "hobe sound", "port salerno", "port st. lucie",
+                    "port st lucie", "fort pierce", "vero beach", "sebastian",
+                    "fellsmere", "indiantown", "jupiter island",
+                    "hutchinson island", "mets", "clover park", "roger dean",
+                )
+                if not any(marker in local_blob for marker in local_markers):
+                    continue
+            assessment = _canonical_hero_freshness_assessment(item, now=now)
+            if not assessment.get("stale"):
+                fresh_candidates.append({
+                    "category_key": category.get("category_key", ""),
+                    "placement": placement,
+                    "headline": item.get("headline", ""),
+                    "canonical_slug": item.get("canonical_slug") or item.get("_archived_slug") or "",
+                    **assessment,
+                })
+
+    action = "retained_fresh_canonical_hero"
+    selected = top_cat
+    if before_assessment.get("stale") and fresh_candidates:
+        selected = select_front_page_hero(all_categories, deterministic_only=True)
+        if selected is None:
+            raise RuntimeError(
+                "Canonical hero freshness contract FAILED: a fresh canonical candidate exists "
+                "but reselection produced no hero"
+            )
+        action = "reselected_after_final_canonical_binding"
+
+    after = (selected or {}).get("hero") or {}
+    after_assessment = _canonical_hero_freshness_assessment(after, now=now)
+    if after_assessment.get("stale") and fresh_candidates:
+        report = {
+            "version": CANONICAL_HERO_FRESHNESS_VERSION,
+            "generated_at": now.isoformat(timespec="seconds"),
+            "passed": False,
+            "action": action,
+            "before": {"headline": before.get("headline", ""), **before_assessment},
+            "after": {"headline": after.get("headline", ""), **after_assessment},
+            "fresh_candidate_count": len(fresh_candidates),
+            "fresh_candidates": fresh_candidates,
+        }
+        _write_canonical_hero_freshness_report(report)
+        raise RuntimeError(
+            "Canonical hero freshness contract FAILED: final hero is stale while "
+            f"{len(fresh_candidates)} fresh canonical candidate(s) exist"
+        )
+
+    report = {
+        "version": CANONICAL_HERO_FRESHNESS_VERSION,
+        "generated_at": now.isoformat(timespec="seconds"),
+        "passed": True,
+        "action": action if fresh_candidates else "stale_fallback_no_fresh_canonical_candidates",
+        "before": {
+            "headline": before.get("headline", ""),
+            "canonical_slug": before.get("canonical_slug") or before.get("_archived_slug") or "",
+            **before_assessment,
+        },
+        "after": {
+            "headline": after.get("headline", ""),
+            "canonical_slug": after.get("canonical_slug") or after.get("_archived_slug") or "",
+            **after_assessment,
+        },
+        "fresh_candidate_count": len(fresh_candidates),
+        "fresh_candidates": fresh_candidates,
+    }
+    _write_canonical_hero_freshness_report(report)
+    print(
+        "  Canonical hero freshness contract PASSED: "
+        f"{report['action']} — '{after.get('headline','')[:60]}'"
+    )
+    return selected
+
+
 HERO_PREFILTER_AUDIT = []
 FRONT_PAGE_HERO_AUDIT = {}
 
-def select_front_page_hero(all_categories):
+def select_front_page_hero(all_categories, deterministic_only=False):
     """Select the strongest current front-page story across every live placement.
 
     Section heroes are editorial layout choices, not the complete candidate pool. A
@@ -6641,25 +6888,10 @@ def select_front_page_hero(all_categories):
         return _has_any(blob, local_markers)
 
     def _parse_hero_datetime(item):
-        for datefield in ("published_raw", "date", "first_published", "lastmod", "updated", "published"):
-            raw = str(item.get(datefield, "") or "").strip()
-            if not raw:
-                continue
-            try:
-                if ("," in raw and ":" in raw) or (
-                    raw.count(":") >= 1
-                    and any(marker in raw for marker in ["GMT", "+0", "-0", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"])
-                ):
-                    dt = parsedate_to_datetime(raw)
-                    if dt.tzinfo is None:
-                        dt = dt.replace(tzinfo=_tz.utc)
-                    return dt.astimezone(_tz.utc), datefield, raw
-                if "-" in raw[:10]:
-                    dt = datetime.strptime(raw[:10], "%Y-%m-%d").replace(tzinfo=_tz.utc)
-                    return dt, datefield, raw
-            except Exception:
-                continue
-        return None, "", ""
+        assessment = _canonical_hero_freshness_assessment(item, now=_now)
+        raw = assessment.get("date_value") or ""
+        dt = _parse_publication_timestamp(raw)
+        return dt, assessment.get("date_field", ""), raw
 
     stale_day_names = {
         (_now - timedelta(days=1)).strftime("%A").lower(),
@@ -6682,18 +6914,22 @@ def select_front_page_hero(all_categories):
             str(item.get("teaser") or ""),
             str(item.get("body") or "")[:900],
         ]).lower()
+        canonical_assessment = _canonical_hero_freshness_assessment(item, now=_now)
         dt, date_field, raw_date = _parse_hero_datetime(item)
-        age_hours = None
+        age_hours = canonical_assessment.get("age_hours")
+        if item.get("_canonical_freshness_bound") or item.get("canonical_slug") or item.get("_archived_slug"):
+            return dict(canonical_assessment)
         if dt is not None:
-            age_hours = (_now - dt).total_seconds() / 3600
             same_day = dt.date() == _now.date()
-            if same_day or age_hours < 18:
+            if same_day or (age_hours is not None and age_hours < 18):
                 return {
                     "stale": False,
                     "reason": "same_day_publication" if same_day else "published_within_18_hours",
                     "date_field": date_field,
                     "date_value": raw_date,
-                    "age_hours": round(age_hours, 2),
+                    "age_hours": round(age_hours, 2) if age_hours is not None else None,
+                    "canonical_bound": False,
+                    "meaningful_update_validated": bool(item.get("meaningful_update_validated")),
                 }
         if any(phrase in content for phrase in fresh_dev_phrases):
             return {
@@ -6943,6 +7179,8 @@ def select_front_page_hero(all_categories):
         return _materialize(max(working, key=_priority), "deterministic_stale_fallback")
 
     working = sorted(working, key=_priority, reverse=True)[:12]
+    if deterministic_only:
+        return _materialize(working[0], "deterministic_post_canonical_freshness")
     if len(working) == 1:
         return _materialize(working[0], "only_fresh_candidate")
 
@@ -11625,6 +11863,19 @@ def _bind_live_item_to_archive(item, entry, current_customs=None, replace_with_c
         item["_editorial_story_id"] = story_id
     item["ranking_eligible"] = bool(entry.get("ranking_eligible", bool(story_id)))
     item["legacy_identity_status"] = entry.get("legacy_identity_status", "identified" if story_id else "")
+    # Canonical publication timing is authoritative for hero freshness. A fresh
+    # source may not lend its timestamp to an older page after rebinding.
+    item["_canonical_freshness_bound"] = True
+    item["canonical_slug"] = slug
+    for field in (
+        "first_published", "date", "lastmod", "last_meaningful_update_at",
+        "meaningful_update_validated", "meaningful_update_basis",
+    ):
+        if entry.get(field) not in (None, ""):
+            item[field] = entry.get(field)
+        elif field in {"last_meaningful_update_at", "meaningful_update_validated", "meaningful_update_basis"}:
+            item.pop(field, None)
+    item["published_raw"] = entry.get("first_published") or entry.get("date") or ""
     return True
 
 
@@ -17790,6 +18041,7 @@ def write_archives(all_categories, top_cat):
             )
             hero["canonical_slug"] = slug
 
+            _context_diagnostics = {}
             _route = str(
                 hero.get("_editorial_route") or hero.get("editorial_route") or ""
             ).strip().lower()
@@ -17842,6 +18094,15 @@ def write_archives(all_categories, top_cat):
             _old_headline = (existing.get("headline","") or "").strip()
             _old_teaser   = (existing.get("teaser","") or "").strip()
             _content_changed = (_new_headline != _old_headline) or (_new_teaser != _old_teaser)
+            _meaningful_update_stamped = _record_validated_meaningful_update(
+                existing, hero, _context_diagnostics,
+                changed=_content_changed,
+            )
+            if _meaningful_update_stamped:
+                print(
+                    "  Validated meaningful update refreshed canonical hero eligibility: "
+                    f"'{slug}'"
+                )
 
             _related = [e for e in archive
                         if e.get("category_key") == cat_key and e.get("slug") != slug]
@@ -20442,6 +20703,12 @@ def main():
     # These final-surface contracts intentionally load the persisted publication
     # identity index themselves.  The index built inside write_archives() is local
     # to that function and must never leak into main() as an undeclared variable.
+    canonicalize_all_live_category_surfaces(all_categories, top_cat, OUTPUT_DIR)
+    top_cat = enforce_final_canonical_hero_freshness(
+        all_categories, top_cat, OUTPUT_DIR
+    )
+    # Reselection can promote a card and demote the former hero. Canonicalize once
+    # more so every resulting placement still points directly at its final owner.
     canonicalize_all_live_category_surfaces(all_categories, top_cat, OUTPUT_DIR)
     validate_live_category_canonical_uniqueness(all_categories, top_cat, OUTPUT_DIR)
     print(f"  Timing: archive, publication identity and permalink gates {time.perf_counter() - _stage_started:.1f}s")

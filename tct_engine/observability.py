@@ -17,9 +17,9 @@ from .source_identity import normalize_source_identity_url
 from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.12.0.4"
-ENGINE_RELEASE = "story-aware-update-context"
-OBSERVABILITY_SCHEMA_VERSION = 18
+ENGINE_VERSION = "1.12.0.5"
+ENGINE_RELEASE = "canonical-hero-freshness-integrity"
+OBSERVABILITY_SCHEMA_VERSION = 19
 RESOLVER_VERSION = "3.0"
 RELATIONSHIP_ENGINE_VERSION = "1.5"
 
