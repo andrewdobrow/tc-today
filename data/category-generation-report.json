@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-07-30T03:43:02Z",
+  "generated_at": "2026-07-30T05:56:38Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,24 +15,26 @@
   "summary": {
     "category_count": 9,
     "statuses": {
+      "cache_hit": 1,
       "generated_live": 4,
-      "generation_failed_archive_recovery": 1,
-      "quality_gate_archive_recovery": 3,
-      "sports_zero_candidate_archive_recovery": 1
+      "generation_failed_archive_recovery": 2,
+      "missing_hero_archive_recovery": 1,
+      "quality_gate_archive_recovery": 1
     },
     "failures": {
       "article_framing_integrity": 1,
-      "no_sports_hero_candidates": 1,
-      "publication_quality_rejected": 3
+      "contextless_update_lead": 1,
+      "missing_or_null_hero": 1,
+      "publication_quality_rejected": 1
     },
-    "model_attempt_count": 9,
-    "model_elapsed_seconds": 254.389,
-    "archive_recovery_requested_count": 5,
+    "model_attempt_count": 10,
+    "model_elapsed_seconds": 245.545,
+    "archive_recovery_requested_count": 4,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 5,
+    "contextual_update_lead_rejection_count": 2,
+    "article_framing_rejection_count": 3,
     "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 66
+    "published_story_duplicate_suppression_count": 67
   },
   "categories": [
     {
@@ -41,8 +43,8 @@
       "status": "generated_live",
       "fetched_candidate_count": 27,
       "fresh_candidate_count": 17,
-      "publishable_source_count": 7,
-      "selected_source_count": 2,
+      "publishable_source_count": 8,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -50,11 +52,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 14.196,
+          "elapsed_seconds": 27.198,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 14.196,
+      "model_elapsed_seconds": 27.198,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -65,22 +67,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Martin County hoarding case: 108 animals rescued, more than a dozen find forever homes",
-          "source_url": "https://www.wptv.com/news/treasure-coast/martin-county-hoarding-case-108-animals-rescued-more-than-a-dozen-find-forever-homes"
-        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -132,12 +121,35 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
+          "headline": "Palm Beach Zoo celebrates International Tiger Day, highlights conservation efforts",
+          "source_url": "https://www.wptv.com/lifestyle/palm-beach-zoo/palm-beach-zoo-celebrates-international-tiger-day-highlights-conservation-efforts"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
           "headline": "Week of July 31 - Hometown News Treasure Coast",
           "source_url": "https://www.hometownnewstc.com/community_page/calendar/week-of-july-31/article_e12e0b23-48a7-5b16-8a2d-ff3d254e9872.html"
         }
       ],
       "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Martin County hoarding case: 108 animals rescued, more than a dozen find forever homes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/martin-county-hoarding-case-108-animals-rescued-more-than-a-dozen-find-forever-homes",
+          "editorial_story_id": "story_000003",
+          "canonical_slug": "2026-07-30-martin-county-hoarding-case-yields-108-rescued-animals-over-a-dozen-adopted",
+          "canonical_headline": "Martin County hoarding case yields 108 rescued animals, over a dozen adopted",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Martin County school district cuts 3 bus routes, saving $255,000 with no impact to students",
@@ -210,16 +222,6 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Driver with revoked license arrested after police pursuit from Stuart into Martin County - WPEC",
-          "source_url": "https://cbs12.com/news/local/florida-crime-news-revoked-license-driver-accused-of-fleeing-stuart-police-striking-car-during-pursuit-martin-county-multi-agency-pursuit-crash-fhp-fleeing-eluding-leaving-scene-crash-property-damage",
-          "editorial_story_id": "story_001296",
-          "canonical_slug": "2026-07-29-stuart-driver-arrested-after-police-pursuit-into-martin-county-hit-and-run-crash",
-          "canonical_headline": "Stuart driver arrested after police pursuit into Martin County, hit-and-run crash",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
           "source_headline": "Martin County School District adjusts bus routes to save $255,000 - WPBF",
           "source_url": "https://www.wpbf.com/article/martin-county-schools-new-bus-routes-2026/73292430",
           "editorial_story_id": "story_001179",
@@ -241,95 +243,65 @@
       ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County School District cuts 3 bus routes, saves $255,000 without eliminating drivers",
-      "generated_card_count": 0,
-      "elapsed_seconds": 28.794
+      "live_hero_headline": "Martin County School District cuts 3 bus routes, saves $255,000 with no impact to students",
+      "generated_card_count": 1,
+      "elapsed_seconds": 41.864
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generated_live",
-      "fetched_candidate_count": 29,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 28,
       "fresh_candidate_count": 18,
       "publishable_source_count": 8,
       "selected_source_count": 7,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 61.218,
-          "result": "success"
+          "elapsed_seconds": 17.251,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Investigators reveal horrific home conditions in Fort Pierce baby death case; arrests made - cw34.com"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 16.108,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Investigators reveal horrific home conditions in Fort Pierce baby death case; arrests made - cw34.com"
         }
       ],
-      "model_elapsed_seconds": 61.218,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 33.359,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: new_development_missing — Investigators reveal horrific home conditions in Fort Pierce baby death case; arrests made - cw34.com",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 1,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Boca Raton to invest over $1 million for four new police officers to address homelessness",
-          "missing": [
-            "headline_money_claim_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Boca Raton to invest over $1 million for four new police officers to address homelessness",
-            "lead": "The City of Boca Raton is taking a new approach to addressing homelessness, approving plans to expand law enforcement and outreach efforts in response to growing community concerns. During a Monday workshop, city leaders directed City Manager Mark Sohaney to move forward with hiring four new police officers, a Community Resource Coordinator, and creating a Quality-of-Life Working Group. Mayor Andy Thomson said the investment is designed to strengthen both public safety and services for people experiencing homelessness.",
-            "lead_word_count": 79,
-            "headline_overlap_ratio": 0.636,
-            "new_context_token_count": 46,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Boca Raton to invest over $1 million for four new police officers to address homelessness",
-            "lead": "The City of Boca Raton is taking a new approach to addressing homelessness, approving plans to expand law enforcement and outreach efforts in response to growing community concerns. During a Monday workshop, city leaders directed City Manager Mark Sohaney to move forward with hiring four new police officers, a Community Resource Coordinator, and creating a Quality-of-Life Working Group. Mayor Andy Thomson said the investment is designed to strengthen both public safety and services for people experiencing homelessness.",
-            "headline_money_claims": [
-              1000000
-            ],
-            "lead_money_claims": [],
-            "missing_money_claims": [
-              1000000
-            ],
-            "headline_jurisdictions": [],
-            "lead_jurisdictions": [],
-            "missing_jurisdictions": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_money_claim_missing_from_lead"
-            ]
-          }
-        }
-      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
       "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 11,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Martin County hoarding case: 108 animals rescued, more than a dozen find forever homes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/martin-county-hoarding-case-108-animals-rescued-more-than-a-dozen-find-forever-homes",
+          "editorial_story_id": "story_000003",
+          "canonical_slug": "2026-07-30-martin-county-hoarding-case-yields-108-rescued-animals-over-a-dozen-adopted",
+          "canonical_headline": "Martin County hoarding case yields 108 rescued animals, over a dozen adopted",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "Martin County school district cuts 3 bus routes, saving $255,000 with no impact to students",
@@ -419,56 +391,34 @@
           "canonical_headline": "St. Lucie detective calls Fort Pierce baby death case one of worst in 20-year career",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "3-month-old died from severe dehydration and malnutrition in St. Lucie County home - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-child-abuse-deputy-death-mother/73276755",
-          "editorial_story_id": "story_001266",
-          "canonical_slug": "2026-07-30-three-arrested-after-3-month-old-dies-from-severe-dehydration-and-malnutrition-i",
-          "canonical_headline": "Three arrested after 3-month-old dies from severe dehydration and malnutrition in Fort Pierce home",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Investigators reveal horrific home conditions in Fort Pierce baby death case; arrests made - cw34.com",
-          "source_url": "https://cw34.com/news/local/investigators-reveal-horrific-home-conditions-in-fort-pierce-baby-death-case-arrests-made-three-month-old-3-mobile-july-27-2026",
-          "editorial_story_id": "story_000928",
-          "canonical_slug": "2026-07-28-st-lucie-sheriff-details-year-long-investigation-into-fort-pierce-infant-death",
-          "canonical_headline": "Mother, grandfather, and girlfriend arrested after 3-month-old dies from dehydration and malnutrition in Fort Pierce",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Three arrested in St. Lucie County after 3-month-old dies from dehydration and malnutrition",
-      "generated_card_count": 0,
-      "elapsed_seconds": 69.868
+      "elapsed_seconds": 41.228
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
-      "status": "quality_gate_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 16,
       "publishable_source_count": 9,
       "selected_source_count": 7,
       "cache_hit": false,
-      "archive_recovery_requested": true,
+      "archive_recovery_requested": false,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 65.115,
+          "elapsed_seconds": 67.666,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 65.115,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 67.666,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -479,18 +429,18 @@
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Boca Raton to invest $1.12 million in new police officers to address homelessness",
+          "headline": "Boca Raton to spend over $1 million on four new police officers to address homelessness",
           "missing": [
             "headline_money_claim_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Boca Raton to invest $1.12 million in new police officers to address homelessness",
-            "lead": "The City of Boca Raton is taking a new approach to addressing homelessness, approving plans to expand law enforcement and outreach efforts in response to growing community concerns. During a Monday workshop, city leaders directed City Manager Mark Sohaney to move forward with hiring four new police officers, a Community Resource Coordinator, and creating a Quality-of-Life Working Group.",
-            "lead_word_count": 60,
-            "headline_overlap_ratio": 0.6,
-            "new_context_token_count": 34,
+            "headline": "Boca Raton to spend over $1 million on four new police officers to address homelessness",
+            "lead": "Boca Raton approved plans to hire four new police officers, a Community Resource Coordinator, and create a Quality of Life Working Group during a Monday workshop. The four new officers are expected to cost about $280,000 each, for a total of approximately $1.12 million. The Community Resource Coordinator position is expected to cost about $110,000.",
+            "lead_word_count": 58,
+            "headline_overlap_ratio": 0.636,
+            "new_context_token_count": 25,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -504,14 +454,16 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "Boca Raton to invest $1.12 million in new police officers to address homelessness",
-            "lead": "The City of Boca Raton is taking a new approach to addressing homelessness, approving plans to expand law enforcement and outreach efforts in response to growing community concerns. During a Monday workshop, city leaders directed City Manager Mark Sohaney to move forward with hiring four new police officers, a Community Resource Coordinator, and creating a Quality-of-Life Working Group.",
+            "headline": "Boca Raton to spend over $1 million on four new police officers to address homelessness",
+            "lead": "Boca Raton approved plans to hire four new police officers, a Community Resource Coordinator, and create a Quality of Life Working Group during a Monday workshop. The four new officers are expected to cost about $280,000 each, for a total of approximately $1.12 million. The Community Resource Coordinator position is expected to cost about $110,000.",
             "headline_money_claims": [
+              1000000
+            ],
+            "lead_money_claims": [
               1120000
             ],
-            "lead_money_claims": [],
             "missing_money_claims": [
-              1120000
+              1000000
             ],
             "headline_jurisdictions": [],
             "lead_jurisdictions": [],
@@ -532,6 +484,16 @@
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Martin County hoarding case: 108 animals rescued, more than a dozen find forever homes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/martin-county-hoarding-case-108-animals-rescued-more-than-a-dozen-find-forever-homes",
+          "editorial_story_id": "story_000003",
+          "canonical_slug": "2026-07-30-martin-county-hoarding-case-yields-108-rescued-animals-over-a-dozen-adopted",
+          "canonical_headline": "Martin County hoarding case yields 108 rescued animals, over a dozen adopted",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "Martin County school district cuts 3 bus routes, saving $255,000 with no impact to students",
@@ -594,16 +556,6 @@
         },
         {
           "category_key": "business",
-          "source_headline": "How property tax reform could impact fire service in Martin County, commissioners respond",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/how-property-tax-reform-could-impact-fire-service-in-martin-county-commissioners-respond",
-          "editorial_story_id": "story_001131",
-          "canonical_slug": "2026-07-29-martin-county-fire-chief-warns-property-tax-reform-could-force-station-closures",
-          "canonical_headline": "Martin County Fire Chief warns tax amendment could force 116 firefighter cuts, station closures",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
           "source_headline": "New K-8 school breaks ground in Fort Pierce, combining 3 St. Lucie County schools into one",
           "source_url": "https://www.wptv.com/news/education/new-k-8-school-breaks-ground-in-fort-pierce-combining-3-st-lucie-county-schools-into-one",
           "editorial_story_id": "story_001100",
@@ -615,23 +567,25 @@
       ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 75.857
+      "live_hero_headline": "Martin County fire chief warns property tax reform could force closure of firehouses, cut 116 firefighters",
+      "generated_card_count": 0,
+      "elapsed_seconds": 73.536
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
-      "status": "sports_zero_candidate_archive_recovery",
+      "status": "cache_hit",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 4,
-      "selected_source_count": 4,
-      "cache_hit": false,
-      "archive_recovery_requested": true,
+      "publishable_source_count": 5,
+      "selected_source_count": 5,
+      "cache_hit": true,
+      "archive_recovery_requested": false,
       "attempt_count": 0,
       "attempts": [],
       "model_elapsed_seconds": 0.0,
-      "failure_code": "no_sports_hero_candidates",
-      "failure_summary": "Selected Sports source pool contained no deterministic athletic hero candidate",
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -640,7 +594,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 2,
@@ -666,7 +620,8 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "elapsed_seconds": 10.128
+      "live_hero_headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
+      "elapsed_seconds": 14.459
     },
     {
       "category_key": "things_to_do",
@@ -683,69 +638,19 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 32.49,
+          "elapsed_seconds": 32.042,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 32.491,
+      "model_elapsed_seconds": 32.042,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 1,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Adolph & Rose Levis Jewish Community Center in Boca Raton begins $9 million renovation",
-          "missing": [
-            "headline_money_claim_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Adolph & Rose Levis Jewish Community Center in Boca Raton begins $9 million renovation",
-            "lead": "The 31,000-square-foot renovation will create a more accessible, welcoming and state-of-the-art campus aimed at serving future generations. The renovation includes upgraded gathering spaces, enhanced community areas and a new amphitheater designed to host arts, culture and educational programming.",
-            "lead_word_count": 44,
-            "headline_overlap_ratio": 0.182,
-            "new_context_token_count": 29,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Adolph & Rose Levis Jewish Community Center in Boca Raton begins $9 million renovation",
-            "lead": "The 31,000-square-foot renovation will create a more accessible, welcoming and state-of-the-art campus aimed at serving future generations. The renovation includes upgraded gathering spaces, enhanced community areas and a new amphitheater designed to host arts, culture and educational programming.",
-            "headline_money_claims": [
-              9000000
-            ],
-            "lead_money_claims": [],
-            "missing_money_claims": [
-              9000000
-            ],
-            "headline_jurisdictions": [],
-            "lead_jurisdictions": [],
-            "missing_jurisdictions": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_money_claim_missing_from_lead"
-            ]
-          }
-        }
-      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
       "category_eligibility_assessed_count": 8,
@@ -796,7 +701,7 @@
       ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 45.006
+      "elapsed_seconds": 48.881
     },
     {
       "category_key": "florida",
@@ -813,7 +718,7 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.14,
+          "elapsed_seconds": 15.422,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
           "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Leon County judge weighs challenge to Amendment 3 ballot language on property taxes"
@@ -821,15 +726,15 @@
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 18.397,
+          "elapsed_seconds": 15.025,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Leon County judge hears challenge to Amendment 3 ballot language on property taxes"
+          "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Leon County judge considers challenge to Amendment 3 ballot language on property taxes"
         }
       ],
-      "model_elapsed_seconds": 33.538,
+      "model_elapsed_seconds": 30.447,
       "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Leon County judge hears challenge to Amendment 3 ballot language on property taxes",
+      "failure_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Leon County judge considers challenge to Amendment 3 ballot language on property taxes",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -886,7 +791,7 @@
       ],
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 44.137
+      "elapsed_seconds": 43.352
     },
     {
       "category_key": "martin",
@@ -894,8 +799,8 @@
       "status": "generated_live",
       "fetched_candidate_count": 27,
       "fresh_candidate_count": 20,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -903,11 +808,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 13.708,
+          "elapsed_seconds": 26.205,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 13.708,
+      "model_elapsed_seconds": 26.205,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -918,14 +823,34 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
+          "source_headline": "Martin County hoarding case: 108 animals rescued, more than a dozen find forever homes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/martin-county-hoarding-case-108-animals-rescued-more-than-a-dozen-find-forever-homes",
+          "editorial_story_id": "story_000003",
+          "canonical_slug": "2026-07-30-martin-county-hoarding-case-yields-108-rescued-animals-over-a-dozen-adopted",
+          "canonical_headline": "Martin County hoarding case yields 108 rescued animals, over a dozen adopted",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
           "source_headline": "Martin County school district cuts 3 bus routes, saving $255,000 with no impact to students",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-school-district-cuts-3-bus-routes-saving-255-000-with-no-impact-to-students",
+          "editorial_story_id": "story_001356",
+          "canonical_slug": "2026-07-30-martin-county-schools-cut-3-bus-routes-save-255000-with-no-driver-layoffs",
+          "canonical_headline": "Martin County schools cut 3 bus routes, save $255,000 with no driver layoffs",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County school district cuts 3 bus routes, saving $255,000 with no impact to students - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-school-district-cuts-3-bus-routes-saving-255-000-with-no-impact-to-students",
           "editorial_story_id": "story_001356",
           "canonical_slug": "2026-07-30-martin-county-schools-cut-3-bus-routes-save-255000-with-no-driver-layoffs",
@@ -965,16 +890,6 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Martin County fire chief warns homestead exemption expansion could lead to increased response time - WPBF",
-          "source_url": "https://www.wpbf.com/article/martin-county-fire-chief-homestead-exemption-expansion-station-closures-layoffs/73286022",
-          "editorial_story_id": "story_001119",
-          "canonical_slug": "2026-07-28-martin-county-fire-chief-warns-homestead-exemption-could-force-station-closures",
-          "canonical_headline": "Martin County Fire Chief warns homestead exemption expansion could force station closures, firefighter layoffs",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
           "source_headline": "Martin County moves to rewrite shark fishing rules to protect swimmers - WPBF",
           "source_url": "https://www.wpbf.com/article/martin-county-florida-shark-fishing-beach-rules/73288368",
           "editorial_story_id": "story_001155",
@@ -982,32 +897,22 @@
           "canonical_headline": "Martin County moves to rewrite shark fishing rules after complaints about drones, chum",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County leaders to hear how proposed property tax amendment could impact Fire Rescue - WPEC",
-          "source_url": "https://cbs12.com/news/local/martin-county-leaders-to-hear-how-proposed-property-tax-amendment-could-impact-fire-rescue",
-          "editorial_story_id": "story_001010",
-          "canonical_slug": "2026-07-28-martin-county-fire-rescue-could-lose-116-firefighters-under-proposed-property-ta",
-          "canonical_headline": "Martin County Fire Rescue could lose 116 firefighters if property tax amendment passes",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County hoarding case yields 108 rescued animals, over a dozen adopted",
+      "live_hero_headline": "108 animals rescued in Martin County hoarding case, more arriving daily",
       "generated_card_count": 1,
-      "elapsed_seconds": 22.962
+      "elapsed_seconds": 37.585
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 18,
-      "publishable_source_count": 4,
-      "selected_source_count": 3,
+      "fresh_candidate_count": 17,
+      "publishable_source_count": 3,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1015,11 +920,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 30.052,
+          "elapsed_seconds": 24.238,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 30.052,
+      "model_elapsed_seconds": 24.238,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1030,11 +935,31 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 12,
+      "published_story_duplicate_suppression_count": 13,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Flashing traffic light at Glades Cut Off Road in St. Lucie County still not fully operational after 6 months - WFLX",
+          "source_url": "https://www.wflx.com/2026/07/29/flashing-traffic-light-glades-cut-off-road-st-lucie-county-still-not-fully-operational-after-6-months",
+          "editorial_story_id": "story_001294",
+          "canonical_slug": "2026-07-29-flashing-traffic-light-at-glades-cut-off-road-still-not-operational-after-6-mont",
+          "canonical_headline": "Flashing traffic light at Glades Cut Off Road still not operational after 6 months",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "IA report: St. Lucie County deputy fired over social media post mocking sheriff - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-deputy-fired-controversial-social-media-post-internal-affairs-report-standards-of-performance-job-expectations-work-place-st-lucie-county-sheriffs-office-florida-news",
+          "editorial_story_id": "story_001360",
+          "canonical_slug": "2026-07-30-st-lucie-county-deputy-fired-after-social-media-post-mocked-sheriffs-performance",
+          "canonical_headline": "St. Lucie County deputy fired after social media post mocked sheriff's performance standards",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina",
@@ -1097,12 +1022,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Fort Pierce pizza shop transforms patio into book haven, serving young readers - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-pizza-shop-transforms-patio-into-book-haven-serving-young-readers",
+          "source_headline": "Fort Pierce pizza shop transforms patio into book haven, serving young readers - WFLX",
+          "source_url": "https://www.wflx.com/2026/07/29/fort-pierce-pizza-shop-transforms-patio-into-book-haven-serving-young-readers?outputType=amp",
           "editorial_story_id": "story_001178",
           "canonical_slug": "2026-07-29-fort-pierce-pizza-shop-transforms-outdoor-patio-into-free-reading-room-for-child",
           "canonical_headline": "Fort Pierce pizza shop transforms patio into free reading room for children",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1137,16 +1062,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "3-month-old died from severe dehydration and malnutrition in St. Lucie County home - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-child-abuse-deputy-death-mother/73276755",
-          "editorial_story_id": "story_001266",
-          "canonical_slug": "2026-07-30-three-arrested-after-3-month-old-dies-from-severe-dehydration-and-malnutrition-i",
-          "canonical_headline": "Three arrested after 3-month-old dies from severe dehydration and malnutrition in Fort Pierce home",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "St. Lucie County could lose $63 million in funding if property tax goes away - WPEC",
           "source_url": "https://cbs12.com/news/local/south-florida-treasure-coast-news-st-lucie-county-could-lose-63-million-in-funding-if-property-tax-goes-away-port-st-lucie-community-center-city-budget-workshop-7-8-million-dollars-in-projects-from-the-budget",
           "editorial_story_id": "story_000244",
@@ -1158,18 +1073,18 @@
       ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "St. Lucie County deputy fired after social media post mocked sheriff's performance standards",
-      "generated_card_count": 2,
-      "elapsed_seconds": 38.453
+      "live_hero_headline": "Three arrested in death of 3-month-old from severe dehydration and malnutrition in Fort Pierce home",
+      "generated_card_count": 1,
+      "elapsed_seconds": 33.235
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "quality_gate_archive_recovery",
+      "status": "missing_hero_archive_recovery",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 18,
-      "publishable_source_count": 5,
-      "selected_source_count": 5,
+      "fresh_candidate_count": 17,
+      "publishable_source_count": 4,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 1,
@@ -1177,13 +1092,13 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 4.071,
+          "elapsed_seconds": 4.39,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 4.071,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 4.39,
+      "failure_code": "missing_or_null_hero",
+      "failure_summary": "No usable hero remained after sanitization",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1192,11 +1107,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Martin County hoarding case: 108 animals rescued, more than a dozen find forever homes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/martin-county-hoarding-case-108-animals-rescued-more-than-a-dozen-find-forever-homes",
+          "editorial_story_id": "story_000003",
+          "canonical_slug": "2026-07-30-martin-county-hoarding-case-yields-108-rescued-animals-over-a-dozen-adopted",
+          "canonical_headline": "Martin County hoarding case yields 108 rescued animals, over a dozen adopted",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Martin County school district cuts 3 bus routes, saving $255,000 with no impact to students",
@@ -1280,7 +1205,7 @@
       ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 16.626
+      "elapsed_seconds": 14.1
     }
   ]
 }
