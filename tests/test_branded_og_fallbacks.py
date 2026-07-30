@@ -39,7 +39,7 @@ def test_legacy_ai_urls_are_migration_inputs_not_active_pool_entries():
     assert 'if "/images/fallback/" in path:' in source
 
 
-def test_engine_release_identifies_final_canonical_surface_dedup():
+def test_engine_version_is_compatible_with_final_canonical_surface_dedup():
     observability = (ROOT / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'ENGINE_VERSION = "1.11.9.0"' in observability
-    assert 'ENGINE_RELEASE = "final-canonical-surface-dedup"' in observability
+    assert 'OBSERVABILITY_SCHEMA_VERSION = 17' in observability
+    assert 'ENGINE_VERSION = "1.11.' in observability

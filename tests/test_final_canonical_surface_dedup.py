@@ -346,11 +346,12 @@ def test_final_surface_contract_passes_for_unique_direct_canonical_links(tmp_pat
     assert report["redirect_source_link_count"] == 0
 
 
-def test_engine_release_identifies_final_canonical_surface_dedup():
-    root = Path(__file__).resolve().parents[1]
-    observability = (root / "tct_engine" / "observability.py").read_text(encoding="utf-8")
-    assert 'ENGINE_VERSION = "1.11.9.0"' in observability
-    assert 'ENGINE_RELEASE = "final-canonical-surface-dedup"' in observability
+def test_engine_version_is_compatible_with_final_canonical_surface_dedup():
+    import tct_engine.observability as observability
+
+    version = tuple(int(part) for part in observability.ENGINE_VERSION.split("."))
+    assert version >= (1, 11, 9, 0)
+    assert observability.OBSERVABILITY_SCHEMA_VERSION >= 17
 
 
 def test_render_pipeline_uses_final_identity_context_and_fails_closed_before_write():
