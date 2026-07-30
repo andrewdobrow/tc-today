@@ -4351,6 +4351,12 @@ _UPDATE_NOVELTY_ANCHORS = (
     ("decision", re.compile(r"\b(?:approve|approves|approved|reject|rejects|rejected|vote|votes|voted|rule|rules|ruled)\b", re.IGNORECASE)),
     ("status_change", re.compile(r"\b(?:reopen|reopens|reopened|close|closes|closed|resume|resumes|resumed|suspend|suspends|suspended)\b", re.IGNORECASE)),
     ("continuing_status", re.compile(r"\b(?:still|remains?|continues?|now|after\s+\d+|months?|weeks?|days?)\b", re.IGNORECASE)),
+    ("community_reaction", re.compile(
+        r"\b(?:neighbor|neighbors|resident|residents|community|family|families)\b"
+        r".{0,80}\b(?:worr(?:y|ied|ies)|concern(?:ed|s)?|fear(?:ed|s)?|"
+        r"say|says|said|recall(?:s|ed)?|remember(?:s|ed)?)\b",
+        re.IGNORECASE,
+    )),
 )
 
 
@@ -4362,6 +4368,9 @@ def _source_story_form(source):
     """Classify update copy from authoritative story routing or explicit title cues."""
     if not isinstance(source, dict):
         return "standard"
+    explicit = str(source.get("story_form") or "").strip().lower()
+    if explicit in {"update", "standard"}:
+        return explicit
     route = str(
         source.get("_editorial_route") or source.get("editorial_route") or ""
     ).strip().lower()
@@ -4389,13 +4398,31 @@ def _first_matching_anchor(text, anchor_groups):
     return "", None
 
 
-def _update_lead_diagnostics(item, source=None):
-    """Return a deterministic pass/fail assessment for an explicit update lead.
+_UPDATE_CONTEXT_STOP_WORDS = {
+    "about", "after", "again", "against", "before", "being", "between",
+    "child", "children", "county", "details", "during", "from", "have",
+    "into", "latest", "local", "more", "news", "officials", "over",
+    "says", "said", "story", "their", "there", "these", "they", "this",
+    "through", "under", "where", "with", "would",
+}
 
-    The lead must mention the highest-priority underlying-event anchor present in
-    the source and at least one source-indicated update/novelty signal. This catches
-    openings that jump directly into quotes, scene details, or procedure while never
-    explaining what originally happened.
+
+def _update_context_tokens(text):
+    return {
+        token
+        for token in re.findall(r"[a-z0-9]+", str(text or "").lower())
+        if len(token) >= 4 and token not in _UPDATE_CONTEXT_STOP_WORDS
+    }
+
+
+def _update_lead_diagnostics(item, source=None):
+    """Return a deterministic pass/fail assessment for a story update lead.
+
+    Update status comes from the publication/story decision, not merely from words
+    such as ``update`` or ``new details`` in a headline. When a canonical TCT page
+    already exists, its headline and article context define the original event. The
+    incoming source defines the new development. A replacement lead must explain both
+    to a first-time reader before the canonical page may be changed.
     """
     source = source if isinstance(source, dict) else item
     story_form = str(item.get("story_form") or _source_story_form(source))
@@ -4403,35 +4430,105 @@ def _update_lead_diagnostics(item, source=None):
         return {"required": False, "passed": True, "story_form": story_form}
 
     lead = _first_body_paragraph(item.get("body", ""))
-    source_title = str(source.get("source_title") or source.get("title") or source.get("headline") or "")
-    source_text = " ".join([
+    lead_word_count = len(re.findall(r"\b\w+\b", lead))
+    source_title = str(
+        source.get("source_title")
+        or source.get("title")
+        or source.get("headline")
+        or ""
+    )
+    current_source_text = " ".join([
         source_title,
-        str(source.get("article_text") or source.get("source_summary") or source.get("summary") or source.get("body") or "")[:1800],
+        str(
+            source.get("article_text")
+            or source.get("source_summary")
+            or source.get("summary")
+            or source.get("body")
+            or ""
+        )[:2400],
+        " ".join(str(value) for value in (source.get("_editorial_new_facts") or [])),
     ])
 
-    baseline_name, baseline_pattern = _first_matching_anchor(source_text, _UPDATE_BASELINE_ANCHORS)
-    novelty_name, novelty_pattern = _first_matching_anchor(source_title, _UPDATE_NOVELTY_ANCHORS)
-    baseline_present = bool(not baseline_pattern or baseline_pattern.search(lead))
-    novelty_present = bool(not novelty_pattern or novelty_pattern.search(lead))
-    passed = bool(lead) and baseline_present and novelty_present
+    canonical_headline = str(
+        source.get("_canonical_context_headline")
+        or item.get("_canonical_context_headline")
+        or ""
+    ).strip()
+    canonical_body = str(
+        source.get("_canonical_context_body")
+        or item.get("_canonical_context_body")
+        or ""
+    ).strip()
+    canonical_context_available = bool(canonical_headline or canonical_body)
+    baseline_text = " ".join(filter(None, [
+        canonical_headline,
+        canonical_body,
+        current_source_text if not canonical_context_available else "",
+    ]))
+
+    baseline_name, baseline_pattern = _first_matching_anchor(
+        baseline_text, _UPDATE_BASELINE_ANCHORS
+    )
+    baseline_anchor_present = bool(
+        not baseline_pattern or baseline_pattern.search(lead)
+    )
+
+    canonical_tokens = _update_context_tokens(canonical_headline)
+    lead_tokens = _update_context_tokens(lead)
+    baseline_context_hits = sorted(canonical_tokens & lead_tokens)
+    baseline_context_required = min(2, len(canonical_tokens)) if canonical_tokens else 0
+    baseline_details_present = bool(
+        not baseline_context_required
+        or len(baseline_context_hits) >= baseline_context_required
+    )
+    baseline_present = baseline_anchor_present and baseline_details_present
+
+    novelty_name, novelty_pattern = _first_matching_anchor(
+        source_title, _UPDATE_NOVELTY_ANCHORS
+    )
+    novelty_tokens = sorted(
+        _update_context_tokens(source_title) - _update_context_tokens(canonical_headline)
+    )
+    novelty_token_hits = sorted(set(novelty_tokens) & lead_tokens)
+    if novelty_pattern is not None:
+        novelty_present = bool(novelty_pattern.search(lead))
+    elif canonical_context_available and novelty_tokens:
+        novelty_name = "source_distinctive_detail"
+        novelty_present = bool(novelty_token_hits)
+    else:
+        novelty_present = True
+
+    length_present = lead_word_count >= 18
+    passed = bool(lead) and baseline_present and novelty_present and length_present
 
     missing = []
     if not lead:
         missing.append("lead_missing")
-    if not baseline_present:
+    if not baseline_anchor_present:
         missing.append("original_event_context_missing")
+    if baseline_anchor_present and not baseline_details_present:
+        missing.append("original_event_details_missing")
     if not novelty_present:
         missing.append("new_development_missing")
+    if lead and not length_present:
+        missing.append("lead_too_short_for_context")
 
     return {
         "required": True,
         "passed": passed,
         "story_form": story_form,
-        "lead_word_count": len(re.findall(r"\b\w+\b", lead)),
+        "lead_word_count": lead_word_count,
         "baseline_anchor": baseline_name,
         "baseline_present": baseline_present,
+        "baseline_anchor_present": baseline_anchor_present,
+        "baseline_details_present": baseline_details_present,
+        "baseline_context_hits": baseline_context_hits,
+        "baseline_context_required": baseline_context_required,
+        "canonical_context_available": canonical_context_available,
+        "canonical_context_headline": canonical_headline,
         "novelty_anchor": novelty_name,
         "novelty_present": novelty_present,
+        "novelty_token_hits": novelty_token_hits,
         "missing": missing,
         "source_title": source_title,
         "headline": str(item.get("headline") or ""),
@@ -4843,6 +4940,17 @@ def generate_category_content(category_key, category_label, headlines, request_t
         # 14000 chars (~2300 words): the input the model writes from. Set high enough
         # that a normal article is never truncated, so key facts (ranked lists, names,
         # numbers) always reach the model. Only a pathologically long page would be cut.
+        if story_form == "update" and h.get("_canonical_context_headline"):
+            original_headline = sanitize(h.get("_canonical_context_headline", ""))
+            original_body = sanitize(h.get("_canonical_context_body", ""))[:2400]
+            return (
+                f"{i+1}. {title} [source_type:{stype}] [source_quality:{quality}] "
+                f"[hero_eligible:{hero_eligible}] [category_match_score:{match_score}] "
+                f"[story_form:{story_form}]{pub_str}\n"
+                f"   ORIGINAL PUBLISHED STORY: {original_headline}\n"
+                f"   ORIGINAL STORY CONTEXT: {original_body}\n"
+                f"   CURRENT UPDATE SOURCE: {sanitize(content)[:14000]}"
+            )
         return f"{i+1}. {title} [source_type:{stype}] [source_quality:{quality}] [hero_eligible:{hero_eligible}] [category_match_score:{match_score}] [story_form:{story_form}]{pub_str}\n   {sanitize(content)[:14000]}"
     # Pre-filter headlines older than 48 hours before Claude sees them
     from datetime import timezone as _tz
@@ -5079,6 +5187,16 @@ Return ONLY valid JSON:
                 # which is what was emptying whole categories of their heroes.
                 item["source_title"] = source.get("title", "")
                 item["story_form"] = _source_story_form(source)
+                for context_key in (
+                    "_canonical_context_slug",
+                    "_canonical_context_headline",
+                    "_canonical_context_body",
+                    "_canonical_context_first_published",
+                    "_canonical_context_basis",
+                    "_story_aware_update_context",
+                ):
+                    if source.get(context_key) not in (None, ""):
+                        item[context_key] = source.get(context_key)
                 item["feed_url"] = source.get("feed_url", "")
             except (IndexError, ValueError, TypeError):
                 item["link"]      = ""
@@ -5704,6 +5822,7 @@ def _build_category_generation_report(records):
     article_framing_rejection_count = 0
     category_eligibility_rejection_count = 0
     published_story_duplicate_suppression_count = 0
+    story_aware_update_context_count = 0
     for record in records:
         status_counts[str(record.get("status") or "unknown")] += 1
         failure_code = str(record.get("failure_code") or "")
@@ -5737,6 +5856,9 @@ def _build_category_generation_report(records):
         published_story_duplicate_suppression_count += int(
             record.get("published_story_duplicate_suppression_count") or 0
         )
+        story_aware_update_context_count += int(
+            record.get("story_aware_update_context_count") or 0
+        )
 
     return {
         "schema_version": CATEGORY_GENERATION_REPORT_SCHEMA_VERSION,
@@ -5764,6 +5886,7 @@ def _build_category_generation_report(records):
             "article_framing_rejection_count": article_framing_rejection_count,
             "category_eligibility_rejection_count": category_eligibility_rejection_count,
             "published_story_duplicate_suppression_count": published_story_duplicate_suppression_count,
+            "story_aware_update_context_count": story_aware_update_context_count,
         },
         "categories": records,
     }
@@ -15158,6 +15281,117 @@ def _canonical_publication_ledger_target(item, ledger, identity_index=None):
     return canonical, basis, keys
 
 
+def _canonical_update_context_excerpt(entry, max_chars=2400):
+    if not isinstance(entry, dict):
+        return ""
+    body = str(
+        entry.get("body")
+        or entry.get("article_text")
+        or entry.get("teaser")
+        or ""
+    ).strip()
+    if not body and entry.get("slug"):
+        body = str(_archive_article_body(entry) or "").strip()
+    paragraphs = [
+        part.strip()
+        for part in re.split(r"\n\s*\n", body)
+        if part.strip()
+    ]
+    excerpt = "\n\n".join(paragraphs[:3]) if paragraphs else body
+    return excerpt[:max_chars].strip()
+
+
+def _attach_canonical_update_context(item, canonical, basis=""):
+    """Attach the already-published story baseline to an incoming update source."""
+    if not isinstance(item, dict) or not isinstance(canonical, dict):
+        return False
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return False
+    route = str(
+        item.get("_editorial_route") or item.get("editorial_route") or ""
+    ).strip().lower()
+    if route == "skip":
+        return False
+
+    canonical_headline = str(canonical.get("headline") or "").strip()
+    canonical_body = _canonical_update_context_excerpt(canonical)
+    if not canonical_headline and not canonical_body:
+        return False
+
+    item["story_form"] = "update"
+    item["_canonical_context_slug"] = str(canonical.get("slug") or "")
+    item["_canonical_context_headline"] = canonical_headline
+    item["_canonical_context_body"] = canonical_body
+    item["_canonical_context_first_published"] = str(
+        canonical.get("first_published") or canonical.get("date") or ""
+    )
+    item["_canonical_context_basis"] = str(basis or "canonical_publication_ledger")
+    item["_story_aware_update_context"] = True
+    return True
+
+
+def _prepare_story_aware_update_context(headlines, archive, ledger=None, identity_index=None):
+    """Mark every source that already owns a canonical page as an update.
+
+    This runs before Claude. It prevents headline wording from deciding whether an
+    article is an update and gives the model the original TCT story context it must
+    explain in the lead.
+    """
+    ledger = ledger or _build_canonical_publication_ledger(archive, identity_index)
+    bindings = []
+    for item in list(headlines or []):
+        if not isinstance(item, dict):
+            continue
+        canonical, basis, keys = _canonical_publication_ledger_target(
+            item, ledger, identity_index
+        )
+        if canonical is None:
+            continue
+        if not _attach_canonical_update_context(item, canonical, basis):
+            continue
+        bindings.append({
+            "source_headline": str(item.get("title") or item.get("headline") or ""),
+            "source_url": _normalized_external_source_url(
+                item.get("link") or item.get("source_url")
+            ),
+            "canonical_slug": str(canonical.get("slug") or ""),
+            "canonical_headline": str(canonical.get("headline") or ""),
+            "basis": str(basis or "canonical_publication_ledger"),
+            "identity_keys": list(keys),
+        })
+    return bindings
+
+
+def _update_replacement_diagnostics(item, canonical):
+    """Validate an in-place replacement against the story it would overwrite."""
+    probe = dict(item or {})
+    probe["story_form"] = "update"
+    source = dict(item or {})
+    source["story_form"] = "update"
+    source["title"] = (
+        source.get("source_headline")
+        or source.get("source_title")
+        or source.get("headline")
+        or ""
+    )
+    source["article_text"] = (
+        source.get("article_text")
+        or source.get("source_summary")
+        or source.get("body")
+        or ""
+    )
+    source["_canonical_context_headline"] = str(
+        (canonical or {}).get("headline") or ""
+    )
+    source["_canonical_context_body"] = _canonical_update_context_excerpt(
+        canonical or {}
+    )
+    source["_canonical_context_slug"] = str(
+        (canonical or {}).get("slug") or ""
+    )
+    return _update_lead_diagnostics(probe, source)
+
+
 def _reconcile_canonical_publication_ledger(archive, identity_index, output_root):
     """Collapse connected duplicate publication records before new writing begins.
 
@@ -17564,17 +17798,9 @@ def write_archives(all_categories, top_cat):
                 and not (hero.get("is_custom") or hero.get("authoritative_custom"))
             ):
                 hero["story_form"] = "update"
-                _context_source = dict(hero)
-                _context_source["title"] = (
-                    hero.get("source_headline") or hero.get("headline") or ""
-                )
-                _context_source["article_text"] = " ".join(filter(None, [
-                    str(existing.get("headline") or ""),
-                    str(existing.get("teaser") or ""),
-                    str(hero.get("body") or ""),
-                ]))
-                _context_diagnostics = _article_framing_diagnostics(
-                    hero, _context_source
+                hero["story_form"] = "update"
+                _context_diagnostics = _update_replacement_diagnostics(
+                    hero, existing
                 )
                 if not _context_diagnostics.get("passed", False):
                     _forward_identity_report["canonical_publication_ledger"][
@@ -17583,6 +17809,9 @@ def write_archives(all_categories, top_cat):
                         "headline": headline,
                         "canonical_slug": slug,
                         "missing": _context_diagnostics.get("missing", []),
+                        "baseline_anchor": _context_diagnostics.get("baseline_anchor", ""),
+                        "baseline_context_hits": _context_diagnostics.get("baseline_context_hits", []),
+                        "novelty_anchor": _context_diagnostics.get("novelty_anchor", ""),
                         "action": "preserve_existing_page_contextless_update_rejected",
                     })
                     hero["_publication_skip_reason"] = (
@@ -19201,6 +19430,9 @@ def main():
     # Current published identities are needed before model generation so a registry
     # ``skip`` decision can suppress an already-published story at the source boundary.
     _pre_generation_archive = load_archive(OUTPUT_DIR / "archive.json")
+    _pre_generation_publication_ledger = _build_canonical_publication_ledger(
+        _pre_generation_archive
+    )
     all_categories = []
     category_generation_records = []
     category_generation_report = {}
@@ -19270,6 +19502,8 @@ def main():
             "category_eligibility_rejections": [],
             "published_story_duplicate_suppression_count": 0,
             "published_story_duplicate_suppressions": [],
+            "story_aware_update_context_count": 0,
+            "story_aware_update_context_bindings": [],
             "_started": _category_started,
         }
         category_generation_records.append(_category_record)
@@ -19300,6 +19534,23 @@ def main():
                 f"  Published-story guard: suppressed {len(_published_story_suppressions)} "
                 "registry skip source(s) before generation"
             )
+        _update_context_bindings = _prepare_story_aware_update_context(
+            headlines,
+            _pre_generation_archive,
+            _pre_generation_publication_ledger,
+        )
+        if _update_context_bindings:
+            _category_record["story_aware_update_context_count"] = len(
+                _update_context_bindings
+            )
+            _category_record["story_aware_update_context_bindings"] = (
+                _update_context_bindings
+            )
+            print(
+                f"  Story-aware update context: attached {len(_update_context_bindings)} "
+                "canonical baseline(s) before generation"
+            )
+
         if not headlines:
             print(
                 f"  Every {cat_config['label']} source already has a published canonical page; "
