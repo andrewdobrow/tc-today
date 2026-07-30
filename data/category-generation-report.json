@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-07-30T09:37:38Z",
+  "generated_at": "2026-07-30T10:46:25Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,31 +15,33 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 1,
-      "generated_live": 4,
+      "cache_hit": 2,
+      "generated_live": 3,
+      "missing_hero_archive_recovery": 2,
       "no_publishable_sources": 1,
-      "quality_gate_archive_recovery": 3
+      "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "publication_quality_rejected": 3
+      "missing_or_null_hero": 2,
+      "publication_quality_rejected": 1
     },
-    "model_attempt_count": 7,
-    "model_elapsed_seconds": 164.952,
+    "model_attempt_count": 6,
+    "model_elapsed_seconds": 182.416,
     "archive_recovery_requested_count": 4,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 4,
     "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 68,
-    "story_aware_update_context_count": 0
+    "published_story_duplicate_suppression_count": 65,
+    "story_aware_update_context_count": 2
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "quality_gate_archive_recovery",
+      "status": "missing_hero_archive_recovery",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 16,
+      "fresh_candidate_count": 17,
       "publishable_source_count": 6,
       "selected_source_count": 1,
       "cache_hit": false,
@@ -49,13 +51,13 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 3.785,
+          "elapsed_seconds": 6.757,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 3.785,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 6.757,
+      "failure_code": "missing_or_null_hero",
+      "failure_summary": "No usable hero remained after sanitization",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -103,8 +105,8 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Boca Raton opens Gopher Tortoise Preserve, an 11-acre natural area for wildlife and education",
-          "source_url": "https://www.wptv.com/news/protecting-paradise/boca-raton-opens-gopher-tortoise-preserve-an-11-acre-natural-area-for-wildlife-and-education"
+          "headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WFLX",
+          "source_url": "https://www.wflx.com/2026/07/29/residents-push-back-plan-turn-fort-pierces-museum-pointe-park-into-mega-yacht-marina/"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -113,13 +115,11 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
+          "reason": "missing_central_government_action",
           "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:victim"
-          ],
-          "headline": "Boca Raton police seek witnesses in fatal parking lot incident involving silver Mercedes SUV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/boca-raton-delray-beach/boca-raton-police-seek-witnesses-in-fatal-parking-lot-incident-involving-silver-mercedes-suv"
+          "competing_signals": [],
+          "headline": "Boca Raton opens Gopher Tortoise Preserve, an 11-acre natural area for wildlife and education",
+          "source_url": "https://www.wptv.com/news/protecting-paradise/boca-raton-opens-gopher-tortoise-preserve-an-11-acre-natural-area-for-wildlife-and-education"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -135,7 +135,7 @@
           "source_url": "https://www.hometownnewstc.com/community_page/calendar/week-of-july-31/article_e12e0b23-48a7-5b16-8a2d-ff3d254e9872.html"
         }
       ],
-      "published_story_duplicate_suppression_count": 11,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -184,16 +184,6 @@
           "editorial_story_id": "story_001322",
           "canonical_slug": "2026-07-29-new-supplemental-radar-installed-in-fort-myers-expected-to-improve-tornado-and-s",
           "canonical_headline": "New supplemental radar installed in Fort Myers expected to improve tornado and storm detection for Treasure Coast",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina",
-          "editorial_story_id": "story_001323",
-          "canonical_slug": "2026-07-30-fort-pierce-residents-fight-plan-to-replace-museum-pointe-park-with-mega-yacht-m",
-          "canonical_headline": "Fort Pierce residents fight plan to replace Museum Pointe Park with mega-yacht marina",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -248,20 +238,32 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WFLX",
+          "source_url": "https://www.wflx.com/2026/07/29/residents-push-back-plan-turn-fort-pierces-museum-pointe-park-into-mega-yacht-marina",
+          "canonical_slug": "2026-07-30-fort-pierce-residents-fight-plan-to-replace-museum-pointe-park-with-mega-yacht-m",
+          "canonical_headline": "Fort Pierce residents fight plan to replace Museum Pointe Park with mega-yacht marina",
+          "basis": "story",
+          "identity_keys": [
+            "story:story_001323",
+            "source:https://www.wflx.com/2026/07/29/residents-push-back-plan-turn-fort-pierces-museum-pointe-park-into-mega-yacht-marina"
+          ]
+        }
+      ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 28.897
+      "elapsed_seconds": 24.063
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 9,
-      "selected_source_count": 8,
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 7,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -269,35 +271,35 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 34.55,
+          "elapsed_seconds": 53.216,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 34.55,
+      "model_elapsed_seconds": 53.216,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 2,
+      "article_framing_rejection_count": 1,
       "article_framing_rejections": [
         {
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "St. Lucie County Sheriff describes Fort Pierce baby death case as one of worst in 20 years",
+          "headline": "Boca Raton approves over $1 million to hire police, coordinator for homelessness response",
           "missing": [
-            "headline_jurisdiction_missing_from_lead"
+            "headline_money_claim_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "St. Lucie County Sheriff describes Fort Pierce baby death case as one of worst in 20 years",
-            "lead": "The investigation began in August of last year when detectives were called to a Fort Pierce home following the infant's death. The baby had been living with his grandfather, Robert Maxwell, and Robert Maxwell's girlfriend, Vikki Koon, while his mother, Nicole Maxwell, resided with a boyfriend in Vero Beach. Investigators found the mobile home in poor condition, extremely hot, with a bug infestation, lack of food, and unsafe for walking.",
-            "lead_word_count": 72,
-            "headline_overlap_ratio": 0.286,
-            "new_context_token_count": 40,
+            "headline": "Boca Raton approves over $1 million to hire police, coordinator for homelessness response",
+            "lead": "The City of Boca Raton approved plans during a Monday workshop to hire four new police officers, a Community Resource Coordinator, and create a Quality-of-Life Working Group to address homelessness. The four new officers are expected to cost about $280,000 each for a total of approximately $1.12 million. The Community Resource Coordinator position is expected to cost about $110,000.",
+            "lead_word_count": 64,
+            "headline_overlap_ratio": 0.7,
+            "new_context_token_count": 28,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -311,83 +313,32 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "St. Lucie County Sheriff describes Fort Pierce baby death case as one of worst in 20 years",
-            "lead": "The investigation began in August of last year when detectives were called to a Fort Pierce home following the infant's death. The baby had been living with his grandfather, Robert Maxwell, and Robert Maxwell's girlfriend, Vikki Koon, while his mother, Nicole Maxwell, resided with a boyfriend in Vero Beach. Investigators found the mobile home in poor condition, extremely hot, with a bug infestation, lack of food, and unsafe for walking.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "fort_pierce",
-              "st_lucie_county"
+            "headline": "Boca Raton approves over $1 million to hire police, coordinator for homelessness response",
+            "lead": "The City of Boca Raton approved plans during a Monday workshop to hire four new police officers, a Community Resource Coordinator, and create a Quality-of-Life Working Group to address homelessness. The four new officers are expected to cost about $280,000 each for a total of approximately $1.12 million. The Community Resource Coordinator position is expected to cost about $110,000.",
+            "headline_money_claims": [
+              1000000
             ],
-            "lead_jurisdictions": [
-              "fort_pierce",
-              "vero_beach"
+            "lead_money_claims": [
+              1120000
             ],
-            "missing_jurisdictions": [
-              "st_lucie_county"
+            "missing_money_claims": [
+              1000000
             ],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ]
-          }
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Martin County animal hoarding case grows to 108 rescued dogs and cats",
-          "missing": [
-            "headline_jurisdiction_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Martin County animal hoarding case grows to 108 rescued dogs and cats",
-            "lead": "The Humane Society of the Treasure Coast says animals continue to come in from the same case, with more animals arriving every single day. Sarah Fisher of the Humane Society of the Treasure Coast said the shelter needs community support to keep up with the growing number of animals in its care.",
-            "lead_word_count": 52,
-            "headline_overlap_ratio": 0.1,
-            "new_context_token_count": 26,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Martin County animal hoarding case grows to 108 rescued dogs and cats",
-            "lead": "The Humane Society of the Treasure Coast says animals continue to come in from the same case, with more animals arriving every single day. Sarah Fisher of the Humane Society of the Treasure Coast said the shelter needs community support to keep up with the growing number of animals in its care.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "martin_county"
-            ],
+            "headline_jurisdictions": [],
             "lead_jurisdictions": [],
-            "missing_jurisdictions": [
-              "martin_county"
-            ],
+            "missing_jurisdictions": [],
             "headline_policy_references": [],
             "lead_policy_references": [],
             "missing_policy_references": [],
             "missing": [
-              "headline_jurisdiction_missing_from_lead"
+              "headline_money_claim_missing_from_lead"
             ]
           }
         }
       ],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 10,
@@ -497,16 +448,16 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Three arrested in Fort Pierce infant death, investigators reveal severe neglect and malnutrition",
+      "live_hero_headline": "Three arrested in Fort Pierce infant death from severe dehydration and malnutrition",
       "generated_card_count": 0,
-      "elapsed_seconds": 44.713
+      "elapsed_seconds": 63.58
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 17,
+      "fresh_candidate_count": 18,
       "publishable_source_count": 10,
       "selected_source_count": 8,
       "cache_hit": false,
@@ -516,11 +467,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 69.387,
+          "elapsed_seconds": 64.881,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 69.387,
+      "model_elapsed_seconds": 64.881,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -533,18 +484,18 @@
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Boca Raton to invest over $1 million to hire police officers and coordinator for homelessness response",
+          "headline": "Boca Raton to invest over $1 million to expand police and homeless outreach after 715 calls this year",
           "missing": [
             "headline_money_claim_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Boca Raton to invest over $1 million to hire police officers and coordinator for homelessness response",
-            "lead": "Boca Raton city leaders directed City Manager Mark Sohaney during a Monday workshop to move forward with hiring four new police officers, a Community Resource Coordinator, and creating a Quality-of-Life Working Group. Mayor Andy Thomson said the investment is designed to strengthen both public safety and services for people experiencing homelessness. The four new officers are expected to cost about $280,000 each, for a total of approximately $1.12 million. The Community Resource Coordinator position is expected to cost about $110,000.",
-            "lead_word_count": 85,
-            "headline_overlap_ratio": 0.636,
-            "new_context_token_count": 45,
+            "headline": "Boca Raton to invest over $1 million to expand police and homeless outreach after 715 calls this year",
+            "lead": "The City of Boca Raton approved plans Monday to expand law enforcement and outreach efforts to address homelessness. City leaders directed City Manager Mark Sohaney to move forward with hiring four new police officers, a Community Resource Coordinator, and creating a Quality-of-Life Working Group. Mayor Andy Thomson said the investment is designed to strengthen both public safety and services for people experiencing homelessness.",
+            "lead_word_count": 65,
+            "headline_overlap_ratio": 0.385,
+            "new_context_token_count": 41,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -558,14 +509,12 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "Boca Raton to invest over $1 million to hire police officers and coordinator for homelessness response",
-            "lead": "Boca Raton city leaders directed City Manager Mark Sohaney during a Monday workshop to move forward with hiring four new police officers, a Community Resource Coordinator, and creating a Quality-of-Life Working Group. Mayor Andy Thomson said the investment is designed to strengthen both public safety and services for people experiencing homelessness. The four new officers are expected to cost about $280,000 each, for a total of approximately $1.12 million. The Community Resource Coordinator position is expected to cost about $110,000.",
+            "headline": "Boca Raton to invest over $1 million to expand police and homeless outreach after 715 calls this year",
+            "lead": "The City of Boca Raton approved plans Monday to expand law enforcement and outreach efforts to address homelessness. City leaders directed City Manager Mark Sohaney to move forward with hiring four new police officers, a Community Resource Coordinator, and creating a Quality-of-Life Working Group. Mayor Andy Thomson said the investment is designed to strengthen both public safety and services for people experiencing homelessness.",
             "headline_money_claims": [
               1000000
             ],
-            "lead_money_claims": [
-              1120000
-            ],
+            "lead_money_claims": [],
             "missing_money_claims": [
               1000000
             ],
@@ -586,7 +535,7 @@
       "category_eligibility_assessed_count": 10,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -647,32 +596,22 @@
           "canonical_headline": "Fort Pierce pizza shop transforms patio into free reading room for children",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "New K-8 school breaks ground in Fort Pierce, combining 3 St. Lucie County schools into one",
-          "source_url": "https://www.wptv.com/news/education/new-k-8-school-breaks-ground-in-fort-pierce-combining-3-st-lucie-county-schools-into-one",
-          "editorial_story_id": "story_001100",
-          "canonical_slug": "2026-07-28-70-million-k-8-school-breaks-ground-in-fort-pierce-will-consolidate-three-st-luc",
-          "canonical_headline": "New $70 million K-8 school breaks ground in Fort Pierce, will consolidate three St. Lucie County schools",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County Fire Chief warns property tax reform could force closure of firehouses, cuts to 116 firefighters",
+      "live_hero_headline": "Martin County fire chief warns property tax reform could force cuts to firefighters, helicopter, and fire stations",
       "generated_card_count": 0,
-      "elapsed_seconds": 77.083
+      "elapsed_seconds": 74.52
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "cache_hit",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 24,
       "publishable_source_count": 5,
       "selected_source_count": 5,
       "cache_hit": true,
@@ -693,18 +632,8 @@
       "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "sports",
-          "source_headline": "Boston cyclist rides 2,600 miles from Key West to Maine to honor friend lost to colorectal cancer",
-          "source_url": "https://www.wptv.com/news/state/boston-cyclist-rides-2-600-miles-from-key-west-to-maine-to-honor-friend-lost-to-colorectal-cancer",
-          "editorial_story_id": "story_000907",
-          "canonical_slug": "2026-07-28-boston-cyclist-passes-through-vero-beach-on-2600-mile-ride-honoring-friend-lost",
-          "canonical_headline": "Cyclist rides through Vero Beach on 2,600-mile journey from Key West to Maine",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "sports",
           "source_headline": "Indian River County Fire Rescue mourns off-duty death of firefighter Geoffrey Lang - WPEC",
@@ -719,7 +648,7 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "live_hero_headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
-      "elapsed_seconds": 14.655
+      "elapsed_seconds": 13.232
     },
     {
       "category_key": "things_to_do",
@@ -736,19 +665,69 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 33.074,
+          "elapsed_seconds": 34.697,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 33.074,
+      "model_elapsed_seconds": 34.697,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "$9 million renovation underway at Adolph & Rose Levis Jewish Community Center in Boca Raton",
+          "missing": [
+            "headline_money_claim_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "$9 million renovation underway at Adolph & Rose Levis Jewish Community Center in Boca Raton",
+            "lead": "Leaders at the Levis JCC say the 31,000-square-foot renovation will create a more accessible, welcoming and state-of-the-art campus aimed at serving future generations. The renovation includes upgraded gathering spaces, enhanced community areas and a new amphitheater designed to host arts, culture and educational programming.",
+            "lead_word_count": 50,
+            "headline_overlap_ratio": 0.273,
+            "new_context_token_count": 32,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "$9 million renovation underway at Adolph & Rose Levis Jewish Community Center in Boca Raton",
+            "lead": "Leaders at the Levis JCC say the 31,000-square-foot renovation will create a more accessible, welcoming and state-of-the-art campus aimed at serving future generations. The renovation includes upgraded gathering spaces, enhanced community areas and a new amphitheater designed to host arts, culture and educational programming.",
+            "headline_money_claims": [
+              9000000
+            ],
+            "lead_money_claims": [],
+            "missing_money_claims": [
+              9000000
+            ],
+            "headline_jurisdictions": [],
+            "lead_jurisdictions": [],
+            "missing_jurisdictions": [],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_money_claim_missing_from_lead"
+            ]
+          }
+        }
+      ],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
       "category_eligibility_assessed_count": 8,
@@ -831,7 +810,7 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 51.83
+      "elapsed_seconds": 52.404
     },
     {
       "category_key": "florida",
@@ -912,18 +891,30 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 12.119
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "'Bring accountability back': Voter tells WPTV why he supports Florida property tax referendum - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQb1BtS0ZwMzR6TEVjNE1zYTljU2g3OFVaeUloaW53SVpkVkVVUFE4eFh2LVllbVFIMFdySlVhakQ1aFNxSTV2Y3FvZEdGdHM5dFNrczd1LU1hN1lpZS1PbEVyZl9xODVXMkFlNWdsc1l3cTd1WFRmckFJRWxXX2x1Y1BOQzJwbkdCV1pwR24tcS1sVFRzaWlobmxid0haSW13VUtKckdBaHB5MDdoV1ZhYkNDWmdBS0hRSTVBbHBHRDdKeTd4V3dIbzQtOFJKWXc",
+          "canonical_slug": "2026-07-29-florida-voters-to-decide-november-referendum-on-raising-homestead-exemption-for",
+          "canonical_headline": "Florida voters to decide November referendum on raising homestead exemption for property tax reform",
+          "basis": "story",
+          "identity_keys": [
+            "story:story_001324",
+            "source:https://news.google.com/rss/articles/CBMizwFBVV95cUxQb1BtS0ZwMzR6TEVjNE1zYTljU2g3OFVaeUloaW53SVpkVkVVUFE4eFh2LVllbVFIMFdySlVhakQ1aFNxSTV2Y3FvZEdGdHM5dFNrczd1LU1hN1lpZS1PbEVyZl9xODVXMkFlNWdsc1l3cTd1WFRmckFJRWxXX2x1Y1BOQzJwbkdCV1pwR24tcS1sVFRzaWlobmxid0haSW13VUtKckdBaHB5MDdoV1ZhYkNDWmdBS0hRSTVBbHBHRDdKeTd4V3dIbzQtOFJKWXc"
+          ]
+        }
+      ],
+      "elapsed_seconds": 12.25
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 4,
-      "selected_source_count": 4,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -931,11 +922,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 10.905,
+          "elapsed_seconds": 16.376,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 10.905,
+      "model_elapsed_seconds": 16.376,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -948,18 +939,18 @@
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "108 dogs and cats rescued in Martin County hoarding case, more than a dozen adopted",
+          "headline": "108 animals rescued in Martin County hoarding case, shelter seeks community support",
           "missing": [
             "headline_jurisdiction_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "108 dogs and cats rescued in Martin County hoarding case, more than a dozen adopted",
-            "lead": "The Humane Society of the Treasure Coast says animals continue to come in from the same case. Every single day more animals are coming forth from the same case, Sarah Fisher of the Humane Society of the Treasure Coast said.",
-            "lead_word_count": 40,
-            "headline_overlap_ratio": 0.167,
-            "new_context_token_count": 17,
+            "headline": "108 animals rescued in Martin County hoarding case, shelter seeks community support",
+            "lead": "The Humane Society of the Treasure Coast says animals continue to come in from the same case. Sarah Fisher of the Humane Society of the Treasure Coast said every single day more animals are coming forth from the same case. Fisher said the shelter needs community support to keep up with the growing number of animals in its care.",
+            "lead_word_count": 59,
+            "headline_overlap_ratio": 0.455,
+            "new_context_token_count": 23,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -973,8 +964,8 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "108 dogs and cats rescued in Martin County hoarding case, more than a dozen adopted",
-            "lead": "The Humane Society of the Treasure Coast says animals continue to come in from the same case. Every single day more animals are coming forth from the same case, Sarah Fisher of the Humane Society of the Treasure Coast said.",
+            "headline": "108 animals rescued in Martin County hoarding case, shelter seeks community support",
+            "lead": "The Humane Society of the Treasure Coast says animals continue to come in from the same case. Sarah Fisher of the Humane Society of the Treasure Coast said every single day more animals are coming forth from the same case. Fisher said the shelter needs community support to keep up with the growing number of animals in its care.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
@@ -996,7 +987,7 @@
       ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 5,
@@ -1056,30 +1047,23 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County Fire Rescue could lose 116 firefighters, close three stations under proposed homestead exemption expansion",
+      "live_hero_headline": "Martin County fire chief warns homestead exemption expansion could close stations, cut 116 firefighters",
       "generated_card_count": 0,
-      "elapsed_seconds": 21.378
+      "elapsed_seconds": 30.256
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
+      "status": "cache_hit",
       "fetched_candidate_count": 30,
       "fresh_candidate_count": 17,
       "publishable_source_count": 2,
       "selected_source_count": 1,
-      "cache_hit": false,
+      "cache_hit": true,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 7.725,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 7.725,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1228,16 +1212,13 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "success",
-      "budget_seconds": 180.0,
       "live_hero_headline": "Three arrested in death of 3-month-old from severe dehydration and malnutrition in Fort Pierce",
-      "generated_card_count": 0,
-      "elapsed_seconds": 17.92
+      "elapsed_seconds": 8.584
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "quality_gate_archive_recovery",
+      "status": "missing_hero_archive_recovery",
       "fetched_candidate_count": 29,
       "fresh_candidate_count": 21,
       "publishable_source_count": 4,
@@ -1249,13 +1230,13 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 5.526,
+          "elapsed_seconds": 6.489,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 5.526,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 6.489,
+      "failure_code": "missing_or_null_hero",
+      "failure_summary": "No usable hero remained after sanitization",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1354,7 +1335,7 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 15.023
+      "elapsed_seconds": 15.826
     }
   ]
 }
