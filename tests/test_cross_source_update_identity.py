@@ -422,3 +422,145 @@ def test_recurring_custom_reports_never_use_cross_source_fallback():
 
     assert evidence["matched"] is False
     assert evidence["reason"] == "custom_publication_outside_cross_source_fallback"
+
+
+def test_fentanyl_sentencing_does_not_match_unrelated_sebastian_death_warning():
+    g = _load_generate()
+    canonical = {
+        "slug": "2026-07-09-second-decomposed-body-found-near-us-1-in-sebastian-days-after-first-discovery",
+        "headline": "Indian River County Sheriff warns of possible bad drugs on streets after two deaths near Sebastian",
+        "teaser": (
+            "Sheriff Eric Flowers said it is possible bad fentanyl or "
+            "methamphetamine is on the streets and urged drug users to seek treatment."
+        ),
+        "date": "2026-07-09",
+        "editorial_story_id": "story-deaths-drug-drugs-eric-fentanyl-dbbbd58a",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+    }
+    incoming = _incoming(
+        "Man sentenced to life in prison for selling fentanyl that killed Vero Beach man in 2023",
+        (
+            "A Los Angeles man was sentenced to life in federal prison after "
+            "prosecutors said fentanyl he sold caused the 2023 overdose death of a "
+            "Vero Beach man."
+        ),
+        "2026-07-30",
+        "story-fentanyl-sentencing-fragment",
+        "https://example.com/vero-beach-fentanyl-sentencing",
+    )
+
+    evidence = g._cross_source_same_event_evidence(incoming, canonical)
+    ledger = g._build_canonical_publication_ledger([canonical])
+    target, _basis, _keys = g._canonical_publication_ledger_target(incoming, ledger)
+
+    assert evidence["matched"] is False
+    assert target is None
+
+
+def test_candidate_blocking_avoids_full_archive_scan(monkeypatch):
+    g = _load_generate()
+    matching = dict(DOUBLE_SHOOTING)
+    unrelated = [
+        {
+            "slug": f"2026-06-{index:02d}-unrelated-story-{index}",
+            "headline": f"Unrelated business opening number {index} in Florida",
+            "teaser": "A different company announced an unrelated opening.",
+            "date": f"2026-06-{index:02d}",
+            "editorial_story_id": f"story-unrelated-{index}",
+            "legacy_identity_status": "identified",
+            "ranking_eligible": True,
+        }
+        for index in range(1, 21)
+    ]
+    ledger = g._build_canonical_publication_ledger([matching, *unrelated])
+    calls = []
+    original = g._cross_source_same_event_evidence
+
+    def counted(*args, **kwargs):
+        calls.append((args[0].get("headline"), args[1].get("headline")))
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(g, "_cross_source_same_event_evidence", counted)
+    target, _basis, _keys = g._canonical_publication_ledger_target(
+        dict(DOUBLE_SHOOTING_911), ledger
+    )
+
+    assert target["slug"] == DOUBLE_SHOOTING["slug"]
+    assert len(calls) <= 2
+
+
+def test_proven_legacy_canonical_adopts_current_story_id_before_live_validation(tmp_path):
+    import json
+
+    g = _load_generate()
+    canonical = {
+        "slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
+        "headline": "Port St. Lucie man arrested after holding teens at gunpoint during Orbeez prank",
+        "teaser": "A Port St. Lucie man was arrested after confronting teens during an Orbeez prank.",
+        "date": "2026-06-27",
+        "legacy_identity_status": "legacy_unresolved",
+        "ranking_eligible": False,
+    }
+    incoming = {
+        "headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint during Orbeez prank",
+        "editorial_story_id": "story-orbeez-case-current",
+        "_editorial_story_id": "story-orbeez-case-current",
+    }
+    ledger = g._build_canonical_publication_ledger([canonical])
+
+    adopted = g._adopt_missing_canonical_story_id(
+        incoming,
+        canonical,
+        incoming["editorial_story_id"],
+        ledger=ledger,
+        basis="canonical_publication_ledger:incident",
+    )
+    assert adopted == "story-orbeez-case-current"
+    assert canonical["editorial_story_id"] == adopted
+    assert canonical["ranking_eligible"] is True
+    assert ledger["key_to_slug"][f"story:{adopted}"] == canonical["slug"]
+
+    (tmp_path / "archive.json").write_text(json.dumps([canonical]), encoding="utf-8")
+    live = dict(incoming, slug=canonical["slug"], _archived_slug=canonical["slug"])
+    report = g.validate_forward_live_identity(
+        [{"category_key": "crime", "hero": live, "cards": []}],
+        output_dir=tmp_path,
+    )
+    assert report["passed"] is True
+
+
+def test_separate_i95_crashes_and_wrongful_death_cases_do_not_merge():
+    g = _load_generate()
+    stuart_crash = {
+        "headline": "Five hospitalized after multi-vehicle crash and fire on I-95 in Stuart",
+        "teaser": "A crash in Stuart closed northbound lanes and sent five people to hospitals.",
+        "date": "2026-06-03",
+    }
+    vero_crash = {
+        "headline": "Multi-vehicle crash closes northbound I-95 lanes near Vero Beach",
+        "teaser": "A separate crash near Vero Beach closed northbound lanes eleven days later.",
+        "date": "2026-06-14",
+    }
+    turnpike_lawsuit = {
+        "headline": "Stuart daughter files wrongful death suit after Florida Turnpike crash killed three",
+        "teaser": "The lawsuit concerns a Turnpike collision in St. Lucie County.",
+        "date": "2026-06-13",
+    }
+    gokart_lawsuit = {
+        "headline": "Family files wrongful death lawsuit after girl dies in Port St. Lucie go-kart crash",
+        "teaser": "The lawsuit concerns a separate crash at an indoor adventure park.",
+        "date": "2026-07-20",
+    }
+
+    assert g._cross_source_same_event_evidence(stuart_crash, vero_crash)["matched"] is False
+    assert g._cross_source_same_event_evidence(turnpike_lawsuit, gokart_lawsuit)["matched"] is False
+
+
+def test_supreme_court_name_is_not_a_precise_street_location():
+    g = _load_generate()
+    item = {
+        "headline": "Florida Supreme Court adopts new rules",
+        "teaser": "The Florida Supreme Court issued an administrative order.",
+    }
+    assert "florida-supreme-court" not in g._cross_source_precise_locations(item)

@@ -15614,6 +15614,12 @@ def _cross_source_precise_locations(item):
             continue
         prefix[0] = _CROSS_SOURCE_DIRECTION_MAP.get(prefix[0], prefix[0])
         suffix = _CROSS_SOURCE_STREET_SUFFIXES[raw_suffix]
+        if suffix == "court" and prefix[-1] in {
+            "supreme", "appeals", "appellate", "circuit", "federal", "district",
+        }:
+            # Institutional names such as Florida Supreme Court are not street-level
+            # incident anchors.
+            continue
         result.add("-".join(prefix + [suffix]))
 
     # Lowercase feeds lose capitalization. Recover only street phrases immediately
@@ -15643,6 +15649,10 @@ def _cross_source_precise_locations(item):
             continue
         prefix[0] = _CROSS_SOURCE_DIRECTION_MAP.get(prefix[0], prefix[0])
         suffix = _CROSS_SOURCE_STREET_SUFFIXES.get(match.group(2), match.group(2))
+        if suffix == "court" and prefix[-1] in {
+            "supreme", "appeals", "appellate", "circuit", "federal", "district",
+        }:
+            continue
         result.add("-".join(prefix + [suffix]))
     return result
 
@@ -15668,7 +15678,7 @@ def _cross_source_event_families(item):
     patterns = {
         "shooting": r"\b(shooting|shot|gunfire|homicide|murder)\b",
         "vehicle-chase": r"\b(chase|pursuit|flee|fled|elud|high speed|80 mph|k 9|drone)\b",
-        "public-policy": r"\b(ordinance|ordinances|rule|rules|regulation|proposal|commissioners|commission|public comment)\b",
+        "public-policy": r"\b(ordinance|ordinances|rule|rules|regulation|proposal|commissioners|commission|school board|public comment)\b",
         "child-death": r"\b(infant|baby|child).{0,80}\b(died|death|dehydration|malnutrition|manslaughter|abuse)\b",
         "animal-case": r"\b(hoarding|animals?|cats?|dogs?|rescued|seized)\b",
         "crash": r"\b(crash|collision|wreck)\b",
@@ -15705,7 +15715,95 @@ def _cross_source_distinctive_tokens(item):
     }
 
 
-def _cross_source_same_event_evidence(left, right):
+def _cross_source_headline_topic_tokens(item):
+    """Order-independent headline concepts used only for candidate blocking."""
+    headline = str(item.get("headline") or item.get("title") or "") if isinstance(item, dict) else ""
+    exclusions = set(ARCHIVE_STOPS) | set(GENERIC_TOKENS) | _CROSS_SOURCE_STAGE_TOKENS
+    return {
+        _stem(word)
+        for word in _cross_source_words(headline)
+        if word not in exclusions and _stem(word) not in exclusions
+    }
+
+
+def _cross_source_feature_bundle(item):
+    """Compute reusable deterministic identity features for one publication.
+
+    Archive entries are compared repeatedly during one build.  Computing every
+    regex/entity feature for every possible pair caused the v1.12.0.6 production
+    slowdown.  This bundle is intentionally immutable and safe to cache inside the
+    in-memory publication ledger.
+    """
+    text = _cross_source_text(item)
+    return {
+        "date": _cross_source_date_value(item),
+        "locality": frozenset(_audit_locations(text)),
+        "event_families": frozenset(_cross_source_event_families(item)),
+        "incident_anchor": _durable_incident_anchor(
+            item, include_archive_body=True
+        ),
+        "known_event_key": _known_event_key(text),
+        "people": frozenset(_cross_source_person_names(item)),
+        "precise_locations": frozenset(_cross_source_precise_locations(item)),
+        "agencies": frozenset(_cross_source_agencies(item)),
+        "subject_phrases": frozenset(_cross_source_subject_ngrams(item)),
+        "headline_topic_tokens": frozenset(
+            _cross_source_headline_topic_tokens(item)
+        ),
+        "distinctive_tokens": frozenset(_cross_source_distinctive_tokens(item)),
+    }
+
+
+def _cross_source_candidate_keys(features):
+    """Return high-signal blocking keys used before expensive pair evaluation."""
+    if not isinstance(features, dict):
+        return ()
+    keys = []
+    anchor = str(features.get("incident_anchor") or "").strip()
+    known = str(features.get("known_event_key") or "").strip()
+    if anchor:
+        keys.append(f"anchor:{anchor}")
+    if known:
+        keys.append(f"known:{known}")
+    keys.extend(f"person:{value}" for value in sorted(features.get("people") or ()))
+    keys.extend(
+        f"place:{value}"
+        for value in sorted(features.get("precise_locations") or ())
+    )
+    keys.extend(
+        f"subject:{value}"
+        for value in sorted(features.get("subject_phrases") or ())
+    )
+    topic_tokens = sorted(features.get("headline_topic_tokens") or ())
+    # Unordered token pairs catch rewritten headlines such as "board approves
+    # attendance zones" versus "attendance zones approved by board" without opening
+    # the candidate pool to every article sharing one generic word.
+    for offset, left in enumerate(topic_tokens):
+        for right in topic_tokens[offset + 1:]:
+            keys.append(f"topic-pair:{left}:{right}")
+
+    # Agency alone is too broad.  Pair it with event family and locality so a police
+    # department's unrelated incidents do not enter the same candidate bucket.
+    for agency in sorted(features.get("agencies") or ()):
+        for family in sorted(features.get("event_families") or ()):
+            localities = sorted(features.get("locality") or ()) or ["unknown"]
+            for locality in localities:
+                keys.append(f"agency-family:{agency}:{family}:{locality}")
+    return tuple(dict.fromkeys(keys))
+
+
+def _cross_source_candidate_slugs(features, ledger):
+    """Return only archive slugs sharing at least one stable blocking key."""
+    index = ledger.get("cross_source_candidate_index", {}) if isinstance(ledger, dict) else {}
+    candidates = set()
+    for key in _cross_source_candidate_keys(features):
+        candidates.update(index.get(key, ()))
+    return candidates
+
+
+def _cross_source_same_event_evidence(
+    left, right, *, left_features=None, right_features=None
+):
     """Return explainable, source-independent evidence for one persistent story.
 
     The matcher deliberately ignores publisher, URL, headline framing and fragmented
@@ -15723,6 +15821,7 @@ def _cross_source_same_event_evidence(left, right):
         "shared_precise_locations": [],
         "shared_agencies": [],
         "shared_subject_phrases": [],
+        "shared_headline_topic_tokens": [],
         "shared_distinctive_tokens": [],
     }
     if not isinstance(left, dict) or not isinstance(right, dict):
@@ -15738,8 +15837,11 @@ def _cross_source_same_event_evidence(left, right):
         result["reason"] = "custom_publication_outside_cross_source_fallback"
         return result
 
-    left_date = _cross_source_date_value(left)
-    right_date = _cross_source_date_value(right)
+    left_features = left_features or _cross_source_feature_bundle(left)
+    right_features = right_features or _cross_source_feature_bundle(right)
+
+    left_date = left_features.get("date")
+    right_date = right_features.get("date")
     day_gap = abs((left_date - right_date).days) if left_date and right_date else None
     if day_gap is not None and day_gap > 45:
         result["reason"] = "outside_45_day_identity_window"
@@ -15747,19 +15849,24 @@ def _cross_source_same_event_evidence(left, right):
         return result
 
     left_text, right_text = _cross_source_text(left), _cross_source_text(right)
-    left_locality = _audit_locations(left_text)
-    right_locality = _audit_locations(right_text)
+    left_locality = set(left_features.get("locality") or ())
+    right_locality = set(right_features.get("locality") or ())
+    route_only_localities = {"i-95"}
+    left_jurisdictions = left_locality - route_only_localities
+    right_jurisdictions = right_locality - route_only_localities
+    shared_jurisdictions = left_jurisdictions & right_jurisdictions
     shared_locality = left_locality & right_locality
-    if left_locality and right_locality and not shared_locality:
+    if left_jurisdictions and right_jurisdictions and not shared_jurisdictions:
         result["reason"] = "conflicting_locality"
         result["decision_trace"].extend((
-            f"left_locality={sorted(left_locality)}",
-            f"right_locality={sorted(right_locality)}",
+            f"left_locality={sorted(left_jurisdictions)}",
+            f"right_locality={sorted(right_jurisdictions)}",
         ))
         return result
+    identity_locality = shared_jurisdictions or (shared_locality - route_only_localities)
 
-    left_families = _cross_source_event_families(left)
-    right_families = _cross_source_event_families(right)
+    left_families = set(left_features.get("event_families") or ())
+    right_families = set(right_features.get("event_families") or ())
     shared_families = left_families & right_families
     if left_families and right_families and not shared_families:
         result["reason"] = "conflicting_event_family"
@@ -15770,8 +15877,8 @@ def _cross_source_same_event_evidence(left, right):
         return result
 
     anchor_trace = []
-    left_anchor = _durable_incident_anchor(left, include_archive_body=True)
-    right_anchor = _durable_incident_anchor(right, include_archive_body=True)
+    left_anchor = left_features.get("incident_anchor")
+    right_anchor = right_features.get("incident_anchor")
     if left_anchor and right_anchor and left_anchor != right_anchor:
         result["reason"] = "structured_incident_anchor_conflict"
         result["decision_trace"] = [
@@ -15789,8 +15896,8 @@ def _cross_source_same_event_evidence(left, right):
             f"one_sided_incident_anchor={left_anchor or right_anchor}"
         )
 
-    left_known = _known_event_key(left_text)
-    right_known = _known_event_key(right_text)
+    left_known = left_features.get("known_event_key")
+    right_known = right_features.get("known_event_key")
     if left_known and right_known and left_known != right_known:
         result["reason"] = "known_event_key_conflict"
         result["decision_trace"] = [
@@ -15804,12 +15911,26 @@ def _cross_source_same_event_evidence(left, right):
     elif left_known or right_known:
         anchor_trace.append(f"one_sided_known_event_key={left_known or right_known}")
 
-    shared_people = _cross_source_person_names(left) & _cross_source_person_names(right)
-    shared_precise = (
-        _cross_source_precise_locations(left) & _cross_source_precise_locations(right)
+    shared_people = set(left_features.get("people") or ()) & set(
+        right_features.get("people") or ()
     )
-    shared_agencies = _cross_source_agencies(left) & _cross_source_agencies(right)
-    shared_subjects = _cross_source_subject_ngrams(left) & _cross_source_subject_ngrams(right)
+    shared_precise = set(left_features.get("precise_locations") or ()) & set(
+        right_features.get("precise_locations") or ()
+    )
+    shared_agencies = set(left_features.get("agencies") or ()) & set(
+        right_features.get("agencies") or ()
+    )
+    shared_subjects = set(left_features.get("subject_phrases") or ()) & set(
+        right_features.get("subject_phrases") or ()
+    )
+    shared_topic_tokens = set(left_features.get("headline_topic_tokens") or ()) & set(
+        right_features.get("headline_topic_tokens") or ()
+    )
+    topic_generic = {
+        "2026", "approv", "board", "city", "commission", "county",
+        "district", "meet", "school", "vote", "year",
+    }
+    shared_topic_core = shared_topic_tokens - topic_generic
     generic_subject_tokens = {
         "approv", "board", "city", "commission", "commissioner", "county",
         "meet", "school", "vote", "year", "2026",
@@ -15818,14 +15939,15 @@ def _cross_source_same_event_evidence(left, right):
         phrase for phrase in shared_subjects
         if set(phrase.split("-")) - generic_subject_tokens
     }
-    shared_distinctive = (
-        _cross_source_distinctive_tokens(left) & _cross_source_distinctive_tokens(right)
+    shared_distinctive = set(left_features.get("distinctive_tokens") or ()) & set(
+        right_features.get("distinctive_tokens") or ()
     )
     result.update({
         "shared_named_people": sorted(shared_people),
         "shared_precise_locations": sorted(shared_precise),
         "shared_agencies": sorted(shared_agencies),
         "shared_subject_phrases": sorted(shared_subjects),
+        "shared_headline_topic_tokens": sorted(shared_topic_tokens),
         "shared_distinctive_tokens": sorted(shared_distinctive)[:30],
     })
 
@@ -15836,7 +15958,7 @@ def _cross_source_same_event_evidence(left, right):
         dimensions.append("known_event_key")
     if day_gap is None or day_gap <= 45:
         dimensions.append("bounded_time_window")
-    if shared_locality:
+    if identity_locality:
         dimensions.append("shared_locality")
     if shared_families:
         dimensions.append("shared_event_family")
@@ -15848,17 +15970,44 @@ def _cross_source_same_event_evidence(left, right):
         dimensions.append("shared_agency")
     if shared_subjects:
         dimensions.append("shared_subject_phrase")
+    if len(shared_topic_core) >= 2:
+        dimensions.append("shared_headline_topic")
     if len(shared_distinctive) >= 4:
         dimensions.append("distinctive_fact_overlap")
 
+    policy_topic_anchor = bool(
+        "public-policy" in shared_families
+        and identity_locality
+        and len(shared_topic_core) >= 2
+    )
+    near_duplicate_headline_anchor = bool(
+        day_gap is not None
+        and day_gap <= 2
+        and len(shared_topic_core) >= 4
+        and len(shared_distinctive) >= 5
+        and _story_match_confidence(left, right) >= 90
+    )
+    hard_shared_anchor = bool(
+        exact_anchor
+        or exact_known
+        or shared_people
+        or shared_precise
+        or policy_topic_anchor
+        or near_duplicate_headline_anchor
+        or (shared_agencies and shared_families and identity_locality)
+    )
     existing_pair_corroboration = bool(
-        _same_event_items(left, right) and _same_story_topic(left, right)
+        hard_shared_anchor
+        and _same_event_items(left, right)
+        and _same_story_topic(left, right)
     )
     if existing_pair_corroboration:
         dimensions.append("existing_matcher_corroboration")
 
     time_safe = day_gap is None or day_gap <= 45
-    locality_safe = bool(shared_locality) or not (left_locality and right_locality)
+    locality_safe = bool(identity_locality) or not (
+        left_jurisdictions and right_jurisdictions
+    )
     family_safe = bool(shared_families) or not (left_families and right_families)
     confidence = 0.0
     reason = result["reason"]
@@ -15886,23 +16035,30 @@ def _cross_source_same_event_evidence(left, right):
         reason = "shared_precise_location_and_incident_facts"
     elif (
         "public-policy" in shared_families and shared_agencies and shared_subjects
-        and shared_locality and time_safe and len(shared_distinctive) >= 4
+        and identity_locality and time_safe and len(shared_distinctive) >= 4
     ):
         confidence = 0.95
         reason = "same_governing_body_and_policy_subject"
     elif (
-        shared_subjects and shared_locality and shared_families and time_safe
+        shared_subjects and identity_locality and shared_families and time_safe
         and len(shared_distinctive) >= 6
         and (shared_agencies or shared_precise or shared_people)
     ):
         confidence = 0.94
         reason = "shared_subject_and_multiple_stable_facts"
     elif (
-        existing_pair_corroboration and time_safe
-        and (
-            shared_people or shared_precise or shared_agencies or shared_subjects
-            or len(shared_distinctive) >= 6
-        )
+        policy_topic_anchor and len(shared_topic_tokens) >= 4
+        and identity_locality and time_safe
+        and len(shared_distinctive) >= 6 and existing_pair_corroboration
+        and _story_match_confidence(left, right) >= 78
+    ):
+        confidence = 0.93
+        reason = "rewritten_headline_topic_with_locality_corroboration"
+    elif near_duplicate_headline_anchor and time_safe and locality_safe and family_safe:
+        confidence = 0.925
+        reason = "near_duplicate_headline_with_bounded_time"
+    elif (
+        existing_pair_corroboration and hard_shared_anchor and time_safe
         and _story_match_confidence(left, right) >= 78
     ):
         confidence = 0.92
@@ -15911,12 +16067,14 @@ def _cross_source_same_event_evidence(left, right):
     result["evidence_dimensions"] = dimensions
     result["decision_trace"] = anchor_trace + [
         f"publication_gap_days={day_gap if day_gap is not None else 'unknown'}",
-        f"shared_locality={sorted(shared_locality)}",
+        f"shared_locality={sorted(identity_locality)}",
         f"shared_event_families={sorted(shared_families)}",
         f"shared_named_people={sorted(shared_people)}",
         f"shared_precise_locations={sorted(shared_precise)}",
         f"shared_agencies={sorted(shared_agencies)}",
         f"shared_subject_phrases={sorted(shared_subjects)}",
+        f"shared_headline_topic_tokens={sorted(shared_topic_tokens)}",
+        f"shared_headline_topic_core={sorted(shared_topic_core)}",
         f"shared_distinctive_token_count={len(shared_distinctive)}",
         f"existing_matcher_corroboration={existing_pair_corroboration}",
     ]
@@ -16044,6 +16202,42 @@ def _apply_cross_source_canonical_identity(item, canonical, evidence, *, action)
     )
 
 
+def _adopt_missing_canonical_story_id(
+    item, canonical, story_id, *, ledger=None, basis="canonical_publication_ledger"
+):
+    """Backfill a proven canonical page from the current persistent story identity.
+
+    Some older archive rows predate ``editorial_story_id``.  When the authoritative
+    ledger has already proven that a current source belongs to that exact page, the
+    current persistent ID is safer than leaving the canonical page identity-less and
+    later failing the forward live contract.
+    """
+    if not isinstance(item, dict) or not isinstance(canonical, dict):
+        return ""
+    story_id = str(story_id or "").strip()
+    existing = str(canonical.get("editorial_story_id") or "").strip()
+    if existing:
+        item["editorial_story_id"] = existing
+        item["_editorial_story_id"] = existing
+        return existing
+    if not story_id:
+        return ""
+
+    canonical["editorial_story_id"] = story_id
+    canonical["identity_origin"] = "current_run_canonical_ledger_backfill"
+    canonical["identity_backfill_basis"] = str(basis or "canonical_publication_ledger")
+    canonical["legacy_identity_status"] = "identified"
+    canonical["ranking_eligible"] = True
+    item["editorial_story_id"] = story_id
+    item["_editorial_story_id"] = story_id
+
+    if isinstance(ledger, dict):
+        slug = str(canonical.get("slug") or "").strip()
+        if slug:
+            ledger.setdefault("key_to_slug", {})[f"story:{story_id}"] = slug
+    return story_id
+
+
 def _build_cross_source_update_identity_report():
     rows = [dict(row) for row in CROSS_SOURCE_IDENTITY_OBSERVATIONS]
     return {
@@ -16101,10 +16295,18 @@ def _build_canonical_publication_ledger(archive, identity_index=None):
         if entry.get("slug")
     }
     key_members = defaultdict(list)
+    cross_source_features = {}
+    cross_source_candidate_index = defaultdict(set)
     for entry in archive:
         if not _publication_ledger_candidate_safe(entry):
             continue
         _ensure_publication_identity_fields(entry)
+        slug = str(entry.get("slug") or "").strip()
+        features = _cross_source_feature_bundle(entry)
+        if slug:
+            cross_source_features[slug] = features
+            for candidate_key in _cross_source_candidate_keys(features):
+                cross_source_candidate_index[candidate_key].add(slug)
         for key in _publication_ledger_identity_keys(
             entry, identity_index, include_archive_body=True
         ):
@@ -16127,6 +16329,11 @@ def _build_canonical_publication_ledger(archive, identity_index=None):
         "by_slug": by_slug,
         "key_to_slug": key_to_slug,
         "key_conflicts": key_conflicts,
+        "cross_source_features": cross_source_features,
+        "cross_source_candidate_index": {
+            key: tuple(sorted(slugs))
+            for key, slugs in cross_source_candidate_index.items()
+        },
         "entry_count": len(by_slug),
         "identity_key_count": len(key_to_slug),
     }
@@ -16152,10 +16359,20 @@ def _canonical_publication_ledger_target(item, ledger, identity_index=None):
         # registry IDs may all differ; several stable incident dimensions must still
         # prove that the incoming report belongs to an established canonical.
         matched = []
-        for entry in ledger.get("by_slug", {}).values():
+        incoming_features = _cross_source_feature_bundle(item)
+        candidate_slugs = _cross_source_candidate_slugs(incoming_features, ledger)
+        for slug in candidate_slugs:
+            entry = ledger.get("by_slug", {}).get(slug)
+            if not entry:
+                continue
             if not _publication_ledger_candidate_safe(entry):
                 continue
-            evidence = _cross_source_same_event_evidence(item, entry)
+            evidence = _cross_source_same_event_evidence(
+                item,
+                entry,
+                left_features=incoming_features,
+                right_features=ledger.get("cross_source_features", {}).get(slug),
+            )
             if evidence.get("matched"):
                 matched.append((entry, evidence))
         if not matched:
@@ -16167,7 +16384,10 @@ def _canonical_publication_ledger_target(item, ledger, identity_index=None):
         )
         basis = (
             "high-confidence-same-event"
-            if evidence.get("reason") == "existing_matchers_plus_stable_cross_source_anchor"
+            if evidence.get("reason") in {
+                "existing_matchers_plus_stable_cross_source_anchor",
+                "rewritten_headline_topic_with_locality_corroboration",
+            }
             else "cross-source-same-event"
         )
         return canonical, basis, keys
@@ -16350,19 +16570,39 @@ def _reconcile_canonical_publication_ledger(archive, identity_index, output_root
                 key_owner[key] = index
         identity_keys_by_index[index] = tuple(keys)
 
-    # Historical universal reconciliation. Proven same-event pairs may have
-    # different story IDs and different source URLs because the old pipeline
-    # fragmented identity before publication. Collapse only high-confidence,
-    # time-bounded pairs; uncertain cases remain separate and visible for review.
+    # Historical reconciliation is blocked by stable cross-source features before
+    # pair evaluation.  v1.12.0.6 compared every archive row with every other row,
+    # which made the production path quadratic as the archive grew.
     candidate_indexes = sorted(identity_keys_by_index)
+    feature_by_index = {
+        index: _cross_source_feature_bundle(archive[index])
+        for index in candidate_indexes
+    }
+    cross_source_buckets = defaultdict(list)
+    for index, features in feature_by_index.items():
+        for candidate_key in _cross_source_candidate_keys(features):
+            cross_source_buckets[candidate_key].append(index)
+
+    candidate_pairs = set()
+    for members in cross_source_buckets.values():
+        unique_members = sorted(set(members))
+        for offset, left_index in enumerate(unique_members):
+            for right_index in unique_members[offset + 1:]:
+                candidate_pairs.add((left_index, right_index))
+
     generic_pair_edges = []
-    for offset, left_index in enumerate(candidate_indexes):
+    for left_index, right_index in sorted(candidate_pairs):
         left = archive[left_index]
-        for right_index in candidate_indexes[offset + 1:]:
-            right = archive[right_index]
-            if _generic_same_event_publication_match(left, right):
-                union(left_index, right_index)
-                generic_pair_edges.append((left_index, right_index))
+        right = archive[right_index]
+        evidence = _cross_source_same_event_evidence(
+            left,
+            right,
+            left_features=feature_by_index[left_index],
+            right_features=feature_by_index[right_index],
+        )
+        if evidence.get("matched"):
+            union(left_index, right_index)
+            generic_pair_edges.append((left_index, right_index))
 
     components = defaultdict(list)
     for index in identity_keys_by_index:
@@ -16451,6 +16691,7 @@ def _reconcile_canonical_publication_ledger(archive, identity_index, output_root
         "groups_collapsed": len(groups),
         "records_redirected": len(redirects),
         "false_quarantines_repaired": repaired_quarantines,
+        "cross_source_candidate_pairs": len(candidate_pairs),
         "generic_same_event_edges": len(generic_pair_edges),
         "identity_key_count": ledger.get("identity_key_count", 0),
         "remaining_identity_conflicts": ledger.get("key_conflicts", {}),
@@ -18477,6 +18718,13 @@ def write_archives(all_categories, top_cat):
                     or ""
                 ).strip()
                 _target_basis = f"canonical_publication_ledger:{_ledger_basis}"
+                _editorial_story_id = _adopt_missing_canonical_story_id(
+                    hero,
+                    existing,
+                    _editorial_story_id,
+                    ledger=_publication_ledger,
+                    basis=_target_basis,
+                )
                 hero["canonical_publication_id"] = _stable_publication_id(
                     existing.get("slug", "")
                 )
