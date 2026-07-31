@@ -10117,6 +10117,135 @@ def load_archive(archive_path):
     return []
 
 
+_V1_12_0_6_FALSE_UPDATE_REPAIR_SNAPSHOTS = {
+    "2026-07-09-second-decomposed-body-found-near-us-1-in-sebastian-days-after-first-discovery": {
+        "slug": "2026-07-09-second-decomposed-body-found-near-us-1-in-sebastian-days-after-first-discovery",
+        "headline": "Indian River County Sheriff warns of possible bad drugs on streets after two deaths near Sebastian",
+        "teaser": "Sheriff Eric Flowers said it is possible bad fentanyl or methamphetamine is on the streets and urged drug users to seek treatment.",
+        "category_key": "indian_river",
+        "category_label": "Indian River County",
+        "date": "2026-07-09",
+        "lastmod": "2026-07-10",
+        "image_url": "https://treasurecoast.today/images/editorial/cities/sebastian/Welcome-to-Sebastian.webp",
+        "feed_url": "",
+        "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/live-at-11-am-indian-river-county-sheriffs-office-to-speak-after-2-bodies-found-near-sebastian-this-week",
+        "is_weather_alert": False,
+        "ranking_eligible": False,
+        "legacy_identity_status": "recent_unresolved",
+        "image_credit": "",
+        "image_source": "editorial_fallback",
+        "is_fallback_image": True,
+        "category_keys": ["indian_river"],
+        "county_keys": ["indian_river"],
+        "publication_id": "publication:7caf9a6874c926071348ebec",
+        "canonical_slug": "2026-07-09-second-decomposed-body-found-near-us-1-in-sebastian-days-after-first-discovery",
+        "canonical_publication_id": "publication:7caf9a6874c926071348ebec",
+    },
+    "2026-07-30-two-arrested-after-high-speed-chase-through-port-st-lucie-ends-with-one-suspect": {
+        "slug": "2026-07-30-two-arrested-after-high-speed-chase-through-port-st-lucie-ends-with-one-suspect",
+        "headline": "Two arrested after high-speed chase through Port St. Lucie ends with one suspect found on occupied home's roof",
+        "teaser": "Port St. Lucie Police arrested two men on July 23 after a high-speed chase on Southwest Becker Road ended with officers finding one suspect on the roof of an occupied home. Joseph ",
+        "category_key": "crime",
+        "category_label": "Crime & Safety",
+        "category_keys": ["crime", "st_lucie"],
+        "county_keys": ["st_lucie"],
+        "date": "2026-07-30",
+        "lastmod": "2026-07-30",
+        "first_published": "Thu, 30 Jul 2026 16:51:11 -0400",
+        "image_url": "https://bloximages.newyork1.vip.townnews.com/hometownnewstc.com/content/tncms/assets/v3/editorial/8/15/815d49e3-cb9d-57dd-9e9e-b5e7bc4a0fa1/6a6b8d7e78228.image.jpg?crop=331%2C174%2C0%2C122",
+        "feed_url": "https://news.google.com/rss/search?q=st+lucie+county+police+arrest+charged+when:2d&hl=en-US&gl=US&ceid=US:en",
+        "source_url": "https://www.hometownnewstc.com/news/st_lucie/two-arrested-after-fleeing-port-st-lucie-police-in-high-speed-chase/article_db2e7e71-cbb7-5adb-9f78-6b1893b0c5ed.html",
+        "source_headline": "Two arrested after fleeing Port St. Lucie Police in high-speed chase - Hometown News Treasure Coast",
+        "incident_anchor_key": "",
+        "editorial_event_key": "unknown-event-c12d366662",
+        "editorial_route": "generate_new",
+        "is_weather_alert": False,
+        "is_custom": False,
+        "authoritative_custom": False,
+        "custom_fingerprint": "",
+        "custom_body_hash": "",
+        "custom_headline_key": "",
+        "article_type": "",
+        "product_guide_hash": "",
+        "product_count": 0,
+        "has_affiliate_links": False,
+        "custom_event_key": "",
+        "custom_series_key": "",
+        "custom_edition_key": "",
+        "article_word_count": 211,
+        "article_paragraph_count": 4,
+        "event_url": "",
+        "event_link_text": "",
+        "editorial_story_id": "story_001427",
+        "identity_origin": "current_run_editorial_decision",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+        "publication_id": "publication:5eab5aeea6b5520dbf0ab3c2",
+        "canonical_slug": "2026-07-30-two-arrested-after-high-speed-chase-through-port-st-lucie-ends-with-one-suspect",
+        "canonical_publication_id": "publication:5eab5aeea6b5520dbf0ab3c2",
+    },
+}
+
+
+def _repair_v1_12_0_6_false_cross_source_overwrites(output_root):
+    """Restore the two canonical rows overwritten by the 2026-07-31 matcher bug.
+
+    The repair is exact-slug and exact-drift guarded, so clean repositories and any
+    future legitimate update to these stories remain untouched.
+    """
+    root = Path(output_root)
+    archive_path = root / "archive.json"
+    archive = load_archive(archive_path)
+    if not isinstance(archive, list):
+        return {"repaired_count": 0, "repairs": []}
+
+    drift_markers = {
+        "2026-07-09-second-decomposed-body-found-near-us-1-in-sebastian-days-after-first-discovery": (
+            "sentenced to life", "selling fentanyl", "vero beach man",
+        ),
+        "2026-07-30-two-arrested-after-high-speed-chase-through-port-st-lucie-ends-with-one-suspect": (
+            "sexual battery", "lewd", "lascivious", "fort pierce man held without bond",
+        ),
+    }
+    repairs = []
+    for index, row in enumerate(archive):
+        if not isinstance(row, dict):
+            continue
+        slug = str(row.get("slug") or "")
+        snapshot = _V1_12_0_6_FALSE_UPDATE_REPAIR_SNAPSHOTS.get(slug)
+        if not snapshot:
+            continue
+        observed = " ".join((
+            str(row.get("headline") or ""),
+            str(row.get("source_headline") or ""),
+            str(row.get("source_url") or ""),
+        )).lower()
+        if not any(marker in observed for marker in drift_markers[slug]):
+            continue
+        repairs.append({
+            "slug": slug,
+            "incorrect_headline": str(row.get("headline") or ""),
+            "restored_headline": snapshot["headline"],
+            "incorrect_source_url": str(row.get("source_url") or ""),
+            "restored_source_url": snapshot["source_url"],
+        })
+        archive[index] = dict(snapshot)
+
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "release": "v1.12.0.6.2",
+        "repaired_count": len(repairs),
+        "repairs": repairs,
+    }
+    report_path = root / "data" / "cross-source-identity-repair.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if repairs:
+        archive_path.write_text(json.dumps(archive, indent=2, ensure_ascii=False), encoding="utf-8")
+    return report
+
+
 def _custom_body_tokens(value):
     text = str(value or "")
     # Rendered Markdown links retain their label but not the destination in visible
@@ -15493,49 +15622,59 @@ def _cross_source_words(text):
 
 
 def _cross_source_person_names(item):
-    """Extract stable person names only from incident-bearing contexts."""
+    """Extract incident participants, not officials, publishers, or place names.
+
+    v1.12.0.6.1 still treated any title-cased two-word phrase in a crime-bearing
+    sentence as a person.  In production that promoted Sheriff Eric Flowers,
+    ``West Palm Beach`` and ``Hometown News Treasure`` into identity anchors and
+    merged unrelated stories.  Only names tied to an explicit participant role are
+    safe enough for cross-source publication identity.
+    """
     text = _cross_source_text(item)
     if not text:
         return set()
-    # A negative-control sentence may explicitly state that named people were not
-    # involved. Remove that clause before entity extraction so negated names cannot
-    # become positive identity evidence.
     text = re.sub(
         r"\b(?:no one|nobody)\s+(?:was\s+)?(?:named\s+)?[^.!?]{0,180}",
         " ", text, flags=re.I,
     )
+
+    name_rx = r"[A-Z][a-z'’-]+(?:\s+[A-Z][a-z'’-]+){1,2}"
     candidates = set()
-    patterns = (
-        r"\b([A-Z][a-z'’-]+(?:\s+[A-Z][a-z'’-]+){1,2}),\s*\d{1,3}\b",
-        r"\b(?:identified as|victim was|suspect was|named|arrested|charged)\s+"
-        r"([A-Z][a-z'’-]+(?:\s+[A-Z][a-z'’-]+){1,2})\b",
-        r"\b([A-Z][a-z'’-]+\s+[A-Z][a-z'’-]+)\s+"
-        r"(?:told|said|returned|shot|died|was|were|faces|faced|acted|opened)\b",
-    )
-    for pattern in patterns:
-        candidates.update(re.findall(pattern, text))
 
-    context_rx = re.compile(
-        r"\b(arrest|arrested|charged|shooting|shot|killed|died|death|victim|"
-        r"suspect|manslaughter|abuse|custody|police|deputies)\b", re.I
-    )
-    for match in re.finditer(
-        r"\b([A-Z][a-z'’-]+(?:\s+[A-Z][a-z'’-]+){1,2})\b", text
-    ):
-        start, end = match.span()
-        context = text[max(0, start - 90):min(len(text), end + 90)]
-        if context_rx.search(context):
-            candidates.add(match.group(1))
+    # Ages are a strong participant signal in crime and public-safety reporting.
+    candidates.update(re.findall(rf"\b({name_rx}),\s*\d{{1,3}}\b", text))
 
-    # Lists of defendants/victims often separate names with commas or ``and``.
-    # Extract each two-token name independently inside an incident-bearing sentence
-    # rather than allowing a greedy entity span to hide the later names.
-    for sentence in re.split(r"(?<=[.!?])\s+", text):
-        if not context_rx.search(sentence):
-            continue
-        candidates.update(re.findall(
-            r"\b([A-Z][a-z'’-]+\s+[A-Z][a-z'’-]+)\b", sentence
-        ))
+    # Explicit role phrases in either direction.
+    role_before = (
+        r"identified as|victim(?: was| is)?|suspect(?: was| is)?|defendant(?: was| is)?|"
+        r"officers arrested|deputies arrested|police arrested|authorities arrested|"
+        r"prosecutors charged|was charged as|was identified as"
+    )
+    candidates.update(re.findall(rf"\b(?:{role_before})\s+({name_rx})\b", text, re.I))
+
+    role_after = (
+        r"was|were|is|are|has been|have been|had been"
+    )
+    participant_action = (
+        r"arrested|charged|convicted|sentenced|indicted|killed|shot|murdered|"
+        r"found dead|reported missing|accused"
+    )
+    candidates.update(re.findall(
+        rf"\b({name_rx})\s+(?:{role_after})\s+(?:later\s+)?(?:{participant_action})\b",
+        text, re.I,
+    ))
+
+    # Lists such as ``the arrests of Nicole Maxwell, Robert Maxwell and Vikki
+    # Koon`` or ``Nicole Maxwell, Robert Maxwell and Vikki Koon were arrested``.
+    list_patterns = (
+        rf"\b(?:arrests?|charges?|convictions?|sentences?|indictments?)\s+"
+        rf"(?:of|against)\s+([^.;]{{0,180}})",
+        rf"\b(({name_rx})(?:\s*,\s*{name_rx})*(?:\s+and\s+{name_rx})?)\s+"
+        rf"(?:were|was)\s+(?:later\s+)?(?:{participant_action})\b",
+    )
+    for pattern in list_patterns:
+        for match in re.finditer(pattern, text, re.I):
+            candidates.update(re.findall(rf"\b({name_rx})\b", match.group(1)))
 
     result = set()
     excluded_words = {
@@ -15543,27 +15682,35 @@ def _cross_source_person_names(item):
         "fire", "rescue", "department", "circle", "road", "avenue", "boulevard",
         "street", "parkway", "florida", "southwest", "southeast", "northeast",
         "northwest", "port", "lucie", "martin", "indian", "river", "fort", "pierce",
+        "news", "hometown", "treasure", "coast", "union", "fraternal", "order",
+        "mayor", "chief", "president", "captain", "captains", "official", "officials",
+        "school", "bus", "driver", "pastor", "teacher", "student", "coach", "doctor",
+        "nurse", "officer", "deputy", "deputies", "trooper", "attorney", "judge",
+        "manager", "employee", "worker", "resident", "neighbor", "family", "lane",
+        "drive", "court", "place", "way", "trail", "terrace", "highway",
+    }
+    organization_phrases = {
+        "hometown news", "hometown news treasure", "treasure coast", "treasure coast news",
+        "west palm beach", "palm beach", "west palm", "palm beach county",
+        "indian river county", "martin county", "st lucie county",
     }
     for value in candidates:
         normalized = re.sub(r"[^a-z0-9]+", " ", value.lower()).strip()
         words = normalized.split()
         if not (2 <= len(words) <= 3):
             continue
-        if normalized in _CROSS_SOURCE_PERSON_EXCLUSIONS:
+        if normalized in _CROSS_SOURCE_PERSON_EXCLUSIONS or normalized in organization_phrases:
             continue
         if set(words) & excluded_words:
             continue
         result.add(normalized)
 
-    # Prefer the complete three-token name over an overlapping two-token prefix
-    # produced by the sentence-list fallback (for example Joseph Gary Harris).
     triples = [name.split() for name in result if len(name.split()) == 3]
-    result = {
+    return {
         name for name in result
         if len(name.split()) != 2
         or not any(name.split() in (triple[:2], triple[1:]) for triple in triples)
     }
-    return result
 
 
 def _cross_source_precise_locations(item):
@@ -20646,6 +20793,12 @@ def main():
     editorial_audit_rows = []
     editorial_activation_run = None
     used_bank_images = set()
+    _repair_report = _repair_v1_12_0_6_false_cross_source_overwrites(OUTPUT_DIR)
+    if _repair_report.get("repaired_count"):
+        print(
+            "  Cross-source overwrite repair restored "
+            f"{_repair_report['repaired_count']} canonical article(s)"
+        )
     # Current published identities are needed before model generation so a registry
     # ``skip`` decision can suppress an already-published story at the source boundary.
     _pre_generation_archive = load_archive(OUTPUT_DIR / "archive.json")

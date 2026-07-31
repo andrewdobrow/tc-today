@@ -564,3 +564,143 @@ def test_supreme_court_name_is_not_a_precise_street_location():
         "teaser": "The Florida Supreme Court issued an administrative order.",
     }
     assert "florida-supreme-court" not in g._cross_source_precise_locations(item)
+
+
+def test_production_fentanyl_story_does_not_reuse_sheriff_spokesperson_as_identity():
+    g = _load_generate()
+    canonical = {
+        "slug": "2026-07-09-second-decomposed-body-found-near-us-1-in-sebastian-days-after-first-discovery",
+        "headline": "Indian River County Sheriff warns of possible bad drugs on streets after two deaths near Sebastian",
+        "teaser": (
+            "Indian River County Sheriff Eric Flowers warned that possible bad fentanyl "
+            "or methamphetamine may be circulating after two bodies were found near Sebastian."
+        ),
+        "date": "2026-07-09",
+        "legacy_identity_status": "recent_unresolved",
+        "ranking_eligible": False,
+    }
+    incoming = _incoming(
+        "Man sentenced to life in prison for selling fentanyl that killed Vero Beach man in 2023 - WPEC",
+        (
+            "Alfonso Guerrero, 39, was sentenced to life in federal prison after "
+            "fentanyl he sold caused David Eller's 2023 overdose death. Indian River "
+            "County Sheriff Eric Flowers said the sheriff's office worked with federal "
+            "agents during the prosecution."
+        ),
+        "2026-07-30",
+        "story_001485",
+        "https://cbs12.com/news/crime/man-sentenced-to-life-in-prison-for-selling-fentanyl-that-killed-vero-beach-man-in-2023",
+    )
+
+    evidence = g._cross_source_same_event_evidence(incoming, canonical)
+    ledger = g._build_canonical_publication_ledger([canonical])
+    target, _basis, _keys = g._canonical_publication_ledger_target(incoming, ledger)
+
+    assert "eric flowers" not in g._cross_source_person_names(incoming)
+    assert evidence["matched"] is False, evidence
+    assert target is None
+
+
+def test_production_police_union_story_does_not_match_parking_impersonation():
+    g = _load_generate()
+    canonical = {
+        "slug": "2026-06-17-west-palm-beach-woman-arrested-for-posing-as-parking-official-in-palm-beach-wort",
+        "headline": "West Palm Beach woman charged with posing as parking official in $1 scam on Worth Avenue",
+        "teaser": (
+            "Palm Beach police charged a West Palm Beach woman accused of posing as a "
+            "parking official and collecting one-dollar payments on Worth Avenue."
+        ),
+        "date": "2026-06-17",
+        "legacy_identity_status": "recent_unresolved",
+        "ranking_eligible": False,
+    }
+    incoming = _incoming(
+        "West Palm Beach police union pushes back on firing of 3 captains, claims 'different standard' applied",
+        (
+            "The West Palm Beach Fraternal Order of Police challenged Chief Tony "
+            "Araujo's decision to uphold the firing of three captains in a double-"
+            "dipping timecard investigation. Mayor Keith James discussed the separate "
+            "internal-affairs case."
+        ),
+        "2026-07-30",
+        "story_001406",
+        "https://www.wptv.com/news/local-news/west-palm-beach-police-union-firing-captains",
+    )
+
+    evidence = g._cross_source_same_event_evidence(incoming, canonical)
+    ledger = g._build_canonical_publication_ledger([canonical])
+    target, _basis, _keys = g._canonical_publication_ledger_target(incoming, ledger)
+
+    assert "west palm beach" not in g._cross_source_person_names(incoming)
+    assert evidence["matched"] is False, evidence
+    assert target is None
+
+
+def test_production_sexual_battery_story_does_not_match_roof_chase_source_brand():
+    g = _load_generate()
+    canonical = dict(ROOF_CHASE)
+    canonical["source_headline"] = (
+        "Two arrested after fleeing Port St. Lucie Police in high-speed chase - "
+        "Hometown News Treasure Coast"
+    )
+    incoming = _incoming(
+        "Fort Pierce man held without bond on sexual battery charges involving child",
+        (
+            "James Ronald Owens, 58, was arrested by Fort Pierce police on sexual "
+            "battery and lewd or lascivious molestation charges involving a child. "
+            "Hometown News Treasure Coast reported the allegations span six years."
+        ),
+        "2026-07-30",
+        "story_001424",
+        "https://www.hometownnewstc.com/news/st_lucie/fort-pierce-man-jailed-sexual-battery.html",
+    )
+    incoming["source_headline"] = (
+        "Fort Pierce man jailed on charges of sexual battery - Hometown News Treasure Coast"
+    )
+
+    evidence = g._cross_source_same_event_evidence(incoming, canonical)
+    ledger = g._build_canonical_publication_ledger([canonical])
+    target, _basis, _keys = g._canonical_publication_ledger_target(incoming, ledger)
+
+    assert not ({"hometown news", "hometown news treasure"} & g._cross_source_person_names(incoming))
+    assert evidence["matched"] is False, evidence
+    assert target is None
+
+
+def test_v1_12_0_6_false_update_repair_restores_exact_canonical_rows(tmp_path):
+    import json
+
+    g = _load_generate()
+    corrupted = [
+        {
+            "slug": "2026-07-09-second-decomposed-body-found-near-us-1-in-sebastian-days-after-first-discovery",
+            "headline": "Los Angeles man sentenced to life for selling fentanyl that killed Vero Beach man",
+            "source_url": "https://cbs12.com/news/crime/man-sentenced-to-life-in-prison-for-selling-fentanyl",
+            "editorial_story_id": "story_001485",
+            "identity_origin": "cross_source_canonical_match",
+        },
+        {
+            "slug": "2026-07-30-two-arrested-after-high-speed-chase-through-port-st-lucie-ends-with-one-suspect",
+            "headline": "Fort Pierce man held without bond on sexual battery charges involving child",
+            "source_url": "https://www.hometownnewstc.com/news/st_lucie/fort-pierce-man-jailed-on-charges-of-sexual-battery.html",
+            "editorial_story_id": "story_001427",
+            "identity_origin": "cross_source_canonical_match",
+        },
+        {"slug": "clean-story", "headline": "Clean story", "source_url": "https://example.com/clean"},
+    ]
+    (tmp_path / "archive.json").write_text(json.dumps(corrupted), encoding="utf-8")
+
+    report = g._repair_v1_12_0_6_false_cross_source_overwrites(tmp_path)
+    repaired = json.loads((tmp_path / "archive.json").read_text(encoding="utf-8"))
+    by_slug = {row["slug"]: row for row in repaired}
+
+    assert report["repaired_count"] == 2
+    assert by_slug[corrupted[0]["slug"]]["headline"].startswith("Indian River County Sheriff")
+    assert "editorial_story_id" not in by_slug[corrupted[0]["slug"]]
+    assert by_slug[corrupted[1]["slug"]]["headline"].startswith("Two arrested after high-speed chase")
+    assert by_slug[corrupted[1]["slug"]]["editorial_story_id"] == "story_001427"
+    assert by_slug["clean-story"] == corrupted[2]
+    saved_report = json.loads(
+        (tmp_path / "data" / "cross-source-identity-repair.json").read_text(encoding="utf-8")
+    )
+    assert saved_report["repaired_count"] == 2
