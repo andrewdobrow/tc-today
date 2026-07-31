@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from tct_engine.story_importance import ImportanceLevel, StoryImportanceEngine
 from tct_engine.story_registry import StoryRegistry
@@ -117,10 +117,11 @@ def test_follow_up_recalculates_importance(tmp_path):
     )
     assert registry.get_importance(story_id).score == 15
 
+    reference_time = datetime.now(timezone.utc)
     first = TimelineEntry(
         event_key="event-a",
         article_id="a1",
-        published_at=datetime(2026, 7, 1, tzinfo=timezone.utc),
+        published_at=reference_time - timedelta(days=1),
         title="Initial report",
         source="TCT",
         url="https://example.com/a1",
@@ -130,7 +131,7 @@ def test_follow_up_recalculates_importance(tmp_path):
     second = TimelineEntry(
         event_key="event-b",
         article_id="a2",
-        published_at=datetime(2026, 7, 2, tzinfo=timezone.utc),
+        published_at=reference_time,
         title="Follow-up",
         source="TCT",
         url="https://example.com/a2",
