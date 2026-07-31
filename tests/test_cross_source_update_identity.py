@@ -201,7 +201,7 @@ def test_google_news_wrapper_and_resolved_publisher_do_not_require_source_equali
 
     assert canonical is not None
     assert canonical["slug"] == ROOF_CHASE["slug"]
-    assert basis == "cross-source-same-event"
+    assert basis.startswith("event-identity-authority:")
 
 
 def test_infant_neighbor_reaction_remains_same_story_across_publishers():
@@ -291,7 +291,7 @@ def test_missing_story_id_still_reuses_cross_source_canonical():
 
     assert canonical is not None
     assert canonical["slug"] == SHARK_RULES["slug"]
-    assert basis == "cross-source-same-event"
+    assert basis.startswith("event-identity-authority:")
     assert source["editorial_story_id"] == SHARK_RULES["editorial_story_id"]
     assert source["_editorial_route"] == "update_existing"
 
@@ -322,7 +322,9 @@ def test_cross_source_observability_uses_resolved_publisher_and_final_action():
     assert row["canonical_story_id"] == ROOF_CHASE["editorial_story_id"]
     assert row["confidence"] >= 0.90
     assert len(row["evidence_dimensions"]) >= 3
-    assert row["relationship"] == "same_event"
+    assert row["relationship"] == "same_event_verified"
+    assert row["write_authorized"] is True
+    assert row["evidence_tier"] in {"exact_identity", "hard_composite_identity"}
     assert row["final_publication_action"] == (
         "preserve_existing_page_contextless_update_rejected"
     )
@@ -509,12 +511,34 @@ def test_proven_legacy_canonical_adopts_current_story_id_before_live_validation(
     }
     ledger = g._build_canonical_publication_ledger([canonical])
 
+    # Candidate similarity alone cannot mutate a legacy canonical row.
     adopted = g._adopt_missing_canonical_story_id(
         incoming,
         canonical,
         incoming["editorial_story_id"],
         ledger=ledger,
-        basis="canonical_publication_ledger:incident",
+        basis="canonical_publication_ledger:candidate_only",
+    )
+    assert adopted == ""
+    assert "editorial_story_id" not in canonical
+
+    decision = {
+        "outcome": "same_event_verified",
+        "evidence_tier": "exact_identity",
+        "write_authorized": True,
+        "proof_type": "exact_structured_incident_key",
+        "reason": "test_exact_identity",
+        "reason_codes": ["deterministic_identity_key"],
+    }
+    g._stamp_canonical_write_authorization(
+        incoming, canonical, decision, basis="test_exact_identity"
+    )
+    adopted = g._adopt_missing_canonical_story_id(
+        incoming,
+        canonical,
+        incoming["editorial_story_id"],
+        ledger=ledger,
+        basis="canonical_publication_ledger:exact_identity",
     )
     assert adopted == "story-orbeez-case-current"
     assert canonical["editorial_story_id"] == adopted

@@ -163,7 +163,7 @@ def test_false_headline_slug_quarantine_cannot_force_second_permalink(tmp_path):
     )
     assert target["slug"] == TRAFFIC_CANONICAL
     assert "story:story_001294" in keys
-    assert "story" in basis
+    assert basis in {"trusted_persistent_story_id", "exact_structured_incident_key"}
 
 
 def test_same_persistent_story_update_ignores_cosmetic_permalink_drift():
@@ -232,7 +232,7 @@ def test_ledger_report_is_valid_json(tmp_path):
     payload = json.loads(
         (tmp_path / "data" / "canonical-publication-ledger.json").read_text()
     )
-    assert payload["version"] == "1.0"
+    assert payload["version"] == "1.1"
     assert payload["passed"] is True
 
 
@@ -264,7 +264,7 @@ def test_generic_same_event_fallback_blocks_fragmented_story_ids():
     )
 
     assert target["slug"] == existing["slug"]
-    assert basis == "high-confidence-same-event"
+    assert basis == "event-identity-authority:governing_body_plus_policy_subject"
 
 
 def test_generic_same_event_fallback_rejects_same_board_different_decision():

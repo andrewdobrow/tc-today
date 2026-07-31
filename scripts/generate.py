@@ -65,6 +65,23 @@ except Exception as exc:
     incident_anchor_key = None
     _editorial_import_error = exc
 
+try:
+    from tct_engine.event_identity_authority import (
+        OUTCOME_NEW as IDENTITY_OUTCOME_NEW,
+        OUTCOME_POSSIBLE as IDENTITY_OUTCOME_POSSIBLE,
+        OUTCOME_VERIFIED as IDENTITY_OUTCOME_VERIFIED,
+        authorize_exact_identity_keys,
+        authorization_matches_target,
+        decide_cross_source_identity,
+    )
+except Exception:
+    IDENTITY_OUTCOME_NEW = "new_story"
+    IDENTITY_OUTCOME_POSSIBLE = "possible_relationship"
+    IDENTITY_OUTCOME_VERIFIED = "same_event_verified"
+    authorize_exact_identity_keys = None
+    authorization_matches_target = None
+    decide_cross_source_identity = None
+
 # -- CONFIG --
 
 TCT_PRESENTATION_VERSION = "6.4-unified-presentation-hotfix"
@@ -243,6 +260,9 @@ CANONICAL_HERO_FRESHNESS_REPORT_PATH = OUTPUT_DIR / "data" / "canonical-hero-fre
 CROSS_SOURCE_UPDATE_IDENTITY_REPORT_PATH = (
     OUTPUT_DIR / "data" / "cross-source-update-identity.json"
 )
+EVENT_IDENTITY_AUTHORITY_REPORT_PATH = (
+    OUTPUT_DIR / "data" / "event-identity-authority.json"
+)
 
 # v1.10.5 forward publication identity. New generated articles are published only
 # when the current editorial decision can be carried directly into the archive row.
@@ -252,7 +272,7 @@ FORWARD_IDENTITY_RECENT_DAYS = 30
 CURRENT_RUN_EDITORIAL_IDENTITIES = {}
 CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
 CROSS_SOURCE_IDENTITY_OBSERVATIONS = []
-CROSS_SOURCE_UPDATE_IDENTITY_SCHEMA_VERSION = 1
+CROSS_SOURCE_UPDATE_IDENTITY_SCHEMA_VERSION = 2
 CUSTOM_RETIREMENTS_PATH = OUTPUT_DIR / "data" / "custom-retirements.json"
 DEFAULT_AFFILIATE_DISCLOSURE = (
     "Treasure Coast Today may earn a commission from qualifying purchases made "
@@ -15447,7 +15467,7 @@ def _publication_coalesce_key(item, identity_index=None):
     return f"headline:{headline_key}" if headline_key else ""
 
 
-CANONICAL_PUBLICATION_LEDGER_VERSION = "1.0"
+CANONICAL_PUBLICATION_LEDGER_VERSION = "1.1"
 
 
 def _stable_publication_id(slug):
@@ -15487,7 +15507,24 @@ def _publication_ledger_identity_keys(item, identity_index=None, *, include_arch
     if not isinstance(item, dict):
         return ()
     keys = []
-    anchor = _durable_incident_anchor(item, include_archive_body=include_archive_body)
+    stored_identity = item.get("event_identity") if isinstance(item, dict) else None
+    anchor = str(
+        (stored_identity or {}).get("incident_anchor")
+        if isinstance(stored_identity, dict)
+        else ""
+    ).strip()
+    if not anchor:
+        anchor = str(item.get("incident_anchor_key") or "").strip()
+    if not anchor:
+        try:
+            anchor = str(
+                _event_identity_snapshot(
+                    item, include_archive_body=include_archive_body
+                ).get("incident_anchor")
+                or ""
+            ).strip()
+        except Exception:
+            anchor = ""
     if anchor:
         keys.append(f"incident:{anchor}")
 
@@ -15815,6 +15852,10 @@ def _cross_source_agencies(item):
         "martin-county-sheriff": r"\bmartin county sheriff(?: s office)?\b",
         "st-lucie-county-sheriff": r"\bst lucie county sheriff(?: s office)?\b",
         "indian-river-county-sheriff": r"\bindian river county sheriff(?: s office)?\b",
+        "st-lucie-county-school-board": r"\bst lucie county school board\b|\bst lucie school board\b",
+        "martin-county-school-board": r"\bmartin county school board\b|\bmartin school board\b",
+        "indian-river-county-school-board": r"\bindian river county school board\b|\bindian river school board\b",
+        "school-board": r"\bschool board\b",
     }
     return {key for key, pattern in patterns.items() if re.search(pattern, text)}
 
@@ -15873,32 +15914,137 @@ def _cross_source_headline_topic_tokens(item):
     }
 
 
-def _cross_source_feature_bundle(item):
-    """Compute reusable deterministic identity features for one publication.
+def _event_identity_snapshot(item, *, include_archive_body=False):
+    """Return immutable, source-oriented event facts for identity decisions.
 
-    Archive entries are compared repeatedly during one build.  Computing every
-    regex/entity feature for every possible pair caused the v1.12.0.6 production
-    slowdown.  This bundle is intentionally immutable and safe to cache inside the
-    in-memory publication ledger.
+    New publications persist this record once. Later generated copy may add context,
+    quotations, officials, and related incidents, but those prose changes never alter
+    the identity facts used to authorize a canonical write.
     """
-    text = _cross_source_text(item)
-    return {
-        "date": _cross_source_date_value(item),
-        "locality": frozenset(_audit_locations(text)),
-        "event_families": frozenset(_cross_source_event_families(item)),
-        "incident_anchor": _durable_incident_anchor(
-            item, include_archive_body=True
-        ),
-        "known_event_key": _known_event_key(text),
-        "people": frozenset(_cross_source_person_names(item)),
-        "precise_locations": frozenset(_cross_source_precise_locations(item)),
-        "agencies": frozenset(_cross_source_agencies(item)),
-        "subject_phrases": frozenset(_cross_source_subject_ngrams(item)),
-        "headline_topic_tokens": frozenset(
-            _cross_source_headline_topic_tokens(item)
-        ),
-        "distinctive_tokens": frozenset(_cross_source_distinctive_tokens(item)),
+    if not isinstance(item, dict):
+        return {}
+    stored = item.get("event_identity")
+    if isinstance(stored, dict) and stored.get("schema_version"):
+        return dict(stored)
+    cached = item.get("_event_identity_snapshot")
+    if isinstance(cached, dict):
+        return dict(cached)
+
+    source_headline = str(
+        item.get("source_headline")
+        or item.get("source_title")
+        or item.get("title")
+        or item.get("headline")
+        or ""
+    ).strip()
+    source_text = str(
+        item.get("article_text")
+        or item.get("source_summary")
+        or item.get("summary")
+        or item.get("teaser")
+        or ""
+    ).strip()
+    source_fields_present = bool(
+        item.get("article_text")
+        or item.get("source_summary")
+        or item.get("source_headline")
+        or item.get("source_title")
+    )
+    if not source_text and include_archive_body:
+        source_text = str(item.get("body") or _archive_article_body(item) or "").strip()
+
+    identity_item = {
+        "headline": source_headline,
+        "title": source_headline,
+        "teaser": source_text[:1200],
+        "article_text": source_text[:4000],
+        "body": source_text[:4000],
+        "published": item.get("source_published") or item.get("published") or item.get("date"),
+        "date": item.get("date"),
+        "facts": item.get("facts", ()) or (),
+        "locations": item.get("locations", ()) or (),
+        "agencies": item.get("agencies", ()) or (),
+        "event_types": item.get("event_types", ()) or (),
+        "entities": item.get("entities", ()) or (),
     }
+    identity_text = _cross_source_text(identity_item)
+    snapshot = {
+        "schema_version": "1.0",
+        "origin": (
+            "source_derived"
+            if source_fields_present
+            else "legacy_archive_derived"
+            if include_archive_body
+            else "display_copy_derived"
+        ),
+        "source_url": _normalized_external_source_url(
+            item.get("source_url")
+            or item.get("_source_url")
+            or item.get("original_url")
+            or item.get("link")
+        ),
+        "source_headline": source_headline,
+        "source_published": str(
+            item.get("source_published")
+            or item.get("published_raw")
+            or item.get("published")
+            or item.get("date")
+            or ""
+        ),
+        "incident_anchor": _durable_incident_anchor(
+            identity_item, include_archive_body=False
+        ),
+        "known_event_key": _known_event_key(identity_text),
+        "locality": sorted(_audit_locations(identity_text)),
+        "event_families": sorted(_cross_source_event_families(identity_item)),
+        "people": sorted(_cross_source_person_names(identity_item)),
+        "precise_locations": sorted(_cross_source_precise_locations(identity_item)),
+        "agencies": sorted(_cross_source_agencies(identity_item)),
+        "subject_phrases": sorted(_cross_source_subject_ngrams(identity_item)),
+        "headline_topic_tokens": sorted(
+            _cross_source_headline_topic_tokens(identity_item)
+        ),
+        "distinctive_tokens": sorted(_cross_source_distinctive_tokens(identity_item)),
+    }
+    item["_event_identity_snapshot"] = dict(snapshot)
+    return snapshot
+
+
+def _cross_source_feature_bundle(item):
+    """Compute reusable identity features from an immutable event snapshot."""
+    snapshot = _event_identity_snapshot(item, include_archive_body=True)
+    date_value = _cross_source_date_value(item)
+    return {
+        "date": date_value,
+        "identity_origin": str(snapshot.get("origin") or ""),
+        "identity_snapshot": snapshot,
+        "locality": frozenset(snapshot.get("locality") or ()),
+        "event_families": frozenset(snapshot.get("event_families") or ()),
+        "incident_anchor": str(snapshot.get("incident_anchor") or ""),
+        "known_event_key": str(snapshot.get("known_event_key") or ""),
+        "people": frozenset(snapshot.get("people") or ()),
+        "precise_locations": frozenset(snapshot.get("precise_locations") or ()),
+        "agencies": frozenset(snapshot.get("agencies") or ()),
+        "subject_phrases": frozenset(snapshot.get("subject_phrases") or ()),
+        "headline_topic_tokens": frozenset(
+            snapshot.get("headline_topic_tokens") or ()
+        ),
+        "distinctive_tokens": frozenset(snapshot.get("distinctive_tokens") or ()),
+    }
+
+
+def _persist_event_identity(item, archive_entry=None):
+    """Persist the first source-derived identity snapshot and never rewrite it."""
+    if not isinstance(item, dict):
+        return {}
+    target = archive_entry if isinstance(archive_entry, dict) else item
+    existing = target.get("event_identity")
+    if isinstance(existing, dict) and existing.get("schema_version"):
+        return existing
+    snapshot = _event_identity_snapshot(item, include_archive_body=False)
+    if snapshot:
+        target["event_identity"] = copy.deepcopy(snapshot)
+    return snapshot
 
 
 def _cross_source_candidate_keys(features):
@@ -15951,17 +16097,22 @@ def _cross_source_candidate_slugs(features, ledger):
 def _cross_source_same_event_evidence(
     left, right, *, left_features=None, right_features=None
 ):
-    """Return explainable, source-independent evidence for one persistent story.
+    """Classify a cross-source pair under the canonical write authority boundary.
 
-    The matcher deliberately ignores publisher, URL, headline framing and fragmented
-    registry IDs. It requires several independent stable facts and refuses custom
-    recurring editions, locality conflicts and incompatible event families.
+    Text similarity retrieves candidates. Only exact identity or a hard composite of
+    source-oriented event facts can return ``write_authorized=True``.
     """
     result = {
         "matched": False,
         "confidence": 0.0,
-        "relationship": "new_story",
-        "reason": "insufficient_cross_source_event_evidence",
+        "confidence_semantics": "legacy_compatibility_score_not_probability",
+        "relationship": IDENTITY_OUTCOME_NEW,
+        "identity_outcome": IDENTITY_OUTCOME_NEW,
+        "evidence_tier": "insufficient_evidence",
+        "write_authorized": False,
+        "proof_type": "none",
+        "reason": "insufficient_event_identity_evidence",
+        "reason_codes": [],
         "evidence_dimensions": [],
         "decision_trace": [],
         "shared_named_people": [],
@@ -15990,12 +16141,7 @@ def _cross_source_same_event_evidence(
     left_date = left_features.get("date")
     right_date = right_features.get("date")
     day_gap = abs((left_date - right_date).days) if left_date and right_date else None
-    if day_gap is not None and day_gap > 45:
-        result["reason"] = "outside_45_day_identity_window"
-        result["decision_trace"].append(f"publication_gap_days={day_gap}")
-        return result
 
-    left_text, right_text = _cross_source_text(left), _cross_source_text(right)
     left_locality = set(left_features.get("locality") or ())
     right_locality = set(right_features.get("locality") or ())
     route_only_localities = {"i-95"}
@@ -16003,61 +16149,31 @@ def _cross_source_same_event_evidence(
     right_jurisdictions = right_locality - route_only_localities
     shared_jurisdictions = left_jurisdictions & right_jurisdictions
     shared_locality = left_locality & right_locality
-    if left_jurisdictions and right_jurisdictions and not shared_jurisdictions:
-        result["reason"] = "conflicting_locality"
-        result["decision_trace"].extend((
-            f"left_locality={sorted(left_jurisdictions)}",
-            f"right_locality={sorted(right_jurisdictions)}",
-        ))
-        return result
     identity_locality = shared_jurisdictions or (shared_locality - route_only_localities)
 
     left_families = set(left_features.get("event_families") or ())
     right_families = set(right_features.get("event_families") or ())
     shared_families = left_families & right_families
-    if left_families and right_families and not shared_families:
-        result["reason"] = "conflicting_event_family"
-        result["decision_trace"].extend((
-            f"left_event_families={sorted(left_families)}",
-            f"right_event_families={sorted(right_families)}",
-        ))
-        return result
 
-    anchor_trace = []
-    left_anchor = left_features.get("incident_anchor")
-    right_anchor = right_features.get("incident_anchor")
-    if left_anchor and right_anchor and left_anchor != right_anchor:
-        result["reason"] = "structured_incident_anchor_conflict"
-        result["decision_trace"] = [
-            f"left_incident_anchor={left_anchor}",
-            f"right_incident_anchor={right_anchor}",
-        ]
-        return result
+    left_anchor = str(left_features.get("incident_anchor") or "")
+    right_anchor = str(right_features.get("incident_anchor") or "")
+    left_known = str(left_features.get("known_event_key") or "")
+    right_known = str(right_features.get("known_event_key") or "")
+
+    conflict_reason = ""
+    if day_gap is not None and day_gap > 45:
+        conflict_reason = "outside_45_day_identity_window"
+    elif left_jurisdictions and right_jurisdictions and not shared_jurisdictions:
+        conflict_reason = "conflicting_locality"
+    elif left_families and right_families and not shared_families:
+        conflict_reason = "conflicting_event_family"
+    elif left_anchor and right_anchor and left_anchor != right_anchor:
+        conflict_reason = "structured_incident_anchor_conflict"
+    elif left_known and right_known and left_known != right_known:
+        conflict_reason = "known_event_key_conflict"
+
     exact_anchor = bool(left_anchor and left_anchor == right_anchor)
-    if exact_anchor:
-        anchor_trace.append(f"incident_anchor={left_anchor}")
-    elif left_anchor or right_anchor:
-        # Different reporting stages may expose enough structured facts for only one
-        # side to receive an anchor. Absence is not contradictory evidence.
-        anchor_trace.append(
-            f"one_sided_incident_anchor={left_anchor or right_anchor}"
-        )
-
-    left_known = left_features.get("known_event_key")
-    right_known = right_features.get("known_event_key")
-    if left_known and right_known and left_known != right_known:
-        result["reason"] = "known_event_key_conflict"
-        result["decision_trace"] = [
-            f"left_known_event_key={left_known}",
-            f"right_known_event_key={right_known}",
-        ]
-        return result
     exact_known = bool(left_known and left_known == right_known)
-    if exact_known:
-        anchor_trace.append(f"known_event_key={left_known}")
-    elif left_known or right_known:
-        anchor_trace.append(f"one_sided_known_event_key={left_known or right_known}")
-
     shared_people = set(left_features.get("people") or ()) & set(
         right_features.get("people") or ()
     )
@@ -16089,14 +16205,6 @@ def _cross_source_same_event_evidence(
     shared_distinctive = set(left_features.get("distinctive_tokens") or ()) & set(
         right_features.get("distinctive_tokens") or ()
     )
-    result.update({
-        "shared_named_people": sorted(shared_people),
-        "shared_precise_locations": sorted(shared_precise),
-        "shared_agencies": sorted(shared_agencies),
-        "shared_subject_phrases": sorted(shared_subjects),
-        "shared_headline_topic_tokens": sorted(shared_topic_tokens),
-        "shared_distinctive_tokens": sorted(shared_distinctive)[:30],
-    })
 
     dimensions = []
     if exact_anchor:
@@ -16122,116 +16230,93 @@ def _cross_source_same_event_evidence(
     if len(shared_distinctive) >= 4:
         dimensions.append("distinctive_fact_overlap")
 
-    policy_topic_anchor = bool(
-        "public-policy" in shared_families
-        and identity_locality
-        and len(shared_topic_core) >= 2
-    )
-    near_duplicate_headline_anchor = bool(
+    near_duplicate_headline = bool(
         day_gap is not None
         and day_gap <= 2
         and len(shared_topic_core) >= 4
         and len(shared_distinctive) >= 5
         and _story_match_confidence(left, right) >= 90
     )
-    hard_shared_anchor = bool(
-        exact_anchor
-        or exact_known
-        or shared_people
-        or shared_precise
-        or policy_topic_anchor
-        or near_duplicate_headline_anchor
-        or (shared_agencies and shared_families and identity_locality)
-    )
-    existing_pair_corroboration = bool(
-        hard_shared_anchor
-        and _same_event_items(left, right)
-        and _same_story_topic(left, right)
-    )
-    if existing_pair_corroboration:
-        dimensions.append("existing_matcher_corroboration")
-
     time_safe = day_gap is None or day_gap <= 45
     locality_safe = bool(identity_locality) or not (
         left_jurisdictions and right_jurisdictions
     )
     family_safe = bool(shared_families) or not (left_families and right_families)
-    confidence = 0.0
-    reason = result["reason"]
 
-    if (
-        exact_anchor and time_safe and locality_safe and family_safe
-        and (shared_people or (shared_precise and len(shared_distinctive) >= 4))
-    ):
-        confidence = 0.995
-        reason = "exact_structured_incident_anchor_with_corroboration"
-    elif exact_known and time_safe and locality_safe and family_safe:
-        confidence = 0.995
-        reason = "exact_known_event_key"
-    elif (
-        shared_people and time_safe and locality_safe and family_safe
-        and (shared_precise or len(shared_distinctive) >= 4)
-    ):
-        confidence = 0.98
-        reason = "shared_people_location_and_incident_facts"
-    elif (
-        shared_precise and time_safe and locality_safe and family_safe
-        and len(shared_distinctive) >= 4
-    ):
-        confidence = 0.96
-        reason = "shared_precise_location_and_incident_facts"
-    elif (
-        "public-policy" in shared_families and shared_agencies and shared_subjects
-        and identity_locality and time_safe and len(shared_distinctive) >= 4
-    ):
-        confidence = 0.95
-        reason = "same_governing_body_and_policy_subject"
-    elif (
-        shared_subjects and identity_locality and shared_families and time_safe
-        and len(shared_distinctive) >= 6
-        and (shared_agencies or shared_precise or shared_people)
-    ):
-        confidence = 0.94
-        reason = "shared_subject_and_multiple_stable_facts"
-    elif (
-        policy_topic_anchor and len(shared_topic_tokens) >= 4
-        and identity_locality and time_safe
-        and len(shared_distinctive) >= 6 and existing_pair_corroboration
-        and _story_match_confidence(left, right) >= 78
-    ):
-        confidence = 0.93
-        reason = "rewritten_headline_topic_with_locality_corroboration"
-    elif near_duplicate_headline_anchor and time_safe and locality_safe and family_safe:
-        confidence = 0.925
-        reason = "near_duplicate_headline_with_bounded_time"
-    elif (
-        existing_pair_corroboration and hard_shared_anchor and time_safe
-        and _story_match_confidence(left, right) >= 78
-    ):
-        confidence = 0.92
-        reason = "existing_matchers_plus_stable_cross_source_anchor"
+    if decide_cross_source_identity is None:
+        decision = {
+            "outcome": IDENTITY_OUTCOME_NEW,
+            "evidence_tier": "insufficient_evidence",
+            "write_authorized": False,
+            "proof_type": "none",
+            "reason": "identity_authority_module_unavailable",
+            "reason_codes": ("fail_closed",),
+        }
+    else:
+        decision = decide_cross_source_identity(
+            conflict_reason=conflict_reason,
+            exact_incident_anchor=exact_anchor,
+            exact_known_event_key=exact_known,
+            shared_named_people=len(shared_people),
+            shared_precise_locations=len(shared_precise),
+            shared_agencies=len(shared_agencies),
+            shared_subject_phrases=(
+                len(shared_subjects)
+                or (1 if len(shared_topic_core) >= 2 else 0)
+            ),
+            shared_headline_topic_core=len(shared_topic_core),
+            shared_distinctive_facts=len(shared_distinctive),
+            shared_locality=bool(identity_locality),
+            shared_event_family=bool(shared_families),
+            policy_family="public-policy" in shared_families,
+            time_safe=time_safe,
+            locality_safe=locality_safe,
+            family_safe=family_safe,
+            near_duplicate_headline=near_duplicate_headline,
+        ).to_dict()
 
-    result["evidence_dimensions"] = dimensions
-    result["decision_trace"] = anchor_trace + [
-        f"publication_gap_days={day_gap if day_gap is not None else 'unknown'}",
-        f"shared_locality={sorted(identity_locality)}",
-        f"shared_event_families={sorted(shared_families)}",
-        f"shared_named_people={sorted(shared_people)}",
-        f"shared_precise_locations={sorted(shared_precise)}",
-        f"shared_agencies={sorted(shared_agencies)}",
-        f"shared_subject_phrases={sorted(shared_subjects)}",
-        f"shared_headline_topic_tokens={sorted(shared_topic_tokens)}",
-        f"shared_headline_topic_core={sorted(shared_topic_core)}",
-        f"shared_distinctive_token_count={len(shared_distinctive)}",
-        f"existing_matcher_corroboration={existing_pair_corroboration}",
-    ]
-    if confidence >= 0.90:
-        result.update({
-            "matched": True,
-            "confidence": confidence,
-            "relationship": "same_event",
-            "reason": reason,
-        })
+    compatibility_score = {
+        "exact_identity": 0.99,
+        "hard_composite_identity": 0.95,
+        "candidate_only": 0.50,
+        "conflict": 0.0,
+        "insufficient_evidence": 0.0,
+    }.get(str(decision.get("evidence_tier") or ""), 0.0)
+
+    result.update({
+        "matched": bool(decision.get("write_authorized")),
+        "confidence": compatibility_score,
+        "relationship": str(decision.get("outcome") or IDENTITY_OUTCOME_NEW),
+        "identity_outcome": str(decision.get("outcome") or IDENTITY_OUTCOME_NEW),
+        "evidence_tier": str(decision.get("evidence_tier") or "insufficient_evidence"),
+        "write_authorized": bool(decision.get("write_authorized")),
+        "proof_type": str(decision.get("proof_type") or "none"),
+        "reason": str(decision.get("reason") or "insufficient_event_identity_evidence"),
+        "reason_codes": list(decision.get("reason_codes") or ()),
+        "evidence_dimensions": dimensions,
+        "shared_named_people": sorted(shared_people),
+        "shared_precise_locations": sorted(shared_precise),
+        "shared_agencies": sorted(shared_agencies),
+        "shared_subject_phrases": sorted(shared_subjects),
+        "shared_headline_topic_tokens": sorted(shared_topic_tokens),
+        "shared_distinctive_tokens": sorted(shared_distinctive)[:30],
+        "decision_trace": [
+            f"left_identity_origin={left_features.get('identity_origin','')}",
+            f"right_identity_origin={right_features.get('identity_origin','')}",
+            f"publication_gap_days={day_gap if day_gap is not None else 'unknown'}",
+            f"shared_locality={sorted(identity_locality)}",
+            f"shared_event_families={sorted(shared_families)}",
+            f"shared_named_people={sorted(shared_people)}",
+            f"shared_precise_locations={sorted(shared_precise)}",
+            f"shared_agencies={sorted(shared_agencies)}",
+            f"shared_subject_phrases={sorted(shared_subjects)}",
+            f"shared_headline_topic_core={sorted(shared_topic_core)}",
+            f"shared_distinctive_token_count={len(shared_distinctive)}",
+            f"identity_outcome={decision.get('outcome','')}",
+            f"evidence_tier={decision.get('evidence_tier','')}",
+            f"write_authorized={bool(decision.get('write_authorized'))}",
+        ],
+    })
     return result
 
 
@@ -16240,6 +16325,59 @@ def _cross_source_publisher(value):
         return urlsplit(str(value or "")).netloc.lower()
     except Exception:
         return ""
+
+
+def _stamp_canonical_write_authorization(
+    item, canonical, decision, *, basis="", identity_keys=()
+):
+    """Attach a target-bound authorization token for the final writer gate."""
+    if not isinstance(item, dict) or not isinstance(canonical, dict):
+        return None
+    payload = dict(decision or {})
+    if not payload.get("write_authorized"):
+        return None
+    slug = str(canonical.get("slug") or "").strip()
+    if not slug:
+        return None
+    authorization = {
+        "schema_version": "1.0",
+        "outcome": str(payload.get("outcome") or payload.get("identity_outcome") or ""),
+        "evidence_tier": str(payload.get("evidence_tier") or ""),
+        "write_authorized": True,
+        "proof_type": str(payload.get("proof_type") or ""),
+        "reason": str(payload.get("reason") or ""),
+        "reason_codes": list(payload.get("reason_codes") or ()),
+        "canonical_slug": slug,
+        "canonical_story_id": str(canonical.get("editorial_story_id") or ""),
+        "basis": str(basis or ""),
+        "identity_keys": list(identity_keys or ()),
+    }
+    seed = json.dumps(authorization, sort_keys=True, ensure_ascii=True)
+    authorization["authorization_token"] = hashlib.sha256(
+        seed.encode("utf-8")
+    ).hexdigest()[:24]
+    item["_canonical_write_authorization"] = authorization
+    return authorization
+
+
+def _canonical_write_authorized(item, canonical):
+    if not isinstance(item, dict) or not isinstance(canonical, dict):
+        return False
+    authorization = item.get("_canonical_write_authorization")
+    if authorization_matches_target is None:
+        return False
+    return authorization_matches_target(
+        authorization, str(canonical.get("slug") or "")
+    )
+
+
+def _direct_ledger_authorization(item, canonical, matched_keys, ledger):
+    trusted_story_ids = set((ledger or {}).get("trusted_story_ids") or ())
+    if authorize_exact_identity_keys is None:
+        return None
+    return authorize_exact_identity_keys(
+        matched_keys, trusted_story_ids=trusted_story_ids
+    ).to_dict()
 
 
 def _record_cross_source_identity_observation(item, canonical, evidence, *, action):
@@ -16263,10 +16401,24 @@ def _record_cross_source_identity_observation(item, canonical, evidence, *, acti
         "canonical_story_id": str(canonical.get("editorial_story_id") or ""),
         "evidence_dimensions": list(evidence.get("evidence_dimensions") or []),
         "confidence": float(evidence.get("confidence") or 0.0),
-        "relationship": "same_event",
+        "confidence_semantics": str(evidence.get("confidence_semantics") or ""),
+        "relationship": str(
+            evidence.get("identity_outcome")
+            or evidence.get("relationship")
+            or IDENTITY_OUTCOME_NEW
+        ),
+        "identity_outcome": str(
+            evidence.get("identity_outcome")
+            or evidence.get("relationship")
+            or IDENTITY_OUTCOME_NEW
+        ),
+        "evidence_tier": str(evidence.get("evidence_tier") or ""),
+        "write_authorized": bool(evidence.get("write_authorized")),
+        "proof_type": str(evidence.get("proof_type") or ""),
+        "reason_codes": list(evidence.get("reason_codes") or []),
         "match_reason": str(evidence.get("reason") or ""),
         "decision_trace": list(evidence.get("decision_trace") or []),
-        "final_publication_action": str(action or "update_existing_or_hold"),
+        "final_publication_action": str(action or "candidate_only_no_write"),
     }
     key = (
         row["resolved_url"], row["incoming_headline"], row["matched_canonical_slug"],
@@ -16313,6 +16465,26 @@ def _finalize_cross_source_identity_observation(item, action):
 
 
 def _apply_cross_source_canonical_identity(item, canonical, evidence, *, action):
+    """Apply identity only after the authority policy grants canonical write power."""
+    if not bool((evidence or {}).get("write_authorized")):
+        _record_cross_source_identity_observation(
+            item, canonical, evidence or {}, action="candidate_only_no_write"
+        )
+        return None
+
+    decision = {
+        "outcome": evidence.get("identity_outcome") or evidence.get("relationship"),
+        "evidence_tier": evidence.get("evidence_tier"),
+        "write_authorized": True,
+        "proof_type": evidence.get("proof_type"),
+        "reason": evidence.get("reason"),
+        "reason_codes": evidence.get("reason_codes") or (),
+    }
+    if not _stamp_canonical_write_authorization(
+        item, canonical, decision, basis="cross_source_hard_event_proof"
+    ):
+        return None
+
     incoming_story_id = str(
         item.get("editorial_story_id") or item.get("_editorial_story_id") or ""
     ).strip()
@@ -16327,9 +16499,9 @@ def _apply_cross_source_canonical_identity(item, canonical, evidence, *, action)
         item["_editorial_route"] = "update_existing"
         item["editorial_route"] = "update_existing"
         item["story_form"] = "update"
-    item["_editorial_relationship"] = "same_event"
+    item["_editorial_relationship"] = IDENTITY_OUTCOME_VERIFIED
     item["_editorial_relationship_confidence"] = float(evidence.get("confidence") or 0.0)
-    item["_editorial_identity_origin"] = "cross_source_canonical_match"
+    item["_editorial_identity_origin"] = "event_identity_authority"
 
     source_url = _normalized_external_source_url(
         item.get("source_url") or item.get("_source_url") or item.get("link")
@@ -16341,9 +16513,9 @@ def _apply_cross_source_canonical_identity(item, canonical, evidence, *, action)
         current["story_id"] = canonical_story_id
         if current.get("route") != "skip":
             current["route"] = "update_existing"
-        current["relationship"] = "same_event"
+        current["relationship"] = IDENTITY_OUTCOME_VERIFIED
         current["relationship_confidence"] = float(evidence.get("confidence") or 0.0)
-        current["identity_origin"] = "cross_source_canonical_match"
+        current["identity_origin"] = "event_identity_authority"
     return _record_cross_source_identity_observation(
         item, canonical, evidence, action=action
     )
@@ -16360,6 +16532,8 @@ def _adopt_missing_canonical_story_id(
     later failing the forward live contract.
     """
     if not isinstance(item, dict) or not isinstance(canonical, dict):
+        return ""
+    if not _canonical_write_authorized(item, canonical):
         return ""
     story_id = str(story_id or "").strip()
     existing = str(canonical.get("editorial_story_id") or "").strip()
@@ -16387,17 +16561,38 @@ def _adopt_missing_canonical_story_id(
 
 def _build_cross_source_update_identity_report():
     rows = [dict(row) for row in CROSS_SOURCE_IDENTITY_OBSERVATIONS]
+    destructive_actions = {
+        "update_existing", "canonical_bound_before_generation",
+        "reuse_existing_canonical_before_slug_creation",
+    }
+    unauthorized_destructive = [
+        row for row in rows
+        if row.get("final_publication_action") in destructive_actions
+        and not row.get("write_authorized")
+    ]
     return {
         "schema_version": CROSS_SOURCE_UPDATE_IDENTITY_SCHEMA_VERSION,
         "generated_at": _utc_now_iso(),
-        "policy": "different_source_does_not_imply_different_story",
-        "passed": all(
-            float(row.get("confidence") or 0.0) >= 0.90
-            and "mint_new" not in str(row.get("final_publication_action") or "")
-            for row in rows
-        ),
+        "policy": "candidate_retrieval_is_not_canonical_write_authority",
+        "passed": not unauthorized_destructive,
         "summary": {
-            "match_count": len(rows),
+            "observation_count": len(rows),
+            "match_count": sum(
+                1 for row in rows
+                if row.get("identity_outcome") == IDENTITY_OUTCOME_VERIFIED
+            ),
+            "verified_same_event_count": sum(
+                1 for row in rows
+                if row.get("identity_outcome") == IDENTITY_OUTCOME_VERIFIED
+            ),
+            "possible_relationship_count": sum(
+                1 for row in rows
+                if row.get("identity_outcome") == IDENTITY_OUTCOME_POSSIBLE
+            ),
+            "write_authorized_count": sum(
+                1 for row in rows if row.get("write_authorized")
+            ),
+            "unauthorized_destructive_count": len(unauthorized_destructive),
             "updated_existing_count": sum(
                 1 for row in rows
                 if row.get("final_publication_action") == "update_existing"
@@ -16405,7 +16600,7 @@ def _build_cross_source_update_identity_report():
             "preserved_or_held_count": sum(
                 1 for row in rows
                 if str(row.get("final_publication_action") or "").startswith(
-                    ("preserve_", "hold_")
+                    ("preserve_", "hold_", "candidate_only")
                 )
             ),
             "canonical_bound_before_generation_count": sum(
@@ -16413,6 +16608,13 @@ def _build_cross_source_update_identity_report():
                 if row.get("final_publication_action") == "canonical_bound_before_generation"
             ),
         },
+        "authority_contract": {
+            "allowed_write_outcome": IDENTITY_OUTCOME_VERIFIED,
+            "candidate_outcome": IDENTITY_OUTCOME_POSSIBLE,
+            "candidate_write_authority": False,
+            "confidence_is_probability": False,
+        },
+        "violations": unauthorized_destructive,
         "matches": rows,
     }
 
@@ -16423,8 +16625,14 @@ def _write_cross_source_update_identity_report(output_root=None):
         Path(output_root) / "data" / "cross-source-update-identity.json"
         if output_root is not None else CROSS_SOURCE_UPDATE_IDENTITY_REPORT_PATH
     )
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    authority_path = (
+        Path(output_root) / "data" / "event-identity-authority.json"
+        if output_root is not None else EVENT_IDENTITY_AUTHORITY_REPORT_PATH
+    )
+    payload = json.dumps(report, indent=2, ensure_ascii=False)
+    for destination in (path, authority_path):
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(payload, encoding="utf-8")
     return report
 
 
@@ -16476,6 +16684,7 @@ def _build_canonical_publication_ledger(archive, identity_index=None):
         "by_slug": by_slug,
         "key_to_slug": key_to_slug,
         "key_conflicts": key_conflicts,
+        "trusted_story_ids": tuple(sorted(safe_story_ids)),
         "cross_source_features": cross_source_features,
         "cross_source_candidate_index": {
             key: tuple(sorted(slugs))
@@ -16487,6 +16696,7 @@ def _build_canonical_publication_ledger(archive, identity_index=None):
 
 
 def _canonical_publication_ledger_target(item, ledger, identity_index=None):
+    """Return a canonical target only when a write-authoritative proof exists."""
     if not isinstance(item, dict) or not isinstance(ledger, dict):
         return None, "", ()
     keys = _publication_ledger_identity_keys(item, identity_index)
@@ -16501,49 +16711,107 @@ def _canonical_publication_ledger_target(item, ledger, identity_index=None):
         for slug in slugs
         if ledger.get("by_slug", {}).get(slug)
     ]
-    if not candidates:
-        # Source-independent fail-closed fallback. URLs, publishers, headlines and
-        # registry IDs may all differ; several stable incident dimensions must still
-        # prove that the incoming report belongs to an established canonical.
-        matched = []
-        incoming_features = _cross_source_feature_bundle(item)
-        candidate_slugs = _cross_source_candidate_slugs(incoming_features, ledger)
-        for slug in candidate_slugs:
-            entry = ledger.get("by_slug", {}).get(slug)
-            if not entry:
-                continue
-            if not _publication_ledger_candidate_safe(entry):
-                continue
-            evidence = _cross_source_same_event_evidence(
-                item,
-                entry,
-                left_features=incoming_features,
-                right_features=ledger.get("cross_source_features", {}).get(slug),
-            )
-            if evidence.get("matched"):
-                matched.append((entry, evidence))
-        if not matched:
-            return None, "", keys
-        canonical = min((row[0] for row in matched), key=_publication_canonical_key)
-        evidence = next(row[1] for row in matched if row[0] is canonical)
-        _apply_cross_source_canonical_identity(
-            item, canonical, evidence, action="canonical_bound_before_generation"
+    if candidates:
+        canonical = min(candidates, key=_publication_canonical_key)
+        matched_keys = tuple(
+            key for key in keys
+            if ledger.get("key_to_slug", {}).get(key) == canonical.get("slug")
         )
-        basis = (
-            "high-confidence-same-event"
-            if evidence.get("reason") in {
-                "existing_matchers_plus_stable_cross_source_anchor",
-                "rewritten_headline_topic_with_locality_corroboration",
+        decision = _direct_ledger_authorization(
+            item, canonical, matched_keys, ledger
+        )
+        if decision and decision.get("write_authorized"):
+            evidence = {
+                "matched": True,
+                "confidence": 0.99,
+                "confidence_semantics": "legacy_compatibility_score_not_probability",
+                "relationship": decision.get("outcome"),
+                "identity_outcome": decision.get("outcome"),
+                "evidence_tier": decision.get("evidence_tier"),
+                "write_authorized": True,
+                "proof_type": decision.get("proof_type"),
+                "reason": decision.get("reason"),
+                "reason_codes": list(decision.get("reason_codes") or ()),
+                "evidence_dimensions": [
+                    key.split(":", 1)[0] for key in matched_keys
+                ],
+                "decision_trace": [
+                    "deterministic_identity_keys=" + ",".join(matched_keys),
+                    "write_authorized=True",
+                ],
             }
-            else "cross-source-same-event"
+            if not _apply_cross_source_canonical_identity(
+                item,
+                canonical,
+                evidence,
+                action="canonical_bound_before_generation",
+            ):
+                return None, "authorization_stamp_failed", keys
+            basis = str(
+                decision.get("proof_type") or "deterministic_identity"
+            )
+            return canonical, basis, keys
+        # An untrusted/ambiguous story ID may retrieve a candidate, but cannot bind it.
+        item["_canonical_identity_candidate"] = {
+            "canonical_slug": str(canonical.get("slug") or ""),
+            "identity_outcome": IDENTITY_OUTCOME_POSSIBLE,
+            "evidence_tier": "candidate_only",
+            "write_authorized": False,
+            "proof_type": "untrusted_identity_key",
+            "identity_keys": list(matched_keys),
+        }
+        return None, "candidate_only_untrusted_identity_key", keys
+
+    # Source-independent candidate retrieval. Candidate similarity itself has no
+    # destructive authority; only the hard proof returned by the policy may bind.
+    verified = []
+    possible = []
+    incoming_features = _cross_source_feature_bundle(item)
+    candidate_slugs = _cross_source_candidate_slugs(incoming_features, ledger)
+    for slug in candidate_slugs:
+        entry = ledger.get("by_slug", {}).get(slug)
+        if not entry or not _publication_ledger_candidate_safe(entry):
+            continue
+        evidence = _cross_source_same_event_evidence(
+            item,
+            entry,
+            left_features=incoming_features,
+            right_features=ledger.get("cross_source_features", {}).get(slug),
         )
-        return canonical, basis, keys
-    canonical = min(candidates, key=_publication_canonical_key)
-    matched_keys = tuple(
-        key for key in keys
-        if ledger.get("key_to_slug", {}).get(key) == canonical.get("slug")
+        if evidence.get("write_authorized"):
+            verified.append((entry, evidence))
+        elif evidence.get("identity_outcome") == IDENTITY_OUTCOME_POSSIBLE:
+            possible.append((entry, evidence))
+
+    if not verified:
+        if possible:
+            canonical, evidence = min(
+                possible, key=lambda row: _publication_canonical_key(row[0])
+            )
+            item["_canonical_identity_candidate"] = {
+                "canonical_slug": str(canonical.get("slug") or ""),
+                "canonical_headline": str(canonical.get("headline") or ""),
+                "identity_outcome": IDENTITY_OUTCOME_POSSIBLE,
+                "evidence_tier": str(evidence.get("evidence_tier") or "candidate_only"),
+                "write_authorized": False,
+                "proof_type": str(evidence.get("proof_type") or "candidate_similarity"),
+                "reason": str(evidence.get("reason") or ""),
+                "evidence_dimensions": list(evidence.get("evidence_dimensions") or ()),
+            }
+            _record_cross_source_identity_observation(
+                item, canonical, evidence, action="candidate_only_no_write"
+            )
+        return None, "candidate_only_no_write", keys
+
+    canonical = min((row[0] for row in verified), key=_publication_canonical_key)
+    evidence = next(row[1] for row in verified if row[0] is canonical)
+    if not _apply_cross_source_canonical_identity(
+        item, canonical, evidence, action="canonical_bound_before_generation"
+    ):
+        return None, "authorization_stamp_failed", keys
+    basis = "event-identity-authority:" + str(
+        evidence.get("proof_type") or "hard_event_proof"
     )
-    basis = "+".join(key.split(":", 1)[0] for key in matched_keys) or "publication_ledger"
     return canonical, basis, keys
 
 
@@ -16636,12 +16904,12 @@ def _prepare_story_aware_update_context(headlines, archive, ledger=None, identit
                 "final_publication_action", ""
             ),
         })
-        if basis == "cross-source-same-event":
+        if str(basis).startswith("event-identity-authority:"):
             print(
-                "  Cross-source canonical match: "
+                "  Verified cross-source identity: "
                 f"'{str(item.get('title') or item.get('headline') or '')[:72]}' -> "
                 f"'{canonical.get('slug','')}' "
-                f"({float(cross_source.get('confidence') or 0.0):.2f})"
+                f"[{cross_source.get('proof_type','hard_event_proof')}]"
             )
     return bindings
 
@@ -18386,12 +18654,19 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
     if story_id and entry_story_id and story_id != entry_story_id:
         return False, "persistent_story_id_conflict"
 
+    ledger_basis = str(basis or "").startswith("canonical_publication_ledger")
+    ledger_authorized = bool(
+        ledger_basis and _canonical_write_authorized(item, entry)
+    )
     route = str(item.get("_editorial_route") or item.get("editorial_route") or "").strip().lower()
     if (
         route == "skip"
         and story_id
         and entry_story_id == story_id
-        and (basis in {"persistent_story_id", "exact_source_url"} or str(basis).startswith("canonical_publication_ledger"))
+        and (
+            basis in {"persistent_story_id", "exact_source_url"}
+            or ledger_authorized
+        )
     ):
         # ``skip`` is a no-change decision. Preserve the existing canonical page;
         # never reinterpret rewritten display copy as a proposed article update.
@@ -18400,7 +18675,6 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
     # Once the authoritative ledger or the same persistent story has selected a
     # canonical, a headline/slug wording difference can never force a new permalink.
     # Primary-claim drift remains separately guarded below.
-    ledger_basis = str(basis or "").startswith("canonical_publication_ledger")
     same_persistent_story = bool(
         basis == "persistent_story_id"
         and story_id
@@ -18423,7 +18697,10 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
         return False, "primary_claim_slug_drift_unrepaired"
 
     if ledger_basis:
-        return True, str(basis)
+        return (
+            ledger_authorized,
+            str(basis) if ledger_authorized else "canonical_write_authorization_missing",
+        )
     if same_persistent_story:
         return True, basis
     if same_exact_source:
@@ -18460,6 +18737,42 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
     if basis == "weather_event_key":
         return True, basis
     return False, "unverified_update_target"
+
+
+def _destructive_publication_write_authorized(item, entry, story_id, basis):
+    """Final independent gate before any existing permalink may be mutated."""
+    if not isinstance(item, dict) or not isinstance(entry, dict):
+        return False
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return True
+    if _canonical_write_authorized(item, entry):
+        return True
+
+    basis = str(basis or "")
+    incoming_source = _normalized_external_source_url(
+        item.get("source_url") or item.get("_source_url") or item.get("link")
+    )
+    existing_source = _normalized_external_source_url(
+        entry.get("source_url") or entry.get("original_url") or entry.get("link")
+    )
+    if basis == "exact_source_url":
+        return bool(incoming_source and incoming_source == existing_source)
+
+    incoming_story_id = str(story_id or "").strip()
+    existing_story_id = str(entry.get("editorial_story_id") or "").strip()
+    if basis == "persistent_story_id":
+        return bool(
+            incoming_story_id
+            and existing_story_id
+            and incoming_story_id == existing_story_id
+        )
+
+    if basis == "weather_event_key":
+        return bool(
+            item.get("weather_event_key")
+            and item.get("weather_event_key") == entry.get("weather_event_key")
+        )
+    return False
 
 
 def _reconcile_archive_publication_identity(archive, identity_index):
@@ -18930,7 +19243,13 @@ def write_archives(all_categories, top_cat):
         # jurisdiction and monetary claim, rebind the same canonical archive row
         # before validation. This creates one aligned URL plus a permanent redirect,
         # never two live articles for the same exact source/story identity.
-        if existing is not None and not (hero.get("is_custom") or hero.get("authoritative_custom")):
+        if (
+            existing is not None
+            and not (hero.get("is_custom") or hero.get("authoritative_custom"))
+            and _destructive_publication_write_authorized(
+                hero, existing, _editorial_story_id, _target_basis
+            )
+        ):
             _claim_rebind_redirect = _migrate_archive_entry_to_claim_aligned_slug(
                 hero,
                 existing,
@@ -19118,6 +19437,32 @@ def write_archives(all_categories, top_cat):
                     "action": "reuse_existing_canonical_before_slug_creation",
                 })
 
+        if (
+            existing
+            and not (hero.get("is_custom") or hero.get("authoritative_custom"))
+            and str(hero.get("_editorial_route") or hero.get("editorial_route") or "").lower() != "skip"
+            and not _destructive_publication_write_authorized(
+                hero, existing, _editorial_story_id, _target_basis
+            )
+        ):
+            _finalize_cross_source_identity_observation(
+                hero, "hold_missing_canonical_write_authorization"
+            )
+            _forward_identity_report["publication_holds"].append({
+                "headline": headline,
+                "source_url": normalized_source_url,
+                "candidate_slug": existing.get("slug", ""),
+                "reason": "missing_canonical_write_authorization",
+                "basis": _target_basis,
+                "action": "preserve_existing_page_and_hold_generated_rewrite",
+            })
+            hero["_publication_skip_reason"] = "missing_canonical_write_authorization"
+            print(
+                "  CANONICAL WRITE HOLD: preserved existing page "
+                f"'{existing.get('slug','')}' because no hard identity proof authorized mutation"
+            )
+            continue
+
         if existing:
             # Same story — update existing page in place, keep original URL. An
             # unchanged active custom queue entry is retained for live placement and
@@ -19200,6 +19545,7 @@ def write_archives(all_categories, top_cat):
                     f"'{slug}'"
                 )
 
+            _persist_event_identity(hero, existing)
             _related = [e for e in archive
                         if e.get("category_key") == cat_key and e.get("slug") != slug]
             _related.sort(key=lambda e: e.get("lastmod") or e.get("date",""), reverse=True)
@@ -19294,6 +19640,7 @@ def write_archives(all_categories, top_cat):
             hero["_archived_slug"] = slug
             hero["slug"] = slug
             hero["link"] = f"{SITE_URL}/articles/{slug}.html"
+            _new_event_identity = _persist_event_identity(hero)
             archive.append({
                 "slug": slug, "headline": headline,
                 "teaser": hero.get("teaser","") or hero.get("body","")[:180],
@@ -19310,6 +19657,7 @@ def write_archives(all_categories, top_cat):
                 "feed_url": hero.get("feed_url",""),
                 "source_url": normalized_source_url,
                 "source_headline": hero.get("source_headline", ""),
+                "event_identity": copy.deepcopy(_new_event_identity),
                 "incident_anchor_key": _durable_incident_anchor(hero),
                 "editorial_event_key": hero.get("_editorial_event_key", ""),
                 "editorial_route": hero.get("_editorial_route", ""),
@@ -19482,9 +19830,13 @@ def write_archives(all_categories, top_cat):
     (OUTPUT_DIR / "news-sitemap.xml").write_text(update_news_sitemap(archive), encoding="utf-8")
     _cross_source_report = _write_cross_source_update_identity_report(OUTPUT_DIR)
     print(
-        "  Cross-source update identity: "
-        f"{_cross_source_report.get('summary', {}).get('match_count', 0)} "
-        "canonical match(es) recorded"
+        "  Event identity authority: "
+        f"{_cross_source_report.get('summary', {}).get('verified_same_event_count', 0)} "
+        "verified write(s), "
+        f"{_cross_source_report.get('summary', {}).get('possible_relationship_count', 0)} "
+        "candidate-only relationship(s), "
+        f"{_cross_source_report.get('summary', {}).get('unauthorized_destructive_count', 0)} "
+        "authority violation(s)"
     )
     print(f"  Archived {new_count} new, updated {updated_count} existing ({len(archive)} total)")
     return regression_report

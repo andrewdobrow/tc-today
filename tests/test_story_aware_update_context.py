@@ -138,10 +138,13 @@ def _payload(body):
 def test_existing_canonical_makes_headline_reframe_an_update_before_generation():
     generate = _load_generate()
     source = _source()
-    ledger = generate._build_canonical_publication_ledger([dict(CANONICAL)])
+    identity_index = types.SimpleNamespace(safe_story_ids={"story_001234"})
+    ledger = generate._build_canonical_publication_ledger(
+        [dict(CANONICAL)], identity_index
+    )
 
     bindings = generate._prepare_story_aware_update_context(
-        [source], [dict(CANONICAL)], ledger
+        [source], [dict(CANONICAL)], ledger, identity_index
     )
 
     assert len(bindings) == 1
