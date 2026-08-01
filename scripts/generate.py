@@ -50,6 +50,17 @@ try:
         source_identity_requires_title_continuity,
         source_identity_title_compatible,
         incident_anchor_key,
+        SEMANTIC_PUBLICATION_GATE_VERSION,
+        SEMANTIC_ACTION_DUPLICATE,
+        SEMANTIC_ACTION_HOLD,
+        SEMANTIC_ACTION_NEW,
+        SEMANTIC_ACTION_UPDATE,
+        SEMANTIC_GATE_DEFAULT_MAX_CANDIDATES,
+        SEMANTIC_GATE_DEFAULT_MIN_CONFIDENCE,
+        SEMANTIC_GATE_DEFAULT_RECENT_WINDOW_DAYS,
+        adjudicate_semantic_publication_candidates,
+        semantic_publication_decision_cache_key,
+        retrieve_semantic_publication_candidates,
     )
     from tct_engine.registry_repair import (
         is_broad_event_class_key,
@@ -71,6 +82,17 @@ except Exception as exc:
     source_identity_requires_title_continuity = None
     source_identity_title_compatible = None
     incident_anchor_key = None
+    SEMANTIC_PUBLICATION_GATE_VERSION = "unavailable"
+    SEMANTIC_ACTION_DUPLICATE = "duplicate_use_existing_canonical"
+    SEMANTIC_ACTION_HOLD = "hold"
+    SEMANTIC_ACTION_NEW = "new_story"
+    SEMANTIC_ACTION_UPDATE = "update_existing_canonical"
+    SEMANTIC_GATE_DEFAULT_MAX_CANDIDATES = 4
+    SEMANTIC_GATE_DEFAULT_MIN_CONFIDENCE = 0.82
+    SEMANTIC_GATE_DEFAULT_RECENT_WINDOW_DAYS = 7
+    adjudicate_semantic_publication_candidates = None
+    semantic_publication_decision_cache_key = None
+    retrieve_semantic_publication_candidates = None
     is_broad_event_class_key = None
     story_quarantine_reasons = None
     _editorial_import_error = exc
@@ -280,7 +302,7 @@ PERSISTENT_STORY_IDENTITY_INTEGRITY_REPORT_PATH = (
 # v1.10.5 forward publication identity. New generated articles are published only
 # when the current editorial decision can be carried directly into the archive row.
 # Historical rows remain readable, but unresolved legacy identity is not guessed.
-FORWARD_IDENTITY_VERSION = "1.6"
+FORWARD_IDENTITY_VERSION = "1.7"
 FORWARD_IDENTITY_RECENT_DAYS = 30
 CURRENT_RUN_EDITORIAL_IDENTITIES = {}
 CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
@@ -306,6 +328,14 @@ def _positive_float_env(name, default):
     except (TypeError, ValueError):
         value = float(default)
     return value if value > 0 else float(default)
+
+
+def _positive_int_env(name, default):
+    try:
+        value = int(os.environ.get(name, default))
+    except (TypeError, ValueError):
+        value = int(default)
+    return value if value > 0 else int(default)
 
 CATEGORY_MODEL_CALL_TIMEOUT_SECONDS = _positive_float_env(
     "TCT_CATEGORY_MODEL_CALL_TIMEOUT_SECONDS", 120
@@ -604,6 +634,27 @@ STORY_CLASSIFICATION = None
 # TEST: running everything on Sonnet to evaluate article quality vs Haiku.
 MODEL_ARTICLES = "claude-sonnet-4-5"   # article generation, enrichment, ranking, rewrites
 MODEL_SELECTION = "claude-sonnet-4-5"  # hero selection, structural decisions
+
+# v1.12.2.0 semantic final publication gate. The model sees only a bounded set of
+# recent fuzzy candidates; it never searches the archive and never writes directly.
+SEMANTIC_GATE_RECENT_DAYS = _positive_int_env(
+    "TCT_SEMANTIC_GATE_RECENT_DAYS", SEMANTIC_GATE_DEFAULT_RECENT_WINDOW_DAYS
+)
+SEMANTIC_GATE_MAX_CANDIDATES = _positive_int_env(
+    "TCT_SEMANTIC_GATE_MAX_CANDIDATES", SEMANTIC_GATE_DEFAULT_MAX_CANDIDATES
+)
+SEMANTIC_GATE_TIMEOUT_SECONDS = _positive_float_env(
+    "TCT_SEMANTIC_GATE_TIMEOUT_SECONDS", 45
+)
+SEMANTIC_GATE_MIN_CONFIDENCE = min(
+    0.99, max(0.50, _positive_float_env(
+        "TCT_SEMANTIC_GATE_MIN_CONFIDENCE", SEMANTIC_GATE_DEFAULT_MIN_CONFIDENCE
+    ))
+)
+SEMANTIC_GATE_CACHE_PATH = OUTPUT_DIR / "data" / "semantic-publication-gate-cache.json"
+SEMANTIC_GATE_REPORT_PATH = OUTPUT_DIR / "data" / "semantic-publication-gate.json"
+SEMANTIC_GATE_CACHE_SCHEMA_VERSION = 1
+SEMANTIC_GATE_REPORT_SCHEMA_VERSION = 1
 
 # Content bank — loaded once at startup, used for card enrichment
 CONTENT_BANK_FEEDS = [
@@ -16483,6 +16534,561 @@ def _find_exact_headline_archive_reconciliation(item, archive):
     }
 
 
+
+
+def _semantic_gate_article_payload(item, *, include_archive_body=False):
+    """Build the bounded article representation sent to candidate retrieval/model."""
+    if not isinstance(item, dict):
+        return {}
+    body = str(item.get("body") or item.get("article_text") or "").strip()
+    if include_archive_body and not body:
+        body = str(_archive_article_body(item) or "").strip()
+    teaser = str(item.get("teaser") or item.get("summary") or "").strip()
+    features = _final_publication_identity_features(
+        {**item, "body": body or item.get("body", "")},
+        include_archive_body=False,
+    )
+    date_value = features.get("date") or _cross_source_date_value(item)
+    lead = teaser
+    if body:
+        paragraphs = [
+            re.sub(r"\s+", " ", part).strip()
+            for part in re.split(r"\n\s*\n|(?<=\.)\s+(?=[A-Z])", body)
+            if re.sub(r"\s+", " ", part).strip()
+        ]
+        if paragraphs:
+            lead = paragraphs[0]
+    stored = item.get("event_identity") if isinstance(item.get("event_identity"), dict) else {}
+    return {
+        "slug": str(item.get("slug") or item.get("_archived_slug") or "").strip(),
+        "headline": str(item.get("headline") or item.get("title") or "").strip(),
+        "source_headline": str(
+            item.get("source_headline") or item.get("source_title") or ""
+        ).strip(),
+        "published_at": (
+            date_value.isoformat() if hasattr(date_value, "isoformat") else str(
+                item.get("first_published")
+                or item.get("published")
+                or item.get("source_published")
+                or item.get("date")
+                or ""
+            )
+        ),
+        "first_published": str(item.get("first_published") or ""),
+        "date": str(item.get("date") or ""),
+        "source_url": _normalized_external_source_url(
+            item.get("source_url")
+            or item.get("_source_url")
+            or item.get("original_url")
+            or item.get("link")
+            or item.get("url")
+        ),
+        "lead": lead[:1000],
+        "teaser": teaser[:1000],
+        "body": body,
+        "locality": sorted(features.get("locality") or stored.get("locality") or ()),
+        "event_families": sorted(
+            features.get("event_families") or stored.get("event_families") or ()
+        ),
+        "people": sorted(features.get("people") or stored.get("people") or ()),
+        "precise_locations": sorted(
+            features.get("precise_locations") or stored.get("precise_locations") or ()
+        ),
+        "agencies": sorted(features.get("agencies") or stored.get("agencies") or ()),
+        "incident_anchor": str(
+            features.get("incident_anchor")
+            or stored.get("incident_anchor")
+            or item.get("incident_anchor_key")
+            or ""
+        ),
+        "known_event_key": str(
+            features.get("known_event_key")
+            or stored.get("known_event_key")
+            or item.get("editorial_event_key")
+            or ""
+        ),
+    }
+
+
+def _load_semantic_publication_gate_cache(path=None):
+    target = Path(path or SEMANTIC_GATE_CACHE_PATH)
+    try:
+        payload = json.loads(target.read_text(encoding="utf-8"))
+    except Exception:
+        payload = {}
+    if not isinstance(payload, dict) or payload.get("schema_version") != SEMANTIC_GATE_CACHE_SCHEMA_VERSION:
+        payload = {
+            "schema_version": SEMANTIC_GATE_CACHE_SCHEMA_VERSION,
+            "gate_version": SEMANTIC_PUBLICATION_GATE_VERSION,
+            "entries": {},
+        }
+    if not isinstance(payload.get("entries"), dict):
+        payload["entries"] = {}
+    return payload
+
+
+def _save_semantic_publication_gate_cache(cache, path=None):
+    target = Path(path or SEMANTIC_GATE_CACHE_PATH)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    entries = dict((cache or {}).get("entries") or {})
+    ordered = sorted(
+        entries.items(),
+        key=lambda pair: str((pair[1] or {}).get("updated_at") or ""),
+        reverse=True,
+    )[:500]
+    payload = {
+        "schema_version": SEMANTIC_GATE_CACHE_SCHEMA_VERSION,
+        "gate_version": SEMANTIC_PUBLICATION_GATE_VERSION,
+        "entries": dict(ordered),
+    }
+    temp = target.with_suffix(target.suffix + ".tmp")
+    temp.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+    temp.replace(target)
+    return payload
+
+
+def _new_semantic_publication_gate_report():
+    return {
+        "schema_version": SEMANTIC_GATE_REPORT_SCHEMA_VERSION,
+        "gate_version": SEMANTIC_PUBLICATION_GATE_VERSION,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "policy": {
+            "recent_window_days": SEMANTIC_GATE_RECENT_DAYS,
+            "max_candidates": SEMANTIC_GATE_MAX_CANDIDATES,
+            "min_same_event_confidence": SEMANTIC_GATE_MIN_CONFIDENCE,
+            "model": MODEL_SELECTION,
+            "failure_behavior": "hold_new_permalink_when_suspicious_candidate_exists",
+            "custom_articles": "excluded_authoritative_custom_contract_retained",
+        },
+        "summary": {
+            "evaluations": 0,
+            "candidate_pairs": 0,
+            "model_calls": 0,
+            "cache_hits": 0,
+            "no_candidate_passes": 0,
+            "duplicates_preserved": 0,
+            "canonical_updates_selected": 0,
+            "new_stories_allowed": 0,
+            "retroactive_rows_retained": 0,
+            "holds": 0,
+            "retroactive_redirects": 0,
+        },
+        "decisions": [],
+        "archive_repairs": [],
+    }
+
+
+def _semantic_gate_recent_archive_rows(incoming, archive):
+    incoming_dt = _cross_source_date_value(incoming) or datetime.now(timezone.utc).date()
+    incoming_date = incoming_dt.date() if isinstance(incoming_dt, datetime) else incoming_dt
+    rows = []
+    for row in archive or []:
+        if not isinstance(row, dict) or not row.get("slug"):
+            continue
+        if row.get("is_custom") or row.get("authoritative_custom"):
+            continue
+        if not _archive_entry_live_identity_safe(row):
+            continue
+        row_dt = _archive_record_datetime(row) or _slug_date(row.get("slug"))
+        if row_dt is None or incoming_date is None:
+            continue
+        try:
+            row_date = row_dt.date() if isinstance(row_dt, datetime) else row_dt
+            if abs((incoming_date - row_date).days) > SEMANTIC_GATE_RECENT_DAYS:
+                continue
+        except Exception:
+            continue
+        rows.append(row)
+    return rows
+
+
+def _semantic_gate_cached_decision_valid(decision, candidates):
+    if not isinstance(decision, dict):
+        return False
+    action = str(decision.get("action") or "")
+    if action not in {
+        SEMANTIC_ACTION_DUPLICATE,
+        SEMANTIC_ACTION_UPDATE,
+        SEMANTIC_ACTION_NEW,
+        SEMANTIC_ACTION_HOLD,
+    }:
+        return False
+    if action in {SEMANTIC_ACTION_DUPLICATE, SEMANTIC_ACTION_UPDATE}:
+        slugs = {str(row.get("slug") or "") for row in candidates}
+        return str(decision.get("selected_candidate_slug") or "") in slugs
+    return True
+
+
+def _run_semantic_publication_gate(
+    incoming,
+    archive,
+    cache,
+    report,
+    *,
+    phase="forward_publication",
+):
+    """Retrieve recent candidates, make one bounded model call, and audit it."""
+    incoming_payload = _semantic_gate_article_payload(incoming, include_archive_body=False)
+    recent_rows = _semantic_gate_recent_archive_rows(incoming, archive)
+    if retrieve_semantic_publication_candidates is None:
+        decision = {
+            "status": "gate_module_unavailable",
+            "action": SEMANTIC_ACTION_HOLD,
+            "selected_candidate_slug": "",
+            "same_real_world_event": False,
+            "material_new_update": False,
+            "confidence": 0.0,
+            "shared_anchors": [],
+            "novel_facts": [],
+            "reason": "Semantic publication gate module unavailable.",
+            "validation_errors": ["gate_module_unavailable"],
+        }
+        candidates = []
+    else:
+        stubs = [
+            _semantic_gate_article_payload(row, include_archive_body=False)
+            for row in recent_rows
+        ]
+        candidates = retrieve_semantic_publication_candidates(
+            incoming_payload,
+            stubs,
+            window_days=SEMANTIC_GATE_RECENT_DAYS,
+            max_candidates=SEMANTIC_GATE_MAX_CANDIDATES,
+        )
+        if not candidates:
+            decision = {
+                "status": "no_candidates",
+                "action": SEMANTIC_ACTION_NEW,
+                "selected_candidate_slug": "",
+                "same_real_world_event": False,
+                "material_new_update": False,
+                "confidence": 1.0,
+                "shared_anchors": [],
+                "novel_facts": [],
+                "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+                "validation_errors": [],
+            }
+        else:
+            rows_by_slug = {str(row.get("slug") or ""): row for row in recent_rows}
+            enriched = []
+            for candidate in candidates:
+                slug = str(candidate.get("slug") or "")
+                source_row = rows_by_slug.get(slug, {})
+                enriched.append({
+                    **candidate,
+                    "article": _semantic_gate_article_payload(
+                        source_row, include_archive_body=True
+                    ),
+                })
+            candidates = enriched
+            cache_key = (
+                semantic_publication_decision_cache_key(
+                    incoming_payload, candidates, model=MODEL_SELECTION
+                )
+                if semantic_publication_decision_cache_key is not None
+                else ""
+            )
+            cached = dict((cache or {}).get("entries", {}).get(cache_key, {}) or {})
+            cached_decision = cached.get("decision")
+            cache_hit = bool(
+                cache_key and _semantic_gate_cached_decision_valid(cached_decision, candidates)
+            )
+            if cache_hit:
+                decision = copy.deepcopy(cached_decision)
+                report["summary"]["cache_hits"] += 1
+            else:
+                report["summary"]["model_calls"] += 1
+                if adjudicate_semantic_publication_candidates is None:
+                    decision = {
+                        "status": "gate_adjudicator_unavailable",
+                        "action": SEMANTIC_ACTION_HOLD,
+                        "selected_candidate_slug": "",
+                        "same_real_world_event": False,
+                        "material_new_update": False,
+                        "confidence": 0.0,
+                        "shared_anchors": [],
+                        "novel_facts": [],
+                        "reason": "Semantic adjudicator unavailable; fail-closed hold.",
+                        "validation_errors": ["gate_adjudicator_unavailable"],
+                    }
+                else:
+                    decision = adjudicate_semantic_publication_candidates(
+                        client,
+                        model=MODEL_SELECTION,
+                        incoming=incoming_payload,
+                        candidates=candidates,
+                        timeout_seconds=SEMANTIC_GATE_TIMEOUT_SECONDS,
+                        min_confidence=SEMANTIC_GATE_MIN_CONFIDENCE,
+                    )
+                # Persist only completed, schema-valid adjudications. A timeout, API
+                # failure, unavailable client, or malformed model response must hold
+                # this run but remain retryable on the next production run.
+                if cache_key and str(decision.get("status") or "") == "validated":
+                    cache.setdefault("entries", {})[cache_key] = {
+                        "updated_at": datetime.now(timezone.utc).isoformat(),
+                        "decision": copy.deepcopy(decision),
+                    }
+
+    action = str(decision.get("action") or SEMANTIC_ACTION_HOLD)
+    summary = report["summary"]
+    summary["evaluations"] += 1
+    summary["candidate_pairs"] += len(candidates)
+    if not candidates:
+        summary["no_candidate_passes"] += 1
+    if action == SEMANTIC_ACTION_DUPLICATE:
+        summary["duplicates_preserved"] += 1
+    elif action == SEMANTIC_ACTION_UPDATE:
+        summary["canonical_updates_selected"] += 1
+    elif action == SEMANTIC_ACTION_NEW:
+        if phase == "forward_publication":
+            summary["new_stories_allowed"] += 1
+        else:
+            summary["retroactive_rows_retained"] += 1
+    else:
+        summary["holds"] += 1
+
+    selected_slug = str(decision.get("selected_candidate_slug") or "")
+    selected = next(
+        (
+            row for row in recent_rows
+            if str(row.get("slug") or "") == selected_slug
+        ),
+        None,
+    )
+    report["decisions"].append({
+        "phase": phase,
+        "incoming_headline": incoming_payload.get("headline", ""),
+        "incoming_source_url": incoming_payload.get("source_url", ""),
+        "incoming_story_id": str(
+            incoming.get("editorial_story_id")
+            or incoming.get("_editorial_story_id")
+            or ""
+        ),
+        "candidates": [
+            {
+                "slug": row.get("slug", ""),
+                "headline": row.get("headline", ""),
+                "retrieval_score": (row.get("evidence") or {}).get("retrieval_score", 0),
+                "headline_similarity": (
+                    (row.get("evidence") or {}).get("headline_similarity") or {}
+                ).get("score", 0),
+                "day_gap": (row.get("evidence") or {}).get("day_gap"),
+                "reasons": (row.get("evidence") or {}).get("reasons", []),
+            }
+            for row in candidates
+        ],
+        "decision": {
+            key: value
+            for key, value in decision.items()
+            if key != "raw_model_decision"
+        },
+    })
+    return decision, selected, candidates
+
+
+def _semantic_gate_identity_evidence(decision, candidates):
+    selected_slug = str(decision.get("selected_candidate_slug") or "")
+    selected_candidate = next(
+        (row for row in candidates if str(row.get("slug") or "") == selected_slug),
+        {},
+    )
+    retrieval = dict(selected_candidate.get("evidence") or {})
+    dimensions = ["claude_final_semantic_adjudication", "bounded_recent_candidate"]
+    for key, label in (
+        ("shared_locality", "shared_locality"),
+        ("shared_event_families", "shared_event_family"),
+        ("shared_people", "shared_named_people"),
+        ("shared_precise_locations", "shared_precise_location"),
+        ("shared_agencies", "shared_agency"),
+    ):
+        if retrieval.get(key):
+            dimensions.append(label)
+    if retrieval.get("exact_incident_anchor"):
+        dimensions.append("structured_incident_anchor")
+    return {
+        "matched": True,
+        "confidence": float(decision.get("confidence") or 0.0),
+        "confidence_semantics": "model_adjudicated_probability_with_bounded_candidate_retrieval",
+        "relationship": IDENTITY_OUTCOME_VERIFIED,
+        "identity_outcome": IDENTITY_OUTCOME_VERIFIED,
+        "evidence_tier": "model_adjudicated_identity",
+        "write_authorized": True,
+        "proof_type": "claude_final_semantic_publication_gate",
+        "reason": str(decision.get("reason") or "same_event_model_adjudication"),
+        "reason_codes": [
+            "bounded_recent_fuzzy_retrieval",
+            "claude_same_event_adjudication",
+            "target_bound_authorization",
+        ],
+        "evidence_dimensions": list(dict.fromkeys(dimensions)),
+        "shared_anchors": list(decision.get("shared_anchors") or []),
+        "novel_facts": list(decision.get("novel_facts") or []),
+        "decision_trace": [
+            f"semantic_gate_action={decision.get('action','')}",
+            f"selected_candidate_slug={selected_slug}",
+            f"model_confidence={float(decision.get('confidence') or 0.0):.3f}",
+            f"material_new_update={bool(decision.get('material_new_update'))}",
+            f"retrieval_score={retrieval.get('retrieval_score',0)}",
+            f"headline_similarity={(retrieval.get('headline_similarity') or {}).get('score',0)}",
+        ],
+    }
+
+
+def _apply_semantic_gate_update_identity(item, canonical, decision, candidates):
+    evidence = _semantic_gate_identity_evidence(decision, candidates)
+    if not _stamp_canonical_write_authorization(
+        item,
+        canonical,
+        evidence,
+        basis="semantic_final_publication_gate",
+    ):
+        return ""
+    incoming_story_id = str(
+        item.get("editorial_story_id") or item.get("_editorial_story_id") or ""
+    ).strip()
+    canonical_story_id = str(canonical.get("editorial_story_id") or "").strip()
+    if incoming_story_id and canonical_story_id and incoming_story_id != canonical_story_id:
+        item["_incoming_fragmented_story_id"] = incoming_story_id
+    if not canonical_story_id and incoming_story_id:
+        canonical_story_id = incoming_story_id
+        canonical["editorial_story_id"] = canonical_story_id
+        canonical["identity_origin"] = "semantic_final_publication_gate_backfill"
+    if canonical_story_id:
+        item["editorial_story_id"] = canonical_story_id
+        item["_editorial_story_id"] = canonical_story_id
+    item["_editorial_route"] = "update_existing"
+    item["editorial_route"] = "update_existing"
+    item["story_form"] = "update"
+    item["_editorial_relationship"] = IDENTITY_OUTCOME_VERIFIED
+    item["_editorial_relationship_confidence"] = float(
+        decision.get("confidence") or 0.0
+    )
+    item["_editorial_identity_origin"] = "semantic_final_publication_gate"
+    _record_cross_source_identity_observation(
+        item,
+        canonical,
+        evidence,
+        action="semantic_gate_update_existing_canonical",
+    )
+    return canonical_story_id
+
+
+def _repair_recent_semantic_archive_duplicates(
+    archive,
+    articles_dir,
+    output_root,
+    cache,
+    report,
+):
+    """Repair already-published recent duplicates only when no update is material.
+
+    A significant-update decision is reported but not rewritten retroactively from
+    rendered HTML. Forward publication will route future updates into the canonical.
+    """
+    archive = list(archive or [])
+    dated = [
+        (row, _archive_record_datetime(row) or _slug_date(row.get("slug")))
+        for row in archive
+        if isinstance(row, dict)
+        and row.get("slug")
+        and not (row.get("is_custom") or row.get("authoritative_custom"))
+        and _archive_entry_live_identity_safe(row)
+    ]
+    valid_dates = [dt for _, dt in dated if dt is not None]
+    if not valid_dates:
+        return archive, [], {"repaired_count": 0, "held_count": 0}
+    newest = max(valid_dates)
+    cutoff = newest - timedelta(days=SEMANTIC_GATE_RECENT_DAYS)
+    recent = [
+        row for row, dt in dated
+        if dt is not None and dt >= cutoff
+    ]
+    recent.sort(key=_publication_canonical_key)
+    survivors = []
+    removed = set()
+    redirects = []
+    held = []
+    for row in recent:
+        candidate_pool = [
+            prior for prior in survivors
+            if str(prior.get("slug") or "") not in removed
+        ]
+        decision, canonical, candidates = _run_semantic_publication_gate(
+            row,
+            candidate_pool,
+            cache,
+            report,
+            phase="retroactive_recent_archive_repair",
+        )
+        action = str(decision.get("action") or "")
+        if action == SEMANTIC_ACTION_DUPLICATE and isinstance(canonical, dict):
+            source_slug = str(row.get("slug") or "")
+            target_slug = str(canonical.get("slug") or "")
+            if source_slug and target_slug and source_slug != target_slug:
+                removed.add(source_slug)
+                _merge_category_memberships(
+                    canonical,
+                    row,
+                    canonical.get("category_key") or row.get("category_key") or "",
+                )
+                evidence = _semantic_gate_identity_evidence(decision, candidates)
+                redirects.append({
+                    "source_slug": source_slug,
+                    "source_headline": row.get("headline", ""),
+                    "target_slug": target_slug,
+                    "target_headline": canonical.get("headline", ""),
+                    "story_stage": "semantic-final-publication-gate-repair",
+                    "match_confidence": int(
+                        round(float(decision.get("confidence") or 0.0) * 100)
+                    ),
+                    "canonical_is_custom": False,
+                    "editorial_story_id": str(canonical.get("editorial_story_id") or ""),
+                    "reason": (
+                        "Claude final-gate adjudication confirmed the same recent "
+                        "real-world event with no material new update."
+                    ),
+                    "identity_evidence": evidence,
+                })
+                repair = {
+                    "source_slug": source_slug,
+                    "target_slug": target_slug,
+                    "source_headline": row.get("headline", ""),
+                    "target_headline": canonical.get("headline", ""),
+                    "confidence": decision.get("confidence", 0),
+                    "shared_anchors": decision.get("shared_anchors", []),
+                }
+                report["archive_repairs"].append(repair)
+                report["summary"]["retroactive_redirects"] += 1
+                continue
+        elif action in {SEMANTIC_ACTION_UPDATE, SEMANTIC_ACTION_HOLD} and candidates:
+            held.append({
+                "slug": row.get("slug", ""),
+                "headline": row.get("headline", ""),
+                "action": action,
+                "candidate_slug": (canonical or {}).get("slug", "") if isinstance(canonical, dict) else "",
+                "reason": decision.get("reason", ""),
+            })
+        survivors.append(row)
+
+    cleaned = [
+        row for row in archive
+        if str((row or {}).get("slug") or "") not in removed
+    ]
+    return cleaned, redirects, {
+        "repaired_count": len(redirects),
+        "held_count": len(held),
+        "held": held,
+    }
+
+
+def _write_semantic_publication_gate_report(report, output_root=None):
+    path = Path(output_root or OUTPUT_DIR) / "data" / "semantic-publication-gate.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    report["generated_at"] = datetime.now(timezone.utc).isoformat()
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    return report
+
+
 def _cross_source_candidate_keys(features):
     """Return high-signal blocking keys used before expensive pair evaluation."""
     if not isinstance(features, dict):
@@ -19698,6 +20304,8 @@ def write_archives(all_categories, top_cat):
         "custom_payloads_verified": 0,
         "legacy_archive_scope_days": FORWARD_IDENTITY_RECENT_DAYS,
     }
+    _semantic_gate_cache = _load_semantic_publication_gate_cache()
+    _semantic_gate_report = _new_semantic_publication_gate_report()
 
     # Canonical cleanup is handled below. Never unlink an already-published
     # duplicate URL: it is retained as a redirect destination so readers and search
@@ -19738,6 +20346,19 @@ def write_archives(all_categories, top_cat):
     _canonical_redirects.extend(_exact_headline_redirects)
     _forward_identity_report["exact_headline_incident_repairs"] = (
         _exact_headline_repair_report
+    )
+    archive, _semantic_archive_redirects, _semantic_archive_repair_report = (
+        _repair_recent_semantic_archive_duplicates(
+            archive,
+            articles_dir,
+            OUTPUT_DIR,
+            _semantic_gate_cache,
+            _semantic_gate_report,
+        )
+    )
+    _canonical_redirects.extend(_semantic_archive_redirects)
+    _forward_identity_report["semantic_archive_repairs"] = (
+        _semantic_archive_repair_report
     )
 
     # Bridge the persistent editorial registry into the permalink writer. Raw source
@@ -20199,11 +20820,15 @@ def write_archives(all_categories, top_cat):
                     "action": "reuse_existing_canonical_before_slug_creation",
                 })
 
-        # FINAL-COPY DUPLICATE BARRIER. Source snapshots can be sparse or wrong
-        # even when the generated article contains the person's name and exact streets.
-        # An exact TCT headline retrieves the established page, but consolidation still
-        # requires locality, event family, bounded time and incident-level proof.
-        if existing is None and not (hero.get("is_custom") or hero.get("authoritative_custom")):
+        # FINAL-COPY DUPLICATE BARRIER. Deterministic exact identity remains the
+        # cheapest authority. If it cannot resolve the final copy, a bounded seven-day
+        # fuzzy retrieval nominates only a few candidates and Claude decides whether
+        # the article is a duplicate, a material update, or a genuinely new story.
+        if existing is None and not (
+            hero.get("is_custom")
+            or hero.get("authoritative_custom")
+            or hero.get("is_weather_alert")
+        ):
             _headline_reconciliation = _find_exact_headline_archive_reconciliation(
                 hero, archive
             )
@@ -20238,32 +20863,123 @@ def write_archives(all_categories, top_cat):
                     f"'{_headline_canonical.get('slug','')}' for '{headline[:60]}'"
                 )
                 continue
+
+            _semantic_decision, _semantic_canonical, _semantic_candidates = (
+                _run_semantic_publication_gate(
+                    hero,
+                    archive,
+                    _semantic_gate_cache,
+                    _semantic_gate_report,
+                    phase="forward_publication",
+                )
+            )
+            _semantic_action = str(
+                _semantic_decision.get("action") or SEMANTIC_ACTION_HOLD
+            )
             if _headline_reconciliation.get("status") == "hold":
-                _candidate_slugs = [
-                    row.get("slug", "")
-                    for row in _headline_reconciliation.get("candidates", [])
-                ]
                 _forward_identity_report["exact_headline_reconciliations"].append({
                     "headline": headline,
-                    "candidate_slugs": _candidate_slugs,
-                    "status": "held",
+                    "candidate_slugs": [
+                        row.get("slug", "")
+                        for row in _headline_reconciliation.get("candidates", [])
+                    ],
+                    "status": "deferred_to_semantic_final_gate",
                     "reason": _headline_reconciliation.get("reason", ""),
+                    "semantic_action": _semantic_action,
                 })
+
+            if (
+                _semantic_action == SEMANTIC_ACTION_DUPLICATE
+                and isinstance(_semantic_canonical, dict)
+            ):
+                _semantic_evidence = _semantic_gate_identity_evidence(
+                    _semantic_decision, _semantic_candidates
+                )
+                _bind_live_item_to_archive(
+                    hero,
+                    _semantic_canonical,
+                    current_customs=_current_customs,
+                    replace_with_custom=False,
+                )
+                _record_cross_source_identity_observation(
+                    hero,
+                    _semantic_canonical,
+                    _semantic_evidence,
+                    action="preserve_existing_page_semantic_duplicate",
+                )
+                _forward_identity_report["existing_articles_preserved"] += 1
+                _forward_identity_report.setdefault(
+                    "semantic_publication_gate", []
+                ).append({
+                    "headline": headline,
+                    "canonical_slug": _semantic_canonical.get("slug", ""),
+                    "action": SEMANTIC_ACTION_DUPLICATE,
+                    "confidence": _semantic_decision.get("confidence", 0),
+                    "shared_anchors": _semantic_decision.get("shared_anchors", []),
+                })
+                hero["_publication_skip_reason"] = (
+                    "semantic_duplicate_existing_page_preserved"
+                )
+                print(
+                    "  SEMANTIC DUPLICATE LOCK: preserved "
+                    f"'{_semantic_canonical.get('slug','')}' for '{headline[:60]}'"
+                )
+                continue
+
+            if (
+                _semantic_action == SEMANTIC_ACTION_UPDATE
+                and isinstance(_semantic_canonical, dict)
+            ):
+                existing = _semantic_canonical
+                _editorial_story_id = _apply_semantic_gate_update_identity(
+                    hero,
+                    existing,
+                    _semantic_decision,
+                    _semantic_candidates,
+                ) or str(existing.get("editorial_story_id") or _editorial_story_id or "")
+                _target_basis = "semantic_final_publication_gate"
+                hero["canonical_slug"] = existing.get("slug", "")
+                hero["canonical_publication_id"] = _stable_publication_id(
+                    existing.get("slug", "")
+                )
+                _forward_identity_report.setdefault(
+                    "semantic_publication_gate", []
+                ).append({
+                    "headline": headline,
+                    "canonical_slug": existing.get("slug", ""),
+                    "action": SEMANTIC_ACTION_UPDATE,
+                    "confidence": _semantic_decision.get("confidence", 0),
+                    "shared_anchors": _semantic_decision.get("shared_anchors", []),
+                    "novel_facts": _semantic_decision.get("novel_facts", []),
+                })
+                print(
+                    "  SEMANTIC UPDATE ROUTE: reusing "
+                    f"'{existing.get('slug','')}' for '{headline[:60]}'"
+                )
+
+            elif _semantic_action == SEMANTIC_ACTION_HOLD:
+                _candidate_slugs = [
+                    row.get("slug", "") for row in _semantic_candidates
+                ]
                 _forward_identity_report["publication_holds"].append({
                     "headline": headline,
                     "source_url": normalized_source_url,
                     "candidate_slugs": _candidate_slugs,
-                    "reason": _headline_reconciliation.get("reason", ""),
-                    "action": "hold_new_permalink_exact_headline_identity_unresolved",
+                    "reason": _semantic_decision.get("reason", ""),
+                    "validation_errors": _semantic_decision.get(
+                        "validation_errors", []
+                    ),
+                    "action": "hold_new_permalink_semantic_identity_unresolved",
                 })
                 hero["_publication_skip_reason"] = (
-                    "exact_headline_identity_unresolved_hold"
+                    "semantic_identity_unresolved_hold"
                 )
                 print(
-                    "  EXACT HEADLINE HOLD: no new permalink for "
-                    f"'{headline[:60]}' because incident identity was unresolved"
+                    "  SEMANTIC IDENTITY HOLD: no new permalink for "
+                    f"'{headline[:60]}' because recent-story identity was unresolved"
                 )
                 continue
+
 
         if (
             existing
@@ -20637,6 +21353,11 @@ def write_archives(all_categories, top_cat):
     )
     validate_archive_incident_uniqueness(archive, OUTPUT_DIR)
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
+    _save_semantic_publication_gate_cache(_semantic_gate_cache)
+    _write_semantic_publication_gate_report(_semantic_gate_report, OUTPUT_DIR)
+    _forward_identity_report["semantic_publication_gate_summary"] = copy.deepcopy(
+        _semantic_gate_report.get("summary", {})
+    )
     _forward_identity_report.update({
         "archive_identity": _archive_identity_backfill,
         "active_archive_records": len(archive),
@@ -20651,6 +21372,9 @@ def write_archives(all_categories, top_cat):
     _publication_report.update({
         "archive_identity_backfill": _archive_identity_backfill,
         "forward_publication_identity": _forward_identity_report,
+        "semantic_publication_gate": copy.deepcopy(
+            _semantic_gate_report.get("summary", {})
+        ),
         "generated_items_coalesced": _publication_items_coalesced,
         "redirects_created": len(_publication_redirects),
         "active_archive_records": len(archive),

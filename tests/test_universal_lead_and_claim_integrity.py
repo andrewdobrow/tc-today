@@ -426,7 +426,7 @@ def test_release_versions_and_reports_are_bumped():
         "v1.11.8.8-universal-lead-claim-integrity"
     )
     assert g.CATEGORY_GENERATION_REPORT_SCHEMA_VERSION == 6
-    assert g.FORWARD_IDENTITY_VERSION == "1.6"
+    assert g.FORWARD_IDENTITY_VERSION == "1.7"
     version = tuple(int(part) for part in observability.ENGINE_VERSION.split("."))
     assert version >= (1, 11, 8, 8)
     assert observability.OBSERVABILITY_SCHEMA_VERSION >= 17

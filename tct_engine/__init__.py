@@ -121,6 +121,20 @@ from .publication_identity import (
     PublicationIdentityIndex,
     build_publication_identity_index,
 )
+from .semantic_publication_gate import (
+    ACTION_DUPLICATE as SEMANTIC_ACTION_DUPLICATE,
+    ACTION_HOLD as SEMANTIC_ACTION_HOLD,
+    ACTION_NEW as SEMANTIC_ACTION_NEW,
+    ACTION_UPDATE as SEMANTIC_ACTION_UPDATE,
+    DEFAULT_MAX_CANDIDATES as SEMANTIC_GATE_DEFAULT_MAX_CANDIDATES,
+    DEFAULT_MIN_CONFIDENCE as SEMANTIC_GATE_DEFAULT_MIN_CONFIDENCE,
+    DEFAULT_RECENT_WINDOW_DAYS as SEMANTIC_GATE_DEFAULT_RECENT_WINDOW_DAYS,
+    SEMANTIC_PUBLICATION_GATE_VERSION,
+    adjudicate_candidates as adjudicate_semantic_publication_candidates,
+    decision_cache_key as semantic_publication_decision_cache_key,
+    headline_similarity as semantic_headline_similarity,
+    retrieve_recent_candidates as retrieve_semantic_publication_candidates,
+)
 from .ranking_recommendations import (
     RANKING_MODE,
     RANKING_RECOMMENDATION_VERSION,
@@ -255,6 +269,18 @@ __all__ = [
     "PUBLICATION_IDENTITY_VERSION",
     "PublicationIdentityIndex",
     "build_publication_identity_index",
+    "SEMANTIC_PUBLICATION_GATE_VERSION",
+    "SEMANTIC_ACTION_DUPLICATE",
+    "SEMANTIC_ACTION_HOLD",
+    "SEMANTIC_ACTION_NEW",
+    "SEMANTIC_ACTION_UPDATE",
+    "SEMANTIC_GATE_DEFAULT_MAX_CANDIDATES",
+    "SEMANTIC_GATE_DEFAULT_MIN_CONFIDENCE",
+    "SEMANTIC_GATE_DEFAULT_RECENT_WINDOW_DAYS",
+    "adjudicate_semantic_publication_candidates",
+    "semantic_publication_decision_cache_key",
+    "semantic_headline_similarity",
+    "retrieve_semantic_publication_candidates",
 ]
 
-__version__ = "1.12.0.2"
+__version__ = "1.12.2.0"

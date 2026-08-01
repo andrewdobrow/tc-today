@@ -4,15 +4,15 @@ from pathlib import Path
 def test_current_release_metadata_is_synchronized():
     import tct_engine.observability as observability
 
-    assert observability.ENGINE_VERSION == "1.12.1.4"
-    assert observability.ENGINE_RELEASE == "newsletter-responsive-presentation"
-    assert observability.OBSERVABILITY_SCHEMA_VERSION == 30
+    assert observability.ENGINE_VERSION == "1.12.2.0"
+    assert observability.ENGINE_RELEASE == "semantic-final-publication-gate"
+    assert observability.OBSERVABILITY_SCHEMA_VERSION == 31
 
 
 def test_current_release_artifacts_are_present():
     root = Path(__file__).resolve().parents[1]
-    assert (root / "PATCH_NOTES_v1.12.1.4.md").exists()
+    assert (root / "PATCH_NOTES_v1.12.2.0.md").exists()
     assert (
         root
-        / "NEWSLETTER_RESPONSIVE_PRESENTATION_REVIEW_GUIDE_v1.12.1.4.md"
+        / "SEMANTIC_FINAL_PUBLICATION_GATE_REVIEW_GUIDE_v1.12.2.0.md"
     ).exists()
