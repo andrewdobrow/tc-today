@@ -164,6 +164,53 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+// -- RESPONSIVE KIT NEWSLETTER PRESENTATION --
+// Use the compact sticky signup only on desktop. Mobile receives Kit's modal
+// form instead, preventing a fixed signup bar from competing with the masthead.
+(() => {
+  const mobileQuery = window.matchMedia("(max-width: 680px)");
+  const embeds = {
+    desktop: {
+      uid: "4edef44197",
+      src: "https://treasure-coast-today.kit.com/4edef44197/index.js",
+      mode: "desktop-sticky"
+    },
+    mobile: {
+      uid: "be625cadfe",
+      src: "https://treasure-coast-today.kit.com/be625cadfe/index.js",
+      mode: "mobile-modal"
+    }
+  };
+  const initialMobileState = mobileQuery.matches;
+
+  function loadResponsiveKitForm() {
+    const config = mobileQuery.matches ? embeds.mobile : embeds.desktop;
+    if (document.querySelector(`script[data-uid="${config.uid}"]`)) return;
+
+    const script = document.createElement("script");
+    script.async = true;
+    script.dataset.uid = config.uid;
+    script.dataset.tctNewsletterMode = config.mode;
+    script.src = config.src;
+    document.body.appendChild(script);
+  }
+
+  // Defer one task so any legacy footer embed already in the parsed page can
+  // be detected rather than duplicated. Newly generated pages contain no
+  // hard-coded sticky or modal script.
+  window.setTimeout(loadResponsiveKitForm, 0);
+
+  const handleBreakpointChange = event => {
+    if (event.matches !== initialMobileState) window.location.reload();
+  };
+  if (mobileQuery.addEventListener) {
+    mobileQuery.addEventListener("change", handleBreakpointChange);
+  } else if (mobileQuery.addListener) {
+    mobileQuery.addListener(handleBreakpointChange);
+  }
+})();
+
+
 // -- KIT STICKY BAR LAYERING --
 // Kit injects the sticky form asynchronously and may wrap it in one or more
 // positioned containers. Promote the actual top-level Kit container above the
@@ -316,6 +363,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function syncStickyBarLayer() {
     rafId = 0;
+
+    // The sticky presentation is desktop-only. On mobile, Kit's separate
+    // modal embed owns newsletter acquisition and the masthead must retain
+    // its normal top position.
+    if (mobileQuery.matches) {
+      if (resizeObserver) resizeObserver.disconnect();
+      observedTarget = null;
+      clearPromotedLayer();
+      root.classList.remove("kit-sticky-visible");
+      root.style.setProperty("--kit-sticky-height", "0px");
+      return;
+    }
+
     const form = findStickyForm();
 
     if (form !== observedTarget) {

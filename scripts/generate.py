@@ -14386,8 +14386,7 @@ def _page_footer():
     </div>
     <div class="footer-bottom">© 2026 Treasure Coast Today. All rights reserved.</div>
   </footer>
-  <script src="/main.js"></script>
-  <script async data-uid="4edef44197" src="https://treasure-coast-today.kit.com/4edef44197/index.js"></script>"""
+  <script src="/main.js"></script>"""
 
 
 def render_author_page():

@@ -4206,3 +4206,50 @@ html.kit-sticky-visible .article-reading-progress {
   clip: auto !important;
   z-index: 2147483001 !important;
 }
+
+/* ============================================================
+   TCT v1.12.1.4 — responsive newsletter presentation
+   Desktop keeps Kit's sticky bar. Mobile suppresses every sticky wrapper and
+   uses the dedicated Kit modal so the masthead remains fully visible.
+   ============================================================ */
+@media (max-width: 680px) {
+  .formkit-sticky-bar,
+  .formkit-form[data-format="sticky bar"],
+  body > .tct-kit-sticky-layer,
+  .tct-kit-sticky-layer,
+  .tct-kit-sticky-shell,
+  .tct-kit-sticky-form {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  html.kit-sticky-visible body {
+    padding-top: 0 !important;
+  }
+
+  html.kit-sticky-visible body > header,
+  html.kit-sticky-visible header,
+  html.kit-sticky-visible .article-reading-progress {
+    top: 0 !important;
+  }
+
+  .formkit-modal,
+  .formkit-overlay,
+  .formkit-form[data-format="modal"] {
+    z-index: 2147483000 !important;
+  }
+
+  .formkit-modal .formkit-form,
+  .formkit-overlay .formkit-form,
+  .formkit-form[data-format="modal"] {
+    width: calc(100vw - 28px) !important;
+    max-width: 520px !important;
+    max-height: calc(100dvh - 32px) !important;
+    margin: 16px auto !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+  }
+}

@@ -28,18 +28,33 @@ def test_desktop_latest_rail_stretches_beside_hero_and_newsletter_stack():
     assert "overflow-y: auto !important" in css
 
 
-def test_sticky_bar_promotes_outermost_kit_wrapper_above_masthead():
+def test_desktop_sticky_bar_promotes_outermost_kit_wrapper_above_masthead():
     css = _read("style.css")
     assert "body > .tct-kit-sticky-layer" in css
     assert "z-index: 2147483000 !important" in css
     assert ".tct-kit-sticky-form" in css
-    assert "max-height: 58px !important" in css
-    assert "grid-template-columns: minmax(0, 1fr) auto !important" in css
+    assert "max-height: 72px !important" in css
+    assert "@media (min-width: 681px)" in css
+
+
+def test_mobile_hides_sticky_wrappers_and_bounds_modal_to_viewport():
+    css = _read("style.css")
+    responsive = css.index("TCT v1.12.1.4 — responsive newsletter presentation")
+    tail = css[responsive:]
+    assert '@media (max-width: 680px)' in tail
+    assert '.formkit-form[data-format="sticky bar"]' in tail
+    assert 'display: none !important' in tail
+    assert 'html.kit-sticky-visible body' in tail
+    assert 'padding-top: 0 !important' in tail
+    assert '.formkit-form[data-format="modal"]' in tail
+    assert 'max-height: calc(100dvh - 32px) !important' in tail
 
 
 def test_sticky_bar_runtime_promotes_top_level_layer_and_reserves_space():
     js = _read("main.js")
     assert "function findTopLevelLayer(node)" in js
+    assert "if (mobileQuery.matches)" in js
+    assert 'root.style.setProperty("--kit-sticky-height", "0px")' in js
     assert 'layer.parentElement !== document.body' in js
     assert 'layer.classList.add("tct-kit-sticky-layer")' in js
     assert 'shell.classList.add("tct-kit-sticky-shell")' in js

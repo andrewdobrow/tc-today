@@ -46,8 +46,11 @@ def test_inline_form_is_rendered_beneath_hero_inside_lead_stack():
 
 def test_inline_and_sticky_kit_forms_use_distinct_uids():
     source = _source()
+    runtime = (Path(__file__).resolve().parents[1] / "main.js").read_text(
+        encoding="utf-8"
+    )
     assert KIT_INLINE_FORM_UID != KIT_STICKY_FORM_UID
-    assert KIT_STICKY_FORM_UID in source
+    assert KIT_STICKY_FORM_UID in runtime
     assert KIT_INLINE_FORM_UID in source
 
 
