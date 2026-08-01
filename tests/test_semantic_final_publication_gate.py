@@ -980,3 +980,140 @@ def test_pending_registry_directive_retries_from_prior_report(tmp_path):
 
     assert result["story_records_merged"] == 1
     assert payload["story_aliases"]["story_001684"] == "story_001557"
+
+
+SHARK_CANONICAL_SLUG = (
+    "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-"
+    "fishing-rules-after-public-bea"
+)
+SHARK_CANONICAL_HEADLINE = (
+    "Martin County moves to rewrite shark fishing rules after complaints "
+    "about drones, chum"
+)
+SHARK_MEETING_SLUG = (
+    "2026-07-30-martin-county-commissioners-face-pushback-on-proposed-"
+    "changes-to-beach-shark-fis"
+)
+SHARK_MEETING_HEADLINE = (
+    "Martin County commissioners face pushback on proposed changes to "
+    "beach shark fishing rules"
+)
+SHARK_INCOMING_HEADLINE = (
+    "Martin County reviews shark fishing ordinance after state says local "
+    "rules must comply"
+)
+SHARK_BODY = (
+    "Martin County commissioners are reviewing the county's shark fishing "
+    "ordinance after concerns about chumming, drones, remote-controlled boats, "
+    "and swimmers at public beaches. The discussion concerns whether local "
+    "rules comply with Florida law and what changes commissioners may adopt."
+)
+
+
+def _shark_policy_article(slug: str, headline: str, date: str, key: str):
+    return {
+        "slug": slug,
+        "headline": headline,
+        "source_headline": headline,
+        "published_at": date,
+        "date": date,
+        "body": SHARK_BODY,
+        "teaser": SHARK_BODY,
+        "source_url": f"https://example.com/{slug}",
+        "locality": ["martin-county"],
+        "event_families": ["public-policy"],
+        "people": [],
+        "precise_locations": [],
+        "agencies": ["martin-county-commission"],
+        "incident_anchor": "",
+        "known_event_key": key,
+    }
+
+
+def test_shark_fishing_ordinance_pair_reaches_claude_despite_policy_wording_shift():
+    canonical = _shark_policy_article(
+        SHARK_CANONICAL_SLUG,
+        SHARK_CANONICAL_HEADLINE,
+        "2026-07-29",
+        "unknown-event-fa0b950da1",
+    )
+    incoming = _shark_policy_article(
+        "",
+        SHARK_INCOMING_HEADLINE,
+        "2026-08-01",
+        "unknown-event-new-shark-ordinance",
+    )
+
+    candidates = retrieve_recent_candidates(
+        incoming, [canonical], window_days=7, max_candidates=4
+    )
+
+    assert [candidate["slug"] for candidate in candidates] == [
+        SHARK_CANONICAL_SLUG
+    ]
+    evidence = candidates[0]["evidence"]
+    assert evidence["known_event_key_conflict"] is True
+    assert evidence["structured_conflict_override"] is True
+    assert evidence["structured_conflict_override_tier"] == (
+        "policy_subject_continuity"
+    )
+    assert evidence["headline_similarity"]["score"] >= 0.56
+    assert evidence["headline_similarity"]["shared_token_count"] >= 6
+    assert {"shark", "fishing", "regulation"}.issubset(
+        set(evidence["shared_topic_tokens"])
+    )
+    assert (
+        "structured_identity_conflict_overridden_by_policy_subject"
+        in evidence["reasons"]
+    )
+
+
+def test_prior_shark_fishing_meeting_story_also_reaches_same_policy_candidate():
+    canonical = _shark_policy_article(
+        SHARK_CANONICAL_SLUG,
+        SHARK_CANONICAL_HEADLINE,
+        "2026-07-29",
+        "unknown-event-fa0b950da1",
+    )
+    meeting = _shark_policy_article(
+        SHARK_MEETING_SLUG,
+        SHARK_MEETING_HEADLINE,
+        "2026-07-30",
+        "unknown-event-677948c83e",
+    )
+
+    candidates = retrieve_recent_candidates(
+        meeting, [canonical], window_days=7, max_candidates=4
+    )
+
+    assert [candidate["slug"] for candidate in candidates] == [
+        SHARK_CANONICAL_SLUG
+    ]
+    assert candidates[0]["evidence"]["structured_conflict_override_tier"] == (
+        "policy_subject_continuity"
+    )
+
+
+def test_policy_subject_override_does_not_match_different_martin_county_ordinance():
+    canonical = _shark_policy_article(
+        SHARK_CANONICAL_SLUG,
+        SHARK_CANONICAL_HEADLINE,
+        "2026-07-29",
+        "unknown-event-fa0b950da1",
+    )
+    unrelated = _shark_policy_article(
+        "",
+        "Martin County reviews noise ordinance after state says local rules must change",
+        "2026-08-01",
+        "unknown-event-noise-ordinance",
+    )
+    unrelated["body"] = (
+        "Martin County is reviewing residential noise limits and enforcement hours."
+    )
+    unrelated["teaser"] = unrelated["body"]
+
+    candidates = retrieve_recent_candidates(
+        unrelated, [canonical], window_days=7, max_candidates=4
+    )
+
+    assert candidates == []

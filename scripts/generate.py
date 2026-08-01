@@ -16977,6 +16977,17 @@ def _new_semantic_publication_gate_report():
                         "minimum_headline_similarity": 0.56,
                         "minimum_shared_headline_tokens": 8,
                     },
+                    {
+                        "name": "policy_subject_continuity",
+                        "minimum_headline_similarity": 0.56,
+                        "minimum_shared_headline_tokens": 6,
+                        "requires": [
+                            "shared_locality",
+                            "shared_public_policy_event_family",
+                            "shared_regulation_concept",
+                            "two_additional_shared_subject_tokens",
+                        ],
+                    },
                 ],
                 "effect": "candidate_only_model_adjudication_required",
             },
@@ -17204,6 +17215,15 @@ def _run_semantic_publication_gate(
                 "headline_similarity": (
                     (row.get("evidence") or {}).get("headline_similarity") or {}
                 ).get("score", 0),
+                "similarity_basis": str(
+                    (row.get("evidence") or {}).get("similarity_basis") or ""
+                ),
+                "shared_headline_tokens": list(
+                    (row.get("evidence") or {}).get("shared_headline_tokens") or []
+                ),
+                "shared_topic_tokens": list(
+                    (row.get("evidence") or {}).get("shared_topic_tokens") or []
+                ),
                 "day_gap": (row.get("evidence") or {}).get("day_gap"),
                 "structured_conflict_override": bool(
                     (row.get("evidence") or {}).get("structured_conflict_override")

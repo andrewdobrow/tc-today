@@ -23,7 +23,7 @@ from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from typing import Any, Iterable, Mapping, Sequence
 
-SEMANTIC_PUBLICATION_GATE_VERSION = "1.2"
+SEMANTIC_PUBLICATION_GATE_VERSION = "1.3"
 SEMANTIC_PUBLICATION_GATE_PROMPT_VERSION = "1.0"
 DEFAULT_RECENT_WINDOW_DAYS = 7
 DEFAULT_MAX_CANDIDATES = 4
@@ -54,7 +54,34 @@ _TOKEN_CANONICAL = {
     "votes": "vote", "voted": "vote", "voting": "vote",
     "resigned": "resign", "resigns": "resign", "resigning": "resign",
     "left": "leave", "leaves": "leave", "leaving": "leave",
+    # Public-policy outlets frequently alternate among rule, law, and ordinance
+    # while describing the same local action. Normalize those surface forms so
+    # the semantic gate can nominate the pair for Claude without treating the
+    # normalization itself as proof of identity.
+    "rule": "regulation", "rules": "regulation",
+    "law": "regulation", "laws": "regulation",
+    "ordinance": "regulation", "ordinances": "regulation",
+    "fishes": "fishing", "fished": "fishing",
+    "move": "revise", "moves": "revise", "moved": "revise",
+    "rewrite": "revise", "rewrites": "revise", "rewriting": "revise",
+    "review": "revise", "reviews": "revise", "reviewed": "revise",
+    "reviewing": "revise",
+    "change": "revise", "changes": "revise", "changed": "revise",
+    "changing": "revise",
+    "revise": "revise", "revises": "revise", "revised": "revise",
+    "revising": "revise",
+    "commissioner": "commission", "commissioners": "commission",
 }
+
+# These tokens are useful context but are too generic to establish that two
+# public-policy headlines concern the same regulated subject. The policy-subject
+# override below requires at least three shared topical tokens after removing
+# this context vocabulary.
+_GENERIC_CANDIDATE_CONTEXT_TOKENS = frozenset({
+    "city", "county", "commission", "council", "board", "local", "state",
+    "florida", "martin", "lucie", "indian", "river", "vero", "port",
+    "st", "beach", "revise", "propose", "approve", "vote", "says", "must",
+})
 
 
 def _clean_text(value: object) -> str:
@@ -216,7 +243,18 @@ def candidate_evidence(
     )
     if source_generic:
         source_similarity = {**source_similarity, "score": 0.0}
-    similarity = final_similarity if final_similarity["score"] >= source_similarity["score"] else source_similarity
+    if final_similarity["score"] >= source_similarity["score"]:
+        similarity = final_similarity
+        similarity_basis = "final_headline"
+        left_similarity_tokens = set(headline_tokens(incoming_headline))
+        right_similarity_tokens = set(headline_tokens(candidate_headline))
+    else:
+        similarity = source_similarity
+        similarity_basis = "source_headline"
+        left_similarity_tokens = set(headline_tokens(incoming_source_headline))
+        right_similarity_tokens = set(headline_tokens(candidate_source_headline))
+    shared_headline_tokens = left_similarity_tokens & right_similarity_tokens
+    shared_topic_tokens = shared_headline_tokens - _GENERIC_CANDIDATE_CONTEXT_TOKENS
     features = _shared_feature_evidence(incoming, candidate)
     incoming_dt = _article_datetime(incoming)
     candidate_dt = _article_datetime(candidate)
@@ -271,9 +309,27 @@ def candidate_evidence(
         # Some publishers describe the same incident from different narrative
         # angles, which lowers the aggregate fuzzy score even when the pair
         # shares a highly distinctive bundle of actors, action, place, and
-        # outcome.  This lower-score path requires more shared canonical tokens
+        # outcome. This lower-score path requires more shared canonical tokens
         # and still only nominates the pair for Claude adjudication.
         conflict_override_tier = "distinctive_token_overlap"
+    elif (
+        conflict
+        and similarity["score"] >= 0.56
+        and shared_count >= 6
+        and context_compatible
+        and any(
+            "policy" in family or "regulat" in family or "government" in family
+            for family in features["shared_event_families"]
+        )
+        and "regulation" in shared_topic_tokens
+        and len(shared_topic_tokens - {"regulation"}) >= 2
+    ):
+        # Policy coverage often changes vocabulary across outlets: rules, laws,
+        # and ordinances may all describe one proceeding, while rewrite, review,
+        # and change describe the same action. Require a shared locality/event
+        # family plus the regulation concept and two additional subject tokens.
+        # This only lets Claude see the pair; it never merges automatically.
+        conflict_override_tier = "policy_subject_continuity"
     strong_conflict_override = bool(conflict_override_tier)
 
     similarity_gate = bool(
@@ -305,6 +361,8 @@ def candidate_evidence(
         reasons.append("structured_identity_conflict_overridden_by_strong_headline")
     elif conflict_override_tier == "distinctive_token_overlap":
         reasons.append("structured_identity_conflict_overridden_by_distinctive_overlap")
+    elif conflict_override_tier == "policy_subject_continuity":
+        reasons.append("structured_identity_conflict_overridden_by_policy_subject")
     if not time_safe:
         reasons.append("outside_recent_window")
 
@@ -314,6 +372,9 @@ def candidate_evidence(
         "structured_conflict_override_tier": conflict_override_tier,
         "retrieval_score": round(score, 4),
         "headline_similarity": similarity,
+        "similarity_basis": similarity_basis,
+        "shared_headline_tokens": sorted(shared_headline_tokens),
+        "shared_topic_tokens": sorted(shared_topic_tokens),
         "final_headline_similarity": final_similarity,
         "source_headline_similarity": source_similarity,
         "day_gap": day_gap,
