@@ -1,13 +1,13 @@
 {
-  "schema_version": 21,
+  "schema_version": 24,
   "engine": {
     "name": "tct-editorial-engine",
-    "version": "1.12.0.7",
-    "release": "event-identity-authority-boundary",
+    "version": "1.12.0.8.3",
+    "release": "explicit-custom-slug-integrity",
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-01T01:47:54Z",
+  "generated_at": "2026-08-01T04:09:55Z",
   "mode": "enforce",
   "publication_behavior_changed": true,
   "activation": {
@@ -19,12 +19,12 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 2,
-    "enforceable_recommendation_count": 2,
-    "applied_action_count": 2,
+    "recommendation_count": 3,
+    "enforceable_recommendation_count": 3,
+    "applied_action_count": 3,
     "circuit_breaker_tripped": false,
-    "placements_before": 6,
-    "placements_after": 4,
+    "placements_before": 9,
+    "placements_after": 6,
     "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
     "recommendations": [
@@ -46,6 +46,25 @@
         "reason": "Same story and safe normalized stage 'sentencing' at 98% confidence.",
         "category": "crime",
         "placement": "hero"
+      },
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
+        "headline": "King's Landing development in Fort Pierce nears completion of first luxury villas",
+        "source_title_key": "king s landing development in fort pierce nears completion of first luxury villas",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-2029-about-advancing-afterwards-agreement-492d833b",
+        "canonical_is_custom": false,
+        "canonical_title": "King's Landing development in Fort Pierce nears completion with luxury villas, Marriott Hotel by 2029",
+        "canonical_source": "",
+        "canonical_url": "https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
+        "reason": "Same story and safe normalized stage 'approved-or-enacted' at 98% confidence.",
+        "category": "st_lucie",
+        "placement": "card"
       },
       {
         "action": "suppress_duplicate",
@@ -88,7 +107,7 @@
         "placement": "hero",
         "slug": "",
         "source_title": "Los Angeles man sentenced to life in prison for fentanyl sale that killed Vero Beach resident",
-        "date": "12:13 PM ET",
+        "date": "Yesterday, 12:13 PM ET",
         "category_key": "crime",
         "is_custom": false,
         "story_stage": "sentencing",
@@ -100,6 +119,41 @@
         "matched_prior_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
         "matched_prior_source": "",
         "matched_prior_source_url": "https://treasurecoast.today/articles/2026-07-31-los-angeles-man-sentenced-to-life-in-prison-for-selling-fentanyl-that-killed-ver.html",
+        "matched_prior_is_custom": false,
+        "activation_managed": true
+      },
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
+        "headline": "King's Landing development in Fort Pierce nears completion of first luxury villas",
+        "source_title_key": "king s landing development in fort pierce nears completion of first luxury villas",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-2029-about-advancing-afterwards-agreement-492d833b",
+        "canonical_is_custom": false,
+        "canonical_title": "King's Landing development in Fort Pierce nears completion with luxury villas, Marriott Hotel by 2029",
+        "canonical_source": "",
+        "canonical_url": "https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
+        "reason": "Same story and safe normalized stage 'approved-or-enacted' at 98% confidence.",
+        "category": "st_lucie",
+        "placement": "card",
+        "slug": "",
+        "source_title": "King's Landing development in Fort Pierce nears completion of first luxury villas",
+        "date": "Yesterday, 6:04 PM ET",
+        "category_key": "st_lucie",
+        "is_custom": false,
+        "story_stage": "approved-or-enacted",
+        "decision": "SUPPRESSED_DUPLICATE",
+        "action_taken": true,
+        "eligible_for_activation": true,
+        "match_confidence": 98,
+        "matched_prior_slug": "",
+        "matched_prior_headline": "King's Landing development in Fort Pierce nears completion with luxury villas, Marriott Hotel by 2029",
+        "matched_prior_source": "",
+        "matched_prior_source_url": "https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
         "matched_prior_is_custom": false,
         "activation_managed": true
       },
@@ -123,7 +177,7 @@
         "placement": "hero",
         "slug": "",
         "source_title": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
-        "date": "12:13 PM ET",
+        "date": "Yesterday, 12:13 PM ET",
         "category_key": "indian_river",
         "is_custom": false,
         "story_stage": "sentencing",
@@ -159,28 +213,45 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 177,
+    "candidates_processed": 178,
     "routes": {
-      "generate_new": 39,
-      "skip": 137,
-      "update_existing": 1
+      "generate_new": 16,
+      "skip": 162
     },
     "eligibility": {
-      "listing": 2,
-      "low_value": 126,
-      "publishable": 49
+      "listing": 4,
+      "low_value": 124,
+      "publishable": 50
     },
     "source_classes": {
       "aggregator": 128,
-      "local_news": 32,
-      "regional_news": 15,
+      "local_news": 31,
+      "regional_news": 17,
       "unknown": 2
     },
-    "rejected_count": 2,
+    "rejected_count": 4,
     "rejected_examples": [
+      {
+        "headline": "14391 SW Skye Dr, Port Saint Lucie, FL 34987 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOSlBFV0NXYUlKclk5enlmU1Q4UlgxaWJVa2tKeUJBaTZ4a0l0dDkyVEstUExPMm1mSEhYUFJtZDZXX2hJV0ZGVUhNeE1CWXU5blZFTTNrNEFzVlpMMEZaazJ6OGRsSlh3cnVTNHQwWVRQbmI3Z1VUMkNGVDdWeWwtaVlwaE1pNklmVE53VFhQRlBwdWR6VWVR?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
       {
         "headline": "9611 SW Libertas Way, Port Saint Lucie, FL 34987 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOV1dBR0NjR2FNUFg3eTEyTG5vVDlmQURjYzVGSFFja3FCNUNEZUY2U3pHYWphQXpPQjYzRmNmNXdXWndFWFNIQTRBaDNIZnFIZjFLZUdxalRoSUczSURyWGxJNzVBcEJzb2tyZnpLcHBZd3VUYjU0NXJ2RGtRNW1IOE56a1dTeF85ajNBMzB6LWV1OEZHRVJfdVdtaHg?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
+      {
+        "headline": "1001 NE Baker Rd # 5212, Stuart, FL 34994 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOSTdlLTdFTGloSklwdGR5czBhQVFCWGxXendKWmlLWXV6WFdWR2hkUlVtV0FfNld6bXhEd0dsNUs5Y3hubmdnSWkxTUhxdTByWVhmZnQxamZYR0hNZDJ5QW0zcWZueDBuTHlOa2JPa2dtcDB0bFpSU0FEQWwySEhaNVBseUZOQ2pWR2xYMzZGeE1aM1Nq?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -200,20 +271,22 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 30,
-      "same_event": 147
+      "new_story": 10,
+      "same_event": 168
     },
     "examples": [
       {
-        "story_id": "story_001650",
+        "story_id": "story_001658",
         "title": "Prichard city council recalls city fleet after losing municipal insurance coverage - WEAR-TV",
         "event_key": "unknown-event-a26da2f399",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -222,71 +295,82 @@
         "event_key": "unknown-event-5064e96138",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_001651",
+        "story_id": "story_001659",
         "title": "Advocates raise concerns over media clerk cuts as Palm Beach County school year approaches - WPBF",
         "event_key": "unknown-event-8e2ce77040",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_001652",
+        "story_id": "story_001660",
         "title": "South Florida renters squeezed as housing costs climb to 50% of income for many residents",
         "event_key": "unknown-event-50b017aa73",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_001653",
+        "story_id": "story_001661",
         "title": "Pediatricians urge Palm Beach County families to schedule back-to-school shots now",
         "event_key": "unknown-event-f46fa836d3",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_001654",
+        "story_id": "story_001662",
         "title": "Walmart Supercenter coming to Westlake as Palm Beach County's western communities grow",
         "event_key": "unknown-event-8fc149b950",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_001655",
+        "story_id": "story_001663",
         "title": "DeSantis’ property tax cut faces legal challenge over ballot language - The Real Deal",
         "event_key": "unknown-event-ecd2136e59",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -332,9 +416,32 @@
         ]
       },
       {
-        "story_id": "story_001656",
+        "story_id": "",
+        "title": "14391 SW Skye Dr, Port Saint Lucie, FL 34987 - Realtor.com",
+        "event_key": "",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "",
+        "decision_trace": []
+      },
+      {
+        "story_id": "story_001664",
         "title": "2026 Voter’s Guide - Florida House District 32, Republican primary - WKMG",
         "event_key": "unknown-event-ff3b5a04ae",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_001688",
+        "title": "Gadsden County School Board District 4 candidates are sharing their priorities - The Florida Trib",
+        "event_key": "unknown-event-3f3122092e",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
@@ -344,15 +451,17 @@
         ]
       },
       {
-        "story_id": "story_001657",
+        "story_id": "story_001665",
         "title": "2026 Voter’s Guide - Brevard County Commission District 4 Republican primary - WKMG",
         "event_key": "unknown-event-000533753f",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -385,15 +494,14 @@
       },
       {
         "story_id": "story_001604",
-        "title": "Orange County school calendar 2026-2027: When school starts in Florida - Florida Today",
-        "event_key": "unknown-event-1ed8d7b915",
+        "title": "Orange County school calendar 2026-2027: When school starts in Florida - floridatoday.com",
+        "event_key": "unknown-event-be78f5562d",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMixAFBVV95cUxQQmV6bmE3TEFJVWQzT05mNVNnZ0Y5b1M4U2xkYzFhYmxSbnE4VXlNMmdNdl9LZFEzdkNad2FPNUxfNkFVWERPZFd2cjBvQVFKanpBZVQxc2hHOTJfTEE4aVNDT0lEeUFINEtZdGNXZjN5T1dIR242VEp6QXROOWUyTkl3Q0Z4aGhueTBDN2RNMlhTYUJxMm1tTU10WmlKd21KTVdab0xKNzUxV1pqTXMxS2tLdXlzSGNjaFJiZDhZNGRKTWIw",
           "Confidence: 1.00"
         ]
       },
@@ -429,34 +537,6 @@
         "story_id": "story_001558",
         "title": "Sarasota County school calendar 2026-2027: When school starts - Sarasota Herald-Tribune",
         "event_key": "unknown-event-8384ef69c1",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001559",
-        "title": "West Palm Beach police chief fires 5 command officers after nearly 2-year overtime misconduct probe",
-        "event_key": "fire-4fdb6b2c73",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001560",
-        "title": "Florida state park to have prescribed burn July 31 - Treasure Coast News",
-        "event_key": "unknown-event-331dadcb78",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -470,16 +550,18 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_001650",
+        "story_id": "story_001658",
         "title": "Prichard city council recalls city fleet after losing municipal insurance coverage - WEAR-TV",
         "event_key": "unknown-event-a26da2f399",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -489,76 +571,87 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_001651",
+        "story_id": "story_001659",
         "title": "Advocates raise concerns over media clerk cuts as Palm Beach County school year approaches - WPBF",
         "event_key": "unknown-event-8e2ce77040",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_001652",
+        "story_id": "story_001660",
         "title": "South Florida renters squeezed as housing costs climb to 50% of income for many residents",
         "event_key": "unknown-event-50b017aa73",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_001653",
+        "story_id": "story_001661",
         "title": "Pediatricians urge Palm Beach County families to schedule back-to-school shots now",
         "event_key": "unknown-event-f46fa836d3",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_001654",
+        "story_id": "story_001662",
         "title": "Walmart Supercenter coming to Westlake as Palm Beach County's western communities grow",
         "event_key": "unknown-event-8fc149b950",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
-        "story_id": "story_001655",
+        "story_id": "story_001663",
         "title": "DeSantis’ property tax cut faces legal challenge over ballot language - The Real Deal",
         "event_key": "unknown-event-ecd2136e59",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -607,9 +700,24 @@
         ]
       },
       {
-        "story_id": "story_001656",
+        "story_id": "story_001664",
         "title": "2026 Voter’s Guide - Florida House District 32, Republican primary - WKMG",
         "event_key": "unknown-event-ff3b5a04ae",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_001688",
+        "title": "Gadsden County School Board District 4 candidates are sharing their priorities - The Florida Trib",
+        "event_key": "unknown-event-3f3122092e",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -620,16 +728,18 @@
         ]
       },
       {
-        "story_id": "story_001657",
+        "story_id": "story_001665",
         "title": "2026 Voter’s Guide - Brevard County Commission District 4 Republican primary - WKMG",
         "event_key": "unknown-event-000533753f",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -664,16 +774,15 @@
       },
       {
         "story_id": "story_001604",
-        "title": "Orange County school calendar 2026-2027: When school starts in Florida - Florida Today",
-        "event_key": "unknown-event-1ed8d7b915",
+        "title": "Orange County school calendar 2026-2027: When school starts in Florida - floridatoday.com",
+        "event_key": "unknown-event-be78f5562d",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMixAFBVV95cUxQQmV6bmE3TEFJVWQzT05mNVNnZ0Y5b1M4U2xkYzFhYmxSbnE4VXlNMmdNdl9LZFEzdkNad2FPNUxfNkFVWERPZFd2cjBvQVFKanpBZVQxc2hHOTJfTEE4aVNDT0lEeUFINEtZdGNXZjN5T1dIR242VEp6QXROOWUyTkl3Q0Z4aGhueTBDN2RNMlhTYUJxMm1tTU10WmlKd21KTVdab0xKNzUxV1pqTXMxS2tLdXlzSGNjaFJiZDhZNGRKTWIw",
           "Confidence: 1.00"
         ]
       },
@@ -725,22 +834,7 @@
       {
         "story_id": "story_001559",
         "title": "West Palm Beach police chief fires 5 command officers after nearly 2-year overtime misconduct probe",
-        "event_key": "fire-4fdb6b2c73",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001560",
-        "title": "Florida state park to have prescribed burn July 31 - Treasure Coast News",
-        "event_key": "unknown-event-331dadcb78",
+        "event_key": "fire-4fdb6b2c73-4fdb6b2c73",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -757,75 +851,69 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 1,
+    "candidate_count": 0,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {
-      "new_story": 1
-    },
-    "milestones": {
-      "death": 1
-    },
-    "reason_codes": {
-      "entity_match": 1,
-      "identity_anchor_qualified": 1,
-      "location_match": 1,
-      "novel_milestone": 1,
-      "title_continuity": 1
-    },
-    "examples": [
-      {
-        "headline": "Port St. Lucie officer resigns after allegations he left scene of car where man later died by suicide - WPBF",
-        "event_key": "unknown-event-351769e611",
-        "current_story_id": "story_001675",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_001316",
-        "candidate_confidence": 0.642857,
-        "candidate_milestones": [
-          "death"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "location_match",
-          "entity_match",
-          "title_continuity",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_001316",
-          "Novel milestones: death",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.43",
-          "Location match: True",
-          "Agency match: False",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.64"
-        ]
-      }
-    ],
-    "retrospective_candidate_count": 8,
+    "current_relationships": {},
+    "milestones": {},
+    "reason_codes": {},
+    "examples": [],
+    "retrospective_candidate_count": 9,
     "retrospective_high_confidence_candidate_count": 4,
     "retrospective_activation_eligible_candidate_count": 1,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 383,
-      "timeline_entries_examined": 930,
-      "transitions_examined": 501,
-      "candidate_count": 8,
+      "stories_with_timelines": 396,
+      "timeline_entries_examined": 955,
+      "transitions_examined": 513,
+      "candidate_count": 9,
       "high_confidence_candidate_count": 4,
       "activation_eligible_candidate_count": 1,
-      "identity_anchor_rejected_count": 3,
-      "incoherent_transition_count": 3,
-      "incoherent_story_count": 3,
+      "identity_anchor_rejected_count": 4,
+      "incoherent_transition_count": 4,
+      "incoherent_story_count": 4,
       "incoherent_stories": [
         {
-          "story_id": "story_000721",
+          "story_id": "story_000236",
+          "story_title": "Videos surface in St. Lucie County firefighter hazing controversy leading to terminations, suspensions",
+          "transition_count": 1,
+          "blocking_reasons": {
+            "timeline_identity_unanchored": 1
+          },
+          "examples": [
+            {
+              "prior_article": {
+                "article_id": "rss-0ead22e6e9b92c3e4d25",
+                "event_key": "fire-94d9235ae2",
+                "published_at": "2026-07-24T01:40:23.579334+00:00",
+                "title": "New depositions reveal why a St. Lucie County firefighter turned in alleged hazing videos - WFLX",
+                "source": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNdU9QVG5ldUdvemtmRGZqWnQzMnh4TnUwYnAyajJRTHFBNmRUcGpIUUZMOHF5VFlhR29jbkdqY0hENEtZX1ZCVHlNVU15QWZJYmoySmMtUTVDRjhDTGxTZWdVbE0wSHI4X3dsYUV0bkI4b09XTUFRWE40Rk9Zc0MwOS1ESGUzQUJiMDZwLTJZTUpVajBlZUg5c2Q3UC1UUlFyS2xOdEtPTW1wcUZheUxiSTBSN3FFdndCRnZMdjRWdEhYbVN6RVFqdkxfZ9IBywFBVV95cUxNdU9QVG5ldUdvemtmRGZqWnQzMnh4TnUwYnAyajJRTHFBNmRUcGpIUUZMOHF5VFlhR29jbkdqY0hENEtZX1ZCVHlNVU15QWZJYmoySmMtUTVDRjhDTGxTZWdVbE0wSHI4X3dsYUV0bkI4b09XTUFRWE40Rk9Zc0MwOS1ESGUzQUJiMDZwLTJZTUpVajBlZUg5c2Q3UC1UUlFyS2xOdEtPTW1wcUZheUxiSTBSN3FFdndCRnZMdjRWdEhYbVN6RVFqdkxfZw?oc=5",
+                "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNdU9QVG5ldUdvemtmRGZqWnQzMnh4TnUwYnAyajJRTHFBNmRUcGpIUUZMOHF5VFlhR29jbkdqY0hENEtZX1ZCVHlNVU15QWZJYmoySmMtUTVDRjhDTGxTZWdVbE0wSHI4X3dsYUV0bkI4b09XTUFRWE40Rk9Zc0MwOS1ESGUzQUJiMDZwLTJZTUpVajBlZUg5c2Q3UC1UUlFyS2xOdEtPTW1wcUZheUxiSTBSN3FFdndCRnZMdjRWdEhYbVN6RVFqdkxfZ9IBywFBVV95cUxNdU9QVG5ldUdvemtmRGZqWnQzMnh4TnUwYnAyajJRTHFBNmRUcGpIUUZMOHF5VFlhR29jbkdqY0hENEtZX1ZCVHlNVU15QWZJYmoySmMtUTVDRjhDTGxTZWdVbE0wSHI4X3dsYUV0bkI4b09XTUFRWE40Rk9Zc0MwOS1ESGUzQUJiMDZwLTJZTUpVajBlZUg5c2Q3UC1UUlFyS2xOdEtPTW1wcUZheUxiSTBSN3FFdndCRnZMdjRWdEhYbVN6RVFqdkxfZw?oc=5"
+              },
+              "newer_article": {
+                "article_id": "rss-1ac94b0cee7351870e59",
+                "event_key": "named-person-death:ai-our",
+                "published_at": "2026-08-01T04:03:52.676583+00:00",
+                "title": "Videos surface in St. Lucie County firefighter hazing controversy leading to terminations, suspensions",
+                "source": "https://www.wptv.com/news/region-st-lucie-county.rss",
+                "url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/videos-surface-in-st-lucie-county-firefighter-hazing-controversy-leading-to-terminations-suspensions"
+              },
+              "milestones": [
+                "death"
+              ],
+              "identity_anchor_codes": [
+                "event_family_conflict",
+                "moderate_pair_title_continuity",
+                "shared_discriminative_title_tokens",
+                "identity_anchor_missing"
+              ],
+              "prior_title_overlap": 0.444444
+            }
+          ]
+        },
+        {
+          "story_id": "story_000793",
           "story_title": "Indian River County firefighter/paramedic dies following off-duty personal tragedy - WPTV",
           "transition_count": 1,
           "blocking_reasons": {
@@ -834,26 +922,26 @@
           "examples": [
             {
               "prior_article": {
-                "article_id": "rss-0de5c984c74ed314a9df",
-                "event_key": "fire-sebastian",
-                "published_at": "2026-07-25T00:38:10.414050+00:00",
-                "title": "Shots fired at Orchard Grove apartments; no injuries reported - Sebastian Daily",
-                "source": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNZGhzSlpCQmJ1ZEd1OGx0UVVISnNxb0VjQ1BId0tWeEtFX2RVajBGV2FYbTlqWW96TUhyY1VtNmhBbUl0Y1V2RGlUOVBibG5UZGFpNFhEc2NNVm9Kd0hod09JOXcyVnRQZW5NMGx6OGM1QTI1dlBNMW1OeGpYeURTWUtBTFE4djliUGdVY0NGbUhCSFVETVV5d2ZuQ0JrTFpLNEdEZEJuUQ?oc=5",
-                "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNZGhzSlpCQmJ1ZEd1OGx0UVVISnNxb0VjQ1BId0tWeEtFX2RVajBGV2FYbTlqWW96TUhyY1VtNmhBbUl0Y1V2RGlUOVBibG5UZGFpNFhEc2NNVm9Kd0hod09JOXcyVnRQZW5NMGx6OGM1QTI1dlBNMW1OeGpYeURTWUtBTFE4djliUGdVY0NGbUhCSFVETVV5d2ZuQ0JrTFpLNEdEZEJuUQ?oc=5"
+                "article_id": "rss-7dd2c0dcb2bf08526fe8",
+                "event_key": "animal-rescue-76e432cbef-cats",
+                "published_at": "2026-07-28T03:51:43.625572+00:00",
+                "title": "Cat, hamster rescued after house fire in Palm Beach County",
+                "source": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/cat-hamster-rescued-after-house-fire-in-palm-beach-county",
+                "url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/cat-hamster-rescued-after-house-fire-in-palm-beach-county"
               },
               "newer_article": {
-                "article_id": "rss-e378addd0a558bf38256",
-                "event_key": "fire-eb9336d08f",
-                "published_at": "2026-07-26T03:14:09.762329+00:00",
-                "title": "Indian River County Fire Rescue firefighter Geoffrey Lang dies in off-duty incident - WPBF",
-                "source": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOSGZrSW56TktkbmdEUkVNdDBWRGdBaG94VHczSlVIMlc4MTlFZjk1NUpjWS04TXR4M2JUb0N0RjVhUkZKZHlZUTBYOE51eTA4am9JWTVYWmlta3NyZlNnanFiWmJVNDF0VWNOZFg0d0IzOXJmS3Nvb2FxanpkT3JjWHlMQ3o4eVBBaERNTnlpSDFRVHA2ZnpJcGNJeVhTbmtZUHNYdERNbmVtTXk1ZEE?oc=5",
-                "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOSGZrSW56TktkbmdEUkVNdDBWRGdBaG94VHczSlVIMlc4MTlFZjk1NUpjWS04TXR4M2JUb0N0RjVhUkZKZHlZUTBYOE51eTA4am9JWTVYWmlta3NyZlNnanFiWmJVNDF0VWNOZFg0d0IzOXJmS3Nvb2FxanpkT3JjWHlMQ3o4eVBBaERNTnlpSDFRVHA2ZnpJcGNJeVhTbmtZUHNYdERNbmVtTXk1ZEE?oc=5"
+                "article_id": "rss-023f331eb7c1f32029c7",
+                "event_key": "fire-97ed25da2e-97ed25da2e",
+                "published_at": "2026-08-01T04:03:52.676583+00:00",
+                "title": "Indian River County firefighter/paramedic dies following off-duty personal tragedy - WPTV",
+                "source": "https://www.wptv.com/news/region-martin-county/indiantown/indian-river-county-firefighter-paramedic-dies-following-off-duty-personal-tragedy",
+                "url": "https://www.wptv.com/news/region-martin-county/indiantown/indian-river-county-firefighter-paramedic-dies-following-off-duty-personal-tragedy"
               },
               "milestones": [
                 "death"
               ],
               "identity_anchor_codes": [
-                "event_family_match",
+                "event_family_conflict",
                 "identity_anchor_missing"
               ],
               "prior_title_overlap": 0.0
@@ -935,13 +1023,13 @@
       "milestones": {
         "arrest": 2,
         "court_action": 1,
-        "death": 3,
+        "death": 4,
         "identified": 1,
         "recovery": 1
       },
       "blocking_conflicts": {
         "same_timestamp_order_uncertain": 4,
-        "timeline_identity_unanchored": 3,
+        "timeline_identity_unanchored": 4,
         "weak_title_continuity": 3
       },
       "excluded_entry_count": 55,
@@ -1312,7 +1400,82 @@
           ]
         },
         {
-          "story_id": "story_000721",
+          "story_id": "story_000236",
+          "story_title": "Videos surface in St. Lucie County firefighter hazing controversy leading to terminations, suspensions",
+          "milestones": [
+            "death"
+          ],
+          "matched_phrases": {
+            "death": [
+              "death"
+            ]
+          },
+          "confidence": 0.74,
+          "activation_eligible": false,
+          "timeline_incoherent": true,
+          "identity_anchor_qualified": false,
+          "identity_anchor_codes": [
+            "event_family_conflict",
+            "moderate_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_missing"
+          ],
+          "shared_title_tokens": [
+            "firefighter",
+            "hazing",
+            "lucie",
+            "videos"
+          ],
+          "blocking_conflicts": [
+            "timeline_identity_unanchored"
+          ],
+          "reason_codes": [
+            "retrospective_timeline_transition",
+            "novel_milestone",
+            "persistent_story_identity_untrusted",
+            "event_family_conflict",
+            "moderate_pair_title_continuity",
+            "shared_discriminative_title_tokens",
+            "identity_anchor_missing",
+            "prior_title_continuity",
+            "canonical_title_continuity_context_only",
+            "chronology_supported",
+            "timeline_incoherent"
+          ],
+          "prior_title_overlap": 0.444444,
+          "canonical_title_overlap": 1.0,
+          "prior_article": {
+            "article_id": "rss-0ead22e6e9b92c3e4d25",
+            "event_key": "fire-94d9235ae2",
+            "published_at": "2026-07-24T01:40:23.579334+00:00",
+            "title": "New depositions reveal why a St. Lucie County firefighter turned in alleged hazing videos - WFLX",
+            "source": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNdU9QVG5ldUdvemtmRGZqWnQzMnh4TnUwYnAyajJRTHFBNmRUcGpIUUZMOHF5VFlhR29jbkdqY0hENEtZX1ZCVHlNVU15QWZJYmoySmMtUTVDRjhDTGxTZWdVbE0wSHI4X3dsYUV0bkI4b09XTUFRWE40Rk9Zc0MwOS1ESGUzQUJiMDZwLTJZTUpVajBlZUg5c2Q3UC1UUlFyS2xOdEtPTW1wcUZheUxiSTBSN3FFdndCRnZMdjRWdEhYbVN6RVFqdkxfZ9IBywFBVV95cUxNdU9QVG5ldUdvemtmRGZqWnQzMnh4TnUwYnAyajJRTHFBNmRUcGpIUUZMOHF5VFlhR29jbkdqY0hENEtZX1ZCVHlNVU15QWZJYmoySmMtUTVDRjhDTGxTZWdVbE0wSHI4X3dsYUV0bkI4b09XTUFRWE40Rk9Zc0MwOS1ESGUzQUJiMDZwLTJZTUpVajBlZUg5c2Q3UC1UUlFyS2xOdEtPTW1wcUZheUxiSTBSN3FFdndCRnZMdjRWdEhYbVN6RVFqdkxfZw?oc=5",
+            "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNdU9QVG5ldUdvemtmRGZqWnQzMnh4TnUwYnAyajJRTHFBNmRUcGpIUUZMOHF5VFlhR29jbkdqY0hENEtZX1ZCVHlNVU15QWZJYmoySmMtUTVDRjhDTGxTZWdVbE0wSHI4X3dsYUV0bkI4b09XTUFRWE40Rk9Zc0MwOS1ESGUzQUJiMDZwLTJZTUpVajBlZUg5c2Q3UC1UUlFyS2xOdEtPTW1wcUZheUxiSTBSN3FFdndCRnZMdjRWdEhYbVN6RVFqdkxfZ9IBywFBVV95cUxNdU9QVG5ldUdvemtmRGZqWnQzMnh4TnUwYnAyajJRTHFBNmRUcGpIUUZMOHF5VFlhR29jbkdqY0hENEtZX1ZCVHlNVU15QWZJYmoySmMtUTVDRjhDTGxTZWdVbE0wSHI4X3dsYUV0bkI4b09XTUFRWE40Rk9Zc0MwOS1ESGUzQUJiMDZwLTJZTUpVajBlZUg5c2Q3UC1UUlFyS2xOdEtPTW1wcUZheUxiSTBSN3FFdndCRnZMdjRWdEhYbVN6RVFqdkxfZw?oc=5"
+          },
+          "newer_article": {
+            "article_id": "rss-1ac94b0cee7351870e59",
+            "event_key": "named-person-death:ai-our",
+            "published_at": "2026-08-01T04:03:52.676583+00:00",
+            "title": "Videos surface in St. Lucie County firefighter hazing controversy leading to terminations, suspensions",
+            "source": "https://www.wptv.com/news/region-st-lucie-county.rss",
+            "url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/videos-surface-in-st-lucie-county-firefighter-hazing-controversy-leading-to-terminations-suspensions"
+          },
+          "candidate_trace": [
+            "Follow-up candidate mode: retrospective_observe_only",
+            "Story: story_000236",
+            "Novel milestones: death",
+            "Identity anchor qualified: False",
+            "Identity anchor codes: event_family_conflict, moderate_pair_title_continuity, shared_discriminative_title_tokens, identity_anchor_missing",
+            "Prior title overlap: 0.44",
+            "Canonical title overlap (context only): 1.00",
+            "Same timestamp: False",
+            "Blocking conflicts: timeline_identity_unanchored",
+            "Candidate confidence: 0.74",
+            "Activation eligible: False"
+          ]
+        },
+        {
+          "story_id": "story_000793",
           "story_title": "Indian River County firefighter/paramedic dies following off-duty personal tragedy - WPTV",
           "milestones": [
             "death"
@@ -1327,7 +1490,7 @@
           "timeline_incoherent": true,
           "identity_anchor_qualified": false,
           "identity_anchor_codes": [
-            "event_family_match",
+            "event_family_conflict",
             "identity_anchor_missing"
           ],
           "shared_title_tokens": [],
@@ -1338,38 +1501,38 @@
             "retrospective_timeline_transition",
             "novel_milestone",
             "persistent_story_identity_untrusted",
-            "event_family_match",
+            "event_family_conflict",
             "identity_anchor_missing",
             "canonical_title_continuity_context_only",
             "chronology_supported",
             "timeline_incoherent"
           ],
           "prior_title_overlap": 0.0,
-          "canonical_title_overlap": 0.545455,
+          "canonical_title_overlap": 1.0,
           "prior_article": {
-            "article_id": "rss-0de5c984c74ed314a9df",
-            "event_key": "fire-sebastian",
-            "published_at": "2026-07-25T00:38:10.414050+00:00",
-            "title": "Shots fired at Orchard Grove apartments; no injuries reported - Sebastian Daily",
-            "source": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNZGhzSlpCQmJ1ZEd1OGx0UVVISnNxb0VjQ1BId0tWeEtFX2RVajBGV2FYbTlqWW96TUhyY1VtNmhBbUl0Y1V2RGlUOVBibG5UZGFpNFhEc2NNVm9Kd0hod09JOXcyVnRQZW5NMGx6OGM1QTI1dlBNMW1OeGpYeURTWUtBTFE4djliUGdVY0NGbUhCSFVETVV5d2ZuQ0JrTFpLNEdEZEJuUQ?oc=5",
-            "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNZGhzSlpCQmJ1ZEd1OGx0UVVISnNxb0VjQ1BId0tWeEtFX2RVajBGV2FYbTlqWW96TUhyY1VtNmhBbUl0Y1V2RGlUOVBibG5UZGFpNFhEc2NNVm9Kd0hod09JOXcyVnRQZW5NMGx6OGM1QTI1dlBNMW1OeGpYeURTWUtBTFE4djliUGdVY0NGbUhCSFVETVV5d2ZuQ0JrTFpLNEdEZEJuUQ?oc=5"
+            "article_id": "rss-7dd2c0dcb2bf08526fe8",
+            "event_key": "animal-rescue-76e432cbef-cats",
+            "published_at": "2026-07-28T03:51:43.625572+00:00",
+            "title": "Cat, hamster rescued after house fire in Palm Beach County",
+            "source": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/cat-hamster-rescued-after-house-fire-in-palm-beach-county",
+            "url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/cat-hamster-rescued-after-house-fire-in-palm-beach-county"
           },
           "newer_article": {
-            "article_id": "rss-e378addd0a558bf38256",
-            "event_key": "fire-eb9336d08f",
-            "published_at": "2026-07-26T03:14:09.762329+00:00",
-            "title": "Indian River County Fire Rescue firefighter Geoffrey Lang dies in off-duty incident - WPBF",
-            "source": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOSGZrSW56TktkbmdEUkVNdDBWRGdBaG94VHczSlVIMlc4MTlFZjk1NUpjWS04TXR4M2JUb0N0RjVhUkZKZHlZUTBYOE51eTA4am9JWTVYWmlta3NyZlNnanFiWmJVNDF0VWNOZFg0d0IzOXJmS3Nvb2FxanpkT3JjWHlMQ3o4eVBBaERNTnlpSDFRVHA2ZnpJcGNJeVhTbmtZUHNYdERNbmVtTXk1ZEE?oc=5",
-            "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOSGZrSW56TktkbmdEUkVNdDBWRGdBaG94VHczSlVIMlc4MTlFZjk1NUpjWS04TXR4M2JUb0N0RjVhUkZKZHlZUTBYOE51eTA4am9JWTVYWmlta3NyZlNnanFiWmJVNDF0VWNOZFg0d0IzOXJmS3Nvb2FxanpkT3JjWHlMQ3o4eVBBaERNTnlpSDFRVHA2ZnpJcGNJeVhTbmtZUHNYdERNbmVtTXk1ZEE?oc=5"
+            "article_id": "rss-023f331eb7c1f32029c7",
+            "event_key": "fire-97ed25da2e-97ed25da2e",
+            "published_at": "2026-08-01T04:03:52.676583+00:00",
+            "title": "Indian River County firefighter/paramedic dies following off-duty personal tragedy - WPTV",
+            "source": "https://www.wptv.com/news/region-martin-county/indiantown/indian-river-county-firefighter-paramedic-dies-following-off-duty-personal-tragedy",
+            "url": "https://www.wptv.com/news/region-martin-county/indiantown/indian-river-county-firefighter-paramedic-dies-following-off-duty-personal-tragedy"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_000721",
+            "Story: story_000793",
             "Novel milestones: death",
             "Identity anchor qualified: False",
-            "Identity anchor codes: event_family_match, identity_anchor_missing",
+            "Identity anchor codes: event_family_conflict, identity_anchor_missing",
             "Prior title overlap: 0.00",
-            "Canonical title overlap (context only): 0.55",
+            "Canonical title overlap (context only): 1.00",
             "Same timestamp: False",
             "Blocking conflicts: timeline_identity_unanchored",
             "Candidate confidence: 0.74",
@@ -1519,35 +1682,36 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 359,
-      "treasure_coast_local": 271,
+      "florida": 360,
+      "treasure_coast_local": 278,
       "treasure_coast_region": 126,
-      "unknown": 729
+      "unknown": 733
     },
-    "average_score": 59.21
+    "average_score": 59.34
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 359,
-      "treasure_coast_local": 271,
+      "florida": 360,
+      "treasure_coast_local": 278,
       "treasure_coast_region": 126,
-      "unknown": 729
+      "unknown": 733
     },
-    "average_priority": 4.0
+    "average_priority": 4.36
   },
   "story_lifecycle": {
     "counts": {
-      "active": 630,
-      "developing": 197,
-      "ongoing": 658
+      "active": 628,
+      "breaking": 1,
+      "developing": 217,
+      "ongoing": 651
     }
   },
   "registry_health": {
-    "repair_version": 5,
+    "repair_version": 7,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 1457,
-    "active_stories_after": 1457,
+    "active_stories_before": 1454,
+    "active_stories_after": 1454,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -1566,22 +1730,332 @@
     "selective_incident_anchor_groups_repaired": 0,
     "selective_timeline_entries_moved": 0,
     "contaminated_story_records_preserved": 0,
-    "incident_anchor_to_story_count": 26,
-    "generated_at": "2026-08-01T01:40:58Z",
-    "quarantined_story_records_retained": 26,
-    "active_story_count": 1485
+    "incident_anchor_to_story_count": 25,
+    "generated_at": "2026-08-01T04:03:56Z",
+    "quarantined_story_records_retained": 29,
+    "active_story_count": 1497
   },
   "stories": {
-    "total": 1485,
+    "total": 1497,
     "importance_levels": {
-      "breaking": 0,
-      "high": 20,
+      "breaking": 2,
+      "high": 25,
       "normal": 222,
-      "low": 1243,
+      "low": 1248,
       "archived": 0
     },
-    "average_importance": 8.71,
+    "average_importance": 9.03,
     "top": [
+      {
+        "story_id": "story_000793",
+        "title": "Indian River County firefighter/paramedic dies following off-duty personal tragedy - WPTV",
+        "score": 85,
+        "editorial_priority": 96,
+        "editorial_score": 96,
+        "score_breakdown": {
+          "score": 96,
+          "importance": 85,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 0.01
+        },
+        "level": "breaking",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_county",
+            "label": "Multi-county impact",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Sebastian"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 5,
+        "timeline_entries": 5,
+        "relationship_decisions": 3,
+        "canonical_source_candidates": 16,
+        "lifecycle": {
+          "state": "breaking",
+          "reason": "Breaking importance with a current or undated update",
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 0.01,
+          "event_count": 5,
+          "timeline_entries": 5
+        }
+      },
+      {
+        "story_id": "story_000004",
+        "title": "Motorcyclist dies in Vero Beach crash after traveling at speeds of 113 mph, police say",
+        "score": 75,
+        "editorial_priority": 85,
+        "editorial_score": 85,
+        "score_breakdown": {
+          "score": 85,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 0.0
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Vero Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 3,
+        "timeline_entries": 3,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 4,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 0.0,
+          "event_count": 3,
+          "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_000049",
+        "title": "Community gathers to honor 9-year-old boy killed in dirt bike and FedEx truck crash in St. Lucie County - WPTV",
+        "score": 75,
+        "editorial_priority": 85,
+        "editorial_score": 85,
+        "score_breakdown": {
+          "score": 85,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 0.01
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 12,
+        "timeline_entries": 7,
+        "relationship_decisions": 3,
+        "canonical_source_candidates": 7,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 0.01,
+          "event_count": 12,
+          "timeline_entries": 7
+        }
+      },
+      {
+        "story_id": "story_001657",
+        "title": "86-year-old woman dies after Port St. Lucie intersection crash - WPEC",
+        "score": 75,
+        "editorial_priority": 84,
+        "editorial_score": 84,
+        "score_breakdown": {
+          "score": 84,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.12,
+          "source_trust": 90,
+          "age_hours": 0.07
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Port St. Lucie"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 0.07,
+          "event_count": 2,
+          "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_001684",
+        "title": "86-year-old woman critically injured in Port St. Lucie crash later dies at hospital - WPBF",
+        "score": 75,
+        "editorial_priority": 84,
+        "editorial_score": 84,
+        "score_breakdown": {
+          "score": 84,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 0.07
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Port St. Lucie"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 0.07,
+          "event_count": 2,
+          "timeline_entries": 2
+        }
+      },
       {
         "story_id": "story_001521",
         "title": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
@@ -1595,7 +2069,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 20.5
+          "age_hours": 22.89
         },
         "level": "high",
         "importance_reasons": [
@@ -1638,25 +2112,25 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-31T05:11:29.117258+00:00",
-          "hours_since_update": 20.5,
+          "hours_since_update": 22.89,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
-        "story_id": "story_000004",
-        "title": "Motorcyclist dies in Vero Beach crash after traveling at speeds of 113 mph, police say",
+        "story_id": "story_001652",
+        "title": "Family files lawsuit after 6-year-old girl dies in Port St. Lucie go-kart crash - WPBF",
         "score": 75,
-        "editorial_priority": 72,
-        "editorial_score": 72,
+        "editorial_priority": 74,
+        "editorial_score": 74,
         "score_breakdown": {
-          "score": 72,
+          "score": 74,
           "importance": 75,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 43.84
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 0.0
         },
         "level": "high",
         "importance_reasons": [
@@ -1671,69 +2145,8 @@
             "points": 25
           },
           {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Vero Beach"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 4,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-30T05:50:25.908649+00:00",
-          "hours_since_update": 43.84,
-          "event_count": 2,
-          "timeline_entries": 2
-        }
-      },
-      {
-        "story_id": "story_000049",
-        "title": "Community gathers to honor 9-year-old boy killed in dirt bike and FedEx truck crash in St. Lucie County - WPTV",
-        "score": 75,
-        "editorial_priority": 72,
-        "editorial_score": 72,
-        "score_breakdown": {
-          "score": 72,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 63.01
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
+            "code": "court_action",
+            "label": "Court action",
             "points": 10
           }
         ],
@@ -1744,7 +2157,7 @@
             "St. Lucie County"
           ],
           "places": [
-            "Fort Pierce"
+            "Port St. Lucie"
           ]
         },
         "editorial_proximity": {
@@ -1752,78 +2165,17 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 6,
-        "timeline_entries": 5,
-        "relationship_decisions": 3,
-        "canonical_source_candidates": 7,
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
         "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-29T10:40:45.649396+00:00",
-          "hours_since_update": 63.01,
-          "event_count": 6,
-          "timeline_entries": 5
-        }
-      },
-      {
-        "story_id": "story_000721",
-        "title": "Indian River County firefighter/paramedic dies following off-duty personal tragedy - WPTV",
-        "score": 75,
-        "editorial_priority": 72,
-        "editorial_score": 72,
-        "score_breakdown": {
-          "score": 72,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 43.85
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Sebastian"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 16,
-        "timeline_entries": 16,
-        "relationship_decisions": 5,
-        "canonical_source_candidates": 18,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-30T05:50:25.908649+00:00",
-          "hours_since_update": 43.85,
-          "event_count": 16,
-          "timeline_entries": 16
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 0.0,
+          "event_count": 1,
+          "timeline_entries": 1
         }
       },
       {
@@ -1839,7 +2191,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 55.91
+          "age_hours": 58.3
         },
         "level": "high",
         "importance_reasons": [
@@ -1872,7 +2224,7 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 2,
+        "event_count": 4,
         "timeline_entries": 2,
         "relationship_decisions": 1,
         "canonical_source_candidates": 2,
@@ -1880,8 +2232,8 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 55.91,
-          "event_count": 2,
+          "hours_since_update": 58.3,
+          "event_count": 4,
           "timeline_entries": 2
         }
       },
@@ -1898,7 +2250,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 10.0
+          "age_hours": 12.39
         },
         "level": "high",
         "importance_reasons": [
@@ -1936,7 +2288,117 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 10.0,
+          "hours_since_update": 12.39,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_001655",
+        "title": "Indian River County firefighter/paramedic dies following off-duty personal tragedy - WPTV",
+        "score": 65,
+        "editorial_priority": 64,
+        "editorial_score": 64,
+        "score_breakdown": {
+          "score": 64,
+          "importance": 65,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 0.01
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 0.01,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_001656",
+        "title": "Firefighter who got his start in Coral Springs dies in Sebastian, officials say - Coral Springs News",
+        "score": 65,
+        "editorial_priority": 64,
+        "editorial_score": 64,
+        "score_breakdown": {
+          "score": 64,
+          "importance": 65,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 0.01
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Sebastian"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 0.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -1954,7 +2416,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 10.01
+          "age_hours": 12.4
         },
         "level": "high",
         "importance_reasons": [
@@ -1997,7 +2459,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 10.01,
+          "hours_since_update": 12.4,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2006,16 +2468,16 @@
         "story_id": "story_001643",
         "title": "Woman dies in Florida after two-vehicle, T-bone crash - Treasure Coast News",
         "score": 65,
-        "editorial_priority": 61,
-        "editorial_score": 61,
+        "editorial_priority": 58,
+        "editorial_score": 58,
         "score_breakdown": {
-          "score": 61,
+          "score": 58,
           "importance": 65,
           "proximity_multiplier": 0.95,
-          "freshness_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 5.08
+          "age_hours": 7.45
         },
         "level": "high",
         "importance_reasons": [
@@ -2041,17 +2503,79 @@
           "scope": "treasure_coast_region",
           "reason": "Directly affects the Treasure Coast region"
         },
-        "event_count": 1,
+        "event_count": 2,
         "timeline_entries": 1,
         "relationship_decisions": 1,
         "canonical_source_candidates": 1,
         "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-31T20:40:54.806838+00:00",
-          "hours_since_update": 5.08,
-          "event_count": 1,
+          "hours_since_update": 7.45,
+          "event_count": 2,
           "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_000781",
+        "title": "Family of Emma Riddle files wrongful death suit over Urban Air trampoline park accident - WFTV",
+        "score": 85,
+        "editorial_priority": 56,
+        "editorial_score": 56,
+        "score_breakdown": {
+          "score": 56,
+          "importance": 85,
+          "proximity_multiplier": 0.95,
+          "freshness_multiplier": 0.7,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 120.53
+        },
+        "level": "breaking",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "court_action",
+            "label": "Court action",
+            "points": 10
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_region",
+          "score": 95,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 95,
+          "scope": "treasure_coast_region",
+          "reason": "Directly affects the Treasure Coast region"
+        },
+        "event_count": 5,
+        "timeline_entries": 3,
+        "relationship_decisions": 2,
+        "canonical_source_candidates": 3,
+        "lifecycle": {
+          "state": "ongoing",
+          "reason": "Established multi-event story has not updated in the past 72 hours",
+          "last_updated": "2026-07-27T03:32:10.873614+00:00",
+          "hours_since_update": 120.53,
+          "event_count": 5,
+          "timeline_entries": 3
         }
       },
       {
@@ -2067,7 +2591,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 50.87
+          "age_hours": 53.25
         },
         "level": "normal",
         "importance_reasons": [
@@ -2105,7 +2629,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-29T22:49:06.705745+00:00",
-          "hours_since_update": 50.87,
+          "hours_since_update": 53.25,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2123,7 +2647,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 46.07
+          "age_hours": 48.46
         },
         "level": "normal",
         "importance_reasons": [
@@ -2159,7 +2683,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-30T03:36:51.907089+00:00",
-          "hours_since_update": 46.07,
+          "hours_since_update": 48.46,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2177,7 +2701,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 55.91
+          "age_hours": 58.36
         },
         "level": "normal",
         "importance_reasons": [
@@ -2213,7 +2737,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 55.91,
+          "hours_since_update": 58.36,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2231,7 +2755,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 55.91
+          "age_hours": 58.3
         },
         "level": "normal",
         "importance_reasons": [
@@ -2267,7 +2791,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 55.91,
+          "hours_since_update": 58.3,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2285,7 +2809,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 10.01
+          "age_hours": 12.4
         },
         "level": "normal",
         "importance_reasons": [
@@ -2324,126 +2848,13 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 10.01,
+          "hours_since_update": 12.4,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
-        "story_id": "story_001609",
-        "title": "Man sentenced in Florida to life for selling fentanyl, resulting in death - Treasure Coast News",
-        "score": 50,
-        "editorial_priority": 47,
-        "editorial_score": 47,
-        "score_breakdown": {
-          "score": 47,
-          "importance": 50,
-          "proximity_multiplier": 0.95,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 5.02
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "court_action",
-            "label": "Court action",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_region",
-          "score": 95,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 95,
-          "scope": "treasure_coast_region",
-          "reason": "Directly affects the Treasure Coast region"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-07-31T20:40:54.806838+00:00",
-          "hours_since_update": 5.02,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000011",
-        "title": "SUV crashes into Port St. Lucie liquor store; driver charged with DUIPolice say driver fled on foot and was found hiding several blocks away - Hometown News Treasure Coast",
-        "score": 75,
-        "editorial_priority": 46,
-        "editorial_score": 46,
-        "score_breakdown": {
-          "score": 46,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.55,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 210.09
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "court_action",
-            "label": "Court action",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Port St. Lucie"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 9,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Story remains open pending a resolution or archival threshold",
-          "last_updated": "2026-07-23T07:40:14.261666+00:00",
-          "hours_since_update": 210.09,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_001675",
+        "story_id": "story_001685",
         "title": "Port St. Lucie officer resigns after allegations he left scene of car where man later died by suicide - WPBF",
         "score": 40,
         "editorial_priority": 45,
@@ -2455,7 +2866,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 0.08
+          "age_hours": 0.07
         },
         "level": "normal",
         "importance_reasons": [
@@ -2487,228 +2898,10 @@
         "lifecycle": {
           "state": "active",
           "reason": "Single-event story is current",
-          "last_updated": "2026-08-01T01:40:54.884252+00:00",
-          "hours_since_update": 0.08,
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 0.07,
           "event_count": 1,
           "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_001188",
-        "title": "Man charged in fatal overdose in Martin County - wcti12.com",
-        "score": 50,
-        "editorial_priority": 42,
-        "editorial_score": 42,
-        "score_breakdown": {
-          "score": 42,
-          "importance": 50,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 55.91
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 55.91,
-          "event_count": 2,
-          "timeline_entries": 2
-        }
-      },
-      {
-        "story_id": "story_001191",
-        "title": "Fugitive arrested after fatal overdose in Martin County - witn.com",
-        "score": 50,
-        "editorial_priority": 42,
-        "editorial_score": 42,
-        "score_breakdown": {
-          "score": 42,
-          "importance": 50,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 53.01
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 3,
-        "timeline_entries": 3,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 3,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-29T20:40:49.736866+00:00",
-          "hours_since_update": 53.01,
-          "event_count": 3,
-          "timeline_entries": 3
-        }
-      },
-      {
-        "story_id": "story_000928",
-        "title": "Investigators reveal horrific home conditions in Fort Pierce baby death case; arrests made - WPEC",
-        "score": 50,
-        "editorial_priority": 39,
-        "editorial_score": 39,
-        "score_breakdown": {
-          "score": 39,
-          "importance": 50,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 87.01
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 3,
-        "timeline_entries": 3,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 3,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Established multi-event story has not updated in the past 72 hours",
-          "last_updated": "2026-07-28T10:40:55.425868+00:00",
-          "hours_since_update": 87.01,
-          "event_count": 3,
-          "timeline_entries": 3
-        }
-      },
-      {
-        "story_id": "story_001360",
-        "title": "IA report: St. Lucie County deputy fired over social media post mocking sheriff - cbs12.com",
-        "score": 35,
-        "editorial_priority": 37,
-        "editorial_score": 37,
-        "score_breakdown": {
-          "score": 37,
-          "importance": 35,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 10.08
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 10.08,
-          "event_count": 2,
-          "timeline_entries": 2
         }
       }
     ]
@@ -2716,7 +2909,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 6,
-    "generated_at": "2026-08-01T01:46:46Z",
+    "generated_at": "2026-08-01T04:08:46Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -2731,7 +2924,8 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "generated_live": 6,
+        "cache_hit": 3,
+        "generated_live": 3,
         "missing_hero_archive_recovery": 1,
         "no_publishable_sources": 1,
         "quality_gate_archive_recovery": 1
@@ -2740,14 +2934,14 @@
         "missing_or_null_hero": 1,
         "publication_quality_rejected": 1
       },
-      "model_attempt_count": 8,
-      "model_elapsed_seconds": 173.247,
+      "model_attempt_count": 5,
+      "model_elapsed_seconds": 114.284,
       "archive_recovery_requested_count": 3,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 7,
-      "published_story_duplicate_suppression_count": 40,
+      "category_eligibility_rejection_count": 6,
+      "published_story_duplicate_suppression_count": 47,
       "story_aware_update_context_count": 0
     },
     "categories": [
@@ -2755,9 +2949,9 @@
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "missing_hero_archive_recovery",
-        "fetched_candidate_count": 28,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 8,
+        "fetched_candidate_count": 29,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 7,
         "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -2766,11 +2960,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 3.695,
+            "elapsed_seconds": 4.847,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 3.695,
+        "model_elapsed_seconds": 4.847,
         "failure_code": "missing_or_null_hero",
         "failure_summary": "No usable hero remained after sanitization",
         "sports_expired_event_preview_count": 0,
@@ -2781,8 +2975,8 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 8,
-        "category_eligibility_rejection_count": 7,
+        "category_eligibility_assessed_count": 7,
+        "category_eligibility_rejection_count": 6,
         "category_eligibility_rejections": [
           {
             "contract_version": "1.0-local-government-central-action",
@@ -2845,21 +3039,6 @@
             "policy": "central_government_action_required",
             "eligible": false,
             "would_reject": true,
-            "reason": "competing_story_form_without_government_action",
-            "positive_signals": [],
-            "competing_signals": [
-              "crime_incident:homicide"
-            ],
-            "headline": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
             "reason": "missing_central_government_action",
             "positive_signals": [],
             "competing_signals": [],
@@ -2880,7 +3059,7 @@
             "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/welcome-to-cat-heaven-nine-lives-cafe-pairs-shelter-cats-with-specialty-coffee-and-pilates"
           }
         ],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -2909,6 +3088,26 @@
             "editorial_story_id": "story_001603",
             "canonical_slug": "2026-07-31-byron-donalds-holds-commanding-lead-in-florida-gop-governors-race-with-three-wee",
             "canonical_headline": "Byron Donalds holds commanding lead in Florida GOP governor's race with three weeks until primary",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection",
+            "editorial_story_id": "story_001557",
+            "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "Martin County Commissioners move to change beach shark fishing laws - WPEC",
+            "source_url": "https://cbs12.com/news/local/martin-county-commissioners-move-change-shark-fishing-laws-beaches-chumming-chum-endanger-swimmers-surfers-beachgoers-blood-surf-incident-shark-bites-rules-beach-fishing",
+            "editorial_story_id": "story_001464",
+            "canonical_slug": "2026-07-30-martin-county-commissioners-face-pushback-on-proposed-changes-to-beach-shark-fis",
+            "canonical_headline": "Martin County commissioners face pushback on proposed changes to beach shark fishing rules",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -2947,16 +3146,16 @@
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 29.274
+        "elapsed_seconds": 24.986
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "generated_live",
         "fetched_candidate_count": 26,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 8,
-        "selected_source_count": 8,
+        "fresh_candidate_count": 18,
+        "publishable_source_count": 7,
+        "selected_source_count": 7,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -2964,11 +3163,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 21.1,
+            "elapsed_seconds": 13.184,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 21.1,
+        "model_elapsed_seconds": 13.184,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -2979,10 +3178,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -3012,6 +3211,16 @@
             "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
             "canonical_headline": "Inmate awaiting retrial for Fort Pierce murder charged with attacking convicted killer in St. Lucie County Jail",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection",
+            "editorial_story_id": "story_001557",
+            "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3046,13 +3255,13 @@
           },
           {
             "category_key": "crime",
-            "surface": "card",
-            "headline": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
-            "editorial_story_id": "story_000011",
-            "canonical_slug": "2026-07-29-man-crashes-suv-into-port-st-lucie-liquor-store-charged-with-dui",
-            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "published_skip_placement_suppressed"
+            "source_headline": "Two arrested after fleeing Port St. Lucie Police in high-speed chase - Hometown News Treasure Coast",
+            "source_url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxNVDVxb19nTW9Ub0lTNm8zUkJfVUE1ZlpvaGNVYUdhZzZ6SElGWUZOdmlsLUZTd0phckw4cEFNWGJGUW9NWkJiSGJkUWxLZGpoS1A4a2hyOVczVUlyZTVvZHQyaFBMUC1Gd05MR19IaGx6UGVoOFEzcU9SanBRYzdPaWNGajFGay10cEc3WGJQZGlKZllFb2JleHFXS1Q5bUJmejZ0NWoteF9SaFFSTDBoLTBfR0hYc2ctdzl6QXZQUVltMHkzV1cwRXM0WHVvZVBYU3J5WUJhMlpRSHJlR1Y5RVpzNGRLaFhBRjZLcVYxWWV3VnNB",
+            "editorial_story_id": "story_001427",
+            "canonical_slug": "2026-07-30-two-arrested-after-high-speed-chase-through-port-st-lucie-ends-with-one-suspect",
+            "canonical_headline": "Two arrested after high-speed chase through Port St. Lucie ends with one suspect found on occupied home's roof",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
@@ -3061,28 +3270,21 @@
         "budget_seconds": 180.0,
         "live_hero_headline": "Los Angeles man sentenced to life in prison for fentanyl sale that killed Vero Beach resident",
         "generated_card_count": 0,
-        "elapsed_seconds": 34.703
+        "elapsed_seconds": 25.011
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 9,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 8,
         "selected_source_count": 7,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 13.329,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 13.329,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3093,10 +3295,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 9,
+        "category_eligibility_assessed_count": 8,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -3106,6 +3308,16 @@
             "canonical_slug": "2026-07-31-treasure-coast-renters-face-high-costs-as-rental-market-holds-flat",
             "canonical_headline": "Treasure Coast renters face high costs as rental market holds flat",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection",
+            "editorial_story_id": "story_001557",
+            "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3131,32 +3343,22 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "King's Landing development in Fort Pierce nears completion with luxury villas, Marriott Hotel by 2029",
-        "generated_card_count": 0,
-        "elapsed_seconds": 24.567
+        "elapsed_seconds": 8.456
       },
       {
         "category_key": "sports",
         "category_label": "Sports",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 25,
         "fresh_candidate_count": 25,
         "publishable_source_count": 6,
         "selected_source_count": 6,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 57.948,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 57.948,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3174,11 +3376,8 @@
         "published_story_duplicate_suppressions": [],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
-        "generated_card_count": 0,
-        "elapsed_seconds": 75.06
+        "elapsed_seconds": 15.328
       },
       {
         "category_key": "things_to_do",
@@ -3186,8 +3385,8 @@
         "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 21,
-        "publishable_source_count": 7,
-        "selected_source_count": 7,
+        "publishable_source_count": 6,
+        "selected_source_count": 6,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 1,
@@ -3195,11 +3394,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 37.183,
+            "elapsed_seconds": 60.085,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 37.183,
+        "model_elapsed_seconds": 60.085,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -3210,7 +3409,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 7,
+        "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 3,
@@ -3227,21 +3426,21 @@
           },
           {
             "category_key": "things_to_do",
-            "source_headline": "Fishing line finds new purpose - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/dining_and_entertainment/local_events/fishing-line-finds-new-purpose/article_d7d4f6f4-e60e-5854-b3f0-e865f071937e.html",
-            "editorial_story_id": "story_000810",
-            "canonical_slug": "2026-07-28-recycled-fishing-line-becomes-friendship-bracelets-at-vero-beach-museum-of-art",
-            "canonical_headline": "Vero Beach Museum of Art to host recycled fishing line bracelet workshop Aug. 8",
+            "source_headline": "Week of July 31 - Hometown News Treasure Coast",
+            "source_url": "https://www.hometownnewstc.com/community_page/calendar/week-of-july-31/article_04e22d7f-ce41-5dde-b427-958866a5c070.html",
+            "editorial_story_id": "story_001228",
+            "canonical_slug": "2026-07-31-vero-beach-museum-of-art-features-american-artists-new-building-exhibit-through",
+            "canonical_headline": "Vero Beach Museum of Art features American artists, new building exhibit through 2027",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "things_to_do",
-            "source_headline": "Big Taste of Martin County returns to support Big Brothers Big Sisters mentoring programs",
-            "source_url": "https://www.wptv.com/shining-a-light/big-taste-of-martin-county-returns-to-support-big-brothers-big-sisters-mentoring-programs",
-            "editorial_story_id": "story_000253",
-            "canonical_slug": "2026-07-23-big-taste-of-martin-county-returns-oct-6-to-support-youth-mentoring-programs",
-            "canonical_headline": "Big Brothers Big Sisters returns Big Taste of Martin County fundraiser to Stuart",
+            "source_headline": "Fishing line finds new purpose - Hometown News Treasure Coast",
+            "source_url": "https://www.hometownnewstc.com/dining_and_entertainment/local_events/fishing-line-finds-new-purpose/article_d7d4f6f4-e60e-5854-b3f0-e865f071937e.html",
+            "editorial_story_id": "story_000810",
+            "canonical_slug": "2026-07-28-recycled-fishing-line-becomes-friendship-bracelets-at-vero-beach-museum-of-art",
+            "canonical_headline": "Vero Beach Museum of Art to host recycled fishing line bracelet workshop Aug. 8",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
@@ -3250,7 +3449,7 @@
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 59.705
+        "elapsed_seconds": 82.108
       },
       {
         "category_key": "florida",
@@ -3303,28 +3502,21 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "elapsed_seconds": 23.623
+        "elapsed_seconds": 16.484
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 22,
         "publishable_source_count": 1,
         "selected_source_count": 1,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 5.691,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 5.691,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3363,18 +3555,15 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Stuart man jailed after fleeing traffic stop, leading police chase into Martin County",
-        "generated_card_count": 0,
-        "elapsed_seconds": 20.689
+        "elapsed_seconds": 12.251
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 19,
+        "fresh_candidate_count": 16,
         "publishable_source_count": 4,
         "selected_source_count": 4,
         "cache_hit": false,
@@ -3384,11 +3573,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 20.49,
+            "elapsed_seconds": 22.933,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 20.49,
+        "model_elapsed_seconds": 22.933,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3402,7 +3591,7 @@
         "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 12,
+        "published_story_duplicate_suppression_count": 14,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -3412,16 +3601,6 @@
             "canonical_slug": "2026-07-25-single-family-home-prices-rise-across-treasure-coast-after-two-years-of-declines",
             "canonical_headline": "Treasure Coast single-family home prices rise after two-year decline",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Man, 86, dies in two-car crash in Port St. Lucie - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-man-86-dies-wo-car-crash-port-st-lucie/73320842",
-            "editorial_story_id": "story_000011",
-            "canonical_slug": "2026-07-29-man-crashes-suv-into-port-st-lucie-liquor-store-charged-with-dui",
-            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3462,6 +3641,36 @@
             "canonical_slug": "2026-07-31-st-lucie-county-sheriffs-office-seeks-flamingo-bandit-after-home-burglarized-twi",
             "canonical_headline": "St. Lucie County Sheriff's Office seeks 'Flamingo Bandit' after home burglarized twice",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Man accused of attacking convicted killer Otto Lenke in St. Lucie County Jail - WPEC",
+            "source_url": "https://cbs12.com/news/local/man-accused-of-attacking-convicted-killer-otto-lenke-in-st-lucie-county-jail-robert-castro-dorm-struck-in-face-cut-nose-richard-benson-death",
+            "editorial_story_id": "story_001610",
+            "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
+            "canonical_headline": "Inmate awaiting retrial for Fort Pierce murder charged with attacking convicted killer in St. Lucie County Jail",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection",
+            "editorial_story_id": "story_001557",
+            "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection",
+            "editorial_story_id": "story_001557",
+            "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3516,31 +3725,31 @@
           },
           {
             "category_key": "st_lucie",
-            "surface": "hero",
-            "headline": "86-year-old woman dies after crash at Port St. Lucie intersection",
-            "editorial_story_id": "story_000011",
-            "canonical_slug": "2026-07-29-man-crashes-suv-into-port-st-lucie-liquor-store-charged-with-dui",
-            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "published_skip_placement_suppressed"
+            "source_headline": "Infant death investigation in St. Lucie County may not be completed - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-death-baby-infant-mother-grandfather/73287792",
+            "editorial_story_id": "story_001161",
+            "canonical_slug": "2026-07-29-st-lucie-county-investigators-say-3-month-olds-death-may-bring-further-charges",
+            "canonical_headline": "St. Lucie County investigators say 3-month-old's death may bring further charges",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "King's Landing development in downtown Fort Pierce nears construction milestones",
-        "generated_card_count": 1,
-        "elapsed_seconds": 35.868
+        "live_hero_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+        "generated_card_count": 2,
+        "elapsed_seconds": 35.162
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "generated_live",
         "fetched_candidate_count": 27,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 9,
-        "selected_source_count": 8,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 7,
+        "selected_source_count": 7,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -3548,11 +3757,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 13.811,
+            "elapsed_seconds": 13.235,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 13.811,
+        "model_elapsed_seconds": 13.235,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3563,10 +3772,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 9,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -3600,6 +3809,16 @@
           },
           {
             "category_key": "indian_river",
+            "source_headline": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection",
+            "editorial_story_id": "story_001557",
+            "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
             "source_headline": "Man sentenced to life in prison for selling fentanyl that killed Vero Beach man in 2023 - WPEC",
             "source_url": "https://cbs12.com/news/crime/man-sentenced-to-life-in-prison-for-selling-fentanyl-that-killed-vero-beach-man-in-2023-indian-river-county-sheriffs-office-irsco-dea-miami-divison-florida-news",
             "editorial_story_id": "story_001485",
@@ -3625,7 +3844,7 @@
         "budget_seconds": 180.0,
         "live_hero_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
         "generated_card_count": 0,
-        "elapsed_seconds": 21.351
+        "elapsed_seconds": 25.016
       }
     ]
   }
