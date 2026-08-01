@@ -256,3 +256,100 @@ def test_post_publication_rebind_prefers_repaired_slug_over_quarantined_older_sl
     assert rebound == 1
     assert categories[0]["hero"]["_archived_slug"] == repaired_slug
     assert categories[0]["hero"]["link"].endswith(f"/{repaired_slug}.html")
+
+
+def test_editor_supplied_custom_slug_preserves_suffix_beyond_generic_slug_limit():
+    g = _load_generate()
+    requested = (
+        "2026-07-31-treasure-coast-traffic-report-i-95-ramp-and-road-"
+        "closures-planned-aug-2-7"
+    )
+    assert len(requested) > 80
+    hero = {
+        "headline": "Treasure Coast Traffic Report: I-95 Ramp and Road Closures Planned Aug. 2-7",
+        "body": "Complete manually authored traffic report.",
+        "is_custom": True,
+        "_custom_requested_slug": requested,
+    }
+
+    existing, forced_slug, story_id = g._resolve_custom_publication_target(
+        hero, [], None, hero["headline"]
+    )
+
+    assert existing is None
+    assert forced_slug == requested
+    assert forced_slug.endswith("aug-2-7")
+    assert story_id.startswith("custom:")
+
+
+def test_abbreviated_month_recurring_edition_marker_matches_explicit_custom_slug():
+    g = _load_generate()
+    entry = {
+        "headline": "Treasure Coast Traffic Report: I-95 Ramp and Road Closures Planned Aug. 2-7",
+        "slug": (
+            "2026-07-31-treasure-coast-traffic-report-i-95-ramp-and-road-"
+            "closures-planned-aug-2-7"
+        ),
+        "is_custom": True,
+    }
+
+    assert g._custom_edition_marker(entry) == "aug-2-7"
+    assert g._custom_series_slug_mismatch(entry, entry["slug"]) is False
+    assert g._archive_headline_slug_alignment(entry)["aligned"] is True
+
+
+def test_truncated_recurring_custom_slug_is_rejected_before_live_publication():
+    g = _load_generate()
+    entry = {
+        "headline": "Treasure Coast Traffic Report: I-95 Ramp and Road Closures Planned Aug. 2-7",
+        "slug": (
+            "2026-07-31-treasure-coast-traffic-report-i-95-ramp-and-road-"
+            "closures-planned-aug"
+        ),
+        "is_custom": True,
+    }
+
+    result = g._archive_headline_slug_alignment(entry)
+    assert result["aligned"] is False
+    assert result["reason"] == "recurring_custom_edition_slug_mismatch"
+
+
+def test_forward_live_identity_accepts_exact_long_custom_edition_slug(tmp_path):
+    g = _load_generate()
+    (tmp_path / "data").mkdir()
+    slug = (
+        "2026-07-31-treasure-coast-traffic-report-i-95-ramp-and-road-"
+        "closures-planned-aug-2-7"
+    )
+    headline = "Treasure Coast Traffic Report: I-95 Ramp and Road Closures Planned Aug. 2-7"
+    story_id = "custom:traffic-aug-2-7"
+    (tmp_path / "archive.json").write_text(
+        __import__("json").dumps([
+            {
+                "slug": slug,
+                "headline": headline,
+                "editorial_story_id": story_id,
+                "ranking_eligible": True,
+                "is_custom": True,
+                "authoritative_custom": True,
+                "custom_series_key": "treasure-coast-traffic-report",
+                "custom_edition_key": "aug-2-7",
+            }
+        ]),
+        encoding="utf-8",
+    )
+    placement = {
+        "headline": headline,
+        "slug": slug,
+        "_archived_slug": slug,
+        "link": f"https://treasurecoast.today/articles/{slug}.html",
+        "editorial_story_id": story_id,
+        "is_custom": True,
+        "authoritative_custom": True,
+    }
+    categories = [{"category_key": "local_gov", "hero": placement, "cards": []}]
+
+    report = g.validate_forward_live_identity(categories, categories[0], tmp_path)
+
+    assert report["passed"] is True
+    assert report["violation_count"] == 0

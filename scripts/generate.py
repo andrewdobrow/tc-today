@@ -10030,7 +10030,7 @@ def load_custom_articles():
                 "Keep one authoritative queue entry per headline."
             )
         queued_headlines.add(headline)
-        requested_slug = slugify(str(art.get("slug") or ""))
+        requested_slug = _validated_custom_requested_slug(art.get("slug"))
         if requested_slug:
             prior_headline = queued_slugs.get(requested_slug)
             if prior_headline and prior_headline != headline:
@@ -11592,6 +11592,39 @@ _CUSTOM_MONTHS = (
     "january", "february", "march", "april", "may", "june",
     "july", "august", "september", "october", "november", "december",
 )
+_CUSTOM_MONTH_PATTERN = (
+    r"jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|"
+    r"jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|"
+    r"nov(?:ember)?|dec(?:ember)?"
+)
+_CUSTOM_REQUESTED_SLUG_MAX_LENGTH = 180
+
+
+def _normalize_custom_slug(value):
+    """Normalize an editor-supplied custom permalink without generic 80-char clipping.
+
+    ``slugify`` intentionally limits generated headlines to 80 characters. A custom
+    permalink is an explicit publication instruction and may need a few additional
+    characters to retain an edition marker such as ``aug-2-7``. Silently clipping
+    that marker makes the published URL contradict the recurring-edition contract.
+    """
+    text = str(value or "").lower().strip()
+    text = re.sub(r"[^\w\s-]", "", text)
+    text = re.sub(r"[\s_]+", "-", text)
+    text = re.sub(r"-+", "-", text)
+    return text.strip("-")
+
+
+def _validated_custom_requested_slug(value):
+    slug = _normalize_custom_slug(value)
+    if len(slug) > _CUSTOM_REQUESTED_SLUG_MAX_LENGTH:
+        raise RuntimeError(
+            "Custom publication slug is too long after normalization "
+            f"({len(slug)} characters; maximum "
+            f"{_CUSTOM_REQUESTED_SLUG_MAX_LENGTH}). Shorten the explicit slug "
+            "without removing its edition marker."
+        )
+    return slug
 
 
 def _parse_any_datetime(value):
@@ -11640,9 +11673,8 @@ def _custom_edition_marker(item):
     if explicit:
         return explicit
     headline = str(item.get("headline") or "").lower()
-    month_pattern = "|".join(_CUSTOM_MONTHS)
     match = re.search(
-        rf"\b({month_pattern})\s+(\d{{1,2}})(?:\s*(?:-|–|—|to|through)\s*(\d{{1,2}}))?\b",
+        rf"\b({_CUSTOM_MONTH_PATTERN})\.?\s+(\d{{1,2}})(?:\s*(?:-|–|—|to|through)\s*(\d{{1,2}}))?\b",
         headline,
         re.I,
     )
@@ -11661,7 +11693,7 @@ def _custom_series_slug_mismatch(item, slug):
     series_key = _custom_series_key(item)
     if not series_key:
         return False
-    slug = slugify(str(slug or ""))
+    slug = _normalize_custom_slug(slug)
     if not slug:
         return False
     marker = _custom_edition_marker(item)
@@ -15406,8 +15438,8 @@ def _resolve_custom_publication_target(hero, archive, existing, headline):
     # custom permalink into a differently titled submission. The stale slug is
     # quarantined, not reused; the different headline receives a new identity.
     if "_custom_requested_slug" not in hero and isinstance(existing, dict):
-        inherited_slug = slugify(str(hero.get("slug") or ""))
-        existing_slug = slugify(str(existing.get("slug") or ""))
+        inherited_slug = _normalize_custom_slug(hero.get("slug"))
+        existing_slug = _normalize_custom_slug(existing.get("slug"))
         if inherited_slug and inherited_slug == existing_slug:
             hero["_superseded_custom_slug"] = existing_slug
             hero["_custom_series_permalink_repair"] = True
@@ -15417,12 +15449,12 @@ def _resolve_custom_publication_target(hero, archive, existing, headline):
     # archive/live placement and must never authorize reuse when the exact
     # headline does not match.
     requested_slug = hero.get("_custom_requested_slug", "")
-    forced_slug = slugify(str(requested_slug or "")) or None
+    forced_slug = _validated_custom_requested_slug(requested_slug) or None
     if forced_slug:
         collision = next(
             (
                 entry for entry in archive or []
-                if slugify(str(entry.get("slug") or "")) == forced_slug
+                if _normalize_custom_slug(entry.get("slug")) == forced_slug
                 and _archive_custom_headline_key(entry) != headline_key
             ),
             None,

@@ -265,3 +265,64 @@ def test_unchanged_published_custom_remains_active_queue_item(tmp_path, monkeypa
     assert item["published_raw"] == archive[0]["published_raw"]
     assert item["editorial_story_id"] == "custom:psl-training"
     assert "_archive_only" not in item
+
+
+def test_write_archives_preserves_long_recurring_traffic_slug_and_live_contract(
+    tmp_path, monkeypatch
+):
+    g = _load_generate()
+    monkeypatch.setattr(g, "OUTPUT_DIR", tmp_path)
+    headline = "Treasure Coast Traffic Report: I-95 Ramp and Road Closures Planned Aug. 2-7"
+    slug = (
+        "2026-07-31-treasure-coast-traffic-report-i-95-ramp-and-road-"
+        "closures-planned-aug-2-7"
+    )
+    queue = [{
+        "headline": headline,
+        "slug": slug,
+        "category": "local_gov",
+        "image_url": "https://treasurecoast.today/images/fdot.png",
+        "body": "Motorists should prepare for overnight closures.\n\nFull county-by-county report.",
+        "expires": "2026-08-08",
+    }]
+    (tmp_path / "custom_articles.json").write_text(json.dumps(queue), encoding="utf-8")
+    (tmp_path / "archive.json").write_text("[]", encoding="utf-8")
+    (tmp_path / "articles").mkdir()
+
+    loaded = g.load_custom_articles()
+    assert len(loaded) == 1
+    live = loaded[0]
+    category = {
+        "category_key": "local_gov",
+        "category_label": "Local Government",
+        "hero": live,
+        "cards": [],
+    }
+
+    monkeypatch.setattr(g, "_sanitize_authoritative_custom_archive", lambda rows, *_: list(rows))
+    monkeypatch.setattr(g, "_purge_nonstory_archive_entries", lambda rows, *_: (list(rows), {}))
+    monkeypatch.setattr(g, "apply_canonical_story_cleanup", lambda rows, *_: (list(rows), []))
+    monkeypatch.setattr(g, "_load_publication_identity_index", lambda: {})
+    monkeypatch.setattr(g, "_backfill_archive_editorial_story_ids", lambda rows, *args, **kwargs: (list(rows), {}))
+    monkeypatch.setattr(g, "_reconcile_archive_publication_identity", lambda rows, *_: (list(rows), [], {}))
+    monkeypatch.setattr(g, "enforce_canonical_redirects", lambda rows, *_args, **_kwargs: (list(rows), {}))
+    monkeypatch.setattr(g, "render_article_page", lambda *_args, **_kwargs: "<html>traffic report</html>")
+    monkeypatch.setattr(g, "validate_custom_body_fidelity", lambda *_args, **_kwargs: True)
+    monkeypatch.setattr(g, "write_story_regression_report", lambda *_args, **_kwargs: {"production_gate_passed": True})
+    monkeypatch.setattr(g, "write_story_health_report", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(g, "render_archive_page", lambda *_args, **_kwargs: "archive")
+    monkeypatch.setattr(g, "update_sitemap", lambda *_args, **_kwargs: "sitemap")
+    monkeypatch.setattr(g, "update_news_sitemap", lambda *_args, **_kwargs: "news-sitemap")
+
+    g.write_archives([category], category)
+
+    archive = json.loads((tmp_path / "archive.json").read_text(encoding="utf-8"))
+    row = next(entry for entry in archive if entry.get("headline") == headline)
+    assert row["slug"] == slug
+    assert row["custom_edition_key"] == "aug-2-7"
+    assert g._archive_headline_slug_alignment(row)["aligned"] is True
+    assert live["_archived_slug"] == slug
+    assert live["link"].endswith(f"/{slug}.html")
+
+    report = g.validate_forward_live_identity([category], category, tmp_path)
+    assert report["passed"] is True
