@@ -179,3 +179,35 @@ def test_index_tracks_all_story_ids_but_source_enforcement_remains_duplicate_saf
     assert "story_followup" in index.all_story_ids
     assert "story_followup" not in index.safe_story_ids
     assert index.resolve_source({"source_url": "https://example.com/arrest"}) == ""
+
+
+def test_publication_index_rejects_reused_rolling_weather_url_without_title_continuity():
+    source = "https://news.google.com/rss/articles/WPBF-WEATHER?oc=5"
+    index = build_publication_identity_index(
+        {
+            "stories": {
+                "story_weather": {
+                    "canonical_title": "Heat advisory in effect for Palm Beach County",
+                    "titles": ["Heat advisory in effect for Palm Beach County - WPBF"],
+                    "sources": [source],
+                    "relationship_history": [{"relationship": "new_story"}],
+                }
+            }
+        }
+    )
+
+    assert index.resolve(
+        {
+            "headline": (
+                "Tracking showers and thunderstorms with triple digit feels-like "
+                "temps across South Florida - WPBF"
+            ),
+            "source_url": source,
+        }
+    ) == ""
+    assert index.resolve(
+        {
+            "headline": "Palm Beach County heat advisory remains in effect Friday - WPBF",
+            "source_url": source,
+        }
+    ) == "story_weather"

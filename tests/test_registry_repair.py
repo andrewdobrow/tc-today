@@ -370,3 +370,62 @@ def test_repair_merges_exact_article_url_but_not_shared_feed_url() -> None:
     assert report.source_identity_groups_resolved == 1
     assert report.source_story_records_removed == 1
     assert report.remaining_source_identity_groups == 0
+
+
+def test_registry_does_not_merge_distinct_weather_events_from_reused_google_url(tmp_path: Path) -> None:
+    registry = StoryRegistry(tmp_path / "registry.json")
+    source = "https://news.google.com/rss/articles/WPBF-WEATHER?oc=5"
+
+    first = registry.resolve_article(
+        event_key="unknown-event-ba62360387",
+        title="Heat advisory in effect for metro and coastal Palm Beach County Friday - WPBF",
+        facts=(),
+        source=source,
+    )
+    second = registry.resolve_article(
+        event_key="unknown-event-newforecast",
+        title=(
+            "Tracking showers and thunderstorms with triple digit feels-like "
+            "temps across South Florida - WPBF"
+        ),
+        facts=(),
+        source=source,
+    )
+
+    assert first != second
+    assert registry.last_decision["relationship"] == "new_story"
+    assert registry.get_story(first)["titles"] == [
+        "Heat advisory in effect for metro and coastal Palm Beach County Friday - WPBF"
+    ]
+    assert registry.get_story(second)["titles"] == [
+        "Tracking showers and thunderstorms with triple digit feels-like temps across South Florida - WPBF"
+    ]
+
+
+def test_registry_repair_does_not_rejoin_incompatible_rolling_weather_titles() -> None:
+    source = "https://news.google.com/rss/articles/WPBF-WEATHER?oc=5"
+    first = _story(
+        "story_001574",
+        events=["unknown-event-ba62360387"],
+        titles=["Heat advisory in effect for metro and coastal Palm Beach County Friday - WPBF"],
+    )
+    second = _story(
+        "story_001700",
+        events=["unknown-event-newforecast"],
+        titles=[
+            "Tracking showers and thunderstorms with triple digit feels-like temps across South Florida - WPBF"
+        ],
+    )
+    first["sources"] = [source]
+    second["sources"] = [source]
+    payload = {
+        "stories": {"story_001574": first, "story_001700": second},
+        "event_to_story": {},
+        "story_aliases": {},
+        "quarantined_stories": {},
+    }
+
+    repair_registry_payload(payload)
+
+    assert set(payload["stories"]) == {"story_001574", "story_001700"}
+    assert payload.get("story_aliases", {}) == {}

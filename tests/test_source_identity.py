@@ -71,3 +71,50 @@ def test_find_matching_source_story_accepts_exact_article_identity() -> None:
     assert match.matched is True
     assert match.story_id == "story_000001"
     assert match.confidence == 1.0
+
+
+def test_rolling_google_news_weather_url_rejects_materially_changed_headline() -> None:
+    source = "https://news.google.com/rss/articles/WPBF-WEATHER?oc=5"
+    stories = (
+        {
+            "story_id": "story_001574",
+            "sources": [source],
+            "titles": [
+                "Heat advisory in effect for metro and coastal Palm Beach County Friday - WPBF"
+            ],
+        },
+    )
+
+    match = find_matching_source_story(
+        source,
+        stories,
+        title=(
+            "Tracking showers and thunderstorms with triple digit feels-like "
+            "temps across South Florida - WPBF"
+        ),
+    )
+
+    assert match.matched is False
+    assert "title continuity" in match.reason.lower()
+    assert "Rolling source title continuity: false" in match.decision_trace
+
+
+def test_rolling_google_news_weather_url_accepts_continuous_headline() -> None:
+    source = "https://news.google.com/rss/articles/WPBF-WEATHER?oc=5"
+    stories = (
+        {
+            "story_id": "story_weather",
+            "sources": [source],
+            "titles": ["Heat advisory in effect for Palm Beach County - WPBF"],
+        },
+    )
+
+    match = find_matching_source_story(
+        source,
+        stories,
+        title="Palm Beach County heat advisory remains in effect Friday - WPBF",
+    )
+
+    assert match.matched is True
+    assert match.story_id == "story_weather"
+    assert "Rolling source title continuity: true" in match.decision_trace

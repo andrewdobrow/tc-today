@@ -13,9 +13,14 @@ from dataclasses import dataclass
 from typing import Any, Mapping, Iterable
 
 from .registry_repair import normalize_identity_title, is_broad_event_class_key, story_quarantine_reasons
-from .source_identity import normalize_source_identity_url
+from .source_identity import (
+    normalize_source_identity_url,
+    source_identity_requires_title_continuity,
+    source_identity_title_compatible,
+    story_identity_titles,
+)
 
-PUBLICATION_IDENTITY_VERSION = "1.0"
+PUBLICATION_IDENTITY_VERSION = "1.1"
 
 
 @dataclass(frozen=True)
@@ -27,7 +32,24 @@ class PublicationIdentityIndex:
     safe_story_ids: frozenset[str]
     quarantined_story_ids: frozenset[str]
     canonical_titles: Mapping[str, str]
+    story_titles: Mapping[str, tuple[str, ...]]
 
+
+    def _source_title_supported(
+        self, item: Mapping[str, Any], story_id: str, raw_url: object
+    ) -> bool:
+        title = (
+            item.get("source_headline")
+            or item.get("headline")
+            or item.get("title")
+            or ""
+        )
+        existing_titles = self.story_titles.get(story_id, ())
+        if not source_identity_requires_title_continuity(
+            raw_url, title=title, existing_titles=existing_titles
+        ):
+            return True
+        return source_identity_title_compatible(title, existing_titles)
     def resolve_source(self, item: Mapping[str, Any] | None) -> str:
         """Resolve only an exact external source-article URL.
 
@@ -42,7 +64,11 @@ class PublicationIdentityIndex:
                 continue
             normalized = normalize_source_identity_url(raw_url)
             story_id = self.url_to_story.get(normalized, "") if normalized else ""
-            if story_id and story_id in self.safe_story_ids:
+            if (
+                story_id
+                and story_id in self.safe_story_ids
+                and self._source_title_supported(item, story_id, raw_url)
+            ):
                 return story_id
         return ""
 
@@ -53,7 +79,11 @@ class PublicationIdentityIndex:
             raw_url = str(item.get(key) or "")
             normalized = normalize_source_identity_url(raw_url)
             story_id = self.url_to_story.get(normalized, "") if normalized else ""
-            if story_id and story_id in self.safe_story_ids:
+            if (
+                story_id
+                and story_id in self.safe_story_ids
+                and self._source_title_supported(item, story_id, raw_url)
+            ):
                 return story_id
             # TCT permalinks carry the canonical article slug even when the original
             # source URL and rewritten headline no longer match the raw registry row.
@@ -127,6 +157,7 @@ def build_publication_identity_index(
     safe_story_ids: set[str] = set()
     all_story_ids: set[str] = set()
     canonical_titles: dict[str, str] = {}
+    story_titles_by_id: dict[str, tuple[str, ...]] = {}
     quarantined_story_ids = frozenset(
         str(story_id)
         for story_id in (payload.get("quarantined_stories", {}) if isinstance(payload, Mapping) else {})
@@ -137,6 +168,7 @@ def build_publication_identity_index(
             continue
         all_story_ids.add(story_id)
         canonical_titles[story_id] = str(story.get("canonical_title") or "")
+        story_titles_by_id[story_id] = story_identity_titles(story)
         if _is_safe_duplicate_story(story):
             safe_story_ids.add(story_id)
 
@@ -192,4 +224,5 @@ def build_publication_identity_index(
         safe_story_ids=frozenset(safe_story_ids),
         quarantined_story_ids=quarantined_story_ids,
         canonical_titles=canonical_titles,
+        story_titles=story_titles_by_id,
     )

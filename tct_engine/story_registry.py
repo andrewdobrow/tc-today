@@ -583,7 +583,9 @@ class StoryRegistry:
             self.save()
             return story_id
 
-        source_match = find_matching_source_story(source, self.iter_stories())
+        source_match = find_matching_source_story(
+            source, self.iter_stories(), title=title
+        )
         if source_match.matched and source_match.story_id:
             story_id = self._canonical_story_id(source_match.story_id)
             matched_story = self.get_story(story_id)

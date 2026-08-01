@@ -18,9 +18,14 @@ from .incident_identity import (
     named_person_death_subjects,
     timeline_incident_anchor,
 )
-from .source_identity import story_source_identity_urls
+from .source_identity import (
+    source_identity_requires_title_continuity,
+    source_identity_title_compatible,
+    story_identity_titles,
+    story_source_identity_urls,
+)
 
-REPAIR_VERSION = 6
+REPAIR_VERSION = 7
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
@@ -706,10 +711,21 @@ def _source_identity_components(stories: Mapping[str, Mapping[str, Any]]) -> lis
         for source_url in story_source_identity_urls(story):
             source_index.setdefault(source_url, []).append(story_id)
 
-    for group in source_index.values():
+    for source_url, group in source_index.items():
         unique = sorted(set(group))
-        for story_id in unique[1:]:
-            union(unique[0], story_id)
+        for left, right in itertools.combinations(unique, 2):
+            left_titles = story_identity_titles(stories[left])
+            right_titles = story_identity_titles(stories[right])
+            if source_identity_requires_title_continuity(
+                source_url, existing_titles=(*left_titles, *right_titles)
+            ):
+                compatible = any(
+                    source_identity_title_compatible(title, right_titles)
+                    for title in left_titles
+                )
+                if not compatible:
+                    continue
+            union(left, right)
 
     components: dict[str, set[str]] = {}
     for story_id in stories:

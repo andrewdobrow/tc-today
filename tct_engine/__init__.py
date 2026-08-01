@@ -87,6 +87,9 @@ from .source_identity import (
     SourceIdentityMatch,
     find_matching_source_story,
     normalize_source_identity_url,
+    source_identity_requires_title_continuity,
+    source_identity_title_compatible,
+    story_identity_titles,
     story_source_identity_urls,
 )
 from .rss_adapter import (
@@ -210,6 +213,9 @@ __all__ = [
     "SourceIdentityMatch",
     "find_matching_source_story",
     "normalize_source_identity_url",
+    "source_identity_requires_title_continuity",
+    "source_identity_title_compatible",
+    "story_identity_titles",
     "story_source_identity_urls",
     "RSSArticleAdapter",
     "RSSArticleError",

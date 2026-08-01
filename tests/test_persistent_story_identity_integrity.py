@@ -318,3 +318,36 @@ def test_repository_migration_separates_and_restores_all_three_incidents():
     fatal_html = (root / "articles" / f"{fatal['slug']}.html").read_text()
     assert "Man accused of DUI" in liquor_html
     assert "86-year-old woman dies" in fatal_html
+
+
+def test_rolling_weather_source_url_cannot_own_ledger_or_overwrite_old_event():
+    g = _load_generate()
+    source = "https://news.google.com/rss/articles/WPBF-WEATHER?oc=5"
+    incoming = {
+        "headline": (
+            "Tracking showers and thunderstorms with triple digit feels-like "
+            "temps across South Florida - WPBF"
+        ),
+        "source_url": source,
+        "editorial_story_id": "story_new_weather",
+    }
+    existing = {
+        "slug": "2026-07-31-heat-advisory-palm-beach-county",
+        "headline": "Heat advisory in effect for metro and coastal Palm Beach County Friday - WPBF",
+        "source_url": source,
+        "editorial_story_id": "story_old_weather",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+    }
+
+    keys = g._publication_ledger_identity_keys(incoming)
+    assert not any(key.startswith("source:") for key in keys)
+    assert g._find_exact_archive_source_entry(incoming, [existing]) is None
+    valid, reason = g._forward_publication_target_valid(
+        incoming, existing, "story_new_weather", "exact_source_url"
+    )
+    assert valid is False
+    assert reason in {"persistent_story_id_conflict", "source_identity_title_conflict"}
+    assert g._destructive_publication_write_authorized(
+        incoming, existing, "story_new_weather", "exact_source_url"
+    ) is False

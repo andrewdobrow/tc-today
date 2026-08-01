@@ -47,6 +47,8 @@ try:
         build_publication_identity_index,
         write_homepage_ranking_recommendations,
         normalize_source_identity_url,
+        source_identity_requires_title_continuity,
+        source_identity_title_compatible,
         incident_anchor_key,
     )
     from tct_engine.registry_repair import (
@@ -66,6 +68,8 @@ except Exception as exc:
     build_publication_identity_index = None
     write_homepage_ranking_recommendations = None
     normalize_source_identity_url = None
+    source_identity_requires_title_continuity = None
+    source_identity_title_compatible = None
     incident_anchor_key = None
     is_broad_event_class_key = None
     story_quarantine_reasons = None
@@ -11942,6 +11946,7 @@ def _find_exact_archive_source_entry(item, archive):
         and _normalized_external_source_url(
             entry.get("source_url") or entry.get("original_url") or entry.get("link")
         ) == normalized
+        and _source_identity_titles_compatible(item, entry)
     ]
     if not matches:
         return None
@@ -15559,7 +15564,23 @@ def _publication_ledger_identity_keys(item, identity_index=None, *, include_arch
         or item.get("url")
     )
     if source_url:
-        keys.append(f"source:{source_url}")
+        rolling = bool(
+            source_identity_requires_title_continuity is not None
+            and source_identity_requires_title_continuity(
+                source_url,
+                title=(
+                    item.get("source_headline")
+                    or item.get("headline")
+                    or item.get("title")
+                    or ""
+                ),
+            )
+        )
+        # A rolling weather/traffic/live URL is a source slot, not one immutable
+        # event. It may retrieve candidates elsewhere, but cannot own a canonical
+        # ledger key or independently authorize an overwrite.
+        if not rolling:
+            keys.append(f"source:{source_url}")
 
     custom_event = str(
         item.get("custom_event_key")
@@ -18876,7 +18897,11 @@ def _persistent_story_independent_identity_evidence(item, entry):
     existing_source = _normalized_external_source_url(
         entry.get("source_url") or entry.get("original_url") or entry.get("link")
     )
-    if incoming_source and incoming_source == existing_source:
+    if (
+        incoming_source
+        and incoming_source == existing_source
+        and _source_identity_titles_compatible(item, entry)
+    ):
         return {
             "matched": True,
             "confidence": 1.0,
@@ -18946,6 +18971,7 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
     same_exact_source = bool(
         incoming_source
         and incoming_source == existing_source
+        and _source_identity_titles_compatible(item, entry)
     )
 
     # Exact normalized source identity is independently authoritative regardless
@@ -19000,7 +19026,12 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
         existing = _normalized_external_source_url(
             entry.get("source_url") or entry.get("original_url") or entry.get("link")
         )
-        return (incoming == existing and bool(incoming)), basis if incoming == existing else "source_identity_conflict"
+        safe_exact_source = bool(
+            incoming
+            and incoming == existing
+            and _source_identity_titles_compatible(item, entry)
+        )
+        return safe_exact_source, basis if safe_exact_source else "source_identity_title_conflict"
     if basis == "weather_event_key":
         return True, basis
     return False, "unverified_update_target"
@@ -19023,7 +19054,11 @@ def _destructive_publication_write_authorized(item, entry, story_id, basis):
         entry.get("source_url") or entry.get("original_url") or entry.get("link")
     )
     if basis == "exact_source_url":
-        return bool(incoming_source and incoming_source == existing_source)
+        return bool(
+            incoming_source
+            and incoming_source == existing_source
+            and _source_identity_titles_compatible(item, entry)
+        )
 
     incoming_story_id = str(story_id or "").strip()
     existing_story_id = str(entry.get("editorial_story_id") or "").strip()
@@ -19105,7 +19140,12 @@ def _reconcile_archive_publication_identity(archive, identity_index):
                 right.get("source_url") or right.get("original_url") or right.get("link")
             )
             return bool(
-                (left_source and right_source and left_source == right_source)
+                (
+                    left_source
+                    and right_source
+                    and left_source == right_source
+                    and _source_identity_titles_compatible(left, right)
+                )
                 or _same_event_items(left, right)
             )
 
@@ -20797,6 +20837,48 @@ def _normalized_external_source_url(value):
     return urlunsplit((parts.scheme.lower(), parts.netloc.lower(), parts.path.rstrip("/"), urlencode(query), ""))
 
 
+def _source_identity_titles_compatible(incoming, existing):
+    """Return True when exact URL equality also preserves event-level title identity."""
+    incoming_source = _normalized_external_source_url(
+        (incoming or {}).get("source_url")
+        or (incoming or {}).get("_source_url")
+        or (incoming or {}).get("original_url")
+        or (incoming or {}).get("link")
+    )
+    existing_source = _normalized_external_source_url(
+        (existing or {}).get("source_url")
+        or (existing or {}).get("original_url")
+        or (existing or {}).get("link")
+    )
+    if not incoming_source or incoming_source != existing_source:
+        return False
+    incoming_title = (
+        (incoming or {}).get("source_headline")
+        or (incoming or {}).get("headline")
+        or (incoming or {}).get("title")
+        or ""
+    )
+    existing_titles = [
+        (existing or {}).get("source_headline"),
+        (existing or {}).get("headline"),
+        (existing or {}).get("title"),
+    ]
+    if (
+        source_identity_requires_title_continuity is None
+        or not source_identity_requires_title_continuity(
+            incoming_source,
+            title=incoming_title,
+            existing_titles=existing_titles,
+        )
+    ):
+        return True
+    if source_identity_title_compatible is None:
+        return False
+    return bool(
+        source_identity_title_compatible(incoming_title, existing_titles)
+    )
+
+
 def _load_current_quarantined_story_ids():
     """Load story IDs that must never re-enter current-run publication identity.
 
@@ -20943,7 +21025,12 @@ def _published_skip_canonical(item, archive):
         existing_source = _normalized_external_source_url(
             entry.get("source_url") or entry.get("original_url") or entry.get("link")
         )
-        if incoming_source and existing_source and incoming_source == existing_source:
+        if (
+            incoming_source
+            and existing_source
+            and incoming_source == existing_source
+            and _source_identity_titles_compatible(item, entry)
+        ):
             corroborated.append((entry, "exact_source_and_persistent_story_skip"))
             continue
         if _same_event_items(item, entry):

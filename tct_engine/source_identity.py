@@ -12,7 +12,7 @@ from typing import Any, Iterable, Mapping
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 import re
 
-SOURCE_IDENTITY_VERSION = "1.0"
+SOURCE_IDENTITY_VERSION = "1.1"
 
 _TRACKING_QUERY_KEYS = frozenset(
     {
@@ -22,6 +22,115 @@ _TRACKING_QUERY_KEYS = frozenset(
 )
 _FEED_FILE_RE = re.compile(r"\.(?:rss|xml|atom)(?:/)?$", re.IGNORECASE)
 _FEED_SEGMENTS = frozenset({"feed", "feeds", "rss"})
+
+_TITLE_WORD_RE = re.compile(r"[a-z0-9]+")
+_TITLE_NOISE = frozenset({
+    "the", "and", "for", "with", "from", "after", "before", "into", "over",
+    "this", "that", "today", "friday", "saturday", "sunday", "monday",
+    "tuesday", "wednesday", "thursday", "county", "florida", "south",
+    "north", "east", "west", "metro", "coastal", "local", "news",
+    "wptv", "wpbf", "wpec", "wflx", "cw34", "com", "palm", "beach",
+    "st", "lucie", "martin", "indian", "river", "treasure", "coast",
+})
+_ROLLING_SOURCE_PATH_TOKENS = frozenset({
+    "weather", "forecast", "radar", "traffic", "live", "livestream",
+    "updates", "update", "blog", "alerts", "alert",
+})
+_ROLLING_TITLE_TOKENS = frozenset({
+    "weather", "forecast", "radar", "advisory", "showers", "thunderstorms",
+    "storm", "storms", "rain", "temperature", "temperatures", "temps",
+    "heat", "hurricane", "tropical", "alert", "alerts", "watch", "warning",
+})
+
+
+def _source_title_tokens(value: object) -> set[str]:
+    title = str(value or "").strip()
+    # Remove a short trailing publisher attribution. This intentionally remains
+    # local to source identity so registry_repair can import this module without
+    # creating a circular dependency.
+    parts = re.split(r"\s+(?:-|–|—|\|)\s+", title)
+    if len(parts) > 1 and len(_TITLE_WORD_RE.findall(parts[-1])) <= 6:
+        title = " ".join(parts[:-1])
+    return {
+        token for token in _TITLE_WORD_RE.findall(title.casefold())
+        if (len(token) >= 3 or token.isdigit()) and token not in _TITLE_NOISE
+    }
+
+
+def source_identity_requires_title_continuity(
+    value: object,
+    *,
+    title: object = "",
+    existing_titles: Iterable[object] = (),
+) -> bool:
+    """Return True for article URLs that may represent a rolling content slot.
+
+    A publisher may reuse one weather/traffic/live page while changing the
+    real-world event and headline behind it. Google News URLs are treated as
+    rolling only when the incoming or persisted title carries a rolling-weather
+    signal; ordinary one-off Google News articles retain exact-source identity.
+    """
+
+    normalized = normalize_source_identity_url(value)
+    if not normalized:
+        return False
+    parsed = urlsplit(normalized)
+    path_tokens = {
+        token for segment in (parsed.path or "").casefold().split("/")
+        for token in re.split(r"[-_.]+", segment) if token
+    }
+    if path_tokens & _ROLLING_SOURCE_PATH_TOKENS:
+        return True
+    if (parsed.hostname or "").casefold() != "news.google.com":
+        return False
+    title_tokens = set(_TITLE_WORD_RE.findall(str(title or "").casefold()))
+    for existing in existing_titles or ():
+        title_tokens.update(_TITLE_WORD_RE.findall(str(existing or "").casefold()))
+    return bool(title_tokens & _ROLLING_TITLE_TOKENS)
+
+
+def source_identity_title_compatible(
+    incoming_title: object,
+    existing_titles: Iterable[object],
+) -> bool:
+    """Require event-level title continuity for mutable/rolling source URLs."""
+
+    incoming_raw = str(incoming_title or "").strip()
+    if not incoming_raw:
+        return False
+    incoming_norm = " ".join(_TITLE_WORD_RE.findall(incoming_raw.casefold()))
+    incoming_tokens = _source_title_tokens(incoming_raw)
+    for existing in existing_titles or ():
+        existing_raw = str(existing or "").strip()
+        if not existing_raw:
+            continue
+        existing_norm = " ".join(_TITLE_WORD_RE.findall(existing_raw.casefold()))
+        if incoming_norm and incoming_norm == existing_norm:
+            return True
+        existing_tokens = _source_title_tokens(existing_raw)
+        if not incoming_tokens or not existing_tokens:
+            continue
+        shared = incoming_tokens & existing_tokens
+        overlap = len(shared) / min(len(incoming_tokens), len(existing_tokens))
+        # Two specific shared concepts plus meaningful proportional overlap allow
+        # ordinary headline evolution while rejecting a reused rolling page whose
+        # subject changed entirely.
+        if len(shared) >= 2 and overlap >= 0.35:
+            return True
+    return False
+
+
+def story_identity_titles(story: Mapping[str, Any]) -> tuple[str, ...]:
+    values: list[str] = [str(v) for v in (story.get("titles", ()) or ()) if str(v).strip()]
+    canonical = str(story.get("canonical_title") or "").strip()
+    if canonical:
+        values.append(canonical)
+    values.extend(
+        str(candidate.get("title") or "").strip()
+        for candidate in (story.get("title_candidates", ()) or ())
+        if isinstance(candidate, Mapping) and str(candidate.get("title") or "").strip()
+    )
+    return tuple(dict.fromkeys(values))
 
 
 def normalize_source_identity_url(value: object) -> str:
@@ -102,8 +211,14 @@ class SourceIdentityMatch:
 def find_matching_source_story(
     source: object,
     stories: Iterable[Mapping[str, Any]],
+    *,
+    title: object = "",
 ) -> SourceIdentityMatch:
-    """Find a story containing the exact same safe article identity URL."""
+    """Find a story containing the same safe article identity URL.
+
+    Rolling source URLs require independent title continuity. Exact URL equality
+    remains a strong candidate signal, but cannot join materially different events.
+    """
 
     normalized = normalize_source_identity_url(source)
     if not normalized:
@@ -113,12 +228,42 @@ def find_matching_source_story(
             ("Exact source article identity: false",),
         )
 
-    matches = [
-        str(story.get("story_id", "")).strip()
-        for story in stories
+    candidate_stories = [
+        story for story in stories
         if normalized in story_source_identity_urls(story)
         and str(story.get("story_id", "")).strip()
     ]
+    rolling_candidates = [
+        story for story in candidate_stories
+        if source_identity_requires_title_continuity(
+            normalized,
+            title=title,
+            existing_titles=story_identity_titles(story),
+        )
+    ]
+    if rolling_candidates and title:
+        supported = [
+            story for story in candidate_stories
+            if story not in rolling_candidates
+            or source_identity_title_compatible(title, story_identity_titles(story))
+        ]
+        if candidate_stories and not supported:
+            return SourceIdentityMatch(
+                False, None, normalized, 0.0,
+                "Rolling source URL changed event identity; title continuity was not established",
+                (
+                    "Exact source article identity: candidate_only",
+                    "Rolling source title continuity: false",
+                    f"Normalized source URL: {normalized}",
+                ),
+            )
+        candidate_stories = supported
+
+    matches = sorted({
+        str(story.get("story_id", "")).strip()
+        for story in candidate_stories
+        if str(story.get("story_id", "")).strip()
+    })
     if not matches:
         return SourceIdentityMatch(
             False, None, normalized, 0.0,
@@ -129,13 +274,35 @@ def find_matching_source_story(
             ),
         )
 
-    story_id = sorted(matches)[0]
+    if len(matches) > 1:
+        return SourceIdentityMatch(
+            False, None, normalized, 0.0,
+            "Source URL identity is ambiguous across multiple stories",
+            (
+                "Exact source article identity: ambiguous",
+                f"Normalized source URL: {normalized}",
+                f"Candidate story count: {len(matches)}",
+            ),
+        )
+
+    story_id = matches[0]
+    trace = [
+        "Exact source article identity: true",
+        f"Normalized source URL: {normalized}",
+    ]
+    matched_story = next(
+        (story for story in candidate_stories if str(story.get("story_id", "")).strip() == story_id),
+        None,
+    )
+    if matched_story and source_identity_requires_title_continuity(
+        normalized,
+        title=title,
+        existing_titles=story_identity_titles(matched_story),
+    ):
+        trace.append("Rolling source title continuity: true")
+    trace.append("Confidence: 1.00")
     return SourceIdentityMatch(
         True, story_id, normalized, 1.0,
         "Exact source article URL already belongs to this story",
-        (
-            "Exact source article identity: true",
-            f"Normalized source URL: {normalized}",
-            "Confidence: 1.00",
-        ),
+        tuple(trace),
     )
