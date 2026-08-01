@@ -635,7 +635,7 @@ STORY_CLASSIFICATION = None
 MODEL_ARTICLES = "claude-sonnet-4-5"   # article generation, enrichment, ranking, rewrites
 MODEL_SELECTION = "claude-sonnet-4-5"  # hero selection, structural decisions
 
-# v1.12.2.0 semantic final publication gate. The model sees only a bounded set of
+# v1.12.2.2 semantic candidate recall expansion. The model sees only a bounded set of
 # recent fuzzy candidates; it never searches the archive and never writes directly.
 SEMANTIC_GATE_RECENT_DAYS = _positive_int_env(
     "TCT_SEMANTIC_GATE_RECENT_DAYS", SEMANTIC_GATE_DEFAULT_RECENT_WINDOW_DAYS
@@ -16656,6 +16656,21 @@ def _new_semantic_publication_gate_report():
             "recent_window_days": SEMANTIC_GATE_RECENT_DAYS,
             "max_candidates": SEMANTIC_GATE_MAX_CANDIDATES,
             "min_same_event_confidence": SEMANTIC_GATE_MIN_CONFIDENCE,
+            "structured_conflict_override": {
+                "tiers": [
+                    {
+                        "name": "strong_headline_similarity",
+                        "minimum_headline_similarity": 0.74,
+                        "minimum_shared_headline_tokens": 6,
+                    },
+                    {
+                        "name": "distinctive_token_overlap",
+                        "minimum_headline_similarity": 0.56,
+                        "minimum_shared_headline_tokens": 8,
+                    },
+                ],
+                "effect": "candidate_only_model_adjudication_required",
+            },
             "model": MODEL_SELECTION,
             "failure_behavior": "hold_new_permalink_when_suspicious_candidate_exists",
             "custom_articles": "excluded_authoritative_custom_contract_retained",
@@ -16663,6 +16678,7 @@ def _new_semantic_publication_gate_report():
         "summary": {
             "evaluations": 0,
             "candidate_pairs": 0,
+            "structured_conflict_overrides": 0,
             "model_calls": 0,
             "cache_hits": 0,
             "no_candidate_passes": 0,
@@ -16833,6 +16849,11 @@ def _run_semantic_publication_gate(
     summary = report["summary"]
     summary["evaluations"] += 1
     summary["candidate_pairs"] += len(candidates)
+    summary["structured_conflict_overrides"] += sum(
+        1
+        for candidate in candidates
+        if (candidate.get("evidence") or {}).get("structured_conflict_override")
+    )
     if not candidates:
         summary["no_candidate_passes"] += 1
     if action == SEMANTIC_ACTION_DUPLICATE:
@@ -16873,6 +16894,21 @@ def _run_semantic_publication_gate(
                     (row.get("evidence") or {}).get("headline_similarity") or {}
                 ).get("score", 0),
                 "day_gap": (row.get("evidence") or {}).get("day_gap"),
+                "structured_conflict_override": bool(
+                    (row.get("evidence") or {}).get("structured_conflict_override")
+                ),
+                "structured_conflict_override_tier": str(
+                    (row.get("evidence") or {}).get(
+                        "structured_conflict_override_tier"
+                    )
+                    or ""
+                ),
+                "incident_anchor_conflict": bool(
+                    (row.get("evidence") or {}).get("incident_anchor_conflict")
+                ),
+                "known_event_key_conflict": bool(
+                    (row.get("evidence") or {}).get("known_event_key_conflict")
+                ),
                 "reasons": (row.get("evidence") or {}).get("reasons", []),
             }
             for row in candidates
@@ -21355,6 +21391,15 @@ def write_archives(all_categories, top_cat):
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
     _save_semantic_publication_gate_cache(_semantic_gate_cache)
     _write_semantic_publication_gate_report(_semantic_gate_report, OUTPUT_DIR)
+    _semantic_summary = _semantic_gate_report.get("summary", {})
+    print(
+        "  Semantic publication gate: "
+        f"{_semantic_summary.get('candidate_pairs', 0)} candidate pair(s), "
+        f"{_semantic_summary.get('structured_conflict_overrides', 0)} conflict override(s), "
+        f"{_semantic_summary.get('model_calls', 0)} model call(s), "
+        f"{_semantic_summary.get('retroactive_redirects', 0)} retroactive redirect(s), "
+        f"{_semantic_summary.get('holds', 0)} hold(s)"
+    )
     _forward_identity_report["semantic_publication_gate_summary"] = copy.deepcopy(
         _semantic_gate_report.get("summary", {})
     )

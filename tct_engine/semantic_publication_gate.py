@@ -23,7 +23,7 @@ from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from typing import Any, Iterable, Mapping, Sequence
 
-SEMANTIC_PUBLICATION_GATE_VERSION = "1.0"
+SEMANTIC_PUBLICATION_GATE_VERSION = "1.2"
 SEMANTIC_PUBLICATION_GATE_PROMPT_VERSION = "1.0"
 DEFAULT_RECENT_WINDOW_DAYS = 7
 DEFAULT_MAX_CANDIDATES = 4
@@ -52,6 +52,8 @@ _TOKEN_CANONICAL = {
     "arrested": "arrest", "arrests": "arrest",
     "approves": "approve", "approved": "approve", "approval": "approve",
     "votes": "vote", "voted": "vote", "voting": "vote",
+    "resigned": "resign", "resigns": "resign", "resigning": "resign",
+    "left": "leave", "leaves": "leave", "leaving": "leave",
 }
 
 
@@ -252,15 +254,39 @@ def candidate_evidence(
         features["incident_anchor_conflict"] or features["known_event_key_conflict"]
     )
 
+    # The semantic gate exists specifically because deterministic event keys can be
+    # incomplete or contradictory across publishers.  A generated generic event key
+    # (for example ``traffic-crash-port-st-lucie-*``) must not veto a near-identical
+    # finished headline before Claude is allowed to compare the stories.  Preserve
+    # the conflict as evidence, but permit a bounded candidate when the finished
+    # headlines are strongly similar and share enough distinctive vocabulary.
+    #
+    # Two conservative override tiers are allowed. One requires very high fuzzy
+    # similarity; the other requires a larger bundle of shared canonical tokens.
+    # Both only nominate a pair for adjudication and never merge it directly.
+    conflict_override_tier = ""
+    if conflict and similarity["score"] >= 0.74 and shared_count >= 6:
+        conflict_override_tier = "strong_headline_similarity"
+    elif conflict and similarity["score"] >= 0.56 and shared_count >= 8:
+        # Some publishers describe the same incident from different narrative
+        # angles, which lowers the aggregate fuzzy score even when the pair
+        # shares a highly distinctive bundle of actors, action, place, and
+        # outcome.  This lower-score path requires more shared canonical tokens
+        # and still only nominates the pair for Claude adjudication.
+        conflict_override_tier = "distinctive_token_overlap"
+    strong_conflict_override = bool(conflict_override_tier)
+
+    similarity_gate = bool(
+        similarity["score"] >= 0.64
+        or (similarity["score"] >= 0.50 and context_compatible and contextual_anchor)
+        or (similarity["score"] >= 0.56 and context_compatible and shared_count >= 6)
+        or strong_conflict_override
+    )
     eligible = bool(
         time_safe
-        and not conflict
         and shared_count >= 4
-        and (
-            similarity["score"] >= 0.64
-            or (similarity["score"] >= 0.50 and context_compatible and contextual_anchor)
-            or (similarity["score"] >= 0.56 and context_compatible and shared_count >= 6)
-        )
+        and similarity_gate
+        and (not conflict or strong_conflict_override)
     )
     reasons: list[str] = []
     if similarity["score"] >= 0.64:
@@ -275,11 +301,17 @@ def candidate_evidence(
         reasons.append(f"publication_gap_{day_gap}_days")
     if conflict:
         reasons.append("structured_identity_conflict")
+    if conflict_override_tier == "strong_headline_similarity":
+        reasons.append("structured_identity_conflict_overridden_by_strong_headline")
+    elif conflict_override_tier == "distinctive_token_overlap":
+        reasons.append("structured_identity_conflict_overridden_by_distinctive_overlap")
     if not time_safe:
         reasons.append("outside_recent_window")
 
     return {
         "eligible": eligible,
+        "structured_conflict_override": strong_conflict_override,
+        "structured_conflict_override_tier": conflict_override_tier,
         "retrieval_score": round(score, 4),
         "headline_similarity": similarity,
         "final_headline_similarity": final_similarity,

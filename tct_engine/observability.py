@@ -17,8 +17,8 @@ from .source_identity import normalize_source_identity_url
 from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.12.2.0"
-ENGINE_RELEASE = "semantic-final-publication-gate"
+ENGINE_VERSION = "1.12.2.2"
+ENGINE_RELEASE = "semantic-candidate-recall-expansion"
 OBSERVABILITY_SCHEMA_VERSION = 31
 RESOLVER_VERSION = "3.0"
 RELATIONSHIP_ENGINE_VERSION = "1.5"
