@@ -1,13 +1,13 @@
 {
-  "schema_version": 31,
+  "schema_version": 32,
   "engine": {
     "name": "tct-editorial-engine",
-    "version": "1.12.2.2",
-    "release": "semantic-candidate-recall-expansion",
+    "version": "1.12.2.4",
+    "release": "canonical-hero-archive-recovery",
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-01T09:41:03Z",
+  "generated_at": "2026-08-01T10:41:29Z",
   "mode": "enforce",
   "publication_behavior_changed": true,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 2,
     "applied_action_count": 2,
     "circuit_breaker_tripped": false,
-    "placements_before": 3,
-    "placements_after": 1,
+    "placements_before": 5,
+    "placements_after": 3,
     "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
     "recommendations": [
@@ -161,23 +161,32 @@
   "audit": {
     "candidates_processed": 180,
     "routes": {
-      "generate_new": 9,
-      "skip": 170,
+      "generate_new": 4,
+      "skip": 175,
       "update_existing": 1
     },
     "eligibility": {
-      "listing": 1,
-      "low_value": 128,
+      "listing": 2,
+      "low_value": 127,
       "publishable": 51
     },
     "source_classes": {
       "aggregator": 129,
-      "local_news": 29,
-      "regional_news": 18,
+      "local_news": 30,
+      "regional_news": 17,
       "unknown": 4
     },
-    "rejected_count": 1,
+    "rejected_count": 2,
     "rejected_examples": [
+      {
+        "headline": "Four dazzling golf course homes for sale: August 1 - Golfweek",
+        "source_url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPbEVDdWZ3Q2JabHQ2UGpXQXBnZFpwZ3NWVHQyRkczU1VsZERGYUpCOW9IR3ZiZEhKNll5YVp4Zzk0U3FYSHp1MFNXUnRQcUE2Y1EycXZUbEdnTnE2X1dZY3VFVk1xaUxLSEpZT0FRQy00OWtXZUh1SE90TnNMMkZtd0xOZUN2eHhPSDc0MXQzbndaYWtvTWY5d3ZaZHM0MmVUQl9sZGwwRUFXLTR2U2JjRHhCQ0NWQVZJUTJpckZVQXhOSGhYMnJwSHhlUkhCQQ?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'for sale'"
+        ],
+        "source_class": "aggregator"
+      },
       {
         "headline": "2,500+ Florida Condos Show Structural Damage, Just 5 Evacuated, State Report Finds - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOYUdPeU5sNjFZbUd1QmFLYVlrSm5TR2UwNlEwUnUtRTlVWGRMZHRPaVlYZVptbTRSeG43MDNpTlEtakZpTTY5cnF0bjRyRmM3OFdrQ3NnM2tzTjBBMWZJYUZremFxXzE1SVVQNFM5MTg5elkxdUptdDRxbFk5VU5lLUJXTVJZdUxSWDktQ2lSbF9kdWR6ek93amJVTnJrMmFjY0E?oc=5",
@@ -191,10 +200,22 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 8,
-      "same_event": 172
+      "new_story": 5,
+      "same_event": 175
     },
     "examples": [
+      {
+        "story_id": "story_001720",
+        "title": "July 2026 in photos: July 4th, summer camps, animal hoarding - Treasure Coast News",
+        "event_key": "unknown-event-73242861b1",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_001658",
         "title": "Prichard city council recalls city fleet after losing municipal insurance coverage - WEAR-TV",
@@ -451,20 +472,6 @@
         "story_id": "story_001557",
         "title": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
         "event_key": "named-person-death:marie-martin",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001559",
-        "title": "West Palm Beach police chief fires 5 command officers after nearly 2-year overtime misconduct probe",
-        "event_key": "fire-4fdb6b2c73-4fdb6b2c73",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -478,6 +485,19 @@
     ],
     "decision_trace_examples": [
       {
+        "story_id": "story_001720",
+        "title": "July 2026 in photos: July 4th, summer camps, animal hoarding - Treasure Coast News",
+        "event_key": "unknown-event-73242861b1",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_001658",
         "title": "Prichard city council recalls city fleet after losing municipal insurance coverage - WEAR-TV",
         "event_key": "unknown-event-a26da2f399",
@@ -751,21 +771,6 @@
         "story_id": "story_001557",
         "title": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
         "event_key": "named-person-death:marie-martin",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001559",
-        "title": "West Palm Beach police chief fires 5 command officers after nearly 2-year overtime misconduct probe",
-        "event_key": "fire-4fdb6b2c73-4fdb6b2c73",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -796,8 +801,8 @@
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
       "stories_with_timelines": 422,
-      "timeline_entries_examined": 1023,
-      "transitions_examined": 552,
+      "timeline_entries_examined": 1024,
+      "transitions_examined": 553,
       "candidate_count": 9,
       "high_confidence_candidate_count": 4,
       "activation_eligible_candidate_count": 1,
@@ -1615,23 +1620,23 @@
     "scopes": {
       "florida": 363,
       "treasure_coast_local": 279,
-      "treasure_coast_region": 130,
-      "unknown": 748
+      "treasure_coast_region": 131,
+      "unknown": 750
     },
-    "average_score": 59.23
+    "average_score": 59.22
   },
   "editorial_proximity": {
     "scopes": {
       "florida": 363,
       "treasure_coast_local": 279,
-      "treasure_coast_region": 130,
-      "unknown": 748
+      "treasure_coast_region": 131,
+      "unknown": 750
     },
-    "average_priority": 4.38
+    "average_priority": 4.35
   },
   "story_lifecycle": {
     "counts": {
-      "active": 622,
+      "active": 625,
       "breaking": 1,
       "developing": 242,
       "ongoing": 655
@@ -1641,8 +1646,8 @@
     "repair_version": 7,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 1513,
-    "active_stories_after": 1513,
+    "active_stories_before": 1520,
+    "active_stories_after": 1520,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -1662,35 +1667,35 @@
     "selective_timeline_entries_moved": 0,
     "contaminated_story_records_preserved": 0,
     "incident_anchor_to_story_count": 28,
-    "generated_at": "2026-08-01T09:34:36Z",
+    "generated_at": "2026-08-01T10:35:23Z",
     "quarantined_story_records_retained": 29,
-    "active_story_count": 1520
+    "active_story_count": 1523
   },
   "stories": {
-    "total": 1520,
+    "total": 1523,
     "importance_levels": {
       "breaking": 2,
       "high": 24,
       "normal": 224,
-      "low": 1270,
+      "low": 1273,
       "archived": 0
     },
-    "average_importance": 9.11,
+    "average_importance": 9.09,
     "top": [
       {
         "story_id": "story_000793",
         "title": "Indian River County firefighter/paramedic dies following off-duty personal tragedy - WPTV",
         "score": 85,
-        "editorial_priority": 96,
-        "editorial_score": 96,
+        "editorial_priority": 92,
+        "editorial_score": 92,
         "score_breakdown": {
-          "score": 96,
+          "score": 92,
           "importance": 85,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 5.52
+          "age_hours": 6.53
         },
         "level": "breaking",
         "importance_reasons": [
@@ -1738,131 +1743,9 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 5.52,
+          "hours_since_update": 6.53,
           "event_count": 6,
           "timeline_entries": 6
-        }
-      },
-      {
-        "story_id": "story_000004",
-        "title": "Motorcyclist dies in Vero Beach crash after traveling at speeds of 113 mph, police say",
-        "score": 75,
-        "editorial_priority": 85,
-        "editorial_score": 85,
-        "score_breakdown": {
-          "score": 85,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 5.51
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Vero Beach"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 3,
-        "timeline_entries": 3,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 4,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 5.51,
-          "event_count": 3,
-          "timeline_entries": 3
-        }
-      },
-      {
-        "story_id": "story_000049",
-        "title": "Community gathers to honor 9-year-old boy killed in dirt bike and FedEx truck crash in St. Lucie County - WPTV",
-        "score": 75,
-        "editorial_priority": 85,
-        "editorial_score": 85,
-        "score_breakdown": {
-          "score": 85,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 5.52
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 12,
-        "timeline_entries": 7,
-        "relationship_decisions": 3,
-        "canonical_source_candidates": 7,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 5.52,
-          "event_count": 12,
-          "timeline_entries": 7
         }
       },
       {
@@ -1878,7 +1761,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.07
+          "age_hours": 1.09
         },
         "level": "high",
         "importance_reasons": [
@@ -1921,7 +1804,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T09:34:32.950254+00:00",
-          "hours_since_update": 0.07,
+          "hours_since_update": 1.09,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -1939,7 +1822,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 1.01
+          "age_hours": 2.02
         },
         "level": "high",
         "importance_reasons": [
@@ -1982,25 +1865,25 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T08:38:37.518469+00:00",
-          "hours_since_update": 1.01,
+          "hours_since_update": 2.02,
           "event_count": 3,
           "timeline_entries": 3
         }
       },
       {
-        "story_id": "story_001652",
-        "title": "Family files lawsuit after 6-year-old girl dies in Port St. Lucie go-kart crash - WPBF",
+        "story_id": "story_000004",
+        "title": "Motorcyclist dies in Vero Beach crash after traveling at speeds of 113 mph, police say",
         "score": 75,
-        "editorial_priority": 74,
-        "editorial_score": 74,
+        "editorial_priority": 81,
+        "editorial_score": 81,
         "score_breakdown": {
-          "score": 74,
+          "score": 81,
           "importance": 75,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 5.51
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 6.53
         },
         "level": "high",
         "importance_reasons": [
@@ -2015,8 +1898,69 @@
             "points": 25
           },
           {
-            "code": "court_action",
-            "label": "Court action",
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Vero Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 3,
+        "timeline_entries": 3,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 4,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 6.53,
+          "event_count": 3,
+          "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_000049",
+        "title": "Community gathers to honor 9-year-old boy killed in dirt bike and FedEx truck crash in St. Lucie County - WPTV",
+        "score": 75,
+        "editorial_priority": 81,
+        "editorial_score": 81,
+        "score_breakdown": {
+          "score": 81,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 6.53
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
             "points": 10
           }
         ],
@@ -2027,7 +1971,7 @@
             "St. Lucie County"
           ],
           "places": [
-            "Port St. Lucie"
+            "Fort Pierce"
           ]
         },
         "editorial_proximity": {
@@ -2035,17 +1979,17 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
+        "event_count": 12,
+        "timeline_entries": 7,
+        "relationship_decisions": 3,
+        "canonical_source_candidates": 7,
         "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 5.51,
-          "event_count": 1,
-          "timeline_entries": 1
+          "hours_since_update": 6.53,
+          "event_count": 12,
+          "timeline_entries": 7
         }
       },
       {
@@ -2061,7 +2005,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 63.81
+          "age_hours": 64.82
         },
         "level": "high",
         "importance_reasons": [
@@ -2102,7 +2046,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 63.81,
+          "hours_since_update": 64.82,
           "event_count": 4,
           "timeline_entries": 2
         }
@@ -2120,7 +2064,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 28.46
+          "age_hours": 29.48
         },
         "level": "high",
         "importance_reasons": [
@@ -2163,7 +2107,68 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-31T05:11:29.117258+00:00",
-          "hours_since_update": 28.46,
+          "hours_since_update": 29.48,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_001652",
+        "title": "Family files lawsuit after 6-year-old girl dies in Port St. Lucie go-kart crash - WPBF",
+        "score": 75,
+        "editorial_priority": 70,
+        "editorial_score": 70,
+        "score_breakdown": {
+          "score": 70,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 6.53
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "court_action",
+            "label": "Court action",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Port St. Lucie"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 6.53,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2181,7 +2186,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 17.9
+          "age_hours": 18.91
         },
         "level": "high",
         "importance_reasons": [
@@ -2219,63 +2224,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 17.9,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_001656",
-        "title": "Firefighter who got his start in Coral Springs dies in Sebastian, officials say - Coral Springs News",
-        "score": 65,
-        "editorial_priority": 64,
-        "editorial_score": 64,
-        "score_breakdown": {
-          "score": 64,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 5.52
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Sebastian"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 5.52,
+          "hours_since_update": 18.91,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2293,7 +2242,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 17.9
+          "age_hours": 18.91
         },
         "level": "high",
         "importance_reasons": [
@@ -2336,9 +2285,65 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 17.9,
+          "hours_since_update": 18.91,
           "event_count": 3,
           "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_001656",
+        "title": "Firefighter who got his start in Coral Springs dies in Sebastian, officials say - Coral Springs News",
+        "score": 65,
+        "editorial_priority": 61,
+        "editorial_score": 61,
+        "score_breakdown": {
+          "score": 61,
+          "importance": 65,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 6.53
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Sebastian"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 6.53,
+          "event_count": 1,
+          "timeline_entries": 1
         }
       },
       {
@@ -2354,7 +2359,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 12.97
+          "age_hours": 13.98
         },
         "level": "high",
         "importance_reasons": [
@@ -2388,7 +2393,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-31T20:40:54.806838+00:00",
-          "hours_since_update": 12.97,
+          "hours_since_update": 13.98,
           "event_count": 2,
           "timeline_entries": 1
         }
@@ -2406,7 +2411,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 126.04
+          "age_hours": 127.06
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2450,7 +2455,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-07-27T03:32:10.873614+00:00",
-          "hours_since_update": 126.04,
+          "hours_since_update": 127.06,
           "event_count": 5,
           "timeline_entries": 3
         }
@@ -2468,7 +2473,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 1.01
+          "age_hours": 2.02
         },
         "level": "normal",
         "importance_reasons": [
@@ -2506,7 +2511,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T08:38:37.518469+00:00",
-          "hours_since_update": 1.01,
+          "hours_since_update": 2.02,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2524,7 +2529,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 58.76
+          "age_hours": 59.78
         },
         "level": "normal",
         "importance_reasons": [
@@ -2562,7 +2567,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-29T22:49:06.705745+00:00",
-          "hours_since_update": 58.76,
+          "hours_since_update": 59.78,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2580,7 +2585,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 53.97
+          "age_hours": 54.98
         },
         "level": "normal",
         "importance_reasons": [
@@ -2616,7 +2621,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-30T03:36:51.907089+00:00",
-          "hours_since_update": 53.97,
+          "hours_since_update": 54.98,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2634,7 +2639,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 63.88
+          "age_hours": 64.89
         },
         "level": "normal",
         "importance_reasons": [
@@ -2670,7 +2675,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 63.88,
+          "hours_since_update": 64.89,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2688,7 +2693,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 63.81
+          "age_hours": 64.82
         },
         "level": "normal",
         "importance_reasons": [
@@ -2724,7 +2729,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 63.81,
+          "hours_since_update": 64.82,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2742,7 +2747,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 17.9
+          "age_hours": 18.91
         },
         "level": "normal",
         "importance_reasons": [
@@ -2781,7 +2786,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 17.9,
+          "hours_since_update": 18.91,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2799,7 +2804,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 12.91
+          "age_hours": 13.92
         },
         "level": "normal",
         "importance_reasons": [
@@ -2833,7 +2838,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-31T20:40:54.806838+00:00",
-          "hours_since_update": 12.91,
+          "hours_since_update": 13.92,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2843,7 +2848,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 6,
-    "generated_at": "2026-08-01T09:39:20Z",
+    "generated_at": "2026-08-01T10:40:29Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -2869,23 +2874,23 @@
         "publication_quality_rejected": 2
       },
       "model_attempt_count": 4,
-      "model_elapsed_seconds": 127.78,
+      "model_elapsed_seconds": 159.533,
       "archive_recovery_requested_count": 5,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 6,
-      "published_story_duplicate_suppression_count": 54,
-      "story_aware_update_context_count": 4
+      "category_eligibility_rejection_count": 7,
+      "published_story_duplicate_suppression_count": 47,
+      "story_aware_update_context_count": 0
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "missing_hero_archive_recovery",
-        "fetched_candidate_count": 29,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 7,
+        "fetched_candidate_count": 27,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 8,
         "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -2894,11 +2899,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 5.154,
+            "elapsed_seconds": 5.836,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 5.154,
+        "model_elapsed_seconds": 5.836,
         "failure_code": "missing_or_null_hero",
         "failure_summary": "No usable hero remained after sanitization",
         "sports_expired_event_preview_count": 0,
@@ -2909,8 +2914,8 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 7,
-        "category_eligibility_rejection_count": 6,
+        "category_eligibility_assessed_count": 8,
+        "category_eligibility_rejection_count": 7,
         "category_eligibility_rejections": [
           {
             "contract_version": "1.0-local-government-central-action",
@@ -2958,6 +2963,19 @@
             "policy": "central_government_action_required",
             "eligible": false,
             "would_reject": true,
+            "reason": "missing_central_government_action",
+            "positive_signals": [],
+            "competing_signals": [],
+            "headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
+            "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina"
+          },
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
             "reason": "competing_story_form_without_government_action",
             "positive_signals": [],
             "competing_signals": [
@@ -2993,7 +3011,7 @@
             "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/welcome-to-cat-heaven-nine-lives-cafe-pairs-shelter-cats-with-specialty-coffee-and-pilates"
           }
         ],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -3002,16 +3020,6 @@
             "editorial_story_id": "story_001600",
             "canonical_slug": "2026-07-31-treasure-coast-renters-face-high-costs-as-rental-market-holds-flat",
             "canonical_headline": "Treasure Coast renters face high costs as rental market holds flat",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
-            "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina",
-            "editorial_story_id": "story_001323",
-            "canonical_slug": "2026-07-30-fort-pierce-residents-fight-plan-to-replace-museum-pointe-park-with-mega-yacht-m",
-            "canonical_headline": "Fort Pierce residents fight plan to replace Museum Pointe Park with mega-yacht marina",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3054,66 +3062,20 @@
             "canonical_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Martin County school district cuts 3 bus routes, saving $255,000 with no impact to students - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-school-district-cuts-3-bus-routes-saving-255-000-with-no-impact-to-students",
-            "editorial_story_id": "story_001356",
-            "canonical_slug": "2026-07-30-martin-county-school-district-cuts-3-bus-routes-saving-255000",
-            "canonical_headline": "Martin County School District cuts 3 bus routes, saving $255,000",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Martin County school district cuts 3 bus routes, saving $255,000 with no impact to students - WFLX",
-            "source_url": "https://www.wflx.com/2026/07/29/martin-county-school-district-cuts-3-bus-routes-saving-255000-with-no-impact-students?outputType=amp",
-            "editorial_story_id": "story_001356",
-            "canonical_slug": "2026-07-30-martin-county-school-district-cuts-3-bus-routes-saving-255000",
-            "canonical_headline": "Martin County School District cuts 3 bus routes, saving $255,000",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-08-01-los-angeles-man-sentenced-to-life-in-federal-prison-for-fentanyl-sale-that-kille",
-            "canonical_headline": "Los Angeles man sentenced to life in prison for fentanyl sale that killed Vero Beach resident",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "incident:named-person-death:los-angeles",
-              "story:story_001521",
-              "source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "incident",
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=incident:named-person-death:los-angeles,story:story_001521,source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 22.89
+        "elapsed_seconds": 23.387
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "cache_hit",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 17,
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 18,
         "publishable_source_count": 7,
         "selected_source_count": 7,
         "cache_hit": true,
@@ -3237,36 +3199,10 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-08-01-los-angeles-man-sentenced-to-life-in-federal-prison-for-fentanyl-sale-that-kille",
-            "canonical_headline": "Los Angeles man sentenced to life in prison for fentanyl sale that killed Vero Beach resident",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "incident:named-person-death:los-angeles",
-              "story:story_001521",
-              "source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "incident",
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=incident:named-person-death:los-angeles,story:story_001521,source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "live_hero_headline": "Los Angeles man sentenced to life in prison for fentanyl sale that killed Vero Beach resident",
-        "elapsed_seconds": 10.26
+        "elapsed_seconds": 9.91
       },
       {
         "category_key": "business",
@@ -3283,11 +3219,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 63.375,
+            "elapsed_seconds": 64.035,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 63.375,
+        "model_elapsed_seconds": 64.035,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -3334,37 +3270,11 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-08-01-los-angeles-man-sentenced-to-life-in-federal-prison-for-fentanyl-sale-that-kille",
-            "canonical_headline": "Los Angeles man sentenced to life in prison for fentanyl sale that killed Vero Beach resident",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "incident:named-person-death:los-angeles",
-              "story:story_001521",
-              "source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "incident",
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=incident:named-person-death:los-angeles,story:story_001521,source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 82.326
+        "elapsed_seconds": 78.855
       },
       {
         "category_key": "sports",
@@ -3397,16 +3307,16 @@
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "live_hero_headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
-        "elapsed_seconds": 14.983
+        "elapsed_seconds": 15.519
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
         "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 5,
-        "selected_source_count": 5,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 6,
+        "selected_source_count": 6,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 1,
@@ -3414,11 +3324,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 52.752,
+            "elapsed_seconds": 63.451,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 52.752,
+        "model_elapsed_seconds": 63.451,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -3429,10 +3339,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 5,
+        "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "things_to_do",
@@ -3463,13 +3373,23 @@
             "canonical_headline": "Vero Beach Museum of Art to host recycled fishing line bracelet workshop Aug. 8",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "things_to_do",
+            "source_headline": "Big Taste of Martin County returns to support Big Brothers Big Sisters mentoring programs",
+            "source_url": "https://www.wptv.com/shining-a-light/big-taste-of-martin-county-returns-to-support-big-brothers-big-sisters-mentoring-programs",
+            "editorial_story_id": "story_000253",
+            "canonical_slug": "2026-07-23-big-taste-of-martin-county-returns-oct-6-to-support-youth-mentoring-programs",
+            "canonical_headline": "Big Brothers Big Sisters returns Big Taste of Martin County fundraiser to Stuart",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 75.959
+        "elapsed_seconds": 84.845
       },
       {
         "category_key": "florida",
@@ -3522,7 +3442,7 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "elapsed_seconds": 16.813
+        "elapsed_seconds": 13.292
       },
       {
         "category_key": "martin",
@@ -3595,16 +3515,16 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "elapsed_seconds": 11.201
+        "elapsed_seconds": 9.74
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 13,
-        "publishable_source_count": 1,
-        "selected_source_count": 1,
+        "fresh_candidate_count": 16,
+        "publishable_source_count": 4,
+        "selected_source_count": 4,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -3612,11 +3532,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 6.499,
+            "elapsed_seconds": 26.211,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 6.499,
+        "model_elapsed_seconds": 26.211,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3627,10 +3547,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 17,
+        "published_story_duplicate_suppression_count": 14,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -3639,16 +3559,6 @@
             "editorial_story_id": "story_001566",
             "canonical_slug": "2026-07-31-port-st-lucie-man-caught-on-surveillance-video-stealing-thousands-of-dollars-wor",
             "canonical_headline": "Port St. Lucie man caught on surveillance video stealing thousands of dollars worth of tequila",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "86-year-old woman critically injured in Port St. Lucie crash later dies at hospital - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-man-86-dies-wo-car-crash-port-st-lucie/73320842",
-            "editorial_story_id": "story_001684",
-            "canonical_slug": "2026-08-01-86-year-old-woman-dies-after-crash-at-port-st-lucie-intersection",
-            "canonical_headline": "86-year-old woman dies after failing to yield at Port St. Lucie intersection",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3679,26 +3589,6 @@
             "editorial_story_id": "story_001600",
             "canonical_slug": "2026-07-31-treasure-coast-renters-face-high-costs-as-rental-market-holds-flat",
             "canonical_headline": "Treasure Coast renters face high costs as rental market holds flat",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
-            "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina",
-            "editorial_story_id": "story_001323",
-            "canonical_slug": "2026-07-30-fort-pierce-residents-fight-plan-to-replace-museum-pointe-park-with-mega-yacht-m",
-            "canonical_headline": "Fort Pierce residents fight plan to replace Museum Pointe Park with mega-yacht marina",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie officer resigns after allegations he left scene of car where man later died by suicide - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-officer-resigns-neglect-allegations/73318965",
-            "editorial_story_id": "story_001685",
-            "canonical_slug": "2026-08-01-port-st-lucie-officer-resigns-after-allegations-he-left-scene-where-man-later-di",
-            "canonical_headline": "Port St. Lucie officer resigns after allegations he left scene where man later died by suicide",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3808,17 +3698,17 @@
         "generation_status": "success",
         "budget_seconds": 180.0,
         "live_hero_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
-        "generated_card_count": 0,
-        "elapsed_seconds": 17.874
+        "generated_card_count": 2,
+        "elapsed_seconds": 37.382
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "cache_hit",
         "fetched_candidate_count": 28,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 5,
-        "selected_source_count": 5,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 7,
+        "selected_source_count": 6,
         "cache_hit": true,
         "archive_recovery_requested": false,
         "attempt_count": 0,
@@ -3834,10 +3724,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 5,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -3871,26 +3761,6 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
-            "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina",
-            "editorial_story_id": "story_001323",
-            "canonical_slug": "2026-07-30-fort-pierce-residents-fight-plan-to-replace-museum-pointe-park-with-mega-yacht-m",
-            "canonical_headline": "Fort Pierce residents fight plan to replace Museum Pointe Park with mega-yacht marina",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident - WFLX",
-            "source_url": "https://www.wflx.com/2026/07/31/los-angeles-man-gets-life-sentence-fentanyl-sale-that-killed-vero-beach-resident",
-            "editorial_story_id": "story_001521",
-            "canonical_slug": "2026-08-01-los-angeles-man-sentenced-to-life-in-federal-prison-for-fentanyl-sale-that-kille",
-            "canonical_headline": "Los Angeles man sentenced to life in prison for fentanyl sale that killed Vero Beach resident",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
             "source_headline": "Man sentenced to life in prison for selling fentanyl that killed Vero Beach man in 2023 - WPEC",
             "source_url": "https://cbs12.com/news/crime/man-sentenced-to-life-in-prison-for-selling-fentanyl-that-killed-vero-beach-man-in-2023-indian-river-county-sheriffs-office-irsco-dea-miami-divison-florida-news",
             "editorial_story_id": "story_001485",
@@ -3910,36 +3780,10 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-08-01-los-angeles-man-sentenced-to-life-in-federal-prison-for-fentanyl-sale-that-kille",
-            "canonical_headline": "Los Angeles man sentenced to life in prison for fentanyl sale that killed Vero Beach resident",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "incident:named-person-death:los-angeles",
-              "story:story_001521",
-              "source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "incident",
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=incident:named-person-death:los-angeles,story:story_001521,source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "live_hero_headline": "Los Angeles man sentenced to life in prison for fentanyl sale that killed Vero Beach resident",
-        "elapsed_seconds": 7.755
+        "elapsed_seconds": 8.979
       }
     ]
   }
