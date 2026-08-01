@@ -283,4 +283,4 @@ __all__ = [
     "retrieve_semantic_publication_candidates",
 ]
 
-__version__ = "1.12.2.2"
+__version__ = "1.12.2.3"

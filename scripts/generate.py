@@ -64,6 +64,7 @@ try:
     )
     from tct_engine.registry_repair import (
         is_broad_event_class_key,
+        merge_story_records,
         story_quarantine_reasons,
     )
 except Exception as exc:
@@ -94,6 +95,7 @@ except Exception as exc:
     semantic_publication_decision_cache_key = None
     retrieve_semantic_publication_candidates = None
     is_broad_event_class_key = None
+    merge_story_records = None
     story_quarantine_reasons = None
     _editorial_import_error = exc
 
@@ -635,7 +637,7 @@ STORY_CLASSIFICATION = None
 MODEL_ARTICLES = "claude-sonnet-4-5"   # article generation, enrichment, ranking, rewrites
 MODEL_SELECTION = "claude-sonnet-4-5"  # hero selection, structural decisions
 
-# v1.12.2.2 semantic candidate recall expansion. The model sees only a bounded set of
+# v1.12.2.3 semantic registry consolidation. The model sees only a bounded set of
 # recent fuzzy candidates; it never searches the archive and never writes directly.
 SEMANTIC_GATE_RECENT_DAYS = _positive_int_env(
     "TCT_SEMANTIC_GATE_RECENT_DAYS", SEMANTIC_GATE_DEFAULT_RECENT_WINDOW_DAYS
@@ -654,7 +656,7 @@ SEMANTIC_GATE_MIN_CONFIDENCE = min(
 SEMANTIC_GATE_CACHE_PATH = OUTPUT_DIR / "data" / "semantic-publication-gate-cache.json"
 SEMANTIC_GATE_REPORT_PATH = OUTPUT_DIR / "data" / "semantic-publication-gate.json"
 SEMANTIC_GATE_CACHE_SCHEMA_VERSION = 1
-SEMANTIC_GATE_REPORT_SCHEMA_VERSION = 1
+SEMANTIC_GATE_REPORT_SCHEMA_VERSION = 2
 
 # Content bank — loaded once at startup, used for card enrichment
 CONTENT_BANK_FEEDS = [
@@ -16647,6 +16649,280 @@ def _save_semantic_publication_gate_cache(cache, path=None):
     return payload
 
 
+
+def _load_previous_semantic_publication_gate_report(path=None):
+    """Load the prior completed gate report before this run overwrites it."""
+    target = Path(path or SEMANTIC_GATE_REPORT_PATH)
+    try:
+        payload = json.loads(target.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    if not isinstance(payload, dict):
+        return {}
+    return payload
+
+
+def _semantic_duplicate_registry_directives(reports, archive):
+    """Build deterministic story-ID merge directives from validated gate decisions.
+
+    The model never chooses registry IDs directly. It selects an existing canonical
+    slug; the retained archive row supplies the authoritative target story ID.
+    """
+    target_story_by_slug = {
+        str(row.get("slug") or ""): str(row.get("editorial_story_id") or "").strip()
+        for row in archive or []
+        if isinstance(row, dict) and row.get("slug")
+    }
+    directives = []
+    seen = set()
+    for gate_report in reports or []:
+        if not isinstance(gate_report, dict):
+            continue
+        for entry in gate_report.get("decisions", ()) or ():
+            if not isinstance(entry, dict):
+                continue
+            decision = entry.get("decision") or {}
+            if not isinstance(decision, dict):
+                continue
+            if str(decision.get("action") or "") != SEMANTIC_ACTION_DUPLICATE:
+                continue
+            if not bool(decision.get("same_real_world_event")):
+                continue
+            if bool(decision.get("material_new_update")):
+                continue
+            confidence = float(decision.get("confidence") or 0.0)
+            if confidence < SEMANTIC_GATE_MIN_CONFIDENCE:
+                continue
+            source_story_id = str(entry.get("incoming_story_id") or "").strip()
+            target_slug = str(decision.get("selected_candidate_slug") or "").strip()
+            target_story_id = target_story_by_slug.get(target_slug, "")
+            if not source_story_id or not target_story_id:
+                continue
+            key = (source_story_id, target_story_id)
+            if source_story_id == target_story_id or key in seen:
+                continue
+            seen.add(key)
+            directives.append({
+                "source_story_id": source_story_id,
+                "target_story_id": target_story_id,
+                "target_slug": target_slug,
+                "incoming_headline": str(entry.get("incoming_headline") or ""),
+                "confidence": confidence,
+                "shared_anchors": list(decision.get("shared_anchors") or ()),
+                "reason": str(decision.get("reason") or ""),
+            })
+
+        # Carry forward any valid directive that could not be applied on the prior
+        # run (for example, a temporarily unavailable registry file). This keeps
+        # consolidation fail-closed and retryable instead of losing the model's
+        # validated identity decision when the report is overwritten.
+        consolidation = gate_report.get("registry_consolidation") or {}
+        pending = consolidation.get("pending_directives") or consolidation.get("skipped") or ()
+        for directive in pending:
+            if not isinstance(directive, dict):
+                continue
+            source_story_id = str(directive.get("source_story_id") or "").strip()
+            target_slug = str(directive.get("target_slug") or "").strip()
+            target_story_id = target_story_by_slug.get(target_slug, "")
+            confidence = float(directive.get("confidence") or 0.0)
+            if (
+                not source_story_id
+                or not target_story_id
+                or source_story_id == target_story_id
+                or confidence < SEMANTIC_GATE_MIN_CONFIDENCE
+            ):
+                continue
+            key = (source_story_id, target_story_id)
+            if key in seen:
+                continue
+            seen.add(key)
+            directives.append({
+                "source_story_id": source_story_id,
+                "target_story_id": target_story_id,
+                "target_slug": target_slug,
+                "incoming_headline": str(directive.get("incoming_headline") or ""),
+                "confidence": confidence,
+                "shared_anchors": list(directive.get("shared_anchors") or ()),
+                "reason": str(directive.get("reason") or ""),
+            })
+    return directives
+
+
+def _canonical_registry_story_id(story_id, aliases):
+    current = str(story_id or "").strip()
+    seen = set()
+    while current and current not in seen:
+        seen.add(current)
+        nxt = str((aliases or {}).get(current) or "").strip()
+        if not nxt:
+            break
+        current = nxt
+    return current
+
+
+def _apply_semantic_duplicate_registry_consolidation(
+    archive,
+    gate_reports,
+    registry_path=None,
+):
+    """Consolidate model-confirmed duplicate story fragments in the registry.
+
+    Publication repair alone removes the duplicate permalink, but leaving the
+    secondary persistent story active splits future source membership and timeline
+    context. This write is narrowly authorized by a validated same-event/no-update
+    decision whose selected canonical slug still resolves to an active archive row.
+    """
+    target = Path(registry_path or EDITORIAL_REGISTRY_PATH)
+    result = {
+        "status": "not_run",
+        "directives_considered": 0,
+        "story_records_merged": 0,
+        "aliases_written": 0,
+        "already_consolidated": 0,
+        "skipped": [],
+        "pending_directives": [],
+        "merges": [],
+    }
+    directives = _semantic_duplicate_registry_directives(gate_reports, archive)
+    result["directives_considered"] = len(directives)
+    if merge_story_records is None:
+        result["status"] = "registry_merge_module_unavailable"
+        result["pending_directives"] = directives
+        return result
+    try:
+        payload = json.loads(target.read_text(encoding="utf-8"))
+    except Exception as exc:
+        result["status"] = "registry_unavailable"
+        result["skipped"].append({"reason": f"registry_read_error:{exc.__class__.__name__}"})
+        result["pending_directives"] = directives
+        return result
+    if not isinstance(payload, dict):
+        result["status"] = "registry_invalid"
+        result["pending_directives"] = directives
+        return result
+
+    stories = payload.setdefault("stories", {})
+    aliases = payload.setdefault("story_aliases", {})
+    if not isinstance(stories, dict) or not isinstance(aliases, dict):
+        result["status"] = "registry_invalid"
+        result["pending_directives"] = directives
+        return result
+
+    for directive in directives:
+        original_source = directive["source_story_id"]
+        original_target = directive["target_story_id"]
+        source_id = _canonical_registry_story_id(original_source, aliases)
+        target_id = _canonical_registry_story_id(original_target, aliases)
+        if source_id == target_id:
+            if original_source != target_id and aliases.get(original_source) != target_id:
+                aliases[original_source] = target_id
+                result["aliases_written"] += 1
+            result["already_consolidated"] += 1
+            continue
+        if source_id not in stories:
+            result["skipped"].append({
+                **directive,
+                "reason_code": "source_story_missing",
+                "resolved_source_story_id": source_id,
+            })
+            continue
+        if target_id not in stories:
+            result["skipped"].append({
+                **directive,
+                "reason_code": "target_story_missing",
+                "resolved_target_story_id": target_id,
+            })
+            continue
+
+        primary = stories[target_id]
+        secondary = stories[source_id]
+        merge_story_records(primary, secondary)
+        primary["story_id"] = target_id
+        audit = list(primary.get("semantic_publication_gate_merges", ()) or ())
+        audit.append({
+            "source_story_id": source_id,
+            "target_story_id": target_id,
+            "target_slug": directive["target_slug"],
+            "confidence": directive["confidence"],
+            "shared_anchors": directive["shared_anchors"],
+            "reason": directive["reason"],
+            "merged_at": datetime.now(timezone.utc).isoformat(),
+        })
+        primary["semantic_publication_gate_merges"] = audit[-20:]
+
+        for alias_id, alias_target in list(aliases.items()):
+            if alias_id != target_id and str(alias_target or "").strip() == source_id:
+                aliases[alias_id] = target_id
+        aliases[source_id] = target_id
+        if original_source != source_id:
+            aliases[original_source] = target_id
+        del stories[source_id]
+        result["story_records_merged"] += 1
+        result["aliases_written"] += 1
+        result["merges"].append({
+            **directive,
+            "resolved_source_story_id": source_id,
+            "resolved_target_story_id": target_id,
+        })
+
+    result["pending_directives"] = [
+        {
+            key: item.get(key)
+            for key in (
+                "source_story_id", "target_story_id", "target_slug",
+                "incoming_headline", "confidence", "shared_anchors", "reason",
+            )
+        }
+        for item in result["skipped"]
+        if isinstance(item, dict) and item.get("source_story_id") and item.get("target_slug")
+    ]
+    if not result["story_records_merged"] and not result["aliases_written"]:
+        result["status"] = "no_changes"
+        return result
+
+    event_to_story = {}
+    for story_id, story in stories.items():
+        for event_key in story.get("events", ()) or ():
+            value = str(event_key or "").strip()
+            if not value:
+                continue
+            if is_broad_event_class_key is not None and is_broad_event_class_key(value):
+                continue
+            event_to_story[value] = story_id
+    payload["event_to_story"] = event_to_story
+
+    existing_anchor_index = payload.get("incident_anchor_to_story", {})
+    if isinstance(existing_anchor_index, dict):
+        payload["incident_anchor_to_story"] = {
+            str(anchor): resolved
+            for anchor, story_id in existing_anchor_index.items()
+            if str(anchor).strip()
+            for resolved in [_canonical_registry_story_id(story_id, aliases)]
+            if resolved in stories
+        }
+
+    state = payload.setdefault("semantic_publication_gate_consolidation", {})
+    history = list(state.get("history", ()) or ())
+    snapshot = {
+        "version": "1.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "story_records_merged": result["story_records_merged"],
+        "aliases_written": result["aliases_written"],
+        "merges": result["merges"],
+    }
+    history.append(snapshot)
+    state["version"] = "1.0"
+    state["last_run"] = snapshot
+    state["history"] = history[-10:]
+
+    target.parent.mkdir(parents=True, exist_ok=True)
+    temp = target.with_suffix(target.suffix + ".tmp")
+    temp.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+    temp.replace(target)
+    result["status"] = "consolidated"
+    return result
+
+
 def _new_semantic_publication_gate_report():
     return {
         "schema_version": SEMANTIC_GATE_REPORT_SCHEMA_VERSION,
@@ -16688,6 +16964,8 @@ def _new_semantic_publication_gate_report():
             "retroactive_rows_retained": 0,
             "holds": 0,
             "retroactive_redirects": 0,
+            "registry_story_records_merged": 0,
+            "registry_aliases_written": 0,
         },
         "decisions": [],
         "archive_repairs": [],
@@ -17088,6 +17366,8 @@ def _repair_recent_semantic_archive_duplicates(
                 repair = {
                     "source_slug": source_slug,
                     "target_slug": target_slug,
+                    "source_story_id": str(row.get("editorial_story_id") or ""),
+                    "target_story_id": str(canonical.get("editorial_story_id") or ""),
                     "source_headline": row.get("headline", ""),
                     "target_headline": canonical.get("headline", ""),
                     "confidence": decision.get("confidence", 0),
@@ -20341,6 +20621,9 @@ def write_archives(all_categories, top_cat):
         "legacy_archive_scope_days": FORWARD_IDENTITY_RECENT_DAYS,
     }
     _semantic_gate_cache = _load_semantic_publication_gate_cache()
+    _previous_semantic_gate_report = (
+        _load_previous_semantic_publication_gate_report()
+    )
     _semantic_gate_report = _new_semantic_publication_gate_report()
 
     # Canonical cleanup is handled below. Never unlink an already-published
@@ -20395,6 +20678,25 @@ def write_archives(all_categories, top_cat):
     _canonical_redirects.extend(_semantic_archive_redirects)
     _forward_identity_report["semantic_archive_repairs"] = (
         _semantic_archive_repair_report
+    )
+    _semantic_registry_consolidation = (
+        _apply_semantic_duplicate_registry_consolidation(
+            archive,
+            [_previous_semantic_gate_report, _semantic_gate_report],
+            EDITORIAL_REGISTRY_PATH,
+        )
+    )
+    _semantic_gate_report["registry_consolidation"] = copy.deepcopy(
+        _semantic_registry_consolidation
+    )
+    _semantic_gate_report["summary"]["registry_story_records_merged"] = int(
+        _semantic_registry_consolidation.get("story_records_merged", 0) or 0
+    )
+    _semantic_gate_report["summary"]["registry_aliases_written"] = int(
+        _semantic_registry_consolidation.get("aliases_written", 0) or 0
+    )
+    _forward_identity_report["semantic_registry_consolidation"] = copy.deepcopy(
+        _semantic_registry_consolidation
     )
 
     # Bridge the persistent editorial registry into the permalink writer. Raw source
@@ -21398,6 +21700,7 @@ def write_archives(all_categories, top_cat):
         f"{_semantic_summary.get('structured_conflict_overrides', 0)} conflict override(s), "
         f"{_semantic_summary.get('model_calls', 0)} model call(s), "
         f"{_semantic_summary.get('retroactive_redirects', 0)} retroactive redirect(s), "
+        f"{_semantic_summary.get('registry_story_records_merged', 0)} registry merge(s), "
         f"{_semantic_summary.get('holds', 0)} hold(s)"
     )
     _forward_identity_report["semantic_publication_gate_summary"] = copy.deepcopy(

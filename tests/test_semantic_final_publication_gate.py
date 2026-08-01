@@ -705,3 +705,278 @@ def test_transient_model_failure_is_not_cached(tmp_path, monkeypatch):
     assert second["action"] == ACTION_DUPLICATE
     assert len(fake.messages.calls) == 2
     assert len(cache["entries"]) == 1
+
+
+def _registry_story(story_id: str, event_key: str, source_url: str, title: str):
+    return {
+        "story_id": story_id,
+        "events": [event_key],
+        "titles": [title],
+        "title_tokens": title.lower().split(),
+        "fact_tokens": [],
+        "facts": [],
+        "locations": ["port-st-lucie"],
+        "agencies": ["port-st-lucie-police"],
+        "event_types": ["crash"],
+        "entities": [],
+        "sources": [source_url],
+        "title_candidates": [],
+        "timeline": [
+            {
+                "event_key": event_key,
+                "article_id": source_url,
+                "url": source_url,
+                "title": title,
+            }
+        ],
+        "resolution_history": [],
+        "relationship_history": [],
+        "lifecycle_history": [],
+        "local_relevance": {"score": 100},
+        "custom_article_count": 0,
+        "canonical_title": title,
+    }
+
+
+def _validated_duplicate_report(source_story_id: str, target_slug: str):
+    return {
+        "schema_version": 1,
+        "gate_version": "test",
+        "decisions": [
+            {
+                "phase": "retroactive_recent_archive_repair",
+                "incoming_headline": INCOMING_HEADLINE,
+                "incoming_story_id": source_story_id,
+                "candidates": [{"slug": target_slug}],
+                "decision": {
+                    "status": "validated",
+                    "action": ACTION_DUPLICATE,
+                    "recommended_action": ACTION_DUPLICATE,
+                    "selected_candidate_slug": target_slug,
+                    "same_real_world_event": True,
+                    "material_new_update": False,
+                    "confidence": 0.95,
+                    "shared_anchors": ["same victim", "same intersection"],
+                    "novel_facts": [],
+                    "reason": "Same event with no material update.",
+                    "validation_errors": [],
+                },
+            }
+        ],
+        "archive_repairs": [],
+    }
+
+
+def test_semantic_duplicate_registry_consolidation_merges_story_fragments(tmp_path):
+    generate = _load_generate(tmp_path)
+    registry_path = tmp_path / "data" / "editorial_story_registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    registry_path.write_text(
+        json.dumps(
+            {
+                "schema": 1,
+                "stories": {
+                    "story_001557": _registry_story(
+                        "story_001557",
+                        "named-person-death:marie-martin",
+                        "https://example.com/canonical",
+                        CANONICAL_HEADLINE,
+                    ),
+                    "story_001684": _registry_story(
+                        "story_001684",
+                        "traffic-crash-port-st-lucie-18a61ec42a",
+                        "https://example.com/duplicate",
+                        INCOMING_HEADLINE,
+                    ),
+                },
+                "event_to_story": {
+                    "named-person-death:marie-martin": "story_001557",
+                    "traffic-crash-port-st-lucie-18a61ec42a": "story_001684",
+                },
+                "story_aliases": {},
+                "incident_anchor_to_story": {},
+                "quarantined_stories": {},
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    canonical = _archive_row(
+        CANONICAL_SLUG, CANONICAL_HEADLINE, "2026-07-31", "story_001557"
+    )
+    report = _validated_duplicate_report("story_001684", CANONICAL_SLUG)
+
+    result = generate._apply_semantic_duplicate_registry_consolidation(
+        [canonical], [report], registry_path
+    )
+    payload = json.loads(registry_path.read_text(encoding="utf-8"))
+
+    assert result["status"] == "consolidated"
+    assert result["story_records_merged"] == 1
+    assert "story_001684" not in payload["stories"]
+    assert payload["story_aliases"]["story_001684"] == "story_001557"
+    assert payload["event_to_story"][
+        "traffic-crash-port-st-lucie-18a61ec42a"
+    ] == "story_001557"
+    primary = payload["stories"]["story_001557"]
+    assert "https://example.com/duplicate" in primary["sources"]
+    assert len(primary["timeline"]) == 2
+    assert primary["semantic_publication_gate_merges"][0][
+        "source_story_id"
+    ] == "story_001684"
+
+
+def test_previous_semantic_report_replays_after_duplicate_archive_row_is_gone(tmp_path):
+    generate = _load_generate(tmp_path)
+    registry_path = tmp_path / "data" / "editorial_story_registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    registry_path.write_text(
+        json.dumps(
+            {
+                "schema": 1,
+                "stories": {
+                    "story_001316": _registry_story(
+                        "story_001316",
+                        "unknown-event-9edc175ede",
+                        "https://example.com/officer-canonical",
+                        OFFICER_CANONICAL_HEADLINE,
+                    ),
+                    "story_001685": _registry_story(
+                        "story_001685",
+                        "unknown-event-351769e611",
+                        "https://example.com/officer-duplicate",
+                        OFFICER_INCOMING_HEADLINE,
+                    ),
+                },
+                "event_to_story": {
+                    "unknown-event-9edc175ede": "story_001316",
+                    "unknown-event-351769e611": "story_001685",
+                },
+                "story_aliases": {},
+                "incident_anchor_to_story": {},
+                "quarantined_stories": {},
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+    retained_archive = [
+        _archive_row(
+            OFFICER_CANONICAL_SLUG,
+            OFFICER_CANONICAL_HEADLINE,
+            "2026-07-29",
+            "story_001316",
+        )
+    ]
+    prior_report = _validated_duplicate_report(
+        "story_001685", OFFICER_CANONICAL_SLUG
+    )
+
+    result = generate._apply_semantic_duplicate_registry_consolidation(
+        retained_archive, [prior_report, {}], registry_path
+    )
+    payload = json.loads(registry_path.read_text(encoding="utf-8"))
+
+    assert result["story_records_merged"] == 1
+    assert payload["story_aliases"]["story_001685"] == "story_001316"
+    assert "story_001685" not in payload["stories"]
+    assert payload["event_to_story"]["unknown-event-351769e611"] == "story_001316"
+
+
+def test_semantic_registry_consolidation_ignores_material_updates(tmp_path):
+    generate = _load_generate(tmp_path)
+    registry_path = tmp_path / "data" / "editorial_story_registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    registry_path.write_text(
+        json.dumps(
+            {
+                "schema": 1,
+                "stories": {
+                    "story_a": _registry_story(
+                        "story_a", "event-a", "https://example.com/a", "A"
+                    ),
+                    "story_b": _registry_story(
+                        "story_b", "event-b", "https://example.com/b", "B"
+                    ),
+                },
+                "event_to_story": {"event-a": "story_a", "event-b": "story_b"},
+                "story_aliases": {},
+                "incident_anchor_to_story": {},
+                "quarantined_stories": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    canonical = _archive_row(CANONICAL_SLUG, CANONICAL_HEADLINE, "2026-07-31", "story_a")
+    report = _validated_duplicate_report("story_b", CANONICAL_SLUG)
+    report["decisions"][0]["decision"]["material_new_update"] = True
+    report["decisions"][0]["decision"]["action"] = ACTION_UPDATE
+
+    result = generate._apply_semantic_duplicate_registry_consolidation(
+        [canonical], [report], registry_path
+    )
+    payload = json.loads(registry_path.read_text(encoding="utf-8"))
+
+    assert result["status"] == "no_changes"
+    assert set(payload["stories"]) == {"story_a", "story_b"}
+    assert payload["story_aliases"] == {}
+
+
+def test_pending_registry_directive_retries_from_prior_report(tmp_path):
+    generate = _load_generate(tmp_path)
+    registry_path = tmp_path / "data" / "editorial_story_registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    registry_path.write_text(
+        json.dumps(
+            {
+                "schema": 1,
+                "stories": {
+                    "story_001557": _registry_story(
+                        "story_001557",
+                        "named-person-death:marie-martin",
+                        "https://example.com/canonical",
+                        CANONICAL_HEADLINE,
+                    ),
+                    "story_001684": _registry_story(
+                        "story_001684",
+                        "traffic-crash-port-st-lucie-18a61ec42a",
+                        "https://example.com/duplicate",
+                        INCOMING_HEADLINE,
+                    ),
+                },
+                "event_to_story": {},
+                "story_aliases": {},
+                "incident_anchor_to_story": {},
+                "quarantined_stories": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    canonical = _archive_row(
+        CANONICAL_SLUG, CANONICAL_HEADLINE, "2026-07-31", "story_001557"
+    )
+    prior_report = {
+        "decisions": [],
+        "registry_consolidation": {
+            "status": "registry_unavailable",
+            "pending_directives": [
+                {
+                    "source_story_id": "story_001684",
+                    "target_story_id": "story_001557",
+                    "target_slug": CANONICAL_SLUG,
+                    "incoming_headline": INCOMING_HEADLINE,
+                    "confidence": 0.95,
+                    "shared_anchors": ["same crash"],
+                    "reason": "Same event.",
+                }
+            ],
+        },
+    }
+
+    result = generate._apply_semantic_duplicate_registry_consolidation(
+        [canonical], [prior_report], registry_path
+    )
+    payload = json.loads(registry_path.read_text(encoding="utf-8"))
+
+    assert result["story_records_merged"] == 1
+    assert payload["story_aliases"]["story_001684"] == "story_001557"
