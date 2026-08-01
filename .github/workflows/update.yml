@@ -78,6 +78,22 @@ jobs:
           TCT_ENGINE_MAX_ACTIONS: ${{ vars.TCT_ENGINE_MAX_ACTIONS || '8' }}
           TCT_ENGINE_KILL_SWITCH: ${{ vars.TCT_ENGINE_KILL_SWITCH || 'false' }}
 
+      - name: Upload generation diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tct-generation-diagnostics-${{ github.run_id }}
+          if-no-files-found: ignore
+          retention-days: 14
+          path: |
+            data/persistent-story-identity-integrity.json
+            data/cross-source-update-identity.json
+            data/event-identity-authority.json
+            data/editorial_story_registry.json
+            data/forward-publication-identity.json
+            data/story-regression-report.json
+            archive.json
+
       - name: Remove transient Python artifacts
         run: |
           find . -type d -name '__pycache__' -prune -exec rm -rf {} +
