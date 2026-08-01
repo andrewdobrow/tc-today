@@ -29,16 +29,19 @@ def test_inline_form_is_rendered_after_every_article_body():
     assert source.index(body) < source.index(slot)
 
 
-def test_inline_form_is_rendered_immediately_after_category_hero_row():
+def test_inline_form_is_rendered_beneath_hero_inside_lead_stack():
     source = _source()
+    stack = '<div class="lead-stack">'
     hero_row = '<div class="lead-primary">{heroes_html}</div>'
     slot = '{_newsletter_inline_embed("category-hero")}'
-    top_stories = '<section class="top-stories-v2">'
+    rail = '<aside class="latest-rail">'
+    assert stack in source
     assert hero_row in source
     assert slot in source
     homepage = source.index('<main class="homepage-v2">')
+    assert source.index(stack, homepage) < source.index(hero_row, homepage)
     assert source.index(hero_row, homepage) < source.index(slot, homepage)
-    assert source.index(slot, homepage) < source.index(top_stories, homepage)
+    assert source.index(slot, homepage) < source.index(rail, homepage)
 
 
 def test_inline_and_sticky_kit_forms_use_distinct_uids():
@@ -51,6 +54,6 @@ def test_inline_and_sticky_kit_forms_use_distinct_uids():
 def test_inline_slot_css_keeps_form_within_tct_content_width():
     css = (Path(__file__).resolve().parents[1] / "style.css").read_text(encoding="utf-8")
     assert ".newsletter-inline-slot" in css
-    assert ".homepage-v2 > .newsletter-inline-slot--category-hero" in css
+    assert ".lead-stack > .newsletter-inline-slot--category-hero" in css
     assert ".article-main-column > .newsletter-inline-slot" in css
     assert "max-width: none !important" in css

@@ -9182,14 +9182,16 @@ def render_index(all_categories, top_cat):
   </div>
   <main class="homepage-v2">
     <div class="lead-layout">
-      <div class="lead-primary">{heroes_html}</div>
+      <div class="lead-stack">
+        <div class="lead-primary">{heroes_html}</div>
+        {_newsletter_inline_embed("category-hero")}
+      </div>
       <aside class="latest-rail">
         <div class="latest-rail-title"><span>◷</span><h2>Latest News</h2></div>
         <div class="latest-list">{latest_items_html}</div>
         <a class="latest-more" href="/archive.html">View all latest news →</a>
       </aside>
     </div>
-    {_newsletter_inline_embed("category-hero")}
     <section class="top-stories-v2">
       <div class="section-kicker"><span>☆</span><h2>Top Stories</h2></div>
       <div class="articles-grid" id="articlesGrid">{cards_html}</div>

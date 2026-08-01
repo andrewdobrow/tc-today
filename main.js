@@ -162,3 +162,81 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btn) btn.click();
   }
 });
+
+
+// -- KIT STICKY BAR CONTAINMENT --
+// Kit injects the sticky form asynchronously. Detect the actual rendered bar,
+// reserve exactly its compact height, and keep TCT's sticky masthead below it.
+(() => {
+  const root = document.documentElement;
+  const mobileQuery = window.matchMedia("(max-width: 680px)");
+  let observedBar = null;
+  let resizeObserver = null;
+  let rafId = 0;
+
+  function barIsVisible(bar) {
+    if (!bar || !bar.isConnected) return false;
+    const style = window.getComputedStyle(bar);
+    const rect = bar.getBoundingClientRect();
+    return style.display !== "none" &&
+      style.visibility !== "hidden" &&
+      Number(style.opacity || 1) !== 0 &&
+      rect.width > 0 && rect.height > 8;
+  }
+
+  function syncStickyBarOffset() {
+    rafId = 0;
+    const bar = document.querySelector(".formkit-sticky-bar");
+
+    if (bar !== observedBar) {
+      if (resizeObserver) resizeObserver.disconnect();
+      observedBar = bar;
+      if (bar && "ResizeObserver" in window) {
+        resizeObserver = new ResizeObserver(scheduleSync);
+        resizeObserver.observe(bar);
+      }
+    }
+
+    if (!barIsVisible(bar)) {
+      root.classList.remove("kit-sticky-visible");
+      root.style.setProperty("--kit-sticky-height", "0px");
+      return;
+    }
+
+    const compactCap = mobileQuery.matches ? 58 : 72;
+    const measured = Math.ceil(bar.getBoundingClientRect().height);
+    const height = Math.max(42, Math.min(measured, compactCap));
+    root.style.setProperty("--kit-sticky-height", `${height}px`);
+    root.classList.add("kit-sticky-visible");
+  }
+
+  function scheduleSync() {
+    if (rafId) return;
+    rafId = window.requestAnimationFrame(syncStickyBarOffset);
+  }
+
+  const observer = new MutationObserver(mutations => {
+    const relevant = mutations.some(mutation => {
+      if (mutation.type === "childList") return true;
+      const target = mutation.target;
+      return target instanceof Element &&
+        (target.matches(".formkit-sticky-bar, .formkit-sticky-bar *") ||
+          Boolean(target.closest(".formkit-sticky-bar")));
+    });
+    if (relevant) scheduleSync();
+  });
+  observer.observe(document.body || document.documentElement, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["class", "style", "hidden"]
+  });
+
+  window.addEventListener("resize", scheduleSync, { passive: true });
+  window.addEventListener("load", scheduleSync, { once: true });
+  if (mobileQuery.addEventListener) {
+    mobileQuery.addEventListener("change", scheduleSync);
+  }
+  document.addEventListener("DOMContentLoaded", scheduleSync, { once: true });
+  scheduleSync();
+})();
