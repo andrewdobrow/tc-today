@@ -31,6 +31,7 @@ from .source_identity import find_matching_source_story
 from .registry_repair import (
     choose_primary_story_id,
     is_sparse_event_key,
+    is_broad_event_class_key,
     normalize_identity_title,
     normalize_title,
     repair_registry_payload,
@@ -401,11 +402,16 @@ class StoryRegistry:
             "canonical_title": "",
             "importance": StoryImportance(score=0, level=ImportanceLevel.LOW).to_dict(),
         }
-        self.data["event_to_story"][event_key] = story_id
+        if not is_broad_event_class_key(event_key):
+            self.data["event_to_story"][event_key] = story_id
         return story_id
 
     def resolve_story(self, event_key: str) -> str:
-        mapped = self.data["event_to_story"].get(event_key)
+        mapped = (
+            None
+            if is_broad_event_class_key(event_key)
+            else self.data["event_to_story"].get(event_key)
+        )
         if mapped:
             return self._canonical_story_id(mapped)
 
@@ -430,7 +436,11 @@ class StoryRegistry:
         source_class: str = "unknown",
         source_trust: int = 50,
     ) -> str:
-        mapped = self.data["event_to_story"].get(event_key)
+        mapped = (
+            None
+            if is_broad_event_class_key(event_key)
+            else self.data["event_to_story"].get(event_key)
+        )
         if mapped:
             story_id = self._canonical_story_id(mapped)
             mapped_story = self.get_story(story_id)
@@ -1102,7 +1112,8 @@ class StoryRegistry:
         if event_key not in story["events"]:
             story["events"].append(event_key)
 
-        self.data["event_to_story"][event_key] = canonical_id
+        if not is_broad_event_class_key(event_key):
+            self.data["event_to_story"][event_key] = canonical_id
         if save:
             self.save()
         return canonical_id
@@ -1120,7 +1131,8 @@ class StoryRegistry:
         for event_key in secondary["events"]:
             if event_key not in primary["events"]:
                 primary["events"].append(event_key)
-            self.data["event_to_story"][event_key] = primary_story
+            if not is_broad_event_class_key(event_key):
+                self.data["event_to_story"][event_key] = primary_story
 
         for field in (
             "titles",

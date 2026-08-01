@@ -83,16 +83,20 @@ def authorize_exact_identity_keys(
                 "deterministic_identity_key",
             )
 
-    for key in keys:
-        if key.startswith("story:") and key.split(":", 1)[1] in trusted:
-            return _decision(
-                OUTCOME_VERIFIED,
-                TIER_EXACT,
-                True,
-                "trusted_persistent_story_id",
-                "trusted_persistent_story_id",
-                "registry_certified_identity",
-            )
+    # A persistent story ID is retrieval evidence only. The registry may already
+    # be contaminated by a broad event key, so circularly trusting that ID would
+    # allow the original mistake to authorize an overwrite. Independent source-
+    # derived event proof is required later by ``decide_cross_source_identity``.
+    if any(key.startswith("story:") for key in keys):
+        return _decision(
+            OUTCOME_POSSIBLE,
+            TIER_CANDIDATE,
+            False,
+            "uncorroborated_persistent_story_id",
+            "persistent_story_id_requires_independent_event_proof",
+            "candidate_only",
+            "write_forbidden",
+        )
 
     if keys:
         return _decision(

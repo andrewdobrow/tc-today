@@ -272,8 +272,8 @@ def test_different_events_remain_separate():
     )
 
     assert cat_result.event_key == "animal-rescue-stuart-cats"
-    assert crash_result.event_key == (
-        "traffic-crash-port-st-lucie"
+    assert crash_result.event_key.startswith(
+        "traffic-crash-port-st-lucie-"
     )
     assert cat_result.canonical_article_id == "cat-story"
     assert crash_result.canonical_article_id == "crash-story"

@@ -164,7 +164,7 @@ def test_exact_source_url_authorizes_canonical_binding():
     assert g._canonical_write_authorized(incoming, canonical) is True
 
 
-def test_registry_trusted_persistent_story_id_authorizes_binding():
+def test_registry_trusted_persistent_story_id_is_candidate_only_without_independent_proof():
     g = _load_generate()
     story_id = "story_registry_trusted"
     canonical = dict(_candidate_canonical(), editorial_story_id=story_id)
@@ -178,9 +178,10 @@ def test_registry_trusted_persistent_story_id_authorizes_binding():
         incoming, ledger, identity_index
     )
 
-    assert target["slug"] == canonical["slug"]
-    assert basis == "trusted_persistent_story_id"
-    assert g._canonical_write_authorized(incoming, canonical) is True
+    assert target is None
+    assert basis == "candidate_only_uncorroborated_persistent_story_id"
+    assert incoming["_canonical_identity_candidate"]["write_authorized"] is False
+    assert g._canonical_write_authorized(incoming, canonical) is False
 
 
 def test_event_identity_is_persisted_once_and_remains_immutable():

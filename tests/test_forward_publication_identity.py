@@ -84,7 +84,7 @@ def test_forward_target_updates_same_exact_source_and_preserves_identity():
     }]
     target, basis = g._find_forward_publication_target(item, archive, "story-one")
     assert target["slug"] == "2026-07-24-original"
-    assert basis == "persistent_story_id"
+    assert basis == "exact_source_url"
     valid, reason = g._forward_publication_target_valid(
         item,
         target,
@@ -93,7 +93,7 @@ def test_forward_target_updates_same_exact_source_and_preserves_identity():
         now=datetime(2026, 7, 29, tzinfo=timezone.utc),
     )
     assert valid is True
-    assert reason == "persistent_story_id"
+    assert reason == "exact_source_url"
 
 
 def test_prospective_alignment_does_not_invent_age_for_undated_archive_row():

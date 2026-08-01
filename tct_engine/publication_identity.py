@@ -12,7 +12,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Mapping, Iterable
 
-from .registry_repair import normalize_identity_title
+from .registry_repair import normalize_identity_title, is_broad_event_class_key, story_quarantine_reasons
 from .source_identity import normalize_source_identity_url
 
 PUBLICATION_IDENTITY_VERSION = "1.0"
@@ -25,6 +25,7 @@ class PublicationIdentityIndex:
     slug_to_story: Mapping[str, str]
     all_story_ids: frozenset[str]
     safe_story_ids: frozenset[str]
+    quarantined_story_ids: frozenset[str]
     canonical_titles: Mapping[str, str]
 
     def resolve_source(self, item: Mapping[str, Any] | None) -> str:
@@ -103,6 +104,10 @@ def _is_safe_duplicate_story(story: Mapping[str, Any]) -> bool:
     Duplicate/source consolidation stories are safe because they represent parallel
     coverage of the same stage, not a new editorial milestone.
     """
+    if story_quarantine_reasons(story):
+        return False
+    if any(is_broad_event_class_key(key) for key in story.get("events", ())):
+        return False
     relationships = {
         str(row.get("relationship") or "").strip().lower()
         for row in (story.get("relationship_history") or [])
@@ -122,6 +127,10 @@ def build_publication_identity_index(
     safe_story_ids: set[str] = set()
     all_story_ids: set[str] = set()
     canonical_titles: dict[str, str] = {}
+    quarantined_story_ids = frozenset(
+        str(story_id)
+        for story_id in (payload.get("quarantined_stories", {}) if isinstance(payload, Mapping) else {})
+    )
 
     for story_id, story in _story_items(payload):
         if not story_id:
@@ -181,5 +190,6 @@ def build_publication_identity_index(
         slug_to_story=slug_to_story,
         all_story_ids=frozenset(all_story_ids),
         safe_story_ids=frozenset(safe_story_ids),
+        quarantined_story_ids=quarantined_story_ids,
         canonical_titles=canonical_titles,
     )

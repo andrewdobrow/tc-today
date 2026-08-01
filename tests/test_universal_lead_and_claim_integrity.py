@@ -400,13 +400,13 @@ def test_ordinary_same_story_headline_update_keeps_existing_permalink():
             "Port St. Lucie City Council approved an updated road construction "
             "schedule Tuesday, moving the project's start to October."
         ),
-        "source_url": "https://source.test/road-project",
+        "source_url": "https://www.wptv.com/news/local-news/road-project",
         "editorial_story_id": "story-road",
     }
     entry = {
         "slug": "2026-07-28-port-st-lucie-council-approves-road-project",
         "headline": "Port St. Lucie council approves road project",
-        "source_url": "https://source.test/road-project",
+        "source_url": "https://www.wptv.com/news/local-news/road-project",
         "editorial_story_id": "story-road",
     }
 
@@ -415,7 +415,7 @@ def test_ordinary_same_story_headline_update_keeps_existing_permalink():
     )
 
     assert valid is True
-    assert reason == "persistent_story_id"
+    assert reason == "exact_source_url"
 
 
 def test_release_versions_and_reports_are_bumped():

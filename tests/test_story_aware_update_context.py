@@ -135,7 +135,7 @@ def _payload(body):
     })
 
 
-def test_existing_canonical_makes_headline_reframe_an_update_before_generation():
+def test_existing_story_id_does_not_attach_update_context_without_independent_proof():
     generate = _load_generate()
     source = _source()
     identity_index = types.SimpleNamespace(safe_story_ids={"story_001234"})
@@ -147,12 +147,12 @@ def test_existing_canonical_makes_headline_reframe_an_update_before_generation()
         [source], [dict(CANONICAL)], ledger, identity_index
     )
 
-    assert len(bindings) == 1
-    assert source["story_form"] == "update"
-    assert source["_canonical_context_slug"] == CANONICAL["slug"]
-    assert source["_canonical_context_headline"] == CANONICAL["headline"]
-    assert "died" in source["_canonical_context_body"]
-    assert bindings[0]["canonical_slug"] == CANONICAL["slug"]
+    assert bindings == []
+    assert source.get("story_form") != "update"
+    assert source["_canonical_identity_candidate"]["write_authorized"] is False
+    assert source["_canonical_identity_candidate"]["proof_type"] == (
+        "uncorroborated_persistent_story_id"
+    )
 
 
 def test_neighbor_reaction_lead_fails_without_original_death_and_arrest_context():

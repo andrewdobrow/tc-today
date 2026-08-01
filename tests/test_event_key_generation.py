@@ -56,7 +56,9 @@ def test_crash_key():
         event_types=("traffic crash",),
     )
 
-    assert generate_event_key(facts) == "traffic-crash-port-st-lucie"
+    event_key = generate_event_key(facts)
+    assert event_key.startswith("traffic-crash-port-st-lucie-")
+    assert event_key == generate_event_key(facts)
 
 
 def test_unknown_events_do_not_share_one_global_key():

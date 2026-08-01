@@ -50,6 +50,12 @@ def generate_event_key(
     else:
         parts.append(_identity_suffix(facts))
 
+    # Crash and fire labels identify a class of incidents, not one incident.
+    # Keep the useful semantic prefix for observability, but add a stable
+    # article-derived suffix so a city-level key can never merge unrelated events.
+    if parts[0] in {"traffic-crash", "fire"}:
+        parts.append(_identity_suffix(facts))
+
     if "cats rescued" in facts.facts:
         parts.append("cats")
 

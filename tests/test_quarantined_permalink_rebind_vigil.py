@@ -61,7 +61,7 @@ def test_persistent_story_update_keeps_canonical_despite_headline_slug_drift():
         now=datetime(2026, 7, 27, tzinfo=timezone.utc),
     )
     assert valid is True
-    assert reason == "persistent_story_id"
+    assert reason == "exact_source_url"
 
 
 def test_exact_source_headline_evolution_keeps_existing_canonical():

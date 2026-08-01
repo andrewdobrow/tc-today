@@ -179,7 +179,7 @@ def test_same_persistent_story_update_ignores_cosmetic_permalink_drift():
         incoming, existing, "story_001294", "persistent_story_id"
     )
     assert passed is True
-    assert reason == "persistent_story_id"
+    assert reason == "persistent_story_id_independently_verified"
 
 
 def test_authoritative_route_marks_update_for_contextual_lead_contract():

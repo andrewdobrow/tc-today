@@ -20,10 +20,54 @@ from .incident_identity import (
 )
 from .source_identity import story_source_identity_urls
 
-REPAIR_VERSION = 5
+REPAIR_VERSION = 6
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
+
+_BROAD_EVENT_PREFIXES = ("traffic-crash-", "fire-")
+_BROAD_NAMED_DEATH_LOCATION_TOKENS = frozenset({
+    "avenue", "beach", "boulevard", "bridge", "circle", "county",
+    "drive", "highway", "interstate", "lane", "parkway", "road",
+    "street", "trail", "turnpike", "way", "fort", "pierce", "stuart",
+    "vero", "sebastian", "lucie", "martin", "river", "florida",
+    "north", "south", "east", "west", "northeast", "northwest",
+    "southeast", "southwest", "state", "us",
+})
+_DIRECTION_TOKENS = frozenset({
+    "north", "south", "east", "west", "northeast", "northwest",
+    "southeast", "southwest",
+})
+
+
+def is_broad_event_class_key(event_key: object) -> bool:
+    """Return True when a key describes an event class, not one incident.
+
+    City/county crash and fire keys were historically treated as canonical
+    identity.  That allowed every crash in one jurisdiction to inherit one
+    persistent story.  These keys may still be retained as descriptive metadata,
+    but they must never own an ``event_to_story`` mapping or authorize a merge.
+    """
+    value = str(event_key or "").strip().casefold()
+    if not value:
+        return False
+    if value.startswith(_BROAD_EVENT_PREFIXES):
+        # v1.12.0.8 appends a ten-character source/article hash to crash and
+        # fire keys. Those keys identify one incident; only the unsuffixed
+        # jurisdiction-level class remains broad.
+        return _HASH_SUFFIX_RE.search(value) is None
+    if value.startswith("named-person-death:"):
+        subject = value.split(":", 1)[1]
+        ordered_tokens = tuple(token for token in subject.split("-") if token)
+        tokens = set(ordered_tokens)
+        # A location-only subject (or a truncated street beginning with a
+        # direction) is not a named person. Do not reject a real surname merely
+        # because it is also a county name, e.g. ``marie-martin``.
+        if tokens and tokens <= _BROAD_NAMED_DEATH_LOCATION_TOKENS:
+            return True
+        if ordered_tokens and ordered_tokens[0] in _DIRECTION_TOKENS:
+            return True
+    return False
 _WORD_RE = re.compile(r"[a-z0-9]+")
 
 _PUBLISHER_SUFFIX_RE = re.compile(
@@ -113,6 +157,7 @@ def is_sparse_event_key(event_key: object) -> bool:
         value in _LEGACY_GENERIC_EVENT_KEYS
         or value.startswith("unknown-event-")
         or _HASH_SUFFIX_RE.search(value)
+        or is_broad_event_class_key(value)
     )
 
 
@@ -141,6 +186,36 @@ def _sparse_story_is_incoherent(story: Mapping[str, Any]) -> bool:
     return len(anchors) < 2 and average_overlap < 0.40
 
 
+def _broad_event_story_is_incoherent(story: Mapping[str, Any]) -> bool:
+    events = [str(value) for value in story.get("events", ()) if str(value).strip()]
+    titles = [str(value) for value in story.get("titles", ()) if str(value).strip()]
+    if not any(is_broad_event_class_key(key) for key in events) or len(titles) < 4:
+        return False
+
+    # Treat syndicated/reworded titles as a graph. A legitimate incident should
+    # remain connected through at least one specific title anchor. Multiple
+    # disconnected clusters under one city-level crash/fire key indicate that the
+    # key merged separate incidents.
+    parent = list(range(len(titles)))
+
+    def find(index: int) -> int:
+        while parent[index] != index:
+            parent[index] = parent[parent[index]]
+            index = parent[index]
+        return index
+
+    def union(left: int, right: int) -> None:
+        a, b = find(left), find(right)
+        if a != b:
+            parent[b] = a
+
+    for left, right in itertools.combinations(range(len(titles)), 2):
+        if _pair_overlap(titles[left], titles[right]) >= 0.30:
+            union(left, right)
+    components = {find(index) for index in range(len(titles))}
+    return len(components) > 1
+
+
 def story_quarantine_reasons(story: Mapping[str, Any]) -> tuple[str, ...]:
     events = [str(value) for value in story.get("events", ()) if str(value).strip()]
     titles = list(story.get("titles", ()) or ())
@@ -155,6 +230,9 @@ def story_quarantine_reasons(story: Mapping[str, Any]) -> tuple[str, ...]:
 
     if _sparse_story_is_incoherent(story):
         reasons.append("unsupported_sparse_event_merge")
+
+    if _broad_event_story_is_incoherent(story):
+        reasons.append("broad_event_class_multi_incident")
 
     return tuple(reasons)
 
@@ -347,7 +425,7 @@ def _duplicate_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[
                 title_index.setdefault(normalized, []).append(story_id)
         for event_key in story.get("events", ()):
             value = str(event_key or "").strip()
-            if value:
+            if value and not is_broad_event_class_key(value):
                 event_index.setdefault(value, []).append(story_id)
 
     for group in (*title_index.values(), *event_index.values()):
@@ -758,7 +836,7 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
     for story_id, story in stories.items():
         for event_key in story.get("events", ( )):
             value = str(event_key or "").strip()
-            if value:
+            if value and not is_broad_event_class_key(value):
                 event_to_story[value] = story_id
     payload["event_to_story"] = event_to_story
     # Structured incident anchors are a first-class registry index.  New feed

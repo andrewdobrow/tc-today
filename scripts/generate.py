@@ -49,6 +49,10 @@ try:
         normalize_source_identity_url,
         incident_anchor_key,
     )
+    from tct_engine.registry_repair import (
+        is_broad_event_class_key,
+        story_quarantine_reasons,
+    )
 except Exception as exc:
     ActivationConfig = None
     EngineMode = None
@@ -63,6 +67,8 @@ except Exception as exc:
     write_homepage_ranking_recommendations = None
     normalize_source_identity_url = None
     incident_anchor_key = None
+    is_broad_event_class_key = None
+    story_quarantine_reasons = None
     _editorial_import_error = exc
 
 try:
@@ -262,6 +268,9 @@ CROSS_SOURCE_UPDATE_IDENTITY_REPORT_PATH = (
 )
 EVENT_IDENTITY_AUTHORITY_REPORT_PATH = (
     OUTPUT_DIR / "data" / "event-identity-authority.json"
+)
+PERSISTENT_STORY_IDENTITY_INTEGRITY_REPORT_PATH = (
+    OUTPUT_DIR / "data" / "persistent-story-identity-integrity.json"
 )
 
 # v1.10.5 forward publication identity. New generated articles are published only
@@ -15838,7 +15847,11 @@ def _cross_source_precise_locations(item):
         }:
             continue
         result.add("-".join(prefix + [suffix]))
-    return result
+    generic_locations = {
+        "florida-highway", "state-road", "us-highway", "interstate-highway",
+        "county-road", "federal-highway", "national-highway",
+    }
+    return {value for value in result if value not in generic_locations}
 
 
 def _cross_source_agencies(item):
@@ -15938,10 +15951,10 @@ def _event_identity_snapshot(item, *, include_archive_body=False):
         or ""
     ).strip()
     source_text = str(
-        item.get("article_text")
-        or item.get("source_summary")
+        item.get("source_summary")
         or item.get("summary")
         or item.get("teaser")
+        or item.get("article_text")
         or ""
     ).strip()
     source_fields_present = bool(
@@ -15967,7 +15980,11 @@ def _event_identity_snapshot(item, *, include_archive_body=False):
         "event_types": item.get("event_types", ()) or (),
         "entities": item.get("entities", ()) or (),
     }
-    identity_text = _cross_source_text(identity_item)
+    # Known-event classification is intentionally bounded to source-facing copy.
+    # Generated body context and related-story prose must never redefine identity.
+    identity_text = ". ".join(
+        part for part in (source_headline, source_text[:900]) if part
+    )
     snapshot = {
         "schema_version": "1.0",
         "origin": (
@@ -16636,6 +16653,116 @@ def _write_cross_source_update_identity_report(output_root=None):
     return report
 
 
+def _build_persistent_story_identity_integrity_report(archive, registry_payload):
+    """Audit the trust boundary between registry identity and publication."""
+    payload = registry_payload if isinstance(registry_payload, dict) else {}
+    stories = payload.get("stories", {}) if isinstance(payload.get("stories", {}), dict) else {}
+    quarantined = payload.get("quarantined_stories", {}) if isinstance(payload.get("quarantined_stories", {}), dict) else {}
+    event_to_story = payload.get("event_to_story", {}) if isinstance(payload.get("event_to_story", {}), dict) else {}
+
+    broad_mappings = []
+    for event_key, story_id in event_to_story.items():
+        if is_broad_event_class_key is not None and is_broad_event_class_key(event_key):
+            broad_mappings.append({"event_key": event_key, "story_id": story_id})
+
+    active_contaminated = []
+    if story_quarantine_reasons is not None:
+        for story_id, story in stories.items():
+            reasons = list(story_quarantine_reasons(story))
+            if reasons:
+                active_contaminated.append({
+                    "story_id": story_id,
+                    "reasons": reasons,
+                    "events": list(story.get("events") or ()),
+                    "titles": list(story.get("titles") or ()),
+                })
+
+    identity_index = (
+        build_publication_identity_index(payload)
+        if build_publication_identity_index is not None
+        else None
+    )
+    safe_story_ids = set(getattr(identity_index, "safe_story_ids", set()) or set())
+    broad_story_ids = {
+        story_id
+        for story_id, story in stories.items()
+        if is_broad_event_class_key is not None
+        and any(is_broad_event_class_key(key) for key in story.get("events", ()))
+    }
+    broad_story_ids_with_write_authority = sorted(broad_story_ids & safe_story_ids)
+
+    quarantined_ids = set(quarantined)
+    archive_quarantine_refs = []
+    for entry in archive or []:
+        if not isinstance(entry, dict):
+            continue
+        story_id = str(entry.get("editorial_story_id") or "").strip()
+        if story_id and story_id in quarantined_ids:
+            archive_quarantine_refs.append({
+                "story_id": story_id,
+                "slug": str(entry.get("slug") or ""),
+                "headline": str(entry.get("headline") or ""),
+            })
+
+    circular_authorizations = [
+        dict(row) for row in CROSS_SOURCE_IDENTITY_OBSERVATIONS
+        if str(row.get("proof_type") or "") in {
+            "trusted_persistent_story_id", "persistent_story_id"
+        }
+        and row.get("write_authorized")
+    ]
+    violations = (
+        len(broad_mappings)
+        + len(active_contaminated)
+        + len(broad_story_ids_with_write_authority)
+        + len(archive_quarantine_refs)
+        + len(circular_authorizations)
+    )
+    return {
+        "schema_version": 1,
+        "release": "persistent-story-identity-integrity",
+        "passed": violations == 0,
+        "summary": {
+            "active_story_count": len(stories),
+            "quarantined_story_count": len(quarantined),
+            "active_contaminated_count": len(active_contaminated),
+            "broad_event_mapping_count": len(broad_mappings),
+            "broad_story_write_authority_count": len(broad_story_ids_with_write_authority),
+            "archive_quarantine_reference_count": len(archive_quarantine_refs),
+            "circular_story_id_authorization_count": len(circular_authorizations),
+            "violation_count": violations,
+        },
+        "active_contaminated_stories": active_contaminated,
+        "broad_event_mappings": broad_mappings,
+        "broad_story_ids_with_write_authority": broad_story_ids_with_write_authority,
+        "archive_quarantine_references": archive_quarantine_refs,
+        "circular_story_id_authorizations": circular_authorizations,
+    }
+
+
+def _validate_persistent_story_identity_integrity(archive, output_root=None):
+    root = Path(output_root) if output_root is not None else OUTPUT_DIR
+    registry_payload = _read_json_file(
+        root / "data" / "editorial_story_registry.json", {}
+    )
+    report = _build_persistent_story_identity_integrity_report(
+        archive, registry_payload
+    )
+    path = root / "data" / "persistent-story-identity-integrity.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if not report.get("passed"):
+        raise RuntimeError(
+            "Persistent story identity integrity FAILED: "
+            f"{report.get('summary', {}).get('violation_count', 0)} violation(s)"
+        )
+    print(
+        "  Persistent story identity integrity PASSED "
+        f"({report.get('summary', {}).get('active_story_count', 0)} active stories)"
+    )
+    return report
+
+
 def _generic_same_event_publication_match(left, right):
     """Conservative universal fallback when registry IDs fragmented."""
     return bool(_cross_source_same_event_evidence(left, right).get("matched"))
@@ -16751,16 +16878,37 @@ def _canonical_publication_ledger_target(item, ledger, identity_index=None):
                 decision.get("proof_type") or "deterministic_identity"
             )
             return canonical, basis, keys
-        # An untrusted/ambiguous story ID may retrieve a candidate, but cannot bind it.
+        # A registry story ID can retrieve this candidate, but must be independently
+        # re-proven from source-derived event facts before it may bind a permalink.
+        independently_verified = []
+        for candidate in candidates:
+            evidence = _persistent_story_independent_identity_evidence(item, candidate)
+            if evidence:
+                independently_verified.append((candidate, evidence))
+        if independently_verified:
+            canonical, evidence = min(
+                independently_verified, key=lambda row: _publication_canonical_key(row[0])
+            )
+            if _apply_cross_source_canonical_identity(
+                item, canonical, evidence, action="canonical_bound_before_generation"
+            ):
+                return (
+                    canonical,
+                    "event-identity-authority:" + str(
+                        evidence.get("proof_type") or "independent_story_reverification"
+                    ),
+                    keys,
+                )
+
         item["_canonical_identity_candidate"] = {
             "canonical_slug": str(canonical.get("slug") or ""),
             "identity_outcome": IDENTITY_OUTCOME_POSSIBLE,
             "evidence_tier": "candidate_only",
             "write_authorized": False,
-            "proof_type": "untrusted_identity_key",
+            "proof_type": "uncorroborated_persistent_story_id",
             "identity_keys": list(matched_keys),
         }
-        return None, "candidate_only_untrusted_identity_key", keys
+        return None, "candidate_only_uncorroborated_persistent_story_id", keys
 
     # Source-independent candidate retrieval. Candidate similarity itself has no
     # destructive authority; only the hard proof returned by the policy may bind.
@@ -18500,6 +18648,39 @@ def _stable_authoritative_custom_story_id(entry):
     return "custom:" + hashlib.sha256(seed.encode("utf-8")).hexdigest()[:32]
 
 
+def _revoke_quarantined_archive_story_ids(archive, identity_index):
+    """Remove circular publication trust inherited from quarantined stories.
+
+    Quarantine is a registry verdict that the story ID may represent several real
+    events. Archive articles remain published, but that ID can no longer be used to
+    select or overwrite a canonical permalink. Exact source or independent incident
+    evidence may safely identify the article again on a later run.
+    """
+    quarantined_ids = set(
+        getattr(identity_index, "quarantined_story_ids", set()) or set()
+    )
+    if not quarantined_ids:
+        return list(archive or []), []
+    revoked = []
+    for entry in archive or []:
+        if not isinstance(entry, dict):
+            continue
+        story_id = str(entry.get("editorial_story_id") or "").strip()
+        if not story_id or story_id not in quarantined_ids:
+            continue
+        revoked.append({
+            "story_id": story_id,
+            "slug": str(entry.get("slug") or ""),
+            "headline": str(entry.get("headline") or ""),
+        })
+        entry.pop("editorial_story_id", None)
+        entry.pop("_editorial_story_id", None)
+        entry.pop("identity_origin", None)
+        entry["legacy_identity_status"] = "quarantined_story_id_revoked"
+        entry["identity_repair_reason"] = "persistent_story_contamination"
+    return list(archive or []), revoked
+
+
 def _backfill_archive_editorial_story_ids(archive, identity_index, output_root=None, now=None):
     """Resolve recent source identity and deterministically identify custom archives.
 
@@ -18610,8 +18791,17 @@ def _publication_canonical_key(entry):
 
 
 def _find_forward_publication_target(item, archive, story_id=""):
-    """Find an update target using explicit identity only."""
+    """Find an update target using the strongest explicit identity first."""
     story_id = str(story_id or "").strip()
+
+    # Exact source identity is independent of the persistent registry and therefore
+    # outranks a story ID that may have been assigned by an earlier broad-key merge.
+    exact_source = _find_exact_archive_source_entry(item, archive)
+    if exact_source is not None:
+        existing_id = str(exact_source.get("editorial_story_id") or "").strip()
+        if not story_id or not existing_id or existing_id == story_id:
+            return exact_source, "exact_source_url"
+
     route = str(item.get("_editorial_route") or "").strip().lower()
     if story_id and route != "generate_new":
         matches = [
@@ -18622,12 +18812,6 @@ def _find_forward_publication_target(item, archive, story_id=""):
         if matches:
             return min(matches, key=_publication_canonical_key), "persistent_story_id"
 
-    exact_source = _find_exact_archive_source_entry(item, archive)
-    if exact_source is not None:
-        existing_id = str(exact_source.get("editorial_story_id") or "").strip()
-        if not story_id or not existing_id or existing_id == story_id:
-            return exact_source, "exact_source_url"
-
     if item.get("is_weather_alert") and item.get("weather_event_key"):
         weather_key = item.get("weather_event_key")
         match = next(
@@ -18637,6 +18821,45 @@ def _find_forward_publication_target(item, archive, story_id=""):
         if match:
             return match, "weather_event_key"
     return None, "new_publication"
+
+
+def _persistent_story_independent_identity_evidence(item, entry):
+    """Re-prove a registry relationship from immutable source event facts.
+
+    A matching persistent story ID retrieves a candidate only. It never authorizes
+    a write by itself because that ID may be the product of an earlier broad-key
+    merge.
+    """
+    if not isinstance(item, dict) or not isinstance(entry, dict):
+        return {}
+
+    # Reusing the exact normalized publisher URL is deterministic source identity,
+    # independent of any registry story assignment. It is valid corroboration even
+    # when the caller originally retrieved the row by persistent story ID.
+    incoming_source = _normalized_external_source_url(
+        item.get("source_url") or item.get("_source_url") or item.get("link")
+    )
+    existing_source = _normalized_external_source_url(
+        entry.get("source_url") or entry.get("original_url") or entry.get("link")
+    )
+    if incoming_source and incoming_source == existing_source:
+        return {
+            "matched": True,
+            "confidence": 1.0,
+            "confidence_semantics": "deterministic_identity_not_probability",
+            "relationship": IDENTITY_OUTCOME_VERIFIED,
+            "identity_outcome": IDENTITY_OUTCOME_VERIFIED,
+            "evidence_tier": "exact_identity",
+            "write_authorized": True,
+            "proof_type": "exact_source_url",
+            "reason": "exact_normalized_source_url",
+            "reason_codes": ["exact_source_url", "independent_registry_corroboration"],
+            "evidence_dimensions": ["source_url"],
+            "decision_trace": ["exact_source_url=True", "write_authorized=True"],
+        }
+
+    evidence = _cross_source_same_event_evidence(item, entry)
+    return evidence if evidence.get("write_authorized") else {}
 
 
 def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
@@ -18687,10 +18910,16 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
         entry.get("source_url") or entry.get("original_url") or entry.get("link")
     )
     same_exact_source = bool(
-        basis == "exact_source_url"
-        and incoming_source
+        incoming_source
         and incoming_source == existing_source
     )
+
+    # Exact normalized source identity is independently authoritative regardless
+    # of which candidate-retrieval path found the row first. It must be evaluated
+    # before headline/slug drift because a publisher may legitimately revise the
+    # headline of the same source article.
+    if same_exact_source:
+        return True, "exact_source_url"
 
     claim_drift = _publication_slug_claim_diagnostics(item, entry)
     if claim_drift.get("rebind_required"):
@@ -18702,10 +18931,13 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
             str(basis) if ledger_authorized else "canonical_write_authorization_missing",
         )
     if same_persistent_story:
-        return True, basis
-    if same_exact_source:
-        return True, basis
-
+        evidence = _persistent_story_independent_identity_evidence(item, entry)
+        if evidence:
+            _stamp_canonical_write_authorization(
+                item, entry, evidence, basis="persistent_story_id_independently_verified"
+            )
+            return True, "persistent_story_id_independently_verified"
+        return False, "uncorroborated_persistent_story_id"
     # Evaluate the row as it would exist after this update. A changed headline and
     # current lastmod may expose an old overwritten URL that still looks safe before
     # mutation. Such a row is quarantined and the current story receives a new slug.
@@ -18725,7 +18957,8 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
             )
 
     if basis == "persistent_story_id" and story_id and entry_story_id == story_id:
-        return True, basis
+        evidence = _persistent_story_independent_identity_evidence(item, entry)
+        return (bool(evidence), "persistent_story_id_independently_verified" if evidence else "uncorroborated_persistent_story_id")
     if basis == "exact_source_url":
         incoming = _normalized_external_source_url(
             item.get("source_url") or item.get("_source_url") or item.get("link")
@@ -18761,10 +18994,19 @@ def _destructive_publication_write_authorized(item, entry, story_id, basis):
     incoming_story_id = str(story_id or "").strip()
     existing_story_id = str(entry.get("editorial_story_id") or "").strip()
     if basis == "persistent_story_id":
-        return bool(
+        if not (
             incoming_story_id
             and existing_story_id
             and incoming_story_id == existing_story_id
+        ):
+            return False
+        evidence = _persistent_story_independent_identity_evidence(item, entry)
+        if not evidence:
+            return False
+        return bool(
+            _stamp_canonical_write_authorization(
+                item, entry, evidence, basis="persistent_story_id_independently_verified"
+            )
         )
 
     if basis == "weather_event_key":
@@ -18988,6 +19230,12 @@ def write_archives(all_categories, top_cat):
     # articles may be rewritten into very different TCT headlines; source-backed
     # story identity prevents those rewrites from becoming parallel public URLs.
     _publication_identity = _load_publication_identity_index()
+    archive, _quarantined_story_id_revocations = (
+        _revoke_quarantined_archive_story_ids(archive, _publication_identity)
+    )
+    _forward_identity_report["quarantined_story_id_revocations"] = (
+        _quarantined_story_id_revocations
+    )
     archive, _archive_identity_backfill = _backfill_archive_editorial_story_ids(
         archive, _publication_identity, OUTPUT_DIR
     )
@@ -22139,6 +22387,7 @@ def main():
     # that has just been consolidated.  Reload the canonical archive and rebind every
     # existing live placement by persistent story ID before the integrity gate runs.
     _canonical_archive = load_archive(_archive_path)
+    _validate_persistent_story_identity_integrity(_canonical_archive, OUTPUT_DIR)
     _post_publication_rebound = _rebind_live_items_to_published_archive(
         all_categories,
         _canonical_archive,
