@@ -7232,6 +7232,10 @@ def select_front_page_hero(all_categories, deterministic_only=False):
         if not (c.get("hero") or {}).get("_archive_only")
         or (c.get("hero") or {}).get("_custom_active_queue")
     ]
+    active_ids = {id(candidate) for candidate in active_candidates}
+    archive_candidates = [
+        candidate for candidate in candidate_pool if id(candidate) not in active_ids
+    ]
     working = active_candidates if active_candidates else list(candidate_pool)
 
     forced = [c for c in working if (c.get("hero") or {}).get("force_hero")]
@@ -7248,6 +7252,31 @@ def select_front_page_hero(all_categories, deterministic_only=False):
         else:
             fresh_candidates.append(candidate)
 
+    selection_mode = "fresh_live_candidate" if active_candidates else "fresh_archive_recovery"
+
+    # The final canonical-freshness barrier evaluates every eligible canonical
+    # placement, including recent archive-recovery stories.  Hero selection must use
+    # the same universe.  Previously, any stale live placement caused fresh archive
+    # candidates to be discarded before reselection, so the selector returned a stale
+    # hero while the barrier correctly observed fresh alternatives and stopped the run.
+    # A fresh canonical archive story is preferable to a stale live fallback; archive
+    # recovery remains unavailable whenever at least one fresh live candidate exists.
+    if not fresh_candidates and active_candidates and archive_candidates:
+        fresh_archive_candidates = []
+        for candidate in archive_candidates:
+            assessment = _stale_assessment(candidate)
+            if assessment.get("stale"):
+                HERO_PREFILTER_AUDIT.append(_candidate_audit(candidate))
+            else:
+                fresh_archive_candidates.append(candidate)
+        if fresh_archive_candidates:
+            fresh_candidates = fresh_archive_candidates
+            selection_mode = "fresh_archive_recovery"
+            print(
+                "  Hero pre-filter: no fresh live candidates; "
+                "using fresh canonical archive recovery"
+            )
+
     if fresh_candidates:
         for row in HERO_PREFILTER_AUDIT:
             print(
@@ -7262,9 +7291,8 @@ def select_front_page_hero(all_categories, deterministic_only=False):
                 c for c in working
                 if c.get("category_key") != "sports" or _is_major_sports_story(c.get("hero") or {})
             ]
-        selection_mode = "fresh_live_candidate"
     else:
-        print("  Hero pre-filter: no fresh live candidates; using deterministic stale fallback")
+        print("  Hero pre-filter: no fresh canonical candidates; using deterministic stale fallback")
         non_sports = [c for c in working if c.get("category_key") != "sports"]
         if non_sports:
             working = non_sports
@@ -7272,7 +7300,12 @@ def select_front_page_hero(all_categories, deterministic_only=False):
 
     working = sorted(working, key=_priority, reverse=True)[:12]
     if deterministic_only:
-        return _materialize(working[0], "deterministic_post_canonical_freshness")
+        reason = (
+            "deterministic_post_canonical_archive_recovery"
+            if selection_mode == "fresh_archive_recovery"
+            else "deterministic_post_canonical_freshness"
+        )
+        return _materialize(working[0], reason)
     if len(working) == 1:
         return _materialize(working[0], "only_fresh_candidate")
 

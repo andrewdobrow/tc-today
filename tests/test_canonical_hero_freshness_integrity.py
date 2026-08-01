@@ -195,3 +195,52 @@ def test_stale_fallback_is_allowed_only_when_no_fresh_canonical_exists(tmp_path)
     assert selected is category
     report = (tmp_path / "canonical-hero-freshness-contract.json").read_text()
     assert '"action": "stale_fallback_no_fresh_canonical_candidates"' in report
+
+
+def test_final_freshness_gate_can_reselect_recent_archive_recovery(tmp_path):
+    g = _load_generate()
+    g.CANONICAL_HERO_FRESHNESS_REPORT_PATH = tmp_path / "canonical-hero-freshness-contract.json"
+    now = datetime.now(timezone.utc)
+    old = (now - timedelta(days=4)).strftime("%a, %d %b %Y %H:%M:%S GMT")
+    fresh = (now - timedelta(hours=2)).strftime("%a, %d %b %Y %H:%M:%S GMT")
+
+    stale_live_item = _item(
+        "Martin County School District consolidates older bus routes",
+        old,
+        urgency=8,
+        body="Martin County school officials discussed the route changes earlier this week.",
+    )
+    stale_live_item.update({
+        "_canonical_freshness_bound": True,
+        "canonical_slug": "older-martin-county-bus-routes",
+        "_archived_slug": "older-martin-county-bus-routes",
+        "first_published": old,
+    })
+    fresh_archive_item = _item(
+        "Fort Pierce police announce a new public-safety development",
+        fresh,
+        urgency=6,
+        body="Fort Pierce police announced the new public-safety development today.",
+    )
+    fresh_archive_item.update({
+        "_archive_only": True,
+        "_archive_verified_quality": True,
+        "_canonical_freshness_bound": True,
+        "canonical_slug": "fresh-fort-pierce-public-safety-development",
+        "_archived_slug": "fresh-fort-pierce-public-safety-development",
+        "first_published": fresh,
+        "ranking_eligible": True,
+    })
+
+    stale_live = _category("local_gov", "Local Government", stale_live_item)
+    fresh_archive = _category("crime", "Crime & Safety", fresh_archive_item)
+
+    selected = g.enforce_final_canonical_hero_freshness(
+        [stale_live, fresh_archive], stale_live, tmp_path
+    )
+
+    assert selected is fresh_archive
+    report = (tmp_path / "canonical-hero-freshness-contract.json").read_text()
+    assert '"passed": true' in report
+    assert '"action": "reselected_after_final_canonical_binding"' in report
+    assert "fresh-fort-pierce-public-safety-development" in report

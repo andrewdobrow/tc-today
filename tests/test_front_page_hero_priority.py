@@ -217,3 +217,47 @@ def test_active_queue_custom_is_fresh_even_if_recovery_marker_survives():
     assert generate.FRONT_PAGE_HERO_AUDIT["selection_reason"] == "only_fresh_candidate"
     assert generate.FRONT_PAGE_HERO_AUDIT["selected"]["archive_only"] is False
     assert generate.FRONT_PAGE_HERO_AUDIT["selected"]["active_custom_queue"] is True
+
+
+def test_fresh_archive_recovery_beats_stale_live_candidate_after_canonical_binding():
+    generate = _load_generate_module()
+    now = datetime.now(timezone.utc)
+    fresh = (now - timedelta(hours=2)).strftime("%a, %d %b %Y %H:%M:%S GMT")
+    old = (now - timedelta(days=4)).strftime("%a, %d %b %Y %H:%M:%S GMT")
+
+    stale_live = _category(
+        "local_gov",
+        "Local Government",
+        _item(
+            "Martin County commission reviews an older budget item",
+            old,
+            7,
+            body="Martin County commissioners reviewed the budget item earlier this week.",
+        ),
+    )
+    fresh_archive_item = _item(
+        "Fort Pierce police announce new public-safety development",
+        fresh,
+        6,
+        body="Fort Pierce police announced the new development today.",
+        archive_only=True,
+    )
+    fresh_archive_item.update({
+        "_canonical_freshness_bound": True,
+        "canonical_slug": "fresh-fort-pierce-public-safety-development",
+        "_archived_slug": "fresh-fort-pierce-public-safety-development",
+        "first_published": fresh,
+    })
+    fresh_archive = _category("crime", "Crime & Safety", fresh_archive_item)
+
+    selected = generate.select_front_page_hero(
+        [stale_live, fresh_archive], deterministic_only=True
+    )
+
+    assert selected is fresh_archive
+    assert selected["hero"]["headline"] == fresh_archive_item["headline"]
+    assert (
+        generate.FRONT_PAGE_HERO_AUDIT["selection_reason"]
+        == "deterministic_post_canonical_archive_recovery"
+    )
+    assert generate.FRONT_PAGE_HERO_AUDIT["selected"]["archive_only"] is True
