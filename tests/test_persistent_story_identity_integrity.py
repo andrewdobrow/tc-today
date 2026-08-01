@@ -174,6 +174,114 @@ def test_quarantined_story_ids_are_revoked_from_archive_rows():
     assert revoked[0]["story_id"] == "story_bad"
 
 
+def test_cached_editorial_state_cannot_resurrect_quarantined_story_id():
+    g = _load_generate()
+    prior_denylist = set(g.CURRENT_RUN_QUARANTINED_STORY_IDS)
+    prior_identities = dict(g.CURRENT_RUN_EDITORIAL_IDENTITIES)
+    try:
+        g.CURRENT_RUN_QUARANTINED_STORY_IDS = {"story_000011"}
+        g.CURRENT_RUN_EDITORIAL_IDENTITIES = {}
+        entry = {
+            "title": "86-year-old woman dies after Port St. Lucie intersection crash",
+            "link": "https://cbs12.com/news/local/86-year-old-woman-dies-after-port-st-lucie-intersection-crash",
+            "editorial_story_id": "story_000011",
+            "_editorial_route": "update_existing",
+            "story_form": "update",
+        }
+        row = {
+            "source_url": entry["link"],
+            "headline": entry["title"],
+            "story_id": "story_000011",
+            "event_key": "traffic-crash-port-st-lucie",
+            "route": "update_existing",
+            "relationship": "same_event",
+            "relationship_confidence": 1.0,
+            "decision_trace": ["Exact event-key mapping: true"],
+        }
+
+        remembered = g._remember_current_run_editorial_identity(entry, row)
+
+        assert remembered is False
+        assert row["story_id"] == ""
+        assert row["route"] == "generate_new"
+        assert row["relationship"] == "new_story"
+        assert row["rejected_story_id"] == "story_000011"
+        assert "editorial_story_id" not in entry
+        assert "_editorial_route" not in entry
+        assert "story_form" not in entry
+        assert g.CURRENT_RUN_EDITORIAL_IDENTITIES == {}
+    finally:
+        g.CURRENT_RUN_QUARANTINED_STORY_IDS = prior_denylist
+        g.CURRENT_RUN_EDITORIAL_IDENTITIES = prior_identities
+
+
+def test_reused_current_run_identity_refuses_quarantined_story_id():
+    g = _load_generate()
+    prior_denylist = set(g.CURRENT_RUN_QUARANTINED_STORY_IDS)
+    prior_identities = dict(g.CURRENT_RUN_EDITORIAL_IDENTITIES)
+    url = "https://cbs12.com/news/local/quarantined-crash"
+    try:
+        g.CURRENT_RUN_QUARANTINED_STORY_IDS = {"story_bad"}
+        g.CURRENT_RUN_EDITORIAL_IDENTITIES = {
+            url: {
+                "story_id": "story_bad",
+                "event_key": "traffic-crash-port-st-lucie",
+                "route": "update_existing",
+            }
+        }
+        entry = {"title": "Separate crash", "link": url}
+
+        stamped = g._stamp_known_current_run_identity(entry)
+
+        assert stamped is False
+        assert url not in g.CURRENT_RUN_EDITORIAL_IDENTITIES
+        assert "editorial_story_id" not in entry
+    finally:
+        g.CURRENT_RUN_QUARANTINED_STORY_IDS = prior_denylist
+        g.CURRENT_RUN_EDITORIAL_IDENTITIES = prior_identities
+
+
+def test_cached_generation_cannot_reuse_prior_write_authorization():
+    g = _load_generate()
+    prior_identities = dict(g.CURRENT_RUN_EDITORIAL_IDENTITIES)
+    url = "https://www.wptv.com/news/local/safe-current-source"
+    try:
+        g.CURRENT_RUN_EDITORIAL_IDENTITIES = {
+            url: {
+                "story_id": "story_safe",
+                "event_key": "named-person-death:marie-martin",
+                "route": "skip",
+                "relationship": "same_event",
+                "relationship_confidence": 1.0,
+            }
+        }
+        cached = {
+            "headline": "Cached generated headline",
+            "source_url": url,
+            "_canonical_write_authorization": {"authorization_token": "stale"},
+            "_cross_source_identity_match": {
+                "write_authorized": True,
+                "proof_type": "trusted_persistent_story_id",
+            },
+            "_canonical_context_slug": "wrong-old-slug",
+            "canonical_slug": "wrong-old-slug",
+            "canonical_publication_id": "pub:wrong",
+        }
+        data = {"hero": cached, "cards": []}
+
+        stamped = g._stamp_current_run_story_ids(data, [])
+
+        assert stamped == 1
+        assert cached["editorial_story_id"] == "story_safe"
+        assert "_canonical_write_authorization" not in cached
+        assert "_cross_source_identity_match" not in cached
+        assert "_canonical_context_slug" not in cached
+        assert "canonical_slug" not in cached
+        assert "canonical_publication_id" not in cached
+    finally:
+        g.CURRENT_RUN_EDITORIAL_IDENTITIES = prior_identities
+
+
 def test_integrity_contract_detects_broad_mapping_and_quarantine_reference():
     g = _load_generate()
     registry = {

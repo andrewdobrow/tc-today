@@ -281,6 +281,7 @@ FORWARD_IDENTITY_RECENT_DAYS = 30
 CURRENT_RUN_EDITORIAL_IDENTITIES = {}
 CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
 CROSS_SOURCE_IDENTITY_OBSERVATIONS = []
+CURRENT_RUN_QUARANTINED_STORY_IDS = set()
 CROSS_SOURCE_UPDATE_IDENTITY_SCHEMA_VERSION = 2
 CUSTOM_RETIREMENTS_PATH = OUTPUT_DIR / "data" / "custom-retirements.json"
 DEFAULT_AFFILIATE_DISCLOSURE = (
@@ -16752,9 +16753,42 @@ def _validate_persistent_story_identity_integrity(archive, output_root=None):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     if not report.get("passed"):
+        details = []
+        if report.get("active_contaminated_stories"):
+            row = report["active_contaminated_stories"][0]
+            details.append(
+                "active_contaminated_story="
+                + str(row.get("story_id") or "unknown")
+            )
+        if report.get("broad_event_mappings"):
+            row = report["broad_event_mappings"][0]
+            details.append(
+                "broad_event_mapping="
+                + str(row.get("event_key") or "unknown")
+            )
+        if report.get("broad_story_ids_with_write_authority"):
+            details.append(
+                "broad_story_write_authority="
+                + str(report["broad_story_ids_with_write_authority"][0])
+            )
+        if report.get("archive_quarantine_references"):
+            row = report["archive_quarantine_references"][0]
+            details.append(
+                "archive_quarantine_reference="
+                + str(row.get("story_id") or "unknown")
+                + ":"
+                + str(row.get("slug") or "unknown")
+            )
+        if report.get("circular_story_id_authorizations"):
+            row = report["circular_story_id_authorizations"][0]
+            details.append(
+                "circular_story_id_authorization="
+                + str(row.get("matched_canonical_slug") or "unknown")
+            )
         raise RuntimeError(
             "Persistent story identity integrity FAILED: "
             f"{report.get('summary', {}).get('violation_count', 0)} violation(s)"
+            + (" — " + "; ".join(details) if details else "")
         )
     print(
         "  Persistent story identity integrity PASSED "
@@ -20034,6 +20068,21 @@ def write_archives(all_categories, top_cat):
     archive, _redirect_verification = enforce_canonical_redirects(
         archive, articles_dir, OUTPUT_DIR, current_run_redirects=_canonical_redirects
     )
+    # New pages are appended after the initial quarantine cleanup. A stale cached
+    # editorial decision must not be able to reintroduce a quarantined story ID in
+    # that interval. Revoke again at the final write barrier, then allow the normal
+    # exact-source backfill to attach any fresh safe identity created this run.
+    archive, _post_write_quarantine_revocations = (
+        _revoke_quarantined_archive_story_ids(archive, _publication_identity)
+    )
+    if _post_write_quarantine_revocations:
+        _quarantined_story_id_revocations.extend(
+            _post_write_quarantine_revocations
+        )
+        print(
+            "  Final publication barrier revoked "
+            f"{len(_post_write_quarantine_revocations)} quarantined story ID(s)"
+        )
     archive, _archive_identity_backfill = _backfill_archive_editorial_story_ids(
         archive, _publication_identity, OUTPUT_DIR
     )
@@ -20748,6 +20797,50 @@ def _normalized_external_source_url(value):
     return urlunsplit((parts.scheme.lower(), parts.netloc.lower(), parts.path.rstrip("/"), urlencode(query), ""))
 
 
+def _load_current_quarantined_story_ids():
+    """Load story IDs that must never re-enter current-run publication identity.
+
+    The editorial engine persists decisions across runs. A registry repair can
+    quarantine an old story while the cached editorial state still remembers that
+    source as belonging to the former ID. Keep one in-memory denylist for the run so
+    cached decisions cannot resurrect a quarantined identity downstream.
+    """
+    payload = _read_json_file(EDITORIAL_REGISTRY_PATH, {})
+    quarantined = payload.get("quarantined_stories", {}) if isinstance(payload, dict) else {}
+    if not isinstance(quarantined, dict):
+        return set()
+    return {
+        str(story_id or "").strip()
+        for story_id in quarantined
+        if str(story_id or "").strip()
+    }
+
+
+def _current_story_id_is_quarantined(story_id):
+    return str(story_id or "").strip() in CURRENT_RUN_QUARANTINED_STORY_IDS
+
+
+def _clear_quarantined_identity_fields(entry):
+    """Remove one stale registry identity without disturbing source content."""
+    if not isinstance(entry, dict):
+        return
+    for key in (
+        "editorial_story_id", "_editorial_story_id", "_editorial_event_key",
+        "_editorial_route", "editorial_route", "_editorial_relationship",
+        "_editorial_relationship_confidence", "_editorial_new_facts",
+        "_editorial_identity_origin", "_canonical_write_authorization",
+        "_cross_source_identity_match", "_canonical_identity_candidate",
+        "_incoming_fragmented_story_id", "_canonical_context_slug",
+        "_canonical_context_headline", "_canonical_context_body",
+        "_canonical_context_first_published", "_canonical_context_basis",
+        "_story_aware_update_context", "_publication_route_repaired",
+        "canonical_slug", "canonical_publication_id",
+    ):
+        entry.pop(key, None)
+    if entry.get("story_form") == "update":
+        entry.pop("story_form", None)
+
+
 def _remember_current_run_editorial_identity(entry, row):
     """Persist the exact current-run registry decision for later publication.
 
@@ -20760,6 +20853,24 @@ def _remember_current_run_editorial_identity(entry, row):
     story_id = str(row.get("story_id") or "").strip()
     source_url = _normalized_external_source_url(row.get("source_url") or entry.get("link"))
     if not story_id or not source_url:
+        return False
+    if _current_story_id_is_quarantined(story_id):
+        # A persisted editorial-state decision may predate the registry repair that
+        # quarantined this story. It is retrieval history, not current authority.
+        # Strip it before model generation so the live item can receive a fresh,
+        # independently resolved story ID during the current registry pass.
+        row["rejected_story_id"] = story_id
+        row["story_id"] = ""
+        row["route"] = "generate_new"
+        row["relationship"] = "new_story"
+        row["relationship_confidence"] = 0.0
+        row["relationship_reason"] = "quarantined_persistent_story_id_revoked"
+        row["decision_trace"] = list(row.get("decision_trace") or ()) + [
+            f"Quarantined persistent story ID rejected: {story_id}",
+            "Publication identity reset for current-run re-resolution",
+        ]
+        _clear_quarantined_identity_fields(entry)
+        CURRENT_RUN_EDITORIAL_IDENTITIES.pop(source_url, None)
         return False
     record = {
         "story_id": story_id,
@@ -20930,6 +21041,13 @@ def _stamp_current_run_story_ids(data, headlines):
             "editorial_story_id", "_editorial_story_id", "_editorial_event_key",
             "_editorial_route", "_editorial_relationship",
             "_editorial_relationship_confidence", "_editorial_identity_origin",
+            "_canonical_write_authorization", "_cross_source_identity_match",
+            "_canonical_identity_candidate", "_incoming_fragmented_story_id",
+            "_canonical_context_slug", "_canonical_context_headline",
+            "_canonical_context_body", "_canonical_context_first_published",
+            "_canonical_context_basis", "_story_aware_update_context",
+            "_publication_route_repaired", "canonical_slug",
+            "canonical_publication_id",
         ):
             item.pop(key, None)
         source = None
@@ -20950,6 +21068,11 @@ def _stamp_current_run_story_ids(data, headlines):
             continue
         story_id = str(identity.get("story_id") or (source or {}).get("editorial_story_id") or "").strip()
         if not story_id:
+            continue
+        if _current_story_id_is_quarantined(story_id):
+            _clear_quarantined_identity_fields(item)
+            if isinstance(source, dict):
+                _clear_quarantined_identity_fields(source)
             continue
         item["editorial_story_id"] = story_id
         item["_editorial_story_id"] = story_id
@@ -21003,6 +21126,10 @@ def _stamp_known_current_run_identity(entry):
     )
     identity = CURRENT_RUN_EDITORIAL_IDENTITIES.get(source_url, {}) if source_url else {}
     if not identity or identity.get("ambiguous") or not identity.get("story_id"):
+        return False
+    if _current_story_id_is_quarantined(identity.get("story_id")):
+        CURRENT_RUN_EDITORIAL_IDENTITIES.pop(source_url, None)
+        _clear_quarantined_identity_fields(entry)
         return False
     entry["editorial_story_id"] = identity["story_id"]
     entry["_editorial_story_id"] = identity["story_id"]
@@ -21375,13 +21502,14 @@ def _write_editorial_observability(engine, audit_rows, activation_run=None, cate
 
 def main():
     global CURRENT_RUN_EDITORIAL_IDENTITIES, CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
-    global CROSS_SOURCE_IDENTITY_OBSERVATIONS
+    global CROSS_SOURCE_IDENTITY_OBSERVATIONS, CURRENT_RUN_QUARANTINED_STORY_IDS
     _build_started = time.perf_counter()
     _stage_started = _build_started
     GENERATION_CACHE.reset_stats()
     CURRENT_RUN_EDITORIAL_IDENTITIES = {}
     CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
     CROSS_SOURCE_IDENTITY_OBSERVATIONS = []
+    CURRENT_RUN_QUARANTINED_STORY_IDS = set()
     print("Treasure Coast Today — building site...")
     _cache_counts = GENERATION_CACHE.counts()
     print(
@@ -21389,6 +21517,12 @@ def main():
         + ", ".join(f"{bucket}={count}" for bucket, count in sorted(_cache_counts.items()))
     )
     editorial_engine = _load_editorial_engine_audit()
+    CURRENT_RUN_QUARANTINED_STORY_IDS = _load_current_quarantined_story_ids()
+    if CURRENT_RUN_QUARANTINED_STORY_IDS:
+        print(
+            "  Persistent identity denylist loaded: "
+            f"{len(CURRENT_RUN_QUARANTINED_STORY_IDS)} quarantined story ID(s)"
+        )
     editorial_audited_keys = set()
     editorial_audit_rows = []
     editorial_activation_run = None
