@@ -2,12 +2,12 @@
   "schema_version": 31,
   "engine": {
     "name": "tct-editorial-engine",
-    "version": "1.12.2.0",
-    "release": "semantic-final-publication-gate",
+    "version": "1.12.2.2",
+    "release": "semantic-candidate-recall-expansion",
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-01T08:45:03Z",
+  "generated_at": "2026-08-01T09:41:03Z",
   "mode": "enforce",
   "publication_behavior_changed": true,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 2,
     "applied_action_count": 2,
     "circuit_breaker_tripped": false,
-    "placements_before": 12,
-    "placements_after": 10,
+    "placements_before": 3,
+    "placements_after": 1,
     "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
     "recommendations": [
@@ -159,73 +159,28 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 185,
+    "candidates_processed": 180,
     "routes": {
-      "generate_new": 14,
+      "generate_new": 9,
       "skip": 170,
       "update_existing": 1
     },
     "eligibility": {
-      "listing": 6,
-      "low_value": 127,
-      "publishable": 52
+      "listing": 1,
+      "low_value": 128,
+      "publishable": 51
     },
     "source_classes": {
-      "aggregator": 133,
-      "local_news": 31,
+      "aggregator": 129,
+      "local_news": 29,
       "regional_news": 18,
-      "unknown": 3
+      "unknown": 4
     },
-    "rejected_count": 6,
+    "rejected_count": 1,
     "rejected_examples": [
-      {
-        "headline": "9611 SW Libertas Way, Port Saint Lucie, FL 34987 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOV1dBR0NjR2FNUFg3eTEyTG5vVDlmQURjYzVGSFFja3FCNUNEZUY2U3pHYWphQXpPQjYzRmNmNXdXWndFWFNIQTRBaDNIZnFIZjFLZUdxalRoSUczSURyWGxJNzVBcEJzb2tyZnpLcHBZd3VUYjU0NXJ2RGtRNW1IOE56a1dTeF85ajNBMzB6LWV1OEZHRVJfdVdtaHg?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
-      },
-      {
-        "headline": "1001 NE Baker Rd # 5212, Stuart, FL 34994 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOSTdlLTdFTGloSklwdGR5czBhQVFCWGxXendKWmlLWXV6WFdWR2hkUlVtV0FfNld6bXhEd0dsNUs5Y3hubmdnSWkxTUhxdTByWVhmZnQxamZYR0hNZDJ5QW0zcWZueDBuTHlOa2JPa2dtcDB0bFpSU0FEQWwySEhaNVBseUZOQ2pWR2xYMzZGeE1aM1Nq?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
-      },
-      {
-        "headline": "14391 SW Skye Dr, Port Saint Lucie, FL 34987 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOSlBFV0NXYUlKclk5enlmU1Q4UlgxaWJVa2tKeUJBaTZ4a0l0dDkyVEstUExPMm1mSEhYUFJtZDZXX2hJV0ZGVUhNeE1CWXU5blZFTTNrNEFzVlpMMEZaazJ6OGRsSlh3cnVTNHQwWVRQbmI3Z1VUMkNGVDdWeWwtaVlwaE1pNklmVE53VFhQRlBwdWR6VWVR?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
-      },
       {
         "headline": "2,500+ Florida Condos Show Structural Damage, Just 5 Evacuated, State Report Finds - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOYUdPeU5sNjFZbUd1QmFLYVlrSm5TR2UwNlEwUnUtRTlVWGRMZHRPaVlYZVptbTRSeG43MDNpTlEtakZpTTY5cnF0bjRyRmM3OFdrQ3NnM2tzTjBBMWZJYUZremFxXzE1SVVQNFM5MTg5elkxdUptdDRxbFk5VU5lLUJXTVJZdUxSWDktQ2lSbF9kdWR6ek93amJVTnJrMmFjY0E?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
-      },
-      {
-        "headline": "2157.5 10th Ave, Vero Beach, FL 32960 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxORThUR2RJRHc0TGszYzk3TjZyUTRlTWkxakhkUGxFWVRuMzV0dnlKWTctUEpiZWZ3bHNsdHhwdEZGSW1STWFRb2p4elVndGg5eGRpRTJhWl9iY1hmcXNuRENyVzRmczFGQkJYZ2M5aW10dVJaaU15Y3gzRzhYZFI4RHYwa2FuYWZMS2lkRVoydks?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
-      },
-      {
-        "headline": "1286 River Reach Dr, Vero Beach, FL 32967 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQYTM2MU9ZX1hLWHc1UU16Sk5wQlBoS2g4dmM2U2didmpGcld5dTFxNGxEZ1Z3X0ZYUjZXdFp1anMtTUhxOXpoSnlXaENfRXVsLW5oNkh6VzdXM1FPYjFSVV9zc18yUjF4TE1idGFSM0E3eUNSTzg0RWNJTTh2Y2h1NTBiOHQtM0FacG82cHBLYWVCNHdPZkVF?oc=5",
         "status": "listing",
         "reasons": [
           "Headline matches listing pattern 'realtor.com'"
@@ -236,8 +191,8 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 6,
-      "same_event": 179
+      "new_story": 8,
+      "same_event": 172
     },
     "examples": [
       {
@@ -270,14 +225,15 @@
       },
       {
         "story_id": "story_001659",
-        "title": "Advocates raise concerns over media clerk cuts as Palm Beach County school year approaches - wpbf.com",
-        "event_key": "unknown-event-384191bdd3",
+        "title": "Advocates raise concerns over media clerk cuts as Palm Beach County school year approaches - WPBF",
+        "event_key": "unknown-event-8e2ce77040",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -369,6 +325,20 @@
         "story_id": "story_001323",
         "title": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
         "event_key": "unknown-event-46c54b6e53",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_001694",
+        "title": "Hillsborough County school calendar 2026-2027: When school starts - AOL.com",
+        "event_key": "unknown-event-5fdede8683",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -495,20 +465,6 @@
         "story_id": "story_001559",
         "title": "West Palm Beach police chief fires 5 command officers after nearly 2-year overtime misconduct probe",
         "event_key": "fire-4fdb6b2c73-4fdb6b2c73",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001560",
-        "title": "Florida state park to have prescribed burn July 31 - Treasure Coast News",
-        "event_key": "unknown-event-331dadcb78",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -553,15 +509,16 @@
       },
       {
         "story_id": "story_001659",
-        "title": "Advocates raise concerns over media clerk cuts as Palm Beach County school year approaches - wpbf.com",
-        "event_key": "unknown-event-384191bdd3",
+        "title": "Advocates raise concerns over media clerk cuts as Palm Beach County school year approaches - WPBF",
+        "event_key": "unknown-event-8e2ce77040",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -659,6 +616,21 @@
         "story_id": "story_001323",
         "title": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
         "event_key": "unknown-event-46c54b6e53",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_001694",
+        "title": "Hillsborough County school calendar 2026-2027: When school starts - AOL.com",
+        "event_key": "unknown-event-5fdede8683",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -804,21 +776,6 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_001560",
-        "title": "Florida state park to have prescribed burn July 31 - Treasure Coast News",
-        "event_key": "unknown-event-331dadcb78",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ]
   },
@@ -838,9 +795,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 421,
-      "timeline_entries_examined": 1020,
-      "transitions_examined": 550,
+      "stories_with_timelines": 422,
+      "timeline_entries_examined": 1023,
+      "transitions_examined": 552,
       "candidate_count": 9,
       "high_confidence_candidate_count": 4,
       "activation_eligible_candidate_count": 1,
@@ -1656,28 +1613,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 361,
+      "florida": 363,
       "treasure_coast_local": 279,
-      "treasure_coast_region": 127,
-      "unknown": 746
+      "treasure_coast_region": 130,
+      "unknown": 748
     },
-    "average_score": 59.18
+    "average_score": 59.23
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 361,
+      "florida": 363,
       "treasure_coast_local": 279,
-      "treasure_coast_region": 127,
-      "unknown": 746
+      "treasure_coast_region": 130,
+      "unknown": 748
     },
-    "average_priority": 4.4
+    "average_priority": 4.38
   },
   "story_lifecycle": {
     "counts": {
       "active": 622,
       "breaking": 1,
-      "developing": 241,
-      "ongoing": 649
+      "developing": 242,
+      "ongoing": 655
     }
   },
   "registry_health": {
@@ -1705,20 +1662,20 @@
     "selective_timeline_entries_moved": 0,
     "contaminated_story_records_preserved": 0,
     "incident_anchor_to_story_count": 28,
-    "generated_at": "2026-08-01T08:38:41Z",
+    "generated_at": "2026-08-01T09:34:36Z",
     "quarantined_story_records_retained": 29,
-    "active_story_count": 1513
+    "active_story_count": 1520
   },
   "stories": {
-    "total": 1513,
+    "total": 1520,
     "importance_levels": {
       "breaking": 2,
       "high": 24,
       "normal": 224,
-      "low": 1263,
+      "low": 1270,
       "archived": 0
     },
-    "average_importance": 9.13,
+    "average_importance": 9.11,
     "top": [
       {
         "story_id": "story_000793",
@@ -1733,7 +1690,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.59
+          "age_hours": 5.52
         },
         "level": "breaking",
         "importance_reasons": [
@@ -1781,7 +1738,7 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 4.59,
+          "hours_since_update": 5.52,
           "event_count": 6,
           "timeline_entries": 6
         }
@@ -1799,7 +1756,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.58
+          "age_hours": 5.51
         },
         "level": "high",
         "importance_reasons": [
@@ -1842,7 +1799,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 4.58,
+          "hours_since_update": 5.51,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -1860,7 +1817,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.58
+          "age_hours": 5.52
         },
         "level": "high",
         "importance_reasons": [
@@ -1903,7 +1860,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 4.58,
+          "hours_since_update": 5.52,
           "event_count": 12,
           "timeline_entries": 7
         }
@@ -1921,7 +1878,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 1.22
+          "age_hours": 0.07
         },
         "level": "high",
         "importance_reasons": [
@@ -1956,17 +1913,17 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 4,
-        "timeline_entries": 4,
+        "event_count": 5,
+        "timeline_entries": 5,
         "relationship_decisions": 1,
-        "canonical_source_candidates": 4,
+        "canonical_source_candidates": 5,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-01T07:29:30.419640+00:00",
-          "hours_since_update": 1.22,
-          "event_count": 4,
-          "timeline_entries": 4
+          "last_updated": "2026-08-01T09:34:32.950254+00:00",
+          "hours_since_update": 0.07,
+          "event_count": 5,
+          "timeline_entries": 5
         }
       },
       {
@@ -1982,7 +1939,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 0.07
+          "age_hours": 1.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2025,7 +1982,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T08:38:37.518469+00:00",
-          "hours_since_update": 0.07,
+          "hours_since_update": 1.01,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2043,7 +2000,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 4.58
+          "age_hours": 5.51
         },
         "level": "high",
         "importance_reasons": [
@@ -2086,7 +2043,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 4.58,
+          "hours_since_update": 5.51,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2104,7 +2061,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 62.88
+          "age_hours": 63.81
         },
         "level": "high",
         "importance_reasons": [
@@ -2145,7 +2102,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 62.88,
+          "hours_since_update": 63.81,
           "event_count": 4,
           "timeline_entries": 2
         }
@@ -2163,7 +2120,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 27.54
+          "age_hours": 28.46
         },
         "level": "high",
         "importance_reasons": [
@@ -2206,7 +2163,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-31T05:11:29.117258+00:00",
-          "hours_since_update": 27.54,
+          "hours_since_update": 28.46,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2224,7 +2181,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 16.96
+          "age_hours": 17.9
         },
         "level": "high",
         "importance_reasons": [
@@ -2262,7 +2219,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 16.96,
+          "hours_since_update": 17.9,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2280,7 +2237,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 4.58
+          "age_hours": 5.52
         },
         "level": "high",
         "importance_reasons": [
@@ -2318,7 +2275,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 4.58,
+          "hours_since_update": 5.52,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2336,7 +2293,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 16.97
+          "age_hours": 17.9
         },
         "level": "high",
         "importance_reasons": [
@@ -2379,7 +2336,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 16.97,
+          "hours_since_update": 17.9,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2397,7 +2354,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 12.03
+          "age_hours": 12.97
         },
         "level": "high",
         "importance_reasons": [
@@ -2431,7 +2388,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-31T20:40:54.806838+00:00",
-          "hours_since_update": 12.03,
+          "hours_since_update": 12.97,
           "event_count": 2,
           "timeline_entries": 1
         }
@@ -2449,7 +2406,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 125.11
+          "age_hours": 126.04
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2493,7 +2450,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-07-27T03:32:10.873614+00:00",
-          "hours_since_update": 125.11,
+          "hours_since_update": 126.04,
           "event_count": 5,
           "timeline_entries": 3
         }
@@ -2511,7 +2468,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 0.07
+          "age_hours": 1.01
         },
         "level": "normal",
         "importance_reasons": [
@@ -2549,7 +2506,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T08:38:37.518469+00:00",
-          "hours_since_update": 0.07,
+          "hours_since_update": 1.01,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2567,7 +2524,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 57.83
+          "age_hours": 58.76
         },
         "level": "normal",
         "importance_reasons": [
@@ -2605,7 +2562,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-29T22:49:06.705745+00:00",
-          "hours_since_update": 57.83,
+          "hours_since_update": 58.76,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2623,7 +2580,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 53.03
+          "age_hours": 53.97
         },
         "level": "normal",
         "importance_reasons": [
@@ -2659,7 +2616,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-30T03:36:51.907089+00:00",
-          "hours_since_update": 53.03,
+          "hours_since_update": 53.97,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2677,7 +2634,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 62.94
+          "age_hours": 63.88
         },
         "level": "normal",
         "importance_reasons": [
@@ -2713,7 +2670,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 62.94,
+          "hours_since_update": 63.88,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2731,7 +2688,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 62.88
+          "age_hours": 63.81
         },
         "level": "normal",
         "importance_reasons": [
@@ -2767,7 +2724,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 62.88,
+          "hours_since_update": 63.81,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2785,7 +2742,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 16.97
+          "age_hours": 17.9
         },
         "level": "normal",
         "importance_reasons": [
@@ -2824,7 +2781,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 16.97,
+          "hours_since_update": 17.9,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2842,7 +2799,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 11.98
+          "age_hours": 12.91
         },
         "level": "normal",
         "importance_reasons": [
@@ -2876,7 +2833,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-31T20:40:54.806838+00:00",
-          "hours_since_update": 11.98,
+          "hours_since_update": 12.91,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2886,7 +2843,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 6,
-    "generated_at": "2026-08-01T08:43:58Z",
+    "generated_at": "2026-08-01T09:39:20Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -2901,25 +2858,25 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "cache_hit": 1,
-        "generated_live": 5,
+        "cache_hit": 3,
+        "generated_live": 1,
         "missing_hero_archive_recovery": 1,
-        "no_publishable_sources": 1,
-        "quality_gate_archive_recovery": 1
+        "no_publishable_sources": 2,
+        "quality_gate_archive_recovery": 2
       },
       "failures": {
         "missing_or_null_hero": 1,
-        "publication_quality_rejected": 1
+        "publication_quality_rejected": 2
       },
-      "model_attempt_count": 7,
-      "model_elapsed_seconds": 167.193,
-      "archive_recovery_requested_count": 3,
+      "model_attempt_count": 4,
+      "model_elapsed_seconds": 127.78,
+      "archive_recovery_requested_count": 5,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 4,
+      "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 6,
-      "published_story_duplicate_suppression_count": 45,
-      "story_aware_update_context_count": 12
+      "published_story_duplicate_suppression_count": 54,
+      "story_aware_update_context_count": 4
     },
     "categories": [
       {
@@ -2937,11 +2894,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 6.07,
+            "elapsed_seconds": 5.154,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 6.07,
+        "model_elapsed_seconds": 5.154,
         "failure_code": "missing_or_null_hero",
         "failure_summary": "No usable hero remained after sanitization",
         "sports_expired_event_preview_count": 0,
@@ -3149,28 +3106,21 @@
         ],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 25.334
+        "elapsed_seconds": 22.89
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "generated_live",
-        "fetched_candidate_count": 28,
-        "fresh_candidate_count": 19,
-        "publishable_source_count": 8,
-        "selected_source_count": 8,
-        "cache_hit": false,
+        "status": "cache_hit",
+        "fetched_candidate_count": 27,
+        "fresh_candidate_count": 17,
+        "publishable_source_count": 7,
+        "selected_source_count": 7,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 40.641,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 40.641,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3181,11 +3131,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 10,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "crime",
+            "source_headline": "Surveillance video shows Port St. Lucie man accused of stealing tequila worth thousands - WPBF",
+            "source_url": "https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342",
+            "editorial_story_id": "story_001566",
+            "canonical_slug": "2026-07-31-port-st-lucie-man-caught-on-surveillance-video-stealing-thousands-of-dollars-wor",
+            "canonical_headline": "Port St. Lucie man caught on surveillance video stealing thousands of dollars worth of tequila",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "crime",
             "source_headline": "Treasure Coast renters say costs are high as rental market holds flat, expert says",
@@ -3277,31 +3237,8 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 2,
+        "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Surveillance video shows Port St. Lucie man accused of stealing tequila worth thousands - wpbf.com",
-            "source_url": "https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-07-31-port-st-lucie-man-caught-on-surveillance-video-stealing-thousands-of-dollars-wor",
-            "canonical_headline": "Port St. Lucie man caught on surveillance video stealing thousands of dollars worth of tequila",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_001566",
-              "source:https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_001566,source:https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          },
           {
             "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
             "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
@@ -3328,34 +3265,31 @@
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Los Angeles man sentenced to life in prison for fentanyl sale that killed Vero Beach resident",
-        "generated_card_count": 1,
-        "elapsed_seconds": 54.284
+        "elapsed_seconds": 10.26
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
-        "status": "generated_live",
+        "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 21,
-        "publishable_source_count": 8,
-        "selected_source_count": 7,
+        "publishable_source_count": 7,
+        "selected_source_count": 6,
         "cache_hit": false,
-        "archive_recovery_requested": false,
+        "archive_recovery_requested": true,
         "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 13.055,
+            "elapsed_seconds": 63.375,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 13.055,
-        "failure_code": "",
-        "failure_summary": "",
+        "model_elapsed_seconds": 63.375,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3364,11 +3298,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "business",
+            "source_headline": "King's Landing development in Fort Pierce moves forward with construction milestones - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
+            "editorial_story_id": "story_001667",
+            "canonical_slug": "2026-08-01-kings-landing-development-in-fort-pierce-nears-completion-with-luxury-villas-mar",
+            "canonical_headline": "King's Landing development in Fort Pierce advances with luxury villas nearing completion, Marriott Hotel planned for 2029",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "business",
             "source_headline": "Treasure Coast renters say costs are high as rental market holds flat, expert says",
@@ -3388,43 +3332,10 @@
             "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Sanctuary at Winterlakes residents in Port St. Lucie say maintenance requests go unanswered",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/sanctuary-at-winterlakes-residents-in-port-st-lucie-say-maintenance-requests-go-unanswered",
-            "editorial_story_id": "story_001486",
-            "canonical_slug": "2026-07-31-port-st-lucie-apartment-residents-report-unanswered-maintenance-requests-mold-at",
-            "canonical_headline": "Port St. Lucie apartment residents report unanswered maintenance requests, mold at Sanctuary at Winterlakes",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 2,
+        "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
-          {
-            "source_headline": "King's Landing development in Fort Pierce moves forward with construction milestones - wpbf.com",
-            "source_url": "https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-08-01-kings-landing-development-in-fort-pierce-nears-completion-with-luxury-villas-mar",
-            "canonical_headline": "King's Landing development in Fort Pierce nears completion with luxury villas, Marriott Hotel by 2029",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_001667",
-              "source:https://www.wpbf.com/article/florida-development-construction-waterfront/73320543"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_001667,source:https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          },
           {
             "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
             "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
@@ -3453,9 +3364,7 @@
         ],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "King's Landing development in Fort Pierce advances with luxury villas nearing completion, Marriott Hotel planned for 2029",
-        "generated_card_count": 0,
-        "elapsed_seconds": 22.954
+        "elapsed_seconds": 82.326
       },
       {
         "category_key": "sports",
@@ -3488,30 +3397,30 @@
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "live_hero_headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
-        "elapsed_seconds": 15.752
+        "elapsed_seconds": 14.983
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
-        "status": "generated_live",
+        "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 7,
-        "selected_source_count": 7,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 5,
+        "selected_source_count": 5,
         "cache_hit": false,
-        "archive_recovery_requested": false,
+        "archive_recovery_requested": true,
         "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 45.424,
+            "elapsed_seconds": 52.752,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 45.424,
-        "failure_code": "",
-        "failure_summary": "",
+        "model_elapsed_seconds": 52.752,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3520,11 +3429,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 7,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "things_to_do",
+            "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-fun-things-across-treasure-coast-palm-beach-weekend-1784287590-1785499876/73316892",
+            "editorial_story_id": "story_000091",
+            "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
+            "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "things_to_do",
             "source_headline": "Week of July 31 - Hometown News Treasure Coast",
@@ -3550,9 +3469,7 @@
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Back-to-school bash in Port St. Lucie offers free supplies, entertainment Saturday",
-        "generated_card_count": 5,
-        "elapsed_seconds": 62.286
+        "elapsed_seconds": 75.959
       },
       {
         "category_key": "florida",
@@ -3605,30 +3522,23 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "elapsed_seconds": 15.818
+        "elapsed_seconds": 16.813
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "quality_gate_archive_recovery",
+        "status": "no_publishable_sources",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 1,
-        "selected_source_count": 1,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 0,
+        "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 5.302,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 5.302,
-        "failure_code": "publication_quality_rejected",
-        "failure_summary": "Generated content did not pass final publication quality gates",
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3637,10 +3547,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
@@ -3671,22 +3581,30 @@
             "canonical_headline": "Stuart man jailed after fleeing traffic stop, leading police chase into Martin County",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-fun-things-across-treasure-coast-palm-beach-weekend-1784287590-1785499876/73316892",
+            "editorial_story_id": "story_000091",
+            "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
+            "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "elapsed_seconds": 16.918
+        "elapsed_seconds": 11.201
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 6,
-        "selected_source_count": 6,
+        "fresh_candidate_count": 13,
+        "publishable_source_count": 1,
+        "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -3694,126 +3612,46 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 40.929,
+            "elapsed_seconds": 6.499,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 40.929,
+        "model_elapsed_seconds": 6.499,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 3,
-        "contextual_update_lead_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "story_form": "update",
-            "lead_word_count": 89,
-            "baseline_anchor": "",
-            "baseline_present": true,
-            "baseline_anchor_present": true,
-            "baseline_details_present": true,
-            "baseline_context_hits": [
-              "abandoned",
-              "costing",
-              "damaging",
-              "fort",
-              "pierce",
-              "property",
-              "resort",
-              "revenue",
-              "sailboat",
-              "thousands"
-            ],
-            "baseline_context_required": 2,
-            "canonical_context_available": true,
-            "canonical_context_headline": "Fort Pierce resort says abandoned sailboat is damaging property and costing thousands in revenue",
-            "novelty_anchor": "source_distinctive_detail",
-            "novelty_present": false,
-            "novelty_token_hits": [],
-            "missing": [
-              "new_development_missing"
-            ],
-            "source_title": "Fort Pierce resort faces damage and losses from abandoned sailboat - wpbf.com",
-            "headline": "Fort Pierce resort blocked from moving abandoned sailboat causing property damage and revenue losses"
-          },
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "story_form": "update",
-            "lead_word_count": 60,
-            "baseline_anchor": "",
-            "baseline_present": true,
-            "baseline_anchor_present": true,
-            "baseline_details_present": true,
-            "baseline_context_hits": [
-              "caught",
-              "dollars",
-              "lucie",
-              "port",
-              "stealing",
-              "surveillance",
-              "tequila",
-              "thousands",
-              "video",
-              "worth"
-            ],
-            "baseline_context_required": 2,
-            "canonical_context_available": true,
-            "canonical_context_headline": "Port St. Lucie man caught on surveillance video stealing thousands of dollars worth of tequila",
-            "novelty_anchor": "source_distinctive_detail",
-            "novelty_present": false,
-            "novelty_token_hits": [],
-            "missing": [
-              "new_development_missing"
-            ],
-            "source_title": "Surveillance video shows Port St. Lucie man accused of stealing tequila worth thousands - wpbf.com",
-            "headline": "Port St. Lucie man caught on video stealing thousands in tequila from Martin County liquor store"
-          },
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "story_form": "update",
-            "lead_word_count": 52,
-            "baseline_anchor": "fatality",
-            "baseline_present": false,
-            "baseline_anchor_present": false,
-            "baseline_details_present": true,
-            "baseline_context_hits": [
-              "allegations",
-              "left",
-              "lucie",
-              "officer",
-              "port",
-              "scene"
-            ],
-            "baseline_context_required": 2,
-            "canonical_context_available": true,
-            "canonical_context_headline": "Port St. Lucie officer resigns after allegations he left scene where man later died by suicide",
-            "novelty_anchor": "source_distinctive_detail",
-            "novelty_present": false,
-            "novelty_token_hits": [],
-            "missing": [
-              "original_event_context_missing",
-              "new_development_missing"
-            ],
-            "source_title": "Port St. Lucie officer resigns after allegations he left scene of car where man later died by suicide - wpbf.com",
-            "headline": "Port St. Lucie officer resigns after allegations he left scene where man later died by suicide"
-          }
-        ],
+        "contextual_update_lead_rejection_count": 0,
+        "contextual_update_lead_rejections": [],
         "article_framing_rejection_count": 0,
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 6,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 12,
+        "published_story_duplicate_suppression_count": 17,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Surveillance video shows Port St. Lucie man accused of stealing tequila worth thousands - WPBF",
+            "source_url": "https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342",
+            "editorial_story_id": "story_001566",
+            "canonical_slug": "2026-07-31-port-st-lucie-man-caught-on-surveillance-video-stealing-thousands-of-dollars-wor",
+            "canonical_headline": "Port St. Lucie man caught on surveillance video stealing thousands of dollars worth of tequila",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "86-year-old woman critically injured in Port St. Lucie crash later dies at hospital - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-man-86-dies-wo-car-crash-port-st-lucie/73320842",
+            "editorial_story_id": "story_001684",
+            "canonical_slug": "2026-08-01-86-year-old-woman-dies-after-crash-at-port-st-lucie-intersection",
+            "canonical_headline": "86-year-old woman dies after failing to yield at Port St. Lucie intersection",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "Florida housing market: Treasure Coast single-family home prices on the rise - WPTV",
@@ -3821,6 +3659,16 @@
             "editorial_story_id": "story_000537",
             "canonical_slug": "2026-07-25-single-family-home-prices-rise-across-treasure-coast-after-two-years-of-declines",
             "canonical_headline": "Treasure Coast single-family home prices rise after two-year decline",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "King's Landing development in Fort Pierce moves forward with construction milestones - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
+            "editorial_story_id": "story_001667",
+            "canonical_slug": "2026-08-01-kings-landing-development-in-fort-pierce-nears-completion-with-luxury-villas-mar",
+            "canonical_headline": "King's Landing development in Fort Pierce advances with luxury villas nearing completion, Marriott Hotel planned for 2029",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3841,6 +3689,16 @@
             "editorial_story_id": "story_001323",
             "canonical_slug": "2026-07-30-fort-pierce-residents-fight-plan-to-replace-museum-pointe-park-with-mega-yacht-m",
             "canonical_headline": "Fort Pierce residents fight plan to replace Museum Pointe Park with mega-yacht marina",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie officer resigns after allegations he left scene of car where man later died by suicide - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-officer-resigns-neglect-allegations/73318965",
+            "editorial_story_id": "story_001685",
+            "canonical_slug": "2026-08-01-port-st-lucie-officer-resigns-after-allegations-he-left-scene-where-man-later-di",
+            "canonical_headline": "Port St. Lucie officer resigns after allegations he left scene where man later died by suicide",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3886,21 +3744,31 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "Fort Pierce resort faces damage and losses from abandoned sailboat - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-fort-pierce-resort-abandoned-sailboat-damages/73309795",
+            "editorial_story_id": "story_001520",
+            "canonical_slug": "2026-07-31-fort-pierce-resort-says-abandoned-sailboat-is-damaging-property-and-costing-thou",
+            "canonical_headline": "Fort Pierce resort says abandoned sailboat is damaging property and costing thousands in revenue",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Citizen’s arrest law cited as charges dropped against Port St. Lucie man - WPEC",
+            "source_url": "https://cbs12.com/news/local/florida-crime-news-citizens-arrest-charges-dropped-against-man-who-held-teens-at-gunpoint-orbeez-prank-port-st-lucie-felony-state-attorney",
+            "editorial_story_id": "story_001429",
+            "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
+            "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "Flashing traffic light at Glades Cut Off Road in St. Lucie County still not fully operational after 6 months - WFLX",
             "source_url": "https://www.wflx.com/2026/07/29/flashing-traffic-light-glades-cut-off-road-st-lucie-county-still-not-fully-operational-after-6-months",
             "editorial_story_id": "story_001294",
             "canonical_slug": "2026-07-29-flashing-traffic-light-at-glades-cut-off-road-still-not-operational-after-6-mont",
             "canonical_headline": "Flashing traffic light at Glades Cut Off Road still not operational after 6 months",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Citizen’s arrest law cited as charges dropped against Port St. Lucie man - cw34.com",
-            "source_url": "https://cw34.com/news/local/florida-crime-news-citizens-arrest-charges-dropped-against-man-who-held-teens-at-gunpoint-orbeez-prank-port-st-lucie-felony-state-attorney",
-            "editorial_story_id": "story_001429",
-            "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
-            "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3926,7 +3794,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Infant death investigation in St. Lucie County may not be completed - wpbf.com",
+            "source_headline": "Infant death investigation in St. Lucie County may not be completed - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-death-baby-infant-mother-grandfather/73287792",
             "editorial_story_id": "story_001161",
             "canonical_slug": "2026-07-29-st-lucie-county-investigators-say-3-month-olds-death-may-bring-further-charges",
@@ -3935,199 +3803,41 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 5,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Surveillance video shows Port St. Lucie man accused of stealing tequila worth thousands - wpbf.com",
-            "source_url": "https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-07-31-port-st-lucie-man-caught-on-surveillance-video-stealing-thousands-of-dollars-wor",
-            "canonical_headline": "Port St. Lucie man caught on surveillance video stealing thousands of dollars worth of tequila",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_001566",
-              "source:https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_001566,source:https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          },
-          {
-            "source_headline": "86-year-old woman critically injured in Port St. Lucie crash later dies at hospital - wpbf.com",
-            "source_url": "https://www.wpbf.com/article/florida-man-86-dies-wo-car-crash-port-st-lucie/73320842",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-08-01-86-year-old-woman-dies-after-crash-at-port-st-lucie-intersection",
-            "canonical_headline": "86-year-old woman dies after crash at Port St. Lucie intersection",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_001684",
-              "source:https://www.wpbf.com/article/florida-man-86-dies-wo-car-crash-port-st-lucie/73320842"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_001684,source:https://www.wpbf.com/article/florida-man-86-dies-wo-car-crash-port-st-lucie/73320842",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          },
-          {
-            "source_headline": "King's Landing development in Fort Pierce moves forward with construction milestones - wpbf.com",
-            "source_url": "https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-08-01-kings-landing-development-in-fort-pierce-nears-completion-with-luxury-villas-mar",
-            "canonical_headline": "King's Landing development in Fort Pierce nears completion with luxury villas, Marriott Hotel by 2029",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_001667",
-              "source:https://www.wpbf.com/article/florida-development-construction-waterfront/73320543"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_001667,source:https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          },
-          {
-            "source_headline": "Port St. Lucie officer resigns after allegations he left scene of car where man later died by suicide - wpbf.com",
-            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-officer-resigns-neglect-allegations/73318965",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-08-01-port-st-lucie-officer-resigns-after-allegations-he-left-scene-where-man-later-di",
-            "canonical_headline": "Port St. Lucie officer resigns after allegations he left scene where man later died by suicide",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_001685",
-              "source:https://www.wpbf.com/article/florida-port-st-lucie-officer-resigns-neglect-allegations/73318965"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_001685,source:https://www.wpbf.com/article/florida-port-st-lucie-officer-resigns-neglect-allegations/73318965",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          },
-          {
-            "source_headline": "Fort Pierce resort faces damage and losses from abandoned sailboat - wpbf.com",
-            "source_url": "https://www.wpbf.com/article/florida-fort-pierce-resort-abandoned-sailboat-damages/73309795",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-07-31-fort-pierce-resort-says-abandoned-sailboat-is-damaging-property-and-costing-thou",
-            "canonical_headline": "Fort Pierce resort says abandoned sailboat is damaging property and costing thousands in revenue",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_001520",
-              "source:https://www.wpbf.com/article/florida-fort-pierce-resort-abandoned-sailboat-damages/73309795"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_001520,source:https://www.wpbf.com/article/florida-fort-pierce-resort-abandoned-sailboat-damages/73309795",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "86-year-old woman dies after failing to yield at Port St. Lucie intersection",
-        "generated_card_count": 1,
-        "elapsed_seconds": 55.03
+        "live_hero_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+        "generated_card_count": 0,
+        "elapsed_seconds": 17.874
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "generated_live",
-        "fetched_candidate_count": 27,
+        "status": "cache_hit",
+        "fetched_candidate_count": 28,
         "fresh_candidate_count": 21,
-        "publishable_source_count": 6,
-        "selected_source_count": 6,
-        "cache_hit": false,
+        "publishable_source_count": 5,
+        "selected_source_count": 5,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 15.772,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 15.772,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 1,
-        "contextual_update_lead_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "story_form": "update",
-            "lead_word_count": 37,
-            "baseline_anchor": "",
-            "baseline_present": true,
-            "baseline_anchor_present": true,
-            "baseline_details_present": true,
-            "baseline_context_hits": [
-              "association",
-              "chairman",
-              "eric",
-              "florida",
-              "flowers",
-              "indian",
-              "river",
-              "sheriff",
-              "sheriffs",
-              "sworn"
-            ],
-            "baseline_context_required": 2,
-            "canonical_context_available": true,
-            "canonical_context_headline": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association",
-            "novelty_anchor": "source_distinctive_detail",
-            "novelty_present": false,
-            "novelty_token_hits": [],
-            "missing": [
-              "new_development_missing"
-            ],
-            "source_title": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association - wpbf.com",
-            "headline": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association"
-          }
-        ],
+        "contextual_update_lead_rejection_count": 0,
+        "contextual_update_lead_rejections": [],
         "article_framing_rejection_count": 0,
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 6,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -4188,9 +3898,19 @@
             "canonical_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association - WPBF",
+            "source_url": "https://www.wpbf.com/article/indian-river-county-sheriff-eric-flowers-sworn-chairman-florida-sheriffs-association/73311866",
+            "editorial_story_id": "story_001524",
+            "canonical_slug": "2026-07-31-indian-river-county-sheriff-eric-flowers-sworn-in-as-chairman-of-florida-sheriff",
+            "canonical_headline": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 2,
+        "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
             "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
@@ -4216,36 +3936,10 @@
             ],
             "relationship": "same_event_verified",
             "final_publication_action": "canonical_bound_before_generation"
-          },
-          {
-            "source_headline": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association - wpbf.com",
-            "source_url": "https://www.wpbf.com/article/indian-river-county-sheriff-eric-flowers-sworn-chairman-florida-sheriffs-association/73311866",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-07-31-indian-river-county-sheriff-eric-flowers-sworn-in-as-chairman-of-florida-sheriff",
-            "canonical_headline": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_001524",
-              "source:https://www.wpbf.com/article/indian-river-county-sheriff-eric-flowers-sworn-chairman-florida-sheriffs-association/73311866"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_001524,source:https://www.wpbf.com/article/indian-river-county-sheriff-eric-flowers-sworn-chairman-florida-sheriffs-association/73311866",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Los Angeles man sentenced to life in prison for fentanyl sale that killed Vero Beach resident",
-        "generated_card_count": 0,
-        "elapsed_seconds": 24.785
+        "elapsed_seconds": 7.755
       }
     ]
   }

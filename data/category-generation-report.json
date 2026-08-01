@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-01T08:43:58Z",
+  "generated_at": "2026-08-01T09:39:20Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,25 +15,25 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 1,
-      "generated_live": 5,
+      "cache_hit": 3,
+      "generated_live": 1,
       "missing_hero_archive_recovery": 1,
-      "no_publishable_sources": 1,
-      "quality_gate_archive_recovery": 1
+      "no_publishable_sources": 2,
+      "quality_gate_archive_recovery": 2
     },
     "failures": {
       "missing_or_null_hero": 1,
-      "publication_quality_rejected": 1
+      "publication_quality_rejected": 2
     },
-    "model_attempt_count": 7,
-    "model_elapsed_seconds": 167.193,
-    "archive_recovery_requested_count": 3,
+    "model_attempt_count": 4,
+    "model_elapsed_seconds": 127.78,
+    "archive_recovery_requested_count": 5,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 4,
+    "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
     "category_eligibility_rejection_count": 6,
-    "published_story_duplicate_suppression_count": 45,
-    "story_aware_update_context_count": 12
+    "published_story_duplicate_suppression_count": 54,
+    "story_aware_update_context_count": 4
   },
   "categories": [
     {
@@ -51,11 +51,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 6.07,
+          "elapsed_seconds": 5.154,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 6.07,
+      "model_elapsed_seconds": 5.154,
       "failure_code": "missing_or_null_hero",
       "failure_summary": "No usable hero remained after sanitization",
       "sports_expired_event_preview_count": 0,
@@ -263,28 +263,21 @@
       ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 25.334
+      "elapsed_seconds": 22.89
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generated_live",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 8,
-      "selected_source_count": 8,
-      "cache_hit": false,
+      "status": "cache_hit",
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 17,
+      "publishable_source_count": 7,
+      "selected_source_count": 7,
+      "cache_hit": true,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 40.641,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 40.641,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -295,11 +288,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Surveillance video shows Port St. Lucie man accused of stealing tequila worth thousands - WPBF",
+          "source_url": "https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342",
+          "editorial_story_id": "story_001566",
+          "canonical_slug": "2026-07-31-port-st-lucie-man-caught-on-surveillance-video-stealing-thousands-of-dollars-wor",
+          "canonical_headline": "Port St. Lucie man caught on surveillance video stealing thousands of dollars worth of tequila",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "Treasure Coast renters say costs are high as rental market holds flat, expert says",
@@ -391,31 +394,8 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Surveillance video shows Port St. Lucie man accused of stealing tequila worth thousands - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-07-31-port-st-lucie-man-caught-on-surveillance-video-stealing-thousands-of-dollars-wor",
-          "canonical_headline": "Port St. Lucie man caught on surveillance video stealing thousands of dollars worth of tequila",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_001566",
-            "source:https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_001566,source:https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
         {
           "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
           "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
@@ -442,34 +422,31 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "generation_status": "success",
-      "budget_seconds": 180.0,
       "live_hero_headline": "Los Angeles man sentenced to life in prison for fentanyl sale that killed Vero Beach resident",
-      "generated_card_count": 1,
-      "elapsed_seconds": 54.284
+      "elapsed_seconds": 10.26
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
-      "status": "generated_live",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 8,
-      "selected_source_count": 7,
+      "publishable_source_count": 7,
+      "selected_source_count": 6,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 13.055,
+          "elapsed_seconds": 63.375,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 13.055,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 63.375,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -478,11 +455,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "King's Landing development in Fort Pierce moves forward with construction milestones - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
+          "editorial_story_id": "story_001667",
+          "canonical_slug": "2026-08-01-kings-landing-development-in-fort-pierce-nears-completion-with-luxury-villas-mar",
+          "canonical_headline": "King's Landing development in Fort Pierce advances with luxury villas nearing completion, Marriott Hotel planned for 2029",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "Treasure Coast renters say costs are high as rental market holds flat, expert says",
@@ -502,43 +489,10 @@
           "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Sanctuary at Winterlakes residents in Port St. Lucie say maintenance requests go unanswered",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/sanctuary-at-winterlakes-residents-in-port-st-lucie-say-maintenance-requests-go-unanswered",
-          "editorial_story_id": "story_001486",
-          "canonical_slug": "2026-07-31-port-st-lucie-apartment-residents-report-unanswered-maintenance-requests-mold-at",
-          "canonical_headline": "Port St. Lucie apartment residents report unanswered maintenance requests, mold at Sanctuary at Winterlakes",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
-        {
-          "source_headline": "King's Landing development in Fort Pierce moves forward with construction milestones - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-08-01-kings-landing-development-in-fort-pierce-nears-completion-with-luxury-villas-mar",
-          "canonical_headline": "King's Landing development in Fort Pierce nears completion with luxury villas, Marriott Hotel by 2029",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_001667",
-            "source:https://www.wpbf.com/article/florida-development-construction-waterfront/73320543"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_001667,source:https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
         {
           "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
           "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
@@ -567,9 +521,7 @@
       ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "King's Landing development in Fort Pierce advances with luxury villas nearing completion, Marriott Hotel planned for 2029",
-      "generated_card_count": 0,
-      "elapsed_seconds": 22.954
+      "elapsed_seconds": 82.326
     },
     {
       "category_key": "sports",
@@ -602,30 +554,30 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "live_hero_headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
-      "elapsed_seconds": 15.752
+      "elapsed_seconds": 14.983
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
-      "status": "generated_live",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 7,
-      "selected_source_count": 7,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 5,
+      "selected_source_count": 5,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 45.424,
+          "elapsed_seconds": 52.752,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 45.424,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 52.752,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -634,11 +586,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "things_to_do",
+          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-fun-things-across-treasure-coast-palm-beach-weekend-1784287590-1785499876/73316892",
+          "editorial_story_id": "story_000091",
+          "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
+          "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "things_to_do",
           "source_headline": "Week of July 31 - Hometown News Treasure Coast",
@@ -664,9 +626,7 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Back-to-school bash in Port St. Lucie offers free supplies, entertainment Saturday",
-      "generated_card_count": 5,
-      "elapsed_seconds": 62.286
+      "elapsed_seconds": 75.959
     },
     {
       "category_key": "florida",
@@ -719,30 +679,23 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 15.818
+      "elapsed_seconds": 16.813
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "quality_gate_archive_recovery",
+      "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 0,
+      "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 5.302,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 5.302,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -751,10 +704,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
@@ -785,22 +738,30 @@
           "canonical_headline": "Stuart man jailed after fleeing traffic stop, leading police chase into Martin County",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-fun-things-across-treasure-coast-palm-beach-weekend-1784287590-1785499876/73316892",
+          "editorial_story_id": "story_000091",
+          "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
+          "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "elapsed_seconds": 16.918
+      "elapsed_seconds": 11.201
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 18,
-      "publishable_source_count": 6,
-      "selected_source_count": 6,
+      "fresh_candidate_count": 13,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -808,126 +769,46 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 40.929,
+          "elapsed_seconds": 6.499,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 40.929,
+      "model_elapsed_seconds": 6.499,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 3,
-      "contextual_update_lead_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 89,
-          "baseline_anchor": "",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "abandoned",
-            "costing",
-            "damaging",
-            "fort",
-            "pierce",
-            "property",
-            "resort",
-            "revenue",
-            "sailboat",
-            "thousands"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Fort Pierce resort says abandoned sailboat is damaging property and costing thousands in revenue",
-          "novelty_anchor": "source_distinctive_detail",
-          "novelty_present": false,
-          "novelty_token_hits": [],
-          "missing": [
-            "new_development_missing"
-          ],
-          "source_title": "Fort Pierce resort faces damage and losses from abandoned sailboat - wpbf.com",
-          "headline": "Fort Pierce resort blocked from moving abandoned sailboat causing property damage and revenue losses"
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 60,
-          "baseline_anchor": "",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "caught",
-            "dollars",
-            "lucie",
-            "port",
-            "stealing",
-            "surveillance",
-            "tequila",
-            "thousands",
-            "video",
-            "worth"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Port St. Lucie man caught on surveillance video stealing thousands of dollars worth of tequila",
-          "novelty_anchor": "source_distinctive_detail",
-          "novelty_present": false,
-          "novelty_token_hits": [],
-          "missing": [
-            "new_development_missing"
-          ],
-          "source_title": "Surveillance video shows Port St. Lucie man accused of stealing tequila worth thousands - wpbf.com",
-          "headline": "Port St. Lucie man caught on video stealing thousands in tequila from Martin County liquor store"
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 52,
-          "baseline_anchor": "fatality",
-          "baseline_present": false,
-          "baseline_anchor_present": false,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "allegations",
-            "left",
-            "lucie",
-            "officer",
-            "port",
-            "scene"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Port St. Lucie officer resigns after allegations he left scene where man later died by suicide",
-          "novelty_anchor": "source_distinctive_detail",
-          "novelty_present": false,
-          "novelty_token_hits": [],
-          "missing": [
-            "original_event_context_missing",
-            "new_development_missing"
-          ],
-          "source_title": "Port St. Lucie officer resigns after allegations he left scene of car where man later died by suicide - wpbf.com",
-          "headline": "Port St. Lucie officer resigns after allegations he left scene where man later died by suicide"
-        }
-      ],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 12,
+      "published_story_duplicate_suppression_count": 17,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Surveillance video shows Port St. Lucie man accused of stealing tequila worth thousands - WPBF",
+          "source_url": "https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342",
+          "editorial_story_id": "story_001566",
+          "canonical_slug": "2026-07-31-port-st-lucie-man-caught-on-surveillance-video-stealing-thousands-of-dollars-wor",
+          "canonical_headline": "Port St. Lucie man caught on surveillance video stealing thousands of dollars worth of tequila",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "86-year-old woman critically injured in Port St. Lucie crash later dies at hospital - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-man-86-dies-wo-car-crash-port-st-lucie/73320842",
+          "editorial_story_id": "story_001684",
+          "canonical_slug": "2026-08-01-86-year-old-woman-dies-after-crash-at-port-st-lucie-intersection",
+          "canonical_headline": "86-year-old woman dies after failing to yield at Port St. Lucie intersection",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Florida housing market: Treasure Coast single-family home prices on the rise - WPTV",
@@ -935,6 +816,16 @@
           "editorial_story_id": "story_000537",
           "canonical_slug": "2026-07-25-single-family-home-prices-rise-across-treasure-coast-after-two-years-of-declines",
           "canonical_headline": "Treasure Coast single-family home prices rise after two-year decline",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "King's Landing development in Fort Pierce moves forward with construction milestones - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
+          "editorial_story_id": "story_001667",
+          "canonical_slug": "2026-08-01-kings-landing-development-in-fort-pierce-nears-completion-with-luxury-villas-mar",
+          "canonical_headline": "King's Landing development in Fort Pierce advances with luxury villas nearing completion, Marriott Hotel planned for 2029",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -955,6 +846,16 @@
           "editorial_story_id": "story_001323",
           "canonical_slug": "2026-07-30-fort-pierce-residents-fight-plan-to-replace-museum-pointe-park-with-mega-yacht-m",
           "canonical_headline": "Fort Pierce residents fight plan to replace Museum Pointe Park with mega-yacht marina",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie officer resigns after allegations he left scene of car where man later died by suicide - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-officer-resigns-neglect-allegations/73318965",
+          "editorial_story_id": "story_001685",
+          "canonical_slug": "2026-08-01-port-st-lucie-officer-resigns-after-allegations-he-left-scene-where-man-later-di",
+          "canonical_headline": "Port St. Lucie officer resigns after allegations he left scene where man later died by suicide",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1000,21 +901,31 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "Fort Pierce resort faces damage and losses from abandoned sailboat - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-resort-abandoned-sailboat-damages/73309795",
+          "editorial_story_id": "story_001520",
+          "canonical_slug": "2026-07-31-fort-pierce-resort-says-abandoned-sailboat-is-damaging-property-and-costing-thou",
+          "canonical_headline": "Fort Pierce resort says abandoned sailboat is damaging property and costing thousands in revenue",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Citizen’s arrest law cited as charges dropped against Port St. Lucie man - WPEC",
+          "source_url": "https://cbs12.com/news/local/florida-crime-news-citizens-arrest-charges-dropped-against-man-who-held-teens-at-gunpoint-orbeez-prank-port-st-lucie-felony-state-attorney",
+          "editorial_story_id": "story_001429",
+          "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
+          "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "Flashing traffic light at Glades Cut Off Road in St. Lucie County still not fully operational after 6 months - WFLX",
           "source_url": "https://www.wflx.com/2026/07/29/flashing-traffic-light-glades-cut-off-road-st-lucie-county-still-not-fully-operational-after-6-months",
           "editorial_story_id": "story_001294",
           "canonical_slug": "2026-07-29-flashing-traffic-light-at-glades-cut-off-road-still-not-operational-after-6-mont",
           "canonical_headline": "Flashing traffic light at Glades Cut Off Road still not operational after 6 months",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Citizen’s arrest law cited as charges dropped against Port St. Lucie man - cw34.com",
-          "source_url": "https://cw34.com/news/local/florida-crime-news-citizens-arrest-charges-dropped-against-man-who-held-teens-at-gunpoint-orbeez-prank-port-st-lucie-felony-state-attorney",
-          "editorial_story_id": "story_001429",
-          "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
-          "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1040,7 +951,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Infant death investigation in St. Lucie County may not be completed - wpbf.com",
+          "source_headline": "Infant death investigation in St. Lucie County may not be completed - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-death-baby-infant-mother-grandfather/73287792",
           "editorial_story_id": "story_001161",
           "canonical_slug": "2026-07-29-st-lucie-county-investigators-say-3-month-olds-death-may-bring-further-charges",
@@ -1049,199 +960,41 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 5,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Surveillance video shows Port St. Lucie man accused of stealing tequila worth thousands - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-07-31-port-st-lucie-man-caught-on-surveillance-video-stealing-thousands-of-dollars-wor",
-          "canonical_headline": "Port St. Lucie man caught on surveillance video stealing thousands of dollars worth of tequila",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_001566",
-            "source:https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_001566,source:https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "86-year-old woman critically injured in Port St. Lucie crash later dies at hospital - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/florida-man-86-dies-wo-car-crash-port-st-lucie/73320842",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-08-01-86-year-old-woman-dies-after-crash-at-port-st-lucie-intersection",
-          "canonical_headline": "86-year-old woman dies after crash at Port St. Lucie intersection",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_001684",
-            "source:https://www.wpbf.com/article/florida-man-86-dies-wo-car-crash-port-st-lucie/73320842"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_001684,source:https://www.wpbf.com/article/florida-man-86-dies-wo-car-crash-port-st-lucie/73320842",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "King's Landing development in Fort Pierce moves forward with construction milestones - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-08-01-kings-landing-development-in-fort-pierce-nears-completion-with-luxury-villas-mar",
-          "canonical_headline": "King's Landing development in Fort Pierce nears completion with luxury villas, Marriott Hotel by 2029",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_001667",
-            "source:https://www.wpbf.com/article/florida-development-construction-waterfront/73320543"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_001667,source:https://www.wpbf.com/article/florida-development-construction-waterfront/73320543",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Port St. Lucie officer resigns after allegations he left scene of car where man later died by suicide - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-officer-resigns-neglect-allegations/73318965",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-08-01-port-st-lucie-officer-resigns-after-allegations-he-left-scene-where-man-later-di",
-          "canonical_headline": "Port St. Lucie officer resigns after allegations he left scene where man later died by suicide",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_001685",
-            "source:https://www.wpbf.com/article/florida-port-st-lucie-officer-resigns-neglect-allegations/73318965"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_001685,source:https://www.wpbf.com/article/florida-port-st-lucie-officer-resigns-neglect-allegations/73318965",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Fort Pierce resort faces damage and losses from abandoned sailboat - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-resort-abandoned-sailboat-damages/73309795",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-07-31-fort-pierce-resort-says-abandoned-sailboat-is-damaging-property-and-costing-thou",
-          "canonical_headline": "Fort Pierce resort says abandoned sailboat is damaging property and costing thousands in revenue",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_001520",
-            "source:https://www.wpbf.com/article/florida-fort-pierce-resort-abandoned-sailboat-damages/73309795"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_001520,source:https://www.wpbf.com/article/florida-fort-pierce-resort-abandoned-sailboat-damages/73309795",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "86-year-old woman dies after failing to yield at Port St. Lucie intersection",
-      "generated_card_count": 1,
-      "elapsed_seconds": 55.03
+      "live_hero_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+      "generated_card_count": 0,
+      "elapsed_seconds": 17.874
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generated_live",
-      "fetched_candidate_count": 27,
+      "status": "cache_hit",
+      "fetched_candidate_count": 28,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 6,
-      "selected_source_count": 6,
-      "cache_hit": false,
+      "publishable_source_count": 5,
+      "selected_source_count": 5,
+      "cache_hit": true,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.772,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 15.772,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 1,
-      "contextual_update_lead_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 37,
-          "baseline_anchor": "",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "association",
-            "chairman",
-            "eric",
-            "florida",
-            "flowers",
-            "indian",
-            "river",
-            "sheriff",
-            "sheriffs",
-            "sworn"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association",
-          "novelty_anchor": "source_distinctive_detail",
-          "novelty_present": false,
-          "novelty_token_hits": [],
-          "missing": [
-            "new_development_missing"
-          ],
-          "source_title": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association - wpbf.com",
-          "headline": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association"
-        }
-      ],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1302,9 +1055,19 @@
           "canonical_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association - WPBF",
+          "source_url": "https://www.wpbf.com/article/indian-river-county-sheriff-eric-flowers-sworn-chairman-florida-sheriffs-association/73311866",
+          "editorial_story_id": "story_001524",
+          "canonical_slug": "2026-07-31-indian-river-county-sheriff-eric-flowers-sworn-in-as-chairman-of-florida-sheriff",
+          "canonical_headline": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
           "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
@@ -1330,36 +1093,10 @@
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/indian-river-county-sheriff-eric-flowers-sworn-chairman-florida-sheriffs-association/73311866",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-07-31-indian-river-county-sheriff-eric-flowers-sworn-in-as-chairman-of-florida-sheriff",
-          "canonical_headline": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_001524",
-            "source:https://www.wpbf.com/article/indian-river-county-sheriff-eric-flowers-sworn-chairman-florida-sheriffs-association/73311866"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_001524,source:https://www.wpbf.com/article/indian-river-county-sheriff-eric-flowers-sworn-chairman-florida-sheriffs-association/73311866",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "generation_status": "success",
-      "budget_seconds": 180.0,
       "live_hero_headline": "Los Angeles man sentenced to life in prison for fentanyl sale that killed Vero Beach resident",
-      "generated_card_count": 0,
-      "elapsed_seconds": 24.785
+      "elapsed_seconds": 7.755
     }
   ]
 }
