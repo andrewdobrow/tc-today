@@ -28,18 +28,23 @@ def test_desktop_latest_rail_stretches_beside_hero_and_newsletter_stack():
     assert "overflow-y: auto !important" in css
 
 
-def test_sticky_bar_has_official_high_z_index_and_compact_mobile_limit():
+def test_sticky_bar_promotes_outermost_kit_wrapper_above_masthead():
     css = _read("style.css")
-    assert ".formkit-sticky-bar" in css
-    assert "z-index: 999999 !important" in css
-    assert 'data-format="sticky bar"' in css
+    assert "body > .tct-kit-sticky-layer" in css
+    assert "z-index: 2147483000 !important" in css
+    assert ".tct-kit-sticky-form" in css
     assert "max-height: 58px !important" in css
     assert "grid-template-columns: minmax(0, 1fr) auto !important" in css
 
 
-def test_sticky_bar_runtime_reserves_space_only_when_visible():
+def test_sticky_bar_runtime_promotes_top_level_layer_and_reserves_space():
     js = _read("main.js")
-    assert 'document.querySelector(".formkit-sticky-bar")' in js
+    assert "function findTopLevelLayer(node)" in js
+    assert 'layer.parentElement !== document.body' in js
+    assert 'layer.classList.add("tct-kit-sticky-layer")' in js
+    assert 'shell.classList.add("tct-kit-sticky-shell")' in js
+    assert 'form.classList.add("tct-kit-sticky-form")' in js
+    assert '"z-index": "2147483000"' in js
     assert 'root.classList.add("kit-sticky-visible")' in js
     assert 'root.classList.remove("kit-sticky-visible")' in js
     assert '--kit-sticky-height' in js
@@ -52,3 +57,12 @@ def test_header_and_reading_progress_are_offset_below_visible_bar():
     assert "html.kit-sticky-visible body" in css
     assert "html.kit-sticky-visible header" in css
     assert "html.kit-sticky-visible .article-reading-progress" in css
+
+
+def test_sticky_layer_restores_kits_original_inline_styles_when_closed():
+    js = _read("main.js")
+    assert "const originalInlineStyles = new WeakMap()" in js
+    assert "const promotedElements = new Set()" in js
+    assert "snapshot.set(property" in js
+    assert "element.style.setProperty(property, value, priority)" in js
+    assert "originalInlineStyles.delete(element)" in js

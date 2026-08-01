@@ -4068,3 +4068,141 @@ html.kit-sticky-visible .article-reading-progress {
     font-size: 13px !important;
   }
 }
+
+/* ============================================================
+   TCT v1.12.1.3 — Kit top-layer masthead stack
+   Promote Kit's outermost injected wrapper into the viewport's top layer.
+   The previous selector could style an inner bar while its parent stacking
+   context remained behind the masthead.
+   ============================================================ */
+body > .tct-kit-sticky-layer,
+.tct-kit-sticky-layer {
+  position: fixed !important;
+  inset: 0 0 auto 0 !important;
+  width: 100% !important;
+  height: var(--kit-sticky-height) !important;
+  min-height: var(--kit-sticky-height) !important;
+  max-height: var(--kit-sticky-height) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+  translate: none !important;
+  overflow: visible !important;
+  clip: auto !important;
+  opacity: 1 !important;
+  isolation: isolate !important;
+  z-index: 2147483000 !important;
+}
+
+.tct-kit-sticky-layer .formkit-sticky-bar,
+.tct-kit-sticky-layer .tct-kit-sticky-form,
+.tct-kit-sticky-form {
+  position: relative !important;
+  inset: auto !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: var(--kit-sticky-height) !important;
+  margin: 0 !important;
+  transform: none !important;
+  translate: none !important;
+  overflow: hidden !important;
+  z-index: 2147483001 !important;
+}
+
+.tct-kit-sticky-form > [data-style] {
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  box-sizing: border-box !important;
+}
+
+html.kit-sticky-visible body {
+  padding-top: var(--kit-sticky-height) !important;
+}
+
+html.kit-sticky-visible body > header,
+html.kit-sticky-visible header {
+  top: var(--kit-sticky-height) !important;
+  z-index: 100 !important;
+}
+
+html.kit-sticky-visible .article-reading-progress {
+  top: var(--kit-sticky-height) !important;
+}
+
+@media (min-width: 681px) {
+  .tct-kit-sticky-form {
+    max-height: 72px !important;
+    padding: 8px 52px 8px 16px !important;
+  }
+
+  .tct-kit-sticky-form > [data-style] {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 520px) !important;
+    align-items: center !important;
+    gap: 18px !important;
+    width: 100% !important;
+    max-width: 1440px !important;
+    margin: 0 auto !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .tct-kit-sticky-form {
+    max-height: 58px !important;
+    padding: 6px 42px 6px 8px !important;
+  }
+
+  .tct-kit-sticky-form .formkit-header,
+  .tct-kit-sticky-form .formkit-subheader,
+  .tct-kit-sticky-form .formkit-guarantee,
+  .tct-kit-sticky-form [data-element="content"] {
+    display: none !important;
+  }
+
+  .tct-kit-sticky-form > [data-style] {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .tct-kit-sticky-form .formkit-fields,
+  .tct-kit-sticky-form [data-element="fields"] {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    height: 46px !important;
+    margin: 0 !important;
+  }
+
+  .tct-kit-sticky-form .formkit-field,
+  .tct-kit-sticky-form .formkit-submit {
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  .tct-kit-sticky-form .formkit-input,
+  .tct-kit-sticky-form .formkit-submit {
+    height: 42px !important;
+    min-height: 42px !important;
+    max-height: 42px !important;
+  }
+}
+
+.tct-kit-sticky-shell {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: var(--kit-sticky-height) !important;
+  margin: 0 !important;
+  transform: none !important;
+  translate: none !important;
+  overflow: visible !important;
+  clip: auto !important;
+  z-index: 2147483001 !important;
+}

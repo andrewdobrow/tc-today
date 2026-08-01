@@ -164,79 +164,213 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// -- KIT STICKY BAR CONTAINMENT --
-// Kit injects the sticky form asynchronously. Detect the actual rendered bar,
-// reserve exactly its compact height, and keep TCT's sticky masthead below it.
+// -- KIT STICKY BAR LAYERING --
+// Kit injects the sticky form asynchronously and may wrap it in one or more
+// positioned containers. Promote the actual top-level Kit container above the
+// TCT masthead, reserve a fixed compact height, and keep the entire masthead
+// stack below it while the form is visible.
 (() => {
   const root = document.documentElement;
   const mobileQuery = window.matchMedia("(max-width: 680px)");
-  let observedBar = null;
+  let observedTarget = null;
   let resizeObserver = null;
   let rafId = 0;
+  const promotedElements = new Set();
+  const originalInlineStyles = new WeakMap();
 
-  function barIsVisible(bar) {
-    if (!bar || !bar.isConnected) return false;
-    const style = window.getComputedStyle(bar);
-    const rect = bar.getBoundingClientRect();
-    return style.display !== "none" &&
-      style.visibility !== "hidden" &&
-      Number(style.opacity || 1) !== 0 &&
-      rect.width > 0 && rect.height > 8;
+  function setImportantStyle(element, property, value) {
+    if (!element) return;
+    let snapshot = originalInlineStyles.get(element);
+    if (!snapshot) {
+      snapshot = new Map();
+      originalInlineStyles.set(element, snapshot);
+    }
+    if (!snapshot.has(property)) {
+      snapshot.set(property, {
+        value: element.style.getPropertyValue(property),
+        priority: element.style.getPropertyPriority(property)
+      });
+    }
+    promotedElements.add(element);
+    if (element.style.getPropertyValue(property) === value &&
+        element.style.getPropertyPriority(property) === "important") return;
+    element.style.setProperty(property, value, "important");
   }
 
-  function syncStickyBarOffset() {
-    rafId = 0;
-    const bar = document.querySelector(".formkit-sticky-bar");
+  function findStickyForm() {
+    return document.querySelector('.formkit-form[data-format="sticky bar"]') ||
+      document.querySelector(".formkit-sticky-bar");
+  }
 
-    if (bar !== observedBar) {
+  function findTopLevelLayer(node) {
+    if (!node) return null;
+    let layer = node.closest(".formkit-sticky-bar") || node;
+    while (layer.parentElement &&
+           layer.parentElement !== document.body &&
+           layer.parentElement !== document.documentElement) {
+      layer = layer.parentElement;
+    }
+    if (layer === document.body || layer === document.documentElement) {
+      return node.closest(".formkit-sticky-bar") || node;
+    }
+    return layer;
+  }
+
+  function elementIsVisible(element) {
+    if (!element || !element.isConnected) return false;
+    let current = element;
+    while (current && current !== document.documentElement) {
+      const style = window.getComputedStyle(current);
+      if (style.display === "none" || style.visibility === "hidden" ||
+          Number(style.opacity || 1) === 0) return false;
+      current = current.parentElement;
+    }
+    const rect = element.getBoundingClientRect();
+    return rect.width > 0 && (rect.height > 0 || element.scrollHeight > 0);
+  }
+
+  function clearPromotedLayer() {
+    promotedElements.forEach(element => {
+      element.classList.remove(
+        "tct-kit-sticky-layer", "tct-kit-sticky-shell", "tct-kit-sticky-form"
+      );
+      const snapshot = originalInlineStyles.get(element);
+      if (snapshot) {
+        snapshot.forEach(({ value, priority }, property) => {
+          if (value) element.style.setProperty(property, value, priority);
+          else element.style.removeProperty(property);
+        });
+      }
+      originalInlineStyles.delete(element);
+    });
+    promotedElements.clear();
+  }
+
+  function promoteStickyLayer(form) {
+    const layer = findTopLevelLayer(form);
+    if (!layer) return null;
+
+    const height = mobileQuery.matches ? 58 : 72;
+    layer.classList.add("tct-kit-sticky-layer");
+    form.classList.add("tct-kit-sticky-form");
+
+    // Neutralize every injected wrapper between the form and the promoted
+    // body-level layer. A lower ancestor transform or clipping rule can trap a
+    // high-z-index child beneath the masthead.
+    let shell = form.parentElement;
+    while (shell && shell !== layer && shell !== document.body) {
+      shell.classList.add("tct-kit-sticky-shell");
+      setImportantStyle(shell, "position", "relative");
+      setImportantStyle(shell, "top", "auto");
+      setImportantStyle(shell, "right", "auto");
+      setImportantStyle(shell, "bottom", "auto");
+      setImportantStyle(shell, "left", "auto");
+      setImportantStyle(shell, "width", "100%");
+      setImportantStyle(shell, "height", "100%");
+      setImportantStyle(shell, "min-height", "0");
+      setImportantStyle(shell, "max-height", `${height}px`);
+      setImportantStyle(shell, "transform", "none");
+      setImportantStyle(shell, "overflow", "visible");
+      setImportantStyle(shell, "z-index", "2147483001");
+      shell = shell.parentElement;
+    }
+
+    // Inline important declarations neutralize wrapper-level positioning and
+    // transforms that can otherwise trap Kit beneath a site stacking context.
+    const layerStyles = {
+      position: "fixed",
+      top: "0px",
+      right: "0px",
+      bottom: "auto",
+      left: "0px",
+      width: "100%",
+      height: `${height}px`,
+      "min-height": `${height}px`,
+      "max-height": `${height}px`,
+      "z-index": "2147483000",
+      transform: "none",
+      overflow: "visible",
+      clip: "auto",
+      isolation: "isolate",
+      margin: "0px"
+    };
+    Object.entries(layerStyles).forEach(([property, value]) => {
+      setImportantStyle(layer, property, value);
+    });
+
+    setImportantStyle(form, "position", "relative");
+    setImportantStyle(form, "top", "auto");
+    setImportantStyle(form, "bottom", "auto");
+    setImportantStyle(form, "width", "100%");
+    setImportantStyle(form, "height", "100%");
+    setImportantStyle(form, "min-height", "0");
+    setImportantStyle(form, "max-height", `${height}px`);
+    setImportantStyle(form, "z-index", "2147483001");
+    setImportantStyle(form, "transform", "none");
+    setImportantStyle(form, "margin", "0");
+
+    root.style.setProperty("--kit-sticky-height", `${height}px`);
+    root.classList.add("kit-sticky-visible");
+    return layer;
+  }
+
+  function syncStickyBarLayer() {
+    rafId = 0;
+    const form = findStickyForm();
+
+    if (form !== observedTarget) {
       if (resizeObserver) resizeObserver.disconnect();
-      observedBar = bar;
-      if (bar && "ResizeObserver" in window) {
+      clearPromotedLayer();
+      observedTarget = form;
+      if (form && "ResizeObserver" in window) {
         resizeObserver = new ResizeObserver(scheduleSync);
-        resizeObserver.observe(bar);
+        resizeObserver.observe(form);
       }
     }
 
-    if (!barIsVisible(bar)) {
+    if (!elementIsVisible(form)) {
+      clearPromotedLayer();
       root.classList.remove("kit-sticky-visible");
       root.style.setProperty("--kit-sticky-height", "0px");
       return;
     }
 
-    const compactCap = mobileQuery.matches ? 58 : 72;
-    const measured = Math.ceil(bar.getBoundingClientRect().height);
-    const height = Math.max(42, Math.min(measured, compactCap));
-    root.style.setProperty("--kit-sticky-height", `${height}px`);
-    root.classList.add("kit-sticky-visible");
+    promoteStickyLayer(form);
   }
 
   function scheduleSync() {
     if (rafId) return;
-    rafId = window.requestAnimationFrame(syncStickyBarOffset);
+    rafId = window.requestAnimationFrame(syncStickyBarLayer);
   }
 
   const observer = new MutationObserver(mutations => {
     const relevant = mutations.some(mutation => {
       if (mutation.type === "childList") return true;
       const target = mutation.target;
-      return target instanceof Element &&
-        (target.matches(".formkit-sticky-bar, .formkit-sticky-bar *") ||
-          Boolean(target.closest(".formkit-sticky-bar")));
+      return target instanceof Element && Boolean(
+        target.matches('.formkit-sticky-bar, .formkit-sticky-bar *, .formkit-form[data-format="sticky bar"], .formkit-form[data-format="sticky bar"] *') ||
+        target.closest('.formkit-sticky-bar, .formkit-form[data-format="sticky bar"]')
+      );
     });
     if (relevant) scheduleSync();
   });
-  observer.observe(document.body || document.documentElement, {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: ["class", "style", "hidden"]
-  });
+
+  function beginObservation() {
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class", "style", "hidden"]
+    });
+    scheduleSync();
+  }
+
+  if (document.body) beginObservation();
+  else document.addEventListener("DOMContentLoaded", beginObservation, { once: true });
 
   window.addEventListener("resize", scheduleSync, { passive: true });
   window.addEventListener("load", scheduleSync, { once: true });
   if (mobileQuery.addEventListener) {
     mobileQuery.addEventListener("change", scheduleSync);
   }
-  document.addEventListener("DOMContentLoaded", scheduleSync, { once: true });
-  scheduleSync();
 })();
