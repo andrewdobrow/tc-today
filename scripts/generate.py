@@ -1244,6 +1244,57 @@ def _is_real_source_image_url(url):
     )
 
 
+def _absolute_image_url(url):
+    """Return one absolute image URL without changing publisher query parameters."""
+    raw = html_lib.unescape(str(url or "").strip())
+    if raw.startswith("//"):
+        return "https:" + raw
+    if raw.startswith("/"):
+        return f"{SITE_URL}{raw}"
+    return raw
+
+
+def _category_social_og_image_url(category_key):
+    """Return the branded green OG card for one category.
+
+    Social syndication must never inherit the reusable editorial photographs used to
+    keep article pages visually distinct. When a story has no verified source image,
+    its category OG card is the single deterministic fallback for RSS, Open Graph,
+    Twitter cards, and structured data.
+    """
+    key = str(category_key or "").strip()
+    names = BRANDED_FALLBACK_IMAGE_MAP.get(
+        key, BRANDED_FALLBACK_IMAGE_MAP["top_news"]
+    )
+    filename = names[0] if names else BRANDED_FALLBACK_IMAGE_MAP["top_news"][0]
+    return f"{SITE_URL}/{filename}"
+
+
+def _social_syndication_image_url(item, category_key=""):
+    """Choose the only image allowed in RSS/social metadata.
+
+    Priority is intentionally strict:
+
+    1. A verified real source image already attached to this exact article.
+    2. The green branded category OG card.
+
+    Managed editorial fallback photos and legacy placeholders are article-display
+    assets only. They must never leak into RSS or social previews.
+    """
+    article = item if isinstance(item, dict) else {}
+    key = str(
+        category_key
+        or article.get("category_key")
+        or article.get("category")
+        or "top_news"
+    ).strip()
+    for field in ("source_image_url", "image_url"):
+        candidate = _absolute_image_url(article.get(field))
+        if _is_real_source_image_url(candidate):
+            return candidate
+    return _category_social_og_image_url(key)
+
+
 def _archive_entry_for_exact_live_item(item, archive):
     """Resolve an archive row without fuzzy headline/image cross-contamination."""
     if not isinstance(item, dict) or not isinstance(archive, list):
@@ -10445,12 +10496,11 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     # an "Updated" timestamp would be misleading. Published time is the honest signal.
 
     description = (hero.get("teaser") or hero.get("body", "")[:155]).replace('"', '')
-    # Only use images from reliable/stable sources for og:image
-    # Hotlinked CDN images from Google News or unknown sources may break on social sharing
-    _reliable_domains = ["wptv.com", "wpbf.com", "cbs12.com", "treasurecoast.today", "wflx.com"]
-    _hero_img = hero.get("image_url", "")
-    _cat_og   = f"{SITE_URL}/og-{category_key}.png"
-    image_url = _hero_img if (_hero_img and any(d in _hero_img for d in _reliable_domains)) else _cat_og
+    # RSS, Open Graph, Twitter, and NewsArticle schema share one authoritative image
+    # resolver. A real source image wins regardless of which publisher CDN hosts it;
+    # otherwise the green category OG card is used. Reusable article placeholders are
+    # deliberately excluded from social metadata.
+    image_url = _social_syndication_image_url(hero, category_key)
     _is_product_guide = str(hero.get("article_type") or "") == "product_guide"
     structured_data = {
         "@context": "https://schema.org",
@@ -11082,15 +11132,14 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
             "label", cat_key.replace("_", " ").title() if cat_key else "Treasure Coast News"
         )
         pub_rfc = format_datetime(published_dt.astimezone(timezone.utc), usegmt=True)
-        image_url = str(article.get("image_url") or "").strip()
-        if image_url.startswith("/"):
-            image_url = f"{SITE_URL}{image_url}"
-        media_xml = ""
-        if image_url.startswith(("http://", "https://")):
-            media_xml = (
-                f'\n    <media:content url="{_html.escape(image_url, quote=True)}" '
-                'medium="image" />'
-            )
+        # Always publish one explicit RSS image. Nextdoor should not have to guess by
+        # scraping the article page: verified source image first, otherwise the green
+        # category OG card. Article-only editorial placeholders are never syndicated.
+        image_url = _social_syndication_image_url(article, cat_key)
+        media_xml = (
+            f'\n    <media:content url="{_html.escape(image_url, quote=True)}" '
+            'medium="image" />'
+        )
         items.append(f"""  <item>
     <title><![CDATA[{_cdata(headline)}]]></title>
     <link>{_html.escape(article_url)}</link>
@@ -11158,6 +11207,96 @@ def validate_custom_rss_publication_contract(output_root=None):
     )
     return report
 
+
+
+def validate_rss_social_image_contract(output_root=None):
+    """Fail closed when RSS/social imagery violates the source-or-category policy."""
+    root = Path(output_root or OUTPUT_DIR)
+    feed_path = root / "feed.xml"
+    archive_path = root / "archive.json"
+    feed_text = feed_path.read_text(encoding="utf-8", errors="ignore") if feed_path.exists() else ""
+    archive = load_archive(archive_path)
+    archive_by_slug = {
+        str(row.get("slug") or "").strip(): row
+        for row in archive
+        if isinstance(row, dict) and str(row.get("slug") or "").strip()
+    }
+
+    item_blocks = re.findall(r"<item>(.*?)</item>", feed_text, flags=re.DOTALL | re.IGNORECASE)
+    issues = []
+    checked = 0
+    source_images = 0
+    category_og_images = 0
+    for block in item_blocks:
+        guid_match = re.search(r"<guid[^>]*>(.*?)</guid>", block, flags=re.DOTALL | re.IGNORECASE)
+        media = re.findall(
+            r'<media:content\s+url="([^"]+)"[^>]*/?>',
+            block,
+            flags=re.IGNORECASE,
+        )
+        guid = html_lib.unescape((guid_match.group(1) if guid_match else "").strip())
+        slug = guid.rsplit("/", 1)[-1].removesuffix(".html") if guid else ""
+        row = archive_by_slug.get(slug)
+        if len(media) != 1:
+            issues.append({
+                "slug": slug,
+                "reason": "rss_item_must_have_exactly_one_media_content",
+                "media_count": len(media),
+            })
+            continue
+        actual = html_lib.unescape(media[0].strip())
+        checked += 1
+        if "/images/editorial/" in actual or "/images/fallback/" in actual:
+            issues.append({
+                "slug": slug,
+                "reason": "article_placeholder_leaked_into_rss",
+                "actual_image": actual,
+            })
+        if isinstance(row, dict):
+            expected = _social_syndication_image_url(
+                row, str(row.get("category_key") or row.get("category") or "top_news")
+            )
+            if actual != expected:
+                issues.append({
+                    "slug": slug,
+                    "reason": "rss_image_does_not_match_authoritative_policy",
+                    "actual_image": actual,
+                    "expected_image": expected,
+                })
+            if _is_real_source_image_url(actual):
+                source_images += 1
+            else:
+                category_og_images += 1
+
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "release": "v1.12.2.7",
+        "status": "passed" if item_blocks and not issues else "failed",
+        "rss_items": len(item_blocks),
+        "checked_images": checked,
+        "source_images": source_images,
+        "category_og_images": category_og_images,
+        "issue_count": len(issues),
+        "issues": issues,
+    }
+    report_path = root / "data" / "rss-social-image-contract.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    if not item_blocks:
+        raise RuntimeError("RSS social image contract FAILED: feed contains no items")
+    if issues:
+        raise RuntimeError(
+            "RSS social image contract FAILED: "
+            f"{len(issues)} image policy violation(s); see {report_path}"
+        )
+    print(
+        "  RSS social image contract PASSED: "
+        f"{checked} item(s), {source_images} source image(s), "
+        f"{category_og_images} category OG fallback(s)"
+    )
+    return report
 
 def update_sitemap(archive_entries):
     """Regenerate sitemap.xml with all static and article pages."""
@@ -24319,6 +24458,7 @@ def main():
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
     (OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat), encoding="utf-8")
     validate_custom_rss_publication_contract(OUTPUT_DIR)
+    validate_rss_social_image_contract(OUTPUT_DIR)
     validate_nonstory_publication_contract(all_categories, top_cat, OUTPUT_DIR)
 
     # Save only after the normal production build has completed.
