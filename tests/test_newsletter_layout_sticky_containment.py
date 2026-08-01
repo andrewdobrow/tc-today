@@ -28,56 +28,30 @@ def test_desktop_latest_rail_stretches_beside_hero_and_newsletter_stack():
     assert "overflow-y: auto !important" in css
 
 
-def test_desktop_sticky_bar_promotes_outermost_kit_wrapper_above_masthead():
-    css = _read("style.css")
-    assert "body > .tct-kit-sticky-layer" in css
-    assert "z-index: 2147483000 !important" in css
-    assert ".tct-kit-sticky-form" in css
-    assert "max-height: 72px !important" in css
-    assert "@media (min-width: 681px)" in css
+def test_modal_replaces_sticky_bar_on_all_viewports():
+    js = _read("main.js")
+    assert "SITEWIDE KIT NEWSLETTER MODAL" in js
+    assert 'uid: "be625cadfe"' in js
+    assert 'mode: "sitewide-modal"' in js
+    assert "4edef44197" not in js
+    assert "KIT STICKY BAR LAYERING" not in js
+    assert "--kit-sticky-height" not in js
 
 
-def test_mobile_hides_sticky_wrappers_and_bounds_modal_to_viewport():
+def test_mobile_modal_is_bounded_with_dismissible_backdrop_space():
     css = _read("style.css")
-    responsive = css.index("TCT v1.12.1.4 — responsive newsletter presentation")
+    responsive = css.index("TCT v1.12.2.9 — sitewide newsletter modal presentation")
     tail = css[responsive:]
     assert '@media (max-width: 680px)' in tail
-    assert '.formkit-form[data-format="sticky bar"]' in tail
-    assert 'display: none !important' in tail
-    assert 'html.kit-sticky-visible body' in tail
-    assert 'padding-top: 0 !important' in tail
     assert '.formkit-form[data-format="modal"]' in tail
-    assert 'max-height: calc(100dvh - 32px) !important' in tail
+    assert 'width: calc(100vw - 48px) !important' in tail
+    assert 'max-height: calc(100dvh - 64px) !important' in tail
+    assert 'margin: 32px auto !important' in tail
 
 
-def test_sticky_bar_runtime_promotes_top_level_layer_and_reserves_space():
-    js = _read("main.js")
-    assert "function findTopLevelLayer(node)" in js
-    assert "if (mobileQuery.matches)" in js
-    assert 'root.style.setProperty("--kit-sticky-height", "0px")' in js
-    assert 'layer.parentElement !== document.body' in js
-    assert 'layer.classList.add("tct-kit-sticky-layer")' in js
-    assert 'shell.classList.add("tct-kit-sticky-shell")' in js
-    assert 'form.classList.add("tct-kit-sticky-form")' in js
-    assert '"z-index": "2147483000"' in js
-    assert 'root.classList.add("kit-sticky-visible")' in js
-    assert 'root.classList.remove("kit-sticky-visible")' in js
-    assert '--kit-sticky-height' in js
-    assert "new MutationObserver(mutations =>" in js
-    assert "new ResizeObserver(scheduleSync)" in js
-
-
-def test_header_and_reading_progress_are_offset_below_visible_bar():
+def test_modal_layer_is_above_masthead_without_page_offset():
     css = _read("style.css")
-    assert "html.kit-sticky-visible body" in css
-    assert "html.kit-sticky-visible header" in css
-    assert "html.kit-sticky-visible .article-reading-progress" in css
-
-
-def test_sticky_layer_restores_kits_original_inline_styles_when_closed():
     js = _read("main.js")
-    assert "const originalInlineStyles = new WeakMap()" in js
-    assert "const promotedElements = new Set()" in js
-    assert "snapshot.set(property" in js
-    assert "element.style.setProperty(property, value, priority)" in js
-    assert "originalInlineStyles.delete(element)" in js
+    assert "z-index: 2147483000 !important" in css
+    assert "kit-sticky-visible" not in js
+    assert "padding-top: var(--kit-sticky-height)" not in css[css.index("TCT v1.12.2.9"):]

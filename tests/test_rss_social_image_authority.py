@@ -332,3 +332,76 @@ def test_category_og_sync_does_not_replace_visible_article_placeholder(tmp_path,
     assert 'cities/stuart/stuart.webp' in page
     report = generate.validate_rss_social_image_contract(tmp_path)
     assert report["status"] == "passed"
+
+
+def test_live_category_recovery_persists_exact_fallback_authority(tmp_path, monkeypatch):
+    import json
+
+    archive = [
+        {
+            "slug": "category-recovery-story",
+            "headline": "Category recovery story",
+            "teaser": "The live placement has the authoritative category context.",
+            "category_key": "crime",
+            "first_published": "Fri, 31 Jul 2026 08:00:00 -0400",
+            "image_url": "https://treasurecoast.today/images/editorial/cities/stuart/stuart.webp",
+        }
+    ]
+    (tmp_path / "archive.json").write_text(json.dumps(archive), encoding="utf-8")
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    (articles / "category-recovery-story.html").write_text(
+        '''<html><head>
+<meta content="https://treasurecoast.today/og-image.png" property="og:image">
+<meta content="https://treasurecoast.today/og-image.png" name="twitter:image">
+<script type="application/ld+json">{"@type":"NewsArticle","image":["https://treasurecoast.today/og-image.png"]}</script>
+</head><body></body></html>''',
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(generate, "OUTPUT_DIR", tmp_path)
+    categories = [
+        {
+            "category_key": "martin",
+            "hero": {
+                "slug": "category-recovery-story",
+                "_archived_slug": "category-recovery-story",
+                "headline": "Category recovery story",
+                "category_key": "martin",
+                "image_url": "https://treasurecoast.today/images/editorial/cities/stuart/stuart.webp",
+            },
+            "cards": [],
+        }
+    ]
+
+    feed = generate.render_rss_feed(categories, {}, max_items=10)
+    (tmp_path / "feed.xml").write_text(feed, encoding="utf-8")
+    persisted = json.loads((tmp_path / "archive.json").read_text(encoding="utf-8"))[0]
+
+    assert "https://treasurecoast.today/og-martin.png" in feed
+    assert persisted["category_key"] == "crime"  # editorial archive identity is untouched
+    assert persisted["rss_social_image_url"] == "https://treasurecoast.today/og-martin.png"
+    assert persisted["rss_social_image_kind"] == "category_og"
+    assert persisted["rss_social_image_category_key"] == "martin"
+
+    report = generate.validate_rss_social_image_contract(tmp_path)
+    assert report["status"] == "passed"
+    assert report["authority_items"] == 1
+
+
+def test_social_meta_sync_handles_content_before_marker_attribute(tmp_path):
+    source = "https://cdn.example.com/story-image.jpg?x=1&y=2"
+    article = tmp_path / "story.html"
+    article.write_text(
+        '''<html><head>
+<meta content="https://treasurecoast.today/og-image.png" property="og:image">
+<meta content="https://treasurecoast.today/og-image.png" name="twitter:image">
+<script type="application/ld+json">{"@type":"NewsArticle","image":["https://treasurecoast.today/og-image.png"]}</script>
+</head><body></body></html>''',
+        encoding="utf-8",
+    )
+
+    assert generate._sync_article_social_image_metadata(article, source) is True
+    page = article.read_text(encoding="utf-8")
+    assert generate._meta_tag_content(page, "property", "og:image") == source
+    assert generate._meta_tag_content(page, "name", "twitter:image") == source
+    assert source.replace("&", "&amp;") in page

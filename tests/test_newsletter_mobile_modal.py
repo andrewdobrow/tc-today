@@ -4,31 +4,21 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_mobile_modal_is_not_hardcoded_into_generated_page_footer():
+def test_modal_is_not_hardcoded_into_generated_page_footer():
     source = (ROOT / "scripts" / "generate.py").read_text(encoding="utf-8")
     assert "be625cadfe" not in source
 
 
-def test_mobile_modal_is_loaded_only_by_the_responsive_runtime_branch():
+def test_same_modal_is_loaded_for_desktop_and_mobile():
     js = (ROOT / "main.js").read_text(encoding="utf-8")
-    mobile_block = js.index('mobile: {')
-    modal_uid = js.index('uid: "be625cadfe"', mobile_block)
-    modal_src = js.index(
-        'src: "https://treasure-coast-today.kit.com/be625cadfe/index.js"',
-        modal_uid,
-    )
-    selector = js.index(
-        'const config = mobileQuery.matches ? embeds.mobile : embeds.desktop'
-    )
-    assert mobile_block < modal_uid < modal_src < selector
+    assert js.count('uid: "be625cadfe"') == 1
+    assert 'mode: "sitewide-modal"' in js
+    assert "matchMedia" not in js[js.index("// -- SITEWIDE KIT NEWSLETTER MODAL --"):]
+    assert "4edef44197" not in js
 
 
-def test_sticky_layer_runtime_returns_without_offset_on_mobile():
-    js = (ROOT / "main.js").read_text(encoding="utf-8")
-    start = js.index("function syncStickyBarLayer()")
-    end = js.index("const form = findStickyForm();", start)
-    mobile_guard = js[start:end]
-    assert "if (mobileQuery.matches)" in mobile_guard
-    assert 'root.classList.remove("kit-sticky-visible")' in mobile_guard
-    assert 'root.style.setProperty("--kit-sticky-height", "0px")' in mobile_guard
-    assert "return;" in mobile_guard
+def test_mobile_modal_keeps_generous_dismissible_border():
+    css = (ROOT / "style.css").read_text(encoding="utf-8")
+    assert "width: calc(100vw - 48px) !important" in css
+    assert "max-height: calc(100dvh - 64px) !important" in css
+    assert "margin: 32px auto !important" in css

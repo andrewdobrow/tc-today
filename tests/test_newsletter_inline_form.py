@@ -3,7 +3,7 @@ from pathlib import Path
 
 KIT_INLINE_FORM_UID = "30e15672d3"
 KIT_INLINE_FORM_SRC = "https://treasure-coast-today.kit.com/30e15672d3/index.js"
-KIT_STICKY_FORM_UID = "4edef44197"
+KIT_MODAL_FORM_UID = "be625cadfe"
 
 
 def _source() -> str:
@@ -44,13 +44,13 @@ def test_inline_form_is_rendered_beneath_hero_inside_lead_stack():
     assert source.index(slot, homepage) < source.index(rail, homepage)
 
 
-def test_inline_and_sticky_kit_forms_use_distinct_uids():
+def test_inline_and_modal_kit_forms_use_distinct_uids():
     source = _source()
     runtime = (Path(__file__).resolve().parents[1] / "main.js").read_text(
         encoding="utf-8"
     )
-    assert KIT_INLINE_FORM_UID != KIT_STICKY_FORM_UID
-    assert KIT_STICKY_FORM_UID in runtime
+    assert KIT_INLINE_FORM_UID != KIT_MODAL_FORM_UID
+    assert KIT_MODAL_FORM_UID in runtime
     assert KIT_INLINE_FORM_UID in source
 
 

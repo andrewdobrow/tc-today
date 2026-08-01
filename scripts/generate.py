@@ -1254,6 +1254,35 @@ def _absolute_image_url(url):
     return raw
 
 
+def _canonical_social_category_key(*values):
+    """Resolve labels and keys to one stable social-image category key."""
+    aliases = {
+        "top news": "top_news",
+        "news": "top_news",
+        "local government": "local_gov",
+        "crime safety": "crime",
+        "crime and safety": "crime",
+        "business development": "business",
+        "business and development": "business",
+        "sports": "sports",
+        "things to do": "things_to_do",
+        "florida": "florida",
+        "martin county": "martin",
+        "st lucie county": "st_lucie",
+        "saint lucie county": "st_lucie",
+        "indian river county": "indian_river",
+    }
+    for value in values:
+        raw = str(value or "").strip()
+        if raw in BRANDED_FALLBACK_IMAGE_MAP:
+            return raw
+        normalized = re.sub(r"[^a-z0-9]+", " ", raw.lower()).strip()
+        mapped = aliases.get(normalized)
+        if mapped in BRANDED_FALLBACK_IMAGE_MAP:
+            return mapped
+    return "top_news"
+
+
 def _category_social_og_image_url(category_key):
     """Return the branded green OG card for one category.
 
@@ -1262,7 +1291,7 @@ def _category_social_og_image_url(category_key):
     its category OG card is the single deterministic fallback for RSS, Open Graph,
     Twitter cards, and structured data.
     """
-    key = str(category_key or "").strip()
+    key = _canonical_social_category_key(category_key)
     names = BRANDED_FALLBACK_IMAGE_MAP.get(
         key, BRANDED_FALLBACK_IMAGE_MAP["top_news"]
     )
@@ -1282,12 +1311,9 @@ def _social_syndication_image_url(item, category_key=""):
     assets only. They must never leak into RSS or social previews.
     """
     article = item if isinstance(item, dict) else {}
-    key = str(
-        category_key
-        or article.get("category_key")
-        or article.get("category")
-        or "top_news"
-    ).strip()
+    key = _canonical_social_category_key(
+        category_key, article.get("category_key"), article.get("category")
+    )
     for field in ("source_image_url", "image_url"):
         candidate = _absolute_image_url(article.get(field))
         if _is_real_source_image_url(candidate):
@@ -11007,13 +11033,61 @@ def render_archive_page(archive_entries):
 </html>"""
 
 
-def _sync_article_social_image_metadata(article_path, image_url):
-    """Synchronize one existing article page with the authoritative RSS image.
+def _meta_tag_content(page, attribute_name, attribute_value):
+    """Extract a meta content value regardless of HTML attribute order."""
+    for match in re.finditer(r"<meta\b[^>]*>", str(page or ""), flags=re.I):
+        tag = match.group(0)
+        marker = re.search(
+            rf"\b{re.escape(attribute_name)}\s*=\s*([\"']){re.escape(attribute_value)}\1",
+            tag,
+            flags=re.I,
+        )
+        if not marker:
+            continue
+        content = re.search(r"\bcontent\s*=\s*([\"'])(.*?)\1", tag, flags=re.I | re.S)
+        return html_lib.unescape(content.group(2).strip()) if content else ""
+    return ""
 
-    The visible article image is intentionally left untouched: reusable editorial
-    photography may still be useful inside the page. Only Open Graph, Twitter, and
-    NewsArticle structured-data image metadata are updated so every syndication path
-    presents the same verified source image or green category OG card.
+
+def _upsert_meta_tag_content(page, attribute_name, attribute_value, content_value):
+    """Replace or insert one social-image meta tag without assuming attribute order."""
+    source = str(page or "")
+    escaped = html_lib.escape(str(content_value or "").strip(), quote=True)
+    tag_pattern = re.compile(r"<meta\b[^>]*>", flags=re.I)
+    for match in tag_pattern.finditer(source):
+        tag = match.group(0)
+        marker = re.search(
+            rf"\b{re.escape(attribute_name)}\s*=\s*([\"']){re.escape(attribute_value)}\1",
+            tag,
+            flags=re.I,
+        )
+        if not marker:
+            continue
+        if re.search(r"\bcontent\s*=", tag, flags=re.I):
+            updated_tag = re.sub(
+                r"(\bcontent\s*=\s*)([\"']).*?\2",
+                lambda m: f'{m.group(1)}{m.group(2)}{escaped}{m.group(2)}',
+                tag,
+                count=1,
+                flags=re.I | re.S,
+            )
+        else:
+            close = "/>" if tag.rstrip().endswith("/>") else ">"
+            updated_tag = tag.rstrip()[:-len(close)].rstrip() + f' content="{escaped}"' + close
+        return source[:match.start()] + updated_tag + source[match.end():]
+
+    new_tag = f'<meta {attribute_name}="{attribute_value}" content="{escaped}">'
+    head_close = re.search(r"</head\s*>", source, flags=re.I)
+    if head_close:
+        return source[:head_close.start()] + new_tag + "\n" + source[head_close.start():]
+    return new_tag + "\n" + source
+
+
+def _sync_article_social_image_metadata(article_path, image_url):
+    """Synchronize article social metadata with the authoritative RSS image.
+
+    The visible article image remains untouched. Open Graph, Twitter, and the first
+    NewsArticle JSON-LD image are aligned with the exact image emitted in RSS.
     """
     path = Path(article_path)
     authoritative = _absolute_image_url(image_url)
@@ -11024,23 +11098,11 @@ def _sync_article_social_image_metadata(article_path, image_url):
     except Exception:
         return False
 
-    escaped = html_lib.escape(authoritative, quote=True)
-    updated = page
-    replacements = (
-        (
-            r'(<meta\s+property=["\']og:image["\']\s+content=["\'])[^"\']*(["\']\s*/?>)',
-            rf'\g<1>{escaped}\g<2>',
-        ),
-        (
-            r'(<meta\s+name=["\']twitter:image["\']\s+content=["\'])[^"\']*(["\']\s*/?>)',
-            rf'\g<1>{escaped}\g<2>',
-        ),
-    )
-    for pattern, replacement in replacements:
-        updated = re.sub(pattern, replacement, updated, count=1, flags=re.I)
+    updated = _upsert_meta_tag_content(page, "property", "og:image", authoritative)
+    updated = _upsert_meta_tag_content(updated, "name", "twitter:image", authoritative)
 
-    # render_article_page serializes the NewsArticle image as a one-item JSON array.
-    # Replace only the first such field so product-guide item images remain intact.
+    # render_article_page serializes NewsArticle.image as a one-item JSON array.
+    # Replace only the first such field so product-guide item imagery remains intact.
     json_image = json.dumps(authoritative, ensure_ascii=False)
     updated = re.sub(
         r'("image"\s*:\s*\[\s*)"(?:\\.|[^"\\])*"(\s*\])',
@@ -11071,6 +11133,32 @@ def _persist_rss_source_image_authority(archive_row, image_url, *, origin=""):
         changed = True
     if archive_row.get("social_image_is_source") is not True:
         archive_row["social_image_is_source"] = True
+        changed = True
+    return changed
+
+
+def _persist_rss_social_image_authority(
+    archive_row, image_url, *, category_key, image_kind, origin=""
+):
+    """Persist the exact RSS/social decision for deterministic validation."""
+    if not isinstance(archive_row, dict):
+        return False
+    authoritative = _absolute_image_url(image_url)
+    canonical_key = _canonical_social_category_key(category_key)
+    kind = "source" if image_kind == "source" else "category_og"
+    changed = False
+    values = {
+        "rss_social_image_url": authoritative,
+        "rss_social_image_kind": kind,
+        "rss_social_image_category_key": canonical_key,
+        "rss_social_image_source": str(origin or kind).strip(),
+    }
+    for field, value in values.items():
+        if str(archive_row.get(field) or "").strip() != str(value):
+            archive_row[field] = value
+            changed = True
+    if archive_row.get("social_image_is_source") is not (kind == "source"):
+        archive_row["social_image_is_source"] = kind == "source"
         changed = True
     return changed
 
@@ -11196,26 +11284,33 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
         return str(value or "").replace("]]>", "]]]]><![CDATA[>")
 
     items = []
+    authority_items = []
     archive_image_metadata_changed = False
     article_social_metadata_synced = 0
     for _custom_priority, published_dt, slug, article in candidates:
         headline = str(article.get("headline") or "").strip()
         article_url = f"{SITE_URL}/articles/{slug}.html"
         teaser = str(article.get("teaser") or article.get("body") or "").strip()[:1200]
-        cat_key = str(article.get("category_key") or article.get("category") or "").strip()
+        archive_row = archive_by_slug.get(slug)
+        cat_key = _canonical_social_category_key(
+            article.get("category_key"),
+            archive_row.get("category_key") if isinstance(archive_row, dict) else "",
+            article.get("category"),
+            archive_row.get("category") if isinstance(archive_row, dict) else "",
+        )
         cat_label = CATEGORIES.get(cat_key, {}).get(
-            "label", cat_key.replace("_", " ").title() if cat_key else "Treasure Coast News"
+            "label", "Treasure Coast News" if cat_key == "top_news" else cat_key.replace("_", " ").title()
         )
         pub_rfc = format_datetime(published_dt.astimezone(timezone.utc), usegmt=True)
         # Always publish one explicit RSS image. Nextdoor should not have to guess by
         # scraping the article page: verified source image first, otherwise the green
         # category OG card. Article-only editorial placeholders are never syndicated.
         image_url = _social_syndication_image_url(article, cat_key)
-        archive_row = archive_by_slug.get(slug)
-        if _is_real_source_image_url(image_url):
-            live = live_by_slug.get(slug) or live_by_headline.get(
-                _exact_custom_headline(headline)
-            )
+        image_kind = "source" if _is_real_source_image_url(image_url) else "category_og"
+        live = live_by_slug.get(slug) or live_by_headline.get(
+            _exact_custom_headline(headline)
+        )
+        if image_kind == "source":
             origin = (
                 "verified_live_article_source"
                 if isinstance(live, dict)
@@ -11231,6 +11326,26 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
                 )
                 or archive_image_metadata_changed
             )
+        else:
+            origin = "category_og_fallback"
+        archive_image_metadata_changed = (
+            _persist_rss_social_image_authority(
+                archive_row,
+                image_url,
+                category_key=cat_key,
+                image_kind=image_kind,
+                origin=origin,
+            )
+            or archive_image_metadata_changed
+        )
+        authority_items.append({
+            "slug": slug,
+            "article_url": article_url,
+            "image_url": image_url,
+            "image_kind": image_kind,
+            "category_key": cat_key,
+            "origin": origin,
+        })
         article_social_metadata_synced += int(
             _sync_article_social_image_metadata(
                 OUTPUT_DIR / "articles" / f"{slug}.html", image_url
@@ -11253,11 +11368,25 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
         (OUTPUT_DIR / "archive.json").write_text(
             json.dumps(archive, indent=2, ensure_ascii=False), encoding="utf-8"
         )
+    authority_report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "release": "v1.12.2.9",
+        "item_count": len(authority_items),
+        "items": authority_items,
+    }
+    authority_path = OUTPUT_DIR / "data" / "rss-social-image-authority.json"
+    authority_path.parent.mkdir(parents=True, exist_ok=True)
+    authority_path.write_text(
+        json.dumps(authority_report, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+
     if archive_image_metadata_changed or article_social_metadata_synced:
         print(
             "  RSS image authority persisted: "
             f"archive metadata changed={int(archive_image_metadata_changed)}, "
-            f"article social metadata synced={article_social_metadata_synced}"
+            f"article social metadata synced={article_social_metadata_synced}, "
+            f"authority items={len(authority_items)}"
         )
 
     items_xml = "\n".join(items)
@@ -11321,15 +11450,25 @@ def validate_custom_rss_publication_contract(output_root=None):
 
 
 def validate_rss_social_image_contract(output_root=None):
-    """Fail closed when RSS/social imagery violates the source-or-category policy."""
+    """Fail closed when RSS/social imagery violates the persisted authority ledger."""
     root = Path(output_root or OUTPUT_DIR)
     feed_path = root / "feed.xml"
     archive_path = root / "archive.json"
+    authority_path = root / "data" / "rss-social-image-authority.json"
     feed_text = feed_path.read_text(encoding="utf-8", errors="ignore") if feed_path.exists() else ""
     archive = load_archive(archive_path)
     archive_by_slug = {
         str(row.get("slug") or "").strip(): row
         for row in archive
+        if isinstance(row, dict) and str(row.get("slug") or "").strip()
+    }
+    try:
+        authority_report = json.loads(authority_path.read_text(encoding="utf-8"))
+    except Exception:
+        authority_report = {}
+    authority_by_slug = {
+        str(row.get("slug") or "").strip(): row
+        for row in authority_report.get("items", [])
         if isinstance(row, dict) and str(row.get("slug") or "").strip()
     }
 
@@ -11350,6 +11489,7 @@ def validate_rss_social_image_contract(output_root=None):
         guid = html_lib.unescape((guid_match.group(1) if guid_match else "").strip())
         slug = guid.rsplit("/", 1)[-1].removesuffix(".html") if guid else ""
         row = archive_by_slug.get(slug)
+        authority = authority_by_slug.get(slug)
         if len(media) != 1:
             issues.append({
                 "slug": slug,
@@ -11365,51 +11505,128 @@ def validate_rss_social_image_contract(output_root=None):
                 "reason": "article_placeholder_leaked_into_rss",
                 "actual_image": actual,
             })
-        if isinstance(row, dict):
-            expected = _social_syndication_image_url(
-                row, str(row.get("category_key") or row.get("category") or "top_news")
-            )
-            if actual != expected:
+
+        if not isinstance(authority, dict):
+            issues.append({
+                "slug": slug,
+                "reason": "missing_rss_social_image_authority",
+                "actual_image": actual,
+            })
+            continue
+
+        expected = _absolute_image_url(authority.get("image_url"))
+        image_kind = str(authority.get("image_kind") or "").strip()
+        category_key = _canonical_social_category_key(authority.get("category_key"))
+        if actual != expected:
+            issues.append({
+                "slug": slug,
+                "reason": "rss_image_disagrees_with_persisted_authority",
+                "actual_image": actual,
+                "expected_image": expected,
+            })
+
+        if image_kind == "source":
+            source_images += 1
+            if not _is_real_source_image_url(actual):
                 issues.append({
                     "slug": slug,
-                    "reason": "rss_image_does_not_match_authoritative_policy",
+                    "reason": "authority_marks_non_source_as_source",
                     "actual_image": actual,
-                    "expected_image": expected,
                 })
-            if _is_real_source_image_url(actual):
-                source_images += 1
-                if str(row.get("source_image_url") or "").strip() == actual:
-                    persisted_source_images += 1
+            if not isinstance(row, dict) or _absolute_image_url(row.get("source_image_url")) != actual:
+                issues.append({
+                    "slug": slug,
+                    "reason": "source_image_authority_not_persisted_to_archive",
+                    "actual_image": actual,
+                    "archive_source_image": _absolute_image_url(row.get("source_image_url")) if isinstance(row, dict) else "",
+                })
             else:
-                category_og_images += 1
+                persisted_source_images += 1
+        elif image_kind == "category_og":
+            category_og_images += 1
+            category_expected = _category_social_og_image_url(category_key)
+            if actual != category_expected:
+                issues.append({
+                    "slug": slug,
+                    "reason": "category_og_authority_mismatch",
+                    "actual_image": actual,
+                    "expected_image": category_expected,
+                    "category_key": category_key,
+                })
+        else:
+            issues.append({
+                "slug": slug,
+                "reason": "unknown_rss_social_image_kind",
+                "image_kind": image_kind,
+            })
+
+        if isinstance(row, dict):
+            persisted_url = _absolute_image_url(row.get("rss_social_image_url"))
+            persisted_kind = str(row.get("rss_social_image_kind") or "").strip()
+            persisted_category = _canonical_social_category_key(
+                row.get("rss_social_image_category_key")
+            )
+            if (
+                persisted_url != actual
+                or persisted_kind != image_kind
+                or persisted_category != category_key
+            ):
+                issues.append({
+                    "slug": slug,
+                    "reason": "archive_rss_authority_fields_disagree",
+                    "actual_image": actual,
+                    "archive_image": persisted_url,
+                    "authority_kind": image_kind,
+                    "archive_kind": persisted_kind,
+                    "authority_category": category_key,
+                    "archive_category": persisted_category,
+                })
 
         article_path = root / "articles" / f"{slug}.html"
         if article_path.is_file():
             article_html = article_path.read_text(encoding="utf-8", errors="ignore")
-            og_match = re.search(
-                r'<meta\s+property=["\']og:image["\']\s+content=["\']([^"\']+)',
-                article_html,
-                flags=re.I,
-            )
-            article_og = html_lib.unescape(
-                (og_match.group(1) if og_match else "").strip()
-            )
+            article_og = _meta_tag_content(article_html, "property", "og:image")
+            article_twitter = _meta_tag_content(article_html, "name", "twitter:image")
+            metadata_mismatch = False
             if article_og != actual:
+                metadata_mismatch = True
                 issues.append({
                     "slug": slug,
                     "reason": "article_og_image_disagrees_with_rss",
                     "rss_image": actual,
                     "article_og_image": article_og,
                 })
-            else:
+            if article_twitter != actual:
+                metadata_mismatch = True
+                issues.append({
+                    "slug": slug,
+                    "reason": "article_twitter_image_disagrees_with_rss",
+                    "rss_image": actual,
+                    "article_twitter_image": article_twitter,
+                })
+            if not metadata_mismatch:
                 article_social_metadata_matches += 1
 
+    feed_slugs = {
+        html_lib.unescape((re.search(r"<guid[^>]*>(.*?)</guid>", block, flags=re.S | re.I).group(1))).strip().rsplit("/", 1)[-1].removesuffix(".html")
+        for block in item_blocks
+        if re.search(r"<guid[^>]*>(.*?)</guid>", block, flags=re.S | re.I)
+    }
+    orphan_authority = sorted(set(authority_by_slug) - feed_slugs)
+    if orphan_authority:
+        issues.append({
+            "reason": "authority_contains_non_feed_items",
+            "slugs": orphan_authority[:20],
+            "count": len(orphan_authority),
+        })
+
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
-        "release": "v1.12.2.8",
+        "release": "v1.12.2.9",
         "status": "passed" if item_blocks and not issues else "failed",
         "rss_items": len(item_blocks),
+        "authority_items": len(authority_by_slug),
         "checked_images": checked,
         "source_images": source_images,
         "category_og_images": category_og_images,
