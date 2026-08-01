@@ -11007,6 +11007,74 @@ def render_archive_page(archive_entries):
 </html>"""
 
 
+def _sync_article_social_image_metadata(article_path, image_url):
+    """Synchronize one existing article page with the authoritative RSS image.
+
+    The visible article image is intentionally left untouched: reusable editorial
+    photography may still be useful inside the page. Only Open Graph, Twitter, and
+    NewsArticle structured-data image metadata are updated so every syndication path
+    presents the same verified source image or green category OG card.
+    """
+    path = Path(article_path)
+    authoritative = _absolute_image_url(image_url)
+    if not path.is_file() or not authoritative:
+        return False
+    try:
+        page = path.read_text(encoding="utf-8", errors="ignore")
+    except Exception:
+        return False
+
+    escaped = html_lib.escape(authoritative, quote=True)
+    updated = page
+    replacements = (
+        (
+            r'(<meta\s+property=["\']og:image["\']\s+content=["\'])[^"\']*(["\']\s*/?>)',
+            rf'\g<1>{escaped}\g<2>',
+        ),
+        (
+            r'(<meta\s+name=["\']twitter:image["\']\s+content=["\'])[^"\']*(["\']\s*/?>)',
+            rf'\g<1>{escaped}\g<2>',
+        ),
+    )
+    for pattern, replacement in replacements:
+        updated = re.sub(pattern, replacement, updated, count=1, flags=re.I)
+
+    # render_article_page serializes the NewsArticle image as a one-item JSON array.
+    # Replace only the first such field so product-guide item images remain intact.
+    json_image = json.dumps(authoritative, ensure_ascii=False)
+    updated = re.sub(
+        r'("image"\s*:\s*\[\s*)"(?:\\.|[^"\\])*"(\s*\])',
+        rf'\g<1>{json_image}\g<2>',
+        updated,
+        count=1,
+    )
+    if updated == page:
+        return False
+    path.write_text(updated, encoding="utf-8")
+    return True
+
+
+def _persist_rss_source_image_authority(archive_row, image_url, *, origin=""):
+    """Persist a verified source image without replacing the visible article asset."""
+    if not isinstance(archive_row, dict):
+        return False
+    authoritative = _absolute_image_url(image_url)
+    if not _is_real_source_image_url(authoritative):
+        return False
+    changed = False
+    if str(archive_row.get("source_image_url") or "").strip() != authoritative:
+        archive_row["source_image_url"] = authoritative
+        changed = True
+    provenance = str(origin or "rss_verified_source").strip()
+    if str(archive_row.get("social_image_source") or "").strip() != provenance:
+        archive_row["social_image_source"] = provenance
+        changed = True
+    if archive_row.get("social_image_is_source") is not True:
+        archive_row["social_image_is_source"] = True
+        changed = True
+    return changed
+
+
 def _rss_publication_datetime(entry):
     """Return a stable UTC timestamp for RSS ordering and pubDate output."""
     from email.utils import parsedate_to_datetime
@@ -11093,6 +11161,11 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
             if headline:
                 live_by_headline.setdefault(headline, item)
 
+    archive_by_slug = {
+        str(row.get("slug") or "").strip(): row
+        for row in archive
+        if isinstance(row, dict) and str(row.get("slug") or "").strip()
+    }
     candidates = []
     seen_slugs = set()
     for row in archive:
@@ -11123,6 +11196,8 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
         return str(value or "").replace("]]>", "]]]]><![CDATA[>")
 
     items = []
+    archive_image_metadata_changed = False
+    article_social_metadata_synced = 0
     for _custom_priority, published_dt, slug, article in candidates:
         headline = str(article.get("headline") or "").strip()
         article_url = f"{SITE_URL}/articles/{slug}.html"
@@ -11136,6 +11211,31 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
         # scraping the article page: verified source image first, otherwise the green
         # category OG card. Article-only editorial placeholders are never syndicated.
         image_url = _social_syndication_image_url(article, cat_key)
+        archive_row = archive_by_slug.get(slug)
+        if _is_real_source_image_url(image_url):
+            live = live_by_slug.get(slug) or live_by_headline.get(
+                _exact_custom_headline(headline)
+            )
+            origin = (
+                "verified_live_article_source"
+                if isinstance(live, dict)
+                and any(
+                    _absolute_image_url(live.get(field)) == image_url
+                    for field in ("source_image_url", "image_url")
+                )
+                else "verified_archive_article_source"
+            )
+            archive_image_metadata_changed = (
+                _persist_rss_source_image_authority(
+                    archive_row, image_url, origin=origin
+                )
+                or archive_image_metadata_changed
+            )
+        article_social_metadata_synced += int(
+            _sync_article_social_image_metadata(
+                OUTPUT_DIR / "articles" / f"{slug}.html", image_url
+            )
+        )
         media_xml = (
             f'\n    <media:content url="{_html.escape(image_url, quote=True)}" '
             'medium="image" />'
@@ -11148,6 +11248,17 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
     <pubDate>{pub_rfc}</pubDate>
     <category><![CDATA[{_cdata(cat_label)}]]></category>{media_xml}
   </item>""")
+
+    if archive_image_metadata_changed:
+        (OUTPUT_DIR / "archive.json").write_text(
+            json.dumps(archive, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
+    if archive_image_metadata_changed or article_social_metadata_synced:
+        print(
+            "  RSS image authority persisted: "
+            f"archive metadata changed={int(archive_image_metadata_changed)}, "
+            f"article social metadata synced={article_social_metadata_synced}"
+        )
 
     items_xml = "\n".join(items)
     return f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -11227,6 +11338,8 @@ def validate_rss_social_image_contract(output_root=None):
     checked = 0
     source_images = 0
     category_og_images = 0
+    article_social_metadata_matches = 0
+    persisted_source_images = 0
     for block in item_blocks:
         guid_match = re.search(r"<guid[^>]*>(.*?)</guid>", block, flags=re.DOTALL | re.IGNORECASE)
         media = re.findall(
@@ -11265,18 +11378,43 @@ def validate_rss_social_image_contract(output_root=None):
                 })
             if _is_real_source_image_url(actual):
                 source_images += 1
+                if str(row.get("source_image_url") or "").strip() == actual:
+                    persisted_source_images += 1
             else:
                 category_og_images += 1
+
+        article_path = root / "articles" / f"{slug}.html"
+        if article_path.is_file():
+            article_html = article_path.read_text(encoding="utf-8", errors="ignore")
+            og_match = re.search(
+                r'<meta\s+property=["\']og:image["\']\s+content=["\']([^"\']+)',
+                article_html,
+                flags=re.I,
+            )
+            article_og = html_lib.unescape(
+                (og_match.group(1) if og_match else "").strip()
+            )
+            if article_og != actual:
+                issues.append({
+                    "slug": slug,
+                    "reason": "article_og_image_disagrees_with_rss",
+                    "rss_image": actual,
+                    "article_og_image": article_og,
+                })
+            else:
+                article_social_metadata_matches += 1
 
     report = {
         "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
-        "release": "v1.12.2.7",
+        "release": "v1.12.2.8",
         "status": "passed" if item_blocks and not issues else "failed",
         "rss_items": len(item_blocks),
         "checked_images": checked,
         "source_images": source_images,
         "category_og_images": category_og_images,
+        "persisted_source_images": persisted_source_images,
+        "article_social_metadata_matches": article_social_metadata_matches,
         "issue_count": len(issues),
         "issues": issues,
     }
@@ -11294,7 +11432,8 @@ def validate_rss_social_image_contract(output_root=None):
     print(
         "  RSS social image contract PASSED: "
         f"{checked} item(s), {source_images} source image(s), "
-        f"{category_og_images} category OG fallback(s)"
+        f"{category_og_images} category OG fallback(s), "
+        f"{article_social_metadata_matches} article metadata match(es)"
     )
     return report
 

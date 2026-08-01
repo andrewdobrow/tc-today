@@ -229,3 +229,106 @@ def test_runtime_rss_social_image_contract_rejects_editorial_placeholder_leak(tm
     )
     assert report["status"] == "failed"
     assert report["issue_count"] >= 1
+
+
+def test_live_source_enrichment_is_persisted_before_contract_validation(tmp_path, monkeypatch):
+    import json
+
+    source = "https://kubrick.htvapps.com/htv-prod/images/live-source.jpg"
+    archive = [
+        {
+            "slug": "live-source-story",
+            "headline": "Live source story",
+            "teaser": "The archive still has an article-only placeholder.",
+            "category_key": "crime",
+            "first_published": "Fri, 31 Jul 2026 08:00:00 -0400",
+            "image_url": (
+                "https://treasurecoast.today/images/editorial/"
+                "topics/crime-public-safety/police-lights.webp"
+            ),
+        }
+    ]
+    (tmp_path / "archive.json").write_text(json.dumps(archive), encoding="utf-8")
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    (articles / "live-source-story.html").write_text(
+        '''<html><head>
+<meta property="og:image" content="https://treasurecoast.today/og-crime.png">
+<meta name="twitter:image" content="https://treasurecoast.today/og-crime.png">
+<script type="application/ld+json">{"@type":"NewsArticle","image":["https://treasurecoast.today/og-crime.png"]}</script>
+</head><body><img src="https://treasurecoast.today/images/editorial/topics/crime-public-safety/police-lights.webp"></body></html>''',
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(generate, "OUTPUT_DIR", tmp_path)
+    categories = [
+        {
+            "category_key": "crime",
+            "hero": {
+                "slug": "live-source-story",
+                "_archived_slug": "live-source-story",
+                "headline": "Live source story",
+                "category_key": "crime",
+                "image_url": source,
+            },
+            "cards": [],
+        }
+    ]
+
+    feed = generate.render_rss_feed(categories, {}, max_items=10)
+    (tmp_path / "feed.xml").write_text(feed, encoding="utf-8")
+    persisted = json.loads((tmp_path / "archive.json").read_text(encoding="utf-8"))
+
+    assert persisted[0]["image_url"].endswith("police-lights.webp")
+    assert persisted[0]["source_image_url"] == source
+    assert persisted[0]["social_image_source"] == "verified_live_article_source"
+    assert source in feed
+
+    page = (articles / "live-source-story.html").read_text(encoding="utf-8")
+    assert f'<meta property="og:image" content="{source}">' in page
+    assert f'<meta name="twitter:image" content="{source}">' in page
+    assert 'police-lights.webp' in page  # visible article fallback remains untouched
+
+    report = generate.validate_rss_social_image_contract(tmp_path)
+    assert report["status"] == "passed"
+    assert report["persisted_source_images"] == 1
+    assert report["article_social_metadata_matches"] == 1
+
+
+def test_category_og_sync_does_not_replace_visible_article_placeholder(tmp_path, monkeypatch):
+    import json
+
+    archive = [
+        {
+            "slug": "category-og-story",
+            "headline": "Category OG story",
+            "teaser": "No source image exists.",
+            "category_key": "martin",
+            "first_published": "Fri, 31 Jul 2026 08:00:00 -0400",
+            "image_url": (
+                "https://treasurecoast.today/images/editorial/"
+                "cities/stuart/stuart.webp"
+            ),
+        }
+    ]
+    (tmp_path / "archive.json").write_text(json.dumps(archive), encoding="utf-8")
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    (articles / "category-og-story.html").write_text(
+        '''<html><head>
+<meta property="og:image" content="https://treasurecoast.today/og-image.png">
+<meta name="twitter:image" content="https://treasurecoast.today/og-image.png">
+<script type="application/ld+json">{"@type":"NewsArticle","image":["https://treasurecoast.today/og-image.png"]}</script>
+</head><body><img src="https://treasurecoast.today/images/editorial/cities/stuart/stuart.webp"></body></html>''',
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(generate, "OUTPUT_DIR", tmp_path)
+
+    feed = generate.render_rss_feed([], {}, max_items=10)
+    (tmp_path / "feed.xml").write_text(feed, encoding="utf-8")
+    page = (articles / "category-og-story.html").read_text(encoding="utf-8")
+
+    assert "https://treasurecoast.today/og-martin.png" in feed
+    assert '<meta property="og:image" content="https://treasurecoast.today/og-martin.png">' in page
+    assert 'cities/stuart/stuart.webp' in page
+    report = generate.validate_rss_social_image_contract(tmp_path)
+    assert report["status"] == "passed"

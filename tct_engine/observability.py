@@ -17,9 +17,9 @@ from .source_identity import normalize_source_identity_url
 from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.12.2.7"
-ENGINE_RELEASE = "rss-social-image-authority"
-OBSERVABILITY_SCHEMA_VERSION = 34
+ENGINE_VERSION = "1.12.2.8"
+ENGINE_RELEASE = "rss-image-authority-persistence"
+OBSERVABILITY_SCHEMA_VERSION = 35
 RESOLVER_VERSION = "3.0"
 RELATIONSHIP_ENGINE_VERSION = "1.5"
 
