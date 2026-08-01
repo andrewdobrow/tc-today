@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "gate_version": "1.2",
-  "generated_at": "2026-08-01T15:48:37.126358+00:00",
+  "gate_version": "1.3",
+  "generated_at": "2026-08-01T19:16:56.479717+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -17,6 +17,17 @@
           "name": "distinctive_token_overlap",
           "minimum_headline_similarity": 0.56,
           "minimum_shared_headline_tokens": 8
+        },
+        {
+          "name": "policy_subject_continuity",
+          "minimum_headline_similarity": 0.56,
+          "minimum_shared_headline_tokens": 6,
+          "requires": [
+            "shared_locality",
+            "shared_public_policy_event_family",
+            "shared_regulation_concept",
+            "two_additional_shared_subject_tokens"
+          ]
         }
       ],
       "effect": "candidate_only_model_adjudication_required"
@@ -26,20 +37,20 @@
     "custom_articles": "excluded_authoritative_custom_contract_retained"
   },
   "summary": {
-    "evaluations": 72,
-    "candidate_pairs": 0,
-    "structured_conflict_overrides": 0,
-    "model_calls": 0,
+    "evaluations": 73,
+    "candidate_pairs": 2,
+    "structured_conflict_overrides": 2,
+    "model_calls": 2,
     "cache_hits": 0,
-    "no_candidate_passes": 72,
-    "duplicates_preserved": 0,
-    "canonical_updates_selected": 0,
+    "no_candidate_passes": 71,
+    "duplicates_preserved": 1,
+    "canonical_updates_selected": 1,
     "new_stories_allowed": 1,
-    "retroactive_rows_retained": 71,
+    "retroactive_rows_retained": 70,
     "holds": 0,
-    "retroactive_redirects": 0,
-    "registry_story_records_merged": 0,
-    "registry_aliases_written": 0
+    "retroactive_redirects": 1,
+    "registry_story_records_merged": 1,
+    "registry_aliases_written": 1
   },
   "decisions": [
     {
@@ -1054,17 +1065,60 @@
       "incoming_headline": "Martin County commissioners face pushback on proposed changes to beach shark fishing rules",
       "incoming_source_url": "https://cbs12.com/news/local/martin-county-commissioners-move-change-shark-fishing-laws-beaches-chumming-chum-endanger-swimmers-surfers-beachgoers-blood-surf-incident-shark-bites-rules-beach-fishing",
       "incoming_story_id": "story_001464",
-      "candidates": [],
+      "candidates": [
+        {
+          "slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+          "headline": "Martin County moves to rewrite shark fishing rules after complaints about drones, chum",
+          "retrieval_score": 0.8041,
+          "headline_similarity": 0.6541,
+          "similarity_basis": "source_headline",
+          "shared_headline_tokens": [
+            "county",
+            "fishing",
+            "martin",
+            "regulation",
+            "revise",
+            "shark"
+          ],
+          "shared_topic_tokens": [
+            "fishing",
+            "regulation",
+            "shark"
+          ],
+          "day_gap": 2,
+          "structured_conflict_override": true,
+          "structured_conflict_override_tier": "policy_subject_continuity",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": true,
+          "reasons": [
+            "strong_fuzzy_headline",
+            "shared_locality_and_event_family",
+            "publication_gap_2_days",
+            "structured_identity_conflict",
+            "structured_identity_conflict_overridden_by_policy_subject"
+          ]
+        }
+      ],
       "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
+        "status": "validated",
+        "action": "duplicate_use_existing_canonical",
+        "recommended_action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+        "same_real_world_event": true,
         "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "confidence": 0.92,
+        "shared_anchors": [
+          "Martin County Commission meeting about shark fishing rules",
+          "Same policy initiative to rewrite beach shark fishing ordinances",
+          "Same concerns about drones and chum attracting sharks near swimmers",
+          "Same proposed restrictions during lifeguard hours"
+        ],
+        "novel_facts": [
+          "Incoming article mentions 'Tuesday morning's meeting' and 'strong public opposition'",
+          "Incoming references 'residents, local surfers, and marine experts' testifying",
+          "No substantive new policy developments or decisions beyond what candidate already reported"
+        ],
+        "reason": "Both articles cover the same Martin County Commission initiative to rewrite shark fishing rules in response to complaints about drones and chumming. The candidate (published July 28, covering a Tuesday meeting) provides comprehensive detail about the policy proposal, legal framework, and planned restrictions. The incoming article (published July 30) appears to cover the same Tuesday meeting but focuses on public opposition without reporting any material policy development, vote, or decision beyond what the candidate already detailed. The 'pushback' mentioned is routine public comment, not a material update like a vote outcome or policy change.",
         "validation_errors": []
       }
     },
@@ -1392,10 +1446,73 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Martin County reviews shark fishing ordinance after state says local rules must align with state law",
       "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-considers-changes-to-shark-fishing-rules-on-beaches-after-state-directive",
       "incoming_story_id": "story_001724",
+      "candidates": [
+        {
+          "slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+          "headline": "Martin County moves to rewrite shark fishing rules after complaints about drones, chum",
+          "retrieval_score": 0.7827,
+          "headline_similarity": 0.6327,
+          "similarity_basis": "source_headline",
+          "shared_headline_tokens": [
+            "county",
+            "fishing",
+            "martin",
+            "regulation",
+            "revise",
+            "shark"
+          ],
+          "shared_topic_tokens": [
+            "fishing",
+            "regulation",
+            "shark"
+          ],
+          "day_gap": 4,
+          "structured_conflict_override": true,
+          "structured_conflict_override_tier": "policy_subject_continuity",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": true,
+          "reasons": [
+            "moderate_fuzzy_headline",
+            "shared_locality_and_event_family",
+            "publication_gap_4_days",
+            "structured_identity_conflict",
+            "structured_identity_conflict_overridden_by_policy_subject"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "validated",
+        "action": "update_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "confidence": 0.92,
+        "shared_anchors": [
+          "Martin County Commission reviewing shark fishing ordinance",
+          "Same locality (Martin County)",
+          "Same policy subject (shark fishing rules on beaches)",
+          "Same governing body (Martin County commissioners)",
+          "Continuing government proceeding to revise local ordinance"
+        ],
+        "novel_facts": [
+          "Florida Fish and Wildlife Conservation Commission issued a directive to the county",
+          "State agency specifically told county that local rules must align with state law",
+          "This represents the state's formal response/intervention in the local ordinance process"
+        ],
+        "reason": "Both articles cover the same continuing government proceeding: Martin County's effort to revise its shark fishing ordinance. The candidate from July 28 reports commissioners directing staff to draft a new ordinance after complaints about drones and chum. The incoming article from August 1 provides a material update: FWC has now formally directed the county to align its rules with state law, which is a significant development in this policy process. This state directive represents official guidance that will shape the ordinance rewrite and is consequential information readers need to know.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fort Pierce residents petition against plan to convert Museum Pointe Park into mega-yacht marina",
+      "incoming_source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina",
+      "incoming_story_id": "story_001162",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1411,15 +1528,48 @@
       }
     }
   ],
-  "archive_repairs": [],
+  "archive_repairs": [
+    {
+      "source_slug": "2026-07-30-martin-county-commissioners-face-pushback-on-proposed-changes-to-beach-shark-fis",
+      "target_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+      "source_story_id": "story_001464",
+      "target_story_id": "story_001155",
+      "source_headline": "Martin County commissioners face pushback on proposed changes to beach shark fishing rules",
+      "target_headline": "Martin County moves to rewrite shark fishing rules after complaints about drones, chum",
+      "confidence": 0.92,
+      "shared_anchors": [
+        "Martin County Commission meeting about shark fishing rules",
+        "Same policy initiative to rewrite beach shark fishing ordinances",
+        "Same concerns about drones and chum attracting sharks near swimmers",
+        "Same proposed restrictions during lifeguard hours"
+      ]
+    }
+  ],
   "registry_consolidation": {
-    "status": "no_changes",
-    "directives_considered": 0,
-    "story_records_merged": 0,
-    "aliases_written": 0,
+    "status": "consolidated",
+    "directives_considered": 1,
+    "story_records_merged": 1,
+    "aliases_written": 1,
     "already_consolidated": 0,
     "skipped": [],
     "pending_directives": [],
-    "merges": []
+    "merges": [
+      {
+        "source_story_id": "story_001464",
+        "target_story_id": "story_001155",
+        "target_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+        "incoming_headline": "Martin County commissioners face pushback on proposed changes to beach shark fishing rules",
+        "confidence": 0.92,
+        "shared_anchors": [
+          "Martin County Commission meeting about shark fishing rules",
+          "Same policy initiative to rewrite beach shark fishing ordinances",
+          "Same concerns about drones and chum attracting sharks near swimmers",
+          "Same proposed restrictions during lifeguard hours"
+        ],
+        "reason": "Both articles cover the same Martin County Commission initiative to rewrite shark fishing rules in response to complaints about drones and chumming. The candidate (published July 28, covering a Tuesday meeting) provides comprehensive detail about the policy proposal, legal framework, and planned restrictions. The incoming article (published July 30) appears to cover the same Tuesday meeting but focuses on public opposition without reporting any material policy development, vote, or decision beyond what the candidate already detailed. The 'pushback' mentioned is routine public comment, not a material update like a vote outcome or policy change.",
+        "resolved_source_story_id": "story_001464",
+        "resolved_target_story_id": "story_001155"
+      }
+    ]
   }
 }
