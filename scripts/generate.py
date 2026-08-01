@@ -3045,7 +3045,7 @@ def _archive_article_metrics(entry):
     try:
         html_text = path.read_text(encoding="utf-8", errors="ignore")
         match = re.search(
-            r'<div class="article-body">(.*?)</div>\s*<div class="article-share">',
+            r'<div class="article-body">(.*?)</div>\s*(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">',
             html_text, re.IGNORECASE | re.DOTALL,
         )
         if not match:
@@ -3070,7 +3070,7 @@ def _archive_article_body(entry):
     try:
         html_text = path.read_text(encoding="utf-8", errors="ignore")
         match = re.search(
-            r'<div class="article-body">(.*?)</div>\s*<div class="article-share">',
+            r'<div class="article-body">(.*?)</div>\s*(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">',
             html_text, re.IGNORECASE | re.DOTALL,
         )
         if not match:
@@ -9189,6 +9189,7 @@ def render_index(all_categories, top_cat):
         <a class="latest-more" href="/archive.html">View all latest news →</a>
       </aside>
     </div>
+    {_newsletter_inline_embed("category-hero")}
     <section class="top-stories-v2">
       <div class="section-kicker"><span>☆</span><h2>Top Stories</h2></div>
       <div class="articles-grid" id="articlesGrid">{cards_html}</div>
@@ -9424,6 +9425,17 @@ def _exact_custom_headline(value):
     wording remain significant. A changed headline is a new article.
     """
     return str(value or "").strip()
+
+
+def _normalized_generated_headline_key(value):
+    """Return a conservative comparison key for generated TCT headlines.
+
+    This key is never sufficient by itself to authorize a write. It only opens a
+    final-article reconciliation check that must also prove locality, event family,
+    time proximity and at least one incident-level corroborator.
+    """
+    text = str(value or "").lower().replace("’", "'")
+    return re.sub(r"[^a-z0-9]+", " ", text).strip()
 
 
 def _load_custom_retirements(output_root=None):
@@ -10296,7 +10308,7 @@ def validate_custom_body_fidelity(hero, page_html):
         return validate_product_guide_fidelity(hero, page_html)
     import html as _html
     match = re.search(
-        r'<div class="article-body">(.*?)</div>\s*<div class="article-share">',
+        r'<div class="article-body">(.*?)</div>\s*(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">',
         str(page_html or ""),
         flags=re.IGNORECASE | re.DOTALL,
     )
@@ -10697,6 +10709,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         <div class="article-main-column">
           {img_html}
           <div class="article-body">{body}</div>
+          {_newsletter_inline_embed("article")}
           {event_link_html}
           <div class="article-share">
             <span class="article-share-label">Share this story</span>
@@ -14328,6 +14341,28 @@ def _page_header(active=""):
   </header>"""
 
 
+KIT_INLINE_FORM_UID = "30e15672d3"
+KIT_INLINE_FORM_SRC = (
+    "https://treasure-coast-today.kit.com/30e15672d3/index.js"
+)
+
+
+def _newsletter_inline_embed(placement):
+    """Return the one inline Kit signup module used on a rendered page."""
+    placement_key = re.sub(
+        r"[^a-z0-9_-]+",
+        "-",
+        str(placement or "inline").lower(),
+    ).strip("-")
+    return (
+        f'\n      <aside class="newsletter-inline-slot newsletter-inline-slot--{placement_key}" '
+        'aria-label="Subscribe to the Treasure Coast Morning Brief">\n'
+        f'        <script async data-uid="{KIT_INLINE_FORM_UID}" '
+        f'src="{KIT_INLINE_FORM_SRC}"></script>\n'
+        '      </aside>'
+    )
+
+
 def _page_footer():
     return """  <footer>
     <div class="footer-inner footer-v2">
@@ -14349,7 +14384,8 @@ def _page_footer():
     </div>
     <div class="footer-bottom">© 2026 Treasure Coast Today. All rights reserved.</div>
   </footer>
-  <script src="/main.js"></script>"""
+  <script src="/main.js"></script>
+  <script async data-uid="4edef44197" src="https://treasure-coast-today.kit.com/4edef44197/index.js"></script>"""
 
 
 def render_author_page():
@@ -15140,9 +15176,114 @@ def _repair_archive_claim_drifted_permalinks(archive, articles_dir, output_root)
     return archive, redirects, report
 
 
+def _repair_exact_headline_incident_duplicates(archive, articles_dir, output_root):
+    """Collapse proven exact-headline incident duplicates before publication.
+
+    This is a public-archive repair, not a fuzzy matcher. A group is changed only
+    when every duplicate is within the bounded time window and independently agrees
+    with the chosen canonical on locality, event family and an incident corroborator.
+    """
+    groups = defaultdict(list)
+    for row in [entry for entry in (archive or []) if isinstance(entry, dict)]:
+        if row.get("is_custom") or row.get("authoritative_custom"):
+            continue
+        if not _archive_entry_live_identity_safe(row):
+            continue
+        key = _normalized_generated_headline_key(row.get("headline"))
+        if key and len(key.split()) >= 6:
+            groups[key].append(row)
+
+    removed = set()
+    redirects = []
+    repaired = []
+    held = []
+    for key, members in sorted(groups.items()):
+        unique = {str(row.get("slug") or ""): row for row in members if row.get("slug")}
+        if len(unique) < 2:
+            continue
+        ordered = sorted(unique.values(), key=_publication_canonical_key)
+        canonical = ordered[0]
+        decisions = []
+        for duplicate in ordered[1:]:
+            evidence = _exact_headline_incident_evidence(duplicate, canonical)
+            decisions.append((duplicate, evidence))
+        if not decisions or not all(evidence.get("write_authorized") for _, evidence in decisions):
+            held.append({
+                "headline_key": key,
+                "slugs": [row.get("slug", "") for row in ordered],
+                "reason": "exact_headline_group_not_fully_proven",
+                "decisions": [
+                    {
+                        "slug": duplicate.get("slug", ""),
+                        "reason": evidence.get("reason", ""),
+                        "decision_trace": evidence.get("decision_trace", []),
+                    }
+                    for duplicate, evidence in decisions
+                ],
+            })
+            continue
+
+        for duplicate, evidence in decisions:
+            source_slug = str(duplicate.get("slug") or "")
+            target_slug = str(canonical.get("slug") or "")
+            if not source_slug or not target_slug or source_slug == target_slug:
+                continue
+            removed.add(source_slug)
+            _merge_category_memberships(
+                canonical,
+                duplicate,
+                canonical.get("category_key") or duplicate.get("category_key") or "",
+            )
+            redirects.append({
+                "source_slug": source_slug,
+                "source_headline": duplicate.get("headline", ""),
+                "target_slug": target_slug,
+                "target_headline": canonical.get("headline", ""),
+                "story_stage": "exact-final-headline-incident-reconciliation",
+                "match_confidence": 99,
+                "canonical_is_custom": False,
+                "editorial_story_id": str(canonical.get("editorial_story_id") or ""),
+                "reason": (
+                    "Exact final headline plus locality, event family and incident-level "
+                    "corroboration proved duplicate source coverage."
+                ),
+                "identity_evidence": evidence,
+            })
+            repaired.append({
+                "source_slug": source_slug,
+                "target_slug": target_slug,
+                "headline": canonical.get("headline", ""),
+                "source_story_id": duplicate.get("editorial_story_id", ""),
+                "target_story_id": canonical.get("editorial_story_id", ""),
+                "proof_type": evidence.get("proof_type", ""),
+                "evidence_dimensions": evidence.get("evidence_dimensions", []),
+            })
+
+    cleaned = [row for row in (archive or []) if str(row.get("slug") or "") not in removed]
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "release": "v1.12.0.8.4",
+        "policy": "exact_final_headline_requires_locality_family_and_incident_corroboration",
+        "repaired_count": len(repaired),
+        "held_group_count": len(held),
+        "repaired": repaired,
+        "held_groups": held,
+    }
+    path = Path(output_root) / "data" / "exact-headline-incident-reconciliation.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if repaired:
+        print(
+            "  Exact-headline incident reconciliation consolidated "
+            f"{len(repaired)} duplicate permalink(s)"
+        )
+    return cleaned, redirects, report
+
+
 def _plain_article_paragraphs_from_html(html_text):
     match = re.search(
-        r'(<div class="article-body">)(.*?)(</div>\s*<div class="article-share">)',
+        r'(<div class="article-body">)(.*?)(</div>\s*(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">)',
         str(html_text or ""),
         re.I | re.S,
     )
@@ -15738,7 +15879,8 @@ def _cross_source_person_names(item):
         " ", text, flags=re.I,
     )
 
-    name_rx = r"[A-Z][a-z'’-]+(?:\s+[A-Z][a-z'’-]+){1,2}"
+    name_word = r"[A-Z][a-z'’-]+"
+    name_rx = rf"{name_word}(?:\s+(?:[A-Z]\.?|{name_word}))?\s+{name_word}"
     candidates = set()
 
     # Ages are a strong participant signal in crime and public-safety reporting.
@@ -15799,6 +15941,9 @@ def _cross_source_person_names(item):
         words = normalized.split()
         if not (2 <= len(words) <= 3):
             continue
+        if len(words) == 3 and len(words[1]) == 1:
+            normalized = f"{words[0]} {words[2]}"
+            words = normalized.split()
         if normalized in _CROSS_SOURCE_PERSON_EXCLUSIONS or normalized in organization_phrases:
             continue
         if set(words) & excluded_words:
@@ -16116,6 +16261,225 @@ def _persist_event_identity(item, archive_entry=None):
     if snapshot:
         target["event_identity"] = copy.deepcopy(snapshot)
     return snapshot
+
+
+def _final_publication_identity_features(item, *, include_archive_body=False):
+    """Derive identity from the final TCT article, not its sparse source preview.
+
+    Source-oriented identity remains authoritative for destructive updates. This
+    final-copy view is used only to prevent a second permalink after the generated
+    article itself reveals the same incident through names, streets and locality.
+    Existing cached/source snapshots and precomputed anchors are deliberately ignored.
+    """
+    if not isinstance(item, dict):
+        return {}
+    body = str(item.get("body") or item.get("article_text") or "").strip()
+    if include_archive_body and not body:
+        body = str(_archive_article_body(item) or "").strip()
+    headline = str(item.get("headline") or item.get("title") or "").strip()
+    teaser = str(item.get("teaser") or item.get("summary") or "").strip()
+    final_item = {
+        "headline": headline,
+        "title": headline,
+        "teaser": teaser,
+        "body": body,
+        "article_text": body,
+        "facts": item.get("facts", ()) or (),
+        "locations": item.get("locations", ()) or (),
+        "agencies": item.get("agencies", ()) or (),
+        "event_types": item.get("event_types", ()) or (),
+        "entities": item.get("entities", ()) or (),
+        "date": item.get("date"),
+        "first_published": item.get("first_published"),
+        "published": item.get("published"),
+        "source_published": item.get("source_published"),
+    }
+    text = _cross_source_text(final_item)
+    anchor = ""
+    if incident_anchor_key is not None:
+        try:
+            anchor = str(incident_anchor_key(
+                titles=(headline, teaser),
+                facts=final_item["facts"],
+                locations=final_item["locations"],
+                agencies=final_item["agencies"],
+                event_types=final_item["event_types"],
+                entities=final_item["entities"],
+                body=body,
+            ) or "").strip()
+        except Exception:
+            anchor = ""
+
+    stored = item.get("event_identity") if isinstance(item.get("event_identity"), dict) else {}
+    stored_anchor = str(stored.get("incident_anchor") or "").strip()
+    # Never inherit the exact production corruption this release repairs.
+    if not anchor and stored_anchor and stored_anchor != "named-person-death:hyundai-elantra":
+        anchor = stored_anchor
+
+    locality = set(_audit_locations(text))
+    locality.update(stored.get("locality") or ())
+    families = set(_cross_source_event_families(final_item))
+    families.update(stored.get("event_families") or ())
+    people = set(_cross_source_person_names(final_item))
+    people.update(stored.get("people") or ())
+    precise = set(_cross_source_precise_locations(final_item))
+    precise.update(stored.get("precise_locations") or ())
+    agencies = set(_cross_source_agencies(final_item))
+    agencies.update(stored.get("agencies") or ())
+    subjects = set(_cross_source_subject_ngrams(final_item))
+    distinctive = set(_cross_source_distinctive_tokens(final_item))
+    topic = set(_cross_source_headline_topic_tokens(final_item))
+
+    return {
+        "date": _cross_source_date_value(final_item),
+        "identity_origin": "final_publication_copy",
+        "incident_anchor": anchor,
+        "known_event_key": "",
+        "locality": frozenset(locality),
+        "event_families": frozenset(families),
+        "people": frozenset(people),
+        "precise_locations": frozenset(precise),
+        "agencies": frozenset(agencies),
+        "subject_phrases": frozenset(subjects),
+        "headline_topic_tokens": frozenset(topic),
+        "distinctive_tokens": frozenset(distinctive),
+    }
+
+
+def _exact_headline_incident_evidence(left, right):
+    """Prove that two exact final headlines describe one concrete incident.
+
+    Exact headline equality only retrieves the candidate. Publication is consolidated
+    only when locality and event family agree, the reports are within three days, and
+    at least one incident-level fact (structured anchor, named person, precise street,
+    agency or a strong distinctive-fact intersection) also agrees.
+    """
+    left_key = _normalized_generated_headline_key((left or {}).get("headline"))
+    right_key = _normalized_generated_headline_key((right or {}).get("headline"))
+    base = {
+        "matched": False,
+        "confidence": 0.0,
+        "confidence_semantics": "deterministic_contract_not_probability",
+        "relationship": IDENTITY_OUTCOME_NEW,
+        "identity_outcome": IDENTITY_OUTCOME_NEW,
+        "evidence_tier": "insufficient_evidence",
+        "write_authorized": False,
+        "proof_type": "none",
+        "reason": "headline_not_exact",
+        "reason_codes": [],
+        "evidence_dimensions": [],
+        "decision_trace": [],
+    }
+    if not left_key or left_key != right_key or len(left_key.split()) < 6:
+        return base
+
+    left_features = _final_publication_identity_features(left, include_archive_body=True)
+    right_features = _final_publication_identity_features(right, include_archive_body=True)
+    left_date, right_date = left_features.get("date"), right_features.get("date")
+    day_gap = abs((left_date - right_date).days) if left_date and right_date else None
+    shared_locality = set(left_features.get("locality") or ()) & set(right_features.get("locality") or ())
+    shared_locality -= {"i-95"}
+    shared_families = set(left_features.get("event_families") or ()) & set(right_features.get("event_families") or ())
+    left_anchor = str(left_features.get("incident_anchor") or "")
+    right_anchor = str(right_features.get("incident_anchor") or "")
+    exact_anchor = bool(left_anchor and left_anchor == right_anchor)
+    anchor_conflict = bool(left_anchor and right_anchor and left_anchor != right_anchor)
+    shared_people = set(left_features.get("people") or ()) & set(right_features.get("people") or ())
+    shared_precise = set(left_features.get("precise_locations") or ()) & set(right_features.get("precise_locations") or ())
+    shared_agencies = set(left_features.get("agencies") or ()) & set(right_features.get("agencies") or ())
+    shared_distinctive = set(left_features.get("distinctive_tokens") or ()) & set(right_features.get("distinctive_tokens") or ())
+    # Headline words are intentionally excluded from corroboration because the
+    # candidate was retrieved by exact headline equality. Require a separate real-
+    # world anchor from the final article copy.
+    corroborated = bool(
+        exact_anchor
+        or shared_people
+        or shared_precise
+        or shared_agencies
+    )
+    time_safe = day_gap is None or day_gap <= 3
+    verified = bool(
+        shared_locality
+        and shared_families
+        and time_safe
+        and corroborated
+        and not anchor_conflict
+    )
+    dimensions = ["exact_final_headline"]
+    if shared_locality:
+        dimensions.append("shared_locality")
+    if shared_families:
+        dimensions.append("shared_event_family")
+    if exact_anchor:
+        dimensions.append("structured_incident_anchor")
+    if shared_people:
+        dimensions.append("shared_named_people")
+    if shared_precise:
+        dimensions.append("shared_precise_location")
+    if shared_agencies:
+        dimensions.append("shared_agency")
+    if len(shared_distinctive) >= 5:
+        dimensions.append("distinctive_fact_overlap")
+
+    return {
+        **base,
+        "matched": verified,
+        "confidence": 0.99 if verified else 0.0,
+        "relationship": IDENTITY_OUTCOME_VERIFIED if verified else IDENTITY_OUTCOME_POSSIBLE,
+        "identity_outcome": IDENTITY_OUTCOME_VERIFIED if verified else IDENTITY_OUTCOME_POSSIBLE,
+        "evidence_tier": "hard_composite_identity" if verified else "candidate_only",
+        "write_authorized": verified,
+        "proof_type": "exact_final_headline_incident_composite" if verified else "exact_final_headline_candidate",
+        "reason": "exact_final_headline_incident_verified" if verified else "exact_final_headline_without_sufficient_incident_proof",
+        "reason_codes": ["deterministic_identity_key"] if verified else ["candidate_only", "write_forbidden"],
+        "evidence_dimensions": dimensions,
+        "shared_named_people": sorted(shared_people),
+        "shared_precise_locations": sorted(shared_precise),
+        "shared_agencies": sorted(shared_agencies),
+        "shared_distinctive_tokens": sorted(shared_distinctive)[:30],
+        "decision_trace": [
+            f"publication_gap_days={day_gap if day_gap is not None else 'unknown'}",
+            f"shared_locality={sorted(shared_locality)}",
+            f"shared_event_families={sorted(shared_families)}",
+            f"left_anchor={left_anchor or 'none'}",
+            f"right_anchor={right_anchor or 'none'}",
+            f"shared_named_people={sorted(shared_people)}",
+            f"shared_precise_locations={sorted(shared_precise)}",
+            f"shared_agencies={sorted(shared_agencies)}",
+            f"shared_distinctive_token_count={len(shared_distinctive)}",
+            f"write_authorized={verified}",
+        ],
+    }
+
+
+def _find_exact_headline_archive_reconciliation(item, archive):
+    """Return a proven canonical or a fail-closed hold for an exact headline."""
+    key = _normalized_generated_headline_key((item or {}).get("headline"))
+    if not key:
+        return {"status": "none", "candidates": []}
+    candidates = [
+        row for row in (archive or [])
+        if isinstance(row, dict)
+        and not (row.get("is_custom") or row.get("authoritative_custom"))
+        and _archive_entry_live_identity_safe(row)
+        and _normalized_generated_headline_key(row.get("headline")) == key
+    ]
+    if not candidates:
+        return {"status": "none", "candidates": []}
+    verified = []
+    for candidate in candidates:
+        evidence = _exact_headline_incident_evidence(item, candidate)
+        if evidence.get("write_authorized"):
+            verified.append((candidate, evidence))
+    if len(candidates) == 1 and len(verified) == 1:
+        candidate, evidence = verified[0]
+        return {"status": "verified", "canonical": candidate, "evidence": evidence, "candidates": [candidate]}
+    return {
+        "status": "hold",
+        "reason": "exact_headline_target_ambiguous" if len(candidates) > 1 else "exact_headline_incident_not_proven",
+        "candidates": candidates,
+        "verified_count": len(verified),
+    }
 
 
 def _cross_source_candidate_keys(features):
@@ -17877,16 +18241,48 @@ def validate_archive_incident_uniqueness(archive, output_root):
         for anchor, rows in sorted(groups.items())
         if len({row["slug"] for row in rows}) > 1
     ]
-    passed = not duplicates and not redirect_sources
+    headline_groups = defaultdict(list)
+    for entry in [row for row in (archive or []) if isinstance(row, dict)]:
+        if entry.get("is_custom") or entry.get("authoritative_custom"):
+            continue
+        key = _normalized_generated_headline_key(entry.get("headline"))
+        if key and len(key.split()) >= 6:
+            headline_groups[key].append(entry)
+    exact_headline_duplicates = []
+    for key, members in sorted(headline_groups.items()):
+        unique = {str(row.get("slug") or ""): row for row in members if row.get("slug")}
+        if len(unique) < 2:
+            continue
+        ordered = sorted(unique.values(), key=_publication_canonical_key)
+        canonical = ordered[0]
+        verified = []
+        for duplicate in ordered[1:]:
+            evidence = _exact_headline_incident_evidence(duplicate, canonical)
+            if evidence.get("write_authorized"):
+                verified.append({
+                    "slug": duplicate.get("slug", ""),
+                    "headline": duplicate.get("headline", ""),
+                    "proof_type": evidence.get("proof_type", ""),
+                    "evidence_dimensions": evidence.get("evidence_dimensions", []),
+                })
+        if verified:
+            exact_headline_duplicates.append({
+                "headline_key": key,
+                "canonical_slug": canonical.get("slug", ""),
+                "verified_duplicates": verified,
+            })
+    passed = not duplicates and not exact_headline_duplicates and not redirect_sources
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "passed": passed,
         "checked_archive_entries": checked,
         "structured_incident_group_count": len(groups),
         "duplicate_incident_group_count": len(duplicates),
+        "exact_headline_duplicate_group_count": len(exact_headline_duplicates),
         "active_redirect_source_count": len(redirect_sources),
         "duplicate_incident_groups": duplicates,
+        "exact_headline_duplicate_groups": exact_headline_duplicates,
         "active_redirect_sources": redirect_sources,
     }
     path = output_root / "data" / "global-incident-identity-contract.json"
@@ -17896,6 +18292,7 @@ def validate_archive_incident_uniqueness(archive, output_root):
         raise RuntimeError(
             "Global incident identity contract FAILED: "
             f"{len(duplicates)} duplicate incident group(s), "
+            f"{len(exact_headline_duplicates)} exact-headline incident duplicate group(s), "
             f"{len(redirect_sources)} active redirect source(s)"
         )
     print(
@@ -19296,6 +19693,7 @@ def write_archives(all_categories, top_cat):
         "target_conflicts": [],
         "quarantined_update_targets": [],
         "custom_series_repairs": [],
+        "exact_headline_reconciliations": [],
         "custom_payloads_verified": 0,
         "legacy_archive_scope_days": FORWARD_IDENTITY_RECENT_DAYS,
     }
@@ -19330,6 +19728,15 @@ def write_archives(all_categories, top_cat):
     _canonical_redirects.extend(_claim_alignment_redirects)
     _forward_identity_report["claim_aligned_permalink_repairs"] = list(
         _claim_alignment_report.get("repaired") or []
+    )
+    archive, _exact_headline_redirects, _exact_headline_repair_report = (
+        _repair_exact_headline_incident_duplicates(
+            archive, articles_dir, OUTPUT_DIR
+        )
+    )
+    _canonical_redirects.extend(_exact_headline_redirects)
+    _forward_identity_report["exact_headline_incident_repairs"] = (
+        _exact_headline_repair_report
     )
 
     # Bridge the persistent editorial registry into the permalink writer. Raw source
@@ -19790,6 +20197,72 @@ def write_archives(all_categories, top_cat):
                     ),
                     "action": "reuse_existing_canonical_before_slug_creation",
                 })
+
+        # FINAL-COPY DUPLICATE BARRIER. Source snapshots can be sparse or wrong
+        # even when the generated article contains the person's name and exact streets.
+        # An exact TCT headline retrieves the established page, but consolidation still
+        # requires locality, event family, bounded time and incident-level proof.
+        if existing is None and not (hero.get("is_custom") or hero.get("authoritative_custom")):
+            _headline_reconciliation = _find_exact_headline_archive_reconciliation(
+                hero, archive
+            )
+            if _headline_reconciliation.get("status") == "verified":
+                _headline_canonical = _headline_reconciliation["canonical"]
+                _headline_evidence = _headline_reconciliation["evidence"]
+                _bind_live_item_to_archive(
+                    hero,
+                    _headline_canonical,
+                    current_customs=_current_customs,
+                    replace_with_custom=False,
+                )
+                _record_cross_source_identity_observation(
+                    hero,
+                    _headline_canonical,
+                    _headline_evidence,
+                    action="preserve_existing_page_exact_headline_incident_verified",
+                )
+                _forward_identity_report["exact_headline_reconciliations"].append({
+                    "headline": headline,
+                    "canonical_slug": _headline_canonical.get("slug", ""),
+                    "status": "verified_existing_page_preserved",
+                    "proof_type": _headline_evidence.get("proof_type", ""),
+                    "evidence_dimensions": _headline_evidence.get("evidence_dimensions", []),
+                })
+                _forward_identity_report["existing_articles_preserved"] += 1
+                hero["_publication_skip_reason"] = (
+                    "exact_headline_incident_existing_page_preserved"
+                )
+                print(
+                    "  EXACT HEADLINE INCIDENT LOCK: preserved "
+                    f"'{_headline_canonical.get('slug','')}' for '{headline[:60]}'"
+                )
+                continue
+            if _headline_reconciliation.get("status") == "hold":
+                _candidate_slugs = [
+                    row.get("slug", "")
+                    for row in _headline_reconciliation.get("candidates", [])
+                ]
+                _forward_identity_report["exact_headline_reconciliations"].append({
+                    "headline": headline,
+                    "candidate_slugs": _candidate_slugs,
+                    "status": "held",
+                    "reason": _headline_reconciliation.get("reason", ""),
+                })
+                _forward_identity_report["publication_holds"].append({
+                    "headline": headline,
+                    "source_url": normalized_source_url,
+                    "candidate_slugs": _candidate_slugs,
+                    "reason": _headline_reconciliation.get("reason", ""),
+                    "action": "hold_new_permalink_exact_headline_identity_unresolved",
+                })
+                hero["_publication_skip_reason"] = (
+                    "exact_headline_identity_unresolved_hold"
+                )
+                print(
+                    "  EXACT HEADLINE HOLD: no new permalink for "
+                    f"'{headline[:60]}' because incident identity was unresolved"
+                )
+                continue
 
         if (
             existing

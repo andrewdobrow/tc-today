@@ -3785,3 +3785,50 @@ main .article-wrap > .article-ad-banner {
     flex: 0 0 auto !important;
   }
 }
+
+/* ============================================================
+   TCT v1.12.1.1 — Kit inline newsletter module
+   One inline form sits below the active category hero and one follows
+   each article body. Kit owns the form's internal design; this wrapper
+   keeps it aligned with TCT's content columns and responsive spacing.
+   ============================================================ */
+.newsletter-inline-slot {
+  width: 100%;
+  max-width: 100%;
+  margin: 22px 0 30px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--surface, #fff);
+}
+
+.newsletter-inline-slot .formkit-form {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+.homepage-v2 > .newsletter-inline-slot--category-hero {
+  width: calc(100% - 380px);
+  margin: 18px 0 30px;
+}
+
+.article-main-column > .newsletter-inline-slot {
+  margin: 30px 0 10px;
+}
+
+@media (max-width: 900px) {
+  .newsletter-inline-slot,
+  .homepage-v2 > .newsletter-inline-slot--category-hero,
+  .article-main-column > .newsletter-inline-slot {
+    width: 100%;
+    margin-top: 18px;
+    margin-bottom: 22px;
+    border-radius: 10px;
+  }
+
+  .newsletter-inline-slot .formkit-form {
+    border-radius: 10px !important;
+  }
+}

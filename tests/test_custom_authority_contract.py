@@ -106,3 +106,22 @@ def test_custom_body_fidelity_for_normal_article():
     hero = {"headline": "Manual", "body": body, "is_custom": True, "authoritative_custom": True}
     page = '<div class="article-body">' + g.make_paragraphs(body, preserve_all=True) + '</div><div class="article-share">share</div>'
     assert g.validate_custom_body_fidelity(hero, page) is True
+
+
+def test_custom_body_fidelity_tolerates_inline_newsletter_before_share():
+    g = _load_generate()
+    body = "Lead paragraph.\n\nSecond paragraph with local details."
+    hero = {
+        "headline": "Manual newsletter placement test",
+        "body": body,
+        "is_custom": True,
+        "authoritative_custom": True,
+    }
+    page = (
+        '<div class="article-body">'
+        + g.make_paragraphs(body, preserve_all=True)
+        + "</div>"
+        + g._newsletter_inline_embed("article")
+        + '<div class="article-share">share</div>'
+    )
+    assert g.validate_custom_body_fidelity(hero, page) is True
