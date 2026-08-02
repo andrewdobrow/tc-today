@@ -1,21 +1,23 @@
 {
-  "schema_version": 36,
+  "schema_version": 38,
   "engine": {
     "name": "tct-editorial-engine",
-    "version": "1.12.2.9",
-    "release": "rss-image-authority-ledger-sitewide-modal",
+    "version": "1.13.0.1",
+    "release": "semantic-material-update-transaction-integrity",
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-01T20:46:43Z",
-  "mode": "enforce",
+  "generated_at": "2026-08-02T00:53:36Z",
+  "mode": "shadow",
   "publication_behavior_changed": false,
   "activation": {
     "activation_version": "1.1",
     "requested_mode": "enforce",
-    "effective_mode": "enforce",
-    "preflight_passed": true,
-    "preflight_reasons": [],
+    "effective_mode": "shadow",
+    "preflight_passed": false,
+    "preflight_reasons": [
+      "registry health is not clean"
+    ],
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
@@ -23,8 +25,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 0,
-    "placements_after": 0,
+    "placements_before": 2,
+    "placements_after": 2,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -51,21 +53,21 @@
   "audit": {
     "candidates_processed": 177,
     "routes": {
-      "generate_new": 7,
-      "skip": 170
+      "generate_new": 29,
+      "skip": 148
     },
     "eligibility": {
-      "listing": 4,
-      "low_value": 124,
-      "publishable": 49
+      "listing": 5,
+      "low_value": 127,
+      "publishable": 45
     },
     "source_classes": {
-      "aggregator": 128,
-      "local_news": 32,
-      "regional_news": 15,
-      "unknown": 2
+      "aggregator": 132,
+      "local_news": 30,
+      "regional_news": 14,
+      "unknown": 1
     },
-    "rejected_count": 4,
+    "rejected_count": 5,
     "rejected_examples": [
       {
         "headline": "14391 SW Skye Dr, Port Saint Lucie, FL 34987 - Realtor.com",
@@ -95,6 +97,15 @@
         "source_class": "aggregator"
       },
       {
+        "headline": "2,500+ Florida Condos Show Structural Damage, Just 5 Evacuated, State Report Finds - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOYUdPeU5sNjFZbUd1QmFLYVlrSm5TR2UwNlEwUnUtRTlVWGRMZHRPaVlYZVptbTRSeG43MDNpTlEtakZpTTY5cnF0bjRyRmM3OFdrQ3NnM2tzTjBBMWZJYUZremFxXzE1SVVQNFM5MTg5elkxdUptdDRxbFk5VU5lLUJXTVJZdUxSWDktQ2lSbF9kdWR6ek93amJVTnJrMmFjY0E?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
+      {
         "headline": "1286 River Reach Dr, Vero Beach, FL 32967 - Realtor.com",
         "source_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQYTM2MU9ZX1hLWHc1UU16Sk5wQlBoS2g4dmM2U2didmpGcld5dTFxNGxEZ1Z3X0ZYUjZXdFp1anMtTUhxOXpoSnlXaENfRXVsLW5oNkh6VzdXM1FPYjFSVV9zc18yUjF4TE1idGFSM0E3eUNSTzg0RWNJTTh2Y2h1NTBiOHQtM0FacG82cHBLYWVCNHdPZkVF?oc=5",
         "status": "listing",
@@ -107,10 +118,22 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 8,
-      "same_event": 169
+      "new_story": 26,
+      "same_event": 151
     },
     "examples": [
+      {
+        "story_id": "story_001770",
+        "title": "Adopt a class, inspire learning - Hometown News Treasure Coast",
+        "event_key": "unknown-event-7618cf6aae",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_001739",
         "title": "Buc-ee’s on track to open 2 new stores in August, with more on the way - WAVY.com",
@@ -169,8 +192,8 @@
       },
       {
         "story_id": "story_001720",
-        "title": "July 2026 in photos: July 4th, summer camps, animal hoarding - tcpalm.com",
-        "event_key": "unknown-event-9de831b851",
+        "title": "July 2026 in photos: July 4th, summer camps, animal hoarding - Treasure Coast News",
+        "event_key": "unknown-event-73242861b1",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -193,6 +216,18 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_001771",
+        "title": "Central Florida Voter Guide: August primary races and candidates - Orlando Sentinel",
+        "event_key": "unknown-event-20902046e2",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -295,22 +330,8 @@
       },
       {
         "story_id": "story_001162",
-        "title": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - wptv.com",
-        "event_key": "unknown-event-baacf6680a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001694",
-        "title": "Hillsborough County school calendar 2026-2027: When school starts - AOL.com",
-        "event_key": "unknown-event-5fdede8683",
+        "title": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
+        "event_key": "unknown-event-46c54b6e53",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -360,34 +381,33 @@
       },
       {
         "story_id": "story_001602",
-        "title": "Florida Dept. of Health Marion County Issues Rabies Advisory - 352today",
-        "event_key": "unknown-event-8ff845c68d",
+        "title": "Florida Dept. of Health Marion County Issues Rabies Advisory - 352today.com",
+        "event_key": "unknown-event-5ab8faa853",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001603",
-        "title": "Byron Donalds focuses on affordability as Republican rivals scramble for momentum in Florida governor's race",
-        "event_key": "unknown-event-de2efe9762",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMimAFBVV95cUxNdUZNenpTVTRncUFVUXNVeG9tUDZsNFo5TldMbWR0cVdXQ21CN0daQTg5Ri15dnh6Z0d1bUFYMTlqVGo3STRGNnZmV0d1SVZHVUxOMGNWcFRZQW9qUGllX1gyTndmekRkQlAtbTlDUkZhTmNiSmVERENUZ043UUVaSzlYM2JIWlV4UV8yb0VTTU1TTklZX1Fweg",
+          "Rolling source title continuity: true",
           "Confidence: 1.00"
         ]
       }
     ],
     "decision_trace_examples": [
+      {
+        "story_id": "story_001770",
+        "title": "Adopt a class, inspire learning - Hometown News Treasure Coast",
+        "event_key": "unknown-event-7618cf6aae",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_001739",
         "title": "Buc-ee’s on track to open 2 new stores in August, with more on the way - WAVY.com",
@@ -450,8 +470,8 @@
       },
       {
         "story_id": "story_001720",
-        "title": "July 2026 in photos: July 4th, summer camps, animal hoarding - tcpalm.com",
-        "event_key": "unknown-event-9de831b851",
+        "title": "July 2026 in photos: July 4th, summer camps, animal hoarding - Treasure Coast News",
+        "event_key": "unknown-event-73242861b1",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -476,6 +496,19 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_001771",
+        "title": "Central Florida Voter Guide: August primary races and candidates - Orlando Sentinel",
+        "event_key": "unknown-event-20902046e2",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -585,23 +618,8 @@
       },
       {
         "story_id": "story_001162",
-        "title": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - wptv.com",
-        "event_key": "unknown-event-baacf6680a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001694",
-        "title": "Hillsborough County school calendar 2026-2027: When school starts - AOL.com",
-        "event_key": "unknown-event-5fdede8683",
+        "title": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
+        "event_key": "unknown-event-46c54b6e53",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -645,16 +663,16 @@
       },
       {
         "story_id": "story_001602",
-        "title": "Florida Dept. of Health Marion County Issues Rabies Advisory - 352today",
-        "event_key": "unknown-event-8ff845c68d",
+        "title": "Florida Dept. of Health Marion County Issues Rabies Advisory - 352today.com",
+        "event_key": "unknown-event-5ab8faa853",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
+        "reason": "Exact source article URL already belongs to this story",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
+          "Exact source article identity: true",
+          "Normalized source URL: https://news.google.com/rss/articles/CBMimAFBVV95cUxNdUZNenpTVTRncUFVUXNVeG9tUDZsNFo5TldMbWR0cVdXQ21CN0daQTg5Ri15dnh6Z0d1bUFYMTlqVGo3STRGNnZmV0d1SVZHVUxOMGNWcFRZQW9qUGllX1gyTndmekRkQlAtbTlDUkZhTmNiSmVERENUZ043UUVaSzlYM2JIWlV4UV8yb0VTTU1TTklZX1Fweg",
+          "Rolling source title continuity: true",
           "Confidence: 1.00"
         ]
       },
@@ -662,21 +680,6 @@
         "story_id": "story_001603",
         "title": "Byron Donalds focuses on affordability as Republican rivals scramble for momentum in Florida governor's race",
         "event_key": "unknown-event-de2efe9762",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001638",
-        "title": "Celebrating a major milestone for the Indian River Lagoon-South C-23/C-24 STA - Lake Okeechobee News",
-        "event_key": "unknown-event-d5c4bc23f9",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -706,9 +709,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 453,
-      "timeline_entries_examined": 1118,
-      "transitions_examined": 611,
+      "stories_with_timelines": 456,
+      "timeline_entries_examined": 1131,
+      "transitions_examined": 621,
       "candidate_count": 10,
       "high_confidence_candidate_count": 5,
       "activation_eligible_candidate_count": 2,
@@ -1597,46 +1600,50 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 376,
-      "treasure_coast_local": 275,
-      "treasure_coast_region": 134,
-      "unknown": 779
+      "florida": 382,
+      "treasure_coast_local": 277,
+      "treasure_coast_region": 135,
+      "unknown": 790
     },
-    "average_score": 58.78
+    "average_score": 58.72
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 376,
-      "treasure_coast_local": 275,
-      "treasure_coast_region": 134,
-      "unknown": 779
+      "florida": 382,
+      "treasure_coast_local": 277,
+      "treasure_coast_region": 135,
+      "unknown": 790
     },
-    "average_priority": 4.25
+    "average_priority": 4.17
   },
   "story_lifecycle": {
     "counts": {
-      "active": 588,
-      "developing": 246,
-      "ongoing": 730
+      "active": 664,
+      "developing": 214,
+      "ongoing": 706
     }
   },
   "registry_health": {
     "repair_version": 7,
-    "changed": false,
-    "status": "clean",
-    "active_stories_before": 1560,
-    "active_stories_after": 1560,
+    "changed": true,
+    "status": "repaired",
+    "active_stories_before": 1564,
+    "active_stories_after": 1563,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
-    "duplicate_groups_merged": 0,
-    "duplicate_story_records_removed": 0,
-    "merged_story_ids": {},
+    "duplicate_groups_merged": 1,
+    "duplicate_story_records_removed": 1,
+    "merged_story_ids": {
+      "story_001397": [
+        "story_001438"
+      ]
+    },
     "remaining_exact_duplicate_title_groups": 0,
     "publisher_title_duplicate_groups_resolved": 0,
     "remaining_publisher_title_duplicate_groups": 0,
-    "source_identity_groups_resolved": 0,
-    "source_story_records_removed": 0,
+    "source_identity_groups_resolved": 1,
+    "source_story_records_removed": 1,
     "remaining_source_identity_groups": 0,
     "incident_identity_groups_resolved": 0,
     "incident_story_records_removed": 0,
@@ -1645,20 +1652,20 @@
     "selective_timeline_entries_moved": 0,
     "contaminated_story_records_preserved": 0,
     "incident_anchor_to_story_count": 28,
-    "generated_at": "2026-08-01T20:40:59Z",
+    "generated_at": "2026-08-02T00:47:23Z",
     "quarantined_story_records_retained": 29,
-    "active_story_count": 1564
+    "active_story_count": 1584
   },
   "stories": {
-    "total": 1564,
+    "total": 1584,
     "importance_levels": {
       "breaking": 3,
       "high": 23,
-      "normal": 233,
-      "low": 1305,
+      "normal": 235,
+      "low": 1323,
       "archived": 0
     },
-    "average_importance": 9.22,
+    "average_importance": 9.17,
     "top": [
       {
         "story_id": "story_000793",
@@ -1673,7 +1680,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 16.62
+          "age_hours": 20.73
         },
         "level": "breaking",
         "importance_reasons": [
@@ -1721,7 +1728,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 16.62,
+          "hours_since_update": 20.73,
           "event_count": 6,
           "timeline_entries": 6
         }
@@ -1739,7 +1746,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 29.01
+          "age_hours": 33.11
         },
         "level": "breaking",
         "importance_reasons": [
@@ -1787,7 +1794,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 29.01,
+          "hours_since_update": 33.11,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -1805,7 +1812,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 16.62
+          "age_hours": 20.73
         },
         "level": "high",
         "importance_reasons": [
@@ -1848,7 +1855,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 16.62,
+          "hours_since_update": 20.73,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -1866,7 +1873,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 16.62
+          "age_hours": 20.73
         },
         "level": "high",
         "importance_reasons": [
@@ -1909,7 +1916,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 16.62,
+          "hours_since_update": 20.73,
           "event_count": 12,
           "timeline_entries": 7
         }
@@ -1927,7 +1934,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 12.11
+          "age_hours": 16.22
         },
         "level": "high",
         "importance_reasons": [
@@ -1970,7 +1977,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T08:38:37.518469+00:00",
-          "hours_since_update": 12.11,
+          "hours_since_update": 16.22,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -1988,7 +1995,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 11.18
+          "age_hours": 15.29
         },
         "level": "high",
         "importance_reasons": [
@@ -2031,7 +2038,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T09:34:32.950254+00:00",
-          "hours_since_update": 11.18,
+          "hours_since_update": 15.29,
           "event_count": 5,
           "timeline_entries": 5
         }
@@ -2049,7 +2056,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 16.62
+          "age_hours": 20.73
         },
         "level": "high",
         "importance_reasons": [
@@ -2092,7 +2099,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 16.62,
+          "hours_since_update": 20.73,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2110,7 +2117,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 16.62
+          "age_hours": 20.73
         },
         "level": "high",
         "importance_reasons": [
@@ -2148,7 +2155,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 16.62,
+          "hours_since_update": 20.73,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2166,7 +2173,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 74.91
+          "age_hours": 79.02
         },
         "level": "high",
         "importance_reasons": [
@@ -2207,7 +2214,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 74.91,
+          "hours_since_update": 79.02,
           "event_count": 4,
           "timeline_entries": 2
         }
@@ -2225,7 +2232,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 137.15
+          "age_hours": 141.26
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2269,7 +2276,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-07-27T03:32:10.873614+00:00",
-          "hours_since_update": 137.15,
+          "hours_since_update": 141.26,
           "event_count": 5,
           "timeline_entries": 3
         }
@@ -2287,7 +2294,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 12.04
+          "age_hours": 16.15
         },
         "level": "normal",
         "importance_reasons": [
@@ -2325,7 +2332,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T08:38:37.518469+00:00",
-          "hours_since_update": 12.04,
+          "hours_since_update": 16.15,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2343,7 +2350,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 24.01
+          "age_hours": 28.18
         },
         "level": "high",
         "importance_reasons": [
@@ -2377,65 +2384,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-31T20:40:54.806838+00:00",
-          "hours_since_update": 24.01,
+          "hours_since_update": 28.18,
           "event_count": 2,
           "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000545",
-        "title": "3 arrested in 2025 death of 3-month-old boy in Fort Pierce - WPBF",
-        "score": 50,
-        "editorial_priority": 48,
-        "editorial_score": 48,
-        "score_breakdown": {
-          "score": 48,
-          "importance": 50,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 69.87
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 3,
-        "timeline_entries": 3,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 3,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-07-29T22:49:06.705745+00:00",
-          "hours_since_update": 69.87,
-          "event_count": 3,
-          "timeline_entries": 3
         }
       },
       {
@@ -2451,7 +2402,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 65.07
+          "age_hours": 69.18
         },
         "level": "normal",
         "importance_reasons": [
@@ -2487,7 +2438,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-30T03:36:51.907089+00:00",
-          "hours_since_update": 65.07,
+          "hours_since_update": 69.18,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2505,7 +2456,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 29.01
+          "age_hours": 33.12
         },
         "level": "normal",
         "importance_reasons": [
@@ -2544,7 +2495,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 29.01,
+          "hours_since_update": 33.12,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2562,7 +2513,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 24.01
+          "age_hours": 28.11
         },
         "level": "normal",
         "importance_reasons": [
@@ -2596,7 +2547,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-07-31T20:40:54.806838+00:00",
-          "hours_since_update": 24.01,
+          "hours_since_update": 28.11,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2614,7 +2565,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.22
+          "age_hours": 0.02
         },
         "level": "normal",
         "importance_reasons": [
@@ -2646,17 +2597,73 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 42,
-        "timeline_entries": 41,
+        "event_count": 43,
+        "timeline_entries": 42,
         "relationship_decisions": 19,
-        "canonical_source_candidates": 51,
+        "canonical_source_candidates": 52,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-01T20:31:44.926051+00:00",
-          "hours_since_update": 0.22,
-          "event_count": 42,
-          "timeline_entries": 41
+          "last_updated": "2026-08-02T00:47:19.319286+00:00",
+          "hours_since_update": 0.02,
+          "event_count": 43,
+          "timeline_entries": 42
+        }
+      },
+      {
+        "story_id": "story_000545",
+        "title": "3 arrested in 2025 death of 3-month-old boy in Fort Pierce - WPBF",
+        "score": 50,
+        "editorial_priority": 39,
+        "editorial_score": 39,
+        "score_breakdown": {
+          "score": 39,
+          "importance": 50,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.7,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 73.98
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 3,
+        "timeline_entries": 3,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 3,
+        "lifecycle": {
+          "state": "ongoing",
+          "reason": "Established multi-event story has not updated in the past 72 hours",
+          "last_updated": "2026-07-29T22:49:06.705745+00:00",
+          "hours_since_update": 73.98,
+          "event_count": 3,
+          "timeline_entries": 3
         }
       },
       {
@@ -2672,7 +2679,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 106.01
+          "age_hours": 110.11
         },
         "level": "normal",
         "importance_reasons": [
@@ -2710,7 +2717,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-07-28T10:40:55.425868+00:00",
-          "hours_since_update": 106.01,
+          "hours_since_update": 110.11,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2728,7 +2735,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 74.91
+          "age_hours": 79.02
         },
         "level": "normal",
         "importance_reasons": [
@@ -2764,7 +2771,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 74.91,
+          "hours_since_update": 79.02,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -2782,7 +2789,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 74.91
+          "age_hours": 79.02
         },
         "level": "normal",
         "importance_reasons": [
@@ -2818,7 +2825,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 74.91,
+          "hours_since_update": 79.02,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2828,7 +2835,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 6,
-    "generated_at": "2026-08-01T20:45:46Z",
+    "generated_at": "2026-08-02T00:52:05Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -2844,50 +2851,48 @@
       "category_count": 9,
       "statuses": {
         "cache_hit": 1,
-        "category_eligibility_archive_recovery": 1,
-        "generated_live": 1,
-        "missing_hero_archive_recovery": 3,
+        "generated_live": 3,
+        "missing_hero_archive_recovery": 2,
         "no_publishable_sources": 1,
         "quality_gate_archive_recovery": 2
       },
       "failures": {
-        "missing_or_null_hero": 3,
-        "no_category_eligible_sources": 1,
+        "missing_or_null_hero": 2,
         "publication_quality_rejected": 2
       },
-      "model_attempt_count": 6,
-      "model_elapsed_seconds": 136.473,
-      "archive_recovery_requested_count": 7,
+      "model_attempt_count": 7,
+      "model_elapsed_seconds": 101.245,
+      "archive_recovery_requested_count": 5,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 4,
-      "published_story_duplicate_suppression_count": 52,
+      "published_story_duplicate_suppression_count": 47,
       "story_aware_update_context_count": 0
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
-        "status": "missing_hero_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 27,
         "fresh_candidate_count": 19,
-        "publishable_source_count": 5,
-        "selected_source_count": 1,
+        "publishable_source_count": 6,
+        "selected_source_count": 2,
         "cache_hit": false,
-        "archive_recovery_requested": true,
+        "archive_recovery_requested": false,
         "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 8.364,
+            "elapsed_seconds": 7.462,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 8.364,
-        "failure_code": "missing_or_null_hero",
-        "failure_summary": "No usable hero remained after sanitization",
+        "model_elapsed_seconds": 7.462,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -2896,7 +2901,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 5,
+        "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 4,
         "category_eligibility_rejections": [
           {
@@ -2976,7 +2981,7 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - wptv.com",
+            "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
             "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina",
             "editorial_story_id": "story_001162",
             "canonical_slug": "2026-07-29-fort-pierce-residents-oppose-proposed-mega-yacht-marina-at-museum-pointe-over-co",
@@ -3016,12 +3021,12 @@
           },
           {
             "category_key": "local_gov",
-            "source_headline": "Man sentenced to life in prison for selling fentanyl that killed Vero Beach man in 2023 - cw34.com",
-            "source_url": "https://cw34.com/newsletter-daily/man-sentenced-to-life-in-prison-for-selling-fentanyl-that-killed-vero-beach-man-in-2023-indian-river-county-sheriffs-office-irsco-dea-miami-divison-florida-news",
+            "source_headline": "Man sentenced to life in prison for selling fentanyl that killed Vero Beach man in 2023 - WPEC",
+            "source_url": "https://cbs12.com/news/crime/man-sentenced-to-life-in-prison-for-selling-fentanyl-that-killed-vero-beach-man-in-2023-indian-river-county-sheriffs-office-irsco-dea-miami-divison-florida-news",
             "editorial_story_id": "story_001485",
             "canonical_slug": "2026-07-31-los-angeles-man-sentenced-to-life-in-prison-for-selling-fentanyl-that-killed-ver",
             "canonical_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3039,13 +3044,15 @@
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 25.629
+        "live_hero_headline": "Education Foundation of Martin County launches programs to support classrooms ahead of Aug. 10 school year",
+        "generated_card_count": 0,
+        "elapsed_seconds": 28.333
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "missing_hero_archive_recovery",
-        "fetched_candidate_count": 29,
+        "fetched_candidate_count": 28,
         "fresh_candidate_count": 21,
         "publishable_source_count": 5,
         "selected_source_count": 5,
@@ -3056,11 +3063,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 8.959,
+            "elapsed_seconds": 10.741,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 8.959,
+        "model_elapsed_seconds": 10.741,
         "failure_code": "missing_or_null_hero",
         "failure_summary": "No usable hero remained after sanitization",
         "sports_expired_event_preview_count": 0,
@@ -3074,7 +3081,7 @@
         "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -3145,23 +3152,13 @@
             "canonical_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Citizen’s arrest law cited as charges dropped against Port St. Lucie man - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-crime-news-citizens-arrest-charges-dropped-against-man-who-held-teens-at-gunpoint-orbeez-prank-port-st-lucie-felony-state-attorney",
-            "editorial_story_id": "story_001429",
-            "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
-            "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 25.608
+        "elapsed_seconds": 29.39
       },
       {
         "category_key": "business",
@@ -3178,11 +3175,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 50.718,
+            "elapsed_seconds": 6.839,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 50.718,
+        "model_elapsed_seconds": 6.839,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -3253,7 +3250,7 @@
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 67.14
+        "elapsed_seconds": 16.288
       },
       {
         "category_key": "sports",
@@ -3286,7 +3283,7 @@
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "live_hero_headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
-        "elapsed_seconds": 16.375
+        "elapsed_seconds": 22.188
       },
       {
         "category_key": "things_to_do",
@@ -3303,11 +3300,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 59.263,
+            "elapsed_seconds": 60.208,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 59.263,
+        "model_elapsed_seconds": 60.208,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -3358,14 +3355,14 @@
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 81.03
+        "elapsed_seconds": 83.747
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
         "status": "no_publishable_sources",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 22,
+        "fresh_candidate_count": 23,
         "publishable_source_count": 0,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -3386,7 +3383,7 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 1,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "florida",
@@ -3397,37 +3394,34 @@
             "canonical_headline": "Byron Donalds holds commanding lead in Florida GOP governor's race with three weeks until primary",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "florida",
-            "source_headline": "Postal worker accused of stealing winning Florida Lottery ticket from the mail arrested",
-            "source_url": "https://www.wptv.com/news/state/miami-dade/postal-worker-accused-of-stealing-winning-florida-lottery-ticket-from-the-mail-arrested",
-            "editorial_story_id": "story_001573",
-            "canonical_slug": "2026-07-31-postal-worker-arrested-for-stealing-winning-florida-lottery-ticket-from-mail-in",
-            "canonical_headline": "Postal worker arrested for stealing winning Florida Lottery ticket from mail in Miami",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "elapsed_seconds": 13.711
+        "elapsed_seconds": 18.28
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 19,
-        "publishable_source_count": 1,
-        "selected_source_count": 0,
+        "status": "generated_live",
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Martin County category eligibility contract",
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 6.697,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 6.697,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3436,14 +3430,14 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
-            "source_headline": "Martin County considers changes to shark fishing rules on beaches after state directive - wptv.com",
+            "source_headline": "Martin County considers changes to shark fishing rules on beaches after state directive - WPTV",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-considers-changes-to-shark-fishing-rules-on-beaches-after-state-directive",
             "editorial_story_id": "story_001724",
             "canonical_slug": "2026-08-01-martin-county-reviews-shark-fishing-ordinance-after-state-says-local-rules-must",
@@ -3463,7 +3457,7 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Treasure Coast renters say costs are high as rental market holds flat, expert says",
+            "source_headline": "Treasure Coast renters say costs are high as rental market holds flat, expert says - WPTV",
             "source_url": "https://www.wptv.com/money/real-estate-news/treasure-coast-renters-say-costs-are-high-as-rental-market-holds-flat-expert-says",
             "editorial_story_id": "story_001600",
             "canonical_slug": "2026-07-31-treasure-coast-renters-face-high-costs-as-rental-market-holds-flat",
@@ -3504,14 +3498,18 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "elapsed_seconds": 8.644
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Martin County commissioners delay decision on shark fishing rules after state order",
+        "generated_card_count": 0,
+        "elapsed_seconds": 23.557
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 15,
+        "fresh_candidate_count": 17,
         "publishable_source_count": 2,
         "selected_source_count": 1,
         "cache_hit": false,
@@ -3521,11 +3519,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 5.125,
+            "elapsed_seconds": 5.118,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 5.125,
+        "model_elapsed_seconds": 5.118,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3539,7 +3537,7 @@
         "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 16,
+        "published_story_duplicate_suppression_count": 14,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -3593,7 +3591,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - wptv.com",
+            "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
             "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina",
             "editorial_story_id": "story_001162",
             "canonical_slug": "2026-07-29-fort-pierce-residents-oppose-proposed-mega-yacht-marina-at-museum-pointe-over-co",
@@ -3623,17 +3621,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection - wptv.com",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection",
-            "editorial_story_id": "story_001557",
-            "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
-            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
+            "source_headline": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection",
             "editorial_story_id": "story_001557",
             "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
@@ -3653,16 +3641,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Sanctuary at Winterlakes residents in Port St. Lucie say maintenance requests go unanswered - wptv.com",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/sanctuary-at-winterlakes-residents-in-port-st-lucie-say-maintenance-requests-go-unanswered",
-            "editorial_story_id": "story_001486",
-            "canonical_slug": "2026-07-31-port-st-lucie-apartment-residents-report-unanswered-maintenance-requests-mold-at",
-            "canonical_headline": "Port St. Lucie apartment residents report unanswered maintenance requests, mold at Sanctuary at Winterlakes",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Citizen’s arrest law cited as charges dropped against Port St. Lucie man - WPEC",
             "source_url": "https://cbs12.com/news/local/florida-crime-news-citizens-arrest-charges-dropped-against-man-who-held-teens-at-gunpoint-orbeez-prank-port-st-lucie-felony-state-attorney",
             "editorial_story_id": "story_001429",
@@ -3673,21 +3651,21 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "'Breathe, baby. Breathe': 911 calls capture panic after deadly Port St. Lucie shooting - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-crime-news-911-calls-capture-panic-after-deadly-port-st-lucie-shooting-that-killed-2-men-jealousy-girlfriend-double-homicide-self-defense-port-st-lucie-police",
-            "editorial_story_id": "story_001431",
-            "canonical_slug": "2026-07-20-port-st-lucie-police-to-hold-news-conference-on-double-fatal-shooting-that-kille",
-            "canonical_headline": "Jealousy over woman sparked double fatal shooting in Port St. Lucie, police say",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "IA report: St. Lucie County deputy fired over social media post mocking sheriff - WPEC",
             "source_url": "https://cbs12.com/news/local/st-lucie-county-deputy-fired-controversial-social-media-post-internal-affairs-report-standards-of-performance-job-expectations-work-place-st-lucie-county-sheriffs-office-florida-news",
             "editorial_story_id": "story_001360",
             "canonical_slug": "2026-07-30-st-lucie-county-deputy-fired-after-social-media-post-mocked-sheriffs-performance",
             "canonical_headline": "St. Lucie County deputy fired for Facebook post mocking sheriff's performance standards",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Flashing traffic light at Glades Cut Off Road in St. Lucie County still not fully operational after 6 months - WPTV",
+            "source_url": "https://www.wptv.com/traffic/traffic-news/flashing-traffic-light-at-glades-cut-off-road-still-not-fully-operational-after-6-months",
+            "editorial_story_id": "story_001294",
+            "canonical_slug": "2026-07-29-flashing-traffic-light-at-glades-cut-off-road-still-not-operational-after-6-mont",
+            "canonical_headline": "Flashing traffic light at Glades Cut Off Road still not operational after 6 months",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -3708,15 +3686,15 @@
         "budget_seconds": 180.0,
         "live_hero_headline": "",
         "generated_card_count": 0,
-        "elapsed_seconds": 14.421
+        "elapsed_seconds": 16.951
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "missing_hero_archive_recovery",
-        "fetched_candidate_count": 27,
+        "fetched_candidate_count": 26,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 8,
+        "publishable_source_count": 6,
         "selected_source_count": 5,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -3725,11 +3703,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 4.044,
+            "elapsed_seconds": 4.18,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 4.044,
+        "model_elapsed_seconds": 4.18,
         "failure_code": "missing_or_null_hero",
         "failure_summary": "No usable hero remained after sanitization",
         "sports_expired_event_preview_count": 0,
@@ -3740,10 +3718,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -3774,23 +3752,13 @@
             "canonical_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association - WPBF",
-            "source_url": "https://www.wpbf.com/article/indian-river-county-sheriff-eric-flowers-sworn-chairman-florida-sheriffs-association/73311866",
-            "editorial_story_id": "story_001524",
-            "canonical_slug": "2026-07-31-indian-river-county-sheriff-eric-flowers-sworn-in-as-chairman-of-florida-sheriff",
-            "canonical_headline": "Indian River County Sheriff Eric Flowers sworn in as chairman of Florida Sheriffs Association",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 10.65
+        "elapsed_seconds": 14.757
       }
     ]
   }

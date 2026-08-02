@@ -1,7 +1,7 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "gate_version": "1.3",
-  "generated_at": "2026-08-01T20:46:33.116951+00:00",
+  "generated_at": "2026-08-02T00:53:25.130178+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -33,24 +33,36 @@
       "effect": "candidate_only_model_adjudication_required"
     },
     "model": "claude-sonnet-4-5",
+    "material_update_composer": {
+      "version": "1.0",
+      "model": "claude-sonnet-4-5",
+      "timeout_seconds": 60.0,
+      "failure_behavior": "preserve_both_pages_and_retry",
+      "canonical_url_policy": "preserve_original_permalink"
+    },
     "failure_behavior": "hold_new_permalink_when_suspicious_candidate_exists",
     "custom_articles": "excluded_authoritative_custom_contract_retained"
   },
   "summary": {
-    "evaluations": 71,
-    "candidate_pairs": 1,
+    "evaluations": 73,
+    "candidate_pairs": 2,
     "structured_conflict_overrides": 1,
-    "model_calls": 0,
+    "model_calls": 1,
     "cache_hits": 1,
-    "no_candidate_passes": 70,
+    "no_candidate_passes": 71,
     "duplicates_preserved": 0,
-    "canonical_updates_selected": 1,
-    "new_stories_allowed": 0,
+    "canonical_updates_selected": 2,
+    "new_stories_allowed": 1,
     "retroactive_rows_retained": 70,
     "holds": 0,
-    "retroactive_redirects": 0,
-    "registry_story_records_merged": 0,
-    "registry_aliases_written": 0
+    "retroactive_redirects": 1,
+    "registry_story_records_merged": 1,
+    "registry_aliases_written": 1,
+    "material_update_composer_calls": 2,
+    "material_updates_applied": 2,
+    "material_update_redirects": 1,
+    "material_update_holds": 0,
+    "material_update_replays_suppressed": 0
   },
   "decisions": [
     {
@@ -1445,17 +1457,467 @@
         "reason": "Both articles cover the same continuing government proceeding: Martin County's effort to revise its shark fishing ordinance. The candidate from July 28 reports commissioners directing staff to draft a new ordinance after complaints about drones and chum. The incoming article from August 1 provides a material update: FWC has now formally directed the county to align its rules with state law, which is a significant development in this policy process. This state directive represents official guidance that will shape the ordinance rewrite and is consequential information readers need to know.",
         "validation_errors": []
       }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Martin County commissioners delay decision on shark fishing rules after state order",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-sharks-caught-on-video-off-shoremartin-county-jupiter/73324831",
+      "incoming_story_id": "story_001783",
+      "candidates": [
+        {
+          "slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+          "headline": "Martin County reviews shark fishing ordinance after state directive to align with state law",
+          "retrieval_score": 0.77,
+          "headline_similarity": 0.62,
+          "similarity_basis": "final_headline",
+          "shared_headline_tokens": [
+            "county",
+            "fishing",
+            "martin",
+            "regulation",
+            "shark",
+            "state"
+          ],
+          "shared_topic_tokens": [
+            "fishing",
+            "regulation",
+            "shark"
+          ],
+          "day_gap": 4,
+          "structured_conflict_override": false,
+          "structured_conflict_override_tier": "",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": false,
+          "reasons": [
+            "moderate_fuzzy_headline",
+            "shared_locality_and_event_family",
+            "publication_gap_4_days"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "validated",
+        "action": "update_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "confidence": 0.95,
+        "shared_anchors": [
+          "Martin County Commission reviewing shark fishing ordinance",
+          "Florida Fish and Wildlife Conservation Commission directive to align with state regulations",
+          "State requirement for saltwater fishing license within 1,000 feet of guarded beaches",
+          "Martin County's current ordinance prohibiting shark fishing within 1,000 yards of four guarded beaches (Jensen, Stuart, Bathtub, Hobe Sound)",
+          "County attorneys reviewing the ordinance"
+        ],
+        "novel_facts": [
+          "Commissioners postponed the decision on Tuesday (specific meeting date)",
+          "State agency formally ordered the county to follow state regulations",
+          "Two shark incidents occurred Friday: 12-foot shark (possibly great white) hooked at Normandy Beach in St. Lucie County, dead hammerhead shark found near Jupiter Beach Resort",
+          "Commissioners asked attorneys to review the law before making a decision (formal postponement action)"
+        ],
+        "reason": "Both articles cover the same ongoing government proceeding: Martin County Commission's review of shark fishing ordinances in response to FWC directive. The incoming article reports a material update - commissioners formally postponed their decision on Tuesday after receiving a state order, which is a concrete government action advancing the proceeding. The candidate reported commissioners 'voted to table the discussion' earlier; the incoming article reports the subsequent Tuesday meeting where they postponed after receiving the formal state order. This is a meaningful development in the same proceeding.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Education Foundation of Martin County launches programs to support classrooms ahead of Aug. 10 school year",
+      "incoming_source_url": "https://www.hometownnewstc.com/news/st_lucie/adopt-a-class-inspire-learning/article_dcb73cb8-a50a-5479-9a45-8ad962ada194.html",
+      "incoming_story_id": "story_001770",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
     }
   ],
   "archive_repairs": [],
+  "material_update_compositions": [
+    {
+      "phase": "retroactive_recent_archive_repair",
+      "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+      "incoming_slug": "2026-08-01-martin-county-reviews-shark-fishing-ordinance-after-state-says-local-rules-must",
+      "status": "validated",
+      "validation_errors": [],
+      "word_count": 316,
+      "paragraph_count": 4,
+      "baseline_lead_hits": [
+        "chum",
+        "complaints",
+        "drones",
+        "fishing",
+        "martin",
+        "rewrite",
+        "rules",
+        "shark"
+      ],
+      "novelty_lead_hits": [
+        "align",
+        "changes",
+        "commission",
+        "conservation",
+        "counties",
+        "fish",
+        "including",
+        "preempts",
+        "regulating",
+        "regulations",
+        "saltwater",
+        "statute",
+        "wildlife"
+      ],
+      "headline_alignment": {
+        "aligned": true,
+        "reason": "aligned",
+        "token_similarity": 0.2,
+        "date_gap_days": 4,
+        "prospective": true,
+        "existing_headline": "Martin County moves to rewrite shark fishing rules after complaints about drones, chum",
+        "incoming_headline": "Martin County reviews shark fishing ordinance after state directive to align with state law",
+        "candidate_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+        "prospective_lastmod": "2026-08-02",
+        "timestamp_evidence": "stored_archive_timestamp"
+      },
+      "context_diagnostics": {
+        "required": true,
+        "passed": true,
+        "story_form": "update",
+        "lead_word_count": 78,
+        "baseline_anchor": "",
+        "baseline_present": true,
+        "baseline_anchor_present": true,
+        "baseline_details_present": true,
+        "baseline_context_hits": [
+          "chum",
+          "complaints",
+          "drones",
+          "fishing",
+          "martin",
+          "rewrite",
+          "rules",
+          "shark"
+        ],
+        "baseline_context_required": 2,
+        "canonical_context_available": true,
+        "canonical_context_headline": "Martin County moves to rewrite shark fishing rules after complaints about drones, chum",
+        "novelty_anchor": "decision",
+        "novelty_present": true,
+        "novelty_token_hits": [
+          "changes",
+          "state"
+        ],
+        "missing": [],
+        "source_title": "Martin County considers changes to shark fishing rules on beaches after state directive",
+        "headline": "Martin County reviews shark fishing ordinance after state directive to align with state law"
+      },
+      "headline": "Martin County reviews shark fishing ordinance after state directive to align with state law"
+    },
+    {
+      "phase": "forward_publication",
+      "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+      "incoming_slug": "",
+      "status": "validated",
+      "validation_errors": [],
+      "word_count": 332,
+      "paragraph_count": 4,
+      "baseline_lead_hits": [
+        "fishing",
+        "law",
+        "martin",
+        "ordinance",
+        "shark",
+        "state"
+      ],
+      "novelty_lead_hits": [
+        "asked",
+        "decision",
+        "follow",
+        "making",
+        "ordered",
+        "postponed",
+        "shorelines",
+        "tuesday"
+      ],
+      "headline_alignment": {
+        "aligned": true,
+        "reason": "aligned",
+        "token_similarity": 0.1875,
+        "date_gap_days": 4,
+        "prospective": true,
+        "existing_headline": "Martin County reviews shark fishing ordinance after state directive to align with state law",
+        "incoming_headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations",
+        "candidate_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+        "prospective_lastmod": "2026-08-02",
+        "timestamp_evidence": "stored_archive_timestamp"
+      },
+      "context_diagnostics": {
+        "required": true,
+        "passed": true,
+        "story_form": "update",
+        "lead_word_count": 86,
+        "baseline_anchor": "government_matter",
+        "baseline_present": true,
+        "baseline_anchor_present": true,
+        "baseline_details_present": true,
+        "baseline_context_hits": [
+          "fishing",
+          "martin",
+          "ordinance",
+          "shark",
+          "state"
+        ],
+        "baseline_context_required": 2,
+        "canonical_context_available": true,
+        "canonical_context_headline": "Martin County reviews shark fishing ordinance after state directive to align with state law",
+        "novelty_anchor": "source_distinctive_detail",
+        "novelty_present": true,
+        "novelty_token_hits": [
+          "sharks"
+        ],
+        "missing": [],
+        "source_title": "Sharks caught on video off shore in Martin County, Jupiter - WPBF",
+        "headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations"
+      },
+      "headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations"
+    }
+  ],
+  "material_updates": [
+    {
+      "source_slug": "2026-08-01-martin-county-reviews-shark-fishing-ordinance-after-state-says-local-rules-must",
+      "target_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+      "source_story_id": "story_001724",
+      "target_story_id": "story_001155",
+      "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-considers-changes-to-shark-fishing-rules-on-beaches-after-state-directive",
+      "source_headline": "Martin County reviews shark fishing ordinance after state says local rules must align with state law",
+      "updated_headline": "Martin County reviews shark fishing ordinance after state directive to align with state law",
+      "confidence": 0.92,
+      "shared_anchors": [
+        "Martin County Commission reviewing shark fishing ordinance",
+        "Same locality (Martin County)",
+        "Same policy subject (shark fishing rules on beaches)",
+        "Same governing body (Martin County commissioners)",
+        "Continuing government proceeding to revise local ordinance"
+      ],
+      "novel_facts": [
+        "Florida Fish and Wildlife Conservation Commission issued a directive to the county",
+        "State agency specifically told county that local rules must align with state law",
+        "This represents the state's formal response/intervention in the local ordinance process"
+      ],
+      "updated_at": "2026-08-02T00:52:48Z",
+      "composition": {
+        "phase": "retroactive_recent_archive_repair",
+        "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+        "incoming_slug": "2026-08-01-martin-county-reviews-shark-fishing-ordinance-after-state-says-local-rules-must",
+        "status": "validated",
+        "validation_errors": [],
+        "word_count": 316,
+        "paragraph_count": 4,
+        "baseline_lead_hits": [
+          "chum",
+          "complaints",
+          "drones",
+          "fishing",
+          "martin",
+          "rewrite",
+          "rules",
+          "shark"
+        ],
+        "novelty_lead_hits": [
+          "align",
+          "changes",
+          "commission",
+          "conservation",
+          "counties",
+          "fish",
+          "including",
+          "preempts",
+          "regulating",
+          "regulations",
+          "saltwater",
+          "statute",
+          "wildlife"
+        ],
+        "headline_alignment": {
+          "aligned": true,
+          "reason": "aligned",
+          "token_similarity": 0.2,
+          "date_gap_days": 4,
+          "prospective": true,
+          "existing_headline": "Martin County moves to rewrite shark fishing rules after complaints about drones, chum",
+          "incoming_headline": "Martin County reviews shark fishing ordinance after state directive to align with state law",
+          "candidate_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+          "prospective_lastmod": "2026-08-02",
+          "timestamp_evidence": "stored_archive_timestamp"
+        },
+        "context_diagnostics": {
+          "required": true,
+          "passed": true,
+          "story_form": "update",
+          "lead_word_count": 78,
+          "baseline_anchor": "",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "chum",
+            "complaints",
+            "drones",
+            "fishing",
+            "martin",
+            "rewrite",
+            "rules",
+            "shark"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Martin County moves to rewrite shark fishing rules after complaints about drones, chum",
+          "novelty_anchor": "decision",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "changes",
+            "state"
+          ],
+          "missing": [],
+          "source_title": "Martin County considers changes to shark fishing rules on beaches after state directive",
+          "headline": "Martin County reviews shark fishing ordinance after state directive to align with state law"
+        },
+        "headline": "Martin County reviews shark fishing ordinance after state directive to align with state law"
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "source_slug": "",
+      "target_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+      "source_story_id": "story_001783",
+      "target_story_id": "story_001155",
+      "source_headline": "Sharks caught on video off shore in Martin County, Jupiter - WPBF",
+      "updated_headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Martin County Commission reviewing shark fishing ordinance",
+        "Florida Fish and Wildlife Conservation Commission directive to align with state regulations",
+        "State requirement for saltwater fishing license within 1,000 feet of guarded beaches",
+        "Martin County's current ordinance prohibiting shark fishing within 1,000 yards of four guarded beaches (Jensen, Stuart, Bathtub, Hobe Sound)",
+        "County attorneys reviewing the ordinance"
+      ],
+      "novel_facts": [
+        "Commissioners postponed the decision on Tuesday (specific meeting date)",
+        "State agency formally ordered the county to follow state regulations",
+        "Two shark incidents occurred Friday: 12-foot shark (possibly great white) hooked at Normandy Beach in St. Lucie County, dead hammerhead shark found near Jupiter Beach Resort",
+        "Commissioners asked attorneys to review the law before making a decision (formal postponement action)"
+      ],
+      "updated_at": "2026-08-02T00:53:10Z",
+      "composition": {
+        "phase": "forward_publication",
+        "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+        "incoming_slug": "",
+        "status": "validated",
+        "validation_errors": [],
+        "word_count": 332,
+        "paragraph_count": 4,
+        "baseline_lead_hits": [
+          "fishing",
+          "law",
+          "martin",
+          "ordinance",
+          "shark",
+          "state"
+        ],
+        "novelty_lead_hits": [
+          "asked",
+          "decision",
+          "follow",
+          "making",
+          "ordered",
+          "postponed",
+          "shorelines",
+          "tuesday"
+        ],
+        "headline_alignment": {
+          "aligned": true,
+          "reason": "aligned",
+          "token_similarity": 0.1875,
+          "date_gap_days": 4,
+          "prospective": true,
+          "existing_headline": "Martin County reviews shark fishing ordinance after state directive to align with state law",
+          "incoming_headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations",
+          "candidate_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+          "prospective_lastmod": "2026-08-02",
+          "timestamp_evidence": "stored_archive_timestamp"
+        },
+        "context_diagnostics": {
+          "required": true,
+          "passed": true,
+          "story_form": "update",
+          "lead_word_count": 86,
+          "baseline_anchor": "government_matter",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "fishing",
+            "martin",
+            "ordinance",
+            "shark",
+            "state"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Martin County reviews shark fishing ordinance after state directive to align with state law",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "sharks"
+          ],
+          "missing": [],
+          "source_title": "Sharks caught on video off shore in Martin County, Jupiter - WPBF",
+          "headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations"
+        },
+        "headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations"
+      }
+    }
+  ],
   "registry_consolidation": {
-    "status": "no_changes",
-    "directives_considered": 0,
-    "story_records_merged": 0,
-    "aliases_written": 0,
+    "status": "consolidated",
+    "directives_considered": 1,
+    "story_records_merged": 1,
+    "aliases_written": 1,
     "already_consolidated": 0,
     "skipped": [],
     "pending_directives": [],
-    "merges": []
+    "merges": [
+      {
+        "source_story_id": "story_001724",
+        "target_story_id": "story_001155",
+        "target_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+        "incoming_headline": "Martin County reviews shark fishing ordinance after state says local rules must align with state law",
+        "confidence": 0.92,
+        "shared_anchors": [
+          "Martin County Commission reviewing shark fishing ordinance",
+          "Same locality (Martin County)",
+          "Same policy subject (shark fishing rules on beaches)",
+          "Same governing body (Martin County commissioners)",
+          "Continuing government proceeding to revise local ordinance"
+        ],
+        "reason": "Both articles cover the same continuing government proceeding: Martin County's effort to revise its shark fishing ordinance. The candidate from July 28 reports commissioners directing staff to draft a new ordinance after complaints about drones and chum. The incoming article from August 1 provides a material update: FWC has now formally directed the county to align its rules with state law, which is a significant development in this policy process. This state directive represents official guidance that will shape the ordinance rewrite and is consequential information readers need to know.",
+        "relationship_type": "material_update",
+        "novel_facts": [
+          "Florida Fish and Wildlife Conservation Commission issued a directive to the county",
+          "State agency specifically told county that local rules must align with state law",
+          "This represents the state's formal response/intervention in the local ordinance process"
+        ],
+        "resolved_source_story_id": "story_001724",
+        "resolved_target_story_id": "story_001155"
+      }
+    ]
   }
 }
