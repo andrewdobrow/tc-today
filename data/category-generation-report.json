@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-02T01:45:36Z",
+  "generated_at": "2026-08-02T05:02:24Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,49 +15,58 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 2,
-      "category_exception_archive_recovery": 1,
-      "generated_live": 1,
+      "generated_live": 2,
+      "generation_failed_archive_recovery": 4,
       "no_publishable_sources": 1,
-      "quality_gate_archive_recovery": 4
+      "quality_gate_archive_recovery": 2
     },
     "failures": {
-      "article_framing_integrity": 1,
-      "publication_quality_rejected": 4
+      "article_framing_integrity": 4,
+      "publication_quality_rejected": 2
     },
-    "model_attempt_count": 6,
-    "model_elapsed_seconds": 98.658,
-    "archive_recovery_requested_count": 6,
+    "model_attempt_count": 12,
+    "model_elapsed_seconds": 170.221,
+    "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 4,
-    "published_story_duplicate_suppression_count": 47,
+    "article_framing_rejection_count": 8,
+    "category_eligibility_rejection_count": 5,
+    "published_story_duplicate_suppression_count": 39,
     "story_aware_update_context_count": 0
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "quality_gate_archive_recovery",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 5,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 6,
       "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 3.638,
-          "result": "success"
+          "elapsed_seconds": 3.936,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No local government stories available for Treasure Coast counties"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 4.323,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Error: No eligible hero story found in provided sources"
         }
       ],
-      "model_elapsed_seconds": 3.638,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 8.259,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Error: No eligible hero story found in provided sources",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -66,8 +75,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 5,
-      "category_eligibility_rejection_count": 4,
+      "category_eligibility_assessed_count": 6,
+      "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -120,9 +129,24 @@
           "competing_signals": [],
           "headline": "Free Palm Beach County program helps homeowners protect family homes and avoid costly probate",
           "source_url": "https://www.wptv.com/news/palm-beach-county/free-palm-beach-county-program-helps-homeowners-protect-family-homes-and-avoid-costly-probate"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident"
         }
       ],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -152,16 +176,6 @@
           "canonical_slug": "2026-07-31-treasure-coast-renters-face-high-costs-as-rental-market-holds-flat",
           "canonical_headline": "Treasure Coast renters face high costs as rental market holds flat",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina",
-          "editorial_story_id": "story_001162",
-          "canonical_slug": "2026-07-29-fort-pierce-residents-oppose-proposed-mega-yacht-marina-at-museum-pointe-over-co",
-          "canonical_headline": "Fort Pierce residents oppose proposed mega yacht marina at Museum Pointe over concerns for St. Lucie County Regional History Museum",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -207,32 +221,42 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 20.988
+      "elapsed_seconds": 26.97
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "category_exception_archive_recovery",
-      "fetched_candidate_count": 27,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 26,
       "fresh_candidate_count": 21,
       "publishable_source_count": 5,
       "selected_source_count": 5,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 5.104,
-          "result": "success"
+          "elapsed_seconds": 5.951,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No viable Crime & Safety stories available for Treasure Coast"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 3.523,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No stories available for Treasure Coast Crime & Safety section"
         }
       ],
-      "model_elapsed_seconds": 5.104,
+      "model_elapsed_seconds": 9.473,
       "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed after enrichment: headline_jurisdiction_missing_from_lead — Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
+      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No stories available for Treasure Coast Crime & Safety section",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -244,7 +268,7 @@
       "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -295,32 +319,22 @@
           "canonical_headline": "Inmate awaiting retrial for Fort Pierce murder charged with attacking convicted killer in St. Lucie County Jail",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Martin County Commissioners move to change beach shark fishing laws - WPEC",
-          "source_url": "https://cbs12.com/news/local/martin-county-commissioners-move-change-shark-fishing-laws-beaches-chumming-chum-endanger-swimmers-surfers-beachgoers-blood-surf-incident-shark-bites-rules-beach-fishing",
-          "editorial_story_id": "story_001155",
-          "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
-          "canonical_headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 23.982
+      "elapsed_seconds": 24.713
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 6,
-      "selected_source_count": 6,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 8,
+      "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 1,
@@ -328,11 +342,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 56.169,
+          "elapsed_seconds": 44.492,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 56.169,
+      "model_elapsed_seconds": 44.492,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -343,10 +357,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -380,16 +394,6 @@
         },
         {
           "category_key": "business",
-          "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
-          "editorial_story_id": "story_001485",
-          "canonical_slug": "2026-07-31-los-angeles-man-sentenced-to-life-in-prison-for-selling-fentanyl-that-killed-ver",
-          "canonical_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
           "source_headline": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection",
           "editorial_story_id": "story_001557",
@@ -403,21 +407,28 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 74.42
+      "elapsed_seconds": 61.67
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
-      "status": "cache_hit",
+      "status": "generated_live",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 25,
       "publishable_source_count": 6,
       "selected_source_count": 6,
-      "cache_hit": true,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 57.634,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 57.634,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -435,8 +446,11 @@
       "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
+      "generation_status": "success",
+      "budget_seconds": 180.0,
       "live_hero_headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
-      "elapsed_seconds": 17.606
+      "generated_card_count": 0,
+      "elapsed_seconds": 76.676
     },
     {
       "category_key": "things_to_do",
@@ -453,11 +467,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 24.201,
+          "elapsed_seconds": 21.429,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 24.201,
+      "model_elapsed_seconds": 21.429,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -508,7 +522,7 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 45.9
+      "elapsed_seconds": 45.165
     },
     {
       "category_key": "florida",
@@ -551,23 +565,40 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 17.891
+      "elapsed_seconds": 19.944
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "cache_hit",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 2,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 3,
       "selected_source_count": 1,
-      "cache_hit": true,
-      "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "",
-      "failure_summary": "",
+      "cache_hit": false,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 6.251,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Martin County commissioners postpone decision on shark fishing rules at guarded beaches"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 6.374,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Martin County postpones shark fishing rule decision after state order"
+        }
+      ],
+      "model_elapsed_seconds": 12.626,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Martin County postpones shark fishing rule decision after state order",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -576,14 +607,14 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
-          "source_headline": "Martin County considers changes to shark fishing rules on beaches after state directive - WPTV",
+          "source_headline": "Martin County considers changes to shark fishing rules on beaches after state directive",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-considers-changes-to-shark-fishing-rules-on-beaches-after-state-directive",
           "editorial_story_id": "story_001155",
           "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
@@ -593,7 +624,7 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Martin County considers changes to shark fishing rules on beaches after state directive",
+          "source_headline": "Martin County considers changes to shark fishing rules on beaches after state directive - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-considers-changes-to-shark-fishing-rules-on-beaches-after-state-directive",
           "editorial_story_id": "story_001155",
           "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
@@ -608,16 +639,6 @@
           "editorial_story_id": "story_000537",
           "canonical_slug": "2026-07-25-single-family-home-prices-rise-across-treasure-coast-after-two-years-of-declines",
           "canonical_headline": "Treasure Coast single-family home prices rise after two-year decline",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Treasure Coast renters say costs are high as rental market holds flat, expert says",
-          "source_url": "https://www.wptv.com/money/real-estate-news/treasure-coast-renters-say-costs-are-high-as-rental-market-holds-flat-expert-says",
-          "editorial_story_id": "story_001600",
-          "canonical_slug": "2026-07-31-treasure-coast-renters-face-high-costs-as-rental-market-holds-flat",
-          "canonical_headline": "Treasure Coast renters face high costs as rental market holds flat",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -640,31 +661,22 @@
           "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County Commissioners move to change beach shark fishing laws - WPEC",
-          "source_url": "https://cbs12.com/news/local/martin-county-commissioners-move-change-shark-fishing-laws-beaches-chumming-chum-endanger-swimmers-surfers-beachgoers-blood-surf-incident-shark-bites-rules-beach-fishing",
-          "editorial_story_id": "story_001155",
-          "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
-          "canonical_headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "live_hero_headline": "Martin County commissioners delay decision on shark fishing rules after state order",
-      "elapsed_seconds": 10.734
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 31.082
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 16,
-      "publishable_source_count": 2,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 4,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -672,11 +684,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 5.134,
+          "elapsed_seconds": 8.308,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 5.134,
+      "model_elapsed_seconds": 8.308,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -687,10 +699,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 15,
+      "published_story_duplicate_suppression_count": 13,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -734,22 +746,22 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "Florida housing market: Treasure Coast single-family home prices on the rise - WPTV",
+          "source_url": "https://www.wptv.com/money/real-estate-news/florida-housing-market-treasure-coast-home-prices-on-the-rise",
+          "editorial_story_id": "story_000537",
+          "canonical_slug": "2026-07-25-single-family-home-prices-rise-across-treasure-coast-after-two-years-of-declines",
+          "canonical_headline": "Treasure Coast single-family home prices rise after two-year decline",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "Treasure Coast renters say costs are high as rental market holds flat, expert says",
           "source_url": "https://www.wptv.com/money/real-estate-news/treasure-coast-renters-say-costs-are-high-as-rental-market-holds-flat-expert-says",
           "editorial_story_id": "story_001600",
           "canonical_slug": "2026-07-31-treasure-coast-renters-face-high-costs-as-rental-market-holds-flat",
           "canonical_headline": "Treasure Coast renters face high costs as rental market holds flat",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina",
-          "editorial_story_id": "story_001162",
-          "canonical_slug": "2026-07-29-fort-pierce-residents-oppose-proposed-mega-yacht-marina-at-museum-pointe-over-co",
-          "canonical_headline": "Fort Pierce residents oppose proposed mega yacht marina at Museum Pointe over concerns for St. Lucie County Regional History Museum",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -814,26 +826,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Flashing traffic light at Glades Cut Off Road in St. Lucie County still not fully operational after 6 months - WPTV",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/flashing-traffic-light-at-glades-cut-off-road-still-not-fully-operational-after-6-months",
-          "editorial_story_id": "story_001294",
-          "canonical_slug": "2026-07-29-flashing-traffic-light-at-glades-cut-off-road-still-not-operational-after-6-mont",
-          "canonical_headline": "Flashing traffic light at Glades Cut Off Road still not operational after 6 months",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Infant death investigation in St. Lucie County may not be completed - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-death-baby-infant-mother-grandfather/73287792",
-          "editorial_story_id": "story_001161",
-          "canonical_slug": "2026-07-29-st-lucie-county-investigators-say-3-month-olds-death-may-bring-further-charges",
-          "canonical_headline": "St. Lucie County investigators say 3-month-old's death may bring further charges",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "surface": "hero",
           "headline": "86-year-old woman dies after Port St. Lucie intersection crash",
           "editorial_story_id": "story_001557",
@@ -847,32 +839,42 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "",
+      "live_hero_headline": "Woman killed, man dead in apparent domestic shooting in Port St. Lucie",
       "generated_card_count": 0,
-      "elapsed_seconds": 16.23
+      "elapsed_seconds": 24.122
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "quality_gate_archive_recovery",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 4,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 6,
       "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 4.412,
-          "result": "success"
+          "elapsed_seconds": 3.806,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No usable Indian River County stories available"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 4.194,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Indian River County stories available in current feed"
         }
       ],
-      "model_elapsed_seconds": 4.412,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 8.0,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Indian River County stories available in current feed",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -881,21 +883,11 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "indian_river",
-          "source_headline": "Los Angeles man sentenced to life in prison in fatal Vero Beach fentanyl case - WQCS",
-          "source_url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNUXhfWnVLdTZzUW1zTllKdnRWNFpVYkJIN2lPcHRUYVY0MGtQdjdhUVRENFpXZlgyMklMZWxRX05SMGtUU2lOZEZrWkNsT21ZTTZuNjBSb0dVWWxIX1Q1M05oc3BhSG1MQnAzZFlGQ09VNjNza1ZYTUJsNWgtMmgzSGJ6aTFZVi1CV2VWLWFKRFVfZUZmVjI4YndKU0o0S1M4OC1YbTVBaXdvSG8xbUZuS18tWW94cV9mZlpj",
-          "editorial_story_id": "story_001485",
-          "canonical_slug": "2026-07-31-los-angeles-man-sentenced-to-life-in-prison-for-selling-fentanyl-that-killed-ver",
-          "canonical_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "indian_river",
           "source_headline": "Martin County considers changes to shark fishing rules on beaches after state directive",
@@ -909,9 +901,9 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 14.461
+      "elapsed_seconds": 16.409
     }
   ]
 }
