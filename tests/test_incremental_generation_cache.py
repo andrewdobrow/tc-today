@@ -187,12 +187,29 @@ def test_category_generation_key_changes_with_source_content():
     assert generate._category_generation_cache_key("martin", base) != generate._category_generation_cache_key("martin", changed)
 
 
-def test_production_workflow_restores_incremental_cache():
+def test_production_workflow_restores_and_sanitizes_versioned_incremental_cache():
     workflow = Path(".github/workflows/update.yml").read_text(encoding="utf-8")
     assert "actions/cache@v4" in workflow
     assert "data/generation-cache.json" in workflow
+    assert "tct-generation-cache-v2-source-focus-" in workflow
+    assert "tct-generation-cache-v1-" not in workflow
+    assert "python scripts/sanitize_generation_cache.py" in workflow
+    assert workflow.index("Restore persistent generation cache") < workflow.index(
+        "Sanitize persistent generation cache"
+    ) < workflow.index("Run editorial engine tests")
     assert "timeout-minutes: 90" in workflow
     assert "ACTIVE_WORKFLOW=tct-bounded-runtime-v1.9.5" in workflow
+
+
+def test_editorial_ci_sanitizes_tracked_cache_before_pytest():
+    workflow = Path(".github/workflows/test-editorial-engine.yml").read_text(
+        encoding="utf-8"
+    )
+    assert "python scripts/sanitize_generation_cache.py" in workflow
+    assert '      - "data/generation-cache.json"' in workflow
+    assert workflow.index("Sanitize persistent generation cache") < workflow.index(
+        "Run editorial engine tests"
+    )
 
 
 def test_generation_cache_persists_across_process_runs(tmp_path: Path):

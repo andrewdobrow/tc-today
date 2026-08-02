@@ -30,6 +30,8 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
+from scripts.sanitize_generation_cache import sanitize_cache_payload
+
 # Editorial engine integration. Import failures remain fail-open. Production
 # behavior changes only through the separately gated v1.9 activation controller.
 _editorial_import_error = None
@@ -417,7 +419,7 @@ client = anthropic.Anthropic(api_key=_ANTHROPIC_API_KEY) if _ANTHROPIC_API_KEY e
 GENERATION_CACHE_PATH = OUTPUT_DIR / "data" / "generation-cache.json"
 GENERATION_CACHE_SCHEMA_VERSION = 1
 GENERATION_PROMPT_VERSION = "v1.9.4-incremental-generation-1"
-CATEGORY_GENERATION_PROMPT_VERSION = "v1.11.8.8-universal-lead-claim-integrity"
+CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.0.3-source-focus-cache-integrity"
 _CACHE_MISS = object()
 
 
@@ -505,7 +507,13 @@ class PersistentGenerationCache:
             for bucket in self.LIMITS:
                 if not isinstance(raw.get(bucket), dict):
                     raw[bucket] = {}
+            raw, sanitization = sanitize_cache_payload(raw)
             self.payload = raw
+            if sanitization.changed:
+                self.dirty = True
+                self.stats["integrity_sanitizations"] += len(
+                    sanitization.removed_category_keys
+                )
         except Exception:
             self.payload = self._empty_payload()
 
@@ -542,6 +550,15 @@ class PersistentGenerationCache:
             self.payload.setdefault(bucket, {})[key] = entry
             self.dirty = True
             self.stats[f"{bucket}_write"] += 1
+
+    def delete(self, bucket, key, *, reason="invalid"):
+        with self.lock:
+            removed = self.payload.setdefault(bucket, {}).pop(key, None)
+            if removed is None:
+                return False
+            self.dirty = True
+            self.stats[f"{bucket}_deleted_{reason}"] += 1
+            return True
 
     def _prune(self):
         for bucket, limit in self.LIMITS.items():
@@ -633,6 +650,33 @@ def _category_generation_cache_key(category_key, headlines):
         ),
         "sources": sources,
     })
+
+def _cached_source_for_generated_item(item, headlines):
+    """Resolve cached generated copy back to the current publisher source row."""
+    if not isinstance(item, dict):
+        return {}
+    sources = list(headlines or [])
+    try:
+        source_index = int(item.get("source_index")) - 1
+    except (TypeError, ValueError):
+        source_index = -1
+    if 0 <= source_index < len(sources) and isinstance(sources[source_index], dict):
+        return sources[source_index]
+
+    item_url = _normalize_cache_url(
+        item.get("source_url") or item.get("link") or ""
+    )
+    if item_url:
+        for source in sources:
+            if not isinstance(source, dict):
+                continue
+            source_url = _normalize_cache_url(
+                source.get("source_url") or source.get("link") or ""
+            )
+            if source_url and source_url == item_url:
+                return source
+    return item
+
 
 # Populated once per run by classify_stories(); {headline_lower: set(category_keys)}.
 # None means classification unavailable -> keyword filtering is used instead.
@@ -24924,9 +24968,14 @@ def main():
                 GENERATION_CACHE.save()
 
             _cached_framing_rejections = []
+            _cached_hero_invalidated = False
             if data.get("hero"):
+                _cached_hero = data.get("hero", {})
+                _cached_hero_source = _cached_source_for_generated_item(
+                    _cached_hero, headlines
+                )
                 _cached_hero_framing = _article_framing_diagnostics(
-                    data.get("hero", {}), data.get("hero", {})
+                    _cached_hero, _cached_hero_source
                 )
                 if _cached_hero_framing.get("required") and not _cached_hero_framing.get("passed"):
                     _cached_framing_rejections.append({"surface": "cached_hero", **_cached_hero_framing})
@@ -24935,9 +24984,15 @@ def main():
                         f"'{data.get('hero', {}).get('headline','')[:65]}'"
                     )
                     data["hero"] = None
+                    _cached_hero_invalidated = True
             _cached_cards = []
             for _cached_card in data.get("cards", []) or []:
-                _cached_card_framing = _article_framing_diagnostics(_cached_card, _cached_card)
+                _cached_card_source = _cached_source_for_generated_item(
+                    _cached_card, headlines
+                )
+                _cached_card_framing = _article_framing_diagnostics(
+                    _cached_card, _cached_card_source
+                )
                 if _cached_card_framing.get("required") and not _cached_card_framing.get("passed"):
                     _cached_framing_rejections.append({
                         "surface": "cached_card", **_cached_card_framing
@@ -24952,6 +25007,20 @@ def main():
                 _category_record["article_framing_rejections"].extend(
                     _cached_framing_rejections
                 )
+                if _cached_hero_invalidated:
+                    GENERATION_CACHE.delete(
+                        "categories",
+                        _category_cache_key,
+                        reason="source_focus_integrity",
+                    )
+                else:
+                    GENERATION_CACHE.put(
+                        "categories",
+                        _category_cache_key,
+                        {"category_key": cat_key, "data": data},
+                        ttl_seconds=7 * 24 * 3600,
+                    )
+                GENERATION_CACHE.save()
 
             if data.get("hero") and not data.get("_drop_category") and data.get("category_key") == cat_key:
                 all_categories.append(data)

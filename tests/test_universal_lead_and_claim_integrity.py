@@ -423,7 +423,7 @@ def test_release_versions_and_reports_are_bumped():
     import tct_engine.observability as observability
 
     assert g.CATEGORY_GENERATION_PROMPT_VERSION == (
-        "v1.11.8.8-universal-lead-claim-integrity"
+        "v1.13.0.3-source-focus-cache-integrity"
     )
     assert g.CATEGORY_GENERATION_REPORT_SCHEMA_VERSION == 6
     assert g.FORWARD_IDENTITY_VERSION == "1.7"

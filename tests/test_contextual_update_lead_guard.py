@@ -258,7 +258,7 @@ def test_custom_article_is_never_suppressed_by_update_lead_guard():
 def test_category_cache_version_is_scoped_to_article_prompt_change():
     generate = _load_generate_module()
     assert generate.GENERATION_PROMPT_VERSION == "v1.9.4-incremental-generation-1"
-    assert generate.CATEGORY_GENERATION_PROMPT_VERSION == "v1.11.8.8-universal-lead-claim-integrity"
+    assert generate.CATEGORY_GENERATION_PROMPT_VERSION == "v1.13.0.3-source-focus-cache-integrity"
 
 
 def test_standard_archive_entry_does_not_read_article_body(monkeypatch):
