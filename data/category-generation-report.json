@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-02T15:44:24Z",
+  "generated_at": "2026-08-02T16:29:59Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -17,21 +17,24 @@
     "statuses": {
       "cache_hit": 1,
       "category_eligibility_archive_recovery": 1,
-      "generation_failed_archive_recovery": 6,
-      "no_publishable_sources": 1
+      "generated_live": 2,
+      "generation_failed_archive_recovery": 1,
+      "no_publishable_sources": 1,
+      "quality_gate_archive_recovery": 3
     },
     "failures": {
-      "generation_exception": 6,
-      "no_category_eligible_sources": 1
+      "article_framing_integrity": 1,
+      "no_category_eligible_sources": 1,
+      "publication_quality_rejected": 3
     },
-    "model_attempt_count": 12,
-    "model_elapsed_seconds": 1.698,
-    "archive_recovery_requested_count": 8,
+    "model_attempt_count": 7,
+    "model_elapsed_seconds": 135.574,
+    "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 0,
+    "article_framing_rejection_count": 3,
     "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 31,
+    "published_story_duplicate_suppression_count": 33,
     "story_aware_update_context_count": 1
   },
   "categories": [
@@ -39,7 +42,7 @@
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 25,
+      "fetched_candidate_count": 26,
       "fresh_candidate_count": 21,
       "publishable_source_count": 6,
       "selected_source_count": 1,
@@ -50,23 +53,23 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.13,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde"
+          "elapsed_seconds": 5.512,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No eligible local government stories available for Treasure Coast"
         },
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.113,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde"
+          "elapsed_seconds": 6.296,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No local government stories available for Treasure Coast"
         }
       ],
-      "model_elapsed_seconds": 0.243,
-      "failure_code": "generation_exception",
-      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde",
+      "model_elapsed_seconds": 11.808,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No local government stories available for Treasure Coast",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -146,7 +149,7 @@
           "source_url": "https://www.wptv.com/news/palm-beach-county/free-palm-beach-county-program-helps-homeowners-protect-family-homes-and-avoid-costly-probate"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -187,46 +190,46 @@
           "canonical_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Martin County school district cuts 3 bus routes, saving $255,000 with no impact to students - WFLX",
+          "source_url": "https://www.wflx.com/2026/07/29/martin-county-school-district-cuts-3-bus-routes-saving-255000-with-no-impact-students",
+          "editorial_story_id": "story_001179",
+          "canonical_slug": "2026-07-29-martin-county-school-district-adjusts-bus-routes-to-save-255000",
+          "canonical_headline": "Martin County School District consolidates bus routes to save $255,000",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 22.408
+      "elapsed_seconds": 31.135
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 27,
+      "status": "generated_live",
+      "fetched_candidate_count": 26,
       "fresh_candidate_count": 22,
-      "publishable_source_count": 3,
-      "selected_source_count": 3,
+      "publishable_source_count": 2,
+      "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.135,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.109,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde"
+          "elapsed_seconds": 8.636,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 0.244,
-      "failure_code": "generation_exception",
-      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde",
+      "model_elapsed_seconds": 8.636,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -235,10 +238,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -279,56 +282,38 @@
           "canonical_headline": "St. Lucie County Sheriff's Office seeks 'Flamingo Bandit' after home burglarized twice",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Man accused of attacking convicted killer Otto Lenke in St. Lucie County Jail - WPEC",
-          "source_url": "https://cbs12.com/news/local/man-accused-of-attacking-convicted-killer-otto-lenke-in-st-lucie-county-jail-robert-castro-dorm-struck-in-face-cut-nose-richard-benson-death",
-          "editorial_story_id": "story_001610",
-          "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
-          "canonical_headline": "Inmate awaiting retrial for Fort Pierce murder charged with attacking convicted killer in St. Lucie County Jail",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 19.774
+      "live_hero_headline": "Woman killed, man found dead in apparent domestic shooting in Port St. Lucie",
+      "generated_card_count": 0,
+      "elapsed_seconds": 26.601
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
-      "status": "generation_failed_archive_recovery",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 20,
+      "fresh_candidate_count": 18,
       "publishable_source_count": 9,
       "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.136,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.116,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde"
+          "elapsed_seconds": 68.271,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 0.252,
-      "failure_code": "generation_exception",
-      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde",
+      "model_elapsed_seconds": 68.271,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -340,7 +325,7 @@
       "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -381,13 +366,33 @@
           "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Sanctuary at Winterlakes residents in Port St. Lucie say maintenance requests go unanswered",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/sanctuary-at-winterlakes-residents-in-port-st-lucie-say-maintenance-requests-go-unanswered",
+          "editorial_story_id": "story_001486",
+          "canonical_slug": "2026-07-31-port-st-lucie-apartment-residents-report-unanswered-maintenance-requests-mold-at",
+          "canonical_headline": "Port St. Lucie apartment residents report unanswered maintenance requests, mold at Sanctuary at Winterlakes",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Netflix docuseries renews scrutiny of Palm Beach County detective who investigated Wade Wilson",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/netflix-docuseries-renews-scrutiny-of-palm-beach-county-detective-who-investigated-wade-wilson",
+          "editorial_story_id": "story_001487",
+          "canonical_slug": "2026-07-31-fort-pierce-police-failed-to-arrest-man-before-he-killed-taylor-ann-sato-outside",
+          "canonical_headline": "Fort Pierce police failed to arrest man before he killed Taylor Ann Sato outside Timber Ridge Lane home, internal investigation finds",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 10.626
+      "elapsed_seconds": 89.72
     },
     {
       "category_key": "sports",
@@ -420,40 +425,30 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "live_hero_headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
-      "elapsed_seconds": 19.893
+      "elapsed_seconds": 17.669
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
-      "status": "generation_failed_archive_recovery",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 22,
       "publishable_source_count": 5,
       "selected_source_count": 5,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.14,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.122,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde"
+          "elapsed_seconds": 23.6,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 0.262,
-      "failure_code": "generation_exception",
-      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde",
+      "model_elapsed_seconds": 23.6,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -500,9 +495,9 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 17.799
+      "elapsed_seconds": 47.971
     },
     {
       "category_key": "florida",
@@ -534,7 +529,7 @@
       "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 27.62
+      "elapsed_seconds": 19.536
     },
     {
       "category_key": "martin",
@@ -542,7 +537,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 27,
       "fresh_candidate_count": 22,
-      "publishable_source_count": 2,
+      "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -559,7 +554,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 5,
@@ -617,53 +612,120 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 17.245
+      "elapsed_seconds": 12.431
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generation_failed_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 8,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 9,
       "selected_source_count": 6,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.319,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.121,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde"
+          "elapsed_seconds": 22.278,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 0.44,
-      "failure_code": "generation_exception",
-      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde",
+      "model_elapsed_seconds": 22.279,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Fishermen hook 12-foot shark off Normandy Beach on Hutchinson Island",
+          "missing": [
+            "generated_copy_drifted_from_source_focus"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Fishermen hook 12-foot shark off Normandy Beach on Hutchinson Island",
+            "lead": "Jensen Beach resident and avid beach walker Kathy Green was walking along Normandy Beach on Hutchinson Island in St. Lucie County Friday when she filmed a group of fishermen struggling with a 12-foot shark they had hooked. The fishermen unhooked the deadly beast and released it back into the water. Shark expert and conservationist Jim Abernethy believes it was a great white shark by looking at the video.",
+            "lead_word_count": 69,
+            "headline_overlap_ratio": 0.8,
+            "new_context_token_count": 35,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": true,
+            "headline": "Fishermen hook 12-foot shark off Normandy Beach on Hutchinson Island",
+            "lead": "Jensen Beach resident and avid beach walker Kathy Green was walking along Normandy Beach on Hutchinson Island in St. Lucie County Friday when she filmed a group of fishermen struggling with a 12-foot shark they had hooked. The fishermen unhooked the deadly beast and released it back into the water. Shark expert and conservationist Jim Abernethy believes it was a great white shark by looking at the video.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [],
+            "lead_jurisdictions": [
+              "jensen_beach",
+              "st_lucie_county"
+            ],
+            "missing_jurisdictions": [],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": []
+          },
+          "source_focus": {
+            "required": true,
+            "passed": false,
+            "generated_headline": "Fishermen hook 12-foot shark off Normandy Beach on Hutchinson Island",
+            "generated_lead": "Jensen Beach resident and avid beach walker Kathy Green was walking along Normandy Beach on Hutchinson Island in St. Lucie County Friday when she filmed a group of fishermen struggling with a 12-foot shark they had hooked.",
+            "source_title": "Sharks caught on video off shore in St. Lucie County, Jupiter - WPBF",
+            "source_lead": "Two sharks were spotted along the Atlantic Ocean shore — one that washed up dead and another of fishermen struggling with a hooked one. Both incidents occurred Friday, with video sent to WPBF.",
+            "title_similarity": {
+              "score": 0.2289,
+              "overlap": 0.1,
+              "jaccard": 0.0526,
+              "sorted_sequence": 0.2764,
+              "ordered_sequence": 0.2602,
+              "shared_token_count": 1.0
+            },
+            "lead_token_overlap": 0.227,
+            "missing": [
+              "generated_copy_drifted_from_source_focus"
+            ]
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Surveillance video shows Port St. Lucie man accused of stealing tequila worth thousands - WPBF",
+          "source_url": "https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342",
+          "editorial_story_id": "story_001566",
+          "canonical_slug": "2026-07-31-port-st-lucie-man-caught-on-surveillance-video-stealing-thousands-of-dollars-wor",
+          "canonical_headline": "Port St. Lucie man caught on surveillance video stealing thousands of dollars worth of tequila",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "King's Landing development in Fort Pierce moves forward with construction milestones - WPBF",
@@ -769,42 +831,34 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 13.22
+      "live_hero_headline": "Woman killed, man found dead in apparent domestic shooting in Port St. Lucie",
+      "generated_card_count": 1,
+      "elapsed_seconds": 37.514
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 25,
+      "status": "quality_gate_archive_recovery",
+      "fetched_candidate_count": 24,
       "fresh_candidate_count": 23,
       "publishable_source_count": 3,
       "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.143,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.114,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde"
+          "elapsed_seconds": 0.98,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 0.257,
-      "failure_code": "generation_exception",
-      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cde",
+      "model_elapsed_seconds": 0.98,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -816,7 +870,7 @@
       "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -827,23 +881,13 @@
           "canonical_headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident - wflx.com",
-          "source_url": "https://www.wflx.com/2026/07/31/los-angeles-man-gets-life-sentence-fentanyl-sale-that-killed-vero-beach-resident",
-          "editorial_story_id": "story_001485",
-          "canonical_slug": "2026-07-31-los-angeles-man-sentenced-to-life-in-prison-for-selling-fentanyl-that-killed-ver",
-          "canonical_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 17.116
+      "elapsed_seconds": 21.012
     }
   ]
 }
