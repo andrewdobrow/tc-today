@@ -1207,3 +1207,88 @@ def test_registry_consolidation_preflights_and_skips_contaminating_merge(tmp_pat
     assert "unsupported_sparse_event_merge" in result["skipped"][0]["quarantine_reasons"]
     assert set(payload["stories"]) == {"story_a", "story_b"}
     assert payload["story_aliases"] == {}
+
+
+def test_generated_shark_policy_drift_cannot_nominate_unrelated_shark_video_source():
+    canonical = _shark_policy_article(
+        SHARK_CANONICAL_SLUG,
+        "Martin County postpones shark fishing ordinance decision after state order",
+        "2026-07-29",
+        "unknown-event-fa0b950da1",
+    )
+    canonical["source_headline"] = (
+        "Martin County moves to rewrite shark fishing rules to protect swimmers - WPBF"
+    )
+    incoming = _shark_policy_article(
+        "",
+        "Martin County commissioners delay decision on shark fishing rules after state order",
+        "2026-08-01",
+        "unknown-event-88b8f89e6e",
+    )
+    incoming.update({
+        "source_headline": (
+            "Sharks caught on video off shore in Martin County, Jupiter - WPBF"
+        ),
+        "event_families": ["animal-case", "public-policy"],
+        "agencies": [],
+        "incident_anchor": "",
+    })
+
+    candidates = retrieve_recent_candidates(
+        incoming, [canonical], window_days=7, max_candidates=4
+    )
+
+    assert candidates == []
+    from tct_engine.semantic_publication_gate import candidate_evidence
+
+    evidence = candidate_evidence(incoming, canonical, window_days=7)
+    assert evidence["source_headline_drift_conflict"] is True
+    assert "source_headline_drift_conflict" in evidence["reasons"]
+
+
+def test_terminal_contamination_rejection_is_not_retried_from_prior_report(tmp_path):
+    generate = _load_generate(tmp_path)
+    canonical = _archive_row(
+        CANONICAL_SLUG, CANONICAL_HEADLINE, "2026-07-31", "story_a"
+    )
+    prior_report = {
+        "decisions": [],
+        "registry_consolidation": {
+            "status": "no_changes",
+            "skipped": [
+                {
+                    "source_story_id": "story_b",
+                    "target_story_id": "story_a",
+                    "target_slug": CANONICAL_SLUG,
+                    "incoming_headline": "Unrelated source fragment",
+                    "confidence": 0.95,
+                    "shared_anchors": [],
+                    "reason": "Would contaminate target.",
+                    "relationship_type": "material_update",
+                    "novel_facts": [],
+                    "reason_code": "merge_would_contaminate_target",
+                }
+            ],
+            # v1.13.0.1 copied terminal rejects into pending_directives without
+            # carrying the reason code. The matching skipped row must still veto it.
+            "pending_directives": [
+                {
+                    "source_story_id": "story_b",
+                    "target_story_id": "story_a",
+                    "target_slug": CANONICAL_SLUG,
+                    "incoming_headline": "Unrelated source fragment",
+                    "confidence": 0.95,
+                    "shared_anchors": [],
+                    "reason": "Would contaminate target.",
+                    "relationship_type": "material_update",
+                    "novel_facts": [],
+                }
+            ],
+        },
+    }
+
+    directives = generate._semantic_duplicate_registry_directives(
+        [prior_report], [canonical]
+    )
+
+    assert directives == []

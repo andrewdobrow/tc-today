@@ -430,3 +430,35 @@ def test_release_versions_and_reports_are_bumped():
     version = tuple(int(part) for part in observability.ENGINE_VERSION.split("."))
     assert version >= (1, 11, 8, 8)
     assert observability.OBSERVABILITY_SCHEMA_VERSION >= 17
+
+
+def test_source_focus_guard_rejects_policy_rewrite_of_shark_sighting_story():
+    g = _load_generate()
+    item = {
+        "headline": (
+            "Martin County commissioners delay decision on shark fishing rules "
+            "after state order"
+        ),
+        "body": (
+            "Martin County commissioners postponed a decision on shark fishing "
+            "rules after state wildlife officials ordered the county to align its "
+            "ordinance with state law. Commissioners asked attorneys to review the law."
+        ),
+        "source_title": (
+            "Sharks caught on video off shore in Martin County, Jupiter - WPBF"
+        ),
+        "article_text": (
+            "Two sharks were spotted along the Atlantic Ocean shore Friday, one "
+            "that washed up dead and another that fishermen struggled to release "
+            "after hooking it near Normandy Beach. Video of both incidents was sent "
+            "to WPBF. A later paragraph noted that state wildlife officials had also "
+            "directed Martin County to align local shark-fishing rules with state law."
+        ),
+    }
+
+    diagnostics = g._article_framing_diagnostics(item, item)
+
+    assert diagnostics["passed"] is False
+    assert "generated_copy_drifted_from_source_focus" in diagnostics["missing"]
+    assert diagnostics["source_focus"]["title_similarity"]["score"] < 0.38
+    assert diagnostics["source_focus"]["lead_token_overlap"] < 0.30

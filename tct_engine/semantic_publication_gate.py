@@ -23,7 +23,7 @@ from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from typing import Any, Iterable, Mapping, Sequence
 
-SEMANTIC_PUBLICATION_GATE_VERSION = "1.3"
+SEMANTIC_PUBLICATION_GATE_VERSION = "1.4"
 SEMANTIC_PUBLICATION_GATE_PROMPT_VERSION = "1.0"
 DEFAULT_RECENT_WINDOW_DAYS = 7
 DEFAULT_MAX_CANDIDATES = 4
@@ -285,8 +285,26 @@ def candidate_evidence(
         or features["exact_incident_anchor"]
         or features["exact_known_event_key"]
     )
+    strong_source_identity_anchor = bool(
+        contextual_anchor or features["shared_agencies"]
+    )
     context_compatible = bool(
         features["shared_locality"] and features["shared_event_families"]
+    )
+
+    # The generated TCT headline is not an independent identity source. A model can
+    # occasionally elevate a secondary paragraph and rewrite a story so that it
+    # resembles an unrelated canonical article even though the publisher headline
+    # still describes a different primary event. When the source headlines have
+    # weak continuity and no strong structured anchor independently corroborates the
+    # pair, fail closed before semantic adjudication.
+    source_headline_drift_conflict = bool(
+        not source_generic
+        and similarity_basis == "final_headline"
+        and float(final_similarity.get("score") or 0.0) >= 0.64
+        and float(source_similarity.get("score") or 0.0) < 0.38
+        and int(source_similarity.get("shared_token_count") or 0) <= 3
+        and not strong_source_identity_anchor
     )
     conflict = bool(
         features["incident_anchor_conflict"] or features["known_event_key_conflict"]
@@ -343,6 +361,7 @@ def candidate_evidence(
         and shared_count >= 4
         and similarity_gate
         and (not conflict or strong_conflict_override)
+        and not source_headline_drift_conflict
     )
     reasons: list[str] = []
     if similarity["score"] >= 0.64:
@@ -363,6 +382,8 @@ def candidate_evidence(
         reasons.append("structured_identity_conflict_overridden_by_distinctive_overlap")
     elif conflict_override_tier == "policy_subject_continuity":
         reasons.append("structured_identity_conflict_overridden_by_policy_subject")
+    if source_headline_drift_conflict:
+        reasons.append("source_headline_drift_conflict")
     if not time_safe:
         reasons.append("outside_recent_window")
 
@@ -370,6 +391,7 @@ def candidate_evidence(
         "eligible": eligible,
         "structured_conflict_override": strong_conflict_override,
         "structured_conflict_override_tier": conflict_override_tier,
+        "source_headline_drift_conflict": source_headline_drift_conflict,
         "retrieval_score": round(score, 4),
         "headline_similarity": similarity,
         "similarity_basis": similarity_basis,

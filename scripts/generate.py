@@ -63,6 +63,7 @@ try:
         adjudicate_semantic_publication_candidates,
         semantic_publication_decision_cache_key,
         retrieve_semantic_publication_candidates,
+        semantic_headline_similarity,
     )
     from tct_engine.registry_repair import (
         is_broad_event_class_key,
@@ -98,6 +99,7 @@ except Exception as exc:
     adjudicate_semantic_publication_candidates = None
     semantic_publication_decision_cache_key = None
     retrieve_semantic_publication_candidates = None
+    semantic_headline_similarity = None
     is_broad_event_class_key = None
     merge_story_records = None
     story_quarantine_reasons = None
@@ -5003,6 +5005,107 @@ def _headline_lead_claim_diagnostics(item):
     }
 
 
+def _source_focus_diagnostics(item, source=None):
+    """Fail closed when generated copy abandons the publisher story's main focus."""
+    item = item if isinstance(item, dict) else {}
+    source = source if isinstance(source, dict) else item
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return {"required": False, "passed": True, "custom_exempt": True, "missing": []}
+
+    generated_headline = str(item.get("headline") or item.get("title") or "").strip()
+    generated_lead = _first_body_paragraph(
+        item.get("body") or item.get("teaser") or ""
+    )
+    source_title = str(
+        source.get("source_title")
+        or source.get("source_headline")
+        or source.get("title")
+        or ""
+    ).strip()
+    source_text = str(
+        source.get("article_text")
+        or source.get("source_text")
+        or source.get("summary")
+        or ""
+    ).strip()
+
+    def opening_focus_text(value, *, max_sentences=2, max_words=80):
+        normalized = re.sub(r"\s+", " ", str(value or "")).strip()
+        if not normalized:
+            return ""
+        sentences = [
+            part.strip()
+            for part in re.split(r"(?<=[.!?])\s+(?=[A-Z0-9])", normalized)
+            if part.strip()
+        ]
+        focused = " ".join(sentences[:max_sentences]) if sentences else normalized
+        words = focused.split()
+        return " ".join(words[:max_words])
+
+    source_lead = opening_focus_text(source_text)
+    generated_focus_lead = opening_focus_text(generated_lead)
+    source_title_tokens = _meaningful_framing_tokens(source_title)
+    source_lead_tokens = _meaningful_framing_tokens(source_lead)
+    generated_lead_tokens = _meaningful_framing_tokens(generated_focus_lead)
+
+    # Short alerts, opaque wire labels, and missing source text do not provide enough
+    # independent evidence for this guard. Other framing and identity contracts still
+    # apply to those items.
+    required = bool(
+        generated_headline
+        and generated_lead
+        and len(source_title_tokens) >= 5
+        and len(source_lead_tokens) >= 8
+        and len(re.findall(r"\b\w+\b", source_text)) >= 35
+    )
+    if not required:
+        return {
+            "required": False,
+            "passed": True,
+            "source_title": source_title,
+            "source_lead": source_lead,
+            "missing": [],
+        }
+
+    if semantic_headline_similarity is not None:
+        title_similarity = semantic_headline_similarity(
+            generated_headline, source_title
+        )
+    else:
+        generated_title_tokens = _meaningful_framing_tokens(generated_headline)
+        shared = generated_title_tokens & source_title_tokens
+        denominator = min(len(generated_title_tokens), len(source_title_tokens))
+        score = len(shared) / denominator if denominator else 0.0
+        title_similarity = {
+            "score": round(score, 4),
+            "shared_token_count": float(len(shared)),
+        }
+
+    lead_overlap = (
+        len(generated_lead_tokens & source_lead_tokens)
+        / min(len(generated_lead_tokens), len(source_lead_tokens))
+        if generated_lead_tokens and source_lead_tokens
+        else 0.0
+    )
+    drifted = bool(
+        float(title_similarity.get("score") or 0.0) < 0.38
+        and int(title_similarity.get("shared_token_count") or 0) <= 3
+        and lead_overlap < 0.30
+    )
+    missing = ["generated_copy_drifted_from_source_focus"] if drifted else []
+    return {
+        "required": True,
+        "passed": not drifted,
+        "generated_headline": generated_headline,
+        "generated_lead": generated_focus_lead,
+        "source_title": source_title,
+        "source_lead": source_lead,
+        "title_similarity": title_similarity,
+        "lead_token_overlap": round(lead_overlap, 3),
+        "missing": missing,
+    }
+
+
 def _article_framing_diagnostics(item, source=None):
     """Combined universal lead-independence and headline/lead claim contract."""
     item = item if isinstance(item, dict) else {}
@@ -5015,8 +5118,11 @@ def _article_framing_diagnostics(item, source=None):
         return {"required": False, "passed": True, "custom_exempt": True, "missing": []}
     lead_diag = _lead_independence_diagnostics(item, source)
     claim_diag = _headline_lead_claim_diagnostics(item)
+    source_focus_diag = _source_focus_diagnostics(item, source)
     missing = list(dict.fromkeys(
-        list(lead_diag.get("missing") or []) + list(claim_diag.get("missing") or [])
+        list(lead_diag.get("missing") or [])
+        + list(claim_diag.get("missing") or [])
+        + list(source_focus_diag.get("missing") or [])
     ))
     return {
         "required": True,
@@ -5025,6 +5131,7 @@ def _article_framing_diagnostics(item, source=None):
         "missing": missing,
         "lead_independence": lead_diag,
         "claim_consistency": claim_diag,
+        "source_focus": source_focus_diag,
     }
 
 
@@ -5054,6 +5161,7 @@ def _filter_article_framing_live_placements(items):
             "missing": diagnostics.get("missing", []),
             "lead_independence": diagnostics.get("lead_independence", {}),
             "claim_consistency": diagnostics.get("claim_consistency", {}),
+            "source_focus": diagnostics.get("source_focus", {}),
         })
     return kept, rejected
 
@@ -17301,8 +17409,24 @@ def _semantic_duplicate_registry_directives(reports, archive):
         # consolidation fail-closed and retryable instead of losing the model's
         # validated identity decision when the report is overwritten.
         consolidation = gate_report.get("registry_consolidation") or {}
-        pending = consolidation.get("pending_directives") or consolidation.get("skipped") or ()
-        for directive in pending:
+        terminal_rejections = {
+            (
+                str(row.get("source_story_id") or "").strip(),
+                str(row.get("target_slug") or "").strip(),
+            )
+            for row in consolidation.get("skipped", ()) or ()
+            if isinstance(row, dict)
+            and str(row.get("reason_code") or "") == "merge_would_contaminate_target"
+        }
+        pending = consolidation.get("pending_directives")
+        if pending is None:
+            pending = [
+                row for row in consolidation.get("skipped", ()) or ()
+                if isinstance(row, dict)
+                and str(row.get("reason_code") or "")
+                != "merge_would_contaminate_target"
+            ]
+        for directive in pending or ():
             if not isinstance(directive, dict):
                 continue
             source_story_id = str(directive.get("source_story_id") or "").strip()
@@ -17314,6 +17438,7 @@ def _semantic_duplicate_registry_directives(reports, archive):
                 or not target_story_id
                 or source_story_id == target_story_id
                 or confidence < SEMANTIC_GATE_MIN_CONFIDENCE
+                or (source_story_id, target_slug) in terminal_rejections
             ):
                 continue
             key = (source_story_id, target_story_id)
@@ -17368,6 +17493,7 @@ def _apply_semantic_duplicate_registry_consolidation(
         "already_consolidated": 0,
         "skipped": [],
         "pending_directives": [],
+        "rejected_directives": [],
         "merges": [],
     }
     directives = _semantic_duplicate_registry_directives(gate_reports, archive)
@@ -17439,13 +17565,15 @@ def _apply_semantic_duplicate_registry_consolidation(
             else []
         )
         if quarantine_reasons:
-            result["skipped"].append({
+            rejected = {
                 **directive,
                 "reason_code": "merge_would_contaminate_target",
                 "quarantine_reasons": quarantine_reasons,
                 "resolved_source_story_id": source_id,
                 "resolved_target_story_id": target_id,
-            })
+            }
+            result["skipped"].append(rejected)
+            result["rejected_directives"].append(copy.deepcopy(rejected))
             continue
 
         merge_story_records(primary, secondary)
@@ -17489,7 +17617,10 @@ def _apply_semantic_duplicate_registry_consolidation(
             )
         }
         for item in result["skipped"]
-        if isinstance(item, dict) and item.get("source_story_id") and item.get("target_slug")
+        if isinstance(item, dict)
+        and item.get("source_story_id")
+        and item.get("target_slug")
+        and str(item.get("reason_code") or "") != "merge_would_contaminate_target"
     ]
     if not result["story_records_merged"] and not result["aliases_written"]:
         result["status"] = "no_changes"
