@@ -883,7 +883,7 @@ def test_previous_semantic_report_replays_after_duplicate_archive_row_is_gone(tm
     assert payload["event_to_story"]["unknown-event-351769e611"] == "story_001316"
 
 
-def test_semantic_registry_consolidation_ignores_material_updates(tmp_path):
+def test_semantic_registry_consolidation_merges_material_update_story_fragment(tmp_path):
     generate = _load_generate(tmp_path)
     registry_path = tmp_path / "data" / "editorial_story_registry.json"
     registry_path.parent.mkdir(parents=True, exist_ok=True)
@@ -911,15 +911,23 @@ def test_semantic_registry_consolidation_ignores_material_updates(tmp_path):
     report = _validated_duplicate_report("story_b", CANONICAL_SLUG)
     report["decisions"][0]["decision"]["material_new_update"] = True
     report["decisions"][0]["decision"]["action"] = ACTION_UPDATE
+    report["decisions"][0]["decision"]["novel_facts"] = [
+        "new official development"
+    ]
 
     result = generate._apply_semantic_duplicate_registry_consolidation(
         [canonical], [report], registry_path
     )
     payload = json.loads(registry_path.read_text(encoding="utf-8"))
 
-    assert result["status"] == "no_changes"
-    assert set(payload["stories"]) == {"story_a", "story_b"}
-    assert payload["story_aliases"] == {}
+    assert result["status"] == "consolidated"
+    assert result["story_records_merged"] == 1
+    assert set(payload["stories"]) == {"story_a"}
+    assert payload["story_aliases"]["story_b"] == "story_a"
+    assert payload["event_to_story"]["event-b"] == "story_a"
+    merge_audit = payload["stories"]["story_a"]["semantic_publication_gate_merges"][-1]
+    assert merge_audit["relationship_type"] == "material_update"
+    assert "new official development" in merge_audit["novel_facts"]
 
 
 def test_pending_registry_directive_retries_from_prior_report(tmp_path):

@@ -121,6 +121,11 @@ from .publication_identity import (
     PublicationIdentityIndex,
     build_publication_identity_index,
 )
+from .semantic_material_update import (
+    SEMANTIC_MATERIAL_UPDATE_VERSION,
+    compose_material_update as compose_semantic_material_update,
+    validate_material_update as validate_semantic_material_update,
+)
 from .semantic_publication_gate import (
     ACTION_DUPLICATE as SEMANTIC_ACTION_DUPLICATE,
     ACTION_HOLD as SEMANTIC_ACTION_HOLD,
@@ -269,6 +274,9 @@ __all__ = [
     "PUBLICATION_IDENTITY_VERSION",
     "PublicationIdentityIndex",
     "build_publication_identity_index",
+    "SEMANTIC_MATERIAL_UPDATE_VERSION",
+    "compose_semantic_material_update",
+    "validate_semantic_material_update",
     "SEMANTIC_PUBLICATION_GATE_VERSION",
     "SEMANTIC_ACTION_DUPLICATE",
     "SEMANTIC_ACTION_HOLD",
@@ -283,4 +291,4 @@ __all__ = [
     "retrieve_semantic_publication_candidates",
 ]
 
-__version__ = "1.12.2.6"
+__version__ = "1.13.0"

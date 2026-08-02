@@ -51,6 +51,8 @@ try:
         source_identity_title_compatible,
         incident_anchor_key,
         SEMANTIC_PUBLICATION_GATE_VERSION,
+        SEMANTIC_MATERIAL_UPDATE_VERSION,
+        compose_semantic_material_update,
         SEMANTIC_ACTION_DUPLICATE,
         SEMANTIC_ACTION_HOLD,
         SEMANTIC_ACTION_NEW,
@@ -84,6 +86,8 @@ except Exception as exc:
     source_identity_title_compatible = None
     incident_anchor_key = None
     SEMANTIC_PUBLICATION_GATE_VERSION = "unavailable"
+    SEMANTIC_MATERIAL_UPDATE_VERSION = "unavailable"
+    compose_semantic_material_update = None
     SEMANTIC_ACTION_DUPLICATE = "duplicate_use_existing_canonical"
     SEMANTIC_ACTION_HOLD = "hold"
     SEMANTIC_ACTION_NEW = "new_story"
@@ -648,6 +652,9 @@ SEMANTIC_GATE_MAX_CANDIDATES = _positive_int_env(
 SEMANTIC_GATE_TIMEOUT_SECONDS = _positive_float_env(
     "TCT_SEMANTIC_GATE_TIMEOUT_SECONDS", 45
 )
+SEMANTIC_MATERIAL_UPDATE_TIMEOUT_SECONDS = _positive_float_env(
+    "TCT_SEMANTIC_MATERIAL_UPDATE_TIMEOUT_SECONDS", 60
+)
 SEMANTIC_GATE_MIN_CONFIDENCE = min(
     0.99, max(0.50, _positive_float_env(
         "TCT_SEMANTIC_GATE_MIN_CONFIDENCE", SEMANTIC_GATE_DEFAULT_MIN_CONFIDENCE
@@ -656,7 +663,7 @@ SEMANTIC_GATE_MIN_CONFIDENCE = min(
 SEMANTIC_GATE_CACHE_PATH = OUTPUT_DIR / "data" / "semantic-publication-gate-cache.json"
 SEMANTIC_GATE_REPORT_PATH = OUTPUT_DIR / "data" / "semantic-publication-gate.json"
 SEMANTIC_GATE_CACHE_SCHEMA_VERSION = 1
-SEMANTIC_GATE_REPORT_SCHEMA_VERSION = 2
+SEMANTIC_GATE_REPORT_SCHEMA_VERSION = 3
 
 # Content bank — loaded once at startup, used for card enrichment
 CONTENT_BANK_FEEDS = [
@@ -10503,7 +10510,15 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
             from email.utils import parsedate_to_datetime
             from datetime import timezone as _tz, timedelta as _td
             et = _tz(_td(hours=-4))
-            dt = parsedate_to_datetime(raw).astimezone(et)
+            try:
+                dt = parsedate_to_datetime(str(raw)).astimezone(et)
+            except Exception:
+                dt = datetime.fromisoformat(
+                    str(raw).replace("Z", "+00:00")
+                )
+                if dt.tzinfo is None:
+                    dt = dt.replace(tzinfo=_tz.utc)
+                dt = dt.astimezone(et)
             hour = dt.hour % 12 or 12
             ampm = "AM" if dt.hour < 12 else "PM"
             months = ["January","February","March","April","May","June","July",
@@ -10517,9 +10532,19 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     # published_raw (which for feed articles is the original source's timestamp).
     _pub_raw = hero.get("first_published") or hero.get("date", "") or pub_date
     _pub_display = _fmt_full(_pub_raw) if _pub_raw else pub_date
-    # "Updated" is intentionally not shown. Article pages are rewritten on routine runs
-    # even when nothing changed, and there is no reliable significant-change signal, so
-    # an "Updated" timestamp would be misleading. Published time is the honest signal.
+    _updated_raw = ""
+    if hero.get("meaningful_update_validated"):
+        _updated_raw = str(
+            hero.get("last_meaningful_update_at")
+            or hero.get("updated_at")
+            or ""
+        ).strip()
+    _updated_display = _fmt_full(_updated_raw) if _updated_raw else ""
+    _updated_html = (
+        f'<span class="article-updated">Updated {_updated_display}</span>'
+        if _updated_display and _updated_display != _pub_display
+        else ""
+    )
 
     description = (hero.get("teaser") or hero.get("body", "")[:155]).replace('"', '')
     # RSS, Open Graph, Twitter, and NewsArticle schema share one authoritative image
@@ -10535,7 +10560,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         "description": description,
         "image":    [image_url] if image_url else [],
         "datePublished": _pub_raw or pub_date,
-        "dateModified":  _pub_raw or pub_date,
+        "dateModified":  _updated_raw or _pub_raw or pub_date,
         "author":    {
             "@type": "Person",
             "name":  "Andrew Dobrow",
@@ -10769,7 +10794,8 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     .article-byline a {{ color: var(--text); font-weight: 600; text-decoration: none; }}
     .article-byline a:hover {{ text-decoration: underline; }}
     .article-times {{ display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }}
-    .article-published {{ font-size: 12px; color: var(--text-muted); }}
+    .article-published, .article-updated {{ font-size: 12px; color: var(--text-muted); }}
+    .article-updated::before {{ content: "·"; margin: 0 7px 0 5px; }}
     .article-headline {{ max-width: 920px; font-family: "Fraunces", serif; font-size: clamp(38px, 5vw, 68px); font-weight: 600; line-height: 1.02; letter-spacing: -.045em; color: var(--text); margin: 0 0 38px; text-wrap: balance; overflow-wrap: anywhere; }}
     .article-editorial-grid {{ display: grid; grid-template-columns: minmax(0, 760px) minmax(260px, 320px); gap: clamp(42px, 6vw, 82px); align-items: start; }}
     .article-main-column {{ min-width: 0; }}
@@ -10866,7 +10892,7 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
         <span class="article-byline">By <a href="/author/andrew-dobrow.html" rel="author">Andrew Dobrow</a></span>
       </div>
       <div class="article-times">
-        <span class="article-published">Published {_pub_display}</span>
+        <span class="article-published">Published {_pub_display}</span>{_updated_html}
       </div>
       <h1 class="article-headline">{hero["headline"]}</h1>
       <div class="article-editorial-grid">
@@ -11371,7 +11397,7 @@ def render_rss_feed(all_categories, top_cat, max_items=100):
     authority_report = {
         "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
-        "release": "v1.12.2.9",
+        "release": "v1.13.0",
         "item_count": len(authority_items),
         "items": authority_items,
     }
@@ -11623,7 +11649,7 @@ def validate_rss_social_image_contract(output_root=None):
     report = {
         "schema_version": 2,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
-        "release": "v1.12.2.9",
+        "release": "v1.13.0",
         "status": "passed" if item_blocks and not issues else "failed",
         "rss_items": len(item_blocks),
         "authority_items": len(authority_by_slug),
@@ -17212,11 +17238,15 @@ def _semantic_duplicate_registry_directives(reports, archive):
             decision = entry.get("decision") or {}
             if not isinstance(decision, dict):
                 continue
-            if str(decision.get("action") or "") != SEMANTIC_ACTION_DUPLICATE:
+            action = str(decision.get("action") or "")
+            if action not in {SEMANTIC_ACTION_DUPLICATE, SEMANTIC_ACTION_UPDATE}:
                 continue
             if not bool(decision.get("same_real_world_event")):
                 continue
-            if bool(decision.get("material_new_update")):
+            material_update = bool(decision.get("material_new_update"))
+            if action == SEMANTIC_ACTION_DUPLICATE and material_update:
+                continue
+            if action == SEMANTIC_ACTION_UPDATE and not material_update:
                 continue
             confidence = float(decision.get("confidence") or 0.0)
             if confidence < SEMANTIC_GATE_MIN_CONFIDENCE:
@@ -17238,6 +17268,10 @@ def _semantic_duplicate_registry_directives(reports, archive):
                 "confidence": confidence,
                 "shared_anchors": list(decision.get("shared_anchors") or ()),
                 "reason": str(decision.get("reason") or ""),
+                "relationship_type": (
+                    "material_update" if action == SEMANTIC_ACTION_UPDATE else "duplicate"
+                ),
+                "novel_facts": list(decision.get("novel_facts") or ()),
             })
 
         # Carry forward any valid directive that could not be applied on the prior
@@ -17272,6 +17306,8 @@ def _semantic_duplicate_registry_directives(reports, archive):
                 "confidence": confidence,
                 "shared_anchors": list(directive.get("shared_anchors") or ()),
                 "reason": str(directive.get("reason") or ""),
+                "relationship_type": str(directive.get("relationship_type") or "duplicate"),
+                "novel_facts": list(directive.get("novel_facts") or ()),
             })
     return directives
 
@@ -17293,12 +17329,13 @@ def _apply_semantic_duplicate_registry_consolidation(
     gate_reports,
     registry_path=None,
 ):
-    """Consolidate model-confirmed duplicate story fragments in the registry.
+    """Consolidate model-confirmed same-event story fragments in the registry.
 
-    Publication repair alone removes the duplicate permalink, but leaving the
-    secondary persistent story active splits future source membership and timeline
-    context. This write is narrowly authorized by a validated same-event/no-update
-    decision whose selected canonical slug still resolves to an active archive row.
+    Publication repair removes a duplicate or routes a material update into the
+    canonical permalink, but leaving the secondary persistent story active would
+    split future source membership and timeline context. This write is narrowly
+    authorized by a validated same-event decision whose selected canonical slug
+    still resolves to an active archive row.
     """
     target = Path(registry_path or EDITORIAL_REGISTRY_PATH)
     result = {
@@ -17373,6 +17410,8 @@ def _apply_semantic_duplicate_registry_consolidation(
             "target_slug": directive["target_slug"],
             "confidence": directive["confidence"],
             "shared_anchors": directive["shared_anchors"],
+            "relationship_type": directive.get("relationship_type", "duplicate"),
+            "novel_facts": list(directive.get("novel_facts") or []),
             "reason": directive["reason"],
             "merged_at": datetime.now(timezone.utc).isoformat(),
         })
@@ -17399,6 +17438,7 @@ def _apply_semantic_duplicate_registry_consolidation(
             for key in (
                 "source_story_id", "target_story_id", "target_slug",
                 "incoming_headline", "confidence", "shared_anchors", "reason",
+                "relationship_type", "novel_facts",
             )
         }
         for item in result["skipped"]
@@ -17487,6 +17527,13 @@ def _new_semantic_publication_gate_report():
                 "effect": "candidate_only_model_adjudication_required",
             },
             "model": MODEL_SELECTION,
+            "material_update_composer": {
+                "version": SEMANTIC_MATERIAL_UPDATE_VERSION,
+                "model": MODEL_ARTICLES,
+                "timeout_seconds": SEMANTIC_MATERIAL_UPDATE_TIMEOUT_SECONDS,
+                "failure_behavior": "preserve_both_pages_and_retry",
+                "canonical_url_policy": "preserve_original_permalink",
+            },
             "failure_behavior": "hold_new_permalink_when_suspicious_candidate_exists",
             "custom_articles": "excluded_authoritative_custom_contract_retained",
         },
@@ -17505,9 +17552,15 @@ def _new_semantic_publication_gate_report():
             "retroactive_redirects": 0,
             "registry_story_records_merged": 0,
             "registry_aliases_written": 0,
+            "material_update_composer_calls": 0,
+            "material_updates_applied": 0,
+            "material_update_redirects": 0,
+            "material_update_holds": 0,
         },
         "decisions": [],
         "archive_repairs": [],
+        "material_update_compositions": [],
+        "material_updates": [],
     }
 
 
@@ -17835,6 +17888,327 @@ def _apply_semantic_gate_update_identity(item, canonical, decision, candidates):
     return canonical_story_id
 
 
+
+def _semantic_material_update_source_record(item, role):
+    if not isinstance(item, dict):
+        return {}
+    raw_source_url = str(
+        item.get("source_url")
+        or item.get("_source_url")
+        or item.get("original_url")
+        or item.get("link")
+        or ""
+    ).strip()
+    source_url = _normalized_external_source_url(raw_source_url)
+    # Some publisher URL normalizers intentionally reject short/legacy paths even
+    # when they are valid external provenance. Material-update history must not
+    # silently discard those sources, so retain a safely normalized external URL.
+    if not source_url and raw_source_url:
+        try:
+            parts = urlsplit(raw_source_url)
+            if (
+                parts.scheme.lower() in {"http", "https"}
+                and parts.netloc
+                and "treasurecoast.today" not in parts.netloc.lower()
+            ):
+                query = [
+                    (key, val)
+                    for key, val in parse_qsl(parts.query, keep_blank_values=True)
+                    if not key.lower().startswith("utm_")
+                    and key.lower() not in {"gclid", "fbclid", "oc"}
+                ]
+                source_url = urlunsplit(
+                    (
+                        parts.scheme.lower(),
+                        parts.netloc.lower(),
+                        parts.path.rstrip("/"),
+                        urlencode(query),
+                        "",
+                    )
+                )
+        except ValueError:
+            source_url = ""
+    if not source_url:
+        return {}
+    return {
+        "role": str(role or "source"),
+        "source_url": source_url,
+        "source_headline": str(
+            item.get("source_headline")
+            or item.get("source_title")
+            or item.get("headline")
+            or ""
+        ).strip(),
+        "published_at": str(
+            item.get("first_published")
+            or item.get("published_raw")
+            or item.get("published")
+            or item.get("date")
+            or ""
+        ).strip(),
+    }
+
+
+def _merge_semantic_material_update_sources(canonical, incoming):
+    """Persist original and update sources without discarding provenance."""
+    history = list((canonical or {}).get("source_history") or [])
+    records = [
+        _semantic_material_update_source_record(canonical, "original"),
+        _semantic_material_update_source_record(incoming, "material_update"),
+    ]
+
+    def source_key(value):
+        raw = str(value or "").strip()
+        normalized = _normalized_external_source_url(raw)
+        return (normalized or raw.rstrip("/")).lower()
+
+    seen = {
+        source_key(row.get("source_url"))
+        for row in history
+        if isinstance(row, dict) and row.get("source_url")
+    }
+    seen.discard("")
+    for record in records:
+        source_url = str(record.get("source_url") or "").strip()
+        key = source_key(source_url)
+        if not source_url or not key or key in seen:
+            continue
+        seen.add(key)
+        history.append(record)
+    canonical["source_history"] = history[-20:]
+    latest = records[-1]
+    if latest:
+        canonical["latest_source_url"] = latest.get("source_url", "")
+        canonical["latest_source_headline"] = latest.get("source_headline", "")
+    return history
+
+
+def _semantic_material_update_composition(
+    canonical,
+    incoming,
+    decision,
+    report,
+    *,
+    phase,
+):
+    """Compose and validate one grounded update, failing closed on any defect."""
+    canonical_payload = dict(canonical or {})
+    canonical_payload["body"] = (
+        canonical_payload.get("body")
+        or _archive_article_body(canonical_payload)
+        or canonical_payload.get("teaser")
+        or ""
+    )
+    incoming_payload = dict(incoming or {})
+    incoming_payload["body"] = (
+        incoming_payload.get("body")
+        or _archive_article_body(incoming_payload)
+        or incoming_payload.get("teaser")
+        or ""
+    )
+    incoming_payload["published_at"] = str(
+        incoming_payload.get("first_published")
+        or incoming_payload.get("published_raw")
+        or incoming_payload.get("published")
+        or incoming_payload.get("date")
+        or ""
+    )
+
+    summary = report.setdefault("summary", {})
+    summary["material_update_composer_calls"] = int(
+        summary.get("material_update_composer_calls", 0) or 0
+    ) + 1
+    if compose_semantic_material_update is None:
+        composition = {
+            "status": "composer_unavailable",
+            "validation_errors": ["composer_unavailable"],
+            "reason": "Semantic material-update composer unavailable.",
+        }
+    else:
+        composition = compose_semantic_material_update(
+            client,
+            model=MODEL_ARTICLES,
+            canonical=canonical_payload,
+            incoming=incoming_payload,
+            decision=decision,
+            timeout_seconds=SEMANTIC_MATERIAL_UPDATE_TIMEOUT_SECONDS,
+        )
+
+    result = {
+        "phase": phase,
+        "canonical_slug": str((canonical or {}).get("slug") or ""),
+        "incoming_slug": str((incoming or {}).get("slug") or ""),
+        "status": str(composition.get("status") or ""),
+        "validation_errors": list(composition.get("validation_errors") or []),
+        "word_count": int(composition.get("word_count") or 0),
+        "paragraph_count": int(composition.get("paragraph_count") or 0),
+        "baseline_lead_hits": list(composition.get("baseline_lead_hits") or []),
+        "novelty_lead_hits": list(composition.get("novelty_lead_hits") or []),
+    }
+    if composition.get("status") != "validated":
+        result["reason"] = str(composition.get("reason") or "composition_not_validated")
+        report.setdefault("material_update_compositions", []).append(result)
+        summary["material_update_holds"] = int(
+            summary.get("material_update_holds", 0) or 0
+        ) + 1
+        return None, result
+
+    merged = dict(incoming_payload)
+    merged.update({
+        "headline": composition.get("headline", ""),
+        "teaser": composition.get("teaser", ""),
+        "body": composition.get("body", ""),
+        "story_form": "update",
+        "_editorial_route": "update_existing",
+        "editorial_route": "update_existing",
+        "_semantic_material_update": True,
+        "_semantic_material_update_decision": copy.deepcopy(decision),
+        "_editorial_new_facts": list(decision.get("novel_facts") or []),
+        "_canonical_context_headline": str((canonical or {}).get("headline") or ""),
+        "_canonical_context_body": canonical_payload.get("body", ""),
+        "_canonical_context_slug": str((canonical or {}).get("slug") or ""),
+        "first_published": str((canonical or {}).get("first_published") or ""),
+        "date": str((canonical or {}).get("date") or ""),
+        "canonical_slug": str((canonical or {}).get("slug") or ""),
+        "canonical_publication_id": str(
+            (canonical or {}).get("canonical_publication_id")
+            or (canonical or {}).get("publication_id")
+            or ""
+        ),
+    })
+    alignment = _prospective_archive_update_alignment(merged, canonical or {})
+    result["headline_alignment"] = alignment
+    if not alignment.get("aligned", False):
+        merged["headline"] = str((canonical or {}).get("headline") or merged.get("headline") or "")
+        result["headline_preserved_for_permalink_alignment"] = True
+
+    diagnostics = _update_replacement_diagnostics(merged, canonical or {})
+    result["context_diagnostics"] = diagnostics
+    if not diagnostics.get("passed", False):
+        result["status"] = "context_contract_failed"
+        result["validation_errors"] = list(diagnostics.get("missing") or [])
+        report.setdefault("material_update_compositions", []).append(result)
+        summary["material_update_holds"] = int(
+            summary.get("material_update_holds", 0) or 0
+        ) + 1
+        return None, result
+
+    result["status"] = "validated"
+    result["headline"] = merged.get("headline", "")
+    report.setdefault("material_update_compositions", []).append(result)
+    return merged, result
+
+
+def _apply_semantic_material_update_metadata(
+    canonical,
+    incoming,
+    merged,
+    decision,
+    diagnostics,
+    *,
+    today=None,
+):
+    """Persist canonical article metadata after a validated material update."""
+    today = str(today or datetime.now(timezone.utc).date().isoformat())
+    canonical["headline"] = str(merged.get("headline") or canonical.get("headline") or "")
+    canonical["teaser"] = str(merged.get("teaser") or "")
+    canonical["article_word_count"] = _word_count(merged.get("body", ""))
+    canonical["article_paragraph_count"] = _paragraph_count(merged.get("body", ""))
+    canonical["lastmod"] = today
+    canonical["meaningful_update_validated"] = True
+    canonical["meaningful_update_basis"] = "semantic_material_update_gate"
+    canonical["semantic_material_update_version"] = SEMANTIC_MATERIAL_UPDATE_VERSION
+    canonical["semantic_material_update_confidence"] = float(
+        decision.get("confidence") or 0.0
+    )
+    canonical["semantic_material_update_novel_facts"] = list(
+        decision.get("novel_facts") or []
+    )[:20]
+    canonical["semantic_material_update_shared_anchors"] = list(
+        decision.get("shared_anchors") or []
+    )[:20]
+    canonical["semantic_material_update_source_slug"] = str(
+        (incoming or {}).get("slug") or ""
+    )
+    _merge_semantic_material_update_sources(canonical, incoming)
+
+    incoming_source_image = _absolute_image_url(
+        (incoming or {}).get("source_image_url") or (incoming or {}).get("image_url")
+    )
+    if _is_real_source_image_url(incoming_source_image):
+        canonical["source_image_url"] = incoming_source_image
+        canonical["image_url"] = incoming_source_image
+        canonical["social_image_source"] = "semantic_material_update_source"
+        canonical["social_image_is_source"] = True
+        merged["source_image_url"] = incoming_source_image
+        merged["image_url"] = incoming_source_image
+
+    stamp = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    canonical["last_meaningful_update_at"] = stamp
+    canonical["updated_at"] = stamp
+    merged["last_meaningful_update_at"] = stamp
+    merged["updated_at"] = stamp
+    merged["meaningful_update_validated"] = True
+    merged["meaningful_update_basis"] = "semantic_material_update_gate"
+    merged["semantic_material_update_version"] = SEMANTIC_MATERIAL_UPDATE_VERSION
+    merged["_canonical_freshness_bound"] = True
+    merged["first_published"] = str(canonical.get("first_published") or "")
+    merged["editorial_story_id"] = str(canonical.get("editorial_story_id") or "")
+    merged["_editorial_story_id"] = str(canonical.get("editorial_story_id") or "")
+    _merge_category_memberships(
+        canonical,
+        incoming or {},
+        canonical.get("category_key") or (incoming or {}).get("category_key") or "",
+    )
+    return stamp
+
+
+def _render_retroactive_semantic_material_update(
+    canonical,
+    incoming,
+    merged,
+    decision,
+    articles_dir,
+    archive,
+):
+    """Rewrite the canonical page only after composition and context validation."""
+    slug = str(canonical.get("slug") or "")
+    if not slug:
+        raise ValueError("canonical_slug_missing")
+    category_key = str(
+        canonical.get("category_key") or incoming.get("category_key") or "top_news"
+    )
+    category_label = str(
+        canonical.get("category_label") or incoming.get("category_label") or "Top News"
+    )
+    merged["slug"] = slug
+    merged["_archived_slug"] = slug
+    merged["link"] = f"{SITE_URL}/articles/{slug}.html"
+    merged["category_key"] = category_key
+    merged["category_label"] = category_label
+    merged["publication_id"] = canonical.get("publication_id", "")
+    merged["canonical_publication_id"] = canonical.get(
+        "canonical_publication_id", canonical.get("publication_id", "")
+    )
+    related = [
+        row for row in archive or []
+        if isinstance(row, dict)
+        and row.get("category_key") == category_key
+        and row.get("slug") not in {slug, incoming.get("slug")}
+    ]
+    related.sort(key=lambda row: row.get("lastmod") or row.get("date", ""), reverse=True)
+    page_html = render_article_page(
+        merged,
+        category_label,
+        category_key,
+        str(canonical.get("date") or datetime.now(timezone.utc).date().isoformat()),
+        slug,
+        related=related,
+    )
+    (Path(articles_dir) / f"{slug}.html").write_text(page_html, encoding="utf-8")
+    return page_html
+
+
 def _repair_recent_semantic_archive_duplicates(
     archive,
     articles_dir,
@@ -17842,10 +18216,13 @@ def _repair_recent_semantic_archive_duplicates(
     cache,
     report,
 ):
-    """Repair already-published recent duplicates only when no update is material.
+    """Repair recent duplicates and material updates before forward publication.
 
-    A significant-update decision is reported but not rewritten retroactively from
-    rendered HTML. Forward publication will route future updates into the canonical.
+    Duplicate decisions preserve the earlier canonical page and redirect the later
+    URL. Material-update decisions first compose a grounded contextual replacement,
+    validate it against the original and incoming article, rewrite the canonical
+    page, then redirect the later URL. Any composition failure preserves both pages
+    and remains retryable on the next run.
     """
     archive = list(archive or [])
     dated = [
@@ -17858,7 +18235,12 @@ def _repair_recent_semantic_archive_duplicates(
     ]
     valid_dates = [dt for _, dt in dated if dt is not None]
     if not valid_dates:
-        return archive, [], {"repaired_count": 0, "held_count": 0}
+        return archive, [], {
+            "repaired_count": 0,
+            "duplicate_redirects": 0,
+            "material_update_redirects": 0,
+            "held_count": 0,
+        }
     newest = max(valid_dates)
     cutoff = newest - timedelta(days=SEMANTIC_GATE_RECENT_DAYS)
     recent = [
@@ -17870,6 +18252,8 @@ def _repair_recent_semantic_archive_duplicates(
     removed = set()
     redirects = []
     held = []
+    duplicate_redirects = 0
+    material_update_redirects = 0
     for row in recent:
         candidate_pool = [
             prior for prior in survivors
@@ -17923,13 +18307,102 @@ def _repair_recent_semantic_archive_duplicates(
                 }
                 report["archive_repairs"].append(repair)
                 report["summary"]["retroactive_redirects"] += 1
+                duplicate_redirects += 1
                 continue
-        elif action in {SEMANTIC_ACTION_UPDATE, SEMANTIC_ACTION_HOLD} and candidates:
+
+        if action == SEMANTIC_ACTION_UPDATE and isinstance(canonical, dict):
+            source_slug = str(row.get("slug") or "")
+            target_slug = str(canonical.get("slug") or "")
+            if source_slug and target_slug and source_slug != target_slug:
+                merged, composition = _semantic_material_update_composition(
+                    canonical,
+                    row,
+                    decision,
+                    report,
+                    phase="retroactive_recent_archive_repair",
+                )
+                if merged is None:
+                    held.append({
+                        "slug": source_slug,
+                        "headline": row.get("headline", ""),
+                        "action": action,
+                        "candidate_slug": target_slug,
+                        "reason": composition.get("reason")
+                        or "material_update_composition_failed",
+                        "validation_errors": composition.get("validation_errors", []),
+                    })
+                    survivors.append(row)
+                    continue
+
+                diagnostics = dict(composition.get("context_diagnostics") or {})
+                _apply_semantic_material_update_metadata(
+                    canonical,
+                    row,
+                    merged,
+                    decision,
+                    diagnostics,
+                    today=datetime.now(timezone.utc).date().isoformat(),
+                )
+                _persist_event_identity(merged, canonical)
+                _render_retroactive_semantic_material_update(
+                    canonical,
+                    row,
+                    merged,
+                    decision,
+                    articles_dir,
+                    archive,
+                )
+                removed.add(source_slug)
+                evidence = _semantic_gate_identity_evidence(decision, candidates)
+                redirects.append({
+                    "source_slug": source_slug,
+                    "source_headline": row.get("headline", ""),
+                    "target_slug": target_slug,
+                    "target_headline": canonical.get("headline", ""),
+                    "story_stage": "semantic-material-update-routing",
+                    "match_confidence": int(
+                        round(float(decision.get("confidence") or 0.0) * 100)
+                    ),
+                    "canonical_is_custom": False,
+                    "editorial_story_id": str(canonical.get("editorial_story_id") or ""),
+                    "reason": (
+                        "Claude confirmed the same continuing story with a material "
+                        "development; the canonical article was contextually updated."
+                    ),
+                    "identity_evidence": evidence,
+                })
+                update_record = {
+                    "source_slug": source_slug,
+                    "target_slug": target_slug,
+                    "source_story_id": str(row.get("editorial_story_id") or ""),
+                    "target_story_id": str(canonical.get("editorial_story_id") or ""),
+                    "source_headline": row.get("headline", ""),
+                    "updated_headline": canonical.get("headline", ""),
+                    "confidence": decision.get("confidence", 0),
+                    "shared_anchors": list(decision.get("shared_anchors") or []),
+                    "novel_facts": list(decision.get("novel_facts") or []),
+                    "updated_at": canonical.get("updated_at", ""),
+                    "composition": composition,
+                }
+                report.setdefault("material_updates", []).append(update_record)
+                report["summary"]["material_updates_applied"] += 1
+                report["summary"]["material_update_redirects"] += 1
+                report["summary"]["retroactive_redirects"] += 1
+                material_update_redirects += 1
+                print(
+                    "  SEMANTIC MATERIAL UPDATE: refreshed "
+                    f"'{target_slug}' and redirected '{source_slug}'"
+                )
+                continue
+
+        if action == SEMANTIC_ACTION_HOLD and candidates:
             held.append({
                 "slug": row.get("slug", ""),
                 "headline": row.get("headline", ""),
                 "action": action,
-                "candidate_slug": (canonical or {}).get("slug", "") if isinstance(canonical, dict) else "",
+                "candidate_slug": (canonical or {}).get("slug", "")
+                if isinstance(canonical, dict)
+                else "",
                 "reason": decision.get("reason", ""),
             })
         survivors.append(row)
@@ -17940,10 +18413,11 @@ def _repair_recent_semantic_archive_duplicates(
     ]
     return cleaned, redirects, {
         "repaired_count": len(redirects),
+        "duplicate_redirects": duplicate_redirects,
+        "material_update_redirects": material_update_redirects,
         "held_count": len(held),
         "held": held,
     }
-
 
 def _write_semantic_publication_gate_report(report, output_root=None):
     path = Path(output_root or OUTPUT_DIR) / "data" / "semantic-publication-gate.json"
@@ -21816,6 +22290,38 @@ def write_archives(all_categories, top_cat):
                 _semantic_action == SEMANTIC_ACTION_UPDATE
                 and isinstance(_semantic_canonical, dict)
             ):
+                _merged_update, _composition = _semantic_material_update_composition(
+                    _semantic_canonical,
+                    hero,
+                    _semantic_decision,
+                    _semantic_gate_report,
+                    phase="forward_publication",
+                )
+                if _merged_update is None:
+                    _forward_identity_report["publication_holds"].append({
+                        "headline": headline,
+                        "source_url": normalized_source_url,
+                        "candidate_slug": _semantic_canonical.get("slug", ""),
+                        "reason": _composition.get("reason")
+                        or "semantic_material_update_composition_failed",
+                        "validation_errors": _composition.get(
+                            "validation_errors", []
+                        ),
+                        "action": "hold_material_update_preserve_existing_pages",
+                    })
+                    hero["_publication_skip_reason"] = (
+                        "semantic_material_update_composition_hold"
+                    )
+                    print(
+                        "  SEMANTIC MATERIAL UPDATE HOLD: preserved canonical page "
+                        f"'{_semantic_canonical.get('slug','')}' because the merged "
+                        "article did not pass the contextual update contract"
+                    )
+                    continue
+
+                hero.clear()
+                hero.update(_merged_update)
+                headline = str(hero.get("headline") or headline)
                 existing = _semantic_canonical
                 _editorial_story_id = _apply_semantic_gate_update_identity(
                     hero,
@@ -21828,6 +22334,7 @@ def write_archives(all_categories, top_cat):
                 hero["canonical_publication_id"] = _stable_publication_id(
                     existing.get("slug", "")
                 )
+                hero["_semantic_material_update_composition"] = _composition
                 _forward_identity_report.setdefault(
                     "semantic_publication_gate", []
                 ).append({
@@ -21837,9 +22344,10 @@ def write_archives(all_categories, top_cat):
                     "confidence": _semantic_decision.get("confidence", 0),
                     "shared_anchors": _semantic_decision.get("shared_anchors", []),
                     "novel_facts": _semantic_decision.get("novel_facts", []),
+                    "composition_status": _composition.get("status", ""),
                 })
                 print(
-                    "  SEMANTIC UPDATE ROUTE: reusing "
+                    "  SEMANTIC UPDATE ROUTE: contextually refreshing "
                     f"'{existing.get('slug','')}' for '{headline[:60]}'"
                 )
 
@@ -21975,6 +22483,45 @@ def write_archives(all_categories, top_cat):
                     f"'{slug}'"
                 )
 
+            if hero.get("_semantic_material_update"):
+                _semantic_update_decision = dict(
+                    hero.get("_semantic_material_update_decision") or {}
+                )
+                _semantic_update_composition = dict(
+                    hero.get("_semantic_material_update_composition") or {}
+                )
+                _apply_semantic_material_update_metadata(
+                    existing,
+                    hero,
+                    hero,
+                    _semantic_update_decision,
+                    _context_diagnostics,
+                    today=today,
+                )
+                _semantic_gate_report.setdefault("material_updates", []).append({
+                    "phase": "forward_publication",
+                    "source_slug": "",
+                    "target_slug": slug,
+                    "source_story_id": str(
+                        hero.get("_incoming_fragmented_story_id") or ""
+                    ),
+                    "target_story_id": str(existing.get("editorial_story_id") or ""),
+                    "source_headline": str(
+                        hero.get("source_headline") or headline
+                    ),
+                    "updated_headline": headline,
+                    "confidence": _semantic_update_decision.get("confidence", 0),
+                    "shared_anchors": list(
+                        _semantic_update_decision.get("shared_anchors") or []
+                    ),
+                    "novel_facts": list(
+                        _semantic_update_decision.get("novel_facts") or []
+                    ),
+                    "updated_at": existing.get("updated_at", ""),
+                    "composition": _semantic_update_composition,
+                })
+                _semantic_gate_report["summary"]["material_updates_applied"] += 1
+
             _persist_event_identity(hero, existing)
             _related = [e for e in archive
                         if e.get("category_key") == cat_key and e.get("slug") != slug]
@@ -22023,9 +22570,15 @@ def write_archives(all_categories, top_cat):
                 existing["custom_series_key"] = _custom_series_key(hero)
                 existing["custom_edition_key"] = _custom_edition_marker(hero)
             if normalized_source_url:
-                existing["source_url"] = normalized_source_url
+                if hero.get("_semantic_material_update"):
+                    existing["latest_source_url"] = normalized_source_url
+                else:
+                    existing["source_url"] = normalized_source_url
             if hero.get("source_headline"):
-                existing["source_headline"] = hero.get("source_headline")
+                if hero.get("_semantic_material_update"):
+                    existing["latest_source_headline"] = hero.get("source_headline")
+                else:
+                    existing["source_headline"] = hero.get("source_headline")
             if hero.get("_editorial_event_key"):
                 existing["editorial_event_key"] = hero.get("_editorial_event_key")
             if hero.get("_editorial_route"):
@@ -22238,6 +22791,38 @@ def write_archives(all_categories, top_cat):
         archive, OUTPUT_DIR
     )
     validate_archive_incident_uniqueness(archive, OUTPUT_DIR)
+
+    # Forward semantic decisions occur after the pre-publication consolidation pass.
+    # Apply their story-ID aliases before reports are written so a material update
+    # cannot remain split across two persistent registry records for another run.
+    _post_forward_semantic_registry = (
+        _apply_semantic_duplicate_registry_consolidation(
+            archive,
+            [_semantic_gate_report],
+            EDITORIAL_REGISTRY_PATH,
+        )
+    )
+    if _post_forward_semantic_registry.get("story_records_merged") or _post_forward_semantic_registry.get("aliases_written"):
+        _semantic_registry_consolidation["story_records_merged"] = int(
+            _semantic_registry_consolidation.get("story_records_merged", 0) or 0
+        ) + int(_post_forward_semantic_registry.get("story_records_merged", 0) or 0)
+        _semantic_registry_consolidation["aliases_written"] = int(
+            _semantic_registry_consolidation.get("aliases_written", 0) or 0
+        ) + int(_post_forward_semantic_registry.get("aliases_written", 0) or 0)
+        _semantic_registry_consolidation.setdefault("merges", []).extend(
+            list(_post_forward_semantic_registry.get("merges") or [])
+        )
+        _semantic_registry_consolidation["status"] = "consolidated"
+    _semantic_gate_report["registry_consolidation"] = copy.deepcopy(
+        _semantic_registry_consolidation
+    )
+    _semantic_gate_report["summary"]["registry_story_records_merged"] = int(
+        _semantic_registry_consolidation.get("story_records_merged", 0) or 0
+    )
+    _semantic_gate_report["summary"]["registry_aliases_written"] = int(
+        _semantic_registry_consolidation.get("aliases_written", 0) or 0
+    )
+
     archive_path.write_text(json.dumps(archive, indent=2), encoding="utf-8")
     _save_semantic_publication_gate_cache(_semantic_gate_cache)
     _write_semantic_publication_gate_report(_semantic_gate_report, OUTPUT_DIR)
@@ -22247,9 +22832,13 @@ def write_archives(all_categories, top_cat):
         f"{_semantic_summary.get('candidate_pairs', 0)} candidate pair(s), "
         f"{_semantic_summary.get('structured_conflict_overrides', 0)} conflict override(s), "
         f"{_semantic_summary.get('model_calls', 0)} model call(s), "
-        f"{_semantic_summary.get('retroactive_redirects', 0)} retroactive redirect(s), "
+        f"{_semantic_summary.get('retroactive_redirects', 0)} duplicate redirect(s), "
+        f"{_semantic_summary.get('material_updates_applied', 0)} material update(s), "
+        f"{_semantic_summary.get('material_update_redirects', 0)} update redirect(s), "
+        f"{_semantic_summary.get('material_update_composer_calls', 0)} update composer call(s), "
         f"{_semantic_summary.get('registry_story_records_merged', 0)} registry merge(s), "
-        f"{_semantic_summary.get('holds', 0)} hold(s)"
+        f"{_semantic_summary.get('holds', 0)} duplicate hold(s), "
+        f"{_semantic_summary.get('material_update_holds', 0)} update hold(s)"
     )
     _forward_identity_report["semantic_publication_gate_summary"] = copy.deepcopy(
         _semantic_gate_report.get("summary", {})
