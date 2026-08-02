@@ -9,6 +9,7 @@ on:
       - "scripts/**"
       - "custom_articles.json"
       - "data/custom-retirements.json"
+      - "data/generation-cache.json"
       - "manifest.json"
       - ".github/workflows/test-editorial-engine.yml"
       - ".github/workflows/update.yml"
@@ -34,6 +35,9 @@ jobs:
           # require the generator's runtime dependencies even though all network
           # and AI calls remain disabled during tests.
           python -m pip install feedparser anthropic requests json-repair pytest
+
+      - name: Sanitize persistent generation cache
+        run: python scripts/sanitize_generation_cache.py
 
       - name: Validate editorial package
         run: python scripts/validate_package.py
