@@ -7,49 +7,27 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-02T16:31:11Z",
-  "mode": "shadow",
+  "generated_at": "2026-08-02T20:46:36Z",
+  "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
     "activation_version": "1.1",
     "requested_mode": "enforce",
-    "effective_mode": "shadow",
-    "preflight_passed": false,
-    "preflight_reasons": [
-      "registry health is not clean"
-    ],
+    "effective_mode": "enforce",
+    "preflight_passed": true,
+    "preflight_reasons": [],
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 1,
-    "enforceable_recommendation_count": 1,
+    "recommendation_count": 0,
+    "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 4,
-    "placements_after": 4,
+    "placements_before": 5,
+    "placements_after": 5,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
-    "recommendations": [
-      {
-        "action": "suppress_duplicate",
-        "enforceable": true,
-        "evidence": "guarded_same_story_stage_95",
-        "confidence": 0.98,
-        "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace",
-        "headline": "Woman killed, man found dead in apparent domestic shooting in Port St. Lucie",
-        "source_title_key": "woman killed man found dead in apparent domestic shooting in port st lucie",
-        "incoming_article_id": "",
-        "target_article_id": "",
-        "story_id": "story-2000-7-40-active-adult-airlifted-58b5c7d8",
-        "canonical_is_custom": false,
-        "canonical_title": "Woman killed, man found dead in apparent domestic shooting in Port St. Lucie",
-        "canonical_source": "",
-        "canonical_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace",
-        "reason": "Same story and safe normalized stage 'investigation' at 98% confidence.",
-        "category": "st_lucie",
-        "placement": "hero"
-      }
-    ],
+    "recommendations": [],
     "applied_actions": [],
     "enforcement_allowlist": [
       "custom_canonical_protection",
@@ -71,33 +49,32 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 187,
+    "candidates_processed": 177,
     "routes": {
-      "generate_new": 11,
-      "skip": 175,
-      "update_existing": 1
+      "generate_new": 23,
+      "skip": 154
     },
     "eligibility": {
-      "listing": 3,
-      "low_value": 136,
+      "listing": 2,
+      "low_value": 127,
       "publishable": 48
     },
     "source_classes": {
-      "aggregator": 138,
-      "local_news": 34,
-      "regional_news": 14,
+      "aggregator": 128,
+      "local_news": 36,
+      "regional_news": 12,
       "unknown": 1
     },
-    "rejected_count": 3,
+    "rejected_count": 2,
     "rejected_examples": [
       {
-        "headline": "14391 SW Skye Dr, Port Saint Lucie, FL 34987 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOSlBFV0NXYUlKclk5enlmU1Q4UlgxaWJVa2tKeUJBaTZ4a0l0dDkyVEstUExPMm1mSEhYUFJtZDZXX2hJV0ZGVUhNeE1CWXU5blZFTTNrNEFzVlpMMEZaazJ6OGRsSlh3cnVTNHQwWVRQbmI3Z1VUMkNGVDdWeWwtaVlwaE1pNklmVE53VFhQRlBwdWR6VWVR?oc=5",
+        "headline": "2 dead in apparent domestic murder-suicide shooting in Port St. Lucie - WPEC",
+        "source_url": "https://cbs12.com/news/local/developing-police-investigating-shooting-in-port-st-lucie-neighborhood-august-1-2026",
         "status": "listing",
         "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
+          "Headline resembles a property listing rather than a news event"
         ],
-        "source_class": "aggregator"
+        "source_class": "regional_news"
       },
       {
         "headline": "Four dazzling golf course homes for sale: August 1 - AOL.com",
@@ -107,28 +84,91 @@
           "Headline matches listing pattern 'for sale'"
         ],
         "source_class": "aggregator"
-      },
-      {
-        "headline": "2 dead in apparent domestic murder-suicide shooting in Port St. Lucie - WPEC",
-        "source_url": "https://cbs12.com/news/local/developing-police-investigating-shooting-in-port-st-lucie-neighborhood-august-1-2026",
-        "status": "listing",
-        "reasons": [
-          "Headline resembles a property listing rather than a news event"
-        ],
-        "source_class": "regional_news"
       }
     ]
   },
   "relationships": {
     "counts": {
-      "new_story": 10,
-      "same_event": 177
+      "follow_up": 1,
+      "new_story": 20,
+      "same_event": 156
     },
     "examples": [
+      {
+        "story_id": "story_001863",
+        "title": "Crash blocks two left lanes on southbound I-95 near Forest Hill Boulevard",
+        "event_key": "traffic-crash-59c6bfad2f-59c6bfad2f",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_001864",
+        "title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
+        "event_key": "missing-person-bc2bfac354",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000014",
+        "title": "2 killed, 2 seriously hurt in three-vehicle crash involving semi-truck near Belle Glade",
+        "event_key": "named-person-death:belle-glade",
+        "relationship": "follow_up",
+        "confidence": 0.82,
+        "reason": "Attached distinct event as a follow-up to an existing developing story",
+        "decision_trace": [
+          "Relationship: follow_up",
+          "Facts overlap: 1.00",
+          "Location match: False",
+          "Agency match: False",
+          "Event type match: True",
+          "Entity match: True",
+          "Lifecycle signal: True",
+          "Novel milestones: death, identified",
+          "Novel fact ratio: 0.00",
+          "Confidence: 0.82",
+          "Threshold: 0.68"
+        ]
+      },
+      {
+        "story_id": "story_001865",
+        "title": "West Palm Beach man arrested after striking deputy's motorcycle, threatening to kill officers in Islamorada",
+        "event_key": "unknown-event-0e577ae8c4",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_001830",
         "title": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie",
         "event_key": "unknown-event-8d5f416fdf",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_001694",
+        "title": "Hillsborough County school calendar 2026-2027: When school starts - AOL.com",
+        "event_key": "unknown-event-5fdede8683",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -168,6 +208,18 @@
         ]
       },
       {
+        "story_id": "story_001866",
+        "title": "Thadd White: A few thoughts on the 'change my mind' meme - NewsBreak: Local News & Alerts",
+        "event_key": "unknown-event-ce1772cd67",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_000783",
         "title": "Here's when every Ventura County district, college returns to school - AOL.com",
         "event_key": "unknown-event-5dfa6a2774",
@@ -185,6 +237,20 @@
         "story_id": "story_001770",
         "title": "Adopt a class, inspire learning - Hometown News Treasure Coast",
         "event_key": "unknown-event-7618cf6aae",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_001831",
+        "title": "Winner announced in the TCPalm Teacher of the Week poll (July 26-31) - AOL.com",
+        "event_key": "unknown-event-4782d2a5c4",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -271,10 +337,11 @@
         "event_key": "unknown-event-da39f183b8",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -305,106 +372,89 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_001660",
-        "title": "South Florida renters squeezed as housing costs climb to 50% of income for many residents",
-        "event_key": "unknown-event-50b017aa73",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001661",
-        "title": "Pediatricians urge Palm Beach County families to schedule back-to-school shots now",
-        "event_key": "unknown-event-f46fa836d3",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001662",
-        "title": "Walmart Supercenter coming to Westlake as Palm Beach County's western communities grow",
-        "event_key": "unknown-event-8fc149b950",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001663",
-        "title": "DeSantis’ property tax cut faces legal challenge over ballot language - The Real Deal",
-        "event_key": "unknown-event-ecd2136e59",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001600",
-        "title": "Treasure Coast renters say costs are high as rental market holds flat, expert says",
-        "event_key": "unknown-event-747562409f",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001601",
-        "title": "Free Palm Beach County program helps homeowners protect family homes and avoid costly probate",
-        "event_key": "unknown-event-9b5c28d738",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "",
-        "title": "14391 SW Skye Dr, Port Saint Lucie, FL 34987 - Realtor.com",
-        "event_key": "",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "",
-        "decision_trace": []
       }
     ],
     "decision_trace_examples": [
       {
+        "story_id": "story_001863",
+        "title": "Crash blocks two left lanes on southbound I-95 near Forest Hill Boulevard",
+        "event_key": "traffic-crash-59c6bfad2f-59c6bfad2f",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_001864",
+        "title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
+        "event_key": "missing-person-bc2bfac354",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_000014",
+        "title": "2 killed, 2 seriously hurt in three-vehicle crash involving semi-truck near Belle Glade",
+        "event_key": "named-person-death:belle-glade",
+        "relationship": "follow_up",
+        "confidence": 0.82,
+        "matched_existing": true,
+        "reason": "Attached distinct event as a follow-up to an existing developing story",
+        "decision_trace": [
+          "Relationship: follow_up",
+          "Facts overlap: 1.00",
+          "Location match: False",
+          "Agency match: False",
+          "Event type match: True",
+          "Entity match: True",
+          "Lifecycle signal: True",
+          "Novel milestones: death, identified",
+          "Novel fact ratio: 0.00",
+          "Confidence: 0.82",
+          "Threshold: 0.68"
+        ]
+      },
+      {
+        "story_id": "story_001865",
+        "title": "West Palm Beach man arrested after striking deputy's motorcycle, threatening to kill officers in Islamorada",
+        "event_key": "unknown-event-0e577ae8c4",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_001830",
         "title": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie",
         "event_key": "unknown-event-8d5f416fdf",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_001694",
+        "title": "Hillsborough County school calendar 2026-2027: When school starts - AOL.com",
+        "event_key": "unknown-event-5fdede8683",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -447,6 +497,19 @@
         ]
       },
       {
+        "story_id": "story_001866",
+        "title": "Thadd White: A few thoughts on the 'change my mind' meme - NewsBreak: Local News & Alerts",
+        "event_key": "unknown-event-ce1772cd67",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_000783",
         "title": "Here's when every Ventura County district, college returns to school - AOL.com",
         "event_key": "unknown-event-5dfa6a2774",
@@ -465,6 +528,21 @@
         "story_id": "story_001770",
         "title": "Adopt a class, inspire learning - Hometown News Treasure Coast",
         "event_key": "unknown-event-7618cf6aae",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_001831",
+        "title": "Winner announced in the TCPalm Teacher of the Week poll (July 26-31) - AOL.com",
+        "event_key": "unknown-event-4782d2a5c4",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -558,10 +636,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -592,110 +671,6 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001660",
-        "title": "South Florida renters squeezed as housing costs climb to 50% of income for many residents",
-        "event_key": "unknown-event-50b017aa73",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001661",
-        "title": "Pediatricians urge Palm Beach County families to schedule back-to-school shots now",
-        "event_key": "unknown-event-f46fa836d3",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001662",
-        "title": "Walmart Supercenter coming to Westlake as Palm Beach County's western communities grow",
-        "event_key": "unknown-event-8fc149b950",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001663",
-        "title": "DeSantis’ property tax cut faces legal challenge over ballot language - The Real Deal",
-        "event_key": "unknown-event-ecd2136e59",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001600",
-        "title": "Treasure Coast renters say costs are high as rental market holds flat, expert says",
-        "event_key": "unknown-event-747562409f",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001601",
-        "title": "Free Palm Beach County program helps homeowners protect family homes and avoid costly probate",
-        "event_key": "unknown-event-9b5c28d738",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_001832",
-        "title": "2026 Voter’s Guide - Florida House District 31, Republican primary - WKMG",
-        "event_key": "unknown-event-62635edf9f",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
-        "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMitwFBVV95cUxPWW4xTFBVOUdtTGNudjlhUEtUenRsQlZyd0NOZmptbTVLMUg5b2RaWlh5MWlFbkQwandZSk5tUHdJNXpPOVZRTFhZcVQ0R2pfalJUTlBCdTBaWlhsbXJMNmJNN0t6b1JFNFlxOTc5V3J1SGJaUGxMNTFNWXljek5QV1prWkl2MlU4cVY2dUlGbG5MTEVvVnd1aEdUX2Y0ZmZvRFlIQkFQeVBXN1lyemRCM09tbjkxX1E",
           "Confidence: 1.00"
         ]
       }
@@ -704,29 +679,109 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 0,
+    "candidate_count": 1,
     "high_confidence_candidate_count": 0,
-    "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {},
-    "milestones": {},
-    "reason_codes": {},
-    "examples": [],
-    "retrospective_candidate_count": 11,
+    "unanchored_candidate_suppressed_count": 1,
+    "current_relationships": {
+      "new_story": 1
+    },
+    "milestones": {
+      "identified": 1
+    },
+    "reason_codes": {
+      "entity_match": 1,
+      "identity_anchor_qualified": 1,
+      "location_match": 1,
+      "novel_milestone": 1,
+      "title_continuity": 1
+    },
+    "examples": [
+      {
+        "headline": "Victim, suspect identified in shooting at Oxmoor Terrace home in Port St. Lucie on Aug. 1 - Hometown News Treasure Coast",
+        "event_key": "unknown-event-4199bb2600",
+        "current_story_id": "story_001880",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_000071",
+        "candidate_confidence": 0.65,
+        "candidate_milestones": [
+          "identified"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "entity_match",
+          "title_continuity",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_000071",
+          "Novel milestones: identified",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.50",
+          "Location match: True",
+          "Agency match: False",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.65"
+        ]
+      }
+    ],
+    "retrospective_candidate_count": 12,
     "retrospective_high_confidence_candidate_count": 6,
     "retrospective_activation_eligible_candidate_count": 3,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 482,
-      "timeline_entries_examined": 1192,
-      "transitions_examined": 654,
-      "candidate_count": 11,
+      "stories_with_timelines": 484,
+      "timeline_entries_examined": 1200,
+      "transitions_examined": 659,
+      "candidate_count": 12,
       "high_confidence_candidate_count": 6,
       "activation_eligible_candidate_count": 3,
-      "identity_anchor_rejected_count": 4,
-      "incoherent_transition_count": 4,
-      "incoherent_story_count": 4,
+      "identity_anchor_rejected_count": 5,
+      "incoherent_transition_count": 5,
+      "incoherent_story_count": 5,
       "incoherent_stories": [
+        {
+          "story_id": "story_000014",
+          "story_title": "2 killed, 2 seriously hurt in three-vehicle crash involving semi-truck near Belle Glade",
+          "transition_count": 1,
+          "blocking_reasons": {
+            "timeline_identity_unanchored": 1
+          },
+          "examples": [
+            {
+              "prior_article": {
+                "article_id": "rss-8cdd7682d6858e01931a",
+                "event_key": "fire-c0cb6c48cc",
+                "published_at": "2026-07-23T23:17:09.519046+00:00",
+                "title": "Martin County Fire Rescue could lose $16.5M if property tax reform passes in November",
+                "source": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-fire-rescue-could-lose-16-5m-if-property-tax-reform-passes-in-november",
+                "url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-fire-rescue-could-lose-16-5m-if-property-tax-reform-passes-in-november"
+              },
+              "newer_article": {
+                "article_id": "rss-ce15712523af914f7345",
+                "event_key": "named-person-death:belle-glade",
+                "published_at": "2026-08-02T20:40:53.660508+00:00",
+                "title": "2 killed, 2 seriously hurt in three-vehicle crash involving semi-truck near Belle Glade",
+                "source": "https://www.wptv.com/news/palm-beach-county-region-the-glades/2-killed-2-seriously-hurt-in-three-vehicle-crash-involving-semi-truck-near-belle-glade",
+                "url": "https://www.wptv.com/news/palm-beach-county-region-the-glades/2-killed-2-seriously-hurt-in-three-vehicle-crash-involving-semi-truck-near-belle-glade"
+              },
+              "milestones": [
+                "death"
+              ],
+              "identity_anchor_codes": [
+                "event_family_conflict",
+                "identity_anchor_missing"
+              ],
+              "prior_title_overlap": 0.0
+            }
+          ]
+        },
         {
           "story_id": "story_000236",
           "story_title": "Videos surface in St. Lucie County firefighter hazing controversy leading to terminations, suspensions",
@@ -876,20 +931,20 @@
       "milestones": {
         "arrest": 2,
         "court_action": 1,
-        "death": 6,
+        "death": 7,
         "identified": 1,
         "recovery": 1
       },
       "blocking_conflicts": {
         "same_timestamp_order_uncertain": 4,
-        "timeline_identity_unanchored": 4,
+        "timeline_identity_unanchored": 5,
         "weak_title_continuity": 3
       },
-      "excluded_entry_count": 69,
+      "excluded_entry_count": 70,
       "exclusion_reasons": {
         "insufficient_title_detail": 24,
         "low_value_title": 16,
-        "social_source": 30
+        "social_source": 31
       },
       "examples": [
         {
@@ -1399,6 +1454,72 @@
           ]
         },
         {
+          "story_id": "story_000014",
+          "story_title": "2 killed, 2 seriously hurt in three-vehicle crash involving semi-truck near Belle Glade",
+          "milestones": [
+            "death"
+          ],
+          "matched_phrases": {
+            "death": [
+              "death",
+              "killed"
+            ]
+          },
+          "confidence": 0.74,
+          "activation_eligible": false,
+          "timeline_incoherent": true,
+          "identity_anchor_qualified": false,
+          "identity_anchor_codes": [
+            "event_family_conflict",
+            "identity_anchor_missing"
+          ],
+          "shared_title_tokens": [],
+          "blocking_conflicts": [
+            "timeline_identity_unanchored"
+          ],
+          "reason_codes": [
+            "retrospective_timeline_transition",
+            "novel_milestone",
+            "persistent_story_identity_untrusted",
+            "event_family_conflict",
+            "identity_anchor_missing",
+            "canonical_title_continuity_context_only",
+            "chronology_supported",
+            "timeline_incoherent"
+          ],
+          "prior_title_overlap": 0.0,
+          "canonical_title_overlap": 1.0,
+          "prior_article": {
+            "article_id": "rss-8cdd7682d6858e01931a",
+            "event_key": "fire-c0cb6c48cc",
+            "published_at": "2026-07-23T23:17:09.519046+00:00",
+            "title": "Martin County Fire Rescue could lose $16.5M if property tax reform passes in November",
+            "source": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-fire-rescue-could-lose-16-5m-if-property-tax-reform-passes-in-november",
+            "url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-fire-rescue-could-lose-16-5m-if-property-tax-reform-passes-in-november"
+          },
+          "newer_article": {
+            "article_id": "rss-ce15712523af914f7345",
+            "event_key": "named-person-death:belle-glade",
+            "published_at": "2026-08-02T20:40:53.660508+00:00",
+            "title": "2 killed, 2 seriously hurt in three-vehicle crash involving semi-truck near Belle Glade",
+            "source": "https://www.wptv.com/news/palm-beach-county-region-the-glades/2-killed-2-seriously-hurt-in-three-vehicle-crash-involving-semi-truck-near-belle-glade",
+            "url": "https://www.wptv.com/news/palm-beach-county-region-the-glades/2-killed-2-seriously-hurt-in-three-vehicle-crash-involving-semi-truck-near-belle-glade"
+          },
+          "candidate_trace": [
+            "Follow-up candidate mode: retrospective_observe_only",
+            "Story: story_000014",
+            "Novel milestones: death",
+            "Identity anchor qualified: False",
+            "Identity anchor codes: event_family_conflict, identity_anchor_missing",
+            "Prior title overlap: 0.00",
+            "Canonical title overlap (context only): 1.00",
+            "Same timestamp: False",
+            "Blocking conflicts: timeline_identity_unanchored",
+            "Candidate confidence: 0.74",
+            "Activation eligible: False"
+          ]
+        },
+        {
           "story_id": "story_000236",
           "story_title": "Videos surface in St. Lucie County firefighter hazing controversy leading to terminations, suspensions",
           "milestones": [
@@ -1681,50 +1802,46 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 400,
+      "florida": 402,
       "treasure_coast_local": 283,
       "treasure_coast_region": 144,
-      "unknown": 827
+      "unknown": 842
     },
-    "average_score": 58.6
+    "average_score": 58.4
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 400,
+      "florida": 402,
       "treasure_coast_local": 283,
       "treasure_coast_region": 144,
-      "unknown": 827
+      "unknown": 842
     },
-    "average_priority": 4.15
+    "average_priority": 4.1
   },
   "story_lifecycle": {
     "counts": {
-      "active": 687,
-      "developing": 200,
-      "ongoing": 767
+      "active": 712,
+      "developing": 193,
+      "ongoing": 766
     }
   },
   "registry_health": {
     "repair_version": 7,
-    "changed": true,
-    "status": "repaired",
-    "active_stories_before": 1648,
-    "active_stories_after": 1647,
+    "changed": false,
+    "status": "clean",
+    "active_stories_before": 1653,
+    "active_stories_after": 1653,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
-    "duplicate_groups_merged": 1,
-    "duplicate_story_records_removed": 1,
-    "merged_story_ids": {
-      "story_001449": [
-        "story_001809"
-      ]
-    },
+    "duplicate_groups_merged": 0,
+    "duplicate_story_records_removed": 0,
+    "merged_story_ids": {},
     "remaining_exact_duplicate_title_groups": 0,
     "publisher_title_duplicate_groups_resolved": 0,
     "remaining_publisher_title_duplicate_groups": 0,
-    "source_identity_groups_resolved": 1,
-    "source_story_records_removed": 1,
+    "source_identity_groups_resolved": 0,
+    "source_story_records_removed": 0,
     "remaining_source_identity_groups": 0,
     "incident_identity_groups_resolved": 0,
     "incident_story_records_removed": 0,
@@ -1733,35 +1850,35 @@
     "selective_timeline_entries_moved": 0,
     "contaminated_story_records_preserved": 0,
     "incident_anchor_to_story_count": 28,
-    "generated_at": "2026-08-02T16:24:25Z",
+    "generated_at": "2026-08-02T20:40:56Z",
     "quarantined_story_records_retained": 29,
-    "active_story_count": 1654
+    "active_story_count": 1671
   },
   "stories": {
-    "total": 1654,
+    "total": 1671,
     "importance_levels": {
       "breaking": 3,
       "high": 25,
-      "normal": 248,
-      "low": 1378,
+      "normal": 250,
+      "low": 1393,
       "archived": 0
     },
-    "average_importance": 9.24,
+    "average_importance": 9.19,
     "top": [
       {
-        "story_id": "story_001807",
-        "title": "Port St. Lucie police investigate domestic-related shooting after two dead - WPBF",
+        "story_id": "story_000014",
+        "title": "2 killed, 2 seriously hurt in three-vehicle crash involving semi-truck near Belle Glade",
         "score": 75,
-        "editorial_priority": 84,
-        "editorial_score": 84,
+        "editorial_priority": 85,
+        "editorial_score": 85,
         "score_breakdown": {
-          "score": 84,
+          "score": 85,
           "importance": 75,
           "proximity_multiplier": 1.0,
           "freshness_multiplier": 1.0,
-          "source_multiplier": 1.126,
-          "source_trust": 92,
-          "age_hours": 5.8
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 0.01
         },
         "level": "high",
         "importance_reasons": [
@@ -1785,28 +1902,26 @@
           "scope": "treasure_coast_local",
           "score": 100,
           "counties": [
-            "St. Lucie County"
+            "Martin County"
           ],
-          "places": [
-            "Port St. Lucie"
-          ]
+          "places": []
         },
         "editorial_proximity": {
           "score": 100,
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 2,
+        "event_count": 5,
+        "timeline_entries": 3,
+        "relationship_decisions": 3,
+        "canonical_source_candidates": 3,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-02T10:41:13.057638+00:00",
-          "hours_since_update": 5.8,
-          "event_count": 2,
-          "timeline_entries": 2
+          "last_updated": "2026-08-02T20:40:53.660508+00:00",
+          "hours_since_update": 0.01,
+          "event_count": 5,
+          "timeline_entries": 3
         }
       },
       {
@@ -1822,7 +1937,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 36.35
+          "age_hours": 40.62
         },
         "level": "breaking",
         "importance_reasons": [
@@ -1870,7 +1985,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 36.35,
+          "hours_since_update": 40.62,
           "event_count": 6,
           "timeline_entries": 6
         }
@@ -1888,7 +2003,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 48.74
+          "age_hours": 53.02
         },
         "level": "breaking",
         "importance_reasons": [
@@ -1936,9 +2051,70 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 48.74,
+          "hours_since_update": 53.02,
           "event_count": 4,
           "timeline_entries": 4
+        }
+      },
+      {
+        "story_id": "story_001807",
+        "title": "Port St. Lucie police investigate domestic-related shooting after two dead - WPBF",
+        "score": 75,
+        "editorial_priority": 80,
+        "editorial_score": 80,
+        "score_breakdown": {
+          "score": 80,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 10.06
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Port St. Lucie"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-08-02T10:41:13.057638+00:00",
+          "hours_since_update": 10.06,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       },
       {
@@ -1954,7 +2130,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.73
+          "age_hours": 5.01
         },
         "level": "high",
         "importance_reasons": [
@@ -1992,7 +2168,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-02T15:41:09.329483+00:00",
-          "hours_since_update": 0.73,
+          "hours_since_update": 5.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2010,7 +2186,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 36.34
+          "age_hours": 40.62
         },
         "level": "high",
         "importance_reasons": [
@@ -2053,7 +2229,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 36.34,
+          "hours_since_update": 40.62,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2071,7 +2247,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 36.35
+          "age_hours": 40.62
         },
         "level": "high",
         "importance_reasons": [
@@ -2114,7 +2290,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 36.35,
+          "hours_since_update": 40.62,
           "event_count": 12,
           "timeline_entries": 7
         }
@@ -2132,7 +2308,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 31.84
+          "age_hours": 35.17
         },
         "level": "high",
         "importance_reasons": [
@@ -2167,78 +2343,17 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 4,
-        "timeline_entries": 4,
-        "relationship_decisions": 2,
-        "canonical_source_candidates": 4,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-01T08:38:37.518469+00:00",
-          "hours_since_update": 31.84,
-          "event_count": 4,
-          "timeline_entries": 4
-        }
-      },
-      {
-        "story_id": "story_001657",
-        "title": "86-year-old woman dies after Port St. Lucie intersection crash - cbs12.com",
-        "score": 75,
-        "editorial_priority": 71,
-        "editorial_score": 71,
-        "score_breakdown": {
-          "score": 71,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 30.91
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Port St. Lucie"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 5,
-        "timeline_entries": 5,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 5,
+        "event_count": 9,
+        "timeline_entries": 9,
+        "relationship_decisions": 3,
+        "canonical_source_candidates": 9,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T09:34:32.950254+00:00",
-          "hours_since_update": 30.91,
-          "event_count": 5,
-          "timeline_entries": 5
+          "hours_since_update": 35.17,
+          "event_count": 9,
+          "timeline_entries": 9
         }
       },
       {
@@ -2254,7 +2369,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 36.34
+          "age_hours": 40.62
         },
         "level": "high",
         "importance_reasons": [
@@ -2297,7 +2412,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 36.34,
+          "hours_since_update": 40.62,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2315,7 +2430,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 94.64
+          "age_hours": 98.91
         },
         "level": "high",
         "importance_reasons": [
@@ -2356,7 +2471,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 94.64,
+          "hours_since_update": 98.91,
           "event_count": 4,
           "timeline_entries": 2
         }
@@ -2374,7 +2489,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 156.87
+          "age_hours": 161.15
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2418,7 +2533,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-07-27T03:32:10.873614+00:00",
-          "hours_since_update": 156.87,
+          "hours_since_update": 161.15,
           "event_count": 5,
           "timeline_entries": 3
         }
@@ -2436,7 +2551,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 36.35
+          "age_hours": 40.62
         },
         "level": "high",
         "importance_reasons": [
@@ -2474,7 +2589,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 36.35,
+          "hours_since_update": 40.62,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2492,7 +2607,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 43.73
+          "age_hours": 48.01
         },
         "level": "high",
         "importance_reasons": [
@@ -2526,7 +2641,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-07-31T20:40:54.806838+00:00",
-          "hours_since_update": 43.73,
+          "hours_since_update": 48.01,
           "event_count": 2,
           "timeline_entries": 1
         }
@@ -2544,7 +2659,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 31.84
+          "age_hours": 36.04
         },
         "level": "normal",
         "importance_reasons": [
@@ -2582,7 +2697,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-01T08:38:37.518469+00:00",
-          "hours_since_update": 31.84,
+          "hours_since_update": 36.04,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2600,7 +2715,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 48.72
+          "age_hours": 53.0
         },
         "level": "normal",
         "importance_reasons": [
@@ -2639,7 +2754,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 48.72,
+          "hours_since_update": 53.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2657,7 +2772,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 84.8
+          "age_hours": 89.07
         },
         "level": "normal",
         "importance_reasons": [
@@ -2693,7 +2808,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-07-30T03:36:51.907089+00:00",
-          "hours_since_update": 84.8,
+          "hours_since_update": 89.07,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -2711,7 +2826,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 43.73
+          "age_hours": 48.01
         },
         "level": "normal",
         "importance_reasons": [
@@ -2742,10 +2857,10 @@
         "relationship_decisions": 1,
         "canonical_source_candidates": 1,
         "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
+          "state": "ongoing",
+          "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-07-31T20:40:54.806838+00:00",
-          "hours_since_update": 43.73,
+          "hours_since_update": 48.01,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -2763,7 +2878,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.02
+          "age_hours": 4.3
         },
         "level": "normal",
         "importance_reasons": [
@@ -2803,7 +2918,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-02T16:24:21.818231+00:00",
-          "hours_since_update": 0.02,
+          "hours_since_update": 4.3,
           "event_count": 44,
           "timeline_entries": 43
         }
@@ -2821,7 +2936,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 89.59
+          "age_hours": 93.87
         },
         "level": "normal",
         "importance_reasons": [
@@ -2859,7 +2974,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-07-29T22:49:06.705745+00:00",
-          "hours_since_update": 89.59,
+          "hours_since_update": 93.87,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2877,7 +2992,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 125.73
+          "age_hours": 130.0
         },
         "level": "normal",
         "importance_reasons": [
@@ -2915,7 +3030,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-07-28T10:40:55.425868+00:00",
-          "hours_since_update": 125.73,
+          "hours_since_update": 130.0,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -2925,7 +3040,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 6,
-    "generated_at": "2026-08-02T16:29:59Z",
+    "generated_at": "2026-08-02T20:45:42Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -2940,36 +3055,33 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "cache_hit": 1,
         "category_eligibility_archive_recovery": 1,
-        "generated_live": 2,
-        "generation_failed_archive_recovery": 1,
+        "generated_live": 4,
         "no_publishable_sources": 1,
         "quality_gate_archive_recovery": 3
       },
       "failures": {
-        "article_framing_integrity": 1,
         "no_category_eligible_sources": 1,
         "publication_quality_rejected": 3
       },
-      "model_attempt_count": 7,
-      "model_elapsed_seconds": 135.574,
-      "archive_recovery_requested_count": 6,
+      "model_attempt_count": 8,
+      "model_elapsed_seconds": 118.884,
+      "archive_recovery_requested_count": 5,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 3,
-      "category_eligibility_rejection_count": 5,
-      "published_story_duplicate_suppression_count": 33,
-      "story_aware_update_context_count": 1
+      "article_framing_rejection_count": 2,
+      "category_eligibility_rejection_count": 7,
+      "published_story_duplicate_suppression_count": 21,
+      "story_aware_update_context_count": 2
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
-        "status": "generation_failed_archive_recovery",
-        "fetched_candidate_count": 26,
+        "status": "quality_gate_archive_recovery",
+        "fetched_candidate_count": 25,
         "fresh_candidate_count": 21,
-        "publishable_source_count": 6,
+        "publishable_source_count": 8,
         "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -2978,23 +3090,21 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 5.512,
+            "elapsed_seconds": 3.476,
             "result": "article_framing_integrity",
             "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No eligible local government stories available for Treasure Coast"
+            "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No eligible hero story available in Local Government category"
           },
           {
             "attempt": 2,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 6.296,
-            "result": "article_framing_integrity",
-            "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No local government stories available for Treasure Coast"
+            "elapsed_seconds": 4.079,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 11.808,
-        "failure_code": "article_framing_integrity",
-        "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No local government stories available for Treasure Coast",
+        "model_elapsed_seconds": 7.555,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3003,9 +3113,50 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 6,
-        "category_eligibility_rejection_count": 5,
+        "category_eligibility_assessed_count": 8,
+        "category_eligibility_rejection_count": 7,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_central_government_action",
+            "positive_signals": [],
+            "competing_signals": [],
+            "headline": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia"
+          },
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_central_government_action",
+            "positive_signals": [],
+            "competing_signals": [],
+            "headline": "2 killed, 2 seriously hurt in three-vehicle crash involving semi-truck near Belle Glade",
+            "source_url": "https://www.wptv.com/news/palm-beach-county-region-the-glades/2-killed-2-seriously-hurt-in-three-vehicle-crash-involving-semi-truck-near-belle-glade"
+          },
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "competing_story_form_without_government_action",
+            "positive_signals": [],
+            "competing_signals": [
+              "crime_incident:arrested"
+            ],
+            "headline": "West Palm Beach man arrested after striking deputy's motorcycle, threatening to kill officers in Islamorada",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/west-palm-beach-man-arrested-after-striking-deputys-motorcycle-threatening-to-kill-officers-in-islamorada"
+          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -3059,22 +3210,9 @@
             "competing_signals": [],
             "headline": "Pediatricians urge Palm Beach County families to schedule back-to-school shots now",
             "source_url": "https://www.wptv.com/news/education/back-to-school/pediatricians-urge-palm-beach-county-families-to-schedule-back-to-school-shots-now"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "headline": "Free Palm Beach County program helps homeowners protect family homes and avoid costly probate",
-            "source_url": "https://www.wptv.com/news/palm-beach-county/free-palm-beach-county-program-helps-homeowners-protect-family-homes-and-avoid-costly-probate"
           }
         ],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -3115,32 +3253,22 @@
             "canonical_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Martin County school district cuts 3 bus routes, saving $255,000 with no impact to students - WFLX",
-            "source_url": "https://www.wflx.com/2026/07/29/martin-county-school-district-cuts-3-bus-routes-saving-255000-with-no-impact-students",
-            "editorial_story_id": "story_001179",
-            "canonical_slug": "2026-07-29-martin-county-school-district-adjusts-bus-routes-to-save-255000",
-            "canonical_headline": "Martin County School District consolidates bus routes to save $255,000",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "generation_status": "failed",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 31.135
+        "elapsed_seconds": 35.083
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "generated_live",
-        "fetched_candidate_count": 26,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 2,
-        "selected_source_count": 2,
+        "fetched_candidate_count": 24,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 5,
+        "selected_source_count": 5,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -3148,11 +3276,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 8.636,
+            "elapsed_seconds": 9.435,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 8.636,
+        "model_elapsed_seconds": 9.435,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3163,10 +3291,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 1,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -3177,68 +3305,60 @@
             "canonical_headline": "Port St. Lucie man caught on surveillance video stealing thousands of dollars worth of tequila",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Martin County considers changes to shark fishing rules on beaches after state directive",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-considers-changes-to-shark-fishing-rules-on-beaches-after-state-directive",
-            "editorial_story_id": "story_001155",
-            "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
-            "canonical_headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Man jailed after fleeing Stuart police officer during traffic stop - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/news/martin/man-jailed-after-fleeing-stuart-police-officer-during-traffic-stop/article_957d3709-c7d3-5738-8e9d-14c349f8d3dc.html",
-            "editorial_story_id": "story_001632",
-            "canonical_slug": "2026-08-01-stuart-man-jailed-after-fleeing-traffic-stop-leading-police-chase-into-martin-co",
-            "canonical_headline": "Stuart man jailed after fleeing traffic stop, leading police chase into Martin County",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "'Flamingo Bandit' sought after St. Lucie County home burglarized twice - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-crime-news-flamingo-bandit-sought-after-st-lucie-county-home-burglarized-twice-hawaiian-shirt-burglar-shirt-wardrobe",
-            "editorial_story_id": "story_001641",
-            "canonical_slug": "2026-07-31-st-lucie-county-sheriffs-office-seeks-flamingo-bandit-after-home-burglarized-twi",
-            "canonical_headline": "St. Lucie County Sheriff's Office seeks 'Flamingo Bandit' after home burglarized twice",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "2 dead in apparent domestic murder-suicide shooting in Port St. Lucie - WPEC",
+            "source_url": "https://cbs12.com/news/local/developing-police-investigating-shooting-in-port-st-lucie-neighborhood-august-1-2026",
+            "publisher": "cbs12.com",
+            "canonical_slug": "2026-08-02-woman-killed-man-dead-in-apparent-domestic-shooting-in-port-st-lucie",
+            "canonical_headline": "Woman killed, man dead in apparent domestic shooting in Port St. Lucie",
+            "basis": "exact_source_url",
+            "identity_keys": [
+              "source:https://cbs12.com/news/local/developing-police-investigating-shooting-in-port-st-lucie-neighborhood-august-1-2026"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "source"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=source:https://cbs12.com/news/local/developing-police-investigating-shooting-in-port-st-lucie-neighborhood-august-1-2026",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Woman killed, man found dead in apparent domestic shooting in Port St. Lucie",
+        "live_hero_headline": "Woman killed, man found dead after apparent domestic shooting in Port St. Lucie",
         "generated_card_count": 0,
-        "elapsed_seconds": 26.601
+        "elapsed_seconds": 22.413
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
-        "status": "quality_gate_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 18,
-        "publishable_source_count": 9,
+        "publishable_source_count": 11,
         "selected_source_count": 7,
         "cache_hit": false,
-        "archive_recovery_requested": true,
+        "archive_recovery_requested": false,
         "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 68.271,
+            "elapsed_seconds": 39.205,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 68.271,
-        "failure_code": "publication_quality_rejected",
-        "failure_summary": "Generated content did not pass final publication quality gates",
+        "model_elapsed_seconds": 39.205,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3247,7 +3367,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 9,
+        "category_eligibility_assessed_count": 11,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 6,
@@ -3284,6 +3404,16 @@
           },
           {
             "category_key": "business",
+            "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
+            "editorial_story_id": "story_001485",
+            "canonical_slug": "2026-07-31-los-angeles-man-sentenced-to-life-in-prison-for-selling-fentanyl-that-killed-ver",
+            "canonical_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "business",
             "source_headline": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection",
             "editorial_story_id": "story_001557",
@@ -3301,37 +3431,36 @@
             "canonical_headline": "Port St. Lucie apartment residents report unanswered maintenance requests, mold at Sanctuary at Winterlakes",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Netflix docuseries renews scrutiny of Palm Beach County detective who investigated Wade Wilson",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/netflix-docuseries-renews-scrutiny-of-palm-beach-county-detective-who-investigated-wade-wilson",
-            "editorial_story_id": "story_001487",
-            "canonical_slug": "2026-07-31-fort-pierce-police-failed-to-arrest-man-before-he-killed-taylor-ann-sato-outside",
-            "canonical_headline": "Fort Pierce police failed to arrest man before he killed Taylor Ann Sato outside Timber Ridge Lane home, internal investigation finds",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 89.72
+        "live_hero_headline": "Martin County hoarding case grows to 108 rescued animals as adoptions begin",
+        "generated_card_count": 0,
+        "elapsed_seconds": 47.037
       },
       {
         "category_key": "sports",
         "category_label": "Sports",
-        "status": "cache_hit",
+        "status": "generated_live",
         "fetched_candidate_count": 25,
         "fresh_candidate_count": 25,
-        "publishable_source_count": 6,
+        "publishable_source_count": 7,
         "selected_source_count": 6,
-        "cache_hit": true,
+        "cache_hit": false,
         "archive_recovery_requested": false,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 8.673,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 8.673,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3342,15 +3471,18 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "existing_athletic_guard_retained",
-        "category_eligibility_assessed_count": 6,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 0,
         "published_story_duplicate_suppressions": [],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
+        "generation_status": "success",
+        "budget_seconds": 180.0,
         "live_hero_headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
-        "elapsed_seconds": 17.669
+        "generated_card_count": 0,
+        "elapsed_seconds": 23.816
       },
       {
         "category_key": "things_to_do",
@@ -3367,11 +3499,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 23.6,
+            "elapsed_seconds": 22.931,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 23.6,
+        "model_elapsed_seconds": 22.931,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -3422,7 +3554,7 @@
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 47.971
+        "elapsed_seconds": 44.565
       },
       {
         "category_key": "florida",
@@ -3454,14 +3586,14 @@
         "published_story_duplicate_suppressions": [],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "elapsed_seconds": 19.536
+        "elapsed_seconds": 17.881
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 22,
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 25,
         "publishable_source_count": 3,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -3482,7 +3614,7 @@
         "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 1,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
@@ -3493,60 +3625,20 @@
             "canonical_headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Martin County considers changes to shark fishing rules on beaches after state directive",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-considers-changes-to-shark-fishing-rules-on-beaches-after-state-directive",
-            "editorial_story_id": "story_001155",
-            "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
-            "canonical_headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Treasure Coast renters say costs are high as rental market holds flat, expert says - WPTV",
-            "source_url": "https://www.wptv.com/money/real-estate-news/treasure-coast-renters-say-costs-are-high-as-rental-market-holds-flat-expert-says",
-            "editorial_story_id": "story_001600",
-            "canonical_slug": "2026-07-31-treasure-coast-renters-face-high-costs-as-rental-market-holds-flat",
-            "canonical_headline": "Treasure Coast renters face high costs as rental market holds flat",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Man jailed after fleeing Stuart police officer during traffic stop - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/news/martin/man-jailed-after-fleeing-stuart-police-officer-during-traffic-stop/article_957d3709-c7d3-5738-8e9d-14c349f8d3dc.html",
-            "editorial_story_id": "story_001632",
-            "canonical_slug": "2026-08-01-stuart-man-jailed-after-fleeing-traffic-stop-leading-police-chase-into-martin-co",
-            "canonical_headline": "Stuart man jailed after fleeing traffic stop, leading police chase into Martin County",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-fun-things-across-treasure-coast-palm-beach-weekend-1784287590-1785499876/73316892",
-            "editorial_story_id": "story_000091",
-            "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
-            "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "elapsed_seconds": 12.431
+        "elapsed_seconds": 14.533
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 9,
-        "selected_source_count": 6,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 8,
+        "selected_source_count": 7,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -3554,11 +3646,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 22.278,
+            "elapsed_seconds": 26.513,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 22.279,
+        "model_elapsed_seconds": 26.513,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -3571,18 +3663,18 @@
             "surface": "card",
             "required": true,
             "passed": false,
-            "headline": "Fishermen hook 12-foot shark off Normandy Beach on Hutchinson Island",
+            "headline": "Fishermen hook 12-foot shark at Normandy Beach on Hutchinson Island in St. Lucie County",
             "missing": [
               "generated_copy_drifted_from_source_focus"
             ],
             "lead_independence": {
               "required": true,
               "passed": true,
-              "headline": "Fishermen hook 12-foot shark off Normandy Beach on Hutchinson Island",
-              "lead": "Jensen Beach resident and avid beach walker Kathy Green was walking along Normandy Beach on Hutchinson Island in St. Lucie County Friday when she filmed a group of fishermen struggling with a 12-foot shark they had hooked. The fishermen unhooked the deadly beast and released it back into the water. Shark expert and conservationist Jim Abernethy believes it was a great white shark by looking at the video.",
-              "lead_word_count": 69,
-              "headline_overlap_ratio": 0.8,
-              "new_context_token_count": 35,
+              "headline": "Fishermen hook 12-foot shark at Normandy Beach on Hutchinson Island in St. Lucie County",
+              "lead": "Jensen Beach resident and avid beach walker Kathy Green was walking along Normandy Beach on Hutchinson Island in St. Lucie County on Friday when she filmed a group of fishermen struggling with a 12-foot shark they had hooked. The fishermen unhooked the deadly beast and released it back into the water. Shark expert and conservationist Jim Abernethy believes it was a great white shark by looking at the video.",
+              "lead_word_count": 70,
+              "headline_overlap_ratio": 0.917,
+              "new_context_token_count": 32,
               "opaque_references": [],
               "undefined_references": [],
               "story_form": "standard",
@@ -3596,12 +3688,14 @@
             "claim_consistency": {
               "required": true,
               "passed": true,
-              "headline": "Fishermen hook 12-foot shark off Normandy Beach on Hutchinson Island",
-              "lead": "Jensen Beach resident and avid beach walker Kathy Green was walking along Normandy Beach on Hutchinson Island in St. Lucie County Friday when she filmed a group of fishermen struggling with a 12-foot shark they had hooked. The fishermen unhooked the deadly beast and released it back into the water. Shark expert and conservationist Jim Abernethy believes it was a great white shark by looking at the video.",
+              "headline": "Fishermen hook 12-foot shark at Normandy Beach on Hutchinson Island in St. Lucie County",
+              "lead": "Jensen Beach resident and avid beach walker Kathy Green was walking along Normandy Beach on Hutchinson Island in St. Lucie County on Friday when she filmed a group of fishermen struggling with a 12-foot shark they had hooked. The fishermen unhooked the deadly beast and released it back into the water. Shark expert and conservationist Jim Abernethy believes it was a great white shark by looking at the video.",
               "headline_money_claims": [],
               "lead_money_claims": [],
               "missing_money_claims": [],
-              "headline_jurisdictions": [],
+              "headline_jurisdictions": [
+                "st_lucie_county"
+              ],
               "lead_jurisdictions": [
                 "jensen_beach",
                 "st_lucie_county"
@@ -3615,17 +3709,17 @@
             "source_focus": {
               "required": true,
               "passed": false,
-              "generated_headline": "Fishermen hook 12-foot shark off Normandy Beach on Hutchinson Island",
-              "generated_lead": "Jensen Beach resident and avid beach walker Kathy Green was walking along Normandy Beach on Hutchinson Island in St. Lucie County Friday when she filmed a group of fishermen struggling with a 12-foot shark they had hooked.",
+              "generated_headline": "Fishermen hook 12-foot shark at Normandy Beach on Hutchinson Island in St. Lucie County",
+              "generated_lead": "Jensen Beach resident and avid beach walker Kathy Green was walking along Normandy Beach on Hutchinson Island in St. Lucie County on Friday when she filmed a group of fishermen struggling with a 12-foot shark they had hooked.",
               "source_title": "Sharks caught on video off shore in St. Lucie County, Jupiter - WPBF",
               "source_lead": "Two sharks were spotted along the Atlantic Ocean shore — one that washed up dead and another of fishermen struggling with a hooked one. Both incidents occurred Friday, with video sent to WPBF.",
               "title_similarity": {
-                "score": 0.2289,
-                "overlap": 0.1,
-                "jaccard": 0.0526,
-                "sorted_sequence": 0.2764,
-                "ordered_sequence": 0.2602,
-                "shared_token_count": 1.0
+                "score": 0.3259,
+                "overlap": 0.3,
+                "jaccard": 0.1579,
+                "sorted_sequence": 0.4444,
+                "ordered_sequence": 0.3704,
+                "shared_token_count": 3.0
               },
               "lead_token_overlap": 0.227,
               "missing": [
@@ -3636,10 +3730,10 @@
         ],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 9,
+        "category_eligibility_assessed_count": 8,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -3673,32 +3767,12 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "'Flamingo Bandit' sought after St. Lucie County home burglarized twice - cw34.com",
-            "source_url": "https://news.google.com/rss/articles/CBMihAJBVV95cUxQOU1wd2ZZMzVsaVdsT2FUdXFrd2RNVUd6ZGhnbkFJSHo5ejhKdWdRSlZSWERORzVyNmtKU1F0VlY3dVctd1NGVVp1VnRhdTlJa3J2bUlqQ3R1S09iSlNqNlJyZGhYMTkxUTNmQlNQSGxSanhNa2ZxcGRMdjhyZXNUSnRCNzZOQWl2TURla0VnQkJLVlFPUUl0c1JWNnc3WFJ2cTNreUVwNC15TEhWME14eHlDUnRuZUZlRmNDMlBNYTB3cHNndWhkQXplOHpoRGR1TjYxZ19sc2ExRFBpR0ZBTVdfSV92WmJHRndyenFaaXRXM242NnF3N051U2l0V3JHRTlTNA",
-            "editorial_story_id": "story_001641",
-            "canonical_slug": "2026-07-31-st-lucie-county-sheriffs-office-seeks-flamingo-bandit-after-home-burglarized-twi",
-            "canonical_headline": "St. Lucie County Sheriff's Office seeks 'Flamingo Bandit' after home burglarized twice",
+            "source_headline": "86-year-old woman dies after Port St. Lucie intersection crash - cw34.com",
+            "source_url": "https://cw34.com/newsletter-daily/86-year-old-woman-dies-after-port-st-lucie-intersection-crash-marie-martin-2006-hyundai-elantra-teen-driver-17-honda-strikes",
+            "editorial_story_id": "story_001557",
+            "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
             "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie officer resigns after allegations he left scene of car where man later died by suicide - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-officer-resigns-neglect-allegations/73318965",
-            "editorial_story_id": "story_001316",
-            "canonical_slug": "2026-07-29-port-st-lucie-officer-resigned-after-leaving-scene-of-suspected-suicide-without",
-            "canonical_headline": "Port St. Lucie officer resigned after leaving scene of suspected suicide without checking on victim",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "'Flamingo Bandit' sought after St. Lucie County home burglarized twice - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-crime-news-flamingo-bandit-sought-after-st-lucie-county-home-burglarized-twice-hawaiian-shirt-burglar-shirt-wardrobe",
-            "editorial_story_id": "story_001641",
-            "canonical_slug": "2026-07-31-st-lucie-county-sheriffs-office-seeks-flamingo-bandit-after-home-burglarized-twi",
-            "canonical_headline": "St. Lucie County Sheriff's Office seeks 'Flamingo Bandit' after home burglarized twice",
-            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -3718,16 +3792,6 @@
             "editorial_story_id": "story_001429",
             "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
             "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "IA report: St. Lucie County deputy fired over social media post mocking sheriff - WPEC",
-            "source_url": "https://cbs12.com/news/local/st-lucie-county-deputy-fired-controversial-social-media-post-internal-affairs-report-standards-of-performance-job-expectations-work-place-st-lucie-county-sheriffs-office-florida-news",
-            "editorial_story_id": "story_001360",
-            "canonical_slug": "2026-07-30-st-lucie-county-deputy-fired-after-social-media-post-mocked-sheriffs-performance",
-            "canonical_headline": "St. Lucie County deputy fired for Facebook post mocking sheriff's performance standards",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
@@ -3758,18 +3822,18 @@
         ],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Woman killed, man found dead in apparent domestic shooting in Port St. Lucie",
+        "live_hero_headline": "St. Lucie County Sheriff seeks Flamingo Bandit after home burglarized twice in one day",
         "generated_card_count": 1,
-        "elapsed_seconds": 37.514
+        "elapsed_seconds": 35.931
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "quality_gate_archive_recovery",
-        "fetched_candidate_count": 24,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 3,
-        "selected_source_count": 2,
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 26,
+        "publishable_source_count": 7,
+        "selected_source_count": 4,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 1,
@@ -3777,11 +3841,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 0.98,
+            "elapsed_seconds": 4.572,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 0.98,
+        "model_elapsed_seconds": 4.572,
         "failure_code": "publication_quality_rejected",
         "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
@@ -3792,27 +3856,16 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 1,
-        "published_story_duplicate_suppressions": [
-          {
-            "category_key": "indian_river",
-            "source_headline": "Martin County considers changes to shark fishing rules on beaches after state directive",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-considers-changes-to-shark-fishing-rules-on-beaches-after-state-directive",
-            "editorial_story_id": "story_001155",
-            "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
-            "canonical_headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          }
-        ],
+        "published_story_duplicate_suppression_count": 0,
+        "published_story_duplicate_suppressions": [],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 21.012
+        "elapsed_seconds": 19.432
       }
     ]
   }
