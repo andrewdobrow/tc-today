@@ -364,3 +364,93 @@ def test_material_update_composition_failure_preserves_both_pages(tmp_path, monk
     assert redirects == []
     assert repair["held_count"] == 1
     assert report["summary"]["material_update_holds"] == 1
+
+
+def test_absorbed_material_update_source_reuses_canonical_row(tmp_path):
+    generate = _load_generate(tmp_path)
+    canonical = _archive_row(
+        CANONICAL_SLUG,
+        CANONICAL_HEADLINE,
+        "2026-07-29",
+        "story_001155",
+        CANONICAL_BODY,
+        "https://www.wpbf.com/shark-rules",
+    )
+    canonical["meaningful_update_validated"] = True
+    canonical["latest_source_url"] = "https://www.wptv.com/shark-state-directive"
+    canonical["source_history"] = [
+        {
+            "role": "material_update",
+            "source_url": "https://www.wptv.com/shark-state-directive",
+        }
+    ]
+    incoming = {
+        "source_url": "https://www.wptv.com/shark-state-directive?utm_source=rss"
+    }
+
+    matched = generate._find_absorbed_semantic_material_update_source(
+        incoming, [canonical]
+    )
+
+    assert matched is canonical
+
+
+def test_material_update_render_failure_is_transactional(tmp_path, monkeypatch):
+    generate = _load_generate(tmp_path)
+    canonical = _archive_row(
+        CANONICAL_SLUG,
+        CANONICAL_HEADLINE,
+        "2026-07-29",
+        "story_001155",
+        CANONICAL_BODY,
+        "https://www.wpbf.com/shark-rules",
+    )
+    incoming = _archive_row(
+        UPDATE_SLUG,
+        UPDATE_HEADLINE,
+        "2026-08-01",
+        "story_001724",
+        UPDATE_BODY,
+        "https://www.wptv.com/shark-state-directive",
+    )
+    original = json.loads(json.dumps(canonical))
+    _write_page(tmp_path, CANONICAL_SLUG, CANONICAL_HEADLINE, CANONICAL_BODY, "July 29")
+    _write_page(tmp_path, UPDATE_SLUG, UPDATE_HEADLINE, UPDATE_BODY, "August 1")
+
+    def fake_gate(row, archive, cache, report, phase="forward_publication"):
+        if row["slug"] == CANONICAL_SLUG:
+            return ({"action": "new_story"}, None, [])
+        decision = _decision()
+        report["decisions"].append(
+            {
+                "phase": phase,
+                "incoming_headline": row["headline"],
+                "incoming_story_id": row["editorial_story_id"],
+                "decision": decision,
+                "candidates": [{"slug": CANONICAL_SLUG}],
+            }
+        )
+        return decision, canonical, [{"slug": CANONICAL_SLUG, "evidence": {}}]
+
+    monkeypatch.setattr(generate, "_run_semantic_publication_gate", fake_gate)
+    monkeypatch.setattr(generate, "client", _Client(_composition_payload()))
+    monkeypatch.setattr(
+        generate,
+        "_render_retroactive_semantic_material_update",
+        lambda *args, **kwargs: (_ for _ in ()).throw(OSError("disk error")),
+    )
+
+    report = generate._new_semantic_publication_gate_report()
+    cleaned, redirects, repair = generate._repair_recent_semantic_archive_duplicates(
+        [canonical, incoming],
+        tmp_path / "articles",
+        tmp_path,
+        {},
+        report,
+    )
+
+    assert {row["slug"] for row in cleaned} == {CANONICAL_SLUG, UPDATE_SLUG}
+    assert redirects == []
+    assert repair["held_count"] == 1
+    assert report["summary"]["material_update_holds"] == 1
+    assert canonical == original

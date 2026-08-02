@@ -17217,10 +17217,15 @@ def _load_previous_semantic_publication_gate_report(path=None):
 
 
 def _semantic_duplicate_registry_directives(reports, archive):
-    """Build deterministic story-ID merge directives from validated gate decisions.
+    """Build deterministic story-ID merge directives from completed gate actions.
 
     The model never chooses registry IDs directly. It selects an existing canonical
     slug; the retained archive row supplies the authoritative target story ID.
+
+    Duplicate decisions are immediately publication-final. Material-update decisions
+    are different: composition and contextual validation can still fail after Claude
+    confirms identity. Therefore an update may consolidate registry records only when
+    the report also contains a completed ``material_updates`` publication record.
     """
     target_story_by_slug = {
         str(row.get("slug") or ""): str(row.get("editorial_story_id") or "").strip()
@@ -17232,6 +17237,16 @@ def _semantic_duplicate_registry_directives(reports, archive):
     for gate_report in reports or []:
         if not isinstance(gate_report, dict):
             continue
+        applied_material_updates = {
+            (
+                str(row.get("source_story_id") or "").strip(),
+                str(row.get("target_slug") or "").strip(),
+            )
+            for row in gate_report.get("material_updates", ()) or ()
+            if isinstance(row, dict)
+            and str(row.get("source_story_id") or "").strip()
+            and str(row.get("target_slug") or "").strip()
+        }
         for entry in gate_report.get("decisions", ()) or ():
             if not isinstance(entry, dict):
                 continue
@@ -17255,6 +17270,13 @@ def _semantic_duplicate_registry_directives(reports, archive):
             target_slug = str(decision.get("selected_candidate_slug") or "").strip()
             target_story_id = target_story_by_slug.get(target_slug, "")
             if not source_story_id or not target_story_id:
+                continue
+            if (
+                action == SEMANTIC_ACTION_UPDATE
+                and (source_story_id, target_slug) not in applied_material_updates
+            ):
+                # Identity was established, but publication composition was held or
+                # never completed. Do not mutate persistent story identity yet.
                 continue
             key = (source_story_id, target_story_id)
             if source_story_id == target_story_id or key in seen:
@@ -17401,6 +17423,31 @@ def _apply_semantic_duplicate_registry_consolidation(
 
         primary = stories[target_id]
         secondary = stories[source_id]
+
+        # Registry consolidation is a second trust boundary. A valid same-event
+        # semantic decision must not be allowed to turn a clean canonical story into
+        # an incoherent active record because the fragmented source story already
+        # contains noisy sparse event keys or unrelated titles. Preflight the exact
+        # merge on a copy and commit only when the persistent-story integrity rules
+        # still pass.
+        trial_primary = copy.deepcopy(primary)
+        merge_story_records(trial_primary, secondary)
+        trial_primary["story_id"] = target_id
+        quarantine_reasons = (
+            list(story_quarantine_reasons(trial_primary))
+            if story_quarantine_reasons is not None
+            else []
+        )
+        if quarantine_reasons:
+            result["skipped"].append({
+                **directive,
+                "reason_code": "merge_would_contaminate_target",
+                "quarantine_reasons": quarantine_reasons,
+                "resolved_source_story_id": source_id,
+                "resolved_target_story_id": target_id,
+            })
+            continue
+
         merge_story_records(primary, secondary)
         primary["story_id"] = target_id
         audit = list(primary.get("semantic_publication_gate_merges", ()) or ())
@@ -17556,6 +17603,7 @@ def _new_semantic_publication_gate_report():
             "material_updates_applied": 0,
             "material_update_redirects": 0,
             "material_update_holds": 0,
+            "material_update_replays_suppressed": 0,
         },
         "decisions": [],
         "archive_repairs": [],
@@ -17983,6 +18031,53 @@ def _merge_semantic_material_update_sources(canonical, incoming):
     return history
 
 
+def _find_absorbed_semantic_material_update_source(incoming, archive):
+    """Return the canonical row when this exact source was already incorporated.
+
+    Retroactive repair runs before forward publication. The same source can still be
+    present in a current category placement later in the run. Without this guard the
+    publisher asks the composer to merge an update that is already in the canonical
+    article; novelty validation then correctly fails and produces a misleading hold.
+    """
+    incoming_url = str(
+        _semantic_material_update_source_record(
+            incoming or {}, "material_update"
+        ).get("source_url")
+        or ""
+    ).strip()
+    if not incoming_url:
+        return None
+    for row in archive or []:
+        if not isinstance(row, dict) or not row.get("meaningful_update_validated"):
+            continue
+        absorbed_urls = {
+            str(
+                _semantic_material_update_source_record(
+                    {"source_url": row.get("latest_source_url") or ""},
+                    "material_update",
+                ).get("source_url")
+                or ""
+            ).strip()
+        }
+        for source in row.get("source_history", ()) or ():
+            if not isinstance(source, dict):
+                continue
+            if str(source.get("role") or "") != "material_update":
+                continue
+            absorbed_urls.add(
+                str(
+                    _semantic_material_update_source_record(
+                        source, "material_update"
+                    ).get("source_url")
+                    or ""
+                ).strip()
+            )
+        absorbed_urls.discard("")
+        if incoming_url in absorbed_urls:
+            return row
+    return None
+
+
 def _semantic_material_update_composition(
     canonical,
     incoming,
@@ -18205,7 +18300,10 @@ def _render_retroactive_semantic_material_update(
         slug,
         related=related,
     )
-    (Path(articles_dir) / f"{slug}.html").write_text(page_html, encoding="utf-8")
+    destination = Path(articles_dir) / f"{slug}.html"
+    temp = destination.with_suffix(destination.suffix + ".tmp")
+    temp.write_text(page_html, encoding="utf-8")
+    temp.replace(destination)
     return page_html
 
 
@@ -18300,6 +18398,9 @@ def _repair_recent_semantic_archive_duplicates(
                     "target_slug": target_slug,
                     "source_story_id": str(row.get("editorial_story_id") or ""),
                     "target_story_id": str(canonical.get("editorial_story_id") or ""),
+                    "source_url": str(
+                        row.get("source_url") or row.get("_source_url") or ""
+                    ),
                     "source_headline": row.get("headline", ""),
                     "target_headline": canonical.get("headline", ""),
                     "confidence": decision.get("confidence", 0),
@@ -18335,23 +18436,40 @@ def _repair_recent_semantic_archive_duplicates(
                     continue
 
                 diagnostics = dict(composition.get("context_diagnostics") or {})
-                _apply_semantic_material_update_metadata(
-                    canonical,
-                    row,
-                    merged,
-                    decision,
-                    diagnostics,
-                    today=datetime.now(timezone.utc).date().isoformat(),
-                )
-                _persist_event_identity(merged, canonical)
-                _render_retroactive_semantic_material_update(
-                    canonical,
-                    row,
-                    merged,
-                    decision,
-                    articles_dir,
-                    archive,
-                )
+                staged_canonical = copy.deepcopy(canonical)
+                try:
+                    _apply_semantic_material_update_metadata(
+                        staged_canonical,
+                        row,
+                        merged,
+                        decision,
+                        diagnostics,
+                        today=datetime.now(timezone.utc).date().isoformat(),
+                    )
+                    _persist_event_identity(merged, staged_canonical)
+                    _render_retroactive_semantic_material_update(
+                        staged_canonical,
+                        row,
+                        merged,
+                        decision,
+                        articles_dir,
+                        archive,
+                    )
+                except Exception as exc:
+                    report["summary"]["material_update_holds"] += 1
+                    held.append({
+                        "slug": source_slug,
+                        "headline": row.get("headline", ""),
+                        "action": action,
+                        "candidate_slug": target_slug,
+                        "reason": "material_update_publication_transaction_failed",
+                        "validation_errors": [exc.__class__.__name__],
+                    })
+                    survivors.append(row)
+                    continue
+
+                canonical.clear()
+                canonical.update(staged_canonical)
                 removed.add(source_slug)
                 evidence = _semantic_gate_identity_evidence(decision, candidates)
                 redirects.append({
@@ -18376,6 +18494,9 @@ def _repair_recent_semantic_archive_duplicates(
                     "target_slug": target_slug,
                     "source_story_id": str(row.get("editorial_story_id") or ""),
                     "target_story_id": str(canonical.get("editorial_story_id") or ""),
+                    "source_url": str(
+                        row.get("source_url") or row.get("_source_url") or ""
+                    ),
                     "source_headline": row.get("headline", ""),
                     "updated_headline": canonical.get("headline", ""),
                     "confidence": decision.get("confidence", 0),
@@ -22180,6 +22301,45 @@ def write_archives(all_categories, top_cat):
                     "action": "reuse_existing_canonical_before_slug_creation",
                 })
 
+        # A retroactive material-update repair may have absorbed this exact source
+        # earlier in the same run (or a prior run). Do not ask Claude to compose the
+        # already-incorporated update again. Bind the live placement to the canonical
+        # article and preserve the refreshed page without a redundant update hold.
+        if existing is None and not (
+            hero.get("is_custom") or hero.get("authoritative_custom")
+        ):
+            _absorbed_update_canonical = (
+                _find_absorbed_semantic_material_update_source(hero, archive)
+            )
+            if isinstance(_absorbed_update_canonical, dict):
+                _bind_live_item_to_archive(
+                    hero,
+                    _absorbed_update_canonical,
+                    current_customs=_current_customs,
+                    replace_with_custom=False,
+                )
+                _forward_identity_report["existing_articles_preserved"] += 1
+                _forward_identity_report.setdefault(
+                    "semantic_publication_gate", []
+                ).append({
+                    "headline": headline,
+                    "canonical_slug": _absorbed_update_canonical.get("slug", ""),
+                    "action": "material_update_source_already_absorbed",
+                    "source_url": normalized_source_url,
+                })
+                _semantic_gate_report["summary"][
+                    "material_update_replays_suppressed"
+                ] += 1
+                hero["_publication_skip_reason"] = (
+                    "semantic_material_update_source_already_absorbed"
+                )
+                print(
+                    "  SEMANTIC UPDATE REPLAY LOCK: preserved "
+                    f"'{_absorbed_update_canonical.get('slug','')}' for "
+                    f"already-absorbed source '{headline[:60]}'"
+                )
+                continue
+
         # FINAL-COPY DUPLICATE BARRIER. Deterministic exact identity remains the
         # cheapest authority. If it cannot resolve the final copy, a bounded seven-day
         # fuzzy retrieval nominates only a few candidates and Claude decides whether
@@ -22836,6 +22996,7 @@ def write_archives(all_categories, top_cat):
         f"{_semantic_summary.get('material_updates_applied', 0)} material update(s), "
         f"{_semantic_summary.get('material_update_redirects', 0)} update redirect(s), "
         f"{_semantic_summary.get('material_update_composer_calls', 0)} update composer call(s), "
+        f"{_semantic_summary.get('material_update_replays_suppressed', 0)} update replay(s) suppressed, "
         f"{_semantic_summary.get('registry_story_records_merged', 0)} registry merge(s), "
         f"{_semantic_summary.get('holds', 0)} duplicate hold(s), "
         f"{_semantic_summary.get('material_update_holds', 0)} update hold(s)"

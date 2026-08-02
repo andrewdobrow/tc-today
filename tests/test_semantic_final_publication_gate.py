@@ -893,10 +893,16 @@ def test_semantic_registry_consolidation_merges_material_update_story_fragment(t
                 "schema": 1,
                 "stories": {
                     "story_a": _registry_story(
-                        "story_a", "event-a", "https://example.com/a", "A"
+                        "story_a",
+                        "event-a",
+                        "https://example.com/a",
+                        "Martin County rewrites shark fishing rules",
                     ),
                     "story_b": _registry_story(
-                        "story_b", "event-b", "https://example.com/b", "B"
+                        "story_b",
+                        "event-b",
+                        "https://example.com/b",
+                        "Martin County reviews shark fishing ordinance",
                     ),
                 },
                 "event_to_story": {"event-a": "story_a", "event-b": "story_b"},
@@ -913,6 +919,14 @@ def test_semantic_registry_consolidation_merges_material_update_story_fragment(t
     report["decisions"][0]["decision"]["action"] = ACTION_UPDATE
     report["decisions"][0]["decision"]["novel_facts"] = [
         "new official development"
+    ]
+    report["material_updates"] = [
+        {
+            "source_story_id": "story_b",
+            "target_story_id": "story_a",
+            "source_slug": "incoming-update",
+            "target_slug": CANONICAL_SLUG,
+        }
     ]
 
     result = generate._apply_semantic_duplicate_registry_consolidation(
@@ -1125,3 +1139,71 @@ def test_policy_subject_override_does_not_match_different_martin_county_ordinanc
     )
 
     assert candidates == []
+
+
+def test_held_material_update_does_not_create_registry_merge_directive(tmp_path):
+    generate = _load_generate(tmp_path)
+    canonical = _archive_row(
+        CANONICAL_SLUG, CANONICAL_HEADLINE, "2026-07-31", "story_a"
+    )
+    report = _validated_duplicate_report("story_b", CANONICAL_SLUG)
+    report["decisions"][0]["decision"]["material_new_update"] = True
+    report["decisions"][0]["decision"]["action"] = ACTION_UPDATE
+    report["material_updates"] = []
+
+    directives = generate._semantic_duplicate_registry_directives(
+        [report], [canonical]
+    )
+
+    assert directives == []
+
+
+def test_registry_consolidation_preflights_and_skips_contaminating_merge(tmp_path):
+    generate = _load_generate(tmp_path)
+    registry_path = tmp_path / "data" / "editorial_story_registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    registry_path.write_text(
+        json.dumps(
+            {
+                "schema": 1,
+                "stories": {
+                    "story_a": _registry_story(
+                        "story_a",
+                        "unknown-event-shark",
+                        "https://example.com/shark",
+                        "Martin County rewrites shark fishing rules",
+                    ),
+                    "story_b": _registry_story(
+                        "story_b",
+                        "unknown-event-budget",
+                        "https://example.com/budget",
+                        "Port St. Lucie approves annual city budget",
+                    ),
+                },
+                "event_to_story": {
+                    "unknown-event-shark": "story_a",
+                    "unknown-event-budget": "story_b",
+                },
+                "story_aliases": {},
+                "incident_anchor_to_story": {},
+                "quarantined_stories": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    canonical = _archive_row(
+        CANONICAL_SLUG, CANONICAL_HEADLINE, "2026-07-31", "story_a"
+    )
+    report = _validated_duplicate_report("story_b", CANONICAL_SLUG)
+
+    result = generate._apply_semantic_duplicate_registry_consolidation(
+        [canonical], [report], registry_path
+    )
+    payload = json.loads(registry_path.read_text(encoding="utf-8"))
+
+    assert result["status"] == "no_changes"
+    assert result["story_records_merged"] == 0
+    assert result["skipped"][0]["reason_code"] == "merge_would_contaminate_target"
+    assert "unsupported_sparse_event_merge" in result["skipped"][0]["quarantine_reasons"]
+    assert set(payload["stories"]) == {"story_a", "story_b"}
+    assert payload["story_aliases"] == {}
