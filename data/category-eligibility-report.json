@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-03T10:48:40Z",
+  "generated_at": "2026-08-03T15:50:36Z",
   "contract_version": "1.0-local-government-central-action",
   "rollout_policy": "shared_contract_interface; Local Government enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 52,
-    "rejected_count": 4,
+    "assessed_count": 59,
+    "rejected_count": 5,
     "enforced_categories": [
       "local_gov"
     ],
@@ -28,9 +28,22 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 5,
-      "rejected_count": 4,
+      "assessed_count": 8,
+      "rejected_count": 5,
       "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Locally-acquired dengue fever case confirmed in Palm Beach County",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/locally-acquired-dengue-fever-case-confirmed-in-palm-beach-county"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -53,10 +66,12 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
+          "competing_signals": [
+            "crime_incident:police say"
+          ],
+          "headline": "55-year-old woman with dementia found safe in Boynton Beach,  police say",
           "source_url": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia"
         },
         {
@@ -81,11 +96,13 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Health department issues no-swim advisory after wastewater spill on Singer Island",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/health-department-issues-no-swim-advisory-after-wastewater-spill-on-singer-island"
+          "competing_signals": [
+            "crime_incident:shooting"
+          ],
+          "headline": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace"
         }
       ]
     },
@@ -94,7 +111,7 @@
       "category_label": "Crime & Safety",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 4,
+      "assessed_count": 6,
       "rejected_count": 0,
       "rejections": []
     },
@@ -103,7 +120,7 @@
       "category_label": "Business & Development",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 10,
+      "assessed_count": 11,
       "rejected_count": 0,
       "rejections": []
     },
@@ -121,7 +138,7 @@
       "category_label": "Things To Do",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 6,
+      "assessed_count": 7,
       "rejected_count": 0,
       "rejections": []
     },
@@ -139,7 +156,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 5,
+      "assessed_count": 4,
       "rejected_count": 0,
       "rejections": []
     },
@@ -148,7 +165,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 8,
+      "assessed_count": 11,
       "rejected_count": 0,
       "rejections": []
     },
@@ -157,7 +174,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 7,
+      "assessed_count": 5,
       "rejected_count": 0,
       "rejections": []
     }
