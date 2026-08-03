@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-03T00:35:50Z",
+  "generated_at": "2026-08-03T01:46:03Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -27,13 +27,13 @@
       "publication_quality_rejected": 1
     },
     "model_attempt_count": 10,
-    "model_elapsed_seconds": 139.273,
+    "model_elapsed_seconds": 135.093,
     "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 2,
     "article_framing_rejection_count": 6,
     "category_eligibility_rejection_count": 6,
-    "published_story_duplicate_suppression_count": 28,
+    "published_story_duplicate_suppression_count": 35,
     "story_aware_update_context_count": 1
   },
   "categories": [
@@ -41,8 +41,8 @@
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 21,
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 19,
       "publishable_source_count": 7,
       "selected_source_count": 1,
       "cache_hit": false,
@@ -52,23 +52,23 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 5.017,
+          "elapsed_seconds": 4.096,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Treasure Coast local government stories available"
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No eligible local government stories available for Treasure Coast"
         },
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 8.41,
+          "elapsed_seconds": 5.187,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No qualifying local government stories available for Treasure Coast"
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No local government stories available for Treasure Coast coverage"
         }
       ],
-      "model_elapsed_seconds": 13.427,
+      "model_elapsed_seconds": 9.283,
       "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No qualifying local government stories available for Treasure Coast",
+      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No local government stories available for Treasure Coast coverage",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -115,21 +115,6 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:shooting"
-          ],
-          "headline": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
@@ -161,9 +146,22 @@
           "competing_signals": [],
           "headline": "Pediatricians urge Palm Beach County families to schedule back-to-school shots now",
           "source_url": "https://www.wptv.com/news/education/back-to-school/pediatricians-urge-palm-beach-county-families-to-schedule-back-to-school-shots-now"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Free Palm Beach County program helps homeowners protect family homes and avoid costly probate",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/free-palm-beach-county-program-helps-homeowners-protect-family-homes-and-avoid-costly-probate"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -172,6 +170,16 @@
           "editorial_story_id": "story_000014",
           "canonical_slug": "2026-07-23-martin-county-fire-rescue-faces-165m-loss-if-property-tax-reform-passes-in-novem",
           "canonical_headline": "Martin County Fire Rescue faces $16.5M loss, 116 job cuts if property tax reform passes",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace",
+          "editorial_story_id": "story_001806",
+          "canonical_slug": "2026-08-02-woman-killed-man-dead-in-apparent-domestic-shooting-in-port-st-lucie",
+          "canonical_headline": "Woman killed, man dead in apparent domestic shooting in Port St. Lucie",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -197,11 +205,11 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Man sentenced to life in prison for selling fentanyl that killed Vero Beach man in 2023 - WPEC",
-          "source_url": "https://cbs12.com/news/crime/man-sentenced-to-life-in-prison-for-selling-fentanyl-that-killed-vero-beach-man-in-2023-indian-river-county-sheriffs-office-irsco-dea-miami-divison-florida-news",
-          "editorial_story_id": "story_001485",
-          "canonical_slug": "2026-07-31-los-angeles-man-sentenced-to-life-in-prison-for-selling-fentanyl-that-killed-ver",
-          "canonical_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
+          "source_headline": "Treasure Coast renters say costs are high as rental market holds flat, expert says",
+          "source_url": "https://www.wptv.com/money/real-estate-news/treasure-coast-renters-say-costs-are-high-as-rental-market-holds-flat-expert-says",
+          "editorial_story_id": "story_001600",
+          "canonical_slug": "2026-07-31-treasure-coast-renters-face-high-costs-as-rental-market-holds-flat",
+          "canonical_headline": "Treasure Coast renters face high costs as rental market holds flat",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -210,16 +218,16 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 30.998
+      "elapsed_seconds": 25.482
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 4,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -227,11 +235,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 8.762,
+          "elapsed_seconds": 7.21,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 8.762,
+      "model_elapsed_seconds": 7.21,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -242,10 +250,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -269,6 +277,16 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace",
+          "editorial_story_id": "story_001806",
+          "canonical_slug": "2026-08-02-woman-killed-man-dead-in-apparent-domestic-shooting-in-port-st-lucie",
+          "canonical_headline": "Woman killed, man dead in apparent domestic shooting in Port St. Lucie",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Surveillance video shows Port St. Lucie man accused of stealing tequila worth thousands - WPBF",
           "source_url": "https://www.wpbf.com/article/port-st-lucie-man-stealing-tequila-thousands/73316342",
           "editorial_story_id": "story_001566",
@@ -282,17 +300,17 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Two dead in domestic shooting in Port St. Lucie",
+      "live_hero_headline": "Two dead in domestic shooting on Port St. Lucie street",
       "generated_card_count": 0,
-      "elapsed_seconds": 33.498
+      "elapsed_seconds": 20.423
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "cache_hit",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 17,
-      "publishable_source_count": 10,
+      "fresh_candidate_count": 16,
+      "publishable_source_count": 9,
       "selected_source_count": 7,
       "cache_hit": true,
       "archive_recovery_requested": false,
@@ -309,10 +327,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 10,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -321,6 +339,16 @@
           "editorial_story_id": "story_000014",
           "canonical_slug": "2026-07-23-martin-county-fire-rescue-faces-165m-loss-if-property-tax-reform-passes-in-novem",
           "canonical_headline": "Martin County Fire Rescue faces $16.5M loss, 116 job cuts if property tax reform passes",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace",
+          "editorial_story_id": "story_001806",
+          "canonical_slug": "2026-08-02-woman-killed-man-dead-in-apparent-domestic-shooting-in-port-st-lucie",
+          "canonical_headline": "Woman killed, man dead in apparent domestic shooting in Port St. Lucie",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -388,7 +416,7 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "live_hero_headline": "Martin County hoarding case grows to 108 rescued animals as adoptions begin",
-      "elapsed_seconds": 10.724
+      "elapsed_seconds": 8.151
     },
     {
       "category_key": "sports",
@@ -421,7 +449,7 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "live_hero_headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
-      "elapsed_seconds": 18.031
+      "elapsed_seconds": 19.38
     },
     {
       "category_key": "things_to_do",
@@ -438,11 +466,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 50.69,
+          "elapsed_seconds": 50.995,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 50.69,
+      "model_elapsed_seconds": 50.995,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -493,7 +521,7 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 77.329
+      "elapsed_seconds": 75.881
     },
     {
       "category_key": "florida",
@@ -525,13 +553,13 @@
       "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 20.026
+      "elapsed_seconds": 18.957
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 27,
+      "fetched_candidate_count": 28,
       "fresh_candidate_count": 26,
       "publishable_source_count": 4,
       "selected_source_count": 1,
@@ -542,7 +570,7 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 3.797,
+          "elapsed_seconds": 4.078,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
           "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Martin County stories available for hero position"
@@ -550,15 +578,15 @@
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 4.046,
+          "elapsed_seconds": 2.582,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Martin County stories available for hero selection"
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — No Martin County stories available"
         }
       ],
-      "model_elapsed_seconds": 7.843,
+      "model_elapsed_seconds": 6.66,
       "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Martin County stories available for hero selection",
+      "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — No Martin County stories available",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -570,7 +598,7 @@
       "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
@@ -581,22 +609,32 @@
           "canonical_headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Treasure Coast renters say costs are high as rental market holds flat, expert says - WFLX",
+          "source_url": "https://www.wflx.com/2026/07/31/treasure-coast-renters-say-costs-are-high-rental-market-holds-flat-expert-says",
+          "editorial_story_id": "story_001600",
+          "canonical_slug": "2026-07-31-treasure-coast-renters-face-high-costs-as-rental-market-holds-flat",
+          "canonical_headline": "Treasure Coast renters face high costs as rental market holds flat",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 28.33
+      "elapsed_seconds": 20.735
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 9,
-      "selected_source_count": 8,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 7,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 2,
@@ -604,21 +642,21 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 27.482,
+          "elapsed_seconds": 27.798,
           "result": "contextless_update_lead",
           "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: original_event_context_missing — Police identify victim, suspect in Port St. Lucie murder-suicide - WPEC"
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — Port St. Lucie police identify 50-year man, woman in murder-suicide - WPBF"
         },
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 24.096,
+          "elapsed_seconds": 25.496,
           "result": "contextless_update_lead",
           "error_type": "ContextualUpdateLeadError",
           "error_summary": "Contextless update lead for hero: original_event_context_missing — Port St. Lucie police identify 50-year man, woman in murder-suicide - WPBF"
         }
       ],
-      "model_elapsed_seconds": 51.578,
+      "model_elapsed_seconds": 53.294,
       "failure_code": "contextless_update_lead",
       "failure_summary": "Contextless update lead for hero: original_event_context_missing — Port St. Lucie police identify 50-year man, woman in murder-suicide - WPBF",
       "sports_expired_event_preview_count": 0,
@@ -629,10 +667,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -642,6 +680,26 @@
           "canonical_slug": "2026-08-02-elizabeth-ortega-killed-ralph-varela-sr-dead-in-port-st-lucie-murder-suicide-on",
           "canonical_headline": "Elizabeth Ortega killed, Ralph Varela Sr. dead in Port St. Lucie murder-suicide on SE Oxmoor Terrace",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace",
+          "editorial_story_id": "story_001806",
+          "canonical_slug": "2026-08-02-woman-killed-man-dead-in-apparent-domestic-shooting-in-port-st-lucie",
+          "canonical_headline": "Woman killed, man dead in apparent domestic shooting in Port St. Lucie",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace",
+          "editorial_story_id": "story_001806",
+          "canonical_slug": "2026-08-02-woman-killed-man-dead-in-apparent-domestic-shooting-in-port-st-lucie",
+          "canonical_headline": "Woman killed, man dead in apparent domestic shooting in Port St. Lucie",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -731,16 +789,16 @@
       ],
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 68.048
+      "elapsed_seconds": 63.622
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 4,
-      "selected_source_count": 3,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 3,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 2,
@@ -748,21 +806,21 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 4.13,
+          "elapsed_seconds": 4.154,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Indian River County stories available"
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Indian River County stories available in current feed"
         },
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 2.843,
+          "elapsed_seconds": 3.497,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
           "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Indian River County stories available"
         }
       ],
-      "model_elapsed_seconds": 6.973,
+      "model_elapsed_seconds": 7.651,
       "failure_code": "article_framing_integrity",
       "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Indian River County stories available",
       "sports_expired_event_preview_count": 0,
@@ -773,10 +831,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -800,6 +858,16 @@
         },
         {
           "category_key": "indian_river",
+          "source_headline": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace",
+          "editorial_story_id": "story_001806",
+          "canonical_slug": "2026-08-02-woman-killed-man-dead-in-apparent-domestic-shooting-in-port-st-lucie",
+          "canonical_headline": "Woman killed, man dead in apparent domestic shooting in Port St. Lucie",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
           "source_headline": "Treasure Coast renters say costs are high as rental market holds flat, expert says - WFLX",
           "source_url": "https://www.wflx.com/2026/07/31/treasure-coast-renters-say-costs-are-high-rental-market-holds-flat-expert-says",
           "editorial_story_id": "story_001600",
@@ -813,7 +881,7 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 15.121
+      "elapsed_seconds": 16.415
     }
   ]
 }
