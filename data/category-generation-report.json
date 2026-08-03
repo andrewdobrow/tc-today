@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-03T15:50:36Z",
+  "generated_at": "2026-08-03T20:54:30Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,60 +15,47 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 1,
-      "category_exception_archive_recovery": 1,
-      "generated_live": 3,
-      "generation_failed_archive_recovery": 1,
-      "no_publishable_sources": 1,
+      "generated_live": 5,
+      "generation_failed_archive_recovery": 2,
       "quality_gate_archive_recovery": 2
     },
     "failures": {
-      "article_framing_integrity": 2,
+      "contextless_update_lead": 2,
       "publication_quality_rejected": 2
     },
-    "model_attempt_count": 9,
-    "model_elapsed_seconds": 286.847,
-    "archive_recovery_requested_count": 5,
+    "model_attempt_count": 12,
+    "model_elapsed_seconds": 520.414,
+    "archive_recovery_requested_count": 4,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 4,
-    "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 14,
-    "story_aware_update_context_count": 1
+    "contextual_update_lead_rejection_count": 8,
+    "article_framing_rejection_count": 2,
+    "category_eligibility_rejection_count": 7,
+    "published_story_duplicate_suppression_count": 17,
+    "story_aware_update_context_count": 13
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 25,
+      "status": "generated_live",
+      "fetched_candidate_count": 26,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 8,
-      "selected_source_count": 3,
+      "publishable_source_count": 13,
+      "selected_source_count": 6,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 18.198,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Vero Beach keeps millage flat but taps reserves for police positions in $37.3 million budget"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.26,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Vero Beach City Council approves $37.3 million budget, keeps millage rate flat at 2.9816"
+          "elapsed_seconds": 68.929,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 33.458,
-      "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Vero Beach City Council approves $37.3 million budget, keeps millage rate flat at 2.9816",
+      "model_elapsed_seconds": 68.929,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -77,9 +64,63 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 8,
-      "category_eligibility_rejection_count": 5,
+      "category_eligibility_assessed_count": 13,
+      "category_eligibility_rejection_count": 7,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Honduran national convicted in South Florida firearms-trafficking operation",
+          "source_url": "https://www.wptv.com/news/state/honduran-national-convicted-in-south-florida-firearms-trafficking-operation"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Man dead, multiple injured in late-night I-95 crash in Riviera Beach",
+          "source_url": "https://www.wptv.com/traffic/traffic-news/man-dead-multiple-injured-in-late-night-i-95-crash-in-riviera-beach"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrest"
+          ],
+          "headline": "3 Palm Beach County men sentenced for trafficking, sexually exploiting runaway foster teens",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/3-palm-beach-county-men-sentenced-for-trafficking-sexually-exploiting-runaway-foster-teens"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "King’s Landing project is in contract default, uncertain future - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/news/st_lucie/king-s-landing-project-is-in-contract-default-uncertain-future/article_4cae62b3-0f11-5cee-9047-d06a9a6945db.html"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -122,47 +163,27 @@
           ],
           "headline": "55-year-old woman with dementia found safe in Boynton Beach,  police say",
           "source_url": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:arrested"
-          ],
-          "headline": "West Palm Beach man arrested after striking deputy's motorcycle, threatening to kill officers in Islamorada",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/west-palm-beach-man-arrested-after-striking-deputys-motorcycle-threatening-to-kill-officers-in-islamorada"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:shooting"
-          ],
-          "headline": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace"
         }
       ],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
-          "source_headline": "2 killed, 2 seriously hurt in three-vehicle crash involving semi-truck near Belle Glade",
-          "source_url": "https://www.wptv.com/news/palm-beach-county-region-the-glades/2-killed-2-seriously-hurt-in-three-vehicle-crash-involving-semi-truck-near-belle-glade",
-          "editorial_story_id": "story_000014",
-          "canonical_slug": "2026-07-23-martin-county-fire-rescue-faces-165m-loss-if-property-tax-reform-passes-in-novem",
-          "canonical_headline": "Martin County Fire Rescue faces $16.5M loss, 116 job cuts if property tax reform passes",
+          "source_headline": "Vero keeps next year’s millage flat - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/news/indian_river/vero-keeps-next-year-s-millage-flat/article_4c22ce23-9fb6-520f-8fcd-ffca088e6d60.html",
+          "editorial_story_id": "story_001949",
+          "canonical_slug": "2026-08-03-vero-beach-keeps-millage-flat-at-298-mills-adds-410000-to-budget-for-police-posi",
+          "canonical_headline": "Vero Beach keeps millage flat at 2.98 mills, adds $410,000 to budget for police positions",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina",
+          "editorial_story_id": "story_001162",
+          "canonical_slug": "2026-07-29-fort-pierce-residents-oppose-proposed-mega-yacht-marina-at-museum-pointe-over-co",
+          "canonical_headline": "Fort Pierce residents oppose proposed mega yacht marina at Museum Pointe over concerns for St. Lucie County Regional History Museum",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -177,34 +198,116 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "generation_status": "failed",
+      "story_aware_update_context_count": 3,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/martin-county-animal-hoarding-case-grows-to-108-rescued-animals-as-suspect-remains-free-on-bond",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:story_000003",
+            "source:https://www.wptv.com/news/region-martin-county/hobe-sound/martin-county-animal-hoarding-case-grows-to-108-rescued-animals-as-suspect-remains-free-on-bond"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Fort Pierce gets 90-day extension to pay state fines tied to Little Jim's docks",
+          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-08-03-fort-pierce-gets-90-day-extension-to-pay-state-fines-for-little-jims-dock-violat",
+          "canonical_headline": "Fort Pierce gets 90-day extension to pay state fines for Little Jim's dock violations",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_001950",
+            "source:https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_001950,source:https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Fort Pierce gets 90-day extension to pay state fines tied to Little Jim's docks - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-08-03-fort-pierce-gets-90-day-extension-to-pay-state-fines-for-little-jims-dock-violat",
+          "canonical_headline": "Fort Pierce gets 90-day extension to pay state fines for Little Jim's dock violations",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_001950",
+            "source:https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_001950,source:https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 61.835
+      "live_hero_headline": "Fort Pierce gets 90-day extension on $16,000 in state fines for Little Jim's dock violations",
+      "generated_card_count": 2,
+      "elapsed_seconds": 100.261
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "category_exception_archive_recovery",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 6,
-      "selected_source_count": 6,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 9,
+      "selected_source_count": 9,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 28.628,
-          "result": "success"
+          "elapsed_seconds": 45.976,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — Police identify victim, suspect in Port St. Lucie murder-suicide - WPEC"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 54.141,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — Police identify victim, suspect in Port St. Lucie murder-suicide - WPEC"
         }
       ],
-      "model_elapsed_seconds": 28.628,
-      "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed after enrichment: headline_jurisdiction_missing_from_lead — Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
+      "model_elapsed_seconds": 100.116,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: original_event_context_missing — Police identify victim, suspect in Port St. Lucie murder-suicide - WPEC",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -213,21 +316,11 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "crime",
-          "source_headline": "2 killed, 2 seriously hurt in three-vehicle crash involving semi-truck near Belle Glade",
-          "source_url": "https://www.wptv.com/news/palm-beach-county-region-the-glades/2-killed-2-seriously-hurt-in-three-vehicle-crash-involving-semi-truck-near-belle-glade",
-          "editorial_story_id": "story_000014",
-          "canonical_slug": "2026-07-23-martin-county-fire-rescue-faces-165m-loss-if-property-tax-reform-passes-in-novem",
-          "canonical_headline": "Martin County Fire Rescue faces $16.5M loss, 116 job cuts if property tax reform passes",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "crime",
           "source_headline": "Victim, suspect identified in shooting at Oxmoor Terrace home in Port St. Lucie on Aug. 1 - Hometown News Treasure Coast",
@@ -239,46 +332,281 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "generation_status": "success",
+      "story_aware_update_context_count": 2,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/martin-county-animal-hoarding-case-grows-to-108-rescued-animals-as-suspect-remains-free-on-bond",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "source:https://www.wptv.com/news/region-martin-county/hobe-sound/martin-county-animal-hoarding-case-grows-to-108-rescued-animals-as-suspect-remains-free-on-bond"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county,story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Fort Pierce gets 90-day extension to pay state fines tied to Little Jim's docks",
+          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-08-03-fort-pierce-gets-90-day-extension-to-pay-state-fines-for-little-jims-dock-violat",
+          "canonical_headline": "Fort Pierce gets 90-day extension to pay state fines for Little Jim's dock violations",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_001950",
+            "source:https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_001950,source:https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 54.786
+      "elapsed_seconds": 130.505
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "quality_gate_archive_recovery",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 11,
-      "selected_source_count": 6,
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 13,
+      "selected_source_count": 11,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 63.242,
+          "elapsed_seconds": 55.721,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Fort Pierce gets 90-day extension to pay state fines tied to Little Jim's docks"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 60.474,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 63.242,
+      "model_elapsed_seconds": 116.195,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "article_framing_rejection_count": 2,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Fort Pierce gets 90 days to review state fines tied to Little Jim Bait & Tackle docks",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Fort Pierce gets 90 days to review state fines tied to Little Jim Bait & Tackle docks",
+            "lead": "The Florida Department of Environmental Protection alleges the city has been operating docks at Little Jim's on state-owned submerged land without authorization. Emails obtained from FDEP show the state agency extended the city's deadline by 90 days, meaning city commissioners have not yet formally accepted or rejected the state's enforcement terms. City staff have been negotiating with FDEP to reduce or resolve the penalties.",
+            "lead_word_count": 68,
+            "headline_overlap_ratio": 0.429,
+            "new_context_token_count": 33,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "update",
+            "update_diagnostics": {
+              "required": true,
+              "passed": true,
+              "story_form": "update",
+              "lead_word_count": 68,
+              "baseline_anchor": "",
+              "baseline_present": true,
+              "baseline_anchor_present": true,
+              "baseline_details_present": true,
+              "baseline_context_hits": [
+                "little",
+                "state"
+              ],
+              "baseline_context_required": 2,
+              "canonical_context_available": true,
+              "canonical_context_headline": "Fort Pierce gets 90-day extension to pay state fines for Little Jim's dock violations",
+              "novelty_anchor": "continuing_status",
+              "novelty_present": true,
+              "novelty_token_hits": [
+                "docks"
+              ],
+              "missing": [],
+              "source_title": "Fort Pierce gets 90-day extension to pay state fines tied to Little Jim's docks",
+              "headline": "Fort Pierce gets 90 days to review state fines tied to Little Jim Bait & Tackle docks"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Fort Pierce gets 90 days to review state fines tied to Little Jim Bait & Tackle docks",
+            "lead": "The Florida Department of Environmental Protection alleges the city has been operating docks at Little Jim's on state-owned submerged land without authorization. Emails obtained from FDEP show the state agency extended the city's deadline by 90 days, meaning city commissioners have not yet formally accepted or rejected the state's enforcement terms. City staff have been negotiating with FDEP to reduce or resolve the penalties.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "fort_pierce"
+            ],
+            "lead_jurisdictions": [],
+            "missing_jurisdictions": [
+              "fort_pierce"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Fort Pierce gets 90 days to review state fines tied to Little Jim Bait & Tackle docks",
+            "generated_lead": "The Florida Department of Environmental Protection alleges the city has been operating docks at Little Jim's on state-owned submerged land without authorization. Emails obtained from FDEP show the state agency extended the city's deadline by 90 days, meaning city commissioners have not yet formally accepted or rejected the state's enforcement terms.",
+            "source_title": "Fort Pierce gets 90-day extension to pay state fines tied to Little Jim's docks",
+            "source_lead": "The Florida Department of Environmental Protection has given Fort Pierce until Sept. 15 to review, approve and submit a proposed consent order resolving nearly $16,000 in state fines tied to docks at Little Jim Bait & Tackle.Emails obtained by WPTV from FDEP show the state agency extended the city's deadline by 90 days, meaning city commissioners have not yet formally accepted or rejected the state's enforcement terms.",
+            "title_similarity": {
+              "score": 0.7151,
+              "overlap": 0.7692,
+              "jaccard": 0.5882,
+              "sorted_sequence": 0.7703,
+              "ordered_sequence": 0.7973,
+              "shared_token_count": 10.0
+            },
+            "lead_token_overlap": 0.794,
+            "missing": []
+          }
+        },
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond",
+            "lead": "When investigators searched 77-year-old Gail Gustino's home near Hobe Sound on July 20, they found 92 dogs and cats living in triple-digit heat with no ventilation and surrounded by inches of waste. Gustino has since been released from jail on bond, with her next court date scheduled for September. Since the initial rescue, the Humane Society of the Treasure Coast says the total number of animals recovered has climbed to 108. The shelter says every single day more animals are coming forth from the same case, with Gustino apparently having friends she dropped off animals to who have been bringing the animals to the shelter to surrender them.",
+            "lead_word_count": 112,
+            "headline_overlap_ratio": 0.308,
+            "new_context_token_count": 66,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "update",
+            "update_diagnostics": {
+              "required": true,
+              "passed": true,
+              "story_form": "update",
+              "lead_word_count": 112,
+              "baseline_anchor": "",
+              "baseline_present": true,
+              "baseline_anchor_present": true,
+              "baseline_details_present": true,
+              "baseline_context_hits": [
+                "animals",
+                "found",
+                "home"
+              ],
+              "baseline_context_required": 2,
+              "canonical_context_available": true,
+              "canonical_context_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+              "novelty_anchor": "continuing_status",
+              "novelty_present": true,
+              "novelty_token_hits": [
+                "bond",
+                "case"
+              ],
+              "missing": [],
+              "source_title": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond",
+              "headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond",
+            "lead": "When investigators searched 77-year-old Gail Gustino's home near Hobe Sound on July 20, they found 92 dogs and cats living in triple-digit heat with no ventilation and surrounded by inches of waste. Gustino has since been released from jail on bond, with her next court date scheduled for September. Since the initial rescue, the Humane Society of the Treasure Coast says the total number of animals recovered has climbed to 108. The shelter says every single day more animals are coming forth from the same case, with Gustino apparently having friends she dropped off animals to who have been bringing the animals to the shelter to surrender them.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "martin_county"
+            ],
+            "lead_jurisdictions": [
+              "hobe_sound"
+            ],
+            "missing_jurisdictions": [
+              "martin_county"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond",
+            "generated_lead": "When investigators searched 77-year-old Gail Gustino's home near Hobe Sound on July 20, they found 92 dogs and cats living in triple-digit heat with no ventilation and surrounded by inches of waste. Gustino has since been released from jail on bond, with her next court date scheduled for September.",
+            "source_title": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond",
+            "source_lead": "What the Martin County Sheriff describes as the worst animal hoarding case he has ever seen has grown larger, with 108 animals now rescued.When investigators searched 77-year-old Gail Gustino's home near Hobe Sound on July 20, they found 92 dogs and cats living in triple-digit heat with no ventilation and surrounded by inches of waste.WATCH WPTV'S COVERAGE BELOW:Gustino has since been released from jail on bond, with her next court date scheduled for September.The Martin County Sheriff described how Gustino",
+            "title_similarity": {
+              "score": 1.0,
+              "overlap": 1.0,
+              "jaccard": 1.0,
+              "sorted_sequence": 1.0,
+              "ordered_sequence": 1.0,
+              "shared_token_count": 13.0
+            },
+            "lead_token_overlap": 1.0,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 11,
+      "category_eligibility_assessed_count": 13,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -292,64 +620,89 @@
         },
         {
           "category_key": "business",
-          "source_headline": "Martin County considers changes to shark fishing rules on beaches after state directive",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-considers-changes-to-shark-fishing-rules-on-beaches-after-state-directive",
-          "editorial_story_id": "story_001155",
-          "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
-          "canonical_headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Treasure Coast renters say costs are high as rental market holds flat, expert says",
-          "source_url": "https://www.wptv.com/money/real-estate-news/treasure-coast-renters-say-costs-are-high-as-rental-market-holds-flat-expert-says",
-          "editorial_story_id": "story_001600",
-          "canonical_slug": "2026-07-31-treasure-coast-renters-face-high-costs-as-rental-market-holds-flat",
-          "canonical_headline": "Treasure Coast renters face high costs as rental market holds flat",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Los Angeles man gets life sentence for fentanyl sale that killed Vero Beach resident",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/los-angeles-man-gets-life-sentence-for-fentanyl-sale-that-killed-vero-beach-resident",
-          "editorial_story_id": "story_001485",
-          "canonical_slug": "2026-07-31-los-angeles-man-sentenced-to-life-in-prison-for-selling-fentanyl-that-killed-ver",
-          "canonical_headline": "Los Angeles man sentenced to life in prison for selling fentanyl that killed Vero Beach man",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/woman-86-killed-after-failing-to-yield-at-port-st-lucie-intersection",
-          "editorial_story_id": "story_001557",
-          "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
-          "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+          "source_headline": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace",
+          "editorial_story_id": "story_001806",
+          "canonical_slug": "2026-08-02-woman-killed-man-dead-in-apparent-domestic-shooting-in-port-st-lucie",
+          "canonical_headline": "Woman killed, man dead in apparent domestic shooting in Port St. Lucie",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 2,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/martin-county-animal-hoarding-case-grows-to-108-rescued-animals-as-suspect-remains-free-on-bond",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "source:https://www.wptv.com/news/region-martin-county/hobe-sound/martin-county-animal-hoarding-case-grows-to-108-rescued-animals-as-suspect-remains-free-on-bond"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county,story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Fort Pierce gets 90-day extension to pay state fines tied to Little Jim's docks",
+          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-08-03-fort-pierce-gets-90-day-extension-to-pay-state-fines-for-little-jims-dock-violat",
+          "canonical_headline": "Fort Pierce gets 90-day extension to pay state fines for Little Jim's dock violations",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_001950",
+            "source:https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_001950,source:https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 86.458
+      "elapsed_seconds": 137.348
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
-      "status": "cache_hit",
+      "status": "generated_live",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 25,
-      "publishable_source_count": 7,
-      "selected_source_count": 6,
-      "cache_hit": true,
+      "publishable_source_count": 8,
+      "selected_source_count": 7,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 8.089,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 8.089,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -360,15 +713,18 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
       "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
+      "generation_status": "success",
+      "budget_seconds": 180.0,
       "live_hero_headline": "St. Lucie Mets pitcher Conner Ware named Florida State League Pitcher of the Week",
-      "elapsed_seconds": 18.741
+      "generated_card_count": 0,
+      "elapsed_seconds": 35.68
     },
     {
       "category_key": "things_to_do",
@@ -376,8 +732,8 @@
       "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 7,
-      "selected_source_count": 7,
+      "publishable_source_count": 6,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 1,
@@ -385,11 +741,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 71.818,
+          "elapsed_seconds": 69.51,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 71.818,
+      "model_elapsed_seconds": 69.51,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -400,14 +756,14 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "things_to_do",
-          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
+          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-fun-things-across-treasure-coast-palm-beach-weekend-1784287590-1785499876/73316892",
           "editorial_story_id": "story_000091",
           "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
@@ -440,21 +796,28 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 99.968
+      "elapsed_seconds": 96.126
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "no_publishable_sources",
+      "status": "generated_live",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 0,
-      "selected_source_count": 0,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 8.145,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 8.145,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -465,46 +828,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 36.029
-    },
-    {
-      "category_key": "martin",
-      "category_label": "Martin County",
-      "status": "generated_live",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 27,
-      "publishable_source_count": 4,
-      "selected_source_count": 2,
-      "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.656,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 15.656,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
-      "category_eligibility_mode": "existing_geographic_enforce",
-      "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
@@ -513,18 +837,129 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County weighs shark fishing rule changes after state directive",
+      "live_hero_headline": "Honduran national convicted in Fort Pierce federal court for firearms trafficking to Honduras",
       "generated_card_count": 0,
-      "elapsed_seconds": 44.915
+      "elapsed_seconds": 40.837
+    },
+    {
+      "category_key": "martin",
+      "category_label": "Martin County",
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 7,
+      "selected_source_count": 4,
+      "cache_hit": false,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 21.221,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 23.274,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond"
+        }
+      ],
+      "model_elapsed_seconds": 44.495,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: new_development_missing — Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
+      "category_eligibility_mode": "existing_geographic_enforce",
+      "category_eligibility_policy": "county_locality",
+      "category_eligibility_assessed_count": 7,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County considers changes to shark fishing rules on beaches after state directive - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/01/martin-county-considers-changes-shark-fishing-rules-beaches-after-state-directive",
+          "editorial_story_id": "story_001155",
+          "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
+          "canonical_headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "story_aware_update_context_count": 2,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond - WPTV",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/martin-county-animal-hoarding-case-grows-to-108-rescued-animals-as-suspect-remains-free-on-bond",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "source:https://www.wptv.com/news/region-martin-county/hobe-sound/martin-county-animal-hoarding-case-grows-to-108-rescued-animals-as-suspect-remains-free-on-bond"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county,story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/martin-county-animal-hoarding-case-grows-to-108-rescued-animals-as-suspect-remains-free-on-bond",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "source:https://www.wptv.com/news/region-martin-county/hobe-sound/martin-county-animal-hoarding-case-grows-to-108-rescued-animals-as-suspect-remains-free-on-bond"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county,story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 79.457
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 28,
-      "publishable_source_count": 11,
-      "selected_source_count": 9,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 9,
+      "selected_source_count": 8,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -532,93 +967,128 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 45.487,
+          "elapsed_seconds": 62.017,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 45.487,
+      "model_elapsed_seconds": 62.017,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 1,
-      "article_framing_rejections": [
+      "contextual_update_lead_rejection_count": 3,
+      "contextual_update_lead_rejections": [
         {
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "12-foot shark caught and released by fishermen at Normandy Beach on Hutchinson Island",
-          "missing": [
-            "generated_copy_drifted_from_source_focus"
+          "story_form": "update",
+          "lead_word_count": 75,
+          "baseline_anchor": "fatality",
+          "baseline_present": false,
+          "baseline_anchor_present": false,
+          "baseline_details_present": true,
+          "baseline_context_hits": [],
+          "baseline_context_required": 0,
+          "canonical_context_available": false,
+          "canonical_context_headline": "",
+          "novelty_anchor": "identity",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "domestic",
+            "lucie",
+            "murder",
+            "police",
+            "port",
+            "related",
+            "suicide"
           ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "12-foot shark caught and released by fishermen at Normandy Beach on Hutchinson Island",
-            "lead": "Jensen Beach resident Kathy Green was walking along Normandy Beach on Hutchinson Island in St. Lucie County Friday when she filmed a group of fishermen struggling with a 12-foot shark they had hooked. The fishermen unhooked the shark and released it back into the water. Shark expert and conservationist Jim Abernethy believes it was a great white shark by looking at the video.",
-            "lead_word_count": 64,
-            "headline_overlap_ratio": 0.9,
-            "new_context_token_count": 30,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": true,
-            "headline": "12-foot shark caught and released by fishermen at Normandy Beach on Hutchinson Island",
-            "lead": "Jensen Beach resident Kathy Green was walking along Normandy Beach on Hutchinson Island in St. Lucie County Friday when she filmed a group of fishermen struggling with a 12-foot shark they had hooked. The fishermen unhooked the shark and released it back into the water. Shark expert and conservationist Jim Abernethy believes it was a great white shark by looking at the video.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [],
-            "lead_jurisdictions": [
-              "jensen_beach",
-              "st_lucie_county"
-            ],
-            "missing_jurisdictions": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": []
-          },
-          "source_focus": {
-            "required": true,
-            "passed": false,
-            "generated_headline": "12-foot shark caught and released by fishermen at Normandy Beach on Hutchinson Island",
-            "generated_lead": "Jensen Beach resident Kathy Green was walking along Normandy Beach on Hutchinson Island in St. Lucie County Friday when she filmed a group of fishermen struggling with a 12-foot shark they had hooked.",
-            "source_title": "Sharks caught on video off shore in St. Lucie County, Jupiter - WPBF",
-            "source_lead": "Two sharks were spotted along the Atlantic Ocean shore — one that washed up dead and another of fishermen struggling with a hooked one. Both incidents occurred Friday, with video sent to WPBF.",
-            "title_similarity": {
-              "score": 0.3114,
-              "overlap": 0.1,
-              "jaccard": 0.0526,
-              "sorted_sequence": 0.2923,
-              "ordered_sequence": 0.3538,
-              "shared_token_count": 1.0
-            },
-            "lead_token_overlap": 0.227,
-            "missing": [
-              "generated_copy_drifted_from_source_focus"
-            ]
-          }
+          "missing": [
+            "original_event_context_missing"
+          ],
+          "source_title": "Port St. Lucie police identify 50-year man, woman in domestic-related murder-suicide - wpbf.com",
+          "headline": "Port St. Lucie police identify victims in Southeast Oxmoor Terrace murder-suicide"
+        },
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 65,
+          "baseline_anchor": "fatality",
+          "baseline_present": false,
+          "baseline_anchor_present": false,
+          "baseline_details_present": true,
+          "baseline_context_hits": [],
+          "baseline_context_required": 0,
+          "canonical_context_available": false,
+          "canonical_context_headline": "",
+          "novelty_anchor": "identity",
+          "novelty_present": false,
+          "novelty_token_hits": [
+            "lucie",
+            "police",
+            "port"
+          ],
+          "missing": [
+            "original_event_context_missing",
+            "new_development_missing"
+          ],
+          "source_title": "Police identify victim, suspect in Port St. Lucie murder-suicide - WPEC",
+          "headline": "Neighbors react to Port St. Lucie murder-suicide on Southeast Oxmoor Terrace"
+        },
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 57,
+          "baseline_anchor": "fatality",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "apparent",
+            "dead",
+            "domestic",
+            "killed",
+            "lucie",
+            "port",
+            "shooting",
+            "woman"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Woman killed, man dead in apparent domestic shooting in Port St. Lucie",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": false,
+          "novelty_token_hits": [],
+          "missing": [
+            "new_development_missing"
+          ],
+          "source_title": "2 dead in apparent domestic murder-suicide shooting in Port St. Lucie - WPEC",
+          "headline": "Woman killed in apparent domestic shooting in Port St. Lucie neighborhood"
         }
       ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 11,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina",
+          "editorial_story_id": "story_001162",
+          "canonical_slug": "2026-07-29-fort-pierce-residents-oppose-proposed-mega-yacht-marina-at-museum-pointe-over-co",
+          "canonical_headline": "Fort Pierce residents oppose proposed mega yacht marina at Museum Pointe over concerns for St. Lucie County Regional History Museum",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Victim, suspect identified in shooting at Oxmoor Terrace home in Port St. Lucie on Aug. 1 - Hometown News Treasure Coast",
@@ -631,6 +1101,16 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace",
+          "editorial_story_id": "story_001806",
+          "canonical_slug": "2026-08-02-woman-killed-man-dead-in-apparent-domestic-shooting-in-port-st-lucie",
+          "canonical_headline": "Woman killed, man dead in apparent domestic shooting in Port St. Lucie",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "'Flamingo Bandit' sought after St. Lucie County home burglarized twice - WPEC",
           "source_url": "https://cbs12.com/news/local/florida-crime-news-flamingo-bandit-sought-after-st-lucie-county-home-burglarized-twice-hawaiian-shirt-burglar-shirt-wardrobe",
           "editorial_story_id": "story_001641",
@@ -638,10 +1118,43 @@
           "canonical_headline": "St. Lucie County Sheriff's Office seeks 'Flamingo Bandit' after home burglarized twice",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Man accused of attacking convicted killer Otto Lenke in St. Lucie County Jail - WPEC",
+          "source_url": "https://cbs12.com/news/local/man-accused-of-attacking-convicted-killer-otto-lenke-in-st-lucie-county-jail-robert-castro-dorm-struck-in-face-cut-nose-richard-benson-death",
+          "editorial_story_id": "story_001610",
+          "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
+          "canonical_headline": "Inmate awaiting retrial for Fort Pierce murder charged with attacking convicted killer in St. Lucie County Jail",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
+      "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Fort Pierce gets 90-day extension to pay state fines tied to Little Jim's docks - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-08-03-fort-pierce-gets-90-day-extension-to-pay-state-fines-for-little-jims-dock-violat",
+          "canonical_headline": "Fort Pierce gets 90-day extension to pay state fines for Little Jim's dock violations",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_001950",
+            "source:https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_001950,source:https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
         {
           "source_headline": "2 dead in apparent domestic murder-suicide shooting in Port St. Lucie - WPEC",
           "source_url": "https://cbs12.com/news/local/developing-police-investigating-shooting-in-port-st-lucie-neighborhood-august-1-2026",
@@ -666,38 +1179,30 @@
       ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Fort Pierce gets 90-day extension to pay state fines for Little Jim's dock violations",
-      "generated_card_count": 1,
-      "elapsed_seconds": 60.555
+      "live_hero_headline": "Fort Pierce gets 90-day extension to pay nearly $16,000 in state fines tied to Little Jim's docks",
+      "generated_card_count": 3,
+      "elapsed_seconds": 83.55
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generated_live",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 5,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 10,
+      "selected_source_count": 8,
       "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 14.667,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Vero Beach keeps millage flat in $37.3 million budget, adds police positions"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 13.891,
+          "elapsed_seconds": 42.918,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 28.558,
+      "model_elapsed_seconds": 42.918,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -708,18 +1213,87 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 10,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Vero keeps next year’s millage flat - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/news/indian_river/vero-keeps-next-year-s-millage-flat/article_4c22ce23-9fb6-520f-8fcd-ffca088e6d60.html",
+          "editorial_story_id": "story_001949",
+          "canonical_slug": "2026-08-03-vero-beach-keeps-millage-flat-at-298-mills-adds-410000-to-budget-for-police-posi",
+          "canonical_headline": "Vero Beach keeps millage flat at 2.98 mills, adds $410,000 to budget for police positions",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina",
+          "editorial_story_id": "story_001162",
+          "canonical_slug": "2026-07-29-fort-pierce-residents-oppose-proposed-mega-yacht-marina-at-museum-pointe-over-co",
+          "canonical_headline": "Fort Pierce residents oppose proposed mega yacht marina at Museum Pointe over concerns for St. Lucie County Regional History Museum",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "story_aware_update_context_count": 2,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/martin-county-animal-hoarding-case-grows-to-108-rescued-animals-as-suspect-remains-free-on-bond",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "source:https://www.wptv.com/news/region-martin-county/hobe-sound/martin-county-animal-hoarding-case-grows-to-108-rescued-animals-as-suspect-remains-free-on-bond"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county,story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Fort Pierce gets 90-day extension to pay state fines tied to Little Jim's docks",
+          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-08-03-fort-pierce-gets-90-day-extension-to-pay-state-fines-for-little-jims-dock-violat",
+          "canonical_headline": "Fort Pierce gets 90-day extension to pay state fines for Little Jim's dock violations",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_001950",
+            "source:https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_001950,source:https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Vero Beach keeps millage flat at 2.98 mills, adds $410,000 to budget for police positions",
+      "live_hero_headline": "Funeral set for Indian River County firefighter Geoffrey Lang after off-duty death",
       "generated_card_count": 1,
-      "elapsed_seconds": 57.11
+      "elapsed_seconds": 57.054
     }
   ]
 }
