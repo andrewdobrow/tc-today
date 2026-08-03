@@ -80,6 +80,10 @@ jobs:
           TCT_ENGINE_MODE: ${{ vars.TCT_ENGINE_MODE || 'shadow' }}
           TCT_ENGINE_MAX_ACTIONS: ${{ vars.TCT_ENGINE_MAX_ACTIONS || '8' }}
           TCT_ENGINE_KILL_SWITCH: ${{ vars.TCT_ENGINE_KILL_SWITCH || 'false' }}
+          # Reader support appears on every article by default. Change this repository
+          # variable to paid_advertising when commercial banners return; sensitive-topic
+          # notices and community resources will reactivate automatically.
+          TCT_ARTICLE_BANNER_MODE: ${{ vars.TCT_ARTICLE_BANNER_MODE || 'reader_support' }}
 
       - name: Upload generation diagnostics
         if: always()
