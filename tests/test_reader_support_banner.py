@@ -9,6 +9,8 @@ import sys
 import types
 from pathlib import Path
 
+import pytest
+
 
 ROOT = Path(__file__).resolve().parents[1]
 STRIPE_URL = "https://buy.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"
@@ -133,6 +135,8 @@ def test_support_banner_asset_matches_live_banner_dimensions():
 
 def test_most_recent_50_published_articles_use_support_banner():
     generate = _load_generate_module()
+    if generate.ARTICLE_BANNER_MODE != "reader_support":
+        pytest.skip("Repository is intentionally running in paid-advertising mode")
     recent = generate._recent_direct_article_paths(ROOT, limit=MIGRATION_LIMIT)
 
     assert len(recent) == MIGRATION_LIMIT
@@ -210,3 +214,56 @@ def test_production_workflow_exposes_reader_support_to_paid_advertising_switch()
     workflow = (ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8")
     assert "TCT_ARTICLE_BANNER_MODE" in workflow
     assert "vars.TCT_ARTICLE_BANNER_MODE || 'reader_support'" in workflow
+
+
+
+def test_preflight_repairs_legacy_sensitive_and_missing_recent_slots(tmp_path: Path):
+    generate = _load_generate_module()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+
+    legacy = articles / "2026-08-01-legacy.html"
+    sensitive = articles / "2026-08-02-sensitive.html"
+    missing = articles / "2026-08-03-missing.html"
+    _write_legacy_page(legacy)
+    _write_legacy_page(sensitive, sensitive=True)
+    missing.write_text(
+        '<html><body>\n  <div class="article-meta">Local News</div>\n</body></html>',
+        encoding="utf-8",
+    )
+    (tmp_path / "archive.json").write_text(
+        json.dumps([
+            {"slug": legacy.stem},
+            {"slug": sensitive.stem},
+            {"slug": missing.stem},
+        ]),
+        encoding="utf-8",
+    )
+
+    first = generate._migrate_legacy_article_support_banners(tmp_path, limit=50)
+    second = generate._migrate_legacy_article_support_banners(tmp_path, limit=50)
+
+    assert first == {"checked": 3, "migrated": 3, "limit": 50}
+    assert second == {"checked": 3, "migrated": 0, "limit": 50}
+    for page in (legacy, sensitive, missing):
+        html = page.read_text(encoding="utf-8")
+        assert html.count('article-banner-slot') == 1
+        assert STRIPE_URL in html
+        assert BANNER_URL in html
+        assert "advertise-banner.png" not in html
+        assert "article-house-banner" not in html
+
+
+def test_both_workflows_run_reader_support_preflight_before_validation_and_pytest():
+    for relative in (
+        ".github/workflows/test-editorial-engine.yml",
+        ".github/workflows/update.yml",
+    ):
+        workflow = (ROOT / relative).read_text(encoding="utf-8")
+        preflight = workflow.index("Normalize recent reader-support banners")
+        validate = workflow.index("Validate editorial package")
+        pytest_step = workflow.index("Run editorial engine tests")
+
+        assert preflight < validate < pytest_step
+        assert "_migrate_legacy_article_support_banners(Path.cwd(), limit=50)" in workflow
+        assert "TCT_ARTICLE_BANNER_MODE" in workflow

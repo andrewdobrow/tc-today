@@ -126,7 +126,7 @@ except Exception:
 
 # -- CONFIG --
 
-TCT_PRESENTATION_VERSION = "6.7-reader-support-recent-50"
+TCT_PRESENTATION_VERSION = "6.7.1-reader-support-pretest-preflight"
 
 SUPPORT_PAYMENT_URL = "https://buy.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"
 SUPPORT_BANNER_URL = "https://treasurecoast.today/images/support-banner.png"
@@ -20961,24 +20961,25 @@ def _recent_direct_article_paths(output_root, limit=50):
 
 
 def _migrate_legacy_article_support_banners(output_root, limit=50):
-    """Normalize only the newest retained articles to reader-support mode.
+    """Normalize the newest retained articles to the active reader-support contract.
 
-    New pages are rendered with the support banner automatically. Limiting the
-    one-time retained-page migration prevents a single release from rewriting hundreds
-    of historical HTML files. Sensitive-topic paid-advertising architecture remains
-    available through ``paid_advertising`` mode.
+    This preflight is intentionally bounded. It runs before validation in both CI
+    workflows so newly committed articles cannot displace the packaged migration set
+    and fail the next workflow. New pages are also rendered with the same canonical
+    banner during normal generation. Paid-advertising mode remains a no-op here so the
+    retained sensitive-topic architecture can be reactivated later.
     """
+    import os
     import re
 
     if ARTICLE_BANNER_MODE != "reader_support":
         return {"checked": 0, "migrated": 0, "limit": limit}
 
-    legacy_filename = "advertise" + "-banner.png"
-    legacy_pattern = re.compile(
+    ad_pattern = re.compile(
         r'(?P<indent>^[ \t]*)<a\b'
         r'(?=[^>]*\bclass="[^"]*\barticle-banner-slot\b[^"]*")'
         r'(?=[^>]*\bclass="[^"]*\barticle-ad-banner\b[^"]*")'
-        r'[^>]*>\s*<img\b[^>]*' + re.escape(legacy_filename) + r'[^>]*>\s*</a>',
+        r'[^>]*>.*?</a>',
         re.IGNORECASE | re.MULTILINE | re.DOTALL,
     )
     house_pattern = re.compile(
@@ -20988,30 +20989,60 @@ def _migrate_legacy_article_support_banners(output_root, limit=50):
         r'[^>]*>.*?</section>',
         re.IGNORECASE | re.MULTILINE | re.DOTALL,
     )
+    meta_pattern = re.compile(
+        r'(?P<indent>^[ \t]*)<div\b(?=[^>]*\bclass="[^"]*\barticle-meta\b[^"]*")[^>]*>',
+        re.IGNORECASE | re.MULTILINE,
+    )
+    slot_pattern = re.compile(
+        r'\bclass="[^"]*\barticle-banner-slot\b[^"]*"',
+        re.IGNORECASE,
+    )
 
     paths = _recent_direct_article_paths(output_root, limit=limit)
     migrated = 0
     for path in paths:
         raw = path.read_text(encoding="utf-8", errors="ignore")
-        updated = raw
-        updated, legacy_count = legacy_pattern.subn(
+        updated = ad_pattern.sub(
+            lambda match: _article_support_banner_html(match.group("indent")),
+            raw,
+            count=1,
+        )
+        updated = house_pattern.sub(
             lambda match: _article_support_banner_html(match.group("indent")),
             updated,
+            count=1,
         )
-        updated, house_count = house_pattern.subn(
-            lambda match: _article_support_banner_html(match.group("indent")),
-            updated,
-        )
-        if legacy_filename in updated:
+
+        if not slot_pattern.search(updated):
+            meta_match = meta_pattern.search(updated)
+            if not meta_match:
+                raise RuntimeError(
+                    f"Recent direct article has no banner slot or article-meta insertion point: {path}"
+                )
+            indent = meta_match.group("indent")
+            banner = _article_support_banner_html(indent) + "\n"
+            updated = updated[:meta_match.start()] + banner + updated[meta_match.start():]
+
+        slot_count = len(slot_pattern.findall(updated))
+        if slot_count != 1:
             raise RuntimeError(
-                f"Legacy advertising banner remained after support migration: {path}"
+                f"Recent direct article must contain exactly one banner slot; found {slot_count}: {path}"
             )
+        if SUPPORT_PAYMENT_URL not in updated or SUPPORT_BANNER_URL not in updated:
+            raise RuntimeError(f"Canonical reader-support banner was not established: {path}")
         if house_pattern.search(updated):
             raise RuntimeError(
                 f"Sensitive-topic house banner remained during reader-support mode: {path}"
             )
-        if legacy_count or house_count:
-            path.write_text(updated, encoding="utf-8")
+        if "advertise-banner.png" in updated:
+            raise RuntimeError(
+                f"Legacy advertising banner remained after support migration: {path}"
+            )
+
+        if updated != raw:
+            temporary = path.with_name(f".{path.name}.reader-support.tmp")
+            temporary.write_text(updated, encoding="utf-8")
+            os.replace(temporary, path)
             migrated += 1
 
     return {"checked": len(paths), "migrated": migrated, "limit": limit}
