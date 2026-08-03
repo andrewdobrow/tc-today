@@ -126,7 +126,136 @@ except Exception:
 
 # -- CONFIG --
 
-TCT_PRESENTATION_VERSION = "6.4-unified-presentation-hotfix"
+TCT_PRESENTATION_VERSION = "6.7-reader-support-recent-50"
+
+SUPPORT_PAYMENT_URL = "https://buy.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"
+SUPPORT_BANNER_URL = "https://treasurecoast.today/images/support-banner.png"
+SUPPORT_BANNER_ALT = "Support Treasure Coast Today and keep independent, local journalism alive."
+SUPPORT_BANNER_ARIA_LABEL = "Support Treasure Coast Today"
+
+# Reader support is not paid advertising, so it is intentionally eligible for every
+# article, including sensitive coverage. The paid-advertising mode remains intact for
+# a future advertiser rollout; in that mode, sensitive-topic notices/resources replace
+# commercial creative exactly as before.
+ARTICLE_BANNER_MODE = os.getenv("TCT_ARTICLE_BANNER_MODE", "reader_support").strip().lower()
+if ARTICLE_BANNER_MODE not in {"reader_support", "paid_advertising"}:
+    ARTICLE_BANNER_MODE = "reader_support"
+
+PAID_AD_DESTINATION_URL = "/advertise.html"
+PAID_AD_BANNER_URL = "https://treasurecoast.today/images/advertise-banner.png"
+PAID_AD_BANNER_ALT = "Advertise with Treasure Coast Today."
+PAID_AD_BANNER_ARIA_LABEL = "Advertise with Treasure Coast Today"
+
+ARTICLE_SENSITIVE_TERMS = (
+    "murder", "murdered", "homicide", "killed", "killing", "shooting", "shot dead",
+    "stabbing", "stabbed", "rape", "raped", "sexual assault", "sexual battery",
+    "molest", "molestation", "molested", "child abuse", "child porn", "child sex",
+    "csam", "sex abuse", "sexual abuse", "abducted", "abduction", "kidnap",
+    "human trafficking", "sex trafficking", "manslaughter", "fatal shooting",
+    "domestic violence", "domestic abuse", "assault", "overdose death", "suicide",
+    "dead body", "body found", "remains found", "fatal crash", "deadly crash",
+    "wrongful death", "death investigation", "died", "deadly collision",
+)
+ARTICLE_SEXUAL_VIOLENCE_TERMS = (
+    "rape", "raped", "sexual assault", "sexual battery", "molest", "molestation",
+    "molested", "child porn", "child sex", "csam", "sex abuse", "sexual abuse",
+    "sex trafficking",
+)
+ARTICLE_DOMESTIC_VIOLENCE_TERMS = (
+    "domestic violence", "domestic abuse", "intimate partner violence",
+)
+ARTICLE_CRISIS_TERMS = ("suicide", "suicidal", "self-harm", "mental health crisis")
+
+
+def _article_support_banner_html(indent=""):
+    """Return the canonical reader-support banner used across all articles."""
+    return (
+        f'{indent}<a href="{SUPPORT_PAYMENT_URL}" '
+        'class="article-banner-slot article-ad-banner" '
+        'target="_blank" rel="noopener noreferrer external" '
+        f'aria-label="{SUPPORT_BANNER_ARIA_LABEL}">\n'
+        f'{indent}  <img src="{SUPPORT_BANNER_URL}" alt="{SUPPORT_BANNER_ALT}">\n'
+        f'{indent}</a>'
+    )
+
+
+def _article_paid_ad_banner_html(indent=""):
+    """Return the commercial banner contract used when paid advertising is enabled."""
+    return (
+        f'{indent}<a href="{PAID_AD_DESTINATION_URL}" '
+        'class="article-banner-slot article-ad-banner" '
+        f'aria-label="{PAID_AD_BANNER_ARIA_LABEL}">\n'
+        f'{indent}  <img src="{PAID_AD_BANNER_URL}" alt="{PAID_AD_BANNER_ALT}">\n'
+        f'{indent}</a>'
+    )
+
+
+def _article_house_notice_html(label, headline, copy, resource_html="", indent=""):
+    """Render the retained sensitive-topic alternative for paid-advertising mode."""
+    resource_line = f"\n{indent}  {resource_html}" if resource_html else ""
+    return (
+        f'{indent}<section class="article-banner-slot article-house-banner" aria-label="{label}">\n'
+        f'{indent}  <div class="article-house-mark" aria-hidden="true">TCT</div>\n'
+        f'{indent}  <div class="article-house-copy">\n'
+        f'{indent}    <span class="article-house-label">{label}</span>\n'
+        f'{indent}    <strong class="article-house-headline">{headline}</strong>\n'
+        f'{indent}    <span class="article-house-text">{copy}</span>\n'
+        f'{indent}  </div>{resource_line}\n'
+        f'{indent}</section>'
+    )
+
+
+def _article_banner_html_for_context(article_text, indent="", is_weather_alert=False):
+    """Select the current article banner while retaining paid-ad sensitivity rules.
+
+    Reader-support mode deliberately returns the support banner before evaluating topic
+    sensitivity because the placement is a house-support appeal, not a commercial ad.
+    Switching ``TCT_ARTICLE_BANNER_MODE`` to ``paid_advertising`` reactivates the
+    sensitive-topic notices and support resources without another code change.
+    """
+    if ARTICLE_BANNER_MODE == "reader_support":
+        return _article_support_banner_html(indent)
+
+    lowered = str(article_text or "").lower()
+    if any(term in lowered for term in ARTICLE_SEXUAL_VIOLENCE_TERMS):
+        resource = (
+            '<a class="article-house-resource" href="https://rainn.org/" target="_blank" '
+            'rel="noopener noreferrer external"><span>Confidential support</span>'
+            '<strong>RAINN: 800-656-HOPE (4673)</strong></a>'
+        )
+        return _article_house_notice_html(
+            "Community Resource", "Support is available.",
+            "Free, confidential help is available 24 hours a day.", resource, indent,
+        )
+    if any(term in lowered for term in ARTICLE_DOMESTIC_VIOLENCE_TERMS):
+        resource = (
+            '<a class="article-house-resource" href="https://www.thehotline.org/" target="_blank" '
+            'rel="noopener noreferrer external"><span>Confidential support</span>'
+            '<strong>Call 800-799-SAFE or text START to 88788</strong></a>'
+        )
+        return _article_house_notice_html(
+            "Community Resource", "You are not alone.",
+            "Confidential domestic violence support is available 24 hours a day.",
+            resource, indent,
+        )
+    if any(term in lowered for term in ARTICLE_CRISIS_TERMS):
+        resource = (
+            '<a class="article-house-resource" href="https://988lifeline.org/" target="_blank" '
+            'rel="noopener noreferrer external"><span>Free and confidential</span>'
+            '<strong>Call or text 988</strong></a>'
+        )
+        return _article_house_notice_html(
+            "Community Resource", "Help is available now.",
+            "The 988 Lifeline provides free, confidential crisis support.", resource, indent,
+        )
+    if is_weather_alert or any(term in lowered for term in ARTICLE_SENSITIVE_TERMS):
+        return _article_house_notice_html(
+            "Editorial Notice",
+            "Some stories are too important for commercial sponsorship.",
+            "To maintain appropriate context, Treasure Coast Today does not display paid advertising alongside certain sensitive news coverage.",
+            indent=indent,
+        )
+    return _article_paid_ad_banner_html(indent)
 
 CATEGORIES = {
     "local_gov": {
@@ -10816,79 +10945,15 @@ def render_article_page(hero, category_label, category_key, pub_date, slug, rela
     headline_enc = _urlparse.quote(hero.get("headline", ""))
     headline_js  = _json.dumps(hero.get("headline", ""))
 
-    # Every article uses the same top banner slot. Ordinary stories show the paid
-    # advertising creative. Sensitive stories use a restrained editorial notice or
-    # an appropriate national support resource, preserving identical page geometry.
-    _sensitive_terms = [
-        "murder", "murdered", "homicide", "killed", "killing", "shooting", "shot dead",
-        "stabbing", "stabbed", "rape", "raped", "sexual assault", "sexual battery",
-        "molest", "molestation", "molested", "child abuse", "child porn", "child sex",
-        "csam", "sex abuse", "sexual abuse", "abducted", "abduction", "kidnap",
-        "human trafficking", "sex trafficking", "manslaughter", "fatal shooting",
-        "domestic violence", "assault", "overdose death", "suicide", "dead body",
-        "body found", "remains found", "fatal crash", "deadly crash",
-    ]
-    _sexual_terms = [
-        "rape", "raped", "sexual assault", "sexual battery", "molest", "molestation",
-        "molested", "child porn", "child sex", "csam", "sex abuse", "sexual abuse",
-        "sex trafficking",
-    ]
-    _domestic_terms = ["domestic violence", "domestic abuse", "intimate partner violence"]
-    _crisis_terms = ["suicide", "suicidal", "self-harm", "mental health crisis"]
-
+    # Reader support is a house-support appeal rather than paid advertising, so the
+    # default mode shows it on every article. The selector still contains the complete
+    # sensitive-topic advertising policy for a future paid-ad rollout.
     _hl_body = (hero.get("headline", "") + " " + hero.get("body", "")[:500]).lower()
-    _is_sensitive = any(t in _hl_body for t in _sensitive_terms) or bool(hero.get("is_weather_alert"))
-
-    def _editorial_notice(label, headline, copy, resource_html=""):
-        return f'''
-      <section class="article-banner-slot article-house-banner" aria-label="{label}">
-        <div class="article-house-mark" aria-hidden="true">TCT</div>
-        <div class="article-house-copy">
-          <span class="article-house-label">{label}</span>
-          <strong class="article-house-headline">{headline}</strong>
-          <span class="article-house-text">{copy}</span>
-        </div>
-        {resource_html}
-      </section>'''
-
-    if any(t in _hl_body for t in _sexual_terms):
-        _resource = '<a class="article-house-resource" href="https://rainn.org/" target="_blank" rel="noopener noreferrer external"><span>Confidential support</span><strong>RAINN: 800-656-HOPE (4673)</strong></a>'
-        banner_slot = _editorial_notice(
-            "Community Resource",
-            "Support is available.",
-            "Free, confidential help is available 24 hours a day.",
-            _resource,
-        )
-    elif any(t in _hl_body for t in _domestic_terms):
-        _resource = '<a class="article-house-resource" href="https://www.thehotline.org/" target="_blank" rel="noopener noreferrer external"><span>Confidential support</span><strong>Call 800-799-SAFE or text START to 88788</strong></a>'
-        banner_slot = _editorial_notice(
-            "Community Resource",
-            "You are not alone.",
-            "Confidential domestic violence support is available 24 hours a day.",
-            _resource,
-        )
-    elif any(t in _hl_body for t in _crisis_terms):
-        _resource = '<a class="article-house-resource" href="https://988lifeline.org/" target="_blank" rel="noopener noreferrer external"><span>Free and confidential</span><strong>Call or text 988</strong></a>'
-        banner_slot = _editorial_notice(
-            "Community Resource",
-            "Help is available now.",
-            "The 988 Lifeline provides free, confidential crisis support.",
-            _resource,
-        )
-    elif _is_sensitive:
-        banner_slot = _editorial_notice(
-            "Editorial Notice",
-            "Some stories are too important for commercial sponsorship.",
-            "To maintain appropriate context, Treasure Coast Today does not display paid advertising alongside certain sensitive news coverage.",
-        )
-    else:
-        banner_slot = (
-            '      <a href="/advertise.html" class="article-banner-slot article-ad-banner" '
-            'aria-label="Advertise with Treasure Coast Today">\n'
-            '        <img src="/images/advertise-banner.png" '
-            'alt="Advertise with Treasure Coast Today. Reach Martin, St. Lucie and Indian River readers every day">\n'
-            '      </a>'
-        )
+    banner_slot = _article_banner_html_for_context(
+        _hl_body,
+        "      ",
+        is_weather_alert=bool(hero.get("is_weather_alert")),
+    )
 
     # Related stories — same category, most recent, excluding this article
     items = ""
@@ -20835,6 +20900,122 @@ def write_story_health_report(output_root, archive, current_run_redirects=None):
     return report
 
 
+
+def _recent_direct_article_paths(output_root, limit=50):
+    """Return the newest direct article pages in publication order.
+
+    The archive is the authoritative publication sequence. A filename/mtime fallback
+    keeps focused tests and incomplete local checkouts deterministic. Redirect stubs
+    are excluded because they are not reader-facing article pages.
+    """
+    output_root = Path(output_root)
+    articles_dir = output_root / "articles"
+    if not articles_dir.exists() or limit <= 0:
+        return []
+
+    def _is_direct_article(path):
+        if not path.exists() or not path.is_file():
+            return False
+        raw = path.read_text(encoding="utf-8", errors="ignore")
+        return 'http-equiv="refresh"' not in raw and "window.location.replace" not in raw
+
+    selected = []
+    seen = set()
+    archive_path = output_root / "archive.json"
+    if archive_path.exists():
+        try:
+            archive = json.loads(archive_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
+            archive = []
+        if isinstance(archive, dict):
+            archive = archive.get("articles") or archive.get("items") or []
+        if isinstance(archive, list):
+            for row in reversed(archive):
+                if not isinstance(row, dict):
+                    continue
+                slug = str(row.get("canonical_slug") or row.get("slug") or "").strip()
+                slug = slug.removesuffix(".html")
+                if not slug or slug in seen:
+                    continue
+                path = articles_dir / f"{slug}.html"
+                if not _is_direct_article(path):
+                    continue
+                selected.append(path)
+                seen.add(slug)
+                if len(selected) >= limit:
+                    return selected
+
+    fallback = sorted(
+        articles_dir.glob("*.html"),
+        key=lambda path: (path.stem[:10], path.stat().st_mtime_ns, path.name),
+        reverse=True,
+    )
+    for path in fallback:
+        if path.stem in seen or not _is_direct_article(path):
+            continue
+        selected.append(path)
+        seen.add(path.stem)
+        if len(selected) >= limit:
+            break
+    return selected
+
+
+def _migrate_legacy_article_support_banners(output_root, limit=50):
+    """Normalize only the newest retained articles to reader-support mode.
+
+    New pages are rendered with the support banner automatically. Limiting the
+    one-time retained-page migration prevents a single release from rewriting hundreds
+    of historical HTML files. Sensitive-topic paid-advertising architecture remains
+    available through ``paid_advertising`` mode.
+    """
+    import re
+
+    if ARTICLE_BANNER_MODE != "reader_support":
+        return {"checked": 0, "migrated": 0, "limit": limit}
+
+    legacy_filename = "advertise" + "-banner.png"
+    legacy_pattern = re.compile(
+        r'(?P<indent>^[ \t]*)<a\b'
+        r'(?=[^>]*\bclass="[^"]*\barticle-banner-slot\b[^"]*")'
+        r'(?=[^>]*\bclass="[^"]*\barticle-ad-banner\b[^"]*")'
+        r'[^>]*>\s*<img\b[^>]*' + re.escape(legacy_filename) + r'[^>]*>\s*</a>',
+        re.IGNORECASE | re.MULTILINE | re.DOTALL,
+    )
+    house_pattern = re.compile(
+        r'(?P<indent>^[ \t]*)<section\b'
+        r'(?=[^>]*\bclass="[^"]*\barticle-banner-slot\b[^"]*")'
+        r'(?=[^>]*\bclass="[^"]*\barticle-house-banner\b[^"]*")'
+        r'[^>]*>.*?</section>',
+        re.IGNORECASE | re.MULTILINE | re.DOTALL,
+    )
+
+    paths = _recent_direct_article_paths(output_root, limit=limit)
+    migrated = 0
+    for path in paths:
+        raw = path.read_text(encoding="utf-8", errors="ignore")
+        updated = raw
+        updated, legacy_count = legacy_pattern.subn(
+            lambda match: _article_support_banner_html(match.group("indent")),
+            updated,
+        )
+        updated, house_count = house_pattern.subn(
+            lambda match: _article_support_banner_html(match.group("indent")),
+            updated,
+        )
+        if legacy_filename in updated:
+            raise RuntimeError(
+                f"Legacy advertising banner remained after support migration: {path}"
+            )
+        if house_pattern.search(updated):
+            raise RuntimeError(
+                f"Sensitive-topic house banner remained during reader-support mode: {path}"
+            )
+        if legacy_count or house_count:
+            path.write_text(updated, encoding="utf-8")
+            migrated += 1
+
+    return {"checked": len(paths), "migrated": migrated, "limit": limit}
+
 def _repair_article_shells(output_root):
     """Normalize every retained article to one banner, grid and populated sidebar.
 
@@ -20881,70 +21062,8 @@ def _repair_article_shells(output_root):
         })
     catalog.sort(key=lambda item: (item["sort"], item["slug"]), reverse=True)
 
-    sensitive_terms = (
-        "murder", "murdered", "homicide", "killed", "killing", "shooting", "shot dead",
-        "stabbing", "stabbed", "rape", "raped", "sexual assault", "sexual battery",
-        "molest", "molestation", "molested", "child abuse", "child porn", "child sex",
-        "csam", "sex abuse", "sexual abuse", "abducted", "abduction", "kidnap",
-        "human trafficking", "sex trafficking", "manslaughter", "fatal shooting",
-        "domestic violence", "domestic abuse", "assault", "overdose death", "suicide",
-        "dead body", "body found", "remains found", "fatal crash", "deadly crash",
-        "wrongful death", "death investigation", "died", "deadly collision"
-    )
-    sexual_terms = (
-        "rape", "raped", "sexual assault", "sexual battery", "molest", "molestation",
-        "molested", "child porn", "child sex", "csam", "sex abuse", "sexual abuse",
-        "sex trafficking"
-    )
-    domestic_terms = ("domestic violence", "domestic abuse", "intimate partner violence")
-    crisis_terms = ("suicide", "suicidal", "self-harm", "mental health crisis")
-
-    ad_html = (
-        '<a href="/advertise.html" class="article-banner-slot article-ad-banner" '
-        'aria-label="Advertise with Treasure Coast Today">'
-        '<img src="/images/advertise-banner.png" '
-        'alt="Advertise with Treasure Coast Today. Reach Martin, St. Lucie and Indian River readers every day">'
-        '</a>'
-    )
-
-    def _notice(label, headline, copy, resource_html=""):
-        return (
-            f'<section class="article-banner-slot article-house-banner" aria-label="{label}">'
-            '<div class="article-house-mark" aria-hidden="true">TCT</div>'
-            '<div class="article-house-copy">'
-            f'<span class="article-house-label">{label}</span>'
-            f'<strong class="article-house-headline">{headline}</strong>'
-            f'<span class="article-house-text">{copy}</span>'
-            '</div>' + resource_html + '</section>'
-        )
-
     def _banner_for(article_text):
-        lowered = article_text.lower()
-        if any(term in lowered for term in sexual_terms):
-            resource = ('<a class="article-house-resource" href="https://rainn.org/" target="_blank" '
-                        'rel="noopener noreferrer external"><span>Confidential support</span>'
-                        '<strong>RAINN: 800-656-HOPE (4673)</strong></a>')
-            return _notice("Community Resource", "Support is available.",
-                           "Free, confidential help is available 24 hours a day.", resource)
-        if any(term in lowered for term in domestic_terms):
-            resource = ('<a class="article-house-resource" href="https://www.thehotline.org/" target="_blank" '
-                        'rel="noopener noreferrer external"><span>Confidential support</span>'
-                        '<strong>Call 800-799-SAFE or text START to 88788</strong></a>')
-            return _notice("Community Resource", "You are not alone.",
-                           "Confidential domestic violence support is available 24 hours a day.", resource)
-        if any(term in lowered for term in crisis_terms):
-            resource = ('<a class="article-house-resource" href="https://988lifeline.org/" target="_blank" '
-                        'rel="noopener noreferrer external"><span>Free and confidential</span>'
-                        '<strong>Call or text 988</strong></a>')
-            return _notice("Community Resource", "Help is available now.",
-                           "The 988 Lifeline provides free, confidential crisis support.", resource)
-        if any(term in lowered for term in sensitive_terms):
-            return _notice(
-                "Editorial Notice",
-                "Some stories are too important for commercial sponsorship.",
-                "To maintain appropriate context, Treasure Coast Today does not display paid advertising alongside certain sensitive news coverage."
-            )
-        return ad_html
+        return _article_banner_html_for_context(article_text)
 
     def _sidebar_for(current_slug, current_category):
         same = [item for item in catalog if item["slug"] != current_slug and current_category and item["category"] == current_category]
@@ -25746,6 +25865,12 @@ def main():
     # presentation contract is not present. This prevents another apparently random
     # mix of old and new article shells from reaching production.
     _repair_article_shells(OUTPUT_DIR)
+    _support_banner_migration = _migrate_legacy_article_support_banners(OUTPUT_DIR)
+    if _support_banner_migration.get("migrated"):
+        print(
+            "  Reader-support banner migration: "
+            f"{_support_banner_migration['migrated']} retained article page(s) updated"
+        )
     _validate_presentation_contract(OUTPUT_DIR)
     print(f"  Timing: page rendering and presentation checks {time.perf_counter() - _stage_started:.1f}s")
     _stage_started = time.perf_counter()
