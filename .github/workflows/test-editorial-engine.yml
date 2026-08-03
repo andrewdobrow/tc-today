@@ -17,6 +17,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      TCT_ARTICLE_BANNER_MODE: ${{ vars.TCT_ARTICLE_BANNER_MODE || 'reader_support' }}
 
     steps:
       - name: Check out repository
@@ -38,6 +40,19 @@ jobs:
 
       - name: Sanitize persistent generation cache
         run: python scripts/sanitize_generation_cache.py
+
+      - name: Normalize recent reader-support banners
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from scripts.generate import _migrate_legacy_article_support_banners
+
+          result = _migrate_legacy_article_support_banners(Path.cwd(), limit=50)
+          print(
+              "Reader-support preflight: "
+              f"{result['checked']} checked, {result['migrated']} migrated"
+          )
+          PY
 
       - name: Validate editorial package
         run: python scripts/validate_package.py

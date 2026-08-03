@@ -21,6 +21,7 @@ jobs:
     timeout-minutes: 90
     env:
       PYTHONDONTWRITEBYTECODE: "1"
+      TCT_ARTICLE_BANNER_MODE: ${{ vars.TCT_ARTICLE_BANNER_MODE || 'reader_support' }}
     outputs:
       committed: ${{ steps.push.outputs.committed }}
 
@@ -54,6 +55,19 @@ jobs:
 
       - name: Sanitize persistent generation cache
         run: python scripts/sanitize_generation_cache.py
+
+      - name: Normalize recent reader-support banners
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from scripts.generate import _migrate_legacy_article_support_banners
+
+          result = _migrate_legacy_article_support_banners(Path.cwd(), limit=50)
+          print(
+              "Reader-support preflight: "
+              f"{result['checked']} checked, {result['migrated']} migrated"
+          )
+          PY
 
       - name: Validate editorial package
         run: python scripts/validate_package.py
