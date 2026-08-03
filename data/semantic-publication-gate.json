@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "gate_version": "1.4",
-  "generated_at": "2026-08-02T20:46:26.819102+00:00",
+  "generated_at": "2026-08-03T00:36:48.811996+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -45,19 +45,19 @@
   },
   "summary": {
     "evaluations": 70,
-    "candidate_pairs": 0,
+    "candidate_pairs": 1,
     "structured_conflict_overrides": 0,
-    "model_calls": 0,
+    "model_calls": 1,
     "cache_hits": 0,
-    "no_candidate_passes": 70,
-    "duplicates_preserved": 0,
+    "no_candidate_passes": 69,
+    "duplicates_preserved": 1,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 2,
-    "retroactive_rows_retained": 68,
+    "new_stories_allowed": 0,
+    "retroactive_rows_retained": 69,
     "holds": 0,
     "retroactive_redirects": 0,
-    "registry_story_records_merged": 0,
-    "registry_aliases_written": 0,
+    "registry_story_records_merged": 1,
+    "registry_aliases_written": 1,
     "material_update_composer_calls": 0,
     "material_updates_applied": 0,
     "material_update_redirects": 0,
@@ -1358,7 +1358,7 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Elizabeth Ortega killed, Ralph Varela Sr. dead in Port St. Lucie murder-suicide on SE Oxmoor Terrace",
       "incoming_source_url": "https://www.hometownnewstc.com/crime/st_lucie/victim-suspect-identified-in-shooting-at-oxmoor-terrace-home-in-port-st-lucie-on-aug/article_c89b77ef-e03f-5997-9530-a9fb2e6ce0b1.html",
       "incoming_story_id": "story_001880",
@@ -1378,20 +1378,60 @@
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "St. Lucie County Sheriff seeks Flamingo Bandit after home burglarized twice in one day",
-      "incoming_source_url": "https://cbs12.com/newsletter-daily/florida-crime-news-flamingo-bandit-sought-after-st-lucie-county-home-burglarized-twice-hawaiian-shirt-burglar-shirt-wardrobe",
-      "incoming_story_id": "story_001641",
-      "candidates": [],
+      "incoming_headline": "Two dead in domestic shooting in Port St. Lucie",
+      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace",
+      "incoming_story_id": "story_001830",
+      "candidates": [
+        {
+          "slug": "2026-08-02-woman-killed-man-dead-in-apparent-domestic-shooting-in-port-st-lucie",
+          "headline": "Woman killed, man dead in apparent domestic shooting in Port St. Lucie",
+          "retrieval_score": 0.8935,
+          "headline_similarity": 0.7735,
+          "similarity_basis": "final_headline",
+          "shared_headline_tokens": [
+            "death",
+            "domestic",
+            "lucie",
+            "port",
+            "shooting",
+            "st"
+          ],
+          "shared_topic_tokens": [
+            "death",
+            "domestic",
+            "shooting"
+          ],
+          "day_gap": 0,
+          "structured_conflict_override": false,
+          "structured_conflict_override_tier": "",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": false,
+          "reasons": [
+            "strong_fuzzy_headline",
+            "shared_locality_and_event_family",
+            "publication_gap_0_days"
+          ]
+        }
+      ],
       "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
+        "status": "validated",
+        "action": "duplicate_use_existing_canonical",
+        "recommended_action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-08-02-woman-killed-man-dead-in-apparent-domestic-shooting-in-port-st-lucie",
+        "same_real_world_event": true,
         "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
+        "confidence": 0.98,
+        "shared_anchors": [
+          "2000 block of SE Oxmoor Terrace",
+          "Saturday evening around 7:40 p.m.",
+          "Woman airlifted to hospital and pronounced dead",
+          "Man found dead from apparent self-inflicted gunshot wound",
+          "Multiple 911 calls reporting gunshots and domestic disturbance",
+          "Port St. Lucie Police Department response",
+          "Heavy police presence near SE Triumph Road and SE Veterans Memorial Parkway"
+        ],
         "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "reason": "Both articles describe the identical incident: a domestic-related shooting on Saturday evening at 7:40 p.m. in the 2000 block of SE Oxmoor Terrace in Port St. Lucie. The specific details match precisely - woman airlifted and later pronounced dead, man found dead from apparent self-inflicted gunshot, multiple 911 calls, same police response locations. The incoming article contains no material updates beyond what the canonical already reports - both indicate the scene remained active Sunday with ongoing investigation, both note no public threat, and neither identifies the victims. This is the same reporting with slightly different wording.",
         "validation_errors": []
       }
     }
@@ -1400,14 +1440,36 @@
   "material_update_compositions": [],
   "material_updates": [],
   "registry_consolidation": {
-    "status": "no_changes",
-    "directives_considered": 1,
-    "story_records_merged": 0,
-    "aliases_written": 0,
-    "already_consolidated": 1,
+    "status": "consolidated",
+    "directives_considered": 0,
+    "story_records_merged": 1,
+    "aliases_written": 1,
+    "already_consolidated": 0,
     "skipped": [],
     "pending_directives": [],
     "rejected_directives": [],
-    "merges": []
+    "merges": [
+      {
+        "source_story_id": "story_001830",
+        "target_story_id": "story_001806",
+        "target_slug": "2026-08-02-woman-killed-man-dead-in-apparent-domestic-shooting-in-port-st-lucie",
+        "incoming_headline": "Two dead in domestic shooting in Port St. Lucie",
+        "confidence": 0.98,
+        "shared_anchors": [
+          "2000 block of SE Oxmoor Terrace",
+          "Saturday evening around 7:40 p.m.",
+          "Woman airlifted to hospital and pronounced dead",
+          "Man found dead from apparent self-inflicted gunshot wound",
+          "Multiple 911 calls reporting gunshots and domestic disturbance",
+          "Port St. Lucie Police Department response",
+          "Heavy police presence near SE Triumph Road and SE Veterans Memorial Parkway"
+        ],
+        "reason": "Both articles describe the identical incident: a domestic-related shooting on Saturday evening at 7:40 p.m. in the 2000 block of SE Oxmoor Terrace in Port St. Lucie. The specific details match precisely - woman airlifted and later pronounced dead, man found dead from apparent self-inflicted gunshot, multiple 911 calls, same police response locations. The incoming article contains no material updates beyond what the canonical already reports - both indicate the scene remained active Sunday with ongoing investigation, both note no public threat, and neither identifies the victims. This is the same reporting with slightly different wording.",
+        "relationship_type": "duplicate",
+        "novel_facts": [],
+        "resolved_source_story_id": "story_001830",
+        "resolved_target_story_id": "story_001806"
+      }
+    ]
   }
 }
