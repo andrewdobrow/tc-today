@@ -72,6 +72,9 @@ try:
         merge_story_records,
         story_quarantine_reasons,
     )
+    from tct_engine.timeline_coherence import (
+        registry_timeline_coherence_violations,
+    )
 except Exception as exc:
     ActivationConfig = None
     EngineMode = None
@@ -105,6 +108,7 @@ except Exception as exc:
     is_broad_event_class_key = None
     merge_story_records = None
     story_quarantine_reasons = None
+    registry_timeline_coherence_violations = None
     _editorial_import_error = exc
 
 try:
@@ -447,6 +451,7 @@ CURRENT_RUN_EDITORIAL_IDENTITIES = {}
 CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
 CROSS_SOURCE_IDENTITY_OBSERVATIONS = []
 CURRENT_RUN_QUARANTINED_STORY_IDS = set()
+CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS = set()
 CROSS_SOURCE_UPDATE_IDENTITY_SCHEMA_VERSION = 2
 CUSTOM_RETIREMENTS_PATH = OUTPUT_DIR / "data" / "custom-retirements.json"
 DEFAULT_AFFILIATE_DISCLOSURE = (
@@ -19435,12 +19440,18 @@ def _build_persistent_story_identity_integrity_report(archive, registry_payload)
         }
         and row.get("write_authorized")
     ]
+    timeline_coherence_violations = (
+        registry_timeline_coherence_violations(stories)
+        if registry_timeline_coherence_violations is not None
+        else []
+    )
     violations = (
         len(broad_mappings)
         + len(active_contaminated)
         + len(broad_story_ids_with_write_authority)
         + len(archive_quarantine_refs)
         + len(circular_authorizations)
+        + len(timeline_coherence_violations)
     )
     return {
         "schema_version": 1,
@@ -19454,6 +19465,7 @@ def _build_persistent_story_identity_integrity_report(archive, registry_payload)
             "broad_story_write_authority_count": len(broad_story_ids_with_write_authority),
             "archive_quarantine_reference_count": len(archive_quarantine_refs),
             "circular_story_id_authorization_count": len(circular_authorizations),
+            "timeline_coherence_violation_count": len(timeline_coherence_violations),
             "violation_count": violations,
         },
         "active_contaminated_stories": active_contaminated,
@@ -19461,6 +19473,7 @@ def _build_persistent_story_identity_integrity_report(archive, registry_payload)
         "broad_story_ids_with_write_authority": broad_story_ids_with_write_authority,
         "archive_quarantine_references": archive_quarantine_refs,
         "circular_story_id_authorizations": circular_authorizations,
+        "timeline_coherence_violations": timeline_coherence_violations,
     }
 
 
@@ -19507,6 +19520,12 @@ def _validate_persistent_story_identity_integrity(archive, output_root=None):
             details.append(
                 "circular_story_id_authorization="
                 + str(row.get("matched_canonical_slug") or "unknown")
+            )
+        if report.get("timeline_coherence_violations"):
+            row = report["timeline_coherence_violations"][0]
+            details.append(
+                "timeline_coherence_violation="
+                + str(row.get("story_id") or "unknown")
             )
         raise RuntimeError(
             "Persistent story identity integrity FAILED: "
@@ -24099,6 +24118,23 @@ def _load_current_quarantined_story_ids():
     }
 
 
+def _load_current_timeline_incoherent_story_ids():
+    """Return unresolved timeline violations that cannot authorize suppression."""
+    payload = _read_json_file(EDITORIAL_REGISTRY_PATH, {})
+    stories = payload.get("stories", {}) if isinstance(payload, dict) else {}
+    if not isinstance(stories, dict) or registry_timeline_coherence_violations is None:
+        return set()
+    return {
+        str(row.get("story_id") or "").strip()
+        for row in registry_timeline_coherence_violations(stories)
+        if str(row.get("story_id") or "").strip()
+    }
+
+
+def _current_story_id_is_timeline_incoherent(story_id):
+    return str(story_id or "").strip() in CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS
+
+
 def _current_story_id_is_quarantined(story_id):
     return str(story_id or "").strip() in CURRENT_RUN_QUARANTINED_STORY_IDS
 
@@ -24202,6 +24238,11 @@ def _published_skip_canonical(item, archive):
     route = str(item.get("_editorial_route") or item.get("editorial_route") or "").strip().lower()
     story_id = str(item.get("editorial_story_id") or item.get("_editorial_story_id") or "").strip()
     if route != "skip" or not story_id:
+        return None, ""
+    if _current_story_id_is_timeline_incoherent(story_id):
+        # A contaminated persistent story cannot prove that an incoming source was
+        # already published. Failing open here prevents a legitimate new story from
+        # being suppressed while the registry integrity gate repairs or blocks it.
         return None, ""
 
     def usable(entry):
@@ -24791,6 +24832,7 @@ def _write_editorial_observability(engine, audit_rows, activation_run=None, cate
 def main():
     global CURRENT_RUN_EDITORIAL_IDENTITIES, CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
     global CROSS_SOURCE_IDENTITY_OBSERVATIONS, CURRENT_RUN_QUARANTINED_STORY_IDS
+    global CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS
     _build_started = time.perf_counter()
     _stage_started = _build_started
     GENERATION_CACHE.reset_stats()
@@ -24798,6 +24840,7 @@ def main():
     CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
     CROSS_SOURCE_IDENTITY_OBSERVATIONS = []
     CURRENT_RUN_QUARANTINED_STORY_IDS = set()
+    CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS = set()
     print("Treasure Coast Today — building site...")
     _cache_counts = GENERATION_CACHE.counts()
     print(
@@ -24806,10 +24849,18 @@ def main():
     )
     editorial_engine = _load_editorial_engine_audit()
     CURRENT_RUN_QUARANTINED_STORY_IDS = _load_current_quarantined_story_ids()
+    CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS = (
+        _load_current_timeline_incoherent_story_ids()
+    )
     if CURRENT_RUN_QUARANTINED_STORY_IDS:
         print(
             "  Persistent identity denylist loaded: "
             f"{len(CURRENT_RUN_QUARANTINED_STORY_IDS)} quarantined story ID(s)"
+        )
+    if CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS:
+        print(
+            "  Timeline integrity denylist loaded: "
+            f"{len(CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS)} unresolved story ID(s)"
         )
     editorial_audited_keys = set()
     editorial_audit_rows = []

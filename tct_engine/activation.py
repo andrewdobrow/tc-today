@@ -173,6 +173,7 @@ def _registry_health_is_clean(health: Mapping[str, Any] | None) -> tuple[bool, l
         "remaining_publisher_title_duplicate_groups",
         "remaining_source_identity_groups",
         "remaining_incident_identity_groups",
+        "remaining_timeline_coherence_violations",
     ):
         try:
             value = int(health.get(key, 0) or 0)

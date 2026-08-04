@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Iterable, Mapping
 
+from .timeline_coherence import incoming_entry_conflicts_with_story
+
 _WORD_RE = re.compile(r"[a-z0-9]+")
 _NUMBER_RE = re.compile(r"\b\d+\b")
 _STOP = {
@@ -306,12 +308,22 @@ class StoryRelationshipEngine:
 
         best: StoryRelationship | None = None
         best_advisory: StoryRelationship | None = None
+        timeline_conflicts: list[tuple[str, dict[str, Any]]] = []
 
         for story in stories:
             if story.get("status") == "archived":
                 continue
             story_id = str(story.get("story_id", "")).strip()
             if not story_id:
+                continue
+
+            timeline_conflict = incoming_entry_conflicts_with_story(
+                story,
+                event_key=event_key,
+                title=title,
+            )
+            if timeline_conflict is not None:
+                timeline_conflicts.append((story_id, timeline_conflict))
                 continue
 
             known = {
@@ -581,6 +593,22 @@ class StoryRelationshipEngine:
             return best
         if best_advisory is not None:
             return best_advisory
+        if timeline_conflicts:
+            story_id, conflict = timeline_conflicts[0]
+            return StoryRelationship(
+                StoryRelationshipType.NEW_STORY,
+                None,
+                0.0,
+                "Created new story: proposed attachment failed timeline coherence",
+                (
+                    "Relationship: new_story",
+                    "Timeline coherence hard conflict: true",
+                    f"Rejected candidate story: {story_id}",
+                    f"Incoming family: {conflict.get('incoming_family', 'unknown')}",
+                    f"Existing family: {conflict.get('existing_family', 'unknown')}",
+                    f"Title overlap: {float(conflict.get('title_overlap', 0.0)):.2f}",
+                ),
+            )
         return StoryRelationship(
             StoryRelationshipType.NEW_STORY,
             None,

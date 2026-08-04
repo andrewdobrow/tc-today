@@ -18,6 +18,14 @@ from .incident_identity import (
     named_person_death_subjects,
     timeline_incident_anchor,
 )
+from .timeline_coherence import (
+    analyze_story_timeline_coherence,
+    infer_timeline_event_family,
+    registry_timeline_coherence_violations,
+    timeline_entries_have_continuity,
+    timeline_entry_source_identity,
+    timeline_title_tokens,
+)
 from .source_identity import (
     source_identity_requires_title_continuity,
     source_identity_title_compatible,
@@ -25,7 +33,7 @@ from .source_identity import (
     story_source_identity_urls,
 )
 
-REPAIR_VERSION = 7
+REPAIR_VERSION = 8
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
@@ -369,6 +377,11 @@ class RegistryRepairReport:
     selective_incident_anchor_groups_repaired: int
     selective_timeline_entries_moved: int
     contaminated_story_records_preserved: int
+    timeline_coherence_story_records_repaired: int
+    timeline_coherence_entries_detached: int
+    timeline_coherence_new_story_ids: tuple[str, ...]
+    remaining_timeline_coherence_violations: int
+    timeline_coherence_violation_story_ids: tuple[str, ...]
     incident_anchor_to_story_count: int
     generated_at: str
 
@@ -401,6 +414,11 @@ class RegistryRepairReport:
             "selective_incident_anchor_groups_repaired": self.selective_incident_anchor_groups_repaired,
             "selective_timeline_entries_moved": self.selective_timeline_entries_moved,
             "contaminated_story_records_preserved": self.contaminated_story_records_preserved,
+            "timeline_coherence_story_records_repaired": self.timeline_coherence_story_records_repaired,
+            "timeline_coherence_entries_detached": self.timeline_coherence_entries_detached,
+            "timeline_coherence_new_story_ids": list(self.timeline_coherence_new_story_ids),
+            "remaining_timeline_coherence_violations": self.remaining_timeline_coherence_violations,
+            "timeline_coherence_violation_story_ids": list(self.timeline_coherence_violation_story_ids),
             "incident_anchor_to_story_count": self.incident_anchor_to_story_count,
             "generated_at": self.generated_at,
         }
@@ -690,6 +708,296 @@ def _selective_named_person_death_repair(
     return groups_repaired, entries_moved, contaminated_preserved, anchor_to_story, moved_by_primary
 
 
+
+def _component_candidate_matches(
+    candidate: Mapping[str, Any], component: Iterable[Mapping[str, Any]]
+) -> bool:
+    candidate_entry = {
+        "title": str(candidate.get("title") or ""),
+        "source": str(candidate.get("source") or ""),
+        "url": str(candidate.get("source") or ""),
+    }
+    return any(
+        timeline_entries_have_continuity(candidate_entry, entry)
+        for entry in component
+    )
+
+
+def _component_title_matches(
+    title: object, component: Iterable[Mapping[str, Any]]
+) -> bool:
+    candidate_entry = {"title": str(title or "")}
+    return any(
+        timeline_entries_have_continuity(candidate_entry, entry)
+        for entry in component
+    )
+
+
+def _event_family_label(family: str) -> str:
+    return {
+        "animal_rescue": "animal rescue",
+        "dui": "dui",
+        "execution": "execution",
+        "fire": "fire",
+        "government_finance": "government finance",
+        "hazing": "hazing",
+        "shooting": "shooting",
+        "traffic_crash": "traffic crash",
+        "death": "death",
+    }.get(str(family or ""), "")
+
+
+def _allocate_story_id(payload: MutableMapping[str, Any]) -> str:
+    stories = payload.setdefault("stories", {})
+    quarantined = payload.setdefault("quarantined_stories", {})
+    next_number = int(payload.get("next_story_id", 1) or 1)
+    while True:
+        story_id = f"story_{next_number:06d}"
+        next_number += 1
+        if story_id not in stories and story_id not in quarantined:
+            payload["next_story_id"] = next_number
+            return story_id
+
+
+def _component_record(
+    original: Mapping[str, Any],
+    component: Iterable[Mapping[str, Any]],
+    *,
+    story_id: str,
+    preserve_local_relevance: bool,
+    original_story_id: str,
+) -> dict[str, Any]:
+    entries = [dict(entry) for entry in component]
+    event_keys = {
+        str(entry.get("event_key") or "").strip()
+        for entry in entries
+        if str(entry.get("event_key") or "").strip()
+    }
+    entry_sources = {
+        value
+        for entry in entries
+        for value in (
+            str(entry.get("source") or "").strip(),
+            str(entry.get("url") or "").strip(),
+        )
+        if value
+    }
+    titles = {
+        str(entry.get("title") or "").strip()
+        for entry in entries
+        if str(entry.get("title") or "").strip()
+    }
+    titles.update(
+        str(value).strip()
+        for value in (original.get("titles", ()) or ())
+        if str(value).strip() and _component_title_matches(value, entries)
+    )
+    candidates = [
+        dict(candidate)
+        for candidate in (original.get("title_candidates", ()) or ())
+        if isinstance(candidate, Mapping)
+        and _component_candidate_matches(candidate, entries)
+    ]
+    for entry in entries:
+        title = str(entry.get("title") or "").strip()
+        source = str(entry.get("source") or entry.get("url") or "").strip()
+        if not title:
+            continue
+        if not any(
+            normalize_identity_title(candidate.get("title"))
+            == normalize_identity_title(title)
+            and str(candidate.get("source") or "").strip() == source
+            for candidate in candidates
+        ):
+            candidates.append(
+                {
+                    "title": title,
+                    "source": source,
+                    "source_class": "unknown",
+                    "source_trust": 50,
+                    "is_custom": False,
+                    "priority": 50,
+                }
+            )
+
+    sources = set(entry_sources)
+    sources.update(
+        str(candidate.get("source") or "").strip()
+        for candidate in candidates
+        if str(candidate.get("source") or "").strip()
+    )
+    incident_anchors = sorted(
+        {
+            str(anchor).strip()
+            for anchor in (original.get("incident_anchors", ()) or ())
+            if str(anchor).strip() in event_keys
+        }
+    )
+    families = {
+        infer_timeline_event_family(entry)
+        for entry in entries
+        if infer_timeline_event_family(entry) != "unknown"
+    }
+    event_types = sorted(
+        label for label in (_event_family_label(family) for family in families) if label
+    )
+    resolution_history = [
+        dict(row)
+        for row in (original.get("resolution_history", ()) or ())
+        if isinstance(row, Mapping)
+        and str(row.get("event_key") or "").strip() in event_keys
+    ]
+    relationship_history = [
+        dict(row)
+        for row in (original.get("relationship_history", ()) or ())
+        if isinstance(row, Mapping)
+        and str(row.get("event_key") or "").strip() in event_keys
+    ]
+    title_tokens = sorted(
+        {
+            token
+            for title in titles
+            for token in timeline_title_tokens(title)
+        }
+    )
+
+    record: dict[str, Any] = {
+        "story_id": story_id,
+        "events": sorted(event_keys),
+        "status": "active",
+        "lifecycle": {},
+        "lifecycle_history": [],
+        "titles": sorted(titles),
+        "title_tokens": title_tokens,
+        "fact_tokens": [],
+        "facts": [],
+        "locations": [],
+        "agencies": [],
+        "event_types": event_types,
+        "entities": [],
+        "local_relevance": (
+            dict(original.get("local_relevance") or {})
+            if preserve_local_relevance
+            else {"scope": "unknown", "score": 35, "counties": [], "places": []}
+        ),
+        "resolution_history": resolution_history,
+        "relationship_history": relationship_history,
+        "editorial_proximity": (
+            dict(original.get("editorial_proximity") or {})
+            if preserve_local_relevance
+            else {"score": 35, "scope": "unknown", "reason": "Not yet classified"}
+        ),
+        "editorial_priority": 0,
+        "editorial_score": 0,
+        "score_breakdown": {},
+        "timeline": entries,
+        "custom_article_count": sum(
+            1 for candidate in candidates if bool(candidate.get("is_custom", False))
+        ),
+        "sources": sorted(sources),
+        "title_candidates": _unique_dicts(
+            candidates,
+            ("title", "source", "source_class", "source_trust", "is_custom", "priority"),
+        ),
+        "canonical_title": "",
+        "importance": {
+            "score": 0,
+            "level": "low",
+            "reasons": [],
+        },
+        "identity_contamination_repaired": True,
+        "timeline_coherence_repair": {
+            "repair_version": REPAIR_VERSION,
+            "original_story_id": original_story_id,
+            "component_entry_count": len(entries),
+            "reason": "incompatible_event_families_without_identity_continuity",
+        },
+    }
+    if incident_anchors:
+        record["incident_anchors"] = incident_anchors
+    record["canonical_title"] = _select_canonical_title(record)
+    return record
+
+
+def _repair_timeline_coherence(
+    payload: MutableMapping[str, Any],
+) -> tuple[int, int, list[str], dict[str, list[str]]]:
+    """Split only high-confidence incompatible timeline components.
+
+    The largest coherent component retains the original story ID.  Each detached
+    component receives a fresh ID; no alias is created because these records are
+    explicitly different stories.
+    """
+
+    stories: MutableMapping[str, MutableMapping[str, Any]] = payload.setdefault(
+        "stories", {}
+    )
+    repaired_story_count = 0
+    detached_entry_count = 0
+    new_story_ids: list[str] = []
+    split_story_ids: dict[str, list[str]] = {}
+
+    for story_id in sorted(list(stories), key=_story_number):
+        story = stories.get(story_id)
+        if not isinstance(story, MutableMapping):
+            continue
+        analysis = analyze_story_timeline_coherence(story, story_id=story_id)
+        if analysis.coherent or len(analysis.components) < 2:
+            continue
+
+        components = [list(component) for component in analysis.components]
+
+        def component_priority(component: list[dict[str, Any]]) -> tuple[int, int, int, str]:
+            candidate_count = sum(
+                1
+                for candidate in (story.get("title_candidates", ()) or ())
+                if isinstance(candidate, Mapping)
+                and _component_candidate_matches(candidate, component)
+            )
+            source_count = len(
+                {
+                    timeline_entry_source_identity(entry)
+                    for entry in component
+                    if timeline_entry_source_identity(entry)
+                }
+            )
+            earliest = min(
+                (str(entry.get("published_at") or "") for entry in component),
+                default="",
+            )
+            return (len(component), candidate_count, source_count, earliest)
+
+        primary_component = max(components, key=component_priority)
+        original_snapshot = dict(story)
+        primary_record = _component_record(
+            original_snapshot,
+            primary_component,
+            story_id=story_id,
+            preserve_local_relevance=True,
+            original_story_id=story_id,
+        )
+        stories[story_id] = primary_record
+        split_story_ids[story_id] = []
+
+        for component in components:
+            if component is primary_component:
+                continue
+            new_story_id = _allocate_story_id(payload)
+            stories[new_story_id] = _component_record(
+                original_snapshot,
+                component,
+                story_id=new_story_id,
+                preserve_local_relevance=False,
+                original_story_id=story_id,
+            )
+            new_story_ids.append(new_story_id)
+            split_story_ids[story_id].append(new_story_id)
+            detached_entry_count += len(component)
+
+        repaired_story_count += 1
+
+    return repaired_story_count, detached_entry_count, new_story_ids, split_story_ids
+
 def _source_identity_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[str]]:
     """Return components sharing an exact safe article identity URL."""
 
@@ -829,6 +1137,15 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
     for primary_id, secondary_ids in selective_moved_by_primary.items():
         merged_story_ids.setdefault(primary_id, []).extend(secondary_ids)
 
+    # Split only high-confidence timeline contamination.  Unlike a merge, these
+    # components are intentionally different stories, so no aliases are created.
+    (
+        timeline_stories_repaired,
+        timeline_entries_detached,
+        timeline_new_story_ids,
+        timeline_split_story_ids,
+    ) = _repair_timeline_coherence(payload)
+
     # Exact and publisher-attribution duplicates are resolved first.  The
     # remaining whole-record incident layer is used only for families whose
     # records are safe to merge as a unit (currently mass animal hoarding).
@@ -870,9 +1187,15 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
     remaining_publisher_duplicates = _count_publisher_title_duplicate_groups(stories)
     remaining_source_groups = _count_source_identity_groups(stories)
     remaining_incident_groups = _count_incident_identity_groups(stories)
+    remaining_timeline_violations = registry_timeline_coherence_violations(stories)
     report = RegistryRepairReport(
         repair_version=REPAIR_VERSION,
-        changed=bool(quarantine_reasons or removed or selective_entries_moved),
+        changed=bool(
+            quarantine_reasons
+            or removed
+            or selective_entries_moved
+            or timeline_stories_repaired
+        ),
         active_stories_before=before,
         active_stories_after=len(stories),
         quarantined_story_ids=tuple(sorted(quarantine_reasons, key=_story_number)),
@@ -903,6 +1226,13 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
         selective_incident_anchor_groups_repaired=selective_groups,
         selective_timeline_entries_moved=selective_entries_moved,
         contaminated_story_records_preserved=contaminated_preserved,
+        timeline_coherence_story_records_repaired=timeline_stories_repaired,
+        timeline_coherence_entries_detached=timeline_entries_detached,
+        timeline_coherence_new_story_ids=tuple(timeline_new_story_ids),
+        remaining_timeline_coherence_violations=len(remaining_timeline_violations),
+        timeline_coherence_violation_story_ids=tuple(
+            str(row.get("story_id") or "") for row in remaining_timeline_violations
+        ),
         incident_anchor_to_story_count=len(incident_anchor_to_story),
         generated_at=_utc_now(),
     )
