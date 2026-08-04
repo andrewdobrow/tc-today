@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "gate_version": "1.4",
-  "generated_at": "2026-08-04T15:51:25.693643+00:00",
+  "generated_at": "2026-08-04T20:51:29.503661+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -44,16 +44,16 @@
     "custom_articles": "excluded_authoritative_custom_contract_retained"
   },
   "summary": {
-    "evaluations": 82,
+    "evaluations": 81,
     "candidate_pairs": 1,
-    "structured_conflict_overrides": 0,
+    "structured_conflict_overrides": 1,
     "model_calls": 1,
     "cache_hits": 0,
-    "no_candidate_passes": 81,
+    "no_candidate_passes": 80,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 3,
-    "retroactive_rows_retained": 79,
+    "new_stories_allowed": 0,
+    "retroactive_rows_retained": 81,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -1567,7 +1567,26 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "Florida judge orders rewrite of Amendment 3 ballot language, calling it biased and misleading",
+      "incoming_source_url": "https://www.wptv.com/news/state/judge-orders-rewrite-of-florida-amendment-3-ballot-language",
+      "incoming_story_id": "story_002175",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Three candidates vie for Martin County Commission District 4 seat in August 18 primary",
       "incoming_source_url": "https://www.hometownnewstc.com/news/martin/district-4-martin-commission-candidates-speak-out/article_4895f637-509f-5681-95ad-6ce4d1a88764.html",
       "incoming_story_id": "story_002110",
@@ -1600,13 +1619,15 @@
             "treasure"
           ],
           "day_gap": 1,
-          "structured_conflict_override": false,
-          "structured_conflict_override_tier": "",
+          "structured_conflict_override": true,
+          "structured_conflict_override_tier": "strong_headline_similarity",
           "incident_anchor_conflict": false,
-          "known_event_key_conflict": false,
+          "known_event_key_conflict": true,
           "reasons": [
             "strong_fuzzy_headline",
-            "publication_gap_1_days"
+            "publication_gap_1_days",
+            "structured_identity_conflict",
+            "structured_identity_conflict_overridden_by_strong_headline"
           ]
         }
       ],
@@ -1621,52 +1642,10 @@
         "shared_anchors": [],
         "novel_facts": [
           "Martin County Commission District 4 race",
-          "Candidates John Dial, Sarah Heard, and John Kaz Kazanjian",
-          "August 18 Primary Election for Martin County",
-          "Dial's positions on over-development, SB 180, SB102, Brightline funding",
-          "Heard's positions on data centers, train station location",
-          "Discussion of Business Development Board $450,000 funding",
-          "Commissioner Eileen Vargas opposed BDB funding on June 23"
+          "Three candidates: John Dial, Sarah Heard, John Kaz Kazanjian",
+          "August 18 Primary Election for Martin County"
         ],
-        "reason": "The incoming article covers the Martin County Commission District 4 race with candidates Dial, Heard, and Kazanjian, while the candidate covers Indian River County Commission District 2 race with completely different candidates (McPartlan, Pippin, Robinson, Hardingham). These are separate county commission races in different counties (Martin vs. Indian River), different districts (District 4 vs. District 2), and different candidate slates. Despite both being August 18 primary elections and sharing similar source formatting from Hometown News, they are distinct real-world events with no shared participants, locations, or governing bodies.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Florida judge orders rewrite of Amendment 3 ballot language, calling it biased and misleading",
-      "incoming_source_url": "https://www.wptv.com/news/state/judge-orders-rewrite-of-florida-amendment-3-ballot-language",
-      "incoming_story_id": "story_002175",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Two arrested on drug charges after being found in empty field in Fort Pierce",
-      "incoming_source_url": "https://cbs12.com/news/crime/two-people-accused-of-drug-possession-one-accused-of-resisting-an-officer-in-fort-pierce-florida-news-florida-crime-cocaine-fppd-north-10th-street-st-lucie-county-jail",
-      "incoming_story_id": "story_002075",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "reason": "The incoming article covers a Martin County Commission District 4 race with three specific candidates (Dial, Heard, Kazanjian), while the candidate covers an Indian River County Commission District 2 race with different candidates (McPartlan, Pippin, Robinson, Hardingham). These are completely different county commission races in different counties (Martin vs. Indian River) for different districts (District 4 vs. District 2) with no shared candidates. The high headline similarity is due to generic election coverage vocabulary and the same publication format from Hometown News, but there are no concrete shared anchors indicating the same real-world event.",
         "validation_errors": []
       }
     }
