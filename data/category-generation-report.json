@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-04T10:51:12Z",
+  "generated_at": "2026-08-04T15:50:17Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,48 +15,57 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "generated_live": 3,
-      "no_publishable_sources": 1,
-      "quality_gate_archive_recovery": 4,
+      "generated_live": 5,
+      "generation_failed_archive_recovery": 1,
+      "quality_gate_archive_recovery": 2,
       "sports_zero_candidate_archive_recovery": 1
     },
     "failures": {
+      "article_framing_integrity": 1,
       "no_sports_hero_candidates": 1,
-      "publication_quality_rejected": 4
+      "publication_quality_rejected": 2
     },
-    "model_attempt_count": 8,
-    "model_elapsed_seconds": 317.961,
-    "archive_recovery_requested_count": 6,
+    "model_attempt_count": 10,
+    "model_elapsed_seconds": 267.274,
+    "archive_recovery_requested_count": 4,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 3,
-    "article_framing_rejection_count": 3,
+    "contextual_update_lead_rejection_count": 1,
+    "article_framing_rejection_count": 4,
     "category_eligibility_rejection_count": 8,
     "published_story_duplicate_suppression_count": 35,
-    "story_aware_update_context_count": 8
+    "story_aware_update_context_count": 5
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "quality_gate_archive_recovery",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 10,
-      "selected_source_count": 2,
+      "status": "generated_live",
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 11,
+      "selected_source_count": 3,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 1,
+      "archive_recovery_requested": false,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 11.89,
+          "elapsed_seconds": 22.639,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_restatement_without_context — Three candidates vie for Martin County Commission District 4 seat in August 18 primary"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 22.19,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 11.89,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 44.829,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -65,9 +74,37 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 10,
+      "category_eligibility_assessed_count": 11,
       "category_eligibility_rejection_count": 8,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "headline": "4th arrest made in death of 3-month-old child in St. Lucie County",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/4th-arrest-made-in-death-of-3-month-old-child-in-st-lucie-county"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "West Palm Beach event to offer free physicals, supplies and meals ahead of new school year",
+          "source_url": "https://www.wptv.com/news/education/back-to-school/west-palm-beach-event-to-offer-free-physicals-supplies-and-meals-ahead-of-new-school-year"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -80,6 +117,19 @@
           "competing_signals": [],
           "headline": "Belvedere Baptist Church in West Palm Beach collecting school supplies for at-risk students",
           "source_url": "https://www.wptv.com/news/education/back-to-school/belvedere-baptist-church-in-west-palm-beach-collecting-school-supplies-for-at-risk-students"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Commission will meet Sept. 14 on King’s Landing future - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/news/st_lucie/commission-will-meet-sept-14-on-king-s-landing-future/article_90e490c0-2cd2-5c44-b2e7-e32a06803762.html"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -127,49 +177,6 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:shooting"
-          ],
-          "headline": "PBSO communications officer identified as victim in Port St. Lucie murder-suicide",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/pbso-communications-officer-identified-as-victim-in-port-st-lucie-murder-suicide"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Man dead, multiple injured in late-night I-95 crash in Riviera Beach",
-          "source_url": "https://www.wptv.com/traffic/traffic-news/man-dead-multiple-injured-in-late-night-i-95-crash-in-riviera-beach"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:arrest"
-          ],
-          "headline": "3 Palm Beach County men sentenced for trafficking, sexually exploiting runaway foster teens",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/3-palm-beach-county-men-sentenced-for-trafficking-sexually-exploiting-runaway-foster-teens"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
@@ -177,7 +184,7 @@
           "source_url": "https://www.hometownnewstc.com/news/st_lucie/king-s-landing-project-is-in-contract-default-uncertain-future/article_4cae62b3-0f11-5cee-9047-d06a9a6945db.html"
         }
       ],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -196,16 +203,6 @@
           "editorial_story_id": "story_002061",
           "canonical_slug": "2026-08-04-property-tax-increases-push-treasure-coast-resident-to-relocate-to-puerto-rico",
           "canonical_headline": "Property tax increases push Treasure Coast resident to relocate to Puerto Rico",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Honduran national convicted in South Florida firearms-trafficking operation",
-          "source_url": "https://www.wptv.com/news/state/honduran-national-convicted-in-south-florida-firearms-trafficking-operation",
-          "editorial_story_id": "story_002000",
-          "canonical_slug": "2026-08-03-honduran-national-convicted-in-fort-pierce-federal-court-for-firearms-traffickin",
-          "canonical_headline": "Honduran national convicted in Fort Pierce federal court for firearms trafficking to Honduras",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -250,20 +247,64 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "4th arrest made in death of 3-month-old child in St. Lucie County",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/4th-arrest-made-in-death-of-3-month-old-child-in-st-lucie-county",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-25-3-arrested-in-death-of-3-month-old-in-st-lucie-county-from-dehydration-and-malnu",
+          "canonical_headline": "3 arrested in death of 3-month-old in St. Lucie County from dehydration and malnutrition",
+          "basis": "event-identity-authority:exact_known_event_key",
+          "identity_keys": [
+            "story:story_000536",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/4th-arrest-made-in-death-of-3-month-old-child-in-st-lucie-county"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "known_event_key",
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=legacy_archive_derived",
+            "publication_gap_days=11",
+            "shared_locality=['st-lucie', 'st-lucie-county']",
+            "shared_event_families=['child-death']",
+            "shared_named_people=['three people']",
+            "shared_precise_locations=[]",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['death-month-old']",
+            "shared_headline_topic_core=['death', 'month', 'old']",
+            "shared_distinctive_token_count=7",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=exact_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 56.308
+      "live_hero_headline": "Three candidates vie for Martin County Commission District 4 seat in August 18 primary",
+      "generated_card_count": 0,
+      "elapsed_seconds": 85.946
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 13,
-      "selected_source_count": 12,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 11,
+      "selected_source_count": 11,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -271,11 +312,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 52.236,
+          "elapsed_seconds": 31.117,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 52.236,
+      "model_elapsed_seconds": 31.117,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -287,54 +328,48 @@
           "required": true,
           "passed": false,
           "story_form": "update",
-          "lead_word_count": 74,
-          "baseline_anchor": "",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
+          "lead_word_count": 61,
+          "baseline_anchor": "fatality",
+          "baseline_present": false,
+          "baseline_anchor_present": false,
           "baseline_details_present": true,
-          "baseline_context_hits": [
-            "arrested",
-            "drug",
-            "empty",
-            "field",
-            "fort",
-            "officers",
-            "paraphernalia",
-            "parked",
-            "pierce",
-            "vehicle"
+          "baseline_context_hits": [],
+          "baseline_context_required": 0,
+          "canonical_context_available": false,
+          "canonical_context_headline": "",
+          "novelty_anchor": "identity",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "lucie",
+            "police",
+            "port",
+            "suspect"
           ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Two arrested in Fort Pierce after officers find drug paraphernalia in vehicle parked in empty field",
-          "novelty_anchor": "source_distinctive_detail",
-          "novelty_present": false,
-          "novelty_token_hits": [],
           "missing": [
-            "new_development_missing"
+            "original_event_context_missing"
           ],
-          "source_title": "Two people accused of drug possession; one accused of resisting an officer in Fort Pierce - WPEC",
-          "headline": "Two arrested on drug charges after officers find paraphernalia in Fort Pierce field"
+          "source_title": "Police identify victim, suspect in Port St. Lucie murder-suicide - WPEC",
+          "headline": "Port St. Lucie police identify victim, suspect in SE Oxmoor Terrace murder-suicide"
         }
       ],
-      "article_framing_rejection_count": 2,
+      "article_framing_rejection_count": 1,
       "article_framing_rejections": [
         {
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Florida man arrested after PIT maneuver sends North Carolina family's SUV into barbed-wire fence near Stuart",
+          "headline": "Stuart man arrested after using PIT maneuver on family's SUV in Martin County road rage attack",
           "missing": [
             "headline_jurisdiction_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Florida man arrested after PIT maneuver sends North Carolina family's SUV into barbed-wire fence near Stuart",
-            "lead": "Michael Jeffrey Spiers, 36, was arrested after the crash happened around 7:30 p.m. Saturday near Kanner Highway and I-95. Martin County Sheriff's Office investigators say the family had no role in any confrontation before they were targeted. Deputies say Spiers first went after a woman who was driving alone, chasing her through a gas station parking lot before following her onto the highway. The woman frantically called 911 and told dispatchers he repeatedly tried to force her off the road. The woman's brother was following behind her in a separate car with his wife and young son.",
-            "lead_word_count": 102,
-            "headline_overlap_ratio": 0.25,
-            "new_context_token_count": 61,
+            "headline": "Stuart man arrested after using PIT maneuver on family's SUV in Martin County road rage attack",
+            "lead": "Michael Jeffrey Spiers, 36, was arrested Saturday after deputies say he used a PIT maneuver to send a family's SUV into a barbed-wire fence near Kanner Highway and I-95. The Martin County Sheriff's Office said the crash happened around 7:30 p.m. Spiers is charged with aggravated battery with a deadly weapon and child abuse. Deputies said the family had no role in any confrontation before they were targeted.",
+            "lead_word_count": 74,
+            "headline_overlap_ratio": 0.571,
+            "new_context_token_count": 39,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -348,12 +383,13 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "Florida man arrested after PIT maneuver sends North Carolina family's SUV into barbed-wire fence near Stuart",
-            "lead": "Michael Jeffrey Spiers, 36, was arrested after the crash happened around 7:30 p.m. Saturday near Kanner Highway and I-95. Martin County Sheriff's Office investigators say the family had no role in any confrontation before they were targeted. Deputies say Spiers first went after a woman who was driving alone, chasing her through a gas station parking lot before following her onto the highway. The woman frantically called 911 and told dispatchers he repeatedly tried to force her off the road. The woman's brother was following behind her in a separate car with his wife and young son.",
+            "headline": "Stuart man arrested after using PIT maneuver on family's SUV in Martin County road rage attack",
+            "lead": "Michael Jeffrey Spiers, 36, was arrested Saturday after deputies say he used a PIT maneuver to send a family's SUV into a barbed-wire fence near Kanner Highway and I-95. The Martin County Sheriff's Office said the crash happened around 7:30 p.m. Spiers is charged with aggravated battery with a deadly weapon and child abuse. Deputies said the family had no role in any confrontation before they were targeted.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
             "headline_jurisdictions": [
+              "martin_county",
               "stuart"
             ],
             "lead_jurisdictions": [
@@ -372,106 +408,57 @@
           "source_focus": {
             "required": true,
             "passed": true,
-            "generated_headline": "Florida man arrested after PIT maneuver sends North Carolina family's SUV into barbed-wire fence near Stuart",
-            "generated_lead": "Michael Jeffrey Spiers, 36, was arrested after the crash happened around 7:30 p.m. Saturday near Kanner Highway and I-95.",
+            "generated_headline": "Stuart man arrested after using PIT maneuver on family's SUV in Martin County road rage attack",
+            "generated_lead": "Michael Jeffrey Spiers, 36, was arrested Saturday after deputies say he used a PIT maneuver to send a family's SUV into a barbed-wire fence near Kanner Highway and I-95. The Martin County Sheriff's Office said the crash happened around 7:30 p.m.",
             "source_title": "Florida man accused of PIT maneuver in road rage attack targeting family in Stuart - WPEC",
             "source_lead": "A Florida man is behind bars after deputies say he used a PIT maneuver to send a North Carolina family's SUV into a barbed-wire fence during a road rage attack that began on I-95 and, at one point, passed through Stuart. According to the Martin County Sheriff's Office , the crash happened around 7:30 p.m. on Saturday near Kanner Highway and I-95.",
             "title_similarity": {
-              "score": 0.5301,
-              "overlap": 0.5,
-              "jaccard": 0.3,
-              "sorted_sequence": 0.6265,
-              "ordered_sequence": 0.6024,
-              "shared_token_count": 6.0
+              "score": 0.613,
+              "overlap": 0.6667,
+              "jaccard": 0.4706,
+              "sorted_sequence": 0.6923,
+              "ordered_sequence": 0.5,
+              "shared_token_count": 8.0
             },
-            "lead_token_overlap": 0.667,
-            "missing": []
-          }
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect released on bond",
-          "missing": [
-            "headline_jurisdiction_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect released on bond",
-            "lead": "When investigators searched 77-year-old Gail Gustino's home near Hobe Sound on July 20, they found 92 dogs and cats living in triple-digit heat with no ventilation and surrounded by inches of waste. Gustino has since been released from jail on bond, with her next court date scheduled for September. Since the initial rescue, the Humane Society of the Treasure Coast says the total number of animals recovered has climbed to 108, with more arriving daily.",
-            "lead_word_count": 79,
-            "headline_overlap_ratio": 0.333,
-            "new_context_token_count": 50,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect released on bond",
-            "lead": "When investigators searched 77-year-old Gail Gustino's home near Hobe Sound on July 20, they found 92 dogs and cats living in triple-digit heat with no ventilation and surrounded by inches of waste. Gustino has since been released from jail on bond, with her next court date scheduled for September. Since the initial rescue, the Humane Society of the Treasure Coast says the total number of animals recovered has climbed to 108, with more arriving daily.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "martin_county"
-            ],
-            "lead_jurisdictions": [
-              "hobe_sound"
-            ],
-            "missing_jurisdictions": [
-              "martin_county"
-            ],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect released on bond",
-            "generated_lead": "When investigators searched 77-year-old Gail Gustino's home near Hobe Sound on July 20, they found 92 dogs and cats living in triple-digit heat with no ventilation and surrounded by inches of waste. Gustino has since been released from jail on bond, with her next court date scheduled for September.",
-            "source_title": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond",
-            "source_lead": "What the Martin County Sheriff describes as the worst animal hoarding case he has ever seen has grown larger, with 108 animals now rescued.When investigators searched 77-year-old Gail Gustino's home near Hobe Sound on July 20, they found 92 dogs and cats living in triple-digit heat with no ventilation and surrounded by inches of waste.WATCH WPTV'S COVERAGE BELOW:Gustino has since been released from jail on bond, with her next court date scheduled for September.The Martin County Sheriff described how Gustino",
-            "title_similarity": {
-              "score": 0.8798,
-              "overlap": 0.9167,
-              "jaccard": 0.7857,
-              "sorted_sequence": 0.9286,
-              "ordered_sequence": 0.9286,
-              "shared_token_count": 11.0
-            },
-            "lead_token_overlap": 1.0,
+            "lead_token_overlap": 0.812,
             "missing": []
           }
         }
       ],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 13,
+      "category_eligibility_assessed_count": 11,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "Florida affordability struggles push Treasure Coast man to relocate to Puerto Rico",
-          "source_url": "https://www.wptv.com/money/real-estate-news/florida-affordability-struggles-push-treasure-coast-man-to-relocate-to-puerto-rico",
-          "editorial_story_id": "story_002061",
-          "canonical_slug": "2026-08-04-property-tax-increases-push-treasure-coast-resident-to-relocate-to-puerto-rico",
-          "canonical_headline": "Property tax increases push Treasure Coast resident to relocate to Puerto Rico",
+          "source_headline": "Woman accused of stealing from Walmart arrested for drug possession in Fort Pierce - WPEC",
+          "source_url": "https://cbs12.com/news/crime/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd",
+          "editorial_story_id": "story_002071",
+          "canonical_slug": "2026-08-04-fort-pierce-woman-arrested-for-grand-theft-and-drug-possession-after-walmart-inv",
+          "canonical_headline": "Fort Pierce woman arrested for grand theft and drug possession after Walmart investigation",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Man arrested after PIT maneuver in Martin County sends family’s car into barbed-wire fence - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-pit-maneuver-deputy-car-baby-barbed-wire/73334291",
+          "editorial_story_id": "story_002073",
+          "canonical_slug": "2026-08-04-fort-myers-man-arrested-after-road-rage-pit-maneuver-crashes-familys-suv-into-fe",
+          "canonical_headline": "Fort Myers man arrested after road rage PIT maneuver crashes family's SUV into fence on I-95 in Martin County",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Two people accused of drug possession; one accused of resisting an officer in Fort Pierce - WPEC",
+          "source_url": "http://cbs12.com/news/crime/two-people-accused-of-drug-possession-one-accused-of-resisting-an-officer-in-fort-pierce-florida-news-florida-crime-cocaine-fppd-north-10th-street-st-lucie-county-jail",
+          "editorial_story_id": "story_002075",
+          "canonical_slug": "2026-08-04-two-arrested-in-fort-pierce-after-officers-find-drug-paraphernalia-in-vehicle-pa",
+          "canonical_headline": "Two arrested in Fort Pierce after officers find drug paraphernalia in vehicle parked in empty field",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -486,95 +473,44 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 4,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Woman accused of stealing from Walmart arrested for drug possession in Fort Pierce - WPEC",
-          "source_url": "https://cbs12.com/news/crime/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-04-fort-pierce-woman-arrested-for-grand-theft-and-drug-possession-after-walmart-inv",
-          "canonical_headline": "Fort Pierce woman arrested for grand theft and drug possession after Walmart investigation",
-          "basis": "exact_source_url",
+          "source_headline": "4th arrest made in death of 3-month-old child in St. Lucie County",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/4th-arrest-made-in-death-of-3-month-old-child-in-st-lucie-county",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-25-3-arrested-in-death-of-3-month-old-in-st-lucie-county-from-dehydration-and-malnu",
+          "canonical_headline": "3 arrested in death of 3-month-old in St. Lucie County from dehydration and malnutrition",
+          "basis": "event-identity-authority:exact_known_event_key",
           "identity_keys": [
-            "story:story_002071",
-            "source:https://cbs12.com/news/crime/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd"
+            "story:story_000536",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/4th-arrest-made-in-death-of-3-month-old-child-in-st-lucie-county"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "story",
-            "source"
+            "known_event_key",
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=story:story_002071,source:https://cbs12.com/news/crime/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Man arrested after PIT maneuver in Martin County sends family’s car into barbed-wire fence - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/florida-pit-maneuver-deputy-car-baby-barbed-wire/73334291",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-08-04-fort-myers-man-arrested-after-road-rage-pit-maneuver-crashes-familys-suv-into-fe",
-          "canonical_headline": "Fort Myers man arrested after road rage PIT maneuver crashes family's SUV into fence on I-95 in Martin County",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_002073",
-            "source:https://www.wpbf.com/article/florida-pit-maneuver-deputy-car-baby-barbed-wire/73334291"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_002073,source:https://www.wpbf.com/article/florida-pit-maneuver-deputy-car-baby-barbed-wire/73334291",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Two people accused of drug possession; one accused of resisting an officer in Fort Pierce - WPEC",
-          "source_url": "http://cbs12.com/news/crime/two-people-accused-of-drug-possession-one-accused-of-resisting-an-officer-in-fort-pierce-florida-news-florida-crime-cocaine-fppd-north-10th-street-st-lucie-county-jail",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-04-two-arrested-in-fort-pierce-after-officers-find-drug-paraphernalia-in-vehicle-pa",
-          "canonical_headline": "Two arrested in Fort Pierce after officers find drug paraphernalia in vehicle parked in empty field",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_002075",
-            "source:http://cbs12.com/news/crime/two-people-accused-of-drug-possession-one-accused-of-resisting-an-officer-in-fort-pierce-florida-news-florida-crime-cocaine-fppd-north-10th-street-st-lucie-county-jail"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_002075,source:http://cbs12.com/news/crime/two-people-accused-of-drug-possession-one-accused-of-resisting-an-officer-in-fort-pierce-florida-news-florida-crime-cocaine-fppd-north-10th-street-st-lucie-county-jail",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/03/martin-county-animal-hoarding-case-grows-108-rescued-animals-suspect-remains-free-bond?outputType=amp",
-          "publisher": "www.wflx.com",
-          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
-          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
-          "basis": "exact_structured_incident_key",
-          "identity_keys": [
-            "incident:mass-animal-hoarding:martin-county",
-            "story:story_000003",
-            "source:https://www.wflx.com/2026/08/03/martin-county-animal-hoarding-case-grows-108-rescued-animals-suspect-remains-free-bond?outputType=amp"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "incident"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
+            "left_identity_origin=source_derived",
+            "right_identity_origin=legacy_archive_derived",
+            "publication_gap_days=11",
+            "shared_locality=['st-lucie', 'st-lucie-county']",
+            "shared_event_families=['child-death']",
+            "shared_named_people=['three people']",
+            "shared_precise_locations=[]",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['death-month-old']",
+            "shared_headline_topic_core=['death', 'month', 'old']",
+            "shared_distinctive_token_count=7",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=exact_identity",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -583,18 +519,18 @@
       ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Palm Beach County Sheriff's dispatcher killed in Port St. Lucie murder-suicide",
+      "live_hero_headline": "Fourth arrest made in death of 3-month-old in St. Lucie County",
       "generated_card_count": 0,
-      "elapsed_seconds": 79.577
+      "elapsed_seconds": 67.874
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "quality_gate_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 10,
-      "selected_source_count": 7,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 13,
+      "selected_source_count": 9,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 1,
@@ -602,11 +538,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 57.775,
+          "elapsed_seconds": 77.258,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 57.775,
+      "model_elapsed_seconds": 77.258,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -617,10 +553,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 10,
+      "category_eligibility_assessed_count": 13,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -644,16 +580,6 @@
         },
         {
           "category_key": "business",
-          "source_headline": "Fort Pierce gets 90-day extension to pay state fines tied to Little Jim's docks",
-          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-gets-90-day-extension-to-pay-state-fines-tied-to-little-jims-docks",
-          "editorial_story_id": "story_001950",
-          "canonical_slug": "2026-08-03-fort-pierce-gets-90-day-extension-to-pay-state-fines-for-little-jims-dock-violat",
-          "canonical_headline": "Fort Pierce gets 90-day extension to pay state fines for Little Jim's dock violations",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
           "source_headline": "IRC District 2 Commission candidates speak out - Hometown News Treasure Coast",
           "source_url": "https://www.hometownnewstc.com/news/indian_river/irc-district-2-commission-candidates-speak-out/article_40c05ea4-92bf-5a8a-9f4c-49cdae761f0d.html",
           "editorial_story_id": "story_002005",
@@ -663,18 +589,60 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "4th arrest made in death of 3-month-old child in St. Lucie County",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/4th-arrest-made-in-death-of-3-month-old-child-in-st-lucie-county",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-25-3-arrested-in-death-of-3-month-old-in-st-lucie-county-from-dehydration-and-malnu",
+          "canonical_headline": "3 arrested in death of 3-month-old in St. Lucie County from dehydration and malnutrition",
+          "basis": "event-identity-authority:exact_known_event_key",
+          "identity_keys": [
+            "story:story_000536",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/4th-arrest-made-in-death-of-3-month-old-child-in-st-lucie-county"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "known_event_key",
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=legacy_archive_derived",
+            "publication_gap_days=11",
+            "shared_locality=['st-lucie', 'st-lucie-county']",
+            "shared_event_families=['child-death']",
+            "shared_named_people=['three people']",
+            "shared_precise_locations=[]",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['death-month-old']",
+            "shared_headline_topic_core=['death', 'month', 'old']",
+            "shared_distinctive_token_count=7",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=exact_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 83.216
+      "elapsed_seconds": 98.102
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "sports_zero_candidate_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 5,
       "selected_source_count": 5,
       "cache_hit": false,
@@ -695,11 +663,22 @@
       "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "sports",
+          "source_headline": "Funeral scheduled in Vero Beach honoring lost firefighter Geoffrey Lang - WPEC",
+          "source_url": "https://cbs12.com/newsletter-daily/funeral-scheduled-in-vero-beach-honoring-lost-firefighter-geoffrey-lang-community-church-indian-river-county-fire-rescue-paramedic-off-duty-death",
+          "editorial_story_id": "story_000793",
+          "canonical_slug": "2026-07-28-vero-beach-police-department-honors-service-of-indian-river-county-firefighter",
+          "canonical_headline": "Vero Beach Police Department honors service of Indian River County firefighter",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 26.267
+      "elapsed_seconds": 20.261
     },
     {
       "category_key": "things_to_do",
@@ -716,11 +695,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 34.817,
+          "elapsed_seconds": 36.446,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 34.817,
+      "model_elapsed_seconds": 36.446,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -748,7 +727,7 @@
         },
         {
           "category_key": "things_to_do",
-          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - wpbf.com",
+          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-fun-things-across-treasure-coast-palm-beach-weekend-1784287590-1785499876/73316892",
           "editorial_story_id": "story_000091",
           "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
@@ -781,21 +760,28 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 58.475
+      "elapsed_seconds": 62.932
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "no_publishable_sources",
+      "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 0,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 21.076,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 21.076,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -806,10 +792,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "florida",
@@ -823,6 +809,16 @@
         },
         {
           "category_key": "florida",
+          "source_headline": "'I CAN'T AFFORD IT': Treasure Coast man relocates to Puerto Rico for housing - WPTV",
+          "source_url": "https://www.wptv.com/money/real-estate-news/florida-affordability-struggles-push-treasure-coast-man-to-relocate-to-puerto-rico",
+          "editorial_story_id": "story_002061",
+          "canonical_slug": "2026-08-04-property-tax-increases-push-treasure-coast-resident-to-relocate-to-puerto-rico",
+          "canonical_headline": "Property tax increases push Treasure Coast resident to relocate to Puerto Rico",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "florida",
           "source_headline": "Florida affordability struggles push Treasure Coast man to relocate to Puerto Rico",
           "source_url": "https://www.wptv.com/money/real-estate-news/florida-affordability-struggles-push-treasure-coast-man-to-relocate-to-puerto-rico",
           "editorial_story_id": "story_002061",
@@ -830,191 +826,76 @@
           "canonical_headline": "Property tax increases push Treasure Coast resident to relocate to Puerto Rico",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
+        }
+      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Florida judge orders rewrite of Amendment 3 ballot language, calling it biased and misleading",
+      "generated_card_count": 0,
+      "elapsed_seconds": 51.381
+    },
+    {
+      "category_key": "martin",
+      "category_label": "Martin County",
+      "status": "generated_live",
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
+      "cache_hit": false,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
         {
-          "category_key": "florida",
-          "source_headline": "'I CAN'T AFFORD IT': Treasure Coast man relocates to Puerto Rico for housing - WPTV",
-          "source_url": "https://www.wptv.com/money/real-estate-news/florida-affordability-struggles-push-treasure-coast-man-to-relocate-to-puerto-rico",
-          "editorial_story_id": "story_002061",
-          "canonical_slug": "2026-08-04-property-tax-increases-push-treasure-coast-resident-to-relocate-to-puerto-rico",
-          "canonical_headline": "Property tax increases push Treasure Coast resident to relocate to Puerto Rico",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 11.383,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 11.383,
+      "failure_code": "",
+      "failure_summary": "",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
+      "category_eligibility_mode": "existing_geographic_enforce",
+      "category_eligibility_policy": "county_locality",
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
         {
-          "category_key": "florida",
-          "source_headline": "Honduran national convicted in South Florida firearms-trafficking operation",
-          "source_url": "https://www.wptv.com/news/state/honduran-national-convicted-in-south-florida-firearms-trafficking-operation",
-          "editorial_story_id": "story_002000",
-          "canonical_slug": "2026-08-03-honduran-national-convicted-in-fort-pierce-federal-court-for-firearms-traffickin",
-          "canonical_headline": "Honduran national convicted in Fort Pierce federal court for firearms trafficking to Honduras",
+          "category_key": "martin",
+          "source_headline": "Man arrested after PIT maneuver in Martin County sends family’s car into barbed-wire fence - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-pit-maneuver-deputy-car-baby-barbed-wire/73334291",
+          "editorial_story_id": "story_002073",
+          "canonical_slug": "2026-08-04-fort-myers-man-arrested-after-road-rage-pit-maneuver-crashes-familys-suv-into-fe",
+          "canonical_headline": "Fort Myers man arrested after road rage PIT maneuver crashes family's SUV into fence on I-95 in Martin County",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 32.234
-    },
-    {
-      "category_key": "martin",
-      "category_label": "Martin County",
-      "status": "generated_live",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 5,
-      "selected_source_count": 5,
-      "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 2,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 24.776,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Fort Myers man arrested after road rage attack sends North Carolina family into barbed-wire fence near Stuart"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 27.169,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 51.946,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 1,
-      "contextual_update_lead_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 73,
-          "baseline_anchor": "",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "animals",
-            "found",
-            "hoarding",
-            "home"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
-          "novelty_anchor": "continuing_status",
-          "novelty_present": false,
-          "novelty_token_hits": [
-            "animal",
-            "case",
-            "rescued"
-          ],
-          "missing": [
-            "new_development_missing"
-          ],
-          "source_title": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond - WFLX",
-          "headline": "Martin County animal hoarding case grows to 108 animals as more surrendered daily"
-        }
-      ],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
-      "category_eligibility_mode": "existing_geographic_enforce",
-      "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "'I CAN'T AFFORD IT': Treasure Coast man relocates to Puerto Rico for housing - WPTV",
-          "source_url": "https://www.wptv.com/money/real-estate-news/florida-affordability-struggles-push-treasure-coast-man-to-relocate-to-puerto-rico",
-          "editorial_story_id": "story_002061",
-          "canonical_slug": "2026-08-04-property-tax-increases-push-treasure-coast-resident-to-relocate-to-puerto-rico",
-          "canonical_headline": "Property tax increases push Treasure Coast resident to relocate to Puerto Rico",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County considers changes to shark fishing rules on beaches after state directive - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/01/martin-county-considers-changes-shark-fishing-rules-beaches-after-state-directive",
-          "editorial_story_id": "story_001155",
-          "canonical_slug": "2026-07-29-martin-county-commissioners-move-to-rewrite-shark-fishing-rules-after-public-bea",
-          "canonical_headline": "Martin County postpones shark fishing ordinance decision after state order to align with regulations",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 2,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Man arrested after PIT maneuver in Martin County sends family’s car into barbed-wire fence - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/florida-pit-maneuver-deputy-car-baby-barbed-wire/73334291",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-08-04-fort-myers-man-arrested-after-road-rage-pit-maneuver-crashes-familys-suv-into-fe",
-          "canonical_headline": "Fort Myers man arrested after road rage PIT maneuver crashes family's SUV into fence on I-95 in Martin County",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_002073",
-            "source:https://www.wpbf.com/article/florida-pit-maneuver-deputy-car-baby-barbed-wire/73334291"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_002073,source:https://www.wpbf.com/article/florida-pit-maneuver-deputy-car-baby-barbed-wire/73334291",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Martin County animal hoarding case grows to 108 rescued animals as suspect remains free on bond - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/03/martin-county-animal-hoarding-case-grows-108-rescued-animals-suspect-remains-free-bond?outputType=amp",
-          "publisher": "www.wflx.com",
-          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
-          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
-          "basis": "exact_structured_incident_key",
-          "identity_keys": [
-            "incident:mass-animal-hoarding:martin-county",
-            "story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
-            "source:https://www.wflx.com/2026/08/03/martin-county-animal-hoarding-case-grows-108-rescued-animals-suspect-remains-free-bond?outputType=amp"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "incident",
-            "story"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county,story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Fort Myers man arrested after PIT maneuver sends North Carolina family's SUV into fence near Stuart",
+      "live_hero_headline": "Man arrested after road rage attack involving PIT maneuver sends family into fence in Stuart area",
       "generated_card_count": 0,
-      "elapsed_seconds": 73.75
+      "elapsed_seconds": 39.231
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 25,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 9,
       "selected_source_count": 9,
       "cache_hit": false,
@@ -1024,52 +905,17 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 29.809,
+          "elapsed_seconds": 32.484,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 29.809,
+      "model_elapsed_seconds": 32.484,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 1,
-      "contextual_update_lead_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 39,
-          "baseline_anchor": "",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "arrested",
-            "drug",
-            "empty",
-            "field",
-            "fort",
-            "officers",
-            "paraphernalia",
-            "parked",
-            "pierce",
-            "vehicle"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Two arrested in Fort Pierce after officers find drug paraphernalia in vehicle parked in empty field",
-          "novelty_anchor": "source_distinctive_detail",
-          "novelty_present": false,
-          "novelty_token_hits": [],
-          "missing": [
-            "new_development_missing"
-          ],
-          "source_title": "Two people accused of drug possession; one accused of resisting an officer in Fort Pierce - WPEC",
-          "headline": "Two arrested for drug possession after Fort Pierce police find them parked in empty field"
-        }
-      ],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
@@ -1077,7 +923,7 @@
       "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1086,6 +932,26 @@
           "editorial_story_id": "story_001162",
           "canonical_slug": "2026-07-29-fort-pierce-residents-oppose-proposed-mega-yacht-marina-at-museum-pointe-over-co",
           "canonical_headline": "Fort Pierce residents oppose proposed mega yacht marina at Museum Pointe over concerns for St. Lucie County Regional History Museum",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Woman accused of stealing from Walmart arrested for drug possession in Fort Pierce - WPEC",
+          "source_url": "https://cbs12.com/news/crime/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd",
+          "editorial_story_id": "story_002071",
+          "canonical_slug": "2026-08-04-fort-pierce-woman-arrested-for-grand-theft-and-drug-possession-after-walmart-inv",
+          "canonical_headline": "Fort Pierce woman arrested for grand theft and drug possession after Walmart investigation",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Florida affordability struggles push Treasure Coast man to relocate to Puerto Rico - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/03/florida-affordability-struggles-push-treasure-coast-man-relocate-puerto-rico?outputType=amp",
+          "editorial_story_id": "story_002061",
+          "canonical_slug": "2026-08-04-property-tax-increases-push-treasure-coast-resident-to-relocate-to-puerto-rico",
+          "canonical_headline": "Property tax increases push Treasure Coast resident to relocate to Puerto Rico",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1101,17 +967,17 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace",
-          "editorial_story_id": "story_001806",
-          "canonical_slug": "2026-08-02-woman-killed-man-dead-in-apparent-domestic-shooting-in-port-st-lucie",
-          "canonical_headline": "Woman killed, man dead in apparent domestic shooting in Port St. Lucie",
+          "source_headline": "Victim, suspect identified in shooting at Oxmoor Terrace home in Port St. Lucie on Aug. 1 - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/crime/st_lucie/victim-suspect-identified-in-shooting-at-oxmoor-terrace-home-in-port-st-lucie-on-aug/article_c89b77ef-e03f-5997-9530-a9fb2e6ce0b1.html",
+          "editorial_story_id": "story_001880",
+          "canonical_slug": "2026-08-02-elizabeth-ortega-killed-ralph-varela-sr-dead-in-port-st-lucie-murder-suicide-on",
+          "canonical_headline": "Palm Beach County Sheriff's Office employee killed in Port St. Lucie murder-suicide",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Sharks caught on video off shore in St. Lucie County, Jupiter - wpbf.com",
+          "source_headline": "Sharks caught on video off shore in St. Lucie County, Jupiter - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-sharks-caught-on-video-off-shoremartin-county-jupiter/73324831",
           "editorial_story_id": "story_001783",
           "canonical_slug": "2026-08-03-two-sharks-spotted-off-st-lucie-and-palm-beach-county-coasts",
@@ -1121,58 +987,53 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Man accused of attacking convicted killer Otto Lenke in St. Lucie County Jail - WPEC",
-          "source_url": "https://cbs12.com/news/local/man-accused-of-attacking-convicted-killer-otto-lenke-in-st-lucie-county-jail-robert-castro-dorm-struck-in-face-cut-nose-richard-benson-death",
-          "editorial_story_id": "story_001610",
-          "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
-          "canonical_headline": "Inmate awaiting retrial for Fort Pierce murder charged with attacking convicted killer in St. Lucie County Jail",
+          "source_headline": "'Flamingo Bandit' sought after St. Lucie County home burglarized twice - WPEC",
+          "source_url": "https://cbs12.com/news/local/florida-crime-news-flamingo-bandit-sought-after-st-lucie-county-home-burglarized-twice-hawaiian-shirt-burglar-shirt-wardrobe",
+          "editorial_story_id": "story_001641",
+          "canonical_slug": "2026-07-31-st-lucie-county-sheriffs-office-seeks-flamingo-bandit-after-home-burglarized-twi",
+          "canonical_headline": "St. Lucie County Sheriff's Office seeks 'Flamingo Bandit' after home burglarized twice",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Woman accused of stealing from Walmart arrested for drug possession in Fort Pierce - WPEC",
-          "source_url": "https://cbs12.com/news/crime/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-04-fort-pierce-woman-arrested-for-grand-theft-and-drug-possession-after-walmart-inv",
-          "canonical_headline": "Fort Pierce woman arrested for grand theft and drug possession after Walmart investigation",
-          "basis": "exact_source_url",
+          "source_headline": "4th arrest made in death of 3-month-old child in St. Lucie County",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/4th-arrest-made-in-death-of-3-month-old-child-in-st-lucie-county",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-25-3-arrested-in-death-of-3-month-old-in-st-lucie-county-from-dehydration-and-malnu",
+          "canonical_headline": "3 arrested in death of 3-month-old in St. Lucie County from dehydration and malnutrition",
+          "basis": "event-identity-authority:exact_known_event_key",
           "identity_keys": [
-            "story:story_002071",
-            "source:https://cbs12.com/news/crime/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd"
+            "story:story_000536",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/4th-arrest-made-in-death-of-3-month-old-child-in-st-lucie-county"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "story",
-            "source"
+            "known_event_key",
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=story:story_002071,source:https://cbs12.com/news/crime/woman-accused-of-stealing-from-walmart-arrested-for-drug-possession-in-fort-pierce-florida-crime-florida-news-drugs-walmart-orange-avenue-theft-fppd",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Two people accused of drug possession; one accused of resisting an officer in Fort Pierce - WPEC",
-          "source_url": "http://cbs12.com/news/crime/two-people-accused-of-drug-possession-one-accused-of-resisting-an-officer-in-fort-pierce-florida-news-florida-crime-cocaine-fppd-north-10th-street-st-lucie-county-jail",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-04-two-arrested-in-fort-pierce-after-officers-find-drug-paraphernalia-in-vehicle-pa",
-          "canonical_headline": "Two arrested in Fort Pierce after officers find drug paraphernalia in vehicle parked in empty field",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_002075",
-            "source:http://cbs12.com/news/crime/two-people-accused-of-drug-possession-one-accused-of-resisting-an-officer-in-fort-pierce-florida-news-florida-crime-cocaine-fppd-north-10th-street-st-lucie-county-jail"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_002075,source:http://cbs12.com/news/crime/two-people-accused-of-drug-possession-one-accused-of-resisting-an-officer-in-fort-pierce-florida-news-florida-crime-cocaine-fppd-north-10th-street-st-lucie-county-jail",
+            "left_identity_origin=source_derived",
+            "right_identity_origin=legacy_archive_derived",
+            "publication_gap_days=11",
+            "shared_locality=['st-lucie', 'st-lucie-county']",
+            "shared_event_families=['child-death']",
+            "shared_named_people=['three people']",
+            "shared_precise_locations=[]",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['death-month-old']",
+            "shared_headline_topic_core=['death', 'month', 'old']",
+            "shared_distinctive_token_count=7",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=exact_identity",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -1181,32 +1042,42 @@
       ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Palm Beach County Sheriff's Office communications officer killed in Port St. Lucie murder-suicide",
+      "live_hero_headline": "Fourth arrest made in St. Lucie County infant death case as father taken into custody in Virginia",
       "generated_card_count": 2,
-      "elapsed_seconds": 56.068
+      "elapsed_seconds": 54.842
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "quality_gate_archive_recovery",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 8,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 11,
       "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 79.488,
-          "result": "success"
+          "elapsed_seconds": 7.812,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Indian River County stories available in today's feed"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 4.87,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Indian River County stories available in today's feed"
         }
       ],
-      "model_elapsed_seconds": 79.488,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 12.681,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Indian River County stories available in today's feed",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1215,10 +1086,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 11,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1247,16 +1118,6 @@
           "editorial_story_id": "story_002061",
           "canonical_slug": "2026-08-04-property-tax-increases-push-treasure-coast-resident-to-relocate-to-puerto-rico",
           "canonical_headline": "Property tax increases push Treasure Coast resident to relocate to Puerto Rico",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Honduran national convicted in South Florida firearms-trafficking operation",
-          "source_url": "https://www.wptv.com/news/state/honduran-national-convicted-in-south-florida-firearms-trafficking-operation",
-          "editorial_story_id": "story_002000",
-          "canonical_slug": "2026-08-03-honduran-national-convicted-in-fort-pierce-federal-court-for-firearms-traffickin",
-          "canonical_headline": "Honduran national convicted in Fort Pierce federal court for firearms trafficking to Honduras",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1291,11 +1152,53 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "generation_status": "success",
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "4th arrest made in death of 3-month-old child in St. Lucie County",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/4th-arrest-made-in-death-of-3-month-old-child-in-st-lucie-county",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-25-3-arrested-in-death-of-3-month-old-in-st-lucie-county-from-dehydration-and-malnu",
+          "canonical_headline": "3 arrested in death of 3-month-old in St. Lucie County from dehydration and malnutrition",
+          "basis": "event-identity-authority:exact_known_event_key",
+          "identity_keys": [
+            "story:story_000536",
+            "source:https://www.wptv.com/news/treasure-coast/region-st-lucie-county/4th-arrest-made-in-death-of-3-month-old-child-in-st-lucie-county"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "known_event_key",
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=legacy_archive_derived",
+            "publication_gap_days=11",
+            "shared_locality=['st-lucie', 'st-lucie-county']",
+            "shared_event_families=['child-death']",
+            "shared_named_people=['three people']",
+            "shared_precise_locations=[]",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['death-month-old']",
+            "shared_headline_topic_core=['death', 'month', 'old']",
+            "shared_distinctive_token_count=7",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=exact_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 98.935
+      "elapsed_seconds": 27.077
     }
   ]
 }
