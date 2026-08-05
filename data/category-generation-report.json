@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-05T10:53:20Z",
+  "generated_at": "2026-08-05T15:54:14Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,26 +15,27 @@
   "summary": {
     "category_count": 9,
     "statuses": {
+      "cache_hit": 1,
       "category_eligibility_archive_recovery": 1,
-      "generated_live": 4,
+      "generated_live": 2,
       "generation_failed_archive_recovery": 2,
-      "quality_gate_archive_recovery": 1,
+      "quality_gate_archive_recovery": 2,
       "sports_zero_candidate_archive_recovery": 1
     },
     "failures": {
       "article_framing_integrity": 2,
       "no_category_eligible_sources": 1,
       "no_sports_hero_candidates": 1,
-      "publication_quality_rejected": 1
+      "publication_quality_rejected": 2
     },
-    "model_attempt_count": 9,
-    "model_elapsed_seconds": 431.626,
-    "archive_recovery_requested_count": 5,
-    "sports_expired_event_preview_count": 0,
+    "model_attempt_count": 10,
+    "model_elapsed_seconds": 384.673,
+    "archive_recovery_requested_count": 6,
+    "sports_expired_event_preview_count": 1,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 7,
+    "article_framing_rejection_count": 8,
     "category_eligibility_rejection_count": 7,
-    "published_story_duplicate_suppression_count": 47,
+    "published_story_duplicate_suppression_count": 44,
     "story_aware_update_context_count": 0
   },
   "categories": [
@@ -42,22 +43,30 @@
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "quality_gate_archive_recovery",
-      "fetched_candidate_count": 27,
+      "fetched_candidate_count": 26,
       "fresh_candidate_count": 22,
-      "publishable_source_count": 9,
-      "selected_source_count": 2,
+      "publishable_source_count": 8,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 26.745,
+          "elapsed_seconds": 4.988,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No local Treasure Coast government stories available for Wednesday"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 8.085,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 26.745,
+      "model_elapsed_seconds": 13.073,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -68,7 +77,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 7,
       "category_eligibility_rejections": [
         {
@@ -81,8 +90,49 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "AI data centers spark noise, environmental concerns as South Florida communities weigh moratoriums",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/ai-data-centers-spark-noise-environmental-concerns-as-south-florida-communities-weigh-moratoriums"
+          "headline": "10 Palm Beach County restaurants earn Michelin honors as Emelina makes history with star",
+          "source_url": "https://www.wptv.com/shining-a-light/10-palm-beach-county-restaurants-earn-michelin-honors-as-emelina-makes-history-with-star"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "sports_or_recreation:defeats"
+          ],
+          "headline": "Abdul El-Sayed defeats Haley Stevens in Michigan's Democratic primary for US Senate",
+          "source_url": "https://www.wptv.com/politics/stevens-and-el-sayed-locked-in-tight-race-for-michigans-democratic-senate-nomination"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Back to School: Tradition Lakes K-8 prepares to open in St. Lucie County - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-back-to-school-tradition-lakes-k-8-st-lucie-county/73344051"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "St. Lucie County schools open Aug. 10: What families need to know for the new year - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/04/st-lucie-county-schools-open-aug-10-what-families-need-know-new-year/"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -120,53 +170,22 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Dick's House of Sports proposed as new anchor store at the Gardens Mall in Palm Beach Gardens",
-          "source_url": "https://www.wptv.com/news/region-n-palm-beach-county/palm-beach-gardens/dicks-house-of-sports-proposed-as-new-anchor-store-at-the-gardens-mall-in-palm-beach-gardens"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Back to School: Tradition Lakes K-8 prepares to open in St. Lucie County - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-back-to-school-tradition-lakes-k-8-st-lucie-county/73344051"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:arrested"
-          ],
-          "headline": "Search warrant underway at Fort Pierce home tied to $7 million Southern Truss fraud - WPEC",
-          "source_url": "https://cbs12.com/news/local/search-warrant-underway-at-fort-pierce-home-tied-to-7-million-southern-truss-fraud-fort-pierce-st-lucie-county-southern-truss-fraud-investigation-search-warrant-laura-beth-grasso-indian-river-estates-financial-fraud-organized-fraud-grand-theft"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
           "headline": "Commission will meet Sept. 14 on King’s Landing future - Hometown News Treasure Coast",
           "source_url": "https://www.hometownnewstc.com/news/st_lucie/commission-will-meet-sept-14-on-king-s-landing-future/article_90e490c0-2cd2-5c44-b2e7-e32a06803762.html"
         }
       ],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "AI data centers spark noise, environmental concerns as South Florida communities weigh moratoriums",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/ai-data-centers-spark-noise-environmental-concerns-as-south-florida-communities-weigh-moratoriums",
+          "editorial_story_id": "story_002286",
+          "canonical_slug": "2026-08-05-south-florida-communities-weigh-data-center-moratoriums-as-residents-report-cons",
+          "canonical_headline": "South Florida communities weigh data center moratoriums as residents report constant noise from cooling fans",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Florida judge blocks Amendment 3 ballot language, orders rewrite before November vote - WFLX",
@@ -189,26 +208,6 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "St. Lucie County schools open Aug. 10: What families need to know for the new year",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-open-aug-10-what-families-need-to-know-for-the-new-year",
-          "editorial_story_id": "story_002246",
-          "canonical_slug": "2026-08-04-st-lucie-county-schools-open-aug-10-with-new-tradition-lakes-k-8-campus-and-ai-c",
-          "canonical_headline": "St. Lucie County schools open Aug. 10 with new Tradition Lakes K-8 campus and AI courses",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "St. Lucie County schools open Aug. 10: What families need to know for the new year - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-open-aug-10-what-families-need-to-know-for-the-new-year",
-          "editorial_story_id": "story_002246",
-          "canonical_slug": "2026-08-04-st-lucie-county-schools-open-aug-10-with-new-tradition-lakes-k-8-campus-and-ai-c",
-          "canonical_headline": "St. Lucie County schools open Aug. 10 with new Tradition Lakes K-8 campus and AI courses",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
           "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
           "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina",
           "editorial_story_id": "story_001162",
@@ -222,193 +221,71 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 70.758
+      "elapsed_seconds": 66.487
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generated_live",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 13,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 14,
       "selected_source_count": 12,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 78.178,
-          "result": "success"
+          "elapsed_seconds": 81.986,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Fourth arrest made in death of 3-month-old in Fort Pierce who died from malnutrition and dehydration"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 98.0,
+          "elapsed_seconds": 81.748,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Fourth arrest made in death of 3-month-old in Fort Pierce child neglect case"
         }
       ],
-      "model_elapsed_seconds": 78.178,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 163.733,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Fourth arrest made in death of 3-month-old in Fort Pierce child neglect case",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 2,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "U.S. Marshals arrest biological father in Fort Pierce infant malnutrition death",
-          "missing": [
-            "headline_jurisdiction_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "U.S. Marshals arrest biological father in Fort Pierce infant malnutrition death",
-            "lead": "U.S. Marshals Service arrested Jason Gunter, 45, Tuesday at his home in Mechanicsville, Virginia, on a warrant obtained by St. Lucie County Sheriff's Office detectives investigating the death of his 3-month-old son. Gunter is charged with felony child neglect causing great harm and is awaiting extradition to St. Lucie County. He is the fourth person arrested in connection with the infant's death. The child's mother, 27-year-old Nicole Maxwell, the child's grandfather Robert Maxwell, and Robert Maxwell's girlfriend, 38-year-old Vikki Koon, were previously charged with aggravated manslaughter of a child and aggravated child abuse and are each held on $1.5 million bond.",
-            "lead_word_count": 114,
-            "headline_overlap_ratio": 0.333,
-            "new_context_token_count": 54,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "U.S. Marshals arrest biological father in Fort Pierce infant malnutrition death",
-            "lead": "U.S. Marshals Service arrested Jason Gunter, 45, Tuesday at his home in Mechanicsville, Virginia, on a warrant obtained by St. Lucie County Sheriff's Office detectives investigating the death of his 3-month-old son. Gunter is charged with felony child neglect causing great harm and is awaiting extradition to St. Lucie County. He is the fourth person arrested in connection with the infant's death. The child's mother, 27-year-old Nicole Maxwell, the child's grandfather Robert Maxwell, and Robert Maxwell's girlfriend, 38-year-old Vikki Koon, were previously charged with aggravated manslaughter of a child and aggravated child abuse and are each held on $1.5 million bond.",
-            "headline_money_claims": [],
-            "lead_money_claims": [
-              1500000
-            ],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "fort_pierce"
-            ],
-            "lead_jurisdictions": [
-              "st_lucie_county"
-            ],
-            "missing_jurisdictions": [
-              "fort_pierce"
-            ],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "U.S. Marshals arrest biological father in Fort Pierce infant malnutrition death",
-            "generated_lead": "U.S. Marshals Service arrested Jason Gunter, 45, Tuesday at his home in Mechanicsville, Virginia, on a warrant obtained by St.",
-            "source_title": "US Marshals arrest baby’s father in connection with Fort Pierce malnutrition death - cw34.com",
-            "source_lead": "A fourth person has been arrested in connection with the death of a 3-month-old baby who allegedly died from severe dehydration and malnutrition. Lucie County Sheriff's Office announced Tuesday that the child's biological father, 45-year-old Jason Gunter, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia.",
-            "title_similarity": {
-              "score": 0.6915,
-              "overlap": 0.7778,
-              "jaccard": 0.5,
-              "sorted_sequence": 0.7632,
-              "ordered_sequence": 0.7368,
-              "shared_token_count": 7.0
-            },
-            "lead_token_overlap": 0.786,
-            "missing": []
-          }
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "St. Lucie County detectives serve warrant at Fort Pierce home in Southern Truss fraud investigation",
-          "missing": [
-            "headline_jurisdiction_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "St. Lucie County detectives serve warrant at Fort Pierce home in Southern Truss fraud investigation",
-            "lead": "St. Lucie County Sheriff's Office confirmed to CBS12 News that deputies served a search warrant Tuesday as part of the ongoing investigation into the Southern Truss fraud case. Crime scene investigators were seen outside the home of Laura Beth Grasso in the Indian River Estates neighborhood near Sunset Boulevard. Grasso was arrested July 16 along with Sheri Lynn Harrs and Tina Marie Mejia following what the sheriff's office described as a years-long scheme targeting Southern Truss Companies. Grasso has pleaded not guilty to the charges.",
-            "lead_word_count": 88,
-            "headline_overlap_ratio": 0.692,
-            "new_context_token_count": 49,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "St. Lucie County detectives serve warrant at Fort Pierce home in Southern Truss fraud investigation",
-            "lead": "St. Lucie County Sheriff's Office confirmed to CBS12 News that deputies served a search warrant Tuesday as part of the ongoing investigation into the Southern Truss fraud case. Crime scene investigators were seen outside the home of Laura Beth Grasso in the Indian River Estates neighborhood near Sunset Boulevard. Grasso was arrested July 16 along with Sheri Lynn Harrs and Tina Marie Mejia following what the sheriff's office described as a years-long scheme targeting Southern Truss Companies. Grasso has pleaded not guilty to the charges.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "fort_pierce",
-              "st_lucie_county"
-            ],
-            "lead_jurisdictions": [
-              "st_lucie_county"
-            ],
-            "missing_jurisdictions": [
-              "fort_pierce"
-            ],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "St. Lucie County detectives serve warrant at Fort Pierce home in Southern Truss fraud investigation",
-            "generated_lead": "St. Lucie County Sheriff's Office confirmed to CBS12 News that deputies served a search warrant Tuesday as part of the ongoing investigation into the Southern Truss fraud case.",
-            "source_title": "Search warrant underway at Fort Pierce home tied to $7 million Southern Truss fraud - WPEC",
-            "source_lead": "A large law enforcement presence descended on a Fort Pierce neighborhood Tuesday morning as detectives executed a search warrant connected to an alleged fraud scheme that investigators say cost a local business nearly $7 million. Lucie County Sheriff's Office confirmed to CBS12 News that deputies are serving a search warrant as part of the ongoing investigation into the Southern Truss fraud case.",
-            "title_similarity": {
-              "score": 0.5188,
-              "overlap": 0.5385,
-              "jaccard": 0.3684,
-              "sorted_sequence": 0.659,
-              "ordered_sequence": 0.5896,
-              "shared_token_count": 7.0
-            },
-            "lead_token_overlap": 0.9,
-            "missing": []
-          }
-        }
-      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 13,
+      "category_eligibility_assessed_count": 14,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "Indian River County Sheriff's Office seeks help finding missing 24-year-old man - WPEC",
-          "source_url": "https://cbs12.com/news/local/indian-river-county-sheriffs-office-seeks-help-finding-missing-24-year-old-man-florida-news-missing-person-ircso",
+          "source_headline": "AI data centers spark noise, environmental concerns as South Florida communities weigh moratoriums",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/ai-data-centers-spark-noise-environmental-concerns-as-south-florida-communities-weigh-moratoriums",
+          "editorial_story_id": "story_002286",
+          "canonical_slug": "2026-08-05-south-florida-communities-weigh-data-center-moratoriums-as-residents-report-cons",
+          "canonical_headline": "South Florida communities weigh data center moratoriums as residents report constant noise from cooling fans",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Indian River County Sheriff's Office seeks help finding missing 24-year-old man - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/indian-river-county-sheriffs-office-seeks-help-finding-missing-24-year-old-man-florida-news-missing-person-ircso",
           "editorial_story_id": "story_002291",
           "canonical_slug": "2026-08-05-indian-river-county-sheriffs-office-searches-for-missing-24-year-old-man-last-se",
           "canonical_headline": "Indian River County Sheriff's Office searches for missing 24-year-old man last seen Tuesday afternoon",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -470,58 +347,36 @@
           "canonical_headline": "Two arrested in Fort Pierce after officers find drug paraphernalia in vehicle parked in empty field",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "surface": "hero",
-          "headline": "Fort Myers man arrested after PIT maneuver sends family into barbed-wire fence on I-95 in Martin County",
-          "editorial_story_id": "story_002073",
-          "canonical_slug": "2026-08-04-fort-myers-man-arrested-after-road-rage-pit-maneuver-crashes-familys-suv-into-fe",
-          "canonical_headline": "Fort Myers man arrested after road rage PIT maneuver crashes family's SUV into fence on I-95 in Martin County",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
-        },
-        {
-          "category_key": "crime",
-          "surface": "card",
-          "headline": "Fort Pierce police arrest woman for drug possession, grand theft at Walmart",
-          "editorial_story_id": "story_002071",
-          "canonical_slug": "2026-08-04-fort-pierce-woman-arrested-for-grand-theft-and-drug-possession-after-walmart-inv",
-          "canonical_headline": "Fort Pierce woman arrested for grand theft and drug possession after Walmart investigation",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "St. Lucie County detectives execute search warrant at Fort Pierce home in $7 million Southern Truss fraud case",
-      "generated_card_count": 2,
-      "elapsed_seconds": 105.71
+      "elapsed_seconds": 199.849
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
-      "status": "generated_live",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 12,
-      "selected_source_count": 10,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 11,
+      "selected_source_count": 9,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 88.689,
+          "elapsed_seconds": 70.976,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 88.689,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 70.976,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -532,18 +387,18 @@
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Westlake population nears 5,500 homes with Walmart superstore and Lowe's coming to Town Center West",
+          "headline": "Westlake population nears 4,000 homes as Walmart buys 24-acre site for superstore",
           "missing": [
             "generated_copy_drifted_from_source_focus"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Westlake population nears 5,500 homes with Walmart superstore and Lowe's coming to Town Center West",
-            "lead": "The city of Westlake has grown rapidly since its founding in 2016, with the population reaching about 3,880 homes and another 1,600 homes approved but not yet built, Mayor J.P. O'Connor said. Walmart purchased a 24-acre site in Town Center West near Seminole Pratt Whitney Road and 60th Street North where the company will build a 188,779-square-foot superstore featuring a full grocery store, pharmacy, garden center, automotive center, vision center, convenience store and gas station. The store will sit next to a Lowe's Home Improvement store, which will also serve as a regional headquarters.",
-            "lead_word_count": 103,
-            "headline_overlap_ratio": 0.75,
-            "new_context_token_count": 58,
+            "headline": "Westlake population nears 4,000 homes as Walmart buys 24-acre site for superstore",
+            "lead": "Walmart purchased a 24-acre site in Westlake where the company will build a 188,779-square-foot superstore. The store will be located in Town Center West near Seminole Pratt Whitney Road and 60th Street North. The Walmart will include a full grocery store, pharmacy, garden center, automotive center, vision center, convenience store and gas station.",
+            "lead_word_count": 57,
+            "headline_overlap_ratio": 0.545,
+            "new_context_token_count": 31,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -557,8 +412,8 @@
           "claim_consistency": {
             "required": true,
             "passed": true,
-            "headline": "Westlake population nears 5,500 homes with Walmart superstore and Lowe's coming to Town Center West",
-            "lead": "The city of Westlake has grown rapidly since its founding in 2016, with the population reaching about 3,880 homes and another 1,600 homes approved but not yet built, Mayor J.P. O'Connor said. Walmart purchased a 24-acre site in Town Center West near Seminole Pratt Whitney Road and 60th Street North where the company will build a 188,779-square-foot superstore featuring a full grocery store, pharmacy, garden center, automotive center, vision center, convenience store and gas station. The store will sit next to a Lowe's Home Improvement store, which will also serve as a regional headquarters.",
+            "headline": "Westlake population nears 4,000 homes as Walmart buys 24-acre site for superstore",
+            "lead": "Walmart purchased a 24-acre site in Westlake where the company will build a 188,779-square-foot superstore. The store will be located in Town Center West near Seminole Pratt Whitney Road and 60th Street North. The Walmart will include a full grocery store, pharmacy, garden center, automotive center, vision center, convenience store and gas station.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
@@ -573,19 +428,19 @@
           "source_focus": {
             "required": true,
             "passed": false,
-            "generated_headline": "Westlake population nears 5,500 homes with Walmart superstore and Lowe's coming to Town Center West",
-            "generated_lead": "The city of Westlake has grown rapidly since its founding in 2016, with the population reaching about 3,880 homes and another 1,600 homes approved but not yet built, Mayor J.P. O'Connor said.",
+            "generated_headline": "Westlake population nears 4,000 homes as Walmart buys 24-acre site for superstore",
+            "generated_lead": "Walmart purchased a 24-acre site in Westlake where the company will build a 188,779-square-foot superstore. The store will be located in Town Center West near Seminole Pratt Whitney Road and 60th Street North.",
             "source_title": "City of Westlake continues to grow rapidly with major retailers, hundreds of new homes",
             "source_lead": "The city of Westlake is experiencing a rapid transformation— thousands of new homes have been approved, major retailers are moving in and families drawn by affordable living and strong community bonds.WPTV reporter Christy Waite spoke with Krystal Lexima who moved her family to Westlake from Wellington in 2018 when the landscape looked very different. \"Everything was just dirt and grass. There was just one neighborhood and lots of coyotes,\" Lexima recalls. \"When we came out here there was nothing and",
             "title_similarity": {
-              "score": 0.2595,
+              "score": 0.2792,
               "overlap": 0.2,
-              "jaccard": 0.0952,
-              "sorted_sequence": 0.4359,
-              "ordered_sequence": 0.2949,
+              "jaccard": 0.1,
+              "sorted_sequence": 0.3724,
+              "ordered_sequence": 0.3172,
               "shared_token_count": 2.0
             },
-            "lead_token_overlap": 0.182,
+            "lead_token_overlap": 0.037,
             "missing": [
               "generated_copy_drifted_from_source_focus"
             ]
@@ -594,11 +449,21 @@
       ],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 12,
+      "category_eligibility_assessed_count": 11,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "AI data centers spark noise, environmental concerns as South Florida communities weigh moratoriums",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/ai-data-centers-spark-noise-environmental-concerns-as-south-florida-communities-weigh-moratoriums",
+          "editorial_story_id": "story_002286",
+          "canonical_slug": "2026-08-05-south-florida-communities-weigh-data-center-moratoriums-as-residents-report-cons",
+          "canonical_headline": "South Florida communities weigh data center moratoriums as residents report constant noise from cooling fans",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "Extreme heat is fueling a countywide push for more trees and shade in Palm Beach County",
@@ -654,9 +519,7 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "South Florida communities weigh data center moratoriums as residents report constant noise from cooling fans",
-      "generated_card_count": 0,
-      "elapsed_seconds": 107.173
+      "elapsed_seconds": 101.72
     },
     {
       "category_key": "sports",
@@ -664,8 +527,8 @@
       "status": "sports_zero_candidate_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 5,
-      "selected_source_count": 5,
+      "publishable_source_count": 7,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
@@ -673,15 +536,29 @@
       "model_elapsed_seconds": 0.0,
       "failure_code": "no_sports_hero_candidates",
       "failure_summary": "Selected Sports source pool contained no deterministic athletic hero candidate",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
+      "sports_expired_event_preview_count": 1,
+      "sports_expired_event_previews": [
+        {
+          "headline": "Mets back at Clover Park Tuesday-Sunday vs. Daytona - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/sports/mets-back-at-clover-park-tuesday-sunday-vs-daytona/article_94571854-a013-5260-84ba-8a3711f3c1f8.html",
+          "published": "Wed, 05 Aug 2026 15:15:00 GMT",
+          "reason": "sports_event_window_expired",
+          "event_end_date": "2026-06-28",
+          "event_dates": [
+            "2026-06-18",
+            "2026-06-20",
+            "2026-06-23",
+            "2026-06-28"
+          ]
+        }
+      ],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 3,
@@ -719,14 +596,14 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 31.725
+      "elapsed_seconds": 38.365
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 9,
       "selected_source_count": 9,
       "cache_hit": false,
@@ -736,11 +613,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 69.521,
+          "elapsed_seconds": 11.599,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 69.521,
+      "model_elapsed_seconds": 11.599,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -793,14 +670,14 @@
       "budget_seconds": 180.0,
       "live_hero_headline": "",
       "generated_card_count": 0,
-      "elapsed_seconds": 95.249
+      "elapsed_seconds": 41.111
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 1,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -821,12 +698,22 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "florida",
           "source_headline": "Florida judge blocks Amendment 3 ballot language, orders rewrite before November vote",
           "source_url": "https://www.wptv.com/news/state/florida-judge-blocks-amendment-3-ballot-language-orders-rewrite-before-november-vote",
+          "editorial_story_id": "story_002270",
+          "canonical_slug": "2026-08-05-palm-beach-county-cities-push-for-more-trees-and-shade-as-extreme-heat-bakes-nei",
+          "canonical_headline": "Palm Beach County cities push for more trees and shade as extreme heat bakes neighborhoods",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "florida",
+          "source_headline": "Florida judge blocks Amendment 3 ballot language, orders rewrite before November vote - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNVkl1OG1Tc0hTOVlaeTY3Z1ZrUy1Ld2RVaWFaNUFKVDNUbXNNb2NVeDFvc3pVa0RabXAtS25lSjY5djdGVThuaUZkVTdWVjVNZjhXazg0S3VMZm9sUWw4d1hyd01DNkRKTGxmaEVpWEg4blBobG91bndIdkViMW8waFgxdC1ZYUVGdTdLNDFTR1piRWtYb2lBZ2lRY3hHSHNQeHVqSVdnUFMySHpMZ09Fa0RZd1FxMms",
           "editorial_story_id": "story_002270",
           "canonical_slug": "2026-08-05-palm-beach-county-cities-push-for-more-trees-and-shade-as-extreme-heat-bakes-nei",
           "canonical_headline": "Palm Beach County cities push for more trees and shade as extreme heat bakes neighborhoods",
@@ -846,28 +733,21 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 38.596
+      "elapsed_seconds": 51.834
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "generated_live",
+      "status": "cache_hit",
       "fetched_candidate_count": 26,
       "fresh_candidate_count": 24,
       "publishable_source_count": 2,
       "selected_source_count": 2,
-      "cache_hit": false,
+      "cache_hit": true,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 9.884,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 9.884,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -906,56 +786,121 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "success",
-      "budget_seconds": 180.0,
       "live_hero_headline": "Stuart man arrested after using PIT maneuver on North Carolina family near I-95",
-      "generated_card_count": 0,
-      "elapsed_seconds": 36.369
+      "elapsed_seconds": 33.8
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generation_failed_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 7,
-      "selected_source_count": 7,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 9,
+      "selected_source_count": 9,
       "cache_hit": false,
-      "archive_recovery_requested": true,
+      "archive_recovery_requested": false,
       "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 70.266,
+          "elapsed_seconds": 53.926,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — U.S. Marshals arrest baby's father in Fort Pierce malnutrition death case"
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Father arrested in Virginia in death of 3-month-old Fort Pierce infant from malnutrition"
         },
         {
           "attempt": 2,
-          "timeout_seconds": 109.7,
-          "elapsed_seconds": 77.951,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Father arrested in Fort Pierce infant malnutrition death that claimed 3-month-old's life"
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 53.009,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 148.218,
-      "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Father arrested in Fort Pierce infant malnutrition death that claimed 3-month-old's life",
+      "model_elapsed_seconds": 106.935,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Father arrested in Virginia in connection with Fort Pierce infant malnutrition death",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Father arrested in Virginia in connection with Fort Pierce infant malnutrition death",
+            "lead": "The St. Lucie County Sheriff's Office announced Tuesday that Jason Gunter, the biological father of a 3-month-old who died from severe dehydration and malnutrition, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia. Detectives had obtained an arrest warrant for Gunter in connection with the ongoing investigation into the child's death. He has been charged with felony child neglect causing great harm and is awaiting extradition to St. Lucie County.",
+            "lead_word_count": 81,
+            "headline_overlap_ratio": 0.556,
+            "new_context_token_count": 42,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Father arrested in Virginia in connection with Fort Pierce infant malnutrition death",
+            "lead": "The St. Lucie County Sheriff's Office announced Tuesday that Jason Gunter, the biological father of a 3-month-old who died from severe dehydration and malnutrition, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia. Detectives had obtained an arrest warrant for Gunter in connection with the ongoing investigation into the child's death. He has been charged with felony child neglect causing great harm and is awaiting extradition to St. Lucie County.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "fort_pierce"
+            ],
+            "lead_jurisdictions": [
+              "st_lucie_county"
+            ],
+            "missing_jurisdictions": [
+              "fort_pierce"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Father arrested in Virginia in connection with Fort Pierce infant malnutrition death",
+            "generated_lead": "The St. Lucie County Sheriff's Office announced Tuesday that Jason Gunter, the biological father of a 3-month-old who died from severe dehydration and malnutrition, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia.",
+            "source_title": "US Marshals arrest baby’s father in connection with Fort Pierce malnutrition death - cw34.com",
+            "source_lead": "A fourth person has been arrested in connection with the death of a 3-month-old baby who allegedly died from severe dehydration and malnutrition. Lucie County Sheriff's Office announced Tuesday that the child's biological father, 45-year-old Jason Gunter, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia.",
+            "title_similarity": {
+              "score": 0.6863,
+              "overlap": 0.7778,
+              "jaccard": 0.5,
+              "sorted_sequence": 0.7368,
+              "ordered_sequence": 0.6974,
+              "shared_token_count": 7.0
+            },
+            "lead_token_overlap": 0.964,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1019,16 +964,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/03/woman-killed-man-found-dead-after-apparent-domestic-related-shooting-port-st-lucie",
-          "editorial_story_id": "story_001806",
-          "canonical_slug": "2026-08-02-woman-killed-man-dead-in-apparent-domestic-shooting-in-port-st-lucie",
-          "canonical_headline": "Woman killed, man dead in apparent domestic shooting in Port St. Lucie",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Sharks caught on video off shore in St. Lucie County, Jupiter - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-sharks-caught-on-video-off-shoremartin-county-jupiter/73324831",
           "editorial_story_id": "story_001783",
@@ -1046,32 +981,24 @@
           "canonical_headline": "St. Lucie County Sheriff's Office seeks 'Flamingo Bandit' after home burglarized twice",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Man accused of attacking convicted killer Otto Lenke in St. Lucie County Jail - WPEC",
-          "source_url": "https://cbs12.com/news/local/man-accused-of-attacking-convicted-killer-otto-lenke-in-st-lucie-county-jail-robert-castro-dorm-struck-in-face-cut-nose-richard-benson-death",
-          "editorial_story_id": "story_001610",
-          "canonical_slug": "2026-07-31-inmate-awaiting-retrial-for-fort-pierce-murder-charged-with-attacking-convicted",
-          "canonical_headline": "Inmate awaiting retrial for Fort Pierce murder charged with attacking convicted killer in St. Lucie County Jail",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 162.954
+      "live_hero_headline": "Tradition Lakes K-8 to open Aug. 10 in St. Lucie County",
+      "generated_card_count": 3,
+      "elapsed_seconds": 135.619
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 5,
-      "selected_source_count": 5,
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 4,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 2,
@@ -1079,21 +1006,21 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 4.987,
+          "elapsed_seconds": 12.614,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Indian River County stories available in today's headlines"
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Indian River County stories available in today's feed"
         },
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 5.405,
+          "elapsed_seconds": 5.743,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
           "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Indian River County stories available in today's feed"
         }
       ],
-      "model_elapsed_seconds": 10.391,
+      "model_elapsed_seconds": 18.357,
       "failure_code": "article_framing_integrity",
       "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Indian River County stories available in today's feed",
       "sports_expired_event_preview_count": 0,
@@ -1104,11 +1031,31 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Indian River County remembers firefighter-paramedic Geoffrey Lang at memorial service - WPBF",
+          "source_url": "https://www.wpbf.com/article/indian-river-county-firefighter-paramedic-geoffrey-lang-memorial-service/73346171",
+          "editorial_story_id": "story_000793",
+          "canonical_slug": "2026-07-28-vero-beach-police-department-honors-service-of-indian-river-county-firefighter",
+          "canonical_headline": "Vero Beach Police Department honors service of Indian River County firefighter",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "AI data centers spark noise, environmental concerns as South Florida communities weigh moratoriums",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/ai-data-centers-spark-noise-environmental-concerns-as-south-florida-communities-weigh-moratoriums",
+          "editorial_story_id": "story_002286",
+          "canonical_slug": "2026-08-05-south-florida-communities-weigh-data-center-moratoriums-as-residents-report-cons",
+          "canonical_headline": "South Florida communities weigh data center moratoriums as residents report constant noise from cooling fans",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Indian River County Sheriff's Office seeks help finding missing 24-year-old man - WPEC",
@@ -1151,36 +1098,6 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Florida homeowners say solar door-to-door sales left them with decades of debt",
-          "source_url": "https://www.wptv.com/wptv-investigates/florida-homeowners-say-solar-door-to-door-sales-left-them-with-decades-of-debt",
-          "editorial_story_id": "story_002249",
-          "canonical_slug": "2026-08-04-treasure-coast-homeowners-say-door-to-door-solar-sales-left-them-with-decades-of",
-          "canonical_headline": "Treasure Coast homeowners say door-to-door solar sales left them with decades of debt and malfunctioning systems",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Indian River County remembers firefighter-paramedic Geoffrey Lang at memorial service - WPBF",
-          "source_url": "https://www.wpbf.com/article/indian-river-county-firefighter-paramedic-geoffrey-lang-memorial-service/73346171",
-          "editorial_story_id": "story_000793",
-          "canonical_slug": "2026-07-28-vero-beach-police-department-honors-service-of-indian-river-county-firefighter",
-          "canonical_headline": "Vero Beach Police Department honors service of Indian River County firefighter",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "'I CAN'T AFFORD IT': Treasure Coast man relocates to Puerto Rico for housing - WPTV",
-          "source_url": "https://www.wptv.com/money/real-estate-news/florida-affordability-struggles-push-treasure-coast-man-to-relocate-to-puerto-rico",
-          "editorial_story_id": "story_002061",
-          "canonical_slug": "2026-08-04-property-tax-increases-push-treasure-coast-resident-to-relocate-to-puerto-rico",
-          "canonical_headline": "Property tax increases push Treasure Coast resident to relocate to Puerto Rico",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
           "source_headline": "Funeral scheduled in Vero Beach honoring lost firefighter Geoffrey Lang - WPEC",
           "source_url": "https://cbs12.com/news/local/funeral-scheduled-in-vero-beach-honoring-lost-firefighter-geoffrey-lang-community-church-indian-river-county-fire-rescue-paramedic-off-duty-death",
           "editorial_story_id": "story_000793",
@@ -1194,7 +1111,7 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 31.569
+      "elapsed_seconds": 44.266
     }
   ]
 }
