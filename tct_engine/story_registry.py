@@ -28,6 +28,10 @@ from .editorial_proximity import (
 )
 from .incident_identity import find_matching_incident_story
 from .source_identity import find_matching_source_story
+from .unified_incident_identity import (
+    evidence_from_mapping,
+    find_matching_unified_incident_story,
+)
 from .registry_repair import (
     choose_primary_story_id,
     is_sparse_event_key,
@@ -234,6 +238,7 @@ class StoryRegistry:
             story.setdefault("agencies", [])
             story.setdefault("event_types", [])
             story.setdefault("entities", [])
+            story.setdefault("unified_incident_evidence", [])
             story.setdefault("local_relevance", {"scope":"unknown","score":35,"counties":[],"places":[]})
             story.setdefault("resolution_history", [])
             story.setdefault("relationship_history", [])
@@ -388,6 +393,7 @@ class StoryRegistry:
             "agencies": [],
             "event_types": [],
             "entities": [],
+            "unified_incident_evidence": [],
             "local_relevance": {"scope":"unknown","score":35,"counties":[],"places":[]},
             "resolution_history": [],
             "relationship_history": [],
@@ -435,6 +441,7 @@ class StoryRegistry:
         is_custom: bool = False,
         source_class: str = "unknown",
         source_trust: int = 50,
+        unified_incident_evidence: dict[str, object] | None = None,
     ) -> str:
         mapped = (
             None
@@ -503,6 +510,7 @@ class StoryRegistry:
                 is_custom=is_custom,
                 source_class=source_class,
                 source_trust=source_trust,
+                unified_incident_evidence=unified_incident_evidence,
             )
             self._recalculate_importance(story_id)
             story = self.data["stories"][story_id]
@@ -555,6 +563,7 @@ class StoryRegistry:
                 is_custom=is_custom,
                 source_class=source_class,
                 source_trust=source_trust,
+                unified_incident_evidence=unified_incident_evidence,
             )
             self._recalculate_importance(story_id)
             story = self.data["stories"][story_id]
@@ -637,6 +646,7 @@ class StoryRegistry:
                 is_custom=is_custom,
                 source_class=source_class,
                 source_trust=source_trust,
+                unified_incident_evidence=unified_incident_evidence,
             )
             self._recalculate_importance(story_id)
             story = self.data["stories"][story_id]
@@ -740,6 +750,7 @@ class StoryRegistry:
                 is_custom=is_custom,
                 source_class=source_class,
                 source_trust=source_trust,
+                unified_incident_evidence=unified_incident_evidence,
             )
             self._recalculate_importance(story_id)
             story = self.data["stories"][story_id]
@@ -774,6 +785,89 @@ class StoryRegistry:
                 "decision_trace": trace,
                 "matched_existing": True,
                 "story_id": story_id,
+            }
+            self.last_decision.update(self._follow_up_candidate_fields(relationship))
+            self.save()
+            return story_id
+
+        unified_match = None
+        if unified_incident_evidence:
+            unified_match = find_matching_unified_incident_story(
+                evidence_from_mapping(unified_incident_evidence),
+                self.iter_stories(),
+            )
+        if unified_match is not None and unified_match.matched and unified_match.story_id:
+            story_id = self._canonical_story_id(unified_match.story_id)
+            matched_story = self.get_story(story_id)
+            relationship = self._relationships.classify(
+                event_key=event_key,
+                title=title,
+                facts=facts,
+                locations=locations,
+                agencies=agencies,
+                event_types=event_types,
+                entities=entities,
+                stories=(matched_story,) if matched_story is not None else (),
+            )
+            relationship_won = bool(
+                relationship.attaches_to_story
+                and relationship.story_id
+                and self._canonical_story_id(str(relationship.story_id)) == story_id
+            )
+            relationship_value = (
+                StoryRelationshipType.FOLLOW_UP.value
+                if relationship_won
+                else StoryRelationshipType.SAME_EVENT.value
+            )
+            confidence = max(
+                unified_match.confidence,
+                relationship.confidence if relationship_won else 0.0,
+            )
+            reason = (
+                relationship.reason if relationship_won else unified_match.reason
+            )
+            trace = list(unified_match.decision_trace)
+            if relationship_won:
+                trace.extend(relationship.decision_trace)
+            self.attach_event(story_id, event_key, save=False)
+            self._enrich_story(
+                story_id,
+                title=title,
+                facts=facts,
+                locations=locations,
+                agencies=agencies,
+                event_types=event_types,
+                entities=entities,
+                county=county,
+                source=source,
+                is_custom=is_custom,
+                source_class=source_class,
+                source_trust=source_trust,
+                unified_incident_evidence=unified_incident_evidence,
+            )
+            self._recalculate_importance(story_id)
+            story = self.data["stories"][story_id]
+            self._append_resolution_history(
+                story,
+                {
+                    "event_key": event_key,
+                    "confidence": round(confidence, 6),
+                    "reason": reason,
+                    "decision_trace": trace,
+                    "resolver_version": "3.0",
+                    "matched_existing": True,
+                    "relationship": relationship_value,
+                },
+            )
+            self.last_decision = {
+                "event_key": event_key,
+                "relationship": relationship_value,
+                "confidence": round(confidence, 6),
+                "reason": reason,
+                "decision_trace": trace,
+                "matched_existing": True,
+                "story_id": story_id,
+                "identity_contract": "unified_incident_v1",
             }
             self.last_decision.update(self._follow_up_candidate_fields(relationship))
             self.save()
@@ -910,6 +1004,7 @@ class StoryRegistry:
             is_custom=is_custom,
             source_class=source_class,
             source_trust=source_trust,
+            unified_incident_evidence=unified_incident_evidence,
         )
         self._recalculate_importance(story_id)
         story = self.data["stories"][story_id]
@@ -987,8 +1082,21 @@ class StoryRegistry:
         is_custom: bool = False,
         source_class: str = "unknown",
         source_trust: int = 50,
+        unified_incident_evidence: dict[str, object] | None = None,
     ) -> None:
         story = self.data["stories"][self._canonical_story_id(story_id)]
+
+        if unified_incident_evidence:
+            normalized_evidence = evidence_from_mapping(unified_incident_evidence).to_dict()
+            evidence_rows = story.setdefault("unified_incident_evidence", [])
+            evidence_key = json.dumps(normalized_evidence, sort_keys=True, separators=(",", ":"))
+            existing_keys = {
+                json.dumps(row, sort_keys=True, separators=(",", ":"))
+                for row in evidence_rows if isinstance(row, dict)
+            }
+            if evidence_key not in existing_keys:
+                evidence_rows.append(normalized_evidence)
+                del evidence_rows[:-24]
 
         if title and title not in story["titles"]:
             story["titles"].append(title)

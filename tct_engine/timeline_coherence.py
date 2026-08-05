@@ -80,6 +80,8 @@ def infer_timeline_event_family(entry: Mapping[str, Any]) -> str:
 
     text = " ".join(_WORD_RE.findall(str(entry.get("title") or "").casefold()))
     patterns: tuple[tuple[str, str], ...] = (
+        ("road_rage", r"\broad rage\b|\b(?:pit|police) maneuver\b|\b(?:run|running|chased|forced) .{0,45} off (?:the )?road\b"),
+        ("wildfire_arson", r"\bwildfire\b|\bbrush fire\b.{0,45}\b(?:arson|set|setting|charged)\b|\b(?:arson|set|setting)\b.{0,45}\b(?:wildfire|brush fire)\b"),
         ("execution", r"\b(?:execution|executions|executes|executed|death row)\b|\bputs? .{0,30} to death\b"),
         ("hazing", r"\bhazing\b"),
         ("government_finance", r"\b(?:property tax|tax reform|millage|budget|job cuts?|police positions?)\b"),

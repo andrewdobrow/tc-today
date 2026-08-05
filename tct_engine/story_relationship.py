@@ -117,6 +117,17 @@ def _overlap(left: set[str], right: set[str]) -> float:
     return len(left & right) / min(len(left), len(right)) if left and right else 0.0
 
 
+_GENERIC_IDENTITY_FACTS = frozenset({
+    "arrest made", "fire reported", "road closed", "no injuries reported",
+    "missing person", "investigation ongoing",
+})
+
+
+def _identity_facts(values: set[str]) -> set[str]:
+    """Return only facts distinctive enough to support incident identity."""
+    return {value for value in values if value not in _GENERIC_IDENTITY_FACTS}
+
+
 def _milestones_for(mapping: Mapping[str, set[str]], *values: object) -> set[str]:
     tokens: set[str] = set()
     for value in values:
@@ -268,7 +279,25 @@ def _candidate_identity_anchor_codes(
         and title_score >= 0.70
         and fact_score >= 0.50
     )
-    qualified = exact_event_anchor or corroborated_pair or singular_named_anchor
+    # A location-specific incident can also remain continuous across lifecycle
+    # wording changes (for example, a crash closure followed by a reopening)
+    # when the event family, distinctive facts, and headline all corroborate one
+    # another. Requiring all four signals keeps generic same-city incidents from
+    # attaching while preserving legitimate operational follow-ups.
+    structured_incident_anchor = (
+        location_match
+        and type_match
+        and fact_score >= 0.66
+        and title_score >= 0.45
+    )
+    if structured_incident_anchor:
+        codes.append("structured_incident_continuity")
+    qualified = (
+        exact_event_anchor
+        or corroborated_pair
+        or singular_named_anchor
+        or structured_incident_anchor
+    )
     if qualified:
         codes.append("identity_anchor_qualified")
     return tuple(codes)
@@ -369,6 +398,10 @@ class StoryRelationshipEngine:
                     continue
 
             scores = {key: _overlap(incoming[key], known[key]) for key in incoming}
+            identity_fact_score = _overlap(
+                _identity_facts(incoming["facts"]),
+                _identity_facts(known["facts"]),
+            )
             known_title_tokens = _tokens(story.get("canonical_title", "")) | set(story.get("title_tokens", ()))
             title_score = _overlap(incoming_title_tokens, known_title_tokens)
             known_event_tokens: set[str] = set()
@@ -380,7 +413,7 @@ class StoryRelationshipEngine:
             agency_match = bool(incoming["agencies"] & known["agencies"])
             type_match = bool(incoming["types"] & known["types"])
             entity_match = bool(incoming["entities"] & known["entities"])
-            fact_score = scores["facts"]
+            fact_score = identity_fact_score
             known_milestones = _milestones(
                 story.get("canonical_title", ""),
                 story.get("titles", ()),
@@ -517,7 +550,18 @@ class StoryRelationshipEngine:
                 and (title_score >= 0.35 or event_score >= 0.35)
             )
 
-            eligible = any((
+            live_anchor_codes = _candidate_identity_anchor_codes(
+                exact_event_anchor=exact_event_anchor,
+                location_match=location_match,
+                agency_match=agency_match,
+                type_match=type_match,
+                entity_match=entity_match,
+                title_score=title_score,
+                fact_score=fact_score,
+            )
+            identity_anchor_qualified = "identity_anchor_qualified" in live_anchor_codes
+
+            eligible = identity_anchor_qualified and any((
                 strong_public_safety_follow_up,
                 strong_agency_follow_up,
                 strong_entity_follow_up,
@@ -552,7 +596,8 @@ class StoryRelationshipEngine:
 
             trace = (
                 f"Relationship: {StoryRelationshipType.FOLLOW_UP.value}",
-                f"Facts overlap: {fact_score:.2f}",
+                f"Distinctive facts overlap: {fact_score:.2f}",
+                f"Identity anchor qualified: {identity_anchor_qualified}",
                 f"Location match: {location_match}",
                 f"Agency match: {agency_match}",
                 f"Event type match: {type_match}",
@@ -574,15 +619,7 @@ class StoryRelationshipEngine:
                 candidate_milestones=tuple(sorted(novel_milestones)),
                 candidate_reason_codes=(
                     "enforced_follow_up",
-                    *_candidate_identity_anchor_codes(
-                        exact_event_anchor=exact_event_anchor,
-                        location_match=location_match,
-                        agency_match=agency_match,
-                        type_match=type_match,
-                        entity_match=entity_match,
-                        title_score=title_score,
-                        fact_score=fact_score,
-                    ),
+                    *live_anchor_codes,
                 ),
                 candidate_trace=trace,
             )

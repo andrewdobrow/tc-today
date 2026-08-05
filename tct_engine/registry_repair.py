@@ -26,6 +26,10 @@ from .timeline_coherence import (
     timeline_entry_source_identity,
     timeline_title_tokens,
 )
+from .unified_incident_identity import (
+    story_has_verified_unified_identity,
+    unified_incident_components,
+)
 from .source_identity import (
     source_identity_requires_title_continuity,
     source_identity_title_compatible,
@@ -33,7 +37,7 @@ from .source_identity import (
     story_source_identity_urls,
 )
 
-REPAIR_VERSION = 8
+REPAIR_VERSION = 9
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
@@ -193,6 +197,12 @@ def _sparse_story_is_incoherent(story: Mapping[str, Any]) -> bool:
     if len(events) < 2 or len(titles) < 2 or not all(is_sparse_event_key(key) for key in events):
         return False
 
+    # Sparse event keys are allowed when a separate, source-fact contract proves
+    # that all publisher phrasings belong to one connected incident. This keeps
+    # repair idempotent after a legitimate unified-incident consolidation.
+    if story_has_verified_unified_identity(story):
+        return False
+
     anchors = _shared_title_anchors(titles)
     overlaps = [_pair_overlap(a, b) for a, b in itertools.combinations(titles, 2)]
     average_overlap = sum(overlaps) / len(overlaps) if overlaps else 1.0
@@ -323,6 +333,14 @@ def merge_story_records(primary: MutableMapping[str, Any], secondary: Mapping[st
             | {str(value) for value in secondary.get(field, ()) if str(value).strip()}
         )
 
+    primary["unified_incident_evidence"] = _unique_dicts(
+        [
+            *primary.get("unified_incident_evidence", ()),
+            *secondary.get("unified_incident_evidence", ()),
+        ],
+        ("family", "concepts", "people", "locations", "agencies", "distinctive_tokens", "title_tokens", "published_at"),
+    )[-24:]
+
     primary["title_candidates"] = _unique_dicts(
         [*primary.get("title_candidates", ()), *secondary.get("title_candidates", ())],
         ("title", "source", "source_class", "source_trust", "is_custom", "priority"),
@@ -383,6 +401,9 @@ class RegistryRepairReport:
     remaining_timeline_coherence_violations: int
     timeline_coherence_violation_story_ids: tuple[str, ...]
     incident_anchor_to_story_count: int
+    unified_incident_groups_resolved: int
+    unified_incident_story_records_removed: int
+    remaining_unified_incident_groups: int
     generated_at: str
 
     def to_dict(self) -> dict[str, Any]:
@@ -420,6 +441,9 @@ class RegistryRepairReport:
             "remaining_timeline_coherence_violations": self.remaining_timeline_coherence_violations,
             "timeline_coherence_violation_story_ids": list(self.timeline_coherence_violation_story_ids),
             "incident_anchor_to_story_count": self.incident_anchor_to_story_count,
+            "unified_incident_groups_resolved": self.unified_incident_groups_resolved,
+            "unified_incident_story_records_removed": self.unified_incident_story_records_removed,
+            "remaining_unified_incident_groups": self.remaining_unified_incident_groups,
             "generated_at": self.generated_at,
         }
 
@@ -1146,6 +1170,36 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
         timeline_split_story_ids,
     ) = _repair_timeline_coherence(payload)
 
+    # Cross-source incident identity repairs fragmented sparse-key records using
+    # concrete source facts. This is intentionally stricter than semantic title
+    # similarity and is the general repair path for headline drift such as the
+    # Martin County road-rage PIT-maneuver incident.
+    unified_groups_before = len(unified_incident_components(stories))
+    unified_removed = 0
+    unified_groups_merged = 0
+    # Merging two verified fragments can expose another fragment that only shares
+    # source evidence with the newly combined record. Resolve to a fixed point so
+    # one incident cannot remain split merely because the graph was discovered in
+    # stages. Each pass strictly removes records, so the loop is bounded.
+    while True:
+        unified_components = unified_incident_components(stories)
+        if not unified_components:
+            break
+        unified_groups_merged += len(unified_components)
+        for component in sorted(
+            unified_components,
+            key=lambda group: min(_story_number(value) for value in group),
+        ):
+            primary_id = choose_primary_story_id(component, stories)
+            secondary_ids = sorted(component - {primary_id}, key=_story_number)
+            primary = stories[primary_id]
+            for secondary_id in secondary_ids:
+                merge_story_records(primary, stories[secondary_id])
+                aliases[secondary_id] = primary_id
+                del stories[secondary_id]
+                unified_removed += 1
+            merged_story_ids.setdefault(primary_id, []).extend(secondary_ids)
+
     # Exact and publisher-attribution duplicates are resolved first.  The
     # remaining whole-record incident layer is used only for families whose
     # records are safe to merge as a unit (currently mass animal hoarding).
@@ -1188,6 +1242,7 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
     remaining_source_groups = _count_source_identity_groups(stories)
     remaining_incident_groups = _count_incident_identity_groups(stories)
     remaining_timeline_violations = registry_timeline_coherence_violations(stories)
+    remaining_unified_groups = len(unified_incident_components(stories))
     report = RegistryRepairReport(
         repair_version=REPAIR_VERSION,
         changed=bool(
@@ -1195,13 +1250,14 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
             or removed
             or selective_entries_moved
             or timeline_stories_repaired
+            or unified_removed
         ),
         active_stories_before=before,
         active_stories_after=len(stories),
         quarantined_story_ids=tuple(sorted(quarantine_reasons, key=_story_number)),
         quarantine_reasons=quarantine_reasons,
         duplicate_groups_merged=(
-            len(exact_components) + len(source_components) + len(incident_components)
+            len(exact_components) + len(source_components) + unified_groups_merged + len(incident_components)
         ),
         duplicate_story_records_removed=removed,
         merged_story_ids={
@@ -1234,6 +1290,9 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
             str(row.get("story_id") or "") for row in remaining_timeline_violations
         ),
         incident_anchor_to_story_count=len(incident_anchor_to_story),
+        unified_incident_groups_resolved=unified_groups_merged,
+        unified_incident_story_records_removed=unified_removed,
+        remaining_unified_incident_groups=remaining_unified_groups,
         generated_at=_utc_now(),
     )
 

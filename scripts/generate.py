@@ -75,6 +75,7 @@ try:
     from tct_engine.timeline_coherence import (
         registry_timeline_coherence_violations,
     )
+    from tct_engine.unified_incident_identity import unified_incident_components
 except Exception as exc:
     ActivationConfig = None
     EngineMode = None
@@ -109,6 +110,7 @@ except Exception as exc:
     merge_story_records = None
     story_quarantine_reasons = None
     registry_timeline_coherence_violations = None
+    unified_incident_components = None
     _editorial_import_error = exc
 
 try:
@@ -15820,6 +15822,13 @@ MARTIN_FIRE_TAX_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-07-30-property-tax-reform-on-november-ballot-could-force-closure-of-martin-county-fire",
 })
 
+ROAD_RAGE_CANONICAL_SLUG = (
+    "2026-08-04-fort-myers-man-arrested-after-road-rage-pit-maneuver-crashes-familys-suv-into-fe"
+)
+ROAD_RAGE_REDIRECT_SOURCE_SLUGS = frozenset({
+    "2026-08-05-florida-man-used-police-maneuver-to-run-north-carolina-family-off-road-near-stua",
+})
+
 
 def _publication_slug_claim_diagnostics(item, entry):
     """Compare the immutable URL claim with the current headline/lead claim.
@@ -19445,6 +19454,11 @@ def _build_persistent_story_identity_integrity_report(archive, registry_payload)
         if registry_timeline_coherence_violations is not None
         else []
     )
+    fragmented_unified_incidents = (
+        [sorted(component) for component in unified_incident_components(stories)]
+        if unified_incident_components is not None
+        else []
+    )
     violations = (
         len(broad_mappings)
         + len(active_contaminated)
@@ -19452,6 +19466,7 @@ def _build_persistent_story_identity_integrity_report(archive, registry_payload)
         + len(archive_quarantine_refs)
         + len(circular_authorizations)
         + len(timeline_coherence_violations)
+        + len(fragmented_unified_incidents)
     )
     return {
         "schema_version": 1,
@@ -19466,6 +19481,7 @@ def _build_persistent_story_identity_integrity_report(archive, registry_payload)
             "archive_quarantine_reference_count": len(archive_quarantine_refs),
             "circular_story_id_authorization_count": len(circular_authorizations),
             "timeline_coherence_violation_count": len(timeline_coherence_violations),
+            "fragmented_unified_incident_count": len(fragmented_unified_incidents),
             "violation_count": violations,
         },
         "active_contaminated_stories": active_contaminated,
@@ -19474,6 +19490,7 @@ def _build_persistent_story_identity_integrity_report(archive, registry_payload)
         "archive_quarantine_references": archive_quarantine_refs,
         "circular_story_id_authorizations": circular_authorizations,
         "timeline_coherence_violations": timeline_coherence_violations,
+        "fragmented_unified_incidents": fragmented_unified_incidents,
     }
 
 
@@ -19526,6 +19543,11 @@ def _validate_persistent_story_identity_integrity(archive, output_root=None):
             details.append(
                 "timeline_coherence_violation="
                 + str(row.get("story_id") or "unknown")
+            )
+        if report.get("fragmented_unified_incidents"):
+            details.append(
+                "fragmented_unified_incident="
+                + ",".join(report["fragmented_unified_incidents"][0])
             )
         raise RuntimeError(
             "Persistent story identity integrity FAILED: "
@@ -20290,6 +20312,82 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
                 ),
             })
 
+    # Unified source-fact identity catches sparse-key duplicates whose publishers
+    # use materially different wording for the same incident.  Unlike fuzzy title
+    # matching, this contract requires a compatible event family plus concrete
+    # people/action/location concepts.  It is the final publication-level backstop
+    # for the same incident escaping under two TCT permalinks.
+    try:
+        from tct_engine.unified_incident_identity import (
+            build_unified_incident_evidence,
+            unified_incident_components,
+        )
+    except Exception:
+        build_unified_incident_evidence = None
+        unified_incident_components = None
+
+    if build_unified_incident_evidence and unified_incident_components:
+        identity_rows = {}
+        archive_by_slug = {}
+        for entry in archive:
+            slug = str(entry.get("slug") or "").strip()
+            if not slug or slug in removed_slugs:
+                continue
+            archive_by_slug[slug] = entry
+            evidence = build_unified_incident_evidence(
+                title=entry.get("headline") or entry.get("title") or "",
+                body=" ".join(
+                    str(entry.get(field) or "")
+                    for field in ("teaser", "body", "article_text", "source_title")
+                ),
+                locations=entry.get("locations", ()) or (),
+                agencies=entry.get("agencies", ()) or (),
+                entities=entry.get("entities", ()) or (),
+                published_at=entry.get("first_published") or entry.get("date"),
+            )
+            identity_rows[slug] = {
+                "story_id": slug,
+                "status": "active",
+                "canonical_title": entry.get("headline") or entry.get("title") or "",
+                "titles": [entry.get("headline") or entry.get("title") or ""],
+                "unified_incident_evidence": [evidence.to_dict()],
+            }
+        for component in unified_incident_components(identity_rows):
+            members = [
+                archive_by_slug[slug]
+                for slug in component
+                if slug in archive_by_slug and slug not in removed_slugs
+            ]
+            if len(members) < 2:
+                continue
+            canonical = min(members, key=_incident_canonical_key)
+            for duplicate in members:
+                source_slug = str(duplicate.get("slug") or "")
+                if not source_slug or source_slug == canonical.get("slug"):
+                    continue
+                _merge_category_memberships(
+                    canonical,
+                    duplicate,
+                    canonical.get("category_key") or duplicate.get("category_key") or "",
+                )
+                removed_slugs.add(source_slug)
+                existing_redirect_sources.add(source_slug)
+                _upsert_canonical_redirect(redirects, {
+                    "source_slug": source_slug,
+                    "source_headline": duplicate.get("headline", ""),
+                    "target_slug": canonical.get("slug", ""),
+                    "target_headline": canonical.get("headline", ""),
+                    "story_stage": "unified-incident-identity",
+                    "match_confidence": 98,
+                    "canonical_is_custom": bool(
+                        canonical.get("is_custom") or canonical.get("authoritative_custom")
+                    ),
+                    "reason": (
+                        "Duplicate public URL consolidated by verified cross-source "
+                        "incident evidence rather than fuzzy headline similarity."
+                    ),
+                })
+
     # Enforce the permanent hoarding-story canonical contract independently of
     # headline wording. The canonical headline says "more than 70 animals," so a
     # former text gate requiring "80" could silently skip this migration.
@@ -20411,6 +20509,12 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
             MARTIN_FIRE_TAX_REDIRECT_SOURCE_SLUGS,
             "Property tax reform could force closure of Martin County fire stations",
             "Permanent policy-story migration for Martin County Fire Rescue property-tax impacts.",
+        ),
+        (
+            ROAD_RAGE_CANONICAL_SLUG,
+            ROAD_RAGE_REDIRECT_SOURCE_SLUGS,
+            "Florida man used police maneuver to run North Carolina family off road near Stuart",
+            "Permanent incident migration for the Martin County road-rage PIT-maneuver story.",
         ),
     ):
         canonical = next((e for e in archive if e.get("slug") == canonical_slug), None)

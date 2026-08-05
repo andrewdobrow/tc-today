@@ -73,6 +73,18 @@ def _number_to_digit(value: str) -> str:
 
 _NUMBER_PATTERNS = [
     (
+        re.compile(r"\b(\d+)(?:st|nd|rd|th)\s+arrest\b", re.I),
+        lambda m: f"arrest count: {m.group(1)}",
+    ),
+    (
+        re.compile(r"\b(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)\s+arrest\b", re.I),
+        lambda m: f"arrest count: { {'first':'1','second':'2','third':'3','fourth':'4','fifth':'5','sixth':'6','seventh':'7','eighth':'8','ninth':'9','tenth':'10'}[m.group(1).lower()] }",
+    ),
+    (
+        re.compile(r"\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:people?\s+)?arrested\b", re.I),
+        lambda m: f"arrest count: {_number_to_digit(m.group(1))}",
+    ),
+    (
         re.compile(r"(\d+)\s+cats?", re.I),
         lambda m: f"{m.group(1)} cats",
     ),

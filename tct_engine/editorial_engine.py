@@ -18,6 +18,7 @@ from .event_key import generate_event_key
 from .incident_identity import incident_anchor_key
 from .fact_extraction import extract_article_facts
 from .rss_adapter import RSSArticleAdapter
+from .unified_incident_identity import build_unified_incident_evidence
 
 
 _STATE_VERSION = 1
@@ -197,6 +198,16 @@ class EditorialEngine:
         else:
             event_key = generate_event_key(extracted)
 
+        unified_evidence = build_unified_incident_evidence(
+            title=raw.title,
+            body=raw.body,
+            facts=extracted.facts,
+            locations=extracted.locations,
+            agencies=extracted.agencies,
+            entities=extracted.entities,
+            published_at=raw.published_at,
+        )
+
         pipeline_result = self._pipeline.process(
             PipelineArticle(
                 article_id=raw.article_id,
@@ -214,14 +225,15 @@ class EditorialEngine:
                 published_at=raw.published_at,
                 source_class=eligibility.source_profile.source_class,
                 source_trust=eligibility.source_profile.trust,
+                unified_incident_evidence=unified_evidence.to_dict(),
             )
         )
 
-        canonical = self._pipeline.get_event(event_key)
+        canonical = self._pipeline.get_event(pipeline_result.event_key)
 
         if canonical is None:
             raise RuntimeError(
-                f"Editorial event was not created: {event_key}"
+                f"Editorial event was not created: {pipeline_result.event_key}"
             )
 
         if record_history:
@@ -238,7 +250,7 @@ class EditorialEngine:
             action=pipeline_result.action,
             article_id=raw.article_id,
             canonical_article_id=canonical.canonical.article_id,
-            event_key=event_key,
+            event_key=pipeline_result.event_key,
             extracted_facts=tuple(sorted(extracted.facts)),
             new_facts=tuple(sorted(pipeline_result.new_facts)),
             is_custom=raw.is_custom,

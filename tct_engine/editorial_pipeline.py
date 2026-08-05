@@ -37,6 +37,7 @@ class PipelineArticle:
     published_at: datetime | None = None
     source_class: str = "unknown"
     source_trust: int = 50
+    unified_incident_evidence: dict[str, object] | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -121,15 +122,39 @@ class EditorialPipeline:
             is_custom=article.is_custom,
             source_class=article.source_class,
             source_trust=article.source_trust,
+            unified_incident_evidence=article.unified_incident_evidence,
         )
         relationship_decision = dict(self._registry.last_decision or {})
 
-        existing_snapshot = self._snapshots.get(article.event_key)
-        existing_canonical = self._stories.get(article.event_key)
+        # A verified unified-incident match can arrive under a different sparse or
+        # publisher-derived event key. Route event-level canonical decisions through
+        # the already established event so the same incident cannot publish a second
+        # article merely because its generated key drifted. The incoming event key is
+        # still retained in the persistent registry and timeline as an alias/evidence
+        # trail.
+        decision_event_key = article.event_key
+        if (
+            relationship_decision.get("identity_contract") == "unified_incident_v1"
+            and relationship_decision.get("relationship") == "same_event"
+        ):
+            matched_story = self._registry.get_story(story_id) or {}
+            for known_event_key in matched_story.get("events", ()):
+                known_event_key = str(known_event_key or "").strip()
+                if (
+                    known_event_key
+                    and known_event_key != article.event_key
+                    and self._stories.get(known_event_key) is not None
+                    and known_event_key in self._snapshots
+                ):
+                    decision_event_key = known_event_key
+                    break
+
+        existing_snapshot = self._snapshots.get(decision_event_key)
+        existing_canonical = self._stories.get(decision_event_key)
 
         candidate = StoryCandidate(
             article_id=article.article_id,
-            event_key=article.event_key,
+            event_key=decision_event_key,
             title=article.title,
             source=article.source,
             url=article.url,
@@ -140,8 +165,8 @@ class EditorialPipeline:
         canonical = self._stories.add(candidate)
 
         if existing_snapshot is None:
-            self._snapshots[article.event_key] = StorySnapshot(
-                event_key=article.event_key,
+            self._snapshots[decision_event_key] = StorySnapshot(
+                event_key=decision_event_key,
                 facts=article.facts,
                 status=article.status,
             )
@@ -164,7 +189,7 @@ class EditorialPipeline:
 
             return EditorialPipelineResult(
                 action=decision.action,
-                event_key=article.event_key,
+                event_key=decision_event_key,
                 canonical_article_id=canonical.canonical.article_id,
                 new_facts=article.facts,
                 is_major=article.is_major,
@@ -184,7 +209,7 @@ class EditorialPipeline:
         update = evaluate_story_update(
             existing_snapshot,
             IncomingStoryUpdate(
-                event_key=article.event_key,
+                event_key=decision_event_key,
                 facts=article.facts,
                 status=article.status,
                 is_major=article.is_major,
@@ -192,8 +217,8 @@ class EditorialPipeline:
             ),
         )
 
-        self._snapshots[article.event_key] = StorySnapshot(
-            event_key=article.event_key,
+        self._snapshots[decision_event_key] = StorySnapshot(
+            event_key=decision_event_key,
             facts=article.facts,
             status=article.status,
         )
@@ -220,7 +245,7 @@ class EditorialPipeline:
 
         return EditorialPipelineResult(
             action=decision.action,
-            event_key=article.event_key,
+            event_key=decision_event_key,
             canonical_article_id=canonical.canonical.article_id,
             new_facts=update.new_facts,
             is_major=article.is_major,
