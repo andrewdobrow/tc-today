@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-04T23:27:13Z",
+  "generated_at": "2026-08-05T01:52:16Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,23 +15,25 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "generated_live": 7,
+      "generated_live": 6,
+      "generation_failed_archive_recovery": 1,
       "quality_gate_archive_recovery": 1,
       "sports_zero_candidate_archive_recovery": 1
     },
     "failures": {
+      "article_framing_integrity": 1,
       "no_sports_hero_candidates": 1,
       "publication_quality_rejected": 1
     },
-    "model_attempt_count": 8,
-    "model_elapsed_seconds": 370.462,
-    "archive_recovery_requested_count": 2,
+    "model_attempt_count": 10,
+    "model_elapsed_seconds": 461.607,
+    "archive_recovery_requested_count": 3,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 1,
-    "article_framing_rejection_count": 3,
-    "category_eligibility_rejection_count": 12,
-    "published_story_duplicate_suppression_count": 27,
-    "story_aware_update_context_count": 3
+    "contextual_update_lead_rejection_count": 0,
+    "article_framing_rejection_count": 6,
+    "category_eligibility_rejection_count": 9,
+    "published_story_duplicate_suppression_count": 44,
+    "story_aware_update_context_count": 1
   },
   "categories": [
     {
@@ -39,9 +41,9 @@
       "category_label": "Local Government",
       "status": "generated_live",
       "fetched_candidate_count": 29,
-      "fresh_candidate_count": 27,
-      "publishable_source_count": 16,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 12,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -49,23 +51,93 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 32.814,
+          "elapsed_seconds": 23.019,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 32.814,
+      "model_elapsed_seconds": 23.019,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Four candidates for Indian River County Commission District 2 outline positions on taxes, housing and growth",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Four candidates for Indian River County Commission District 2 outline positions on taxes, housing and growth",
+            "lead": "Bob McPartian, who served 15 years on the Sebastian City Council, said the most serious issue is managing growth in a way that protects quality of life, infrastructure and the Indian River Lagoon. McPartian said he does not support the homestead exemption referendum as written because it was developed quickly without a full analysis of its impact. If it passes, McPartian said he would protect public safety and core infrastructure first, then look to reduce non-essential spending.",
+            "lead_word_count": 78,
+            "headline_overlap_ratio": 0.25,
+            "new_context_token_count": 49,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Four candidates for Indian River County Commission District 2 outline positions on taxes, housing and growth",
+            "lead": "Bob McPartian, who served 15 years on the Sebastian City Council, said the most serious issue is managing growth in a way that protects quality of life, infrastructure and the Indian River Lagoon. McPartian said he does not support the homestead exemption referendum as written because it was developed quickly without a full analysis of its impact. If it passes, McPartian said he would protect public safety and core infrastructure first, then look to reduce non-essential spending.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "indian_river_county"
+            ],
+            "lead_jurisdictions": [
+              "sebastian"
+            ],
+            "missing_jurisdictions": [
+              "indian_river_county"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Four candidates for Indian River County Commission District 2 outline positions on taxes, housing and growth",
+            "generated_lead": "Bob McPartian, who served 15 years on the Sebastian City Council, said the most serious issue is managing growth in a way that protects quality of life, infrastructure and the Indian River Lagoon. McPartian said he does not support the homestead exemption referendum as written because it was developed quickly without a full analysis of its impact.",
+            "source_title": "IRC District 2 Commission candidates speak out - Hometown News Treasure Coast",
+            "source_lead": "The Hometown News sent the same list of questions below to each qualified candidate in the Aug. 18 Republican Primary Election for the District 2 Indian River County Commission seat.",
+            "title_similarity": {
+              "score": 0.3564,
+              "overlap": 0.3636,
+              "jaccard": 0.2,
+              "sorted_sequence": 0.5731,
+              "ordered_sequence": 0.3158,
+              "shared_token_count": 4.0
+            },
+            "lead_token_overlap": 0.095,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 16,
-      "category_eligibility_rejection_count": 12,
+      "category_eligibility_assessed_count": 12,
+      "category_eligibility_rejection_count": 9,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -77,8 +149,8 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Martin County's REACH Center opens workforce training programs for students and career changers",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-countys-reach-center-opens-workforce-training-programs-for-students-and-career-changers"
+          "headline": "Extreme heat is fueling a countywide push for more trees and shade in Palm Beach County",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/extreme-heat-is-fueling-a-countywide-push-for-more-trees-and-shade-in-palm-beach-county"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -103,47 +175,8 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Back to School: Tradition Lakes K-8 prepares to open in St. Lucie County - wpbf.com",
+          "headline": "Back to School: Tradition Lakes K-8 prepares to open in St. Lucie County - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-back-to-school-tradition-lakes-k-8-st-lucie-county/73344051"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "St. Lucie County schools open Aug. 10: What families need to know for the new year",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-open-aug-10-what-families-need-to-know-for-the-new-year"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "St. Lucie County schools open Aug. 10: What families need to know for the new year - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-open-aug-10-what-families-need-to-know-for-the-new-year"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Florida homeowners say solar door-to-door sales left them with decades of debt",
-          "source_url": "https://www.wptv.com/wptv-investigates/florida-homeowners-say-solar-door-to-door-sales-left-them-with-decades-of-debt"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -226,8 +259,48 @@
           "source_url": "https://www.hometownnewstc.com/news/st_lucie/king-s-landing-project-is-in-contract-default-uncertain-future/article_4cae62b3-0f11-5cee-9047-d06a9a6945db.html"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Martin County's REACH Center opens workforce training programs for students and career changers",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-countys-reach-center-opens-workforce-training-programs-for-students-and-career-changers",
+          "editorial_story_id": "story_002241",
+          "canonical_slug": "2026-08-04-martin-county-reach-center-launches-workforce-training-programs-in-aviation-heal",
+          "canonical_headline": "Martin County REACH Center launches workforce training programs in aviation, healthcare, and manufacturing",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "St. Lucie County schools open Aug. 10: What families need to know for the new year",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-open-aug-10-what-families-need-to-know-for-the-new-year",
+          "editorial_story_id": "story_002246",
+          "canonical_slug": "2026-08-04-st-lucie-county-schools-open-aug-10-with-new-tradition-lakes-k-8-campus-and-ai-c",
+          "canonical_headline": "St. Lucie County schools open Aug. 10 with new Tradition Lakes K-8 campus and AI courses",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "St. Lucie County schools open Aug. 10: What families need to know for the new year - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-open-aug-10-what-families-need-to-know-for-the-new-year",
+          "editorial_story_id": "story_002246",
+          "canonical_slug": "2026-08-04-st-lucie-county-schools-open-aug-10-with-new-tradition-lakes-k-8-campus-and-ai-c",
+          "canonical_headline": "St. Lucie County schools open Aug. 10 with new Tradition Lakes K-8 campus and AI courses",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Florida homeowners say solar door-to-door sales left them with decades of debt",
+          "source_url": "https://www.wptv.com/wptv-investigates/florida-homeowners-say-solar-door-to-door-sales-left-them-with-decades-of-debt",
+          "editorial_story_id": "story_002249",
+          "canonical_slug": "2026-08-04-treasure-coast-homeowners-say-door-to-door-solar-sales-left-them-with-decades-of",
+          "canonical_headline": "Treasure Coast homeowners say door-to-door solar sales left them with decades of debt and malfunctioning systems",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "4th arrest made in death of 3-month-old child in St. Lucie County",
@@ -251,20 +324,10 @@
         {
           "category_key": "local_gov",
           "surface": "hero",
-          "headline": "Fort Pierce gets 90-day extension to resolve $16,000 in state fines over Little Jim's docks",
+          "headline": "Fort Pierce gets 90-day extension to pay nearly $16,000 in state fines tied to Little Jim's docks",
           "editorial_story_id": "story_001950",
           "canonical_slug": "2026-08-03-fort-pierce-gets-90-day-extension-to-pay-state-fines-for-little-jims-dock-violat",
           "canonical_headline": "Fort Pierce gets 90-day extension to pay state fines for Little Jim's dock violations",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
-        },
-        {
-          "category_key": "local_gov",
-          "surface": "card",
-          "headline": "Four Republicans, one Democrat vie for Indian River County Commission District 2 seat",
-          "editorial_story_id": "story_002005",
-          "canonical_slug": "2026-08-03-indian-river-county-commission-district-2-candidates-outline-priorities-ahead-of",
-          "canonical_headline": "Indian River County Commission District 2 candidates outline priorities ahead of Aug. 18 primary",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "published_skip_placement_suppressed"
         }
@@ -275,15 +338,15 @@
       "budget_seconds": 180.0,
       "live_hero_headline": "",
       "generated_card_count": 0,
-      "elapsed_seconds": 77.718
+      "elapsed_seconds": 47.877
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 28,
-      "publishable_source_count": 16,
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 15,
       "selected_source_count": 12,
       "cache_hit": false,
       "archive_recovery_requested": false,
@@ -292,11 +355,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 69.609,
+          "elapsed_seconds": 76.094,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 69.609,
+      "model_elapsed_seconds": 76.094,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -309,18 +372,18 @@
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Child's mother, grandfather and girlfriend charged with aggravated manslaughter in Fort Pierce baby death",
+          "headline": "Father arrested in Virginia in connection with Fort Pierce infant malnutrition death",
           "missing": [
             "headline_jurisdiction_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Child's mother, grandfather and girlfriend charged with aggravated manslaughter in Fort Pierce baby death",
-            "lead": "Three people were previously charged in the death of a 3-month-old baby who allegedly died from severe dehydration and malnutrition: the child's mother, 27-year-old Nicole Maxwell; the child's grandfather, Robert Maxwell; and Robert Maxwell's girlfriend, 38-year-old Vikki Koon. All three were charged with aggravated manslaughter of a child and aggravated child abuse. Each was held on a $1.5 million bond.",
-            "lead_word_count": 70,
-            "headline_overlap_ratio": 0.818,
-            "new_context_token_count": 25,
+            "headline": "Father arrested in Virginia in connection with Fort Pierce infant malnutrition death",
+            "lead": "A fourth person has been arrested in connection with the death of a 3-month-old baby who allegedly died from severe dehydration and malnutrition. St. Lucie County Sheriff's Office announced Tuesday that the child's biological father, Jason Gunter, 45, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia. He has been charged with felony child neglect causing great harm and is awaiting extradition to St. Lucie County.",
+            "lead_word_count": 77,
+            "headline_overlap_ratio": 0.667,
+            "new_context_token_count": 40,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -334,17 +397,17 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "Child's mother, grandfather and girlfriend charged with aggravated manslaughter in Fort Pierce baby death",
-            "lead": "Three people were previously charged in the death of a 3-month-old baby who allegedly died from severe dehydration and malnutrition: the child's mother, 27-year-old Nicole Maxwell; the child's grandfather, Robert Maxwell; and Robert Maxwell's girlfriend, 38-year-old Vikki Koon. All three were charged with aggravated manslaughter of a child and aggravated child abuse. Each was held on a $1.5 million bond.",
+            "headline": "Father arrested in Virginia in connection with Fort Pierce infant malnutrition death",
+            "lead": "A fourth person has been arrested in connection with the death of a 3-month-old baby who allegedly died from severe dehydration and malnutrition. St. Lucie County Sheriff's Office announced Tuesday that the child's biological father, Jason Gunter, 45, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia. He has been charged with felony child neglect causing great harm and is awaiting extradition to St. Lucie County.",
             "headline_money_claims": [],
-            "lead_money_claims": [
-              1500000
-            ],
+            "lead_money_claims": [],
             "missing_money_claims": [],
             "headline_jurisdictions": [
               "fort_pierce"
             ],
-            "lead_jurisdictions": [],
+            "lead_jurisdictions": [
+              "st_lucie_county"
+            ],
             "missing_jurisdictions": [
               "fort_pierce"
             ],
@@ -358,44 +421,74 @@
           "source_focus": {
             "required": true,
             "passed": true,
-            "generated_headline": "Child's mother, grandfather and girlfriend charged with aggravated manslaughter in Fort Pierce baby death",
-            "generated_lead": "Three people were previously charged in the death of a 3-month-old baby who allegedly died from severe dehydration and malnutrition: the child's mother, 27-year-old Nicole Maxwell; the child's grandfather, Robert Maxwell; and Robert Maxwell's girlfriend, 38-year-old Vikki Koon. All three were charged with aggravated manslaughter of a child and aggravated child abuse.",
+            "generated_headline": "Father arrested in Virginia in connection with Fort Pierce infant malnutrition death",
+            "generated_lead": "A fourth person has been arrested in connection with the death of a 3-month-old baby who allegedly died from severe dehydration and malnutrition. St.",
             "source_title": "US Marshals arrest baby’s father in connection with Fort Pierce malnutrition death - WPEC",
             "source_lead": "A fourth person has been arrested in connection with the death of a 3-month-old baby who allegedly died from severe dehydration and malnutrition. Lucie County Sheriff's Office announced Tuesday that the child's biological father, 45-year-old Jason Gunter, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia.",
             "title_similarity": {
-              "score": 0.3605,
-              "overlap": 0.3636,
-              "jaccard": 0.2222,
-              "sorted_sequence": 0.5181,
-              "ordered_sequence": 0.4096,
-              "shared_token_count": 4.0
+              "score": 0.7018,
+              "overlap": 0.7778,
+              "jaccard": 0.5385,
+              "sorted_sequence": 0.7568,
+              "ordered_sequence": 0.7162,
+              "shared_token_count": 7.0
             },
-            "lead_token_overlap": 0.4,
+            "lead_token_overlap": 0.933,
             "missing": []
           }
         }
       ],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 16,
+      "category_eligibility_assessed_count": 15,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "Man charged with setting Spokane's largest wildfire went to prison for manslaughter in dad's death - Gulf Coast News and Weather",
-          "source_url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPajJRT3dQYm42WEYwVFYydGlnaUdrU1VQMW1vM0pQUXY4VlFHNDQ3U0p2VjdnUU1HeW1zNi14UTNPc3VCZXFMVllqbm1hNjY3eTNaeThuckZpd21MR3kwUHNWV1BVVFc4TGw5UlU1NU1HM2h0YlJsLWVjZ0VVN0tRbE9VenMtc2ZhWTgxeEc0SlgzZXpZNHo5VnNIOVRGZnc",
-          "editorial_story_id": "story_000793",
-          "canonical_slug": "2026-07-28-vero-beach-police-department-honors-service-of-indian-river-county-firefighter",
-          "canonical_headline": "Vero Beach Police Department honors service of Indian River County firefighter",
+          "source_headline": "Martin County's REACH Center opens workforce training programs for students and career changers",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-countys-reach-center-opens-workforce-training-programs-for-students-and-career-changers",
+          "editorial_story_id": "story_002241",
+          "canonical_slug": "2026-08-04-martin-county-reach-center-launches-workforce-training-programs-in-aviation-heal",
+          "canonical_headline": "Martin County REACH Center launches workforce training programs in aviation, healthcare, and manufacturing",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "St. Lucie County schools open Aug. 10: What families need to know for the new year",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-open-aug-10-what-families-need-to-know-for-the-new-year",
+          "editorial_story_id": "story_002246",
+          "canonical_slug": "2026-08-04-st-lucie-county-schools-open-aug-10-with-new-tradition-lakes-k-8-campus-and-ai-c",
+          "canonical_headline": "St. Lucie County schools open Aug. 10 with new Tradition Lakes K-8 campus and AI courses",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Florida homeowners say solar door-to-door sales left them with decades of debt",
+          "source_url": "https://www.wptv.com/wptv-investigates/florida-homeowners-say-solar-door-to-door-sales-left-them-with-decades-of-debt",
+          "editorial_story_id": "story_002249",
+          "canonical_slug": "2026-08-04-treasure-coast-homeowners-say-door-to-door-solar-sales-left-them-with-decades-of",
+          "canonical_headline": "Treasure Coast homeowners say door-to-door solar sales left them with decades of debt and malfunctioning systems",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "4th arrest made in death of 3-month-old child in St. Lucie County - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/04/4th-arrest-made-death-3-month-old-child-st-lucie-county",
+          "editorial_story_id": "story_000536",
+          "canonical_slug": "2026-07-25-3-arrested-in-death-of-3-month-old-in-st-lucie-county-from-dehydration-and-malnu",
+          "canonical_headline": "3 arrested in death of 3-month-old in St. Lucie County from dehydration and malnutrition",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "crime",
-          "surface": "card",
-          "headline": "Martin County man arrested after PIT maneuver sends family's car into barbed-wire fence on I-95",
+          "surface": "hero",
+          "headline": "Fort Myers man arrested after road rage PIT maneuver crashes family into fence on I-95 in Martin County",
           "editorial_story_id": "story_002073",
           "canonical_slug": "2026-08-04-fort-myers-man-arrested-after-road-rage-pit-maneuver-crashes-familys-suv-into-fe",
           "canonical_headline": "Fort Myers man arrested after road rage PIT maneuver crashes family's SUV into fence on I-95 in Martin County",
@@ -407,18 +500,18 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "St. Lucie County detectives execute search warrant at Fort Pierce home in $7 million Southern Truss fraud case",
-      "generated_card_count": 3,
-      "elapsed_seconds": 95.721
+      "live_hero_headline": "Fourth arrest made in St. Lucie County infant death investigation",
+      "generated_card_count": 2,
+      "elapsed_seconds": 94.021
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "generated_live",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 14,
-      "selected_source_count": 12,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 12,
+      "selected_source_count": 11,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -426,11 +519,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 81.794,
+          "elapsed_seconds": 73.618,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 81.794,
+      "model_elapsed_seconds": 73.618,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -441,11 +534,41 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 14,
+      "category_eligibility_assessed_count": 12,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Martin County's REACH Center opens workforce training programs for students and career changers",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-countys-reach-center-opens-workforce-training-programs-for-students-and-career-changers",
+          "editorial_story_id": "story_002241",
+          "canonical_slug": "2026-08-04-martin-county-reach-center-launches-workforce-training-programs-in-aviation-heal",
+          "canonical_headline": "Martin County REACH Center launches workforce training programs in aviation, healthcare, and manufacturing",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "St. Lucie County schools open Aug. 10: What families need to know for the new year",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-open-aug-10-what-families-need-to-know-for-the-new-year",
+          "editorial_story_id": "story_002246",
+          "canonical_slug": "2026-08-04-st-lucie-county-schools-open-aug-10-with-new-tradition-lakes-k-8-campus-and-ai-c",
+          "canonical_headline": "St. Lucie County schools open Aug. 10 with new Tradition Lakes K-8 campus and AI courses",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Florida homeowners say solar door-to-door sales left them with decades of debt",
+          "source_url": "https://www.wptv.com/wptv-investigates/florida-homeowners-say-solar-door-to-door-sales-left-them-with-decades-of-debt",
+          "editorial_story_id": "story_002249",
+          "canonical_slug": "2026-08-04-treasure-coast-homeowners-say-door-to-door-solar-sales-left-them-with-decades-of",
+          "canonical_headline": "Treasure Coast homeowners say door-to-door solar sales left them with decades of debt and malfunctioning systems",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "4th arrest made in death of 3-month-old child in St. Lucie County",
@@ -471,9 +594,9 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "St. Lucie County schools open Aug. 10 with flat enrollment at 42,505 students",
+      "live_hero_headline": "Palm Beach County cities push for more trees and shade as extreme heat bakes neighborhoods",
       "generated_card_count": 0,
-      "elapsed_seconds": 95.647
+      "elapsed_seconds": 84.488
     },
     {
       "category_key": "sports",
@@ -481,8 +604,8 @@
       "status": "sports_zero_candidate_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 5,
-      "selected_source_count": 5,
+      "publishable_source_count": 6,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
@@ -498,24 +621,14 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "sports",
-          "source_headline": "Funeral scheduled in Vero Beach honoring lost firefighter Geoffrey Lang - WPEC",
-          "source_url": "https://cbs12.com/newsletter-daily/funeral-scheduled-in-vero-beach-honoring-lost-firefighter-geoffrey-lang-community-church-indian-river-county-fire-rescue-paramedic-off-duty-death",
-          "editorial_story_id": "story_000793",
-          "canonical_slug": "2026-07-28-vero-beach-police-department-honors-service-of-indian-river-county-firefighter",
-          "canonical_headline": "Vero Beach Police Department honors service of Indian River County firefighter",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "sports",
-          "source_headline": "2026 Florida high school football preseason coverage guide - FloridaHSFootball.com",
+          "source_headline": "2026 Florida high school football preseason coverage guide - floridahsfootball.com",
           "source_url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQRENVdlU3bEF4YUhLR0V3S2FMVXVodXFFa2l5WFBuTklBeXFDQzAybVI5NHZLTXoxUU84MmpyWlV4d2JhcUZFUkk5YVc0RFRzay03WGx2amNUTWdsQ2VKVG5uS2xMdndVTFRXYWZZTllVV0VhVjBHY3JwLVNCcmE0T3NUajhxZnlKajZPeVBNM3ZJcUdZUlZPN3Mxa3V6Tk5FRmdVdE5JaC1NZThLOVFGdU1VOWhnMW8wODh0cUN2RFVqc0RUWGJXeGtmZTc",
           "editorial_story_id": "story_002084",
           "canonical_slug": "2026-08-04-space-coast-symphony-orchestra-brings-landscapes-legends-concert-to-vero-beach",
@@ -532,11 +645,21 @@
           "canonical_headline": "Florida Attorney General threatens Catholic school scholarship funding over vaccine exemption policies",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "sports",
+          "source_headline": "Funeral scheduled in Vero Beach honoring lost firefighter Geoffrey Lang - WPEC",
+          "source_url": "https://cbs12.com/news/local/funeral-scheduled-in-vero-beach-honoring-lost-firefighter-geoffrey-lang-community-church-indian-river-county-fire-rescue-paramedic-off-duty-death",
+          "editorial_story_id": "story_000793",
+          "canonical_slug": "2026-07-28-vero-beach-police-department-honors-service-of-indian-river-county-firefighter",
+          "canonical_headline": "Vero Beach Police Department honors service of Indian River County firefighter",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 22.084
+      "elapsed_seconds": 18.979
     },
     {
       "category_key": "things_to_do",
@@ -553,11 +676,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.813,
+          "elapsed_seconds": 69.754,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 12.813,
+      "model_elapsed_seconds": 69.754,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -575,7 +698,7 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "things_to_do",
-          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - wpbf.com",
+          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-fun-things-across-treasure-coast-palm-beach-weekend-1784287590-1785499876/73316892",
           "editorial_story_id": "story_000091",
           "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
@@ -606,7 +729,7 @@
         {
           "category_key": "things_to_do",
           "surface": "hero",
-          "headline": "Space Coast Symphony Orchestra brings Landscapes & Legends concert to Vero Beach",
+          "headline": "Space Coast Symphony Orchestra performs Landscapes & Legends concert Sunday in Vero Beach",
           "editorial_story_id": "story_002084",
           "canonical_slug": "2026-08-04-space-coast-symphony-orchestra-brings-landscapes-legends-concert-to-vero-beach",
           "canonical_headline": "Space Coast Symphony Orchestra brings Landscapes & Legends concert to Vero Beach",
@@ -620,30 +743,40 @@
       "budget_seconds": 180.0,
       "live_hero_headline": "",
       "generated_card_count": 0,
-      "elapsed_seconds": 35.042
+      "elapsed_seconds": 87.495
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 25,
+      "fresh_candidate_count": 24,
       "publishable_source_count": 3,
       "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 31.702,
-          "result": "success"
+          "elapsed_seconds": 57.929,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Leon County judge blocks Amendment 3 ballot language, orders Attorney General to rewrite property tax measure descriptio"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 20.457,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Leon County judge blocks Amendment 3 ballot language, orders state to rewrite property tax measure description"
         }
       ],
-      "model_elapsed_seconds": 31.702,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 78.387,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: named_measure_undefined_in_lead — Leon County judge blocks Amendment 3 ballot language, orders state to rewrite property tax measure description",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -659,66 +792,49 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "florida",
-          "surface": "hero",
-          "headline": "Leon County judge orders rewrite of Amendment 3 ballot language, calling it biased and misleading",
-          "editorial_story_id": "story_002175",
-          "canonical_slug": "2026-08-04-florida-judge-orders-rewrite-of-amendment-3-ballot-language-calling-it-biased-an",
-          "canonical_headline": "Florida judge orders rewrite of Amendment 3 ballot language, calling it biased and misleading",
+          "source_headline": "Florida Sheriffs Association raises public safety concerns over November homestead exemption vote",
+          "source_url": "https://www.wptv.com/news/state/florida-sheriffs-association-raises-public-safety-concerns-over-november-homestead-exemption-vote",
+          "editorial_story_id": "story_002258",
+          "canonical_slug": "2026-08-04-florida-sheriffs-association-warns-homestead-exemption-ballot-measure-could-leng",
+          "canonical_headline": "Florida Sheriffs Association warns homestead exemption ballot measure could lengthen law enforcement response times",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
+          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "'I CAN'T AFFORD IT': Treasure Coast man relocates to Puerto Rico for housing - WPTV",
-          "source_url": "https://www.wptv.com/money/real-estate-news/florida-affordability-struggles-push-treasure-coast-man-to-relocate-to-puerto-rico",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-04-property-tax-increases-push-treasure-coast-resident-to-relocate-to-puerto-rico",
-          "canonical_headline": "Property tax increases push Treasure Coast resident to relocate to Puerto Rico",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_002064",
-            "source:https://www.wptv.com/money/real-estate-news/florida-affordability-struggles-push-treasure-coast-man-to-relocate-to-puerto-rico"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=source:https://www.wptv.com/money/real-estate-news/florida-affordability-struggles-push-treasure-coast-man-to-relocate-to-puerto-rico",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "generation_status": "success",
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Florida Sheriffs Association warns homestead exemption ballot measure could lengthen law enforcement response times",
-      "generated_card_count": 0,
-      "elapsed_seconds": 63.623
+      "elapsed_seconds": 104.01
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 26,
-      "publishable_source_count": 3,
-      "selected_source_count": 3,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 2,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 20.955,
+          "elapsed_seconds": 11.331,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Florida man charged after PIT maneuver sends North Carolina family's SUV into fence near Stuart"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 7.406,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 20.955,
+      "model_elapsed_seconds": 18.737,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -729,14 +845,24 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
-          "source_headline": "Man arrested after PIT maneuver in Martin County sends family’s car into barbed-wire fence - wpbf.com",
+          "source_headline": "Martin County's REACH Center opens workforce training programs for students and career changers",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-countys-reach-center-opens-workforce-training-programs-for-students-and-career-changers",
+          "editorial_story_id": "story_002241",
+          "canonical_slug": "2026-08-04-martin-county-reach-center-launches-workforce-training-programs-in-aviation-heal",
+          "canonical_headline": "Martin County REACH Center launches workforce training programs in aviation, healthcare, and manufacturing",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Man arrested after PIT maneuver in Martin County sends family’s car into barbed-wire fence - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-pit-maneuver-deputy-car-baby-barbed-wire/73334291",
           "editorial_story_id": "story_002073",
           "canonical_slug": "2026-08-04-fort-myers-man-arrested-after-road-rage-pit-maneuver-crashes-familys-suv-into-fe",
@@ -748,8 +874,8 @@
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "'Worst Animal Hoarding' Case In Martin County Grows Even Larger - WIOD",
-          "source_url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOYkpjQldqNWpRRkZaX0RaZFFvT3UxQzRlbzNrZ0czcVRNVWtULVh4UDlnZ3hiYkFYNnM1dy1RWjlMYThLWUtkUHZpVlFKSzBXNkpUbnhTdXViOTdkWGJscTlCdXBPbnppV1R2ZXRkRV9TaWFBRmxUVVBZMlhVSFdOV25RQjJUa2taM2VacjRzMEtkd0lPOUVPTXB0SnRiRUlzVTdYRXV2OWtDaVc3Ujl3R1o1N2dVbXpMSmF4cTUxeFNCZEg0NWfSAbABQVVfeXFMTkFlQVlfSWUzWkRqaXF3WUdoZzh6N2s1MEhaWVlRMjJLWTRpY0NhYk1PMUdiV3VKZEp6bzJPMEhIRzludVA0TVJpVG1ETmpXcWRzdmFzTlZPTHprUWVXWXVmQTlWeFRDTkFIOFZ1UWotMk1UeGtTdkZSZEkwa2lYWGc2WUlIUnZpYlB5enN4dDN5eWNFb3hiel9NakR6SGJQbW45TDBuVFVIY1BualpJZUk",
+          "source_headline": "'Worst Animal Hoarding' Case In Martin County Grows Even Larger - 1290 WJNO",
+          "source_url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNek9QajhmLXh6Z3NVQkM2Y1YxQktxc3ZVdl8xbzRxTVAxdDI3a3BUT2UtV1MzNmpfbm1iZjU1WkRqaW0wRm5GeEwtTHBKRVAzcS1fRUIzODVJejFtbjhUcTFDXzkzMVBoenBCMjI4bmtSSGljUVNoeDhKNDl3SGlVTUEyQ0F0TFNKdDgyWDFqTlRtU2Q4OXJNMHhoNVNycEdhbFdqUFdwcmRwVTJIZ3pSYmlWR01OUDJaeXgwWEFRSi1MUzRNdFE",
           "publisher": "news.google.com",
           "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
           "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
@@ -757,7 +883,7 @@
           "identity_keys": [
             "incident:mass-animal-hoarding:martin-county",
             "story:story_000003",
-            "source:https://news.google.com/rss/articles/CBMixgFBVV95cUxOYkpjQldqNWpRRkZaX0RaZFFvT3UxQzRlbzNrZ0czcVRNVWtULVh4UDlnZ3hiYkFYNnM1dy1RWjlMYThLWUtkUHZpVlFKSzBXNkpUbnhTdXViOTdkWGJscTlCdXBPbnppV1R2ZXRkRV9TaWFBRmxUVVBZMlhVSFdOV25RQjJUa2taM2VacjRzMEtkd0lPOUVPTXB0SnRiRUlzVTdYRXV2OWtDaVc3Ujl3R1o1N2dVbXpMSmF4cTUxeFNCZEg0NWfSAbABQVVfeXFMTkFlQVlfSWUzWkRqaXF3WUdoZzh6N2s1MEhaWVlRMjJLWTRpY0NhYk1PMUdiV3VKZEp6bzJPMEhIRzludVA0TVJpVG1ETmpXcWRzdmFzTlZPTHprUWVXWXVmQTlWeFRDTkFIOFZ1UWotMk1UeGtTdkZSZEkwa2lYWGc2WUlIUnZpYlB5enN4dDN5eWNFb3hiel9NakR6SGJQbW45TDBuVFVIY1BualpJZUk"
+            "source:https://news.google.com/rss/articles/CBMixgFBVV95cUxNek9QajhmLXh6Z3NVQkM2Y1YxQktxc3ZVdl8xbzRxTVAxdDI3a3BUT2UtV1MzNmpfbm1iZjU1WkRqaW0wRm5GeEwtTHBKRVAzcS1fRUIzODVJejFtbjhUcTFDXzkzMVBoenBCMjI4bmtSSGljUVNoeDhKNDl3SGlVTUEyQ0F0TFNKdDgyWDFqTlRtU2Q4OXJNMHhoNVNycEdhbFdqUFdwcmRwVTJIZ3pSYmlWR01OUDJaeXgwWEFRSi1MUzRNdFE"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
@@ -773,18 +899,18 @@
       ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County REACH Center launches workforce training programs in aviation, healthcare, and manufacturing",
-      "generated_card_count": 2,
-      "elapsed_seconds": 47.359
+      "live_hero_headline": "Florida man used police maneuver to run North Carolina family off road near Stuart",
+      "generated_card_count": 0,
+      "elapsed_seconds": 42.98
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 7,
-      "selected_source_count": 7,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 6,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -792,139 +918,35 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 76.907,
+          "elapsed_seconds": 66.72,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 76.907,
+      "model_elapsed_seconds": 66.72,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 1,
-      "contextual_update_lead_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 73,
-          "baseline_anchor": "fatality",
-          "baseline_present": false,
-          "baseline_anchor_present": false,
-          "baseline_details_present": true,
-          "baseline_context_hits": [],
-          "baseline_context_required": 0,
-          "canonical_context_available": false,
-          "canonical_context_headline": "",
-          "novelty_anchor": "identity",
-          "novelty_present": true,
-          "novelty_token_hits": [
-            "domestic",
-            "lucie",
-            "murder",
-            "police",
-            "port",
-            "related",
-            "suicide"
-          ],
-          "missing": [
-            "original_event_context_missing"
-          ],
-          "source_title": "Port St. Lucie police identify 50-year man, woman in domestic-related murder-suicide - wpbf.com",
-          "headline": "Port St. Lucie police identify suspect in domestic-related murder-suicide on Southeast Oxmoor Terrace"
-        }
-      ],
-      "article_framing_rejection_count": 2,
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 1,
       "article_framing_rejections": [
         {
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Deputies search Fort Pierce home in $7 million Southern Truss fraud investigation",
-          "missing": [
-            "headline_money_claim_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Deputies search Fort Pierce home in $7 million Southern Truss fraud investigation",
-            "lead": "St. Lucie County Sheriff's Office deputies served a search warrant Tuesday morning at the Fort Pierce home of Laura Beth Grasso in the Indian River Estates neighborhood near Sunset Boulevard as part of the ongoing Southern Truss fraud investigation. Crime scene investigators were seen outside the residence. Grasso was arrested July 16 along with Sheri Lynn Harrs and Tina Marie Mejia following what the sheriff's office described as a years-long scheme targeting Southern Truss Companies. Grasso has pleaded not guilty to the charges.",
-            "lead_word_count": 86,
-            "headline_overlap_ratio": 0.9,
-            "new_context_token_count": 49,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Deputies search Fort Pierce home in $7 million Southern Truss fraud investigation",
-            "lead": "St. Lucie County Sheriff's Office deputies served a search warrant Tuesday morning at the Fort Pierce home of Laura Beth Grasso in the Indian River Estates neighborhood near Sunset Boulevard as part of the ongoing Southern Truss fraud investigation. Crime scene investigators were seen outside the residence. Grasso was arrested July 16 along with Sheri Lynn Harrs and Tina Marie Mejia following what the sheriff's office described as a years-long scheme targeting Southern Truss Companies. Grasso has pleaded not guilty to the charges.",
-            "headline_money_claims": [
-              7000000
-            ],
-            "lead_money_claims": [],
-            "missing_money_claims": [
-              7000000
-            ],
-            "headline_jurisdictions": [
-              "fort_pierce"
-            ],
-            "lead_jurisdictions": [
-              "fort_pierce",
-              "st_lucie_county"
-            ],
-            "missing_jurisdictions": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_money_claim_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "Deputies search Fort Pierce home in $7 million Southern Truss fraud investigation",
-            "generated_lead": "St. Lucie County Sheriff's Office deputies served a search warrant Tuesday morning at the Fort Pierce home of Laura Beth Grasso in the Indian River Estates neighborhood near Sunset Boulevard as part of the ongoing Southern Truss fraud investigation.",
-            "source_title": "Search warrant underway at Fort Pierce home tied to $7 million Southern Truss fraud - WPEC",
-            "source_lead": "A large law enforcement presence descended on a Fort Pierce neighborhood Tuesday morning as detectives executed a search warrant connected to an alleged fraud scheme that investigators say cost a local business nearly $7 million. Lucie County Sheriff's Office confirmed to CBS12 News that deputies are serving a search warrant as part of the ongoing investigation into the Southern Truss fraud case.",
-            "title_similarity": {
-              "score": 0.7258,
-              "overlap": 0.8182,
-              "jaccard": 0.6,
-              "sorted_sequence": 0.6835,
-              "ordered_sequence": 0.7089,
-              "shared_token_count": 9.0
-            },
-            "lead_token_overlap": 0.6,
-            "missing": []
-          }
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "U.S. Marshals arrest father in Virginia in Fort Pierce baby malnutrition death case",
+          "headline": "U.S. Marshals arrest baby's father in connection with Fort Pierce malnutrition death",
           "missing": [
             "headline_jurisdiction_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "U.S. Marshals arrest father in Virginia in Fort Pierce baby malnutrition death case",
-            "lead": "St. Lucie County Sheriff's Office announced Tuesday that Jason Gunter, the biological father of a 3-month-old baby who allegedly died from severe dehydration and malnutrition, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia. Detectives had obtained an arrest warrant for Gunter in connection with the ongoing investigation into the child's death. He has been charged with felony child neglect causing great harm and is awaiting extradition to St. Lucie County.",
-            "lead_word_count": 82,
-            "headline_overlap_ratio": 0.7,
-            "new_context_token_count": 42,
+            "headline": "U.S. Marshals arrest baby's father in connection with Fort Pierce malnutrition death",
+            "lead": "St. Lucie County Sheriff's Office announced Tuesday that the biological father of a 3-month-old baby who allegedly died from severe dehydration and malnutrition has been arrested. Jason Gunter, 45, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia, and has been charged with felony child neglect causing great harm. He is awaiting extradition to St. Lucie County.",
+            "lead_word_count": 67,
+            "headline_overlap_ratio": 0.444,
+            "new_context_token_count": 38,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -938,8 +960,8 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "U.S. Marshals arrest father in Virginia in Fort Pierce baby malnutrition death case",
-            "lead": "St. Lucie County Sheriff's Office announced Tuesday that Jason Gunter, the biological father of a 3-month-old baby who allegedly died from severe dehydration and malnutrition, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia. Detectives had obtained an arrest warrant for Gunter in connection with the ongoing investigation into the child's death. He has been charged with felony child neglect causing great harm and is awaiting extradition to St. Lucie County.",
+            "headline": "U.S. Marshals arrest baby's father in connection with Fort Pierce malnutrition death",
+            "lead": "St. Lucie County Sheriff's Office announced Tuesday that the biological father of a 3-month-old baby who allegedly died from severe dehydration and malnutrition has been arrested. Jason Gunter, 45, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia, and has been charged with felony child neglect causing great harm. He is awaiting extradition to St. Lucie County.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
@@ -962,30 +984,50 @@
           "source_focus": {
             "required": true,
             "passed": true,
-            "generated_headline": "U.S. Marshals arrest father in Virginia in Fort Pierce baby malnutrition death case",
-            "generated_lead": "St. Lucie County Sheriff's Office announced Tuesday that Jason Gunter, the biological father of a 3-month-old baby who allegedly died from severe dehydration and malnutrition, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia.",
+            "generated_headline": "U.S. Marshals arrest baby's father in connection with Fort Pierce malnutrition death",
+            "generated_lead": "St. Lucie County Sheriff's Office announced Tuesday that the biological father of a 3-month-old baby who allegedly died from severe dehydration and malnutrition has been arrested.",
             "source_title": "US Marshals arrest baby’s father in connection with Fort Pierce malnutrition death - WPEC",
             "source_lead": "A fourth person has been arrested in connection with the death of a 3-month-old baby who allegedly died from severe dehydration and malnutrition. Lucie County Sheriff's Office announced Tuesday that the child's biological father, 45-year-old Jason Gunter, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia.",
             "title_similarity": {
-              "score": 0.7511,
-              "overlap": 0.8,
-              "jaccard": 0.6154,
-              "sorted_sequence": 0.8322,
-              "ordered_sequence": 0.7785,
-              "shared_token_count": 8.0
+              "score": 0.9345,
+              "overlap": 1.0,
+              "jaccard": 0.8182,
+              "sorted_sequence": 0.9452,
+              "ordered_sequence": 0.9452,
+              "shared_token_count": 9.0
             },
-            "lead_token_overlap": 0.967,
+            "lead_token_overlap": 0.947,
             "missing": []
           }
         }
       ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County schools open Aug. 10: What families need to know for the new year",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-open-aug-10-what-families-need-to-know-for-the-new-year",
+          "editorial_story_id": "story_002246",
+          "canonical_slug": "2026-08-04-st-lucie-county-schools-open-aug-10-with-new-tradition-lakes-k-8-campus-and-ai-c",
+          "canonical_headline": "St. Lucie County schools open Aug. 10 with new Tradition Lakes K-8 campus and AI courses",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Florida homeowners say solar door-to-door sales left them with decades of debt - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQMjNkN0pqUnhUTkdkb2M4LTlkMHNDTjl6YzFSeS1MQXVHcEY4aDZ3dmZfYkp6QmVHRW9WTkhZV1lCemRjQmMwdTE1dnEzUjZqNFJjY2FJMjlxS19KdFFZRUhDYTJwMU80LXBRWjBOUXNEUDhkWGJfZFFXeE9fYTBLUl9qN3MzZHFHVUFxeDVZSnE1bTlZZzlzOGlLTjMtQU13TkZpWnM0RUU1UTFBbjU2VUM0T045MktZ",
+          "editorial_story_id": "story_002249",
+          "canonical_slug": "2026-08-04-treasure-coast-homeowners-say-door-to-door-solar-sales-left-them-with-decades-of",
+          "canonical_headline": "Treasure Coast homeowners say door-to-door solar sales left them with decades of debt and malfunctioning systems",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
@@ -1018,7 +1060,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Sharks caught on video off shore in St. Lucie County, Jupiter - wpbf.com",
+          "source_headline": "Sharks caught on video off shore in St. Lucie County, Jupiter - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-sharks-caught-on-video-off-shoremartin-county-jupiter/73324831",
           "editorial_story_id": "story_001783",
           "canonical_slug": "2026-08-03-two-sharks-spotted-off-st-lucie-and-palm-beach-county-coasts",
@@ -1055,24 +1097,34 @@
           "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "IA report: St. Lucie County deputy fired over social media post mocking sheriff - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-deputy-fired-controversial-social-media-post-internal-affairs-report-standards-of-performance-job-expectations-work-place-st-lucie-county-sheriffs-office-florida-news",
+          "editorial_story_id": "story_001360",
+          "canonical_slug": "2026-07-30-st-lucie-county-deputy-fired-after-social-media-post-mocked-sheriffs-performance",
+          "canonical_headline": "St. Lucie County deputy fired for Facebook post mocking sheriff's performance standards",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "St. Lucie County schools open Aug. 10 with new Tradition Lakes K-8 campus and AI courses",
+      "live_hero_headline": "Tradition Lakes K-8 prepares to open in St. Lucie County with 1,600 students expected",
       "generated_card_count": 2,
-      "elapsed_seconds": 95.662
+      "elapsed_seconds": 80.632
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "quality_gate_archive_recovery",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 26,
-      "publishable_source_count": 13,
-      "selected_source_count": 9,
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 9,
+      "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 1,
@@ -1080,11 +1132,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 43.868,
+          "elapsed_seconds": 55.278,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 43.868,
+      "model_elapsed_seconds": 55.278,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -1095,14 +1147,44 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 13,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
-          "source_headline": "Indian River County remembers firefighter-paramedic Geoffrey Lang at memorial service - wpbf.com",
+          "source_headline": "Martin County's REACH Center opens workforce training programs for students and career changers",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-countys-reach-center-opens-workforce-training-programs-for-students-and-career-changers",
+          "editorial_story_id": "story_002241",
+          "canonical_slug": "2026-08-04-martin-county-reach-center-launches-workforce-training-programs-in-aviation-heal",
+          "canonical_headline": "Martin County REACH Center launches workforce training programs in aviation, healthcare, and manufacturing",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "St. Lucie County schools open Aug. 10: What families need to know for the new year",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-open-aug-10-what-families-need-to-know-for-the-new-year",
+          "editorial_story_id": "story_002246",
+          "canonical_slug": "2026-08-04-st-lucie-county-schools-open-aug-10-with-new-tradition-lakes-k-8-campus-and-ai-c",
+          "canonical_headline": "St. Lucie County schools open Aug. 10 with new Tradition Lakes K-8 campus and AI courses",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Florida homeowners say solar door-to-door sales left them with decades of debt",
+          "source_url": "https://www.wptv.com/wptv-investigates/florida-homeowners-say-solar-door-to-door-sales-left-them-with-decades-of-debt",
+          "editorial_story_id": "story_002249",
+          "canonical_slug": "2026-08-04-treasure-coast-homeowners-say-door-to-door-solar-sales-left-them-with-decades-of",
+          "canonical_headline": "Treasure Coast homeowners say door-to-door solar sales left them with decades of debt and malfunctioning systems",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Indian River County remembers firefighter-paramedic Geoffrey Lang at memorial service - WPBF",
           "source_url": "https://www.wpbf.com/article/indian-river-county-firefighter-paramedic-geoffrey-lang-memorial-service/73346171",
           "editorial_story_id": "story_000793",
           "canonical_slug": "2026-07-28-vero-beach-police-department-honors-service-of-indian-river-county-firefighter",
@@ -1129,37 +1211,23 @@
           "canonical_headline": "Vero Beach Police Department honors service of Indian River County firefighter",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
+        },
         {
-          "source_headline": "'I CAN'T AFFORD IT': Treasure Coast man relocates to Puerto Rico for housing - WPTV",
-          "source_url": "https://www.wptv.com/money/real-estate-news/florida-affordability-struggles-push-treasure-coast-man-to-relocate-to-puerto-rico",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-04-property-tax-increases-push-treasure-coast-resident-to-relocate-to-puerto-rico",
-          "canonical_headline": "Property tax increases push Treasure Coast resident to relocate to Puerto Rico",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_002061",
-            "source:https://www.wptv.com/money/real-estate-news/florida-affordability-struggles-push-treasure-coast-man-to-relocate-to-puerto-rico"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_002061,source:https://www.wptv.com/money/real-estate-news/florida-affordability-struggles-push-treasure-coast-man-to-relocate-to-puerto-rico",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
+          "category_key": "indian_river",
+          "source_headline": "IRC District 2 Commission candidates speak out - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/news/indian_river/irc-district-2-commission-candidates-speak-out/article_40c05ea4-92bf-5a8a-9f4c-49cdae761f0d.html",
+          "editorial_story_id": "story_002005",
+          "canonical_slug": "2026-08-03-indian-river-county-commission-district-2-candidates-outline-priorities-ahead-of",
+          "canonical_headline": "Indian River County Commission District 2 candidates outline priorities ahead of Aug. 18 primary",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 66.191
+      "elapsed_seconds": 75.968
     }
   ]
 }
