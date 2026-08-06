@@ -54,5 +54,5 @@ def test_current_surfaces_use_selected_image():
     assert homepage.count(IMAGE) >= 2
 
     feed = (ROOT / "feed.xml").read_text()
-    target = feed.split("Martin County Sheriff's Office seeks public help finding missing 14-year-old autistic boy in Palm City", 1)[1].split("</item>", 1)[0]
+    target = feed.split("Missing 14-year-old autistic boy Ethan Boyd safely located, Martin County sheriff says", 1)[1].split("</item>", 1)[0]
     assert IMAGE in target

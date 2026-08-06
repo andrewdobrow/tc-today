@@ -431,6 +431,7 @@ TRUSTED_SOURCE_RECOVERY_REPORT_PATH = OUTPUT_DIR / "data" / "trusted-source-reco
 CATEGORY_MEMBERSHIP_REPORT_PATH = OUTPUT_DIR / "data" / "category-membership-report.json"
 SOURCE_IMAGE_QUALITY_REPORT_PATH = OUTPUT_DIR / "data" / "source-image-quality-report.json"
 ARTICLE_IMAGE_OVERRIDES_PATH = OUTPUT_DIR / "data" / "article-image-overrides.json"
+ARTICLE_CONTENT_OVERRIDES_PATH = OUTPUT_DIR / "data" / "article-content-overrides.json"
 ARTICLE_FRAMING_INTEGRITY_REPORT_PATH = OUTPUT_DIR / "data" / "article-framing-integrity-report.json"
 CLAIM_ALIGNED_PERMALINK_REPAIR_REPORT_PATH = OUTPUT_DIR / "data" / "claim-aligned-permalink-repair.json"
 EDITORIAL_ACTIVATION_PATH = OUTPUT_DIR / "data" / "editorial_activation.json"
@@ -1464,6 +1465,118 @@ def _normalize_article_slug(value):
     if path.endswith(".html"):
         path = path[:-5]
     return path.strip()
+
+
+def _load_article_content_overrides(path=None):
+    override_path = Path(path or ARTICLE_CONTENT_OVERRIDES_PATH)
+    if not override_path.is_file():
+        return {}
+    try:
+        payload = json.loads(override_path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    rows = payload.get("overrides", payload) if isinstance(payload, dict) else {}
+    return {
+        _normalize_article_slug(k): dict(v)
+        for k, v in rows.items()
+        if _normalize_article_slug(k) and isinstance(v, dict)
+    }
+
+
+def _apply_article_content_overrides_to_outputs(output_root=None):
+    root = Path(output_root or OUTPUT_DIR)
+    overrides = _load_article_content_overrides(root / "data" / "article-content-overrides.json")
+    if not overrides:
+        return 0
+    changed = 0
+    archive_path = root / "archive.json"
+    archive = load_archive(archive_path)
+    for row in archive:
+        slug = _normalize_article_slug(row.get("slug") or row.get("link") or row.get("permalink"))
+        ov = overrides.get(slug)
+        if not ov:
+            continue
+        for field in ("headline", "teaser", "body", "image_url", "updated", "date_modified", "meaningful_update_at"):
+            if ov.get(field):
+                row[field] = ov[field]
+        row["is_meaningful_update"] = True
+        row["update_status"] = ov.get("update_status", "resolved")
+        changed += 1
+    if changed:
+        archive_path.write_text(json.dumps(archive, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    data_path = root / "data.json"
+    if data_path.is_file():
+        try:
+            data_payload = json.loads(data_path.read_text(encoding="utf-8"))
+            def _patch_payload(node):
+                if isinstance(node, dict):
+                    node_slug = ""
+                    for key in ("slug", "canonical_slug", "link", "href", "url", "permalink"):
+                        node_slug = _normalize_article_slug(node.get(key))
+                        if node_slug:
+                            break
+                    ov = overrides.get(node_slug)
+                    if ov:
+                        for field in ("headline", "teaser", "body", "image_url", "updated", "date_modified", "meaningful_update_at"):
+                            if ov.get(field):
+                                node[field] = ov[field]
+                        node["is_meaningful_update"] = True
+                        node["update_status"] = ov.get("update_status", "resolved")
+                    for value in node.values():
+                        _patch_payload(value)
+                elif isinstance(node, list):
+                    for value in node:
+                        _patch_payload(value)
+            _patch_payload(data_payload)
+            data_path.write_text(json.dumps(data_payload, indent=2, ensure_ascii=False), encoding="utf-8")
+        except Exception:
+            pass
+
+    for slug, ov in overrides.items():
+        page = root / "articles" / f"{slug}.html"
+        if not page.is_file():
+            continue
+        text = page.read_text(encoding="utf-8")
+        old_h1 = re.search(r'<h1 class="article-headline">(.*?)</h1>', text, re.S)
+        old_headline = html.unescape(re.sub(r'<[^>]+>', '', old_h1.group(1))) if old_h1 else ''
+        headline = str(ov.get("headline") or old_headline)
+        teaser = str(ov.get("teaser") or '')
+        body = str(ov.get("body") or '')
+        image_url = str(ov.get("image_url") or '')
+        modified = str(ov.get("updated") or ov.get("date_modified") or '')
+        update_label = str(ov.get("update_label") or 'UPDATE — Aug. 5, 2026, 11:44 p.m.:')
+        update_text = str(ov.get("update_text") or '')
+        original_label = str(ov.get("original_label") or 'Original report:')
+        esc_headline = html.escape(headline, quote=True)
+        esc_teaser = html.escape(teaser, quote=True)
+        text = re.sub(r'<title>.*?</title>', f'<title>{esc_headline} | Treasure Coast Today</title>', text, count=1, flags=re.S)
+        text = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{esc_teaser}">', text, count=1)
+        text = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{esc_headline} | Treasure Coast Today">', text, count=1)
+        text = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{esc_teaser}">', text, count=1)
+        if modified:
+            text = re.sub(r'<meta property="article:modified_time" content="[^"]*">', f'<meta property="article:modified_time" content="{html.escape(modified, quote=True)}">', text, count=1)
+        text = re.sub(r'<h1 class="article-headline">.*?</h1>', f'<h1 class="article-headline">{html.escape(headline)}</h1>', text, count=1, flags=re.S)
+        if image_url:
+            text = re.sub(r'(<figure class="article-hero-image"><img src=")[^"]+', r'\1'+image_url, text, count=1)
+            text = re.sub(r'(<meta property="og:image" content=")[^"]+', r'\1'+image_url, text, count=1)
+            text = re.sub(r'(<meta name="twitter:image" content=")[^"]+', r'\1'+image_url, text, count=1)
+        update_html = f'<div class="article-update"><p><strong>{html.escape(update_label)}</strong> {html.escape(update_text)}</p></div>'
+        original_html = ''.join(f'<p>{html.escape(x.strip())}</p>' for x in body.split('\n\n') if x.strip())
+        replacement = f'<div class="article-body">{update_html}<p><strong>{html.escape(original_label)}</strong></p>{original_html}</div>'
+        text = re.sub(r'<div class="article-body">.*?</div>', replacement, text, count=1, flags=re.S)
+        # JSON-LD
+        m = re.search(r'<script type="application/ld\+json">(.*?)</script>', text, re.S)
+        if m:
+            try:
+                ld=json.loads(m.group(1)); ld['headline']=headline; ld['description']=teaser
+                if image_url: ld['image']=[image_url]
+                if modified: ld['dateModified']=modified
+                text=text[:m.start(1)]+json.dumps(ld, ensure_ascii=False)+text[m.end(1):]
+            except Exception:
+                pass
+        page.write_text(text, encoding="utf-8")
+    return changed
 
 
 def _load_article_image_overrides(path=None):
@@ -26487,6 +26600,9 @@ def main():
     (OUTPUT_DIR / "ownership.html").write_text(render_ownership_page(), encoding="utf-8")
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
     (OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat), encoding="utf-8")
+    _content_override_count = _apply_article_content_overrides_to_outputs(OUTPUT_DIR)
+    if _content_override_count:
+        print(f"  Article content overrides applied to {_content_override_count} canonical article(s)")
     validate_custom_rss_publication_contract(OUTPUT_DIR)
     validate_rss_social_image_contract(OUTPUT_DIR)
     validate_nonstory_publication_contract(all_categories, top_cat, OUTPUT_DIR)
