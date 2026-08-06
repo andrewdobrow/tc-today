@@ -1,11 +1,20 @@
-# v1.13.1.4 — Ethan Boyd Found-Safe Canonical Update
+# v1.13.1.4 — Complete HTML Alias Runtime Fix
 
-This cumulative overlay includes v1.13.1.3 and updates the existing Ethan Boyd canonical article in place.
+## Emergency correction
 
-- Keeps the original permalink unchanged.
-- Changes the headline to: “Missing 14-year-old autistic boy Ethan Boyd safely located, Martin County sheriff says.”
-- Adds a timestamped update at the top stating that MCSO reported Ethan safely located at 11:44 p.m.
-- Preserves the original missing-person report beneath an “Original report” label.
-- Keeps `/images/ethan-boyd.png` as the article, card, Open Graph, Twitter and structured-data image.
-- Adds a durable `data/article-content-overrides.json` authority layer so future rebuilds do not restore the old missing-person headline or body.
-- Marks the story as a meaningful resolved update while retaining the same canonical slug.
+The v1.13.1.3 patch repaired `html.unescape()` but did not repair the later
+`html.escape()` calls inside `_apply_article_content_overrides_to_outputs()`.
+The production workflow therefore reached the end of generation and failed with
+another `NameError`.
+
+This release replaces every bare `html.*` reference in that function with the
+existing `html_lib.*` alias. It also fails the preflight if any bare reference
+remains, preventing another method-by-method runtime failure.
+
+## Scope
+
+- Replaces the source-targeted runtime patcher only.
+- Preserves the registry-write batching improvement from v1.13.1.3.
+- Does not replace `scripts/generate.py` with an older copy.
+- Does not alter articles, archive records, custom content, images, redirects,
+  registry data, or identity rules.
