@@ -1,6 +1,6 @@
-name: Update Treasure Coast Today — Bounded Runtime v1.9.5
+name: Update Treasure Coast Today — Bounded Runtime v1.9.6
 
-run-name: "TCT update v1.9.5 • ${{ github.ref_name }} • ${{ github.sha }}"
+run-name: "TCT update v1.9.6 • ${{ github.ref_name }} • ${{ github.sha }}"
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   update:
-    name: Update site — bounded runtime v1.9.5 (90-minute safety ceiling)
+    name: Update site — bounded runtime v1.9.6 (90-minute safety ceiling)
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: Runtime safety revision
         run: |
-          echo "ACTIVE_WORKFLOW=tct-bounded-runtime-v1.9.5"
+          echo "ACTIVE_WORKFLOW=tct-bounded-runtime-v1.9.6"
           echo "JOB_TIMEOUT_MINUTES=90"
           echo "GITHUB_SHA=$GITHUB_SHA"
 
@@ -55,6 +55,9 @@ jobs:
 
       - name: Sanitize persistent generation cache
         run: python scripts/sanitize_generation_cache.py
+
+      - name: Apply generator runtime hotfix
+        run: python scripts/apply_generator_runtime_hotfix.py
 
       - name: Normalize recent reader-support banners
         run: |
