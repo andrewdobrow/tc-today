@@ -1,0 +1,26 @@
+TCT v1.13.1.8 web-upload-safe validation
+=========================================
+
+Repository basis:
+- Exact uploaded snapshot: tc-today-main (1)(2).zip
+- Cumulative v1.13.1.8 overlay applied with data/editorial_story_registry.json intentionally excluded
+
+Workflow-equivalent preflight:
+- Generation cache sanitizer: clean
+- Generator runtime hotfix: clean/idempotent
+- False-jurisdiction generator guard: clean/verified
+- False-jurisdiction publication repair: clean/idempotent
+- Reader-support newest-50 migration: 50 checked, 0 migrated
+- Existing 28 MB registry normalized in place: 1 obsolete record removed; clean verification true
+- Package validation: 34 modules, 119 public exports
+
+Test validation after registry normalization:
+- 758 passed
+- 0 failed
+- Executed in four complete filename-partitioned pytest batches to stay within local command limits
+
+Packaging validation:
+- data/editorial_story_registry.json is not included
+- Existing repository registry must remain in place
+- Largest included file is data/generation-cache.json at approximately 2.9 MB
+- No included file exceeds the 25 MB browser-upload limit
