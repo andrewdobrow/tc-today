@@ -198,7 +198,7 @@ def test_production_workflow_restores_and_sanitizes_versioned_incremental_cache(
         "Sanitize persistent generation cache"
     ) < workflow.index("Run editorial engine tests")
     assert "timeout-minutes: 90" in workflow
-    assert "ACTIVE_WORKFLOW=tct-bounded-runtime-v1.9.5" in workflow
+    assert "ACTIVE_WORKFLOW=tct-bounded-runtime-v1.9.6" in workflow
 
 
 def test_editorial_ci_sanitizes_tracked_cache_before_pytest():
