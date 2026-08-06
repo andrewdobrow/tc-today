@@ -1539,7 +1539,7 @@ def _apply_article_content_overrides_to_outputs(output_root=None):
             continue
         text = page.read_text(encoding="utf-8")
         old_h1 = re.search(r'<h1 class="article-headline">(.*?)</h1>', text, re.S)
-        old_headline = html.unescape(re.sub(r'<[^>]+>', '', old_h1.group(1))) if old_h1 else ''
+        old_headline = html_lib.unescape(re.sub(r'<[^>]+>', '', old_h1.group(1))) if old_h1 else ''
         headline = str(ov.get("headline") or old_headline)
         teaser = str(ov.get("teaser") or '')
         body = str(ov.get("body") or '')
@@ -1548,22 +1548,22 @@ def _apply_article_content_overrides_to_outputs(output_root=None):
         update_label = str(ov.get("update_label") or 'UPDATE — Aug. 5, 2026, 11:44 p.m.:')
         update_text = str(ov.get("update_text") or '')
         original_label = str(ov.get("original_label") or 'Original report:')
-        esc_headline = html.escape(headline, quote=True)
-        esc_teaser = html.escape(teaser, quote=True)
+        esc_headline = html_lib.escape(headline, quote=True)
+        esc_teaser = html_lib.escape(teaser, quote=True)
         text = re.sub(r'<title>.*?</title>', f'<title>{esc_headline} | Treasure Coast Today</title>', text, count=1, flags=re.S)
         text = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{esc_teaser}">', text, count=1)
         text = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{esc_headline} | Treasure Coast Today">', text, count=1)
         text = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{esc_teaser}">', text, count=1)
         if modified:
-            text = re.sub(r'<meta property="article:modified_time" content="[^"]*">', f'<meta property="article:modified_time" content="{html.escape(modified, quote=True)}">', text, count=1)
-        text = re.sub(r'<h1 class="article-headline">.*?</h1>', f'<h1 class="article-headline">{html.escape(headline)}</h1>', text, count=1, flags=re.S)
+            text = re.sub(r'<meta property="article:modified_time" content="[^"]*">', f'<meta property="article:modified_time" content="{html_lib.escape(modified, quote=True)}">', text, count=1)
+        text = re.sub(r'<h1 class="article-headline">.*?</h1>', f'<h1 class="article-headline">{html_lib.escape(headline)}</h1>', text, count=1, flags=re.S)
         if image_url:
             text = re.sub(r'(<figure class="article-hero-image"><img src=")[^"]+', r'\1'+image_url, text, count=1)
             text = re.sub(r'(<meta property="og:image" content=")[^"]+', r'\1'+image_url, text, count=1)
             text = re.sub(r'(<meta name="twitter:image" content=")[^"]+', r'\1'+image_url, text, count=1)
-        update_html = f'<div class="article-update"><p><strong>{html.escape(update_label)}</strong> {html.escape(update_text)}</p></div>'
-        original_html = ''.join(f'<p>{html.escape(x.strip())}</p>' for x in body.split('\n\n') if x.strip())
-        replacement = f'<div class="article-body">{update_html}<p><strong>{html.escape(original_label)}</strong></p>{original_html}</div>'
+        update_html = f'<div class="article-update"><p><strong>{html_lib.escape(update_label)}</strong> {html_lib.escape(update_text)}</p></div>'
+        original_html = ''.join(f'<p>{html_lib.escape(x.strip())}</p>' for x in body.split('\n\n') if x.strip())
+        replacement = f'<div class="article-body">{update_html}<p><strong>{html_lib.escape(original_label)}</strong></p>{original_html}</div>'
         text = re.sub(r'<div class="article-body">.*?</div>', replacement, text, count=1, flags=re.S)
         # JSON-LD
         m = re.search(r'<script type="application/ld\+json">(.*?)</script>', text, re.S)
@@ -25098,69 +25098,71 @@ def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, a
     if engine is None or route_editorial_result is None:
         return
 
-    for entry in headlines:
-        audit_key = (entry.get("link") or entry.get("title") or "").strip().lower()
-        if not audit_key:
-            continue
-        if audit_key in audited_keys:
-            _stamp_known_current_run_identity(entry)
-            continue
-        audited_keys.add(audit_key)
+    # v1.13.1.3: batch persistent registry writes for this category.
+    with engine._pipeline.defer_registry_saves(commit=True):
+        for entry in headlines:
+            audit_key = (entry.get("link") or entry.get("title") or "").strip().lower()
+            if not audit_key:
+                continue
+            if audit_key in audited_keys:
+                _stamp_known_current_run_identity(entry)
+                continue
+            audited_keys.add(audit_key)
 
-        try:
-            # Pass a shallow copy so an adapter can never mutate the live candidate.
-            result = engine.process(
-                dict(entry),
-                source=entry.get("link") or entry.get("feed_url") or "rss",
-                county=category_key if category_key in COUNTY_KEYS else "",
-            )
-            instruction = route_editorial_result(result)
-            route = getattr(getattr(instruction, "route", None), "value", None)
-            route = route or str(getattr(instruction, "route", "unknown"))
-            row = {
-                "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-                "category": category_key,
-                "headline": entry.get("title", ""),
-                "source_url": entry.get("link", ""),
-                "route": route,
-                "event_key": getattr(instruction, "event_key", ""),
-                "incoming_article_id": getattr(instruction, "incoming_article_id", ""),
-                "target_article_id": getattr(instruction, "target_article_id", ""),
-                "story_id": getattr(result, "story_id", ""),
-                "eligible": bool(getattr(result, "eligible", True)),
-                "eligibility_status": getattr(result, "eligibility_status", "publishable"),
-                "eligibility_reasons": list(getattr(result, "eligibility_reasons", ()) or ()),
-                "source_class": getattr(result, "source_class", "unknown"),
-                "source_trust": int(getattr(result, "source_trust", 50) or 0),
-                "relationship": getattr(result, "relationship", "new_story"),
-                "relationship_confidence": float(getattr(result, "relationship_confidence", 0.0) or 0.0),
-                "relationship_reason": getattr(result, "relationship_reason", ""),
-                "new_facts": list(getattr(result, "new_facts", ()) or ()),
-                "decision_trace": list(getattr(result, "decision_trace", ()) or ()),
-                "follow_up_candidate_story_id": getattr(result, "follow_up_candidate_story_id", ""),
-                "follow_up_candidate_confidence": float(getattr(result, "follow_up_candidate_confidence", 0.0) or 0.0),
-                "follow_up_candidate_milestones": list(getattr(result, "follow_up_candidate_milestones", ()) or ()),
-                "follow_up_candidate_reason_codes": list(getattr(result, "follow_up_candidate_reason_codes", ()) or ()),
-                "follow_up_candidate_trace": list(getattr(result, "follow_up_candidate_trace", ()) or ()),
-                "follow_up_candidate_mode": getattr(result, "follow_up_candidate_mode", "observe_only"),
-                "incoming_is_custom": bool(getattr(result, "is_custom", False)),
-                "canonical_is_custom": bool(getattr(result, "canonical_is_custom", False)),
-                "canonical_title": getattr(result, "canonical_title", ""),
-                "canonical_source": getattr(result, "canonical_source", ""),
-                "canonical_url": getattr(result, "canonical_url", ""),
-            }
-            _remember_current_run_editorial_identity(entry, row)
-            audit_rows.append(row)
-            print(
-                "  EDITORIAL AUDIT:",
-                row["route"],
-                "| event:", row["event_key"],
-                "| incoming:", row["incoming_article_id"],
-                "| target:", row["target_article_id"],
-                "| eligibility:", row["eligibility_status"],
-            )
-        except Exception as exc:
-            print(f"  Editorial audit item failed; continuing unchanged: {exc}")
+            try:
+                # Pass a shallow copy so an adapter can never mutate the live candidate.
+                result = engine.process(
+                    dict(entry),
+                    source=entry.get("link") or entry.get("feed_url") or "rss",
+                    county=category_key if category_key in COUNTY_KEYS else "",
+                )
+                instruction = route_editorial_result(result)
+                route = getattr(getattr(instruction, "route", None), "value", None)
+                route = route or str(getattr(instruction, "route", "unknown"))
+                row = {
+                    "timestamp": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+                    "category": category_key,
+                    "headline": entry.get("title", ""),
+                    "source_url": entry.get("link", ""),
+                    "route": route,
+                    "event_key": getattr(instruction, "event_key", ""),
+                    "incoming_article_id": getattr(instruction, "incoming_article_id", ""),
+                    "target_article_id": getattr(instruction, "target_article_id", ""),
+                    "story_id": getattr(result, "story_id", ""),
+                    "eligible": bool(getattr(result, "eligible", True)),
+                    "eligibility_status": getattr(result, "eligibility_status", "publishable"),
+                    "eligibility_reasons": list(getattr(result, "eligibility_reasons", ()) or ()),
+                    "source_class": getattr(result, "source_class", "unknown"),
+                    "source_trust": int(getattr(result, "source_trust", 50) or 0),
+                    "relationship": getattr(result, "relationship", "new_story"),
+                    "relationship_confidence": float(getattr(result, "relationship_confidence", 0.0) or 0.0),
+                    "relationship_reason": getattr(result, "relationship_reason", ""),
+                    "new_facts": list(getattr(result, "new_facts", ()) or ()),
+                    "decision_trace": list(getattr(result, "decision_trace", ()) or ()),
+                    "follow_up_candidate_story_id": getattr(result, "follow_up_candidate_story_id", ""),
+                    "follow_up_candidate_confidence": float(getattr(result, "follow_up_candidate_confidence", 0.0) or 0.0),
+                    "follow_up_candidate_milestones": list(getattr(result, "follow_up_candidate_milestones", ()) or ()),
+                    "follow_up_candidate_reason_codes": list(getattr(result, "follow_up_candidate_reason_codes", ()) or ()),
+                    "follow_up_candidate_trace": list(getattr(result, "follow_up_candidate_trace", ()) or ()),
+                    "follow_up_candidate_mode": getattr(result, "follow_up_candidate_mode", "observe_only"),
+                    "incoming_is_custom": bool(getattr(result, "is_custom", False)),
+                    "canonical_is_custom": bool(getattr(result, "canonical_is_custom", False)),
+                    "canonical_title": getattr(result, "canonical_title", ""),
+                    "canonical_source": getattr(result, "canonical_source", ""),
+                    "canonical_url": getattr(result, "canonical_url", ""),
+                }
+                _remember_current_run_editorial_identity(entry, row)
+                audit_rows.append(row)
+                print(
+                    "  EDITORIAL AUDIT:",
+                    row["route"],
+                    "| event:", row["event_key"],
+                    "| incoming:", row["incoming_article_id"],
+                    "| target:", row["target_article_id"],
+                    "| eligibility:", row["eligibility_status"],
+                )
+            except Exception as exc:
+                print(f"  Editorial audit item failed; continuing unchanged: {exc}")
 
 
 def _save_editorial_engine_audit(engine, audit_rows):
