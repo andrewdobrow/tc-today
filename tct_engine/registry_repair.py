@@ -37,7 +37,7 @@ from .source_identity import (
     story_source_identity_urls,
 )
 
-REPAIR_VERSION = 9
+REPAIR_VERSION = 10
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
@@ -689,6 +689,11 @@ def _selective_named_person_death_repair(
                 contaminated_preserved += 1
                 secondary["identity_contamination_repaired"] = True
                 secondary["detached_incident_anchor"] = anchor
+                # The prior canonical may be the exact named-person title that
+                # was just moved out. Clear it before selecting from the
+                # remaining candidates/titles; otherwise a later fixed-point
+                # duplicate pass can reattach the contamination we just split.
+                secondary["canonical_title"] = ""
                 secondary["canonical_title"] = _select_canonical_title(secondary)
                 # Remove the named subject when no remaining title refers to it.
                 remaining_text = " ".join(
@@ -1093,6 +1098,43 @@ def _count_publisher_title_duplicate_groups(stories: Mapping[str, Mapping[str, A
     return sum(1 for story_ids in title_index.values() if len(story_ids) > 1)
 
 
+def _merge_component_batch(
+    stories: MutableMapping[str, MutableMapping[str, Any]],
+    aliases: MutableMapping[str, str],
+    components: Iterable[set[str]],
+    merged_story_ids: MutableMapping[str, list[str]],
+) -> tuple[int, int]:
+    """Merge one freshly computed component batch.
+
+    Later repair layers can expose identity evidence that was not present when an
+    earlier layer ran.  Keeping the merge primitive small and deterministic lets
+    the caller repeat the identity layers until no records are removed.
+    """
+
+    groups_merged = 0
+    records_removed = 0
+    ordered = sorted(
+        (set(component) for component in components if len(component) > 1),
+        key=lambda group: min(_story_number(value) for value in group),
+    )
+    for component in ordered:
+        # A prior component in the same batch may already have removed a member.
+        active_component = {story_id for story_id in component if story_id in stories}
+        if len(active_component) < 2:
+            continue
+        primary_id = choose_primary_story_id(active_component, stories)
+        secondary_ids = sorted(active_component - {primary_id}, key=_story_number)
+        primary = stories[primary_id]
+        for secondary_id in secondary_ids:
+            merge_story_records(primary, stories[secondary_id])
+            aliases[secondary_id] = primary_id
+            del stories[secondary_id]
+            records_removed += 1
+        merged_story_ids.setdefault(primary_id, []).extend(secondary_ids)
+        groups_merged += 1
+    return groups_merged, records_removed
+
+
 def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepairReport:
     stories: MutableMapping[str, MutableMapping[str, Any]] = payload.setdefault("stories", {})
     aliases: MutableMapping[str, str] = payload.setdefault("story_aliases", {})
@@ -1217,6 +1259,51 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
             incident_removed += 1
         merged_story_ids.setdefault(primary_id, []).extend(secondary_ids)
 
+    # A merge in any later identity layer can expose a component that an earlier
+    # layer could not see.  For example, combining publisher-title fragments can
+    # bring an exact article URL into a record that now overlaps another story.
+    # Resolve every whole-record identity layer to a fixed point before rebuilding
+    # indexes or declaring the registry clean.  Each successful pass strictly
+    # removes records, so the loop is bounded by the active story count.
+    late_exact_groups = 0
+    late_source_groups = 0
+    late_unified_groups = 0
+    late_incident_groups = 0
+    while True:
+        removed_this_pass = 0
+
+        groups, removed_now = _merge_component_batch(
+            stories, aliases, _duplicate_components(stories), merged_story_ids
+        )
+        late_exact_groups += groups
+        removed_this_pass += removed_now
+
+        groups, removed_now = _merge_component_batch(
+            stories, aliases, _source_identity_components(stories), merged_story_ids
+        )
+        late_source_groups += groups
+        source_removed += removed_now
+        removed_this_pass += removed_now
+
+        groups, removed_now = _merge_component_batch(
+            stories, aliases, unified_incident_components(stories), merged_story_ids
+        )
+        late_unified_groups += groups
+        unified_removed += removed_now
+        removed_this_pass += removed_now
+
+        groups, removed_now = _merge_component_batch(
+            stories, aliases, _incident_components(stories), merged_story_ids
+        )
+        late_incident_groups += groups
+        incident_removed += removed_now
+        removed_this_pass += removed_now
+
+        if removed_this_pass == 0:
+            break
+
+    unified_groups_merged += late_unified_groups
+
     # Rebuild the event index from active records only. Quarantined records never
     # retain active mappings, and aliases are resolved to their chosen primary.
     event_to_story: dict[str, str] = {}
@@ -1257,7 +1344,13 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
         quarantined_story_ids=tuple(sorted(quarantine_reasons, key=_story_number)),
         quarantine_reasons=quarantine_reasons,
         duplicate_groups_merged=(
-            len(exact_components) + len(source_components) + unified_groups_merged + len(incident_components)
+            len(exact_components)
+            + late_exact_groups
+            + len(source_components)
+            + late_source_groups
+            + unified_groups_merged
+            + len(incident_components)
+            + late_incident_groups
         ),
         duplicate_story_records_removed=removed,
         merged_story_ids={
@@ -1269,14 +1362,10 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
             0, publisher_duplicate_groups_before - remaining_publisher_duplicates
         ),
         remaining_publisher_title_duplicate_groups=remaining_publisher_duplicates,
-        source_identity_groups_resolved=max(
-            0, source_groups_before - remaining_source_groups
-        ),
+        source_identity_groups_resolved=(len(source_components) + late_source_groups),
         source_story_records_removed=source_removed,
         remaining_source_identity_groups=remaining_source_groups,
-        incident_identity_groups_resolved=max(
-            0, incident_groups_before - remaining_incident_groups
-        ),
+        incident_identity_groups_resolved=(len(incident_components) + late_incident_groups),
         incident_story_records_removed=incident_removed,
         remaining_incident_identity_groups=remaining_incident_groups,
         selective_incident_anchor_groups_repaired=selective_groups,

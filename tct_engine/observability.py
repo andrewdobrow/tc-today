@@ -17,9 +17,9 @@ from .source_identity import normalize_source_identity_url
 from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.13.1"
-ENGINE_RELEASE = "unified-incident-identity-contract"
-OBSERVABILITY_SCHEMA_VERSION = 40
+ENGINE_VERSION = "1.13.1.1"
+ENGINE_RELEASE = "registry-fixed-point-preflight"
+OBSERVABILITY_SCHEMA_VERSION = 41
 RESOLVER_VERSION = "3.0"
 RELATIONSHIP_ENGINE_VERSION = "1.5"
 
