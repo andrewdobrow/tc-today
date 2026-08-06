@@ -429,6 +429,7 @@ CATEGORY_ELIGIBILITY_REPORT_PATH = OUTPUT_DIR / "data" / "category-eligibility-r
 TRUSTED_SOURCE_RECOVERY_REPORT_PATH = OUTPUT_DIR / "data" / "trusted-source-recovery.json"
 CATEGORY_MEMBERSHIP_REPORT_PATH = OUTPUT_DIR / "data" / "category-membership-report.json"
 SOURCE_IMAGE_QUALITY_REPORT_PATH = OUTPUT_DIR / "data" / "source-image-quality-report.json"
+ARTICLE_IMAGE_OVERRIDES_PATH = OUTPUT_DIR / "data" / "article-image-overrides.json"
 ARTICLE_FRAMING_INTEGRITY_REPORT_PATH = OUTPUT_DIR / "data" / "article-framing-integrity-report.json"
 CLAIM_ALIGNED_PERMALINK_REPAIR_REPORT_PATH = OUTPUT_DIR / "data" / "claim-aligned-permalink-repair.json"
 EDITORIAL_ACTIVATION_PATH = OUTPUT_DIR / "data" / "editorial_activation.json"
@@ -1442,6 +1443,136 @@ def _absolute_image_url(url):
         return f"{SITE_URL}{raw}"
     return raw
 
+
+
+def _normalize_article_slug(value):
+    """Return one article slug from a slug, permalink, href, or archive field."""
+    raw = html_lib.unescape(str(value or "").strip())
+    if not raw:
+        return ""
+    try:
+        parsed = urlsplit(raw)
+        path = parsed.path or raw
+    except Exception:
+        path = raw
+    path = path.split("?", 1)[0].split("#", 1)[0].rstrip("/")
+    if "/articles/" in path:
+        path = path.rsplit("/articles/", 1)[-1]
+    else:
+        path = path.rsplit("/", 1)[-1]
+    if path.endswith(".html"):
+        path = path[:-5]
+    return path.strip()
+
+
+def _load_article_image_overrides(path=None):
+    """Load deterministic, article-specific image assignments.
+
+    These overrides are editorial authority. They are intentionally keyed by the
+    canonical article slug so a future feed refresh, fallback rotation, archive
+    recovery, or social-image rebuild cannot replace the selected image.
+    """
+    override_path = Path(path or ARTICLE_IMAGE_OVERRIDES_PATH)
+    if not override_path.is_file():
+        return {}
+    try:
+        payload = json.loads(override_path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    rows = payload.get("overrides", payload) if isinstance(payload, dict) else payload
+    result = {}
+    if isinstance(rows, dict):
+        iterator = rows.items()
+    elif isinstance(rows, list):
+        iterator = ((row.get("slug") or row.get("permalink"), row) for row in rows if isinstance(row, dict))
+    else:
+        iterator = ()
+    for raw_slug, raw_value in iterator:
+        slug = _normalize_article_slug(raw_slug)
+        if not slug:
+            continue
+        if isinstance(raw_value, str):
+            image_url = raw_value
+        elif isinstance(raw_value, dict):
+            image_url = raw_value.get("image_url") or raw_value.get("url") or ""
+        else:
+            image_url = ""
+        image_url = _absolute_image_url(image_url)
+        if image_url and not _source_image_rejection_reason(image_url):
+            result[slug] = image_url
+    return result
+
+
+def _article_image_override_for_item(item=None, *, slug="", overrides=None):
+    article = item if isinstance(item, dict) else {}
+    target_slug = _normalize_article_slug(slug)
+    if not target_slug:
+        for field in (
+            "slug", "canonical_slug", "_archived_slug", "_resolved_permalink_slug",
+            "link", "permalink", "url",
+        ):
+            target_slug = _normalize_article_slug(article.get(field))
+            if target_slug:
+                break
+    mapping = overrides if isinstance(overrides, dict) else _load_article_image_overrides()
+    return target_slug, str(mapping.get(target_slug) or "").strip()
+
+
+def _apply_article_image_override(item, *, slug="", overrides=None):
+    """Apply one editorially selected image to visible and social image fields."""
+    if not isinstance(item, dict):
+        return False
+    target_slug, image_url = _article_image_override_for_item(
+        item, slug=slug, overrides=overrides
+    )
+    if not target_slug or not image_url:
+        return False
+    changed = False
+    values = {
+        "image_url": image_url,
+        "source_image_url": image_url,
+        "image_credit": "",
+        "image_source": "manual_article_image_override",
+        "is_fallback_image": False,
+        "rss_social_image_url": image_url,
+        "rss_social_image_kind": "source",
+        "rss_social_image_source": "manual_article_image_override",
+        "social_image_is_source": True,
+        "article_image_override": True,
+    }
+    for field, value in values.items():
+        if item.get(field) != value:
+            item[field] = value
+            changed = True
+    return changed
+
+
+def _apply_article_image_overrides_to_archive(archive, overrides=None):
+    mapping = overrides if isinstance(overrides, dict) else _load_article_image_overrides()
+    changed = 0
+    for row in archive or []:
+        if isinstance(row, dict) and _apply_article_image_override(row, overrides=mapping):
+            changed += 1
+    return changed
+
+
+def _apply_article_image_overrides_to_categories(all_categories, top_cat=None, overrides=None):
+    mapping = overrides if isinstance(overrides, dict) else _load_article_image_overrides()
+    changed = 0
+    seen = set()
+    categories = list(all_categories or [])
+    if isinstance(top_cat, dict):
+        categories.append(top_cat)
+    for category in categories:
+        if not isinstance(category, dict):
+            continue
+        for item in [category.get("hero")] + list(category.get("cards") or []):
+            if not isinstance(item, dict) or id(item) in seen:
+                continue
+            seen.add(id(item))
+            if _apply_article_image_override(item, overrides=mapping):
+                changed += 1
+    return changed
 
 def _canonical_social_category_key(*values):
     """Resolve labels and keys to one stable social-image category key."""
@@ -10788,6 +10919,7 @@ def validate_custom_body_fidelity(hero, page_html):
 
 
 def render_article_page(hero, category_label, category_key, pub_date, slug, related=None):
+    _apply_article_image_override(hero, slug=slug)
     """Render a permanent article page for a single TCT story."""
     # Published + updated timestamps for the byline area. Prefer the article's real
     # first-published time; fall back to the pub_date passed in. "Updated" only shows
@@ -22324,6 +22456,13 @@ def write_archives(all_categories, top_cat):
         "update_context_holds": [],
     }
 
+    _article_override_archive_updates = _apply_article_image_overrides_to_archive(archive)
+    if _article_override_archive_updates:
+        print(
+            "  Article image overrides preserved "
+            f"{_article_override_archive_updates} archive record(s)"
+        )
+
     heroes = [(top_cat["category_key"], top_cat["category_label"], top_cat["hero"])]
     for cat in all_categories:
         if cat["category_key"] != top_cat["category_key"]:
@@ -25960,6 +26099,15 @@ def main():
             f"{_restored_live_source_images} archived source image(s) to live placements"
         )
 
+    _manual_image_overrides = _apply_article_image_overrides_to_categories(
+        all_categories, top_cat
+    )
+    if _manual_image_overrides:
+        print(
+            "  Article image overrides applied to "
+            f"{_manual_image_overrides} live placement(s)"
+        )
+
     # Final fallback images for any promoted heroes without images
     for cat in all_categories:
         hero = cat.get("hero", {})
@@ -26001,6 +26149,8 @@ def main():
             "  Post-publication permalink binding verified "
             f"{_post_publication_rebound} canonical placement(s)"
         )
+
+    _apply_article_image_overrides_to_categories(all_categories, top_cat)
 
     enforce_custom_category_placement(all_categories)
     apply_custom_retirements_to_live(all_categories, top_cat, OUTPUT_DIR)
