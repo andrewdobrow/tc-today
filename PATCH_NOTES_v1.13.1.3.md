@@ -1,35 +1,31 @@
-# v1.13.1.3 — ASCII Permalink Integrity
+# v1.13.1.3 — Generator HTML Alias and Registry Write Batching Hotfix
 
-## Purpose
+## Production failure repaired
 
-Prevent valid articles with accented characters in their headlines from being
-published under a filename that the final permalink-integrity gate cannot resolve.
+The August 6 production run reached the final output stage and then failed in
+`_apply_article_content_overrides_to_outputs()` because the generator imports the
+standard-library HTML module as `html_lib` but the new override code called
+`html.unescape()`.
 
-The failed production run created the counterfeit Pokémon article with a Unicode
-slug while the live-binding layer normalized the same URL to `pok-mon`. The article
-existed, but the live Martin County hero could not prove that its page existed and
-the deployment correctly failed closed.
+The hotfix rewrites only that invalid reference to `html_lib.unescape()` and
+compiles the resulting generator before it can run.
 
-## Included cumulative work
+## Runtime regression repaired
 
-This overlay includes all files from v1.13.1.2 Missing-Person Identity Continuity.
-The retained Ethan Boyd article remains the canonical page and keeps the editorial
-image override at `/images/ethan-boyd.png`.
+The editorial audit was writing the multi-megabyte persistent story registry once
+for nearly every feed candidate. As the registry grew, those writes became about
+1.5 seconds apiece and added several minutes to each production cycle.
 
-## Permanent correction
+The hotfix wraps each category's audit candidates in the registry's existing
+atomic deferred-save context. Decisions remain sequential and deterministic, but
+all registry mutations for the category are persisted in one write instead of one
+write per candidate.
 
-- Generated and custom permalinks now use one shared ASCII-only NFKD normalization.
-- `Pokémon` becomes `pokemon`; `fiancée` becomes `fiancee`.
-- Existing unsafe archive slugs are migrated before identity and category loading.
-- Substantive article HTML is copied to the safe canonical filename.
-- Historical Unicode, ZIP-escaped and old hyphen-normalized spellings become
-  noindex redirects.
-- Archive and redirect metadata are updated atomically.
-- Migration is idempotent and fails closed on a canonical-path collision or a
-  missing substantive article file.
+## Safe application model
 
-## Production repairs
+This overlay does not replace `scripts/generate.py`. The included idempotent patcher
+edits the repository's current generator, preserving newer article, image, custom
+content, and identity changes. Both workflows run the patcher before importing the
+generator.
 
-- The Martin County counterfeit Pokémon article is migrated to:
-  `2026-08-06-martin-county-investigators-warn-of-counterfeit-pokemon-card-scams-after-collect`
-- The older Hobe Sound fiancée article is migrated to an ASCII-safe permalink.
+The successful production workflow will commit the patched generator normally.
