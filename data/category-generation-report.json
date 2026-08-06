@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-06T07:00:51Z",
+  "generated_at": "2026-08-06T22:48:40Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,60 +15,45 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "generated_live": 5,
-      "generation_failed_archive_recovery": 1,
-      "no_publishable_sources": 1,
-      "quality_gate_archive_recovery": 1,
+      "generated_live": 8,
       "sports_zero_candidate_archive_recovery": 1
     },
     "failures": {
-      "article_framing_integrity": 1,
-      "no_sports_hero_candidates": 1,
-      "publication_quality_rejected": 1
+      "no_sports_hero_candidates": 1
     },
-    "model_attempt_count": 9,
-    "model_elapsed_seconds": 411.951,
-    "archive_recovery_requested_count": 4,
+    "model_attempt_count": 8,
+    "model_elapsed_seconds": 284.835,
+    "archive_recovery_requested_count": 1,
     "sports_expired_event_preview_count": 1,
     "contextual_update_lead_rejection_count": 2,
-    "article_framing_rejection_count": 7,
-    "category_eligibility_rejection_count": 7,
-    "published_story_duplicate_suppression_count": 63,
-    "story_aware_update_context_count": 0
+    "article_framing_rejection_count": 2,
+    "category_eligibility_rejection_count": 11,
+    "published_story_duplicate_suppression_count": 28,
+    "story_aware_update_context_count": 2
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 8,
-      "selected_source_count": 1,
+      "status": "generated_live",
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 15,
+      "selected_source_count": 3,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 3.724,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No eligible local government stories available for Treasure Coast"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 3.361,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No local government stories available for Treasure Coast"
+          "elapsed_seconds": 17.002,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 7.085,
-      "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No local government stories available for Treasure Coast",
+      "model_elapsed_seconds": 17.002,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -77,9 +62,48 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 8,
-      "category_eligibility_rejection_count": 7,
+      "category_eligibility_assessed_count": 15,
+      "category_eligibility_rejection_count": 11,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Tradition Lakes K-8 School opening delayed in St. Lucie County - WPBF",
+          "source_url": "https://www.wpbf.com/article/tradition-lakes-k-8-school-opening-delayed-st-lucie-county-port-st-lucie/73370702"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Treasure Coast, Okeechobee County schools adjust to enrollment changes as homeschooling grows - WPBF",
+          "source_url": "https://www.wpbf.com/article/treasure-coast-okeechobee-county-schools-adjust-to-enrollment-changes-as-homeschooling-grows/73370376"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "'Once you showed up, it made a difference': Homeowner gets My Safe Florida Home grant approved",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/region-s-palm-beach-county/once-you-showed-up-it-made-a-difference-homeowner-gets-my-safe-florida-home-grant-approved"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -90,10 +114,25 @@
           "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
           "competing_signals": [
-            "crime_incident:shooting"
+            "crime_incident:police say"
           ],
-          "headline": "Deputies shoot, kill 18-year-old who was attacking father with butcher knife during welfare check",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/palm-beach-county-sheriffs-office-investigating-shooting-near-vista-parkway-in-west-palm-beach"
+          "headline": "Costco closes after electrical fire, Stuart police say",
+          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/costco-closes-after-electrical-fire-stuart-police-say"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "headline": "76-year-old accused of barcode-switching scheme at Port St. Lucie Target store - WPEC",
+          "source_url": "https://cbs12.com/news/local/florida-crime-news-76-year-old-soman-accused-of-barcode-switching-scheme-at-port-st-lucie-target-store-28-barcode-stickers-tj-maxx-publix-burlington-scheme-to-defraud"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -105,8 +144,23 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Royal Palm Beach parents warn school U-turn plan is putting children in danger near elementary school",
-          "source_url": "https://www.wptv.com/news/region-c-palm-beach-county/royal-palm-beach/royal-palm-beach-parents-warn-school-u-turn-plan-is-putting-children-in-danger-near-elementary-school"
+          "headline": "Man claims $10,000 as 'Ultimate Grand Prize' winner in 2026 Florida Python Challenge",
+          "source_url": "https://www.wptv.com/news/protecting-paradise/man-claims-10-000-as-ultimate-grand-prize-winner-in-2026-florida-python-challenge"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "headline": "Deputies arrest man connected to series of burglaries in St. Lucie Village",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/deputies-arrest-man-connected-to-series-of-burglaries-in-st-lucie-village"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -118,8 +172,38 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "WPTV meteorologists visit Wellington Preparatory School to teach students about weather",
-          "source_url": "https://www.wptv.com/weather/weather-news/wptv-meteorologists-visit-wellington-preparatory-school-to-teach-students-about-weather"
+          "headline": "Police identify woman found dead 2 miles off Boca Raton coast as Fort Lauderdale resident",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/boca-raton-delray-beach/police-identify-woman-found-dead-2-miles-off-the-boca-raton-coast-as-fort-lauderdale-resident"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "headline": "Road rage crash in Port St. Lucie leaves motorcyclist seriously injured, driver arrested",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/road-rage-crash-in-port-st-lucie-leaves-motorcyclist-seriously-injured-driver-arrested"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "sports_or_recreation:tournament"
+          ],
+          "headline": "WHERE'S WALTER? Crashing band camp at Vero Beach High School",
+          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-crashing-band-camp-at-vero-beach-high-school"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -131,78 +215,19 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Palm Beach Gardens neighborhood divided over plan to remove hundreds of mature live oak trees",
-          "source_url": "https://www.wptv.com/news/region-n-palm-beach-county/palm-beach-gardens/palm-beach-gardens-neighborhood-divided-over-plan-to-remove-hundreds-of-mature-live-oak-trees"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Boys and Girls Club of Palm Beach County distributes backpacks to students ahead of new school year",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/boys-and-girls-club-of-palm-beach-county-distributes-backpacks-to-students-ahead-of-new-school-year"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Early voting information for Palm Beach, Okeechobee counties and the Treasure Coast - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/05/early-voting-information-palm-beach-okeechobee-counties-treasure-coast/"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "St. Lucie County - Week of Aug. 7 - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/community_page/calendar/st-lucie-county---week-of-aug-7/article_b5570146-c1f5-56a1-bd56-64114e1cb2a3.html"
+          "headline": "Florida drivers: Know these school zone rules before classes resume",
+          "source_url": "https://www.wptv.com/news/education/back-to-school/florida-drivers-know-these-school-zone-rules-before-classes-resume"
         }
       ],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
-          "source_headline": "Collectors lose $1,200 in two Martin County counterfeit Pokémon card deals - cw34.com",
-          "source_url": "https://cw34.com/news/local/pokemon-card-scam-counterfeit-cards-facebook-market-place-trading-cards-collectibles-pikachu-zelle-1200-deals-arranged-martin-county-sheriffs-office-florida-news",
-          "editorial_story_id": "story_002355",
-          "canonical_slug": "2026-08-06-martin-county-investigators-warn-of-counterfeit-pokemon-card-scams-after-collect",
-          "canonical_headline": "Martin County investigators warn of counterfeit Pokémon card scams after collectors lose $1,200",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Florida's property-tax amendment faces growing opposition with little organized support to counter it - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxNTUdxTlpIbU9NM1YtNkRLdDdwalIyMHdaNGcxUlAzR0hxb1Z0WVNCN1hIMDJyOWk0WXZLcVpTaksyRWliVVFjeFIxSkI1YVhoWElQZG1SNXJXZUFUR1BwOGJDNDU5eWZmWWZKVzNTS2pTcll3SVJRNFVWNkh2c0RleEZqM1V5cHZHajREeVV6SkVBOTBMN0p5cW5QcG9vSTZjRlZyblU2VHdLLVlsZE5TVFMxNDZiVkNmeUJxLTNiYVlYZnNlREoySmsyMjZCRTRoYU1Ga1NSZ0JURGFiMFHSAd4BQVVfeXFMTU1HcU5aSG1PTTNWLTZES3Q3cGpSMjB3WjRnMVJQM0dIcW9WdFlTQjdYSDAycjlpNFl2S3FaU2pLMkVpYlVRY3hSMUpCNWFYaFhJUGRtUjVyV2VBVEdQcDhiQzQ1OXlmZllmSlczU0tqU3JZd0lSUTRVVjZIdnNEZXhGajNVeXB2R2o0RHlVekpFQTkwTDdKeXFuUHBvb0k2Y0ZWcm5VNlR3Sy1ZbGROU1RTMTQ2YlZDZnlCcS0zYmFZWGZzZURKMkprMjI2QkU0aGFNRmtTUmdCVERhYjBR",
-          "editorial_story_id": "story_002390",
-          "canonical_slug": "2026-08-06-florida-property-tax-amendment-draws-organized-opposition-while-supporters-remai",
-          "canonical_headline": "Florida property tax amendment draws organized opposition while supporters remain quiet",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Vero Beach moves closer to rebuilding Humiston Beach boardwalk destroyed by Hurricane Nicole",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-moves-closer-to-rebuilding-humiston-beach-boardwalk-destroyed-by-hurricane-nicole",
-          "editorial_story_id": "story_002356",
-          "canonical_slug": "2026-08-06-vero-beach-moves-forward-on-47-million-humiston-beach-boardwalk-reconstruction-f",
-          "canonical_headline": "Vero Beach moves forward on $4.7 million Humiston Beach boardwalk reconstruction four years after Hurricane Nicole",
+          "source_headline": "Firefighters battle blaze at St. Lucie County home - WPEC",
+          "source_url": "https://cbs12.com/news/local/firefighters-battled-home-blaze-melaleuca-boulevard-detached-structure-burning-vehicle-st-lucie-county-fire-district-florida-news",
+          "editorial_story_id": "story_002416",
+          "canonical_slug": "2026-08-06-firefighters-battle-blaze-at-st-lucie-county-home-on-melaleuca-boulevard",
+          "canonical_headline": "Firefighters battle blaze at St. Lucie County home on Melaleuca Boulevard",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -218,26 +243,6 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Lawmaker challenges Causeway Cove development's Live Local Act compliance - WPTV",
-          "source_url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxPS0E3VXhVbHFEOUlhV3N3OFRlWG01WUp4SGdoTjNRS2E2NnNsLVhxcldGd1FNSk1xUUJuQzFUa3c3RmFnUGNQd2hDUkhJVU4za1Y3NGRYcjRnWEJwcy1TdWlick1RYjl0NmxXbGRjRTIwWmd6UjJrN3F1ZFNJbHlaVWRTUzRQM1lsNWhjMkx5RkY5U0diZEZ3YjhCb3VfN0hFQkFVUmJRUW9PMVZZZTNhdGVwaUtfX0luLVpvQzRXYUszRkRvWDZJcHV2WHpSY24tRUdOTDFKVkpHVFFPMzE2Mw",
-          "editorial_story_id": "story_002365",
-          "canonical_slug": "2026-08-06-state-lawmaker-challenges-fort-pierce-causeway-cove-development-over-zoning-comp",
-          "canonical_headline": "State lawmaker challenges Fort Pierce Causeway Cove development over zoning compliance",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Lawmaker challenges Causeway Cove development's Live Local Act compliance",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-lawmaker-challenges-causeway-cove-developments-live-local-act-compliance",
-          "editorial_story_id": "story_002365",
-          "canonical_slug": "2026-08-06-state-lawmaker-challenges-fort-pierce-causeway-cove-development-over-zoning-comp",
-          "canonical_headline": "State lawmaker challenges Fort Pierce Causeway Cove development over zoning compliance",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
           "source_headline": "St. Lucie County schools open Aug. 10: What families need to know for the new year - WFLX",
           "source_url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPYmhncW80OGJQaERBSk9QYzkxamFwanloczNvYTJxazNGLUJ0MUFSNGlrZXZWOF9ZWHZKUHEtYzhTc0NRcXFpbS0zUEhHdTgtX0l3eEpKLUJmLVM1NG93cUgteFpTYllEc2NZeDZNR3VaNzVuT09yY09jbVJ5dVcwWkRMUkdkZ2RfcmV3YUpBUGtwWDRYYmVGRzNIVGVicGQ5eTZRMFd2ZjVDZU0",
           "editorial_story_id": "story_002246",
@@ -248,48 +253,30 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "King's Landing developer says it's $15 million short, asks Fort Pierce for six more months - cw34.com",
-          "source_url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQUUVkOTBQMi14Y19oSVdpQzlSRW5qNjBWNlFnMm5sWjIxT1RBZzJMUzJoclU4YWlnQXh4enlab0hjZUQxOXpPOGduZE5tM3ZoMzFVR291S0Rxcmtwcy1VaERqdHNCdEw3eUFXdk5Zc1Z1ZHpxWXNDZGRzaWM4QUNoN28zeUNqWkhlNnY2cWMwNFNqZkw2eWJ3V0VvR2FOdXo5OVZsbWZDVms0Y2VXZ1ltUFdoeFF6VlN4U3lGSDE4aw",
-          "editorial_story_id": "story_002361",
-          "canonical_slug": "2026-08-06-fort-pierce-kings-landing-developer-asks-city-for-six-more-months-reports-15-mil",
-          "canonical_headline": "Fort Pierce King's Landing developer asks city for six more months, reports $15 million funding shortfall",
+          "source_headline": "Early voting information for Palm Beach, Okeechobee counties and the Treasure Coast - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/05/early-voting-information-palm-beach-okeechobee-counties-treasure-coast",
+          "editorial_story_id": "story_002377",
+          "canonical_slug": "2026-08-06-early-voting-begins-saturday-across-martin-st-lucie-indian-river-counties-for-au",
+          "canonical_headline": "Early voting begins Saturday across Martin, St. Lucie, Indian River counties for August primary",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Back to School: Tradition Lakes K-8 prepares to open in St. Lucie County - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-back-to-school-tradition-lakes-k-8-st-lucie-county/73344051",
-          "editorial_story_id": "story_002246",
-          "canonical_slug": "2026-08-04-st-lucie-county-schools-open-aug-10-with-new-tradition-lakes-k-8-campus-and-ai-c",
-          "canonical_headline": "St. Lucie County schools open Aug. 10 with new Tradition Lakes K-8 campus and AI courses",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Indian River County - Week of Aug. 7 - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/community_page/calendar/indian-river-county---week-of-aug-7/article_7a3b7a1f-5b89-566f-a286-8ffac79bbc71.html",
-          "editorial_story_id": "story_002439",
-          "canonical_slug": "2026-08-06-vero-beach-museum-of-art-hosts-free-second-saturday-events-aug-8",
-          "canonical_headline": "Vero Beach Museum of Art hosts free Second Saturday events Aug. 8",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 9.632
+      "live_hero_headline": "Fort Pierce Kings Landing developers seek $15 million to complete Marriott hotel after budget shortfall",
+      "generated_card_count": 0,
+      "elapsed_seconds": 47.614
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 16,
+      "fresh_candidate_count": 28,
+      "publishable_source_count": 18,
       "selected_source_count": 12,
       "cache_hit": false,
       "archive_recovery_requested": false,
@@ -298,226 +285,34 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 78.825,
+          "elapsed_seconds": 65.372,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 78.825,
+      "model_elapsed_seconds": 65.372,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 1,
-      "contextual_update_lead_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 103,
-          "baseline_anchor": "fatality",
-          "baseline_present": false,
-          "baseline_anchor_present": false,
-          "baseline_details_present": true,
-          "baseline_context_hits": [],
-          "baseline_context_required": 0,
-          "canonical_context_available": false,
-          "canonical_context_headline": "",
-          "novelty_anchor": "disclosure",
-          "novelty_present": true,
-          "novelty_token_hits": [
-            "call",
-            "lucie",
-            "police",
-            "port"
-          ],
-          "missing": [
-            "original_event_context_missing"
-          ],
-          "source_title": "Port St. Lucie police release 911 call in fatal shooting of PBSO communications officer - WFLX",
-          "headline": "Port St. Lucie neighbor describes years of fighting before fatal shooting on SE Oxmoor Terrace"
-        }
-      ],
-      "article_framing_rejection_count": 2,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Infant death investigation reveals messages warning father baby was starving",
-          "missing": [
-            "generated_copy_drifted_from_source_focus"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Infant death investigation reveals messages warning father baby was starving",
-            "lead": "Text messages obtained during the investigation into the death of a 3-month-old infant in Fort Pierce showed family members repeatedly warning both parents that something was wrong. On August 12, 2025, messages sent to Nicole Maxwell stated, 'The baby's got nothing to eat. I don't know what to give him.' Days later, additional messages warned that the baby was sick, covered in marks and sleeping constantly. Other messages urged Jason Gunter to come to Florida because something was wrong with the infant. According to detectives, neither parent took action that resulted in immediate medical care for the child.",
-            "lead_word_count": 102,
-            "headline_overlap_ratio": 0.667,
-            "new_context_token_count": 57,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": true,
-            "headline": "Infant death investigation reveals messages warning father baby was starving",
-            "lead": "Text messages obtained during the investigation into the death of a 3-month-old infant in Fort Pierce showed family members repeatedly warning both parents that something was wrong. On August 12, 2025, messages sent to Nicole Maxwell stated, 'The baby's got nothing to eat. I don't know what to give him.' Days later, additional messages warned that the baby was sick, covered in marks and sleeping constantly. Other messages urged Jason Gunter to come to Florida because something was wrong with the infant. According to detectives, neither parent took action that resulted in immediate medical care for the child.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [],
-            "lead_jurisdictions": [
-              "fort_pierce"
-            ],
-            "missing_jurisdictions": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": []
-          },
-          "source_focus": {
-            "required": true,
-            "passed": false,
-            "generated_headline": "Infant death investigation reveals messages warning father baby was starving",
-            "generated_lead": "Text messages obtained during the investigation into the death of a 3-month-old infant in Fort Pierce showed family members repeatedly warning both parents that something was wrong. On August 12, 2025, messages sent to Nicole Maxwell stated, 'The baby's got nothing to eat.",
-            "source_title": "US Marshals arrest baby’s father in connection with Fort Pierce malnutrition death - cw34.com",
-            "source_lead": "A fourth person has been arrested in connection with the death of a 3-month-old baby who allegedly died from severe dehydration and malnutrition. Lucie County Sheriff's Office announced Tuesday that the child's biological father, 45-year-old Jason Gunter, was taken into custody by the United States Marshals Service at his home in Mechanicsville, Virginia.",
-            "title_similarity": {
-              "score": 0.3056,
-              "overlap": 0.3333,
-              "jaccard": 0.1667,
-              "sorted_sequence": 0.4444,
-              "ordered_sequence": 0.2614,
-              "shared_token_count": 3.0
-            },
-            "lead_token_overlap": 0.129,
-            "missing": [
-              "generated_copy_drifted_from_source_focus"
-            ]
-          }
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Autopsy reveals Fort Pierce infant lost over two pounds before death from malnutrition",
-          "missing": [
-            "generated_copy_drifted_from_source_focus"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Autopsy reveals Fort Pierce infant lost over two pounds before death from malnutrition",
-            "lead": "An autopsy revealed the extent of the infant's condition before his death at HCA Florida Lawnwood Hospital in Fort Pierce on August 20, 2025. According to the Medical Examiner's Office, Robert Gunter weighed 11 pounds, 12 ounces at a pediatric appointment on July 24, 2025. Less than a month later, at the time of his death, he weighed only 9 pounds, 3.5 ounces, placing him below the first percentile for children his age.",
-            "lead_word_count": 76,
-            "headline_overlap_ratio": 0.583,
-            "new_context_token_count": 39,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": true,
-            "headline": "Autopsy reveals Fort Pierce infant lost over two pounds before death from malnutrition",
-            "lead": "An autopsy revealed the extent of the infant's condition before his death at HCA Florida Lawnwood Hospital in Fort Pierce on August 20, 2025. According to the Medical Examiner's Office, Robert Gunter weighed 11 pounds, 12 ounces at a pediatric appointment on July 24, 2025. Less than a month later, at the time of his death, he weighed only 9 pounds, 3.5 ounces, placing him below the first percentile for children his age.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "fort_pierce"
-            ],
-            "lead_jurisdictions": [
-              "fort_pierce"
-            ],
-            "missing_jurisdictions": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": []
-          },
-          "source_focus": {
-            "required": true,
-            "passed": false,
-            "generated_headline": "Autopsy reveals Fort Pierce infant lost over two pounds before death from malnutrition",
-            "generated_lead": "An autopsy revealed the extent of the infant's condition before his death at HCA Florida Lawnwood Hospital in Fort Pierce on August 20, 2025. According to the Medical Examiner's Office, Robert Gunter weighed 11 pounds, 12 ounces at a pediatric appointment on July 24, 2025.",
-            "source_title": "Fourth arrest made in year-old St. Lucie County child abuse case - Hometown News Treasure Coast",
-            "source_lead": "Jason Gunter, 45, was arrested by the U.S. Marshals Service at his home in Mechanicsville, Va., on Aug.",
-            "title_similarity": {
-              "score": 0.2228,
-              "overlap": 0.0,
-              "jaccard": 0.0,
-              "sorted_sequence": 0.3418,
-              "ordered_sequence": 0.2532,
-              "shared_token_count": 0.0
-            },
-            "lead_token_overlap": 0.182,
-            "missing": [
-              "generated_copy_drifted_from_source_focus"
-            ]
-          }
-        }
-      ],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 16,
+      "category_eligibility_assessed_count": 18,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "Vero Beach moves closer to rebuilding Humiston Beach boardwalk destroyed by Hurricane Nicole",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-moves-closer-to-rebuilding-humiston-beach-boardwalk-destroyed-by-hurricane-nicole",
-          "editorial_story_id": "story_002356",
-          "canonical_slug": "2026-08-06-vero-beach-moves-forward-on-47-million-humiston-beach-boardwalk-reconstruction-f",
-          "canonical_headline": "Vero Beach moves forward on $4.7 million Humiston Beach boardwalk reconstruction four years after Hurricane Nicole",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Lawmaker challenges Causeway Cove development's Live Local Act compliance",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-lawmaker-challenges-causeway-cove-developments-live-local-act-compliance",
-          "editorial_story_id": "story_002365",
-          "canonical_slug": "2026-08-06-state-lawmaker-challenges-fort-pierce-causeway-cove-development-over-zoning-comp",
-          "canonical_headline": "State lawmaker challenges Fort Pierce Causeway Cove development over zoning compliance",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Early voting information for Palm Beach, Okeechobee counties and the Treasure Coast",
-          "source_url": "https://www.wptv.com/news/political/elections-local/early-voting-dates-in-palm-beach-okeechobee-counties-and-the-treasure-coast",
+          "source_headline": "Early voting information for Palm Beach, Okeechobee counties and the Treasure Coast - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/05/early-voting-information-palm-beach-okeechobee-counties-treasure-coast?outputType=amp",
           "editorial_story_id": "story_002377",
           "canonical_slug": "2026-08-06-early-voting-begins-saturday-across-martin-st-lucie-indian-river-counties-for-au",
           "canonical_headline": "Early voting begins Saturday across Martin, St. Lucie, Indian River counties for August primary",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Fort Pierce police investigate hit-and-run crash involving 2 children in crosswalk",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-police-investigate-hit-and-run-crash-involving-2-children-in-crosswalk",
-          "editorial_story_id": "story_002380",
-          "canonical_slug": "2026-08-06-fort-pierce-police-seek-driver-in-hit-and-run-that-injured-two-children-in-cross",
-          "canonical_headline": "Fort Pierce police seek driver in hit-and-run that injured two children in crosswalk",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -529,138 +324,50 @@
           "canonical_headline": "Fort Pierce police seek driver in hit-and-run that injured two children in crosswalk",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Indian River County Sheriff's Office seeks help finding missing 24-year-old man - WPEC",
-          "source_url": "https://cbs12.com/news/local/indian-river-county-sheriffs-office-seeks-help-finding-missing-24-year-old-man-florida-news-missing-person-ircso",
-          "editorial_story_id": "story_002291",
-          "canonical_slug": "2026-08-05-indian-river-county-sheriffs-office-searches-for-missing-24-year-old-man-last-se",
-          "canonical_headline": "Indian River County Sheriff's Office searches for missing 24-year-old man last seen Tuesday afternoon",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "surface": "hero",
-          "headline": "Port St. Lucie police release 911 call from domestic murder-suicide on SE Oxmoor Terrace",
-          "editorial_story_id": "story_001880",
-          "canonical_slug": "2026-08-02-elizabeth-ortega-killed-ralph-varela-sr-dead-in-port-st-lucie-murder-suicide-on",
-          "canonical_headline": "Port St. Lucie police release 911 call in fatal domestic shooting of Palm Beach Sheriff's Office employee",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Virginia man arrested as fourth suspect in St. Lucie County infant death case",
-      "generated_card_count": 2,
-      "elapsed_seconds": 83.325
+      "live_hero_headline": "Port St. Lucie police release 911 call from domestic shooting that killed PBSO communications officer",
+      "generated_card_count": 6,
+      "elapsed_seconds": 79.496
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
-      "status": "quality_gate_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 16,
-      "publishable_source_count": 9,
-      "selected_source_count": 6,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 16,
+      "selected_source_count": 12,
       "cache_hit": false,
-      "archive_recovery_requested": true,
+      "archive_recovery_requested": false,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 59.977,
+          "elapsed_seconds": 78.966,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 59.977,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 78.966,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 1,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Palm Beach County schools lost 7,000 students and $100 million in budget as November referendum approaches",
-          "missing": [
-            "headline_money_claim_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Palm Beach County schools lost 7,000 students and $100 million in budget as November referendum approaches",
-            "lead": "Superintendent Mike Burke said the budget and enrollment go together in lock step, explaining how state funding formulas tie district revenue directly to student counts. The district is funded on a per student basis and when the enrollment goes down, the money goes down, Burke said. This year's projected decline of 2,900 additional students threatens to compound existing financial pressures, affecting everything from teacher compensation to program offerings.",
-            "lead_word_count": 70,
-            "headline_overlap_ratio": 0.154,
-            "new_context_token_count": 43,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Palm Beach County schools lost 7,000 students and $100 million in budget as November referendum approaches",
-            "lead": "Superintendent Mike Burke said the budget and enrollment go together in lock step, explaining how state funding formulas tie district revenue directly to student counts. The district is funded on a per student basis and when the enrollment goes down, the money goes down, Burke said. This year's projected decline of 2,900 additional students threatens to compound existing financial pressures, affecting everything from teacher compensation to program offerings.",
-            "headline_money_claims": [
-              100000000
-            ],
-            "lead_money_claims": [],
-            "missing_money_claims": [
-              100000000
-            ],
-            "headline_jurisdictions": [],
-            "lead_jurisdictions": [],
-            "missing_jurisdictions": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_money_claim_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "Palm Beach County schools lost 7,000 students and $100 million in budget as November referendum approaches",
-            "generated_lead": "Superintendent Mike Burke said the budget and enrollment go together in lock step, explaining how state funding formulas tie district revenue directly to student counts. The district is funded on a per student basis and when the enrollment goes down, the money goes down, Burke said.",
-            "source_title": "Palm Beach County schools face enrollment crisis as budget pressures mount ahead of referendum",
-            "source_lead": "Palm Beach County schools face declining enrollment affecting budget, teacher pay and staffing as voters prepare for November property tax referendum.WATCH BELOW: 'The budget and enrollment go together in lock step,' Superintendent Mike Burke tells WPTV's Joel LopezAs Palm Beach County students return to classrooms Monday, the School District of Palm Beach County confronts a mounting enrollment crisis that has already slashed $100 million from its budget, according to Superintendent Mike Burke. The district faces another potential decline of 2,900",
-            "title_similarity": {
-              "score": 0.5097,
-              "overlap": 0.5,
-              "jaccard": 0.3,
-              "sorted_sequence": 0.5902,
-              "ordered_sequence": 0.5792,
-              "shared_token_count": 6.0
-            },
-            "lead_token_overlap": 0.357,
-            "missing": []
-          }
-        }
-      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 16,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -681,81 +388,23 @@
           "canonical_headline": "State lawmaker challenges Fort Pierce Causeway Cove development over zoning compliance",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Port St. Lucie police release 911 call in fatal shooting of PBSO communications officer",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-release-911-call-in-fatal-shooting-of-pbso-communications-officer",
-          "editorial_story_id": "story_001880",
-          "canonical_slug": "2026-08-02-elizabeth-ortega-killed-ralph-varela-sr-dead-in-port-st-lucie-murder-suicide-on",
-          "canonical_headline": "Port St. Lucie police release 911 call in fatal domestic shooting of Palm Beach Sheriff's Office employee",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Early voting information for Palm Beach, Okeechobee counties and the Treasure Coast",
-          "source_url": "https://www.wptv.com/news/political/elections-local/early-voting-dates-in-palm-beach-okeechobee-counties-and-the-treasure-coast",
-          "editorial_story_id": "story_002377",
-          "canonical_slug": "2026-08-06-early-voting-begins-saturday-across-martin-st-lucie-indian-river-counties-for-au",
-          "canonical_headline": "Early voting begins Saturday across Martin, St. Lucie, Indian River counties for August primary",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Fort Pierce police investigate hit-and-run crash involving 2 children in crosswalk",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-police-investigate-hit-and-run-crash-involving-2-children-in-crosswalk",
-          "editorial_story_id": "story_002380",
-          "canonical_slug": "2026-08-06-fort-pierce-police-seek-driver-in-hit-and-run-that-injured-two-children-in-cross",
-          "canonical_headline": "Fort Pierce police seek driver in hit-and-run that injured two children in crosswalk",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "AI data centers spark noise, environmental concerns as South Florida communities weigh moratoriums",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/ai-data-centers-spark-noise-environmental-concerns-as-south-florida-communities-weigh-moratoriums",
-          "editorial_story_id": "story_002286",
-          "canonical_slug": "2026-08-05-south-florida-communities-weigh-data-center-moratoriums-as-residents-report-cons",
-          "canonical_headline": "South Florida communities weigh data center moratoriums as residents report constant noise from cooling fans",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Martin County's REACH Center opens workforce training programs for students and career changers",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-countys-reach-center-opens-workforce-training-programs-for-students-and-career-changers",
-          "editorial_story_id": "story_002241",
-          "canonical_slug": "2026-08-04-martin-county-reach-center-launches-workforce-training-programs-in-aviation-heal",
-          "canonical_headline": "Martin County REACH Center launches workforce training programs in aviation, healthcare, and manufacturing",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "St. Lucie County schools open Aug. 10: What families need to know for the new year",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/st-lucie-county-schools-open-aug-10-what-families-need-to-know-for-the-new-year",
-          "editorial_story_id": "story_002246",
-          "canonical_slug": "2026-08-04-st-lucie-county-schools-open-aug-10-with-new-tradition-lakes-k-8-campus-and-ai-c",
-          "canonical_headline": "St. Lucie County schools open Aug. 10 with new Tradition Lakes K-8 campus and AI courses",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 76.232
+      "live_hero_headline": "Fort Pierce Kings Landing developers seek $15 million to finish Marriott project as city commissioners debate reclaiming property",
+      "generated_card_count": 2,
+      "elapsed_seconds": 88.895
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "sports_zero_candidate_archive_recovery",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 9,
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 8,
       "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -786,7 +435,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 2,
@@ -814,16 +463,16 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 3.009
+      "elapsed_seconds": 10.381
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 9,
-      "selected_source_count": 9,
+      "fresh_candidate_count": 17,
+      "publishable_source_count": 10,
+      "selected_source_count": 10,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -831,11 +480,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.634,
+          "elapsed_seconds": 14.285,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 12.634,
+      "model_elapsed_seconds": 14.285,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -846,7 +495,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 10,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 4,
@@ -898,21 +547,28 @@
       "budget_seconds": 180.0,
       "live_hero_headline": "",
       "generated_card_count": 0,
-      "elapsed_seconds": 14.882
+      "elapsed_seconds": 18.393
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "no_publishable_sources",
+      "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 0,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 12.765,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 12.765,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -923,34 +579,27 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "florida",
-          "source_headline": "Florida's property-tax amendment faces growing opposition with little organized support to counter it",
-          "source_url": "https://www.wptv.com/news/state/floridas-property-tax-amendment-faces-growing-opposition-with-little-organized-support-to-counter-it",
-          "editorial_story_id": "story_002390",
-          "canonical_slug": "2026-08-06-florida-property-tax-amendment-draws-organized-opposition-while-supporters-remai",
-          "canonical_headline": "Florida property tax amendment draws organized opposition while supporters remain quiet",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 2.215
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Tom Rahill wins $10,000 grand prize in 2026 Florida Python Challenge after removing 96 snakes",
+      "generated_card_count": 0,
+      "elapsed_seconds": 36.175
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 6,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -958,44 +607,140 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 8.171,
+          "elapsed_seconds": 43.331,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 8.171,
+      "model_elapsed_seconds": 43.331,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 75,
+          "baseline_anchor": "",
+          "baseline_present": false,
+          "baseline_anchor_present": true,
+          "baseline_details_present": false,
+          "baseline_context_hits": [
+            "animals"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "animal",
+            "case",
+            "humane",
+            "society"
+          ],
+          "missing": [
+            "original_event_details_missing"
+          ],
+          "source_title": "Humane Society seeks urgent help after Martin County's largest animal hoarding case - WPEC",
+          "headline": "Humane Society seeks help after Martin County animal hoarding case brings in 108 animals"
+        }
+      ],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Boat on dock lift catches fire in Stuart on Northwest Fork Road",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Boat on dock lift catches fire in Stuart on Northwest Fork Road",
+            "lead": "Martin County Fire Rescue crews responded just before 3 p.m. Wednesday to the 1600 block of Northwest Fork Road after reports of a boat on fire. When firefighters arrived, they found thick black smoke billowing from a small boat sitting on a lift at a residential dock. Crews located the nearest fire hydrant and quickly knocked down the flames before the fire could spread.",
+            "lead_word_count": 65,
+            "headline_overlap_ratio": 0.778,
+            "new_context_token_count": 33,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Boat on dock lift catches fire in Stuart on Northwest Fork Road",
+            "lead": "Martin County Fire Rescue crews responded just before 3 p.m. Wednesday to the 1600 block of Northwest Fork Road after reports of a boat on fire. When firefighters arrived, they found thick black smoke billowing from a small boat sitting on a lift at a residential dock. Crews located the nearest fire hydrant and quickly knocked down the flames before the fire could spread.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "stuart"
+            ],
+            "lead_jurisdictions": [
+              "martin_county"
+            ],
+            "missing_jurisdictions": [
+              "stuart"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Boat on dock lift catches fire in Stuart on Northwest Fork Road",
+            "generated_lead": "Martin County Fire Rescue crews responded just before 3 p.m. Wednesday to the 1600 block of Northwest Fork Road after reports of a boat on fire.",
+            "source_title": "Boat on dock lift catches fire in Stuart; firefighters quickly contain flames - WPEC",
+            "source_lead": "Firefighters quickly extinguished a boat fire Wednesday afternoon at a home in Stuart, preventing the flames from spreading, officials said. According to Martin County Fire Rescue , crews responded just before 3 p.m. to the 1600 block of Northwest Fork Road after reports of a boat on fire.",
+            "title_similarity": {
+              "score": 0.5797,
+              "overlap": 0.6667,
+              "jaccard": 0.4286,
+              "sorted_sequence": 0.5891,
+              "ordered_sequence": 0.6202,
+              "shared_token_count": 6.0
+            },
+            "lead_token_overlap": 1.0,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
-          "source_headline": "Martin County deputies seek help finding missing autistic teen last seen in Palm City - WPEC",
+          "source_headline": "Martin County deputies locate missing autistic teen last seen in Palm City - WPEC",
           "source_url": "https://cbs12.com/news/local/martin-county-deputies-seek-autistic-missing-14-year-old-boy-last-seen-grand-oaks-living-facility-coquina-cove-florida-news",
           "editorial_story_id": "story_002406",
           "canonical_slug": "2026-08-06-martin-county-sheriffs-office-seeks-public-help-finding-missing-14-year-old-auti",
           "canonical_headline": "Missing 14-year-old autistic boy Ethan Boyd safely located, Martin County sheriff says",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Flood Advisory for Martin County - WPEC",
-          "source_url": "https://cbs12.com/news/local/flood-advisory-for-martin-county-heavy-rain-thunderstorm-lightning-lake-storms-okeechobee",
-          "editorial_story_id": "story_002407",
-          "canonical_slug": "2026-08-06-flood-advisory-issued-for-western-martin-county-through-730-pm-thursday",
-          "canonical_headline": "Flood Advisory issued for western Martin County through 7:30 p.m. Thursday",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1020,51 +765,67 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Early voting information for Palm Beach, Okeechobee counties and the Treasure Coast",
-          "source_url": "https://www.wptv.com/news/political/elections-local/early-voting-dates-in-palm-beach-okeechobee-counties-and-the-treasure-coast",
-          "editorial_story_id": "story_002377",
-          "canonical_slug": "2026-08-06-early-voting-begins-saturday-across-martin-st-lucie-indian-river-counties-for-au",
-          "canonical_headline": "Early voting begins Saturday across Martin, St. Lucie, Indian River counties for August primary",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "Martin County deputies seek help finding missing autistic teen last seen in Palm City - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxQS3ZiLUxtQzJrVkVzTnlyazlLR28zS2R5TEQ5TUxrTUhLQ1p3Q25Tb3J1YlFiMUthYWJxcnFLU1lNWWV2QklOeXFyTWNTVTFvOTFDVVdMYnBmTjh6aE1UQTZhNFViWFRlQlV4Y1oyTUJfMHJPMUN5c3pFZUpVYnpBOXdkVm9DWUxIYVh0RjF2eW53WlNXd2lJSHluTnljV3JFVlNzejNtZzB1ZEM1cG1pa0ZsUkMwRVVacUFRS2U3RWhmbDgzenF2SlR6NE0ybHUxLU9nWFRFTEJ0QV9GSTlyZE1TY2xPMmdpZHJibWpPdmQ",
+          "editorial_story_id": "story_002406",
+          "canonical_slug": "2026-08-06-martin-county-sheriffs-office-seeks-public-help-finding-missing-14-year-old-auti",
+          "canonical_headline": "Missing 14-year-old autistic boy Ethan Boyd safely located, Martin County sheriff says",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Humane Society seeks urgent help after Martin County's largest animal hoarding case - WPEC",
+          "source_url": "https://cbs12.com/news/local/humane-society-treasure-coast-seeks-urgent-help-after-martin-countys-largest-animal-hoarding-case-adoptions-foster-donations-postal-worker-route-influx-animal-welfare-checks",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:story_000003",
+            "source:https://cbs12.com/news/local/humane-society-treasure-coast-seeks-urgent-help-after-martin-countys-largest-animal-hoarding-case-adoptions-foster-donations-postal-worker-route-influx-animal-welfare-checks"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "North Carolina family run off road near I-95 in Martin County during chase",
-      "generated_card_count": 0,
-      "elapsed_seconds": 11.05
+      "live_hero_headline": "Costco on Kanner Highway in Stuart closes after electrical fire, reopens with limited service",
+      "generated_card_count": 2,
+      "elapsed_seconds": 65.161
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 14,
-      "publishable_source_count": 8,
-      "selected_source_count": 8,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 10,
+      "selected_source_count": 10,
       "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 88.699,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Father arrested in Virginia in Fort Pierce infant malnutrition death investigation"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 91.3,
-          "elapsed_seconds": 75.526,
+          "elapsed_seconds": 41.786,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 164.225,
+      "model_elapsed_seconds": 41.786,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1076,34 +837,26 @@
           "required": true,
           "passed": false,
           "story_form": "update",
-          "lead_word_count": 97,
+          "lead_word_count": 70,
           "baseline_anchor": "fatality",
-          "baseline_present": false,
-          "baseline_anchor_present": false,
+          "baseline_present": true,
+          "baseline_anchor_present": true,
           "baseline_details_present": true,
           "baseline_context_hits": [],
           "baseline_context_required": 0,
           "canonical_context_available": false,
           "canonical_context_headline": "",
           "novelty_anchor": "disclosure",
-          "novelty_present": true,
+          "novelty_present": false,
           "novelty_token_hits": [
-            "call",
-            "lucie",
-            "murder",
-            "neighbor",
             "police",
-            "port",
-            "shot",
-            "suicide",
-            "think",
-            "weekend"
+            "shot"
           ],
           "missing": [
-            "original_event_context_missing"
+            "new_development_missing"
           ],
           "source_title": "'I think my neighbor was shot': Port St. Lucie police release 911 call in weekend murder-suicide - WPBF",
-          "headline": "Port St. Lucie police release 911 call in weekend murder-suicide"
+          "headline": "Port St. Lucie police release 911 call in Southeast Oxmoor Terrace murder-suicide"
         }
       ],
       "article_framing_rejection_count": 1,
@@ -1112,18 +865,18 @@
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Fort Pierce woman faces fraud charges as search warrant executed at Indian River Estates home",
+          "headline": "St. Lucie County deputies arrest man connected to series of burglaries in St. Lucie Village",
           "missing": [
             "headline_jurisdiction_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Fort Pierce woman faces fraud charges as search warrant executed at Indian River Estates home",
-            "lead": "Crime scene investigators were seen outside Grasso's home in the Indian River Estates neighborhood near Sunset Boulevard as deputies served a search warrant connected to the ongoing Southern Truss fraud investigation. Grasso, who worked as the company's bookkeeper and comptroller, was arrested July 16 along with Sheri Lynn Harrs and Tina Marie Mejia. Grasso faces charges of first-degree grand theft of $100,000 or more, organized fraud of $50,000 or more, racketeering and money laundering of $100,000 or more. Harrs and Mejia each face charges of grand theft, organized fraud and racketeering. Grasso has pleaded not guilty, and her bond was set at a combined $1.15 million.",
-            "lead_word_count": 113,
-            "headline_overlap_ratio": 0.692,
-            "new_context_token_count": 55,
+            "headline": "St. Lucie County deputies arrest man connected to series of burglaries in St. Lucie Village",
+            "lead": "Deputies responded Wednesday to the 2900 block of North Indian River Drive after receiving a report of a suspicious person. Upon arrival, deputies located Daniel Eugene Holmes, 42, who was going through trash near the roadway. Deputies said they also observed a bicycle in Holmes' possession with fishing equipment attached to it.",
+            "lead_word_count": 52,
+            "headline_overlap_ratio": 0.1,
+            "new_context_token_count": 35,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -1137,19 +890,17 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "Fort Pierce woman faces fraud charges as search warrant executed at Indian River Estates home",
-            "lead": "Crime scene investigators were seen outside Grasso's home in the Indian River Estates neighborhood near Sunset Boulevard as deputies served a search warrant connected to the ongoing Southern Truss fraud investigation. Grasso, who worked as the company's bookkeeper and comptroller, was arrested July 16 along with Sheri Lynn Harrs and Tina Marie Mejia. Grasso faces charges of first-degree grand theft of $100,000 or more, organized fraud of $50,000 or more, racketeering and money laundering of $100,000 or more. Harrs and Mejia each face charges of grand theft, organized fraud and racketeering. Grasso has pleaded not guilty, and her bond was set at a combined $1.15 million.",
+            "headline": "St. Lucie County deputies arrest man connected to series of burglaries in St. Lucie Village",
+            "lead": "Deputies responded Wednesday to the 2900 block of North Indian River Drive after receiving a report of a suspicious person. Upon arrival, deputies located Daniel Eugene Holmes, 42, who was going through trash near the roadway. Deputies said they also observed a bicycle in Holmes' possession with fishing equipment attached to it.",
             "headline_money_claims": [],
-            "lead_money_claims": [
-              1150000
-            ],
+            "lead_money_claims": [],
             "missing_money_claims": [],
             "headline_jurisdictions": [
-              "fort_pierce"
+              "st_lucie_county"
             ],
             "lead_jurisdictions": [],
             "missing_jurisdictions": [
-              "fort_pierce"
+              "st_lucie_county"
             ],
             "headline_policy_references": [],
             "lead_policy_references": [],
@@ -1161,29 +912,34 @@
           "source_focus": {
             "required": true,
             "passed": true,
-            "generated_headline": "Fort Pierce woman faces fraud charges as search warrant executed at Indian River Estates home",
-            "generated_lead": "Crime scene investigators were seen outside Grasso's home in the Indian River Estates neighborhood near Sunset Boulevard as deputies served a search warrant connected to the ongoing Southern Truss fraud investigation. Grasso, who worked as the company's bookkeeper and comptroller, was arrested July 16 along with Sheri Lynn Harrs and Tina Marie Mejia.",
-            "source_title": "Search warrant underway at Fort Pierce home tied to $7 million Southern Truss fraud - WPEC",
-            "source_lead": "A large law enforcement presence descended on a Fort Pierce neighborhood Tuesday morning as detectives executed a search warrant connected to an alleged fraud scheme that investigators say cost a local business nearly $7 million. Lucie County Sheriff's Office confirmed to CBS12 News that deputies are serving a search warrant as part of the ongoing investigation into the Southern Truss fraud case.",
+            "generated_headline": "St. Lucie County deputies arrest man connected to series of burglaries in St. Lucie Village",
+            "generated_lead": "Deputies responded Wednesday to the 2900 block of North Indian River Drive after receiving a report of a suspicious person. Upon arrival, deputies located Daniel Eugene Holmes, 42, who was going through trash near the roadway.",
+            "source_title": "Deputies arrest man connected to series of burglaries in St. Lucie Village",
+            "source_lead": "Lucie County Sheriff's Office Patrol Operations Bureau has led to the arrest of a suspect connected to a series of burglaries in the St. Lucie Village area, deputies said.On Wednesday deputies responded to the 2900 block of North Indian River Drive after receiving a report of a suspicious person.",
             "title_similarity": {
-              "score": 0.4262,
-              "overlap": 0.4615,
-              "jaccard": 0.3,
-              "sorted_sequence": 0.5269,
-              "ordered_sequence": 0.3353,
-              "shared_token_count": 6.0
+              "score": 0.9596,
+              "overlap": 1.0,
+              "jaccard": 0.9,
+              "sorted_sequence": 0.9481,
+              "ordered_sequence": 0.8889,
+              "shared_token_count": 9.0
             },
-            "lead_token_overlap": 0.282,
+            "lead_token_overlap": 0.519,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
             "missing": []
           }
         }
       ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 10,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 16,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1244,124 +1000,64 @@
           "canonical_headline": "Fort Pierce King's Landing developer asks city for six more months, reports $15 million funding shortfall",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Lawmaker challenges Causeway Cove development's Live Local Act compliance",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-lawmaker-challenges-causeway-cove-developments-live-local-act-compliance",
-          "editorial_story_id": "story_002365",
-          "canonical_slug": "2026-08-06-state-lawmaker-challenges-fort-pierce-causeway-cove-development-over-zoning-comp",
-          "canonical_headline": "State lawmaker challenges Fort Pierce Causeway Cove development over zoning compliance",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Lawmaker challenges Causeway Cove development's Live Local Act compliance - WPTV",
-          "source_url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxPS0E3VXhVbHFEOUlhV3N3OFRlWG01WUp4SGdoTjNRS2E2NnNsLVhxcldGd1FNSk1xUUJuQzFUa3c3RmFnUGNQd2hDUkhJVU4za1Y3NGRYcjRnWEJwcy1TdWlick1RYjl0NmxXbGRjRTIwWmd6UjJrN3F1ZFNJbHlaVWRTUzRQM1lsNWhjMkx5RkY5U0diZEZ3YjhCb3VfN0hFQkFVUmJRUW9PMVZZZTNhdGVwaUtfX0luLVpvQzRXYUszRkRvWDZJcHV2WHpSY24tRUdOTDFKVkpHVFFPMzE2Mw",
-          "editorial_story_id": "story_002365",
-          "canonical_slug": "2026-08-06-state-lawmaker-challenges-fort-pierce-causeway-cove-development-over-zoning-comp",
-          "canonical_headline": "State lawmaker challenges Fort Pierce Causeway Cove development over zoning compliance",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie police release 911 call in fatal shooting of PBSO communications officer - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-release-911-call-in-fatal-shooting-of-pbso-communications-officer",
-          "editorial_story_id": "story_001880",
-          "canonical_slug": "2026-08-02-elizabeth-ortega-killed-ralph-varela-sr-dead-in-port-st-lucie-murder-suicide-on",
-          "canonical_headline": "Port St. Lucie police release 911 call in fatal domestic shooting of Palm Beach Sheriff's Office employee",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie police release 911 call in fatal shooting of PBSO communications officer",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-release-911-call-in-fatal-shooting-of-pbso-communications-officer",
-          "editorial_story_id": "story_001880",
-          "canonical_slug": "2026-08-02-elizabeth-ortega-killed-ralph-varela-sr-dead-in-port-st-lucie-murder-suicide-on",
-          "canonical_headline": "Port St. Lucie police release 911 call in fatal domestic shooting of Palm Beach Sheriff's Office employee",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Early voting information for Palm Beach, Okeechobee counties and the Treasure Coast",
-          "source_url": "https://www.wptv.com/news/political/elections-local/early-voting-dates-in-palm-beach-okeechobee-counties-and-the-treasure-coast",
-          "editorial_story_id": "story_002377",
-          "canonical_slug": "2026-08-06-early-voting-begins-saturday-across-martin-st-lucie-indian-river-counties-for-au",
-          "canonical_headline": "Early voting begins Saturday across Martin, St. Lucie, Indian River counties for August primary",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Fort Pierce police investigate hit-and-run crash involving 2 children in crosswalk",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-police-investigate-hit-and-run-crash-involving-2-children-in-crosswalk",
-          "editorial_story_id": "story_002380",
-          "canonical_slug": "2026-08-06-fort-pierce-police-seek-driver-in-hit-and-run-that-injured-two-children-in-cross",
-          "canonical_headline": "Fort Pierce police seek driver in hit-and-run that injured two children in crosswalk",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Fort Pierce police investigate hit-and-run crash involving 2 children in crosswalk - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-police-investigate-hit-and-run-crash-involving-2-children-in-crosswalk",
-          "editorial_story_id": "story_002380",
-          "canonical_slug": "2026-08-06-fort-pierce-police-seek-driver-in-hit-and-run-that-injured-two-children-in-cross",
-          "canonical_headline": "Fort Pierce police seek driver in hit-and-run that injured two children in crosswalk",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Driver accused of hitting two children, leaving scene sought in Fort Pierce - WPBF",
-          "source_url": "https://www.wpbf.com/article/fort-pierce-police-search-driver-hit-and-run-two-children/73353546",
-          "editorial_story_id": "story_002347",
-          "canonical_slug": "2026-08-05-driver-sought-after-hitting-two-children-and-fleeing-scene-in-fort-pierce",
-          "canonical_headline": "Driver sought after hitting two children and fleeing scene in Fort Pierce",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Back to School: Tradition Lakes K-8 prepares to open in St. Lucie County - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-back-to-school-tradition-lakes-k-8-st-lucie-county/73344051",
-          "editorial_story_id": "story_002246",
-          "canonical_slug": "2026-08-04-st-lucie-county-schools-open-aug-10-with-new-tradition-lakes-k-8-campus-and-ai-c",
-          "canonical_headline": "St. Lucie County schools open Aug. 10 with new Tradition Lakes K-8 campus and AI courses",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Residents push back on plan to turn Fort Pierce's Museum Pointe Park into a mega-yacht marina - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/residents-push-back-on-plan-to-turn-fort-pierces-museum-pointe-park-into-a-mega-yacht-marina",
-          "editorial_story_id": "story_001162",
-          "canonical_slug": "2026-07-29-fort-pierce-residents-oppose-proposed-mega-yacht-marina-at-museum-pointe-over-co",
-          "canonical_headline": "Fort Pierce residents oppose proposed mega yacht marina at Museum Pointe over concerns for St. Lucie County Regional History Museum",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Crash closes U.S. 1 in both directions near SE Tiffany Avenue in Port St. Lucie - cw34.com",
+          "source_url": "https://cw34.com/news/local/crash-closes-us-1-southeast-tiffany-avenue-port-st-lucie-traffic-alert-seek-alternative-routes-port-st-lucie-police-department-florida-news?teaserSource=trending",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-08-06-us-1-closed-in-both-directions-near-tiffany-avenue-in-port-st-lucie-after-crash",
+          "canonical_headline": "U.S. 1 closed in both directions near Tiffany Avenue in Port St. Lucie after crash",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_002372"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['port-st-lucie', 'st-lucie']",
+            "shared_event_families=['crash']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['southeast-tiffany-avenue']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['both-direction-near', 'both-direction-near-tiffany', 'clos-both-direction', 'clos-both-direction-near', 'crash-clos-both', 'crash-clos-both-direction', 'direction-near-tiffany', 'direction-near-tiffany-avenue', 'near-tiffany-avenue']",
+            "shared_headline_topic_core=['avenue', 'both', 'clos', 'crash', 'direction', 'near', 'tiffany']",
+            "shared_distinctive_token_count=8",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Family says roadside memorial for woman killed in St. Lucie County crash keeps being removed",
-      "generated_card_count": 4,
-      "elapsed_seconds": 166.401
+      "live_hero_headline": "Fort Pierce Kings Landing development faces new delay as developers seek $15 million to finish Marriott project",
+      "generated_card_count": 1,
+      "elapsed_seconds": 52.241
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generated_live",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 9,
-      "selected_source_count": 8,
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 12,
+      "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1369,11 +1065,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 81.034,
+          "elapsed_seconds": 11.328,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 81.034,
+      "model_elapsed_seconds": 11.328,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1384,21 +1080,11 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 12,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "indian_river",
-          "source_headline": "Vero Beach moves closer to rebuilding Humiston Beach boardwalk destroyed by Hurricane Nicole",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-moves-closer-to-rebuilding-humiston-beach-boardwalk-destroyed-by-hurricane-nicole",
-          "editorial_story_id": "story_002356",
-          "canonical_slug": "2026-08-06-vero-beach-moves-forward-on-47-million-humiston-beach-boardwalk-reconstruction-f",
-          "canonical_headline": "Vero Beach moves forward on $4.7 million Humiston Beach boardwalk reconstruction four years after Hurricane Nicole",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "indian_river",
           "source_headline": "Vero Beach moves closer to rebuilding Humiston Beach boardwalk destroyed by Hurricane Nicole - WPTV",
@@ -1407,56 +1093,6 @@
           "canonical_slug": "2026-08-06-vero-beach-moves-forward-on-47-million-humiston-beach-boardwalk-reconstruction-f",
           "canonical_headline": "Vero Beach moves forward on $4.7 million Humiston Beach boardwalk reconstruction four years after Hurricane Nicole",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Lawmaker challenges Causeway Cove development's Live Local Act compliance",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-lawmaker-challenges-causeway-cove-developments-live-local-act-compliance",
-          "editorial_story_id": "story_002365",
-          "canonical_slug": "2026-08-06-state-lawmaker-challenges-fort-pierce-causeway-cove-development-over-zoning-comp",
-          "canonical_headline": "State lawmaker challenges Fort Pierce Causeway Cove development over zoning compliance",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Port St. Lucie police release 911 call in fatal shooting of PBSO communications officer",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-release-911-call-in-fatal-shooting-of-pbso-communications-officer",
-          "editorial_story_id": "story_001880",
-          "canonical_slug": "2026-08-02-elizabeth-ortega-killed-ralph-varela-sr-dead-in-port-st-lucie-murder-suicide-on",
-          "canonical_headline": "Port St. Lucie police release 911 call in fatal domestic shooting of Palm Beach Sheriff's Office employee",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Early voting information for Palm Beach, Okeechobee counties and the Treasure Coast",
-          "source_url": "https://www.wptv.com/news/political/elections-local/early-voting-dates-in-palm-beach-okeechobee-counties-and-the-treasure-coast",
-          "editorial_story_id": "story_002377",
-          "canonical_slug": "2026-08-06-early-voting-begins-saturday-across-martin-st-lucie-indian-river-counties-for-au",
-          "canonical_headline": "Early voting begins Saturday across Martin, St. Lucie, Indian River counties for August primary",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Fort Pierce police investigate hit-and-run crash involving 2 children in crosswalk",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-police-investigate-hit-and-run-crash-involving-2-children-in-crosswalk",
-          "editorial_story_id": "story_002380",
-          "canonical_slug": "2026-08-06-fort-pierce-police-seek-driver-in-hit-and-run-that-injured-two-children-in-cross",
-          "canonical_headline": "Fort Pierce police seek driver in hit-and-run that injured two children in crosswalk",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Indian River County Sheriff's Office seeks help finding missing 24-year-old man - WPEC",
-          "source_url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxPRlFLUEdTRHgwVUlLNUJtdjIxMEZ0Sl9TTGtvbFF6WVJtdE5fXzN3eXBSOFlWa3dpMWRzU3hraTFFUlBWWUVaN1d2UERaRWtuRklVVDV1SndJUjdCTGdDZmJaTmkwS2hPV3MwajRMcUJyal9sLThHcURhemVVTWdQR3BPTmFHdWdMLWxIaXZjQlhIeEFYdGxyZ3BjYXdraUl5WFNpZENidC1tZmJhTHJnUzQ3OVJXZFBtQUtwMEVmWnZERUFHX24zWENfV0JYYm5ZcjBwV0lucmhEcWhrbHZEME0wMVM0OXhZRkZCNG9rQWVHR0xwaXc",
-          "editorial_story_id": "story_002291",
-          "canonical_slug": "2026-08-05-indian-river-county-sheriffs-office-searches-for-missing-24-year-old-man-last-se",
-          "canonical_headline": "Indian River County Sheriff's Office searches for missing 24-year-old man last seen Tuesday afternoon",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1481,11 +1117,11 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Indian River County - Week of Aug. 7 - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/community_page/calendar/indian-river-county---week-of-aug-7/article_7a3b7a1f-5b89-566f-a286-8ffac79bbc71.html",
-          "editorial_story_id": "story_002439",
-          "canonical_slug": "2026-08-06-vero-beach-museum-of-art-hosts-free-second-saturday-events-aug-8",
-          "canonical_headline": "Vero Beach Museum of Art hosts free Second Saturday events Aug. 8",
+          "source_headline": "Indian River County Sheriff's Office seeks help finding missing 24-year-old man - WPEC",
+          "source_url": "https://cbs12.com/news/local/indian-river-county-sheriffs-office-seeks-help-finding-missing-24-year-old-man-florida-news-missing-person-ircso",
+          "editorial_story_id": "story_002291",
+          "canonical_slug": "2026-08-05-indian-river-county-sheriffs-office-searches-for-missing-24-year-old-man-last-se",
+          "canonical_headline": "Indian River County Sheriff's Office searches for missing 24-year-old man last seen Tuesday afternoon",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -1494,9 +1130,9 @@
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Indian River County sheriff's deputies shoot, kill 18-year-old attacking father with butcher knife during welfare check",
+      "live_hero_headline": "Vero Beach High School marching band prepares for school year with nearly 90 years of tradition",
       "generated_card_count": 0,
-      "elapsed_seconds": 85.437
+      "elapsed_seconds": 21.809
     }
   ]
 }
