@@ -112,28 +112,38 @@ def repair_generation_cache(path: Path) -> bool:
         atomic_write(path, json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
     return changed
 
+def _remove_matching_blocks(raw: str, tag: str) -> str:
+    """Remove only sibling blocks that contain the withdrawn slug.
+
+    The tempered body prevents a match from crossing an earlier closing tag.
+    This is critical for RSS and sitemap files: a plain ``.*?`` can start at
+    the first item and consume every sibling up to the target item.
+    """
+    pattern = re.compile(
+        rf"\s*<{tag}\b[^>]*>(?:(?!</{tag}>).)*?</{tag}>\s*",
+        re.I | re.S,
+    )
+
+    def replace(match: re.Match[str]) -> str:
+        block = match.group(0)
+        return "\n" if SLUG.lower() in block.lower() else block
+
+    return pattern.sub(replace, raw)
+
 def repair_xml(path: Path, tag: str) -> bool:
     if not path.exists():
         return False
     raw = path.read_text(encoding="utf-8", errors="ignore")
-    pattern = re.compile(rf"\s*<{tag}\b[^>]*>.*?(?:{re.escape(SLUG)}|{re.escape(ARTICLE_PATH)}).*?</{tag}>\s*", re.I | re.S)
-    updated = pattern.sub("\n", raw)
+    updated = _remove_matching_blocks(raw, tag)
     if updated == raw:
         return False
     atomic_write(path, updated)
     return True
 
 def strip_bad_blocks(raw: str) -> str:
-    patterns = (
-        re.compile(rf"\s*<section\b[^>]*\bclass=[\"'][^\"']*\bhero\b[^\"']*[\"'][^>]*>.*?{re.escape(SLUG)}.*?</section>\s*", re.I | re.S),
-        re.compile(rf"\s*<article\b[^>]*>.*?{re.escape(SLUG)}.*?</article>\s*", re.I | re.S),
-        re.compile(rf"\s*<li\b[^>]*>.*?{re.escape(SLUG)}.*?</li>\s*", re.I | re.S),
-        re.compile(rf"\s*<a\b[^>]*href=[\"'][^\"']*{re.escape(SLUG)}[^\"']*[\"'][^>]*>.*?</a>\s*", re.I | re.S),
-    )
     updated = raw
-    for pattern in patterns:
-        updated = pattern.sub("\n", updated)
-    updated = re.sub(rf"^.*{re.escape(SLUG)}.*$\n?", "", updated, flags=re.I | re.M)
+    for tag in ("section", "article", "li", "a"):
+        updated = _remove_matching_blocks(updated, tag)
     return updated
 
 def ensure_homepage_hero(raw: str) -> str:

@@ -62,5 +62,10 @@ def test_current_surfaces_use_selected_image():
     assert IMAGE in placement.group(0)
 
     feed = (ROOT / "feed.xml").read_text()
-    target = feed.split("Martin County Sheriff's Office seeks public help finding missing 14-year-old autistic boy in Palm City", 1)[1].split("</item>", 1)[0]
+    feed_items = re.findall(r"<item>.*?</item>", feed, flags=re.DOTALL)
+    target = next(
+        item
+        for item in feed_items
+        if f"/articles/{SLUG}.html" in item
+    )
     assert IMAGE in target

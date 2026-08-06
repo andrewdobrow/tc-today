@@ -71,14 +71,33 @@ def test_exact_bad_publication_is_retired_from_every_surface(tmp_path):
     bad_path.write_text("<html><body>bad</body></html>", encoding="utf-8")
     (tmp_path / "archive.json").write_text(json.dumps([{"slug": BAD_SLUG}, {"slug": "safe"}]), encoding="utf-8")
     (tmp_path / "data.json").write_text(json.dumps({"hero": {"slug": BAD_SLUG}, "cards": [{"slug": "safe"}]}), encoding="utf-8")
-    (tmp_path / "feed.xml").write_text(f"<rss><channel><item><link>https://treasurecoast.today/articles/{BAD_SLUG}.html</link></item></channel></rss>", encoding="utf-8")
-    (tmp_path / "sitemap.xml").write_text(f"<urlset><url><loc>https://treasurecoast.today/articles/{BAD_SLUG}.html</loc></url></urlset>", encoding="utf-8")
-    (tmp_path / "news-sitemap.xml").write_text(f"<urlset><url><loc>https://treasurecoast.today/articles/{BAD_SLUG}.html</loc></url></urlset>", encoding="utf-8")
-    (tmp_path / "index.html").write_text(f'<main><section class="hero hero-v3" data-cat-hero="all"><a href="/articles/{BAD_SLUG}.html">bad</a></section><section class="hero hero-v3" data-cat-hero="crime" style="display:none"><a href="/articles/safe.html">safe</a></section></main>', encoding="utf-8")
+    (tmp_path / "feed.xml").write_text(
+        f"<rss><channel><item><link>https://treasurecoast.today/articles/safe-before.html</link></item>"
+        f"<item><link>https://treasurecoast.today/articles/{BAD_SLUG}.html</link></item>"
+        f"<item><link>https://treasurecoast.today/articles/safe-after.html</link></item></channel></rss>",
+        encoding="utf-8",
+    )
+    sitemap = (
+        f"<urlset><url><loc>https://treasurecoast.today/articles/safe-before.html</loc></url>"
+        f"<url><loc>https://treasurecoast.today/articles/{BAD_SLUG}.html</loc></url>"
+        f"<url><loc>https://treasurecoast.today/articles/safe-after.html</loc></url></urlset>"
+    )
+    (tmp_path / "sitemap.xml").write_text(sitemap, encoding="utf-8")
+    (tmp_path / "news-sitemap.xml").write_text(sitemap, encoding="utf-8")
+    (tmp_path / "index.html").write_text(
+        f'<main><section class="hero hero-v3" data-cat-hero="all"><a href="/articles/{BAD_SLUG}.html">bad</a></section>'
+        '<section class="hero hero-v3" data-cat-hero="crime" style="display:none"><a href="/articles/safe-before.html">safe before</a></section>'
+        '<a class="latest-item" href="/articles/safe-after.html">safe after</a></main>',
+        encoding="utf-8",
+    )
     subprocess.run([sys.executable, str(ROOT / "scripts" / "repair_false_jurisdiction_publication.py"), str(tmp_path)], check=True)
     assert "noindex" in bad_path.read_text(encoding="utf-8")
     for name in ("archive.json", "data.json", "feed.xml", "sitemap.xml", "news-sitemap.xml", "index.html"):
-        assert BAD_SLUG not in (tmp_path / name).read_text(encoding="utf-8")
+        text = (tmp_path / name).read_text(encoding="utf-8")
+        assert BAD_SLUG not in text
+        if name in {"feed.xml", "sitemap.xml", "news-sitemap.xml", "index.html"}:
+            assert "safe-before" in text
+            assert "safe-after" in text
     assert 'data-cat-hero="all"' in (tmp_path / "index.html").read_text(encoding="utf-8")
 
 def test_workflows_patch_and_repair_before_tests_and_generation():
