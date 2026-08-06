@@ -37,7 +37,7 @@ from .source_identity import (
     story_source_identity_urls,
 )
 
-REPAIR_VERSION = 10
+REPAIR_VERSION = 11
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")

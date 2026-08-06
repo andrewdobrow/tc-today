@@ -206,6 +206,7 @@ class EditorialEngine:
             agencies=extracted.agencies,
             entities=extracted.entities,
             published_at=raw.published_at,
+            source_url=raw.url,
         )
 
         pipeline_result = self._pipeline.process(

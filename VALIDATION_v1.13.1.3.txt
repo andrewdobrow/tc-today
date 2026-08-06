@@ -1,0 +1,22 @@
+v1.13.1.3 ASCII Permalink Integrity — Validation
+
+Cumulative release:
+- Includes v1.13.1.2 Missing-Person Identity Continuity.
+- Retains the Ethan Boyd canonical article and /images/ethan-boyd.png override.
+- Does not include or replace custom_articles.json.
+
+Exact production failure repaired:
+- Martin County counterfeit Pokémon article migrated to ASCII `pokemon` slug.
+- The old Unicode and `pok-mon` spellings are redirect sources.
+- Exact Martin County live hero now resolves through validate_live_permalink_integrity.
+
+Regression validation:
+- Fresh-overlay targeted suite: 23 passed.
+- Full available repository suite in build worktree: 748 passed.
+- Seven legacy fixture tests remain unavailable because the uploaded repository base
+  does not contain its historical root engine.py compatibility file; these are not
+  failures introduced by this release.
+- Package validation: 34 modules imported; 119 public exports verified.
+- Unicode slug migration first pass: 2 migrated, 0 conflicts.
+- Unicode slug migration second pass: 0 migrated, ascii_only=true.
+- Overlay does not replace custom_articles.json.

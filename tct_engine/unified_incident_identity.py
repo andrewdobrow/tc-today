@@ -10,6 +10,10 @@ from datetime import datetime, timezone
 import re
 from typing import Any, Iterable, Mapping
 
+UNIFIED_INCIDENT_EVIDENCE_VERSION = 2
+_STORY_EVIDENCE_CACHE: dict[tuple[Any, ...], tuple["UnifiedIncidentEvidence", ...]] = {}
+_STORY_EVIDENCE_CACHE_LIMIT = 10000
+
 _WORD_RE = re.compile(r"[a-z0-9]+")
 _STOP = frozenset({
     "a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "in",
@@ -47,6 +51,12 @@ def _family(text: str) -> str:
         ("road_rage", r"\broad rage\b|\b(?:pit|police) maneuver\b|\brun(?:ning)? .{0,45} off (?:the )?road\b|\bchased? off (?:the )?road\b"),
         ("wildfire_arson", r"\bwildfire\b|\bbrush fire\b.{0,45}\b(?:arson|set|setting|charged)\b|\b(?:arson|set|setting)\b.{0,45}\b(?:wildfire|brush fire)\b"),
         ("animal_rescue", r"\b(?:cat|cats|dog|dogs|animal|animals|hamster|pets?)\b.{0,45}\b(?:rescue|rescued|saved)\b|\b(?:rescue|rescued|saved)\b.{0,45}\b(?:cat|cats|dog|dogs|animal|animals|hamster|pets?)\b"),
+        (
+            "missing_person",
+            r"\b(?:missing|reported missing|went missing|last seen)\b.{0,90}\b(?:person|child|boy|girl|teen|teenager|man|woman|student)\b"
+            r"|\b(?:help|search|seek|seeking|find|finding|locate|locating)\b.{0,75}\b(?:missing|last seen|autistic|teen|boy|girl|child)\b"
+            r"|\b(?:person|child|boy|girl|teen|teenager|man|woman|student)\b.{0,75}\b(?:missing|last seen|reported missing|went missing)\b",
+        ),
         ("traffic_crash", r"\b(?:crash|collision|wreck|vehicle overturned|hit and run)\b"),
         ("murder_suicide", r"\bmurder[- ]suicide\b|\bdomestic[- ]related\b.{0,45}\b(?:two|2) dead\b"),
         ("shooting", r"\b(?:shooting|shot|gunfire)\b"),
@@ -73,25 +83,62 @@ def _concepts(text: str) -> set[str]:
         ("kanner_highway", r"\bkanner (?:highway|hwy|road)\b"),
         ("martin_stuart", r"\bmartin county\b|\bstuart\b"),
         ("fourth_arrest", r"\b(?:4th|fourth) arrest\b|\b4 (?:people )?arrested\b"),
+        ("missing_person_signal", r"\b(?:missing|reported missing|went missing|last seen)\b|\b(?:help|search|seek|seeking|find|finding|locate|locating)\b.{0,45}\b(?:person|child|boy|girl|teen|teenager|man|woman|student|autistic)\b"),
+        ("last_seen", r"\blast seen\b"),
+        ("public_search", r"\b(?:help|search|seek|seeking|find|finding|locate|locating|looking)\b"),
+        ("autistic_subject", r"\bautistic\b|\bautism\b"),
+        ("minor_subject", r"\b(?:child|boy|girl|teen|teenager|juvenile|minor)\b|\b\d{1,2}\s+year\s+old\b"),
+        ("grand_oaks", r"\bgrand oaks(?: living facility| senior living| living)?\b"),
+        ("coquina_cove", r"\bcoquina cove\b"),
+        ("palm_city", r"\bpalm city\b"),
     )
     for name, pattern in tests:
         if re.search(pattern, text):
             concepts.add(name)
+    for match in re.finditer(r"\b(\d{1,2})\s+year\s+old\b", text):
+        age = int(match.group(1))
+        if 0 <= age <= 99:
+            concepts.add(f"age_{age}")
     return concepts
 
 
 def _person_names(text: str) -> set[str]:
-    # Deliberately narrow: full names adjacent to an age or arrest verb.
+    """Extract participant names tied to an incident role.
+
+    Missing-person alerts commonly put the age before the name (``14-year-old
+    Ethan Boyd``) or describe the name as ``last seen`` rather than arrested.
+    Those are strong identity signals and must survive publisher headline drift.
+    """
     names: set[str] = set()
     raw = str(text or "")
-    for match in re.finditer(
-        r"\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2})(?:,?\s+(?:age\s+)?\d{1,3}\b|\s+(?:was\s+)?(?:arrested|charged|identified|killed)\b)",
-        raw,
-    ):
-        value = " ".join(match.group(1).casefold().split())
-        if value not in {"north carolina", "martin county", "palm beach", "fort myers"}:
+    name_rx = r"[A-Z][a-z]+(?:\s+(?:[A-Z]\.?|[A-Z][a-z]+)){1,2}"
+    patterns = (
+        rf"\b({name_rx})(?:,?\s+(?:age\s+)?\d{{1,3}}\b|\s+(?:was\s+)?(?:arrested|charged|identified|killed)\b)",
+        rf"\b\d{{1,3}}[- ]year[- ]old\s+({name_rx})\b",
+        rf"\b({name_rx}),\s+(?:an?\s+|the\s+)?\d{{1,3}}[- ]year[- ]old\b",
+        rf"\b(?:find|finding|locate|locating|search(?:ing)? for|looking for)\s+({name_rx})\b",
+        rf"\b({name_rx})\b[^.!?]{{0,65}}\b(?:reported missing|went missing|is missing|was missing|last seen|found safe|located safe)\b",
+    )
+    for pattern in patterns:
+        for match in re.finditer(pattern, raw):
+            value = " ".join(match.group(1).casefold().split())
             names.add(value)
-    return names
+
+    excluded = {
+        "north carolina", "martin county", "palm beach", "fort myers",
+        "palm city", "grand oaks", "grand oaks living",
+        "grand oaks living facility", "coquina cove",
+        "martin county sheriff", "martin county sheriff office",
+        "martin county sheriff s office", "treasure coast today",
+    }
+    return {
+        value for value in names
+        if value not in excluded
+        and not any(
+            token in {"county", "sheriff", "police", "office", "facility", "living"}
+            for token in value.split()
+        )
+    }
 
 
 def _iso(value: object) -> str:
@@ -131,9 +178,11 @@ class UnifiedIncidentEvidence:
     distinctive_tokens: tuple[str, ...]
     title_tokens: tuple[str, ...]
     published_at: str = ""
+    evidence_version: int = UNIFIED_INCIDENT_EVIDENCE_VERSION
 
     def to_dict(self) -> dict[str, Any]:
         return {
+            "evidence_version": self.evidence_version,
             "family": self.family,
             "concepts": list(self.concepts),
             "people": list(self.people),
@@ -154,10 +203,17 @@ def build_unified_incident_evidence(
     agencies: Iterable[object] = (),
     entities: Iterable[object] = (),
     published_at: object = None,
+    source_url: object = "",
 ) -> UnifiedIncidentEvidence:
     title_text = str(title or "")
     text = " ".join(
-        [title_text, str(body or ""), *(str(v or "") for v in facts), *(str(v or "") for v in entities)]
+        [
+            title_text,
+            str(body or ""),
+            str(source_url or ""),
+            *(str(v or "") for v in facts),
+            *(str(v or "") for v in entities),
+        ]
     )
     normalized = _norm(text)
     title_tokens = _tokens(title_text)
@@ -195,6 +251,7 @@ def evidence_from_mapping(value: Mapping[str, Any]) -> UnifiedIncidentEvidence:
         distinctive_tokens=tuple(str(v) for v in value.get("distinctive_tokens", ()) if str(v)),
         title_tokens=tuple(str(v) for v in value.get("title_tokens", ()) if str(v)),
         published_at=str(value.get("published_at") or ""),
+        evidence_version=int(value.get("evidence_version") or 1),
     )
 
 
@@ -245,6 +302,40 @@ def compare_unified_incident_evidence(
     if shared_people:
         confidence = 0.94 + min(0.04, 0.01 * len(shared_concepts))
         qualified = True
+    elif incoming.family == "missing_person":
+        ages_a = {value for value in concepts_a if value.startswith("age_")}
+        ages_b = {value for value in concepts_b if value.startswith("age_")}
+        shared_age = ages_a & ages_b
+        age_conflict = bool(ages_a and ages_b and not shared_age)
+        person_conflict = bool(people_a and people_b and not shared_people)
+        if age_conflict or person_conflict:
+            return 0.0, (
+                f"Missing-person age conflict: {age_conflict}",
+                f"Missing-person name conflict: {person_conflict}",
+            )
+        shared_landmark = shared_concepts & {"grand_oaks", "coquina_cove"}
+        shared_profile = shared_concepts & {"autistic_subject", "minor_subject"}
+        search_continuity = bool(
+            "missing_person_signal" in shared_concepts
+            and ("last_seen" in shared_concepts or "public_search" in shared_concepts)
+        )
+        # Same locality plus an exact age is a strong cross-publisher alert
+        # signature. Add condition/subject or search continuity so unrelated
+        # missing-person alerts in the same city remain separate.
+        if shared_locations and shared_age and (shared_profile or search_continuity):
+            confidence = 0.96 + min(0.02, 0.01 * len(shared_landmark))
+            qualified = True
+        elif shared_locations and shared_landmark and search_continuity:
+            confidence = 0.95
+            qualified = True
+        elif (
+            shared_locations
+            and {"autistic_subject", "minor_subject", "last_seen"}.issubset(shared_concepts)
+            and title_overlap >= 0.30
+            and len(shared_distinctive) >= 4
+        ):
+            confidence = 0.91
+            qualified = True
     elif incoming.family == "road_rage":
         core = {"pit_maneuver", "forced_off_road"}
         region = {"martin_stuart", "i95", "kanner_highway", "north_carolina_family", "barbed_wire_fence"}
@@ -279,7 +370,7 @@ def compare_unified_incident_evidence(
         # both high token overlap and at least three shared distinctive terms.
         general_family_allowed = incoming.family in {
             "traffic_crash", "shooting", "murder_suicide",
-            "animal_rescue", "dui", "wildfire_arson",
+            "animal_rescue", "dui", "wildfire_arson", "missing_person",
         }
         location_agency_signature = (
             general_family_allowed
@@ -328,28 +419,102 @@ def compare_unified_incident_evidence(
     return confidence if qualified else 0.0, trace
 
 
-def story_unified_evidence(story: Mapping[str, Any]) -> tuple[UnifiedIncidentEvidence, ...]:
-    stored = story.get("unified_incident_evidence", ()) or ()
-    evidence = [evidence_from_mapping(row) for row in stored if isinstance(row, Mapping)]
-    if evidence:
-        return tuple(evidence)
-    titles = [story.get("canonical_title", ""), *story.get("titles", ())]
-    published = ""
-    timeline = list(story.get("timeline", ()) or ())
-    if timeline:
-        published = str(timeline[0].get("published_at") or "")
-    built = [
-        build_unified_incident_evidence(
-            title=title,
-            facts=story.get("facts", ()),
-            locations=story.get("locations", ()),
-            agencies=story.get("agencies", ()),
-            entities=story.get("entities", ()),
-            published_at=published,
+def _story_evidence_cache_key(story: Mapping[str, Any]) -> tuple[Any, ...]:
+    timeline = tuple(
+        (
+            str(row.get("title") or ""),
+            str(row.get("source") or ""),
+            str(row.get("url") or ""),
+            str(row.get("published_at") or ""),
         )
-        for title in titles if str(title or "").strip()
+        for row in (story.get("timeline", ()) or ())
+        if isinstance(row, Mapping)
+    )
+    stored = tuple(
+        (
+            int(row.get("evidence_version") or 1),
+            str(row.get("family") or "unknown"),
+            tuple(str(v) for v in row.get("concepts", ()) or ()),
+            tuple(str(v) for v in row.get("people", ()) or ()),
+            tuple(str(v) for v in row.get("locations", ()) or ()),
+        )
+        for row in (story.get("unified_incident_evidence", ()) or ())
+        if isinstance(row, Mapping)
+    )
+    return (
+        str(story.get("story_id") or ""),
+        str(story.get("canonical_title") or ""),
+        tuple(str(v) for v in story.get("titles", ()) or ()),
+        tuple(str(v) for v in story.get("facts", ()) or ()),
+        tuple(str(v) for v in story.get("locations", ()) or ()),
+        tuple(str(v) for v in story.get("agencies", ()) or ()),
+        tuple(str(v) for v in story.get("entities", ()) or ()),
+        timeline,
+        stored,
+    )
+
+
+def story_unified_evidence(story: Mapping[str, Any]) -> tuple[UnifiedIncidentEvidence, ...]:
+    cache_key = _story_evidence_cache_key(story)
+    cached = _STORY_EVIDENCE_CACHE.get(cache_key)
+    if cached is not None:
+        return cached
+
+    stored_rows = [
+        row for row in (story.get("unified_incident_evidence", ()) or ())
+        if isinstance(row, Mapping)
     ]
-    return tuple(built)
+    stored = [evidence_from_mapping(row) for row in stored_rows]
+    # Versioned rows were built with the current extraction contract and can be
+    # trusted directly. Legacy rows are rebuilt because older releases classified
+    # missing-person alerts as ``unknown`` and discarded age/name continuity.
+    if stored and all(
+        evidence.evidence_version >= UNIFIED_INCIDENT_EVIDENCE_VERSION
+        for evidence in stored
+    ):
+        result = tuple(stored)
+    else:
+        timeline = list(story.get("timeline", ()) or ())
+        published = str(timeline[0].get("published_at") or "") if timeline else ""
+        source_urls = " ".join(
+            str(row.get("source") or row.get("url") or "")
+            for row in timeline if isinstance(row, Mapping)
+        )
+        titles = [
+            story.get("canonical_title", ""),
+            *story.get("titles", ()),
+            *(row.get("title", "") for row in timeline if isinstance(row, Mapping)),
+        ]
+        built: list[UnifiedIncidentEvidence] = []
+        seen: set[tuple[Any, ...]] = set()
+        for title in titles:
+            if not str(title or "").strip():
+                continue
+            evidence = build_unified_incident_evidence(
+                title=title,
+                body=source_urls,
+                facts=story.get("facts", ()),
+                locations=story.get("locations", ()),
+                agencies=story.get("agencies", ()),
+                entities=story.get("entities", ()),
+                published_at=published,
+                source_url=source_urls,
+            )
+            key = (
+                evidence.family, evidence.concepts, evidence.people, evidence.locations,
+                evidence.agencies, evidence.distinctive_tokens, evidence.title_tokens,
+            )
+            if key not in seen:
+                seen.add(key)
+                built.append(evidence)
+        result = tuple(built) if any(
+            evidence.family != "unknown" for evidence in built
+        ) else tuple(stored or built)
+
+    if len(_STORY_EVIDENCE_CACHE) >= _STORY_EVIDENCE_CACHE_LIMIT:
+        _STORY_EVIDENCE_CACHE.clear()
+    _STORY_EVIDENCE_CACHE[cache_key] = result
+    return result
 
 
 def find_matching_unified_incident_story(
@@ -432,18 +597,25 @@ def unified_incident_components(stories: Mapping[str, Mapping[str, Any]]) -> lis
         if a != b:
             parent[b] = a
 
+    # Evidence extraction can inspect timeline URLs and legacy rows. Cache it once
+    # per story; recomputing it inside the pairwise family loop previously turned a
+    # repair pass into repeated full-registry parsing and caused workflow creep.
+    evidence_by_story = {
+        story_id: story_unified_evidence(story)
+        for story_id, story in stories.items()
+    }
     buckets: dict[str, list[str]] = {}
-    for story_id, story in stories.items():
-        families = {ev.family for ev in story_unified_evidence(story) if ev.family != "unknown"}
+    for story_id, evidence_rows in evidence_by_story.items():
+        families = {ev.family for ev in evidence_rows if ev.family != "unknown"}
         for family in families:
             buckets.setdefault(family, []).append(story_id)
     for members in buckets.values():
         for i, left in enumerate(members):
-            left_evidence = story_unified_evidence(stories[left])
+            left_evidence = evidence_by_story[left]
             for right in members[i + 1:]:
                 matched = False
                 for a in left_evidence:
-                    for b in story_unified_evidence(stories[right]):
+                    for b in evidence_by_story[right]:
                         score, _ = compare_unified_incident_evidence(a, b)
                         if score >= 0.86:
                             union(left, right)

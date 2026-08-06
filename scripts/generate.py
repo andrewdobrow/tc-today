@@ -11,6 +11,7 @@ import re
 import hashlib
 import copy
 import time
+import unicodedata
 import threading
 import html as html_lib
 from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode, quote
@@ -8068,14 +8069,31 @@ def promote_duplicate_heroes(top_cat, all_categories):
 
 
 
+def _ascii_slug_text(value):
+    """Return one deterministic ASCII-only article slug fragment.
+
+    Article paths must use the same normalization at creation, archive lookup and
+    live permalink validation.  Python's ``\\w`` includes Unicode letters, which
+    previously allowed headlines such as ``Pokémon`` to create a Unicode filename
+    while the publication-integrity layer later searched for ``pok-mon``.  NFKD
+    transliteration keeps readable equivalents (``pokemon``, ``fiancee``) and the
+    final regex guarantees a static-host-safe path.
+    """
+    raw = unicodedata.normalize("NFKD", str(value or ""))
+    raw = raw.encode("ascii", "ignore").decode("ascii").lower().strip()
+    raw = re.sub(r"[^a-z0-9\s_-]+", "", raw)
+    raw = re.sub(r"[\s_]+", "-", raw)
+    raw = re.sub(r"-+", "-", raw)
+    return raw.strip("-")
+
+
 def _normalize_existing_article_slug(value):
     """Normalize an already-published slug without applying new-slug truncation."""
     raw = str(value or "").strip().split("?", 1)[0].split("#", 1)[0]
     raw = raw.rstrip("/").rsplit("/", 1)[-1]
     if raw.lower().endswith(".html"):
         raw = raw[:-5]
-    raw = raw.strip().lower()
-    return re.sub(r"[^a-z0-9_-]+", "-", raw).strip("-")
+    return _ascii_slug_text(raw)
 
 
 def _article_slug_from_permalink(permalink):
@@ -8136,6 +8154,223 @@ def _follow_canonical_redirect_slug(slug, redirect_map, max_hops=24):
 def _canonical_article_permalink(slug):
     slug = _normalize_existing_article_slug(slug)
     return f"{SITE_URL}/articles/{slug}.html" if slug else ""
+
+
+def _legacy_article_slug_variants(raw_slug):
+    """Return path spellings produced by pre-v1.13.1.3 Unicode handling."""
+    raw = str(raw_slug or "").strip()
+    variants = []
+    if raw:
+        variants.append(raw)
+        # Earlier lookup normalization replaced each non-ASCII run with a dash.
+        legacy_hyphen = re.sub(r"[^a-z0-9_-]+", "-", raw.lower()).strip("-")
+        if legacy_hyphen:
+            variants.append(legacy_hyphen)
+        # Some ZIP/extraction paths represent Unicode code points as #Uxxxx.
+        escaped = "".join(
+            ch if ord(ch) < 128 else f"#U{ord(ch):04x}"
+            for ch in raw
+        )
+        if escaped:
+            variants.append(escaped)
+    return list(dict.fromkeys(variants))
+
+
+def _replace_slug_references(value, replacements):
+    """Recursively update exact permalink fragments in persisted JSON payloads."""
+    if isinstance(value, dict):
+        return {
+            key: _replace_slug_references(item, replacements)
+            for key, item in value.items()
+        }
+    if isinstance(value, list):
+        return [_replace_slug_references(item, replacements) for item in value]
+    if isinstance(value, str):
+        updated = value
+        for source, target in replacements.items():
+            if source and source != target:
+                updated = updated.replace(source, target)
+                updated = updated.replace(quote(source, safe="-_"), target)
+        return updated
+    return value
+
+
+def _atomic_write_text(path, text):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(text, encoding="utf-8")
+    os.replace(temporary, path)
+
+
+def _migrate_unsafe_article_slugs(output_root=None):
+    """Migrate published Unicode article paths to the ASCII permalink contract.
+
+    The migration is bounded to archive rows whose stored slug is not already the
+    canonical ASCII form.  It copies the substantive article to the safe path,
+    rewrites persisted archive references, retains redirect pages for historical
+    spellings and records the work for final redirect enforcement.  A second pass is
+    a no-op, so startup and CI may safely call it on every run.
+    """
+    root = Path(output_root or OUTPUT_DIR)
+    archive_path = root / "archive.json"
+    articles_dir = root / "articles"
+    if not archive_path.exists() or not articles_dir.exists():
+        return {"checked": 0, "migrated": 0, "conflicts": [], "migrations": []}
+
+    archive = load_archive(archive_path)
+    raw_slugs = {
+        str(row.get("slug") or "").strip()
+        for row in archive if isinstance(row, dict) and row.get("slug")
+    }
+    migrations = []
+    conflicts = []
+    replacements = {}
+
+    for entry in archive:
+        if not isinstance(entry, dict):
+            continue
+        raw_slug = str(entry.get("slug") or "").strip()
+        canonical_slug = _normalize_existing_article_slug(raw_slug)
+        if not raw_slug or not canonical_slug or raw_slug == canonical_slug:
+            continue
+        if canonical_slug in raw_slugs and canonical_slug != raw_slug:
+            conflicts.append({
+                "source_slug": raw_slug,
+                "target_slug": canonical_slug,
+                "reason": "canonical_target_already_owned",
+            })
+            continue
+
+        variants = _legacy_article_slug_variants(raw_slug)
+        source_path = next(
+            (
+                articles_dir / f"{variant}.html"
+                for variant in variants
+                if (articles_dir / f"{variant}.html").is_file()
+                and "window.location.replace" not in (
+                    articles_dir / f"{variant}.html"
+                ).read_text(encoding="utf-8", errors="ignore")
+            ),
+            None,
+        )
+        target_path = articles_dir / f"{canonical_slug}.html"
+        if source_path is None and not target_path.is_file():
+            conflicts.append({
+                "source_slug": raw_slug,
+                "target_slug": canonical_slug,
+                "reason": "substantive_article_file_missing",
+            })
+            continue
+
+        local_replacements = {
+            variant: canonical_slug
+            for variant in variants
+            if variant and variant != canonical_slug
+        }
+        article_html = (
+            source_path.read_text(encoding="utf-8", errors="ignore")
+            if source_path is not None
+            else target_path.read_text(encoding="utf-8", errors="ignore")
+        )
+        article_html = _replace_slug_references(article_html, local_replacements)
+        _atomic_write_text(target_path, article_html)
+
+        for variant in variants:
+            if not variant or variant == canonical_slug:
+                continue
+            redirect_path = articles_dir / f"{variant}.html"
+            _atomic_write_text(
+                redirect_path,
+                _render_canonical_redirect_page(
+                    variant, canonical_slug, str(entry.get("headline") or "")
+                ),
+            )
+            replacements[variant] = canonical_slug
+
+        replacements[raw_slug] = canonical_slug
+        migrations.append({
+            "source_slug": raw_slug,
+            "target_slug": canonical_slug,
+            "headline": str(entry.get("headline") or ""),
+            "legacy_variants": variants,
+        })
+        raw_slugs.discard(raw_slug)
+        raw_slugs.add(canonical_slug)
+
+    if conflicts:
+        report = {
+            "schema_version": 1,
+            "status": "failed",
+            "checked": len(archive),
+            "migrated": 0,
+            "conflicts": conflicts,
+            "migrations": migrations,
+        }
+        report_path = root / "data" / "article-slug-integrity.json"
+        _atomic_write_text(report_path, json.dumps(report, indent=2, ensure_ascii=False))
+        raise RuntimeError(
+            "Article slug integrity FAILED: "
+            + "; ".join(
+                f"{row['source_slug']} ({row['reason']})" for row in conflicts[:5]
+            )
+        )
+
+    if migrations:
+        archive = _replace_slug_references(archive, replacements)
+        _atomic_write_text(
+            archive_path,
+            json.dumps(archive, indent=2, ensure_ascii=False),
+        )
+
+        manifest_path = root / "data" / "canonical-redirects.json"
+        manifest = _read_json_file(manifest_path, {"redirects": []})
+        redirect_rows = [
+            row for row in manifest.get("redirects", [])
+            if isinstance(row, dict) and row.get("source_slug")
+        ]
+        by_source = {str(row.get("source_slug")): row for row in redirect_rows}
+        for migration in migrations:
+            source_slug = migration["source_slug"]
+            target_slug = migration["target_slug"]
+            for variant in migration["legacy_variants"]:
+                if not variant or variant == target_slug:
+                    continue
+                by_source[variant] = {
+                    "source_slug": variant,
+                    "source_headline": migration["headline"],
+                    "target_slug": target_slug,
+                    "target_headline": migration["headline"],
+                    "story_stage": "article_slug_integrity_migration",
+                    "match_confidence": 100,
+                    "reason": "unicode_article_slug_migrated_to_ascii",
+                }
+        records = list(by_source.values())[-CANONICAL_REDIRECT_LIMIT:]
+        _atomic_write_text(
+            manifest_path,
+            json.dumps({
+                "schema_version": 2,
+                "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                "redirect_count": len(records),
+                "redirects": records,
+            }, indent=2, ensure_ascii=False),
+        )
+
+    report = {
+        "schema_version": 1,
+        "status": "passed",
+        "checked": len(archive),
+        "migrated": len(migrations),
+        "conflicts": [],
+        "migrations": migrations,
+        "ascii_only": all(
+            str(row.get("slug") or "") == _normalize_existing_article_slug(row.get("slug"))
+            for row in archive if isinstance(row, dict) and row.get("slug")
+        ),
+    }
+    report_path = root / "data" / "article-slug-integrity.json"
+    _atomic_write_text(report_path, json.dumps(report, indent=2, ensure_ascii=False))
+    return report
 
 
 def _incident_canonical_key(entry):
@@ -9795,11 +10030,7 @@ def render_index(all_categories, top_cat):
 
 
 def slugify(text):
-    text = text.lower().strip()
-    text = re.sub(r"[^\w\s-]", "", text)
-    text = re.sub(r"[\s_]+", "-", text)
-    text = re.sub(r"-+", "-", text)
-    return text[:80].strip("-")
+    return _ascii_slug_text(text)[:80].strip("-")
 
 
 def _weather_phenomenon(event):
@@ -12585,12 +12816,9 @@ def _normalize_custom_slug(value):
     permalink is an explicit publication instruction and may need a few additional
     characters to retain an edition marker such as ``aug-2-7``. Silently clipping
     that marker makes the published URL contradict the recurring-edition contract.
+    Custom and generated paths share the same ASCII-only normalization contract.
     """
-    text = str(value or "").lower().strip()
-    text = re.sub(r"[^\w\s-]", "", text)
-    text = re.sub(r"[\s_]+", "-", text)
-    text = re.sub(r"-+", "-", text)
-    return text.strip("-")
+    return _ascii_slug_text(value)
 
 
 def _validated_custom_requested_slug(value):
@@ -16856,6 +17084,25 @@ def _cross_source_person_names(item):
 
     # Ages are a strong participant signal in crime and public-safety reporting.
     candidates.update(re.findall(rf"\b({name_rx}),\s*\d{{1,3}}\b", text))
+    # Missing-person alerts frequently put the age before the name or phrase it as
+    # ``NAME, a 14-year-old`` instead of the crime-style ``NAME, 14`` form.
+    candidates.update(re.findall(
+        rf"\b\d{{1,3}}[- ]year[- ]old\s+({name_rx})\b", text
+    ))
+    candidates.update(re.findall(
+        rf"\b({name_rx}),\s+(?:an?\s+|the\s+)?\d{{1,3}}[- ]year[- ]old\b",
+        text,
+    ))
+    candidates.update(re.findall(
+        rf"\b(?:find|finding|locate|locating|search(?:ing)? for|looking for)\s+({name_rx})\b",
+        text,
+        re.I,
+    ))
+    candidates.update(re.findall(
+        rf"\b({name_rx})\b[^.!?]{{0,65}}\b(?:reported missing|went missing|is missing|was missing|last seen|found safe|located safe)\b",
+        text,
+        re.I,
+    ))
 
     # Explicit role phrases in either direction.
     role_before = (
@@ -17051,6 +17298,12 @@ def _cross_source_event_families(item):
         "vehicle-chase": r"\b(chase|pursuit|flee|fled|elud|high speed|80 mph|k 9|drone)\b",
         "public-policy": r"\b(ordinance|ordinances|rule|rules|regulation|proposal|commissioners|commission|school board|public comment)\b",
         "child-death": r"\b(infant|baby|child).{0,80}\b(died|death|dehydration|malnutrition|manslaughter|abuse)\b",
+        "missing-person": (
+            r"\b(missing|reported missing|went missing|last seen)\b.{0,90}"
+            r"\b(person|child|boy|girl|teen|teenager|man|woman|student)\b"
+            r"|\b(help|search|seek|seeking|find|finding|locate|locating)\b.{0,75}"
+            r"\b(missing|last seen|autistic|teen|boy|girl|child)\b"
+        ),
         "animal-case": r"\b(hoarding|animals?|cats?|dogs?|rescued|seized)\b",
         "crash": r"\b(crash|collision|wreck)\b",
         "fire": r"\b(structure fire|house fire|brush fire|wildfire|fire-rescue|burning|arson|blaze)\b",
@@ -20470,12 +20723,16 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
                 title=entry.get("headline") or entry.get("title") or "",
                 body=" ".join(
                     str(entry.get(field) or "")
-                    for field in ("teaser", "body", "article_text", "source_title")
+                    for field in (
+                        "teaser", "body", "article_text", "source_title",
+                        "source_headline", "source_url",
+                    )
                 ),
                 locations=entry.get("locations", ()) or (),
                 agencies=entry.get("agencies", ()) or (),
                 entities=entry.get("entities", ()) or (),
                 published_at=entry.get("first_published") or entry.get("date"),
+                source_url=entry.get("source_url") or "",
             )
             identity_rows[slug] = {
                 "story_id": slug,
@@ -25085,6 +25342,12 @@ def main():
     CURRENT_RUN_QUARANTINED_STORY_IDS = set()
     CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS = set()
     print("Treasure Coast Today — building site...")
+    _slug_migration = _migrate_unsafe_article_slugs(OUTPUT_DIR)
+    if _slug_migration.get("migrated"):
+        print(
+            "  Article slug integrity migrated "
+            f"{_slug_migration['migrated']} Unicode permalink(s) to ASCII"
+        )
     _cache_counts = GENERATION_CACHE.counts()
     print(
         "  Generation cache loaded: "
