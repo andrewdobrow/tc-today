@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,8 +52,15 @@ def test_current_surfaces_use_selected_image():
     assert f'<figure class="article-hero-image"><img src="{IMAGE}"' in article
 
     homepage = (ROOT / "index.html").read_text()
-    assert homepage.count(IMAGE) >= 2
+    target_path = re.escape(f"/articles/{SLUG}.html")
+    placement = re.search(
+        rf'<a\b(?=[^>]*href="(?:https://treasurecoast\.today)?{target_path}")[^>]*>.*?</a>',
+        homepage,
+        flags=re.DOTALL,
+    )
+    assert placement is not None
+    assert IMAGE in placement.group(0)
 
     feed = (ROOT / "feed.xml").read_text()
-    target = feed.split("Missing 14-year-old autistic boy Ethan Boyd safely located, Martin County sheriff says", 1)[1].split("</item>", 1)[0]
+    target = feed.split("Martin County Sheriff's Office seeks public help finding missing 14-year-old autistic boy in Palm City", 1)[1].split("</item>", 1)[0]
     assert IMAGE in target
