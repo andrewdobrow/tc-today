@@ -18,7 +18,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      TCT_ARTICLE_BANNER_MODE: ${{ vars.TCT_ARTICLE_BANNER_MODE || 'reader_support' }}
+      TCT_ARTICLE_BANNER_MODE: reader_support
 
     steps:
       - name: Check out repository
@@ -43,6 +43,12 @@ jobs:
 
       - name: Apply generator runtime hotfix
         run: python scripts/apply_generator_runtime_hotfix.py
+
+      - name: Apply false-jurisdiction source guard
+        run: python scripts/apply_false_jurisdiction_hotfix.py
+
+      - name: Retire false-jurisdiction publication
+        run: python scripts/repair_false_jurisdiction_publication.py
 
       - name: Normalize recent reader-support banners
         run: |
