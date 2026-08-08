@@ -1,0 +1,36 @@
+TCT v1.13.2.1 EMERGENCY VALIDATION
+Date: 2026-08-07
+
+FULL WORKFLOW TEST BOUNDARY
+  python -m pytest tests -q --ignore=tests/test_canonical_identity.py --ignore=tests/test_matcher_contract.py
+  RESULT: 780 passed, 0 failed
+
+TARGETED LATE-STAGE SUITE
+  test_county_membership_authority.py
+  test_final_canonical_surface_dedup.py
+  test_persistent_story_identity_integrity.py
+  test_category_eligibility_contracts.py
+  RESULT: 58 passed, 0 failed
+
+CUSTOM PUBLICATION SUITE
+  tests/test_custom*.py
+  RESULT: 45 passed, 0 failed
+
+PACKAGE VALIDATION
+  scripts/validate_package.py
+  RESULT: passed; 34 modules imported / 119 public exports verified
+
+PREFLIGHT MUTATION CHECKS
+  sanitize_generation_cache.py: clean
+  apply_generator_runtime_hotfix.py: source_changed=False
+  apply_false_jurisdiction_hotfix.py: changed=false, verified=true
+  repair_false_jurisdiction_publication.py: no changes required
+
+PRODUCTION FAILURE ADDRESSED
+  Final county membership authority previously aborted after late canonicalization.
+  Legacy archive county authority is now preserved across archive->live and canonical
+  rebind boundaries, followed by a final placement-level quarantine/recovery pass.
+
+FEED NOTE
+  Google News returned many 503/timeouts in the failed run. This degraded source intake
+  but was not the terminating exception and is intentionally not mixed into this hotfix.

@@ -283,3 +283,108 @@ def test_legacy_archive_marker_cannot_override_conflicting_source_evidence():
     assert "martin" not in assessment["supported_counties"]
     assert any(row["county"] == "palm_beach" for row in assessment["conflicting_counties"])
     assert "martin" not in generate._item_category_memberships(item, "business")
+
+
+def test_archive_recovery_preserves_legacy_county_authority_marker(tmp_path: Path, monkeypatch):
+    """Regression for the Aug. 7 production crash after archive recovery.
+
+    A legacy row can be valid only because archive migration stamped the conservative
+    migration-only county marker. Projecting that row back to a live county surface
+    must carry the marker with it or the final live gate will reject the recovered row.
+    """
+    generate = _load_generate()
+    marker = {
+        "origin": generate.COUNTY_LEGACY_ARCHIVE_AUTHORITY_ORIGIN,
+        "contract_version": generate.COUNTY_MEMBERSHIP_AUTHORITY_VERSION,
+        "counties": ["indian_river"],
+        "migration_only": True,
+    }
+    legacy = {
+        "slug": "2026-06-15-vero-beach-project-advances",
+        "headline": "Vero Beach project advances",
+        "teaser": "Indian River County officials moved the Vero Beach project forward.",
+        "body": "Indian River County officials moved the Vero Beach project forward after reviewing the next phase. The project remains under local review.",
+        "category_key": "indian_river",
+        "category_keys": ["indian_river"],
+        "county_keys": ["indian_river"],
+        "source_url": "",
+        "source_headline": "",
+        "article_text": "",
+        "article_word_count": 200,
+        "article_paragraph_count": 3,
+        "date": "2026-06-15",
+        "lastmod": "2026-06-15",
+        "county_membership_authority": marker,
+        "ranking_eligible": True,
+    }
+    (tmp_path / "archive.json").write_text(json.dumps([legacy]), encoding="utf-8")
+    monkeypatch.setattr(generate, "OUTPUT_DIR", tmp_path)
+    monkeypatch.setattr(generate, "get_fallback_image", lambda *args, **kwargs: ("", ""))
+    monkeypatch.setattr(
+        generate,
+        "_sanitize_authoritative_custom_archive",
+        lambda archive, articles_dir: archive,
+    )
+    monkeypatch.setattr(
+        generate,
+        "_backfill_archive_editorial_story_ids",
+        lambda archive, index, output_root=None: (archive, {}),
+    )
+    monkeypatch.setattr(generate, "_load_publication_identity_index", lambda: {})
+
+    categories = [{
+        "category_key": "indian_river",
+        "category_label": "Indian River County",
+        "hero": None,
+        "cards": [],
+    }]
+    generate.ensure_all_category_sections(categories, min_cards=0)
+    recovered = next(c for c in categories if c["category_key"] == "indian_river")["hero"]
+
+    assert recovered["headline"] == legacy["headline"]
+    assert recovered["county_membership_authority"] == marker
+    assessment = generate._county_membership_authority_assessment(recovered, "indian_river")
+    assert "indian_river" in assessment["supported_counties"]
+    result = generate.validate_live_county_membership_authority(
+        categories, output_root=tmp_path
+    )
+    assert result["passed"] is True
+
+
+def test_canonical_rebind_carries_persisted_county_authority_provenance():
+    generate = _load_generate()
+    marker = {
+        "origin": generate.COUNTY_LEGACY_ARCHIVE_AUTHORITY_ORIGIN,
+        "contract_version": generate.COUNTY_MEMBERSHIP_AUTHORITY_VERSION,
+        "counties": ["st_lucie"],
+        "migration_only": True,
+    }
+    item = {
+        "headline": "Temporary duplicate headline",
+        "category_key": "st_lucie",
+        "category_keys": ["st_lucie"],
+        "county_keys": ["st_lucie"],
+        "link": "https://treasurecoast.today/articles/duplicate.html",
+    }
+    identity = {
+        "canonical_slug": "2026-06-01-fort-pierce-project",
+        "canonical_permalink": "https://treasurecoast.today/articles/2026-06-01-fort-pierce-project.html",
+        "identity_basis": "persistent_story_id",
+        "story_id": "story_fixture",
+        "canonical_entry": {
+            "headline": "Fort Pierce project moves forward",
+            "teaser": "The project advanced.",
+            "source_url": "",
+            "source_headline": "",
+            "article_text": "",
+            "county_membership_authority": marker,
+            "editorial_story_id": "story_fixture",
+        },
+    }
+
+    changed = generate._apply_final_canonical_surface_identity(item, identity)
+
+    assert changed is True
+    assert item["county_membership_authority"] == marker
+    assessment = generate._county_membership_authority_assessment(item, "st_lucie")
+    assert "st_lucie" in assessment["supported_counties"]

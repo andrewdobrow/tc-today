@@ -1,0 +1,29 @@
+TCT v1.13.2.1 — RUN NOW
+
+This ZIP is cumulative. You do NOT need to apply the earlier v1.13.2.0 or FDOT custom
+article ZIP separately if you use this package.
+
+1. Extract this ZIP locally.
+2. Open the folder: tct-v1.13.2.1-emergency-web-upload-safe-overlay
+3. Copy/drag the CONTENTS of that folder into the ROOT of your tc-today repo.
+4. Preserve paths and overwrite matching files:
+     scripts/generate.py
+     tests/test_county_membership_authority.py
+     tests/test_final_canonical_surface_dedup.py
+     tests/test_persistent_story_identity_integrity.py
+     tests/test_category_eligibility_contracts.py
+     custom_articles.json
+5. Commit/push.
+6. Run "Test Editorial Engine".
+7. If green, immediately run "Update Treasure Coast Today".
+
+Expected production signal near the end:
+  Persistent story identity integrity PASSED ... advisory ...
+  Final county membership authority PASSED (... live placement(s) assessed)
+  Live category canonical contract PASSED (...)
+
+If the final county repair finds a late mismatch, it may also log:
+  Final county authority quarantined N unsupported placement(s) after canonicalization;
+  recovering affected sections
+
+That message is a successful self-repair path, not a workflow failure.

@@ -9448,6 +9448,21 @@ def _apply_final_canonical_surface_identity(item, identity):
             if value not in (None, "") and item.get(key) != value:
                 item[key] = value
                 changed = True
+        # Canonical rebinding must carry the canonical owner's provenance along with
+        # its copy. Otherwise a valid archive-recovered county story can lose the
+        # source/legacy authority that justified its county membership and then fail
+        # the final live gate after canonicalization. Never synthesize these fields
+        # from generated copy; copy only persisted canonical provenance.
+        for key in (
+            "source_url", "latest_source_url", "source_headline",
+            "latest_source_headline", "source_title", "source_summary",
+            "article_text", "feed_url", "event_identity",
+            "county_membership_authority",
+        ):
+            value = canonical_entry.get(key)
+            if value not in (None, "", [], {}) and item.get(key) != value:
+                item[key] = copy.deepcopy(value)
+                changed = True
         if canonical_entry.get("is_custom") or canonical_entry.get("authoritative_custom"):
             if not item.get("is_custom"):
                 item["is_custom"] = True
@@ -25260,6 +25275,12 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             "article_text": e.get("article_text") or "",
             "feed_url": e.get("feed_url") or "",
             "event_identity": copy.deepcopy(e.get("event_identity") or {}),
+            # Preserve migration-only county authority when a legacy archive row is
+            # projected back onto a live surface. Dropping this marker makes a row that
+            # passed archive authority immediately fail the final live authority gate.
+            "county_membership_authority": copy.deepcopy(
+                e.get("county_membership_authority") or {}
+            ),
             "_archived_slug": e["slug"],
             "_archive_only": True,
             "_archive_verified_quality": True,
@@ -27394,6 +27415,31 @@ def main():
     # Reselection can promote a card and demote the former hero. Canonicalize once
     # more so every resulting placement still points directly at its final owner.
     canonicalize_all_live_category_surfaces(all_categories, top_cat, OUTPUT_DIR)
+
+    # Canonical rebinding is intentionally late and can replace a live object with
+    # persisted archive metadata. Re-run the county authority repair *after* that
+    # mutation boundary. Unsupported county metadata is stripped and unsupported
+    # county placements are quarantined locally rather than sacrificing the entire
+    # otherwise-valid publishing run. If a county hero is removed, deterministic
+    # archive recovery supplies an authority-checked replacement (or a structural
+    # placeholder when no real story qualifies).
+    _final_county_repair = enforce_live_county_membership_authority(all_categories)
+    if _final_county_repair.get("rejections"):
+        print(
+            "  Final county authority quarantined "
+            f"{len(_final_county_repair['rejections'])} unsupported placement(s) "
+            "after canonicalization; recovering affected sections"
+        )
+        ensure_all_category_sections(all_categories)
+        canonicalize_all_live_category_surfaces(all_categories, top_cat, OUTPUT_DIR)
+        _final_county_repair_second = enforce_live_county_membership_authority(all_categories)
+        if _final_county_repair_second.get("rejections"):
+            print(
+                "  Final county authority quarantined "
+                f"{len(_final_county_repair_second['rejections'])} additional "
+                "placement(s) after recovery"
+            )
+
     validate_live_county_membership_authority(all_categories, top_cat, OUTPUT_DIR)
     validate_live_category_canonical_uniqueness(all_categories, top_cat, OUTPUT_DIR)
     print(f"  Timing: archive, publication identity and permalink gates {time.perf_counter() - _stage_started:.1f}s")
