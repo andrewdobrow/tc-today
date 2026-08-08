@@ -1,0 +1,73 @@
+Treasure Coast Today v1.13.2.4 — Cross-Source Identity Evidence Repair + Membership Dark Launch
+Date: 2026-08-08
+
+This is a cumulative overlay over the user's 2026-08-08 current repo. It includes
+all v1.13.2.3 emergency containment changes plus the v1.13.2.4 changes below.
+
+1) Keeps v1.13.2.3 current-run contamination containment
+   - Newly contaminated persistent stories are quarantined at editorial-audit
+     category boundaries.
+   - Current-run publication authority from quarantined identities is revoked.
+   - The final persistent identity integrity gate remains hard-fail.
+
+2) Fixes the cross-source evidence plumbing defect
+   - scripts/generate.py already enriches feed rows with exact publisher article_text
+     before the editorial audit.
+   - tct_engine/rss_adapter.py previously ignored article_text/source_text and gave
+     the deterministic editorial engine only RSS content/summary. Google News
+     summaries are often little more than the headline.
+   - The adapter now prefers body/article_text/source_text before RSS content/summary.
+   - This lets deterministic identity code use the exact facts the generator already
+     fetched rather than trying to infer identity from sparse headlines.
+
+3) Adds conservative animal-cruelty incident identity
+   - Adds the animal_cruelty incident family.
+   - Uses concrete anchors including locality, age, bond amount, small-dog facts,
+     social-media video, kicking action, pool scene and agency continuity.
+   - Conflicting age/bond facts hard-reject a merge.
+   - The contract is robust to the Shieferstein/Schieferstein one-letter publisher
+     spelling discrepancy in the Aug. 8 Port St. Lucie case.
+   - Adds core Treasure Coast law-enforcement agency extraction for St. Lucie County
+     Sheriff's Office, Indian River County Sheriff's Office, Port St. Lucie Police,
+     and Fort Pierce Police.
+
+4) Permanently repairs the escaped Aug. 8 Port St. Lucie animal-cruelty duplicate
+   Canonical (oldest public URL):
+   /articles/2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog.html
+
+   Redirected duplicate:
+   /articles/2026-08-08-port-st-lucie-man-arrested-on-animal-cruelty-charge-after-video-circulates-on-so.html
+
+   - The duplicate becomes a canonical redirect.
+   - The surviving canonical keeps combined Crime & Safety + St. Lucie County
+     category membership, so one story can appear on both category surfaces without
+     creating two article URLs.
+   - A permanent regression test covers this exact production escape.
+
+5) Prebuilds the requested membership navigation/card in DARK mode only
+   - Default remains TCT_MEMBERSHIP_UI_ENABLED=false.
+   - With the flag OFF (the production default), current readers continue to see:
+       Header: Advertise
+       Homepage promo: existing advertising solicitation card
+   - No paywall, Subscribe CTA, membership purchase link, or article truncation is
+     exposed by this overlay.
+   - Once live payment/auth/entitlement/account management are complete, enabling the
+     flag switches the header CTA to Subscribe and the homepage promo to the locked
+     coral membership design:
+       "Comprehensive local coverage. No ads. Less than $5 a month."
+       $4.99 monthly / $49 annually / completely ad-free
+   - update.yml passes the two dark-launch variables, both safe by default:
+       TCT_MEMBERSHIP_UI_ENABLED=false
+       TCT_SUBSCRIBE_URL=/subscribe.html
+
+Validation performed:
+- scripts/validate_package.py: PASSED (34 modules, 119 public exports)
+- Exact pytest command used by TCT GitHub workflows:
+  python -m pytest tests --ignore=tests/test_canonical_identity.py --ignore=tests/test_matcher_contract.py
+  Result: 792 passed, 0 failed.
+- Targeted membership/evidence/animal-cruelty tests: PASSED.
+
+IMPORTANT LAUNCH SAFETY
+Do not set TCT_MEMBERSHIP_UI_ENABLED=true yet. The Subscribe page/payment and
+entitlement flow are not live in this increment. The flag is intentionally false so
+this overlay can be deployed to the active readership safely.

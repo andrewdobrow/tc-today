@@ -88,6 +88,15 @@ class RSSArticleAdapter:
         self,
         entry: Mapping[str, Any],
     ) -> str:
+        # The generator enriches feed entries with the publisher's exact article
+        # text before the editorial audit runs.  Identity decisions must consume
+        # that evidence instead of falling back to a thin RSS/Google News summary
+        # (which is often little more than the headline).
+        for field in ("body", "article_text", "source_text"):
+            cleaned = self._clean_html(entry.get(field))
+            if cleaned:
+                return cleaned
+
         content = entry.get("content")
 
         if isinstance(content, list):

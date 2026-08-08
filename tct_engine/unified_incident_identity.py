@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 import re
 from typing import Any, Iterable, Mapping
 
-UNIFIED_INCIDENT_EVIDENCE_VERSION = 2
+UNIFIED_INCIDENT_EVIDENCE_VERSION = 3
 _STORY_EVIDENCE_CACHE: dict[tuple[Any, ...], tuple["UnifiedIncidentEvidence", ...]] = {}
 _STORY_EVIDENCE_CACHE_LIMIT = 10000
 
@@ -50,6 +50,7 @@ def _family(text: str) -> str:
     patterns = (
         ("road_rage", r"\broad rage\b|\b(?:pit|police) maneuver\b|\brun(?:ning)? .{0,45} off (?:the )?road\b|\bchased? off (?:the )?road\b"),
         ("wildfire_arson", r"\bwildfire\b|\bbrush fire\b.{0,45}\b(?:arson|set|setting|charged)\b|\b(?:arson|set|setting)\b.{0,45}\b(?:wildfire|brush fire)\b"),
+        ("animal_cruelty", r"\banimal cruelty\b|\b(?:dog|cat|animal|pet)\b.{0,55}\b(?:kicked|kicking|abused|abusing|beaten|beating|cruelty)\b|\b(?:kicked|kicking|abused|abusing|beaten|beating|cruelty)\b.{0,55}\b(?:dog|cat|animal|pet)\b"),
         ("animal_rescue", r"\b(?:cat|cats|dog|dogs|animal|animals|hamster|pets?)\b.{0,45}\b(?:rescue|rescued|saved)\b|\b(?:rescue|rescued|saved)\b.{0,45}\b(?:cat|cats|dog|dogs|animal|animals|hamster|pets?)\b"),
         (
             "missing_person",
@@ -72,6 +73,8 @@ def _family(text: str) -> str:
 
 
 def _concepts(text: str) -> set[str]:
+    raw = str(text or "")
+    normalized = _norm(raw)
     concepts: set[str] = set()
     tests = (
         ("pit_maneuver", r"\b(?:pit|police) maneuver\b"),
@@ -91,14 +94,43 @@ def _concepts(text: str) -> set[str]:
         ("grand_oaks", r"\bgrand oaks(?: living facility| senior living| living)?\b"),
         ("coquina_cove", r"\bcoquina cove\b"),
         ("palm_city", r"\bpalm city\b"),
+        # Animal-cruelty reports frequently drift from a broad charge headline to
+        # a video/action headline.  These are concrete incident anchors, not
+        # generic crime vocabulary.
+        ("animal_cruelty", r"\banimal cruelty\b"),
+        ("small_dog", r"\bsmall dog\b|\blittle dog\b"),
+        ("social_media_video", r"\bsocial media (?:video|clip|post)\b|\bviral video\b"),
+        ("kicking_dog", r"\b(?:kick|kicked|kicking)\b.{0,28}\b(?:dog|pet)\b|\b(?:dog|pet)\b.{0,28}\b(?:kick|kicked|kicking)\b"),
+        ("pool_scene", r"\b(?:pool|swimming pool)\b"),
     )
     for name, pattern in tests:
-        if re.search(pattern, text):
+        if re.search(pattern, normalized):
             concepts.add(name)
-    for match in re.finditer(r"\b(\d{1,2})\s+year\s+old\b", text):
+
+    for match in re.finditer(r"\b(\d{1,2})\s+year\s+old\b", normalized):
         age = int(match.group(1))
         if 0 <= age <= 99:
             concepts.add(f"age_{age}")
+
+    # Publisher copy also commonly renders age as ``Full Name, 68, ...``.
+    for match in re.finditer(
+        r"\b[A-Z][A-Za-z'.-]+(?:\s+[A-Z][A-Za-z'.-]+){1,2},\s*(\d{1,2})(?:,|\s)",
+        raw,
+    ):
+        age = int(match.group(1))
+        if 0 <= age <= 99:
+            concepts.add(f"age_{age}")
+
+    # Bond is a highly discriminating arrest fact. Normalize punctuation so
+    # ``$7,500`` and ``$7500`` become the same deterministic concept.
+    for pattern in (
+        r"\$\s*([0-9][0-9,]{2,})\s+(?:bond|bail)",
+        r"\b(?:bond|bail)(?:\s+(?:was|is|set|amount|at))*\s*\$\s*([0-9][0-9,]{2,})",
+    ):
+        for match in re.finditer(pattern, raw, re.I):
+            amount = re.sub(r"[^0-9]", "", match.group(1))
+            if amount:
+                concepts.add(f"bond_{amount}")
     return concepts
 
 
@@ -231,7 +263,7 @@ def build_unified_incident_evidence(
     distinctive = _tokens(text) - _GENERIC - location_tokens - agency_tokens
     return UnifiedIncidentEvidence(
         family=_family(normalized),
-        concepts=tuple(sorted(_concepts(normalized))),
+        concepts=tuple(sorted(_concepts(text))),
         people=tuple(sorted(_person_names(text))),
         locations=tuple(sorted(normalized_locations)),
         agencies=tuple(sorted(normalized_agencies)),
@@ -302,6 +334,44 @@ def compare_unified_incident_evidence(
     if shared_people:
         confidence = 0.94 + min(0.04, 0.01 * len(shared_concepts))
         qualified = True
+    elif incoming.family == "animal_cruelty":
+        ages_a = {value for value in concepts_a if value.startswith("age_")}
+        ages_b = {value for value in concepts_b if value.startswith("age_")}
+        bonds_a = {value for value in concepts_a if value.startswith("bond_")}
+        bonds_b = {value for value in concepts_b if value.startswith("bond_")}
+        shared_age = ages_a & ages_b
+        shared_bond = bonds_a & bonds_b
+        age_conflict = bool(ages_a and ages_b and not shared_age)
+        bond_conflict = bool(bonds_a and bonds_b and not shared_bond)
+        if age_conflict or bond_conflict:
+            return 0.0, (
+                f"Animal-cruelty age conflict: {age_conflict}",
+                f"Animal-cruelty bond conflict: {bond_conflict}",
+            )
+        core = {"animal_cruelty", "small_dog", "social_media_video", "kicking_dog", "pool_scene"}
+        shared_core = shared_concepts & core
+        # Same place + same age + same bond + the same concrete animal/video
+        # facts is an incident fingerprint strong enough to survive a one-letter
+        # publisher spelling discrepancy in the subject's surname.
+        if shared_locations and shared_age and shared_bond and len(shared_core) >= 2:
+            confidence = 0.99
+            qualified = True
+        elif (
+            shared_locations
+            and bool(shared_age or shared_bond)
+            and bool(shared_agencies)
+            and len(shared_core) >= 3
+        ):
+            confidence = 0.97
+            qualified = True
+        elif (
+            shared_locations
+            and bool(shared_agencies)
+            and len(shared_core) >= 4
+            and len(shared_distinctive) >= 3
+        ):
+            confidence = 0.93
+            qualified = True
     elif incoming.family == "missing_person":
         ages_a = {value for value in concepts_a if value.startswith("age_")}
         ages_b = {value for value in concepts_b if value.startswith("age_")}
@@ -370,7 +440,7 @@ def compare_unified_incident_evidence(
         # both high token overlap and at least three shared distinctive terms.
         general_family_allowed = incoming.family in {
             "traffic_crash", "shooting", "murder_suicide",
-            "animal_rescue", "dui", "wildfire_arson", "missing_person",
+            "animal_rescue", "animal_cruelty", "dui", "wildfire_arson", "missing_person",
         }
         location_agency_signature = (
             general_family_allowed

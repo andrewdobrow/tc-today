@@ -14,6 +14,7 @@ from tct_engine.publication_identity import build_publication_identity_index
 from tct_engine.registry_repair import (
     is_broad_event_class_key,
     repair_registry_payload,
+    quarantine_active_story_contamination,
 )
 from tct_engine.story_registry import StoryRegistry
 
@@ -407,3 +408,101 @@ def test_final_integrity_validator_does_not_discard_run_for_fragment_candidate(t
     written = json.loads((data_dir / "persistent-story-identity-integrity.json").read_text(encoding="utf-8"))
     assert written["status"] == "passed_with_advisories"
     assert written["summary"]["advisory_warning_count"] == 1
+
+
+def test_current_run_contamination_is_quarantined_without_full_registry_repair():
+    payload = {
+        "next_story_id": 3,
+        "stories": {
+            "story_002076": {
+                "story_id": "story_002076",
+                "events": ["unknown-event-road1", "unknown-event-road2"],
+                "titles": [
+                    "Fort Myers man arrested after PIT maneuver sends family into fence near Stuart",
+                    "Oakland man arrested after two shot at Woodward Reservoir in California",
+                ],
+                "sources": [],
+                "timeline": [
+                    {"title": "Fort Myers man arrested after PIT maneuver sends family into fence near Stuart"},
+                    {"title": "Oakland man arrested after two shot at Woodward Reservoir in California"},
+                ],
+                "unified_incident_evidence": [],
+            },
+            "story_safe": {
+                "story_id": "story_safe",
+                "events": ["unknown-event-safe"],
+                "titles": ["Martin County approves new park improvements in Stuart"],
+                "sources": [],
+                "timeline": [],
+                "unified_incident_evidence": [],
+            },
+        },
+        "event_to_story": {
+            "unknown-event-road1": "story_002076",
+            "unknown-event-road2": "story_002076",
+            "unknown-event-safe": "story_safe",
+        },
+        "story_aliases": {"story_old": "story_002076"},
+        "quarantined_stories": {},
+        "incident_anchor_to_story": {
+            "road-rage:bad": "story_002076",
+            "safe:park": "story_safe",
+        },
+    }
+
+    quarantined = quarantine_active_story_contamination(payload)
+
+    assert quarantined == {"story_002076": ("unsupported_sparse_event_merge",)}
+    assert "story_002076" not in payload["stories"]
+    assert "story_002076" in payload["quarantined_stories"]
+    assert "story_old" not in payload["story_aliases"]
+    assert "unknown-event-road1" not in payload["event_to_story"]
+    assert payload["event_to_story"]["unknown-event-safe"] == "story_safe"
+    assert "road-rage:bad" not in payload["incident_anchor_to_story"]
+    assert payload["incident_anchor_to_story"]["safe:park"] == "story_safe"
+
+
+def test_current_run_quarantine_revokes_candidate_authority_before_activation():
+    g = _load_generate()
+    prior_denylist = set(g.CURRENT_RUN_QUARANTINED_STORY_IDS)
+    prior_identities = dict(g.CURRENT_RUN_EDITORIAL_IDENTITIES)
+    source = "https://example.com/road-rage"
+    try:
+        g.CURRENT_RUN_QUARANTINED_STORY_IDS = set()
+        g.CURRENT_RUN_EDITORIAL_IDENTITIES = {
+            source: {
+                "story_id": "story_002076",
+                "event_key": "unknown-event-road1",
+                "route": "skip",
+            }
+        }
+        headline = {
+            "title": "Fort Myers man arrested after road rage crash",
+            "link": source,
+            "editorial_story_id": "story_002076",
+            "_editorial_story_id": "story_002076",
+            "_editorial_route": "skip",
+        }
+        audit_rows = [{
+            "story_id": "story_002076",
+            "route": "skip",
+            "source_url": source,
+        }]
+
+        contained = g._contain_newly_quarantined_editorial_identities(
+            {"story_002076": ("unsupported_sparse_event_merge",)},
+            [headline],
+            audit_rows,
+        )
+
+        assert contained == ["story_002076"]
+        assert "story_002076" in g.CURRENT_RUN_QUARANTINED_STORY_IDS
+        assert source not in g.CURRENT_RUN_EDITORIAL_IDENTITIES
+        assert "editorial_story_id" not in headline
+        assert "_editorial_route" not in headline
+        assert audit_rows[0]["identity_quarantined"] is True
+        assert audit_rows[0]["activation_eligible"] is False
+        assert audit_rows[0]["quarantine_reasons"] == ["unsupported_sparse_event_merge"]
+    finally:
+        g.CURRENT_RUN_QUARANTINED_STORY_IDS = prior_denylist
+        g.CURRENT_RUN_EDITORIAL_IDENTITIES = prior_identities

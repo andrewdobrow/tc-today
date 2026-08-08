@@ -316,3 +316,145 @@ def test_existing_road_rage_duplicate_redirects_to_august_4_canonical(tmp_path: 
     redirect = next(row for row in redirects if row["source_slug"] == DUPLICATE)
     assert redirect["target_slug"] == CANONICAL
     assert (articles / f"{DUPLICATE}.html").exists()
+
+
+def test_psl_animal_cruelty_headline_drift_has_verified_identity_despite_name_typo():
+    cbs = build_unified_incident_evidence(
+        title="Port St. Lucie man arrested after video shows him allegedly abusing small dog",
+        body=(
+            "Ricky Lee Shieferstein, 68, was arrested after the St. Lucie County "
+            "Sheriff's Office investigated a social media video that appeared to "
+            "show him kicking a small dog near a pool. He was held on a $7,500 bond."
+        ),
+        locations=("Port St. Lucie",),
+        agencies=("St. Lucie County Sheriff's Office",),
+        published_at="2026-08-08T01:02:00+00:00",
+    )
+    hometown = build_unified_incident_evidence(
+        title="Port St. Lucie man charged with animal cruelty",
+        body=(
+            "Ricky Lee Schieferstein, 68, was arrested Aug. 6 on an animal cruelty "
+            "charge after a social media video circulated showing him kicking a small "
+            "dog near a swimming pool, according to the St. Lucie County Sheriff's "
+            "Office. His bond was set at $7,500."
+        ),
+        locations=("Port St. Lucie",),
+        agencies=("St. Lucie County Sheriff's Office",),
+        published_at="2026-08-08T01:46:00+00:00",
+    )
+
+    assert cbs.family == hometown.family == "animal_cruelty"
+    confidence, trace = compare_unified_incident_evidence(cbs, hometown)
+    assert confidence >= 0.97
+    assert "Shared concepts:" in " ".join(trace)
+    assert "Identity anchors qualified: True" in trace
+
+
+def test_psl_animal_cruelty_contract_does_not_merge_unrelated_same_city_case():
+    first = build_unified_incident_evidence(
+        title="Port St. Lucie man charged with animal cruelty",
+        body=(
+            "A 68-year-old man was arrested after a social media video showed him "
+            "kicking a small dog. His bond was $7,500."
+        ),
+        locations=("Port St. Lucie",),
+        agencies=("St. Lucie County Sheriff's Office",),
+        published_at="2026-08-08T01:46:00+00:00",
+    )
+    unrelated = build_unified_incident_evidence(
+        title="Port St. Lucie resident faces animal cruelty charge in separate case",
+        body=(
+            "A 42-year-old resident was arrested after investigators found an injured "
+            "cat. Bond was set at $2,500."
+        ),
+        locations=("Port St. Lucie",),
+        agencies=("St. Lucie County Sheriff's Office",),
+        published_at="2026-08-09T01:46:00+00:00",
+    )
+
+    confidence, _ = compare_unified_incident_evidence(first, unrelated)
+    assert confidence == 0.0
+
+
+def test_editorial_engine_uses_enriched_source_text_to_join_psl_animal_cruelty_sources(tmp_path: Path):
+    engine = EditorialEngine(
+        default_published_at=datetime(2026, 8, 8, 1, tzinfo=timezone.utc),
+        registry_path=tmp_path / "registry.json",
+    )
+    first = engine.process(
+        {
+            "id": "cbs-animal-cruelty",
+            "title": "Port St. Lucie man arrested after video shows him allegedly abusing small dog",
+            "link": "https://cbs12.com/example-animal-cruelty",
+            "summary": "Port St. Lucie man arrested after video shows him allegedly abusing small dog",
+            "article_text": (
+                "Ricky Lee Shieferstein, 68, was arrested after the St. Lucie County "
+                "Sheriff's Office investigated a social media video that showed him "
+                "kicking a small dog near a pool. He was held on a $7,500 bond."
+            ),
+        },
+        source="CBS12",
+        county="St. Lucie",
+    )
+    second = engine.process(
+        {
+            "id": "hometown-animal-cruelty",
+            "title": "Port St. Lucie man charged with animal cruelty",
+            "link": "https://www.hometownnewstc.com/example-animal-cruelty",
+            "summary": "Port St. Lucie man charged with animal cruelty",
+            "article_text": (
+                "Ricky Lee Schieferstein, 68, was arrested on an animal cruelty charge "
+                "after a social media video showed him kicking a small dog near a "
+                "swimming pool, the St. Lucie County Sheriff's Office said. His bond "
+                "was set at $7,500."
+            ),
+        },
+        source="Hometown News Treasure Coast",
+        county="St. Lucie",
+    )
+
+    assert second.story_id == first.story_id
+    assert second.action in {EditorialAction.IGNORE, EditorialAction.UPDATE_EXISTING}
+
+
+def test_existing_psl_animal_cruelty_duplicate_redirects_to_oldest_canonical_and_merges_categories(tmp_path: Path):
+    generate = _load_generate_module()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    canonical = generate.PSL_ANIMAL_CRUELTY_CANONICAL_SLUG
+    duplicate = next(iter(generate.PSL_ANIMAL_CRUELTY_REDIRECT_SOURCE_SLUGS))
+    archive = [
+        {
+            "slug": canonical,
+            "headline": "Port St. Lucie man arrested after video shows him kicking small dog",
+            "date": "2026-08-08",
+            "first_published": "2026-08-08T01:02:00+00:00",
+            "category_key": "st_lucie",
+            "category_keys": ["st_lucie"],
+            "county_key": "st_lucie",
+            "editorial_story_id": "story_002576",
+            "source_headline": "Port St. Lucie man arrested after video shows him allegedly abusing small dog - cbs12.com",
+            "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office",
+        },
+        {
+            "slug": duplicate,
+            "headline": "Port St. Lucie man arrested on animal cruelty charge after video circulates on social media",
+            "date": "2026-08-08",
+            "first_published": "2026-08-08T01:46:00+00:00",
+            "category_key": "crime",
+            "category_keys": ["crime", "st_lucie"],
+            "county_key": "st_lucie",
+            "editorial_story_id": "story_002573",
+            "source_headline": "Port St. Lucie man charged with animal cruelty - Hometown News Treasure Coast",
+            "source_url": "https://www.hometownnewstc.com/multimedia/photo_galleries/st_lucie/port-st-lucie-man-charged-with-animal-cruelty/article_12646c96-5d70-5527-844c-6561ae54674c.html",
+        },
+    ]
+
+    cleaned, redirects = generate.apply_canonical_story_cleanup(archive, articles, tmp_path)
+
+    assert [row["slug"] for row in cleaned] == [canonical]
+    assert set(cleaned[0]["category_keys"]) >= {"crime", "st_lucie"}
+    redirect = next(row for row in redirects if row["source_slug"] == duplicate)
+    assert redirect["target_slug"] == canonical
+    rendered = (articles / f"{duplicate}.html").read_text()
+    assert f"/articles/{canonical}.html" in rendered

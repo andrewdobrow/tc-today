@@ -178,3 +178,20 @@ def test_unknown_article_returns_empty_fact_collections():
     assert result.locations == ()
     assert result.agencies == ()
     assert result.event_types == ()
+
+def test_extracts_core_st_lucie_law_enforcement_agency():
+    article = make_article(
+        title="Port St. Lucie man charged with animal cruelty",
+        body=(
+            "The St. Lucie County Sheriff's Office investigated a social "
+            "media video showing a small dog being kicked in Port St. Lucie."
+        ),
+        county="St. Lucie",
+    )
+
+    result = extract_article_facts(article)
+
+    assert "St. Lucie County Sheriff's Office" in result.agencies
+    assert "Port St. Lucie" in result.locations
+    assert "animal cruelty" in result.facts
+

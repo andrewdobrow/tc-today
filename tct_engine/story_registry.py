@@ -39,6 +39,7 @@ from .registry_repair import (
     normalize_identity_title,
     normalize_title,
     repair_registry_payload,
+    quarantine_active_story_contamination,
 )
 
 _WORD_RE = re.compile(r"[a-z0-9]+")
@@ -443,6 +444,19 @@ class StoryRegistry:
             self._save_pending = True
             return
         self._write()
+
+    def quarantine_active_contamination(self) -> dict[str, tuple[str, ...]]:
+        """Fail closed on story contamination introduced after registry load.
+
+        This is called at a production audit batch boundary, after the article's
+        timeline entry has been recorded.  A contaminated story is removed from
+        active identity authority instead of being allowed to abort the entire site
+        build several minutes later at the final publication gate.
+        """
+        quarantined = quarantine_active_story_contamination(self.data)
+        if quarantined:
+            self._write()
+        return quarantined
 
     @contextmanager
     def defer_saves(self, *, commit: bool = True):

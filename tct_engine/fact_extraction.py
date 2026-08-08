@@ -48,6 +48,22 @@ _AGENCIES = (
         "Martin County Sheriff's Office",
     ),
     (
+        re.compile(r"st\.?\s*lucie county sheriff", re.I),
+        "St. Lucie County Sheriff's Office",
+    ),
+    (
+        re.compile(r"indian river county sheriff", re.I),
+        "Indian River County Sheriff's Office",
+    ),
+    (
+        re.compile(r"port st\.?\s*lucie police", re.I),
+        "Port St. Lucie Police Department",
+    ),
+    (
+        re.compile(r"fort pierce police", re.I),
+        "Fort Pierce Police Department",
+    ),
+    (
         re.compile(r"st\.?\s*lucie county fire district", re.I),
         "St. Lucie County Fire District",
     ),

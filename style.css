@@ -4234,3 +4234,122 @@ html.kit-sticky-visible .article-reading-progress {
     box-sizing: border-box !important;
   }
 }
+
+/* ================================================================
+   v2.4 — MEMBERSHIP DARK-LAUNCH PROMO CARD
+   Not rendered unless TCT_MEMBERSHIP_UI_ENABLED is explicitly enabled.
+   The coral treatment intentionally contrasts with TCT's forest-green chrome.
+   ================================================================ */
+.articles-grid > .tct-membership-card {
+  position: relative;
+  isolation: isolate;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: stretch;
+  min-height: 100%;
+  overflow: hidden;
+  border: 0;
+  background: #f26445 !important;
+  color: #171717 !important;
+  text-decoration: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.articles-grid > .tct-membership-card::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(255,255,255,.28), transparent 32%),
+    linear-gradient(145deg, #f57a5f 0%, #f26445 58%, #e95437 100%);
+}
+
+.articles-grid > .tct-membership-card::after {
+  content: "TCT";
+  position: absolute;
+  right: -12px;
+  bottom: -30px;
+  z-index: -1;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 112px;
+  line-height: 1;
+  font-weight: 700;
+  color: rgba(23,23,23,.06);
+  pointer-events: none;
+}
+
+.tct-membership-card-inner {
+  display: flex !important;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  min-height: 100%;
+  padding: clamp(26px, 3vw, 42px);
+}
+
+.tct-membership-kicker {
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.tct-membership-headline {
+  max-width: 18ch;
+  margin: 0;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(24px, 2vw, 32px);
+  font-weight: 650;
+  line-height: 1.08;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+
+.tct-membership-copy {
+  max-width: 46ch;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.58;
+}
+
+.tct-membership-options {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.tct-membership-options span {
+  display: inline-flex;
+  padding: 5px 9px;
+  border: 1px solid rgba(23,23,23,.24);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  background: rgba(255,255,255,.34);
+}
+
+.tct-membership-cta {
+  margin-top: 4px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgba(23,23,23,.62);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.tct-membership-card:focus-visible {
+  outline: 3px solid #171717;
+  outline-offset: -6px;
+}
+
+@media (max-width: 680px) {
+  .articles-grid > .tct-membership-card { min-height: 330px; }
+  .tct-membership-card-inner { padding: 30px 24px; }
+  .tct-membership-headline { max-width: 18ch; font-size: 28px; }
+}

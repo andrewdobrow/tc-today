@@ -133,7 +133,54 @@ except Exception:
 
 # -- CONFIG --
 
-TCT_PRESENTATION_VERSION = "6.7.1-reader-support-pretest-preflight"
+TCT_PRESENTATION_VERSION = "6.7.2-membership-dark-launch-preflight"
+
+# Membership launch safety. This remains OFF until live Stripe checkout,
+# webhook-backed entitlement, authentication, article unlock and account
+# management are all verified end-to-end. While off, current readers continue
+# to see the existing Advertise CTA/card exactly as before.
+MEMBERSHIP_UI_ENABLED = os.getenv("TCT_MEMBERSHIP_UI_ENABLED", "0").strip().lower() in {
+    "1", "true", "yes", "on",
+}
+MEMBERSHIP_SUBSCRIBE_URL = os.getenv("TCT_SUBSCRIBE_URL", "/subscribe.html").strip() or "/subscribe.html"
+
+
+def _header_primary_cta_html():
+    if MEMBERSHIP_UI_ENABLED:
+        return (
+            f'<a href="{html_lib.escape(MEMBERSHIP_SUBSCRIBE_URL, quote=True)}" '
+            'class="support-btn membership-subscribe-btn" style="text-decoration:none">Subscribe</a>'
+        )
+    return '<a href="/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>'
+
+
+def _homepage_support_card_html():
+    if MEMBERSHIP_UI_ENABLED:
+        href = html_lib.escape(MEMBERSHIP_SUBSCRIBE_URL, quote=True)
+        return f'''
+      <a href="{href}" class="grid-card tct-membership-card" data-cat="all" data-support-card="true" aria-label="Subscribe to Treasure Coast Today">
+        <div class="tct-membership-card-inner">
+          <span class="tct-membership-kicker">Treasure Coast Today Membership</span>
+          <h2 class="tct-membership-headline">Comprehensive local coverage. No ads. Less than $5 a month.</h2>
+          <p class="tct-membership-copy">Get unlimited access to Treasure Coast Today and support independent journalism covering Martin, St. Lucie and Indian River counties.</p>
+          <span class="tct-membership-options" aria-hidden="true">
+            <span>$4.99 monthly</span><span>$49 annually</span><span>Completely ad-free</span>
+          </span>
+          <span class="tct-membership-cta">View membership options <b>&rarr;</b></span>
+        </div>
+      </a>'''
+    return '''
+      <a href="/advertise.html" class="grid-card tct-advertise-card" data-cat="all" data-support-card="true" aria-label="Advertise with Treasure Coast Today">
+        <div class="tct-advertise-card-inner">
+          <span class="tct-advertise-kicker">Grow your local business</span>
+          <h2 class="tct-advertise-headline">Reach readers across the Treasure Coast.</h2>
+          <p class="tct-advertise-copy">Connect with customers in Martin, St. Lucie and Indian River counties through banner ads, sponsored articles, business spotlights and social media promotion.</p>
+          <span class="tct-advertise-options" aria-hidden="true">
+            <span>Banner ads</span><span>Featured articles</span><span>Social promotion</span>
+          </span>
+          <span class="tct-advertise-cta">Explore advertising options <b>&rarr;</b></span>
+        </div>
+      </a>'''
 
 SUPPORT_PAYMENT_URL = "https://buy.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"
 SUPPORT_BANNER_URL = "https://treasurecoast.today/images/support-banner.png"
@@ -10508,18 +10555,7 @@ def render_index(all_categories, top_cat):
         except Exception as exc:
             print(f"  Homepage ranking recommendations unavailable; live order unchanged: {exc}")
 
-    support_card = """
-      <a href="/advertise.html" class="grid-card tct-advertise-card" data-cat="all" data-support-card="true" aria-label="Advertise with Treasure Coast Today">
-        <div class="tct-advertise-card-inner">
-          <span class="tct-advertise-kicker">Grow your local business</span>
-          <h2 class="tct-advertise-headline">Reach readers across the Treasure Coast.</h2>
-          <p class="tct-advertise-copy">Connect with customers in Martin, St. Lucie and Indian River counties through banner ads, sponsored articles, business spotlights and social media promotion.</p>
-          <span class="tct-advertise-options" aria-hidden="true">
-            <span>Banner ads</span><span>Featured articles</span><span>Social promotion</span>
-          </span>
-          <span class="tct-advertise-cta">Explore advertising options <b>&rarr;</b></span>
-        </div>
-      </a>"""
+    support_card = _homepage_support_card_html()
 
     def card_display_date(card):
         # Show the date the story was last updated ON OUR SITE (archive lastmod/date),
@@ -10830,7 +10866,7 @@ def render_index(all_categories, top_cat):
         <a href="/archive.html" class="cat-btn" style="text-decoration:none">Archive</a>
       </nav>
       <div class="header-actions">
-        <a href="/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
+        {_header_primary_cta_html()}
       </div>
     </div>
   </header>
@@ -16371,7 +16407,7 @@ def _page_header(active=""):
         {cat_link("Archive", "/archive.html", "archive")}
       </nav>
       <div class="header-actions">
-        <a href="/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>
+        {_header_primary_cta_html()}
       </div>
     </div>
   </header>"""
@@ -17030,6 +17066,19 @@ ROAD_RAGE_CANONICAL_SLUG = (
 )
 ROAD_RAGE_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-08-05-florida-man-used-police-maneuver-to-run-north-carolina-family-off-road-near-stua",
+})
+
+# Permanent regression for the Aug. 2026 Port St. Lucie animal-cruelty arrest.
+# CBS12 and Hometown News described the same arrest with materially different
+# headlines (and a one-letter surname discrepancy in source copy), allowing two
+# public TCT permalinks to escape before exact publisher text reached the
+# deterministic identity engine.  Preserve the oldest public URL and carry both
+# Crime & Safety and St. Lucie County membership onto that canonical page.
+PSL_ANIMAL_CRUELTY_CANONICAL_SLUG = (
+    "2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog"
+)
+PSL_ANIMAL_CRUELTY_REDIRECT_SOURCE_SLUGS = frozenset({
+    "2026-08-08-port-st-lucie-man-arrested-on-animal-cruelty-charge-after-video-circulates-on-so",
 })
 
 
@@ -21792,6 +21841,50 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
             })
             removed_slugs.add(source_slug)
 
+    # Permanent cleanup for the Port St. Lucie animal-cruelty duplicate that
+    # escaped across two category runs.  This is intentionally slug-specific as a
+    # production regression, while the generalized prevention mechanism lives in
+    # rss_adapter + unified_incident_identity.
+    psl_animal_canonical = next(
+        (e for e in archive if e.get("slug") == PSL_ANIMAL_CRUELTY_CANONICAL_SLUG),
+        None,
+    )
+    if psl_animal_canonical:
+        psl_animal_canonical.pop("exclude_from_live_recovery", None)
+        psl_animal_canonical.pop("identity_quarantine_reason", None)
+        psl_animal_canonical["legacy_identity_status"] = "identified"
+        psl_animal_canonical["ranking_eligible"] = True
+        for source_slug in sorted(PSL_ANIMAL_CRUELTY_REDIRECT_SOURCE_SLUGS):
+            duplicate = next((e for e in archive if e.get("slug") == source_slug), None)
+            if duplicate:
+                _merge_category_memberships(
+                    psl_animal_canonical,
+                    duplicate,
+                    psl_animal_canonical.get("category_key")
+                    or duplicate.get("category_key")
+                    or "st_lucie",
+                )
+            _upsert_canonical_redirect(redirects, {
+                "source_slug": source_slug,
+                "source_headline": (
+                    "Port St. Lucie man arrested on animal cruelty charge after video circulates"
+                ),
+                "target_slug": PSL_ANIMAL_CRUELTY_CANONICAL_SLUG,
+                "target_headline": psl_animal_canonical.get("headline", ""),
+                "story_stage": "canonical-migration",
+                "match_confidence": 100,
+                "canonical_is_custom": bool(
+                    psl_animal_canonical.get("is_custom")
+                    or psl_animal_canonical.get("authoritative_custom")
+                ),
+                "editorial_story_id": psl_animal_canonical.get("editorial_story_id", ""),
+                "reason": (
+                    "Permanent regression migration for the verified cross-source "
+                    "Port St. Lucie animal-cruelty arrest duplicate."
+                ),
+            })
+            removed_slugs.add(source_slug)
+
     cleaned = [e for e in archive if e.get("slug") not in removed_slugs]
     if not redirects:
         return cleaned, []
@@ -25884,6 +25977,44 @@ def _stamp_known_current_run_identity(entry):
     return True
 
 
+def _contain_newly_quarantined_editorial_identities(quarantined, headlines, audit_rows):
+    """Revoke current-run candidate authority for stories quarantined mid-run."""
+    global CURRENT_RUN_QUARANTINED_STORY_IDS, CURRENT_RUN_EDITORIAL_IDENTITIES
+    if not isinstance(quarantined, dict) or not quarantined:
+        return []
+    story_ids = {str(story_id) for story_id in quarantined if str(story_id).strip()}
+    if not story_ids:
+        return []
+
+    CURRENT_RUN_QUARANTINED_STORY_IDS.update(story_ids)
+    for source_url, identity in list(CURRENT_RUN_EDITORIAL_IDENTITIES.items()):
+        if str((identity or {}).get("story_id") or "") in story_ids:
+            CURRENT_RUN_EDITORIAL_IDENTITIES.pop(source_url, None)
+
+    for entry in headlines or ():
+        if not isinstance(entry, dict):
+            continue
+        story_id = str(
+            entry.get("editorial_story_id")
+            or entry.get("_editorial_story_id")
+            or ""
+        )
+        if story_id in story_ids:
+            _clear_quarantined_identity_fields(entry)
+
+    for row in audit_rows or ():
+        if not isinstance(row, dict):
+            continue
+        story_id = str(row.get("story_id") or "")
+        if story_id not in story_ids:
+            continue
+        row["identity_quarantined"] = True
+        row["quarantine_reasons"] = list(quarantined.get(story_id) or ())
+        row["activation_eligible"] = False
+
+    return sorted(story_ids)
+
+
 def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, audit_rows):
     """Audit each unique source once and stamp its exact decision on every copy.
 
@@ -25960,6 +26091,28 @@ def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, a
             except Exception as exc:
                 print(f"  Editorial audit item failed; continuing unchanged: {exc}")
 
+    # A clean registry can become contaminated only after fresh evidence is attached.
+    # Contain that condition at the category batch boundary: quarantine the story,
+    # revoke its current-run candidate authority, and let publication continue using
+    # independent source/incident proof. The final integrity gate remains hard-fail.
+    try:
+        quarantined = engine.quarantine_registry_contamination()
+    except Exception as exc:
+        print(f"  Editorial registry contamination containment failed: {exc}")
+        quarantined = {}
+    newly_quarantined = _contain_newly_quarantined_editorial_identities(
+        quarantined, headlines, audit_rows
+    )
+    if newly_quarantined:
+        details = ", ".join(
+            f"{story_id} ({'/'.join(quarantined.get(story_id) or ())})"
+            for story_id in newly_quarantined
+        )
+        print(
+            "  Persistent registry containment: quarantined current-run "
+            f"contamination — {details}"
+        )
+
 
 def _save_editorial_engine_audit(engine, audit_rows):
     """Persist shadow state and observations; failures remain non-fatal."""
@@ -25992,8 +26145,19 @@ def _prepare_editorial_activation(engine, audit_rows):
             OUTPUT_DIR / "data" / "story-regression-report.json", {}
         )
         registry_health = engine.get_registry_health()
+        activation_rows = [
+            row for row in audit_rows
+            if not row.get("identity_quarantined")
+            and str(row.get("story_id") or "") not in CURRENT_RUN_QUARANTINED_STORY_IDS
+        ]
+        ignored_quarantined = len(audit_rows) - len(activation_rows)
+        if ignored_quarantined:
+            print(
+                "  Editorial activation ignored "
+                f"{ignored_quarantined} quarantined identity observation(s)"
+            )
         run = build_activation_run(
-            audit_rows,
+            activation_rows,
             config=config,
             previous_regression_report=previous_gate,
             registry_health=registry_health,

@@ -243,3 +243,26 @@ def test_missing_date_uses_supplied_default():
     result = adapter.convert(entry, source="WPTV")
 
     assert result.published_at == default_time
+
+def test_prefers_enriched_article_text_over_thin_rss_summary():
+    adapter = RSSArticleAdapter()
+
+    entry = {
+        "id": "story-enriched",
+        "title": "Port St. Lucie man charged with animal cruelty",
+        "link": "https://example.com/story-enriched",
+        "summary": "Port St. Lucie man charged with animal cruelty",
+        "article_text": (
+            "Ricky Lee Schieferstein, 68, was arrested after the St. Lucie "
+            "County Sheriff's Office investigated a social media video that "
+            "appeared to show him kicking a small dog. He was held on a "
+            "$7,500 bond."
+        ),
+    }
+
+    result = adapter.convert(entry, source="Hometown News", county="St. Lucie")
+
+    assert "Ricky Lee Schieferstein, 68" in result.body
+    assert "$7,500 bond" in result.body
+    assert result.body != entry["summary"]
+

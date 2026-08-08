@@ -79,6 +79,10 @@ class EditorialPipeline:
         """Return a context manager that batches persistent registry writes."""
         return self._registry.defer_saves(commit=commit)
 
+    def quarantine_registry_contamination(self):
+        """Revoke active authority for stories contaminated during this batch."""
+        return self._registry.quarantine_active_contamination()
+
     def _record_timeline_entry(
         self,
         *,

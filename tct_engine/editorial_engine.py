@@ -277,6 +277,10 @@ class EditorialEngine:
             canonical_url=canonical.canonical.url,
         )
 
+    def quarantine_registry_contamination(self):
+        """Contain current-run registry contamination without publication authority."""
+        return self._pipeline.quarantine_registry_contamination()
+
     def get_event(self, event_key: str):
         return self._pipeline.get_event(event_key)
 

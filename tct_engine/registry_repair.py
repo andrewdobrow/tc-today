@@ -1135,6 +1135,62 @@ def _merge_component_batch(
     return groups_merged, records_removed
 
 
+
+def quarantine_active_story_contamination(
+    payload: MutableMapping[str, Any],
+) -> dict[str, tuple[str, ...]]:
+    """Quarantine active records that became incoherent during the current run.
+
+    ``repair_registry_payload`` performs this check at load time, but a clean story
+    can become contaminated later when fresh candidate evidence is attached.  This
+    lightweight containment pass intentionally does *only* the quarantine/revocation
+    work: it does not run expensive cross-story reconciliation.  The contaminated
+    story loses all active event/alias/incident-anchor authority while its snapshot is
+    retained for diagnosis and later deterministic repair.
+    """
+    stories: MutableMapping[str, MutableMapping[str, Any]] = payload.setdefault("stories", {})
+    aliases: MutableMapping[str, str] = payload.setdefault("story_aliases", {})
+    quarantined: MutableMapping[str, Any] = payload.setdefault("quarantined_stories", {})
+
+    reasons_by_story: dict[str, tuple[str, ...]] = {}
+    for story_id, story in list(stories.items()):
+        reasons = story_quarantine_reasons(story)
+        if not reasons:
+            continue
+        snapshot = dict(story)
+        snapshot["quarantined_at"] = _utc_now()
+        snapshot["quarantine_reasons"] = list(reasons)
+        snapshot["repair_version"] = REPAIR_VERSION
+        quarantined[story_id] = snapshot
+        del stories[story_id]
+        reasons_by_story[story_id] = reasons
+
+    if not reasons_by_story:
+        return {}
+
+    quarantined_ids = set(reasons_by_story)
+    for alias, target in list(aliases.items()):
+        if alias in quarantined_ids or target in quarantined_ids:
+            del aliases[alias]
+
+    event_to_story: dict[str, str] = {}
+    for story_id, story in stories.items():
+        for event_key in story.get("events", ()) or ():
+            value = str(event_key or "").strip()
+            if value and not is_broad_event_class_key(value):
+                event_to_story[value] = story_id
+    payload["event_to_story"] = event_to_story
+
+    anchors = payload.get("incident_anchor_to_story", {})
+    if isinstance(anchors, dict):
+        payload["incident_anchor_to_story"] = {
+            str(anchor): str(story_id)
+            for anchor, story_id in anchors.items()
+            if str(anchor).strip() and str(story_id) in stories
+        }
+
+    return reasons_by_story
+
 def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepairReport:
     stories: MutableMapping[str, MutableMapping[str, Any]] = payload.setdefault("stories", {})
     aliases: MutableMapping[str, str] = payload.setdefault("story_aliases", {})
