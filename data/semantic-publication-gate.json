@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "gate_version": "1.4",
-  "generated_at": "2026-08-08T01:47:17.226182+00:00",
+  "generated_at": "2026-08-08T10:48:57.541122+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -44,22 +44,22 @@
     "custom_articles": "excluded_authoritative_custom_contract_retained"
   },
   "summary": {
-    "evaluations": 63,
+    "evaluations": 65,
     "candidate_pairs": 3,
-    "structured_conflict_overrides": 1,
+    "structured_conflict_overrides": 2,
     "model_calls": 2,
     "cache_hits": 1,
-    "no_candidate_passes": 60,
-    "duplicates_preserved": 0,
-    "canonical_updates_selected": 1,
-    "new_stories_allowed": 3,
-    "retroactive_rows_retained": 59,
+    "no_candidate_passes": 62,
+    "duplicates_preserved": 1,
+    "canonical_updates_selected": 0,
+    "new_stories_allowed": 2,
+    "retroactive_rows_retained": 62,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 1,
     "registry_aliases_written": 1,
-    "material_update_composer_calls": 1,
-    "material_updates_applied": 1,
+    "material_update_composer_calls": 0,
+    "material_updates_applied": 0,
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0
@@ -948,9 +948,9 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "St. Lucie County deputies arrest man in series of burglaries in St. Lucie Village",
-      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/deputies-arrest-man-connected-to-series-of-burglaries-in-st-lucie-village",
-      "incoming_story_id": "story_002466",
+      "incoming_headline": "Costco in Stuart reopens after electrical fire but refrigeration remains down",
+      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/costco-closes-after-electrical-fire-stuart-police-say",
+      "incoming_story_id": "story_002457",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -967,9 +967,9 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Costco in Stuart closes after electrical fire",
-      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/costco-closes-after-electrical-fire-stuart-police-say",
-      "incoming_story_id": "story_002457",
+      "incoming_headline": "St. Lucie County deputies arrest man in series of burglaries in St. Lucie Village",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/deputies-arrest-man-connected-to-series-of-burglaries-in-st-lucie-village",
+      "incoming_story_id": "story_002466",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1232,7 +1232,7 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Port St. Lucie man arrested on animal cruelty charge after video circulates on social media",
       "incoming_source_url": "https://www.hometownnewstc.com/multimedia/photo_galleries/st_lucie/port-st-lucie-man-charged-with-animal-cruelty/article_12646c96-5d70-5527-844c-6561ae54674c.html",
       "incoming_story_id": "story_002573",
@@ -1262,13 +1262,15 @@
             "treasure"
           ],
           "day_gap": 0,
-          "structured_conflict_override": false,
-          "structured_conflict_override_tier": "",
+          "structured_conflict_override": true,
+          "structured_conflict_override_tier": "distinctive_token_overlap",
           "incident_anchor_conflict": false,
-          "known_event_key_conflict": false,
+          "known_event_key_conflict": true,
           "reasons": [
             "strong_fuzzy_headline",
-            "publication_gap_0_days"
+            "publication_gap_0_days",
+            "structured_identity_conflict",
+            "structured_identity_conflict_overridden_by_distinctive_overlap"
           ]
         }
       ],
@@ -1282,19 +1284,16 @@
         "confidence": 0.98,
         "shared_anchors": [],
         "novel_facts": [
-          "Ricky Lee Schieferstein arrested Aug. 6 for animal cruelty",
-          "68-year-old Port St. Lucie resident",
-          "Video circulated on social media showing dog being kicked",
-          "Detective Dawn Dale conducted investigation",
-          "$7,500 bond",
-          "16-second video shows man kicking small dog at concrete pool"
+          "Ricky Lee Schieferstein, 68, arrested Aug. 6",
+          "Animal cruelty charge",
+          "Video circulated on social media showing apparent abuse"
         ],
-        "reason": "The incoming article is about Ricky Lee Schieferstein arrested for animal cruelty involving a dog on Aug. 6. The candidate is about Daniel Eugene Holmes arrested for burglary and loitering on Aug. 5. These are completely different people, different crimes, different dates, and different incidents. They only share the same county (St. Lucie) and general timeframe, which is insufficient to establish the same real-world event.",
+        "reason": "The incoming article is about Ricky Lee Schieferstein arrested for animal cruelty based on a social media video. The candidate is about Daniel Eugene Holmes arrested for burglary and loitering. These are completely different people, different crimes, and different incidents despite both occurring in St. Lucie County around the same time. The retrieval system flagged this due to generic headline overlap ('man charged', 'St. Lucie') but there are no concrete shared anchors.",
         "validation_errors": []
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "St. Lucie Mets fall 17-3 to Daytona as Tortugas score 11 unanswered runs at Clover Park",
       "incoming_source_url": "https://www.hometownnewstc.com/sports/tortugas-pull-away-for-17-3-win-over-mets/article_ae6713ec-1863-596f-ac46-7138b723728f.html",
       "incoming_story_id": "story_002600",
@@ -1313,66 +1312,7 @@
       }
     },
     {
-      "phase": "forward_publication",
-      "incoming_headline": "Costco in Stuart reopens after electrical fire, refrigeration still down",
-      "incoming_source_url": "https://cw34.com/news/local/costco-closes-electrical-fire-kanner-highway-store-closure-business-fire-shopping-disruption-costco-news-treasure-coast-florida-news?teaserSource=trending",
-      "incoming_story_id": "story_002518",
-      "candidates": [
-        {
-          "slug": "2026-08-06-costco-in-stuart-closes-after-electrical-fire",
-          "headline": "Costco in Stuart closes after electrical fire",
-          "retrieval_score": 0.7117,
-          "headline_similarity": 0.6517,
-          "similarity_basis": "final_headline",
-          "shared_headline_tokens": [
-            "costco",
-            "electrical",
-            "fire",
-            "stuart"
-          ],
-          "shared_topic_tokens": [
-            "costco",
-            "electrical",
-            "fire",
-            "stuart"
-          ],
-          "day_gap": 1,
-          "structured_conflict_override": false,
-          "structured_conflict_override_tier": "",
-          "incident_anchor_conflict": false,
-          "known_event_key_conflict": false,
-          "reasons": [
-            "strong_fuzzy_headline",
-            "publication_gap_1_days"
-          ]
-        }
-      ],
-      "decision": {
-        "status": "validated",
-        "action": "update_existing_canonical",
-        "recommended_action": "update_existing_canonical",
-        "selected_candidate_slug": "2026-08-06-costco-in-stuart-closes-after-electrical-fire",
-        "same_real_world_event": true,
-        "material_new_update": true,
-        "confidence": 0.98,
-        "shared_anchors": [
-          "Same Costco location at 3173 Kanner Highway in Stuart",
-          "Same electrical fire incident",
-          "Stuart Police Department involvement",
-          "Thursday closure date (Aug 6, 2026)"
-        ],
-        "novel_facts": [
-          "Store reopened on Friday (Aug 7)",
-          "Refrigeration unit remains non-operational",
-          "Only dry goods available for purchase",
-          "Refrigerated and frozen items cannot be purchased"
-        ],
-        "reason": "This is clearly the same electrical fire at the same Costco location. The candidate reported the initial Thursday closure and fire extinguishment. The incoming article provides a material update: the store has now reopened (Friday) but with significant operational limitations - the refrigeration system is still down, restricting sales to dry goods only. This is a meaningful development that changes what readers need to know about the store's status.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Tradition Lakes K-8 opening delayed one week, leaving St. Lucie parents scrambling for child care",
       "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/tradition-lakes-k-8-opening-postponed-leaving-parents-scrambling-for-child-care",
       "incoming_story_id": "story_002552",
@@ -1389,214 +1329,146 @@
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
       }
-    }
-  ],
-  "archive_repairs": [],
-  "material_update_compositions": [
+    },
     {
       "phase": "forward_publication",
-      "canonical_slug": "2026-08-06-costco-in-stuart-closes-after-electrical-fire",
-      "incoming_slug": "",
-      "status": "validated",
-      "validation_errors": [],
-      "word_count": 177,
-      "paragraph_count": 4,
-      "baseline_lead_hits": [
-        "costco",
-        "electrical",
-        "fire",
-        "stuart"
-      ],
-      "novelty_lead_hits": [
-        "available",
-        "because",
-        "but",
-        "dry",
-        "friday",
-        "goods",
-        "limited",
-        "non",
-        "now",
-        "only",
-        "open",
-        "operational",
-        "purchase",
-        "refrigeration",
-        "remains",
-        "reopened",
-        "services",
-        "unit"
-      ],
-      "headline_alignment": {
-        "aligned": true,
-        "reason": "aligned",
-        "token_similarity": 0.4,
-        "date_gap_days": 2,
-        "prospective": true,
-        "existing_headline": "Costco in Stuart closes after electrical fire",
-        "incoming_headline": "Costco in Stuart reopens after electrical fire but refrigeration remains down",
-        "candidate_slug": "2026-08-06-costco-in-stuart-closes-after-electrical-fire",
-        "prospective_lastmod": "2026-08-08",
-        "timestamp_evidence": "stored_archive_timestamp"
-      },
-      "context_diagnostics": {
-        "required": true,
-        "passed": true,
-        "story_form": "update",
-        "lead_word_count": 51,
-        "baseline_anchor": "fire",
-        "baseline_present": true,
-        "baseline_anchor_present": true,
-        "baseline_details_present": true,
-        "baseline_context_hits": [
-          "costco",
-          "electrical",
-          "fire",
-          "stuart"
-        ],
-        "baseline_context_required": 2,
-        "canonical_context_available": true,
-        "canonical_context_headline": "Costco in Stuart closes after electrical fire",
-        "novelty_anchor": "status_change",
-        "novelty_present": true,
-        "novelty_token_hits": [],
-        "missing": [],
-        "source_title": "Costco reopens following electrical fire at Martin County location - cw34.com",
-        "headline": "Costco in Stuart reopens after electrical fire but refrigeration remains down"
-      },
-      "headline": "Costco in Stuart reopens after electrical fire but refrigeration remains down"
-    }
-  ],
-  "material_updates": [
+      "incoming_headline": "Port St. Lucie police investigate campaign sign confrontations between mayor and challenger",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-port-st-lucie-police-campaign-sign-dispute/73380846",
+      "incoming_story_id": "story_002554",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
     {
       "phase": "forward_publication",
-      "source_slug": "",
-      "target_slug": "2026-08-06-costco-in-stuart-closes-after-electrical-fire",
-      "source_story_id": "story_002518",
-      "target_story_id": "story_002457",
-      "source_headline": "Costco reopens following electrical fire at Martin County location - cw34.com",
-      "updated_headline": "Costco in Stuart reopens after electrical fire but refrigeration remains down",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Same Costco location at 3173 Kanner Highway in Stuart",
-        "Same electrical fire incident",
-        "Stuart Police Department involvement",
-        "Thursday closure date (Aug 6, 2026)"
-      ],
-      "novel_facts": [
-        "Store reopened on Friday (Aug 7)",
-        "Refrigeration unit remains non-operational",
-        "Only dry goods available for purchase",
-        "Refrigerated and frozen items cannot be purchased"
-      ],
-      "updated_at": "2026-08-08T01:47:03Z",
-      "composition": {
-        "phase": "forward_publication",
-        "canonical_slug": "2026-08-06-costco-in-stuart-closes-after-electrical-fire",
-        "incoming_slug": "",
-        "status": "validated",
-        "validation_errors": [],
-        "word_count": 177,
-        "paragraph_count": 4,
-        "baseline_lead_hits": [
-          "costco",
-          "electrical",
-          "fire",
-          "stuart"
-        ],
-        "novelty_lead_hits": [
-          "available",
-          "because",
-          "but",
-          "dry",
-          "friday",
-          "goods",
-          "limited",
-          "non",
-          "now",
-          "only",
-          "open",
-          "operational",
-          "purchase",
-          "refrigeration",
-          "remains",
-          "reopened",
-          "services",
-          "unit"
-        ],
-        "headline_alignment": {
-          "aligned": true,
-          "reason": "aligned",
-          "token_similarity": 0.4,
-          "date_gap_days": 2,
-          "prospective": true,
-          "existing_headline": "Costco in Stuart closes after electrical fire",
-          "incoming_headline": "Costco in Stuart reopens after electrical fire but refrigeration remains down",
-          "candidate_slug": "2026-08-06-costco-in-stuart-closes-after-electrical-fire",
-          "prospective_lastmod": "2026-08-08",
-          "timestamp_evidence": "stored_archive_timestamp"
-        },
-        "context_diagnostics": {
-          "required": true,
-          "passed": true,
-          "story_form": "update",
-          "lead_word_count": 51,
-          "baseline_anchor": "fire",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "costco",
-            "electrical",
-            "fire",
-            "stuart"
+      "incoming_headline": "Port St. Lucie postpones Riverland sports complex rezoning after Tradition residents protest",
+      "incoming_source_url": "https://www.hometownnewstc.com/news/st_lucie/riverland-kennedy-rezoning-postponed-for-resident-meeting/article_e7636f0a-a2f2-527a-b182-fca8c163743b.html",
+      "incoming_story_id": "story_002680",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Early voting begins Saturday for Florida's August primary in Martin County",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-early-voting-palm-beach-okeechobee-treasure-coast/73377550",
+      "incoming_story_id": "story_002678",
+      "candidates": [
+        {
+          "slug": "2026-08-06-early-voting-begins-saturday-across-martin-st-lucie-indian-river-counties-for-au",
+          "headline": "Early voting begins Saturday across Martin, St. Lucie, Indian River counties for August primary",
+          "retrieval_score": 0.7419,
+          "headline_similarity": 0.6819,
+          "similarity_basis": "final_headline",
+          "shared_headline_tokens": [
+            "august",
+            "begins",
+            "early",
+            "martin",
+            "primary",
+            "saturday",
+            "vote"
           ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Costco in Stuart closes after electrical fire",
-          "novelty_anchor": "status_change",
-          "novelty_present": true,
-          "novelty_token_hits": [],
-          "missing": [],
-          "source_title": "Costco reopens following electrical fire at Martin County location - cw34.com",
-          "headline": "Costco in Stuart reopens after electrical fire but refrigeration remains down"
-        },
-        "headline": "Costco in Stuart reopens after electrical fire but refrigeration remains down"
+          "shared_topic_tokens": [
+            "august",
+            "begins",
+            "early",
+            "primary",
+            "saturday"
+          ],
+          "day_gap": 1,
+          "structured_conflict_override": false,
+          "structured_conflict_override_tier": "",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": false,
+          "reasons": [
+            "strong_fuzzy_headline",
+            "publication_gap_1_days"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "validated",
+        "action": "duplicate_use_existing_canonical",
+        "recommended_action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-08-06-early-voting-begins-saturday-across-martin-st-lucie-indian-river-counties-for-au",
+        "same_real_world_event": true,
+        "material_new_update": false,
+        "confidence": 0.95,
+        "shared_anchors": [
+          "Florida's August primary election",
+          "Early voting begins Saturday",
+          "Martin County early voting",
+          "Same election cycle (August 2026 primary)"
+        ],
+        "novel_facts": [
+          "Specific hours: 8 a.m. to 6 p.m. daily",
+          "End date Aug. 15 (vs Aug. 17 in candidate)",
+          "Election Day is Tuesday, Aug. 18",
+          "Voter ID requirements detailed",
+          "Explanation of closed primaries"
+        ],
+        "reason": "Both articles cover the same real-world event: early voting for Florida's August 2026 primary election in Martin County beginning on Saturday. The candidate article covers multiple counties (Martin, St. Lucie, Indian River, Palm Beach, Okeechobee) while the incoming focuses specifically on Martin County. However, there is a date discrepancy: the incoming says early voting runs Aug. 8-15, while the candidate says Aug. 9-17. The incoming provides additional procedural details (hours, ID requirements, closed primary explanation) but these are routine informational additions, not material updates like arrests, charges, rulings, or identification of victims. The date conflict appears to be an error in one source, but the core event (early voting start for August primary) is identical.",
+        "validation_errors": []
       }
     }
   ],
+  "archive_repairs": [],
+  "material_update_compositions": [],
+  "material_updates": [],
   "registry_consolidation": {
     "status": "consolidated",
-    "directives_considered": 0,
+    "directives_considered": 1,
     "story_records_merged": 1,
     "aliases_written": 1,
-    "already_consolidated": 0,
+    "already_consolidated": 1,
     "skipped": [],
     "pending_directives": [],
     "rejected_directives": [],
     "merges": [
       {
-        "source_story_id": "story_002518",
-        "target_story_id": "story_002457",
-        "target_slug": "2026-08-06-costco-in-stuart-closes-after-electrical-fire",
-        "incoming_headline": "Costco in Stuart reopens after electrical fire, refrigeration still down",
-        "confidence": 0.98,
+        "source_story_id": "story_002678",
+        "target_story_id": "story_002377",
+        "target_slug": "2026-08-06-early-voting-begins-saturday-across-martin-st-lucie-indian-river-counties-for-au",
+        "incoming_headline": "Early voting begins Saturday for Florida's August primary in Martin County",
+        "confidence": 0.95,
         "shared_anchors": [
-          "Same Costco location at 3173 Kanner Highway in Stuart",
-          "Same electrical fire incident",
-          "Stuart Police Department involvement",
-          "Thursday closure date (Aug 6, 2026)"
+          "Florida's August primary election",
+          "Early voting begins Saturday",
+          "Martin County early voting",
+          "Same election cycle (August 2026 primary)"
         ],
-        "reason": "This is clearly the same electrical fire at the same Costco location. The candidate reported the initial Thursday closure and fire extinguishment. The incoming article provides a material update: the store has now reopened (Friday) but with significant operational limitations - the refrigeration system is still down, restricting sales to dry goods only. This is a meaningful development that changes what readers need to know about the store's status.",
-        "relationship_type": "material_update",
+        "reason": "Both articles cover the same real-world event: early voting for Florida's August 2026 primary election in Martin County beginning on Saturday. The candidate article covers multiple counties (Martin, St. Lucie, Indian River, Palm Beach, Okeechobee) while the incoming focuses specifically on Martin County. However, there is a date discrepancy: the incoming says early voting runs Aug. 8-15, while the candidate says Aug. 9-17. The incoming provides additional procedural details (hours, ID requirements, closed primary explanation) but these are routine informational additions, not material updates like arrests, charges, rulings, or identification of victims. The date conflict appears to be an error in one source, but the core event (early voting start for August primary) is identical.",
+        "relationship_type": "duplicate",
         "novel_facts": [
-          "Store reopened on Friday (Aug 7)",
-          "Refrigeration unit remains non-operational",
-          "Only dry goods available for purchase",
-          "Refrigerated and frozen items cannot be purchased"
+          "Specific hours: 8 a.m. to 6 p.m. daily",
+          "End date Aug. 15 (vs Aug. 17 in candidate)",
+          "Election Day is Tuesday, Aug. 18",
+          "Voter ID requirements detailed",
+          "Explanation of closed primaries"
         ],
-        "resolved_source_story_id": "story_002518",
-        "resolved_target_story_id": "story_002457"
+        "resolved_source_story_id": "story_002678",
+        "resolved_target_story_id": "story_002377"
       }
     ]
   }

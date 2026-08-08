@@ -7,9 +7,9 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-08T01:47:32Z",
+  "generated_at": "2026-08-08T10:49:18Z",
   "mode": "enforce",
-  "publication_behavior_changed": false,
+  "publication_behavior_changed": true,
   "activation": {
     "activation_version": "1.1",
     "requested_mode": "enforce",
@@ -19,16 +19,72 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 0,
-    "enforceable_recommendation_count": 0,
-    "applied_action_count": 0,
+    "recommendation_count": 1,
+    "enforceable_recommendation_count": 1,
+    "applied_action_count": 1,
     "circuit_breaker_tripped": false,
     "placements_before": 6,
-    "placements_after": 6,
-    "publication_behavior_changed": false,
+    "placements_after": 5,
+    "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
-    "recommendations": [],
-    "applied_actions": [],
+    "recommendations": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://cbs12.com/news/videos/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office",
+        "headline": "Port St. Lucie man arrested after video shows alleged abuse of small dog",
+        "source_title_key": "port st lucie man arrested after video shows alleged abuse of small dog",
+        "incoming_article_id": "",
+        "target_article_id": "2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog",
+        "story_id": "story-abusing-arrested-dog-following-investigation-5316be50",
+        "canonical_is_custom": false,
+        "canonical_title": "Port St. Lucie man arrested after video shows him kicking small dog",
+        "canonical_source": "",
+        "canonical_url": "https://treasurecoast.today/articles/2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog.html",
+        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
+        "category": "st_lucie",
+        "placement": "card"
+      }
+    ],
+    "applied_actions": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://cbs12.com/news/videos/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office",
+        "headline": "Port St. Lucie man arrested after video shows alleged abuse of small dog",
+        "source_title_key": "port st lucie man arrested after video shows alleged abuse of small dog",
+        "incoming_article_id": "",
+        "target_article_id": "2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog",
+        "story_id": "story-abusing-arrested-dog-following-investigation-5316be50",
+        "canonical_is_custom": false,
+        "canonical_title": "Port St. Lucie man arrested after video shows him kicking small dog",
+        "canonical_source": "",
+        "canonical_url": "https://treasurecoast.today/articles/2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog.html",
+        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
+        "category": "st_lucie",
+        "placement": "card",
+        "slug": "",
+        "source_title": "Port St. Lucie man arrested after video shows alleged abuse of small dog",
+        "date": "Yesterday, 5:19 PM ET",
+        "category_key": "st_lucie",
+        "is_custom": false,
+        "story_stage": "arrest-or-charges",
+        "decision": "SUPPRESSED_DUPLICATE",
+        "action_taken": true,
+        "eligible_for_activation": true,
+        "match_confidence": 98,
+        "matched_prior_slug": "2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog",
+        "matched_prior_headline": "Port St. Lucie man arrested after video shows him kicking small dog",
+        "matched_prior_source": "",
+        "matched_prior_source_url": "https://treasurecoast.today/articles/2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog.html",
+        "matched_prior_is_custom": false,
+        "activation_managed": true
+      }
+    ],
     "enforcement_allowlist": [
       "custom_canonical_protection",
       "exact_normalized_title_identity",
@@ -49,51 +105,103 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 184,
+    "candidates_processed": 183,
     "routes": {
-      "generate_new": 29,
-      "skip": 155
+      "generate_new": 45,
+      "skip": 138
     },
     "eligibility": {
-      "low_value": 119,
-      "publishable": 64,
-      "search_page": 1
+      "low_value": 121,
+      "publishable": 62
     },
     "source_classes": {
-      "aggregator": 119,
-      "local_news": 40,
-      "regional_news": 22,
-      "unknown": 3
+      "aggregator": 121,
+      "local_news": 39,
+      "regional_news": 21,
+      "unknown": 2
     },
-    "rejected_count": 1,
-    "rejected_examples": [
-      {
-        "headline": "Search warrant underway at Fort Pierce home tied to $7 million Southern Truss fraud - cbs12.com",
-        "source_url": "https://cbs12.com/news/local/search-warrant-underway-at-fort-pierce-home-tied-to-7-million-southern-truss-fraud-fort-pierce-st-lucie-county-southern-truss-fraud-investigation-search-warrant-laura-beth-grasso-indian-river-estates-financial-fraud-organized-fraud-grand-theft",
-        "status": "search_page",
-        "reasons": [
-          "URL path matches blocked pattern '/search'"
-        ],
-        "source_class": "regional_news"
-      }
-    ]
+    "rejected_count": 0,
+    "rejected_examples": []
   },
   "relationships": {
     "counts": {
-      "new_story": 18,
-      "same_event": 166
+      "new_story": 30,
+      "same_event": 153
     },
     "examples": [
       {
-        "story_id": "story_002662",
-        "title": "District 2 commissioner candidates discuss key issues before primary - Vero News",
-        "event_key": "unknown-event-5333522fc8",
+        "story_id": "story_002679",
+        "title": "Charter school company plans new middle, elementary school in Florida - Treasure Coast News",
+        "event_key": "unknown-event-6a1f5244bd",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_002680",
+        "title": "Riverland-Kennedy rezoning postponed for resident meeting - Hometown News Treasure Coast",
+        "event_key": "unknown-event-805fa97f09",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_002681",
+        "title": "Port St. Lucie police investigate campaign sign disputes involving mayoral candidates - Yahoo",
+        "event_key": "unknown-event-f1e65ab1de",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_002645",
+        "title": "F-bombs fly in clash over Port St. Lucie campaign signs - WPEC",
+        "event_key": "unknown-event-fd3016fbbb",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact source article URL already belongs to this story",
+        "decision_trace": [
+          "Exact source article identity: true",
+          "Normalized source URL: https://cbs12.com/news/local/f-bombs-fly-in-clash-over-campaign-sign-involving-mayors-husband-opponent-port-st-lucie-police-department-pslpd-campaign-signs-political-signs-election-2026-august-election-local-election-mayoral-election-campaign-dispute-confrontation",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_002682",
+        "title": "Dick's House of Sports, outdoor athletic field move closer to replacing old Sears at Gardens Mall",
+        "event_key": "unknown-event-ea01c3e4a5",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_002662",
+        "title": "District 2 commissioner candidates discuss key issues before primary - Vero News",
+        "event_key": "unknown-event-5333522fc8",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -154,14 +262,15 @@
       },
       {
         "story_id": "story_002553",
-        "title": "'I don't know what we're going to do': Tradition Lakes K-8 opening delayed - wptv.com",
-        "event_key": "unknown-event-9710faf8ff",
+        "title": "'I don't know what we're going to do': Tradition Lakes K-8 opening delayed - WPTV",
+        "event_key": "unknown-event-37ff99df96",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -176,6 +285,19 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_002645",
+        "title": "F-bombs fly in clash over Port St. Lucie campaign sign - cw34.com",
+        "event_key": "unknown-event-3cbc6bb300",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -267,89 +389,6 @@
         "story_id": "story_002561",
         "title": "Two South Florida teens are facing charges in a pair of vehicle burglaries including one in which a security guard was shot at and nearly killed, police said. - facebook.com",
         "event_key": "unknown-event-d3781a3962",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_002562",
-        "title": "Scientists identify a seagrass that bounces back after environmental collapse - Earth.com",
-        "event_key": "unknown-event-9b069e9422",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_002563",
-        "title": "Port St. Lucie Mayor’s Husband, Police Lieutenant, Caught on Video in Sign-Theft Dispute - Hoodline",
-        "event_key": "unknown-event-f4818442f2",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_002564",
-        "title": "Florida Treasure Hunt auction in West Palm Beach features coins, jewelry and golden chickens",
-        "event_key": "unknown-event-b39146450c",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_002565",
-        "title": "Glades Teacher Appreciation Breakfast honors educators before first day of school",
-        "event_key": "unknown-event-fbcf925f52",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_002566",
-        "title": "Rep. Dana Trabulsy challenges Causeway Cove development - wqcs.org",
-        "event_key": "unknown-event-5a99977de2",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_002567",
-        "title": "United Airlines adds nonstop flights to San Francisco from Donald J. Trump International Airport",
-        "event_key": "unknown-event-9c2db99d00",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -363,9 +402,9 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_002662",
-        "title": "District 2 commissioner candidates discuss key issues before primary - Vero News",
-        "event_key": "unknown-event-5333522fc8",
+        "story_id": "story_002679",
+        "title": "Charter school company plans new middle, elementary school in Florida - Treasure Coast News",
+        "event_key": "unknown-event-6a1f5244bd",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -373,6 +412,74 @@
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_002680",
+        "title": "Riverland-Kennedy rezoning postponed for resident meeting - Hometown News Treasure Coast",
+        "event_key": "unknown-event-805fa97f09",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_002681",
+        "title": "Port St. Lucie police investigate campaign sign disputes involving mayoral candidates - Yahoo",
+        "event_key": "unknown-event-f1e65ab1de",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_002645",
+        "title": "F-bombs fly in clash over Port St. Lucie campaign signs - WPEC",
+        "event_key": "unknown-event-fd3016fbbb",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact source article URL already belongs to this story",
+        "decision_trace": [
+          "Exact source article identity: true",
+          "Normalized source URL: https://cbs12.com/news/local/f-bombs-fly-in-clash-over-campaign-sign-involving-mayors-husband-opponent-port-st-lucie-police-department-pslpd-campaign-signs-political-signs-election-2026-august-election-local-election-mayoral-election-campaign-dispute-confrontation",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_002682",
+        "title": "Dick's House of Sports, outdoor athletic field move closer to replacing old Sears at Gardens Mall",
+        "event_key": "unknown-event-ea01c3e4a5",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_002662",
+        "title": "District 2 commissioner candidates discuss key issues before primary - Vero News",
+        "event_key": "unknown-event-5333522fc8",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -437,15 +544,16 @@
       },
       {
         "story_id": "story_002553",
-        "title": "'I don't know what we're going to do': Tradition Lakes K-8 opening delayed - wptv.com",
-        "event_key": "unknown-event-9710faf8ff",
+        "title": "'I don't know what we're going to do': Tradition Lakes K-8 opening delayed - WPTV",
+        "event_key": "unknown-event-37ff99df96",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -461,6 +569,20 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_002645",
+        "title": "F-bombs fly in clash over Port St. Lucie campaign sign - cw34.com",
+        "event_key": "unknown-event-3cbc6bb300",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -558,95 +680,6 @@
         "story_id": "story_002561",
         "title": "Two South Florida teens are facing charges in a pair of vehicle burglaries including one in which a security guard was shot at and nearly killed, police said. - facebook.com",
         "event_key": "unknown-event-d3781a3962",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_002562",
-        "title": "Scientists identify a seagrass that bounces back after environmental collapse - Earth.com",
-        "event_key": "unknown-event-9b069e9422",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_002563",
-        "title": "Port St. Lucie Mayor’s Husband, Police Lieutenant, Caught on Video in Sign-Theft Dispute - Hoodline",
-        "event_key": "unknown-event-f4818442f2",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_002564",
-        "title": "Florida Treasure Hunt auction in West Palm Beach features coins, jewelry and golden chickens",
-        "event_key": "unknown-event-b39146450c",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_002565",
-        "title": "Glades Teacher Appreciation Breakfast honors educators before first day of school",
-        "event_key": "unknown-event-fbcf925f52",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_002566",
-        "title": "Rep. Dana Trabulsy challenges Causeway Cove development - wqcs.org",
-        "event_key": "unknown-event-5a99977de2",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact normalized title match: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_002567",
-        "title": "United Airlines adds nonstop flights to San Francisco from Donald J. Trump International Airport",
-        "event_key": "unknown-event-9c2db99d00",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -676,9 +709,9 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 673,
-      "timeline_entries_examined": 1695,
-      "transitions_examined": 942,
+      "stories_with_timelines": 683,
+      "timeline_entries_examined": 1721,
+      "transitions_examined": 958,
       "candidate_count": 20,
       "high_confidence_candidate_count": 13,
       "activation_eligible_candidate_count": 7,
@@ -2400,27 +2433,27 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 588,
-      "treasure_coast_local": 404,
-      "treasure_coast_region": 224,
-      "unknown": 1228
+      "florida": 592,
+      "treasure_coast_local": 407,
+      "treasure_coast_region": 232,
+      "unknown": 1242
     },
-    "average_score": 58.46
+    "average_score": 58.51
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 588,
-      "treasure_coast_local": 404,
-      "treasure_coast_region": 224,
-      "unknown": 1228
+      "florida": 592,
+      "treasure_coast_local": 407,
+      "treasure_coast_region": 232,
+      "unknown": 1242
     },
-    "average_priority": 3.6
+    "average_priority": 3.52
   },
   "story_lifecycle": {
     "counts": {
-      "active": 1630,
-      "developing": 113,
-      "ongoing": 699,
+      "active": 1664,
+      "developing": 99,
+      "ongoing": 708,
       "resolved": 2
     }
   },
@@ -2428,8 +2461,8 @@
     "repair_version": 11,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 2427,
-    "active_stories_after": 2427,
+    "active_stories_before": 2443,
+    "active_stories_after": 2443,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2457,143 +2490,21 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-08-08T01:41:27Z",
+    "generated_at": "2026-08-08T10:41:53Z",
     "quarantined_story_records_retained": 29,
-    "active_story_count": 2444
+    "active_story_count": 2473
   },
   "stories": {
-    "total": 2444,
+    "total": 2473,
     "importance_levels": {
       "breaking": 3,
       "high": 42,
-      "normal": 359,
-      "low": 2040,
+      "normal": 362,
+      "low": 2066,
       "archived": 0
     },
-    "average_importance": 8.98,
+    "average_importance": 8.97,
     "top": [
-      {
-        "story_id": "story_002470",
-        "title": "Road rage crash in Port St. Lucie leaves motorcyclist seriously injured, driver arrested",
-        "score": 65,
-        "editorial_priority": 74,
-        "editorial_score": 74,
-        "score_breakdown": {
-          "score": 74,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 0.83
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "serious_injury",
-            "label": "Serious injury reported",
-            "points": 30
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Port St. Lucie"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 7,
-        "timeline_entries": 7,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 7,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-08T00:53:05.392904+00:00",
-          "hours_since_update": 0.83,
-          "event_count": 7,
-          "timeline_entries": 7
-        }
-      },
-      {
-        "story_id": "story_001806",
-        "title": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie - WPTV",
-        "score": 75,
-        "editorial_priority": 72,
-        "editorial_score": 72,
-        "score_breakdown": {
-          "score": 72,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 70.59
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Port St. Lucie"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 5,
-        "timeline_entries": 4,
-        "relationship_decisions": 2,
-        "canonical_source_candidates": 4,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-05T03:06:44.279269+00:00",
-          "hours_since_update": 70.59,
-          "event_count": 5,
-          "timeline_entries": 4
-        }
-      },
       {
         "story_id": "story_002068",
         "title": "PBSO communications officer identified as victim in Port St. Lucie murder-suicide",
@@ -2607,7 +2518,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 42.84
+          "age_hours": 51.85
         },
         "level": "high",
         "importance_reasons": [
@@ -2650,7 +2561,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-06T06:51:35.977301+00:00",
-          "hours_since_update": 42.84,
+          "hours_since_update": 51.85,
           "event_count": 13,
           "timeline_entries": 13
         }
@@ -2668,7 +2579,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 47.42
+          "age_hours": 56.43
         },
         "level": "high",
         "importance_reasons": [
@@ -2711,42 +2622,37 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-06T02:16:46.847967+00:00",
-          "hours_since_update": 47.42,
+          "hours_since_update": 56.43,
           "event_count": 2,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_001557",
-        "title": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
-        "score": 85,
-        "editorial_priority": 68,
-        "editorial_score": 68,
+        "story_id": "story_002470",
+        "title": "Road rage crash in Port St. Lucie leaves motorcyclist seriously injured, driver arrested",
+        "score": 65,
+        "editorial_priority": 70,
+        "editorial_score": 70,
         "score_breakdown": {
-          "score": 68,
-          "importance": 85,
+          "score": 70,
+          "importance": 65,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 160.12
+          "age_hours": 9.84
         },
-        "level": "breaking",
+        "level": "high",
         "importance_reasons": [
           {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
+            "code": "serious_injury",
+            "label": "Serious injury reported",
+            "points": 30
           },
           {
             "code": "public_safety",
             "label": "Public-safety event",
             "points": 25
-          },
-          {
-            "code": "court_action",
-            "label": "Court action",
-            "points": 10
           },
           {
             "code": "follow_up",
@@ -2769,17 +2675,17 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 10,
-        "timeline_entries": 10,
-        "relationship_decisions": 4,
-        "canonical_source_candidates": 10,
+        "event_count": 7,
+        "timeline_entries": 7,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 7,
         "lifecycle": {
-          "state": "ongoing",
-          "reason": "Established multi-event story has not updated in the past 72 hours",
-          "last_updated": "2026-08-01T09:34:32.950254+00:00",
-          "hours_since_update": 160.12,
-          "event_count": 10,
-          "timeline_entries": 10
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-08-08T00:53:05.392904+00:00",
+          "hours_since_update": 9.84,
+          "event_count": 7,
+          "timeline_entries": 7
         }
       },
       {
@@ -2795,7 +2701,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 47.42
+          "age_hours": 56.43
         },
         "level": "high",
         "importance_reasons": [
@@ -2828,69 +2734,17 @@
         "relationship_decisions": 1,
         "canonical_source_candidates": 1,
         "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
+          "state": "ongoing",
+          "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-06T02:16:46.847967+00:00",
-          "hours_since_update": 47.42,
+          "hours_since_update": 56.43,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
-        "story_id": "story_002644",
-        "title": "Florida police investigating death of missing man found in pond - Treasure Coast News",
-        "score": 65,
-        "editorial_priority": 61,
-        "editorial_score": 61,
-        "score_breakdown": {
-          "score": 61,
-          "importance": 65,
-          "proximity_multiplier": 0.95,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 0.87
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_region",
-          "score": 95,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 95,
-          "scope": "treasure_coast_region",
-          "reason": "Directly affects the Treasure Coast region"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-08-08T00:53:05.392904+00:00",
-          "hours_since_update": 0.87,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_000004",
-        "title": "Motorcyclist dies in Vero Beach crash after traveling at speeds of 113 mph, police say",
+        "story_id": "story_001806",
+        "title": "Woman killed, man found dead after apparent domestic-related shooting in Port St. Lucie - WPTV",
         "score": 75,
         "editorial_priority": 60,
         "editorial_score": 60,
@@ -2901,68 +2755,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 165.63
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Vero Beach"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 3,
-        "timeline_entries": 3,
-        "relationship_decisions": 0,
-        "canonical_source_candidates": 4,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Established multi-event story has not updated in the past 72 hours",
-          "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 165.63,
-          "event_count": 3,
-          "timeline_entries": 3
-        }
-      },
-      {
-        "story_id": "story_000049",
-        "title": "Community gathers to honor 9-year-old boy killed in dirt bike and FedEx truck crash in St. Lucie County - WPTV",
-        "score": 75,
-        "editorial_priority": 60,
-        "editorial_score": 60,
-        "score_breakdown": {
-          "score": 60,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 165.63
+          "age_hours": 79.6
         },
         "level": "high",
         "importance_reasons": [
@@ -2989,69 +2782,7 @@
             "St. Lucie County"
           ],
           "places": [
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 12,
-        "timeline_entries": 7,
-        "relationship_decisions": 3,
-        "canonical_source_candidates": 7,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Established multi-event story has not updated in the past 72 hours",
-          "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 165.63,
-          "event_count": 12,
-          "timeline_entries": 7
-        }
-      },
-      {
-        "story_id": "story_000793",
-        "title": "Indian River County firefighter/paramedic dies following off-duty personal tragedy - WPTV",
-        "score": 75,
-        "editorial_priority": 60,
-        "editorial_score": 60,
-        "score_breakdown": {
-          "score": 60,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 165.67
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Vero Beach",
-            "Sebastian"
+            "Port St. Lucie"
           ]
         },
         "editorial_proximity": {
@@ -3060,16 +2791,16 @@
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
         "event_count": 5,
-        "timeline_entries": 5,
+        "timeline_entries": 4,
         "relationship_decisions": 2,
-        "canonical_source_candidates": 23,
+        "canonical_source_candidates": 4,
         "lifecycle": {
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
-          "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 165.67,
+          "last_updated": "2026-08-05T03:06:44.279269+00:00",
+          "hours_since_update": 79.6,
           "event_count": 5,
-          "timeline_entries": 5
+          "timeline_entries": 4
         }
       },
       {
@@ -3085,7 +2816,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 121.2
+          "age_hours": 130.21
         },
         "level": "high",
         "importance_reasons": [
@@ -3128,9 +2859,61 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-03T00:30:14.732111+00:00",
-          "hours_since_update": 121.2,
+          "hours_since_update": 130.21,
           "event_count": 2,
           "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_002644",
+        "title": "Florida police investigating death of missing man found in pond - Treasure Coast News",
+        "score": 65,
+        "editorial_priority": 58,
+        "editorial_score": 58,
+        "score_breakdown": {
+          "score": 58,
+          "importance": 65,
+          "proximity_multiplier": 0.95,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 9.89
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_region",
+          "score": 95,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 95,
+          "scope": "treasure_coast_region",
+          "reason": "Directly affects the Treasure Coast region"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-08-08T00:53:05.392904+00:00",
+          "hours_since_update": 9.89,
+          "event_count": 1,
+          "timeline_entries": 1
         }
       },
       {
@@ -3146,7 +2929,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 0.06
+          "age_hours": 0.08
         },
         "level": "normal",
         "importance_reasons": [
@@ -3176,17 +2959,17 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 2,
-        "timeline_entries": 2,
+        "event_count": 3,
+        "timeline_entries": 3,
         "relationship_decisions": 1,
-        "canonical_source_candidates": 2,
+        "canonical_source_candidates": 3,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-08T01:41:18.231814+00:00",
-          "hours_since_update": 0.06,
-          "event_count": 2,
-          "timeline_entries": 2
+          "last_updated": "2026-08-08T10:41:38.083143+00:00",
+          "hours_since_update": 0.08,
+          "event_count": 3,
+          "timeline_entries": 3
         }
       },
       {
@@ -3202,7 +2985,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 178.01
+          "age_hours": 187.02
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3250,9 +3033,311 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 178.01,
+          "hours_since_update": 187.02,
           "event_count": 4,
           "timeline_entries": 4
+        }
+      },
+      {
+        "story_id": "story_001557",
+        "title": "Woman, 86, killed in crash after failing to yield at Port St. Lucie intersection",
+        "score": 85,
+        "editorial_priority": 53,
+        "editorial_score": 53,
+        "score_breakdown": {
+          "score": 53,
+          "importance": 85,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.55,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 169.13
+        },
+        "level": "breaking",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "court_action",
+            "label": "Court action",
+            "points": 10
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Port St. Lucie"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 10,
+        "timeline_entries": 10,
+        "relationship_decisions": 4,
+        "canonical_source_candidates": 10,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Multi-event story remains open but is no longer rapidly developing",
+          "last_updated": "2026-08-01T09:34:32.950254+00:00",
+          "hours_since_update": 169.13,
+          "event_count": 10,
+          "timeline_entries": 10
+        }
+      },
+      {
+        "story_id": "story_000004",
+        "title": "Motorcyclist dies in Vero Beach crash after traveling at speeds of 113 mph, police say",
+        "score": 75,
+        "editorial_priority": 47,
+        "editorial_score": 47,
+        "score_breakdown": {
+          "score": 47,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.55,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 174.63
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Vero Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 3,
+        "timeline_entries": 3,
+        "relationship_decisions": 0,
+        "canonical_source_candidates": 4,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Multi-event story remains open but is no longer rapidly developing",
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 174.63,
+          "event_count": 3,
+          "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_000049",
+        "title": "Community gathers to honor 9-year-old boy killed in dirt bike and FedEx truck crash in St. Lucie County - WPTV",
+        "score": 75,
+        "editorial_priority": 47,
+        "editorial_score": 47,
+        "score_breakdown": {
+          "score": 47,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.55,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 174.64
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 12,
+        "timeline_entries": 7,
+        "relationship_decisions": 3,
+        "canonical_source_candidates": 7,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Multi-event story remains open but is no longer rapidly developing",
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 174.64,
+          "event_count": 12,
+          "timeline_entries": 7
+        }
+      },
+      {
+        "story_id": "story_000793",
+        "title": "Indian River County firefighter/paramedic dies following off-duty personal tragedy - WPTV",
+        "score": 75,
+        "editorial_priority": 47,
+        "editorial_score": 47,
+        "score_breakdown": {
+          "score": 47,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.55,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 174.68
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Vero Beach",
+            "Sebastian"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 5,
+        "timeline_entries": 5,
+        "relationship_decisions": 2,
+        "canonical_source_candidates": 23,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Multi-event story remains open but is no longer rapidly developing",
+          "last_updated": "2026-08-01T04:03:52.676583+00:00",
+          "hours_since_update": 174.68,
+          "event_count": 5,
+          "timeline_entries": 5
+        }
+      },
+      {
+        "story_id": "story_002584",
+        "title": "Nurses in Florida Arrested in Alleged Neglect Case After Patient Death - The Boca Raton Tribune",
+        "score": 50,
+        "editorial_priority": 47,
+        "editorial_score": 47,
+        "score_breakdown": {
+          "score": 47,
+          "importance": 50,
+          "proximity_multiplier": 0.95,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 0.08
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_region",
+          "score": 95,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 95,
+          "scope": "treasure_coast_region",
+          "reason": "Directly affects the Treasure Coast region"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-08-08T10:41:38.083143+00:00",
+          "hours_since_update": 0.08,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       },
       {
@@ -3268,7 +3353,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 223.92
+          "age_hours": 232.93
         },
         "level": "high",
         "importance_reasons": [
@@ -3309,65 +3394,9 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 223.92,
+          "hours_since_update": 232.93,
           "event_count": 4,
           "timeline_entries": 2
-        }
-      },
-      {
-        "story_id": "story_001656",
-        "title": "Firefighter who got his start in Coral Springs dies in Sebastian, officials say - Coral Springs News",
-        "score": 65,
-        "editorial_priority": 45,
-        "editorial_score": 45,
-        "score_breakdown": {
-          "score": 45,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 165.63
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Sebastian"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Story is older than 48 hours but remains within the active news window",
-          "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 165.63,
-          "event_count": 1,
-          "timeline_entries": 1
         }
       },
       {
@@ -3383,7 +3412,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 286.16
+          "age_hours": 295.17
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3427,7 +3456,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-27T03:32:10.873614+00:00",
-          "hours_since_update": 286.16,
+          "hours_since_update": 295.17,
           "event_count": 5,
           "timeline_entries": 3
         }
@@ -3445,7 +3474,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 27.02
+          "age_hours": 36.04
         },
         "level": "high",
         "importance_reasons": [
@@ -3484,7 +3513,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-06T22:40:32.384292+00:00",
-          "hours_since_update": 27.02,
+          "hours_since_update": 36.04,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3502,7 +3531,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 74.51
+          "age_hours": 83.52
         },
         "level": "normal",
         "importance_reasons": [
@@ -3538,65 +3567,9 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-04T23:11:38.621211+00:00",
-          "hours_since_update": 74.51,
+          "hours_since_update": 83.52,
           "event_count": 5,
           "timeline_entries": 5
-        }
-      },
-      {
-        "story_id": "story_002471",
-        "title": "WHERE'S WALTER? Crashing band camp at Vero Beach High School",
-        "score": 35,
-        "editorial_priority": 40,
-        "editorial_score": 40,
-        "score_breakdown": {
-          "score": 40,
-          "importance": 35,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 0.85
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Vero Beach"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-08T00:53:05.392904+00:00",
-          "hours_since_update": 0.85,
-          "event_count": 2,
-          "timeline_entries": 2
         }
       },
       {
@@ -3612,7 +3585,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 74.56
+          "age_hours": 83.52
         },
         "level": "normal",
         "importance_reasons": [
@@ -3650,9 +3623,63 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-04T23:11:38.621211+00:00",
-          "hours_since_update": 74.56,
+          "hours_since_update": 83.52,
           "event_count": 4,
           "timeline_entries": 4
+        }
+      },
+      {
+        "story_id": "story_002165",
+        "title": "Fourth arrest made in death of 3-month-old child, St. Lucie County Sheriff's Office says - wpbf.com",
+        "score": 50,
+        "editorial_priority": 39,
+        "editorial_score": 39,
+        "score_breakdown": {
+          "score": 39,
+          "importance": 50,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.7,
+          "source_multiplier": 1.126,
+          "source_trust": 92,
+          "age_hours": 83.52
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "ongoing",
+          "reason": "Established multi-event story has not updated in the past 72 hours",
+          "last_updated": "2026-08-04T23:11:38.621211+00:00",
+          "hours_since_update": 83.52,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       }
     ]
@@ -3660,7 +3687,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 6,
-    "generated_at": "2026-08-08T01:46:00Z",
+    "generated_at": "2026-08-08T10:47:25Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3677,56 +3704,46 @@
       "statuses": {
         "county_zero_candidate_archive_recovery": 1,
         "generated_live": 6,
-        "generation_failed_archive_recovery": 1,
-        "no_publishable_sources": 1
+        "no_publishable_sources": 1,
+        "sports_zero_candidate_archive_recovery": 1
       },
       "failures": {
-        "article_framing_integrity": 1,
-        "no_source_backed_county_hero_candidates": 1
+        "no_source_backed_county_hero_candidates": 1,
+        "no_sports_hero_candidates": 1
       },
-      "model_attempt_count": 8,
-      "model_elapsed_seconds": 188.591,
+      "model_attempt_count": 6,
+      "model_elapsed_seconds": 202.244,
       "archive_recovery_requested_count": 3,
       "sports_expired_event_preview_count": 1,
       "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 4,
+      "article_framing_rejection_count": 1,
       "category_eligibility_rejection_count": 22,
-      "published_story_duplicate_suppression_count": 42,
-      "story_aware_update_context_count": 0
+      "published_story_duplicate_suppression_count": 47,
+      "story_aware_update_context_count": 1
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
-        "status": "generation_failed_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 27,
-        "publishable_source_count": 13,
+        "fresh_candidate_count": 26,
+        "publishable_source_count": 14,
         "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 8.817,
-            "result": "article_framing_integrity",
-            "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — St. Lucie County delays Tradition Lakes K-8 opening one week, disrupting child care plans for 1,100 families"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 11.089,
-            "result": "article_framing_integrity",
-            "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — St. Lucie County delays Tradition Lakes K-8 opening one week, leaving parents scrambling for child care"
+            "elapsed_seconds": 19.834,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 19.906,
-        "failure_code": "article_framing_integrity",
-        "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — St. Lucie County delays Tradition Lakes K-8 opening one week, leaving parents scrambling for child care",
+        "model_elapsed_seconds": 19.834,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -3735,9 +3752,35 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 13,
+        "category_eligibility_assessed_count": 14,
         "category_eligibility_rejection_count": 11,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_central_government_action",
+            "positive_signals": [],
+            "competing_signals": [],
+            "headline": "F-bombs fly in clash over Port St. Lucie campaign signs - WPEC",
+            "source_url": "https://cbs12.com/news/local/f-bombs-fly-in-clash-over-campaign-sign-involving-mayors-husband-opponent-port-st-lucie-police-department-pslpd-campaign-signs-political-signs-election-2026-august-election-local-election-mayoral-election-campaign-dispute-confrontation"
+          },
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_central_government_action",
+            "positive_signals": [],
+            "competing_signals": [],
+            "headline": "Dick's House of Sports, outdoor athletic field move closer to replacing old Sears at Gardens Mall",
+            "source_url": "https://www.wptv.com/news/region-n-palm-beach-county/palm-beach-gardens/dicks-house-of-sports-outdoor-athletic-field-move-closer-to-replacing-old-sears-at-gardens-mall"
+          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -3763,6 +3806,19 @@
             "competing_signals": [],
             "headline": "Singer Island residents, businesses frustrated over Riviera Beach paid parking program",
             "source_url": "https://www.wptv.com/news/region-c-palm-beach-county/riviera-beach/singer-island-residents-businesses-frustrated-over-riviera-beach-paid-parking-program"
+          },
+          {
+            "contract_version": "1.0-local-government-central-action",
+            "category_key": "local_gov",
+            "mode": "enforce",
+            "policy": "central_government_action_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_central_government_action",
+            "positive_signals": [],
+            "competing_signals": [],
+            "headline": "F-bombs fly in clash over Port St. Lucie campaign sign - cw34.com",
+            "source_url": "https://cw34.com/news/local/f-bombs-fly-in-clash-over-campaign-sign-involving-mayors-husband-opponent-port-st-lucie-police-department-pslpd-campaign-signs-political-signs-election-2026-august-election-local-election-mayoral-election-campaign-dispute-confrontation"
           },
           {
             "contract_version": "1.0-local-government-central-action",
@@ -3813,34 +3869,6 @@
             "reason": "missing_central_government_action",
             "positive_signals": [],
             "competing_signals": [],
-            "headline": "United Airlines adds nonstop flights to San Francisco from Donald J. Trump International Airport",
-            "source_url": "https://www.wptv.com/lifestyle/travel/united-airlines-adds-nonstop-flights-to-san-francisco-from-donald-j-trump-international-airport"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "competing_story_form_without_government_action",
-            "positive_signals": [],
-            "competing_signals": [
-              "sports_or_recreation:defeats"
-            ],
-            "headline": "Tennessee GOP primary delivers setback for Trump-endorsed Ogles",
-            "source_url": "https://www.wptv.com/politics/america-votes/tennessee-gop-primary-delivers-setback-for-trump-endorsed-ogles"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
             "headline": "Tradition Lakes K-8 School opening delayed in St. Lucie County - WPBF",
             "source_url": "https://www.wpbf.com/article/tradition-lakes-k-8-school-opening-delayed-st-lucie-county-port-st-lucie/73370702"
           },
@@ -3869,25 +3897,20 @@
             "competing_signals": [],
             "headline": "Treasure Coast, Okeechobee County schools adjust to enrollment changes as homeschooling grows - WPBF",
             "source_url": "https://www.wpbf.com/article/treasure-coast-okeechobee-county-schools-adjust-to-enrollment-changes-as-homeschooling-grows/73370376"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "competing_story_form_without_government_action",
-            "positive_signals": [],
-            "competing_signals": [
-              "crime_incident:arrested"
-            ],
-            "headline": "76-year-old accused of barcode-switching scheme at Port St. Lucie Target store - cw34.com",
-            "source_url": "https://cw34.com/news/local/florida-crime-news-76-year-old-soman-accused-of-barcode-switching-scheme-at-port-st-lucie-target-store-28-barcode-stickers-tj-maxx-publix-burlington-scheme-to-defraud"
           }
         ],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "Tradition Lakes K-8 opening postponed, leaving parents scrambling for child care",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/tradition-lakes-k-8-opening-postponed-leaving-parents-scrambling-for-child-care",
+            "editorial_story_id": "story_002552",
+            "canonical_slug": "2026-08-08-tradition-lakes-k-8-opening-delayed-one-week-leaving-st-lucie-parents-scrambling",
+            "canonical_headline": "Tradition Lakes K-8 opening delayed one week, leaving St. Lucie parents scrambling for child care",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Port St. Lucie police release details on 2 separate political campaign sign investigations",
@@ -3921,16 +3944,18 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "generation_status": "failed",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 26.955
+        "live_hero_headline": "Port St. Lucie postpones Riverland sports complex rezoning after Tradition residents protest",
+        "generated_card_count": 0,
+        "elapsed_seconds": 33.683
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 21,
+        "fresh_candidate_count": 22,
         "publishable_source_count": 8,
         "selected_source_count": 8,
         "cache_hit": false,
@@ -3940,92 +3965,19 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 64.79,
+            "elapsed_seconds": 54.091,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 64.79,
+        "model_elapsed_seconds": 54.091,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
         "contextual_update_lead_rejections": [],
-        "article_framing_rejection_count": 1,
-        "article_framing_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "headline": "Tradition Lakes K-8 school opening delayed one week, leaving Port St. Lucie area parents scrambling for child care",
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ],
-            "lead_independence": {
-              "required": true,
-              "passed": true,
-              "headline": "Tradition Lakes K-8 school opening delayed one week, leaving Port St. Lucie area parents scrambling for child care",
-              "lead": "St. Lucie Public Schools announced Thursday that the first day of classes at the new Tradition Lakes K-8 school will be pushed from Aug. 10 to Aug. 17, affecting approximately 1,100 students. Parents received notification of the delay just four days before the originally scheduled opening, sparking frustration among families who had already arranged work schedules and child care around the initial start date.",
-              "lead_word_count": 66,
-              "headline_overlap_ratio": 0.562,
-              "new_context_token_count": 39,
-              "opaque_references": [],
-              "undefined_references": [],
-              "story_form": "standard",
-              "update_diagnostics": {
-                "required": false,
-                "passed": true,
-                "story_form": "standard"
-              },
-              "missing": []
-            },
-            "claim_consistency": {
-              "required": true,
-              "passed": false,
-              "headline": "Tradition Lakes K-8 school opening delayed one week, leaving Port St. Lucie area parents scrambling for child care",
-              "lead": "St. Lucie Public Schools announced Thursday that the first day of classes at the new Tradition Lakes K-8 school will be pushed from Aug. 10 to Aug. 17, affecting approximately 1,100 students. Parents received notification of the delay just four days before the originally scheduled opening, sparking frustration among families who had already arranged work schedules and child care around the initial start date.",
-              "headline_money_claims": [],
-              "lead_money_claims": [],
-              "missing_money_claims": [],
-              "headline_jurisdictions": [
-                "port_st_lucie"
-              ],
-              "lead_jurisdictions": [],
-              "missing_jurisdictions": [
-                "port_st_lucie"
-              ],
-              "headline_policy_references": [],
-              "lead_policy_references": [],
-              "missing_policy_references": [],
-              "missing": [
-                "headline_jurisdiction_missing_from_lead"
-              ]
-            },
-            "source_focus": {
-              "required": true,
-              "passed": true,
-              "generated_headline": "Tradition Lakes K-8 school opening delayed one week, leaving Port St. Lucie area parents scrambling for child care",
-              "generated_lead": "St. Lucie Public Schools announced Thursday that the first day of classes at the new Tradition Lakes K-8 school will be pushed from Aug.",
-              "source_title": "Tradition Lakes K-8 opening postponed, leaving parents scrambling for child care",
-              "source_lead": "Lucie County's new Tradition Lakes K-8 school has been postponed by one week, leaving hundreds of parents scrambling to find last-minute child care arrangements. WATCH BELOW: 'This is not something we anticipated,' Superintendent Dr.",
-              "title_similarity": {
-                "score": 0.7509,
-                "overlap": 0.9,
-                "jaccard": 0.5,
-                "sorted_sequence": 0.7543,
-                "ordered_sequence": 0.7429,
-                "shared_token_count": 9.0
-              },
-              "lead_token_overlap": 0.333,
-              "missing": []
-            },
-            "source_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            }
-          }
-        ],
+        "article_framing_rejection_count": 0,
+        "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
         "category_eligibility_assessed_count": 8,
@@ -4035,32 +3987,32 @@
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
+            "source_headline": "Port St. Lucie man charged with animal cruelty - Hometown News Treasure Coast",
+            "source_url": "https://www.hometownnewstc.com/multimedia/photo_galleries/st_lucie/port-st-lucie-man-charged-with-animal-cruelty/article_12646c96-5d70-5527-844c-6561ae54674c.html",
+            "editorial_story_id": "story_002573",
+            "canonical_slug": "2026-08-08-port-st-lucie-man-arrested-on-animal-cruelty-charge-after-video-circulates-on-so",
+            "canonical_headline": "Port St. Lucie man arrested on animal cruelty charge after video circulates on social media",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Tradition Lakes K-8 opening postponed, leaving parents scrambling for child care",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/tradition-lakes-k-8-opening-postponed-leaving-parents-scrambling-for-child-care",
+            "editorial_story_id": "story_002552",
+            "canonical_slug": "2026-08-08-tradition-lakes-k-8-opening-delayed-one-week-leaving-st-lucie-parents-scrambling",
+            "canonical_headline": "Tradition Lakes K-8 opening delayed one week, leaving St. Lucie parents scrambling for child care",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "Port St. Lucie police release details on 2 separate political campaign sign investigations",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigating-2-incidents-involving-political-campaign-signs",
             "editorial_story_id": "story_002554",
             "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-two-separate-campaign-sign-incidents-involving",
             "canonical_headline": "Port St. Lucie police investigate two separate campaign sign incidents involving Mayor Martin's husband",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Port St. Lucie man arrested after video shows him allegedly abusing small dog - cw34.com",
-            "source_url": "https://cw34.com/news/local/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office",
-            "editorial_story_id": "story_002576",
-            "canonical_slug": "2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog",
-            "canonical_headline": "Port St. Lucie man arrested after video shows him kicking small dog",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Port St. Lucie man arrested after video shows him allegedly abusing small dog - cbs12.com",
-            "source_url": "https://cbs12.com/news/crime/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office",
-            "editorial_story_id": "story_002576",
-            "canonical_slug": "2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog",
-            "canonical_headline": "Port St. Lucie man arrested after video shows him kicking small dog",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4095,7 +4047,7 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Road rage ends in violent 4-vehicle crash on U.S. 1, Port St. Lucie man arrested - cbs12.com",
+            "source_headline": "Road rage ends in violent 4-vehicle crash on U.S. 1, Port St. Lucie man arrested - WPEC",
             "source_url": "https://cbs12.com/news/local/road-rage-ends-in-violent-4-vehicle-crash-on-us-1-port-st-lucie-man-arrested-harley-davidson-ford-super-duty-kevin-lonergan-reckless-driving-reckless-driving-arrest-four-vehicle-crash-traffic-crash-se-lyngate-drive-se-tiffany-avenue-st-lucie",
             "editorial_story_id": "story_002470",
             "canonical_slug": "2026-08-06-port-st-lucie-road-rage-crash-leaves-motorcyclist-with-brain-bleed-driver-arrest",
@@ -4115,31 +4067,31 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Road rage crash in Port St. Lucie leaves motorcyclist seriously injured, driver arrested - WFLX",
-            "source_url": "https://www.wflx.com/2026/08/06/road-rage-crash-port-st-lucie-leaves-motorcyclist-seriously-injured-driver-arrested",
-            "editorial_story_id": "story_002470",
-            "canonical_slug": "2026-08-06-port-st-lucie-road-rage-crash-leaves-motorcyclist-with-brain-bleed-driver-arrest",
-            "canonical_headline": "Port St. Lucie road rage crash leaves motorcyclist with brain bleed, driver arrested",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
+            "surface": "hero",
+            "headline": "Humane Society of the Treasure Coast seeks urgent help after Martin County's largest animal hoarding case",
+            "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+            "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+            "basis": "same_event_and_persistent_story_skip",
+            "reason": "published_skip_placement_suppressed"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Port St. Lucie man arrested on animal cruelty charge after video circulates on social media",
+        "live_hero_headline": "",
         "generated_card_count": 0,
-        "elapsed_seconds": 68.872
+        "elapsed_seconds": 60.91
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "generated_live",
-        "fetched_candidate_count": 25,
+        "fetched_candidate_count": 26,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 14,
-        "selected_source_count": 3,
+        "publishable_source_count": 12,
+        "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4147,11 +4099,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 18.07,
+            "elapsed_seconds": 8.841,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 18.07,
+        "model_elapsed_seconds": 8.841,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4162,9 +4114,25 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 14,
+        "category_eligibility_assessed_count": 12,
         "category_eligibility_rejection_count": 11,
         "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-business-development-primary-focus",
+            "category_key": "business",
+            "mode": "enforce",
+            "policy": "primary_business_development_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_treasure_coast_business_nexus",
+            "positive_signals": [
+              "development_project:redevelopment",
+              "commercial_real_estate:mall"
+            ],
+            "competing_signals": [],
+            "headline": "Dick's House of Sports, outdoor athletic field move closer to replacing old Sears at Gardens Mall",
+            "source_url": "https://www.wptv.com/news/region-n-palm-beach-county/palm-beach-gardens/dicks-house-of-sports-outdoor-athletic-field-move-closer-to-replacing-old-sears-at-gardens-mall"
+          },
           {
             "contract_version": "1.0-business-development-primary-focus",
             "category_key": "business",
@@ -4216,6 +4184,23 @@
             "competing_signals": [],
             "headline": "Florida Treasure Hunt auction in West Palm Beach features coins, jewelry and golden chickens",
             "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/florida-treasure-hunt-auction-in-west-palm-beach-features-coins-jewelry-and-golden-chickens"
+          },
+          {
+            "contract_version": "1.0-business-development-primary-focus",
+            "category_key": "business",
+            "mode": "enforce",
+            "policy": "primary_business_development_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "competing_story_form_without_business_development_focus",
+            "positive_signals": [
+              "commercial_real_estate:restaurant"
+            ],
+            "competing_signals": [
+              "election_political_process:ballot"
+            ],
+            "headline": "2026 Reader’s Choice voting is open - Hometown News Treasure Coast",
+            "source_url": "https://www.hometownnewstc.com/news/st_lucie/2026-reader-s-choice-voting-is-open/article_58ccc6e1-90f0-5bae-a3a5-d8cde2dac20d.html"
           },
           {
             "contract_version": "1.0-business-development-primary-focus",
@@ -4292,38 +4277,20 @@
             ],
             "headline": "Palm Beach County teachers say thousands of dollars in pay are on the line in November vote",
             "source_url": "https://www.wptv.com/news/palm-beach-county/region-c-palm-beach-county/palm-beach-county-teachers-say-thousands-of-dollars-in-pay-are-on-the-line-in-november-vote"
-          },
-          {
-            "contract_version": "1.0-business-development-primary-focus",
-            "category_key": "business",
-            "mode": "enforce",
-            "policy": "primary_business_development_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_treasure_coast_business_nexus",
-            "positive_signals": [],
-            "competing_signals": [
-              "schools_education:students"
-            ],
-            "headline": "St. Lucie Public Schools moves Tradition Lakes K-8 first day to August 17",
-            "source_url": "https://www.wptv.com/news/education/back-to-school/st-lucie-public-schools-moves-tradition-lakes-k-8-first-day-to-august-17"
-          },
-          {
-            "contract_version": "1.0-business-development-primary-focus",
-            "category_key": "business",
-            "mode": "enforce",
-            "policy": "primary_business_development_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_treasure_coast_business_nexus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "headline": "'Once you showed up, it made a difference': Homeowner gets My Safe Florida Home grant approved",
-            "source_url": "https://www.wptv.com/news/palm-beach-county/region-s-palm-beach-county/once-you-showed-up-it-made-a-difference-homeowner-gets-my-safe-florida-home-grant-approved"
           }
         ],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "business",
+            "source_headline": "Tradition Lakes K-8 opening postponed, leaving parents scrambling for child care",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/tradition-lakes-k-8-opening-postponed-leaving-parents-scrambling-for-child-care",
+            "editorial_story_id": "story_002552",
+            "canonical_slug": "2026-08-08-tradition-lakes-k-8-opening-delayed-one-week-leaving-st-lucie-parents-scrambling",
+            "canonical_headline": "Tradition Lakes K-8 opening delayed one week, leaving St. Lucie parents scrambling for child care",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "business",
             "source_headline": "Port St. Lucie police release details on 2 separate political campaign sign investigations",
@@ -4347,7 +4314,7 @@
           {
             "category_key": "business",
             "surface": "hero",
-            "headline": "Fort Pierce Kings Landing developers seek $15 million as project faces new delay",
+            "headline": "Fort Pierce Kings Landing development faces new delay as developers seek $15 million to complete Marriott hotel",
             "editorial_story_id": "story_002361",
             "canonical_slug": "2026-08-06-fort-pierce-kings-landing-developers-seek-15-million-to-complete-marriott-hotel",
             "canonical_headline": "Fort Pierce Kings Landing developers short $15 million, city commissioners divided on next steps",
@@ -4361,30 +4328,23 @@
         "budget_seconds": 180.0,
         "live_hero_headline": "",
         "generated_card_count": 0,
-        "elapsed_seconds": 21.692
+        "elapsed_seconds": 17.235
       },
       {
         "category_key": "sports",
         "category_label": "Sports",
-        "status": "generated_live",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 6,
-        "selected_source_count": 5,
+        "status": "sports_zero_candidate_archive_recovery",
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 3,
+        "selected_source_count": 2,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 17.527,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 17.527,
-        "failure_code": "",
-        "failure_summary": "",
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_sports_hero_candidates",
+        "failure_summary": "Selected Sports source pool contained no deterministic athletic hero candidate",
         "sports_expired_event_preview_count": 1,
         "sports_expired_event_previews": [
           {
@@ -4407,11 +4367,41 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "existing_athletic_guard_retained",
-        "category_eligibility_assessed_count": 5,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "sports",
+            "source_headline": "Tortugas pull away for 17-3 win over Mets - Hometown News Treasure Coast",
+            "source_url": "https://www.hometownnewstc.com/sports/tortugas-pull-away-for-17-3-win-over-mets/article_ae6713ec-1863-596f-ac46-7138b723728f.html",
+            "editorial_story_id": "story_002600",
+            "canonical_slug": "2026-08-08-st-lucie-mets-fall-17-3-to-daytona-as-tortugas-score-11-unanswered-runs-at-clove",
+            "canonical_headline": "St. Lucie Mets fall 17-3 to Daytona as Tortugas score 11 unanswered runs at Clover Park",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "sports",
+            "source_headline": "Mets split doubleheader with Tortugas with wild game 2 win - Hometown News Treasure Coast",
+            "source_url": "https://www.hometownnewstc.com/sports/mets-split-doubleheader-with-tortugas-with-wild-game-2-win/article_b91d8a4a-de28-5b08-8373-e463742db830.html",
+            "editorial_story_id": "story_002451",
+            "canonical_slug": "2026-08-08-st-lucie-mets-split-doubleheader-with-daytona-rally-for-11-10-win-in-10-innings",
+            "canonical_headline": "St. Lucie Mets split doubleheader with Daytona, rally for 11-10 win in 10 innings",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "sports",
+            "source_headline": "Tortugas pull away for 17-3 win over Mets - MLB.com",
+            "source_url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1zSUdSZDllMFM1Rzh6b1p6eHNYakk4a1hWaFdRVVJsRVFlT3JtUUs5aERIc092TmlXdG1hUlM0UmRabm02SUw4Uk1EcWszU3JsbWpselhKS205SGdCYzFOUmQwTEdUNGU3OEJvcg",
+            "editorial_story_id": "story_002600",
+            "canonical_slug": "2026-08-08-st-lucie-mets-fall-17-3-to-daytona-as-tortugas-score-11-unanswered-runs-at-clove",
+            "canonical_headline": "St. Lucie Mets fall 17-3 to Daytona as Tortugas score 11 unanswered runs at Clover Park",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "sports",
             "source_headline": "WHERE'S WALTER? Crashing band camp at Vero Beach High School - WFLX",
@@ -4434,16 +4424,6 @@
           },
           {
             "category_key": "sports",
-            "source_headline": "Mets split doubleheader with Tortugas with wild game 2 win - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/sports/mets-split-doubleheader-with-tortugas-with-wild-game-2-win/article_b91d8a4a-de28-5b08-8373-e463742db830.html",
-            "editorial_story_id": "story_002451",
-            "canonical_slug": "2026-08-08-st-lucie-mets-split-doubleheader-with-daytona-rally-for-11-10-win-in-10-innings",
-            "canonical_headline": "St. Lucie Mets split doubleheader with Daytona, rally for 11-10 win in 10 innings",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "sports",
             "source_headline": "Mets split doubleheader with Tortugas with wild game 2 win - MLB.com",
             "source_url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9pd0g5UUROb0tFZ2lMMHgyeDZOTjExenZ1ei1wMEVnV0dsaHFjbDcwenhLNnZvV2dYeDdadWUyXzJzRGt5RzFSVFF5ZFRKMnhPOXd4U20xTmV3WXdV",
             "editorial_story_id": "story_002451",
@@ -4454,7 +4434,7 @@
           },
           {
             "category_key": "sports",
-            "source_headline": "Funeral scheduled in Vero Beach honoring lost firefighter Geoffrey Lang - cbs12.com",
+            "source_headline": "Funeral scheduled in Vero Beach honoring lost firefighter Geoffrey Lang - WPEC",
             "source_url": "https://cbs12.com/news/local/funeral-scheduled-in-vero-beach-honoring-lost-firefighter-geoffrey-lang-community-church-indian-river-county-fire-rescue-paramedic-off-duty-death",
             "editorial_story_id": "story_000793",
             "canonical_slug": "2026-07-28-vero-beach-police-department-honors-service-of-indian-river-county-firefighter",
@@ -4465,11 +4445,7 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "St. Lucie Mets fall 17-3 to Daytona as Tortugas score 11 unanswered runs at Clover Park",
-        "generated_card_count": 0,
-        "elapsed_seconds": 21.939
+        "elapsed_seconds": 9.818
       },
       {
         "category_key": "things_to_do",
@@ -4477,7 +4453,7 @@
         "status": "generated_live",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 20,
-        "publishable_source_count": 9,
+        "publishable_source_count": 10,
         "selected_source_count": 9,
         "cache_hit": false,
         "archive_recovery_requested": false,
@@ -4486,11 +4462,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 15.332,
+            "elapsed_seconds": 62.803,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 15.332,
+        "model_elapsed_seconds": 62.803,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4501,7 +4477,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 9,
+        "category_eligibility_assessed_count": 10,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 2,
@@ -4533,7 +4509,7 @@
         "budget_seconds": 180.0,
         "live_hero_headline": "",
         "generated_card_count": 0,
-        "elapsed_seconds": 17.782
+        "elapsed_seconds": 65.896
       },
       {
         "category_key": "florida",
@@ -4576,7 +4552,7 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "elapsed_seconds": 7.799
+        "elapsed_seconds": 7.641
       },
       {
         "category_key": "martin",
@@ -4593,11 +4569,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 6.364,
+            "elapsed_seconds": 19.466,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 6.364,
+        "model_elapsed_seconds": 19.466,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4611,11 +4587,11 @@
         "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
-            "source_headline": "Martin County community rallies to restore mangrove island on St. Lucie River - wptv.com",
+            "source_headline": "Martin County community rallies to restore mangrove island on St. Lucie River",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-community-rallies-to-restore-mangrove-island-on-st-lucie-river",
             "editorial_story_id": "story_002559",
             "canonical_slug": "2026-08-08-pipers-landing-residents-plant-6000-mangroves-to-restore-eroded-st-lucie-river-i",
@@ -4625,7 +4601,7 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Martin County community rallies to restore mangrove island on St. Lucie River",
+            "source_headline": "Martin County community rallies to restore mangrove island on St. Lucie River - WPTV",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-community-rallies-to-restore-mangrove-island-on-st-lucie-river",
             "editorial_story_id": "story_002559",
             "canonical_slug": "2026-08-08-pipers-landing-residents-plant-6000-mangroves-to-restore-eroded-st-lucie-river-i",
@@ -4645,6 +4621,16 @@
           },
           {
             "category_key": "martin",
+            "source_headline": "Costco reopens following electrical fire at Martin County location - cw34.com",
+            "source_url": "https://cw34.com/news/local/costco-closes-electrical-fire-kanner-highway-store-closure-business-fire-shopping-disruption-costco-news-treasure-coast-florida-news?teaserSource=trending",
+            "editorial_story_id": "story_002457",
+            "canonical_slug": "2026-08-06-costco-in-stuart-closes-after-electrical-fire",
+            "canonical_headline": "Costco in Stuart reopens after electrical fire but refrigeration remains down",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
             "source_headline": "Neighbors in Martin County say dogs are suffering next door. The sheriff says his hands are tied - WFLX",
             "source_url": "https://www.wflx.com/2026/08/06/neighbors-martin-county-say-dogs-are-suffering-next-door-sheriff-says-his-hands-are-tied",
             "editorial_story_id": "story_002458",
@@ -4655,41 +4641,41 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Martin County deputies locate missing autistic teen last seen in Palm City - cbs12.com",
-            "source_url": "https://cbs12.com/news/local/martin-county-deputies-seek-autistic-missing-14-year-old-boy-last-seen-grand-oaks-living-facility-coquina-cove-florida-news",
-            "editorial_story_id": "story_002406",
-            "canonical_slug": "2026-08-06-martin-county-sheriffs-office-seeks-public-help-finding-missing-14-year-old-auti",
-            "canonical_headline": "Missing 14-year-old autistic boy Ethan Boyd safely located, Martin County sheriff says",
+            "source_headline": "Costco reopens following electrical fire at Martin County location - WPEC",
+            "source_url": "https://cbs12.com/news/local/costco-closes-electrical-fire-kanner-highway-store-closure-business-fire-shopping-disruption-costco-news-treasure-coast-florida-news",
+            "editorial_story_id": "story_002457",
+            "canonical_slug": "2026-08-06-costco-in-stuart-closes-after-electrical-fire",
+            "canonical_headline": "Costco in Stuart reopens after electrical fire but refrigeration remains down",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "martin",
-            "source_headline": "Authorities need help finding 14-year-old autistic boy last seen in Palm City - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-palm-city-missing-14-year-old-autistic-boy/73360714",
-            "editorial_story_id": "story_002406",
-            "canonical_slug": "2026-08-06-martin-county-sheriffs-office-seeks-public-help-finding-missing-14-year-old-auti",
-            "canonical_headline": "Missing 14-year-old autistic boy Ethan Boyd safely located, Martin County sheriff says",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
+            "surface": "card",
+            "headline": "Humane Society of the Treasure Coast seeks urgent help after Martin County's largest animal hoarding case",
+            "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+            "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+            "basis": "same_event_and_persistent_story_skip",
+            "reason": "published_skip_placement_suppressed"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Costco in Stuart reopens after electrical fire, refrigeration still down",
+        "live_hero_headline": "Early voting begins Saturday for Florida's August primary in Martin County",
         "generated_card_count": 0,
-        "elapsed_seconds": 13.815
+        "elapsed_seconds": 29.713
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 4,
-        "selected_source_count": 4,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 6,
+        "selected_source_count": 5,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4697,11 +4683,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 46.602,
+            "elapsed_seconds": 37.209,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 46.602,
+        "model_elapsed_seconds": 37.209,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4714,18 +4700,18 @@
             "surface": "card",
             "required": true,
             "passed": false,
-            "headline": "Search warrant executed at Fort Pierce home in $7 million Southern Truss fraud investigation",
+            "headline": "Tradition Lakes K-8 School opening delayed one week in St. Lucie County",
             "missing": [
-              "headline_money_claim_missing_from_lead"
+              "headline_jurisdiction_missing_from_lead"
             ],
             "lead_independence": {
               "required": true,
               "passed": true,
-              "headline": "Search warrant executed at Fort Pierce home in $7 million Southern Truss fraud investigation",
-              "lead": "St. Lucie County Sheriff's Office deputies served a search warrant Tuesday morning as part of the ongoing investigation into the Southern Truss fraud case. Crime scene investigators were seen outside the home of Laura Beth Grasso in the Indian River Estates neighborhood near Sunset Boulevard in Fort Pierce. Grasso was arrested July 16 along with Sheri Lynn Harrs and Tina Marie Mejia following what the sheriff's office described as a years-long scheme targeting Southern Truss Companies. Grasso has pleaded not guilty to the charges, court records show.",
-              "lead_word_count": 90,
-              "headline_overlap_ratio": 0.818,
-              "new_context_token_count": 52,
+              "headline": "Tradition Lakes K-8 School opening delayed one week in St. Lucie County",
+              "lead": "St. Lucie Public Schools Superintendent Dr. John R. Prince announced Thursday that the first day of school for students at Tradition Lakes K-8 will move one week, from August 10 to Monday, August 17, 2026. The additional week gives teachers and staff time to complete final classroom preparations at the district's newest school.",
+              "lead_word_count": 55,
+              "headline_overlap_ratio": 0.7,
+              "new_context_token_count": 28,
               "opaque_references": [],
               "undefined_references": [],
               "story_form": "standard",
@@ -4739,46 +4725,41 @@
             "claim_consistency": {
               "required": true,
               "passed": false,
-              "headline": "Search warrant executed at Fort Pierce home in $7 million Southern Truss fraud investigation",
-              "lead": "St. Lucie County Sheriff's Office deputies served a search warrant Tuesday morning as part of the ongoing investigation into the Southern Truss fraud case. Crime scene investigators were seen outside the home of Laura Beth Grasso in the Indian River Estates neighborhood near Sunset Boulevard in Fort Pierce. Grasso was arrested July 16 along with Sheri Lynn Harrs and Tina Marie Mejia following what the sheriff's office described as a years-long scheme targeting Southern Truss Companies. Grasso has pleaded not guilty to the charges, court records show.",
-              "headline_money_claims": [
-                7000000
-              ],
+              "headline": "Tradition Lakes K-8 School opening delayed one week in St. Lucie County",
+              "lead": "St. Lucie Public Schools Superintendent Dr. John R. Prince announced Thursday that the first day of school for students at Tradition Lakes K-8 will move one week, from August 10 to Monday, August 17, 2026. The additional week gives teachers and staff time to complete final classroom preparations at the district's newest school.",
+              "headline_money_claims": [],
               "lead_money_claims": [],
-              "missing_money_claims": [
-                7000000
-              ],
+              "missing_money_claims": [],
               "headline_jurisdictions": [
-                "fort_pierce"
-              ],
-              "lead_jurisdictions": [
-                "fort_pierce",
                 "st_lucie_county"
               ],
-              "missing_jurisdictions": [],
+              "lead_jurisdictions": [],
+              "missing_jurisdictions": [
+                "st_lucie_county"
+              ],
               "headline_policy_references": [],
               "lead_policy_references": [],
               "missing_policy_references": [],
               "missing": [
-                "headline_money_claim_missing_from_lead"
+                "headline_jurisdiction_missing_from_lead"
               ]
             },
             "source_focus": {
               "required": true,
               "passed": true,
-              "generated_headline": "Search warrant executed at Fort Pierce home in $7 million Southern Truss fraud investigation",
-              "generated_lead": "St. Lucie County Sheriff's Office deputies served a search warrant Tuesday morning as part of the ongoing investigation into the Southern Truss fraud case.",
-              "source_title": "Search warrant underway at Fort Pierce home tied to $7 million Southern Truss fraud - cbs12.com",
-              "source_lead": "A large law enforcement presence descended on a Fort Pierce neighborhood Tuesday morning as detectives executed a search warrant connected to an alleged fraud scheme that investigators say cost a local business nearly $7 million. Lucie County Sheriff's Office confirmed to CBS12 News that deputies are serving a search warrant as part of the ongoing investigation into the Southern Truss fraud case.",
+              "generated_headline": "Tradition Lakes K-8 School opening delayed one week in St. Lucie County",
+              "generated_lead": "St. Lucie Public Schools Superintendent Dr.",
+              "source_title": "Tradition Lakes K-8 School opening delayed in St. Lucie County - WPBF",
+              "source_lead": "The grand opening of a new public school in St. Lucie County will have to wait.",
               "title_similarity": {
-                "score": 0.7539,
-                "overlap": 0.8333,
-                "jaccard": 0.625,
-                "sorted_sequence": 0.7485,
-                "ordered_sequence": 0.7836,
-                "shared_token_count": 10.0
+                "score": 0.8591,
+                "overlap": 0.9,
+                "jaccard": 0.75,
+                "sorted_sequence": 0.9206,
+                "ordered_sequence": 0.8889,
+                "shared_token_count": 9.0
               },
-              "lead_token_overlap": 0.889,
+              "lead_token_overlap": 0.5,
               "missing": []
             },
             "source_jurisdiction": {
@@ -4790,24 +4771,34 @@
         ],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 6,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 10,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
-            "source_headline": "77-year-old Port St. Lucie man found dead in nearby pond, PSLPD says - cbs12.com",
-            "source_url": "https://cbs12.com/news/florida/77-year-old-port-st-lucie-man-found-dead-in-nearby-pond-pslpd-says-port-st-lucie-police-department-car-in-pond-vehicle-in-canal-florida-news",
+            "source_headline": "Port St. Lucie police investigate death of 77-year-old man found in pond - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-police-77-year-old-found-dead-pond/73379700",
             "editorial_story_id": "story_002646",
             "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-death-of-77-year-old-man-found-in-pond-near-his",
             "canonical_headline": "Port St. Lucie police investigate death of 77-year-old man found in pond near his home",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie police investigating 2 incidents involving political campaign signs - wptv.com",
+            "source_headline": "Tradition Lakes K-8 opening postponed, leaving parents scrambling for child care",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/tradition-lakes-k-8-opening-postponed-leaving-parents-scrambling-for-child-care",
+            "editorial_story_id": "story_002552",
+            "canonical_slug": "2026-08-08-tradition-lakes-k-8-opening-delayed-one-week-leaving-st-lucie-parents-scrambling",
+            "canonical_headline": "Tradition Lakes K-8 opening delayed one week, leaving St. Lucie parents scrambling for child care",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Port St. Lucie police release details on 2 separate political campaign sign investigations - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigating-2-incidents-involving-political-campaign-signs",
             "editorial_story_id": "story_002554",
             "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-two-separate-campaign-sign-incidents-involving",
@@ -4827,26 +4818,6 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie police investigate death of 77-year-old man found in pond - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-police-77-year-old-found-dead-pond/73379700",
-            "editorial_story_id": "story_002646",
-            "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-death-of-77-year-old-man-found-in-pond-near-his",
-            "canonical_headline": "Port St. Lucie police investigate death of 77-year-old man found in pond near his home",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie man arrested after video shows him allegedly abusing small dog - cbs12.com",
-            "source_url": "https://cbs12.com/news/videos/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office",
-            "editorial_story_id": "story_002576",
-            "canonical_slug": "2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog",
-            "canonical_headline": "Port St. Lucie man arrested after video shows him kicking small dog",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "Driver arrested after alleged road rage incident leads to four-vehicle crash in Port St. Lucie - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-driver-road-rage-incident-leads-four-vehicle-crash-port-st-lucie/73366168",
             "editorial_story_id": "story_002470",
@@ -4857,7 +4828,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Kings Landing development in Fort Pierce faces new delay as developers seek millions to finish project - wptv.com",
+            "source_headline": "Kings Landing development in Fort Pierce faces new delay as developers seek millions to finish project - WPTV",
             "source_url": "https://www.wptv.com/money/real-estate-news/kings-landing-development-in-fort-pierce-faces-new-delay-as-developers-seek-millions-to-finish-project",
             "editorial_story_id": "story_002361",
             "canonical_slug": "2026-08-06-fort-pierce-kings-landing-developers-seek-15-million-to-complete-marriott-hotel",
@@ -4867,17 +4838,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Road rage ends in violent 4-vehicle crash on U.S. 1, Port St. Lucie man arrested - cbs12.com",
-            "source_url": "https://cbs12.com/news/local/road-rage-ends-in-violent-4-vehicle-crash-on-us-1-port-st-lucie-man-arrested-harley-davidson-ford-super-duty-kevin-lonergan-reckless-driving-reckless-driving-arrest-four-vehicle-crash-traffic-crash-se-lyngate-drive-se-tiffany-avenue-st-lucie",
-            "editorial_story_id": "story_002470",
-            "canonical_slug": "2026-08-06-port-st-lucie-road-rage-crash-leaves-motorcyclist-with-brain-bleed-driver-arrest",
-            "canonical_headline": "Port St. Lucie road rage crash leaves motorcyclist with brain bleed, driver arrested",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Firefighters battle blaze at St. Lucie County home - cbs12.com",
+            "source_headline": "Firefighters battle blaze at St. Lucie County home - WPEC",
             "source_url": "https://cbs12.com/news/local/firefighters-battled-home-blaze-melaleuca-boulevard-detached-structure-burning-vehicle-st-lucie-county-fire-district-florida-news",
             "editorial_story_id": "story_002416",
             "canonical_slug": "2026-08-06-firefighters-battle-blaze-at-st-lucie-county-home-on-melaleuca-boulevard",
@@ -4894,24 +4855,58 @@
             "canonical_headline": "St. Lucie County schools open Aug. 10 with new Tradition Lakes K-8 campus and AI courses",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Sharks caught on video off shore in St. Lucie County, Jupiter - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-sharks-caught-on-video-off-shoremartin-county-jupiter/73324831",
+            "editorial_story_id": "story_001783",
+            "canonical_slug": "2026-08-03-two-sharks-spotted-off-st-lucie-and-palm-beach-county-coasts",
+            "canonical_headline": "Two sharks spotted off St. Lucie and Palm Beach County coasts",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Port St. Lucie man arrested after video shows him allegedly abusing small dog - WPEC",
+            "source_url": "https://cbs12.com/news/videos/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office",
+            "publisher": "cbs12.com",
+            "canonical_slug": "2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog",
+            "canonical_headline": "Port St. Lucie man arrested after video shows him kicking small dog",
+            "basis": "exact_source_url",
+            "identity_keys": [
+              "story:story_002576",
+              "source:https://cbs12.com/news/videos/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office"
+            ],
+            "match_confidence": 0.99,
+            "evidence_dimensions": [
+              "story",
+              "source"
+            ],
+            "decision_trace": [
+              "deterministic_identity_keys=story:story_002576,source:https://cbs12.com/news/videos/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Port St. Lucie mayor's husband confronts opponent over campaign signs in profanity-laced clash",
-        "generated_card_count": 1,
-        "elapsed_seconds": 49.371
+        "live_hero_headline": "Port St. Lucie police investigate campaign sign confrontations between mayor and challenger",
+        "generated_card_count": 2,
+        "elapsed_seconds": 42.95
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
         "status": "county_zero_candidate_archive_recovery",
-        "fetched_candidate_count": 26,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 8,
-        "selected_source_count": 6,
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 5,
+        "selected_source_count": 4,
         "cache_hit": false,
         "archive_recovery_requested": true,
         "attempt_count": 0,
@@ -4927,11 +4922,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "Tradition Lakes K-8 opening postponed, leaving parents scrambling for child care",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/tradition-lakes-k-8-opening-postponed-leaving-parents-scrambling-for-child-care",
+            "editorial_story_id": "story_002552",
+            "canonical_slug": "2026-08-08-tradition-lakes-k-8-opening-delayed-one-week-leaving-st-lucie-parents-scrambling",
+            "canonical_headline": "Tradition Lakes K-8 opening delayed one week, leaving St. Lucie parents scrambling for child care",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "indian_river",
             "source_headline": "Port St. Lucie police release details on 2 separate political campaign sign investigations",
@@ -4954,7 +4959,7 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "WHERE'S WALTER? Crashing band camp at Vero Beach High School - wptv.com",
+            "source_headline": "WHERE'S WALTER? Crashing band camp at Vero Beach High School - WPTV",
             "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-crashing-band-camp-at-vero-beach-high-school",
             "editorial_story_id": "story_002471",
             "canonical_slug": "2026-08-06-vero-beach-high-school-marching-band-prepares-for-school-year-with-nearly-90-yea",
@@ -4965,7 +4970,7 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "elapsed_seconds": 4.412
+        "elapsed_seconds": 6.865
       }
     ]
   }
