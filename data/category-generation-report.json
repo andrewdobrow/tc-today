@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-08T10:47:25Z",
+  "generated_at": "2026-08-08T15:44:03Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,47 +16,58 @@
     "category_count": 9,
     "statuses": {
       "county_zero_candidate_archive_recovery": 1,
-      "generated_live": 6,
+      "generation_failed_archive_recovery": 6,
       "no_publishable_sources": 1,
       "sports_zero_candidate_archive_recovery": 1
     },
     "failures": {
+      "generation_exception": 6,
       "no_source_backed_county_hero_candidates": 1,
       "no_sports_hero_candidates": 1
     },
-    "model_attempt_count": 6,
-    "model_elapsed_seconds": 202.244,
-    "archive_recovery_requested_count": 3,
+    "model_attempt_count": 12,
+    "model_elapsed_seconds": 1.745,
+    "archive_recovery_requested_count": 9,
     "sports_expired_event_preview_count": 1,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 1,
-    "category_eligibility_rejection_count": 22,
-    "published_story_duplicate_suppression_count": 47,
+    "article_framing_rejection_count": 0,
+    "category_eligibility_rejection_count": 17,
+    "published_story_duplicate_suppression_count": 43,
     "story_aware_update_context_count": 1
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generated_live",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 26,
-      "publishable_source_count": 14,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 9,
       "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 19.834,
-          "result": "success"
+          "elapsed_seconds": 0.158,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.143,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq"
         }
       ],
-      "model_elapsed_seconds": 19.834,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 0.301,
+      "failure_code": "generation_exception",
+      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -65,8 +76,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 14,
-      "category_eligibility_rejection_count": 11,
+      "category_eligibility_assessed_count": 9,
+      "category_eligibility_rejection_count": 7,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -78,20 +89,7 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "F-bombs fly in clash over Port St. Lucie campaign signs - WPEC",
-          "source_url": "https://cbs12.com/news/local/f-bombs-fly-in-clash-over-campaign-sign-involving-mayors-husband-opponent-port-st-lucie-police-department-pslpd-campaign-signs-political-signs-election-2026-august-election-local-election-mayoral-election-campaign-dispute-confrontation"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Dick's House of Sports, outdoor athletic field move closer to replacing old Sears at Gardens Mall",
+          "headline": "Dick's House of Sport, outdoor athletic field move closer to replacing old Sears at Gardens Mall",
           "source_url": "https://www.wptv.com/news/region-n-palm-beach-county/palm-beach-gardens/dicks-house-of-sports-outdoor-athletic-field-move-closer-to-replacing-old-sears-at-gardens-mall"
         },
         {
@@ -156,32 +154,6 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Florida Treasure Hunt auction in West Palm Beach features coins, jewelry and golden chickens",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/florida-treasure-hunt-auction-in-west-palm-beach-features-coins-jewelry-and-golden-chickens"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Glades Teacher Appreciation Breakfast honors educators before first day of school",
-          "source_url": "https://www.wptv.com/news/education/back-to-school/glades-teacher-appreciation-breakfast-honors-educators-ahead-of-first-day-of-school"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
           "headline": "Tradition Lakes K-8 School opening delayed in St. Lucie County - WPBF",
           "source_url": "https://www.wpbf.com/article/tradition-lakes-k-8-school-opening-delayed-st-lucie-county-port-st-lucie/73370702"
         },
@@ -197,23 +169,20 @@
           "competing_signals": [],
           "headline": "Early voting begins Aug. 8 for Palm Beach, Okeechobee counties and the Treasure Coast - WFLX",
           "source_url": "https://www.wflx.com/2026/08/07/early-voting-begins-aug-8-palm-beach-okeechobee-counties-treasure-coast/"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Treasure Coast, Okeechobee County schools adjust to enrollment changes as homeschooling grows - WPBF",
-          "source_url": "https://www.wpbf.com/article/treasure-coast-okeechobee-county-schools-adjust-to-enrollment-changes-as-homeschooling-grows/73370376"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Riverland-Kennedy rezoning postponed for resident meeting - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/news/st_lucie/riverland-kennedy-rezoning-postponed-for-resident-meeting/article_e7636f0a-a2f2-527a-b182-fca8c163743b.html",
+          "editorial_story_id": "story_002680",
+          "canonical_slug": "2026-08-08-port-st-lucie-postpones-riverland-sports-complex-rezoning-after-tradition-reside",
+          "canonical_headline": "Port St. Lucie postpones Riverland sports complex rezoning after Tradition residents protest",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Tradition Lakes K-8 opening postponed, leaving parents scrambling for child care",
@@ -255,36 +224,68 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "generation_status": "success",
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Humane Society seeks urgent help after Martin County's largest animal hoarding case - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/humane-society-treasure-coast-seeks-urgent-help-after-martin-countys-largest-animal-hoarding-case-adoptions-foster-donations-postal-worker-route-influx-animal-welfare-checks",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:story_000003",
+            "source:https://cw34.com/newsletter-daily/humane-society-treasure-coast-seeks-urgent-help-after-martin-countys-largest-animal-hoarding-case-adoptions-foster-donations-postal-worker-route-influx-animal-welfare-checks"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie postpones Riverland sports complex rezoning after Tradition residents protest",
-      "generated_card_count": 0,
-      "elapsed_seconds": 33.683
+      "elapsed_seconds": 12.312
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 8,
-      "selected_source_count": 8,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 9,
+      "selected_source_count": 9,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 54.091,
-          "result": "success"
+          "elapsed_seconds": 0.132,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.119,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq"
         }
       ],
-      "model_elapsed_seconds": 54.091,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 0.251,
+      "failure_code": "generation_exception",
+      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -293,10 +294,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -367,58 +368,46 @@
           "canonical_headline": "Port St. Lucie road rage crash leaves motorcyclist with brain bleed, driver arrested",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Man charged with burglary, loitering near St. Lucie Village - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/crime/st_lucie/man-charged-with-burglary-loitering-near-st-lucie-village/article_e2f5cf27-e433-51c1-95e6-f9f4d957bf63.html",
-          "editorial_story_id": "story_002479",
-          "canonical_slug": "2026-08-08-man-charged-with-burglary-loitering-near-st-lucie-village",
-          "canonical_headline": "Man charged with burglary, loitering near St. Lucie Village",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "surface": "hero",
-          "headline": "Humane Society of the Treasure Coast seeks urgent help after Martin County's largest animal hoarding case",
-          "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
-          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
-          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "",
-      "generated_card_count": 0,
-      "elapsed_seconds": 60.91
+      "elapsed_seconds": 6.048
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 26,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 12,
+      "publishable_source_count": 11,
       "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 8.841,
-          "result": "success"
+          "elapsed_seconds": 0.244,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.126,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq"
         }
       ],
-      "model_elapsed_seconds": 8.841,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 0.37,
+      "failure_code": "generation_exception",
+      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -427,8 +416,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 12,
-      "category_eligibility_rejection_count": 11,
+      "category_eligibility_assessed_count": 11,
+      "category_eligibility_rejection_count": 10,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -443,7 +432,7 @@
             "commercial_real_estate:mall"
           ],
           "competing_signals": [],
-          "headline": "Dick's House of Sports, outdoor athletic field move closer to replacing old Sears at Gardens Mall",
+          "headline": "Dick's House of Sport, outdoor athletic field move closer to replacing old Sears at Gardens Mall",
           "source_url": "https://www.wptv.com/news/region-n-palm-beach-county/palm-beach-gardens/dicks-house-of-sports-outdoor-athletic-field-move-closer-to-replacing-old-sears-at-gardens-mall"
         },
         {
@@ -574,25 +563,9 @@
           ],
           "headline": "Maltz Jupiter Theatre welcomes students back for new school year",
           "source_url": "https://www.wptv.com/news/education/back-to-school/maltz-jupiter-theatre-welcomes-students-back-for-new-school-year"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_treasure_coast_business_nexus",
-          "positive_signals": [],
-          "competing_signals": [
-            "election_political_process:ballot",
-            "schools_education:school district"
-          ],
-          "headline": "Palm Beach County teachers say thousands of dollars in pay are on the line in November vote",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/region-c-palm-beach-county/palm-beach-county-teachers-say-thousands-of-dollars-in-pay-are-on-the-line-in-november-vote"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -623,34 +596,22 @@
           "canonical_headline": "Piper's Landing residents plant 6,000 mangroves to restore eroded St. Lucie River island in Martin County",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "surface": "hero",
-          "headline": "Fort Pierce Kings Landing development faces new delay as developers seek $15 million to complete Marriott hotel",
-          "editorial_story_id": "story_002361",
-          "canonical_slug": "2026-08-06-fort-pierce-kings-landing-developers-seek-15-million-to-complete-marriott-hotel",
-          "canonical_headline": "Fort Pierce Kings Landing developers short $15 million, city commissioners divided on next steps",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "",
-      "generated_card_count": 0,
-      "elapsed_seconds": 17.235
+      "elapsed_seconds": 4.718
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "sports_zero_candidate_archive_recovery",
-      "fetched_candidate_count": 26,
+      "fetched_candidate_count": 25,
       "fresh_candidate_count": 19,
-      "publishable_source_count": 3,
-      "selected_source_count": 2,
+      "publishable_source_count": 4,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
@@ -680,10 +641,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "sports",
@@ -744,44 +705,44 @@
           "canonical_headline": "St. Lucie Mets split doubleheader with Daytona, rally for 11-10 win in 10 innings",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "sports",
-          "source_headline": "Funeral scheduled in Vero Beach honoring lost firefighter Geoffrey Lang - WPEC",
-          "source_url": "https://cbs12.com/news/local/funeral-scheduled-in-vero-beach-honoring-lost-firefighter-geoffrey-lang-community-church-indian-river-county-fire-rescue-paramedic-off-duty-death",
-          "editorial_story_id": "story_000793",
-          "canonical_slug": "2026-07-28-vero-beach-police-department-honors-service-of-indian-river-county-firefighter",
-          "canonical_headline": "Vero Beach Police Department honors service of Indian River County firefighter",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 9.818
+      "elapsed_seconds": 3.458
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 10,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 9,
       "selected_source_count": 9,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 62.803,
-          "result": "success"
+          "elapsed_seconds": 0.141,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.13,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq"
         }
       ],
-      "model_elapsed_seconds": 62.803,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 0.271,
+      "failure_code": "generation_exception",
+      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -790,39 +751,27 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 10,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "things_to_do",
-          "source_headline": "Big Taste of Martin County returns to support Big Brothers Big Sisters mentoring programs",
-          "source_url": "https://www.wptv.com/shining-a-light/big-taste-of-martin-county-returns-to-support-big-brothers-big-sisters-mentoring-programs",
-          "editorial_story_id": "story_000253",
-          "canonical_slug": "2026-07-23-big-taste-of-martin-county-returns-oct-6-to-support-youth-mentoring-programs",
-          "canonical_headline": "Big Brothers Big Sisters returns Big Taste of Martin County fundraiser to Stuart",
+          "source_headline": "Riverland-Kennedy rezoning postponed for resident meeting - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/news/st_lucie/riverland-kennedy-rezoning-postponed-for-resident-meeting/article_e7636f0a-a2f2-527a-b182-fca8c163743b.html",
+          "editorial_story_id": "story_002680",
+          "canonical_slug": "2026-08-08-port-st-lucie-postpones-riverland-sports-complex-rezoning-after-tradition-reside",
+          "canonical_headline": "Port St. Lucie postpones Riverland sports complex rezoning after Tradition residents protest",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "things_to_do",
-          "surface": "hero",
-          "headline": "Space Coast Symphony Orchestra performs Landscapes & Legends concert Sunday in Vero Beach",
-          "editorial_story_id": "story_002084",
-          "canonical_slug": "2026-08-04-space-coast-symphony-orchestra-brings-landscapes-legends-concert-to-vero-beach",
-          "canonical_headline": "Space Coast Symphony Orchestra brings Landscapes & Legends concert to Vero Beach",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "",
-      "generated_card_count": 0,
-      "elapsed_seconds": 65.896
+      "elapsed_seconds": 5.786
     },
     {
       "category_key": "florida",
@@ -865,30 +814,40 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 7.641
+      "elapsed_seconds": 13.266
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "generated_live",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 19.466,
-          "result": "success"
+          "elapsed_seconds": 0.152,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.186,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq"
         }
       ],
-      "model_elapsed_seconds": 19.466,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 0.339,
+      "failure_code": "generation_exception",
+      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -897,14 +856,14 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
-          "source_headline": "Martin County community rallies to restore mangrove island on St. Lucie River",
+          "source_headline": "Martin County community rallies to restore mangrove island on St. Lucie River - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-community-rallies-to-restore-mangrove-island-on-st-lucie-river",
           "editorial_story_id": "story_002559",
           "canonical_slug": "2026-08-08-pipers-landing-residents-plant-6000-mangroves-to-restore-eroded-st-lucie-river-i",
@@ -914,7 +873,7 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Martin County community rallies to restore mangrove island on St. Lucie River - WPTV",
+          "source_headline": "Martin County community rallies to restore mangrove island on St. Lucie River",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-community-rallies-to-restore-mangrove-island-on-st-lucie-river",
           "editorial_story_id": "story_002559",
           "canonical_slug": "2026-08-08-pipers-landing-residents-plant-6000-mangroves-to-restore-eroded-st-lucie-river-i",
@@ -961,133 +920,58 @@
           "canonical_headline": "Costco in Stuart reopens after electrical fire but refrigeration remains down",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "surface": "card",
-          "headline": "Humane Society of the Treasure Coast seeks urgent help after Martin County's largest animal hoarding case",
-          "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
-          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
-          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Early voting begins Saturday for Florida's August primary in Martin County",
-      "generated_card_count": 0,
-      "elapsed_seconds": 29.713
+      "elapsed_seconds": 5.766
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 6,
-      "selected_source_count": 5,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 4,
+      "selected_source_count": 3,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 37.209,
-          "result": "success"
+          "elapsed_seconds": 0.129,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.084,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq"
         }
       ],
-      "model_elapsed_seconds": 37.209,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 0.213,
+      "failure_code": "generation_exception",
+      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Cdq",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 1,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Tradition Lakes K-8 School opening delayed one week in St. Lucie County",
-          "missing": [
-            "headline_jurisdiction_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Tradition Lakes K-8 School opening delayed one week in St. Lucie County",
-            "lead": "St. Lucie Public Schools Superintendent Dr. John R. Prince announced Thursday that the first day of school for students at Tradition Lakes K-8 will move one week, from August 10 to Monday, August 17, 2026. The additional week gives teachers and staff time to complete final classroom preparations at the district's newest school.",
-            "lead_word_count": 55,
-            "headline_overlap_ratio": 0.7,
-            "new_context_token_count": 28,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Tradition Lakes K-8 School opening delayed one week in St. Lucie County",
-            "lead": "St. Lucie Public Schools Superintendent Dr. John R. Prince announced Thursday that the first day of school for students at Tradition Lakes K-8 will move one week, from August 10 to Monday, August 17, 2026. The additional week gives teachers and staff time to complete final classroom preparations at the district's newest school.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "st_lucie_county"
-            ],
-            "lead_jurisdictions": [],
-            "missing_jurisdictions": [
-              "st_lucie_county"
-            ],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "Tradition Lakes K-8 School opening delayed one week in St. Lucie County",
-            "generated_lead": "St. Lucie Public Schools Superintendent Dr.",
-            "source_title": "Tradition Lakes K-8 School opening delayed in St. Lucie County - WPBF",
-            "source_lead": "The grand opening of a new public school in St. Lucie County will have to wait.",
-            "title_similarity": {
-              "score": 0.8591,
-              "overlap": 0.9,
-              "jaccard": 0.75,
-              "sorted_sequence": 0.9206,
-              "ordered_sequence": 0.8889,
-              "shared_token_count": 9.0
-            },
-            "lead_token_overlap": 0.5,
-            "missing": []
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        }
-      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 11,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1101,11 +985,31 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "77-year-old Port St. Lucie man found dead in nearby pond, PSLPD says - WPEC",
+          "source_url": "https://cbs12.com/news/florida/77-year-old-port-st-lucie-man-found-dead-in-nearby-pond-pslpd-says-port-st-lucie-police-department-car-in-pond-vehicle-in-canal-florida-news",
+          "editorial_story_id": "story_002646",
+          "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-death-of-77-year-old-man-found-in-pond-near-his",
+          "canonical_headline": "Port St. Lucie police investigate death of 77-year-old man found in pond near his home",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "Tradition Lakes K-8 opening postponed, leaving parents scrambling for child care",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/tradition-lakes-k-8-opening-postponed-leaving-parents-scrambling-for-child-care",
           "editorial_story_id": "story_002552",
           "canonical_slug": "2026-08-08-tradition-lakes-k-8-opening-delayed-one-week-leaving-st-lucie-parents-scrambling",
           "canonical_headline": "Tradition Lakes K-8 opening delayed one week, leaving St. Lucie parents scrambling for child care",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie police release details on 2 separate political campaign sign investigations",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigating-2-incidents-involving-political-campaign-signs",
+          "editorial_story_id": "story_002554",
+          "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-two-separate-campaign-sign-incidents-involving",
+          "canonical_headline": "Port St. Lucie police investigate two separate campaign sign incidents involving Mayor Martin's husband",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1121,11 +1025,11 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie police release details on 2 separate political campaign sign investigations",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigating-2-incidents-involving-political-campaign-signs",
-          "editorial_story_id": "story_002554",
-          "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-two-separate-campaign-sign-incidents-involving",
-          "canonical_headline": "Port St. Lucie police investigate two separate campaign sign incidents involving Mayor Martin's husband",
+          "source_headline": "Port St. Lucie man arrested after video shows him allegedly abusing small dog - WPEC",
+          "source_url": "https://cbs12.com/news/videos/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office",
+          "editorial_story_id": "story_002576",
+          "canonical_slug": "2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog",
+          "canonical_headline": "Port St. Lucie man arrested after video shows him kicking small dog",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1171,55 +1075,29 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Sharks caught on video off shore in St. Lucie County, Jupiter - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-sharks-caught-on-video-off-shoremartin-county-jupiter/73324831",
-          "editorial_story_id": "story_001783",
-          "canonical_slug": "2026-08-03-two-sharks-spotted-off-st-lucie-and-palm-beach-county-coasts",
-          "canonical_headline": "Two sharks spotted off St. Lucie and Palm Beach County coasts",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "Port St. Lucie police identify 50-year man, woman in domestic-related murder-suicide - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-port-st-lucue-man-woman-identified-murder-suicide/73327764",
+          "editorial_story_id": "story_002068",
+          "canonical_slug": "2026-08-06-fundraiser-supports-port-st-lucie-firefighter-who-lost-both-parents-in-murder-su",
+          "canonical_headline": "Fundraiser supports Port St. Lucie firefighter who lost both parents in murder-suicide",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Port St. Lucie man arrested after video shows him allegedly abusing small dog - WPEC",
-          "source_url": "https://cbs12.com/news/videos/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog",
-          "canonical_headline": "Port St. Lucie man arrested after video shows him kicking small dog",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_002576",
-            "source:https://cbs12.com/news/videos/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_002576,source:https://cbs12.com/news/videos/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "generation_status": "success",
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie police investigate campaign sign confrontations between mayor and challenger",
-      "generated_card_count": 2,
-      "elapsed_seconds": 42.95
+      "elapsed_seconds": 6.234
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "county_zero_candidate_archive_recovery",
-      "fetched_candidate_count": 28,
+      "fetched_candidate_count": 27,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 5,
-      "selected_source_count": 4,
+      "publishable_source_count": 6,
+      "selected_source_count": 5,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
@@ -1235,10 +1113,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1269,21 +1147,11 @@
           "canonical_headline": "Piper's Landing residents plant 6,000 mangroves to restore eroded St. Lucie River island in Martin County",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "WHERE'S WALTER? Crashing band camp at Vero Beach High School - WPTV",
-          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-crashing-band-camp-at-vero-beach-high-school",
-          "editorial_story_id": "story_002471",
-          "canonical_slug": "2026-08-06-vero-beach-high-school-marching-band-prepares-for-school-year-with-nearly-90-yea",
-          "canonical_headline": "Vero Beach High School marching band prepares for school year with nearly 90 years of tradition",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 6.865
+      "elapsed_seconds": 9.935
     }
   ]
 }
