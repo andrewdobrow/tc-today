@@ -1,8 +1,19 @@
-1. Extract this ZIP locally.
-2. Upload its contents over the repository root, replacing matching files.
-3. IMPORTANT: leave the existing data/editorial_story_registry.json in the repository. It is intentionally absent from this package.
-4. Commit the upload.
-5. Run “Test Editorial Engine.” Its preflight will normalize the existing registry before validation and pytest.
-6. After the test workflow is green, run “Update Treasure Coast Today.” The production workflow will normalize and commit the registry with the generated site.
+TCT v1.13.2.0 — RUN NOW
+=======================
 
-Earlier emergency overlays do not need to be reapplied.
+1. Extract this ZIP.
+2. From the extracted tct-v1.13.2.0-web-upload-safe-overlay folder, copy/upload its CONTENTS
+   into the ROOT of the current tc-today repository, preserving the scripts/ and tests/ paths.
+3. Overwrite the matching existing files.
+4. Commit/push the changes.
+5. Run the GitHub Actions workflow: Test Editorial Engine.
+6. If that workflow passes, immediately run: Update Treasure Coast Today.
+
+IMPORTANT
+- Do not delete or replace archive.json, data/editorial_story_registry.json, or generated site data.
+- They are intentionally not included in this overlay.
+- The production update should repair current county/category projections from the existing state.
+
+EXPECTED WORKFLOW CHANGE
+A final `fragmented_unified_incident` candidate is reported as an advisory and cannot abort an
+otherwise successful publishing run. True persistent-story identity corruption still fails closed.

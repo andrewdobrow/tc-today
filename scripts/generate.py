@@ -429,6 +429,7 @@ CATEGORY_GENERATION_REPORT_PATH = OUTPUT_DIR / "data" / "category-generation-rep
 CATEGORY_ELIGIBILITY_REPORT_PATH = OUTPUT_DIR / "data" / "category-eligibility-report.json"
 TRUSTED_SOURCE_RECOVERY_REPORT_PATH = OUTPUT_DIR / "data" / "trusted-source-recovery.json"
 CATEGORY_MEMBERSHIP_REPORT_PATH = OUTPUT_DIR / "data" / "category-membership-report.json"
+COUNTY_MEMBERSHIP_AUTHORITY_REPORT_PATH = OUTPUT_DIR / "data" / "county-membership-authority-report.json"
 SOURCE_IMAGE_QUALITY_REPORT_PATH = OUTPUT_DIR / "data" / "source-image-quality-report.json"
 ARTICLE_IMAGE_OVERRIDES_PATH = OUTPUT_DIR / "data" / "article-image-overrides.json"
 ARTICLE_CONTENT_OVERRIDES_PATH = OUTPUT_DIR / "data" / "article-content-overrides.json"
@@ -497,6 +498,10 @@ CATEGORY_GENERATION_MIN_RETRY_SECONDS = 15
 CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 6
 CATEGORY_ELIGIBILITY_REPORT_SCHEMA_VERSION = 1
 CATEGORY_ELIGIBILITY_CONTRACT_VERSION = "1.0-local-government-central-action"
+BUSINESS_ELIGIBILITY_CONTRACT_VERSION = "1.0-business-development-primary-focus"
+COUNTY_MEMBERSHIP_AUTHORITY_SCHEMA_VERSION = 1
+COUNTY_MEMBERSHIP_AUTHORITY_VERSION = "1.1-source-derived-with-safe-legacy-migration"
+COUNTY_LEGACY_ARCHIVE_AUTHORITY_ORIGIN = "legacy_archive_membership_uncontradicted"
 
 # The shared category-contract layer is rolled out one beat at a time. Existing
 # deterministic topic/geographic guards remain active everywhere; this map tracks
@@ -507,7 +512,7 @@ CATEGORY_ELIGIBILITY_CONTRACTS = {
         "policy": "central_government_action_required",
     },
     "crime": {"mode": "observe_only", "policy": "future_explicit_contract"},
-    "business": {"mode": "observe_only", "policy": "future_explicit_contract"},
+    "business": {"mode": "enforce", "policy": "primary_business_development_focus_required"},
     "sports": {"mode": "observe_only", "policy": "existing_athletic_guard_retained"},
     "things_to_do": {"mode": "observe_only", "policy": "future_explicit_contract"},
     "florida": {"mode": "observe_only", "policy": "future_explicit_contract"},
@@ -785,7 +790,14 @@ def _category_generation_cache_key(category_key, headlines):
         # Invalidate only the category whose explicit contract changed. Other beat
         # caches remain reusable because their generation policy is unchanged.
         "category_eligibility_contract_version": (
-            CATEGORY_ELIGIBILITY_CONTRACT_VERSION if category_key == "local_gov" else ""
+            CATEGORY_ELIGIBILITY_CONTRACT_VERSION
+            if category_key == "local_gov"
+            else BUSINESS_ELIGIBILITY_CONTRACT_VERSION
+            if category_key == "business"
+            else ""
+        ),
+        "county_membership_authority_version": (
+            COUNTY_MEMBERSHIP_AUTHORITY_VERSION if category_key in COUNTY_KEYS else ""
         ),
         "sources": sources,
     })
@@ -815,6 +827,61 @@ def _cached_source_for_generated_item(item, headlines):
             if source_url and source_url == item_url:
                 return source
     return item
+
+
+def _cached_item_authority_probe(item, headlines):
+    """Bind cached generated copy to current source provenance before contract checks."""
+    item = item if isinstance(item, dict) else {}
+    source = _cached_source_for_generated_item(item, headlines)
+    probe = dict(item)
+    if isinstance(source, dict):
+        source_url = (
+            source.get("source_url") or source.get("_source_url")
+            or source.get("original_url") or source.get("link") or ""
+        )
+        provenance = {
+            "source_title": source.get("source_title") or source.get("title") or "",
+            "source_headline": source.get("source_headline") or source.get("title") or "",
+            "source_summary": source.get("source_summary") or source.get("summary") or "",
+            "article_text": source.get("article_text") or source.get("source_text") or "",
+            "source_url": source_url,
+            "latest_source_url": source.get("latest_source_url") or source_url,
+            "feed_url": source.get("feed_url") or "",
+        }
+        for key, value in provenance.items():
+            if value:
+                probe[key] = value
+                item.setdefault(key, value)
+    return probe
+
+
+def _cached_category_authority_assessment(category_key, item, headlines):
+    """Revalidate category cache reuse under current enforced authority contracts."""
+    probe = _cached_item_authority_probe(item, headlines)
+    failures = []
+
+    contract = _category_eligibility_contract_assessment(category_key, probe)
+    if contract.get("mode") == "enforce" and not contract.get("eligible"):
+        failures.append({
+            "reason": "category_eligibility_contract_failed",
+            "category_contract": _compact_category_contract_assessment(contract, probe),
+        })
+
+    county = None
+    if category_key in COUNTY_KEYS:
+        county = _county_membership_authority_assessment(probe, category_key)
+        if category_key not in county.get("supported_counties", ()):
+            failures.append({
+                "reason": "county_source_authority_failed",
+                "county_authority": county,
+            })
+
+    return {
+        "eligible": not failures,
+        "failures": failures,
+        "category_contract": contract,
+        "county_authority": county,
+    }
 
 
 # Populated once per run by classify_stories(); {headline_lower: set(category_keys)}.
@@ -3270,62 +3337,219 @@ def _trusted_county_feed(category_key, item):
     }
     return trusted_hints.get(category_key, "") in feed_url
 
+
+_COUNTY_AUTHORITY_TERMS = {
+    "martin": (
+        "martin county", "jensen beach", "palm city", "hobe sound", "port salerno",
+        "jupiter island", "indiantown", "sewall's point", "sewalls point",
+        "city of stuart", "stuart florida", "stuart fla", "stuart fl",
+    ),
+    "st_lucie": (
+        "st. lucie county", "st lucie county", "port st. lucie", "port st lucie",
+        "fort pierce", "st. lucie west", "st lucie west",
+    ),
+    "indian_river": (
+        "indian river county", "vero beach", "fellsmere", "wabasso", "gifford",
+        "sebastian inlet", "sebastian river", "city of sebastian", "sebastian florida",
+        "sebastian fla", "sebastian fl",
+    ),
+}
+
+_OUTSIDE_COUNTY_AUTHORITY_TERMS = {
+    "palm_beach": (
+        "palm beach county", "west palm beach", "royal palm beach", "palm beach gardens",
+        "delray beach", "boca raton", "boynton beach", "lake worth", "wellington florida",
+        "riviera beach", "loxahatchee", "belle glade", "pahokee",
+    ),
+    "okeechobee": ("okeechobee county",),
+    "brevard": ("brevard county",),
+    "broward": ("broward county", "fort lauderdale"),
+    "miami_dade": ("miami-dade county", "miami dade county"),
+}
+
+
+def _county_authority_normalize(value):
+    # Treat publisher punctuation as token boundaries so ``St. Lucie County.`` and
+    # URL/path variants normalize to the same locality phrase.
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", str(value or "").lower())).strip()
+
+
+def _county_authority_phrase_hits(text, terms):
+    normalized = f" {_county_authority_normalize(text)} "
+    hits = []
+    for term in terms:
+        phrase = _county_authority_normalize(term)
+        if phrase and f" {phrase} " in normalized:
+            hits.append(term)
+    return hits
+
+
+def _source_county_authority_blob(item):
+    """Return only publisher/source-facing material that may prove county membership.
+
+    Generated TCT headline/teaser/body copy is deliberately excluded. Raw feed rows are
+    allowed to use their title/summary because those fields are publisher material.
+    Persisted event-identity locality is accepted only when its origin is source-derived.
+    """
+    item = item if isinstance(item, dict) else {}
+    event_identity = item.get("event_identity")
+    if not isinstance(event_identity, dict):
+        event_identity = {}
+
+    values = [
+        item.get("source_title"),
+        item.get("source_headline"),
+        item.get("latest_source_headline"),
+        item.get("source_summary"),
+        item.get("source_text"),
+        item.get("article_text"),
+        item.get("source_url"),
+        item.get("latest_source_url"),
+        item.get("_source_url"),
+        item.get("original_url"),
+    ]
+
+    external_link = _normalized_external_source_url(item.get("link"))
+    if external_link:
+        values.append(external_link)
+
+    # Raw fetched-source rows have not yet been rewritten. Their title/summary are
+    # source material; generated/archive rows instead carry source_* provenance.
+    raw_source_row = bool(
+        item.get("title")
+        and (
+            external_link
+            or item.get("article_text")
+            or item.get("source_type") in {"rss", "trusted_aggregator_resolved", "source"}
+        )
+    )
+    if raw_source_row:
+        values.extend([item.get("title"), item.get("summary")])
+
+    if str(event_identity.get("origin") or "") == "source_derived":
+        values.extend([
+            event_identity.get("source_headline"),
+            event_identity.get("source_url"),
+            " ".join(str(v or "") for v in (event_identity.get("locality") or [])),
+            " ".join(str(v or "") for v in (event_identity.get("precise_locations") or [])),
+            " ".join(str(v or "") for v in (event_identity.get("agencies") or [])),
+        ])
+
+    return _county_authority_normalize(" ".join(str(v or "") for v in values))
+
+
+def _trusted_custom_county_blob(item):
+    """Human-authored TCT copy is trusted evidence for custom-only locality."""
+    item = item if isinstance(item, dict) else {}
+    return _county_authority_normalize(" ".join([
+        str(item.get("headline") or item.get("title") or ""),
+        str(item.get("teaser") or item.get("summary") or ""),
+        str(item.get("body") or ""),
+    ]))
+
+
+def _county_membership_authority_assessment(item, primary_category=""):
+    """Assess Treasure Coast county membership from authoritative evidence only."""
+    item = item if isinstance(item, dict) else {}
+    custom = bool(item.get("is_custom") or item.get("authoritative_custom"))
+    source_blob = _trusted_custom_county_blob(item) if custom else _source_county_authority_blob(item)
+
+    evidence = {key: [] for key in COUNTY_KEYS}
+    supported = set()
+    for county_key in COUNTY_KEYS:
+        hits = _county_authority_phrase_hits(source_blob, _COUNTY_AUTHORITY_TERMS[county_key])
+        if hits:
+            supported.add(county_key)
+            evidence[county_key].extend(f"source_term:{hit}" for hit in hits[:6])
+
+    outside_conflicts = []
+    for outside_key, terms in _OUTSIDE_COUNTY_AUTHORITY_TERMS.items():
+        hits = _county_authority_phrase_hits(source_blob, terms)
+        if hits:
+            outside_conflicts.append({
+                "county": outside_key,
+                "evidence": [f"source_term:{hit}" for hit in hits[:6]],
+            })
+
+    if not custom:
+        # A dedicated publisher county feed is supporting metadata, but explicit
+        # outside-county evidence wins unless the source independently names the
+        # Treasure Coast county too.
+        for county_key in COUNTY_KEYS:
+            if county_key in supported:
+                continue
+            if _trusted_county_feed(county_key, item) and not outside_conflicts:
+                supported.add(county_key)
+                evidence[county_key].append("trusted_county_feed")
+
+        # v1.13.2.0 migration safety: many June/July archive rows predate durable
+        # source provenance. Their already-published county membership must not be
+        # erased merely because source_* fields are absent. A migration marker can
+        # preserve those historical labels only when there is *no* surviving source
+        # evidence for any Treasure Coast county and no explicit outside-county
+        # conflict. This marker is written only by the archive backfill below; live
+        # generated copy and classifier output can never create it. If source evidence
+        # later appears, it immediately takes precedence and the marker grants nothing.
+        direct_supported = set(supported)
+        legacy_marker = item.get("county_membership_authority")
+        if (
+            not direct_supported
+            and not outside_conflicts
+            and isinstance(legacy_marker, dict)
+            and legacy_marker.get("origin") == COUNTY_LEGACY_ARCHIVE_AUTHORITY_ORIGIN
+            and legacy_marker.get("contract_version") == COUNTY_MEMBERSHIP_AUTHORITY_VERSION
+        ):
+            for county_key in legacy_marker.get("counties", ()) or ():
+                if county_key in COUNTY_KEYS:
+                    supported.add(county_key)
+                    evidence[county_key].append("legacy_archive_membership_uncontradicted")
+    else:
+        declared = {
+            key for key in _normalize_category_keys(item.get("category_keys") or [])
+            if key in COUNTY_KEYS
+        }
+        declared.update(
+            key for key in (item.get("county_keys") or []) if key in COUNTY_KEYS
+        )
+        for key in (primary_category, item.get("category_key"), item.get("cat_key"), item.get("category")):
+            if key in COUNTY_KEYS:
+                declared.add(key)
+        for county_key in declared:
+            supported.add(county_key)
+            evidence[county_key].append("trusted_custom_declaration")
+
+    requested = set(
+        key for key in _normalize_category_keys(item.get("category_keys") or [])
+        if key in COUNTY_KEYS
+    )
+    requested.update(key for key in (item.get("county_keys") or []) if key in COUNTY_KEYS)
+    for key in (primary_category, item.get("category_key"), item.get("cat_key"), item.get("category")):
+        if key in COUNTY_KEYS:
+            requested.add(key)
+
+    rejected = sorted(requested - supported)
+    return {
+        "schema_version": COUNTY_MEMBERSHIP_AUTHORITY_SCHEMA_VERSION,
+        "contract_version": COUNTY_MEMBERSHIP_AUTHORITY_VERSION,
+        "custom_authority": custom,
+        "requested_counties": [key for key in CATEGORIES if key in requested and key in COUNTY_KEYS],
+        "supported_counties": [key for key in CATEGORIES if key in supported and key in COUNTY_KEYS],
+        "rejected_memberships": rejected,
+        "supporting_evidence": {
+            key: evidence[key] for key in CATEGORIES if key in COUNTY_KEYS and evidence[key]
+        },
+        "conflicting_counties": outside_conflicts,
+        "source_evidence_present": bool(source_blob),
+    }
+
+
 def _county_locality_evidence(category_key, item):
-    """Require real geographic evidence, not a person's name or title word."""
-    raw = _story_locality_blob(item)
-    unquoted = _strip_quoted_phrases(raw)
+    """Compatibility wrapper for the source-authority county membership contract."""
+    if category_key not in COUNTY_KEYS:
+        return False
+    assessment = _county_membership_authority_assessment(item)
+    return category_key in assessment.get("supported_counties", ())
 
-    strong_places = {
-        "martin": [
-            "martin county", "jensen beach", "palm city", "hobe sound",
-            "port salerno", "jupiter island", "indiantown", "sewall's point",
-            "sewalls point",
-        ],
-        "st_lucie": [
-            "st. lucie county", "st lucie county", "port st. lucie",
-            "port st lucie", "fort pierce", "st. lucie west", "st lucie west",
-        ],
-        "indian_river": [
-            "indian river county", "vero beach", "fellsmere", "wabasso",
-            "gifford", "sebastian inlet", "sebastian river",
-        ],
-    }
-    if _has_any(unquoted, strong_places.get(category_key, [])):
-        return True
-
-    entertainment_context = _has_any(raw, [
-        "tv show", "television show", "television series", "streaming series",
-        "series premiere", "season premiere", "episode", "film", "movie",
-        "character", "actor", "actress", "sitcom", "debuts this week",
-        "save the universe",
-    ])
-
-    contextual_patterns = {
-        "martin": [
-            r"\bstuart,?\s+(?:florida|fla\.?|fl)\b",
-            r"\b(?:in|near|around|outside|north of|south of|east of|west of)\s+stuart\b",
-            r"\bcity of stuart\b",
-            r"\bstuart\s+(?:police|fire rescue|city commission|city hall|airport|"
-            r"high school|middle school|elementary|hospital|bridge|road|street|"
-            r"residents?|officials?|business|restaurant|home|man|woman|family)\b",
-            r"\b(?:downtown|police in|officials in|residents of)\s+stuart\b",
-        ],
-        "indian_river": [
-            r"\bsebastian,?\s+(?:florida|fla\.?|fl)\b",
-            r"\b(?:in|near|around|outside|north of|south of)\s+sebastian\b",
-            r"\bcity of sebastian\b",
-            r"\bsebastian\s+(?:police|city council|city hall|river|inlet|"
-            r"residents?|officials?|business|restaurant|home|man|woman|family)\b",
-        ],
-    }
-    if any(re.search(p, unquoted, re.IGNORECASE) for p in contextual_patterns.get(category_key, [])):
-        return True
-
-    # Dedicated publisher county feeds can establish locality when a short title omits
-    # the city. Search feeds do not count, and entertainment-title content is blocked.
-    if _trusted_county_feed(category_key, item) and not entertainment_context:
-        return True
-    return False
 
 def _has_treasure_coast_locality(item):
     raw = _strip_quoted_phrases(_story_locality_blob(item))
@@ -3343,19 +3567,26 @@ def _normalize_category_keys(values):
 
 
 def _item_category_memberships(item, primary_category="", extra_categories=None):
-    """Infer every valid category membership without inventing topic labels.
+    """Return valid topic memberships plus source-authorized county memberships.
 
-    A canonical article keeps one primary editorial category, while deterministic
-    county locality and current-run classification may add secondary memberships.
+    County labels from old archive rows, generated copy, classifier output, or category
+    container context are never self-authorizing. They survive only when the shared
+    county-authority contract independently supports them.
     """
     item = item or {}
-    categories = set(_normalize_category_keys(item.get("category_keys") or []))
+    categories = {
+        key for key in _normalize_category_keys(item.get("category_keys") or [])
+        if key not in COUNTY_KEYS
+    }
     for candidate in (
         primary_category, item.get("category_key"), item.get("cat_key"), item.get("category"),
     ):
-        if candidate in CATEGORIES:
+        if candidate in CATEGORIES and candidate not in COUNTY_KEYS:
             categories.add(candidate)
-    categories.update(_normalize_category_keys(extra_categories or []))
+    categories.update(
+        key for key in _normalize_category_keys(extra_categories or [])
+        if key not in COUNTY_KEYS
+    )
 
     if STORY_CLASSIFICATION is not None:
         for lookup in (
@@ -3365,12 +3596,13 @@ def _item_category_memberships(item, primary_category="", extra_categories=None)
             key = str(lookup or "").strip().lower()
             classified = STORY_CLASSIFICATION.get(key) if key else None
             if classified:
-                categories.update(c for c in classified if c in CATEGORIES)
+                categories.update(
+                    c for c in classified if c in CATEGORIES and c not in COUNTY_KEYS
+                )
                 break
 
-    for county_key in COUNTY_KEYS:
-        if _county_locality_evidence(county_key, item):
-            categories.add(county_key)
+    authority = _county_membership_authority_assessment(item, primary_category)
+    categories.update(authority.get("supported_counties") or [])
     return [key for key in CATEGORIES if key in categories]
 
 
@@ -3384,10 +3616,41 @@ def _apply_category_memberships(item, primary_category="", extra_categories=None
 
 
 def _merge_category_memberships(target, source, primary_category=""):
+    target = target or {}
+    source = source or {}
     extras = []
-    for item in (target or {}, source or {}):
-        extras.extend(_item_category_memberships(item))
-    return _apply_category_memberships(target, primary_category, extras)
+    for row in (target, source):
+        extras.extend(_item_category_memberships(row))
+
+    # The target archive row may be older/sparser than the incoming source-backed
+    # placement. Use a non-mutating combined authority probe so valid county evidence
+    # on the incoming source is not lost during an in-place canonical update.
+    authority_probe = dict(target)
+    for key in (
+        "source_title", "source_headline", "latest_source_headline", "source_summary",
+        "source_text", "article_text", "source_url", "latest_source_url", "_source_url",
+        "original_url", "feed_url", "event_identity", "link", "title",
+    ):
+        value = source.get(key)
+        if value not in (None, "", [], {}):
+            authority_probe[key] = copy.deepcopy(value)
+    if source.get("is_custom") or source.get("authoritative_custom"):
+        authority_probe.update({
+            "is_custom": True,
+            "authoritative_custom": True,
+            "headline": source.get("headline", target.get("headline", "")),
+            "teaser": source.get("teaser", target.get("teaser", "")),
+            "body": source.get("body", target.get("body", "")),
+            "category": source.get("category", ""),
+            "category_key": source.get("category_key", ""),
+            "category_keys": source.get("category_keys", []),
+            "county_keys": source.get("county_keys", []),
+        })
+
+    memberships = _item_category_memberships(authority_probe, primary_category, extras)
+    target["category_keys"] = memberships
+    target["county_keys"] = [key for key in memberships if key in COUNTY_KEYS]
+    return memberships
 
 
 def _category_membership_contains(item, category_key):
@@ -3395,54 +3658,316 @@ def _category_membership_contains(item, category_key):
 
 
 def _backfill_archive_category_memberships(archive, output_root=None):
-    """Persist deterministic secondary county memberships on canonical archive rows."""
+    """Revalidate and repair persisted category/county memberships deterministically."""
     rows = list(archive or [])
     changed = []
-    missing = []
+    repaired = []
+    authority_rows = []
+    violations = []
+
     for entry in rows:
         before = _normalize_category_keys(entry.get("category_keys") or [])
+        before_counties = [key for key in before if key in COUNTY_KEYS]
+        before_counties.extend(
+            key for key in (entry.get("county_keys") or [])
+            if key in COUNTY_KEYS and key not in before_counties
+        )
+        authority = _county_membership_authority_assessment(
+            entry, entry.get("category_key", "")
+        )
+
+        # Historical archive rows created before source-provenance persistence can be
+        # impossible to re-prove today even though their county placement was valid.
+        # Preserve only the *existing* county labels when there is no source-derived
+        # Treasure Coast county at all and no explicit outside-county contradiction.
+        # This is migration-only authority: it cannot add a county that the archive
+        # row did not already carry, and it is ignored as soon as real source locality
+        # is available.
+        primary_county = entry.get("category_key") if entry.get("category_key") in COUNTY_KEYS else ""
+        legacy_existing_counties = list(before_counties)
+        if primary_county and primary_county not in legacy_existing_counties:
+            legacy_existing_counties.append(primary_county)
+        legacy_preserve = [
+            key for key in legacy_existing_counties
+            if key not in authority.get("supported_counties", ())
+        ]
+        if (
+            legacy_preserve
+            and not (entry.get("is_custom") or entry.get("authoritative_custom"))
+            and not authority.get("supported_counties")
+            and not authority.get("conflicting_counties")
+        ):
+            entry["county_membership_authority"] = {
+                "origin": COUNTY_LEGACY_ARCHIVE_AUTHORITY_ORIGIN,
+                "contract_version": COUNTY_MEMBERSHIP_AUTHORITY_VERSION,
+                "counties": [key for key in CATEGORIES if key in set(legacy_preserve)],
+                "migration_only": True,
+            }
+            authority = _county_membership_authority_assessment(
+                entry, entry.get("category_key", "")
+            )
+
         after = _apply_category_memberships(entry, entry.get("category_key", ""))
+        after_counties = [key for key in after if key in COUNTY_KEYS]
         added = [key for key in after if key not in before]
-        if added:
+        removed = [key for key in before if key not in after]
+
+        if added or removed or list(entry.get("county_keys") or []) != after_counties:
             changed.append({
                 "slug": entry.get("slug", ""),
                 "headline": entry.get("headline", ""),
                 "primary_category": entry.get("category_key", ""),
                 "added_categories": added,
+                "removed_categories": removed,
                 "category_keys": after,
+                "county_keys": after_counties,
             })
-        for county_key in COUNTY_KEYS:
-            if _county_locality_evidence(county_key, entry) and county_key not in after:
-                missing.append({
-                    "slug": entry.get("slug", ""),
-                    "headline": entry.get("headline", ""),
-                    "missing_county": county_key,
-                })
+        removed_counties = [
+            key for key in before_counties if key not in after_counties
+        ]
+        if removed_counties:
+            repaired.append({
+                "slug": entry.get("slug", ""),
+                "headline": entry.get("headline", ""),
+                "removed_county_memberships": removed_counties,
+                "supported_counties": authority.get("supported_counties", []),
+                "conflicting_counties": authority.get("conflicting_counties", []),
+            })
+
+        unsupported_after = [
+            key for key in after_counties
+            if key not in authority.get("supported_counties", [])
+        ]
+        if unsupported_after:
+            violations.append({
+                "slug": entry.get("slug", ""),
+                "headline": entry.get("headline", ""),
+                "unsupported_counties": unsupported_after,
+            })
+
+        authority_rows.append({
+            "slug": entry.get("slug", ""),
+            "headline": entry.get("headline", ""),
+            "primary_category": entry.get("category_key", ""),
+            **authority,
+        })
+
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "generated_at": _utc_now_iso(),
-        "policy": "one_canonical_article_with_multiple_category_memberships",
+        "policy": "source_authority_required_for_treasure_coast_county_membership",
         "archive_records_checked": len(rows),
         "records_backfilled": len(changed),
-        "missing_county_memberships": len(missing),
-        "backfilled": changed,
-        "missing": missing,
-        "passed": not missing,
+        "records_changed": len(changed),
+        "records_repaired": len(repaired),
+        "unsupported_memberships_remaining": len(violations),
+        "changed": changed,
+        "repaired": repaired,
+        "violations": violations,
+        "passed": not violations,
     }
+    authority_report = {
+        "schema_version": COUNTY_MEMBERSHIP_AUTHORITY_SCHEMA_VERSION,
+        "contract_version": COUNTY_MEMBERSHIP_AUTHORITY_VERSION,
+        "generated_at": _utc_now_iso(),
+        "policy": (
+            "county membership requires publisher/source-derived evidence or trusted "
+            "custom TCT authority; generated copy cannot prove geography"
+        ),
+        "summary": {
+            "archive_records_assessed": len(authority_rows),
+            "archive_rows_repaired": len(repaired),
+            "legacy_archive_rows_preserved": sum(
+                1 for row in authority_rows
+                if any(
+                    "legacy_archive_membership_uncontradicted" in values
+                    for values in (row.get("supporting_evidence") or {}).values()
+                )
+            ),
+            "unsupported_memberships_remaining": len(violations),
+        },
+        "archive_assessments": authority_rows,
+        "archive_repairs": repaired,
+        "live_projection": {
+            "assessed_placements": 0,
+            "rejected_placements": 0,
+            "violations": [],
+            "passed": True,
+        },
+        "passed": not violations,
+    }
+
     if output_root is not None:
-        path = Path(output_root) / "data" / "category-membership-report.json"
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
-    if missing:
+        data_dir = Path(output_root) / "data"
+        data_dir.mkdir(parents=True, exist_ok=True)
+        (data_dir / "category-membership-report.json").write_text(
+            json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
+        (data_dir / "county-membership-authority-report.json").write_text(
+            json.dumps(authority_report, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
+
+    if violations:
         raise RuntimeError(
-            "Category membership contract FAILED: "
-            f"{len(missing)} clear county membership(s) were not projected"
+            "County membership authority contract FAILED: "
+            f"{len(violations)} unsupported archive membership(s) survived repair"
         )
     print(
-        "  Category membership contract PASSED "
-        f"({len(rows)} archive records; {len(changed)} backfilled)"
+        "  County membership authority PASSED "
+        f"({len(rows)} archive records; {len(repaired)} repaired)"
     )
     return rows, report
+
+
+def _live_county_authority_items(all_categories, top_cat=None):
+    """Yield unique live placement objects with their containing category."""
+    seen = set()
+    categories = list(all_categories or [])
+    if top_cat and top_cat not in categories:
+        categories.append(top_cat)
+    for category in categories:
+        category_key = str((category or {}).get("category_key") or "")
+        placements = [("hero", (category or {}).get("hero"))]
+        placements.extend(("card", card) for card in (category or {}).get("cards", []) or [])
+        for surface, item in placements:
+            if not isinstance(item, dict) or not item.get("headline"):
+                continue
+            marker = id(item)
+            if marker in seen:
+                continue
+            seen.add(marker)
+            yield category_key, surface, item
+
+
+def enforce_live_county_membership_authority(all_categories):
+    """Repair county metadata and reject unsupported placements from county sections."""
+    rejected = []
+    assessed = 0
+    for category in list(all_categories or []):
+        category_key = str((category or {}).get("category_key") or "")
+        if not isinstance(category, dict):
+            continue
+
+        for _, _, item in list(_live_county_authority_items([category])):
+            if item.get("_section_placeholder"):
+                continue
+            assessed += 1
+            _apply_category_memberships(
+                item, item.get("category_key") or item.get("cat_key") or ""
+            )
+
+        if category_key not in COUNTY_KEYS:
+            continue
+
+        hero = category.get("hero")
+        if isinstance(hero, dict) and not hero.get("_section_placeholder"):
+            assessment = _county_membership_authority_assessment(hero, category_key)
+            if category_key not in assessment.get("supported_counties", []):
+                rejected.append({
+                    "category_key": category_key,
+                    "surface": "hero",
+                    "headline": hero.get("headline", ""),
+                    "reason": "unsupported_county_membership",
+                    **assessment,
+                })
+                category["hero"] = None
+
+        kept_cards = []
+        for card in category.get("cards", []) or []:
+            if not isinstance(card, dict) or card.get("_section_placeholder"):
+                kept_cards.append(card)
+                continue
+            assessment = _county_membership_authority_assessment(card, category_key)
+            if category_key not in assessment.get("supported_counties", []):
+                rejected.append({
+                    "category_key": category_key,
+                    "surface": "card",
+                    "headline": card.get("headline", ""),
+                    "reason": "unsupported_county_membership",
+                    **assessment,
+                })
+                continue
+            kept_cards.append(card)
+        category["cards"] = kept_cards
+    return {"assessed_placements": assessed, "rejections": rejected}
+
+
+def validate_live_county_membership_authority(all_categories, top_cat=None, output_root=None):
+    """Fail closed if any final live county placement lacks source authority."""
+    assessed = 0
+    violations = []
+    for category_key, surface, item in _live_county_authority_items(all_categories, top_cat):
+        if item.get("_section_placeholder"):
+            continue
+        assessment = _county_membership_authority_assessment(
+            item, category_key if category_key in COUNTY_KEYS else ""
+        )
+        assessed += 1
+
+        # Metadata itself may not carry an unsupported county even on a topic surface.
+        declared_counties = set(
+            key for key in _normalize_category_keys(item.get("category_keys") or [])
+            if key in COUNTY_KEYS
+        )
+        declared_counties.update(
+            key for key in (item.get("county_keys") or []) if key in COUNTY_KEYS
+        )
+        unsupported_metadata = sorted(
+            declared_counties - set(assessment.get("supported_counties", []))
+        )
+        if unsupported_metadata:
+            violations.append({
+                "category_key": category_key,
+                "surface": surface,
+                "headline": item.get("headline", ""),
+                "reason": "unsupported_county_metadata",
+                "unsupported_counties": unsupported_metadata,
+                **assessment,
+            })
+
+        if (
+            category_key in COUNTY_KEYS
+            and category_key not in assessment.get("supported_counties", [])
+        ):
+            violations.append({
+                "category_key": category_key,
+                "surface": surface,
+                "headline": item.get("headline", ""),
+                "reason": "unsupported_county_live_placement",
+                **assessment,
+            })
+
+    if output_root is not None:
+        path = Path(output_root) / "data" / "county-membership-authority-report.json"
+        existing = {}
+        if path.exists():
+            try:
+                existing = json.loads(path.read_text(encoding="utf-8"))
+            except Exception:
+                existing = {}
+        existing.setdefault("schema_version", COUNTY_MEMBERSHIP_AUTHORITY_SCHEMA_VERSION)
+        existing.setdefault("contract_version", COUNTY_MEMBERSHIP_AUTHORITY_VERSION)
+        existing.setdefault("generated_at", _utc_now_iso())
+        existing["live_projection"] = {
+            "assessed_placements": assessed,
+            "rejected_placements": len(violations),
+            "violations": violations,
+            "passed": not violations,
+        }
+        existing["passed"] = bool(existing.get("passed", True)) and not violations
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(existing, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    if violations:
+        raise RuntimeError(
+            "County membership authority contract FAILED: "
+            f"{len(violations)} unsupported live placement(s)"
+        )
+    print(
+        "  Final county membership authority PASSED "
+        f"({assessed} live placement(s) assessed)"
+    )
+    return {"assessed_placements": assessed, "violations": violations, "passed": True}
 
 
 # Publication quality gates. A category can fall back to older real reporting, but
@@ -3451,6 +3976,7 @@ def _backfill_archive_category_memberships(archive, output_root=None):
 MIN_HERO_BODY_WORDS = 120
 MIN_CARD_BODY_WORDS = 90
 MIN_SOURCE_WORDS = 80
+
 
 def _word_count(text):
     return len(re.findall(r"\b[\w'-]+\b", text or ""))
@@ -4268,12 +4794,139 @@ def _category_contract_hits(text, terms):
     return hits
 
 
+def _business_category_contract_assessment(item, base):
+    """Enforced Business & Development primary-focus contract."""
+    story_text = _text_for_category_match(item)
+    source_blob = _source_county_authority_blob(item)
+
+    local_terms = (
+        "treasure coast", "martin county", "st lucie county", "st. lucie county",
+        "indian river county", "stuart", "jensen beach", "palm city", "hobe sound",
+        "port salerno", "indiantown", "port st lucie", "port st. lucie",
+        "fort pierce", "vero beach", "sebastian", "fellsmere", "hutchinson island",
+        "jupiter island",
+    )
+    local_hits = _category_contract_hits(source_blob, local_terms)
+
+    positive_groups = {
+        "business_opening_closure_expansion": [
+            "grand opening", "opens new", "opening new", "opens in", "opening in",
+            "closes", "closing", "closure", "shuts down", "expands", "expansion",
+            "relocates", "relocation", "new store", "new restaurant", "new business",
+            "new location", "adds location",
+        ],
+        "development_project": [
+            "development project", "development plan", "development proposal",
+            "developer", "developers", "redevelopment", "under construction",
+            "construction", "breaks ground", "groundbreaking", "mixed-use",
+            "commercial project", "housing development", "apartment project",
+            "hotel project", "marriott project", "data center", "warehouse",
+            "industrial park", "site plan", "development order", "land use",
+            "rezoning", "demolition", "mall demolition",
+        ],
+        "jobs_employers_economic_development": [
+            "jobs", "job creation", "hiring", "hires", "employer", "employers",
+            "workforce", "economic development", "business recruitment",
+            "business incentive", "tax incentive", "commercial investment",
+        ],
+        "business_transaction": [
+            "acquires", "acquisition", "merger", "merges", "sold to", "sale of",
+            "buys", "purchases", "investment", "invests", "bankruptcy",
+        ],
+        "commercial_real_estate": [
+            "commercial real estate", "retail center", "shopping center", "mall",
+            "office building", "industrial property", "commercial property",
+            "restaurant", "retail", "hotel",
+        ],
+    }
+    positive_signals = []
+    for name, terms in positive_groups.items():
+        hits = _category_contract_hits(story_text, terms)
+        if hits:
+            positive_signals.append(f"{name}:{hits[0]}")
+
+    competing_groups = {
+        "crime_public_safety": [
+            "arrested", "arrest", "charged", "shooting", "homicide", "murder",
+            "robbery", "burglary", "stabbing", "drug bust", "drug trafficking",
+            "meth", "fentanyl", "cocaine", "fatal crash", "police pursuit",
+            "sheriff investigation",
+        ],
+        "election_political_process": [
+            "early voting", "primary election", "election day", "polling place",
+            "candidate", "ballot", "voter registration", "supervisor of elections",
+        ],
+        "animal_welfare": [
+            "dogs are suffering", "dogs suffering", "animal welfare", "animal control",
+            "animal cruelty", "cats rescued", "dog rescue", "pet adoption",
+        ],
+        "generic_heat_environment_policy": [
+            "extreme heat", "tree canopy", "more trees", "trees and shade",
+            "shade structures", "heat advisory", "urban heat",
+        ],
+        "sports": [
+            "game recap", "wins over", "defeats", "championship", "tournament",
+            "baseball game", "football game", "soccer match",
+        ],
+        "schools_education": [
+            "school board", "school district", "new school", "students", "teacher",
+            "principal", "curriculum",
+        ],
+        "entertainment_event": [
+            "concert", "festival", "parade", "art exhibition", "museum exhibition",
+        ],
+    }
+    competing_signals = []
+    for name, terms in competing_groups.items():
+        hits = _category_contract_hits(story_text, terms)
+        if hits:
+            competing_signals.append(f"{name}:{hits[0]}")
+
+    reason = "primary_business_development_focus_confirmed"
+    eligible = True
+
+    if not local_hits:
+        eligible = False
+        reason = "missing_treasure_coast_business_nexus"
+    elif not positive_signals:
+        eligible = False
+        if competing_signals:
+            reason = "competing_story_form_without_business_development_focus"
+        else:
+            reason = "missing_primary_business_development_focus"
+    elif competing_signals:
+        # A strong development/business event may legitimately involve government,
+        # schools, or public controversy. Crime, elections, animal welfare and generic
+        # heat/tree policy are disqualifying unless the source has a separate,
+        # unmistakable commercial/development event beyond a generic noun.
+        disqualifying = {
+            signal.split(":", 1)[0] for signal in competing_signals
+        } & {
+            "crime_public_safety", "election_political_process", "animal_welfare",
+            "generic_heat_environment_policy", "sports", "entertainment_event",
+        }
+        if disqualifying:
+            eligible = False
+            reason = "competing_story_form_without_business_development_focus"
+
+    base.update({
+        "contract_version": BUSINESS_ELIGIBILITY_CONTRACT_VERSION,
+        "eligible": eligible,
+        "would_reject": not eligible,
+        "reason": reason,
+        "positive_signals": positive_signals,
+        "competing_signals": competing_signals,
+        "local_nexus_signals": [f"source_locality:{hit}" for hit in local_hits[:6]],
+    })
+    return base
+
+
 def _category_eligibility_contract_assessment(category_key, item):
     """Evaluate the explicit per-category semantic contract.
 
-    The shared interface is intentionally broader than the first enforcement rule.
-    Local Government is enforced in v1.11.8.6. Other beats remain observe-only until
-    their own positive and negative fixtures are proven in production.
+    Local Government and Business & Development are enforced through the same shared
+    interface. Remaining topic beats stay observe-only until their own regression
+    fixtures are production-validated.
     """
     config = _category_contract_config(category_key)
     base = {
@@ -4292,7 +4945,11 @@ def _category_eligibility_contract_assessment(category_key, item):
         return base
     if item.get("is_custom") or item.get("authoritative_custom"):
         base.update({"eligible": True, "reason": "custom_authority_exempt"})
+        if category_key == "business":
+            base["contract_version"] = BUSINESS_ELIGIBILITY_CONTRACT_VERSION
         return base
+    if category_key == "business":
+        return _business_category_contract_assessment(item, base)
     if category_key != "local_gov":
         return base
 
@@ -5539,51 +6196,47 @@ def _source_focus_diagnostics(item, source=None):
 
 
 
+# v1.13.2.0: source-backed county jurisdiction authority now delegates to the
+# shared county-membership contract so generation-time hero checks, archive repair,
+# cache reuse, and final live projection cannot disagree.
 # v1.13.1.6: source-backed county jurisdiction authority
-_COUNTY_SOURCE_TERMS = {
-    "martin": ("martin county", "stuart", "jensen beach", "palm city", "hobe sound", "port salerno", "jupiter island", "indiantown", "sewall's point", "rio"),
-    "st_lucie": ("st. lucie county", "st lucie county", "port st. lucie", "port st lucie", "fort pierce", "st. lucie west", "tradition"),
-    "indian_river": ("indian river county", "vero beach", "sebastian", "fellsmere", "wabasso", "gifford", "orchid"),
-}
-_OUTSIDE_TREASURE_COAST_TERMS = (
-    "palm beach county", "west palm beach", "royal palm beach", "palm beach gardens",
-    "delray beach", "boca raton", "boynton beach", "lake worth", "wellington, florida",
-    "riviera beach", "loxahatchee", "belle glade", "pahokee", "broward county",
-    "miami-dade", "miami dade", "okeechobee county", "brevard county",
-)
-
 def _source_only_jurisdiction_blob(source):
-    source = source if isinstance(source, dict) else {}
-    values = (
-        source.get("source_title"), source.get("title"), source.get("source_headline"),
-        source.get("article_text"), source.get("source_text"), source.get("source_summary"),
-        source.get("summary"), source.get("link"), source.get("source_url"), source.get("feed_url"),
-    )
-    return re.sub(r"\s+", " ", " ".join(str(v or "") for v in values)).lower()
+    return _source_county_authority_blob(source)
+
 
 def _source_jurisdiction_diagnostics(item, source=None):
     item = item if isinstance(item, dict) else {}
     source = source if isinstance(source, dict) else item
     category_key = str(item.get("category_key") or source.get("category_key") or "")
-    required_terms = _COUNTY_SOURCE_TERMS.get(category_key)
-    if not required_terms:
+    if category_key not in COUNTY_KEYS:
         return {"required": False, "passed": True, "missing": []}
-    source_blob = _source_only_jurisdiction_blob(source)
-    local_hits = [term for term in required_terms if term in source_blob]
-    outside_hits = [term for term in _OUTSIDE_TREASURE_COAST_TERMS if term in source_blob]
+
+    probe = dict(source)
+    # Preserve the intended generated county as context only; it is never evidence.
+    assessment = _county_membership_authority_assessment(probe, category_key)
+    local_hits = list(
+        assessment.get("supporting_evidence", {}).get(category_key, [])
+    )
+    outside_hits = []
+    for conflict in assessment.get("conflicting_counties", []) or []:
+        outside_hits.extend(conflict.get("evidence") or [])
+
     missing = []
-    if not local_hits:
+    if category_key not in assessment.get("supported_counties", []):
         missing.append("generated_jurisdiction_not_supported_by_source")
-    if outside_hits and not local_hits:
-        missing.append("source_jurisdiction_conflicts_with_generated_county")
+        if outside_hits:
+            missing.append("source_jurisdiction_conflicts_with_generated_county")
+
     return {
         "required": True,
         "passed": not missing,
         "category_key": category_key,
         "local_source_hits": local_hits,
         "outside_source_hits": outside_hits,
+        "authority_assessment": assessment,
         "missing": missing,
     }
+
 
 def _article_framing_diagnostics(item, source=None):
     """Combined universal lead-independence and headline/lead claim contract."""
@@ -6692,9 +7345,14 @@ def _build_category_eligibility_report(records):
         "schema_version": CATEGORY_ELIGIBILITY_REPORT_SCHEMA_VERSION,
         "generated_at": _utc_now_iso(),
         "contract_version": CATEGORY_ELIGIBILITY_CONTRACT_VERSION,
+        "category_contract_versions": {
+            "local_gov": CATEGORY_ELIGIBILITY_CONTRACT_VERSION,
+            "business": BUSINESS_ELIGIBILITY_CONTRACT_VERSION,
+        },
         "rollout_policy": (
-            "shared_contract_interface; Local Government enforced; remaining topic "
-            "contracts observe-only until regression fixtures are production-validated"
+            "shared_contract_interface; Local Government and Business & Development "
+            "enforced; remaining topic contracts observe-only until regression fixtures "
+            "are production-validated"
         ),
         "summary": {
             "assessed_count": total_assessed,
@@ -20014,19 +20672,35 @@ def _build_persistent_story_identity_integrity_report(archive, registry_payload)
         if unified_incident_components is not None
         else []
     )
-    violations = (
+    # A unified-incident component is relationship evidence, not publication write
+    # authority. It can be introduced by newly observed registry evidence late in a
+    # successful run, and some components are intentionally conservative candidates
+    # that must *not* be auto-merged. Treating these candidates as fatal caused the
+    # 2026-08-07 production outage after all category/publication gates had passed.
+    # Keep them visible as advisory warnings while retaining fail-closed behavior for
+    # actual authority, quarantine, circular-authorization, and timeline corruption.
+    hard_violations = (
         len(broad_mappings)
         + len(active_contaminated)
         + len(broad_story_ids_with_write_authority)
         + len(archive_quarantine_refs)
         + len(circular_authorizations)
         + len(timeline_coherence_violations)
-        + len(fragmented_unified_incidents)
     )
+    advisory_warnings = len(fragmented_unified_incidents)
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "release": "persistent-story-identity-integrity",
-        "passed": violations == 0,
+        "passed": hard_violations == 0,
+        "status": (
+            "passed_with_advisories"
+            if hard_violations == 0 and advisory_warnings
+            else ("passed" if hard_violations == 0 else "failed")
+        ),
+        "policy": {
+            "fragmented_unified_incident_severity": "advisory_no_write_authority",
+            "hard_failures_remain_fail_closed": True,
+        },
         "summary": {
             "active_story_count": len(stories),
             "quarantined_story_count": len(quarantined),
@@ -20037,7 +20711,9 @@ def _build_persistent_story_identity_integrity_report(archive, registry_payload)
             "circular_story_id_authorization_count": len(circular_authorizations),
             "timeline_coherence_violation_count": len(timeline_coherence_violations),
             "fragmented_unified_incident_count": len(fragmented_unified_incidents),
-            "violation_count": violations,
+            "hard_violation_count": hard_violations,
+            "advisory_warning_count": advisory_warnings,
+            "violation_count": hard_violations,
         },
         "active_contaminated_stories": active_contaminated,
         "broad_event_mappings": broad_mappings,
@@ -20099,20 +20775,23 @@ def _validate_persistent_story_identity_integrity(archive, output_root=None):
                 "timeline_coherence_violation="
                 + str(row.get("story_id") or "unknown")
             )
-        if report.get("fragmented_unified_incidents"):
-            details.append(
-                "fragmented_unified_incident="
-                + ",".join(report["fragmented_unified_incidents"][0])
-            )
         raise RuntimeError(
             "Persistent story identity integrity FAILED: "
             f"{report.get('summary', {}).get('violation_count', 0)} violation(s)"
             + (" — " + "; ".join(details) if details else "")
         )
-    print(
-        "  Persistent story identity integrity PASSED "
-        f"({report.get('summary', {}).get('active_story_count', 0)} active stories)"
-    )
+    advisory_count = report.get("summary", {}).get("advisory_warning_count", 0)
+    if advisory_count:
+        print(
+            "  Persistent story identity integrity PASSED with "
+            f"{advisory_count} advisory fragmented unified-incident candidate(s) "
+            "(no publication write authority granted)"
+        )
+    else:
+        print(
+            "  Persistent story identity integrity PASSED "
+            f"({report.get('summary', {}).get('active_story_count', 0)} active stories)"
+        )
     return report
 
 
@@ -24513,6 +25192,15 @@ def ensure_all_category_sections(all_categories, min_cards=6):
     )
     archive.sort(key=lambda e: e.get("lastmod") or e.get("date", ""), reverse=True)
 
+    # Repair current live metadata and remove unsupported county placements before any
+    # archive recovery. Recovery then runs through the same authority contract.
+    county_live_repair = enforce_live_county_membership_authority(all_categories)
+    if county_live_repair.get("rejections"):
+        print(
+            "  County authority removed "
+            f"{len(county_live_repair['rejections'])} unsupported live placement(s) before recovery"
+        )
+
     def entry_matches(e, category_key):
         if not e.get("headline") or not e.get("slug"):
             return False
@@ -24526,18 +25214,15 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             return False
         if category_key == "sports" and _archive_sports_event_window_expired(e):
             return False
+
+        contract = _category_eligibility_contract_assessment(category_key, e)
+        if contract.get("mode") == "enforce" and not contract.get("eligible"):
+            return False
+
         if category_key in COUNTY_KEYS:
-            probe = {
-                "headline": e.get("headline", ""),
-                "title": e.get("headline", ""),
-                "teaser": e.get("teaser", ""),
-                "summary": e.get("teaser", ""),
-                "body": _archive_article_body(e),
-                "feed_url": e.get("feed_url", ""),
-            }
-            # County archive recovery never trusts the old category_key by itself.
-            # That old label may be exactly how a bad Stuart/Sebastian match entered.
-            return _county_locality_evidence(category_key, probe)
+            # Persisted category labels and generated TCT prose are not locality proof.
+            authority = _county_membership_authority_assessment(e, category_key)
+            return category_key in authority.get("supported_counties", ())
         return _category_membership_contains(e, category_key)
 
     def archived_story(e, category_key):
@@ -24549,6 +25234,7 @@ def ensure_all_category_sections(all_categories, min_cards=6):
         image_credit = e.get("image_credit", "")
         if not image_url or (_is_legacy_or_branded_fallback_image(image_url) and not (e.get("is_custom") or e.get("authoritative_custom"))):
             image_url, image_credit = get_fallback_image(category_key, e.get("headline", ""), item=e)
+        memberships = _item_category_memberships(e, category_key)
         return {
             "headline": e.get("headline", ""),
             "teaser": e.get("teaser", "") or body[:220],
@@ -24562,9 +25248,18 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             "source_quality": "archive",
             "category_key": category_key,
             "category_label": label,
-            "category_keys": _item_category_memberships(e, category_key),
-            "county_keys": list(e.get("county_keys") or []),
+            "category_keys": memberships,
+            "county_keys": [key for key in memberships if key in COUNTY_KEYS],
             "link": f"{SITE_URL}/articles/{e['slug']}.html",
+            "source_url": e.get("source_url") or e.get("latest_source_url") or "",
+            "latest_source_url": e.get("latest_source_url") or e.get("source_url") or "",
+            "source_headline": e.get("source_headline") or e.get("latest_source_headline") or "",
+            "latest_source_headline": e.get("latest_source_headline") or e.get("source_headline") or "",
+            "source_title": e.get("source_title") or e.get("source_headline") or "",
+            "source_summary": e.get("source_summary") or "",
+            "article_text": e.get("article_text") or "",
+            "feed_url": e.get("feed_url") or "",
+            "event_identity": copy.deepcopy(e.get("event_identity") or {}),
             "_archived_slug": e["slug"],
             "_archive_only": True,
             "_archive_verified_quality": True,
@@ -24615,6 +25310,29 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             card for card in category.get("cards", [])
             if not _archive_entry_has_article_framing_failure(card)
         ]
+
+        contract_config = _category_contract_config(category_key)
+        if contract_config.get("mode") == "enforce":
+            hero = category.get("hero")
+            if hero and not _category_eligibility_contract_assessment(
+                category_key, hero
+            ).get("eligible"):
+                print(
+                    f"  Enforced {config['label']} eligibility removed live hero: "
+                    f"'{hero.get('headline','')[:55]}'"
+                )
+                category["hero"] = None
+            eligible_cards = []
+            for card in category.get("cards", []):
+                assessment = _category_eligibility_contract_assessment(category_key, card)
+                if assessment.get("eligible"):
+                    eligible_cards.append(card)
+                else:
+                    print(
+                        f"  Enforced {config['label']} eligibility removed live card: "
+                        f"'{card.get('headline','')[:55]}'"
+                    )
+            category["cards"] = eligible_cards
 
         if category_key == "sports":
             if category.get("hero") and _sports_event_window_assessment(category["hero"]).get("expired"):
@@ -25918,6 +26636,56 @@ def main():
                     )
                 GENERATION_CACHE.save()
 
+            _cached_authority_rejections = []
+            _cached_authority_hero_invalidated = False
+            if data.get("hero"):
+                _cached_authority = _cached_category_authority_assessment(
+                    cat_key, data["hero"], headlines
+                )
+                if not _cached_authority.get("eligible"):
+                    _cached_authority_rejections.append({
+                        "surface": "cached_hero",
+                        "headline": data["hero"].get("headline", ""),
+                        **_cached_authority,
+                    })
+                    print(
+                        f"  Category authority invalidated cached {cat_config['label']} hero: "
+                        f"'{data['hero'].get('headline','')[:65]}'"
+                    )
+                    data["hero"] = None
+                    _cached_authority_hero_invalidated = True
+
+            _authority_cards = []
+            for _cached_card in data.get("cards", []) or []:
+                _cached_authority = _cached_category_authority_assessment(
+                    cat_key, _cached_card, headlines
+                )
+                if not _cached_authority.get("eligible"):
+                    _cached_authority_rejections.append({
+                        "surface": "cached_card",
+                        "headline": _cached_card.get("headline", ""),
+                        **_cached_authority,
+                    })
+                    continue
+                _authority_cards.append(_cached_card)
+            data["cards"] = _authority_cards
+
+            if _cached_authority_rejections:
+                if _cached_authority_hero_invalidated:
+                    GENERATION_CACHE.delete(
+                        "categories",
+                        _category_cache_key,
+                        reason="category_authority_contract",
+                    )
+                else:
+                    GENERATION_CACHE.put(
+                        "categories",
+                        _category_cache_key,
+                        {"category_key": cat_key, "data": data},
+                        ttl_seconds=7 * 24 * 3600,
+                    )
+                GENERATION_CACHE.save()
+
             if data.get("hero") and not data.get("_drop_category") and data.get("category_key") == cat_key:
                 all_categories.append(data)
                 GENERATION_CACHE.stats["category_generation_skipped"] += 1
@@ -26626,6 +27394,7 @@ def main():
     # Reselection can promote a card and demote the former hero. Canonicalize once
     # more so every resulting placement still points directly at its final owner.
     canonicalize_all_live_category_surfaces(all_categories, top_cat, OUTPUT_DIR)
+    validate_live_county_membership_authority(all_categories, top_cat, OUTPUT_DIR)
     validate_live_category_canonical_uniqueness(all_categories, top_cat, OUTPUT_DIR)
     print(f"  Timing: archive, publication identity and permalink gates {time.perf_counter() - _stage_started:.1f}s")
     _stage_started = time.perf_counter()

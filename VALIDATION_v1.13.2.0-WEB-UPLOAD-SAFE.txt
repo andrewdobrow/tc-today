@@ -1,0 +1,48 @@
+Treasure Coast Today v1.13.2.0 validation
+=========================================
+
+SOURCE BASELINE
+- Current repository ZIP supplied 2026-08-07
+- Confirmed cumulative v1.13.1.8 code/test baseline before implementation
+
+FAILED WORKFLOW ROOT CAUSE
+- Production generation reached final integrity validation after normal category generation,
+  identity consolidation, story regression validation, and archive writes.
+- Fatal condition: fragmented_unified_incident=story_001557,story_001652
+- v1.13.2.0 records this relationship class as advisory/no-write-authority rather than
+  terminating the entire publishing run.
+- All true persistent-story identity authority violations remain fail-closed.
+
+COUNTY AUTHORITY PRODUCTION-DATA SIMULATION
+- archive records assessed: 695
+- legacy rows safely preserved: 191
+- records repaired: 23
+- county rows changed: 26
+- unsupported memberships remaining: 0
+- known Palm Beach heat/tree -> Martin County contamination: removed
+
+TESTS
+- Workflow pytest boundary collected: 778 tests
+- Partition results: 140 + 120 + 127 + 99 + 124 + 140 + 28
+- Total: 778 passed, 0 failed
+
+PREFLIGHT / PACKAGE
+- apply_generator_runtime_hotfix.py: source_changed=False
+- apply_false_jurisdiction_hotfix.py: changed=false, verified=true
+- generator SHA256 unchanged by both hotfix preflights
+- validate_package.py: PASSED (34 modules, 119 public exports)
+
+PAYLOAD
+- scripts/generate.py
+- tests/test_category_eligibility_contracts.py
+- tests/test_county_membership_authority.py
+- tests/test_final_canonical_surface_dedup.py
+- tests/test_persistent_story_identity_integrity.py
+- release notes / run instructions / checksum manifest
+
+EXCLUDED ON PURPOSE
+- archive.json
+- data/editorial_story_registry.json
+- data/generation-cache.json
+- generated HTML/articles
+- feeds and sitemaps

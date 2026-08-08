@@ -351,3 +351,59 @@ def test_rolling_weather_source_url_cannot_own_ledger_or_overwrite_old_event():
     assert g._destructive_publication_write_authorized(
         incoming, existing, "story_new_weather", "exact_source_url"
     ) is False
+
+
+def test_fragmented_unified_incident_candidate_is_advisory_not_fatal(monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(
+        g,
+        "unified_incident_components",
+        lambda stories: [{"story_001557", "story_001652"}],
+    )
+    registry = {
+        "stories": {
+            "story_001557": {"story_id": "story_001557", "events": [], "titles": [], "sources": []},
+            "story_001652": {"story_id": "story_001652", "events": [], "titles": [], "sources": []},
+        },
+        "event_to_story": {},
+        "quarantined_stories": {},
+    }
+
+    report = g._build_persistent_story_identity_integrity_report([], registry)
+
+    assert report["passed"] is True
+    assert report["status"] == "passed_with_advisories"
+    assert report["summary"]["hard_violation_count"] == 0
+    assert report["summary"]["advisory_warning_count"] == 1
+    assert report["summary"]["violation_count"] == 0
+    assert report["fragmented_unified_incidents"] == [["story_001557", "story_001652"]]
+    assert report["policy"]["fragmented_unified_incident_severity"] == "advisory_no_write_authority"
+
+
+def test_final_integrity_validator_does_not_discard_run_for_fragment_candidate(tmp_path: Path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(
+        g,
+        "unified_incident_components",
+        lambda stories: [{"story_001557", "story_001652"}],
+    )
+    data_dir = tmp_path / "data"
+    data_dir.mkdir(parents=True)
+    (data_dir / "editorial_story_registry.json").write_text(
+        json.dumps({
+            "stories": {
+                "story_001557": {"story_id": "story_001557", "events": [], "titles": [], "sources": []},
+                "story_001652": {"story_id": "story_001652", "events": [], "titles": [], "sources": []},
+            },
+            "event_to_story": {},
+            "quarantined_stories": {},
+        }),
+        encoding="utf-8",
+    )
+
+    report = g._validate_persistent_story_identity_integrity([], tmp_path)
+
+    assert report["passed"] is True
+    written = json.loads((data_dir / "persistent-story-identity-integrity.json").read_text(encoding="utf-8"))
+    assert written["status"] == "passed_with_advisories"
+    assert written["summary"]["advisory_warning_count"] == 1

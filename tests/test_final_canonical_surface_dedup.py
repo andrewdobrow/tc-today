@@ -108,7 +108,10 @@ def test_ware_redirect_copy_and_custom_card_collapse_to_custom_canonical(tmp_pat
     assert kept == [custom_copy]
     assert kept[0]["_archived_slug"] == g.WARE_AWARD_CANONICAL_SLUG
     assert kept[0]["headline"] == canonical["headline"]
-    assert set(kept[0]["category_keys"]) == {"sports", "st_lucie"}
+    # v1.13.2.0: a county container/category label on a duplicate copy is not
+    # source authority. The canonical custom Sports article keeps its topic
+    # membership, but unsupported St. Lucie membership is not unioned in.
+    assert set(kept[0]["category_keys"]) == {"sports"}
     assert report["resolved_unique_identity_count"] == 1
     assert report["removed_count"] == 1
     assert report["removed"][0]["identity_key"] == (
