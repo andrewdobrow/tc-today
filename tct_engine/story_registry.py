@@ -55,6 +55,10 @@ def _tokens(value: str) -> set[str]:
 class StoryRegistry:
     SCHEMA_VERSION = 10
     RESOLUTION_HISTORY_LIMIT = 250
+    UNIFIED_INCIDENT_EVIDENCE_LIMIT = 8
+    UNIFIED_INCIDENT_EVIDENCE_PRESSURE_LIMIT = 4
+    UNIFIED_INCIDENT_EVIDENCE_EMERGENCY_LIMIT = 2
+    REGISTRY_PRESSURE_BYTES = 45 * 1024 * 1024
     REGISTRY_MAX_BYTES = 50 * 1024 * 1024
 
     @staticmethod
@@ -88,6 +92,77 @@ class StoryRegistry:
             "duplicates_removed": max(0, len(original) - unique_count),
             "unique_entries_truncated": max(0, unique_count - len(compacted)),
         }
+
+    @classmethod
+    def _compact_unified_incident_evidence_entries(
+        cls,
+        entries: Iterable[dict[str, Any]] | None,
+        *,
+        limit: int | None = None,
+    ) -> tuple[list[dict[str, Any]], dict[str, int]]:
+        """Keep only newest unique candidate-only unified-incident evidence.
+
+        These rows are diagnostic relationship evidence, not authoritative story
+        identity. Persisting dozens of full evidence payloads per story caused the
+        registry to grow beyond its 50 MiB safety ceiling and abort publication.
+        """
+        original = [entry for entry in (entries or ()) if isinstance(entry, dict)]
+        effective_limit = max(1, int(limit or cls.UNIFIED_INCIDENT_EVIDENCE_LIMIT))
+        seen: set[str] = set()
+        newest_unique: list[dict[str, Any]] = []
+        for entry in reversed(original):
+            key = json.dumps(
+                entry, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+            )
+            if key in seen:
+                continue
+            seen.add(key)
+            newest_unique.append(entry)
+            if len(newest_unique) >= effective_limit:
+                break
+        compacted = list(reversed(newest_unique))
+        unique_count = len({
+            json.dumps(entry, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+            for entry in original
+        })
+        return compacted, {
+            "entries_before": len(original),
+            "entries_after": len(compacted),
+            "duplicates_removed": max(0, len(original) - unique_count),
+            "unique_entries_truncated": max(0, unique_count - len(compacted)),
+        }
+
+    @classmethod
+    def _compact_payload_unified_incident_evidence(
+        cls, payload: dict[str, Any], *, limit: int | None = None
+    ) -> dict[str, int]:
+        totals = {
+            "entries_before": 0,
+            "entries_after": 0,
+            "duplicates_removed": 0,
+            "unique_entries_truncated": 0,
+            "stories_compacted": 0,
+        }
+        stories = payload.get("stories", {})
+        if not isinstance(stories, dict):
+            return totals
+        for story in stories.values():
+            if not isinstance(story, dict):
+                continue
+            compacted, stats = cls._compact_unified_incident_evidence_entries(
+                story.get("unified_incident_evidence"), limit=limit
+            )
+            if stats["entries_before"] != stats["entries_after"]:
+                totals["stories_compacted"] += 1
+            story["unified_incident_evidence"] = compacted
+            for key in (
+                "entries_before",
+                "entries_after",
+                "duplicates_removed",
+                "unique_entries_truncated",
+            ):
+                totals[key] += stats[key]
+        return totals
 
     @classmethod
     def _compact_payload_resolution_history(
@@ -305,11 +380,14 @@ class StoryRegistry:
     def _write(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         compaction = self._compact_payload_resolution_history(self.data)
+        incident_compaction = self._compact_payload_unified_incident_evidence(self.data)
         report = self.data.setdefault("history_compaction", {})
         report.update({
             "version": 1,
             "resolution_history_limit_per_story": self.RESOLUTION_HISTORY_LIMIT,
+            "unified_incident_evidence_limit_per_story": self.UNIFIED_INCIDENT_EVIDENCE_LIMIT,
             "last_write": compaction,
+            "last_unified_incident_evidence_write": incident_compaction,
         })
         report["total_duplicates_removed"] = int(
             report.get("total_duplicates_removed", 0) or 0
@@ -317,17 +395,43 @@ class StoryRegistry:
         report["total_unique_entries_truncated"] = int(
             report.get("total_unique_entries_truncated", 0) or 0
         ) + compaction["unique_entries_truncated"]
+        report["total_unified_incident_evidence_duplicates_removed"] = int(
+            report.get("total_unified_incident_evidence_duplicates_removed", 0) or 0
+        ) + incident_compaction["duplicates_removed"]
+        report["total_unified_incident_evidence_truncated"] = int(
+            report.get("total_unified_incident_evidence_truncated", 0) or 0
+        ) + incident_compaction["unique_entries_truncated"]
         serialized = json.dumps(self.data, indent=2, ensure_ascii=False)
         size_bytes = len(serialized.encode("utf-8"))
+        pressure_mode = "normal"
+        if size_bytes > self.REGISTRY_PRESSURE_BYTES:
+            pressure_compaction = self._compact_payload_unified_incident_evidence(
+                self.data, limit=self.UNIFIED_INCIDENT_EVIDENCE_PRESSURE_LIMIT
+            )
+            report["last_unified_incident_evidence_pressure_write"] = pressure_compaction
+            pressure_mode = "pressure"
+            serialized = json.dumps(self.data, indent=2, ensure_ascii=False)
+            size_bytes = len(serialized.encode("utf-8"))
+        if size_bytes > self.REGISTRY_MAX_BYTES:
+            emergency_compaction = self._compact_payload_unified_incident_evidence(
+                self.data, limit=self.UNIFIED_INCIDENT_EVIDENCE_EMERGENCY_LIMIT
+            )
+            report["last_unified_incident_evidence_emergency_write"] = emergency_compaction
+            pressure_mode = "emergency"
+            serialized = json.dumps(self.data, indent=2, ensure_ascii=False)
+            size_bytes = len(serialized.encode("utf-8"))
         report["last_serialized_bytes"] = size_bytes
         report["max_serialized_bytes"] = self.REGISTRY_MAX_BYTES
-        # Re-serialize once so the recorded byte count is present in the file.
+        report["pressure_serialized_bytes"] = self.REGISTRY_PRESSURE_BYTES
+        report["last_pressure_mode"] = pressure_mode
+        # Re-serialize once so the recorded byte count and pressure mode are present.
         serialized = json.dumps(self.data, indent=2, ensure_ascii=False)
         size_bytes = len(serialized.encode("utf-8"))
         if size_bytes > self.REGISTRY_MAX_BYTES:
             raise RuntimeError(
                 "Editorial story registry exceeds the 50 MiB safety ceiling after "
-                f"history compaction: {size_bytes / (1024 * 1024):.2f} MiB"
+                "adaptive candidate-evidence compaction: "
+                f"{size_bytes / (1024 * 1024):.2f} MiB"
             )
         temporary = self.path.with_suffix(self.path.suffix + ".tmp")
         temporary.write_text(serialized, encoding="utf-8")
@@ -1096,7 +1200,10 @@ class StoryRegistry:
             }
             if evidence_key not in existing_keys:
                 evidence_rows.append(normalized_evidence)
-                del evidence_rows[:-24]
+                if len(evidence_rows) > self.UNIFIED_INCIDENT_EVIDENCE_LIMIT:
+                    story["unified_incident_evidence"], _ = (
+                        self._compact_unified_incident_evidence_entries(evidence_rows)
+                    )
 
         if title and title not in story["titles"]:
             story["titles"].append(title)
