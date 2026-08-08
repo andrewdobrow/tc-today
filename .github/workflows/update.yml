@@ -106,6 +106,10 @@ jobs:
           TCT_ENGINE_MODE: ${{ vars.TCT_ENGINE_MODE || 'shadow' }}
           TCT_ENGINE_MAX_ACTIONS: ${{ vars.TCT_ENGINE_MAX_ACTIONS || '8' }}
           TCT_ENGINE_KILL_SWITCH: ${{ vars.TCT_ENGINE_KILL_SWITCH || 'false' }}
+          # Membership UI is dark-launched. It stays false unless explicitly enabled
+          # after live checkout, entitlement, sign-in and account-management validation.
+          TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}
+          TCT_SUBSCRIBE_URL: ${{ vars.TCT_SUBSCRIBE_URL || '/subscribe.html' }}
           # Reader support appears on every article by default. Change this repository
           # variable to paid_advertising when commercial banners return; sensitive-topic
           # notices and community resources will reactivate automatically.
