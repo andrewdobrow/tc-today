@@ -18267,13 +18267,33 @@ def _event_identity_snapshot(item, *, include_archive_body=False):
         or item.get("headline")
         or ""
     ).strip()
-    source_text = str(
-        item.get("source_summary")
-        or item.get("summary")
-        or item.get("teaser")
-        or item.get("article_text")
-        or ""
-    ).strip()
+    # Identity must see the richest immutable publisher evidence available.  A
+    # short RSS teaser is useful context, but it must never hide a successfully
+    # fetched full publisher article.  The previous ``or`` chain did exactly that:
+    # whenever ``source_summary``/``summary`` existed, ``article_text`` was discarded
+    # from cross-source identity even though the fetch/depth pipeline had it.
+    #
+    # Keep this source-oriented: generated TCT ``body`` is deliberately excluded.
+    # We deduplicate repeated feed fields and put the full publisher article first
+    # so the bounded identity window retains names, streets, agencies and incident
+    # details rather than boilerplate teaser copy.
+    source_parts = []
+    source_part_keys = set()
+    for value in (
+        item.get("article_text"),
+        item.get("source_summary"),
+        item.get("summary"),
+        item.get("teaser"),
+    ):
+        text_value = re.sub(r"\s+", " ", str(value or "")).strip()
+        if not text_value:
+            continue
+        dedupe_key = re.sub(r"[^a-z0-9]+", " ", text_value.lower()).strip()
+        if not dedupe_key or dedupe_key in source_part_keys:
+            continue
+        source_part_keys.add(dedupe_key)
+        source_parts.append(text_value)
+    source_text = "\n\n".join(source_parts).strip()
     source_fields_present = bool(
         item.get("article_text")
         or item.get("source_summary")
@@ -18300,7 +18320,7 @@ def _event_identity_snapshot(item, *, include_archive_body=False):
     # Known-event classification is intentionally bounded to source-facing copy.
     # Generated body context and related-story prose must never redefine identity.
     identity_text = ". ".join(
-        part for part in (source_headline, source_text[:900]) if part
+        part for part in (source_headline, source_text[:2600]) if part
     )
     snapshot = {
         "schema_version": "1.0",
@@ -18569,6 +18589,357 @@ def _exact_headline_incident_evidence(left, right):
         ],
     }
 
+
+
+LATE_REPRINT_IDENTITY_WINDOW_DAYS = 7
+LATE_REPRINT_RETROSPECTIVE_HORIZON_DAYS = 30
+
+
+def _late_reprint_same_event_evidence(
+    left,
+    right,
+    *,
+    max_days=LATE_REPRINT_IDENTITY_WINDOW_DAYS,
+    left_features=None,
+    right_features=None,
+):
+    """Prove a delayed cross-publisher reprint from final publication facts.
+
+    This is deliberately narrower than fuzzy story matching.  It exists for one
+    failure mode: a publisher republishes the same local incident days later after a
+    thin RSS preview prevented the immutable source snapshot from carrying the hard
+    anchors.  The generated/final article copy may be used as *corroborating repair
+    evidence*, but never to mutate the stored source identity.
+
+    Write authority requires the same local jurisdiction and event family, a bounded
+    seven-day window, strong headline/topic continuity, and independent incident-level
+    anchors (participant, precise street, or agency) plus substantial factual overlap.
+    Generic same-city crime/crash stories cannot satisfy this contract by wording
+    similarity alone.
+    """
+    base = {
+        "matched": False,
+        "confidence": 0.0,
+        "confidence_semantics": "deterministic_contract_not_probability",
+        "relationship": IDENTITY_OUTCOME_NEW,
+        "identity_outcome": IDENTITY_OUTCOME_NEW,
+        "evidence_tier": "insufficient_evidence",
+        "write_authorized": False,
+        "proof_type": "none",
+        "reason": "insufficient_late_reprint_identity_evidence",
+        "reason_codes": [],
+        "evidence_dimensions": [],
+        "decision_trace": [],
+        "shared_named_people": [],
+        "shared_precise_locations": [],
+        "shared_agencies": [],
+        "shared_distinctive_tokens": [],
+        "shared_headline_topic_tokens": [],
+    }
+    if not isinstance(left, dict) or not isinstance(right, dict):
+        return base
+    if any(
+        item.get("is_custom") or item.get("authoritative_custom") or item.get("is_weather_alert")
+        for item in (left, right)
+    ):
+        return {**base, "reason": "publication_type_excluded_from_late_reprint_lock"}
+    if _is_nonstory_placeholder(left) or _is_nonstory_placeholder(right):
+        return {**base, "reason": "nonstory_payload"}
+
+    # Reject out-of-window pairs before reading archived article HTML.  This keeps
+    # the safety net cheap enough to run on every scheduled production build.
+    left_date = _cross_source_date_value(left)
+    right_date = _cross_source_date_value(right)
+    day_gap = abs((left_date - right_date).days) if left_date and right_date else None
+    if day_gap is not None and day_gap > max(1, int(max_days)):
+        return {
+            **base,
+            "reason": "outside_late_reprint_window",
+            "decision_trace": [f"publication_gap_days={day_gap}"],
+        }
+
+    left_features = left_features or _final_publication_identity_features(
+        left, include_archive_body=True
+    )
+    right_features = right_features or _final_publication_identity_features(
+        right, include_archive_body=True
+    )
+    left_date = left_features.get("date") or left_date
+    right_date = right_features.get("date") or right_date
+    day_gap = abs((left_date - right_date).days) if left_date and right_date else day_gap
+
+    route_only = {"i-95"}
+    left_locality = set(left_features.get("locality") or ())
+    right_locality = set(right_features.get("locality") or ())
+    left_jurisdictions = left_locality - route_only
+    right_jurisdictions = right_locality - route_only
+    shared_locality = left_jurisdictions & right_jurisdictions
+    if left_jurisdictions and right_jurisdictions and not shared_locality:
+        return {**base, "reason": "conflicting_locality"}
+
+    left_families = set(left_features.get("event_families") or ())
+    right_families = set(right_features.get("event_families") or ())
+    shared_families = left_families & right_families
+    if left_families and right_families and not shared_families:
+        return {**base, "reason": "conflicting_event_family"}
+    if not shared_locality or not shared_families:
+        return {**base, "reason": "missing_locality_or_event_family_corroboration"}
+
+    shared_people = set(left_features.get("people") or ()) & set(right_features.get("people") or ())
+    shared_precise = set(left_features.get("precise_locations") or ()) & set(right_features.get("precise_locations") or ())
+    shared_agencies = set(left_features.get("agencies") or ()) & set(right_features.get("agencies") or ())
+    shared_distinctive = set(left_features.get("distinctive_tokens") or ()) & set(right_features.get("distinctive_tokens") or ())
+    shared_topics = set(left_features.get("headline_topic_tokens") or ()) & set(right_features.get("headline_topic_tokens") or ())
+    topic_core = shared_topics - {
+        "2026", "after", "arrest", "arrested", "city", "county", "florida",
+        "man", "new", "police", "report", "said", "say", "woman",
+    }
+
+    left_audit = _event_audit_item(left, "late-reprint-left")
+    right_audit = _event_audit_item(right, "late-reprint-right")
+    headline_confidence = _story_match_confidence(left_audit, right_audit)
+    topic_compatible = _same_story_topic(left_audit, right_audit)
+
+    # Independent hard composites.  A person or precise location carries the most
+    # weight; agency can corroborate but can never establish identity on its own.
+    participant_composite = bool(
+        shared_people
+        and len(shared_distinctive) >= 6
+        and (
+            shared_precise
+            or (
+                shared_agencies
+                and len(shared_distinctive) >= 12
+                and len(topic_core) >= 3
+            )
+        )
+    )
+    # One broad road name such as U.S. 1 is not enough.  Without a participant,
+    # require two independently extracted street-level anchors plus the agency.
+    precise_location_composite = bool(
+        len(shared_precise) >= 2
+        and shared_agencies
+        and len(shared_distinctive) >= 8
+    )
+    verified = bool(
+        topic_compatible
+        and headline_confidence >= 80
+        and len(topic_core) >= 2
+        and (participant_composite or precise_location_composite)
+    )
+
+    dimensions = ["bounded_late_reprint_window", "shared_locality", "shared_event_family"]
+    if len(topic_core) >= 2:
+        dimensions.append("shared_headline_topic")
+    if shared_people:
+        dimensions.append("shared_named_people")
+    if shared_precise:
+        dimensions.append("shared_precise_location")
+    if shared_agencies:
+        dimensions.append("shared_agency")
+    if len(shared_distinctive) >= 6:
+        dimensions.append("distinctive_fact_overlap")
+
+    proof = "none"
+    if verified:
+        if participant_composite:
+            proof = "late_reprint_participant_incident_composite"
+        elif precise_location_composite:
+            proof = "late_reprint_precise_location_incident_composite"
+        else:
+            proof = "late_reprint_precise_location_incident_composite"
+
+    return {
+        **base,
+        "matched": verified,
+        "confidence": 0.98 if verified else 0.0,
+        "relationship": IDENTITY_OUTCOME_VERIFIED if verified else IDENTITY_OUTCOME_POSSIBLE,
+        "identity_outcome": IDENTITY_OUTCOME_VERIFIED if verified else IDENTITY_OUTCOME_POSSIBLE,
+        "evidence_tier": "hard_composite_identity" if verified else "candidate_only",
+        "write_authorized": verified,
+        "proof_type": proof if verified else "late_reprint_candidate",
+        "reason": "delayed_cross_publisher_reprint_verified" if verified else "late_reprint_candidate_without_hard_composite",
+        "reason_codes": ["bounded_recent_reprint", "independent_incident_corroboration"] if verified else ["candidate_only", "write_forbidden"],
+        "evidence_dimensions": dimensions,
+        "shared_named_people": sorted(shared_people),
+        "shared_precise_locations": sorted(shared_precise),
+        "shared_agencies": sorted(shared_agencies),
+        "shared_distinctive_tokens": sorted(shared_distinctive)[:40],
+        "shared_headline_topic_tokens": sorted(topic_core),
+        "decision_trace": [
+            f"publication_gap_days={day_gap if day_gap is not None else 'unknown'}",
+            f"headline_story_confidence={headline_confidence}",
+            f"topic_compatible={topic_compatible}",
+            f"shared_locality={sorted(shared_locality)}",
+            f"shared_event_families={sorted(shared_families)}",
+            f"shared_named_people={sorted(shared_people)}",
+            f"shared_precise_locations={sorted(shared_precise)}",
+            f"shared_agencies={sorted(shared_agencies)}",
+            f"shared_distinctive_token_count={len(shared_distinctive)}",
+            f"write_authorized={verified}",
+        ],
+    }
+
+
+def _find_late_reprint_archive_reconciliation(
+    item, archive, *, feature_cache=None
+):
+    """Find one deterministic recent canonical for a delayed publisher reprint."""
+    matches = []
+    feature_cache = feature_cache if isinstance(feature_cache, dict) else {}
+    item_cache_key = str((item or {}).get("slug") or f"incoming:{id(item)}")
+    item_features = feature_cache.get(item_cache_key)
+    for candidate in archive or []:
+        if not isinstance(candidate, dict) or not candidate.get("slug"):
+            continue
+        if candidate.get("slug") == (item or {}).get("slug"):
+            continue
+        if not _archive_entry_live_identity_safe(candidate):
+            continue
+        candidate_key = str(candidate.get("slug") or f"candidate:{id(candidate)}")
+        candidate_features = feature_cache.get(candidate_key)
+        evidence = _late_reprint_same_event_evidence(
+            item,
+            candidate,
+            left_features=item_features,
+            right_features=candidate_features,
+        )
+        if evidence.get("write_authorized"):
+            matches.append((candidate, evidence))
+    if not matches:
+        return {"status": "none", "candidates": []}
+
+    matches.sort(key=lambda row: _publication_canonical_key(row[0]))
+    canonical, evidence = matches[0]
+    # If more than one *different* canonical survives this very strict proof, fail
+    # closed instead of guessing which public URL owns the incident.
+    competing = {
+        str(row[0].get("canonical_slug") or row[0].get("slug") or "")
+        for row in matches
+    }
+    if len(competing) > 1:
+        return {
+            "status": "hold",
+            "reason": "multiple_hard_late_reprint_canonicals",
+            "candidates": [row[0] for row in matches],
+        }
+    return {
+        "status": "verified",
+        "canonical": canonical,
+        "evidence": evidence,
+        "candidates": [row[0] for row in matches],
+    }
+
+
+def _repair_recent_late_reprint_archive_duplicates(archive, output_root, *, phase="pre_publication"):
+    """Collapse already-minted delayed reprints before they can survive another run."""
+    rows = [row for row in (archive or []) if isinstance(row, dict)]
+    dated_eligible = []
+    for row in rows:
+        if (
+            not row.get("slug")
+            or row.get("is_custom")
+            or row.get("authoritative_custom")
+            or row.get("is_weather_alert")
+            or not _archive_entry_live_identity_safe(row)
+        ):
+            continue
+        row_date = _cross_source_date_value(row)
+        if row_date is not None:
+            dated_eligible.append((row, row_date))
+
+    # Repair a rolling recent horizon, plus one identity-window of history so the
+    # oldest row under repair can still see its earlier canonical.  Forward and
+    # same-run barriers prevent new escapes; this bounded retrospective sweep heals
+    # any delayed reprints already minted before the release without an O(N^2) scan
+    # of the entire historical archive.
+    if dated_eligible:
+        newest_date = max(row_date for _row, row_date in dated_eligible)
+        lookback_days = (
+            LATE_REPRINT_RETROSPECTIVE_HORIZON_DAYS
+            + LATE_REPRINT_IDENTITY_WINDOW_DAYS
+        )
+        cutoff = newest_date - timedelta(days=lookback_days)
+        eligible = [row for row, row_date in dated_eligible if row_date >= cutoff]
+    else:
+        eligible = []
+    eligible.sort(key=_publication_canonical_key)
+    feature_cache = {
+        str(row.get("slug")): _final_publication_identity_features(
+            row, include_archive_body=True
+        )
+        for row in eligible
+        if row.get("slug")
+    }
+    survivors = []
+    removed = set()
+    redirects = []
+    repairs = []
+    for row in eligible:
+        reconciliation = _find_late_reprint_archive_reconciliation(
+            row, survivors, feature_cache=feature_cache
+        )
+        if reconciliation.get("status") != "verified":
+            survivors.append(row)
+            continue
+        canonical = reconciliation["canonical"]
+        evidence = reconciliation["evidence"]
+        source_slug = str(row.get("slug") or "")
+        target_slug = str(canonical.get("slug") or "")
+        if not source_slug or not target_slug or source_slug == target_slug:
+            survivors.append(row)
+            continue
+        removed.add(source_slug)
+        _merge_category_memberships(
+            canonical,
+            row,
+            canonical.get("category_key") or row.get("category_key") or "",
+        )
+        redirects.append({
+            "source_slug": source_slug,
+            "source_headline": row.get("headline", ""),
+            "target_slug": target_slug,
+            "target_headline": canonical.get("headline", ""),
+            "story_stage": "late-cross-source-reprint-lock",
+            "match_confidence": 98,
+            "canonical_is_custom": False,
+            "reason": "Delayed cross-publisher reprint consolidated by deterministic final-copy incident proof.",
+            "proof_type": evidence.get("proof_type", ""),
+            "evidence_dimensions": list(evidence.get("evidence_dimensions") or ()),
+        })
+        repairs.append({
+            "source_slug": source_slug,
+            "source_headline": row.get("headline", ""),
+            "target_slug": target_slug,
+            "target_headline": canonical.get("headline", ""),
+            "proof_type": evidence.get("proof_type", ""),
+            "evidence_dimensions": list(evidence.get("evidence_dimensions") or ()),
+            "decision_trace": list(evidence.get("decision_trace") or ()),
+        })
+
+    cleaned = [row for row in rows if str(row.get("slug") or "") not in removed]
+    report = {
+        "schema_version": 1,
+        "version": "1.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "phase": phase,
+        "window_days": LATE_REPRINT_IDENTITY_WINDOW_DAYS,
+        "retrospective_horizon_days": LATE_REPRINT_RETROSPECTIVE_HORIZON_DAYS,
+        "records_scanned": len(eligible),
+        "records_before": len(rows),
+        "records_after": len(cleaned),
+        "redirected_count": len(redirects),
+        "repairs": repairs,
+    }
+    path = Path(output_root) / "data" / f"late-reprint-identity-lock-{phase}.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if redirects:
+        print(
+            "  Late cross-source reprint lock redirected "
+            f"{len(redirects)} duplicate permalink(s) during {phase}"
+        )
+    return cleaned, redirects, report
 
 def _find_exact_headline_archive_reconciliation(item, archive):
     """Return a proven canonical or a fail-closed hold for an exact headline."""
@@ -23775,6 +24146,15 @@ def write_archives(all_categories, top_cat):
     _forward_identity_report["exact_headline_incident_repairs"] = (
         _exact_headline_repair_report
     )
+    archive, _late_reprint_redirects, _late_reprint_repair_report = (
+        _repair_recent_late_reprint_archive_duplicates(
+            archive, OUTPUT_DIR, phase="pre_publication"
+        )
+    )
+    _canonical_redirects.extend(_late_reprint_redirects)
+    _forward_identity_report["late_reprint_identity_lock"] = (
+        _late_reprint_repair_report
+    )
     archive, _semantic_archive_redirects, _semantic_archive_repair_report = (
         _repair_recent_semantic_archive_duplicates(
             archive,
@@ -24322,6 +24702,56 @@ def write_archives(all_categories, top_cat):
             or hero.get("authoritative_custom")
             or hero.get("is_weather_alert")
         ):
+            _late_reprint_reconciliation = _find_late_reprint_archive_reconciliation(
+                hero, archive
+            )
+            if _late_reprint_reconciliation.get("status") == "verified":
+                _late_canonical = _late_reprint_reconciliation["canonical"]
+                _late_evidence = _late_reprint_reconciliation["evidence"]
+                _bind_live_item_to_archive(
+                    hero,
+                    _late_canonical,
+                    current_customs=_current_customs,
+                    replace_with_custom=False,
+                )
+                _record_cross_source_identity_observation(
+                    hero,
+                    _late_canonical,
+                    _late_evidence,
+                    action="preserve_existing_page_late_reprint_verified",
+                )
+                _forward_identity_report.setdefault("late_reprint_barrier_holds", []).append({
+                    "headline": headline,
+                    "canonical_slug": _late_canonical.get("slug", ""),
+                    "proof_type": _late_evidence.get("proof_type", ""),
+                    "evidence_dimensions": _late_evidence.get("evidence_dimensions", []),
+                    "action": "reuse_existing_canonical_before_slug_creation",
+                })
+                _forward_identity_report["existing_articles_preserved"] += 1
+                hero["_publication_skip_reason"] = "late_cross_source_reprint_existing_page_preserved"
+                print(
+                    "  LATE REPRINT LOCK: preserved "
+                    f"'{_late_canonical.get('slug','')}' for '{headline[:60]}'"
+                )
+                continue
+            if _late_reprint_reconciliation.get("status") == "hold":
+                _forward_identity_report["publication_holds"].append({
+                    "headline": headline,
+                    "source_url": normalized_source_url,
+                    "candidate_slugs": [
+                        row.get("slug", "")
+                        for row in _late_reprint_reconciliation.get("candidates", [])
+                    ],
+                    "reason": _late_reprint_reconciliation.get("reason", ""),
+                    "action": "hold_new_permalink_multiple_hard_late_reprint_targets",
+                })
+                hero["_publication_skip_reason"] = "late_reprint_identity_ambiguous_hold"
+                print(
+                    "  LATE REPRINT IDENTITY HOLD: no new permalink for "
+                    f"'{headline[:60]}' because multiple hard canonical targets matched"
+                )
+                continue
+
             _headline_reconciliation = _find_exact_headline_archive_reconciliation(
                 hero, archive
             )
@@ -24887,6 +25317,16 @@ def write_archives(all_categories, top_cat):
         "same_run_groups_collapsed": _same_run_ledger_report.get("groups_collapsed", 0),
         "same_run_records_redirected": _same_run_ledger_report.get("records_redirected", 0),
     })
+
+    archive, _same_run_late_reprint_redirects, _same_run_late_reprint_report = (
+        _repair_recent_late_reprint_archive_duplicates(
+            archive, OUTPUT_DIR, phase="same_run_final_barrier"
+        )
+    )
+    _canonical_redirects.extend(_same_run_late_reprint_redirects)
+    _forward_identity_report["late_reprint_same_run_final_barrier"] = (
+        _same_run_late_reprint_report
+    )
 
     # FINAL production enforcement: run canonical cleanup again after every page
     # has been considered.  The pre-write cleanup cannot see a duplicate created in
