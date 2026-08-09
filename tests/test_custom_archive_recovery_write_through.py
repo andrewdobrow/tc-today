@@ -283,7 +283,7 @@ def test_write_archives_preserves_long_recurring_traffic_slug_and_live_contract(
         "category": "local_gov",
         "image_url": "https://treasurecoast.today/images/fdot.png",
         "body": "Motorists should prepare for overnight closures.\n\nFull county-by-county report.",
-        "expires": "2026-08-08",
+        "expires": "2099-01-01",
     }]
     (tmp_path / "custom_articles.json").write_text(json.dumps(queue), encoding="utf-8")
     (tmp_path / "archive.json").write_text("[]", encoding="utf-8")
