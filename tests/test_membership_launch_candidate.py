@@ -175,3 +175,18 @@ def test_workflow_passes_membership_launch_state_to_support_banner_preflight():
     marker = "- name: Normalize recent reader-support banners"
     section = workflow.split(marker, 1)[1].split("- name:", 1)[0]
     assert "TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}" in section
+
+
+def test_membership_sitemap_is_python311_safe_and_launch_aware(monkeypatch):
+    source = (ROOT / "scripts/generate.py").read_text()
+    # Python 3.11 cannot parse same-quote nested f-strings (PEP 701 landed in 3.12).
+    assert 'else f"""' not in source
+
+    g = _load_generate()
+    monkeypatch.setattr(g, "MEMBERSHIP_UI_ENABLED", False)
+    assert "/subscribe.html" not in g.update_sitemap([])
+
+    monkeypatch.setattr(g, "MEMBERSHIP_UI_ENABLED", True)
+    sitemap = g.update_sitemap([])
+    assert f"{g.SITE_URL}/subscribe.html" in sitemap
+    assert "<changefreq>monthly</changefreq>" in sitemap

@@ -13189,6 +13189,16 @@ def validate_rss_social_image_contract(output_root=None):
 def update_sitemap(archive_entries):
     """Regenerate sitemap.xml with all static and article pages."""
     now_str = datetime.utcnow().strftime("%Y-%m-%d")
+    membership_sitemap_url = ""
+    if MEMBERSHIP_UI_ENABLED:
+        membership_sitemap_url = f"""
+  <url>
+    <loc>{SITE_URL}/subscribe.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>{now_str}</lastmod>
+  </url>"""
+
     static_urls = f"""  <url>
     <loc>{SITE_URL}/</loc>
     <changefreq>daily</changefreq>
@@ -13208,13 +13218,7 @@ def update_sitemap(archive_entries):
   <url>
     <loc>{SITE_URL}/advertise.html</loc>
     <priority>0.5</priority>
-  </url>{("" if not MEMBERSHIP_UI_ENABLED else f"""
-  <url>
-    <loc>{SITE_URL}/subscribe.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <lastmod>{now_str}</lastmod>
-  </url>""")}
+  </url>{membership_sitemap_url}
   <url>
     <loc>{SITE_URL}/contact.html</loc>
     <priority>0.5</priority>
