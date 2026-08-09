@@ -119,7 +119,26 @@ jobs:
         env:
           TCT_SUPABASE_URL: ${{ vars.TCT_SUPABASE_URL || '' }}
           TCT_SUPABASE_PUBLISHABLE_KEY: ${{ vars.TCT_SUPABASE_PUBLISHABLE_KEY || '' }}
+          TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}
         run: python scripts/write_membership_browser_config.py
+
+      - name: Prepare member-only article payload
+        env:
+          TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}
+          TCT_PROTECTED_EXPORT_PATH: /tmp/tct-protected-articles.json
+        run: python scripts/prepare_membership_paywall.py
+
+      - name: Sync protected article store
+        env:
+          TCT_SUPABASE_URL: ${{ vars.TCT_SUPABASE_URL || '' }}
+          TCT_CONTENT_SYNC_SECRET: ${{ secrets.TCT_CONTENT_SYNC_SECRET }}
+          TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}
+        run: |
+          if [ "$TCT_MEMBERSHIP_UI_ENABLED" = "true" ]; then
+            python scripts/sync_protected_articles.py --export-file /tmp/tct-protected-articles.json --required
+          else
+            python scripts/sync_protected_articles.py --scan-public
+          fi
 
       - name: Upload generation diagnostics
         if: always()
