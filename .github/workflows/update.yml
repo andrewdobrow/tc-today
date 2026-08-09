@@ -125,10 +125,21 @@ jobs:
           TCT_STRIPE_MODE: ${{ vars.TCT_STRIPE_MODE || 'test' }}
         run: python scripts/write_membership_browser_config.py
 
+      - name: Snapshot current protected article store
+        env:
+          TCT_SUPABASE_URL: ${{ vars.TCT_SUPABASE_URL || '' }}
+          TCT_CONTENT_SYNC_SECRET: ${{ secrets.TCT_CONTENT_SYNC_SECRET }}
+          TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}
+        run: |
+          if [ "$TCT_MEMBERSHIP_UI_ENABLED" = "true" ]; then
+            python scripts/sync_protected_articles.py --snapshot-file /tmp/tct-protected-current.json --required
+          fi
+
       - name: Prepare member-only article payload
         env:
           TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}
           TCT_PROTECTED_EXPORT_PATH: /tmp/tct-protected-articles.json
+          TCT_PROTECTED_SNAPSHOT_PATH: /tmp/tct-protected-current.json
         run: python scripts/prepare_membership_paywall.py
 
       - name: Sync protected article store
