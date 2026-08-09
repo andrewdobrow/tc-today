@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -18,22 +19,33 @@ from tct_engine.membership_paywall import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_sentence_aware_preview_hides_remainder_completely():
+def test_character_bounded_cliffhanger_hides_first_paragraph_remainder_completely():
     secret = "MEMBER-ONLY-DETAIL-92341"
+    first = (
+        "Port St. Lucie officials approved the project after months of debate, and the vote "
+        "sets up several immediate changes for residents and businesses across the city that "
+        "will begin taking effect over the coming weeks with additional details still pending."
+    )
     body = (
-        "<p>First paragraph gives the core local-news lead.</p>"
-        "<p>Second paragraph sentence one. Second paragraph sentence two. "
-        f"Third sentence contains {secret}.</p>"
+        f"<p>{first}</p>"
+        f"<p>Second paragraph contains {secret} and should never be public.</p>"
         "<p>Later reporting adds more detail and another substantial paragraph for members.</p>"
     )
     split = split_article_body(body)
     assert split is not None
-    assert "First paragraph gives" in split.preview_html
-    assert "Second paragraph sentence one." in split.preview_html
-    assert "Second paragraph sentence two." in split.preview_html
+    assert 'data-tct-preview-paragraph="true"' in split.preview_html
+    assert 'tct-preview-fade-text' in split.preview_html
+    assert 'tct-preview-ellipsis' in split.preview_html
     assert secret not in split.preview_html
+    assert "Second paragraph" not in split.preview_html
     assert secret in split.protected_html
-    assert "Later reporting" in split.protected_html
+    assert 'data-tct-first-paragraph-continuation="true"' in split.protected_html
+
+    preview_plain = re.sub(r"<[^>]+>", " ", split.preview_html)
+    preview_plain = re.sub(r"\s+", " ", preview_plain).strip().rstrip("…")
+    assert len(preview_plain) <= 300
+    assert len(preview_plain) < len(first) * 0.62
+    assert len(preview_plain) > len(first) * 0.35
 
 
 def test_public_service_exceptions_are_narrow():

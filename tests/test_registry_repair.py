@@ -495,3 +495,63 @@ def test_current_run_containment_revokes_stale_broad_event_mapping() -> None:
         "traffic-crash-stuart-0123456789": "story_000001"
     }
     assert quarantine_active_story_contamination(payload) == {}
+
+
+def test_repair_quarantines_pathological_multi_family_catchall_without_id_specific_rule() -> None:
+    families = [
+        ("animal-rescue", "Animal rescue update in Stuart"),
+        ("fire", "Electrical fire closes store in Palm City"),
+        ("traffic-crash", "Traffic crash closes road in Port St. Lucie"),
+        ("named-person-death:sample-person", "Community mourns resident after death in Vero Beach"),
+    ]
+    events = []
+    titles = []
+    for index in range(44):
+        prefix, base = families[index % len(families)]
+        events.append(f"{prefix}-{index:010x}" if ":" not in prefix else prefix)
+        titles.append(f"{base} report {index}")
+
+    story = _story(
+        "story_009999",
+        events=events,
+        titles=titles,
+        locations=["Stuart", "Palm City", "Port St. Lucie", "Vero Beach"],
+        event_types=["animal rescue", "fire", "traffic crash", "death"],
+    )
+    story["sources"] = [f"https://publisher.example/{index}" for index in range(44)]
+
+    payload = {
+        "stories": {"story_009999": story},
+        "event_to_story": {event: "story_009999" for event in events},
+        "story_aliases": {},
+    }
+
+    report = repair_registry_payload(payload)
+
+    assert "story_009999" not in payload["stories"]
+    assert report.quarantine_reasons["story_009999"] == (
+        "pathological_multi_family_catchall",
+    )
+    assert payload["event_to_story"] == {}
+
+
+def test_multi_family_catchall_guard_does_not_quarantine_long_single_incident_family() -> None:
+    events = [f"traffic-crash-port-st-lucie-{index:010x}" for index in range(44)]
+    story = _story(
+        "story_009998",
+        events=events,
+        titles=[f"Ongoing crash investigation update {index}" for index in range(44)],
+        locations=["Port St. Lucie"],
+        event_types=["traffic crash"],
+    )
+    story["sources"] = [f"https://publisher.example/{index}" for index in range(44)]
+    payload = {
+        "stories": {"story_009998": story},
+        "event_to_story": {event: "story_009998" for event in events},
+        "story_aliases": {},
+    }
+
+    report = repair_registry_payload(payload)
+
+    assert "story_009998" in payload["stories"]
+    assert "story_009998" not in report.quarantine_reasons

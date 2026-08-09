@@ -34,35 +34,76 @@ def _sentences(text: str) -> list[str]:
     return pieces or [text]
 
 
-def split_article_body(body_html: str, second_paragraph_sentences: int = 2) -> ArticleSplit | None:
-    """Keep paragraph one plus 1-2 sentences of paragraph two public.
+PREVIEW_MAX_CHARS = 300
+PREVIEW_RATIO = 0.52
+PREVIEW_MIN_CHARS = 24
+PREVIEW_FADE_MAX_CHARS = 110
 
-    Returns None for bodies too short to have a meaningful protected remainder.
+
+def _word_boundary(text: str, target: int) -> int:
+    """Return a stable cut close to target without splitting a word."""
+    target = max(1, min(int(target), len(text)))
+    if target >= len(text):
+        return len(text)
+    left = text.rfind(" ", max(0, target - 28), target + 1)
+    if left >= max(1, int(target * 0.72)):
+        return left
+    right = text.find(" ", target, min(len(text), target + 20))
+    return right if right != -1 else target
+
+
+def split_article_body(body_html: str, preview_max_chars: int = PREVIEW_MAX_CHARS) -> ArticleSplit | None:
+    """Expose only a cliffhanger-sized slice of paragraph one.
+
+    The public preview is character bounded rather than paragraph bounded. For a
+    normal lead, roughly half of paragraph one is public, with the final portion
+    visibly fading away. The rest of paragraph one and every later paragraph are
+    returned only in the protected payload.
     """
     body_html = str(body_html or "")
     paragraphs = list(_P_RE.finditer(body_html))
-    if len(paragraphs) < 2:
+    if not paragraphs:
         return None
 
-    first, second = paragraphs[0], paragraphs[1]
-    second_text = _plain(second.group(2))
-    sentences = _sentences(second_text)
-    if not sentences:
+    first = paragraphs[0]
+    first_text = _plain(first.group(2))
+    if len(first_text) < 36:
         return None
-    visible_count = min(max(1, second_paragraph_sentences), len(sentences))
-    visible_text = " ".join(sentences[:visible_count]).strip()
-    hidden_text = " ".join(sentences[visible_count:]).strip()
 
-    preview = body_html[: first.end()]
-    between = body_html[first.end() : second.start()]
-    opening_attrs = second.group(1) or ""
-    preview += between + f"<p{opening_attrs}>{html.escape(visible_text)}</p>"
+    ratio_target = max(PREVIEW_MIN_CHARS, int(round(len(first_text) * PREVIEW_RATIO)))
+    target = min(max(PREVIEW_MIN_CHARS, int(preview_max_chars)), ratio_target)
+    # Always leave a real first-paragraph continuation when the lead is long enough.
+    target = min(target, max(PREVIEW_MIN_CHARS, len(first_text) - 18))
+    cut = _word_boundary(first_text, target)
+    if cut <= 0 or cut >= len(first_text):
+        return None
 
-    protected_parts: list[str] = []
-    if hidden_text:
-        protected_parts.append(f"<p{opening_attrs}>{html.escape(hidden_text)}</p>")
-    protected_parts.append(body_html[second.end() :])
-    protected = "".join(protected_parts).strip()
+    fade_chars = min(PREVIEW_FADE_MAX_CHARS, max(34, int(cut * 0.42)))
+    fade_start = _word_boundary(first_text, max(1, cut - fade_chars))
+    if fade_start <= 0 or fade_start >= cut:
+        fade_start = max(1, cut // 2)
+
+    solid_text = first_text[:fade_start].rstrip()
+    faded_text = first_text[fade_start:cut].strip()
+    hidden_first = first_text[cut:].lstrip()
+    if not solid_text or not faded_text or not hidden_first:
+        return None
+
+    opening_attrs = first.group(1) or ""
+    preview_paragraph = (
+        f'<p{opening_attrs} data-tct-preview-paragraph="true">'
+        f'<span class="tct-preview-solid">{html.escape(solid_text)}</span> '
+        f'<span class="tct-preview-fade-text">{html.escape(faded_text)}</span>'
+        '<span class="tct-preview-ellipsis" aria-hidden="true">…</span>'
+        '</p>'
+    )
+    preview = body_html[: first.start()] + preview_paragraph
+
+    protected = (
+        f'<p{opening_attrs} data-tct-first-paragraph-continuation="true">'
+        f'{html.escape(hidden_first)}</p>'
+        + body_html[first.end() :]
+    ).strip()
 
     # Do not manufacture a paywall for a tiny article where almost nothing is hidden.
     if len(_plain(protected)) < 80:

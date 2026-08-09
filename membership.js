@@ -159,7 +159,19 @@ async function unlockArticle(){
   }
   const target = qs('#tct-protected-content')
   if (target) {
-    target.innerHTML = data.protected_body
+    const holder = document.createElement('div')
+    holder.innerHTML = data.protected_body
+    const continuation = qs('[data-tct-first-paragraph-continuation]', holder)
+    const previewParagraph = qs('[data-tct-preview-paragraph]')
+    if (continuation && previewParagraph) {
+      const solid = qs('.tct-preview-solid', previewParagraph)?.textContent || ''
+      const faded = qs('.tct-preview-fade-text', previewParagraph)?.textContent || ''
+      const rest = continuation.textContent || ''
+      previewParagraph.textContent = `${solid} ${faded} ${rest}`.replace(/\s+/g, ' ').trim()
+      previewParagraph.removeAttribute('data-tct-preview-paragraph')
+      continuation.remove()
+    }
+    target.innerHTML = holder.innerHTML
     target.classList.add('is-unlocked')
   }
   qs('.tct-paywall-fade')?.remove()

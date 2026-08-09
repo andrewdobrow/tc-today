@@ -135,7 +135,7 @@ except Exception:
 
 # -- CONFIG --
 
-TCT_PRESENTATION_VERSION = "6.7.3-membership-launch-candidate"
+TCT_PRESENTATION_VERSION = "6.7.4-stale-source-identity-guard"
 
 # Membership launch safety. This remains OFF until live Stripe checkout,
 # webhook-backed entitlement, authentication, article unlock and account
@@ -498,6 +498,42 @@ def category_max_age_hours(category_key):
     return 72
 
 
+def new_publication_source_max_age_hours(category_key):
+    """Hard age ceiling for *minting a new article* from a publisher source.
+
+    Section pages may legitimately retain older canonical stories for depth, but an
+    unattended newsroom must not create a brand-new permalink days after the event
+    simply because a county feed is thin.  Archive recovery supplies section depth;
+    stale publisher items never re-enter generation.  Things To Do is the one broad
+    exception because an older announcement can still describe a future event.
+    """
+    if category_key == "things_to_do":
+        return 336  # future event/activity announcements can remain useful
+    return 48
+
+
+def _new_publication_source_is_stale(item, category_key, now=None):
+    """Return True when a publisher item is too old to mint a new TCT permalink."""
+    if not isinstance(item, dict):
+        return False
+    raw = item.get("source_published") or item.get("published_raw") or item.get("published")
+    if not raw:
+        return False
+    try:
+        from email.utils import parsedate_to_datetime
+        dt = parsedate_to_datetime(str(raw))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        dt = dt.astimezone(timezone.utc)
+        now = now or datetime.now(timezone.utc)
+        if now.tzinfo is None:
+            now = now.replace(tzinfo=timezone.utc)
+        age_hours = (now.astimezone(timezone.utc) - dt).total_seconds() / 3600
+        return age_hours >= new_publication_source_max_age_hours(category_key)
+    except Exception:
+        return False
+
+
 OUTPUT_DIR   = Path(__file__).parent.parent
 SITE_URL     = "https://treasurecoast.today"
 SITE_NAME    = "Treasure Coast Today"
@@ -695,6 +731,101 @@ def _source_content_hint(source):
         "summary": source.get("summary", ""),
         "published": source.get("published", ""),
     })
+
+
+def _focus_extracted_source_text(text, source):
+    """Trim obvious publisher-page contamination before editorial identity sees it.
+
+    Some news templates return a whole landing/newsletter page from trafilatura.  A
+    real article can then sit hundreds of words below unrelated headlines, weather,
+    sports and recommendation modules.  That poisoned event identity in production.
+
+    We only intervene when a strong headline-aligned sentence cluster begins well
+    after the extracted text starts.  Normal articles whose topic is present near the
+    lead are left byte-for-byte unchanged, so this is a bounded repair rather than a
+    general summarizer.
+    """
+    text = re.sub(r"\s+", " ", str(text or "")).strip()
+    if not text or len(text.split()) < 220:
+        return text
+    source = source if isinstance(source, dict) else {}
+    title = str(source.get("title") or source.get("source_title") or source.get("headline") or "")
+    if not title:
+        return text
+
+    generic = {
+        "after", "before", "following", "from", "into", "with", "without",
+        "county", "florida", "location", "local", "news", "says", "said",
+        "report", "reports", "reported", "update", "updates", "latest",
+        "reopens", "reopen", "opens", "open", "closed", "closes", "close",
+    }
+    title_tokens = {
+        token for token in re.findall(r"[a-z0-9]+", title.lower())
+        if len(token) >= 4 and token not in generic
+    }
+    if len(title_tokens) < 2:
+        return text
+
+    sentences = [part.strip() for part in re.split(r"(?<=[.!?])\s+", text) if part.strip()]
+    if len(sentences) < 8:
+        return text
+
+    scores = []
+    sentence_tokens = []
+    for sentence in sentences:
+        tokens = set(re.findall(r"[a-z0-9]+", sentence.lower()))
+        sentence_tokens.append(tokens)
+        scores.append(len(tokens & title_tokens))
+    max_score = max(scores, default=0)
+    if max_score < 2:
+        return text
+    anchor = max(range(len(scores)), key=lambda idx: scores[idx])
+    prefix_words = sum(len(sentence.split()) for sentence in sentences[:anchor])
+    # Normal article extraction should establish the headline topic near the lead.
+    # Do not trim a legitimate long-form article merely because later paragraphs
+    # happen to repeat more headline words.
+    if prefix_words <= 140:
+        return text
+
+    # Build the strongest nearby topic cluster.  Allow at most two low-signal
+    # sentences between strong sentences so quotes/context remain attached.
+    strong = [idx for idx, score in enumerate(scores) if score >= 2]
+    cluster = [anchor]
+    for idx in reversed(strong):
+        if idx >= cluster[0]:
+            continue
+        if cluster[0] - idx <= 3:
+            cluster.insert(0, idx)
+        else:
+            break
+    for idx in strong:
+        if idx <= cluster[-1]:
+            continue
+        if idx - cluster[-1] <= 3:
+            cluster.append(idx)
+        else:
+            break
+    start = cluster[0]
+    end = min(len(sentences), cluster[-1] + 2)
+    focused_sentences = []
+    junk_markers = (
+        "latest weathercast", "fcc applications", "news in photos",
+        "see also:", "share topics:",
+    )
+    for idx in range(start, end):
+        sentence = sentences[idx]
+        lower = sentence.lower()
+        if any(marker in lower for marker in junk_markers) and scores[idx] == 0:
+            continue
+        focused_sentences.append(sentence)
+    focused = " ".join(focused_sentences).strip()
+    focused_words = len(focused.split())
+    if focused_words < 45:
+        return text
+    # Only replace when we actually removed a substantial contaminated prefix.
+    if focused_words >= len(text.split()) * 0.85:
+        return text
+    return focused
 
 
 class PersistentGenerationCache:
@@ -3302,7 +3433,14 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
                 recovery_row["resolved_url"] = resolved
                 if resolved:
                     full = fetch_article_text(resolved, max_words=2500, content_hint=_source_content_hint(h))
-                    words = _word_count(full)
+                    raw_words = _word_count(full)
+                    focused = _focus_extracted_source_text(full, h)
+                    words = _word_count(focused)
+                    if focused != full:
+                        h["source_focus_repaired"] = True
+                        h["source_focus_original_word_count"] = raw_words
+                        h["source_focus_word_count"] = words
+                        full = focused
                     recovery_row["source_word_count"] = words
                     if words >= MIN_SOURCE_WORDS:
                         h["aggregator_url"] = h.get("aggregator_url") or link
@@ -3332,6 +3470,13 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
             # junk-filled scraped page, not to save tokens — the savings were pennies and
             # the cost was dropping the exact facts the article is about.
             full = fetch_article_text(link, max_words=2500, content_hint=_source_content_hint(h))
+            raw_words = _word_count(full)
+            focused = _focus_extracted_source_text(full, h)
+            if focused != full:
+                h["source_focus_repaired"] = True
+                h["source_focus_original_word_count"] = raw_words
+                h["source_focus_word_count"] = _word_count(focused)
+                full = focused
             if full and len(full.split()) >= 140:
                 h["article_text"] = full
                 h["source_quality"] = "full"
@@ -6476,13 +6621,15 @@ def generate_category_content(category_key, category_label, headlines, request_t
             stale = _is_stale(h)
             print(f"    [stale={stale}] [{h.get('published','NO DATE')}] {h.get('title','')[:55]}")
     fresh = [h for h in headlines if not _is_stale(h)]
-    # Do not shrink a section to 1-3 stories just because only a few are inside
-    # the freshness window. If there are not enough fresh stories, keep the full
-    # candidate pool and let ranking/age caps keep older items from leading.
-    if len(fresh) >= min(6, len(headlines)):
-        headlines = fresh
-    else:
-        print(f"  Freshness guard: only {len(fresh)} fresh stories; keeping {len(headlines)} candidates")
+    # Generation itself is stricter than section retention.  A thin section should
+    # recover canonical archive stories, not mint a new article from stale sources.
+    _hard_fresh = [
+        _candidate for _candidate in fresh
+        if not _new_publication_source_is_stale(
+            _candidate, category_key, now=_now_utc
+        )
+    ]
+    headlines = _hard_fresh
 
     headlines_text = "\n".join(hl_line(i, h) for i, h in enumerate(headlines))
     # Final safety pass — remove any remaining characters that break JSON
@@ -16478,7 +16625,12 @@ def _newsletter_inline_embed(placement):
     ).strip("-")
     return (
         f'\n      <aside class="newsletter-inline-slot newsletter-inline-slot--{placement_key}" '
-        'aria-label="Subscribe to the Treasure Coast Morning Brief">\n'
+        'aria-label="Subscribe to the Treasure Coast Morning Brief for free">\n'
+        '        <div class="newsletter-inline-intro">\n'
+        '          <span class="newsletter-inline-kicker">Free newsletter</span>\n'
+        '          <strong>Subscribe to the Morning Brief for free</strong>\n'
+        '          <span>Start the day with the Treasure Coast headlines you need.</span>\n'
+        '        </div>\n'
         f'        <script async data-uid="{KIT_INLINE_FORM_UID}" '
         f'src="{KIT_INLINE_FORM_SRC}"></script>\n'
         '      </aside>'
@@ -16486,7 +16638,16 @@ def _newsletter_inline_embed(placement):
 
 
 def _page_footer():
-    return """  <footer>
+    membership_link = '<a href="/subscribe.html">Membership</a>' if MEMBERSHIP_UI_ENABLED else ''
+    if MEMBERSHIP_UI_ENABLED:
+        connect_column = """<div class="footer-column footer-connect footer-membership-ask">
+        <strong>Support local journalism</strong>
+        <p>Unlimited articles. No ads. Help fund independent Treasure Coast reporting.</p>
+        <a class="footer-subscribe-cta" href="/subscribe.html"><span>Subscribe</span><small>$4.99/mo &middot; $49/yr</small></a>
+      </div>"""
+    else:
+        connect_column = """<div class="footer-column footer-connect"><strong>Stay Connected</strong><p>Join our local community for news, updates and discussion.</p><a class="footer-cta" href="/contact.html">Connect with TCT</a></div>"""
+    return f"""  <footer>
     <div class="footer-inner footer-v2">
       <div class="footer-brand"><span class="footer-wordmark">TCT</span><p>Independent, hyperlocal journalism for the Treasure Coast.</p></div>
       <div class="footer-column"><strong>Quick Links</strong><div class="footer-links">
@@ -16497,13 +16658,13 @@ def _page_footer():
         <a href="/ownership.html">Ownership</a>
         <a href="/weather.html">Weather</a>
         <a href="/archive.html">Archive</a>
-        {('<a href="/subscribe.html">Membership</a>' if MEMBERSHIP_UI_ENABLED else '')}
+        {membership_link}
         <a href="/advertise.html">Advertise</a>
         <a href="/privacy.html">Privacy</a>
         <a href="/contact.html">Contact</a>
       </div></div>
       <div class="footer-column"><strong>Counties</strong><a href="/?cat=martin">Martin County</a><a href="/?cat=st_lucie">St. Lucie County</a><a href="/?cat=indian_river">Indian River County</a></div>
-      <div class="footer-column footer-connect"><strong>Stay Connected</strong><p>Join our local community for news, updates and discussion.</p><a class="footer-cta" href="/contact.html">Connect with TCT</a></div>
+      {connect_column}
     </div>
     <div class="footer-bottom">© 2026 Treasure Coast Today. All rights reserved.</div>
   </footer>
@@ -18231,6 +18392,7 @@ def _cross_source_agencies(item):
     text = re.sub(r"[^a-z0-9]+", " ", _cross_source_text(item).lower())
     patterns = {
         "port-st-lucie-police": r"\bport st lucie police(?: department)?\b",
+        "stuart-police": r"\bstuart police(?: department)?\b",
         "fort-pierce-police": r"\bfort pierce police(?: department)?\b",
         "martin-county-commission": r"\bmartin county commission(?:ers)?\b",
         "st-lucie-county-commission": r"\bst lucie county commission(?:ers)?\b",
@@ -18262,7 +18424,7 @@ def _cross_source_event_families(item):
         ),
         "animal-case": r"\b(hoarding|animals?|cats?|dogs?|rescued|seized)\b",
         "crash": r"\b(crash|collision|wreck)\b",
-        "fire": r"\b(structure fire|house fire|brush fire|wildfire|fire-rescue|burning|arson|blaze)\b",
+        "fire": r"\b(structure fire|house fire|store fire|commercial fire|electrical fire|brush fire|wildfire|fire-rescue|burning|arson|blaze)\b",
     }
     for family, pattern in patterns.items():
         if re.search(pattern, text):
@@ -18510,22 +18672,16 @@ def _final_publication_identity_features(item, *, include_archive_body=False):
         except Exception:
             anchor = ""
 
-    stored = item.get("event_identity") if isinstance(item.get("event_identity"), dict) else {}
-    stored_anchor = str(stored.get("incident_anchor") or "").strip()
-    # Never inherit the exact production corruption this release repairs.
-    if not anchor and stored_anchor and stored_anchor != "named-person-death:hyundai-elantra":
-        anchor = stored_anchor
-
+    # Final-publication repair evidence must actually be final-publication evidence.
+    # Do not union the immutable source snapshot here: a contaminated publisher page
+    # can contain unrelated death/crash/shooting modules and poison an otherwise clean
+    # generated article.  Source identity remains authoritative elsewhere; this view
+    # exists only as a conservative second barrier against duplicate permalinks.
     locality = set(_audit_locations(text))
-    locality.update(stored.get("locality") or ())
     families = set(_cross_source_event_families(final_item))
-    families.update(stored.get("event_families") or ())
     people = set(_cross_source_person_names(final_item))
-    people.update(stored.get("people") or ())
     precise = set(_cross_source_precise_locations(final_item))
-    precise.update(stored.get("precise_locations") or ())
     agencies = set(_cross_source_agencies(final_item))
-    agencies.update(stored.get("agencies") or ())
     subjects = set(_cross_source_subject_ngrams(final_item))
     distinctive = set(_cross_source_distinctive_tokens(final_item))
     topic = set(_cross_source_headline_topic_tokens(final_item))
@@ -18646,11 +18802,31 @@ def _exact_headline_incident_evidence(left, right):
             f"shared_named_people={sorted(shared_people)}",
             f"shared_precise_locations={sorted(shared_precise)}",
             f"shared_agencies={sorted(shared_agencies)}",
+            f"shared_specific_topic_core={sorted(specific_topic_core)}",
             f"shared_distinctive_token_count={len(shared_distinctive)}",
             f"write_authorized={verified}",
         ],
     }
 
+
+
+def _cross_source_precise_location_aliases(values):
+    """Return comparison-only aliases for house-number street anchors.
+
+    Publishers frequently omit a directional (``3173 S. Kanner Highway`` versus
+    ``3173 Kanner Highway``).  The alias is never persisted as identity authority;
+    it is used only inside the already-bounded late-reprint composite.
+    """
+    aliases = set(values or ())
+    directions = {
+        "north", "south", "east", "west", "northeast", "northwest", "southeast", "southwest",
+        "n", "s", "e", "w", "ne", "nw", "se", "sw",
+    }
+    for value in tuple(aliases):
+        parts = str(value or "").split("-")
+        if len(parts) >= 4 and parts[0].isdigit() and parts[1] in directions:
+            aliases.add("-".join([parts[0], *parts[2:]]))
+    return aliases
 
 
 LATE_REPRINT_IDENTITY_WINDOW_DAYS = 7
@@ -18748,7 +18924,9 @@ def _late_reprint_same_event_evidence(
         return {**base, "reason": "missing_locality_or_event_family_corroboration"}
 
     shared_people = set(left_features.get("people") or ()) & set(right_features.get("people") or ())
-    shared_precise = set(left_features.get("precise_locations") or ()) & set(right_features.get("precise_locations") or ())
+    left_precise = _cross_source_precise_location_aliases(left_features.get("precise_locations") or ())
+    right_precise = _cross_source_precise_location_aliases(right_features.get("precise_locations") or ())
+    shared_precise = left_precise & right_precise
     shared_agencies = set(left_features.get("agencies") or ()) & set(right_features.get("agencies") or ())
     shared_distinctive = set(left_features.get("distinctive_tokens") or ()) & set(right_features.get("distinctive_tokens") or ())
     shared_topics = set(left_features.get("headline_topic_tokens") or ()) & set(right_features.get("headline_topic_tokens") or ())
@@ -18783,11 +18961,27 @@ def _late_reprint_same_event_evidence(
         and shared_agencies
         and len(shared_distinctive) >= 8
     )
+    generic_same_site_topics = {
+        "electrical", "fire", "crash", "collision", "closed", "close",
+        "reopen", "reopens", "road", "street", "store", "location",
+    }
+    specific_topic_core = topic_core - generic_same_site_topics
+    strong_same_site_composite = bool(
+        shared_precise
+        and shared_agencies
+        and specific_topic_core
+        and len(shared_distinctive) >= 8
+        and headline_confidence >= 90
+    )
     verified = bool(
         topic_compatible
         and headline_confidence >= 80
         and len(topic_core) >= 2
-        and (participant_composite or precise_location_composite)
+        and (
+            participant_composite
+            or precise_location_composite
+            or strong_same_site_composite
+        )
     )
 
     dimensions = ["bounded_late_reprint_window", "shared_locality", "shared_event_family"]
@@ -18808,6 +19002,8 @@ def _late_reprint_same_event_evidence(
             proof = "late_reprint_participant_incident_composite"
         elif precise_location_composite:
             proof = "late_reprint_precise_location_incident_composite"
+        elif strong_same_site_composite:
+            proof = "late_reprint_strong_same_site_composite"
         else:
             proof = "late_reprint_precise_location_incident_composite"
 
@@ -27332,7 +27528,27 @@ def main():
         if len(fresh_h) >= 6:
             headlines = fresh_h
         else:
-            print(f"  Freshness guard: only {len(fresh_h)} fresh stories for {category_max_age_hours(cat_key)}h window; keeping wider pool")
+            print(f"  Section freshness pool: only {len(fresh_h)} stories inside {category_max_age_hours(cat_key)}h; archive recovery may fill section depth")
+
+        # Hard new-publication freshness contract.  Section depth and new permalink
+        # creation are separate concerns: never revive an old publisher item merely
+        # because a county feed is thin.  Archive recovery handles thin sections.
+        _new_pub_max_age = new_publication_source_max_age_hours(cat_key)
+        _before_new_pub_age = len(headlines)
+        _publication_fresh = [
+            _candidate for _candidate in headlines
+            if not _new_publication_source_is_stale(
+                _candidate, cat_key, now=_now2
+            )
+        ]
+        _stale_new_pub_rejected = _before_new_pub_age - len(_publication_fresh)
+        if _stale_new_pub_rejected:
+            print(
+                f"  New-publication freshness gate: rejected {_stale_new_pub_rejected} "
+                f"source(s) at/over {_new_pub_max_age}h"
+            )
+        _category_record["new_publication_stale_rejected_count"] = _stale_new_pub_rejected
+        headlines = _publication_fresh
         if not headlines:
             print(f"  No headlines found for {cat_config['label']}; using archive recovery")
             _finalize_category_generation_record(

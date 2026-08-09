@@ -215,7 +215,7 @@ def test_registry_repair_splits_only_incompatible_component_and_is_idempotent():
     }
 
     first = repair_registry_payload(payload)
-    assert first.repair_version == REPAIR_VERSION == 13
+    assert first.repair_version == REPAIR_VERSION == 14
     assert first.timeline_coherence_story_records_repaired == 1
     assert first.timeline_coherence_entries_detached == 1
     assert first.remaining_timeline_coherence_violations == 0

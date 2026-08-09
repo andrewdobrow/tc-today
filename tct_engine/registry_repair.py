@@ -38,7 +38,7 @@ from .source_identity import (
     story_source_identity_urls,
 )
 
-REPAIR_VERSION = 13
+REPAIR_VERSION = 14
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
@@ -240,6 +240,54 @@ def _broad_event_story_is_incoherent(story: Mapping[str, Any]) -> bool:
     return len(components) > 1
 
 
+def _multi_family_catchall_story_is_incoherent(story: Mapping[str, Any]) -> bool:
+    """Detect only pathological registry records spanning many incidents.
+
+    A persistent story can legitimately accumulate many updates, but it should not
+    become a catch-all for unrelated fires, crashes, deaths, rescues, and other
+    incident families across multiple Treasure Coast communities.  Keep this guard
+    deliberately high-threshold so ordinary long-running stories are untouched.
+    """
+
+    timeline = [
+        entry for entry in (story.get("timeline", ()) or ())
+        if isinstance(entry, Mapping)
+    ]
+    if len(timeline) < 40:
+        return False
+
+    families = {
+        infer_timeline_event_family(entry)
+        for entry in timeline
+    }
+    families.discard("unknown")
+    if len(families) < 4:
+        return False
+
+    locations = {
+        str(value or "").strip().casefold()
+        for value in (story.get("locations", ()) or ())
+        if str(value or "").strip()
+    }
+    if len(locations) < 4:
+        return False
+
+    # Require a very large amount of independent identity evidence as a final
+    # backstop.  This prevents a legitimate multi-faceted event with a long
+    # timeline from being quarantined merely because several family labels apply.
+    events = {
+        str(value or "").strip()
+        for value in (story.get("events", ()) or ())
+        if str(value or "").strip()
+    }
+    sources = {
+        str(value or "").strip()
+        for value in (story.get("sources", ()) or ())
+        if str(value or "").strip()
+    }
+    return len(events) >= 30 and len(sources) >= 20
+
+
 def story_quarantine_reasons(story: Mapping[str, Any]) -> tuple[str, ...]:
     events = [str(value) for value in story.get("events", ()) if str(value).strip()]
     titles = list(story.get("titles", ()) or ())
@@ -257,6 +305,9 @@ def story_quarantine_reasons(story: Mapping[str, Any]) -> tuple[str, ...]:
 
     if _broad_event_story_is_incoherent(story):
         reasons.append("broad_event_class_multi_incident")
+
+    if _multi_family_catchall_story_is_incoherent(story):
+        reasons.append("pathological_multi_family_catchall")
 
     return tuple(reasons)
 
