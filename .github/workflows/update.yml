@@ -115,6 +115,12 @@ jobs:
           # notices and community resources will reactivate automatically.
           TCT_ARTICLE_BANNER_MODE: ${{ vars.TCT_ARTICLE_BANNER_MODE || 'reader_support' }}
 
+      - name: Build dark-launch membership browser config
+        env:
+          TCT_SUPABASE_URL: ${{ vars.TCT_SUPABASE_URL || '' }}
+          TCT_SUPABASE_PUBLISHABLE_KEY: ${{ vars.TCT_SUPABASE_PUBLISHABLE_KEY || '' }}
+        run: python scripts/write_membership_browser_config.py
+
       - name: Upload generation diagnostics
         if: always()
         uses: actions/upload-artifact@v4
