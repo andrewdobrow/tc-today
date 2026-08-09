@@ -16617,7 +16617,11 @@ KIT_INLINE_FORM_SRC = (
 
 
 def _newsletter_inline_embed(placement):
-    """Return the one inline Kit signup module used on a rendered page."""
+    """Return the one inline Kit signup module used on a rendered page.
+
+    All visible newsletter CTA copy is owned by Kit. TCT supplies only the
+    layout slot and the Kit embed so form wording can be managed in one place.
+    """
     placement_key = re.sub(
         r"[^a-z0-9_-]+",
         "-",
@@ -16625,12 +16629,7 @@ def _newsletter_inline_embed(placement):
     ).strip("-")
     return (
         f'\n      <aside class="newsletter-inline-slot newsletter-inline-slot--{placement_key}" '
-        'aria-label="Subscribe to the Treasure Coast Morning Brief for free">\n'
-        '        <div class="newsletter-inline-intro">\n'
-        '          <span class="newsletter-inline-kicker">Free newsletter</span>\n'
-        '          <strong>Subscribe to the Morning Brief for free</strong>\n'
-        '          <span>Start the day with the Treasure Coast headlines you need.</span>\n'
-        '        </div>\n'
+        'aria-label="Subscribe to the Treasure Coast Morning Brief">\n'
         f'        <script async data-uid="{KIT_INLINE_FORM_UID}" '
         f'src="{KIT_INLINE_FORM_SRC}"></script>\n'
         '      </aside>'

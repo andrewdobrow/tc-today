@@ -54,16 +54,13 @@ def test_canonical_shark_policy_page_contains_only_policy_update_context():
     assert "hammerhead shark" not in page.lower()
     assert "Photo: WPTV" in page
 
-    # The provenance regression is content-focused, not coupled to whether the
-    # repository currently contains a full public article or a launch-state
-    # member preview. Production can legitimately persist either shape.
+    # This regression protects source/provenance integrity. Membership markup is
+    # validated in dedicated membership tests and can legitimately exist in a
+    # legacy preview shape or the current character-bounded cliffhanger shape.
     if 'data-tct-paywall' in page:
         assert 'class="article-body tct-member-preview"' in page
-        assert 'data-tct-preview-paragraph="true"' in page
-        assert (
-            'id="tct-protected-content" '
-            'class="article-body tct-protected-content tct-paywalled-content"'
-        ) in page
+        assert 'id="tct-protected-content"' in page
+        assert 'tct-paywalled-content' in page
     else:
         assert page.count('<div class="article-body">') == 1
         article_body = page.split('<div class="article-body">', 1)[1].split("</div>", 1)[0]

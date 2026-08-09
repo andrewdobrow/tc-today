@@ -41,12 +41,15 @@ def test_member_unlock_reassembles_first_paragraph_before_showing_remainder():
     assert "continuation.remove()" in js
 
 
-def test_morning_brief_cta_is_explicitly_free():
+def test_morning_brief_visible_copy_is_owned_by_kit():
     g = _load_generate()
     markup = g._newsletter_inline_embed("article")
-    assert "Subscribe to the Morning Brief for free" in markup
-    assert "Free newsletter" in markup
-    assert "aria-label=\"Subscribe to the Treasure Coast Morning Brief for free\"" in markup
+    assert 'class="newsletter-inline-intro"' not in markup
+    assert 'newsletter-inline-kicker' not in markup
+    assert "Subscribe to the Morning Brief for free" not in markup
+    assert 'aria-label="Subscribe to the Treasure Coast Morning Brief"' in markup
+    assert f'data-uid="{g.KIT_INLINE_FORM_UID}"' in markup
+    assert f'src="{g.KIT_INLINE_FORM_SRC}"' in markup
 
 
 def test_launch_footer_has_distinct_coral_subscription_ask(monkeypatch):
