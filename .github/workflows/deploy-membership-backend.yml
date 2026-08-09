@@ -29,3 +29,22 @@ jobs:
 
       - name: Deploy membership functions
         run: supabase functions deploy --use-api --project-ref "$PROJECT_ID"
+
+      - name: Explicitly deploy protected-content sync function
+        run: supabase functions deploy sync-protected-articles --use-api --project-ref "$PROJECT_ID"
+
+      - name: Verify protected-content snapshot capability
+        env:
+          TCT_CONTENT_SYNC_SECRET: ${{ secrets.TCT_CONTENT_SYNC_SECRET }}
+        run: |
+          test -n "$TCT_CONTENT_SYNC_SECRET" || { echo "Missing GitHub secret TCT_CONTENT_SYNC_SECRET"; exit 1; }
+          status=$(curl --silent --show-error \
+            --output /tmp/tct-protected-sync-probe.json \
+            --write-out "%{http_code}" \
+            --request POST "https://${PROJECT_ID}.supabase.co/functions/v1/sync-protected-articles" \
+            --header "X-TCT-Content-Sync: ${TCT_CONTENT_SYNC_SECRET}" \
+            --header "Content-Type: application/json" \
+            --data '{"action":"snapshot","offset":0,"limit":1}')
+          rm -f /tmp/tct-protected-sync-probe.json
+          test "$status" = "200" || { echo "Protected-content snapshot capability verification failed with HTTP $status"; exit 1; }
+          echo "Protected-content snapshot capability verified."
