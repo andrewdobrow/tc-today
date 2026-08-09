@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-09T04:41:58Z",
+  "generated_at": "2026-08-09T05:22:12Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,59 +16,51 @@
     "category_count": 9,
     "statuses": {
       "category_eligibility_archive_recovery": 1,
-      "generated_live": 5,
-      "generation_failed_archive_recovery": 1,
+      "county_zero_candidate_archive_recovery": 1,
+      "generated_live": 4,
       "no_publishable_sources": 1,
+      "quality_gate_archive_recovery": 1,
       "sports_zero_candidate_archive_recovery": 1
     },
     "failures": {
-      "article_framing_integrity": 1,
       "no_category_eligible_sources": 1,
-      "no_sports_hero_candidates": 1
+      "no_source_backed_county_hero_candidates": 1,
+      "no_sports_hero_candidates": 1,
+      "publication_quality_rejected": 1
     },
-    "model_attempt_count": 8,
-    "model_elapsed_seconds": 128.721,
-    "archive_recovery_requested_count": 4,
+    "model_attempt_count": 5,
+    "model_elapsed_seconds": 125.406,
+    "archive_recovery_requested_count": 5,
     "sports_expired_event_preview_count": 1,
-    "contextual_update_lead_rejection_count": 3,
-    "article_framing_rejection_count": 2,
-    "category_eligibility_rejection_count": 14,
-    "published_story_duplicate_suppression_count": 43,
-    "story_aware_update_context_count": 2
+    "contextual_update_lead_rejection_count": 2,
+    "article_framing_rejection_count": 1,
+    "category_eligibility_rejection_count": 15,
+    "published_story_duplicate_suppression_count": 40,
+    "story_aware_update_context_count": 1
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generation_failed_archive_recovery",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 28,
       "fresh_candidate_count": 20,
-      "publishable_source_count": 7,
+      "publishable_source_count": 8,
       "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 3.281,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No eligible hero story available in Local Government category"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 3.968,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No eligible hero story available in Local Government category"
+          "elapsed_seconds": 7.874,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 7.249,
-      "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No eligible hero story available in Local Government category",
+      "model_elapsed_seconds": 7.874,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -77,8 +69,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 7,
-      "category_eligibility_rejection_count": 5,
+      "category_eligibility_assessed_count": 8,
+      "category_eligibility_rejection_count": 6,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -92,6 +84,19 @@
           "competing_signals": [],
           "headline": "Community partners provide 750 backpacks to local students - Hometown News Treasure Coast",
           "source_url": "https://www.hometownnewstc.com/news/martin/community-partners-provide-750-backpacks-to-local-students/article_c53dc9c9-9349-580c-aa7b-7084af70f023.html"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Slow down: St. Lucie schools reopen Aug. 10 - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/news/st_lucie/slow-down-st-lucie-schools-reopen-aug-10/article_a56c9fc8-2ee7-5a26-9f72-c653659f5ad1.html"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -231,18 +236,18 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 13.546
+      "elapsed_seconds": 20.367
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 7,
-      "selected_source_count": 7,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 8,
+      "selected_source_count": 8,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -250,11 +255,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 23.53,
+          "elapsed_seconds": 38.657,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 23.53,
+      "model_elapsed_seconds": 38.657,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -265,7 +270,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 5,
@@ -312,22 +317,22 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Driver arrested after alleged road rage incident leads to four-vehicle crash in Port St. Lucie - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-driver-road-rage-incident-leads-four-vehicle-crash-port-st-lucie/73366168",
+          "surface": "hero",
+          "headline": "Port St. Lucie man arrested after road rage leads to four-vehicle crash on U.S. 1",
           "editorial_story_id": "story_002470",
           "canonical_slug": "2026-08-06-port-st-lucie-road-rage-crash-leaves-motorcyclist-with-brain-bleed-driver-arrest",
           "canonical_headline": "Port St. Lucie road rage crash leaves motorcyclist with brain bleed, driver arrested",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "published_skip_placement_suppressed"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie man arrested on animal cruelty charge after video shows dog abuse",
+      "live_hero_headline": "Port St. Lucie man arrested after social media video shows alleged dog abuse",
       "generated_card_count": 1,
-      "elapsed_seconds": 26.78
+      "elapsed_seconds": 43.262
     },
     {
       "category_key": "business",
@@ -521,13 +526,13 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 2.506
+      "elapsed_seconds": 3.315
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "sports_zero_candidate_archive_recovery",
-      "fetched_candidate_count": 26,
+      "fetched_candidate_count": 25,
       "fresh_candidate_count": 22,
       "publishable_source_count": 6,
       "selected_source_count": 5,
@@ -563,7 +568,7 @@
       "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "sports",
@@ -587,16 +592,6 @@
         },
         {
           "category_key": "sports",
-          "source_headline": "Tortugas pull away for 17-3 win over Mets - MLB.com",
-          "source_url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1zSUdSZDllMFM1Rzh6b1p6eHNYakk4a1hWaFdRVVJsRVFlT3JtUUs5aERIc092TmlXdG1hUlM0UmRabm02SUw4Uk1EcWszU3JsbWpselhKS205SGdCYzFOUmQwTEdUNGU3OEJvcg",
-          "editorial_story_id": "story_002600",
-          "canonical_slug": "2026-08-08-st-lucie-mets-fall-17-3-to-daytona-as-tortugas-score-11-unanswered-runs-at-clove",
-          "canonical_headline": "St. Lucie Mets fall 17-3 to Daytona as Tortugas score 11 unanswered runs at Clover Park",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "sports",
           "source_headline": "WHERE'S WALTER? Crashing band camp at Vero Beach High School - WFLX",
           "source_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxObU5xSnFFdDN6OVRjTnktNkFzcGdtRTdSX05UWjJhaFlMdTVBMGNYRnZEbXdsc1F1ZVVBbnpqV0MySFk1dkZ6LUo0cVUxWjRULTNlRHpYQWhJREsyRFdTLTBwREpiUTFEeDl4ZUZ1QmNSU1IyenZzWEUtOGg0TGF6Q3NiZVNDQjlnTHpoLWRXbjI0YjRFMnFCWmxfS2ZsNS1qZThBbkVR0gGmAUFVX3lxTE5tTnFKcUV0M3o5VGNOeS02QXNwZ21FN1JfTlRaMmFoWUx1NUEwY1hGdkRtd2xzUXVlVUFuempXQzJIWTV2RnotSjRxVTFaNFQtM2VEelhBaElESzJEV1MtMHBESmJRMUR4OXhlRnVCY1JTUjJ6dnNYRS04aDRMYXpDc2JlU0NCOWdMemgtZFduMjRiNEUycUJabF9LZmw1LWplOEFuRVE",
           "editorial_story_id": "story_002471",
@@ -608,14 +603,14 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 4.472
+      "elapsed_seconds": 6.278
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 9,
       "selected_source_count": 9,
       "cache_hit": false,
@@ -625,11 +620,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 13.235,
+          "elapsed_seconds": 12.25,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 13.235,
+      "model_elapsed_seconds": 12.25,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -643,22 +638,12 @@
       "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "things_to_do",
-          "source_headline": "Big Taste of Martin County returns to support Big Brothers Big Sisters mentoring programs",
-          "source_url": "https://www.wptv.com/shining-a-light/big-taste-of-martin-county-returns-to-support-big-brothers-big-sisters-mentoring-programs",
-          "editorial_story_id": "story_000253",
-          "canonical_slug": "2026-07-23-big-taste-of-martin-county-returns-oct-6-to-support-youth-mentoring-programs",
-          "canonical_headline": "Big Brothers Big Sisters returns Big Taste of Martin County fundraiser to Stuart",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "things_to_do",
           "surface": "hero",
-          "headline": "Space Coast Symphony Orchestra brings Landscapes & Legends concert to Vero Beach",
+          "headline": "Space Coast Symphony Orchestra performs Landscapes & Legends concert in Vero Beach Sunday",
           "editorial_story_id": "story_002084",
           "canonical_slug": "2026-08-04-space-coast-symphony-orchestra-brings-landscapes-legends-concert-to-vero-beach",
           "canonical_headline": "Space Coast Symphony Orchestra brings Landscapes & Legends concert to Vero Beach",
@@ -672,7 +657,7 @@
       "budget_seconds": 180.0,
       "live_hero_headline": "",
       "generated_card_count": 0,
-      "elapsed_seconds": 16.748
+      "elapsed_seconds": 17.738
     },
     {
       "category_key": "florida",
@@ -715,15 +700,15 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "elapsed_seconds": 3.603
+      "elapsed_seconds": 7.367
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 1,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 2,
       "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": false,
@@ -732,25 +717,98 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 5.88,
+          "elapsed_seconds": 8.239,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 5.88,
+      "model_elapsed_seconds": 8.239,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Flooding hits Martin County roads after Friday night storms",
+          "missing": [
+            "generated_copy_drifted_from_source_focus"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Flooding hits Martin County roads after Friday night storms",
+            "lead": "Heavy rain and storms on Friday night caused flooding in Martin County. The Martin County Sheriff's Office shared photos of a car submerged in water along U.S. Highway 1. The people in the car made it out safely.",
+            "lead_word_count": 40,
+            "headline_overlap_ratio": 0.667,
+            "new_context_token_count": 16,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": true,
+            "headline": "Flooding hits Martin County roads after Friday night storms",
+            "lead": "Heavy rain and storms on Friday night caused flooding in Martin County. The Martin County Sheriff's Office shared photos of a car submerged in water along U.S. Highway 1. The people in the car made it out safely.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "martin_county"
+            ],
+            "lead_jurisdictions": [
+              "martin_county"
+            ],
+            "missing_jurisdictions": [],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": []
+          },
+          "source_focus": {
+            "required": true,
+            "passed": false,
+            "generated_headline": "Flooding hits Martin County roads after Friday night storms",
+            "generated_lead": "Heavy rain and storms on Friday night caused flooding in Martin County. The Martin County Sheriff's Office shared photos of a car submerged in water along U.S.",
+            "source_title": "Costco reopens following electrical fire at Martin County location - cw34.com",
+            "source_lead": "Early voting starts in Palm Beach, Treasure Coast counties. Here’s when and where to vote Early voting for Florida’s Aug.",
+            "title_similarity": {
+              "score": 0.352,
+              "overlap": 0.25,
+              "jaccard": 0.1333,
+              "sorted_sequence": 0.3826,
+              "ordered_sequence": 0.4,
+              "shared_token_count": 2.0
+            },
+            "lead_token_overlap": 0.0,
+            "missing": [
+              "generated_copy_drifted_from_source_focus"
+            ]
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
@@ -801,54 +859,36 @@
           "canonical_headline": "Piper's Landing residents plant 6,000 mangroves to restore eroded St. Lucie River island in Martin County",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "'Extremely concerning': Martin County sheriff reports rise in daytime DUI arrests - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-dui-arrest-daytime-deputy-impaired/73369333",
-          "editorial_story_id": "story_002474",
-          "canonical_slug": "2026-08-06-martin-county-sheriff-reports-rise-in-daytime-dui-arrests",
-          "canonical_headline": "Martin County Sheriff reports rise in daytime DUI arrests",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Costco in Stuart reopens after electrical fire at Kanner Highway location",
+      "live_hero_headline": "Costco on Kanner Highway in Stuart reopens after electrical fire, refrigeration still down",
       "generated_card_count": 0,
-      "elapsed_seconds": 10.82
+      "elapsed_seconds": 13.756
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 5,
-      "selected_source_count": 5,
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 8,
+      "selected_source_count": 8,
       "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 32.003,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: original_event_context_missing — Horse reported missing after theft from pasture in Port St. Lucie - WPBF"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 29.576,
+          "elapsed_seconds": 58.386,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 61.578,
+      "model_elapsed_seconds": 58.386,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -860,7 +900,7 @@
           "required": true,
           "passed": false,
           "story_form": "update",
-          "lead_word_count": 56,
+          "lead_word_count": 93,
           "baseline_anchor": "fatality",
           "baseline_present": true,
           "baseline_anchor_present": true,
@@ -870,10 +910,10 @@
             "found",
             "home",
             "lucie",
-            "near",
             "police",
             "pond",
-            "port"
+            "port",
+            "year"
           ],
           "baseline_context_required": 2,
           "canonical_context_available": true,
@@ -885,14 +925,14 @@
             "new_development_missing"
           ],
           "source_title": "Port St. Lucie police investigate death of 77-year-old man found in pond - WPBF",
-          "headline": "Port St. Lucie police investigate death of 77-year-old man found in pond near home"
+          "headline": "Port St. Lucie man dies after being found in pond near Mockingbird Drive home"
         },
         {
           "surface": "card",
           "required": true,
           "passed": false,
           "story_form": "update",
-          "lead_word_count": 80,
+          "lead_word_count": 76,
           "baseline_anchor": "fatality",
           "baseline_present": false,
           "baseline_anchor_present": false,
@@ -916,14 +956,14 @@
             "original_event_context_missing"
           ],
           "source_title": "Port St. Lucie police identify 50-year man, woman in domestic-related murder-suicide - WPBF",
-          "headline": "Port St. Lucie police identify couple in murder-suicide as Elizabeth Ortega, Ralph Varela Sr."
+          "headline": "Port St. Lucie police identify couple in murder-suicide on Oxmoor Terrace"
         }
       ],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 10,
@@ -990,16 +1030,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Driver arrested after alleged road rage incident leads to four-vehicle crash in Port St. Lucie - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-driver-road-rage-incident-leads-four-vehicle-crash-port-st-lucie/73366168",
-          "editorial_story_id": "story_002470",
-          "canonical_slug": "2026-08-06-port-st-lucie-road-rage-crash-leaves-motorcyclist-with-brain-bleed-driver-arrest",
-          "canonical_headline": "Port St. Lucie road rage crash leaves motorcyclist with brain bleed, driver arrested",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Back to School: Tradition Lakes K-8 prepares to open in St. Lucie County - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-back-to-school-tradition-lakes-k-8-st-lucie-county/73344051",
           "editorial_story_id": "story_002246",
@@ -1021,7 +1051,17 @@
         {
           "category_key": "st_lucie",
           "surface": "card",
-          "headline": "Firefighters extinguish blaze at St. Lucie County home on Melaleuca Boulevard",
+          "headline": "Road rage leads to four-vehicle crash at U.S. 1 and Lyngate Drive in Port St. Lucie",
+          "editorial_story_id": "story_002470",
+          "canonical_slug": "2026-08-06-port-st-lucie-road-rage-crash-leaves-motorcyclist-with-brain-bleed-driver-arrest",
+          "canonical_headline": "Port St. Lucie road rage crash leaves motorcyclist with brain bleed, driver arrested",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "published_skip_placement_suppressed"
+        },
+        {
+          "category_key": "st_lucie",
+          "surface": "card",
+          "headline": "Firefighters battle blaze at St. Lucie County home on Melaleuca Boulevard",
           "editorial_story_id": "story_002416",
           "canonical_slug": "2026-08-06-firefighters-battle-blaze-at-st-lucie-county-home-on-melaleuca-boulevard",
           "canonical_headline": "Firefighters battle blaze at St. Lucie County home on Melaleuca Boulevard",
@@ -1029,7 +1069,7 @@
           "reason": "published_skip_placement_suppressed"
         }
       ],
-      "story_aware_update_context_count": 2,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
           "source_headline": "Port St. Lucie police investigate death of 77-year-old man found in pond - WPBF",
@@ -1053,57 +1093,29 @@
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Port St. Lucie man arrested after video shows him allegedly abusing small dog - WPEC",
-          "source_url": "https://cbs12.com/news/videos/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog",
-          "canonical_headline": "Port St. Lucie man arrested after video shows him kicking small dog",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "source:https://cbs12.com/news/videos/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=source:https://cbs12.com/news/videos/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
         }
       ],
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "American Paint Horse stolen from Port St. Lucie pasture, sheriff's office seeks public help",
-      "generated_card_count": 0,
-      "elapsed_seconds": 67.074
+      "live_hero_headline": "St. Lucie County schools reopen Monday with new bus safety warnings",
+      "generated_card_count": 2,
+      "elapsed_seconds": 62.566
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generated_live",
+      "status": "county_zero_candidate_archive_recovery",
       "fetched_candidate_count": 25,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 4,
-      "selected_source_count": 4,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 17.249,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 17.249,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_source_backed_county_hero_candidates",
+      "failure_summary": "Selected Indian River County source pool contained no source-backed county hero candidate",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1112,7 +1124,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 4,
@@ -1124,6 +1136,16 @@
           "editorial_story_id": "story_002734",
           "canonical_slug": "2026-08-09-indian-river-county-schools-open-monday-with-some-bus-pickups-before-sunrise",
           "canonical_headline": "Indian River County schools open Monday with some bus pickups before sunrise",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "County approves Westside Racquet Club requests - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/news/indian_river/county-approves-westside-racquet-club-requests/article_47c3825d-240c-5d2f-b8eb-edaefbc8aea7.html",
+          "editorial_story_id": "story_002774",
+          "canonical_slug": "2026-08-09-indian-river-county-approves-expansion-of-westside-racquet-club-in-vero-beach",
+          "canonical_headline": "Indian River County approves expansion of Westside Racquet Club in Vero Beach",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1146,25 +1168,11 @@
           "canonical_headline": "Tradition Lakes K-8 opening delayed one week, leaving St. Lucie parents scrambling for child care",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Port St. Lucie police release details on 2 separate political campaign sign investigations",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigating-2-incidents-involving-political-campaign-signs",
-          "editorial_story_id": "story_002554",
-          "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-two-separate-campaign-sign-incidents-involving",
-          "canonical_headline": "Port St. Lucie police investigate two separate campaign sign incidents involving Mayor Martin's husband",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Indian River County approves expansion of Westside Racquet Club in Vero Beach",
-      "generated_card_count": 0,
-      "elapsed_seconds": 21.078
+      "elapsed_seconds": 4.478
     }
   ]
 }
