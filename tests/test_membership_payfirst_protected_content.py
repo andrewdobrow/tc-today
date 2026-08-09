@@ -88,6 +88,9 @@ def test_membership_plan_cards_are_visually_balanced_and_gradient_backed():
     assert '<div class="membership-price">$4.99</div>' in page
     assert '<div class="membership-plan-note">Cancel anytime</div>' in page
     assert 'linear-gradient(135deg,#f26445 0%,#f87858 48%,#e9583e 100%)' in css
+    assert 'color:#fff}.membership-kicker' in css
+    assert 'background:var(--tct-member-paper);color:var(--tct-member-charcoal)' in css
+    assert 'color:rgba(255,255,255,.88)' in css
     assert 'text-align:center' in css
     assert 'margin-top:auto' in css
 
