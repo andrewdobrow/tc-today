@@ -10364,6 +10364,288 @@ def _select_latest_news_entries(archive_entries, limit=5):
     return [row[2] for row in candidates[:limit]]
 
 
+TOP_STORIES_LIMIT = 12
+TOP_STORIES_FRESH_WINDOW_HOURS = 48.0
+TOP_STORIES_EXTENDED_WINDOW_HOURS = 60.0
+TOP_STORIES_EXTENDED_URGENCY_MIN = 8
+TOP_STORIES_TRANSIENT_MAX_HOURS = 24.0
+TOP_STORIES_SPORTS_MAX_HOURS = 24.0
+TOP_STORIES_RANKING_SCHEMA_VERSION = 1
+
+
+def _top_story_archive_slug(card):
+    if not isinstance(card, dict):
+        return ""
+    for key in ("canonical_slug", "_archived_slug", "slug"):
+        slug = _normalize_existing_article_slug(card.get(key))
+        if slug:
+            return slug
+    for key in ("link", "permalink"):
+        slug = _article_slug_from_permalink(str(card.get(key) or ""))
+        if slug:
+            return _normalize_existing_article_slug(slug)
+    return ""
+
+
+def _top_story_effective_datetime(card, archive_by_slug=None):
+    """Return the timestamp Top Stories should use for freshness.
+
+    A validated material update can legitimately make an existing canonical current
+    again. Routine ``lastmod`` changes cannot. For archived cards, the archive's
+    first-publication receipt therefore outranks a fresh-looking card timestamp.
+    """
+    if not isinstance(card, dict):
+        return None, "missing"
+    archive_by_slug = archive_by_slug or {}
+    slug = _top_story_archive_slug(card)
+    archive_entry = archive_by_slug.get(slug) if slug else None
+
+    for source, item in (("archive", archive_entry), ("card", card)):
+        if not isinstance(item, dict):
+            continue
+        if item.get("meaningful_update_validated"):
+            parsed = _parse_any_datetime(item.get("last_meaningful_update_at"))
+            if parsed is not None:
+                return parsed.astimezone(timezone.utc), f"{source}:last_meaningful_update_at"
+
+    if isinstance(archive_entry, dict):
+        parsed = _latest_news_publication_datetime(archive_entry)
+        if parsed is not None:
+            return parsed.astimezone(timezone.utc), "archive:first_published"
+
+    for key in ("first_published", "published_raw", "published", "date"):
+        parsed = _parse_any_datetime(card.get(key))
+        if parsed is not None:
+            return parsed.astimezone(timezone.utc), f"card:{key}"
+    return None, "missing"
+
+
+def _top_story_is_transient(card):
+    text = " ".join([
+        str((card or {}).get("headline") or ""),
+        str((card or {}).get("teaser") or ""),
+    ]).lower()
+    transient_phrases = (
+        "flood advisory", "flood warning", "weather advisory",
+        "severe thunderstorm warning", "tornado warning",
+        "closed in both directions", "road closed", "road closure",
+        "lane closure", "bridge closure", "boil water notice",
+    )
+    return any(phrase in text for phrase in transient_phrases)
+
+
+def _top_story_freshness_points(age_hours):
+    if age_hours is None:
+        return 0.0
+    # Recency is intentionally powerful: a brand-new medium-urgency story should
+    # usually outrank a routine item that is two days old, while a truly urgent
+    # older story can still survive the extended window.
+    return round(max(0.0, 60.0 * (1.0 - min(age_hours, 60.0) / 60.0)), 2)
+
+
+def _top_story_priority(card, age_hours):
+    try:
+        urgency = max(0, min(10, int((card or {}).get("urgency_score", 0) or 0)))
+    except (TypeError, ValueError):
+        urgency = 0
+    score = urgency * 10.0 + _top_story_freshness_points(age_hours)
+    if (card or {}).get("is_breaking"):
+        score += 12.0
+    if (card or {}).get("meaningful_update_validated"):
+        score += 4.0
+    return round(score, 2), urgency
+
+
+def _apply_top_story_pins(selected, eligible_rows, limit):
+    """Preserve explicit editor pin positions without making normal stale cards top."""
+    by_id = {id(row["card"]): row for row in eligible_rows}
+    pinned_rows = [
+        row for row in eligible_rows
+        if row["card"].get("pin_position")
+    ]
+    if not pinned_rows:
+        return list(selected[:limit])
+
+    result = [card for card in selected if not card.get("pin_position")]
+    for row in sorted(pinned_rows, key=lambda value: int(value["card"].get("pin_position") or 999)):
+        card = row["card"]
+        if card in result:
+            result.remove(card)
+        position = max(1, int(card.get("pin_position") or 1))
+        result.insert(min(position - 1, len(result)), card)
+    return result[:limit]
+
+
+def _select_top_story_cards(cards, archive_entries=(), *, hero_headline="", limit=TOP_STORIES_LIMIT, now=None):
+    """Select a small, deterministic set of genuinely current Top Stories.
+
+    Top Stories are not an archive and are not a model-generated importance list.
+    Normal stories must be no more than 48 hours old. Exceptionally urgent stories
+    may remain for up to 60 hours, while transient alerts/closures and routine sports
+    recaps expire after 24 hours. There is deliberately no stale backfill target: a
+    quiet news cycle should show fewer Top Stories rather than republish old material.
+    """
+    try:
+        limit = max(0, int(limit))
+    except (TypeError, ValueError):
+        limit = TOP_STORIES_LIMIT
+    if limit == 0:
+        return [], {
+            "schema_version": TOP_STORIES_RANKING_SCHEMA_VERSION,
+            "selected": [], "excluded": [], "limit": 0,
+        }
+
+    now = now or datetime.now(timezone.utc)
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=timezone.utc)
+    else:
+        now = now.astimezone(timezone.utc)
+
+    archive_by_slug = {}
+    for entry in archive_entries or []:
+        if not isinstance(entry, dict):
+            continue
+        slug = _normalize_existing_article_slug(entry.get("canonical_slug") or entry.get("slug"))
+        if slug:
+            archive_by_slug[slug] = entry
+
+    hero_key = re.sub(r"[^a-z0-9]+", " ", str(hero_headline or "").lower()).strip()
+    rows = []
+    excluded = []
+    seen = set()
+    for position, card in enumerate(cards or [], start=1):
+        if not isinstance(card, dict) or not card.get("headline"):
+            continue
+        headline = str(card.get("headline") or "")
+        headline_key = re.sub(r"[^a-z0-9]+", " ", headline.lower()).strip()
+        if hero_key and headline_key == hero_key:
+            excluded.append({"headline": headline, "reason": "front_page_hero"})
+            continue
+        slug = _top_story_archive_slug(card)
+        identity = slug or headline_key
+        if identity in seen:
+            excluded.append({"headline": headline, "reason": "duplicate_identity"})
+            continue
+        seen.add(identity)
+
+        published_at, timestamp_basis = _top_story_effective_datetime(card, archive_by_slug)
+        age_hours = None
+        if published_at is not None:
+            age_hours = max(0.0, (now - published_at).total_seconds() / 3600.0)
+        priority, urgency = _top_story_priority(card, age_hours)
+        cat_key = str(card.get("cat_key") or card.get("category_key") or "")
+        pinned = bool(card.get("pin_position"))
+        transient = _top_story_is_transient(card)
+
+        reason = "fresh_window"
+        primary_eligible = True
+        fallback_eligible = True
+        if pinned:
+            reason = "manual_pin_override"
+        elif age_hours is None:
+            primary_eligible = False
+            fallback_eligible = urgency >= TOP_STORIES_EXTENDED_URGENCY_MIN
+            reason = "undated"
+        elif age_hours > TOP_STORIES_EXTENDED_WINDOW_HOURS:
+            primary_eligible = False
+            fallback_eligible = False
+            reason = "older_than_60_hours"
+        elif transient and age_hours > TOP_STORIES_TRANSIENT_MAX_HOURS:
+            primary_eligible = False
+            fallback_eligible = False
+            reason = "expired_transient_story"
+        elif cat_key == "sports" and age_hours > TOP_STORIES_SPORTS_MAX_HOURS and urgency < 9:
+            primary_eligible = False
+            fallback_eligible = False
+            reason = "routine_sports_recap_older_than_24_hours"
+        elif age_hours > TOP_STORIES_FRESH_WINDOW_HOURS:
+            primary_eligible = urgency >= TOP_STORIES_EXTENDED_URGENCY_MIN
+            fallback_eligible = True
+            fallback_eligible = primary_eligible
+            reason = (
+                "high_urgency_extended_window"
+                if primary_eligible else "older_than_48_hours_not_urgent_enough"
+            )
+
+        row = {
+            "card": card,
+            "headline": headline,
+            "slug": slug,
+            "input_position": position,
+            "category_key": cat_key,
+            "urgency_score": urgency,
+            "age_hours": round(age_hours, 2) if age_hours is not None else None,
+            "priority_score": priority,
+            "timestamp_basis": timestamp_basis,
+            "primary_eligible": primary_eligible or pinned,
+            "fallback_eligible": fallback_eligible or pinned,
+            "eligibility_reason": reason,
+            "pinned": pinned,
+        }
+        rows.append(row)
+        if not row["fallback_eligible"]:
+            excluded.append({key: value for key, value in row.items() if key != "card"})
+
+    sort_key = lambda row: (
+        0 if row["pinned"] else 1,
+        -float(row["priority_score"]),
+        float(row["age_hours"]) if row["age_hours"] is not None else 999999.0,
+        -int(row["urgency_score"]),
+        row["input_position"],
+        row["headline"].lower(),
+    )
+    primary = sorted([row for row in rows if row["primary_eligible"]], key=sort_key)
+    selected_rows = primary[:limit]
+
+    selected_rows = sorted(selected_rows, key=sort_key)[:limit]
+    selected = [row["card"] for row in selected_rows]
+    selected = _apply_top_story_pins(selected, rows, limit)
+    selected_ids = {id(card) for card in selected}
+
+    final_selected_rows = []
+    for rank, card in enumerate(selected, start=1):
+        row = next(row for row in rows if row["card"] is card)
+        final_selected_rows.append({
+            **{key: value for key, value in row.items() if key != "card"},
+            "rank": rank,
+        })
+
+    for row in rows:
+        if id(row["card"]) not in selected_ids and row["fallback_eligible"]:
+            excluded.append({
+                **{key: value for key, value in row.items() if key != "card"},
+                "reason": "outside_top_story_limit" if row["primary_eligible"] else row["eligibility_reason"],
+            })
+
+    report = {
+        "schema_version": TOP_STORIES_RANKING_SCHEMA_VERSION,
+        "generated_at": now.isoformat(),
+        "policy": (
+            "deterministic_urgency_plus_recency; normal<=48h; high_urgency<=60h; "
+            "transient_and_routine_sports<=24h; no_stale_backfill; max_12"
+        ),
+        "limit": limit,
+        "minimum_target": 0,
+        "input_count": len(list(cards or [])),
+        "selected_count": len(final_selected_rows),
+        "selected": final_selected_rows,
+        "excluded": excluded,
+    }
+    return selected, report
+
+
+def _write_top_stories_ranking_report(report, output_root):
+    path = Path(output_root) / "data" / "top-stories-ranking-report.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(
+        "  Top Stories ranking: "
+        f"{report.get('selected_count', 0)} current story/stories selected "
+        f"from {report.get('input_count', 0)} candidates"
+    )
+    return report
+
+
 def _write_latest_news_rail_contract(entries, archive_entries, output_root):
     """Persist and fail closed when the Latest News rail is not chronological."""
     selected = list(entries or [])
@@ -10654,8 +10936,16 @@ def render_index(all_categories, top_cat):
             f"{len(_article_framing_live_suppressions)} generated article(s)"
         )
 
+    # Top Stories is a small current-news surface, not an archive and not a model
+    # ranking. Select it deterministically from urgency + true publication age.
     enriched_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
-    topnews     = global_rank(enriched_pool, dedupe_against=top_cat["hero"].get("headline", ""))
+    topnews, _top_stories_pre_dedupe_report = _select_top_story_cards(
+        enriched_pool,
+        _bf_archive,
+        hero_headline=top_cat["hero"].get("headline", ""),
+        limit=TOP_STORIES_LIMIT,
+        now=_now_bf,
+    )
     topnews_ids = {id(c) for c in topnews}
     remaining   = [c for c in enriched_pool if id(c) not in topnews_ids]
     all_cards_display = topnews + remaining
@@ -10708,6 +10998,21 @@ def render_index(all_categories, top_cat):
             "  Final canonical surface dedupe removed "
             f"{_homepage_permalink_report['removed_count']} duplicate card placement(s)"
         )
+
+    # Canonical dedupe can remove one of the preliminary Top Stories. Re-run the
+    # deterministic selector against the surviving canonical cards so the visible
+    # list stays full, fresh, and correctly ranked.
+    topnews, _top_stories_report = _select_top_story_cards(
+        all_cards_display,
+        archive_for_links,
+        hero_headline=top_cat["hero"].get("headline", ""),
+        limit=TOP_STORIES_LIMIT,
+        now=datetime.now(timezone.utc),
+    )
+    topnews_ids = {id(c) for c in topnews}
+    remaining = [c for c in all_cards_display if id(c) not in topnews_ids]
+    all_cards_display = topnews + remaining
+    _write_top_stories_ranking_report(_top_stories_report, OUTPUT_DIR)
     if _homepage_permalink_report.get("canonical_rewrite_count") or _hero_canonical_rewrites:
         print(
             "  Final canonical surface binding rewrote "
