@@ -1,5 +1,6 @@
 import { withSupabase } from 'npm:@supabase/server@^1'
 import Stripe from 'npm:stripe@^22'
+import { STRIPE_MODE, stripeSecretMatchesMode } from '../_shared/membership.ts'
 
 const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY') ?? ''
 const siteUrl = (Deno.env.get('SITE_URL') ?? 'https://treasurecoast.today').replace(/\/$/, '')
@@ -8,6 +9,10 @@ const stripe = new Stripe(stripeSecret)
 export default {
   fetch: withSupabase({ auth: 'user' }, async (_req, ctx) => {
     if (!stripeSecret) return Response.json({ error: 'Stripe is not configured.' }, { status: 503 })
+    if (!stripeSecretMatchesMode(stripeSecret)) {
+      console.error(`create-portal Stripe mode mismatch: expected ${STRIPE_MODE}`)
+      return Response.json({ error: 'Stripe payment mode is not configured safely.' }, { status: 503 })
+    }
     const userId = ctx.userClaims?.id
     if (!userId) return Response.json({ error: 'Authentication required.' }, { status: 401 })
 

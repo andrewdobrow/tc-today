@@ -1,6 +1,5 @@
 import { withSupabase } from 'npm:@supabase/server@^1'
-
-const ACTIVE_STATUSES = new Set(['active', 'trialing'])
+import { ACTIVE_STATUSES, STRIPE_LIVEMODE } from '../_shared/membership.ts'
 
 export default {
   fetch: withSupabase({ auth: 'user' }, async (_req, ctx) => {
@@ -38,8 +37,9 @@ export default {
 
     const { data: subscriptions, error: subscriptionError } = await ctx.supabaseAdmin
       .from('subscriptions')
-      .select('status,current_period_end,cancel_at_period_end,stripe_price_id,stripe_subscription_id')
+      .select('status,current_period_end,cancel_at_period_end,stripe_price_id,stripe_subscription_id,stripe_livemode')
       .eq('user_id', userId)
+      .eq('stripe_livemode', STRIPE_LIVEMODE)
       .order('current_period_end', { ascending: false, nullsFirst: false })
 
     if (subscriptionError) {

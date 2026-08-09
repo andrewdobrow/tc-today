@@ -1,6 +1,6 @@
 import { withSupabase } from 'npm:@supabase/server@^1'
 import Stripe from 'npm:stripe@^22'
-import { safeReturnPath } from '../_shared/membership.ts'
+import { safeReturnPath, STRIPE_MODE, stripeSecretMatchesMode } from '../_shared/membership.ts'
 
 const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY') ?? ''
 const siteUrl = (Deno.env.get('SITE_URL') ?? 'https://treasurecoast.today').replace(/\/$/, '')
@@ -20,6 +20,10 @@ export default {
   fetch: withSupabase({ auth: 'none' }, async (req) => {
     if (!stripeSecret || !monthlyPrice || !annualPrice) {
       return Response.json({ error: 'Stripe membership secrets are not configured.' }, { status: 503 })
+    }
+    if (!stripeSecretMatchesMode(stripeSecret)) {
+      console.error(`create-checkout Stripe mode mismatch: expected ${STRIPE_MODE}`)
+      return Response.json({ error: 'Stripe payment mode is not configured safely.' }, { status: 503 })
     }
 
     let body: { plan?: string; return_path?: string }
@@ -42,8 +46,8 @@ export default {
         line_items: [{ price: priceId, quantity: 1 }],
         success_url: `${siteUrl}/subscribe.html?checkout=success&session_id={CHECKOUT_SESSION_ID}&next=${next}`,
         cancel_url: `${siteUrl}/subscribe.html?checkout=cancelled&next=${next}`,
-        metadata: { plan, return_path: returnPath },
-        subscription_data: { metadata: { plan } },
+        metadata: { plan, return_path: returnPath, tct_stripe_mode: STRIPE_MODE },
+        subscription_data: { metadata: { plan, tct_stripe_mode: STRIPE_MODE } },
       })
       if (!session.url) throw new Error('Stripe did not return a Checkout URL.')
       return Response.json({ url: session.url })

@@ -2,6 +2,19 @@ import Stripe from 'npm:stripe@^22'
 
 export const ACTIVE_STATUSES = new Set(['active', 'trialing'])
 
+const rawStripeMode = (Deno.env.get('TCT_STRIPE_MODE') ?? 'test').trim().toLowerCase()
+export const STRIPE_MODE = rawStripeMode === 'live' ? 'live' : 'test'
+export const STRIPE_LIVEMODE = STRIPE_MODE === 'live'
+
+export function stripeSecretMatchesMode(secret: string) {
+  if (!secret) return false
+  return STRIPE_LIVEMODE ? secret.startsWith('sk_live_') : secret.startsWith('sk_test_')
+}
+
+export function stripeObjectMatchesMode(value: { livemode?: boolean } | null | undefined) {
+  return Boolean(value?.livemode) === STRIPE_LIVEMODE
+}
+
 export function normalizeEmail(value: unknown) {
   return String(value ?? '').trim().toLowerCase()
 }
@@ -130,6 +143,7 @@ export async function syncSubscription(
         stripe_subscription_id: subscription.id,
         stripe_price_id: priceId,
         status: subscription.status,
+        stripe_livemode: Boolean(subscription.livemode),
         current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
         cancel_at_period_end: Boolean(subscription.cancel_at_period_end),
         updated_at: new Date().toISOString(),

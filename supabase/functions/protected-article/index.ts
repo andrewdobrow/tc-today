@@ -1,5 +1,5 @@
 import { withSupabase } from 'npm:@supabase/server@^1'
-import { ACTIVE_STATUSES } from '../_shared/membership.ts'
+import { ACTIVE_STATUSES, STRIPE_LIVEMODE } from '../_shared/membership.ts'
 
 export default {
   fetch: withSupabase({ auth: 'user' }, async (req, ctx) => {
@@ -17,7 +17,7 @@ export default {
     let entitled = Boolean(profile?.is_admin)
     if (!entitled) {
       const { data: subscriptions, error: subscriptionError } = await ctx.supabaseAdmin.from('subscriptions')
-        .select('status').eq('user_id', userId).limit(20)
+        .select('status,stripe_livemode').eq('user_id', userId).eq('stripe_livemode', STRIPE_LIVEMODE).limit(20)
       if (subscriptionError) return Response.json({ error: 'Unable to verify membership.' }, { status: 500 })
       entitled = (subscriptions ?? []).some((row) => ACTIVE_STATUSES.has(String(row.status || '')))
     }

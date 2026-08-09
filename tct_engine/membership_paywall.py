@@ -122,8 +122,9 @@ def paywall_html(slug: str) -> str:
   </div>
   <p class="tct-paywall-benefits">Unlimited articles · No ads · Support independent local journalism</p>
   <p class="tct-paywall-secure">Secure checkout powered by Stripe. Cancel anytime.</p>
+  <p class="tct-paywall-renewal">Subscriptions renew automatically until canceled. Manage or cancel your subscription anytime from your membership account.</p>
 </section>
-<div id="tct-protected-content" class="article-body tct-protected-content" aria-live="polite"></div>'''
+<div id="tct-protected-content" class="article-body tct-protected-content tct-paywalled-content" aria-live="polite"></div>'''
 
 
 def add_paywall_schema(page_html: str) -> str:
@@ -139,7 +140,7 @@ def add_paywall_schema(page_html: str) -> str:
         data["hasPart"] = {
             "@type": "WebPageElement",
             "isAccessibleForFree": False,
-            "cssSelector": ".tct-member-only",
+            "cssSelector": ".tct-paywalled-content",
         }
         replacement = match.group(1) + json.dumps(data, separators=(",", ":")) + match.group(3)
         return page_html[: match.start()] + replacement + page_html[match.end() :]

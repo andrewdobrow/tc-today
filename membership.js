@@ -3,7 +3,11 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const config = window.TCT_MEMBERSHIP_CONFIG || {}
 const configured = Boolean(config.supabaseUrl && config.supabasePublishableKey)
 const supabase = configured ? createClient(config.supabaseUrl, config.supabasePublishableKey) : null
-if (config.sandbox) document.querySelector('[data-membership-sandbox]')?.classList.remove('hidden')
+if (config.paymentMode === 'test' || config.sandbox) {
+  document.querySelector('[data-membership-sandbox]')?.classList.remove('hidden')
+} else if (!config.uiEnabled) {
+  document.querySelector('[data-membership-live-validation]')?.classList.remove('hidden')
+}
 
 function qs(sel, root=document){ return root.querySelector(sel) }
 function qsa(sel, root=document){ return [...root.querySelectorAll(sel)] }
@@ -168,6 +172,13 @@ function revealSignIn(button){
   qs('[data-paywall-signin] input[type="email"]', root)?.focus()
 }
 
+function revealRequestedSignIn(){
+  const params = new URLSearchParams(window.location.search)
+  if (params.get('signin') !== '1') return
+  const trigger = qs('[data-reveal-signin]')
+  if (trigger) revealSignIn(trigger)
+}
+
 if (!configured) {
   qsa('[data-membership-message]').forEach(el => setMessage(el, 'Membership configuration is unavailable. Please try again shortly.', true))
 } else {
@@ -176,6 +187,7 @@ if (!configured) {
   qsa('[data-reveal-signin]').forEach(button => button.addEventListener('click', () => revealSignIn(button)))
   qsa('[data-create-portal]').forEach(button => button.addEventListener('click', () => openPortal(button)))
   qsa('[data-sign-out]').forEach(button => button.addEventListener('click', async () => { await supabase.auth.signOut(); await refreshSubscribeAccount(); await unlockArticle() }))
+  revealRequestedSignIn()
   await finishCheckout()
   await refreshSubscribeAccount()
   await unlockArticle()

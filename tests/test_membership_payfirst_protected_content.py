@@ -62,7 +62,7 @@ def test_paywalled_schema_and_assets_are_injected_without_body_payload():
     page = add_paywall_schema(page)
     page = inject_membership_assets(page, "story-slug")
     assert '"isAccessibleForFree":false' in page
-    assert '"cssSelector":".tct-member-only"' in page
+    assert '"cssSelector":".tct-paywalled-content"' in page
     assert '/membership.css' in page
     assert '/membership.js' in page
     assert 'data-article-slug="story-slug"' in page

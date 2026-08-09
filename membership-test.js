@@ -1,6 +1,7 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
 const config = window.TCT_MEMBERSHIP_CONFIG || {}
+const sandboxMode = (config.paymentMode || (config.sandbox ? 'test' : 'live')) !== 'live'
 const warning = document.querySelector('#config-warning')
 const signedOut = document.querySelector('#signed-out')
 const signedIn = document.querySelector('#signed-in')
@@ -49,9 +50,12 @@ async function refreshUI() {
     const status = data.subscription?.status || 'active'
     statusBox.textContent = `MEMBER ACCESS — Stripe subscription status: ${status}`
     plans.classList.add('hidden')
-  } else {
+  } else if (sandboxMode) {
     statusBox.textContent = 'No active membership yet. Choose a sandbox plan below.'
     plans.classList.remove('hidden')
+  } else {
+    statusBox.textContent = 'Stripe is in LIVE mode. Sandbox checkout is disabled on this engineering test page.'
+    plans.classList.add('hidden')
   }
 }
 
@@ -84,6 +88,10 @@ document.querySelector('#sign-out').addEventListener('click', async () => {
 
 document.querySelectorAll('.plan-button').forEach((button) => {
   button.addEventListener('click', async () => {
+    if (!sandboxMode) {
+      setWarning('Live Stripe checkout is intentionally disabled on the sandbox engineering page.')
+      return
+    }
     const plan = button.dataset.plan
     button.disabled = true
     setWarning(`Starting ${plan} sandbox checkout…`)
@@ -104,6 +112,7 @@ supabase.auth.onAuthStateChange(() => {
 
 const checkoutState = new URLSearchParams(window.location.search).get('checkout')
 if (checkoutState === 'success') setWarning('Stripe returned successfully. Waiting for the webhook-backed membership record…')
-if (checkoutState === 'cancelled') setWarning('Sandbox checkout was cancelled. No membership change was made.')
+if (checkoutState === 'cancelled') setWarning(sandboxMode ? 'Sandbox checkout was cancelled. No membership change was made.' : 'Checkout was cancelled. No membership change was made.')
+if (!sandboxMode && !checkoutState) setWarning('Stripe is in LIVE mode. This engineering page will not start payment sessions.')
 
 await refreshUI()

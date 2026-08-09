@@ -135,7 +135,7 @@ except Exception:
 
 # -- CONFIG --
 
-TCT_PRESENTATION_VERSION = "6.7.2-membership-dark-launch-preflight"
+TCT_PRESENTATION_VERSION = "6.7.3-membership-launch-candidate"
 
 # Membership launch safety. This remains OFF until live Stripe checkout,
 # webhook-backed entitlement, authentication, article unlock and account
@@ -149,9 +149,16 @@ MEMBERSHIP_SUBSCRIBE_URL = os.getenv("TCT_SUBSCRIBE_URL", "/subscribe.html").str
 
 def _header_primary_cta_html():
     if MEMBERSHIP_UI_ENABLED:
+        href = html_lib.escape(MEMBERSHIP_SUBSCRIBE_URL, quote=True)
+        joiner = "&amp;" if "?" in href else "?"
+        signin_href = f"{href}{joiner}signin=1"
         return (
-            f'<a href="{html_lib.escape(MEMBERSHIP_SUBSCRIBE_URL, quote=True)}" '
-            'class="support-btn membership-subscribe-btn" style="text-decoration:none">Subscribe</a>'
+            f'<a href="{href}" class="support-btn membership-subscribe-btn" '
+            'style="text-decoration:none" aria-label="Subscribe to Treasure Coast Today — $4.99 monthly or $49 annually">'
+            '<span class="membership-subscribe-label">Subscribe</span>'
+            '<span class="membership-subscribe-price">$4.99/mo &middot; $49/yr</span>'
+            '</a>'
+            f'<a href="{signin_href}" class="membership-header-signin">Sign in</a>'
         )
     return '<a href="/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>'
 
@@ -183,6 +190,35 @@ def _homepage_support_card_html():
           <span class="tct-advertise-cta">Explore advertising options <b>&rarr;</b></span>
         </div>
       </a>'''
+
+def _apply_membership_site_chrome(root: Path) -> int:
+    """Normalize legacy/static page header actions to the current launch state.
+
+    Some retained policy/event pages are not regenerated from templates every run.
+    This bounded pass prevents a mixed Advertise/Subscribe header after launch while
+    preserving the dark-launch behavior before the switch is enabled.
+    """
+    replacement = _header_primary_cta_html()
+    pattern = re.compile(
+        r'(<div\s+class="header-actions">\s*)(.*?)(\s*</div>)',
+        re.I | re.S,
+    )
+    changed = 0
+    for page in sorted(root.rglob("*.html")):
+        if page.name in {"subscribe.html", "membership-test.html"}:
+            continue
+        try:
+            text = page.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        if 'class="header-actions"' not in text:
+            continue
+        updated, count = pattern.subn(lambda m: m.group(1) + replacement + m.group(3), text, count=1)
+        if count and updated != text:
+            page.write_text(updated, encoding="utf-8")
+            changed += 1
+    return changed
+
 
 SUPPORT_PAYMENT_URL = "https://buy.stripe.com/4gM5kw9LWfRb7uV6P34ZG01"
 SUPPORT_BANNER_URL = "https://treasurecoast.today/images/support-banner.png"
@@ -264,11 +300,13 @@ def _article_house_notice_html(label, headline, copy, resource_html="", indent="
 def _article_banner_html_for_context(article_text, indent="", is_weather_alert=False):
     """Select the current article banner while retaining paid-ad sensitivity rules.
 
-    Reader-support mode deliberately returns the support banner before evaluating topic
-    sensitivity because the placement is a house-support appeal, not a commercial ad.
-    Switching ``TCT_ARTICLE_BANNER_MODE`` to ``paid_advertising`` reactivates the
-    sensitive-topic notices and support resources without another code change.
+    Once reader memberships are public, article-level support/advertising banners are
+    removed entirely. The membership paywall and header CTA become the reader-support
+    surface, avoiding a redundant legacy donation appeal above the story. Before launch,
+    reader-support mode behaves exactly as it did previously.
     """
+    if MEMBERSHIP_UI_ENABLED:
+        return ""
     if ARTICLE_BANNER_MODE == "reader_support":
         return _article_support_banner_html(indent)
 
@@ -13170,7 +13208,13 @@ def update_sitemap(archive_entries):
   <url>
     <loc>{SITE_URL}/advertise.html</loc>
     <priority>0.5</priority>
-  </url>
+  </url>{("" if not MEMBERSHIP_UI_ENABLED else f"""
+  <url>
+    <loc>{SITE_URL}/subscribe.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>{now_str}</lastmod>
+  </url>""")}
   <url>
     <loc>{SITE_URL}/contact.html</loc>
     <priority>0.5</priority>
@@ -16449,6 +16493,7 @@ def _page_footer():
         <a href="/ownership.html">Ownership</a>
         <a href="/weather.html">Weather</a>
         <a href="/archive.html">Archive</a>
+        {('<a href="/subscribe.html">Membership</a>' if MEMBERSHIP_UI_ENABLED else '')}
         <a href="/advertise.html">Advertise</a>
         <a href="/privacy.html">Privacy</a>
         <a href="/contact.html">Contact</a>
@@ -16612,7 +16657,7 @@ def render_editorial_standards_page():
         <p>We work to get things right, and when we get something wrong we correct it promptly and transparently. If you spot an error, please tell us. See our <a href="/corrections-policy.html">Corrections Policy</a> for how we handle mistakes.</p>
 
         <h2>Independence</h2>
-        <p>Treasure Coast Today is independently owned and personally funded, with no parent company and no outside investors. Advertising and editorial are kept separate: advertisers do not receive coverage in exchange for their business, and paying for an ad does not influence how or whether we report a story. See our <a href="/ownership.html">Ownership &amp; Funding</a> page for details.</p>
+        <p>Treasure Coast Today is independently owned and personally funded, with no parent company and no outside investors. {"Reader memberships and advertising support the publication, but neither members nor advertisers influence coverage decisions." if MEMBERSHIP_UI_ENABLED else "Advertising and editorial are kept separate: advertisers do not receive coverage in exchange for their business, and paying for an ad does not influence how or whether we report a story."} See our <a href="/ownership.html">Ownership &amp; Funding</a> page for details.</p>
 
         <h2>Fairness</h2>
         <p>We aim to be fair to the people and institutions we cover, to give a reasonable opportunity for response where appropriate, and to distinguish clearly between news and opinion.</p>
@@ -16687,6 +16732,19 @@ def render_ownership_page():
     )
     header = _page_header()
     footer = _page_footer()
+    funding_copy = (
+        "Treasure Coast Today is personally funded by its owner and supported by reader memberships and advertising. "
+        "It has no outside investors, grants, or financial backers, and it is not funded by any political party, campaign, government agency or advocacy organization."
+        if MEMBERSHIP_UI_ENABLED else
+        "Treasure Coast Today is personally funded by its owner and supported by advertising. It has no outside investors, grants, or financial backers, and it is not funded by any political party, campaign, government agency or advocacy organization."
+    )
+    independence_copy = (
+        "Reader memberships and advertising support Treasure Coast Today while remaining separate from editorial decisions. "
+        "Members do not receive influence over coverage, and advertisers do not receive news coverage in exchange for their business. "
+        "Buying an ad or membership does not influence whether or how we report on a person, business or organization. Advertisements are identified as such."
+        if MEMBERSHIP_UI_ENABLED else
+        "Advertising revenue supports Treasure Coast Today and is kept separate from editorial decisions. Advertisers do not receive news coverage in exchange for their business, and buying an ad does not influence whether or how we report on a person, business or organization. Advertisements are identified as such."
+    )
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16705,10 +16763,10 @@ def render_ownership_page():
         <p>Treasure Coast Today is independently owned and operated by Andrew Dobrow, its founder and publisher. It is a sole proprietorship with a single owner. There is no parent company, no corporate group, and no outside ownership stake in the publication.</p>
 
         <h2>Funding</h2>
-        <p>Treasure Coast Today is personally funded by its owner and supported by advertising. It has no outside investors, grants, or financial backers, and it is not funded by any political party, campaign, government agency or advocacy organization.</p>
+        <p>{funding_copy}</p>
 
         <h2>Advertising and independence</h2>
-        <p>Advertising revenue helps keep Treasure Coast Today free to read, with no paywall. Advertising is kept separate from editorial decisions. Advertisers do not receive news coverage in exchange for their business, and buying an ad does not influence whether or how we report on a person, business or organization. Advertisements are identified as such.</p>
+        <p>{independence_copy}</p>
 
         <h2>Our independence</h2>
         <p>Because we answer to no parent company and no investors, our coverage decisions are our own. We are accountable to our readers on the Treasure Coast, and to the standards described on our <a href="/editorial-standards.html">Editorial Standards</a> page.</p>
@@ -22972,6 +23030,53 @@ def _recent_direct_article_paths(output_root, limit=50):
     return selected
 
 
+def _remove_membership_launch_article_support_banners(output_root):
+    """Remove legacy Support TCT/article ad banners from every direct article at launch.
+
+    Historical article HTML is persistent, so changing the renderer alone is not enough.
+    This launch-only pass strips the old article banner slot from retained direct pages
+    without touching redirect stubs or unrelated editorial content.
+    """
+    import re
+
+    if not MEMBERSHIP_UI_ENABLED:
+        return {"checked": 0, "removed": 0}
+
+    articles_dir = Path(output_root) / "articles"
+    if not articles_dir.exists():
+        return {"checked": 0, "removed": 0}
+
+    banner_patterns = (
+        re.compile(
+            r'^[ \t]*<a\b(?=[^>]*\bclass="[^"]*\barticle-banner-slot\b[^"]*")'
+            r'(?=[^>]*\bclass="[^"]*\barticle-ad-banner\b[^"]*")[^>]*>.*?</a>\s*',
+            re.IGNORECASE | re.MULTILINE | re.DOTALL,
+        ),
+        re.compile(
+            r'^[ \t]*<section\b(?=[^>]*\bclass="[^"]*\barticle-banner-slot\b[^"]*")'
+            r'(?=[^>]*\bclass="[^"]*\barticle-house-banner\b[^"]*")[^>]*>.*?</section>\s*',
+            re.IGNORECASE | re.MULTILINE | re.DOTALL,
+        ),
+    )
+
+    checked = removed = 0
+    for path in sorted(articles_dir.glob("*.html")):
+        raw = path.read_text(encoding="utf-8", errors="ignore")
+        if 'http-equiv="refresh"' in raw or "window.location.replace" in raw:
+            continue
+        if 'class="article-wrap"' not in raw:
+            continue
+        checked += 1
+        updated = raw
+        for pattern in banner_patterns:
+            updated = pattern.sub("", updated, count=1)
+        if updated != raw:
+            path.write_text(updated, encoding="utf-8")
+            removed += 1
+
+    return {"checked": checked, "removed": removed}
+
+
 def _migrate_legacy_article_support_banners(output_root, limit=50):
     """Normalize the newest retained articles to the active reader-support contract.
 
@@ -22984,7 +23089,7 @@ def _migrate_legacy_article_support_banners(output_root, limit=50):
     import os
     import re
 
-    if ARTICLE_BANNER_MODE != "reader_support":
+    if MEMBERSHIP_UI_ENABLED or ARTICLE_BANNER_MODE != "reader_support":
         return {"checked": 0, "migrated": 0, "limit": limit}
 
     ad_pattern = re.compile(
@@ -23222,14 +23327,15 @@ def _repair_article_shells(output_root):
         # every run rewrites hundreds of unchanged files and caused production jobs
         # to exceed the workflow timeout. New or updated articles are rendered above;
         # only structurally legacy pages need this repair pass.
-        modern_shell_tokens = (
+        modern_shell_tokens = [
             'class="article-wrap"',
             'class="article-meta"',
-            'class="article-banner-slot',
             'class="article-editorial-grid"',
             'class="article-side-rail"',
             'class="newsroom-strip"',
-        )
+        ]
+        if not MEMBERSHIP_UI_ENABLED:
+            modern_shell_tokens.insert(2, 'class="article-banner-slot')
         if all(token in html for token in modern_shell_tokens):
             skipped_modern += 1
             continue
@@ -23340,7 +23446,10 @@ def _validate_presentation_contract(output_root):
         if 'class="article-wrap"' not in html:
             continue
         article_count += 1
-        missing = [t for t in ('article-banner-slot', 'article-editorial-grid', 'article-side-rail') if t not in html]
+        required_tokens = ['article-editorial-grid', 'article-side-rail']
+        if not MEMBERSHIP_UI_ENABLED:
+            required_tokens.insert(0, 'article-banner-slot')
+        missing = [t for t in required_tokens if t not in html]
         if missing:
             warnings.append(f"{path.name} missing {', '.join(missing)}")
         else:
@@ -28244,12 +28353,20 @@ def main():
     # presentation contract is not present. This prevents another apparently random
     # mix of old and new article shells from reaching production.
     _repair_article_shells(OUTPUT_DIR)
-    _support_banner_migration = _migrate_legacy_article_support_banners(OUTPUT_DIR)
-    if _support_banner_migration.get("migrated"):
-        print(
-            "  Reader-support banner migration: "
-            f"{_support_banner_migration['migrated']} retained article page(s) updated"
-        )
+    if MEMBERSHIP_UI_ENABLED:
+        _membership_banner_cleanup = _remove_membership_launch_article_support_banners(OUTPUT_DIR)
+        if _membership_banner_cleanup.get("removed"):
+            print(
+                "  Membership launch banner cleanup: "
+                f"{_membership_banner_cleanup['removed']} retained article banner(s) removed"
+            )
+    else:
+        _support_banner_migration = _migrate_legacy_article_support_banners(OUTPUT_DIR)
+        if _support_banner_migration.get("migrated"):
+            print(
+                "  Reader-support banner migration: "
+                f"{_support_banner_migration['migrated']} retained article page(s) updated"
+            )
     _validate_presentation_contract(OUTPUT_DIR)
     print(f"  Timing: page rendering and presentation checks {time.perf_counter() - _stage_started:.1f}s")
     _stage_started = time.perf_counter()
@@ -28266,6 +28383,9 @@ def main():
     (OUTPUT_DIR / "corrections-policy.html").write_text(render_corrections_page(), encoding="utf-8")
     (OUTPUT_DIR / "ownership.html").write_text(render_ownership_page(), encoding="utf-8")
     (OUTPUT_DIR / "advertise.html").write_text(render_advertise_page(), encoding="utf-8")
+    _membership_chrome_updates = _apply_membership_site_chrome(OUTPUT_DIR)
+    if _membership_chrome_updates:
+        print(f"  Membership site chrome normalized on {_membership_chrome_updates} retained page(s)")
     (OUTPUT_DIR / "feed.xml").write_text(render_rss_feed(all_categories, top_cat), encoding="utf-8")
     _content_override_count = _apply_article_content_overrides_to_outputs(OUTPUT_DIR)
     if _content_override_count:

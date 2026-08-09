@@ -1,6 +1,6 @@
 import { withSupabase } from 'npm:@supabase/server@^1'
 import Stripe from 'npm:stripe@^22'
-import { idFromExpandable, resolveMembershipUser, syncSubscription } from '../_shared/membership.ts'
+import { idFromExpandable, resolveMembershipUser, STRIPE_MODE, stripeObjectMatchesMode, stripeSecretMatchesMode, syncSubscription } from '../_shared/membership.ts'
 
 const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY') ?? ''
 const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? ''
@@ -10,6 +10,10 @@ const cryptoProvider = Stripe.createSubtleCryptoProvider()
 export default {
   fetch: withSupabase({ auth: 'none' }, async (req, ctx) => {
     if (!stripeSecret || !webhookSecret) return new Response('Stripe webhook secrets are not configured.', { status: 503 })
+    if (!stripeSecretMatchesMode(stripeSecret)) {
+      console.error(`stripe-webhook Stripe mode mismatch: expected ${STRIPE_MODE}`)
+      return new Response('Stripe payment mode is not configured safely.', { status: 503 })
+    }
     const signature = req.headers.get('Stripe-Signature')
     if (!signature) return new Response('Missing Stripe-Signature header.', { status: 400 })
 
@@ -20,6 +24,10 @@ export default {
     } catch (error) {
       console.error('stripe-webhook signature verification failed', error)
       return new Response('Invalid webhook signature.', { status: 400 })
+    }
+    if (!stripeObjectMatchesMode(event)) {
+      console.error(`stripe-webhook rejected ${event.id}: Stripe event mode does not match ${STRIPE_MODE}`)
+      return new Response('Stripe event mode mismatch.', { status: 409 })
     }
 
     const { data: alreadyProcessed, error: seenError } = await ctx.supabaseAdmin
