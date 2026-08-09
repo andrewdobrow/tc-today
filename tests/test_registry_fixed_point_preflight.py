@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 import tct_engine.registry_repair as registry_repair
+import scripts.repair_editorial_story_registry as registry_preflight
 from scripts.repair_editorial_story_registry import normalize_registry
 
 
@@ -132,3 +133,70 @@ def test_workflows_normalize_registry_before_validation_and_pytest():
         tests = text.index("Run editorial engine tests")
         assert preflight < validation < tests
         assert "python scripts/repair_editorial_story_registry.py" in text
+
+
+def test_registry_preflight_converges_when_second_top_level_pass_exposes_merge(tmp_path, monkeypatch):
+    """Regression for production pair story_002776/story_002777.
+
+    A first deterministic pass can legitimately expose another component that is
+    only visible on the next top-level pass.  Preflight must keep applying the
+    same deterministic authority rules until verification is clean instead of
+    failing simply because convergence required two passes.
+    """
+    payload = {
+        "stories": {
+            "story_002776": _story("story_002776", "Canonical local incident", "event-a"),
+            "story_002777": _story("story_002777", "Cross-source incident fragment", "event-b"),
+        },
+        "event_to_story": {},
+        "story_aliases": {},
+        "repair_stage": 0,
+    }
+    path = tmp_path / "registry.json"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+    from types import SimpleNamespace
+
+    def report(changed, merged=None):
+        return SimpleNamespace(
+            changed=changed,
+            merged_story_ids=merged or {},
+            duplicate_story_records_removed=1 if changed else 0,
+            source_story_records_removed=0,
+            unified_incident_story_records_removed=0,
+            incident_story_records_removed=0,
+            remaining_source_identity_groups=0,
+            remaining_unified_incident_groups=0,
+            remaining_incident_identity_groups=0,
+            remaining_timeline_coherence_violations=0,
+        )
+
+    def staged_repair(current):
+        stage = int(current.get("repair_stage", 0))
+        if stage == 0:
+            # First pass changes evidence but does not yet merge the escaped pair.
+            current["repair_stage"] = 1
+            current["stories"]["story_002776"]["facts"] = ["new-evidence"]
+            return report(True)
+        if stage == 1:
+            # The next top-level pass now sees the deterministic merge that caused
+            # the Aug. 8 preflight failure.
+            current["repair_stage"] = 2
+            current["stories"]["story_002776"]["sources"].extend(
+                current["stories"]["story_002777"]["sources"]
+            )
+            del current["stories"]["story_002777"]
+            current["story_aliases"]["story_002777"] = "story_002776"
+            return report(True, {"story_002776": ("story_002777",)})
+        return report(False)
+
+    monkeypatch.setattr(registry_preflight, "repair_registry_payload", staged_repair)
+
+    result = registry_preflight.normalize_registry(path)
+    persisted = json.loads(path.read_text(encoding="utf-8"))
+
+    assert result["changed"] is True
+    assert result["repair_passes"] == 3
+    assert result["verification_clean"] is True
+    assert set(persisted["stories"]) == {"story_002776"}
+    assert persisted["story_aliases"]["story_002777"] == "story_002776"
