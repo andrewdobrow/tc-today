@@ -165,6 +165,9 @@ def test_protected_sync_uses_dedicated_secret_and_never_browser_config():
     assert "secrets.TCT_CONTENT_SYNC_SECRET" in workflow
     assert "--snapshot-file /tmp/tct-protected-current.json --required" in workflow
     assert "TCT_PROTECTED_SNAPSHOT_PATH: /tmp/tct-protected-current.json" in workflow
+    assert "Legacy sync-protected-articles function detected" in workflow
+    assert "supabase functions deploy sync-protected-articles --use-api" in workflow
+    assert "SUPABASE_ACCESS_TOKEN" in workflow
     assert "TCT_CONTENT_SYNC_SECRET" not in writer
 
 

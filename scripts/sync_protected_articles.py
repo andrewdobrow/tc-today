@@ -56,6 +56,15 @@ def _request(url: str, secret: str, payload: dict) -> requests.Response:
         timeout=45,
     )
     if response.status_code >= 300:
+        if (
+            payload.get("action") == "snapshot"
+            and response.status_code == 400
+            and "Batch must contain 1-100 articles" in response.text
+        ):
+            raise RuntimeError(
+                "Protected article snapshot is not supported by the deployed "
+                "sync-protected-articles function. Deploy the current membership backend first."
+            )
         raise RuntimeError(f"Protected article sync failed ({response.status_code}): {response.text[:300]}")
     return response
 
