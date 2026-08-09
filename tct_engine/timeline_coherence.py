@@ -86,6 +86,7 @@ def infer_timeline_event_family(entry: Mapping[str, Any]) -> str:
         ("hazing", r"\bhazing\b"),
         ("government_finance", r"\b(?:property tax|tax reform|millage|budget|job cuts?|police positions?)\b"),
         ("dui", r"\b(?:dui|driving under the influence)\b"),
+        ("animal_cruelty", r"\b(?:cat|cats|animal|animals|dog|dogs|pet|pets)\b.{0,55}\b(?:abuse|abused|abusing|cruelty|kick|kicked|kicking|beat|beaten|harmed|hurt)\b|\b(?:abuse|abused|abusing|cruelty|kick|kicked|kicking|beat|beaten|harmed|hurt)\b.{0,55}\b(?:cat|cats|animal|animals|dog|dogs|pet|pets)\b"),
         ("animal_rescue", r"\b(?:cat|cats|hamster|animal|animals|dog|dogs|pet|pets)\b.{0,45}\b(?:rescue|rescued|saved)\b|\b(?:rescue|rescued|saved)\b.{0,45}\b(?:cat|cats|hamster|animal|animals|dog|dogs|pet|pets)\b"),
         ("traffic_crash", r"\b(?:crash|collision|wreck|semi truck|vehicle)\b"),
         ("shooting", r"\b(?:shooting|shot|gunfire)\b"),

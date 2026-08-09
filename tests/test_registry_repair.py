@@ -5,6 +5,7 @@ from pathlib import Path
 
 from tct_engine.registry_repair import (
     normalize_identity_title,
+    quarantine_active_story_contamination,
     repair_registry_payload,
     strip_publisher_suffix,
 )
@@ -429,3 +430,68 @@ def test_registry_repair_does_not_rejoin_incompatible_rolling_weather_titles() -
 
     assert set(payload["stories"]) == {"story_001574", "story_001700"}
     assert payload.get("story_aliases", {}) == {}
+
+
+def test_repair_persists_index_only_broad_event_cleanup_and_reaches_fixed_point() -> None:
+    """A stale broad event mapping is runtime drift, even when stories are clean."""
+
+    payload = {
+        "stories": {
+            "story_000001": _story(
+                "story_000001",
+                events=["traffic-crash-stuart-0123456789"],
+                titles=["Driver injured in crash on U.S. 1 in Stuart"],
+                event_types=["traffic crash"],
+            )
+        },
+        "event_to_story": {
+            "traffic-crash-stuart": "story_000001",
+            "traffic-crash-stuart-0123456789": "story_000001",
+        },
+        "story_aliases": {},
+        "quarantined_stories": {},
+        "incident_anchor_to_story": {},
+    }
+
+    first = repair_registry_payload(payload)
+
+    assert first.changed is True
+    assert payload["event_to_story"] == {
+        "traffic-crash-stuart-0123456789": "story_000001"
+    }
+
+    stories_snapshot = json.loads(json.dumps(payload["stories"]))
+    event_index_snapshot = dict(payload["event_to_story"])
+    second = repair_registry_payload(payload)
+
+    assert second.changed is False
+    assert payload["stories"] == stories_snapshot
+    assert payload["event_to_story"] == event_index_snapshot
+
+
+def test_current_run_containment_revokes_stale_broad_event_mapping() -> None:
+    payload = {
+        "stories": {
+            "story_000001": _story(
+                "story_000001",
+                events=["traffic-crash-stuart-0123456789"],
+                titles=["Driver injured in crash on U.S. 1 in Stuart"],
+                event_types=["traffic crash"],
+            )
+        },
+        "event_to_story": {
+            "traffic-crash-stuart": "story_000001",
+            "traffic-crash-stuart-0123456789": "story_000001",
+        },
+        "story_aliases": {},
+        "quarantined_stories": {},
+        "incident_anchor_to_story": {},
+    }
+
+    contained = quarantine_active_story_contamination(payload)
+
+    assert contained == {"story_000001": ("broad_event_mapping_revoked",)}
+    assert payload["event_to_story"] == {
+        "traffic-crash-stuart-0123456789": "story_000001"
+    }
+    assert quarantine_active_story_contamination(payload) == {}

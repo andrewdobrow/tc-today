@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from tct_engine.incident_identity import incident_anchor_key
+from tct_engine.incident_identity import build_incident_signature, incident_anchor_key
 from tct_engine.registry_repair import repair_registry_payload
 
 
@@ -113,6 +113,26 @@ def test_named_person_death_anchor_rejects_unrelated_fire_and_shots_stories():
     assert incident_anchor_key(
         titles=("Conner Ware named Florida State League Pitcher of the Week",)
     ) == ""
+
+
+def test_named_person_death_anchor_requires_title_level_death_context():
+    unrelated_body = (
+        "More stories: Patricia Brennan died in Fort Myers. Officials later held a memorial."
+    )
+    title = "Port St. Lucie man arrested after video shows him allegedly abusing small dog"
+
+    assert incident_anchor_key(
+        titles=(title,),
+        body=unrelated_body,
+        entities=("Patricia Brennan",),
+    ) == ""
+
+    signature = build_incident_signature(
+        titles=(title,),
+        body=unrelated_body,
+        entities=("Patricia Brennan",),
+    )
+    assert signature.family != "named_person_death"
 
 
 def test_quoted_official_does_not_displace_named_death_subject():

@@ -71,6 +71,7 @@ try:
     from tct_engine.registry_repair import (
         is_broad_event_class_key,
         merge_story_records,
+        quarantine_active_story_contamination,
         story_quarantine_reasons,
     )
     from tct_engine.timeline_coherence import (
@@ -109,6 +110,7 @@ except Exception as exc:
     semantic_headline_similarity = None
     is_broad_event_class_key = None
     merge_story_records = None
+    quarantine_active_story_contamination = None
     story_quarantine_reasons = None
     registry_timeline_coherence_violations = None
     unified_incident_components = None
@@ -20789,6 +20791,155 @@ def _build_persistent_story_identity_integrity_report(archive, registry_payload)
     }
 
 
+def _rebind_archive_after_registry_self_heal(
+    archive, identity_index, affected_story_ids
+):
+    """Reconcile archive story IDs after a deterministic registry repair.
+
+    Timeline splitting can keep the original ID for one component while moving a
+    second source into a fresh story.  Any archive row written earlier in the same
+    run may therefore still carry the pre-repair ID.  Re-resolve only affected rows
+    from exact source identity; if exact proof is unavailable, revoke the stale ID
+    rather than preserving circular trust.
+    """
+
+    affected = {str(value or "").strip() for value in affected_story_ids if str(value or "").strip()}
+    quarantined_ids = set(
+        getattr(identity_index, "quarantined_story_ids", set()) or set()
+    )
+    changed = 0
+    rebound = []
+    revoked = []
+    for entry in archive or ():
+        if not isinstance(entry, dict):
+            continue
+        old_story_id = str(entry.get("editorial_story_id") or "").strip()
+        if not old_story_id or (
+            old_story_id not in affected and old_story_id not in quarantined_ids
+        ):
+            continue
+
+        resolved = ""
+        try:
+            resolved = str(identity_index.resolve_source(entry) or "").strip()
+        except Exception:
+            resolved = ""
+
+        if resolved:
+            if resolved != old_story_id:
+                entry["editorial_story_id"] = resolved
+                entry["_editorial_story_id"] = resolved
+                entry["identity_origin"] = "final_registry_self_heal_exact_source"
+                entry["legacy_identity_status"] = "identified"
+                changed += 1
+                rebound.append({
+                    "slug": str(entry.get("slug") or ""),
+                    "from_story_id": old_story_id,
+                    "to_story_id": resolved,
+                })
+            continue
+
+        entry.pop("editorial_story_id", None)
+        entry.pop("_editorial_story_id", None)
+        entry.pop("identity_origin", None)
+        entry["legacy_identity_status"] = "final_registry_self_heal_revoked"
+        entry["identity_repair_reason"] = "stale_story_id_after_registry_repair"
+        changed += 1
+        revoked.append({
+            "slug": str(entry.get("slug") or ""),
+            "story_id": old_story_id,
+        })
+    return changed, rebound, revoked
+
+
+def _attempt_final_persistent_story_identity_self_heal(
+    archive, root, registry_payload, initial_report
+):
+    """Repair expected registry drift before the final hard integrity gate.
+
+    The final validator remains fail-closed for unresolved authority violations,
+    non-convergent repair, or systemic corruption.  Single-story drift that the
+    deterministic registry repair already knows how to split/quarantine is normal
+    operating state and must be contained automatically instead of aborting an
+    otherwise valid scheduled publishing run.
+    """
+
+    repairable = bool(
+        initial_report.get("active_contaminated_stories")
+        or initial_report.get("broad_event_mappings")
+        or initial_report.get("archive_quarantine_references")
+        or initial_report.get("timeline_coherence_violations")
+    )
+    result = {
+        "attempted": False,
+        "converged": True,
+        "repair_passes": 0,
+        "registry_changed": False,
+        "archive_rows_rebound": 0,
+        "archive_rows_revoked": 0,
+        "affected_story_ids": [],
+    }
+    if not repairable or quarantine_active_story_contamination is None:
+        return registry_payload, result
+
+    result["attempted"] = True
+    affected_story_ids = {
+        str(row.get("story_id") or "").strip()
+        for key in (
+            "active_contaminated_stories",
+            "archive_quarantine_references",
+            "timeline_coherence_violations",
+        )
+        for row in (initial_report.get(key) or ())
+        if isinstance(row, dict) and str(row.get("story_id") or "").strip()
+    }
+    affected_story_ids.update(
+        str(row.get("story_id") or "").strip()
+        for row in (initial_report.get("broad_event_mappings") or ())
+        if isinstance(row, dict) and str(row.get("story_id") or "").strip()
+    )
+
+    # Use the bounded current-run containment path here rather than the full
+    # cross-story registry reconciliation. The production preflight already runs
+    # that expensive fixed-point repair. At the final gate we need only contain
+    # drift introduced by *this* run: prune unsupported structured keys, split
+    # incompatible timeline components, quarantine anything residual, and rebuild
+    # active event/incident indexes.
+    try:
+        contained = quarantine_active_story_contamination(registry_payload)
+        result["repair_passes"] = 1
+        affected_story_ids.update(str(value) for value in contained)
+        result["contained_story_reasons"] = {
+            str(story_id): list(reasons)
+            for story_id, reasons in contained.items()
+        }
+        result["registry_changed"] = bool(
+            contained or initial_report.get("broad_event_mappings")
+        )
+    except Exception as exc:
+        result["converged"] = False
+        result["containment_error"] = str(exc)
+
+    registry_path = root / "data" / "editorial_story_registry.json"
+    if result["registry_changed"]:
+        _atomic_write_json(registry_path, registry_payload)
+
+    if build_publication_identity_index is not None:
+        identity_index = build_publication_identity_index(registry_payload)
+        archive_changed, rebound, revoked = _rebind_archive_after_registry_self_heal(
+            archive, identity_index, affected_story_ids
+        )
+        result["archive_rows_rebound"] = len(rebound)
+        result["archive_rows_revoked"] = len(revoked)
+        if archive_changed:
+            _atomic_write_json(root / "archive.json", archive)
+        result["archive_rebound_rows"] = rebound[:25]
+        result["archive_revoked_rows"] = revoked[:25]
+
+    result["affected_story_ids"] = sorted(affected_story_ids)
+    return registry_payload, result
+
+
 def _validate_persistent_story_identity_integrity(archive, output_root=None):
     root = Path(output_root) if output_root is not None else OUTPUT_DIR
     registry_payload = _read_json_file(
@@ -20797,11 +20948,32 @@ def _validate_persistent_story_identity_integrity(archive, output_root=None):
     report = _build_persistent_story_identity_integrity_report(
         archive, registry_payload
     )
+
+    self_heal = None
+    if not report.get("passed"):
+        registry_payload, self_heal = _attempt_final_persistent_story_identity_self_heal(
+            archive, root, registry_payload, report
+        )
+        if self_heal.get("attempted"):
+            report = _build_persistent_story_identity_integrity_report(
+                archive, registry_payload
+            )
+            report["self_heal"] = self_heal
+            if self_heal.get("converged") and report.get("passed"):
+                print(
+                    "  Persistent identity self-heal contained expected registry drift: "
+                    f"{self_heal.get('repair_passes', 0)} repair pass(es), "
+                    f"{self_heal.get('archive_rows_rebound', 0)} archive rebind(s), "
+                    f"{self_heal.get('archive_rows_revoked', 0)} archive revocation(s)"
+                )
+
     path = root / "data" / "persistent-story-identity-integrity.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
-    if not report.get("passed"):
+    if not report.get("passed") or (self_heal and not self_heal.get("converged", True)):
         details = []
+        if self_heal and not self_heal.get("converged", True):
+            details.append("registry_self_heal_nonconvergent")
         if report.get("active_contaminated_stories"):
             row = report["active_contaminated_stories"][0]
             details.append(
@@ -26092,9 +26264,9 @@ def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, a
                 print(f"  Editorial audit item failed; continuing unchanged: {exc}")
 
     # A clean registry can become contaminated only after fresh evidence is attached.
-    # Contain that condition at the category batch boundary: quarantine the story,
-    # revoke its current-run candidate authority, and let publication continue using
-    # independent source/incident proof. The final integrity gate remains hard-fail.
+    # Contain that condition at the category batch boundary: deterministic timeline
+    # splits happen immediately, residual unsafe records are quarantined, and all
+    # pre-repair candidate authority is revoked for the rest of this run.
     try:
         quarantined = engine.quarantine_registry_contamination()
     except Exception as exc:
@@ -26109,8 +26281,8 @@ def _audit_editorial_candidates(engine, headlines, category_key, audited_keys, a
             for story_id in newly_quarantined
         )
         print(
-            "  Persistent registry containment: quarantined current-run "
-            f"contamination — {details}"
+            "  Persistent registry containment: contained current-run identity "
+            f"drift — {details}"
         )
 
 

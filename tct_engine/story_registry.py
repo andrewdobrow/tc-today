@@ -446,12 +446,13 @@ class StoryRegistry:
         self._write()
 
     def quarantine_active_contamination(self) -> dict[str, tuple[str, ...]]:
-        """Fail closed on story contamination introduced after registry load.
+        """Contain story contamination introduced after registry load.
 
         This is called at a production audit batch boundary, after the article's
-        timeline entry has been recorded.  A contaminated story is removed from
-        active identity authority instead of being allowed to abort the entire site
-        build several minutes later at the final publication gate.
+        timeline entry has been recorded. Deterministically repairable timeline
+        drift is split in place; residual unsafe stories are quarantined. In both
+        cases the caller revokes stale current-run identity authority instead of
+        allowing one recoverable record to abort the entire site build minutes later.
         """
         quarantined = quarantine_active_story_contamination(self.data)
         if quarantined:

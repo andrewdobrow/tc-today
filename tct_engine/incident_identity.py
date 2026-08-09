@@ -25,7 +25,7 @@ from datetime import datetime, timezone
 import re
 from typing import Any, Iterable, Mapping
 
-INCIDENT_IDENTITY_VERSION = "3.0"
+INCIDENT_IDENTITY_VERSION = "3.1"
 
 _WORD_RE = re.compile(r"[a-z0-9]+")
 _ANIMAL_QUANTITY_RE = re.compile(r"\b(\d{1,3})\s+(?:cats?|dogs?|animals?|pets?)\b", re.IGNORECASE)
@@ -77,6 +77,19 @@ _DEATH_CONTEXT_RE = re.compile(
     r"celebration of life|loss of|remember(?:ed|ing)?|honor(?:s|ed|ing)? (?:the )?life)\b",
     re.IGNORECASE,
 )
+
+
+def title_supports_named_person_death(value: object) -> bool:
+    """Return whether title-level text explicitly frames a death story.
+
+    Publisher article bodies frequently include unrelated recommendation rails,
+    navigation copy, or embedded headlines.  Those snippets are useful for
+    resolving the *name* of a death subject only after the article's own title
+    has established that the article is actually about a death.  They must never
+    create a death identity by themselves.
+    """
+
+    return bool(_DEATH_CONTEXT_RE.search(str(value or "")))
 
 # Common role words are allowed around a person's name but are not part of the
 # identity.  The patterns deliberately require a conventional first/last name.
@@ -425,9 +438,14 @@ def incident_anchor_key(
             *[str(value or "") for value in entities],
         ]
     )
-    anchor, _people = _named_person_death_anchor(full_text, entities=entities)
-    if anchor:
-        return anchor
+    # Death identity is title-gated. The body/entities may resolve the person's
+    # name for a headline such as "Firefighter dies following personal tragedy",
+    # but unrelated body/sidebar text can no longer turn an animal-cruelty,
+    # business, sports, or other story into ``named-person-death:*``.
+    if title_supports_named_person_death(" | ".join(title_values)):
+        anchor, _people = _named_person_death_anchor(full_text, entities=entities)
+        if anchor:
+            return anchor
 
     infrastructure_anchor = _infrastructure_condition_anchor(full_text)
     if infrastructure_anchor:
@@ -524,7 +542,9 @@ def build_incident_signature(
         if parsed is not None
     )
 
-    anchor, people = _named_person_death_anchor(full_text, entities=entities)
+    anchor, people = ("", ())
+    if title_supports_named_person_death(title_text):
+        anchor, people = _named_person_death_anchor(full_text, entities=entities)
     if anchor:
         evidence_titles = sum(bool(_DEATH_CONTEXT_RE.search(value)) for value in title_values)
         return IncidentSignature(

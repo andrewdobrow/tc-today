@@ -9,7 +9,11 @@ from pathlib import Path
 import pytest
 
 from tct_engine.activation import ActivationConfig, EngineMode, build_activation_preflight
-from tct_engine.registry_repair import REPAIR_VERSION, repair_registry_payload
+from tct_engine.registry_repair import (
+    REPAIR_VERSION,
+    quarantine_active_story_contamination,
+    repair_registry_payload,
+)
 from tct_engine.story_relationship import StoryRelationshipEngine, StoryRelationshipType
 from tct_engine.timeline_coherence import (
     analyze_story_timeline_coherence,
@@ -190,14 +194,14 @@ def test_registry_repair_splits_only_incompatible_component_and_is_idempotent():
     budget = _entry(
         "policy-budget-1",
         "Martin County Fire Rescue could lose $16.5M if property tax reform passes in November",
-        "https://example.com/martin-tax",
+        "https://example.com/news/martin-tax",
         "budget",
     )
     duplicate_budget = dict(budget, article_id="budget-2")
     crash = _entry(
         "named-person-death:belle-glade",
         "2 killed, 2 seriously hurt in three-vehicle crash involving semi-truck near Belle Glade",
-        "https://example.com/belle-crash",
+        "https://example.com/news/belle-crash",
         "crash",
     )
     payload = {
@@ -211,7 +215,7 @@ def test_registry_repair_splits_only_incompatible_component_and_is_idempotent():
     }
 
     first = repair_registry_payload(payload)
-    assert first.repair_version == REPAIR_VERSION == 12
+    assert first.repair_version == REPAIR_VERSION == 13
     assert first.timeline_coherence_story_records_repaired == 1
     assert first.timeline_coherence_entries_detached == 1
     assert first.remaining_timeline_coherence_violations == 0
@@ -232,6 +236,55 @@ def test_registry_repair_splits_only_incompatible_component_and_is_idempotent():
     # Ignore repair history timestamps; the story graph itself must be stable.
     assert payload["stories"] == snapshot["stories"]
     assert payload["event_to_story"] == snapshot["event_to_story"]
+
+
+def test_current_run_containment_splits_animal_cruelty_from_unrelated_fire():
+    dog = _entry(
+        "named-person-death:patricia-brennan",
+        "Port St. Lucie man arrested after video shows him allegedly abusing small dog",
+        "https://example.com/dog-abuse",
+        "dog",
+    )
+    fire = _entry(
+        "named-person-death:fort-myers",
+        "Costco reopens following electrical fire at Martin County location",
+        "https://example.com/costco-fire",
+        "fire",
+    )
+    payload = {
+        "schema": 10,
+        "next_story_id": 2,
+        "stories": {"story_000001": _story("story_000001", [dog, fire])},
+        "event_to_story": {
+            dog["event_key"]: "story_000001",
+            fire["event_key"]: "story_000001",
+        },
+        "story_aliases": {},
+        "quarantined_stories": {},
+        "registry_repair": {},
+        "incident_anchor_to_story": {},
+    }
+
+    contained = quarantine_active_story_contamination(payload)
+
+    assert contained == {
+        "story_000001": (
+            "unsupported_structured_event_key_revoked",
+            "timeline_coherence_repaired_split",
+        )
+    }
+    assert "story_000001" in payload["stories"]
+    assert len(payload["stories"]) == 2
+    assert registry_timeline_coherence_violations(payload["stories"]) == []
+    assert not payload["quarantined_stories"]
+    assert all(
+        not str(event_key).startswith("named-person-death:")
+        for story in payload["stories"].values()
+        for event_key in story.get("events", ())
+    )
+    titles = sorted(story["canonical_title"] for story in payload["stories"].values())
+    assert any("small dog" in title for title in titles)
+    assert any("Costco reopens" in title for title in titles)
 
 
 def test_relationship_engine_rejects_hard_timeline_conflict():
@@ -315,6 +368,69 @@ def test_persistent_identity_report_fails_closed_on_timeline_violation():
     assert report["passed"] is False
     assert report["summary"]["timeline_coherence_violation_count"] == 1
     assert report["timeline_coherence_violations"][0]["story_id"] == "story_bad"
+
+
+def test_final_integrity_validator_self_heals_repairable_timeline_drift(tmp_path):
+    generate = _load_generate_module()
+    budget = _entry(
+        "policy-budget-1",
+        "Martin County Fire Rescue could lose $16.5M if property tax reform passes in November",
+        "https://example.com/news/martin-tax",
+        "budget",
+    )
+    crash = _entry(
+        "named-person-death:belle-glade",
+        "2 killed, 2 seriously hurt in three-vehicle crash involving semi-truck near Belle Glade",
+        "https://example.com/news/belle-crash",
+        "crash",
+    )
+    bad_story = _story("story_bad", [budget, crash])
+    registry = {
+        "schema": 10,
+        "next_story_id": 1,
+        "stories": {"story_bad": bad_story},
+        "event_to_story": {
+            "policy-budget-1": "story_bad",
+            "named-person-death:belle-glade": "story_bad",
+        },
+        "story_aliases": {},
+        "quarantined_stories": {},
+        "registry_repair": {},
+        "incident_anchor_to_story": {},
+    }
+    archive = [
+        {
+            "slug": "budget-story",
+            "headline": budget["title"],
+            "source_url": budget["source"],
+            "editorial_story_id": "story_bad",
+        },
+        {
+            "slug": "crash-story",
+            "headline": crash["title"],
+            "source_url": crash["source"],
+            "editorial_story_id": "story_bad",
+        },
+    ]
+    (tmp_path / "data").mkdir()
+    (tmp_path / "data" / "editorial_story_registry.json").write_text(
+        json.dumps(registry), encoding="utf-8"
+    )
+    (tmp_path / "archive.json").write_text(json.dumps(archive), encoding="utf-8")
+
+    report = generate._validate_persistent_story_identity_integrity(archive, tmp_path)
+
+    assert report["passed"] is True
+    assert report["self_heal"]["attempted"] is True
+    assert report["self_heal"]["converged"] is True
+    repaired_registry = json.loads(
+        (tmp_path / "data" / "editorial_story_registry.json").read_text(encoding="utf-8")
+    )
+    assert len(repaired_registry["stories"]) == 2
+    assert registry_timeline_coherence_violations(repaired_registry["stories"]) == []
+    repaired_archive = json.loads((tmp_path / "archive.json").read_text(encoding="utf-8"))
+    assert repaired_archive[0]["editorial_story_id"] == "story_bad"
+    assert repaired_archive[1]["editorial_story_id"] != "story_bad"
 
 
 def test_published_story_guard_cannot_suppress_unresolved_timeline_violation():

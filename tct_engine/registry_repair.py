@@ -16,6 +16,7 @@ from .incident_identity import (
     build_story_incident_signature,
     compare_incident_signatures,
     named_person_death_subjects,
+    title_supports_named_person_death,
     timeline_incident_anchor,
 )
 from .timeline_coherence import (
@@ -37,7 +38,7 @@ from .source_identity import (
     story_source_identity_urls,
 )
 
-REPAIR_VERSION = 12
+REPAIR_VERSION = 13
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
@@ -46,7 +47,7 @@ _BROAD_EVENT_PREFIXES = ("traffic-crash-", "fire-")
 _BROAD_NAMED_DEATH_LOCATION_TOKENS = frozenset({
     "avenue", "beach", "boulevard", "bridge", "circle", "county",
     "drive", "highway", "interstate", "lane", "parkway", "road",
-    "street", "trail", "turnpike", "way", "fort", "pierce", "stuart",
+    "street", "trail", "turnpike", "way", "fort", "pierce", "myers", "stuart",
     "vero", "sebastian", "lucie", "martin", "river", "florida",
     "north", "south", "east", "west", "northeast", "northwest",
     "southeast", "southwest", "state", "us",
@@ -260,6 +261,91 @@ def story_quarantine_reasons(story: Mapping[str, Any]) -> tuple[str, ...]:
     return tuple(reasons)
 
 
+def _story_title_evidence(story: Mapping[str, Any]) -> tuple[str, ...]:
+    """Return title-like evidence without importing noisy body/entity text."""
+
+    values: list[str] = []
+    for value in (story.get("canonical_title"), *(story.get("titles", ()) or ())):
+        text = str(value or "").strip()
+        if text:
+            values.append(text)
+    for candidate in story.get("title_candidates", ()) or ():
+        if not isinstance(candidate, Mapping):
+            continue
+        text = str(candidate.get("title") or "").strip()
+        if text:
+            values.append(text)
+    for entry in story.get("timeline", ()) or ():
+        if not isinstance(entry, Mapping):
+            continue
+        text = str(entry.get("title") or "").strip()
+        if text:
+            values.append(text)
+    return tuple(dict.fromkeys(values))
+
+
+def _prune_unsupported_named_person_death_event_keys(
+    story: MutableMapping[str, Any],
+) -> int:
+    """Revoke death keys from stories with no title-level death evidence.
+
+    Older extraction could inspect an entire publisher page and accidentally turn
+    an unrelated sidebar death headline into ``named-person-death:*`` authority.
+    A real death story always has death/mourning language in at least one retained
+    title-like field.  Historical decision traces are preserved, but active event
+    and timeline authority for unsupported keys is removed.
+    """
+
+    death_supported = any(
+        title_supports_named_person_death(title)
+        for title in _story_title_evidence(story)
+    )
+    if death_supported:
+        return 0
+
+    unsupported = {
+        str(value or "").strip()
+        for value in (story.get("events", ()) or ())
+        if str(value or "").strip().casefold().startswith("named-person-death:")
+    }
+    for entry in story.get("timeline", ()) or ():
+        if not isinstance(entry, Mapping):
+            continue
+        event_key = str(entry.get("event_key") or "").strip()
+        if event_key.casefold().startswith("named-person-death:"):
+            unsupported.add(event_key)
+    if not unsupported:
+        return 0
+
+    story["events"] = [
+        value for value in (story.get("events", ()) or ())
+        if str(value or "").strip() not in unsupported
+    ]
+    story["incident_anchors"] = [
+        value for value in (story.get("incident_anchors", ()) or ())
+        if str(value or "").strip() not in unsupported
+    ]
+
+    revoked = 0
+    timeline: list[dict[str, Any]] = []
+    for original in story.get("timeline", ()) or ():
+        if not isinstance(original, Mapping):
+            continue
+        entry = dict(original)
+        event_key = str(entry.get("event_key") or "").strip()
+        if event_key in unsupported:
+            entry["identity_event_key_revoked"] = event_key
+            entry["identity_event_key_revoked_reason"] = (
+                "named_person_death_without_title_death_context"
+            )
+            entry["event_key"] = ""
+            revoked += 1
+        timeline.append(entry)
+    story["timeline"] = timeline
+    story["unsupported_structured_event_keys_revoked"] = sorted(unsupported)
+    return max(revoked, len(unsupported))
+
+
 def _story_number(story_id: str) -> int:
     match = _STORY_ID_RE.search(story_id)
     return int(match.group(1)) if match else 10**12
@@ -395,6 +481,7 @@ class RegistryRepairReport:
     selective_incident_anchor_groups_repaired: int
     selective_timeline_entries_moved: int
     contaminated_story_records_preserved: int
+    unsupported_structured_event_keys_pruned: int
     timeline_coherence_story_records_repaired: int
     timeline_coherence_entries_detached: int
     timeline_coherence_new_story_ids: tuple[str, ...]
@@ -435,6 +522,7 @@ class RegistryRepairReport:
             "selective_incident_anchor_groups_repaired": self.selective_incident_anchor_groups_repaired,
             "selective_timeline_entries_moved": self.selective_timeline_entries_moved,
             "contaminated_story_records_preserved": self.contaminated_story_records_preserved,
+            "unsupported_structured_event_keys_pruned": self.unsupported_structured_event_keys_pruned,
             "timeline_coherence_story_records_repaired": self.timeline_coherence_story_records_repaired,
             "timeline_coherence_entries_detached": self.timeline_coherence_entries_detached,
             "timeline_coherence_new_story_ids": list(self.timeline_coherence_new_story_ids),
@@ -764,6 +852,7 @@ def _component_title_matches(
 
 def _event_family_label(family: str) -> str:
     return {
+        "animal_cruelty": "animal cruelty",
         "animal_rescue": "animal rescue",
         "dui": "dui",
         "execution": "execution",
@@ -1203,38 +1292,110 @@ def _merge_component_batch(
 def quarantine_active_story_contamination(
     payload: MutableMapping[str, Any],
 ) -> dict[str, tuple[str, ...]]:
-    """Quarantine active records that became incoherent during the current run.
+    """Contain active records that became incoherent during the current run.
 
     ``repair_registry_payload`` performs this check at load time, but a clean story
     can become contaminated later when fresh candidate evidence is attached.  This
-    lightweight containment pass intentionally does *only* the quarantine/revocation
-    work: it does not run expensive cross-story reconciliation.  The contaminated
-    story loses all active event/alias/incident-anchor authority while its snapshot is
-    retained for diagnosis and later deterministic repair.
+    lightweight containment pass intentionally avoids expensive cross-story
+    reconciliation. It first revokes unsupported structured event keys, then splits
+    high-confidence timeline conflicts in place. Only residual contamination that
+    cannot be repaired safely is quarantined. Returned story IDs must have their
+    current-run candidate authority revoked even when the registry record itself was
+    successfully repaired, because already-audited source decisions may still point
+    at the pre-repair identity.
     """
     stories: MutableMapping[str, MutableMapping[str, Any]] = payload.setdefault("stories", {})
     aliases: MutableMapping[str, str] = payload.setdefault("story_aliases", {})
     quarantined: MutableMapping[str, Any] = payload.setdefault("quarantined_stories", {})
 
     reasons_by_story: dict[str, tuple[str, ...]] = {}
+
+    # Stale broad class mappings are index drift, not story identity.  Revoke
+    # them here as part of the same bounded containment pass so the final gate
+    # never needs the expensive full registry repair merely to clean an index.
+    broad_mapping_story_ids: set[str] = set()
+    for event_key, mapped_story_id in (payload.get("event_to_story", {}) or {}).items():
+        if not is_broad_event_class_key(event_key):
+            continue
+        mapped_story_id = str(mapped_story_id or "").strip()
+        if mapped_story_id:
+            broad_mapping_story_ids.add(mapped_story_id)
+            reasons_by_story[mapped_story_id] = tuple(dict.fromkeys([
+                *reasons_by_story.get(mapped_story_id, ()),
+                "broad_event_mapping_revoked",
+            ]))
+
+    unsupported_keys_pruned = 0
     for story_id, story in list(stories.items()):
-        reasons = story_quarantine_reasons(story)
+        if not isinstance(story, MutableMapping):
+            continue
+        pruned = _prune_unsupported_named_person_death_event_keys(story)
+        unsupported_keys_pruned += pruned
+        if pruned:
+            reasons_by_story[story_id] = (
+                "unsupported_structured_event_key_revoked",
+            )
+
+    # Timeline coherence is a deterministic one-story repair and therefore safe at
+    # a category boundary.  Splitting here prevents a recoverable current-run drift
+    # from surviving until the final publication validator.
+    timeline_before = {
+        str(row.get("story_id") or "")
+        for row in registry_timeline_coherence_violations(stories)
+        if str(row.get("story_id") or "")
+    }
+    timeline_repaired = 0
+    timeline_detached = 0
+    timeline_new_story_ids: list[str] = []
+    if timeline_before:
+        (
+            timeline_repaired,
+            timeline_detached,
+            timeline_new_story_ids,
+            _timeline_split_story_ids,
+        ) = _repair_timeline_coherence(payload)
+        timeline_after = {
+            str(row.get("story_id") or "")
+            for row in registry_timeline_coherence_violations(stories)
+            if str(row.get("story_id") or "")
+        }
+        for story_id in sorted(timeline_before - timeline_after, key=_story_number):
+            reasons_by_story[story_id] = tuple(dict.fromkeys([
+                *reasons_by_story.get(story_id, ()),
+                "timeline_coherence_repaired_split",
+            ]))
+    else:
+        timeline_after = set()
+
+    # A residual coherence violation means the detector found a condition the
+    # deterministic splitter could not make safe. Quarantine that story instead of
+    # sacrificing the entire publishing run.
+    residual_timeline = set(timeline_after)
+    persistently_quarantined_ids: set[str] = set()
+    for story_id, story in list(stories.items()):
+        reasons = list(story_quarantine_reasons(story))
+        if story_id in residual_timeline:
+            reasons.append("timeline_coherence_unresolved")
         if not reasons:
             continue
+        reasons = list(dict.fromkeys(reasons))
         snapshot = dict(story)
         snapshot["quarantined_at"] = _utc_now()
         snapshot["quarantine_reasons"] = list(reasons)
         snapshot["repair_version"] = REPAIR_VERSION
         quarantined[story_id] = snapshot
         del stories[story_id]
-        reasons_by_story[story_id] = reasons
+        reasons_by_story[story_id] = tuple(dict.fromkeys([
+            *reasons_by_story.get(story_id, ()),
+            *reasons,
+        ]))
+        persistently_quarantined_ids.add(story_id)
 
-    if not reasons_by_story:
+    if not reasons_by_story and not unsupported_keys_pruned and not broad_mapping_story_ids:
         return {}
 
-    quarantined_ids = set(reasons_by_story)
     for alias, target in list(aliases.items()):
-        if alias in quarantined_ids or target in quarantined_ids:
+        if alias in persistently_quarantined_ids or target in persistently_quarantined_ids:
             del aliases[alias]
 
     event_to_story: dict[str, str] = {}
@@ -1245,13 +1406,39 @@ def quarantine_active_story_contamination(
                 event_to_story[value] = story_id
     payload["event_to_story"] = event_to_story
 
-    anchors = payload.get("incident_anchor_to_story", {})
-    if isinstance(anchors, dict):
-        payload["incident_anchor_to_story"] = {
-            str(anchor): str(story_id)
-            for anchor, story_id in anchors.items()
-            if str(anchor).strip() and str(story_id) in stories
-        }
+    # Preserve valid existing anchor mappings for untouched stories, but rebuild
+    # repaired/split story anchors from the active records so a detached component
+    # cannot leave its incident anchor pointing at the former owner.
+    existing_anchors = payload.get("incident_anchor_to_story", {})
+    repaired_ids = set(timeline_before)
+    rebuilt_anchors: dict[str, str] = {}
+    if isinstance(existing_anchors, dict):
+        for anchor, story_id in existing_anchors.items():
+            anchor = str(anchor or "").strip()
+            story_id = str(story_id or "").strip()
+            if anchor and story_id in stories and story_id not in repaired_ids:
+                rebuilt_anchors[anchor] = story_id
+    for story_id, story in stories.items():
+        for anchor in story.get("incident_anchors", ()) or ():
+            anchor = str(anchor or "").strip()
+            if anchor:
+                rebuilt_anchors[anchor] = story_id
+    payload["incident_anchor_to_story"] = rebuilt_anchors
+
+    repair_state = payload.setdefault("registry_repair", {})
+    repair_state["current_run_containment"] = {
+        "repair_version": REPAIR_VERSION,
+        "generated_at": _utc_now(),
+        "unsupported_structured_event_keys_pruned": unsupported_keys_pruned,
+        "broad_event_mapping_story_ids": sorted(broad_mapping_story_ids, key=_story_number),
+        "timeline_story_records_repaired": timeline_repaired,
+        "timeline_entries_detached": timeline_detached,
+        "timeline_new_story_ids": list(timeline_new_story_ids),
+        "persistently_quarantined_story_ids": sorted(
+            persistently_quarantined_ids, key=_story_number
+        ),
+        "contained_story_ids": sorted(reasons_by_story, key=_story_number),
+    }
 
     return reasons_by_story
 
@@ -1260,6 +1447,15 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
     aliases: MutableMapping[str, str] = payload.setdefault("story_aliases", {})
     quarantined: MutableMapping[str, Any] = payload.setdefault("quarantined_stories", {})
     before = len(stories)
+    event_index_before = dict(payload.get("event_to_story") or {})
+    incident_index_before = dict(payload.get("incident_anchor_to_story") or {})
+
+    unsupported_structured_event_keys_pruned = 0
+    for story in list(stories.values()):
+        if isinstance(story, MutableMapping):
+            unsupported_structured_event_keys_pruned += (
+                _prune_unsupported_named_person_death_event_keys(story)
+            )
 
     quarantine_reasons: dict[str, tuple[str, ...]] = {}
     for story_id, story in list(stories.items()):
@@ -1439,16 +1635,34 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
             if value and not is_broad_event_class_key(value):
                 event_to_story[value] = story_id
     payload["event_to_story"] = event_to_story
-    # Structured incident anchors are a first-class registry index.  New feed
-    # coverage can resolve directly to the canonical story before generic event
-    # keys or semantic similarity are considered.
+    # Structured incident anchors are a first-class registry index. Rebuild them
+    # from the *final* active story graph after every split/merge layer.  Reusing
+    # the pre-split map can leave an anchor pointing at the component that retained
+    # the old story ID even when the anchored timeline entry moved to a fresh ID.
+    anchor_candidates: dict[str, set[str]] = {}
+    for story_id, story in stories.items():
+        for anchor in story.get("incident_anchors", ()) or ():
+            anchor = str(anchor or "").strip()
+            if anchor:
+                anchor_candidates.setdefault(anchor, set()).add(story_id)
+        subjects = named_person_death_subjects(story)
+        for entry in story.get("timeline", ()) or ():
+            if not isinstance(entry, Mapping):
+                continue
+            anchor = timeline_incident_anchor(entry, inherited_subjects=subjects)
+            if anchor:
+                anchor_candidates.setdefault(anchor, set()).add(story_id)
+
     resolved_incident_anchors: dict[str, str] = {}
-    for anchor, story_id in incident_anchor_to_story.items():
-        resolved = _resolve_alias_target(str(story_id), aliases) or str(story_id)
-        if resolved in stories:
-            resolved_incident_anchors[anchor] = resolved
+    for anchor, candidate_ids in sorted(anchor_candidates.items()):
+        active_ids = {story_id for story_id in candidate_ids if story_id in stories}
+        if not active_ids:
+            continue
+        resolved_incident_anchors[anchor] = choose_primary_story_id(active_ids, stories)
     incident_anchor_to_story = resolved_incident_anchors
     payload["incident_anchor_to_story"] = incident_anchor_to_story
+    event_index_changed = event_to_story != event_index_before
+    incident_index_changed = incident_anchor_to_story != incident_index_before
 
     removed = sum(len(values) for values in merged_story_ids.values())
     remaining_duplicates = _count_exact_duplicate_title_groups(stories)
@@ -1461,11 +1675,14 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
         repair_version=REPAIR_VERSION,
         changed=bool(
             quarantine_reasons
+            or unsupported_structured_event_keys_pruned
             or removed
             or selective_entries_moved
             or timeline_stories_repaired
             or unified_removed
             or alias_changes
+            or event_index_changed
+            or incident_index_changed
         ),
         active_stories_before=before,
         active_stories_after=len(stories),
@@ -1499,6 +1716,7 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
         selective_incident_anchor_groups_repaired=selective_groups,
         selective_timeline_entries_moved=selective_entries_moved,
         contaminated_story_records_preserved=contaminated_preserved,
+        unsupported_structured_event_keys_pruned=unsupported_structured_event_keys_pruned,
         timeline_coherence_story_records_repaired=timeline_stories_repaired,
         timeline_coherence_entries_detached=timeline_entries_detached,
         timeline_coherence_new_story_ids=tuple(timeline_new_story_ids),
