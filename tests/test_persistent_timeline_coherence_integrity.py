@@ -211,7 +211,7 @@ def test_registry_repair_splits_only_incompatible_component_and_is_idempotent():
     }
 
     first = repair_registry_payload(payload)
-    assert first.repair_version == REPAIR_VERSION == 11
+    assert first.repair_version == REPAIR_VERSION == 12
     assert first.timeline_coherence_story_records_repaired == 1
     assert first.timeline_coherence_entries_detached == 1
     assert first.remaining_timeline_coherence_violations == 0
@@ -361,6 +361,9 @@ def test_activation_preflight_blocks_unresolved_timeline_integrity():
 
 
 def test_production_registry_has_no_incoherent_timelines_and_repairs_exact_cases():
+    # Production story IDs are intentionally mutable.  This smoke test checks
+    # source-level invariants only; deterministic repairability itself is
+    # validated by the workflow on a scratch copy before pytest starts.
     payload = json.loads(
         (ROOT / "data" / "editorial_story_registry.json").read_text(encoding="utf-8")
     )
@@ -369,7 +372,9 @@ def test_production_registry_has_no_incoherent_timelines_and_repairs_exact_cases
     source_to_story = {}
     for story_id, story in payload["stories"].items():
         for entry in story.get("timeline", ()):
-            source_to_story[str(entry.get("url") or entry.get("source") or "")] = story_id
+            source = str(entry.get("url") or entry.get("source") or "")
+            if source:
+                source_to_story[source] = story_id
 
     pairs = [
         (
@@ -386,10 +391,21 @@ def test_production_registry_has_no_incoherent_timelines_and_repairs_exact_cases
         ),
     ]
     for left_source, right_source in pairs:
+        assert left_source in source_to_story
+        assert right_source in source_to_story
         assert source_to_story[left_source] != source_to_story[right_source]
 
-    # These three legitimate evolving stories remain single timelines.
-    for story_id in ("story_000236", "story_001806", "story_001145"):
+    # These legitimate evolving stories remain coherent regardless of which
+    # numeric persistent story ID currently owns them.
+    evolving_sources = (
+        "https://www.wptv.com/wptv-investigates/new-depositions-reveal-why-a-st-lucie-county-firefighter-turned-in-alleged-hazing-videos",
+        "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-police-investigate-domestic-related-shooting-on-se-oxmoor-terrace",
+        "https://www.wptv.com/news/state/florida-carries-out-first-double-execution-in-more-than-60-years-including-second-oldest-in-u-s-history",
+    )
+    for source in evolving_sources:
+        assert source in source_to_story
+        story_id = source_to_story[source]
         assert analyze_story_timeline_coherence(
             payload["stories"][story_id], story_id=story_id
         ).coherent is True
+

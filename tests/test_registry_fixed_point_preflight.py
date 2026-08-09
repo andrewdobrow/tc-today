@@ -122,17 +122,28 @@ def test_registry_preflight_writes_repair_and_verifies_clean_second_pass(tmp_pat
     assert second["changed"] is False
 
 
-def test_workflows_normalize_registry_before_validation_and_pytest():
-    for relative in (
-        ".github/workflows/test-editorial-engine.yml",
-        ".github/workflows/update.yml",
-    ):
-        text = (ROOT / relative).read_text(encoding="utf-8")
-        preflight = text.index("Normalize persistent story registry")
-        validation = text.index("Validate editorial package")
-        tests = text.index("Run editorial engine tests")
-        assert preflight < validation < tests
-        assert "python scripts/repair_editorial_story_registry.py" in text
+def test_workflows_verify_registry_repairability_without_coupling_tests_to_mutated_ids():
+    test_workflow = (ROOT / ".github/workflows/test-editorial-engine.yml").read_text(encoding="utf-8")
+    preflight = test_workflow.index("Verify persistent story registry is deterministically repairable")
+    validation = test_workflow.index("Validate editorial package")
+    tests = test_workflow.index("Run editorial engine tests")
+    assert preflight < validation < tests
+    assert '$RUNNER_TEMP/editorial_story_registry.json' in test_workflow
+    assert '--registry "$RUNNER_TEMP/editorial_story_registry.json"' in test_workflow
+    assert "Normalize persistent story registry" not in test_workflow
+
+    production_workflow = (ROOT / ".github/workflows/update.yml").read_text(encoding="utf-8")
+    preflight = production_workflow.index("Normalize persistent story registry")
+    validation = production_workflow.index("Validate editorial package")
+    tests = production_workflow.index("Run editorial engine tests")
+    assert preflight < validation < tests
+    assert "python scripts/repair_editorial_story_registry.py" in production_workflow
+
+    # Runtime hotfix scripts are verification-only now. Production must never
+    # silently rewrite generator source before tests or publication.
+    for text in (test_workflow, production_workflow):
+        assert "python scripts/apply_generator_runtime_hotfix.py --check" in text
+        assert "python scripts/apply_false_jurisdiction_hotfix.py --check" in text
 
 
 def test_registry_preflight_converges_when_second_top_level_pass_exposes_merge(tmp_path, monkeypatch):
@@ -200,3 +211,34 @@ def test_registry_preflight_converges_when_second_top_level_pass_exposes_merge(t
     assert result["verification_clean"] is True
     assert set(persisted["stories"]) == {"story_002776"}
     assert persisted["story_aliases"]["story_002777"] == "story_002776"
+
+
+def test_aliases_are_flattened_to_active_canonical_after_canonical_is_merged():
+    payload = {
+        "stories": {
+            "story_000001": _story("story_000001", "Original fragment", "event-a"),
+            "story_000002": _story("story_000002", "Intermediate canonical", "event-b"),
+            "story_000003": _story("story_000003", "Final canonical", "event-c"),
+        },
+        "event_to_story": {},
+        "story_aliases": {"story_000001": "story_000002"},
+    }
+    # Simulate a later authoritative merge of the former canonical into a new
+    # active canonical. The repair representation must collapse the old chain.
+    registry_repair.merge_story_records(
+        payload["stories"]["story_000003"], payload["stories"]["story_000002"]
+    )
+    del payload["stories"]["story_000001"]
+    del payload["stories"]["story_000002"]
+    payload["story_aliases"]["story_000002"] = "story_000003"
+
+    changes = registry_repair._flatten_story_aliases(
+        payload["story_aliases"],
+        payload["stories"],
+        payload.setdefault("quarantined_stories", {}),
+    )
+
+    assert changes == 1
+    assert payload["story_aliases"]["story_000001"] == "story_000003"
+    assert payload["story_aliases"]["story_000002"] == "story_000003"
+    assert all(target in payload["stories"] for target in payload["story_aliases"].values())

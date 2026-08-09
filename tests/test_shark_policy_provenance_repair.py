@@ -65,12 +65,27 @@ def test_shark_sighting_story_remains_separate_in_registry():
         )
     )
 
-    assert "story_001155" in registry["stories"]
-    assert "story_001783" in registry["stories"]
-    assert registry["story_aliases"].get("story_001783") != "story_001155"
+    policy_source = "https://www.wpbf.com/article/martin-county-florida-shark-fishing-beach-rules/73288368"
+    sighting_source = "https://www.wpbf.com/article/florida-sharks-caught-on-video-off-shoremartin-county-jupiter/73324831"
+
+    def story_for_source(source_url):
+        matches = [
+            (story_id, story)
+            for story_id, story in registry["stories"].items()
+            if any(
+                str(entry.get("url") or entry.get("source") or "") == source_url
+                for entry in story.get("timeline", ())
+            )
+        ]
+        assert len(matches) == 1, (source_url, [story_id for story_id, _ in matches])
+        return matches[0]
+
+    policy_id, policy_story = story_for_source(policy_source)
+    sighting_id, _ = story_for_source(sighting_source)
+    assert policy_id != sighting_id
     assert all(
         "sharks caught on video" not in title.lower()
-        for title in registry["stories"]["story_001155"].get("titles", [])
+        for title in policy_story.get("titles", [])
     )
 
 

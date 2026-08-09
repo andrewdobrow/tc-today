@@ -100,10 +100,11 @@ def test_exact_bad_publication_is_retired_from_every_surface(tmp_path):
             assert "safe-after" in text
     assert 'data-cat-hero="all"' in (tmp_path / "index.html").read_text(encoding="utf-8")
 
-def test_workflows_patch_and_repair_before_tests_and_generation():
+def test_workflows_verify_guard_and_repair_before_tests_and_generation():
     for name in ("test-editorial-engine.yml", "update.yml"):
         text = (ROOT / ".github" / "workflows" / name).read_text(encoding="utf-8")
-        assert text.index("Apply false-jurisdiction source guard") < text.index("Run editorial engine tests")
+        assert text.index("Verify false-jurisdiction source guard is baked in") < text.index("Run editorial engine tests")
+        assert "python scripts/apply_false_jurisdiction_hotfix.py --check" in text
         assert text.index("Retire false-jurisdiction publication") < text.index("Run editorial engine tests")
     production = (ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8")
     assert production.index("Retire false-jurisdiction publication") < production.index("Generate news")

@@ -37,7 +37,7 @@ from .source_identity import (
     story_source_identity_urls,
 )
 
-REPAIR_VERSION = 11
+REPAIR_VERSION = 12
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
@@ -1098,6 +1098,70 @@ def _count_publisher_title_duplicate_groups(stories: Mapping[str, Mapping[str, A
     return sum(1 for story_ids in title_index.values() if len(story_ids) > 1)
 
 
+def _resolve_alias_target(
+    story_id: str,
+    aliases: Mapping[str, str],
+) -> str | None:
+    """Resolve an alias chain to its terminal target, rejecting cycles.
+
+    Persistent story IDs are implementation details, not durable semantic IDs.
+    A story that was canonical yesterday can itself be merged tomorrow.  Keeping
+    multi-hop alias chains is legal for ``StoryRegistry`` lookups, but it makes
+    other consumers accidentally depend on intermediate IDs and leaves indexes
+    vulnerable to one-hop resolution bugs.
+    """
+
+    current = str(story_id or "").strip()
+    if not current:
+        return None
+    seen: set[str] = set()
+    while current in aliases:
+        if current in seen:
+            return None
+        seen.add(current)
+        target = str(aliases.get(current) or "").strip()
+        if not target:
+            return None
+        current = target
+    return current
+
+
+def _flatten_story_aliases(
+    aliases: MutableMapping[str, str],
+    stories: Mapping[str, Mapping[str, Any]],
+    quarantined: Mapping[str, Any],
+) -> int:
+    """Canonicalize aliases so every retained alias points to one active story.
+
+    This makes the registry representation idempotent even when a former
+    canonical story is later merged into a better canonical.  Invalid aliases
+    (cycles, self-links, active aliases, or links to missing/quarantined records)
+    are removed rather than allowed to become hidden identity authority.
+    """
+
+    changes = 0
+    active_ids = set(stories)
+    quarantined_ids = set(quarantined)
+    for alias in list(aliases):
+        original = str(aliases.get(alias) or "").strip()
+        target = _resolve_alias_target(alias, aliases)
+        invalid = bool(
+            not target
+            or target == alias
+            or alias in active_ids
+            or target not in active_ids
+            or target in quarantined_ids
+        )
+        if invalid:
+            del aliases[alias]
+            changes += 1
+            continue
+        if original != target:
+            aliases[alias] = target
+            changes += 1
+    return changes
+
+
 def _merge_component_batch(
     stories: MutableMapping[str, MutableMapping[str, Any]],
     aliases: MutableMapping[str, str],
@@ -1360,6 +1424,12 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
 
     unified_groups_merged += late_unified_groups
 
+    # Story IDs are mutable implementation details.  Flatten every alias after
+    # the complete merge/split pipeline so historical IDs point directly to the
+    # final active canonical instead of to an intermediate story that may have
+    # been removed by a later repair layer.
+    alias_changes = _flatten_story_aliases(aliases, stories, quarantined)
+
     # Rebuild the event index from active records only. Quarantined records never
     # retain active mappings, and aliases are resolved to their chosen primary.
     event_to_story: dict[str, str] = {}
@@ -1372,11 +1442,12 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
     # Structured incident anchors are a first-class registry index.  New feed
     # coverage can resolve directly to the canonical story before generic event
     # keys or semantic similarity are considered.
-    incident_anchor_to_story = {
-        anchor: aliases.get(story_id, story_id)
-        for anchor, story_id in incident_anchor_to_story.items()
-        if aliases.get(story_id, story_id) in stories
-    }
+    resolved_incident_anchors: dict[str, str] = {}
+    for anchor, story_id in incident_anchor_to_story.items():
+        resolved = _resolve_alias_target(str(story_id), aliases) or str(story_id)
+        if resolved in stories:
+            resolved_incident_anchors[anchor] = resolved
+    incident_anchor_to_story = resolved_incident_anchors
     payload["incident_anchor_to_story"] = incident_anchor_to_story
 
     removed = sum(len(values) for values in merged_story_ids.values())
@@ -1394,6 +1465,7 @@ def repair_registry_payload(payload: MutableMapping[str, Any]) -> RegistryRepair
             or selective_entries_moved
             or timeline_stories_repaired
             or unified_removed
+            or alias_changes
         ),
         active_stories_before=before,
         active_stories_after=len(stories),

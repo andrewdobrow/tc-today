@@ -2,7 +2,7 @@
 """Install source-backed county jurisdiction guards into the current generator."""
 from __future__ import annotations
 from pathlib import Path
-import os, re, tempfile, py_compile
+import argparse, os, re, tempfile, py_compile
 
 ROOT = Path(__file__).resolve().parents[1]
 PATH = ROOT / "scripts" / "generate.py"
@@ -125,6 +125,14 @@ def patch(src: str) -> tuple[str, bool]:
     return src, src != original
 
 def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Verify the generator already contains the source-authority guard without writing",
+    )
+    args = parser.parse_args()
+
     src = PATH.read_text(encoding="utf-8")
     patched, changed = patch(src)
     required = (
@@ -138,6 +146,14 @@ def main() -> int:
     for token in required:
         if token not in patched:
             raise SystemExit(f"False-jurisdiction hotfix verification failed: {token}")
+    if args.check:
+        if changed:
+            raise SystemExit(
+                "False-jurisdiction source guard is required but has not been baked into scripts/generate.py"
+            )
+        py_compile.compile(str(PATH), doraise=True)
+        print("False-jurisdiction generator guard check PASSED")
+        return 0
     if changed:
         fd, name = tempfile.mkstemp(prefix="generate.", suffix=".tmp", dir=PATH.parent)
         os.close(fd)
