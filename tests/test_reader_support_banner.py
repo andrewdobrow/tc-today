@@ -276,4 +276,11 @@ def test_both_workflows_run_reader_support_preflight_before_validation_and_pytes
         assert preflight < validate < pytest_step
         assert "_migrate_legacy_article_support_banners(Path.cwd(), limit=50)" in workflow
         assert "TCT_ARTICLE_BANNER_MODE" in workflow
-        assert "TCT_MEMBERSHIP_UI_ENABLED" in workflow
+
+    # Editorial CI must be deterministic and isolated from the live membership
+    # launch switch. Launch-state behavior is covered by explicit synthetic tests
+    # above; inheriting the repository variable changes unrelated banner tests.
+    test_workflow = (ROOT / ".github" / "workflows" / "test-editorial-engine.yml").read_text(encoding="utf-8")
+    production_workflow = (ROOT / ".github" / "workflows" / "update.yml").read_text(encoding="utf-8")
+    assert "vars.TCT_MEMBERSHIP_UI_ENABLED" not in test_workflow
+    assert "TCT_MEMBERSHIP_UI_ENABLED" in production_workflow
