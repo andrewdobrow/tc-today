@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "gate_version": "1.4",
-  "generated_at": "2026-08-09T08:56:30.124472+00:00",
+  "generated_at": "2026-08-09T10:31:13.437612+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -44,20 +44,20 @@
     "custom_articles": "excluded_authoritative_custom_contract_retained"
   },
   "summary": {
-    "evaluations": 68,
-    "candidate_pairs": 2,
+    "evaluations": 70,
+    "candidate_pairs": 3,
     "structured_conflict_overrides": 2,
-    "model_calls": 0,
-    "cache_hits": 2,
-    "no_candidate_passes": 66,
-    "duplicates_preserved": 0,
+    "model_calls": 3,
+    "cache_hits": 0,
+    "no_candidate_passes": 67,
+    "duplicates_preserved": 1,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 0,
+    "new_stories_allowed": 1,
     "retroactive_rows_retained": 68,
     "holds": 0,
     "retroactive_redirects": 0,
-    "registry_story_records_merged": 0,
-    "registry_aliases_written": 0,
+    "registry_story_records_merged": 1,
+    "registry_aliases_written": 1,
     "material_update_composer_calls": 0,
     "material_updates_applied": 0,
     "material_update_redirects": 0,
@@ -460,14 +460,14 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
-        "confidence": 0.95,
+        "confidence": 0.98,
         "shared_anchors": [],
         "novel_facts": [
           "Martin County Commission District 4 race",
           "Three candidates: John Dial, Sarah Heard, John Kaz Kazanjian",
           "August 18 Primary Election for Martin County"
         ],
-        "reason": "The incoming article covers a Martin County Commission District 4 race with three specific candidates (Dial, Heard, Kazanjian), while the candidate covers an Indian River County Commission District 2 race with different candidates (McPartlan, Pippin, Robinson, Hardingham). These are completely different county commission races in different counties (Martin vs. Indian River) for different districts (District 4 vs. District 2) with no shared candidates. The high headline similarity is due to generic election coverage vocabulary and the same publication format from Hometown News, but there are no concrete shared anchors indicating the same real-world event.",
+        "reason": "The incoming article covers a Martin County Commission District 4 race with three candidates (Dial, Heard, Kazanjian), while the candidate covers an Indian River County Commission District 2 race with four candidates. These are completely different county commission races in different counties (Martin vs. Indian River) for different districts (4 vs. 2) with different candidates. The high headline similarity is due to generic election coverage vocabulary and the same source format, but there are no concrete shared anchors. The same August 18 election date is a regional primary date, not a unique identifier.",
         "validation_errors": []
       }
     },
@@ -1415,13 +1415,17 @@
         "same_real_world_event": false,
         "material_new_update": false,
         "confidence": 0.95,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Ricky Lee Schieferstein charged with animal cruelty",
-          "Case reported through social media tags",
-          "Sheriff's office warning about using social media to report crimes instead of 911"
+        "shared_anchors": [
+          "St. Lucie County Sheriff's Office",
+          "St. Lucie County jurisdiction",
+          "Similar publication timeframe"
         ],
-        "reason": "The incoming article is about an animal cruelty case involving Ricky Lee Schieferstein and a public warning about reporting crimes via social media. The candidate is about Daniel Eugene Holmes charged with burglary and loitering on August 5. These are completely different incidents with different defendants, different charges (animal cruelty vs. burglary/loitering), different dates, and different fact patterns. The only commonality is St. Lucie County Sheriff's Office jurisdiction and similar source publication format.",
+        "novel_facts": [
+          "Animal cruelty case involving Ricky Lee Schieferstein",
+          "Sheriff's Office warning about reporting crimes via social media tags",
+          "Crime reported through social media rather than 911"
+        ],
+        "reason": "The incoming article is about an animal cruelty case involving Ricky Lee Schieferstein and a Sheriff's Office warning about using social media to report crimes. The candidate is about burglary and loitering charges near St. Lucie Village involving a different unnamed 42-year-old man. These are clearly different criminal cases with different suspects, different crime types (animal cruelty vs. burglary/loitering), and different fact patterns. The only commonalities are the jurisdiction (St. Lucie County) and the same law enforcement agency, which are not sufficient to establish the same real-world event.",
         "validation_errors": []
       }
     },
@@ -1443,20 +1447,135 @@
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
       }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "St. Lucie County Sheriff's Office seeks help finding horse stolen from Port St. Lucie pasture",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-horse-reported-missing-after-theft-from-pasture-in-port-st-lucie/73383399",
+      "incoming_story_id": "story_002646",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Port St. Lucie police release 911 call from weekend murder-suicide on Southeast Oxmoor Terrace",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-port-st-lucie-murder-suicide-911-calls/73360910",
+      "incoming_story_id": "story_000236",
+      "candidates": [
+        {
+          "slug": "2026-08-02-elizabeth-ortega-killed-ralph-varela-sr-dead-in-port-st-lucie-murder-suicide-on",
+          "headline": "Port St. Lucie police release 911 call in fatal domestic shooting of Palm Beach Sheriff's Office employee",
+          "retrieval_score": 1.0,
+          "headline_similarity": 0.511,
+          "similarity_basis": "source_headline",
+          "shared_headline_tokens": [
+            "911",
+            "call",
+            "lucie",
+            "police",
+            "port",
+            "release",
+            "st"
+          ],
+          "shared_topic_tokens": [
+            "911",
+            "call",
+            "police",
+            "release"
+          ],
+          "day_gap": 6,
+          "structured_conflict_override": false,
+          "structured_conflict_override_tier": "",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": false,
+          "reasons": [
+            "moderate_fuzzy_headline",
+            "shared_locality_and_event_family",
+            "shared_incident_anchor",
+            "publication_gap_6_days"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "validated",
+        "action": "duplicate_use_existing_canonical",
+        "recommended_action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-08-02-elizabeth-ortega-killed-ralph-varela-sr-dead-in-port-st-lucie-murder-suicide-on",
+        "same_real_world_event": true,
+        "material_new_update": false,
+        "confidence": 0.95,
+        "shared_anchors": [
+          "Elizabeth Ortega, 50-year-old victim",
+          "Ralph Varela Sr. as suspect/shooter",
+          "Southeast Oxmoor Terrace location",
+          "Port St. Lucie police investigation",
+          "911 call release",
+          "Palm Beach County Sheriff's Office communications officer victim",
+          "Murder-suicide classification"
+        ],
+        "novel_facts": [
+          "Specific details from 911 call (neighbor heard 6 gunshots, thought it was fireworks, house rattled)",
+          "Neighbor's observation about couple yelling and cursing",
+          "30-year relationship detail",
+          "Ortega had recently ended relationship",
+          "Varela was searching for new place to live while still living together"
+        ],
+        "reason": "Both articles cover the identical murder-suicide incident involving Elizabeth Ortega and Ralph Varela Sr. on Southeast Oxmoor Terrace in Port St. Lucie. The incoming article is dated August 8, 2026, and focuses on the release of the 911 call. The candidate is dated August 2, 2026, and also mentions the release of the 911 call. While the incoming article provides additional context about the relationship and specific details from the 911 call content, these are background details and scene descriptions rather than material updates like arrests, charges, official findings, or significant case developments. The core facts remain the same: the 911 call was released regarding this murder-suicide.",
+        "validation_errors": []
+      }
     }
   ],
   "archive_repairs": [],
   "material_update_compositions": [],
   "material_updates": [],
   "registry_consolidation": {
-    "status": "no_changes",
+    "status": "consolidated",
     "directives_considered": 0,
-    "story_records_merged": 0,
-    "aliases_written": 0,
+    "story_records_merged": 1,
+    "aliases_written": 1,
     "already_consolidated": 0,
     "skipped": [],
     "pending_directives": [],
     "rejected_directives": [],
-    "merges": []
+    "merges": [
+      {
+        "source_story_id": "story_000236",
+        "target_story_id": "story_001880",
+        "target_slug": "2026-08-02-elizabeth-ortega-killed-ralph-varela-sr-dead-in-port-st-lucie-murder-suicide-on",
+        "incoming_headline": "Port St. Lucie police release 911 call from weekend murder-suicide on Southeast Oxmoor Terrace",
+        "confidence": 0.95,
+        "shared_anchors": [
+          "Elizabeth Ortega, 50-year-old victim",
+          "Ralph Varela Sr. as suspect/shooter",
+          "Southeast Oxmoor Terrace location",
+          "Port St. Lucie police investigation",
+          "911 call release",
+          "Palm Beach County Sheriff's Office communications officer victim",
+          "Murder-suicide classification"
+        ],
+        "reason": "Both articles cover the identical murder-suicide incident involving Elizabeth Ortega and Ralph Varela Sr. on Southeast Oxmoor Terrace in Port St. Lucie. The incoming article is dated August 8, 2026, and focuses on the release of the 911 call. The candidate is dated August 2, 2026, and also mentions the release of the 911 call. While the incoming article provides additional context about the relationship and specific details from the 911 call content, these are background details and scene descriptions rather than material updates like arrests, charges, official findings, or significant case developments. The core facts remain the same: the 911 call was released regarding this murder-suicide.",
+        "relationship_type": "duplicate",
+        "novel_facts": [
+          "Specific details from 911 call (neighbor heard 6 gunshots, thought it was fireworks, house rattled)",
+          "Neighbor's observation about couple yelling and cursing",
+          "30-year relationship detail",
+          "Ortega had recently ended relationship",
+          "Varela was searching for new place to live while still living together"
+        ],
+        "resolved_source_story_id": "story_000236",
+        "resolved_target_story_id": "story_001880"
+      }
+    ]
   }
 }
