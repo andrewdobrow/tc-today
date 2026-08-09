@@ -1,0 +1,10 @@
+[functions.create-checkout]
+verify_jwt = true
+
+[functions.membership-status]
+verify_jwt = true
+
+# Stripe does not send a Supabase user JWT. This function is public at the
+# gateway and authenticates every request by verifying Stripe's signature.
+[functions.stripe-webhook]
+verify_jwt = false
