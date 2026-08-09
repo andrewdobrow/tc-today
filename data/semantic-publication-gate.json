@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "gate_version": "1.4",
-  "generated_at": "2026-08-09T05:23:50.806887+00:00",
+  "generated_at": "2026-08-09T05:44:35.229900+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -45,15 +45,15 @@
   },
   "summary": {
     "evaluations": 69,
-    "candidate_pairs": 3,
-    "structured_conflict_overrides": 1,
-    "model_calls": 2,
+    "candidate_pairs": 2,
+    "structured_conflict_overrides": 2,
+    "model_calls": 1,
     "cache_hits": 1,
-    "no_candidate_passes": 66,
-    "duplicates_preserved": 1,
+    "no_candidate_passes": 67,
+    "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 3,
-    "retroactive_rows_retained": 65,
+    "new_stories_allowed": 2,
+    "retroactive_rows_retained": 67,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -1346,7 +1346,7 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "St. Lucie County schools reopen Monday with new bus safety warnings",
       "incoming_source_url": "https://www.hometownnewstc.com/news/st_lucie/slow-down-st-lucie-schools-reopen-aug-10/article_a56c9fc8-2ee7-5a26-9f72-c653659f5ad1.html",
       "incoming_story_id": "story_002738",
@@ -1365,86 +1365,7 @@
       }
     },
     {
-      "phase": "forward_publication",
-      "incoming_headline": "Port St. Lucie man arrested after social media video shows alleged dog abuse",
-      "incoming_source_url": "https://cbs12.com/news/crime/port-st-lucie-man-arrested-after-video-shows-him-allegedly-abusing-small-dog-florida-news-florida-crime-st-lucie-county-sheriffs-office",
-      "incoming_story_id": "story_000003",
-      "candidates": [
-        {
-          "slug": "2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog",
-          "headline": "Port St. Lucie man arrested after video shows him kicking small dog",
-          "retrieval_score": 1.0,
-          "headline_similarity": 0.8817,
-          "similarity_basis": "source_headline",
-          "shared_headline_tokens": [
-            "abusing",
-            "allegedly",
-            "arrest",
-            "dog",
-            "him",
-            "lucie",
-            "man",
-            "port",
-            "shows",
-            "small",
-            "st",
-            "video"
-          ],
-          "shared_topic_tokens": [
-            "abusing",
-            "allegedly",
-            "arrest",
-            "dog",
-            "him",
-            "man",
-            "shows",
-            "small",
-            "video"
-          ],
-          "day_gap": 0,
-          "structured_conflict_override": false,
-          "structured_conflict_override_tier": "",
-          "incident_anchor_conflict": false,
-          "known_event_key_conflict": false,
-          "reasons": [
-            "strong_fuzzy_headline",
-            "shared_locality_and_event_family",
-            "publication_gap_0_days"
-          ]
-        }
-      ],
-      "decision": {
-        "status": "validated",
-        "action": "duplicate_use_existing_canonical",
-        "recommended_action": "duplicate_use_existing_canonical",
-        "selected_candidate_slug": "2026-08-08-port-st-lucie-man-arrested-after-video-shows-him-kicking-small-dog",
-        "same_real_world_event": true,
-        "material_new_update": false,
-        "confidence": 0.98,
-        "shared_anchors": [
-          "Ricky Lee Shieferstein, 68",
-          "Port St. Lucie",
-          "St. Lucie County Sheriff's Office investigation",
-          "Social media video showing dog abuse",
-          "Animal cruelty charge",
-          "Arrested August 6, 2026",
-          "$7,500 bond",
-          "St. Lucie County Jail",
-          "Video shows man kicking small dog near pool"
-        ],
-        "novel_facts": [
-          "Detective Dawn Dale identified by name as investigator",
-          "Video duration specified as 16 seconds",
-          "Man yelling 'out, out, out ... in the grass' in video",
-          "Dog kicked in right hip specifically",
-          "Bond status confirmed as of August 7"
-        ],
-        "reason": "Both articles report the identical arrest event: Ricky Lee Shieferstein, 68, arrested August 6 by St. Lucie County Sheriff's Office for animal cruelty after a social media video showed him kicking a small dog near a pool, held on $7,500 bond. The incoming article adds minor details (detective name, video duration, specific verbal commands, which hip was kicked) but these are scene details and background information, not material updates like charges filed, court proceedings, or status changes. This is the same story from the same outlet with slightly different wording.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "St. Lucie County Sheriff's Office warns against using social media to report crimes",
       "incoming_source_url": "https://www.hometownnewstc.com/multimedia/photo_galleries/st_lucie/port-st-lucie-man-charged-with-animal-cruelty/article_12646c96-5d70-5527-844c-6561ae54674c.html",
       "incoming_story_id": "story_002573",
@@ -1473,14 +1394,16 @@
             "news",
             "treasure"
           ],
-          "day_gap": 1,
-          "structured_conflict_override": false,
-          "structured_conflict_override_tier": "",
+          "day_gap": 2,
+          "structured_conflict_override": true,
+          "structured_conflict_override_tier": "distinctive_token_overlap",
           "incident_anchor_conflict": false,
-          "known_event_key_conflict": false,
+          "known_event_key_conflict": true,
           "reasons": [
             "strong_fuzzy_headline",
-            "publication_gap_1_days"
+            "publication_gap_2_days",
+            "structured_identity_conflict",
+            "structured_identity_conflict_overridden_by_distinctive_overlap"
           ]
         }
       ],
@@ -1494,18 +1417,36 @@
         "confidence": 0.95,
         "shared_anchors": [],
         "novel_facts": [
-          "Ricky Lee Schieferstein arrested for animal cruelty",
-          "Social media video showed alleged dog abuse",
-          "St. Lucie County Sheriff's Office warning about using social media to report crimes",
-          "Sheriff's office reminder to call 911 instead of relying on social media"
+          "Ricky Lee Schieferstein charged with animal cruelty",
+          "Case reported through social media tags",
+          "Sheriff's office warning about using social media to report crimes instead of 911"
         ],
-        "reason": "The incoming article is about Ricky Lee Schieferstein's animal cruelty arrest and a sheriff's office PSA about proper crime reporting methods. The candidate is about Daniel Eugene Holmes arrested for burglary and loitering. These are completely different arrests involving different people, different crimes (animal cruelty vs. burglary), and different incidents. They only share the same jurisdiction (St. Lucie County) and general source publication, which is insufficient for merging.",
+        "reason": "The incoming article is about an animal cruelty case involving Ricky Lee Schieferstein and a public warning about reporting crimes via social media. The candidate is about Daniel Eugene Holmes charged with burglary and loitering on August 5. These are completely different incidents with different defendants, different charges (animal cruelty vs. burglary/loitering), different dates, and different fact patterns. The only commonality is St. Lucie County Sheriff's Office jurisdiction and similar source publication format.",
         "validation_errors": []
       }
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "2-year-old stallion stolen from pasture in Port St. Lucie",
+      "incoming_headline": "Costco in Stuart reopens after electrical fire with limited inventory",
+      "incoming_source_url": "https://cw34.com/newsletter-daily/costco-closes-electrical-fire-kanner-highway-store-closure-business-fire-shopping-disruption-costco-news-treasure-coast-florida-news",
+      "incoming_story_id": "story_000003",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Horse reported stolen from pasture on Williams Road in Port St. Lucie",
       "incoming_source_url": "https://www.wpbf.com/article/florida-horse-reported-missing-after-theft-from-pasture-in-port-st-lucie/73383399",
       "incoming_story_id": "story_002646",
       "candidates": [],
@@ -1528,10 +1469,10 @@
   "material_updates": [],
   "registry_consolidation": {
     "status": "no_changes",
-    "directives_considered": 0,
+    "directives_considered": 1,
     "story_records_merged": 0,
     "aliases_written": 0,
-    "already_consolidated": 0,
+    "already_consolidated": 1,
     "skipped": [],
     "pending_directives": [],
     "rejected_directives": [],
