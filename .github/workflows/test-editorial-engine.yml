@@ -41,11 +41,11 @@ jobs:
       - name: Sanitize persistent generation cache
         run: python scripts/sanitize_generation_cache.py
 
-      - name: Apply generator runtime hotfix
-        run: python scripts/apply_generator_runtime_hotfix.py
+      - name: Verify generator runtime guard is baked in
+        run: python scripts/apply_generator_runtime_hotfix.py --check
 
-      - name: Apply false-jurisdiction source guard
-        run: python scripts/apply_false_jurisdiction_hotfix.py
+      - name: Verify false-jurisdiction source guard is baked in
+        run: python scripts/apply_false_jurisdiction_hotfix.py --check
 
       - name: Retire false-jurisdiction publication
         run: python scripts/repair_false_jurisdiction_publication.py
@@ -63,8 +63,11 @@ jobs:
           )
           PY
 
-      - name: Normalize persistent story registry
-        run: python scripts/repair_editorial_story_registry.py
+      - name: Verify persistent story registry is deterministically repairable
+        run: |
+          cp data/editorial_story_registry.json "$RUNNER_TEMP/editorial_story_registry.json"
+          python scripts/repair_editorial_story_registry.py \
+            --registry "$RUNNER_TEMP/editorial_story_registry.json"
 
       - name: Validate editorial package
         run: python scripts/validate_package.py
