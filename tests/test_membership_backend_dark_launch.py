@@ -15,11 +15,15 @@ def test_membership_backend_is_manual_and_reader_ui_stays_dark():
     assert 'os.getenv("TCT_MEMBERSHIP_UI_ENABLED", "0")' in generator
 
 
-def test_stripe_webhook_is_the_only_function_with_gateway_jwt_disabled():
+def test_public_membership_functions_have_explicit_server_side_verification():
     config = (ROOT / "supabase/config.toml").read_text()
     assert "[functions.stripe-webhook]\nverify_jwt = false" in config
-    assert "[functions.create-checkout]\nverify_jwt = true" in config
+    assert "[functions.create-checkout]\nverify_jwt = false" in config
+    assert "[functions.checkout-complete]\nverify_jwt = false" in config
+    assert "[functions.sync-protected-articles]\nverify_jwt = false" in config
     assert "[functions.membership-status]\nverify_jwt = true" in config
+    assert "[functions.create-portal]\nverify_jwt = true" in config
+    assert "[functions.protected-article]\nverify_jwt = true" in config
 
 
 def test_admin_bypass_is_server_side_and_not_a_static_passcode():
@@ -34,14 +38,17 @@ def test_admin_bypass_is_server_side_and_not_a_static_passcode():
     assert "noindex,nofollow,noarchive" in page
 
 
-def test_checkout_uses_only_server_side_stripe_secrets_and_known_plan_names():
+def test_checkout_is_pay_first_and_uses_only_server_side_stripe_secrets():
     checkout = (ROOT / "supabase/functions/create-checkout/index.ts").read_text()
-    browser = (ROOT / "membership-test.js").read_text()
+    browser = (ROOT / "membership.js").read_text()
 
+    assert "withSupabase({ auth: 'none' }" in checkout
     assert "Deno.env.get('STRIPE_SECRET_KEY')" in checkout
     assert "Deno.env.get('STRIPE_PRICE_MONTHLY')" in checkout
     assert "Deno.env.get('STRIPE_PRICE_ANNUAL')" in checkout
-    assert "subscription_data" in checkout
+    assert "customer_email" not in checkout
+    assert "client_reference_id" not in checkout
+    assert "{CHECKOUT_SESSION_ID}" in checkout
     assert "sk_test_" not in browser
     assert "STRIPE_SECRET_KEY" not in browser
 

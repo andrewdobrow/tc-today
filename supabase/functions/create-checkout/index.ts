@@ -1,13 +1,12 @@
 import { withSupabase } from 'npm:@supabase/server@^1'
 import Stripe from 'npm:stripe@^22'
+import { safeReturnPath } from '../_shared/membership.ts'
 
 const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY') ?? ''
 const siteUrl = (Deno.env.get('SITE_URL') ?? 'https://treasurecoast.today').replace(/\/$/, '')
 const monthlyPrice = Deno.env.get('STRIPE_PRICE_MONTHLY') ?? ''
 const annualPrice = Deno.env.get('STRIPE_PRICE_ANNUAL') ?? ''
-
 const stripe = new Stripe(stripeSecret)
-const ACTIVE_STATUSES = new Set(['active', 'trialing'])
 
 function priceForPlan(plan: string) {
   if (plan === 'monthly') return monthlyPrice
@@ -16,18 +15,14 @@ function priceForPlan(plan: string) {
 }
 
 export default {
-  fetch: withSupabase({ auth: 'user' }, async (req, ctx) => {
+  // Pay-first by design: Stripe collects the email. No TCT account is required
+  // before Checkout. The signed Stripe webhook establishes/links the identity.
+  fetch: withSupabase({ auth: 'none' }, async (req) => {
     if (!stripeSecret || !monthlyPrice || !annualPrice) {
       return Response.json({ error: 'Stripe membership secrets are not configured.' }, { status: 503 })
     }
 
-    const userId = ctx.userClaims?.id
-    const email = ctx.userClaims?.email ?? null
-    if (!userId || !email) {
-      return Response.json({ error: 'A confirmed email account is required.' }, { status: 400 })
-    }
-
-    let body: { plan?: string }
+    let body: { plan?: string; return_path?: string }
     try {
       body = await req.json()
     } catch {
@@ -36,89 +31,21 @@ export default {
 
     const plan = String(body.plan ?? '').toLowerCase()
     const priceId = priceForPlan(plan)
-    if (!priceId) {
-      return Response.json({ error: 'Plan must be monthly or annual.' }, { status: 400 })
-    }
+    if (!priceId) return Response.json({ error: 'Plan must be monthly or annual.' }, { status: 400 })
 
-    const { data: profile, error: profileError } = await ctx.supabaseAdmin
-      .from('profiles')
-      .select('id,is_admin,stripe_customer_id')
-      .eq('id', userId)
-      .maybeSingle()
-
-    if (profileError) {
-      console.error('create-checkout profile lookup failed', profileError)
-      return Response.json({ error: 'Unable to start checkout.' }, { status: 500 })
-    }
-
-    if (profile?.is_admin) {
-      return Response.json({ error: 'This administrator account already has full access.', code: 'ADMIN_ACCESS' }, { status: 409 })
-    }
-
-    const { data: activeSubscriptions, error: subscriptionError } = await ctx.supabaseAdmin
-      .from('subscriptions')
-      .select('status')
-      .eq('user_id', userId)
-      .in('status', [...ACTIVE_STATUSES])
-      .limit(1)
-
-    if (subscriptionError) {
-      console.error('create-checkout subscription lookup failed', subscriptionError)
-      return Response.json({ error: 'Unable to start checkout.' }, { status: 500 })
-    }
-
-    if ((activeSubscriptions ?? []).length > 0) {
-      return Response.json({ error: 'This account already has an active membership.', code: 'ALREADY_MEMBER' }, { status: 409 })
-    }
-
-    let customerId = profile?.stripe_customer_id ?? null
+    const returnPath = safeReturnPath(body.return_path)
+    const next = encodeURIComponent(returnPath)
 
     try {
-      if (!customerId) {
-        const customer = await stripe.customers.create({
-          email,
-          metadata: { supabase_user_id: userId },
-        })
-        customerId = customer.id
-
-        const { error: updateError } = await ctx.supabaseAdmin
-          .from('profiles')
-          .upsert(
-            {
-              id: userId,
-              email,
-              stripe_customer_id: customerId,
-              updated_at: new Date().toISOString(),
-            },
-            { onConflict: 'id' },
-          )
-
-        if (updateError) throw updateError
-      }
-
       const session = await stripe.checkout.sessions.create({
         mode: 'subscription',
-        customer: customerId,
-        client_reference_id: userId,
         line_items: [{ price: priceId, quantity: 1 }],
-        success_url: `${siteUrl}/membership-test.html?checkout=success`,
-        cancel_url: `${siteUrl}/membership-test.html?checkout=cancelled`,
-        metadata: {
-          supabase_user_id: userId,
-          plan,
-        },
-        subscription_data: {
-          metadata: {
-            supabase_user_id: userId,
-            plan,
-          },
-        },
+        success_url: `${siteUrl}/subscribe.html?checkout=success&session_id={CHECKOUT_SESSION_ID}&next=${next}`,
+        cancel_url: `${siteUrl}/subscribe.html?checkout=cancelled&next=${next}`,
+        metadata: { plan, return_path: returnPath },
+        subscription_data: { metadata: { plan } },
       })
-
-      if (!session.url) {
-        throw new Error('Stripe did not return a Checkout URL.')
-      }
-
+      if (!session.url) throw new Error('Stripe did not return a Checkout URL.')
       return Response.json({ url: session.url })
     } catch (error) {
       console.error('create-checkout Stripe error', error)

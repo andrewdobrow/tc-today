@@ -1,10 +1,24 @@
 [functions.create-checkout]
-verify_jwt = true
+verify_jwt = false
+
+[functions.checkout-complete]
+verify_jwt = false
 
 [functions.membership-status]
+verify_jwt = true
+
+[functions.create-portal]
+verify_jwt = true
+
+[functions.protected-article]
 verify_jwt = true
 
 # Stripe does not send a Supabase user JWT. This function is public at the
 # gateway and authenticates every request by verifying Stripe's signature.
 [functions.stripe-webhook]
+verify_jwt = false
+
+# CI sends protected article bodies over HTTPS and authenticates with a
+# dedicated shared secret held only by GitHub Actions and Supabase.
+[functions.sync-protected-articles]
 verify_jwt = false

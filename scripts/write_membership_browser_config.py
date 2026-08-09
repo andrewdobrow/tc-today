@@ -1,39 +1,65 @@
 #!/usr/bin/env python3
-"""Write the browser-safe Supabase config used only by the membership test page."""
+"""Write browser-safe Supabase membership configuration.
 
+Privileged credentials are never written. When membership UI is enabled, a
+missing public URL/key is a deployment error rather than a silently broken page.
+"""
 from __future__ import annotations
 
 import json
 import os
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "membership-config.js"
+SUBSCRIBE = ROOT / "subscribe.html"
+
+
+def _enabled() -> bool:
+    return os.getenv("TCT_MEMBERSHIP_UI_ENABLED", "false").strip().lower() in {"1", "true", "yes", "on"}
 
 
 def main() -> None:
     url = os.getenv("TCT_SUPABASE_URL", "").strip().rstrip("/")
     key = os.getenv("TCT_SUPABASE_PUBLISHABLE_KEY", "").strip()
+    ui_enabled = _enabled()
 
-    # Fail closed if a privileged key is accidentally put in the browser variable.
     lowered = key.lower()
     if key and not key.startswith("sb_publishable_"):
-        raise RuntimeError(
-            "TCT_SUPABASE_PUBLISHABLE_KEY must be a browser-safe sb_publishable_ key"
-        )
+        raise RuntimeError("TCT_SUPABASE_PUBLISHABLE_KEY must be a browser-safe sb_publishable_ key")
     if lowered.startswith("sb_secret_") or "service_role" in lowered:
         raise RuntimeError("Refusing to publish a privileged Supabase key")
+    if ui_enabled and (not url or not key):
+        raise RuntimeError("Membership UI cannot be enabled without browser-safe Supabase configuration")
 
     payload = {
         "supabaseUrl": url,
         "supabasePublishableKey": key,
-        "sandbox": True,
+        "uiEnabled": ui_enabled,
+        "sandbox": not ui_enabled,
     }
     OUT.write_text(
         "window.TCT_MEMBERSHIP_CONFIG = " + json.dumps(payload, separators=(",", ":")) + ";\n",
         encoding="utf-8",
     )
-    print(f"Membership browser config written: url={'set' if url else 'missing'}, key={'set' if key else 'missing'}")
+
+    if SUBSCRIBE.exists():
+        text = SUBSCRIBE.read_text(encoding="utf-8")
+        robots = "index,follow" if ui_enabled else "noindex,nofollow,noarchive"
+        text = re.sub(
+            r'(<meta\s+id="membership-robots"\s+name="robots"\s+content=")[^"]*(">)',
+            rf'\g<1>{robots}\g<2>',
+            text,
+            count=1,
+            flags=re.I,
+        )
+        SUBSCRIBE.write_text(text, encoding="utf-8")
+
+    print(
+        f"Membership browser config written: url={'set' if url else 'missing'}, "
+        f"key={'set' if key else 'missing'}, ui={'enabled' if ui_enabled else 'dark'}"
+    )
 
 
 if __name__ == "__main__":
