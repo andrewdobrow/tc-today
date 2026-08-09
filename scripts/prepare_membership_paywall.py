@@ -10,6 +10,11 @@ import json
 import os
 import re
 from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from tct_engine.membership_paywall import (
     add_paywall_schema,
@@ -19,7 +24,6 @@ from tct_engine.membership_paywall import (
     split_article_body,
 )
 
-ROOT = Path(__file__).resolve().parents[1]
 ARTICLES = ROOT / "articles"
 BODY_RE = re.compile(r'<div class="article-body">(.*?)</div>', re.I | re.S)
 HEADLINE_RE = re.compile(r'<h1\b[^>]*class="[^"]*article-headline[^"]*"[^>]*>(.*?)</h1>', re.I | re.S)

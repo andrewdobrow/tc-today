@@ -7,12 +7,15 @@ import json
 import os
 import re
 from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 import requests
 
 from tct_engine.membership_paywall import is_public_service_exception, split_article_body
-
-ROOT = Path(__file__).resolve().parents[1]
 BODY_RE = re.compile(r'<div class="article-body">(.*?)</div>', re.I | re.S)
 HEADLINE_RE = re.compile(r'<h1\b[^>]*class="[^"]*article-headline[^"]*"[^>]*>(.*?)</h1>', re.I | re.S)
 TAG_RE = re.compile(r'<[^>]+>')

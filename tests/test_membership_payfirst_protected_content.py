@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 from pathlib import Path
+import subprocess
+import sys
 
 from tct_engine.membership_paywall import (
     add_paywall_schema,
@@ -163,3 +166,29 @@ def test_paywall_prepare_script_keeps_secret_remainder_out_of_public_html(tmp_pa
     assert secret in payload["articles"][0]["protected_body"]
     assert "data-tct-paywall" in public
     assert '"isAccessibleForFree":false' in public
+
+
+def test_membership_cli_scripts_bootstrap_repo_package_when_executed_by_path():
+    env = os.environ.copy()
+    env["TCT_MEMBERSHIP_UI_ENABLED"] = "false"
+    prep = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/prepare_membership_paywall.py")],
+        cwd=ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+    assert prep.returncode == 0, prep.stderr
+    assert "Membership paywall preparation skipped: UI disabled" in prep.stdout
+
+    sync = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/sync_protected_articles.py"), "--help"],
+        cwd=ROOT,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+    assert sync.returncode == 0, sync.stderr
+    assert "--scan-public" in sync.stdout
