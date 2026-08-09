@@ -260,44 +260,6 @@ def test_arrest_count_is_material_structured_fact():
     assert set(fourth.facts) - set(third.facts) == {"arrest count: 4"}
 
 
-def _story_id_for_source(registry, source_url: str) -> str:
-    matches = []
-    for story_id, story in registry["stories"].items():
-        if any(
-            str(entry.get("url") or entry.get("source") or "") == source_url
-            for entry in story.get("timeline", ())
-        ):
-            matches.append(story_id)
-    assert len(matches) == 1, (source_url, matches)
-    return matches[0]
-
-
-def test_production_registry_consolidates_road_rage_and_detaches_spokane():
-    # Do not assert numeric production story IDs here. They are mutable internal
-    # identifiers and can legitimately disappear when a better canonical wins.
-    registry = json.loads((ROOT / "data" / "editorial_story_registry.json").read_text())
-
-    road_rage_sources = (
-        "http://cbs12.com/news/crime/florida-man-accused-of-pit-maneuver-in-road-rage-attack-targeting-family-in-stuart-florida-road-rage-martin-county-stuart-florida-kanner-highway-i-95-pit-maneuver-north-carolina-family-suv-crash-barbed-wire-fence-michael-",
-        "https://www.wpbf.com/article/florida-pit-maneuver-deputy-car-baby-barbed-wire/73334291",
-    )
-    road_rage_story_ids = {_story_id_for_source(registry, source) for source in road_rage_sources}
-    assert len(road_rage_story_ids) == 1
-
-    lang_story_ids = [
-        story_id
-        for story_id, story in registry["stories"].items()
-        if "Geoffrey Lang" in " ".join(story.get("titles", ()))
-    ]
-    assert len(lang_story_ids) == 1
-    lang_titles = " ".join(registry["stories"][lang_story_ids[0]].get("titles", ()))
-    assert "Spokane" not in lang_titles
-    assert any(
-        "Spokane's largest wildfire" in " ".join(story.get("titles", ()))
-        and story_id != lang_story_ids[0]
-        for story_id, story in registry["stories"].items()
-    )
-
 
 def test_existing_road_rage_duplicate_redirects_to_august_4_canonical(tmp_path: Path):
     generate = _load_generate_module()

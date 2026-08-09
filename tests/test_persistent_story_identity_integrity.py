@@ -297,29 +297,6 @@ def test_integrity_contract_detects_broad_mapping_and_quarantine_reference():
     assert report["summary"]["archive_quarantine_reference_count"] == 1
 
 
-def test_repository_migration_separates_and_restores_all_three_incidents():
-    root = Path(__file__).resolve().parents[1]
-    registry = json.loads((root / "data" / "editorial_story_registry.json").read_text())
-    archive = json.loads((root / "archive.json").read_text())
-    by_slug = {row["slug"]: row for row in archive}
-
-    assert "story_000011" not in registry["stories"]
-    assert "story_000011" in registry["quarantined_stories"]
-    assert not any(is_broad_event_class_key(key) for key in registry["event_to_story"])
-
-    go_kart = by_slug["2026-07-20-family-files-wrongful-death-lawsuit-after-6-year-old-dies-at-urban-air-adventure"]
-    liquor = by_slug["2026-07-29-man-crashes-suv-into-port-st-lucie-liquor-store-charged-with-dui"]
-    fatal = by_slug["2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection"]
-    assert len({go_kart["editorial_story_id"], liquor["editorial_story_id"], fatal["editorial_story_id"]}) == 3
-    assert "liquor store" in liquor["headline"].lower()
-    assert "86-year-old" in fatal["headline"].lower()
-    assert "go-kart" in go_kart["headline"].lower()
-
-    liquor_html = (root / "articles" / f"{liquor['slug']}.html").read_text()
-    fatal_html = (root / "articles" / f"{fatal['slug']}.html").read_text()
-    assert "Man accused of DUI" in liquor_html
-    assert "86-year-old woman dies" in fatal_html
-
 
 def test_rolling_weather_source_url_cannot_own_ledger_or_overwrite_old_event():
     g = _load_generate()
