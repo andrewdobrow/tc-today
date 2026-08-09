@@ -133,24 +133,33 @@ def test_support_banner_asset_matches_live_banner_dimensions():
     assert (width, height) == (940, 234)
 
 
-def test_most_recent_50_published_articles_use_support_banner():
-    generate = _load_generate_module()
-    if generate.ARTICLE_BANNER_MODE != "reader_support":
-        pytest.skip("Repository is intentionally running in paid-advertising mode")
-    recent = generate._recent_direct_article_paths(ROOT, limit=MIGRATION_LIMIT)
+def test_reader_support_preflight_is_noop_after_membership_launch(tmp_path: Path, monkeypatch):
+    """Launch state must not reconstruct the retired Support TCT article banner.
 
-    assert len(recent) == MIGRATION_LIMIT
-    offenders = []
-    for page in recent:
-        html = page.read_text(encoding="utf-8", errors="ignore")
-        if (
-            STRIPE_URL not in html
-            or BANNER_URL not in html
-            or "advertise-banner.png" in html
-            or 'class="article-banner-slot article-house-banner"' in html
-        ):
-            offenders.append(page.name)
-    assert offenders == []
+    This is intentionally synthetic. CI must not make assertions about mutable
+    production article files, because those files legitimately differ before and
+    after the membership launch switch.
+    """
+    generate = _load_generate_module()
+    monkeypatch.setattr(generate, "ARTICLE_BANNER_MODE", "reader_support")
+    monkeypatch.setattr(generate, "MEMBERSHIP_UI_ENABLED", True)
+
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    page = articles / "2026-08-09-example.html"
+    page.write_text(
+        '<html><body><div class="article-meta">Local News</div>'
+        '<div class="article-body"><p>Example article.</p></div></body></html>',
+        encoding="utf-8",
+    )
+
+    result = generate._migrate_legacy_article_support_banners(tmp_path, limit=50)
+    rendered = page.read_text(encoding="utf-8")
+
+    assert result == {"checked": 0, "migrated": 0, "limit": 50}
+    assert STRIPE_URL not in rendered
+    assert BANNER_URL not in rendered
+    assert "article-banner-slot" not in rendered
 
 
 def test_reader_support_mode_uses_support_banner_on_sensitive_topics(monkeypatch):
@@ -267,3 +276,4 @@ def test_both_workflows_run_reader_support_preflight_before_validation_and_pytes
         assert preflight < validate < pytest_step
         assert "_migrate_legacy_article_support_banners(Path.cwd(), limit=50)" in workflow
         assert "TCT_ARTICLE_BANNER_MODE" in workflow
+        assert "TCT_MEMBERSHIP_UI_ENABLED" in workflow
