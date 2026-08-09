@@ -78,6 +78,20 @@ def test_subscribe_page_has_no_registration_gate_before_plan_buttons():
     assert "Email me a sign-in link" in page
 
 
+
+def test_membership_plan_cards_are_visually_balanced_and_gradient_backed():
+    page = (ROOT / "subscribe.html").read_text()
+    css = (ROOT / "membership.css").read_text()
+    markup = paywall_html("example-story")
+    assert "Most flexible" in page
+    assert "Most flexible" in markup
+    assert '<div class="membership-price">$4.99</div>' in page
+    assert '<div class="membership-plan-note">Cancel anytime</div>' in page
+    assert 'linear-gradient(135deg,#f26445 0%,#f87858 48%,#e9583e 100%)' in css
+    assert 'text-align:center' in css
+    assert 'margin-top:auto' in css
+
+
 def test_checkout_completion_creates_or_links_identity_then_sends_passwordless_access():
     completion = (ROOT / "supabase/functions/checkout-complete/index.ts").read_text()
     shared = (ROOT / "supabase/functions/_shared/membership.ts").read_text()

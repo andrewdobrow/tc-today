@@ -113,8 +113,9 @@ def paywall_html(slug: str) -> str:
       <button class="tct-member-btn" data-plan="annual" type="button">Subscribe annually</button>
     </article>
     <article class="tct-paywall-plan">
+      <span class="tct-paywall-badge tct-paywall-badge-flexible">Most flexible</span>
       <h3>Monthly — $4.99/month</h3>
-      <div class="tct-paywall-price">$4.99/month</div>
+      <div class="tct-paywall-price">$4.99</div>
       <div class="tct-paywall-plan-note">Cancel anytime</div>
       <button class="tct-member-btn" data-plan="monthly" type="button">Subscribe monthly</button>
     </article>
