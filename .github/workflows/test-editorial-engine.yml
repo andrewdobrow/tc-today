@@ -23,6 +23,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TCT_ARTICLE_BANNER_MODE: reader_support
+      # Keep CI aligned with the repository launch switch. When membership is live,
+      # reader-support banners are intentionally absent and the preflight must not
+      # reconstruct them in the runner copy.
+      TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}
 
     steps:
       - name: Check out repository
