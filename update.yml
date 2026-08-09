@@ -1,0 +1,217 @@
+name: Update Treasure Coast Today — Bounded Runtime v1.9.6
+
+run-name: "TCT update v1.9.6 • ${{ github.ref_name }} • ${{ github.sha }}"
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Update site — bounded runtime v1.9.6 (90-minute safety ceiling)
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      TCT_ARTICLE_BANNER_MODE: ${{ vars.TCT_ARTICLE_BANNER_MODE || 'reader_support' }}
+    outputs:
+      committed: ${{ steps.push.outputs.committed }}
+
+    steps:
+      - name: Runtime safety revision
+        run: |
+          echo "ACTIVE_WORKFLOW=tct-bounded-runtime-v1.9.6"
+          echo "JOB_TIMEOUT_MINUTES=90"
+          echo "GITHUB_SHA=$GITHUB_SHA"
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Restore persistent generation cache
+        uses: actions/cache@v4
+        with:
+          path: data/generation-cache.json
+          key: tct-generation-cache-v2-source-focus-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            tct-generation-cache-v2-source-focus-${{ github.ref_name }}-
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install feedparser anthropic requests json-repair pytest
+
+      - name: Sanitize persistent generation cache
+        run: python scripts/sanitize_generation_cache.py
+
+      - name: Apply generator runtime hotfix
+        run: python scripts/apply_generator_runtime_hotfix.py
+
+      - name: Apply false-jurisdiction source guard
+        run: python scripts/apply_false_jurisdiction_hotfix.py
+
+      - name: Retire false-jurisdiction publication
+        run: python scripts/repair_false_jurisdiction_publication.py
+
+      - name: Normalize recent reader-support banners
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from scripts.generate import _migrate_legacy_article_support_banners
+
+          result = _migrate_legacy_article_support_banners(Path.cwd(), limit=50)
+          print(
+              "Reader-support preflight: "
+              f"{result['checked']} checked, {result['migrated']} migrated"
+          )
+          PY
+
+      - name: Normalize persistent story registry
+        run: python scripts/repair_editorial_story_registry.py
+
+      - name: Validate editorial package
+        run: python scripts/validate_package.py
+
+      - name: Run editorial engine tests
+        run: |
+          python -m pytest tests -v \
+            --ignore=tests/test_canonical_identity.py \
+            --ignore=tests/test_matcher_contract.py
+
+      - name: Clean up duplicate archives
+        run: |
+          /usr/bin/time -f "Cleanup elapsed: %E" python cleanup_archive.py
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Generate news
+        run: |
+          /usr/bin/time -f "Generate elapsed: %E" python -u scripts/generate.py
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Repository variables provide an immediate, no-code rollout control.
+          # Missing or invalid values always fall back to shadow mode.
+          TCT_ENGINE_MODE: ${{ vars.TCT_ENGINE_MODE || 'shadow' }}
+          TCT_ENGINE_MAX_ACTIONS: ${{ vars.TCT_ENGINE_MAX_ACTIONS || '8' }}
+          TCT_ENGINE_KILL_SWITCH: ${{ vars.TCT_ENGINE_KILL_SWITCH || 'false' }}
+          # Membership UI is dark-launched. It stays false unless explicitly enabled
+          # after live checkout, entitlement, sign-in and account-management validation.
+          TCT_MEMBERSHIP_UI_ENABLED: ${{ vars.TCT_MEMBERSHIP_UI_ENABLED || 'false' }}
+          TCT_SUBSCRIBE_URL: ${{ vars.TCT_SUBSCRIBE_URL || '/subscribe.html' }}
+          # Reader support appears on every article by default. Change this repository
+          # variable to paid_advertising when commercial banners return; sensitive-topic
+          # notices and community resources will reactivate automatically.
+          TCT_ARTICLE_BANNER_MODE: ${{ vars.TCT_ARTICLE_BANNER_MODE || 'reader_support' }}
+
+      - name: Build dark-launch membership browser config
+        env:
+          TCT_SUPABASE_URL: ${{ vars.TCT_SUPABASE_URL || '' }}
+          TCT_SUPABASE_PUBLISHABLE_KEY: ${{ vars.TCT_SUPABASE_PUBLISHABLE_KEY || '' }}
+        run: python scripts/write_membership_browser_config.py
+
+      - name: Upload generation diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tct-generation-diagnostics-${{ github.run_id }}
+          if-no-files-found: ignore
+          retention-days: 14
+          path: |
+            data/persistent-story-identity-integrity.json
+            data/cross-source-update-identity.json
+            data/event-identity-authority.json
+            data/editorial_story_registry.json
+            data/forward-publication-identity.json
+            data/story-regression-report.json
+            archive.json
+
+      - name: Remove transient Python artifacts
+        run: |
+          find . -type d -name '__pycache__' -prune -exec rm -rf {} +
+          find . -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
+          rm -rf .pytest_cache
+
+      - name: Guard generated repository size
+        run: |
+          oversized=$(find . -path './.git' -prune -o -type f -size +90M -print)
+          if [ -n "$oversized" ]; then
+            echo "Generated repository contains file(s) above the 90 MiB safety ceiling:"
+            echo "$oversized"
+            exit 1
+          fi
+          if [ -f data/editorial_story_registry.json ]; then
+            python - <<'PY'
+          from pathlib import Path
+          path = Path("data/editorial_story_registry.json")
+          print(f"Editorial registry size before commit: {path.stat().st_size / (1024 * 1024):.2f} MiB")
+          PY
+          fi
+
+      - name: Commit and push
+        id: push
+        run: |
+          git config user.name "TCT Bot"
+          git config user.email "bot@treasurecoast.today"
+          git add -A
+          git diff --staged --quiet || git commit -m "Update: $(date -u '+%b %d %Y %H:%M UTC')"
+          git pull --rebase
+          git push
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: update
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: github-pages
+      url: ${{ steps.d1.outputs.page_url || steps.d2.outputs.page_url || steps.d3.outputs.page_url }}
+
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy attempt 1
+        id: d1
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+
+      - name: Wait before retry 1
+        if: steps.d1.outcome == 'failure'
+        run: sleep 45
+
+      - name: Deploy attempt 2
+        id: d2
+        if: steps.d1.outcome == 'failure'
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+
+      - name: Wait before retry 2
+        if: steps.d1.outcome == 'failure' && steps.d2.outcome == 'failure'
+        run: sleep 90
+
+      - name: Deploy attempt 3
+        id: d3
+        if: steps.d1.outcome == 'failure' && steps.d2.outcome == 'failure'
+        uses: actions/deploy-pages@v4
