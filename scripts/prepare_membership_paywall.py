@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Prepare public article previews and an out-of-repo protected-content export.
+"""Prepare consistent public article teasers and a protected-content export.
 
 This script is a no-op unless TCT_MEMBERSHIP_UI_ENABLED is true. The export path
 must be outside the repository so protected article text can never be committed.
+When a protected-store snapshot is supplied, already-paywalled legacy pages are
+rehydrated first and then re-split using the current teaser contract.
 """
 from __future__ import annotations
 
+import html
 import json
 import os
 import re
@@ -17,6 +20,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tct_engine.membership_paywall import (
+    FULL_BODY_MARKER,
     add_paywall_schema,
     inject_membership_assets,
     is_public_service_exception,
@@ -28,10 +32,85 @@ ARTICLES = ROOT / "articles"
 BODY_RE = re.compile(r'<div class="article-body">(.*?)</div>', re.I | re.S)
 HEADLINE_RE = re.compile(r'<h1\b[^>]*class="[^"]*article-headline[^"]*"[^>]*>(.*?)</h1>', re.I | re.S)
 TAG_RE = re.compile(r'<[^>]+>')
+PAYWALLED_RE = re.compile(
+    r'<div class="article-body tct-member-preview">(.*?)</div>\s*'
+    r'<div class="tct-member-only">.*?'
+    r'<div id="tct-protected-content"[^>]*></div>\s*</div>',
+    re.I | re.S,
+)
+CURRENT_PREVIEW_P_RE = re.compile(
+    r'<p([^>]*)data-tct-preview-paragraph="true"([^>]*)>(.*?)</p>', re.I | re.S
+)
+CURRENT_CONTINUATION_P_RE = re.compile(
+    r'<p([^>]*)data-tct-first-paragraph-continuation="true"([^>]*)>(.*?)</p>', re.I | re.S
+)
 
 
 def enabled() -> bool:
     return os.getenv("TCT_MEMBERSHIP_UI_ENABLED", "false").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _plain(fragment: str) -> str:
+    return re.sub(r"\s+", " ", html.unescape(TAG_RE.sub(" ", fragment or ""))).strip()
+
+
+def _load_snapshot() -> dict[str, str]:
+    raw = os.getenv("TCT_PROTECTED_SNAPSHOT_PATH", "").strip()
+    if not raw:
+        return {}
+    path = Path(raw)
+    if not path.exists():
+        raise RuntimeError(f"Protected-content snapshot is missing: {path}")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    rows = payload.get("articles") if isinstance(payload, dict) else None
+    if not isinstance(rows, list):
+        raise RuntimeError("Protected-content snapshot has invalid shape")
+    result: dict[str, str] = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        slug = str(row.get("slug") or "").strip()
+        protected_body = str(row.get("protected_body") or "")
+        if slug and protected_body:
+            result[slug] = protected_body
+    return result
+
+
+def _rehydrate_legacy_body(preview_html: str, protected_body: str) -> str:
+    """Reconstruct full article HTML from either current or legacy protected rows."""
+    protected_body = str(protected_body or "")
+    if protected_body.startswith(FULL_BODY_MARKER):
+        return protected_body[len(FULL_BODY_MARKER):].strip()
+
+    # v1.13.5.4 split the first paragraph itself. Rejoin that shape exactly.
+    preview_match = CURRENT_PREVIEW_P_RE.search(preview_html)
+    continuation_match = CURRENT_CONTINUATION_P_RE.search(protected_body)
+    if preview_match and continuation_match:
+        preview_text = _plain(preview_match.group(3)).rstrip(" …")
+        continuation_text = _plain(continuation_match.group(3))
+        attrs = (preview_match.group(1) or "") + (preview_match.group(2) or "")
+        attrs = re.sub(r'\s*data-tct-preview-paragraph="true"', "", attrs, flags=re.I)
+        first_paragraph = f'<p{attrs}>{html.escape((preview_text + " " + continuation_text).strip())}</p>'
+        preview_prefix = preview_html[:preview_match.start()]
+        preview_suffix = preview_html[preview_match.end():]
+        protected_without_continuation = (
+            protected_body[:continuation_match.start()] + protected_body[continuation_match.end():]
+        )
+        return (preview_prefix + first_paragraph + preview_suffix + protected_without_continuation).strip()
+
+    # v1.13.4 exposed paragraph one plus part of paragraph two. The protected row
+    # contains the remainder. Concatenating preserves every word; at worst an old
+    # split sentence remains separated by a paragraph break until this migration.
+    return (preview_html.strip() + protected_body.strip()).strip()
+
+
+def _rehydrate_paywalled_page(page_html: str, protected_body: str) -> str:
+    match = PAYWALLED_RE.search(page_html)
+    if not match:
+        raise RuntimeError("Existing paywall markup could not be rehydrated safely")
+    full_body = _rehydrate_legacy_body(match.group(1), protected_body)
+    replacement = '<div class="article-body">' + full_body + '</div>'
+    return page_html[:match.start()] + replacement + page_html[match.end():]
 
 
 def main() -> None:
@@ -46,15 +125,30 @@ def main() -> None:
     if root_resolved == export_path or root_resolved in export_path.parents:
         raise RuntimeError("Protected-content export must be outside the public repository")
 
+    snapshot = _load_snapshot()
+    snapshot_expected = bool(os.getenv("TCT_PROTECTED_SNAPSHOT_PATH", "").strip())
     protected: list[dict[str, str]] = []
-    rewritten = exempt = short = already = 0
+    rewritten = exempt = short = already = rehydrated = 0
     for path in sorted(ARTICLES.glob("*.html")):
         text = path.read_text(encoding="utf-8", errors="ignore")
+        original_text = text
+        was_rehydrated = False
         if 'http-equiv="refresh"' in text or "window.location.replace" in text:
             continue
+
+        slug = path.stem
         if 'data-tct-paywall' in text:
-            already += 1
-            continue
+            stored = snapshot.get(slug)
+            if stored:
+                text = _rehydrate_paywalled_page(text, stored)
+                rehydrated += 1
+                was_rehydrated = True
+            elif snapshot_expected:
+                raise RuntimeError(f"Protected store is missing existing paywalled article: {slug}")
+            else:
+                already += 1
+                continue
+
         body_match = BODY_RE.search(text)
         if not body_match:
             continue
@@ -63,13 +157,18 @@ def main() -> None:
         body_html = body_match.group(1)
         if is_public_service_exception(headline, body_html):
             exempt += 1
+            # Do not change an already-protected legacy page unless we can safely
+            # complete a new protected split in the same transaction.
             continue
         split = split_article_body(body_html)
         if not split:
             short += 1
+            # If this was a rehydrated legacy page, leave the original paywall on
+            # disk rather than accidentally publishing the full article.
+            if was_rehydrated:
+                assert path.read_text(encoding="utf-8", errors="ignore") == original_text
             continue
 
-        slug = path.stem
         protected.append({"slug": slug, "protected_body": split.protected_html})
         replacement = (
             '<div class="article-body tct-member-preview">'
@@ -86,7 +185,10 @@ def main() -> None:
 
     export_path.parent.mkdir(parents=True, exist_ok=True)
     export_path.write_text(json.dumps({"articles": protected}, ensure_ascii=False), encoding="utf-8")
-    print(f"Membership paywall prepared: {rewritten} protected, {exempt} public-service free, {short} too short, {already} already protected")
+    print(
+        f"Membership paywall prepared: {rewritten} protected, {rehydrated} legacy/current pages rehydrated, "
+        f"{exempt} public-service free, {short} too short, {already} already protected without snapshot"
+    )
     print(f"Protected export written outside repo: {export_path}")
 
 

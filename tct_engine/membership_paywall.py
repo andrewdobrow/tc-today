@@ -34,10 +34,10 @@ def _sentences(text: str) -> list[str]:
     return pieces or [text]
 
 
-PREVIEW_MAX_CHARS = 300
-PREVIEW_RATIO = 0.52
-PREVIEW_MIN_CHARS = 24
-PREVIEW_FADE_MAX_CHARS = 110
+PREVIEW_MAX_CHARS = 340
+PREVIEW_MIN_CHARS = 150
+PREVIEW_MIN_HIDDEN_CHARS = 90
+FULL_BODY_MARKER = "<!--tct-full-article-v2-->"
 
 
 def _word_boundary(text: str, target: int) -> int:
@@ -52,63 +52,74 @@ def _word_boundary(text: str, target: int) -> int:
     return right if right != -1 else target
 
 
-def split_article_body(body_html: str, preview_max_chars: int = PREVIEW_MAX_CHARS) -> ArticleSplit | None:
-    """Expose only a cliffhanger-sized slice of paragraph one.
+def _preview_target(total_chars: int, preview_max_chars: int) -> int:
+    """Choose a consistent teaser size while always leaving meaningful content hidden."""
+    ceiling = max(PREVIEW_MIN_CHARS, int(preview_max_chars))
+    target = min(ceiling, max(PREVIEW_MIN_CHARS, total_chars - PREVIEW_MIN_HIDDEN_CHARS))
+    target = min(target, total_chars - PREVIEW_MIN_HIDDEN_CHARS)
+    return max(0, target)
 
-    The public preview is character bounded rather than paragraph bounded. For a
-    normal lead, roughly half of paragraph one is public, with the final portion
-    visibly fading away. The rest of paragraph one and every later paragraph are
-    returned only in the protected payload.
+
+def split_article_body(body_html: str, preview_max_chars: int = PREVIEW_MAX_CHARS) -> ArticleSplit | None:
+    """Expose a consistent character-bounded teaser across paragraph boundaries.
+
+    The visible teaser aims for about 340 characters on normal articles, regardless
+    of whether the lead paragraph is unusually short or unusually long. At least
+    90 characters remain hidden, and the protected store receives the complete
+    article body so future teaser migrations never depend on public HTML.
     """
     body_html = str(body_html or "")
     paragraphs = list(_P_RE.finditer(body_html))
     if not paragraphs:
         return None
 
-    first = paragraphs[0]
-    first_text = _plain(first.group(2))
-    if len(first_text) < 36:
+    paragraph_rows: list[tuple[str, str]] = []
+    for match in paragraphs:
+        text = _plain(match.group(2))
+        if text:
+            paragraph_rows.append((match.group(1) or "", text))
+    if not paragraph_rows:
         return None
 
-    ratio_target = max(PREVIEW_MIN_CHARS, int(round(len(first_text) * PREVIEW_RATIO)))
-    target = min(max(PREVIEW_MIN_CHARS, int(preview_max_chars)), ratio_target)
-    # Always leave a real first-paragraph continuation when the lead is long enough.
-    target = min(target, max(PREVIEW_MIN_CHARS, len(first_text) - 18))
-    cut = _word_boundary(first_text, target)
-    if cut <= 0 or cut >= len(first_text):
+    total_chars = sum(len(text) for _, text in paragraph_rows) + max(0, len(paragraph_rows) - 1)
+    target = _preview_target(total_chars, preview_max_chars)
+    if target < PREVIEW_MIN_CHARS or total_chars - target < PREVIEW_MIN_HIDDEN_CHARS:
         return None
 
-    fade_chars = min(PREVIEW_FADE_MAX_CHARS, max(34, int(cut * 0.42)))
-    fade_start = _word_boundary(first_text, max(1, cut - fade_chars))
-    if fade_start <= 0 or fade_start >= cut:
-        fade_start = max(1, cut // 2)
+    preview_parts: list[str] = []
+    used = 0
+    for attrs, text in paragraph_rows:
+        separator_cost = 1 if preview_parts else 0
+        remaining = target - used - separator_cost
+        if remaining <= 0:
+            break
+        if len(text) <= remaining:
+            preview_parts.append(f'<p{attrs}>{html.escape(text)}</p>')
+            used += separator_cost + len(text)
+            continue
 
-    solid_text = first_text[:fade_start].rstrip()
-    faded_text = first_text[fade_start:cut].strip()
-    hidden_first = first_text[cut:].lstrip()
-    if not solid_text or not faded_text or not hidden_first:
+        cut = _word_boundary(text, remaining)
+        if cut < 24 and preview_parts:
+            break
+        cut = max(1, min(cut, len(text) - 1))
+        preview_parts.append(f'<p{attrs}>{html.escape(text[:cut].rstrip())}</p>')
+        used += separator_cost + cut
+        break
+
+    preview_inner = "".join(preview_parts).strip()
+    preview_plain = _plain(preview_inner)
+    if len(preview_plain) < PREVIEW_MIN_CHARS:
+        return None
+    if total_chars - len(preview_plain) < PREVIEW_MIN_HIDDEN_CHARS:
         return None
 
-    opening_attrs = first.group(1) or ""
-    preview_paragraph = (
-        f'<p{opening_attrs} data-tct-preview-paragraph="true">'
-        f'<span class="tct-preview-solid">{html.escape(solid_text)}</span> '
-        f'<span class="tct-preview-fade-text">{html.escape(faded_text)}</span>'
-        '<span class="tct-preview-ellipsis" aria-hidden="true">…</span>'
-        '</p>'
+    preview = (
+        '<div class="tct-preview-copy" data-tct-preview-copy="true">'
+        + preview_inner
+        + '</div>'
     )
-    preview = body_html[: first.start()] + preview_paragraph
-
-    protected = (
-        f'<p{opening_attrs} data-tct-first-paragraph-continuation="true">'
-        f'{html.escape(hidden_first)}</p>'
-        + body_html[first.end() :]
-    ).strip()
-
-    # Do not manufacture a paywall for a tiny article where almost nothing is hidden.
-    if len(_plain(protected)) < 80:
-        return None
-    return ArticleSplit(preview_html=preview.strip(), protected_html=protected)
+    protected = FULL_BODY_MARKER + body_html.strip()
+    return ArticleSplit(preview_html=preview, protected_html=protected)
 
 
 def is_public_service_exception(headline: str, body_html: str) -> bool:

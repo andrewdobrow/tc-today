@@ -78,52 +78,63 @@ body.membership-page {
 }
 
 /* ================================================================
-   TCT v1.13.5.4 — stronger conversion cliffhanger
-   The public article preview intentionally ends inside the lead. The
-   protected remainder is not present in public HTML; only the exposed
-   teaser characters participate in these visual fades.
+   TCT v1.13.5.5 — uniform editorial cliffhanger
+   Roughly 340 public characters are shaped into a TC-Palm-style teaser:
+   readable opening lines, then a pronounced vertical text fade into the paywall.
    ================================================================ */
 .tct-member-preview {
   position: relative;
   overflow: visible;
 }
-.tct-member-preview [data-tct-preview-paragraph="true"] {
+.tct-preview-copy {
   position: relative;
-  margin-bottom: 0;
-}
-.tct-preview-fade-text {
-  display: inline;
-  color: transparent;
-  background: linear-gradient(
-    90deg,
-    rgba(41,47,43,.92) 0%,
-    rgba(41,47,43,.78) 24%,
-    rgba(41,47,43,.42) 58%,
-    rgba(41,47,43,.12) 82%,
-    rgba(41,47,43,0) 100%
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 36%,
+    rgba(0,0,0,.88) 49%,
+    rgba(0,0,0,.58) 63%,
+    rgba(0,0,0,.26) 76%,
+    rgba(0,0,0,.08) 87%,
+    transparent 100%
   );
-  -webkit-background-clip: text;
-  background-clip: text;
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 36%,
+    rgba(0,0,0,.88) 49%,
+    rgba(0,0,0,.58) 63%,
+    rgba(0,0,0,.26) 76%,
+    rgba(0,0,0,.08) 87%,
+    transparent 100%
+  );
+}
+.tct-preview-copy p { margin-bottom: 1.18em; }
+.tct-preview-copy p:last-child { margin-bottom: 0; }
+
+/* Legacy preview spans remain supported until every retained page is re-prepared. */
+.tct-preview-fade-text {
+  color: rgba(41,47,43,.52);
 }
 .tct-preview-ellipsis {
-  color: rgba(41,47,43,.10);
-  letter-spacing: .08em;
+  color: rgba(41,47,43,.08);
 }
 .tct-paywall-fade {
-  height: 156px;
-  margin-top: -122px;
+  height: 112px;
+  margin-top: -86px;
   position: relative;
   z-index: 2;
   pointer-events: none;
   background: linear-gradient(
     to bottom,
     rgba(247,250,250,0) 0%,
-    rgba(247,250,250,.16) 18%,
-    rgba(247,250,250,.58) 48%,
-    rgba(247,250,250,.90) 73%,
-    var(--bg,#f7fafa) 92%
+    rgba(247,250,250,.22) 24%,
+    rgba(247,250,250,.66) 55%,
+    rgba(247,250,250,.94) 80%,
+    var(--bg,#f7fafa) 100%
   );
 }
 @media(max-width:680px){
-  .tct-paywall-fade{height:138px;margin-top:-108px}
+  .tct-paywall-fade{height:102px;margin-top:-78px}
 }

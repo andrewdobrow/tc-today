@@ -157,10 +157,24 @@ async function unlockArticle(){
     setMessage(message, `We couldn't load the member portion of this article. ${data?.error || error?.message || ''}`.trim(), true)
     return
   }
+  const protectedBody = String(data.protected_body || '')
+  const fullBodyMarker = '<!--tct-full-article-v2-->'
+  const preview = qs('.tct-member-preview')
+  const memberOnly = paywall.closest('.tct-member-only')
+
+  if (protectedBody.startsWith(fullBodyMarker) && preview) {
+    preview.innerHTML = protectedBody.slice(fullBodyMarker.length).trim()
+    preview.classList.remove('tct-member-preview')
+    qs('.tct-preview-copy', preview)?.classList.remove('tct-preview-copy')
+    memberOnly?.remove()
+    return
+  }
+
+  // Backward-compatible unlock path for rows written before full-body payload v2.
   const target = qs('#tct-protected-content')
   if (target) {
     const holder = document.createElement('div')
-    holder.innerHTML = data.protected_body
+    holder.innerHTML = protectedBody
     const continuation = qs('[data-tct-first-paragraph-continuation]', holder)
     const previewParagraph = qs('[data-tct-preview-paragraph]')
     if (continuation && previewParagraph) {

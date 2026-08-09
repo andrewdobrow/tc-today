@@ -20,8 +20,36 @@ export default {
     if (!(await secureEqual(req.headers.get('X-TCT-Content-Sync') ?? '', expectedSecret))) {
       return Response.json({ error: 'Unauthorized.' }, { status: 401 })
     }
-    let body: { articles?: Array<{ slug?: string; protected_body?: string }> }
+
+    let body: {
+      action?: string
+      offset?: number
+      limit?: number
+      articles?: Array<{ slug?: string; protected_body?: string }>
+    }
     try { body = await req.json() } catch { return Response.json({ error: 'Invalid request body.' }, { status: 400 }) }
+
+    // Server-to-server snapshot used only to rehydrate already-paywalled repository
+    // pages before applying a newer teaser format. It is protected by the dedicated
+    // content-sync secret and is never available through browser configuration.
+    if (body.action === 'snapshot') {
+      const offset = Math.max(0, Math.floor(Number(body.offset ?? 0)))
+      const limit = Math.min(250, Math.max(1, Math.floor(Number(body.limit ?? 200))))
+      const { data, error } = await ctx.supabaseAdmin.from('protected_articles')
+        .select('slug,protected_body,updated_at')
+        .order('slug', { ascending: true })
+        .range(offset, offset + limit - 1)
+      if (error) {
+        console.error('sync-protected-articles snapshot failed', error)
+        return Response.json({ error: 'Protected article snapshot failed.' }, { status: 500 })
+      }
+      const rows = data ?? []
+      return Response.json({
+        articles: rows,
+        next_offset: rows.length === limit ? offset + rows.length : null,
+      })
+    }
+
     const articles = Array.isArray(body.articles) ? body.articles : []
     if (!articles.length || articles.length > 100) return Response.json({ error: 'Batch must contain 1-100 articles.' }, { status: 400 })
 

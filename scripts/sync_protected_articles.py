@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Securely sync protected article remainders to Supabase through an Edge Function."""
+"""Securely sync or snapshot protected article content through Supabase."""
 from __future__ import annotations
 
 import argparse
@@ -48,10 +48,42 @@ def load_export(path: Path) -> list[dict[str, str]]:
     return rows
 
 
+def _request(url: str, secret: str, payload: dict) -> requests.Response:
+    response = requests.post(
+        url,
+        headers={"X-TCT-Content-Sync": secret, "Content-Type": "application/json"},
+        json=payload,
+        timeout=45,
+    )
+    if response.status_code >= 300:
+        raise RuntimeError(f"Protected article sync failed ({response.status_code}): {response.text[:300]}")
+    return response
+
+
+def snapshot_store(url: str, secret: str, output: Path) -> int:
+    rows: list[dict[str, str]] = []
+    offset = 0
+    while True:
+        response = _request(url, secret, {"action": "snapshot", "offset": offset, "limit": 200})
+        payload = response.json()
+        batch = payload.get("articles") if isinstance(payload, dict) else None
+        if not isinstance(batch, list):
+            raise RuntimeError("Protected article snapshot returned invalid shape")
+        rows.extend(batch)
+        next_offset = payload.get("next_offset")
+        if next_offset is None:
+            break
+        offset = int(next_offset)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps({"articles": rows}, ensure_ascii=False), encoding="utf-8")
+    return len(rows)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--export-file")
     parser.add_argument("--scan-public", action="store_true")
+    parser.add_argument("--snapshot-file")
     parser.add_argument("--required", action="store_true")
     args = parser.parse_args()
 
@@ -64,30 +96,30 @@ def main() -> None:
         print(message)
         return
 
+    selected = sum(bool(value) for value in (args.export_file, args.scan_public, args.snapshot_file))
+    if selected != 1:
+        raise RuntimeError("Choose exactly one of --export-file, --scan-public, or --snapshot-file")
+
+    url = f"{base}/functions/v1/sync-protected-articles"
+    if args.snapshot_file:
+        total = snapshot_store(url, secret, Path(args.snapshot_file))
+        print(f"Protected article snapshot complete: {total} article(s)")
+        return
+
     if args.export_file:
         rows = load_export(Path(args.export_file))
-    elif args.scan_public:
-        rows = scan_public_articles()
     else:
-        raise RuntimeError("Choose --export-file or --scan-public")
+        rows = scan_public_articles()
     if not rows:
         print("Protected article sync: nothing to sync")
         return
 
-    url = f"{base}/functions/v1/sync-protected-articles"
     total = 0
     for start in range(0, len(rows), 75):
         batch = rows[start:start + 75]
-        response = requests.post(
-            url,
-            headers={"X-TCT-Content-Sync": secret, "Content-Type": "application/json"},
-            json={"articles": batch},
-            timeout=45,
-        )
-        if response.status_code >= 300:
-            raise RuntimeError(f"Protected article sync failed ({response.status_code}): {response.text[:300]}")
+        _request(url, secret, {"articles": batch})
         total += len(batch)
-    print(f"Protected article sync complete: {total} article remainder(s)")
+    print(f"Protected article sync complete: {total} article payload(s)")
 
 
 if __name__ == "__main__":

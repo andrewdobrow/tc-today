@@ -24,21 +24,26 @@ def _load_generate():
     return importlib.import_module("scripts.generate")
 
 
-def test_paywall_fade_is_deliberately_strong_and_teaser_text_itself_fades():
+def test_paywall_fade_matches_strong_vertical_editorial_cliffhanger():
     css = (ROOT / "membership.css").read_text()
-    assert ".tct-preview-fade-text" in css
-    assert "height: 156px" in css
-    assert "margin-top: -122px" in css
-    assert "rgba(41,47,43,0) 100%" in css
-    assert "rgba(247,250,250,.90) 73%" in css
+    assert ".tct-preview-copy" in css
+    assert "-webkit-mask-image: linear-gradient(" in css
+    assert "to bottom" in css
+    assert "#000 36%" in css
+    assert "rgba(0,0,0,.26) 76%" in css
+    assert "transparent 100%" in css
+    assert "height: 112px" in css
+    assert "margin-top: -86px" in css
+    assert "rgba(247,250,250,.94) 80%" in css
 
 
-def test_member_unlock_reassembles_first_paragraph_before_showing_remainder():
+def test_member_unlock_prefers_full_body_payload_and_keeps_legacy_compatibility():
     js = (ROOT / "membership.js").read_text()
+    assert "<!--tct-full-article-v2-->" in js
+    assert "preview.innerHTML = protectedBody.slice" in js
+    assert "memberOnly?.remove()" in js
     assert "data-tct-first-paragraph-continuation" in js
     assert "data-tct-preview-paragraph" in js
-    assert "previewParagraph.textContent" in js
-    assert "continuation.remove()" in js
 
 
 def test_morning_brief_visible_copy_is_owned_by_kit():
