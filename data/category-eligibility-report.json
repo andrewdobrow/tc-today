@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-10T03:15:23Z",
+  "generated_at": "2026-08-10T10:46:44Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -8,8 +8,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government and Business & Development enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 27,
-    "rejected_count": 5,
+    "assessed_count": 29,
+    "rejected_count": 6,
     "enforced_categories": [
       "business",
       "local_gov"
@@ -42,12 +42,25 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "'The more I give, the hungrier I get': Non-profit on a back-to-school mission",
+          "source_url": "https://www.wptv.com/community/lets-hear-it/the-more-i-give-the-hungrier-i-get-non-profit-on-a-back-to-school-mission"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
           "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
           "competing_signals": [
             "crime_incident:shooting"
           ],
-          "headline": "'UNCOMFORTABLE': Neighbors react as Boca Raton police investigate targeted shooting",
+          "headline": "'UNCOMFORTABLE': Targeted shooting in Boca Raton leaves woman injured",
           "source_url": "https://www.wptv.com/news/local-news/our-community/boca-raton-delray-beach/boca-raton-police-investigating-shooting-near-ne-second-court"
         },
         {
@@ -64,19 +77,6 @@
           ],
           "headline": "19-year-old Boynton Beach man dies following Saturday shooting",
           "source_url": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/19-year-old-boynton-beach-man-dies-following-saturday-shooting"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Community partners provide 750 backpacks to local students - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/news/martin/community-partners-provide-750-backpacks-to-local-students/article_c53dc9c9-9349-580c-aa7b-7084af70f023.html"
         }
       ]
     },
@@ -85,7 +85,7 @@
       "category_label": "Crime & Safety",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 2,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -94,9 +94,24 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 2,
-      "rejected_count": 2,
+      "assessed_count": 3,
+      "rejected_count": 3,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "schools_education:new school"
+          ],
+          "headline": "'The more I give, the hungrier I get': Non-profit on a back-to-school mission",
+          "source_url": "https://www.wptv.com/community/lets-hear-it/the-more-i-give-the-hungrier-i-get-non-profit-on-a-back-to-school-mission"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -109,7 +124,7 @@
           "competing_signals": [
             "crime_public_safety:shooting"
           ],
-          "headline": "'UNCOMFORTABLE': Neighbors react as Boca Raton police investigate targeted shooting",
+          "headline": "'UNCOMFORTABLE': Targeted shooting in Boca Raton leaves woman injured",
           "source_url": "https://www.wptv.com/news/local-news/our-community/boca-raton-delray-beach/boca-raton-police-investigating-shooting-near-ne-second-court"
         },
         {
@@ -143,7 +158,7 @@
       "category_label": "Things To Do",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 9,
+      "assessed_count": 8,
       "rejected_count": 0,
       "rejections": []
     },
@@ -179,7 +194,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 2,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     }

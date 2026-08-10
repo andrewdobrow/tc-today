@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-10T03:15:23Z",
+  "generated_at": "2026-08-10T10:46:44Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -17,27 +17,28 @@
     "statuses": {
       "category_eligibility_archive_recovery": 2,
       "county_zero_candidate_archive_recovery": 1,
-      "generated_live": 2,
-      "generation_failed_archive_recovery": 2,
+      "generated_live": 1,
+      "generation_failed_archive_recovery": 1,
       "no_publishable_sources": 1,
+      "quality_gate_archive_recovery": 2,
       "sports_zero_candidate_archive_recovery": 1
     },
     "failures": {
-      "article_framing_integrity": 1,
       "contextless_update_lead": 1,
       "no_category_eligible_sources": 2,
       "no_source_backed_county_hero_candidates": 1,
-      "no_sports_hero_candidates": 1
+      "no_sports_hero_candidates": 1,
+      "publication_quality_rejected": 2
     },
-    "model_attempt_count": 6,
-    "model_elapsed_seconds": 72.166,
-    "archive_recovery_requested_count": 7,
+    "model_attempt_count": 5,
+    "model_elapsed_seconds": 129.734,
+    "archive_recovery_requested_count": 8,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 2,
-    "article_framing_rejection_count": 2,
-    "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 33,
-    "story_aware_update_context_count": 1
+    "article_framing_rejection_count": 0,
+    "category_eligibility_rejection_count": 6,
+    "published_story_duplicate_suppression_count": 29,
+    "story_aware_update_context_count": 0
   },
   "categories": [
     {
@@ -45,7 +46,7 @@
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 21,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -73,12 +74,25 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "'The more I give, the hungrier I get': Non-profit on a back-to-school mission",
+          "source_url": "https://www.wptv.com/community/lets-hear-it/the-more-i-give-the-hungrier-i-get-non-profit-on-a-back-to-school-mission"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
           "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
           "competing_signals": [
             "crime_incident:shooting"
           ],
-          "headline": "'UNCOMFORTABLE': Neighbors react as Boca Raton police investigate targeted shooting",
+          "headline": "'UNCOMFORTABLE': Targeted shooting in Boca Raton leaves woman injured",
           "source_url": "https://www.wptv.com/news/local-news/our-community/boca-raton-delray-beach/boca-raton-police-investigating-shooting-near-ne-second-court"
         },
         {
@@ -95,22 +109,9 @@
           ],
           "headline": "19-year-old Boynton Beach man dies following Saturday shooting",
           "source_url": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/19-year-old-boynton-beach-man-dies-following-saturday-shooting"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Community partners provide 750 backpacks to local students - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/news/martin/community-partners-provide-750-backpacks-to-local-students/article_c53dc9c9-9349-580c-aa7b-7084af70f023.html"
         }
       ],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -135,21 +136,21 @@
         {
           "category_key": "local_gov",
           "source_headline": "Before sunrise, Indian River students will be on the roadSchools reopen Aug. 10 as officials warn drivers and families to stay alert around buses, school zones and drop-off areas - Hometown News Treasure Coast",
-          "source_url": "https://news.google.com/rss/articles/CBMimAJBVV95cUxONDNiMV93c3owUTNXYnNiR0psWmtta2tFdFUzUUVpMnd5eGh1M280OVJvTHZ1dG1DRDdVS3JGV1h3WEsxMDRIYjBqc3NWVmhweDk4dFp5MWtJdnRtX1NzNWZBQVI1ME1ka042Vl9sc01sb1hMSUM0cUZDYXdDRVh1MExMQ0NfZURLMlFMZXY2SDh4TmR1OU5QcjNteTc4MUVJNGp3VkJjOG8zbGUxeHYxYjQwU0NBYkNTUG9lYVh3aTgzVlhJSUt2WGhUTkswVjJIX28ybS1ueHJvYzVobko2NHRvTnpVajFVS3AxaUk5S3pOS01JeXJuOV9sZUtwblQ0RTg2cjlVaU9ockxGaGhJVVRhWHdTUlRV",
+          "source_url": "https://www.hometownnewstc.com/news/indian_river/before-sunrise-indian-river-students-will-be-on-the-roadschools-reopen-aug-10-as-officials/article_86a65c96-1a6a-5589-baed-081a836bafcf.html",
           "editorial_story_id": "story_002734",
           "canonical_slug": "2026-08-09-indian-river-county-schools-open-monday-with-some-bus-pickups-before-sunrise",
           "canonical_headline": "Indian River County schools open Monday with some bus pickups before sunrise",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "local_gov",
           "source_headline": "Slow down: St. Lucie schools reopen Aug. 10 - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/news/st_lucie/slow-down-st-lucie-schools-reopen-aug-10/article_a56c9fc8-2ee7-5a26-9f72-c653659f5ad1.html",
+          "source_url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNN3JiUXRhV0V6WC1fMU1sVzI1WVZaeEZ2WVhaMVNKSjJRdXdab0N6U25GbThwRFhhbDZvLVpLUm5SQlZCVEk4Vmdtc0tmWkY5Qm00T0ktMG1KZXNkRmxOT3ZROV96LU1pWU9sNW5WTWxxQU40MTJ0TmFvZW1kWWJkU1NnbFRGTGsycTNqZF9GYzFhWTBNSTNLcEtPUk05Y21vS1FMbHJ0c19fUFhsb2lJUHFfVzFhUnoyWVZIcXJaMEwzV01wLTZCV1FVbDVaSEZw",
           "editorial_story_id": "story_002738",
           "canonical_slug": "2026-08-09-st-lucie-county-schools-reopen-monday-with-new-bus-safety-warnings",
           "canonical_headline": "St. Lucie County schools reopen Monday with new bus safety warnings",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -161,55 +162,35 @@
           "canonical_headline": "Martin County schools open Monday with new school bus safety measures and earlier start times",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Riverland-Kennedy rezoning postponed for resident meeting - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/news/st_lucie/riverland-kennedy-rezoning-postponed-for-resident-meeting/article_e7636f0a-a2f2-527a-b182-fca8c163743b.html",
-          "editorial_story_id": "story_002680",
-          "canonical_slug": "2026-08-08-port-st-lucie-postpones-riverland-sports-complex-rezoning-after-tradition-reside",
-          "canonical_headline": "Port St. Lucie postpones Riverland sports complex rezoning after Tradition residents protest",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "new_publication_stale_rejected_count": 2,
-      "elapsed_seconds": 6.953
+      "new_publication_stale_rejected_count": 0,
+      "elapsed_seconds": 13.275
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generation_failed_archive_recovery",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 7.923,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Treasure Coast crime stories available in provided sources"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 9.754,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Treasure Coast crime stories available in today's feed"
+          "elapsed_seconds": 12.037,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 17.677,
-      "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — No Treasure Coast crime stories available in today's feed",
+      "model_elapsed_seconds": 12.037,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -218,7 +199,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 1,
@@ -237,9 +218,9 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 20.255
+      "elapsed_seconds": 20.294
     },
     {
       "category_key": "business",
@@ -247,7 +228,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 20,
-      "publishable_source_count": 2,
+      "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -264,9 +245,24 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "schools_education:new school"
+          ],
+          "headline": "'The more I give, the hungrier I get': Non-profit on a back-to-school mission",
+          "source_url": "https://www.wptv.com/community/lets-hear-it/the-more-i-give-the-hungrier-i-get-non-profit-on-a-back-to-school-mission"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -279,7 +275,7 @@
           "competing_signals": [
             "crime_public_safety:shooting"
           ],
-          "headline": "'UNCOMFORTABLE': Neighbors react as Boca Raton police investigate targeted shooting",
+          "headline": "'UNCOMFORTABLE': Targeted shooting in Boca Raton leaves woman injured",
           "source_url": "https://www.wptv.com/news/local-news/our-community/boca-raton-delray-beach/boca-raton-police-investigating-shooting-near-ne-second-court"
         },
         {
@@ -343,15 +339,15 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "new_publication_stale_rejected_count": 4,
-      "elapsed_seconds": 2.997
+      "new_publication_stale_rejected_count": 6,
+      "elapsed_seconds": 4.324
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "sports_zero_candidate_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 22,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 5,
       "selected_source_count": 5,
       "cache_hit": false,
@@ -376,16 +372,6 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "sports",
-          "source_headline": "Tortugas hold off Mets 5-4 in Sunday finale, win series 4-3 - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/tortugas-hold-off-mets-5-4-in-sunday-finale-win-series-4-3/article_7780e0e8-c260-5bba-815a-b1c8f6d75915.html",
-          "editorial_story_id": "story_002970",
-          "canonical_slug": "2026-08-10-daytona-tortugas-rally-to-beat-st-lucie-mets-5-4-take-series-at-clover-park",
-          "canonical_headline": "Daytona Tortugas rally to beat St. Lucie Mets 5-4, take series at Clover Park",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "sports",
           "source_headline": "Tortugas pull away for 17-3 win over Mets - Hometown News Treasure Coast",
           "source_url": "https://www.hometownnewstc.com/sports/tortugas-pull-away-for-17-3-win-over-mets/article_ae6713ec-1863-596f-ac46-7138b723728f.html",
           "editorial_story_id": "story_002600",
@@ -403,35 +389,45 @@
           "canonical_headline": "St. Lucie Mets split doubleheader with Daytona, rally for 11-10 win in 10 innings",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "sports",
+          "source_headline": "Mets back at Clover Park Tuesday-Sunday vs. Daytona - Hometown News Treasure Coast",
+          "source_url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPRDhLQmhadUdiX0xLcFpnSFdRLXl1R20xVG1GdUIzdVpxLTBpRGdUZ2FENkxRVEFHUzdjckVERF92a1daNW5wVXZ2aUF5NDNaNXJtNXNRc1NPRG9FS2hRdWlwd1NZcXlxZHBQV3F0MDFYLXNhU1RXUm1kaUwteWhTcW9YZkhEYnpfUHdHckJ1QkdIcjNPajVfTktRVjBFN0wtMnNCVHNUVWFpR2hnd0V4TkdUdzVveXpxY01wM0x3c3lnRFZBMGozVkJ6MW9ISHlNU0pNbg",
+          "editorial_story_id": "story_000995",
+          "canonical_slug": "2026-07-28-st-lucie-mets-host-fort-myers-for-seven-game-series-at-clover-park-starting-tues",
+          "canonical_headline": "St. Lucie Mets return to Clover Park for seven-game homestand against Fort Myers",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "new_publication_stale_rejected_count": 10,
-      "elapsed_seconds": 5.881
+      "new_publication_stale_rejected_count": 8,
+      "elapsed_seconds": 12.512
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
-      "status": "generated_live",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 9,
-      "selected_source_count": 9,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 8,
+      "selected_source_count": 8,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 14.177,
+          "elapsed_seconds": 70.602,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 14.177,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 70.602,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -440,20 +436,20 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "things_to_do",
-          "surface": "hero",
-          "headline": "Space Coast Symphony Orchestra brings Landscapes & Legends concert to Vero Beach Sunday",
-          "editorial_story_id": "story_002084",
-          "canonical_slug": "2026-08-04-space-coast-symphony-orchestra-brings-landscapes-legends-concert-to-vero-beach",
-          "canonical_headline": "Space Coast Symphony Orchestra brings Landscapes & Legends concert to Vero Beach",
+          "source_headline": "Big Taste of Martin County returns to support Big Brothers Big Sisters mentoring programs",
+          "source_url": "https://www.wptv.com/shining-a-light/big-taste-of-martin-county-returns-to-support-big-brothers-big-sisters-mentoring-programs",
+          "editorial_story_id": "story_000253",
+          "canonical_slug": "2026-07-23-big-taste-of-martin-county-returns-oct-6-to-support-youth-mentoring-programs",
+          "canonical_headline": "Big Brothers Big Sisters returns Big Taste of Martin County fundraiser to Stuart",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -461,9 +457,7 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "",
-      "generated_card_count": 0,
-      "elapsed_seconds": 17.991
+      "elapsed_seconds": 76.349
     },
     {
       "category_key": "florida",
@@ -496,7 +490,7 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 3.892
+      "elapsed_seconds": 12.562
     },
     {
       "category_key": "martin",
@@ -513,11 +507,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.558,
+          "elapsed_seconds": 11.922,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 12.558,
+      "model_elapsed_seconds": 11.922,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -556,11 +550,11 @@
         {
           "category_key": "martin",
           "source_headline": "Slow down: St. Lucie schools reopen Aug. 10 - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/news/st_lucie/slow-down-st-lucie-schools-reopen-aug-10/article_a56c9fc8-2ee7-5a26-9f72-c653659f5ad1.html",
+          "source_url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNN3JiUXRhV0V6WC1fMU1sVzI1WVZaeEZ2WVhaMVNKSjJRdXdab0N6U25GbThwRFhhbDZvLVpLUm5SQlZCVEk4Vmdtc0tmWkY5Qm00T0ktMG1KZXNkRmxOT3ZROV96LU1pWU9sNW5WTWxxQU40MTJ0TmFvZW1kWWJkU1NnbFRGTGsycTNqZF9GYzFhWTBNSTNLcEtPUk05Y21vS1FMbHJ0c19fUFhsb2lJUHFfVzFhUnoyWVZIcXJaMEwzV01wLTZCV1FVbDVaSEZw",
           "editorial_story_id": "story_002738",
           "canonical_slug": "2026-08-09-st-lucie-county-schools-reopen-monday-with-new-bus-safety-warnings",
           "canonical_headline": "St. Lucie County schools reopen Monday with new bus safety warnings",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -589,16 +583,16 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Man rescues woman trapped on railroad tracks in Hobe Sound",
+      "live_hero_headline": "Man rescues woman trapped on railroad crossing in Hobe Sound",
       "generated_card_count": 0,
-      "elapsed_seconds": 17.258
+      "elapsed_seconds": 17.649
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 21,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 2,
       "selected_source_count": 2,
       "cache_hit": false,
@@ -608,23 +602,23 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 14.378,
+          "elapsed_seconds": 16.385,
           "result": "contextless_update_lead",
           "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: new_development_missing — Port St. Lucie police investigate death of 77-year-old man found in pond - WPBF"
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — Horse reported missing after theft from pasture in Port St. Lucie - WPBF"
         },
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 13.376,
+          "elapsed_seconds": 18.788,
           "result": "contextless_update_lead",
           "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: new_development_missing — Port St. Lucie police investigate death of 77-year-old man found in pond - WPBF"
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — Horse reported missing after theft from pasture in Port St. Lucie - WPBF"
         }
       ],
-      "model_elapsed_seconds": 27.754,
+      "model_elapsed_seconds": 35.173,
       "failure_code": "contextless_update_lead",
-      "failure_summary": "Contextless update lead for hero: new_development_missing — Port St. Lucie police investigate death of 77-year-old man found in pond - WPBF",
+      "failure_summary": "Contextless update lead for hero: original_event_context_missing — Horse reported missing after theft from pasture in Port St. Lucie - WPBF",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -636,7 +630,7 @@
       "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -651,10 +645,20 @@
         {
           "category_key": "st_lucie",
           "source_headline": "Slow down: St. Lucie schools reopen Aug. 10 - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/news/st_lucie/slow-down-st-lucie-schools-reopen-aug-10/article_a56c9fc8-2ee7-5a26-9f72-c653659f5ad1.html",
+          "source_url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNN3JiUXRhV0V6WC1fMU1sVzI1WVZaeEZ2WVhaMVNKSjJRdXdab0N6U25GbThwRFhhbDZvLVpLUm5SQlZCVEk4Vmdtc0tmWkY5Qm00T0ktMG1KZXNkRmxOT3ZROV96LU1pWU9sNW5WTWxxQU40MTJ0TmFvZW1kWWJkU1NnbFRGTGsycTNqZF9GYzFhWTBNSTNLcEtPUk05Y21vS1FMbHJ0c19fUFhsb2lJUHFfVzFhUnoyWVZIcXJaMEwzV01wLTZCV1FVbDVaSEZw",
           "editorial_story_id": "story_002738",
           "canonical_slug": "2026-08-09-st-lucie-county-schools-reopen-monday-with-new-bus-safety-warnings",
           "canonical_headline": "St. Lucie County schools reopen Monday with new bus safety warnings",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Back-to-school safety alert: Martin County schools open Aug. 10 - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/news/martin/back-to-school-safety-alert-martin-county-schools-open-aug-10/article_6134a343-ac74-52f3-8fc0-73c4f6873981.html",
+          "editorial_story_id": "story_002735",
+          "canonical_slug": "2026-08-09-martin-county-schools-open-monday-with-new-school-bus-safety-measures-and-earlie",
+          "canonical_headline": "Martin County schools open Monday with new school bus safety measures and earlier start times",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -680,16 +684,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "F-bombs fly in clash over Port St. Lucie campaign signs - WPEC",
-          "source_url": "https://cbs12.com/news/local/f-bombs-fly-in-clash-over-campaign-sign-involving-mayors-husband-opponent-port-st-lucie-police-department-pslpd-campaign-signs-political-signs-election-2026-august-election-local-election-mayoral-election-campaign-dispute-confrontation",
-          "editorial_story_id": "story_002645",
-          "canonical_slug": "2026-08-09-f-bombs-fly-in-confrontation-over-port-st-lucie-campaign-signs",
-          "canonical_headline": "F-bombs fly in confrontation over Port St. Lucie campaign signs",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Driver arrested after alleged road rage incident leads to four-vehicle crash in Port St. Lucie - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-driver-road-rage-incident-leads-four-vehicle-crash-port-st-lucie/73366168",
           "editorial_story_id": "story_002838",
@@ -707,67 +701,23 @@
           "canonical_headline": "3 arrested in death of 3-month-old in St. Lucie County from dehydration and malnutrition",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Back to School: Tradition Lakes K-8 prepares to open in St. Lucie County - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-back-to-school-tradition-lakes-k-8-st-lucie-county/73344051",
-          "editorial_story_id": "story_002246",
-          "canonical_slug": "2026-08-04-st-lucie-county-schools-open-aug-10-with-new-tradition-lakes-k-8-campus-and-ai-c",
-          "canonical_headline": "St. Lucie County schools open Aug. 10 with new Tradition Lakes K-8 campus and AI courses",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Palm Beach County Sheriff's Office employee killed in Port St. Lucie murder-suicide - WPBF",
-          "source_url": "https://www.wpbf.com/article/palm-beach-county-sheriffs-office-employee-port-st-lucie-murder-suicide/73337086",
-          "editorial_story_id": "story_001880",
-          "canonical_slug": "2026-08-02-elizabeth-ortega-killed-ralph-varela-sr-dead-in-port-st-lucie-murder-suicide-on",
-          "canonical_headline": "Port St. Lucie police release 911 call in fatal domestic shooting of Palm Beach Sheriff's Office employee",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Port St. Lucie police investigate death of 77-year-old man found in pond - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-port-st-lucie-police-77-year-old-found-dead-pond/73379700",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-death-of-77-year-old-man-found-in-pond-near-his",
-          "canonical_headline": "Port St. Lucie police investigate death of 77-year-old man found in pond near his home",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_002646",
-            "source:https://www.wpbf.com/article/florida-port-st-lucie-police-77-year-old-found-dead-pond/73379700"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_002646,source:https://www.wpbf.com/article/florida-port-st-lucie-police-77-year-old-found-dead-pond/73379700",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "new_publication_stale_rejected_count": 1,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "new_publication_stale_rejected_count": 2,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 30.784
+      "elapsed_seconds": 42.213
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "county_zero_candidate_archive_recovery",
-      "fetched_candidate_count": 26,
+      "fetched_candidate_count": 25,
       "fresh_candidate_count": 22,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
@@ -783,10 +733,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -817,22 +767,12 @@
           "canonical_headline": "Indian River County schools open Monday with some bus pickups before sunrise",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "County approves Westside Racquet Club requests - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/news/indian_river/county-approves-westside-racquet-club-requests/article_47c3825d-240c-5d2f-b8eb-edaefbc8aea7.html",
-          "editorial_story_id": "story_002774",
-          "canonical_slug": "2026-08-09-indian-river-county-approves-expansion-of-westside-racquet-club-in-vero-beach",
-          "canonical_headline": "Indian River County approves expansion of Westside Racquet Club in Vero Beach",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 4.379
+      "elapsed_seconds": 7.992
     }
   ]
 }
