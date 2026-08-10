@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-10T02:23:34Z",
+  "generated_at": "2026-08-10T03:15:23Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -8,8 +8,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government and Business & Development enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 24,
-    "rejected_count": 3,
+    "assessed_count": 27,
+    "rejected_count": 5,
     "enforced_categories": [
       "business",
       "local_gov"
@@ -32,9 +32,24 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 2,
-      "rejected_count": 2,
+      "assessed_count": 3,
+      "rejected_count": 3,
       "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:shooting"
+          ],
+          "headline": "'UNCOMFORTABLE': Neighbors react as Boca Raton police investigate targeted shooting",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/boca-raton-delray-beach/boca-raton-police-investigating-shooting-near-ne-second-court"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -70,7 +85,7 @@
       "category_label": "Crime & Safety",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 1,
+      "assessed_count": 2,
       "rejected_count": 0,
       "rejections": []
     },
@@ -79,9 +94,24 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 1,
-      "rejected_count": 1,
+      "assessed_count": 2,
+      "rejected_count": 2,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_treasure_coast_business_nexus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:shooting"
+          ],
+          "headline": "'UNCOMFORTABLE': Neighbors react as Boca Raton police investigate targeted shooting",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/boca-raton-delray-beach/boca-raton-police-investigating-shooting-near-ne-second-court"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -140,7 +170,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 3,
+      "assessed_count": 2,
       "rejected_count": 0,
       "rejections": []
     },
@@ -149,7 +179,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 1,
+      "assessed_count": 2,
       "rejected_count": 0,
       "rejections": []
     }
