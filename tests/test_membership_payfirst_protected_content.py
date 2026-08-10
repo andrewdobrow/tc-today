@@ -413,3 +413,30 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     assert first.count('data-tct-member-prepaint') == 1
     assert first.count('/membership.css?v=1.13.5.7') == 1
     assert first.count('/membership.js?v=1.13.5.7') == 1
+
+
+def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
+    script_path = ROOT / "scripts/prepare_membership_paywall.py"
+    spec = importlib.util.spec_from_file_location("prepare_membership_nested_update", script_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader
+    spec.loader.exec_module(module)
+
+    body = (
+        '<div class="article-update"><p><strong>UPDATE:</strong> The child was safely located late Wednesday night, and the sheriff thanked residents who shared the alert while deputies searched the surrounding Palm City area.</p></div>'
+        '<p><strong>Original report:</strong></p>'
+        '<p>The sheriff requested public help locating the missing child after he was last seen leaving a senior living community, and deputies asked residents in nearby neighborhoods to check yards, cameras and common areas.</p>'
+        '<p>Additional original reporting described the child, the clothing he was wearing, where he was last seen and how residents could contact deputies with information while the search remained active.</p>'
+    )
+    page = (
+        '<div class="article-body">' + body + '</div>'
+        '<aside class="newsletter-inline-slot newsletter-inline-slot--article">newsletter</aside>'
+        '<div class="article-share">share</div>'
+    )
+    match = module.BODY_RE.search(page)
+    assert match
+    assert match.group(1) == body
+    split = split_article_body(match.group(1))
+    assert split is not None
+    assert 'Original report:' in split.protected_html
+    assert 'Additional original reporting' in split.protected_html

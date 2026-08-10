@@ -1849,7 +1849,19 @@ def _apply_article_content_overrides_to_outputs(output_root=None):
         update_html = f'<div class="article-update"><p><strong>{html_lib.escape(update_label)}</strong> {html_lib.escape(update_text)}</p></div>'
         original_html = ''.join(f'<p>{html_lib.escape(x.strip())}</p>' for x in body.split('\n\n') if x.strip())
         replacement = f'<div class="article-body">{update_html}<p><strong>{html_lib.escape(original_label)}</strong></p>{original_html}</div>'
-        text = re.sub(r'<div class="article-body">.*?</div>', replacement, text, count=1, flags=re.S)
+        # Article pages may already be transformed into the membership preview/paywall
+        # shell from a previous production run. Replacing only the first closing
+        # ``</div>`` is not safe because the preview/paywall region contains nested
+        # divs. That old behavior left the remainder of the prior body behind and
+        # appended another copy on every run. Replace the complete article-content
+        # region, stopping only at the stable newsletter/share boundary.
+        article_region = re.compile(
+            r'<div class="article-body(?:\s+[^"]*)?"[^>]*>.*?\s*'
+            r'(?=(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?'
+            r'<div class="article-share">)',
+            re.I | re.S,
+        )
+        text = article_region.sub(replacement + "\n", text, count=1)
         # JSON-LD
         m = re.search(r'<script type="application/ld\+json">(.*?)</script>', text, re.S)
         if m:

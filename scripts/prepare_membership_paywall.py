@@ -29,7 +29,12 @@ from tct_engine.membership_paywall import (
 )
 
 ARTICLES = ROOT / "articles"
-BODY_RE = re.compile(r'<div class="article-body">(.*?)</div>', re.I | re.S)
+BODY_RE = re.compile(
+    r'<div class="article-body">(.*?)</div>'
+    r'(?=\s*(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?'
+    r'<div class="article-share">)',
+    re.I | re.S,
+)
 HEADLINE_RE = re.compile(r'<h1\b[^>]*class="[^"]*article-headline[^"]*"[^>]*>(.*?)</h1>', re.I | re.S)
 TAG_RE = re.compile(r'<[^>]+>')
 PAYWALLED_RE = re.compile(
