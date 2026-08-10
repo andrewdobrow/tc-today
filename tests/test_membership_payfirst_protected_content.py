@@ -365,3 +365,51 @@ def test_membership_cli_scripts_bootstrap_repo_package_when_executed_by_path():
     assert sync.returncode == 0, sync.stderr
     assert "--scan-public" in sync.stdout
     assert "--snapshot-file" in sync.stdout
+
+
+def test_verified_member_hint_suppresses_paywall_before_first_paint_without_granting_content():
+    page = '<!doctype html><html><head><title>Story</title></head><body><div class="article-body">Body</div></body></html>'
+    page = inject_membership_assets(page, "story-slug")
+    css = (ROOT / "membership.css").read_text()
+    js = (ROOT / "membership.js").read_text()
+
+    # The tiny synchronous hint runs in <head>, before any body/paywall can paint.
+    assert 'data-tct-member-prepaint' in page
+    assert "localStorage.getItem('tct_member_entitled_hint')==='1'" in page
+    assert "document.documentElement.classList.add('tct-member-preverified')" in page
+    assert page.index('data-tct-member-prepaint') < page.index('</head>') < page.index('<body')
+
+    # Retained pages receive cache-busted assets so the no-flash code takes effect
+    # immediately after deployment rather than waiting on an old browser cache.
+    assert 'href="/membership.css?v=1.13.5.7"' in page
+    assert 'src="/membership.js?v=1.13.5.7"' in page
+
+    # The hint only changes presentation: the sales card/fade are suppressed and
+    # the teaser is shown without its anonymous-reader mask while verification runs.
+    assert 'html.tct-member-preverified .tct-member-only' in css
+    assert 'display: none !important' in css
+    assert 'html.tct-member-preverified .tct-preview-copy' in css
+    assert 'mask-image: none !important' in css
+
+    # The hint is written only from a successful server membership decision and
+    # cannot substitute for the entitlement check that gates protected content.
+    entitled_at = js.index('const entitled = Boolean(data?.entitled)')
+    hint_at = js.index('setMemberHint(entitled)', entitled_at)
+    status_gate_at = js.index('if (!status.entitled)')
+    protected_fetch_at = js.index("supabase.functions.invoke('protected-article'")
+    assert entitled_at < hint_at
+    assert status_gate_at < protected_fetch_at
+    assert "localStorage.getItem(MEMBER_HINT_KEY)" not in js
+    assert "localStorage.setItem(MEMBER_HINT_KEY, '1')" in js
+    assert "localStorage.removeItem(MEMBER_HINT_KEY)" in js
+    assert "event === 'SIGNED_OUT'" in js
+
+
+def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_assets():
+    page = '''<!doctype html><html><head><link rel="stylesheet" href="/membership.css"></head><body data-article-slug="old"><script src="/membership-config.js"></script><script type="module" src="/membership.js"></script></body></html>'''
+    first = inject_membership_assets(page, "old")
+    second = inject_membership_assets(first, "old")
+    assert first == second
+    assert first.count('data-tct-member-prepaint') == 1
+    assert first.count('/membership.css?v=1.13.5.7') == 1
+    assert first.count('/membership.js?v=1.13.5.7') == 1

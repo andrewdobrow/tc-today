@@ -199,15 +199,49 @@ def add_paywall_schema(page_html: str) -> str:
     return page_html
 
 
+MEMBER_HINT_KEY = "tct_member_entitled_hint"
+MEMBERSHIP_ASSET_VERSION = "1.13.5.7"
+MEMBER_PREPAINT_MARKER = "data-tct-member-prepaint"
+MEMBER_PREPAINT_SCRIPT = (
+    '<script data-tct-member-prepaint>\n'
+    "(function(){try{if(localStorage.getItem('tct_member_entitled_hint')==='1')"
+    "document.documentElement.classList.add('tct-member-preverified')}catch(_e){}})();\n"
+    '</script>'
+)
+
+
 def inject_membership_assets(page_html: str, slug: str) -> str:
-    if '/membership.css' not in page_html:
-        page_html = page_html.replace('</head>', '  <link rel="stylesheet" href="/membership.css">\n</head>', 1)
-    if '/membership.js' not in page_html:
-        page_html = page_html.replace('</body>', '  <script src="/membership-config.js"></script>\n  <script type="module" src="/membership.js"></script>\n</body>', 1)
-    if re.search(r'<body\b[^>]*>', page_html, re.I):
+    css_href = f"/membership.css?v={MEMBERSHIP_ASSET_VERSION}"
+    js_src = f"/membership.js?v={MEMBERSHIP_ASSET_VERSION}"
+
+    # Run the visual member hint before first paint. This only suppresses the
+    # sales treatment while entitlement is rechecked; protected article text is
+    # still available only through the server-side protected-article function.
+    if MEMBER_PREPAINT_MARKER not in page_html:
+        page_html = page_html.replace("</head>", f"  {MEMBER_PREPAINT_SCRIPT}\n</head>", 1)
+
+    # Normalize retained pages to cache-busted membership assets so a browser
+    # cannot keep the pre-no-flash JS/CSS after this deployment.
+    css_pattern = re.compile(r"href=['\"]/membership\.css(?:\?[^'\"]*)?['\"]", re.I)
+    if css_pattern.search(page_html):
+        page_html = css_pattern.sub(f'href="{css_href}"', page_html, count=1)
+    else:
+        page_html = page_html.replace("</head>", f'  <link rel="stylesheet" href="{css_href}">\n</head>', 1)
+
+    js_pattern = re.compile(r"src=['\"]/membership\.js(?:\?[^'\"]*)?['\"]", re.I)
+    if js_pattern.search(page_html):
+        page_html = js_pattern.sub(f'src="{js_src}"', page_html, count=1)
+    else:
+        page_html = page_html.replace(
+            "</body>",
+            f'  <script src="/membership-config.js"></script>\n  <script type="module" src="{js_src}"></script>\n</body>',
+            1,
+        )
+
+    if re.search(r"<body\b[^>]*>", page_html, re.I):
         page_html = re.sub(
-            r'<body\b([^>]*)>',
-            lambda m: f'<body{m.group(1)} data-article-slug="{html.escape(slug, quote=True)}">' if 'data-article-slug=' not in m.group(0) else m.group(0),
+            r"<body\b([^>]*)>",
+            lambda m: f'<body{m.group(1)} data-article-slug="{html.escape(slug, quote=True)}">' if "data-article-slug=" not in m.group(0) else m.group(0),
             page_html,
             count=1,
             flags=re.I,

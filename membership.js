@@ -3,6 +3,18 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const config = window.TCT_MEMBERSHIP_CONFIG || {}
 const configured = Boolean(config.supabaseUrl && config.supabasePublishableKey)
 const supabase = configured ? createClient(config.supabaseUrl, config.supabasePublishableKey) : null
+
+const MEMBER_HINT_KEY = 'tct_member_entitled_hint'
+function setMemberHint(entitled){
+  try {
+    if (entitled) localStorage.setItem(MEMBER_HINT_KEY, '1')
+    else localStorage.removeItem(MEMBER_HINT_KEY)
+  } catch {}
+  document.documentElement.classList.toggle('tct-member-preverified', Boolean(entitled))
+}
+function endMemberPrepaint(){
+  document.documentElement.classList.remove('tct-member-preverified')
+}
 if (config.paymentMode === 'test' || config.sandbox) {
   document.querySelector('[data-membership-sandbox]')?.classList.remove('hidden')
 } else if (!config.uiEnabled) {
@@ -71,10 +83,22 @@ async function sendMagicLink(form){
 async function membershipStatus(){
   if (!supabase) return null
   const { data: { session } } = await supabase.auth.getSession()
-  if (!session) return { authenticated:false, entitled:false }
+  if (!session) {
+    setMemberHint(false)
+    document.body.classList.remove('tct-member-entitled')
+    return { authenticated:false, entitled:false }
+  }
   const { data, error } = await supabase.functions.invoke('membership-status')
-  if (error) return { authenticated:true, entitled:false, error:error.message }
-  document.body.classList.toggle('tct-member-entitled', Boolean(data?.entitled))
+  if (error) {
+    // A transport/backend failure is not an entitlement decision. Reveal the
+    // normal paywall so its error state is visible, but keep the stored hint so
+    // the next navigation can still avoid a flash after service recovers.
+    endMemberPrepaint()
+    return { authenticated:true, entitled:false, error:error.message }
+  }
+  const entitled = Boolean(data?.entitled)
+  setMemberHint(entitled)
+  document.body.classList.toggle('tct-member-entitled', entitled)
   return data
 }
 
@@ -147,6 +171,7 @@ async function unlockArticle(){
     return
   }
   if (!status.entitled) {
+    endMemberPrepaint()
     setMessage(message, status.error ? `Membership check failed: ${status.error}` : 'This signed-in account does not have an active membership.', Boolean(status.error))
     plans?.classList.remove('hidden')
     return
@@ -154,6 +179,9 @@ async function unlockArticle(){
   setMessage(message, 'Unlocking article…')
   const { data, error } = await supabase.functions.invoke('protected-article', { body: { slug } })
   if (error || !data?.protected_body) {
+    // If protected content cannot be retrieved, restore the visible shell so the
+    // member sees the error instead of being stranded on an apparently truncated article.
+    endMemberPrepaint()
     setMessage(message, `We couldn't load the member portion of this article. ${data?.error || error?.message || ''}`.trim(), true)
     return
   }
@@ -167,6 +195,7 @@ async function unlockArticle(){
     preview.classList.remove('tct-member-preview')
     qs('.tct-preview-copy', preview)?.classList.remove('tct-preview-copy')
     memberOnly?.remove()
+    endMemberPrepaint()
     return
   }
 
@@ -190,6 +219,7 @@ async function unlockArticle(){
   }
   qs('.tct-paywall-fade')?.remove()
   paywall.remove()
+  endMemberPrepaint()
 }
 
 function revealSignIn(button){
@@ -212,12 +242,15 @@ if (!configured) {
   qsa('[data-signin-form]').forEach(form => form.addEventListener('submit', event => { event.preventDefault(); sendMagicLink(form) }))
   qsa('[data-reveal-signin]').forEach(button => button.addEventListener('click', () => revealSignIn(button)))
   qsa('[data-create-portal]').forEach(button => button.addEventListener('click', () => openPortal(button)))
-  qsa('[data-sign-out]').forEach(button => button.addEventListener('click', async () => { await supabase.auth.signOut(); await refreshSubscribeAccount(); await unlockArticle() }))
+  qsa('[data-sign-out]').forEach(button => button.addEventListener('click', async () => { await supabase.auth.signOut(); setMemberHint(false); await refreshSubscribeAccount(); await unlockArticle() }))
   revealRequestedSignIn()
   await finishCheckout()
   await refreshSubscribeAccount()
   await unlockArticle()
-  supabase.auth.onAuthStateChange(() => setTimeout(async () => { await refreshSubscribeAccount(); await unlockArticle() }, 0))
+  supabase.auth.onAuthStateChange((event) => {
+    if (event === 'SIGNED_OUT') setMemberHint(false)
+    setTimeout(async () => { await refreshSubscribeAccount(); await unlockArticle() }, 0)
+  })
 }
 
 const cancelled = new URLSearchParams(window.location.search).get('checkout') === 'cancelled'

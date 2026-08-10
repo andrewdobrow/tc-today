@@ -86,6 +86,16 @@ body.membership-page {
   position: relative;
   overflow: visible;
 }
+/* A previously verified member gets this class synchronously in <head>, before
+   first paint. It only suppresses the sales treatment while server entitlement
+   is rechecked; protected article text is still unavailable until that check succeeds. */
+html.tct-member-preverified .tct-member-only {
+  display: none !important;
+}
+html.tct-member-preverified .tct-preview-copy {
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
 .tct-preview-copy {
   position: relative;
   overflow: hidden;
