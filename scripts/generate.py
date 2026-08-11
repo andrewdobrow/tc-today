@@ -156,7 +156,7 @@ def _header_primary_cta_html():
             f'<a href="{href}" class="support-btn membership-subscribe-btn" '
             'style="text-decoration:none" aria-label="Start a 7-day free Treasure Coast Today trial — then $4.99 monthly or $49 annually">'
             '<span class="membership-subscribe-label">Subscribe</span>'
-            '<span class="membership-subscribe-price">7 days free &middot; then $4.99/mo</span>'
+            '<span class="membership-subscribe-price">Limited time &middot; 7 days free &middot; then $4.99/mo</span>'
             '</a>'
             f'<a href="{signin_href}" class="membership-header-signin">Sign in</a>'
         )
@@ -16959,7 +16959,7 @@ def _page_footer():
         connect_column = """<div class="footer-column footer-connect footer-membership-ask">
         <strong>Support local journalism</strong>
         <p>Unlimited articles. No ads. Help fund independent Treasure Coast reporting.</p>
-        <a class="footer-subscribe-cta" href="/subscribe.html"><span>Start free trial</span><small>7 days free &middot; then $4.99/mo</small></a>
+        <a class="footer-subscribe-cta" href="/subscribe.html"><span>Start free trial</span><small>Limited time &middot; 7 days free &middot; then $4.99/mo</small></a>
       </div>"""
     else:
         connect_column = """<div class="footer-column footer-connect"><strong>Stay Connected</strong><p>Join our local community for news, updates and discussion.</p><a class="footer-cta" href="/contact.html">Connect with TCT</a></div>"""

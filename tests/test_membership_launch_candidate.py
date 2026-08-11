@@ -32,7 +32,7 @@ def test_launch_header_uses_coral_pricing_context_and_quiet_signin(monkeypatch):
     header = g._header_primary_cta_html()
     css = (ROOT / "style.css").read_text()
     assert "membership-subscribe-btn" in header
-    assert "7 days free &middot; then $4.99/mo" in header
+    assert "Limited time &middot; 7 days free &middot; then $4.99/mo" in header
     assert "membership-header-signin" in header
     assert "signin=1" in header
     assert "#f26445" in css
@@ -54,7 +54,7 @@ def test_sitewide_chrome_normalizer_preserves_dark_mode_and_launches_retained_pa
     g._apply_membership_site_chrome(tmp_path)
     launched = sample.read_text()
     assert "membership-subscribe-btn" in launched
-    assert "7 days free &middot; then $4.99/mo" in launched
+    assert "Limited time &middot; 7 days free &middot; then $4.99/mo" in launched
     assert "Sign in" in launched
 
 
@@ -66,7 +66,7 @@ def test_subscribe_page_is_real_landing_page_not_account_gate():
     assert 'data-plan="monthly"' in page
     assert "Create account" not in page
     assert 'type="password"' not in page
-    assert "7 days free &middot; then $4.99/mo" in page
+    assert "Limited time &middot; 7 days free &middot; then $4.99/mo" in page
     assert "After your 7-day free trial, your selected subscription renews automatically until canceled" in page
 
 

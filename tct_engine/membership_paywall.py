@@ -145,6 +145,7 @@ def paywall_html(slug: str) -> str:
     return f'''<div class="tct-paywall-fade" aria-hidden="true"></div>
 <section class="tct-paywall" data-tct-paywall data-slug="{escaped_slug}" aria-label="Treasure Coast Today membership">
   <div class="tct-paywall-topline">Already a member?&nbsp;<button class="tct-member-link" type="button" data-reveal-signin>Sign in</button></div>
+  <div class="tct-trial-urgency">Limited-time offer</div>
   <h2>Keep reading free for a week</h2>
   <p class="tct-paywall-value tct-trial-value">Unlimited access for <span class="tct-trial-price-old">$5/month</span> <span class="tct-trial-free">FREE for 1 week</span></p>
   <p class="tct-paywall-copy">Start your 7-day free trial for unlimited, ad-free access to Treasure Coast Today. After the trial, continue for $4.99/month or $49/year.</p>

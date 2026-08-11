@@ -28,6 +28,8 @@ def test_paywall_discloses_trial_and_post_trial_price():
     from tct_engine.membership_paywall import paywall_html
     markup = paywall_html("example-story")
     assert "FREE for 1 week" in markup
+    assert "Limited-time offer" in markup
+    assert "tct-trial-urgency" in markup
     assert "tct-trial-price-old" in markup
     assert "7 days free · then $4.99/month" in markup
     assert "Card required. You won’t be charged today." in markup
@@ -38,7 +40,8 @@ def test_subscribe_page_and_checkout_copy_match_trial_offer():
     page = (ROOT / "subscribe.html").read_text()
     browser = (ROOT / "membership.js").read_text()
     css = (ROOT / "membership.css").read_text()
-    assert "7 days free &middot; then $4.99/mo" in page
+    assert "Limited time &middot; 7 days free &middot; then $4.99/mo" in page
+    assert "membership-trial-urgency" in page
     assert "Start 7-day free trial" in page
     assert "Your 7-day free trial has started" in browser
     assert "membership-trial-price-old" in css
@@ -47,6 +50,6 @@ def test_subscribe_page_and_checkout_copy_match_trial_offer():
 
 def test_generated_site_chrome_advertises_trial_consistently():
     generator = (ROOT / "scripts/generate.py").read_text()
-    assert "7 days free &middot; then $4.99/mo" in generator
+    assert "Limited time &middot; 7 days free &middot; then $4.99/mo" in generator
     assert "Start your free trial" in generator
     assert "Unlimited local news. Free for your first week." in generator
