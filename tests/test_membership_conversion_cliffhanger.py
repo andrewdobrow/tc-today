@@ -64,7 +64,7 @@ def test_launch_footer_has_distinct_coral_subscription_ask(monkeypatch):
     css = (ROOT / "style.css").read_text()
     assert "Support local journalism" in footer
     assert 'class="footer-subscribe-cta"' in footer
-    assert "$4.99/mo &middot; $49/yr" in footer
+    assert "7 days free &middot; then $4.99/mo" in footer
     assert 'href="/subscribe.html"' in footer
     assert "background: #f26445" in css
 

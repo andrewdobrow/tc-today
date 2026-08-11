@@ -154,9 +154,9 @@ def _header_primary_cta_html():
         signin_href = f"{href}{joiner}signin=1"
         return (
             f'<a href="{href}" class="support-btn membership-subscribe-btn" '
-            'style="text-decoration:none" aria-label="Subscribe to Treasure Coast Today — $4.99 monthly or $49 annually">'
+            'style="text-decoration:none" aria-label="Start a 7-day free Treasure Coast Today trial — then $4.99 monthly or $49 annually">'
             '<span class="membership-subscribe-label">Subscribe</span>'
-            '<span class="membership-subscribe-price">$4.99/mo &middot; $49/yr</span>'
+            '<span class="membership-subscribe-price">7 days free &middot; then $4.99/mo</span>'
             '</a>'
             f'<a href="{signin_href}" class="membership-header-signin">Sign in</a>'
         )
@@ -170,12 +170,12 @@ def _homepage_support_card_html():
       <a href="{href}" class="grid-card tct-membership-card" data-cat="all" data-support-card="true" aria-label="Subscribe to Treasure Coast Today">
         <div class="tct-membership-card-inner">
           <span class="tct-membership-kicker">Treasure Coast Today Membership</span>
-          <h2 class="tct-membership-headline">Comprehensive local coverage. No ads. Less than $5 a month.</h2>
-          <p class="tct-membership-copy">Get unlimited access to Treasure Coast Today and support independent journalism covering Martin, St. Lucie and Indian River counties.</p>
+          <h2 class="tct-membership-headline">Unlimited local news. Free for your first week.</h2>
+          <p class="tct-membership-copy">Start with 7 days free, then keep unlimited ad-free access while supporting independent journalism across Martin, St. Lucie and Indian River counties.</p>
           <span class="tct-membership-options" aria-hidden="true">
-            <span>$4.99 monthly</span><span>$49 annually</span><span>Completely ad-free</span>
+            <span>7 days free</span><span>$4.99 monthly</span><span>$49 annually</span><span>Completely ad-free</span>
           </span>
-          <span class="tct-membership-cta">View membership options <b>&rarr;</b></span>
+          <span class="tct-membership-cta">Start your free trial <b>&rarr;</b></span>
         </div>
       </a>'''
     return '''
@@ -16959,7 +16959,7 @@ def _page_footer():
         connect_column = """<div class="footer-column footer-connect footer-membership-ask">
         <strong>Support local journalism</strong>
         <p>Unlimited articles. No ads. Help fund independent Treasure Coast reporting.</p>
-        <a class="footer-subscribe-cta" href="/subscribe.html"><span>Subscribe</span><small>$4.99/mo &middot; $49/yr</small></a>
+        <a class="footer-subscribe-cta" href="/subscribe.html"><span>Start free trial</span><small>7 days free &middot; then $4.99/mo</small></a>
       </div>"""
     else:
         connect_column = """<div class="footer-column footer-connect"><strong>Stay Connected</strong><p>Join our local community for news, updates and discussion.</p><a class="footer-cta" href="/contact.html">Connect with TCT</a></div>"""

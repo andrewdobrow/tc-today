@@ -145,9 +145,9 @@ def paywall_html(slug: str) -> str:
     return f'''<div class="tct-paywall-fade" aria-hidden="true"></div>
 <section class="tct-paywall" data-tct-paywall data-slug="{escaped_slug}" aria-label="Treasure Coast Today membership">
   <div class="tct-paywall-topline">Already a member?&nbsp;<button class="tct-member-link" type="button" data-reveal-signin>Sign in</button></div>
-  <h2>Two ways to continue reading</h2>
-  <p class="tct-paywall-value">Comprehensive local coverage. No ads. Less than $5 a month.</p>
-  <p class="tct-paywall-copy">Get unlimited access to Treasure Coast Today and support independent journalism covering Martin, St. Lucie and Indian River counties.</p>
+  <h2>Keep reading free for a week</h2>
+  <p class="tct-paywall-value tct-trial-value">Unlimited access for <span class="tct-trial-price-old">$5/month</span> <span class="tct-trial-free">FREE for 1 week</span></p>
+  <p class="tct-paywall-copy">Start your 7-day free trial for unlimited, ad-free access to Treasure Coast Today. After the trial, continue for $4.99/month or $49/year.</p>
   <div class="membership-message hidden"></div>
   <div class="tct-paywall-signin hidden" data-paywall-signin>
     <form class="membership-form" data-signin-form>
@@ -161,20 +161,20 @@ def paywall_html(slug: str) -> str:
       <span class="tct-paywall-badge">Best value</span>
       <h3>Annual — $49/year</h3>
       <div class="tct-paywall-price">About $4.08/month</div>
-      <div class="tct-paywall-plan-note">Save $10.88 per year</div>
-      <button class="tct-member-btn" data-plan="annual" type="button">Subscribe annually</button>
+      <div class="tct-paywall-plan-note">7 days free · then $49/year</div>
+      <button class="tct-member-btn" data-plan="annual" type="button">Start 7-day free trial</button>
     </article>
     <article class="tct-paywall-plan">
       <span class="tct-paywall-badge tct-paywall-badge-flexible">Most flexible</span>
       <h3>Monthly — $4.99/month</h3>
       <div class="tct-paywall-price">$4.99</div>
-      <div class="tct-paywall-plan-note">Cancel anytime</div>
-      <button class="tct-member-btn" data-plan="monthly" type="button">Subscribe monthly</button>
+      <div class="tct-paywall-plan-note">7 days free · then $4.99/month</div>
+      <button class="tct-member-btn" data-plan="monthly" type="button">Start 7-day free trial</button>
     </article>
   </div>
   <p class="tct-paywall-benefits">Unlimited articles · No ads · Support independent local journalism</p>
-  <p class="tct-paywall-secure">Secure checkout powered by Stripe. Cancel anytime.</p>
-  <p class="tct-paywall-renewal">Subscriptions renew automatically until canceled. Manage or cancel your subscription anytime from your membership account.</p>
+  <p class="tct-paywall-secure">Secure checkout powered by Stripe. Card required. You won’t be charged today.</p>
+  <p class="tct-paywall-renewal">After your 7-day free trial, your selected subscription renews automatically until canceled. Cancel before the trial ends to avoid a charge.</p>
 </section>
 <div id="tct-protected-content" class="article-body tct-protected-content tct-paywalled-content" aria-live="polite"></div>'''
 
@@ -200,7 +200,7 @@ def add_paywall_schema(page_html: str) -> str:
 
 
 MEMBER_HINT_KEY = "tct_member_entitled_hint"
-MEMBERSHIP_ASSET_VERSION = "1.13.5.7"
+MEMBERSHIP_ASSET_VERSION = "1.13.5.9"
 MEMBER_PREPAINT_MARKER = "data-tct-member-prepaint"
 MEMBER_PREPAINT_SCRIPT = (
     '<script data-tct-member-prepaint>\n'

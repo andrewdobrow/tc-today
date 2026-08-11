@@ -38,7 +38,7 @@ def test_admin_bypass_is_server_side_and_not_a_static_passcode():
     assert "noindex,nofollow,noarchive" in page
 
 
-def test_checkout_is_pay_first_and_uses_only_server_side_stripe_secrets():
+def test_checkout_is_checkout_first_and_uses_only_server_side_stripe_secrets():
     checkout = (ROOT / "supabase/functions/create-checkout/index.ts").read_text()
     browser = (ROOT / "membership.js").read_text()
 
