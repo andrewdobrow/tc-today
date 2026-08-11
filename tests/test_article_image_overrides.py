@@ -53,13 +53,17 @@ def test_current_surfaces_use_selected_image():
 
     homepage = (ROOT / "index.html").read_text()
     target_path = re.escape(f"/articles/{SLUG}.html")
-    placement = re.search(
+    placements = re.findall(
         rf'<a\b(?=[^>]*href="(?:https://treasurecoast\.today)?{target_path}")[^>]*>.*?</a>',
         homepage,
         flags=re.DOTALL,
     )
-    assert placement is not None
-    assert IMAGE in placement.group(0)
+    assert placements
+    # The same article can also appear in text-only surfaces such as the
+    # Older News rail. Those links intentionally contain no image. Enforce
+    # the override on every homepage placement that actually renders one.
+    image_placements = [placement for placement in placements if re.search(r"<img\b", placement)]
+    assert all(IMAGE in placement for placement in image_placements)
 
     feed = (ROOT / "feed.xml").read_text()
     feed_items = re.findall(r"<item>.*?</item>", feed, flags=re.DOTALL)
