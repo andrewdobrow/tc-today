@@ -382,8 +382,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.5.9bb"' in page
-    assert 'src="/membership.js?v=1.13.5.9bb"' in page
+    assert 'href="/membership.css?v=1.13.5.9b"' in page
+    assert 'src="/membership.js?v=1.13.5.9b"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
