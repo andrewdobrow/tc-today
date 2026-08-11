@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-11T14:25:13Z",
+  "generated_at": "2026-08-11T14:55:23Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,36 +16,39 @@
     "category_count": 9,
     "statuses": {
       "category_eligibility_archive_recovery": 1,
-      "generated_live": 4,
+      "county_zero_candidate_archive_recovery": 1,
+      "generated_live": 2,
       "generation_failed_archive_recovery": 1,
+      "no_publishable_sources": 1,
       "quality_gate_archive_recovery": 2,
       "sports_zero_candidate_archive_recovery": 1
     },
     "failures": {
-      "contextless_update_lead": 1,
+      "article_framing_integrity": 1,
       "no_category_eligible_sources": 1,
+      "no_source_backed_county_hero_candidates": 1,
       "no_sports_hero_candidates": 1,
       "publication_quality_rejected": 2
     },
-    "model_attempt_count": 9,
-    "model_elapsed_seconds": 257.873,
-    "archive_recovery_requested_count": 5,
+    "model_attempt_count": 6,
+    "model_elapsed_seconds": 184.685,
+    "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 5,
-    "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 14,
-    "published_story_duplicate_suppression_count": 40,
-    "story_aware_update_context_count": 14
+    "contextual_update_lead_rejection_count": 2,
+    "article_framing_rejection_count": 3,
+    "category_eligibility_rejection_count": 11,
+    "published_story_duplicate_suppression_count": 56,
+    "story_aware_update_context_count": 6
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "quality_gate_archive_recovery",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 10,
-      "selected_source_count": 2,
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 17,
+      "publishable_source_count": 6,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 1,
@@ -53,11 +56,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 5.303,
+          "elapsed_seconds": 2.662,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 5.303,
+      "model_elapsed_seconds": 2.662,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -68,8 +71,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 10,
-      "category_eligibility_rejection_count": 8,
+      "category_eligibility_assessed_count": 6,
+      "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -83,19 +86,6 @@
           "competing_signals": [],
           "headline": "South Carolina Senate race, Wisconsin governor primary headline Tuesday elections",
           "source_url": "https://www.wptv.com/politics/america-votes/south-carolina-senate-race-wisconsin-governor-primary-headline-tuesday-elections"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Tornado-damaged Martin County middle school continues rebuild as students return to class - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/tornado-damaged-martin-county-middle-school-continues-rebuild-as-students-return-to-class"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -143,45 +133,25 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:charged"
-          ],
-          "headline": "Alex Vindman's money advantage meets Angie Nixon's Florida roots in Democratic Senate primary",
-          "source_url": "https://www.wptv.com/news/state/vindmans-money-advantage-meets-nixons-florida-roots-in-democratic-senate-primary"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
           "headline": "Palm Beach County schools earn high marks on first day back",
           "source_url": "https://www.wptv.com/news/education/back-to-school/palm-beach-county-schools-earn-high-marks-on-first-day-back"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:shooting"
-          ],
-          "headline": "Troopers seek Ford F-150 driver after deadly e-bike hit-and-run in Vero Beach - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/troopers-seek-ford-f-150-driver-after-deadly-e-bike-hit-and-run-in-vero-beach-indian-river-county-vero-beach-florida-highway-patrol-fhp-fatal-crash-deadly-crash-hit-and-run-hit-and-run-crash-pedestrian-crash-bicyclist-killed-electric-bicycle"
         }
       ],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 12,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Tornado-damaged Martin County middle school continues rebuild as students return to class - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/tornado-damaged-martin-county-middle-school-continues-rebuild-as-students-return-to-class",
+          "editorial_story_id": "story_003263",
+          "canonical_slug": "2026-08-11-murray-middle-school-students-return-to-class-in-stuart-as-tornado-rebuild-conti",
+          "canonical_headline": "Murray Middle School students return to class in Stuart as tornado rebuild continues",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Indian River County launches new feature to track school buses in real time - cw34.com",
@@ -200,6 +170,16 @@
           "canonical_slug": "2026-08-11-indian-river-county-superintendent-highlights-new-bus-routing-system-on-first-da",
           "canonical_headline": "Indian River County Superintendent highlights new bus routing system on first day of school",
           "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Alex Vindman's money advantage meets Angie Nixon's Florida roots in Democratic Senate primary",
+          "source_url": "https://www.wptv.com/news/state/vindmans-money-advantage-meets-nixons-florida-roots-in-democratic-senate-primary",
+          "editorial_story_id": "story_003185",
+          "canonical_slug": "2026-08-11-vindman-holds-fundraising-edge-over-nixon-in-florida-democratic-senate-primary",
+          "canonical_headline": "Vindman's $14.5 million war chest leads Nixon ahead of Florida Democratic Senate primary",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -244,6 +224,16 @@
         },
         {
           "category_key": "local_gov",
+          "source_headline": "Troopers seek Ford F-150 driver after deadly e-bike hit-and-run in Vero Beach - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/troopers-seek-ford-f-150-driver-after-deadly-e-bike-hit-and-run-in-vero-beach-indian-river-county-vero-beach-florida-highway-patrol-fhp-fatal-crash-deadly-crash-hit-and-run-hit-and-run-crash-pedestrian-crash-bicyclist-killed-electric-bicycle",
+          "editorial_story_id": "story_003095",
+          "canonical_slug": "2026-08-10-troopers-seek-ford-f-150-driver-after-deadly-e-bike-hit-and-run-in-vero-beach",
+          "canonical_headline": "Troopers seek Ford F-150 driver after deadly e-bike hit-and-run in Vero Beach",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
           "source_headline": "Martin County Schools achieves back-to-back A-ratings with focus on individual student instruction - WFLX",
           "source_url": "https://www.wflx.com/2026/08/10/martin-county-schools-achieves-back-to-back-a-ratings-with-focus-individual-student-instruction",
           "editorial_story_id": "story_003059",
@@ -273,86 +263,21 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Alex Vindman's money advantage meets Angie Nixon's Florida roots in Democratic Senate primary",
-          "source_url": "https://www.wptv.com/news/state/vindmans-money-advantage-meets-nixons-florida-roots-in-democratic-senate-primary",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-11-vindman-holds-fundraising-edge-over-nixon-in-florida-democratic-senate-primary",
-          "canonical_headline": "Vindman holds fundraising edge over Nixon in Florida Democratic Senate primary",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_003185",
-            "source:https://www.wptv.com/news/state/vindmans-money-advantage-meets-nixons-florida-roots-in-democratic-senate-primary"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_003185,source:https://www.wptv.com/news/state/vindmans-money-advantage-meets-nixons-florida-roots-in-democratic-senate-primary",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Troopers seek Ford F-150 driver after deadly e-bike hit-and-run in Vero Beach - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/troopers-seek-ford-f-150-driver-after-deadly-e-bike-hit-and-run-in-vero-beach-indian-river-county-vero-beach-florida-highway-patrol-fhp-fatal-crash-deadly-crash-hit-and-run-hit-and-run-crash-pedestrian-crash-bicyclist-killed-electric-bicycle",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-10-troopers-seek-ford-f-150-driver-after-deadly-e-bike-hit-and-run-in-vero-beach",
-          "canonical_headline": "Troopers seek Ford F-150 driver after deadly e-bike hit-and-run in Vero Beach",
-          "basis": "event-identity-authority:participant_plus_precise_location",
-          "identity_keys": [
-            "story:story_003095",
-            "source:https://cbs12.com/news/local/troopers-seek-ford-f-150-driver-after-deadly-e-bike-hit-and-run-in-vero-beach-indian-river-county-vero-beach-florida-highway-patrol-fhp-fatal-crash-deadly-crash-hit-and-run-hit-and-run-crash-pedestrian-crash-bicyclist-killed-electric-bicycle"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_precise_location",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
-            "shared_event_families=['crash', 'shooting', 'vehicle-chase']",
-            "shared_named_people=['an electric bicycle', 'victim in deadly']",
-            "shared_precise_locations=['rest-in-the-eastbound-lane']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=['150-driv-deadly', '150-driv-deadly-bike', 'bike-hit-run', 'deadly-bike-hit', 'deadly-bike-hit-run', 'driv-deadly-bike', 'driv-deadly-bike-hit', 'ford-150-driv', 'ford-150-driv-deadly', 'seek-ford-150', 'seek-ford-150-driv', 'troop-seek-ford', 'troop-seek-ford-150']",
-            "shared_headline_topic_core=['150', 'bike', 'com', 'deadly', 'driv', 'ford', 'hit', 'run', 'seek', 'troop']",
-            "shared_distinctive_token_count=93",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 23.356
+      "elapsed_seconds": 9.813
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 8,
-      "selected_source_count": 8,
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 7,
+      "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -360,11 +285,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 40.434,
+          "elapsed_seconds": 30.953,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 40.434,
+      "model_elapsed_seconds": 30.953,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -375,11 +300,31 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "3 people arrested, charged with drug possession in Fort Pierce - cbs12.com",
+          "source_url": "https://cbs12.com/news/crime/three-people-arrested-charged-with-drug-possession-in-fort-pierce-fppd-drugs-narcotics-crime-suppression-unit-10th-street-park-crime-florida-news",
+          "editorial_story_id": "story_003267",
+          "canonical_slug": "2026-08-11-three-arrested-on-drug-possession-charges-at-fort-pierce-park",
+          "canonical_headline": "Three arrested on drug possession charges at Fort Pierce park",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "3 people arrested, charged with drug possession in Fort Pierce - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/three-people-arrested-charged-with-drug-possession-in-fort-pierce-fppd-drugs-narcotics-crime-suppression-unit-10th-street-park-crime-florida-news",
+          "editorial_story_id": "story_003267",
+          "canonical_slug": "2026-08-11-three-arrested-on-drug-possession-charges-at-fort-pierce-park",
+          "canonical_headline": "Three arrested on drug possession charges at Fort Pierce park",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "Florida homeowners now on 15-year clock for roof replacements",
@@ -413,55 +358,54 @@
         {
           "category_key": "crime",
           "surface": "hero",
-          "headline": "Palm City woman arrested after 36 Border Collies found in feces-covered home",
+          "headline": "Palm City woman arrested after 36 Border Collies rescued from hoarding case on SW Alligator Street",
           "editorial_story_id": "story_003121",
           "canonical_slug": "2026-08-11-palm-city-woman-arrested-after-36-border-collies-found-living-in-feces-covered-h",
           "canonical_headline": "Palm City woman arrested after 36 Border Collies found living in feces-covered home",
           "basis": "same_event_and_persistent_story_skip",
           "reason": "published_skip_placement_suppressed"
-        }
-      ],
-      "story_aware_update_context_count": 2,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "3 people arrested, charged with drug possession in Fort Pierce - cbs12.com",
-          "source_url": "https://cbs12.com/news/crime/three-people-arrested-charged-with-drug-possession-in-fort-pierce-fppd-drugs-narcotics-crime-suppression-unit-10th-street-park-crime-florida-news",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-11-three-arrested-on-drug-possession-charges-at-fort-pierce-park",
-          "canonical_headline": "Three arrested on drug possession charges at Fort Pierce park",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_003267",
-            "source:https://cbs12.com/news/crime/three-people-arrested-charged-with-drug-possession-in-fort-pierce-fppd-drugs-narcotics-crime-suppression-unit-10th-street-park-crime-florida-news"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=source:https://cbs12.com/news/crime/three-people-arrested-charged-with-drug-possession-in-fort-pierce-fppd-drugs-narcotics-crime-suppression-unit-10th-street-park-crime-florida-news",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
         },
         {
-          "source_headline": "Homeowner in custody after 20+ Border Collies found in Palm City hoarding case - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/martin-county-deputies-respond-to-palm-city-border-collie-animal-hoarding-case-warrant-dogs-rescue-",
-          "publisher": "cbs12.com",
+          "category_key": "crime",
+          "surface": "card",
+          "headline": "Former AKC breeder faces at least 40 charges in Palm City Border Collie hoarding case",
+          "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "published_skip_placement_suppressed"
+        },
+        {
+          "category_key": "crime",
+          "surface": "card",
+          "headline": "Investigators continue searching Palm City home for dogs hiding after hoarding rescue",
+          "editorial_story_id": "story_003121",
           "canonical_slug": "2026-08-11-palm-city-woman-arrested-after-36-border-collies-found-living-in-feces-covered-h",
           "canonical_headline": "Palm City woman arrested after 36 Border Collies found living in feces-covered home",
-          "basis": "exact_source_url",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "published_skip_placement_suppressed"
+        }
+      ],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "36 dogs rescued after WPTV investigation into suspected animal hoarding at Martin County home - WPTV",
+          "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/martin-county-sheriffs-office-executes-search-warrant-in-palm-city-animal-hoarding-case",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
           "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
             "story:story_002827",
-            "source:https://cbs12.com/news/local/martin-county-deputies-respond-to-palm-city-border-collie-animal-hoarding-case-warrant-dogs-rescue-"
+            "source:https://www.wptv.com/news/region-martin-county/palm-city/martin-county-sheriffs-office-executes-search-warrant-in-palm-city-animal-hoarding-case"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "source"
+            "incident"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=source:https://cbs12.com/news/local/martin-county-deputies-respond-to-palm-city-border-collie-animal-hoarding-case-warrant-dogs-rescue-",
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -471,9 +415,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "",
+      "live_hero_headline": "WPTV investigation leads to rescue of 36 dogs from Palm City home on SW Alligator Street",
       "generated_card_count": 0,
-      "elapsed_seconds": 54.293
+      "elapsed_seconds": 34.2
     },
     {
       "category_key": "business",
@@ -654,15 +598,16 @@
           "basis": "exact_structured_incident_key",
           "identity_keys": [
             "incident:mass-animal-hoarding:martin-county",
-            "story:story_002827",
+            "story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
             "source:https://www.wptv.com/news/region-martin-county/palm-city/martin-county-sheriffs-office-executes-search-warrant-in-palm-city-animal-hoarding-case"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "incident"
+            "incident",
+            "story"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county,story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -670,16 +615,16 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 5.174
+      "elapsed_seconds": 2.768
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "sports_zero_candidate_archive_recovery",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 7,
-      "selected_source_count": 5,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 6,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
@@ -695,10 +640,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "sports",
@@ -712,12 +657,32 @@
         },
         {
           "category_key": "sports",
+          "source_headline": "Indian River County school leaders reorganize schools ahead of new year - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/indian-river-county-school-leaders-reorganize-schools-ahead-of-new-year",
+          "editorial_story_id": "story_003060",
+          "canonical_slug": "2026-08-10-indian-river-county-converts-freshman-learning-center-into-vero-beach-middle-sch",
+          "canonical_headline": "Indian River County converts Freshman Learning Center into Vero Beach Middle School",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "sports",
           "source_headline": "Tortugas hold off Mets 5-4 in Sunday finale, win series 4-3 - MLB.com",
           "source_url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE9QSFNUX1B0QVhyR3hhSExWVkNZbWFnNTExeF9wRklaelBiQjluSmpHaFhSbHVld25sS2kybW1kY3JCbmJzWTVFb2FEWWpmX3htQl91c09iNHg",
           "editorial_story_id": "story_002970",
           "canonical_slug": "2026-08-10-daytona-tortugas-rally-to-beat-st-lucie-mets-5-4-take-series-at-clover-park",
           "canonical_headline": "Daytona Tortugas rally to beat St. Lucie Mets 5-4, take series at Clover Park",
           "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "sports",
+          "source_headline": "Tortugas pull away for 17-3 win over Mets - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/sports/tortugas-pull-away-for-17-3-win-over-mets/article_ae6713ec-1863-596f-ac46-7138b723728f.html",
+          "editorial_story_id": "story_002600",
+          "canonical_slug": "2026-08-08-st-lucie-mets-fall-17-3-to-daytona-as-tortugas-score-11-unanswered-runs-at-clove",
+          "canonical_headline": "St. Lucie Mets fall 17-3 to Daytona as Tortugas score 11 unanswered runs at Clover Park",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -741,34 +706,10 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Indian River County school leaders reorganize schools ahead of new year - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/indian-river-county-school-leaders-reorganize-schools-ahead-of-new-year",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-10-indian-river-county-converts-freshman-learning-center-into-vero-beach-middle-sch",
-          "canonical_headline": "Indian River County converts Freshman Learning Center into Vero Beach Middle School",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_003060",
-            "source:https://cbs12.com/news/local/indian-river-county-school-leaders-reorganize-schools-ahead-of-new-year"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_003060,source:https://cbs12.com/news/local/indian-river-county-school-leaders-reorganize-schools-ahead-of-new-year",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 6,
-      "elapsed_seconds": 3.733
+      "elapsed_seconds": 2.915
     },
     {
       "category_key": "things_to_do",
@@ -785,11 +726,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 69.806,
+          "elapsed_seconds": 66.673,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 69.806,
+      "model_elapsed_seconds": 66.673,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -810,28 +751,21 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 77.644
+      "elapsed_seconds": 72.651
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "generated_live",
+      "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 0,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 9.289,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 9.289,
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -842,11 +776,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Alex Vindman's money advantage meets Angie Nixon's Florida roots in Democratic Senate primary",
+          "source_url": "https://www.wptv.com/news/state/vindmans-money-advantage-meets-nixons-florida-roots-in-democratic-senate-primary",
+          "editorial_story_id": "story_003185",
+          "canonical_slug": "2026-08-11-vindman-holds-fundraising-edge-over-nixon-in-florida-democratic-senate-primary",
+          "canonical_headline": "Vindman's $14.5 million war chest leads Nixon ahead of Florida Democratic Senate primary",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "florida",
           "source_headline": "Florida homeowners now on 15-year clock for roof replacements",
@@ -858,82 +802,198 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Alex Vindman's money advantage meets Angie Nixon's Florida roots in Democratic Senate primary",
-          "source_url": "https://www.wptv.com/news/state/vindmans-money-advantage-meets-nixons-florida-roots-in-democratic-senate-primary",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-11-vindman-holds-fundraising-edge-over-nixon-in-florida-democratic-senate-primary",
-          "canonical_headline": "Vindman holds fundraising edge over Nixon in Florida Democratic Senate primary",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_003185",
-            "source:https://www.wptv.com/news/state/vindmans-money-advantage-meets-nixons-florida-roots-in-democratic-senate-primary"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_003185,source:https://www.wptv.com/news/state/vindmans-money-advantage-meets-nixons-florida-roots-in-democratic-senate-primary",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Vindman's $14.5 million war chest leads Nixon ahead of Florida Democratic Senate primary",
-      "generated_card_count": 0,
-      "elapsed_seconds": 20.51
+      "elapsed_seconds": 4.134
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 27,
+      "fresh_candidate_count": 25,
       "publishable_source_count": 8,
       "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 36.886,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: new_development_missing — Homeowner in custody after 20+ Border Collies found in Palm City hoarding case - cbs12.com"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 35.942,
+          "elapsed_seconds": 61.542,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 72.829,
+      "model_elapsed_seconds": 61.542,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "contextual_update_lead_rejection_count": 2,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 64,
+          "baseline_anchor": "",
+          "baseline_present": false,
+          "baseline_anchor_present": true,
+          "baseline_details_present": false,
+          "baseline_context_hits": [],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": false,
+          "novelty_token_hits": [],
+          "missing": [
+            "original_event_details_missing",
+            "new_development_missing"
+          ],
+          "source_title": "Border Collies begin recovery after Palm City hoarding case; owner faces 72 cruelty counts - cbs12.com",
+          "headline": "Rescued Border Collies begin recovery at Humane Society of the Treasure Coast"
+        },
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 67,
+          "baseline_anchor": "",
+          "baseline_present": false,
+          "baseline_anchor_present": true,
+          "baseline_details_present": false,
+          "baseline_context_hits": [
+            "home"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "animal",
+            "dogs",
+            "investigation",
+            "martin",
+            "rescued",
+            "wptv"
+          ],
+          "missing": [
+            "original_event_details_missing"
+          ],
+          "source_title": "36 dogs rescued after WPTV investigation into suspected animal hoarding at Martin County home - WPTV",
+          "headline": "WPTV investigation leads to rescue of 36 dogs from Palm City home"
+        }
+      ],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Former AKC breeder arrested after Border Collies found covered in feces at Palm City home",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Former AKC breeder arrested after Border Collies found covered in feces at Palm City home",
+            "lead": "The Martin County Sheriffs Office executed a search warrant earlier Monday and spent much of the afternoon removing the animals, which ranged from puppies to adult Border Collies. Investigators wore hazmat suits as they worked to retrieve the dogs. Sheriff John Budensiek described the state of the home, saying the food bowls and water bowls in there are covered in feces. The animals themselves, the dogs, which are supposed to be Border Collies, beautiful dogs, are covered in feces. They're supposed to be white and black dogs, and they're solid black from the feces.",
+            "lead_word_count": 96,
+            "headline_overlap_ratio": 0.385,
+            "new_context_token_count": 43,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Former AKC breeder arrested after Border Collies found covered in feces at Palm City home",
+            "lead": "The Martin County Sheriffs Office executed a search warrant earlier Monday and spent much of the afternoon removing the animals, which ranged from puppies to adult Border Collies. Investigators wore hazmat suits as they worked to retrieve the dogs. Sheriff John Budensiek described the state of the home, saying the food bowls and water bowls in there are covered in feces. The animals themselves, the dogs, which are supposed to be Border Collies, beautiful dogs, are covered in feces. They're supposed to be white and black dogs, and they're solid black from the feces.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "palm_city"
+            ],
+            "lead_jurisdictions": [
+              "martin_county"
+            ],
+            "missing_jurisdictions": [
+              "palm_city"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Former AKC breeder arrested after Border Collies found covered in feces at Palm City home",
+            "generated_lead": "The Martin County Sheriffs Office executed a search warrant earlier Monday and spent much of the afternoon removing the animals, which ranged from puppies to adult Border Collies. Investigators wore hazmat suits as they worked to retrieve the dogs.",
+            "source_title": "'Deplorable conditions': Martin County woman accused of hoarding 36 dogs - WPBF",
+            "source_lead": "A Martin County woman is facing felony and misdemeanor animal cruelty charges after deputies discovered 36 dogs living in unsanitary conditions inside her Palm City home. The Martin County Sheriff’s Office executed a search warrant earlier today and spent much of the afternoon removing the animals, which ranged from puppies to adult border collies.",
+            "title_similarity": {
+              "score": 0.2411,
+              "overlap": 0.0,
+              "jaccard": 0.0,
+              "sorted_sequence": 0.3425,
+              "ordered_sequence": 0.274,
+              "shared_token_count": 0.0
+            },
+            "lead_token_overlap": 0.679,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
       "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Tornado-damaged Martin County middle school continues rebuild as students return to class - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/tornado-damaged-martin-county-middle-school-continues-rebuild-as-students-return-to-class",
+          "editorial_story_id": "story_003263",
+          "canonical_slug": "2026-08-11-murray-middle-school-students-return-to-class-in-stuart-as-tornado-rebuild-conti",
+          "canonical_headline": "Murray Middle School students return to class in Stuart as tornado rebuild continues",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Homeowner in custody after 20+ Border Collies found in Palm City hoarding case - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/martin-county-deputies-respond-to-palm-city-border-collie-animal-hoarding-case-warrant-dogs-rescue-",
+          "editorial_story_id": "story_003121",
+          "canonical_slug": "2026-08-11-palm-city-woman-arrested-after-36-border-collies-found-living-in-feces-covered-h",
+          "canonical_headline": "Palm City woman arrested after 36 Border Collies found living in feces-covered home",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "martin",
           "source_headline": "Martin County begins school year with smooth bus routes and optimism - WPBF",
@@ -966,21 +1026,11 @@
         },
         {
           "category_key": "martin",
-          "surface": "hero",
-          "headline": "Palm City woman arrested after 36 Border Collies found living in feces-covered home",
-          "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
-          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
-          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
-        },
-        {
-          "category_key": "martin",
           "surface": "card",
-          "headline": "Animal hoarding cases often involve complex mental health factors, experts say after Palm City rescue",
-          "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
-          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
-          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "headline": "Deputies serve warrant at Palm City home in Border Collie hoarding investigation",
+          "editorial_story_id": "story_003121",
+          "canonical_slug": "2026-08-11-palm-city-woman-arrested-after-36-border-collies-found-living-in-feces-covered-h",
+          "canonical_headline": "Palm City woman arrested after 36 Border Collies found living in feces-covered home",
           "basis": "same_event_and_persistent_story_skip",
           "reason": "published_skip_placement_suppressed"
         }
@@ -988,64 +1038,46 @@
       "story_aware_update_context_count": 3,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Homeowner in custody after 20+ Border Collies found in Palm City hoarding case - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/martin-county-deputies-respond-to-palm-city-border-collie-animal-hoarding-case-warrant-dogs-rescue-",
+          "source_headline": "Border Collies begin recovery after Palm City hoarding case; owner faces 72 cruelty counts - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/palm-city-woman-booked-on-72-felony-torture-charges-in-border-collie-hoarding-case-border-collies-palm-city-martin-county-animal-hoarding-dog-rescue-humane-society-of-the-treasure-coast-martin-county-sheriffs-office-martin-county-animal-services",
           "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-11-palm-city-woman-arrested-after-36-border-collies-found-living-in-feces-covered-h",
-          "canonical_headline": "Palm City woman arrested after 36 Border Collies found living in feces-covered home",
-          "basis": "exact_source_url",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
           "identity_keys": [
-            "story:story_003121",
-            "source:https://cbs12.com/news/local/martin-county-deputies-respond-to-palm-city-border-collie-animal-hoarding-case-warrant-dogs-rescue-"
+            "incident:mass-animal-hoarding:martin-county",
+            "story:story_002827",
+            "source:https://cbs12.com/news/local/palm-city-woman-booked-on-72-felony-torture-charges-in-border-collie-hoarding-case-border-collies-palm-city-martin-county-animal-hoarding-dog-rescue-humane-society-of-the-treasure-coast-martin-county-sheriffs-office-martin-county-animal-services"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "story",
-            "source"
+            "incident"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=story:story_003121,source:https://cbs12.com/news/local/martin-county-deputies-respond-to-palm-city-border-collie-animal-hoarding-case-warrant-dogs-rescue-",
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
         },
         {
-          "source_headline": "Martin County deputies serve warrant in Palm City border collie animal hoarding case - cbs12.com",
-          "source_url": "http://cbs12.com/news/crime/martin-county-deputies-respond-to-palm-city-border-collie-animal-hoarding-case-warrant-dogs-rescue-",
+          "source_headline": "Why do people hoard animals? Experts weigh in after Palm City Border Collie rescue - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/why-do-people-hoard-animals-experts-weigh-in-after-palm-city-border-collie-rescue-psychologist-florida-news",
           "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-11-palm-city-woman-arrested-after-36-border-collies-found-living-in-feces-covered-h",
-          "canonical_headline": "Palm City woman arrested after 36 Border Collies found living in feces-covered home",
-          "basis": "event-identity-authority:participant_plus_precise_location",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
           "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
             "story:story_002827",
-            "source:http://cbs12.com/news/crime/martin-county-deputies-respond-to-palm-city-border-collie-animal-hoarding-case-warrant-dogs-rescue-"
+            "source:https://cbs12.com/news/local/why-do-people-hoard-animals-experts-weigh-in-after-palm-city-border-collie-rescue-psychologist-florida-news"
           ],
-          "match_confidence": 0.95,
+          "match_confidence": 0.99,
           "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_precise_location",
-            "shared_agency",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
+            "incident"
           ],
           "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['martin-county', 'palm-city']",
-            "shared_event_families=['animal-case']",
-            "shared_named_people=['and safely remove', 'paige donnell', 'the woman who']",
-            "shared_precise_locations=['1245-sw-alligator-street']",
-            "shared_agencies=['martin-county-sheriff']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['bord', 'case', 'hoard', 'palm']",
-            "shared_distinctive_token_count=160",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -1079,108 +1111,75 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Murray Middle School students return to class in Stuart as tornado rebuild continues",
-      "generated_card_count": 0,
-      "elapsed_seconds": 77.949
+      "live_hero_headline": "Vehicle fire shuts down Florida's Turnpike northbound lanes in Martin County",
+      "generated_card_count": 2,
+      "elapsed_seconds": 70.912
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 5,
-      "selected_source_count": 5,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 2,
+      "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 21.308,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 21.308,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 2,
-      "contextual_update_lead_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 45,
-          "baseline_anchor": "criminal_case",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "drug",
-            "fort",
-            "park",
-            "pierce",
-            "possession",
-            "three"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Three arrested on drug possession charges at Fort Pierce park",
-          "novelty_anchor": "arrest_or_charge",
-          "novelty_present": false,
-          "novelty_token_hits": [
-            "people"
-          ],
-          "missing": [
-            "new_development_missing"
-          ],
-          "source_title": "3 people arrested, charged with drug possession in Fort Pierce - cbs12.com",
-          "headline": "Three arrested on drug charges at 10th Street Park in Fort Pierce"
+          "elapsed_seconds": 10.785,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Construction worker killed by vehicle in I-95 work zone in Port St. Lucie"
         },
         {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 60,
-          "baseline_anchor": "",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "autistic",
-            "lucie",
-            "pond",
-            "port",
-            "residents",
-            "retention"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Port St. Lucie residents rescue autistic child from retention pond",
-          "novelty_anchor": "source_distinctive_detail",
-          "novelty_present": false,
-          "novelty_token_hits": [],
-          "missing": [
-            "new_development_missing"
-          ],
-          "source_title": "Good Samaritans rescue autistic child from retention pond in Port St. Lucie - cbs12.com",
-          "headline": "Port St. Lucie residents rescue autistic child from retention pond"
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 12.07,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Construction worker killed by vehicle in I-95 work zone near Port St. Lucie"
         }
       ],
+      "model_elapsed_seconds": 22.855,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Construction worker killed by vehicle in I-95 work zone near Port St. Lucie",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "3 people arrested, charged with drug possession in Fort Pierce - cbs12.com",
+          "source_url": "https://cbs12.com/news/crime/three-people-arrested-charged-with-drug-possession-in-fort-pierce-fppd-drugs-narcotics-crime-suppression-unit-10th-street-park-crime-florida-news",
+          "editorial_story_id": "story_003267",
+          "canonical_slug": "2026-08-11-three-arrested-on-drug-possession-charges-at-fort-pierce-park",
+          "canonical_headline": "Three arrested on drug possession charges at Fort Pierce park",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "3 people arrested, charged with drug possession in Fort Pierce - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/three-people-arrested-charged-with-drug-possession-in-fort-pierce-fppd-drugs-narcotics-crime-suppression-unit-10th-street-park-crime-florida-news",
+          "editorial_story_id": "story_003267",
+          "canonical_slug": "2026-08-11-three-arrested-on-drug-possession-charges-at-fort-pierce-park",
+          "canonical_headline": "Three arrested on drug possession charges at Fort Pierce park",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Beloved horse 'Strait from Above' missing after suspected theft in Port St. Lucie - cbs12.com",
@@ -1188,6 +1187,16 @@
           "editorial_story_id": "story_002646",
           "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-death-of-77-year-old-man-found-in-pond-near-his",
           "canonical_headline": "Port St. Lucie police investigate death of 77-year-old man found in pond near his home",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "16-year-old Centennial High School student hit by car while crossing Port St. Lucie intersection",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/16-year-old-student-hit-by-car-while-crossing-port-st-lucie-intersection",
+          "editorial_story_id": "story_001557",
+          "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+          "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1232,47 +1241,44 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "3 people arrested, charged with drug possession in Fort Pierce - cbs12.com",
-          "source_url": "https://cbs12.com/news/crime/three-people-arrested-charged-with-drug-possession-in-fort-pierce-fppd-drugs-narcotics-crime-suppression-unit-10th-street-park-crime-florida-news",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-11-three-arrested-on-drug-possession-charges-at-fort-pierce-park",
-          "canonical_headline": "Three arrested on drug possession charges at Fort Pierce park",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "source:https://cbs12.com/news/crime/three-people-arrested-charged-with-drug-possession-in-fort-pierce-fppd-drugs-narcotics-crime-suppression-unit-10th-street-park-crime-florida-news"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=source:https://cbs12.com/news/crime/three-people-arrested-charged-with-drug-possession-in-fort-pierce-fppd-drugs-narcotics-crime-suppression-unit-10th-street-park-crime-florida-news",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Good Samaritans rescue autistic child from retention pond in Port St. Lucie - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-residents-rescue-autistic-child-retention-pond-preventing-drowning-fire-ants-florida-drownings-retention-pond-water-rescue-body-cam-officers-port-st-lucie-police-department",
-          "publisher": "cbs12.com",
+          "source_headline": "Good Samaritans rescue autistic child from retention pond in Port St. Lucie - cw34.com",
+          "source_url": "https://cw34.com/news/local/port-st-lucie-residents-rescue-autistic-child-retention-pond-preventing-drowning-fire-ants-florida-drownings-retention-pond-water-rescue-body-cam-officers-port-st-lucie-police-department",
+          "publisher": "cw34.com",
           "canonical_slug": "2026-08-11-port-st-lucie-residents-rescue-autistic-child-from-retention-pond",
           "canonical_headline": "Port St. Lucie residents rescue autistic child from retention pond",
-          "basis": "exact_source_url",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
           "identity_keys": [
             "story:story_003202",
-            "source:https://cbs12.com/news/local/port-st-lucie-residents-rescue-autistic-child-retention-pond-preventing-drowning-fire-ants-florida-drownings-retention-pond-water-rescue-body-cam-officers-port-st-lucie-police-department"
+            "source:https://cw34.com/news/local/port-st-lucie-residents-rescue-autistic-child-retention-pond-preventing-drowning-fire-ants-florida-drownings-retention-pond-water-rescue-body-cam-officers-port-st-lucie-police-department"
           ],
-          "match_confidence": 0.99,
+          "match_confidence": 0.95,
           "evidence_dimensions": [
-            "story",
-            "source"
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=story:story_003202,source:https://cbs12.com/news/local/port-st-lucie-residents-rescue-autistic-child-retention-pond-preventing-drowning-fire-ants-florida-drownings-retention-pond-water-rescue-body-cam-officers-port-st-lucie-police-department",
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['port-st-lucie', 'st-lucie']",
+            "shared_event_families=['animal-case', 'missing-person']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['their-way']",
+            "shared_agencies=['port-st-lucie-police']",
+            "shared_subject_phrases=['autistic-child-retention', 'autistic-child-retention-pond', 'child-retention-pond', 'good-samaritan-rescue', 'good-samaritan-rescue-autistic', 'rescue-autistic-child', 'rescue-autistic-child-retention', 'samaritan-rescue-autistic', 'samaritan-rescue-autistic-child']",
+            "shared_headline_topic_core=['autistic', 'child', 'good', 'pond', 'rescue', 'retention', 'samaritan']",
+            "shared_distinctive_token_count=72",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -1280,44 +1286,25 @@
         }
       ],
       "new_publication_stale_rejected_count": 2,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "I-95 southbound crash near Crosstown Parkway backs up traffic two miles",
-      "generated_card_count": 0,
-      "elapsed_seconds": 36.864
+      "elapsed_seconds": 26.439
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generation_failed_archive_recovery",
+      "status": "county_zero_candidate_archive_recovery",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 6,
-      "selected_source_count": 5,
+      "fresh_candidate_count": 17,
+      "publishable_source_count": 4,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 2,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 20.321,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: new_development_missing — Troopers seek Ford F-150 driver after deadly e-bike hit-and-run in Vero Beach - cbs12.com"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 18.582,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: new_development_missing — Troopers seek Ford F-150 driver after deadly e-bike hit-and-run in Vero Beach - cbs12.com"
-        }
-      ],
-      "model_elapsed_seconds": 38.904,
-      "failure_code": "contextless_update_lead",
-      "failure_summary": "Contextless update lead for hero: new_development_missing — Troopers seek Ford F-150 driver after deadly e-bike hit-and-run in Vero Beach - cbs12.com",
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_source_backed_county_hero_candidates",
+      "failure_summary": "Selected Indian River County source pool contained no source-backed county hero candidate",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1326,10 +1313,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1393,6 +1380,16 @@
         },
         {
           "category_key": "indian_river",
+          "source_headline": "Troopers seek Ford F-150 driver after deadly e-bike hit-and-run in Vero Beach - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/troopers-seek-ford-f-150-driver-after-deadly-e-bike-hit-and-run-in-vero-beach-indian-river-county-vero-beach-florida-highway-patrol-fhp-fatal-crash-deadly-crash-hit-and-run-hit-and-run-crash-pedestrian-crash-bicyclist-killed-electric-bicycle",
+          "editorial_story_id": "story_003095",
+          "canonical_slug": "2026-08-10-troopers-seek-ford-f-150-driver-after-deadly-e-bike-hit-and-run-in-vero-beach",
+          "canonical_headline": "Troopers seek Ford F-150 driver after deadly e-bike hit-and-run in Vero Beach",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
           "source_headline": "Hallandale Beach man faces new charges of unlawful sexual conduct with minors in Indian River County - WPBF",
           "source_url": "https://www.wpbf.com/article/emaad-mir-florida-man-unlawful-sexual-conduct-girls-indian-river-county/73393801",
           "editorial_story_id": "story_003124",
@@ -1400,79 +1397,22 @@
           "canonical_headline": "Hallandale Beach man arrested in Indian River County on charges of traveling to meet minors for sex",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 2,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Troopers seek Ford F-150 driver after deadly e-bike hit-and-run in Vero Beach - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/troopers-seek-ford-f-150-driver-after-deadly-e-bike-hit-and-run-in-vero-beach-indian-river-county-vero-beach-florida-highway-patrol-fhp-fatal-crash-deadly-crash-hit-and-run-hit-and-run-crash-pedestrian-crash-bicyclist-killed-electric-bicycle",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-10-troopers-seek-ford-f-150-driver-after-deadly-e-bike-hit-and-run-in-vero-beach",
-          "canonical_headline": "Troopers seek Ford F-150 driver after deadly e-bike hit-and-run in Vero Beach",
-          "basis": "event-identity-authority:participant_plus_precise_location",
-          "identity_keys": [
-            "story:story_003095",
-            "source:https://cbs12.com/news/local/troopers-seek-ford-f-150-driver-after-deadly-e-bike-hit-and-run-in-vero-beach-indian-river-county-vero-beach-florida-highway-patrol-fhp-fatal-crash-deadly-crash-hit-and-run-hit-and-run-crash-pedestrian-crash-bicyclist-killed-electric-bicycle"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_precise_location",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
-            "shared_event_families=['crash', 'shooting', 'vehicle-chase']",
-            "shared_named_people=['an electric bicycle', 'victim in deadly']",
-            "shared_precise_locations=['rest-in-the-eastbound-lane']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=['150-driv-deadly', '150-driv-deadly-bike', 'bike-hit-run', 'deadly-bike-hit', 'deadly-bike-hit-run', 'driv-deadly-bike', 'driv-deadly-bike-hit', 'ford-150-driv', 'ford-150-driv-deadly', 'seek-ford-150', 'seek-ford-150-driv', 'troop-seek-ford', 'troop-seek-ford-150']",
-            "shared_headline_topic_core=['150', 'bike', 'com', 'deadly', 'driv', 'ford', 'hit', 'run', 'seek', 'troop']",
-            "shared_distinctive_token_count=93",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
         },
         {
+          "category_key": "indian_river",
           "source_headline": "Indian River County launches new feature to track school buses in real time - cbs12.com",
           "source_url": "https://cbs12.com/news/local/indian-river-county-launches-new-feature-to-track-school-buses-in-real-time",
-          "publisher": "cbs12.com",
+          "editorial_story_id": "story_003061",
           "canonical_slug": "2026-08-10-indian-river-county-schools-launch-real-time-bus-tracking-feature-for-parents",
           "canonical_headline": "Indian River County schools launch real-time bus tracking feature for parents",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_003061",
-            "source:https://cbs12.com/news/local/indian-river-county-launches-new-feature-to-track-school-buses-in-real-time"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_003061,source:https://cbs12.com/news/local/indian-river-county-launches-new-feature-to-track-school-buses-in-real-time",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
-      "budget_seconds": 180.0,
-      "elapsed_seconds": 46.486
+      "elapsed_seconds": 4.083
     }
   ]
 }
