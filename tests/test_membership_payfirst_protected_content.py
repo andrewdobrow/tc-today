@@ -84,10 +84,11 @@ def test_public_service_exceptions_are_narrow():
 
 def test_paywall_markup_uses_locked_copy_and_pay_first_buttons():
     markup = paywall_html("example-story")
-    assert "Keep reading free for a week" in markup
+    assert "Keep reading for" in markup
     assert "FREE for 1 week" in markup
     assert "Annual — $49/year" in markup
-    assert "Monthly — $4.99/month" in markup
+    assert "Monthly membership" in markup
+    assert "Free for 1 week" in markup
     assert "Start 7-day free trial" in markup
     assert markup.count("Start 7-day free trial") == 2
     assert "Already a member?" in markup
@@ -123,8 +124,8 @@ def test_membership_plan_cards_are_visually_balanced_and_gradient_backed():
     markup = paywall_html("example-story")
     assert "Most flexible" in page
     assert "Most flexible" in markup
-    assert '<div class="membership-price">$4.99</div>' in page
-    assert '<div class="membership-plan-note">7 days free · then $4.99/month</div>' in page
+    assert '<div class="membership-price">Free for 1 week</div>' in page
+    assert '<div class="membership-plan-note">$4.99/month after free trial</div>' in page
     assert 'linear-gradient(135deg,#f26445 0%,#f87858 48%,#e9583e 100%)' in css
     assert 'color:#fff}.membership-kicker' in css
     assert 'background:var(--tct-member-paper);color:var(--tct-member-charcoal)' in css
@@ -381,8 +382,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.5.9"' in page
-    assert 'src="/membership.js?v=1.13.5.9"' in page
+    assert 'href="/membership.css?v=1.13.5.9bb"' in page
+    assert 'src="/membership.js?v=1.13.5.9bb"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -411,8 +412,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.5.9') == 1
-    assert first.count('/membership.js?v=1.13.5.9') == 1
+    assert first.count('/membership.css?v=1.13.5.9b') == 1
+    assert first.count('/membership.js?v=1.13.5.9b') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():
