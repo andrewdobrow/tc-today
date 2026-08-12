@@ -622,6 +622,7 @@ CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 6
 CATEGORY_ELIGIBILITY_REPORT_SCHEMA_VERSION = 1
 CATEGORY_ELIGIBILITY_CONTRACT_VERSION = "1.0-local-government-central-action"
 BUSINESS_ELIGIBILITY_CONTRACT_VERSION = "1.0-business-development-primary-focus"
+CRIME_ELIGIBILITY_CONTRACT_VERSION = "1.0-primary-crime-safety-focus"
 COUNTY_MEMBERSHIP_AUTHORITY_SCHEMA_VERSION = 1
 COUNTY_MEMBERSHIP_AUTHORITY_VERSION = "1.1-source-derived-with-safe-legacy-migration"
 COUNTY_LEGACY_ARCHIVE_AUTHORITY_ORIGIN = "legacy_archive_membership_uncontradicted"
@@ -634,7 +635,7 @@ CATEGORY_ELIGIBILITY_CONTRACTS = {
         "mode": "enforce",
         "policy": "central_government_action_required",
     },
-    "crime": {"mode": "observe_only", "policy": "future_explicit_contract"},
+    "crime": {"mode": "enforce", "policy": "primary_crime_safety_focus_required"},
     "business": {"mode": "enforce", "policy": "primary_business_development_focus_required"},
     "sports": {"mode": "observe_only", "policy": "existing_athletic_guard_retained"},
     "things_to_do": {"mode": "observe_only", "policy": "future_explicit_contract"},
@@ -1012,6 +1013,8 @@ def _category_generation_cache_key(category_key, headlines):
             if category_key == "local_gov"
             else BUSINESS_ELIGIBILITY_CONTRACT_VERSION
             if category_key == "business"
+            else CRIME_ELIGIBILITY_CONTRACT_VERSION
+            if category_key == "crime"
             else ""
         ),
         "county_membership_authority_version": (
@@ -3762,6 +3765,22 @@ def _county_membership_authority_assessment(item, primary_category=""):
             supported.add(county_key)
             evidence[county_key].append("trusted_custom_declaration")
 
+    # If the final TCT display headline explicitly narrows a multi-county source to
+    # exactly one Treasure Coast county, do not project that rewritten article into
+    # every county merely because the underlying regional source mentioned them all.
+    # Raw source rows have ``title`` but no generated ``headline``, so this boundary
+    # applies only after editorial framing exists.
+    display_headline = str(item.get("headline") or "").strip()
+    if not custom and display_headline and len(supported) > 1:
+        focused_counties = {
+            county_key for county_key in COUNTY_KEYS
+            if _county_authority_phrase_hits(display_headline, _COUNTY_AUTHORITY_TERMS[county_key])
+        }
+        if len(focused_counties) == 1:
+            focused = next(iter(focused_counties))
+            supported = {focused}
+            evidence[focused].append("display_headline_single_county_focus")
+
     requested = set(
         key for key in _normalize_category_keys(item.get("category_keys") or [])
         if key in COUNTY_KEYS
@@ -3844,6 +3863,17 @@ def _item_category_memberships(item, primary_category="", extra_categories=None)
                     c for c in classified if c in CATEGORIES and c not in COUNTY_KEYS
                 )
                 break
+
+    # Crime & Safety is revalidated at this shared projection boundary because legacy
+    # classifier/cache labels can otherwise survive in ``category_keys`` after a story
+    # has been rewritten around a routine education or community focus. Existing
+    # Local Government/Business contracts already enforce at their source/archive
+    # boundaries; re-running them here would incorrectly reinterpret intentionally
+    # preserved historical memberships from sparse archive rows.
+    if "crime" in categories:
+        assessment = _category_eligibility_contract_assessment("crime", item)
+        if not assessment.get("eligible"):
+            categories.discard("crime")
 
     authority = _county_membership_authority_assessment(item, primary_category)
     categories.update(authority.get("supported_counties") or [])
@@ -3951,7 +3981,18 @@ def _backfill_archive_category_memberships(archive, output_root=None):
                 entry, entry.get("category_key", "")
             )
 
-        after = _apply_category_memberships(entry, entry.get("category_key", ""))
+        original_primary = str(entry.get("category_key") or "")
+        after = _apply_category_memberships(entry, original_primary)
+        if (
+            original_primary in CATEGORIES
+            and original_primary not in after
+            and _category_contract_config(original_primary).get("mode") == "enforce"
+            and not (entry.get("is_custom") or entry.get("authoritative_custom"))
+            and after
+        ):
+            replacement_primary = after[0]
+            entry["category_key"] = replacement_primary
+            entry["category_label"] = CATEGORIES[replacement_primary]["label"]
         after_counties = [key for key in after if key in COUNTY_KEYS]
         added = [key for key in after if key not in before]
         removed = [key for key in before if key not in after]
@@ -4241,6 +4282,96 @@ def _source_word_count(item):
     source_text = item.get("article_text", "") or item.get("source_summary", "") or item.get("summary", "")
     return _word_count(source_text)
 
+_MEDIA_PUBLISHER_BRANDS = {
+    "wptv.com": ("wptv",),
+    "wpbf.com": ("wpbf",),
+    "cbs12.com": ("cbs12", "wpec"),
+    "cw34.com": ("cw34",),
+    "wflx.com": ("wflx",),
+    "tcpalm.com": ("tcpalm", "treasure coast newspapers"),
+    "hometownnewstc.com": ("hometown news", "hometown news treasure coast"),
+    "sebastiandaily.com": ("sebastian daily",),
+}
+
+
+def _is_publisher_self_promotion(item):
+    """Reject a publisher using TCT as free promotion for its own brand or event.
+
+    News reported *by* another outlet remains eligible. This guard is intentionally
+    narrow: it requires a known media publisher plus explicit publisher-branded
+    promotional framing (hosting/holding/presenting an event, giveaway, meetup, etc.).
+    Human-authored TCT custom articles remain authoritative.
+    """
+    if not isinstance(item, dict):
+        return False
+    if item.get("is_custom") or item.get("authoritative_custom"):
+        return False
+
+    source_url = str(
+        item.get("source_url") or item.get("latest_source_url")
+        or item.get("_source_url") or item.get("link") or ""
+    ).strip()
+    try:
+        host = (urlsplit(source_url).netloc or "").lower()
+    except Exception:
+        host = ""
+    host = host[4:] if host.startswith("www.") else host
+    brands = ()
+    for domain, names in _MEDIA_PUBLISHER_BRANDS.items():
+        if host == domain or host.endswith("." + domain):
+            brands = names
+            break
+    if not brands:
+        return False
+
+    headline_values = [
+        str(item.get(key) or "").strip()
+        for key in ("headline", "title", "source_headline", "source_title")
+        if str(item.get(key) or "").strip()
+    ]
+    body = " ".join(str(item.get(key) or "") for key in (
+        "teaser", "summary", "source_summary", "article_text", "body"
+    ))[:12000]
+
+    # Publisher names are commonly appended to syndicated/search headlines as a
+    # source suffix (``Story headline - WPTV``). That attribution alone must never
+    # turn an otherwise valid story about a city-hosted event into self-promotion.
+    # For brand evidence, ignore a terminal publisher suffix while preserving brand
+    # names that are part of the actual headline (``WPTV hosts ...``).
+    brand_headlines = []
+    for value in headline_values:
+        cleaned = value
+        for brand in brands:
+            cleaned = re.sub(
+                r"\s*(?:[-|—–]\s*)" + re.escape(brand) + r"\s*$",
+                "", cleaned, flags=re.I,
+            )
+        brand_headlines.append(cleaned)
+    headline = " ".join(headline_values)
+    normalized_brand_headline = _normalize_nonstory_text(" ".join(brand_headlines))
+    normalized_blob = _normalize_nonstory_text(headline + " " + body)
+    brand_named = any(
+        re.search(r"(?<![a-z0-9])" + re.escape(brand) + r"(?![a-z0-9])", normalized_brand_headline)
+        for brand in brands
+    )
+
+    branded_campaign_path = bool(re.search(
+        r"/(?:community/)?(?:lets-hear-it|meet-the-team|station-events?|contests?|giveaways?)(?:/|$)",
+        urlsplit(source_url).path.lower() if source_url else "",
+    ))
+    promotional_event = bool(
+        re.search(
+            r"\b(?:host|hosts|hosting|hold|holds|holding|bring|brings|present|presents|"
+            r"invite|invites|launch|launches|sponsor|sponsors)\b.{0,90}"
+            r"\b(?:meetup|meet up|town hall|forum|community event|open house|watch party|"
+            r"contest|giveaway|conversation|education focus|event)\b",
+            normalized_blob,
+        )
+        or re.search(r"\blet s hear it\b", normalized_blob)
+    )
+    return bool(branded_campaign_path or (brand_named and promotional_event))
+
+
 def _source_candidate_publishable(item):
     """Require enough verified source material before Claude writes anything.
 
@@ -4249,6 +4380,8 @@ def _source_candidate_publishable(item):
     the section when the live source pool is too thin.
     """
     if not item or not item.get("title"):
+        return False
+    if _is_publisher_self_promotion(item):
         return False
     quality = (item.get("source_quality", "") or "").lower()
     if quality not in {"full", "summary"}:
@@ -4338,6 +4471,8 @@ def _publishable_article(item, hero=False):
     if not item or not item.get("headline"):
         return False
     if _is_nonstory_placeholder(item):
+        return False
+    if _is_publisher_self_promotion(item):
         return False
     if item.get("is_custom") or item.get("is_weather_alert"):
         return True
@@ -4462,6 +4597,8 @@ def _durable_incident_anchor(item, include_archive_body=False):
 
 def _archive_entry_publishable(entry):
     if _is_nonstory_placeholder(entry):
+        return False
+    if _is_publisher_self_promotion(entry):
         return False
     if entry.get("is_custom"):
         return True
@@ -5165,6 +5302,48 @@ def _business_category_contract_assessment(item, base):
     return base
 
 
+def _crime_category_contract_assessment(item, base):
+    """Enforce a visible Crime & Safety focus instead of trusting classifier bleed."""
+    presentation = _normalize_nonstory_text(" ".join([
+        str(item.get("headline") or item.get("title") or ""),
+        str(item.get("teaser") or item.get("summary") or ""),
+        str(item.get("body") or "")[:500],
+    ]))
+    positive_groups = {
+        "law_enforcement_crime": [
+            "arrest", "arrested", "charged", "charges", "police", "sheriff",
+            "deputy", "deputies", "trooper", "homicide", "murder", "shooting",
+            "shot", "robbery", "burglary", "theft", "steal", "stealing", "stole",
+            "assault", "battery", "sentenced", "prison", "drug", "fentanyl",
+            "meth", "cocaine", "fraud", "scam", "stolen",
+        ],
+        "public_safety_incident": [
+            "crash", "collision", "hit and run", "hit-and-run", "vehicle fire",
+            "house fire", "structure fire", "electrical fire", "brush fire",
+            "vegetation fire", "wildfire", "rescue", "rescued", "rescues",
+            "drown", "drowned", "drowns", "drowning", "missing child",
+            "missing person", "found dead", "dies after", "killed", "killing",
+            "emergency", "evacuation", "boil water", "warning", "active shooter",
+            "metal detector", "crisis alert", "road closed", "lane closed",
+        ],
+    }
+    positives = []
+    for name, terms in positive_groups.items():
+        hits = _category_contract_hits(presentation, terms)
+        if hits:
+            positives.append(f"{name}:{hits[0]}")
+    eligible = bool(positives)
+    base.update({
+        "contract_version": CRIME_ELIGIBILITY_CONTRACT_VERSION,
+        "eligible": eligible,
+        "would_reject": not eligible,
+        "reason": "primary_crime_safety_focus_confirmed" if eligible else "missing_primary_crime_safety_focus",
+        "positive_signals": positives,
+        "competing_signals": [],
+    })
+    return base
+
+
 def _category_eligibility_contract_assessment(category_key, item):
     """Evaluate the explicit per-category semantic contract.
 
@@ -5191,9 +5370,13 @@ def _category_eligibility_contract_assessment(category_key, item):
         base.update({"eligible": True, "reason": "custom_authority_exempt"})
         if category_key == "business":
             base["contract_version"] = BUSINESS_ELIGIBILITY_CONTRACT_VERSION
+        elif category_key == "crime":
+            base["contract_version"] = CRIME_ELIGIBILITY_CONTRACT_VERSION
         return base
     if category_key == "business":
         return _business_category_contract_assessment(item, base)
+    if category_key == "crime":
+        return _crime_category_contract_assessment(item, base)
     if category_key != "local_gov":
         return base
 
@@ -7594,10 +7777,11 @@ def _build_category_eligibility_report(records):
         "category_contract_versions": {
             "local_gov": CATEGORY_ELIGIBILITY_CONTRACT_VERSION,
             "business": BUSINESS_ELIGIBILITY_CONTRACT_VERSION,
+            "crime": CRIME_ELIGIBILITY_CONTRACT_VERSION,
         },
         "rollout_policy": (
-            "shared_contract_interface; Local Government and Business & Development "
-            "enforced; remaining topic contracts observe-only until regression fixtures "
+            "shared_contract_interface; Local Government, Business & Development, and "
+            "Crime & Safety enforced; remaining topic contracts observe-only until regression fixtures "
             "are production-validated"
         ),
         "summary": {
@@ -18072,11 +18256,12 @@ def _purge_nonstory_archive_entries(archive, articles_dir, output_root):
     kept = []
     removed = []
     for entry in list(archive or []):
-        if _is_nonstory_placeholder(entry):
+        if _is_nonstory_placeholder(entry) or _is_publisher_self_promotion(entry):
             removed.append({
                 "slug": entry.get("slug", ""),
                 "headline": entry.get("headline", ""),
                 "category_key": entry.get("category_key", ""),
+                "reason": "publisher_self_promotion" if _is_publisher_self_promotion(entry) else "nonstory_placeholder",
             })
             slug = entry.get("slug", "")
             if slug:
@@ -18119,16 +18304,17 @@ def validate_nonstory_publication_contract(all_categories, top_cat, output_root)
         if not item:
             continue
         checked_live += 1
-        if _is_nonstory_placeholder(item):
-            violations.append({"surface": surface, "headline": item.get("headline", "")})
+        if _is_nonstory_placeholder(item) or _is_publisher_self_promotion(item):
+            violations.append({"surface": surface, "headline": item.get("headline", ""), "reason": "publisher_self_promotion" if _is_publisher_self_promotion(item) else "nonstory_placeholder"})
 
     archive = load_archive(output_root / "archive.json")
     for entry in archive:
-        if _is_nonstory_placeholder(entry):
+        if _is_nonstory_placeholder(entry) or _is_publisher_self_promotion(entry):
             violations.append({
                 "surface": "archive",
                 "headline": entry.get("headline", ""),
                 "slug": entry.get("slug", ""),
+                "reason": "publisher_self_promotion" if _is_publisher_self_promotion(entry) else "nonstory_placeholder",
             })
 
     # RSS is checked independently so a future refactor cannot bypass the object gate.
@@ -27641,6 +27827,88 @@ def _write_editorial_observability(engine, audit_rows, activation_run=None, cate
         print(f"  Editorial observability failed; publication output is unchanged: {exc}")
 
 
+def ensure_final_live_visual_images(all_categories, top_cat, output_root=None):
+    """Guarantee every final visual placement has an image after late reselection.
+
+    Hero freshness/canonicalization runs after the older fallback pass and can promote
+    a previously image-less card into the front-page hero. This final boundary runs
+    after all identity/county mutation so rendering can never emit an empty hero media
+    panel again.
+    """
+    root = Path(output_root or OUTPUT_DIR)
+    repaired = []
+    failures = []
+    seen = set()
+
+    def ensure(item, category_key, surface):
+        if not isinstance(item, dict) or not item.get("headline"):
+            return
+        if _is_nonstory_placeholder(item) or _is_publisher_self_promotion(item):
+            return
+        marker = (id(item), surface)
+        if marker in seen:
+            return
+        seen.add(marker)
+        current = str(item.get("image_url") or "").strip()
+        if current and not _is_legacy_or_branded_fallback_image(current):
+            return
+        fallback, credit = get_fallback_image(
+            category_key or item.get("category_key") or "local_gov",
+            item.get("headline", ""),
+            item=item,
+            avoid_url=current,
+        )
+        if fallback:
+            item["image_url"] = fallback
+            item["image_credit"] = credit
+            repaired.append({
+                "surface": surface,
+                "category_key": category_key,
+                "headline": item.get("headline", ""),
+                "previous_image_url": current,
+                "image_url": fallback,
+            })
+        else:
+            failures.append({
+                "surface": surface,
+                "category_key": category_key,
+                "headline": item.get("headline", ""),
+                "previous_image_url": current,
+            })
+
+    for category in all_categories or []:
+        key = str(category.get("category_key") or "local_gov")
+        ensure(category.get("hero"), key, f"{key}:hero")
+        for index, card in enumerate(category.get("cards") or []):
+            ensure(card, key, f"{key}:card:{index}")
+    if isinstance(top_cat, dict):
+        hero = top_cat.get("hero") or {}
+        ensure(hero, str(hero.get("category_key") or top_cat.get("category_key") or "local_gov"), "front_page:hero")
+
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "status": "failed" if failures else "passed",
+        "repaired_count": len(repaired),
+        "failure_count": len(failures),
+        "repaired": repaired,
+        "failures": failures,
+    }
+    path = root / "data" / "final-live-image-contract.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    if failures:
+        raise RuntimeError(
+            "Final live image contract FAILED: "
+            + "; ".join(row.get("headline", "")[:60] for row in failures[:5])
+        )
+    if repaired:
+        print(f"  Final live image contract repaired {len(repaired)} placement(s)")
+    else:
+        print("  Final live image contract PASSED with no repairs")
+    return report
+
+
 def main():
     global CURRENT_RUN_EDITORIAL_IDENTITIES, CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
     global CROSS_SOURCE_IDENTITY_OBSERVATIONS, CURRENT_RUN_QUARANTINED_STORY_IDS
@@ -28861,6 +29129,7 @@ def main():
                 "placement(s) after recovery"
             )
 
+    ensure_final_live_visual_images(all_categories, top_cat, OUTPUT_DIR)
     validate_live_county_membership_authority(all_categories, top_cat, OUTPUT_DIR)
     validate_live_category_canonical_uniqueness(all_categories, top_cat, OUTPUT_DIR)
     print(f"  Timing: archive, publication identity and permalink gates {time.perf_counter() - _stage_started:.1f}s")

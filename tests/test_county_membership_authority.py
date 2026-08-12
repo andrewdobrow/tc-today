@@ -388,3 +388,23 @@ def test_canonical_rebind_carries_persisted_county_authority_provenance():
     assert item["county_membership_authority"] == marker
     assessment = generate._county_membership_authority_assessment(item, "st_lucie")
     assert "st_lucie" in assessment["supported_counties"]
+
+
+def test_generated_single_county_headline_narrows_regional_source_projection():
+    generate = _load_generate()
+    item = _source_entry(
+        "New bus tracking apps debut as Treasure Coast schools report strong first day despite morning scare",
+        (
+            "Martin County, St. Lucie County and Indian River County schools all opened Monday. "
+            "Indian River County introduced a new bus routing system."
+        ),
+        "https://www.wptv.com/news/treasure-coast/new-bus-tracking-apps-debut",
+        headline="Indian River County Superintendent highlights new bus routing system on first day of school",
+        category_key="crime",
+        category_keys=["crime", "martin", "st_lucie", "indian_river"],
+        county_keys=["martin", "st_lucie", "indian_river"],
+    )
+    assessment = generate._county_membership_authority_assessment(item, "crime")
+    assert assessment["supported_counties"] == ["indian_river"]
+    assert sorted(assessment["rejected_memberships"]) == ["martin", "st_lucie"]
+    assert "display_headline_single_county_focus" in assessment["supporting_evidence"]["indian_river"]

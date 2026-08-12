@@ -46,7 +46,8 @@ def _item(headline, body="", **updates):
 def test_shared_contract_registry_enforces_local_government_and_business():
     assert generate.CATEGORY_ELIGIBILITY_CONTRACTS["local_gov"]["mode"] == "enforce"
     assert generate.CATEGORY_ELIGIBILITY_CONTRACTS["business"]["mode"] == "enforce"
-    for key in {"crime", "sports", "things_to_do", "florida"}:
+    assert generate.CATEGORY_ELIGIBILITY_CONTRACTS["crime"]["mode"] == "enforce"
+    for key in {"sports", "things_to_do", "florida"}:
         assert generate.CATEGORY_ELIGIBILITY_CONTRACTS[key]["mode"] == "observe_only"
     for key in {"martin", "st_lucie", "indian_river"}:
         assert generate.CATEGORY_ELIGIBILITY_CONTRACTS[key]["mode"] == "existing_geographic_enforce"
@@ -204,7 +205,7 @@ def test_category_eligibility_report_explains_incremental_rollout():
     assert report["schema_version"] == 1
     assert report["contract_version"] == generate.CATEGORY_ELIGIBILITY_CONTRACT_VERSION
     assert report["summary"]["rejected_count"] == 1
-    assert report["summary"]["enforced_categories"] == ["business", "local_gov"]
+    assert report["summary"]["enforced_categories"] == ["business", "crime", "local_gov"]
     assert "sports" in report["summary"]["observe_only_categories"]
 
 
@@ -357,4 +358,50 @@ def test_business_contract_version_invalidates_only_business_cache(monkeypatch):
     business_after = generate._category_generation_cache_key("business", [source])
     sports_after = generate._category_generation_cache_key("sports", [source])
     assert business_before != business_after
+    assert sports_before == sports_after
+
+
+def test_crime_contract_rejects_school_achievement_and_bus_admin_bleed():
+    fixtures = [
+        _item(
+            "Four Indian River County elementary schools reach 90% reading proficiency milestone",
+            "Four elementary schools reached a reading proficiency goal through a literacy program.",
+        ),
+        _item(
+            "Indian River County Superintendent highlights new bus routing system on first day of school",
+            "The superintendent highlighted a new routing system and parent bus tracking app.",
+        ),
+    ]
+    for item in fixtures:
+        assessment = generate._category_eligibility_contract_assessment("crime", item)
+        assert assessment["eligible"] is False, item["headline"]
+        assert assessment["reason"] == "missing_primary_crime_safety_focus"
+        assert generate._hero_eligible("crime", item) is False
+
+
+def test_crime_contract_keeps_real_public_safety_school_story():
+    item = _item(
+        "Indian River County schools add metal detectors, crisis alert badges as students return",
+        "Schools added metal detectors and crisis alert badges as part of an active shooter safety program.",
+    )
+    assessment = generate._category_eligibility_contract_assessment("crime", item)
+    assert assessment["eligible"] is True
+    assert assessment["positive_signals"]
+
+
+def test_crime_contract_version_invalidates_only_crime_cache(monkeypatch):
+    source = _item(
+        "Fort Pierce police arrest man after robbery",
+        "Police arrested a suspect after a robbery in Fort Pierce.",
+    )
+    crime_before = generate._category_generation_cache_key("crime", [source])
+    sports_before = generate._category_generation_cache_key("sports", [source])
+    monkeypatch.setattr(
+        generate,
+        "CRIME_ELIGIBILITY_CONTRACT_VERSION",
+        generate.CRIME_ELIGIBILITY_CONTRACT_VERSION + "-changed",
+    )
+    crime_after = generate._category_generation_cache_key("crime", [source])
+    sports_after = generate._category_generation_cache_key("sports", [source])
+    assert crime_before != crime_after
     assert sports_before == sports_after
