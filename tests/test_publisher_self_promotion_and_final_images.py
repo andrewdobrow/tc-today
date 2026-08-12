@@ -62,12 +62,29 @@ def test_wptv_reporting_on_real_local_news_is_not_blocked():
     assert generate._source_candidate_publishable(item) is True
 
 
-def test_current_wptv_meetup_archive_row_is_publisher_self_promotion():
-    archive = json.loads((Path(__file__).resolve().parents[1] / "archive.json").read_text())
-    row = next(
-        entry for entry in archive
-        if entry.get("slug") == "2026-08-11-wptv-holds-education-meetup-in-port-st-lucie-on-august-20"
-    )
+def test_exact_wptv_meetup_archive_shape_is_publisher_self_promotion():
+    # Keep this regression deterministic. Production preflight/generation may have
+    # already purged the bad live row before pytest runs, so the test must not depend
+    # on mutable archive.json state. This fixture mirrors the published archive row.
+    row = {
+        "slug": "2026-08-11-wptv-holds-education-meetup-in-port-st-lucie-on-august-20",
+        "headline": "WPTV holds education meetup in Port St. Lucie on August 20",
+        "teaser": (
+            "WPTV will host a community education meetup at House of Music PSL "
+            "in Port St. Lucie on Thursday, August 20."
+        ),
+        "category_key": "st_lucie",
+        "source_url": (
+            "https://www.wptv.com/community/lets-hear-it/"
+            "wptv-brings-lets-hear-it-education-focus-to-west-palm-beach-and-port-st-lucie-aug-19-20"
+        ),
+        "source_headline": (
+            "WPTV brings 'Let's Hear It' education focus to West Palm Beach "
+            "and Port St. Lucie Aug. 19-20"
+        ),
+        "article_word_count": 124,
+        "article_paragraph_count": 3,
+    }
     assert generate._is_publisher_self_promotion(row) is True
     assert generate._archive_entry_publishable(row) is False
 
