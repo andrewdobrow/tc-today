@@ -253,6 +253,15 @@ def test_phrase_aware_advisory_milestones_reject_generic_breaks_and_ending():
     assert "closure" in detect_advisory_follow_up_milestones(
         "JetBlue cancels the route between Vero Beach and New York"
     )
+    assert "death" in detect_advisory_follow_up_milestones(
+        "Deadly shooting under investigation in St. Lucie County"
+    )
+    assert "death" in detect_advisory_follow_up_milestones(
+        "Officer investigated after leaving scene of suspected suicide"
+    )
+    assert "death" not in detect_advisory_follow_up_milestones(
+        "School hosts suicide prevention awareness program"
+    )
 
 
 class _TimelineEngine(_FakeEngine):
@@ -288,12 +297,14 @@ def test_retrospective_observability_finds_missing_person_recovery():
                 "2026-07-26T15:40:30+00:00",
                 "West Palm Beach police seek public's help finding missing "
                 "10-year-old boy traveling with his aunt",
+                source="https://www.wptv.com/missing-child-original",
             ),
             _timeline_entry(
                 "two",
                 "2026-07-26T20:40:28+00:00",
                 "Missing 10-Year-Old safely located in Tennessee, "
                 "West Palm Beach Police say",
+                source="https://www.wpbf.com/missing-child-recovery",
             ),
         ],
     }
@@ -467,7 +478,7 @@ def test_retrospective_sebastian_shooting_to_firefighter_death_is_incoherent():
     assert "timeline_identity_unanchored" in example["blocking_conflicts"]
 
 
-def test_retrospective_missing_child_recovery_retains_exact_source_anchor():
+def test_retrospective_same_source_article_evolution_is_not_follow_up_candidate():
     story = {
         "story_id": "story_000695",
         "status": "developing",
@@ -497,15 +508,120 @@ def test_retrospective_missing_child_recovery_retains_exact_source_anchor():
         _TimelineEngine([story]), []
     )["follow_up_detection"]["retrospective"]
 
-    assert retrospective["high_confidence_candidate_count"] == 1
-    assert retrospective["activation_eligible_candidate_count"] == 1
-    assert retrospective["incoherent_transition_count"] == 0
-    assert retrospective["incoherent_story_count"] == 0
-    example = retrospective["examples"][0]
-    assert example["identity_anchor_qualified"] is True
-    assert example["timeline_incoherent"] is False
+    assert retrospective["candidate_scope"] == "distinct_article_transitions"
+    assert retrospective["candidate_count"] == 0
+    assert retrospective["high_confidence_candidate_count"] == 0
+    assert retrospective["activation_eligible_candidate_count"] == 0
+    assert retrospective["same_source_evolution_count"] == 1
+    assert retrospective["same_source_evolution_milestones"] == {"recovery": 1}
+    example = retrospective["same_source_evolution_examples"][0]
+    assert example["classification"] == "same_source_article_evolution"
+    assert example["milestones"] == ["recovery"]
     assert "exact_source_article_identity" in example["identity_anchor_codes"]
-    assert "timeline_identity_unanchored" not in example["blocking_conflicts"]
+
+
+def test_retrospective_known_event_family_conflict_blocks_activation():
+    story = {
+        "story_id": "story_conflict",
+        "status": "developing",
+        "canonical_title": "Fort Pierce police investigate crash involving 2 children in crosswalk",
+        "timeline": [
+            _timeline_entry(
+                "prior",
+                "2026-08-09T12:00:00+00:00",
+                "Fort Pierce police investigate crash involving 2 children in crosswalk",
+                source="https://www.wptv.com/fort-pierce-crash",
+            ),
+            _timeline_entry(
+                "newer",
+                "2026-08-10T12:00:00+00:00",
+                "Driver identified in Fort Pierce crash involving 2 children in crosswalk",
+                source="https://cbs12.com/fort-pierce-crash-driver",
+            ),
+        ],
+    }
+    story["timeline"][0]["event_key"] = "traffic-crash-fort-pierce-9af536fb39"
+    story["timeline"][1]["event_key"] = "fire-fort-pierce-1a2b3c4d"
+
+    retrospective = build_editorial_observability(
+        _TimelineEngine([story]), []
+    )["follow_up_detection"]["retrospective"]
+
+    assert retrospective["candidate_count"] == 1
+    assert retrospective["activation_eligible_candidate_count"] == 0
+    example = retrospective["examples"][0]
+    assert example["milestones"] == ["identified"]
+    assert example["identity_anchor_qualified"] is True
+    assert "event_family_conflict" in example["blocking_conflicts"]
+    assert "activation_blocked_event_family_conflict" in example["reason_codes"]
+
+
+def test_retrospective_unknown_event_family_does_not_create_false_conflict():
+    story = {
+        "story_id": "story_unknown",
+        "status": "developing",
+        "canonical_title": "19-year-old Boynton Beach man dies following Saturday shooting",
+        "timeline": [
+            _timeline_entry(
+                "prior",
+                "2026-08-09T12:00:00+00:00",
+                "19-year-old Boynton Beach man dies following Saturday shooting",
+                source="https://www.wptv.com/boynton-shooting",
+            ),
+            _timeline_entry(
+                "newer",
+                "2026-08-10T12:00:00+00:00",
+                "19-year-old identified as victim in deadly Boynton Beach shooting - WPEC",
+                source="https://cbs12.com/boynton-shooting-victim",
+            ),
+        ],
+    }
+    story["timeline"][0]["event_key"] = "named-person-death:nigel-beckford"
+    story["timeline"][1]["event_key"] = "unknown-event-ab8ddbfa94"
+
+    retrospective = build_editorial_observability(
+        _TimelineEngine([story]), []
+    )["follow_up_detection"]["retrospective"]
+    example = retrospective["examples"][0]
+
+    assert "event_family_conflict" not in example["blocking_conflicts"]
+    assert "event_family_conflict" not in example["identity_anchor_codes"]
+
+
+def test_retrospective_true_cross_source_arrest_follow_up_stays_activation_evidence():
+    story = {
+        "story_id": "story_002380",
+        "status": "developing",
+        "canonical_title": "Fort Pierce police investigate hit-and-run crash involving 2 children in crosswalk",
+        "timeline": [
+            _timeline_entry(
+                "prior",
+                "2026-08-05T12:00:00+00:00",
+                "Fort Pierce police investigate hit-and-run crash involving 2 children in crosswalk",
+                source="https://www.wptv.com/fort-pierce-hit-run",
+            ),
+            _timeline_entry(
+                "newer",
+                "2026-08-06T12:00:00+00:00",
+                "Driver arrested in Fort Pierce hit-and-run that injured 7-year-old",
+                source="https://www.wpbf.com/fort-pierce-hit-run-arrest",
+            ),
+        ],
+    }
+    story["timeline"][0]["event_key"] = "traffic-crash-fort-pierce-9af536fb39"
+    story["timeline"][1]["event_key"] = "traffic-crash-fort-pierce-e3adde596e"
+
+    retrospective = build_editorial_observability(
+        _TimelineEngine([story]), []
+    )["follow_up_detection"]["retrospective"]
+
+    assert retrospective["candidate_count"] == 1
+    assert retrospective["activation_eligible_candidate_count"] == 1
+    example = retrospective["examples"][0]
+    assert example["milestones"] == ["arrest"]
+    assert example["activation_eligible"] is True
+    assert example["blocking_conflicts"] == []
+    assert "event_family_match" in example["identity_anchor_codes"]
 
 
 def test_retrospective_canonical_title_cannot_self_validate_unrelated_transition():
