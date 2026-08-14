@@ -40,7 +40,11 @@ _ADVISORY_FOLLOW_UP_PATTERNS: Mapping[str, tuple[str, ...]] = {
         r"\bidentity (?:was )?released\b",
         r"\bnamed as\b",
     ),
-    "death": (r"\b(?:dies|died|dead|killed|death)\b",),
+    "death": (
+        r"\b(?:dies|died|dead|deadly|killed|death|fatal|fatality|fatalities)\b",
+        r"\b(?:suspected|apparent) suicide\b",
+        r"\bdied by suicide\b",
+    ),
     "sentencing": (r"\b(?:sentenced|sentencing)\b",),
     "court_action": (
         r"\b(?:trial|hearing|lawsuit|sues|sued|indicted|indictment|arraigned|convicted)\b",

@@ -17,9 +17,9 @@ from .source_identity import normalize_source_identity_url
 from .story_relationship import detect_advisory_follow_up_evidence
 
 ENGINE_NAME = "tct-editorial-engine"
-ENGINE_VERSION = "1.13.1.3"
-ENGINE_RELEASE = "ascii-permalink-integrity"
-OBSERVABILITY_SCHEMA_VERSION = 43
+ENGINE_VERSION = "1.13.6.1"
+ENGINE_RELEASE = "follow-up-evidence-precision"
+OBSERVABILITY_SCHEMA_VERSION = 44
 RESOLVER_VERSION = "3.0"
 RELATIONSHIP_ENGINE_VERSION = "1.5"
 
@@ -90,6 +90,8 @@ def _retrospective_event_family(value: object) -> str:
     key = _normalized_text(value).replace(" ", "-")
     if not key:
         return ""
+    if key == "unknown-event" or key.startswith("unknown-event-"):
+        return "unknown-event"
     for family in ("animal-rescue", "traffic-crash", "missing-person", "fire"):
         if key == family or key.startswith(f"{family}-"):
             return family
@@ -159,7 +161,13 @@ def _retrospective_pair_identity(
         codes.append("exact_event_key")
     if event_family_match:
         codes.append("event_family_match")
-    elif prior_family and newer_family and prior_family != newer_family:
+    elif (
+        prior_family
+        and newer_family
+        and prior_family != "unknown-event"
+        and newer_family != "unknown-event"
+        and prior_family != newer_family
+    ):
         codes.append("event_family_conflict")
     if strong_title_identity:
         codes.append("strong_pair_title_continuity")
@@ -177,6 +185,13 @@ def _retrospective_pair_identity(
         "exact_source_identity": exact_source_identity,
         "exact_event_key": exact_event_key,
         "event_family_match": event_family_match,
+        "event_family_conflict": bool(
+            prior_family
+            and newer_family
+            and prior_family != "unknown-event"
+            and newer_family != "unknown-event"
+            and prior_family != newer_family
+        ),
         "prior_event_family": prior_family,
         "newer_event_family": newer_family,
     }
@@ -233,6 +248,9 @@ def _build_retrospective_follow_up_observability(
 
     candidates: list[dict[str, Any]] = []
     milestone_counts: Counter[str] = Counter()
+    same_source_evolution_milestones: Counter[str] = Counter()
+    same_source_evolution_examples: list[dict[str, Any]] = []
+    same_source_evolution_count = 0
     blocking_conflicts: Counter[str] = Counter()
     exclusion_reasons: Counter[str] = Counter()
     incoherent_stories: dict[str, dict[str, Any]] = {}
@@ -276,6 +294,32 @@ def _build_retrospective_follow_up_observability(
                     canonical_title_overlap = _retrospective_overlap(
                         story.get("canonical_title"), entry.get("title")
                     )
+
+                    # An exact normalized source-article identity means the publisher
+                    # evolved one article in place. That is valuable update evidence,
+                    # but it is not evidence of a distinct follow-up publication and
+                    # must never inflate follow-up activation readiness.
+                    if pair_identity["exact_source_identity"]:
+                        same_source_evolution_count += 1
+                        same_source_evolution_milestones.update(novel_milestones)
+                        if len(same_source_evolution_examples) < 25:
+                            same_source_evolution_examples.append({
+                                "story_id": str(story.get("story_id") or ""),
+                                "story_title": _story_title(story),
+                                "milestones": sorted(novel_milestones),
+                                "matched_phrases": {
+                                    milestone: list(evidence.get(milestone, ()))
+                                    for milestone in sorted(novel_milestones)
+                                },
+                                "classification": "same_source_article_evolution",
+                                "identity_anchor_codes": list(pair_identity["codes"]),
+                                "prior_article": _timeline_entry_payload(previous_eligible),
+                                "newer_article": _timeline_entry_payload(entry),
+                            })
+                        known_milestones.update(milestones)
+                        previous_eligible = entry
+                        continue
+
                     same_timestamp = (
                         _timeline_datetime(previous_eligible.get("published_at"))
                         == _timeline_datetime(entry.get("published_at"))
@@ -288,6 +332,8 @@ def _build_retrospective_follow_up_observability(
                     if not pair_identity["qualified"]:
                         conflicts.append("timeline_identity_unanchored")
                         identity_anchor_rejected_count += 1
+                    if pair_identity["event_family_conflict"]:
+                        conflicts.append("event_family_conflict")
                     terminal = novel_milestones & {
                         "death", "resolution", "opening", "closure"
                     }
@@ -320,6 +366,8 @@ def _build_retrospective_follow_up_observability(
                         reason_codes.append("chronology_supported")
                     if not pair_identity["qualified"]:
                         reason_codes.append("timeline_incoherent")
+                    if pair_identity["event_family_conflict"]:
+                        reason_codes.append("activation_blocked_event_family_conflict")
 
                     activation_eligible = (
                         pair_identity["qualified"]
@@ -427,9 +475,15 @@ def _build_retrospective_follow_up_observability(
         "stories_with_timelines": stories_with_timelines,
         "timeline_entries_examined": timeline_entries_examined,
         "transitions_examined": transitions_examined,
+        "candidate_scope": "distinct_article_transitions",
         "candidate_count": len(candidates),
         "high_confidence_candidate_count": high_confidence_count,
         "activation_eligible_candidate_count": activation_eligible_count,
+        "same_source_evolution_count": same_source_evolution_count,
+        "same_source_evolution_milestones": dict(
+            sorted(same_source_evolution_milestones.items())
+        ),
+        "same_source_evolution_examples": same_source_evolution_examples,
         "identity_anchor_rejected_count": identity_anchor_rejected_count,
         "incoherent_transition_count": identity_anchor_rejected_count,
         "incoherent_story_count": len(incoherent_story_rows),
@@ -443,9 +497,10 @@ def _build_retrospective_follow_up_observability(
         "enforcement_ready": False,
         "enforcement_readiness_reason": (
             "Retrospective candidates are evidence for manual review only. "
-            "Incoherent timelines are quarantined from high-confidence and "
-            "activation evidence; no relationship, grouping, ranking or "
-            "publication behavior changes."
+            "Same-source article evolution is measured separately from distinct "
+            "follow-up publications, event-family conflicts cannot become activation "
+            "evidence, and incoherent timelines are quarantined from high-confidence "
+            "evidence; no relationship, grouping, ranking or publication behavior changes."
         ),
     }
 
