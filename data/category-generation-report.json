@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-14T01:51:35Z",
+  "generated_at": "2026-08-14T10:49:53Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,37 +15,39 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 1,
-      "generated_live": 4,
-      "generation_failed_archive_recovery": 2,
-      "quality_gate_archive_recovery": 1,
+      "category_eligibility_archive_recovery": 1,
+      "county_zero_candidate_archive_recovery": 1,
+      "generated_live": 2,
+      "generation_failed_archive_recovery": 3,
+      "no_publishable_sources": 1,
       "sports_zero_candidate_archive_recovery": 1
     },
     "failures": {
-      "contextless_update_lead": 1,
+      "contextless_update_lead": 2,
       "missing_or_null_hero": 1,
-      "no_sports_hero_candidates": 1,
-      "publication_quality_rejected": 1
+      "no_category_eligible_sources": 1,
+      "no_source_backed_county_hero_candidates": 1,
+      "no_sports_hero_candidates": 1
     },
-    "model_attempt_count": 10,
-    "model_elapsed_seconds": 346.455,
-    "archive_recovery_requested_count": 4,
+    "model_attempt_count": 8,
+    "model_elapsed_seconds": 286.673,
+    "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 3,
-    "article_framing_rejection_count": 2,
-    "category_eligibility_rejection_count": 21,
-    "published_story_duplicate_suppression_count": 45,
-    "story_aware_update_context_count": 10
+    "contextual_update_lead_rejection_count": 5,
+    "article_framing_rejection_count": 1,
+    "category_eligibility_rejection_count": 18,
+    "published_story_duplicate_suppression_count": 41,
+    "story_aware_update_context_count": 6
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "quality_gate_archive_recovery",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 11,
-      "selected_source_count": 2,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 8,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 2,
@@ -53,21 +55,23 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 23.979,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Florida voters to decide property tax referendum in November as homestead exemption debate intensifies"
+          "elapsed_seconds": 3.204,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_details_missing — Border Collies rescued from Palm City hoarding case beginning long road to recovery - cw34.com"
         },
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 24.108,
-          "result": "success"
+          "elapsed_seconds": 5.307,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_details_missing — Border Collies rescued from Palm City hoarding case beginning long road to recovery - cw34.com"
         }
       ],
-      "model_elapsed_seconds": 48.086,
-      "failure_code": "publication_quality_rejected",
-      "failure_summary": "Generated content did not pass final publication quality gates",
+      "model_elapsed_seconds": 8.511,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: original_event_details_missing — Border Collies rescued from Palm City hoarding case beginning long road to recovery - cw34.com",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -76,9 +80,37 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 11,
-      "category_eligibility_rejection_count": 9,
+      "category_eligibility_assessed_count": 8,
+      "category_eligibility_rejection_count": 7,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:shooting"
+          ],
+          "headline": "Deadly shooting under investigation at Seminole Mobile home park in St. Lucie County - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/florida-person-dies-after-shooting-at-st-lucie-county-mobile-home-park/73423601"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "'They've never had a voice': Big Dog Ranch Rescue welcomes final 155 beagles from Wisconsin testing lab",
+          "source_url": "https://www.wptv.com/news/region-c-palm-beach-county/loxahatchee-acreage/theyve-never-had-a-voice-big-dog-ranch-rescue-in-loxahatchee-welcomes-final-155-beagles-from-wisconsin-testing-lab"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -144,69 +176,27 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Democrats gather in Austin to debate 2028 presidential primary calendar and party direction",
-          "source_url": "https://www.wptv.com/politics/democrats-gather-in-austin-to-debate-2028-presidential-primary-calendar-and-party-direction"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Demand for free meals surges at Boca Helping Hands in Lake Worth Beach",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/demand-for-free-meals-surges-at-boca-helping-hands-in-lake-worth-beach"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
           "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
           "competing_signals": [
-            "crime_incident:shooting"
+            "crime_incident:victim"
           ],
-          "headline": "Person dies after shooting at St. Lucie County mobile home park, investigation ongoing - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-person-dies-after-shooting-at-st-lucie-county-mobile-home-park/73423601"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "WHERE'S WALTER? Visiting rescued animals at Busch Wildlife Sanctuary",
-          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-visiting-rescued-animals-at-busch-wildlife-sanctuary"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Indian River County school district looks to sell around 10 properties across the county - wptv.com",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-district-looks-to-sell-around-10-properties-across-the-county"
+          "headline": "Martin County Sheriff's Office saves senior citizen from $600,000 gold bar scam - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/martin-county-sheriffs-office-saves-senior-citizen-from-600000-gold-bar-scam-mcso-bank-scam-fraud-gold-vendor-florida-news"
         }
       ],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Florida retirement costs: Gulf Coast vs. Atlantic Coast shows $600K gap",
+          "source_url": "https://www.wptv.com/news/state/florida-retirement-costs-gulf-coast-vs-atlantic-coast-shows-600k-gap",
+          "editorial_story_id": "story_003731",
+          "canonical_slug": "2026-08-14-florida-retirement-costs-show-600000-gap-between-gulf-coast-and-atlantic-coast",
+          "canonical_headline": "Florida retirement costs show $600,000 gap between Gulf Coast and Atlantic Coast",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Florida governor candidates sharpen their closing arguments as Aug. 18 primary nears",
@@ -215,26 +205,6 @@
           "canonical_slug": "2026-08-13-byron-donalds-leads-florida-republican-gubernatorial-primary-with-49-as-aug-18-v",
           "canonical_headline": "Byron Donalds leads Florida Republican gubernatorial primary with 49% as Aug. 18 vote nears",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "16-year-old girl dies after falling through roof of abandoned Sebastian building",
-          "source_url": "https://www.wptv.com/news/region-indian-river-county/sebastian/16-year-old-girl-dies-after-falling-through-roof-of-abandoned-sebastian-building",
-          "editorial_story_id": "story_003681",
-          "canonical_slug": "2026-08-13-16-year-old-girl-dies-after-falling-through-roof-of-abandoned-sebastian-building",
-          "canonical_headline": "16-year-old girl dies after falling through roof of abandoned Sebastian building",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "3 Port St. Lucie police officers placed on leave during political campaign signage investigation",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/3-port-st-lucie-police-officers-placed-on-leave-during-political-campaign-sign-investigation",
-          "editorial_story_id": "story_002554",
-          "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-two-separate-campaign-sign-incidents-involving",
-          "canonical_headline": "Port St. Lucie police investigate two separate campaign sign incidents involving Mayor Martin's husband",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -249,19 +219,19 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Indian River County school district looks to sell around 10 properties across the county - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/12/indian-river-county-school-district-looks-sell-around-10-properties-across-county?outputType=amp",
-          "editorial_story_id": "story_003544",
-          "canonical_slug": "2026-08-13-indian-river-county-school-district-plans-to-sell-10-properties-across-county",
-          "canonical_headline": "Indian River County school district plans to sell 10 properties across county",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Vehicle tied to fatal hit-and-run in Indian River County recovered - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/vehicle-tied-to-fatal-hit-and-run-in-indian-river-county-recovered/73419431",
+          "editorial_story_id": "story_003587",
+          "canonical_slug": "2026-08-13-vehicle-connected-to-fatal-hit-and-run-in-indian-river-county-recovered",
+          "canonical_headline": "Vehicle connected to fatal hit-and-run in Indian River County recovered",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 3,
+      "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Person dies after shooting at St. Lucie County mobile home park, investigation ongoing - WPBF",
+          "source_headline": "Deadly shooting under investigation at Seminole Mobile home park in St. Lucie County - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-person-dies-after-shooting-at-st-lucie-county-mobile-home-park/73423601",
           "publisher": "www.wpbf.com",
           "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
@@ -278,20 +248,21 @@
             "shared_event_family",
             "shared_precise_location",
             "shared_agency",
+            "shared_subject_phrase",
             "shared_headline_topic",
             "distinctive_fact_overlap"
           ],
           "decision_trace": [
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
-            "publication_gap_days=0",
+            "publication_gap_days=1",
             "shared_locality=['st-lucie', 'st-lucie-county']",
             "shared_event_families=['shooting']",
             "shared_named_people=[]",
             "shared_precise_locations=['orange-avenue']",
             "shared_agencies=['st-lucie-county-sheriff']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['mobile', 'park', 'person']",
+            "shared_subject_phrases=['seminole-mobile-park']",
+            "shared_headline_topic_core=['mobile', 'park', 'seminole']",
             "shared_distinctive_token_count=81",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
@@ -322,44 +293,21 @@
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Indian River County school district looks to sell around 10 properties across the county - wptv.com",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-district-looks-to-sell-around-10-properties-across-the-county",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-13-indian-river-county-school-district-plans-to-sell-10-properties-across-county",
-          "canonical_headline": "Indian River County school district plans to sell 10 properties across county",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_003544",
-            "source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-district-looks-to-sell-around-10-properties-across-the-county"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_003544,source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-district-looks-to-sell-around-10-properties-across-the-county",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 72.757
+      "elapsed_seconds": 30.743
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 8,
-      "selected_source_count": 5,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 7,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -367,37 +315,57 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 19.589,
+          "elapsed_seconds": 44.144,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 19.589,
+      "model_elapsed_seconds": 44.144,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 108,
+          "baseline_anchor": "criminal_case",
+          "baseline_present": false,
+          "baseline_anchor_present": false,
+          "baseline_details_present": true,
+          "baseline_context_hits": [],
+          "baseline_context_required": 0,
+          "canonical_context_available": false,
+          "canonical_context_headline": "",
+          "novelty_anchor": "disclosure",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "border",
+            "city",
+            "collies",
+            "deputies",
+            "home",
+            "neglected",
+            "palm",
+            "rescuing"
+          ],
+          "missing": [
+            "original_event_context_missing"
+          ],
+          "source_title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
+          "headline": "Martin County deputies describe rescuing 36 Border Collies from filth-filled Palm City home"
+        }
+      ],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Florida retirement costs: Gulf Coast vs. Atlantic Coast shows $600K gap",
-          "source_url": "https://www.wptv.com/news/state/florida-retirement-costs-gulf-coast-vs-atlantic-coast-shows-600k-gap"
-        },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
@@ -423,10 +391,33 @@
           "competing_signals": [],
           "headline": "Demand for free meals surges at Boca Helping Hands in Lake Worth Beach",
           "source_url": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/demand-for-free-meals-surges-at-boca-helping-hands-in-lake-worth-beach"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Florida lawmaker pushes for breeder registry after Martin County animal hoarding case - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/12/florida-lawmaker-pushes-breeder-registry-after-martin-county-animal-hoarding-case/?outputType=amp"
         }
       ],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Florida retirement costs: Gulf Coast vs. Atlantic Coast shows $600K gap",
+          "source_url": "https://www.wptv.com/news/state/florida-retirement-costs-gulf-coast-vs-atlantic-coast-shows-600k-gap",
+          "editorial_story_id": "story_003731",
+          "canonical_slug": "2026-08-14-florida-retirement-costs-show-600000-gap-between-gulf-coast-and-atlantic-coast",
+          "canonical_headline": "Florida retirement costs show $600,000 gap between Gulf Coast and Atlantic Coast",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "Man shot, killed inside Fort Pierce home after attacking homeowner; no charges filed - WPEC",
@@ -449,16 +440,6 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "3 Port St. Lucie police officers placed on leave during political campaign signage investigation",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/3-port-st-lucie-police-officers-placed-on-leave-during-political-campaign-sign-investigation",
-          "editorial_story_id": "story_002554",
-          "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-two-separate-campaign-sign-incidents-involving",
-          "canonical_headline": "Port St. Lucie police investigate two separate campaign sign incidents involving Mayor Martin's husband",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "Budget reviews saved $11M since 2019, helping avoid cuts in Indian River County schools - WPEC",
           "source_url": "https://cbs12.com/news/local/budget-reviews-saved-11m-since-2019-helping-avoid-cuts-in-indian-river-county-schools",
           "editorial_story_id": "story_003630",
@@ -469,7 +450,17 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Vehicle tied to fatal hit-and-run in Indian River County recovered - WPBF",
+          "source_headline": "Martin County Sheriff's Office saves senior citizen from $600,000 gold bar scam - WPEC",
+          "source_url": "https://cbs12.com/news/local/martin-county-sheriffs-office-saves-senior-citizen-from-600000-gold-bar-scam-mcso-bank-scam-fraud-gold-vendor-florida-news",
+          "editorial_story_id": "story_003613",
+          "canonical_slug": "2026-08-13-martin-county-deputies-save-senior-from-600000-gold-bar-scam",
+          "canonical_headline": "Martin County deputies save senior from $600,000 gold bar scam",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Vehicle tied to fatal hit-and-run in Indian River County recovered - wpbf.com",
           "source_url": "https://www.wpbf.com/article/vehicle-tied-to-fatal-hit-and-run-in-indian-river-county-recovered/73419431",
           "editorial_story_id": "story_003587",
           "canonical_slug": "2026-08-13-vehicle-connected-to-fatal-hit-and-run-in-indian-river-county-recovered",
@@ -489,7 +480,7 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "'He flipped a switch': Indian River County sheriff's deputy talks a man off a bridge - WPBF",
+          "source_headline": "'He flipped a switch': Indian River County sheriff's deputy talks a man off a bridge - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-jumper-deputy-crisis-suicide-rescue/73416999",
           "editorial_story_id": "story_003400",
           "canonical_slug": "2026-08-12-indian-river-county-deputies-talk-wanted-man-off-17th-street-bridge-after-two-ho",
@@ -498,54 +489,30 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Palm City home condemned after woman arrested in worst animal hoarding case Humane Society has seen - wptv.com",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/palm-city-home-condemned-after-woman-arrested-in-worst-animal-hoarding-case-humane-society-has-seen",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
-          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
-          "basis": "exact_structured_incident_key",
-          "identity_keys": [
-            "incident:mass-animal-hoarding:martin-county",
-            "story:story_003665",
-            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/palm-city-home-condemned-after-woman-arrested-in-worst-animal-hoarding-case-humane-society-has-seen"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "incident"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Fort Pierce driver arrested in hit-and-run that hospitalized 7-year-old girl",
-      "generated_card_count": 2,
-      "elapsed_seconds": 35.493
+      "live_hero_headline": "Fort Pierce man arrested in hit-and-run that hospitalized 7-year-old girl",
+      "generated_card_count": 0,
+      "elapsed_seconds": 55.154
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
-      "status": "cache_hit",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 10,
-      "selected_source_count": 1,
-      "cache_hit": true,
-      "archive_recovery_requested": false,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 8,
+      "selected_source_count": 0,
+      "cache_hit": false,
+      "archive_recovery_requested": true,
       "attempt_count": 0,
       "attempts": [],
       "model_elapsed_seconds": 0.0,
-      "failure_code": "",
-      "failure_summary": "",
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Business & Development category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -554,9 +521,24 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 10,
-      "category_eligibility_rejection_count": 9,
+      "category_eligibility_assessed_count": 8,
+      "category_eligibility_rejection_count": 8,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_treasure_coast_business_nexus",
+          "positive_signals": [
+            "business_opening_closure_expansion:closing"
+          ],
+          "competing_signals": [],
+          "headline": "'They've never had a voice': Big Dog Ranch Rescue welcomes final 155 beagles from Wisconsin testing lab",
+          "source_url": "https://www.wptv.com/news/region-c-palm-beach-county/loxahatchee-acreage/theyve-never-had-a-voice-big-dog-ranch-rescue-in-loxahatchee-welcomes-final-155-beagles-from-wisconsin-testing-lab"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -571,19 +553,6 @@
           ],
           "headline": "Riviera Beach domestic violence attack highlights new Florida pet protection law",
           "source_url": "https://www.wptv.com/news/region-c-palm-beach-county/riviera-beach/riviera-beach-domestic-violence-attack-highlights-new-florida-pet-protection-law"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Florida retirement costs: Gulf Coast vs. Atlantic Coast shows $600K gap",
-          "source_url": "https://www.wptv.com/news/state/florida-retirement-costs-gulf-coast-vs-atlantic-coast-shows-600k-gap"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -669,25 +638,20 @@
           "competing_signals": [],
           "headline": "West Palm Beach residents push to pause major development, demand community voice in city's future",
           "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/west-palm-beach-residents-push-to-pause-major-development-demand-community-voice-in-citys-future"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:arrested"
-          ],
-          "headline": "Florida lawmaker pushes for breeder registry after Martin County animal hoarding case",
-          "source_url": "https://www.wptv.com/wptv-investigates/florida-lawmaker-pushes-for-breeder-registry-after-martin-county-animal-hoarding-case"
         }
       ],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Florida retirement costs: Gulf Coast vs. Atlantic Coast shows $600K gap",
+          "source_url": "https://www.wptv.com/news/state/florida-retirement-costs-gulf-coast-vs-atlantic-coast-shows-600k-gap",
+          "editorial_story_id": "story_003731",
+          "canonical_slug": "2026-08-14-florida-retirement-costs-show-600000-gap-between-gulf-coast-and-atlantic-coast",
+          "canonical_headline": "Florida retirement costs show $600,000 gap between Gulf Coast and Atlantic Coast",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "16-year-old girl dies after falling through roof of abandoned Sebastian building",
@@ -720,6 +684,16 @@
         },
         {
           "category_key": "business",
+          "source_headline": "Indian River County school district looks to sell around 10 properties across the county",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-district-looks-to-sell-around-10-properties-across-the-county",
+          "editorial_story_id": "story_003544",
+          "canonical_slug": "2026-08-13-indian-river-county-school-district-plans-to-sell-10-properties-across-county",
+          "canonical_headline": "Indian River County school district plans to sell 10 properties across county",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
           "source_headline": "Martin County student's first day of school ends in tears following a hot and crowded bus ride",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-students-first-day-of-school-ends-in-tears-following-a-hot-and-crowded-bus-ride",
           "editorial_story_id": "story_003547",
@@ -727,56 +701,21 @@
           "canonical_headline": "South Fork High School freshman describes hot, crowded bus ride on first day of school",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Florida homeowners facing insurance sticker shock may have more roof options than they think",
-          "source_url": "https://www.wptv.com/money/real-estate-news/florida-homeowners-facing-insurance-sticker-shock-may-have-more-roof-options-than-they-think",
-          "editorial_story_id": "story_003548",
-          "canonical_slug": "2026-08-13-florida-homeowners-with-aging-roofs-face-rising-insurance-premiums-as-companies",
-          "canonical_headline": "Florida Homeowners with Aging Roofs Face Rising Insurance Premiums as Companies Limit Coverage",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Indian River County school district looks to sell around 10 properties across the county",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-district-looks-to-sell-around-10-properties-across-the-county",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-13-indian-river-county-school-district-plans-to-sell-10-properties-across-county",
-          "canonical_headline": "Indian River County school district plans to sell 10 properties across county",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_003544",
-            "source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-district-looks-to-sell-around-10-properties-across-the-county"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_003544,source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-district-looks-to-sell-around-10-properties-across-the-county",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Indian River County school district plans to sell 10 properties across county",
-      "elapsed_seconds": 6.788
+      "elapsed_seconds": 5.554
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "sports_zero_candidate_archive_recovery",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 8,
-      "selected_source_count": 8,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
@@ -792,10 +731,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "sports",
@@ -805,16 +744,6 @@
           "canonical_slug": "2026-08-13-indian-river-county-schools-avoid-layoffs-give-all-teachers-raises-after-budget",
           "canonical_headline": "Indian River County schools avoid layoffs, give all teachers raises after budget reviews save $11 million",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "sports",
-          "source_headline": "Indian River County schools earn 'A' rating for fourth straight year - WPEC",
-          "source_url": "https://cbs12.com/news/local/indian-river-county-schools-earn-a-rating-for-fourth-straight-year",
-          "editorial_story_id": "story_003463",
-          "canonical_slug": "2026-08-12-indian-river-county-school-district-earns-a-rating-for-fourth-consecutive-year",
-          "canonical_headline": "Indian River County School District earns 'A' rating for fourth consecutive year",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -829,21 +758,11 @@
         },
         {
           "category_key": "sports",
-          "source_headline": "Back to School: Indian River County schools expand programs to meet families' needs - WPBF",
+          "source_headline": "Back to School: Indian River County schools expand programs to meet families' needs - wpbf.com",
           "source_url": "https://www.wpbf.com/article/indian-river-county-schools-expand-programs-meet-families-needs/73393043",
           "editorial_story_id": "story_003109",
           "canonical_slug": "2026-08-10-indian-river-county-school-enrollment-exceeds-state-projections-with-expanded-pr",
           "canonical_headline": "Indian River County school enrollment exceeds state projections with expanded programs",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "sports",
-          "source_headline": "Indian River County school leaders reorganize schools ahead of new year - WPEC",
-          "source_url": "https://cbs12.com/news/local/indian-river-county-school-leaders-reorganize-schools-ahead-of-new-year",
-          "editorial_story_id": "story_003060",
-          "canonical_slug": "2026-08-10-indian-river-county-converts-freshman-learning-center-into-vero-beach-middle-sch",
-          "canonical_headline": "Indian River County converts Freshman Learning Center into Vero Beach Middle School",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -851,14 +770,14 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 14.946
+      "elapsed_seconds": 16.703
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 19,
+      "fresh_candidate_count": 20,
       "publishable_source_count": 5,
       "selected_source_count": 5,
       "cache_hit": false,
@@ -868,19 +787,19 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 28.263,
+          "elapsed_seconds": 52.461,
           "result": "missing_or_null_hero",
           "error_summary": "Model response did not contain a usable hero after normalization"
         },
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 26.619,
+          "elapsed_seconds": 49.242,
           "result": "missing_or_null_hero",
           "error_summary": "Model response did not contain a usable hero after normalization"
         }
       ],
-      "model_elapsed_seconds": 54.883,
+      "model_elapsed_seconds": 101.703,
       "failure_code": "missing_or_null_hero",
       "failure_summary": "Model response did not contain a usable hero after normalization",
       "sports_expired_event_preview_count": 0,
@@ -894,46 +813,28 @@
       "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "things_to_do",
-          "source_headline": "Indian River County - Week of Aug. 14 - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/community_page/calendar/indian-river-county---week-of-aug-14/article_f5aa9755-ea3f-5690-9887-07f80613d9eb.html",
-          "editorial_story_id": "story_003515",
-          "canonical_slug": "2026-08-12-dermatologist-to-speak-on-skin-cancer-at-heritage-center-in-vero-beach",
-          "canonical_headline": "Dermatologist to speak on skin cancer at Heritage Center in Vero Beach",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 61.503
+      "elapsed_seconds": 105.839
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "generated_live",
+      "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 0,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 7.081,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 7.081,
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -944,11 +845,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Florida retirement costs: Gulf Coast vs. Atlantic Coast shows $600K gap",
+          "source_url": "https://www.wptv.com/news/state/florida-retirement-costs-gulf-coast-vs-atlantic-coast-shows-600k-gap",
+          "editorial_story_id": "story_003731",
+          "canonical_slug": "2026-08-14-florida-retirement-costs-show-600000-gap-between-gulf-coast-and-atlantic-coast",
+          "canonical_headline": "Florida retirement costs show $600,000 gap between Gulf Coast and Atlantic Coast",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "florida",
           "source_headline": "Florida governor candidates sharpen their closing arguments as Aug. 18 primary nears",
@@ -963,18 +874,14 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Florida retirement costs show $600,000 gap between Gulf Coast and Atlantic Coast",
-      "generated_card_count": 0,
-      "elapsed_seconds": 22.406
+      "elapsed_seconds": 11.973
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 27,
+      "fresh_candidate_count": 28,
       "publishable_source_count": 5,
       "selected_source_count": 5,
       "cache_hit": false,
@@ -984,7 +891,7 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 58.216,
+          "elapsed_seconds": 59.334,
           "result": "contextless_update_lead",
           "error_type": "ContextualUpdateLeadError",
           "error_summary": "Contextless update lead for hero: new_development_missing — 'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home"
@@ -992,15 +899,15 @@
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 62.937,
+          "elapsed_seconds": 49.733,
           "result": "contextless_update_lead",
           "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: new_development_missing — 'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home"
+          "error_summary": "Contextless update lead for hero: original_event_context_missing,new_development_missing — 'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home"
         }
       ],
-      "model_elapsed_seconds": 121.153,
+      "model_elapsed_seconds": 109.067,
       "failure_code": "contextless_update_lead",
-      "failure_summary": "Contextless update lead for hero: new_development_missing — 'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
+      "failure_summary": "Contextless update lead for hero: original_event_context_missing,new_development_missing — 'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1012,8 +919,18 @@
       "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Budget reviews saved $11M since 2019, helping avoid cuts in Indian River County schools - WPEC",
+          "source_url": "https://cbs12.com/newsletter-daily/budget-reviews-saved-11m-since-2019-helping-avoid-cuts-in-indian-river-county-schools",
+          "editorial_story_id": "story_003630",
+          "canonical_slug": "2026-08-13-indian-river-county-schools-avoid-layoffs-give-all-teachers-raises-after-budget",
+          "canonical_headline": "Indian River County schools avoid layoffs, give all teachers raises after budget reviews save $11 million",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "martin",
           "source_headline": "Martin County Sheriff's Office saves senior citizen from $600,000 gold bar scam - WPEC",
@@ -1023,41 +940,21 @@
           "canonical_headline": "Martin County deputies save senior from $600,000 gold bar scam",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Trail cam, AirTags and missing signs ignite clash between Martin County candidates - WPEC",
-          "source_url": "https://cbs12.com/news/local/controversy-over-missing-campaign-signs-in-stuart",
-          "editorial_story_id": "story_003616",
-          "canonical_slug": "2026-08-13-trail-camera-airtags-fuel-sign-theft-allegations-between-martin-county-candidate",
-          "canonical_headline": "Trail camera, AirTags fuel sign theft allegations between Martin County candidates",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Spirit Halloween stores begin to open across Palm Beach County, Treasure Coast - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/12/spirit-halloween-stores-begin-open-across-palm-beach-county-treasure-coast",
-          "editorial_story_id": "story_003482",
-          "canonical_slug": "2026-08-13-spirit-halloween-opens-two-locations-in-martin-county",
-          "canonical_headline": "Spirit Halloween opens two locations in Martin County",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 3,
+      "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Palm City home condemned after woman arrested in animal hoarding case - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQTXBGRXBZd1dOQktJV2RBS3lzUDdkNmNNLUNTUjJsa0Z6bFFOWXFKUXE2aHZGNjJxTVJReGNMU29VZG9TaEtQaTdKai1fcFBwTWtfNV9yQ29tYnMwRktvX1g1ejhBSDhFT0gtYW80aDlZVTFhd1IwbEg1aXc0bG9qcUxhblIyWTh6eTlMYmVFNU1rSzA3U09NMGluOEVfcEF5Z29oTGR3OVE",
-          "publisher": "news.google.com",
+          "source_headline": "Border collies rescued from filthy hoarding house in Martin County get makeovers - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/border-collies-rescued-from-filthy-hoarding-house-in-martin-county-get-makeovers/73419259",
+          "publisher": "www.wpbf.com",
           "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
           "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
           "basis": "exact_structured_incident_key",
           "identity_keys": [
             "incident:mass-animal-hoarding:martin-county",
-            "story:story_003665",
-            "source:https://news.google.com/rss/articles/CBMiqAFBVV95cUxQTXBGRXBZd1dOQktJV2RBS3lzUDdkNmNNLUNTUjJsa0Z6bFFOWXFKUXE2aHZGNjJxTVJReGNMU29VZG9TaEtQaTdKai1fcFBwTWtfNV9yQ29tYnMwRktvX1g1ejhBSDhFT0gtYW80aDlZVTFhd1IwbEg1aXc0bG9qcUxhblIyWTh6eTlMYmVFNU1rSzA3U09NMGluOEVfcEF5Z29oTGR3OVE"
+            "story:story_003614",
+            "source:https://www.wpbf.com/article/border-collies-rescued-from-filthy-hoarding-house-in-martin-county-get-makeovers/73419259"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
@@ -1092,44 +989,21 @@
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Border Collie Society of America condemns neglect in Palm City hoarding case, donates $1,000 to organization - wptv.com",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/border-collie-society-of-america-condemns-neglect-in-palm-city-hoarding-case-donates-1-000-to-organization",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
-          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
-          "basis": "exact_structured_incident_key",
-          "identity_keys": [
-            "incident:mass-animal-hoarding:martin-county",
-            "story:story_003503",
-            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/border-collie-society-of-america-condemns-neglect-in-palm-city-hoarding-case-donates-1-000-to-organization"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "incident"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 137.098
+      "elapsed_seconds": 123.896
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 3,
-      "selected_source_count": 2,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 4,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1137,11 +1011,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.484,
+          "elapsed_seconds": 23.248,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 16.484,
+      "model_elapsed_seconds": 23.248,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1154,18 +1028,18 @@
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Deputies investigate fatal shooting at Fort Pierce mobile home park on Orange Avenue",
+          "headline": "Sheriff's investigators search Fort Pierce mobile home, recover firearm after fatal shooting",
           "missing": [
             "headline_jurisdiction_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Deputies investigate fatal shooting at Fort Pierce mobile home park on Orange Avenue",
-            "lead": "A person died Wednesday night after being shot at a residence in the Seminole Mobile Home Park community in the 3300 block of Orange Avenue, according to the St. Lucie County Sheriff's Office. Deputies with the Sheriff's Office Patrol Operations Bureau and personnel from the St. Lucie County Fire District responded at approximately 9:11 p.m. following reports of a shooting. The initial caller reported that an individual had been shot while allegedly attempting to enter a residence.",
+            "headline": "Sheriff's investigators search Fort Pierce mobile home, recover firearm after fatal shooting",
+            "lead": "A person died after being shot Wednesday night at a residence in the Seminole Mobile Home Park community in the 3300 block of Orange Avenue, according to the St. Lucie County Sheriff's Office. Deputies with the Sheriff's Office Patrol Operations Bureau and personnel from the St. Lucie County Fire District responded at approximately 9:11 p.m. following reports of a shooting. The initial caller reported that an individual had been shot while allegedly attempting to enter a residence.",
             "lead_word_count": 81,
-            "headline_overlap_ratio": 0.636,
-            "new_context_token_count": 37,
+            "headline_overlap_ratio": 0.417,
+            "new_context_token_count": 39,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "update",
@@ -1190,20 +1064,20 @@
               "novelty_anchor": "source_distinctive_detail",
               "novelty_present": true,
               "novelty_token_hits": [
-                "person",
+                "seminole",
                 "shooting"
               ],
               "missing": [],
-              "source_title": "Person dies after shooting at St. Lucie County mobile home park, investigation ongoing - WPBF",
-              "headline": "Deputies investigate fatal shooting at Fort Pierce mobile home park on Orange Avenue"
+              "source_title": "Deadly shooting under investigation at Seminole Mobile home park in St. Lucie County - wpbf.com",
+              "headline": "Sheriff's investigators search Fort Pierce mobile home, recover firearm after fatal shooting"
             },
             "missing": []
           },
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "Deputies investigate fatal shooting at Fort Pierce mobile home park on Orange Avenue",
-            "lead": "A person died Wednesday night after being shot at a residence in the Seminole Mobile Home Park community in the 3300 block of Orange Avenue, according to the St. Lucie County Sheriff's Office. Deputies with the Sheriff's Office Patrol Operations Bureau and personnel from the St. Lucie County Fire District responded at approximately 9:11 p.m. following reports of a shooting. The initial caller reported that an individual had been shot while allegedly attempting to enter a residence.",
+            "headline": "Sheriff's investigators search Fort Pierce mobile home, recover firearm after fatal shooting",
+            "lead": "A person died after being shot Wednesday night at a residence in the Seminole Mobile Home Park community in the 3300 block of Orange Avenue, according to the St. Lucie County Sheriff's Office. Deputies with the Sheriff's Office Patrol Operations Bureau and personnel from the St. Lucie County Fire District responded at approximately 9:11 p.m. following reports of a shooting. The initial caller reported that an individual had been shot while allegedly attempting to enter a residence.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
@@ -1226,17 +1100,17 @@
           "source_focus": {
             "required": true,
             "passed": true,
-            "generated_headline": "Deputies investigate fatal shooting at Fort Pierce mobile home park on Orange Avenue",
-            "generated_lead": "A person died Wednesday night after being shot at a residence in the Seminole Mobile Home Park community in the 3300 block of Orange Avenue, according to the St. Lucie County Sheriff's Office.",
-            "source_title": "Person dies after shooting at St. Lucie County mobile home park, investigation ongoing - WPBF",
+            "generated_headline": "Sheriff's investigators search Fort Pierce mobile home, recover firearm after fatal shooting",
+            "generated_lead": "A person died after being shot Wednesday night at a residence in the Seminole Mobile Home Park community in the 3300 block of Orange Avenue, according to the St. Lucie County Sheriff's Office.",
+            "source_title": "Deadly shooting under investigation at Seminole Mobile home park in St. Lucie County - wpbf.com",
             "source_lead": "A person died after being shot Wednesday night at a residence in the Seminole Mobile Home Park community, according to the St. Lucie County Sheriff's Office.",
             "title_similarity": {
-              "score": 0.5092,
-              "overlap": 0.4545,
-              "jaccard": 0.2778,
-              "sorted_sequence": 0.6667,
-              "ordered_sequence": 0.5786,
-              "shared_token_count": 5.0
+              "score": 0.4319,
+              "overlap": 0.2727,
+              "jaccard": 0.15,
+              "sorted_sequence": 0.5276,
+              "ordered_sequence": 0.4908,
+              "shared_token_count": 3.0
             },
             "lead_token_overlap": 1.0,
             "missing": []
@@ -1250,18 +1124,28 @@
       ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "3 Port St. Lucie police officers placed on leave during political campaign signage investigation - wptv.com",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/3-port-st-lucie-police-officers-placed-on-leave-during-political-campaign-sign-investigation",
-          "editorial_story_id": "story_002554",
-          "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-two-separate-campaign-sign-incidents-involving",
-          "canonical_headline": "Port St. Lucie police investigate two separate campaign sign incidents involving Mayor Martin's husband",
+          "source_headline": "Port St. Lucie police officers placed on leave during campaign sign investigations - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/florida-police-political-signs-leave-fdle/73424548",
+          "editorial_story_id": "story_003655",
+          "canonical_slug": "2026-08-13-three-port-st-lucie-police-officers-placed-on-leave-during-campaign-sign-investi",
+          "canonical_headline": "Three Port St. Lucie police officers placed on leave during campaign sign investigations",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Person shot, killed while allegedly trying to enter Fort Pierce mobile home - WPEC",
+          "source_url": "https://news.google.com/rss/articles/CBMipANBVV95cUxOb3JSRmtuSDZJNUlkRnZHQnlhQ2pSY2hyak5UdjVtTmF0VGoxZy1EOElKXy1fcW9rQ2p4ek9CTndTall2eS1aZVprX0laRlBXcUpHMzBYMlNwZGt1X3piV0JpaVpINUx5N2gzUDJfdG5kMnhTUWV5S0N1Y1pUMzBrRExtRFpnbFE2MVpsOXlZd0pQV1AtQ2hJM28tbjROZUZuVXJhUkpaeEpxTGVhMlVDT3pUUEZYMi1aTFBSUmM5enJ3ZHpQdGMtR2dhTnVZa2pSUXUyQjlpcTlFTjF1allhMllXRnUtQVhEbDlZM21sZDdKa3E3RTBjNF9WQ0x3YVQ4YTBSMDJQUUFZYUM4dmJtNmFtSTg2N3RHZi1zRnhXUGM0alJVRnZFVGMyLWxDYklpRHBSamp2NUJ3MEN0MzI2a1l2NDFWMHVVWWJwMGt0c2JXX0JGaHVITTJEZ1RrUUt5eWNtNE91RmJqcnFYYk5qSVppYXZhYkZsbDBXM0F0UEh6VGJHREVaa0c4RzJxZmpmSEZpYVNVY0RadWpoMzBQcTBRb1c",
+          "editorial_story_id": "story_003628",
+          "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
+          "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1277,17 +1161,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie police officers placed on leave during campaign sign investigations - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-police-political-signs-leave-fdle/73424548",
-          "editorial_story_id": "story_003655",
-          "canonical_slug": "2026-08-13-three-port-st-lucie-police-officers-placed-on-leave-during-campaign-sign-investi",
-          "canonical_headline": "Three Port St. Lucie police officers placed on leave during campaign sign investigations",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "3 Port St. Lucie police officers placed on leave during political campaign signage investigation",
+          "source_headline": "3 Port St. Lucie police officers placed on leave during political campaign signage investigation - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/3-port-st-lucie-police-officers-placed-on-leave-during-political-campaign-sign-investigation",
           "editorial_story_id": "story_002554",
           "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-two-separate-campaign-sign-incidents-involving",
@@ -1297,18 +1171,18 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Resident shoots, kills intruder at mobile home park in St. Lucie County; stand your ground case under review",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/person-shot-killed-while-attempting-to-enter-home-at-seminole-mobile-home-park",
-          "editorial_story_id": "story_003628",
-          "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
-          "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "ONLY ON WPBF: Fort Pierce mother demands justice after hit-and-run injures 8-year-old daughter - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-hit-and-run-8-year-old/73419013",
+          "editorial_story_id": "story_002380",
+          "canonical_slug": "2026-08-06-fort-pierce-police-seek-driver-in-hit-and-run-that-injured-two-children-in-cross",
+          "canonical_headline": "Fort Pierce police arrest driver in hit-and-run that seriously injured 7-year-old in crosswalk",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "ONLY ON WPBF: Fort Pierce mother demands justice after hit-and-run injures 8-year-old daughter - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-fort-pierce-hit-and-run-8-year-old/73419013",
+          "source_headline": "Fort Pierce police arrest man in hit-and-run that injured child - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/fort-pierce-police-arrest-man-in-hit-and-run-that-injured-child/73417178",
           "editorial_story_id": "story_002380",
           "canonical_slug": "2026-08-06-fort-pierce-police-seek-driver-in-hit-and-run-that-injured-two-children-in-cross",
           "canonical_headline": "Fort Pierce police arrest driver in hit-and-run that seriously injured 7-year-old in crosswalk",
@@ -1324,42 +1198,12 @@
           "canonical_headline": "Fort Pierce police arrest driver in hit-and-run that seriously injured 7-year-old in crosswalk",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Motorcycle crash survivor reunites with Fort Pierce hospital team - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-victor-lopez-motorcycle-crash-survivor-reunites-fort-pierce-hospital-team/73404058",
-          "editorial_story_id": "story_003363",
-          "canonical_slug": "2026-08-11-motorcycle-crash-survivor-returns-to-fort-pierce-hospital-to-thank-medical-team",
-          "canonical_headline": "Motorcycle crash survivor returns to Fort Pierce hospital to thank medical team",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Worker killed by construction vehicle in work zone in Port St. Lucie overnight - WPBF",
-          "source_url": "https://www.wpbf.com/article/port-st-lucie-crash-i-95-construction-worker/73402418",
-          "editorial_story_id": "story_003280",
-          "canonical_slug": "2026-08-12-construction-worker-killed-by-vehicle-in-i-95-work-zone-south-of-tradition",
-          "canonical_headline": "Construction worker killed by vehicle in I-95 work zone south of Tradition",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County officials discuss 2026 master plan for Port of Fort Pierce - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-port-fort-pierce-waterfront-city-county-government/73407734",
-          "editorial_story_id": "story_003375",
-          "canonical_slug": "2026-08-12-st-lucie-county-officials-outline-2026-master-plan-for-port-of-fort-pierce",
-          "canonical_headline": "St. Lucie County officials outline 2026 master plan for Port of Fort Pierce",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
+      "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Person dies after shooting at St. Lucie County mobile home park, investigation ongoing - WPBF",
+          "source_headline": "Deadly shooting under investigation at Seminole Mobile home park in St. Lucie County - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-person-dies-after-shooting-at-st-lucie-county-mobile-home-park/73423601",
           "publisher": "www.wpbf.com",
           "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
@@ -1376,23 +1220,47 @@
             "shared_event_family",
             "shared_precise_location",
             "shared_agency",
+            "shared_subject_phrase",
             "shared_headline_topic",
             "distinctive_fact_overlap"
           ],
           "decision_trace": [
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
-            "publication_gap_days=0",
+            "publication_gap_days=1",
             "shared_locality=['st-lucie', 'st-lucie-county']",
             "shared_event_families=['shooting']",
             "shared_named_people=[]",
             "shared_precise_locations=['orange-avenue']",
             "shared_agencies=['st-lucie-county-sheriff']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['mobile', 'park', 'person']",
+            "shared_subject_phrases=['seminole-mobile-park']",
+            "shared_headline_topic_core=['mobile', 'park', 'seminole']",
             "shared_distinctive_token_count=81",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "First day of school speeding stop leads to arrest near Fort Pierce elementary school - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/driver-arrested-speeding-fort-pierce-school-zone-first-day-of-school/73411726",
+          "publisher": "www.wpbf.com",
+          "canonical_slug": "2026-08-12-driver-arrested-for-speeding-through-fort-pierce-school-zone-on-first-day-of-cla",
+          "canonical_headline": "Driver arrested for speeding through Fort Pierce school zone on first day of classes",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_003449",
+            "source:https://www.wpbf.com/article/driver-arrested-speeding-fort-pierce-school-zone-first-day-of-school/73411726"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_003449,source:https://www.wpbf.com/article/driver-arrested-speeding-fort-pierce-school-zone-first-day-of-school/73411726",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -1402,82 +1270,58 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Fort Pierce shooting at Seminole Mobile Home Park leaves 37-year-old dead, 5-year-old without father",
-      "generated_card_count": 0,
-      "elapsed_seconds": 25.085
+      "live_hero_headline": "Man shot and killed at Fort Pierce mobile home park, ex-girlfriend says 5-year-old son now without father",
+      "generated_card_count": 1,
+      "elapsed_seconds": 30.968
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generated_live",
-      "fetched_candidate_count": 29,
+      "status": "county_zero_candidate_archive_recovery",
+      "fetched_candidate_count": 30,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 7,
-      "selected_source_count": 7,
+      "publishable_source_count": 5,
+      "selected_source_count": 5,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 79.179,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 79.179,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_source_backed_county_hero_candidates",
+      "failure_summary": "Selected Indian River County source pool contained no source-backed county hero candidate",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 1,
-      "contextual_update_lead_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 75,
-          "baseline_anchor": "criminal_case",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
-          "baseline_details_present": true,
-          "baseline_context_hits": [],
-          "baseline_context_required": 0,
-          "canonical_context_available": false,
-          "canonical_context_headline": "",
-          "novelty_anchor": "disclosure",
-          "novelty_present": false,
-          "novelty_token_hits": [
-            "anything",
-            "border",
-            "city",
-            "collies",
-            "deputies",
-            "home",
-            "like",
-            "neglected",
-            "never",
-            "palm",
-            "rescuing",
-            "seen"
-          ],
-          "missing": [
-            "new_development_missing"
-          ],
-          "source_title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
-          "headline": "Martin County deputies describe rescuing 36 Border Collies from Palm City home"
-        }
-      ],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Florida retirement costs: Gulf Coast vs. Atlantic Coast shows $600K gap",
+          "source_url": "https://www.wptv.com/news/state/florida-retirement-costs-gulf-coast-vs-atlantic-coast-shows-600k-gap",
+          "editorial_story_id": "story_003731",
+          "canonical_slug": "2026-08-14-florida-retirement-costs-show-600000-gap-between-gulf-coast-and-atlantic-coast",
+          "canonical_headline": "Florida retirement costs show $600,000 gap between Gulf Coast and Atlantic Coast",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "16-year-old girl dies after falling through roof of abandoned Sebastian building - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxON01hLUZDVVBpU19BT09mdVkxVEl1NUp3NExlNHFtamhORmFtTjAyazBwdWJDdFRiZ3dDNWZyMlVvMlNvaFVCQ3IzSzR6NkFaMEQ0ME91aURsZENXa01YNk1oRjBXS1J0bzJydE83Zm0xbmNabUdBc2EyNGlBejJrdDZGS3NfTDhjTUY4a0tYZEctOWJrVzhnZlljcUQwM2FrTmNEZzl6S0p6dHBLRnh5ODZsLXhLVGdrZkUxTWd5ZEpuZm43TzBsUkpmSlJ4UlRiU09GRTlkV1NJX00",
+          "editorial_story_id": "story_003681",
+          "canonical_slug": "2026-08-13-16-year-old-girl-dies-after-falling-through-roof-of-abandoned-sebastian-building",
+          "canonical_headline": "16-year-old girl dies after falling through roof of abandoned Sebastian building",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "16-year-old girl dies after falling through roof of abandoned Sebastian building",
@@ -1485,26 +1329,6 @@
           "editorial_story_id": "story_003681",
           "canonical_slug": "2026-08-13-16-year-old-girl-dies-after-falling-through-roof-of-abandoned-sebastian-building",
           "canonical_headline": "16-year-old girl dies after falling through roof of abandoned Sebastian building",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "3 Port St. Lucie police officers placed on leave during political campaign signage investigation",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/3-port-st-lucie-police-officers-placed-on-leave-during-political-campaign-sign-investigation",
-          "editorial_story_id": "story_002554",
-          "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-two-separate-campaign-sign-incidents-involving",
-          "canonical_headline": "Port St. Lucie police investigate two separate campaign sign incidents involving Mayor Martin's husband",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Resident shoots, kills intruder at mobile home park in St. Lucie County; stand your ground case under review",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/person-shot-killed-while-attempting-to-enter-home-at-seminole-mobile-home-park",
-          "editorial_story_id": "story_003628",
-          "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
-          "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1520,7 +1344,7 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Vehicle tied to fatal hit-and-run in Indian River County recovered - WPBF",
+          "source_headline": "Vehicle tied to fatal hit-and-run in Indian River County recovered - wpbf.com",
           "source_url": "https://www.wpbf.com/article/vehicle-tied-to-fatal-hit-and-run-in-indian-river-county-recovered/73419431",
           "editorial_story_id": "story_003587",
           "canonical_slug": "2026-08-13-vehicle-connected-to-fatal-hit-and-run-in-indian-river-county-recovered",
@@ -1550,7 +1374,17 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "'He flipped a switch': Indian River County sheriff's deputy talks a man off a bridge - WPBF",
+          "source_headline": "Indian River County school district looks to sell around 10 properties across the county - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-district-looks-to-sell-around-10-properties-across-the-county",
+          "editorial_story_id": "story_003544",
+          "canonical_slug": "2026-08-13-indian-river-county-school-district-plans-to-sell-10-properties-across-county",
+          "canonical_headline": "Indian River County school district plans to sell 10 properties across county",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "'He flipped a switch': Indian River County sheriff's deputy talks a man off a bridge - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-jumper-deputy-crisis-suicide-rescue/73416999",
           "editorial_story_id": "story_003400",
           "canonical_slug": "2026-08-12-indian-river-county-deputies-talk-wanted-man-off-17th-street-bridge-after-two-ho",
@@ -1559,38 +1393,10 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Indian River County school district looks to sell around 10 properties across the county - wptv.com",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-district-looks-to-sell-around-10-properties-across-the-county",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-13-indian-river-county-school-district-plans-to-sell-10-properties-across-county",
-          "canonical_headline": "Indian River County school district plans to sell 10 properties across county",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_003544",
-            "source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-district-looks-to-sell-around-10-properties-across-the-county"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_003544,source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-district-looks-to-sell-around-10-properties-across-the-county",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Indian River County school district plans to sell 10 properties including 4 older schools",
-      "generated_card_count": 0,
-      "elapsed_seconds": 85.757
+      "elapsed_seconds": 5.496
     }
   ]
 }
