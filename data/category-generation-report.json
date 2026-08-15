@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-15T01:35:31Z",
+  "generated_at": "2026-08-15T03:02:18Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,34 +16,35 @@
     "category_count": 9,
     "statuses": {
       "category_eligibility_archive_recovery": 1,
-      "generated_live": 3,
-      "generation_failed_archive_recovery": 2,
-      "no_publishable_sources": 1,
-      "quality_gate_archive_recovery": 2
+      "generated_live": 4,
+      "generation_failed_archive_recovery": 1,
+      "quality_gate_archive_recovery": 2,
+      "sports_zero_candidate_archive_recovery": 1
     },
     "failures": {
-      "article_framing_integrity": 2,
+      "article_framing_integrity": 1,
       "no_category_eligible_sources": 1,
+      "no_sports_hero_candidates": 1,
       "publication_quality_rejected": 2
     },
-    "model_attempt_count": 11,
-    "model_elapsed_seconds": 306.278,
-    "archive_recovery_requested_count": 6,
+    "model_attempt_count": 8,
+    "model_elapsed_seconds": 207.916,
+    "archive_recovery_requested_count": 5,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 7,
-    "category_eligibility_rejection_count": 17,
-    "published_story_duplicate_suppression_count": 19,
-    "story_aware_update_context_count": 4
+    "contextual_update_lead_rejection_count": 2,
+    "article_framing_rejection_count": 4,
+    "category_eligibility_rejection_count": 18,
+    "published_story_duplicate_suppression_count": 21,
+    "story_aware_update_context_count": 5
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "quality_gate_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 6,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 7,
       "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -52,11 +53,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 26.577,
+          "elapsed_seconds": 11.366,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 26.577,
+      "model_elapsed_seconds": 11.366,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -67,9 +68,22 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 6,
-      "category_eligibility_rejection_count": 4,
+      "category_eligibility_assessed_count": 7,
+      "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "'It's beautiful': Tradition Lakes K-8 in St. Lucie County ready to open after week-long delay - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-tradition-lakes-school-construction-delays/73440832"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -82,7 +96,7 @@
           "competing_signals": [
             "crime_incident:arrested"
           ],
-          "headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - WPEC",
+          "headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - cbs12.com",
           "source_url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms"
         },
         {
@@ -143,13 +157,14 @@
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - WPEC",
+          "source_headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - cbs12.com",
           "source_url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms",
           "publisher": "cbs12.com",
           "canonical_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
           "canonical_headline": "17 arrested in Indiantown cocaine trafficking ring, three remain wanted after months-long investigation",
           "basis": "exact_source_url",
           "identity_keys": [
+            "story:story_003960",
             "source:https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms"
           ],
           "match_confidence": 0.99,
@@ -167,16 +182,16 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 50.32
+      "elapsed_seconds": 27.259
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 12,
-      "selected_source_count": 9,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 10,
+      "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -184,98 +199,22 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 50.704,
+          "elapsed_seconds": 24.169,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 50.704,
+      "model_elapsed_seconds": 24.169,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 1,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Vero Beach High School honors student killed in fall at abandoned Sebastian condo",
-          "missing": [
-            "headline_jurisdiction_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Vero Beach High School honors student killed in fall at abandoned Sebastian condo",
-            "lead": "Vero Beach High School honored 16-year-old Roylynn Scott on Friday night during the school's season opener at Billy Livings Field. Members of the Vero Beach High School band took the field wearing purple ribbons, Roylynn's favorite color, as classmates, teachers, teammates and loved ones filled the stands before kickoff. At her parents' request, the stadium announcer addressed the crowd, sharing details about Roylynn's life, including her love of football games, her passion for art and the impact she had on those around her. As the tribute unfolded, Roylynn's family stood in the bleachers wearing purple in her honor.",
-            "lead_word_count": 104,
-            "headline_overlap_ratio": 0.364,
-            "new_context_token_count": 59,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Vero Beach High School honors student killed in fall at abandoned Sebastian condo",
-            "lead": "Vero Beach High School honored 16-year-old Roylynn Scott on Friday night during the school's season opener at Billy Livings Field. Members of the Vero Beach High School band took the field wearing purple ribbons, Roylynn's favorite color, as classmates, teachers, teammates and loved ones filled the stands before kickoff. At her parents' request, the stadium announcer addressed the crowd, sharing details about Roylynn's life, including her love of football games, her passion for art and the impact she had on those around her. As the tribute unfolded, Roylynn's family stood in the bleachers wearing purple in her honor.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "sebastian",
-              "vero_beach"
-            ],
-            "lead_jurisdictions": [
-              "vero_beach"
-            ],
-            "missing_jurisdictions": [
-              "sebastian"
-            ],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "Vero Beach High School honors student killed in fall at abandoned Sebastian condo",
-            "generated_lead": "Vero Beach High School honored 16-year-old Roylynn Scott on Friday night during the school's season opener at Billy Livings Field. Members of the Vero Beach High School band took the field wearing purple ribbons, Roylynn's favorite color, as classmates, teachers, teammates and loved ones filled the stands before kickoff.",
-            "source_title": "Vero Beach High School honors teen killed in fall at abandoned condo during season opener - WPEC",
-            "source_lead": "The memory of 16-year-old Roylynn Scott was front and center Friday night as students, family members and friends gathered at Billy Livings Field during Vero Beach High School's season opener to honor her life. Members of the Vero Beach High School band took the field wearing purple ribbons, Roylynn's favorite color, as classmates, teachers, teammates and loved ones filled the stands before kickoff.",
-            "title_similarity": {
-              "score": 0.7418,
-              "overlap": 0.8182,
-              "jaccard": 0.5625,
-              "sorted_sequence": 0.8199,
-              "ordered_sequence": 0.7453,
-              "shared_token_count": 9.0
-            },
-            "lead_token_overlap": 0.971,
-            "missing": []
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        }
-      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 12,
+      "category_eligibility_assessed_count": 10,
       "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
         {
@@ -318,8 +257,18 @@
           "source_url": "https://www.hometownnewstc.com/crime/martin/gold-bars-and-empty-bank-accounts/article_0aa7deef-96a5-50c3-8bd6-4322916c1d6c.html"
         }
       ],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Uber passenger accused of beating driver, stealing car in Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-uber-passenger-accused-of-beating-driver-stealing-car-in-fort-pierce/73439865",
+          "editorial_story_id": "story_003930",
+          "canonical_slug": "2026-08-15-uber-passenger-accused-of-beating-driver-stealing-tesla-in-fort-pierce-carjackin",
+          "canonical_headline": "Uber passenger accused of beating driver, stealing Tesla in Fort Pierce carjacking",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "New nonprofit in Indiantown aims to fund youth sports programs and facility upgrades",
@@ -332,25 +281,26 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Vehicle tied to fatal hit-and-run in Indian River County recovered - WPBF",
-          "source_url": "https://www.wpbf.com/article/vehicle-tied-to-fatal-hit-and-run-in-indian-river-county-recovered/73419431",
-          "editorial_story_id": "story_003587",
-          "canonical_slug": "2026-08-13-vehicle-connected-to-fatal-hit-and-run-in-indian-river-county-recovered",
-          "canonical_headline": "Vehicle connected to fatal hit-and-run in Indian River County recovered",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "Man shot, killed inside Fort Pierce home after attacking homeowner; no charges filed - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/person-shot-killed-while-allegedly-trying-to-enter-fort-pierce-mobile-home-st-lucie-county-shooting-st-lucie-county-crime-deadly-shooting-fatal-shooting-orange-avenue-shooting-seminole-mobile-home-park-fort-pierce-crime-st-lucie-county-sheriff",
+          "editorial_story_id": "story_003628",
+          "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
+          "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - WPEC",
+          "source_headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - cbs12.com",
           "source_url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms",
           "publisher": "cbs12.com",
           "canonical_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
           "canonical_headline": "17 arrested in Indiantown cocaine trafficking ring, three remain wanted after months-long investigation",
           "basis": "exact_source_url",
           "identity_keys": [
+            "story:story_003960",
             "source:https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms"
           ],
           "match_confidence": 0.99,
@@ -368,9 +318,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "17 arrested in Indiantown drug bust, 4 kilos of cocaine seized in Operation Beneath the Surface",
-      "generated_card_count": 2,
-      "elapsed_seconds": 72.597
+      "live_hero_headline": "Palm City woman jailed on $275,000 bond after 36 Border Collies rescued from deplorable conditions",
+      "generated_card_count": 1,
+      "elapsed_seconds": 34.222
     },
     {
       "category_key": "business",
@@ -599,23 +549,23 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 5.228
+      "elapsed_seconds": 5.817
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
-      "status": "no_publishable_sources",
+      "status": "sports_zero_candidate_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 0,
-      "selected_source_count": 0,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
       "attempts": [],
       "model_elapsed_seconds": 0.0,
-      "failure_code": "",
-      "failure_summary": "",
+      "failure_code": "no_sports_hero_candidates",
+      "failure_summary": "Selected Sports source pool contained no deterministic athletic hero candidate",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -624,7 +574,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
@@ -632,14 +582,14 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 10.502
+      "elapsed_seconds": 9.193
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 5,
       "selected_source_count": 5,
       "cache_hit": false,
@@ -649,21 +599,21 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 49.336,
+          "elapsed_seconds": 52.434,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals from Martin County hoarding cases begin recovery at Palm City shelter"
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals from Martin County hoarding cases show signs of recovery"
         },
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 36.611,
+          "elapsed_seconds": 49.283,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
           "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals from Martin County hoarding cases begin recovery in Palm City"
         }
       ],
-      "model_elapsed_seconds": 85.947,
+      "model_elapsed_seconds": 101.717,
       "failure_code": "article_framing_integrity",
       "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals from Martin County hoarding cases begin recovery in Palm City",
       "sports_expired_event_preview_count": 0,
@@ -695,7 +645,7 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 90.954
+      "elapsed_seconds": 106.953
     },
     {
       "category_key": "florida",
@@ -707,24 +657,16 @@
       "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 8.078,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — Florida cannot use single full-source story marked hero_eligible:no"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 10.685,
+          "elapsed_seconds": 12.118,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 18.763,
+      "model_elapsed_seconds": 12.118,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -745,7 +687,7 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 36.841
+      "elapsed_seconds": 18.808
     },
     {
       "category_key": "martin",
@@ -753,39 +695,66 @@
       "status": "generated_live",
       "fetched_candidate_count": 29,
       "fresh_candidate_count": 28,
-      "publishable_source_count": 4,
-      "selected_source_count": 3,
+      "publishable_source_count": 5,
+      "selected_source_count": 5,
       "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 22.524,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — 17 arrested in Martin County cocaine trafficking ring, 4 kilos of drugs seized in Indiantown bust"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 18.057,
+          "elapsed_seconds": 11.966,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 40.582,
+      "model_elapsed_seconds": 11.966,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 63,
+          "baseline_anchor": "",
+          "baseline_present": false,
+          "baseline_anchor_present": true,
+          "baseline_details_present": false,
+          "baseline_context_hits": [
+            "hoarding"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "novelty_anchor": "continuing_status",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "border",
+            "case",
+            "city",
+            "collies",
+            "humane",
+            "palm",
+            "rescued",
+            "society"
+          ],
+          "missing": [
+            "original_event_details_missing"
+          ],
+          "source_title": "Humane Society strained after 36 Border Collies rescued in Palm City hoarding case - cbs12.com",
+          "headline": "36 Border Collies rescued from Palm City hoarding case strain Humane Society resources"
+        }
+      ],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 1,
@@ -801,16 +770,17 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
+      "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - WPEC",
+          "source_headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - cbs12.com",
           "source_url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms",
           "publisher": "cbs12.com",
           "canonical_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
           "canonical_headline": "17 arrested in Indiantown cocaine trafficking ring, three remain wanted after months-long investigation",
           "basis": "exact_source_url",
           "identity_keys": [
+            "story:story_003960",
             "source:https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms"
           ],
           "match_confidence": 0.99,
@@ -823,23 +793,46 @@
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Humane Society strained after 36 Border Collies rescued in Palm City hoarding case - cbs12.com",
+          "source_url": "https://cbs12.com/news/arc-florida/humane-society-strained-after-36-border-collies-rescued-in-palm-city-hoarding-case",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:story_003649",
+            "source:https://cbs12.com/news/arc-florida/humane-society-strained-after-36-border-collies-rescued-in-palm-city-hoarding-case"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "17 arrested in Indiantown cocaine trafficking bust, 3 still wanted after Operation Beneath the Surface",
-      "generated_card_count": 1,
-      "elapsed_seconds": 57.267
+      "live_hero_headline": "17 arrested in Martin County cocaine bust; 4 kilos seized in Indiantown trafficking operation",
+      "generated_card_count": 0,
+      "elapsed_seconds": 18.663
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 6,
-      "selected_source_count": 6,
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 4,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -847,11 +840,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 27.828,
+          "elapsed_seconds": 12.286,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 27.828,
+      "model_elapsed_seconds": 12.286,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -862,11 +855,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Uber passenger accused of beating driver, stealing car in Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-uber-passenger-accused-of-beating-driver-stealing-car-in-fort-pierce/73439865",
+          "editorial_story_id": "story_003930",
+          "canonical_slug": "2026-08-15-uber-passenger-accused-of-beating-driver-stealing-tesla-in-fort-pierce-carjackin",
+          "canonical_headline": "Uber passenger accused of beating driver, stealing Tesla in Fort Pierce carjacking",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Port St. Lucie police officers placed on leave during campaign sign investigations - WPBF",
@@ -879,7 +882,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Man shot, killed inside Fort Pierce home after attacking homeowner; no charges filed - WPEC",
+          "source_headline": "Man shot, killed inside Fort Pierce home after attacking homeowner; no charges filed - cbs12.com",
           "source_url": "https://cbs12.com/news/local/person-shot-killed-while-allegedly-trying-to-enter-fort-pierce-mobile-home-st-lucie-county-shooting-st-lucie-county-crime-deadly-shooting-fatal-shooting-orange-avenue-shooting-seminole-mobile-home-park-fort-pierce-crime-st-lucie-county-sheriff",
           "editorial_story_id": "story_003628",
           "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
@@ -889,12 +892,22 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Resident shoots, kills intruder at mobile home park in St. Lucie County; stand your ground case under review - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/13/resident-shoots-kills-intruder-mobile-home-park-st-lucie-county-stand-your-ground-case-under-review",
-          "editorial_story_id": "story_003628",
-          "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
-          "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Suspect arrested in hit-and-run accident in Fort Pierce - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/news/st_lucie/suspect-arrested-in-hit-and-run-accident-in-fort-pierce/article_72778fa4-2e82-5b24-9e5e-700de1142d8f.html",
+          "editorial_story_id": "story_003688",
+          "canonical_slug": "2026-08-14-fort-pierce-man-arrested-in-hit-and-run-that-hospitalized-7-year-old-girl",
+          "canonical_headline": "Fort Pierce man arrested in hit-and-run that hospitalized 7-year-old girl",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fatal shooting at Fort Pierce mobile home park under investigation - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/news/st_lucie/fatal-shooting-at-fort-pierce-mobile-home-park-under-investigation/article_3a07c499-3a18-5d3b-8940-11f11a10886b.html",
+          "editorial_story_id": "story_003918",
+          "canonical_slug": "2026-08-15-sheriffs-deputies-recover-firearm-in-fatal-fort-pierce-mobile-home-park-shooting",
+          "canonical_headline": "Sheriff's deputies recover firearm in fatal Fort Pierce mobile home park shooting",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -933,54 +946,220 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Sheriff's deputies recover firearm in fatal Fort Pierce mobile home park shooting",
-      "generated_card_count": 2,
-      "elapsed_seconds": 35.307
+      "live_hero_headline": "Man shot and killed at Fort Pierce mobile home park, ex-girlfriend says 5-year-old son left without father",
+      "generated_card_count": 0,
+      "elapsed_seconds": 20.07
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generation_failed_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 8,
-      "selected_source_count": 7,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 9,
+      "selected_source_count": 8,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 26.618,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Vero Beach High School honors teen killed in fall at abandoned Sebastian condo during season opener"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 29.259,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Vero Beach High School honors 16-year-old killed in fall at abandoned Sebastian condo"
+          "elapsed_seconds": 34.294,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 55.877,
-      "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Vero Beach High School honors 16-year-old killed in fall at abandoned Sebastian condo",
+      "model_elapsed_seconds": 34.294,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 46,
+          "baseline_anchor": "government_matter",
+          "baseline_present": false,
+          "baseline_anchor_present": false,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "indian",
+            "river"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Indian River County schools avoid layoffs, give all teachers raises after budget reviews save $11 million",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": false,
+          "novelty_token_hits": [],
+          "missing": [
+            "original_event_context_missing",
+            "new_development_missing"
+          ],
+          "source_title": "Budget reviews saved $11M since 2019, helping avoid cuts in Indian River County schools - cbs12.com",
+          "headline": "Indian River County schools avoid layoffs after budget reviews save $11 million since 2019"
+        }
+      ],
+      "article_framing_rejection_count": 2,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Vero Beach High School honors student killed in fall at abandoned Sebastian condo",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Vero Beach High School honors student killed in fall at abandoned Sebastian condo",
+            "lead": "Students, family members and friends gathered at Billy Livings Field during Vero Beach High School's season opener Friday night to honor the memory of 16-year-old Roylynn Scott. Members of the Vero Beach High School band took the field wearing purple ribbons, Roylynn's favorite color, as classmates, teachers, teammates and loved ones filled the stands before kickoff. At her parents' request, the stadium announcer addressed the crowd, sharing details about Roylynn's life, including her love of football games, her passion for art and the impact she had on those around her. The remarks were followed by a moment of silence.",
+            "lead_word_count": 104,
+            "headline_overlap_ratio": 0.364,
+            "new_context_token_count": 62,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Vero Beach High School honors student killed in fall at abandoned Sebastian condo",
+            "lead": "Students, family members and friends gathered at Billy Livings Field during Vero Beach High School's season opener Friday night to honor the memory of 16-year-old Roylynn Scott. Members of the Vero Beach High School band took the field wearing purple ribbons, Roylynn's favorite color, as classmates, teachers, teammates and loved ones filled the stands before kickoff. At her parents' request, the stadium announcer addressed the crowd, sharing details about Roylynn's life, including her love of football games, her passion for art and the impact she had on those around her. The remarks were followed by a moment of silence.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "sebastian",
+              "vero_beach"
+            ],
+            "lead_jurisdictions": [
+              "vero_beach"
+            ],
+            "missing_jurisdictions": [
+              "sebastian"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Vero Beach High School honors student killed in fall at abandoned Sebastian condo",
+            "generated_lead": "Students, family members and friends gathered at Billy Livings Field during Vero Beach High School's season opener Friday night to honor the memory of 16-year-old Roylynn Scott. Members of the Vero Beach High School band took the field wearing purple ribbons, Roylynn's favorite color, as classmates, teachers, teammates and loved ones filled the stands before kickoff.",
+            "source_title": "Vero Beach High School honors teen killed in fall at abandoned condo during season opener - cbs12.com",
+            "source_lead": "The memory of 16-year-old Roylynn Scott was front and center Friday night as students, family members and friends gathered at Billy Livings Field during Vero Beach High School's season opener to honor her life. Members of the Vero Beach High School band took the field wearing purple ribbons, Roylynn's favorite color, as classmates, teachers, teammates and loved ones filled the stands before kickoff.",
+            "title_similarity": {
+              "score": 0.727,
+              "overlap": 0.8182,
+              "jaccard": 0.5294,
+              "sorted_sequence": 0.7952,
+              "ordered_sequence": 0.7229,
+              "shared_token_count": 9.0
+            },
+            "lead_token_overlap": 1.0,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        },
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Cardinal Newman faces Vero Beach in high school football game of the week",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Cardinal Newman faces Vero Beach in high school football game of the week",
+            "lead": "High school football has returned across the Palm Beaches and Treasure Coast, with teams preparing for the season through preseason kickoff games. This week's games do not count toward the official schedule, but schools are using the Preseason Kickoff Classic to ramp up for the season.",
+            "lead_word_count": 47,
+            "headline_overlap_ratio": 0.4,
+            "new_context_token_count": 25,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Cardinal Newman faces Vero Beach in high school football game of the week",
+            "lead": "High school football has returned across the Palm Beaches and Treasure Coast, with teams preparing for the season through preseason kickoff games. This week's games do not count toward the official schedule, but schools are using the Preseason Kickoff Classic to ramp up for the season.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "vero_beach"
+            ],
+            "lead_jurisdictions": [],
+            "missing_jurisdictions": [
+              "vero_beach"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Cardinal Newman faces Vero Beach in high school football game of the week",
+            "generated_lead": "High school football has returned across the Palm Beaches and Treasure Coast, with teams preparing for the season through preseason kickoff games. This week's games do not count toward the official schedule, but schools are using the Preseason Kickoff Classic to ramp up for the season.",
+            "source_title": "High school football game of the week preview: Cardinal Newman at Vero Beach - WPBF",
+            "source_lead": "High school football has returned across the Palm Beaches and Treasure Coast, with teams preparing for the season through preseason kickoff games. This week s games do not count toward the official schedule, but schools are using the Preseason Kickoff Classic to ramp up for the season.",
+            "title_similarity": {
+              "score": 0.8464,
+              "overlap": 0.9,
+              "jaccard": 0.75,
+              "sorted_sequence": 0.8571,
+              "ordered_sequence": 0.4511,
+              "shared_token_count": 9.0
+            },
+            "lead_token_overlap": 1.0,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -994,62 +1173,35 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Budget reviews saved $11M since 2019, helping avoid cuts in Indian River County schools - WPEC",
-          "source_url": "https://cbs12.com/news/local/budget-reviews-saved-11m-since-2019-helping-avoid-cuts-in-indian-river-county-schools",
-          "editorial_story_id": "story_003630",
-          "canonical_slug": "2026-08-13-indian-river-county-schools-avoid-layoffs-give-all-teachers-raises-after-budget",
-          "canonical_headline": "Indian River County schools avoid layoffs, give all teachers raises after budget reviews save $11 million",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Vehicle tied to fatal hit-and-run in Indian River County recovered - WPBF",
-          "source_url": "https://www.wpbf.com/article/vehicle-tied-to-fatal-hit-and-run-in-indian-river-county-recovered/73419431",
-          "editorial_story_id": "story_003587",
-          "canonical_slug": "2026-08-13-vehicle-connected-to-fatal-hit-and-run-in-indian-river-county-recovered",
-          "canonical_headline": "Vehicle connected to fatal hit-and-run in Indian River County recovered",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "Indian River County school district looks to sell around 10 properties across the county - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/12/indian-river-county-school-district-looks-sell-around-10-properties-across-county",
+          "editorial_story_id": "story_003544",
+          "canonical_slug": "2026-08-13-indian-river-county-school-district-plans-to-sell-10-properties-across-county",
+          "canonical_headline": "Indian River County school district plans to sell 10 properties across county",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Indian River County school district looks to sell around 10 properties across the county - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/12/indian-river-county-school-district-looks-sell-around-10-properties-across-county",
-          "publisher": "www.wflx.com",
-          "canonical_slug": "2026-08-13-indian-river-county-school-district-plans-to-sell-10-properties-across-county",
-          "canonical_headline": "Indian River County school district plans to sell 10 properties across county",
-          "basis": "event-identity-authority:governing_body_plus_policy_subject",
+          "source_headline": "Budget reviews saved $11M since 2019, helping avoid cuts in Indian River County schools - cbs12.com",
+          "source_url": "https://cbs12.com/news/local/budget-reviews-saved-11m-since-2019-helping-avoid-cuts-in-indian-river-county-schools",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-08-13-indian-river-county-schools-avoid-layoffs-give-all-teachers-raises-after-budget",
+          "canonical_headline": "Indian River County schools avoid layoffs, give all teachers raises after budget reviews save $11 million",
+          "basis": "exact_source_url",
           "identity_keys": [
-            "story:story_003544",
-            "source:https://www.wflx.com/2026/08/12/indian-river-county-school-district-looks-sell-around-10-properties-across-county"
+            "story:story_003630",
+            "source:https://cbs12.com/news/local/budget-reviews-saved-11m-since-2019-helping-avoid-cuts-in-indian-river-county-schools"
           ],
-          "match_confidence": 0.95,
+          "match_confidence": 0.99,
           "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
+            "story",
+            "source"
           ],
           "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['indian-river', 'indian-river-county']",
-            "shared_event_families=['public-policy']",
-            "shared_named_people=[]",
-            "shared_precise_locations=[]",
-            "shared_agencies=['school-board']",
-            "shared_subject_phrases=['around-propert-acros', 'district-look-sell', 'district-look-sell-around', 'look-sell-around', 'look-sell-around-propert', 'school-district-look', 'school-district-look-sell', 'sell-around-propert', 'sell-around-propert-acros']",
-            "shared_headline_topic_core=['acros', 'around', 'look', 'propert', 'sell']",
-            "shared_distinctive_token_count=125",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
+            "deterministic_identity_keys=story:story_003630,source:https://cbs12.com/news/local/budget-reviews-saved-11m-since-2019-helping-avoid-cuts-in-indian-river-county-schools",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -1057,9 +1209,11 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 68.34
+      "live_hero_headline": "Indian River County schools earn 'A' rating for fourth straight year",
+      "generated_card_count": 0,
+      "elapsed_seconds": 42.307
     }
   ]
 }
