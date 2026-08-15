@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
-  "gate_version": "1.4",
-  "generated_at": "2026-08-15T03:03:40.472254+00:00",
+  "gate_version": "1.5",
+  "generated_at": "2026-08-15T04:43:55.769072+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -44,18 +44,18 @@
     "custom_articles": "excluded_authoritative_custom_contract_retained"
   },
   "summary": {
-    "evaluations": 81,
+    "evaluations": 80,
     "candidate_pairs": 1,
     "structured_conflict_overrides": 1,
-    "model_calls": 0,
-    "cache_hits": 1,
-    "no_candidate_passes": 80,
+    "model_calls": 1,
+    "cache_hits": 0,
+    "no_candidate_passes": 79,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 2,
+    "new_stories_allowed": 0,
     "retroactive_rows_retained": 79,
-    "holds": 0,
-    "retroactive_redirects": 0,
+    "holds": 1,
+    "retroactive_redirects": 1,
     "registry_story_records_merged": 0,
     "registry_aliases_written": 0,
     "material_update_composer_calls": 0,
@@ -719,25 +719,18 @@
         }
       ],
       "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
+        "status": "model_error",
+        "action": "hold",
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
-        "confidence": 0.95,
-        "shared_anchors": [
-          "Same teams: Daytona Tortugas vs St. Lucie Mets",
-          "Same venue: Clover Park",
-          "Same series context"
-        ],
-        "novel_facts": [
-          "Incoming article is about Sunday's game with 5-4 final score",
-          "Incoming article describes series finale with Tortugas winning series 4-3",
-          "Candidate is about Thursday's game with 17-3 final score"
-        ],
-        "reason": "These are two different games in the same seven-game series between the Tortugas and Mets at Clover Park. The candidate covers Thursday's 17-3 game (published 2026-08-07), while the incoming article covers Sunday's 5-4 series finale (published 2026-08-09). The completely different scores (17-3 vs 5-4), different game days (Thursday vs Sunday), and the incoming article explicitly stating it's the 'Sunday finale' that decided the series 4-3 confirm these are distinct games within the same series.",
-        "validation_errors": []
+        "confidence": 0.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "Semantic gate model failure; fail-closed hold: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce3vUVWpiFLyW6QMraVXq'}",
+        "validation_errors": [
+          "model_error"
+        ]
       }
     },
     {
@@ -1523,7 +1516,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "17 arrested in Indiantown cocaine trafficking ring, three remain wanted after months-long investigation",
       "incoming_source_url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms",
-      "incoming_story_id": "",
+      "incoming_story_id": "story_003960",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1615,7 +1608,7 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "17 arrested in Martin County cocaine trafficking bust, 4 kilos seized in Indiantown operation",
       "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-to-hold-press-conference-on-large-scale-narcotics-bust",
       "incoming_story_id": "story_003912",
@@ -1634,31 +1627,64 @@
       }
     },
     {
-      "phase": "forward_publication",
-      "incoming_headline": "Indian River County schools earn 'A' rating for fourth straight year",
-      "incoming_source_url": "https://cw34.com/newsletter-daily/indian-river-county-schools-earn-a-rating-for-fourth-straight-year",
-      "incoming_story_id": "story_003463",
-      "candidates": [],
+      "phase": "verified_production_regression_migration",
+      "incoming_headline": "17 arrested in Martin County cocaine trafficking bust, 4 kilos seized in Indiantown operation",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-to-hold-press-conference-on-large-scale-narcotics-bust",
+      "incoming_story_id": "story_003912",
+      "candidates": [
+        {
+          "slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
+          "headline": "17 arrested in Indiantown cocaine trafficking ring, three remain wanted after months-long investigation",
+          "evidence": {
+            "verified_production_regression": true
+          }
+        }
+      ],
       "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
+        "status": "validated",
+        "action": "duplicate_use_existing_canonical",
+        "selected_candidate_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
+        "same_real_world_event": true,
         "material_new_update": false,
         "confidence": 1.0,
-        "shared_anchors": [],
+        "shared_anchors": [
+          "Operation Beneath the Surface",
+          "17 arrests",
+          "four kilograms of cocaine",
+          "Indiantown",
+          "Martin County Sheriff's Office"
+        ],
         "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "reason": "Verified production regression: both pages cover Martin County Sheriff's Office Operation Beneath the Surface with 17 arrests and four kilograms of cocaine seized. Preserve the older Aug. 14 permalink.",
         "validation_errors": []
       }
     }
   ],
-  "archive_repairs": [],
+  "archive_repairs": [
+    {
+      "source_slug": "2026-08-15-17-arrested-in-martin-county-cocaine-trafficking-bust-4-kilos-seized-in-indianto",
+      "target_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
+      "source_story_id": "story_003912",
+      "target_story_id": "story_003960",
+      "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-to-hold-press-conference-on-large-scale-narcotics-bust",
+      "source_headline": "17 arrested in Martin County cocaine trafficking bust, 4 kilos seized in Indiantown operation",
+      "target_headline": "17 arrested in Indiantown cocaine trafficking ring, three remain wanted after months-long investigation",
+      "confidence": 1.0,
+      "shared_anchors": [
+        "Operation Beneath the Surface",
+        "17 arrests",
+        "four kilograms of cocaine",
+        "Indiantown",
+        "Martin County Sheriff's Office"
+      ],
+      "repair_basis": "verified_production_regression_migration"
+    }
+  ],
   "material_update_compositions": [],
   "material_updates": [],
   "registry_consolidation": {
     "status": "no_changes",
-    "directives_considered": 1,
+    "directives_considered": 2,
     "story_records_merged": 0,
     "aliases_written": 0,
     "already_consolidated": 0,
@@ -1692,6 +1718,29 @@
         ],
         "reason_code": "target_story_missing",
         "resolved_target_story_id": "story_003121"
+      },
+      {
+        "source_story_id": "story_003912",
+        "target_story_id": "story_003960",
+        "target_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
+        "incoming_headline": "17 arrested in Martin County cocaine trafficking bust, 4 kilos seized in Indiantown operation",
+        "confidence": 1.0,
+        "shared_anchors": [
+          "Operation Beneath the Surface",
+          "17 arrests",
+          "four kilograms of cocaine",
+          "Indiantown",
+          "Martin County Sheriff's Office"
+        ],
+        "reason": "Verified production regression: both pages cover Martin County Sheriff's Office Operation Beneath the Surface with 17 arrests and four kilograms of cocaine seized. Preserve the older Aug. 14 permalink.",
+        "relationship_type": "duplicate",
+        "novel_facts": [],
+        "reason_code": "merge_would_contaminate_target",
+        "quarantine_reasons": [
+          "unsupported_sparse_event_merge"
+        ],
+        "resolved_source_story_id": "story_003912",
+        "resolved_target_story_id": "story_003960"
       }
     ],
     "pending_directives": [
@@ -1724,7 +1773,31 @@
         ]
       }
     ],
-    "rejected_directives": [],
+    "rejected_directives": [
+      {
+        "source_story_id": "story_003912",
+        "target_story_id": "story_003960",
+        "target_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
+        "incoming_headline": "17 arrested in Martin County cocaine trafficking bust, 4 kilos seized in Indiantown operation",
+        "confidence": 1.0,
+        "shared_anchors": [
+          "Operation Beneath the Surface",
+          "17 arrests",
+          "four kilograms of cocaine",
+          "Indiantown",
+          "Martin County Sheriff's Office"
+        ],
+        "reason": "Verified production regression: both pages cover Martin County Sheriff's Office Operation Beneath the Surface with 17 arrests and four kilograms of cocaine seized. Preserve the older Aug. 14 permalink.",
+        "relationship_type": "duplicate",
+        "novel_facts": [],
+        "reason_code": "merge_would_contaminate_target",
+        "quarantine_reasons": [
+          "unsupported_sparse_event_merge"
+        ],
+        "resolved_source_story_id": "story_003912",
+        "resolved_target_story_id": "story_003960"
+      }
+    ],
     "merges": []
   }
 }
