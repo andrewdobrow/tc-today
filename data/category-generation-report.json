@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-15T10:45:49Z",
+  "generated_at": "2026-08-15T15:45:31Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,58 +15,39 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 1,
-      "generation_failed_archive_recovery": 7,
-      "sports_zero_candidate_archive_recovery": 1
+      "category_eligibility_archive_recovery": 2,
+      "generation_failed_archive_recovery": 7
     },
     "failures": {
       "generation_exception": 7,
-      "no_category_eligible_sources": 1,
-      "no_sports_hero_candidates": 1
+      "no_category_eligible_sources": 2
     },
     "model_attempt_count": 14,
-    "model_elapsed_seconds": 2.194,
+    "model_elapsed_seconds": 2.613,
     "archive_recovery_requested_count": 9,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 20,
-    "published_story_duplicate_suppression_count": 21,
-    "story_aware_update_context_count": 5
+    "category_eligibility_rejection_count": 24,
+    "published_story_duplicate_suppression_count": 18,
+    "story_aware_update_context_count": 8
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
+      "status": "category_eligibility_archive_recovery",
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 8,
-      "selected_source_count": 2,
+      "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 2,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.316,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.14,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
-        }
-      ],
-      "model_elapsed_seconds": 0.456,
-      "failure_code": "generation_exception",
-      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4",
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Local Government category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -76,8 +57,47 @@
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
       "category_eligibility_assessed_count": 8,
-      "category_eligibility_rejection_count": 6,
+      "category_eligibility_rejection_count": 8,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Delray Beach residents raise concerns about cemetery upkeep at city-owned burial ground",
+          "source_url": "https://www.wptv.com/news/region-s-palm-beach-county/delray-beach/delray-beach-residents-raise-concerns-about-cemetery-upkeep-at-city-owned-burial-ground"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "36 dogs rescued from Palm City 'house of horror' as lawmakers push for new animal cruelty laws",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "'It's beautiful': Tradition Lakes K-8 in St. Lucie County ready to open after week-long delay - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-tradition-lakes-school-construction-delays/73440832"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -92,19 +112,6 @@
           ],
           "headline": "Stuart shooting range raises hundreds of donations for Humane Society of the Treasure Coast",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/stuart-shooting-range-raises-hundreds-of-donations-for-humane-society-of-the-treasure-coast"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "'It's beautiful': Tradition Lakes K-8 in St. Lucie County ready to open after week-long delay - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/florida-tradition-lakes-school-construction-delays/73440832"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -184,20 +191,42 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "36 dogs rescued from Palm City 'house of horror' as lawmakers push for new animal cruelty laws",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:story_004022",
+            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
-      "budget_seconds": 180.0,
-      "elapsed_seconds": 14.839
+      "elapsed_seconds": 19.071
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 9,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 10,
       "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -206,7 +235,7 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.14,
+          "elapsed_seconds": 0.175,
           "result": "generation_exception",
           "error_type": "BadRequestError",
           "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
@@ -214,13 +243,13 @@
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.136,
+          "elapsed_seconds": 0.146,
           "result": "generation_exception",
           "error_type": "BadRequestError",
           "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
         }
       ],
-      "model_elapsed_seconds": 0.276,
+      "model_elapsed_seconds": 0.322,
       "failure_code": "generation_exception",
       "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4",
       "sports_expired_event_preview_count": 0,
@@ -231,9 +260,22 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 9,
-      "category_eligibility_rejection_count": 3,
+      "category_eligibility_assessed_count": 10,
+      "category_eligibility_rejection_count": 4,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Delray Beach residents raise concerns about cemetery upkeep at city-owned burial ground",
+          "source_url": "https://www.wptv.com/news/region-s-palm-beach-county/delray-beach/delray-beach-residents-raise-concerns-about-cemetery-upkeep-at-city-owned-burial-ground"
+        },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
@@ -274,7 +316,7 @@
           "source_url": "https://www.hometownnewstc.com/crime/martin/gold-bars-and-empty-bank-accounts/article_0aa7deef-96a5-50c3-8bd6-4322916c1d6c.html"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -305,38 +347,29 @@
           "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Suspect arrested in hit-and-run accident in Fort Pierce - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/news/st_lucie/suspect-arrested-in-hit-and-run-accident-in-fort-pierce/article_72778fa4-2e82-5b24-9e5e-700de1142d8f.html",
-          "editorial_story_id": "story_003688",
-          "canonical_slug": "2026-08-14-fort-pierce-man-arrested-in-hit-and-run-that-hospitalized-7-year-old-girl",
-          "canonical_headline": "Fort Pierce man arrested in hit-and-run that hospitalized 7-year-old girl",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Uber passenger accused of beating driver, stealing car in Fort Pierce - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/florida-uber-passenger-accused-of-beating-driver-stealing-car-in-fort-pierce/73439865",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-08-15-uber-passenger-accused-of-beating-driver-stealing-tesla-in-fort-pierce-carjackin",
-          "canonical_headline": "Uber passenger accused of beating driver, stealing Tesla in Fort Pierce carjacking",
-          "basis": "exact_source_url",
+          "source_headline": "36 dogs rescued from Palm City 'house of horror' as lawmakers push for new animal cruelty laws",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
           "identity_keys": [
-            "story:story_003930",
-            "source:https://www.wpbf.com/article/florida-uber-passenger-accused-of-beating-driver-stealing-car-in-fort-pierce/73439865"
+            "incident:mass-animal-hoarding:martin-county",
+            "story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "story",
-            "source"
+            "incident",
+            "story"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=story:story_003930,source:https://www.wpbf.com/article/florida-uber-passenger-accused-of-beating-driver-stealing-car-in-fort-pierce/73439865",
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county,story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -346,15 +379,15 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 10.473
+      "elapsed_seconds": 8.927
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 11,
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -371,9 +404,37 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 11,
-      "category_eligibility_rejection_count": 11,
+      "category_eligibility_assessed_count": 12,
+      "category_eligibility_rejection_count": 12,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_treasure_coast_business_nexus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Delray Beach residents raise concerns about cemetery upkeep at city-owned burial ground",
+          "source_url": "https://www.wptv.com/news/region-s-palm-beach-county/delray-beach/delray-beach-residents-raise-concerns-about-cemetery-upkeep-at-city-owned-burial-ground"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "animal_welfare:animal cruelty"
+          ],
+          "headline": "36 dogs rescued from Palm City 'house of horror' as lawmakers push for new animal cruelty laws",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -519,22 +580,9 @@
           "competing_signals": [],
           "headline": "Demand for free meals surges at Boca Helping Hands in Lake Worth Beach",
           "source_url": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/demand-for-free-meals-surges-at-boca-helping-hands-in-lake-worth-beach"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_treasure_coast_business_nexus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "WHERE'S WALTER? Visiting rescued animals at Busch Wildlife Sanctuary",
-          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-visiting-rescued-animals-at-busch-wildlife-sanctuary"
         }
       ],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -565,48 +613,70 @@
           "canonical_headline": "16-year-old girl dies after falling through roof of abandoned Sebastian building",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "3 Port St. Lucie police officers placed on leave during political campaign signage investigation",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/3-port-st-lucie-police-officers-placed-on-leave-during-political-campaign-sign-investigation",
-          "editorial_story_id": "story_002554",
-          "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-two-separate-campaign-sign-incidents-involving",
-          "canonical_headline": "Port St. Lucie police investigate two separate campaign sign incidents involving Mayor Martin's husband",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Resident shoots, kills intruder at mobile home park in St. Lucie County; stand your ground case under review",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/person-shot-killed-while-attempting-to-enter-home-at-seminole-mobile-home-park",
-          "editorial_story_id": "story_003628",
-          "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
-          "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "36 dogs rescued from Palm City 'house of horror' as lawmakers push for new animal cruelty laws",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county,story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 8.381
+      "elapsed_seconds": 3.052
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
-      "status": "sports_zero_candidate_archive_recovery",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 26,
       "fresh_candidate_count": 25,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_sports_hero_candidates",
-      "failure_summary": "Selected Sports source pool contained no deterministic athletic hero candidate",
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.182,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 0.149,
+          "result": "generation_exception",
+          "error_type": "BadRequestError",
+          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
+        }
+      ],
+      "model_elapsed_seconds": 0.332,
+      "failure_code": "generation_exception",
+      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -615,7 +685,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 1,
@@ -634,7 +704,9 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 19.29
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 9.032
     },
     {
       "category_key": "things_to_do",
@@ -651,7 +723,7 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.167,
+          "elapsed_seconds": 0.184,
           "result": "generation_exception",
           "error_type": "BadRequestError",
           "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
@@ -659,13 +731,13 @@
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.13,
+          "elapsed_seconds": 0.154,
           "result": "generation_exception",
           "error_type": "BadRequestError",
           "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
         }
       ],
-      "model_elapsed_seconds": 0.297,
+      "model_elapsed_seconds": 0.338,
       "failure_code": "generation_exception",
       "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4",
       "sports_expired_event_preview_count": 0,
@@ -679,8 +751,19 @@
       "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "things_to_do",
+          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-fun-things-across-treasure-coast-palm-beach-weekend-1784287590-1785499876-1786105000-1786703925/73434335",
+          "editorial_story_id": "story_000091",
+          "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
+          "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
@@ -710,7 +793,7 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 6.075
+      "elapsed_seconds": 7.453
     },
     {
       "category_key": "florida",
@@ -727,7 +810,7 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.141,
+          "elapsed_seconds": 0.465,
           "result": "generation_exception",
           "error_type": "BadRequestError",
           "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
@@ -735,13 +818,13 @@
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.153,
+          "elapsed_seconds": 0.157,
           "result": "generation_exception",
           "error_type": "BadRequestError",
           "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
         }
       ],
-      "model_elapsed_seconds": 0.294,
+      "model_elapsed_seconds": 0.623,
       "failure_code": "generation_exception",
       "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4",
       "sports_expired_event_preview_count": 0,
@@ -762,16 +845,16 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 5.839
+      "elapsed_seconds": 13.439
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 28,
-      "publishable_source_count": 7,
-      "selected_source_count": 6,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 9,
+      "selected_source_count": 8,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 2,
@@ -779,7 +862,7 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.155,
+          "elapsed_seconds": 0.193,
           "result": "generation_exception",
           "error_type": "BadRequestError",
           "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
@@ -787,13 +870,13 @@
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.139,
+          "elapsed_seconds": 0.138,
           "result": "generation_exception",
           "error_type": "BadRequestError",
           "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
         }
       ],
-      "model_elapsed_seconds": 0.294,
+      "model_elapsed_seconds": 0.331,
       "failure_code": "generation_exception",
       "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4",
       "sports_expired_event_preview_count": 0,
@@ -804,7 +887,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 2,
@@ -830,8 +913,56 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
+      "story_aware_update_context_count": 3,
       "story_aware_update_context_bindings": [
+        {
+          "source_headline": "36 dogs rescued from Palm City 'house of horror' as lawmakers push for new animal cruelty laws",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county,story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "36 dogs rescued from Palm City 'house of horror' as lawmakers push for new animal cruelty laws - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county,story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
         {
           "source_headline": "Animals rescued from Martin County hoarding cases start to show signs of healing - WPTV",
           "source_url": "https://www.wptv.com/shining-a-light/animals-rescued-from-martin-county-hoarding-cases-start-to-show-signs-of-healing",
@@ -860,14 +991,14 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 10.563
+      "elapsed_seconds": 6.055
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 22,
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 6,
       "selected_source_count": 6,
       "cache_hit": false,
@@ -877,7 +1008,7 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.144,
+          "elapsed_seconds": 0.19,
           "result": "generation_exception",
           "error_type": "BadRequestError",
           "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
@@ -885,13 +1016,13 @@
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.14,
+          "elapsed_seconds": 0.136,
           "result": "generation_exception",
           "error_type": "BadRequestError",
           "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
         }
       ],
-      "model_elapsed_seconds": 0.285,
+      "model_elapsed_seconds": 0.326,
       "failure_code": "generation_exception",
       "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4",
       "sports_expired_event_preview_count": 0,
@@ -905,26 +1036,26 @@
       "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie police officers placed on leave during campaign sign investigations - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/florida-police-political-signs-leave-fdle/73424548",
-          "editorial_story_id": "story_003655",
-          "canonical_slug": "2026-08-13-three-port-st-lucie-police-officers-placed-on-leave-during-campaign-sign-investi",
-          "canonical_headline": "Three Port St. Lucie police officers placed on leave during campaign sign investigations",
+          "source_headline": "Uber passenger accused of beating driver, stealing car in Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-uber-passenger-accused-of-beating-driver-stealing-car-in-fort-pierce/73439865",
+          "editorial_story_id": "story_003930",
+          "canonical_slug": "2026-08-15-uber-passenger-accused-of-beating-driver-stealing-tesla-in-fort-pierce-carjackin",
+          "canonical_headline": "Uber passenger accused of beating driver, stealing Tesla in Fort Pierce carjacking",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Person shot, killed while allegedly trying to enter Fort Pierce mobile home - WPEC",
-          "source_url": "https://news.google.com/rss/articles/CBMipANBVV95cUxOb3JSRmtuSDZJNUlkRnZHQnlhQ2pSY2hyak5UdjVtTmF0VGoxZy1EOElKXy1fcW9rQ2p4ek9CTndTall2eS1aZVprX0laRlBXcUpHMzBYMlNwZGt1X3piV0JpaVpINUx5N2gzUDJfdG5kMnhTUWV5S0N1Y1pUMzBrRExtRFpnbFE2MVpsOXlZd0pQV1AtQ2hJM28tbjROZUZuVXJhUkpaeEpxTGVhMlVDT3pUUEZYMi1aTFBSUmM5enJ3ZHpQdGMtR2dhTnVZa2pSUXUyQjlpcTlFTjF1allhMllXRnUtQVhEbDlZM21sZDdKa3E3RTBjNF9WQ0x3YVQ4YTBSMDJQUUFZYUM4dmJtNmFtSTg2N3RHZi1zRnhXUGM0alJVRnZFVGMyLWxDYklpRHBSamp2NUJ3MEN0MzI2a1l2NDFWMHVVWWJwMGt0c2JXX0JGaHVITTJEZ1RrUUt5eWNtNE91RmJqcnFYYk5qSVppYXZhYkZsbDBXM0F0UEh6VGJHREVaa0c4RzJxZmpmSEZpYVNVY0RadWpoMzBQcTBRb1c",
-          "editorial_story_id": "story_003628",
-          "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
-          "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Port St. Lucie police officers placed on leave during campaign sign investigations - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-police-political-signs-leave-fdle/73424548",
+          "editorial_story_id": "story_003655",
+          "canonical_slug": "2026-08-13-three-port-st-lucie-police-officers-placed-on-leave-during-campaign-sign-investi",
+          "canonical_headline": "Three Port St. Lucie police officers placed on leave during campaign sign investigations",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -939,77 +1070,40 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "3 Port St. Lucie police officers placed on leave during political campaign signage investigation - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/3-port-st-lucie-police-officers-placed-on-leave-during-political-campaign-sign-investigation",
-          "editorial_story_id": "story_002554",
-          "canonical_slug": "2026-08-08-port-st-lucie-police-investigate-two-separate-campaign-sign-incidents-involving",
-          "canonical_headline": "Port St. Lucie police investigate two separate campaign sign incidents involving Mayor Martin's husband",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Suspect arrested in hit-and-run accident in Fort Pierce - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/news/st_lucie/suspect-arrested-in-hit-and-run-accident-in-fort-pierce/article_72778fa4-2e82-5b24-9e5e-700de1142d8f.html",
+          "editorial_story_id": "story_003688",
+          "canonical_slug": "2026-08-14-fort-pierce-man-arrested-in-hit-and-run-that-hospitalized-7-year-old-girl",
+          "canonical_headline": "Fort Pierce man arrested in hit-and-run that hospitalized 7-year-old girl",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County officials discuss 2026 master plan for Port of Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-port-fort-pierce-waterfront-city-county-government/73407734",
+          "editorial_story_id": "story_003375",
+          "canonical_slug": "2026-08-12-st-lucie-county-officials-outline-2026-master-plan-for-port-of-fort-pierce",
+          "canonical_headline": "St. Lucie County officials outline 2026 master plan for Port of Fort Pierce",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Uber passenger accused of beating driver, stealing car in Fort Pierce - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/florida-uber-passenger-accused-of-beating-driver-stealing-car-in-fort-pierce/73439865",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-08-15-uber-passenger-accused-of-beating-driver-stealing-tesla-in-fort-pierce-carjackin",
-          "canonical_headline": "Uber passenger accused of beating driver, stealing Tesla in Fort Pierce carjacking",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_003930",
-            "source:https://www.wpbf.com/article/florida-uber-passenger-accused-of-beating-driver-stealing-car-in-fort-pierce/73439865"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_003930,source:https://www.wpbf.com/article/florida-uber-passenger-accused-of-beating-driver-stealing-car-in-fort-pierce/73439865",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "St. Lucie County officials discuss 2026 master plan for Port of Fort Pierce - wpbf.com",
-          "source_url": "https://www.wpbf.com/article/florida-port-fort-pierce-waterfront-city-county-government/73407734",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-08-12-st-lucie-county-officials-outline-2026-master-plan-for-port-of-fort-pierce",
-          "canonical_headline": "St. Lucie County officials outline 2026 master plan for Port of Fort Pierce",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_003375",
-            "source:https://www.wpbf.com/article/florida-port-fort-pierce-waterfront-city-county-government/73407734"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_003375,source:https://www.wpbf.com/article/florida-port-fort-pierce-waterfront-city-county-government/73407734",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "new_publication_stale_rejected_count": 1,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 9.669
+      "elapsed_seconds": 6.769
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 8,
-      "selected_source_count": 6,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 9,
+      "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 2,
@@ -1017,7 +1111,7 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.157,
+          "elapsed_seconds": 0.185,
           "result": "generation_exception",
           "error_type": "BadRequestError",
           "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
@@ -1025,13 +1119,13 @@
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.135,
+          "elapsed_seconds": 0.156,
           "result": "generation_exception",
           "error_type": "BadRequestError",
           "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4"
         }
       ],
-      "model_elapsed_seconds": 0.292,
+      "model_elapsed_seconds": 0.341,
       "failure_code": "generation_exception",
       "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce4",
       "sports_expired_event_preview_count": 0,
@@ -1042,10 +1136,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1056,34 +1150,39 @@
           "canonical_headline": "New nonprofit in Indiantown launches to fund youth sports programs and upgrade aging facilities",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Budget reviews saved $11M since 2019, helping avoid cuts in Indian River County schools - WPEC",
-          "source_url": "https://cbs12.com/news/local/budget-reviews-saved-11m-since-2019-helping-avoid-cuts-in-indian-river-county-schools",
-          "editorial_story_id": "story_003630",
-          "canonical_slug": "2026-08-13-indian-river-county-schools-avoid-layoffs-give-all-teachers-raises-after-budget",
-          "canonical_headline": "Indian River County schools avoid layoffs, give all teachers raises after budget reviews save $11 million",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Indian River County school district looks to sell around 10 properties across the county - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/12/indian-river-county-school-district-looks-sell-around-10-properties-across-county",
-          "editorial_story_id": "story_003544",
-          "canonical_slug": "2026-08-13-indian-river-county-school-district-plans-to-sell-10-properties-across-county",
-          "canonical_headline": "Indian River County school district plans to sell 10 properties across county",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "36 dogs rescued from Palm City 'house of horror' as lawmakers push for new animal cruelty laws",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident",
+            "story"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county,story:custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 8.321
+      "elapsed_seconds": 7.234
     }
   ]
 }
