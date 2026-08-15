@@ -19304,7 +19304,6 @@ def _exact_headline_incident_evidence(left, right):
             f"shared_named_people={sorted(shared_people)}",
             f"shared_precise_locations={sorted(shared_precise)}",
             f"shared_agencies={sorted(shared_agencies)}",
-            f"shared_specific_topic_core={sorted(specific_topic_core)}",
             f"shared_distinctive_token_count={len(shared_distinctive)}",
             f"write_authorized={verified}",
         ],
