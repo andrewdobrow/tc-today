@@ -160,3 +160,69 @@ def test_unpublished_noncustom_card_is_removed_after_archive_writer_skips_it(tmp
     )
     assert report["removed_card_count"] == 1
     assert all(card.get("headline") != orphan["headline"] for card in categories[0]["cards"])
+
+
+def test_existing_archive_row_without_story_id_is_removed_from_forward_live_surface(tmp_path):
+    g = _load_generate()
+    g.OUTPUT_DIR = tmp_path
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    today = datetime.now(timezone.utc).date().isoformat()
+
+    valid_slug = f"{today}-verified-martin-county-story"
+    held_slug = f"{today}-17-arrested-in-martin-county-cocaine-trafficking-ring"
+    valid = _archive_row(
+        valid_slug,
+        "Verified Martin County story remains live",
+        "story-verified-martin",
+        "martin",
+    )
+    held = _archive_row(
+        held_slug,
+        "17 arrested in Martin County cocaine trafficking ring",
+        "",
+        "martin",
+    )
+    archive = [valid, held]
+    for row in archive:
+        (articles / f"{row['slug']}.html").write_text(
+            "<article>published</article>", encoding="utf-8"
+        )
+    (tmp_path / "archive.json").write_text(json.dumps(archive), encoding="utf-8")
+
+    hero = {
+        "headline": valid["headline"],
+        "_archived_slug": valid_slug,
+        "editorial_story_id": valid["editorial_story_id"],
+        "category_key": "martin",
+        "enriched": True,
+    }
+    held_card = {
+        "headline": held["headline"],
+        "_archived_slug": held_slug,
+        "link": f"https://treasurecoast.today/articles/{held_slug}.html",
+        "category_key": "martin",
+        "enriched": True,
+        "_publication_skip_reason": "missing_current_run_persistent_story_id",
+    }
+    categories = [
+        {
+            "category_key": "martin",
+            "category_label": "Martin County",
+            "hero": hero,
+            "cards": [held_card],
+        }
+    ]
+
+    # The archive page existing is not enough for a current forward placement:
+    # without an archive story ID it must be removed before the final identity gate.
+    assert g._live_archive_entry(held_card, {held_slug: held}, articles) is None
+    report = g._reconcile_live_publication_receipts(
+        categories, categories[0], tmp_path, current_customs=[]
+    )
+    assert report["removed_card_count"] == 1
+    assert report["removed_cards"][0]["publication_skip_reason"] == (
+        "missing_current_run_persistent_story_id"
+    )
+    assert all(card.get("headline") != held_card["headline"] for card in categories[0]["cards"])
+    assert g.validate_forward_live_identity(categories, categories[0], tmp_path)["passed"] is True

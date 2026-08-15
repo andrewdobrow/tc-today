@@ -14908,6 +14908,8 @@ def _find_current_run_archive_duplicate(item, archive, articles_dir, today=None)
     for entry in archive or []:
         if not _archive_entry_live_identity_safe(entry):
             continue
+        if not item.get("_archive_only") and not str(entry.get("editorial_story_id") or "").strip():
+            continue
         slug = str(entry.get("slug") or "").strip()
         if not _published_article_path(slug, articles_dir):
             continue
@@ -14949,7 +14951,15 @@ def _find_current_run_archive_duplicate(item, archive, articles_dir, today=None)
 
 
 def _live_archive_entry(item, archive_by_slug, articles_dir):
-    """Return the currently bound safe archive row for one live item, if any."""
+    """Return the currently bound archive row only when it satisfies the live contract.
+
+    Forward-generated placements must not treat a legacy/archive row with no
+    persistent story ID as a valid publication receipt.  The final forward-identity
+    gate already rejects that state; enforcing the same rule here lets publication
+    reconciliation remove or recover the placement instead of carrying it forward
+    to a guaranteed deployment failure.  Explicit archive-recovery placements keep
+    their legacy exemption via ``_archive_only``.
+    """
     if not isinstance(item, dict):
         return None
     slug = str(item.get("_archived_slug") or item.get("slug") or "").strip()
@@ -14960,6 +14970,8 @@ def _live_archive_entry(item, archive_by_slug, articles_dir):
             slug = match.group(1)
     entry = archive_by_slug.get(slug)
     if not entry or not _archive_entry_live_identity_safe(entry):
+        return None
+    if not item.get("_archive_only") and not str(entry.get("editorial_story_id") or "").strip():
         return None
     if not _published_article_path(slug, articles_dir):
         return None
@@ -15214,6 +15226,8 @@ def _rebind_live_items_to_published_archive(all_categories, archive, current_cus
             # safe bridge for an un-stamped current placement.
             if not matched and not item.get("_archive_only"):
                 matched = _find_exact_archive_source_entry(item, archive)
+                if matched and not str(matched.get("editorial_story_id") or "").strip():
+                    matched = None
                 if matched:
                     item["_post_publication_match_basis"] = "exact_external_source"
             if not matched and not item.get("_archive_only"):
@@ -25314,6 +25328,7 @@ def write_archives(all_categories, top_cat):
                 _finalize_cross_source_identity_observation(
                     hero, "hold_missing_persistent_story_id"
                 )
+                hero["_publication_skip_reason"] = "missing_current_run_persistent_story_id"
                 _forward_identity_report["publication_holds"].append({
                     "headline": headline,
                     "source_url": normalized_source_url,
