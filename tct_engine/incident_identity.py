@@ -25,7 +25,7 @@ from datetime import datetime, timezone
 import re
 from typing import Any, Iterable, Mapping
 
-INCIDENT_IDENTITY_VERSION = "3.1"
+INCIDENT_IDENTITY_VERSION = "3.2"
 
 _WORD_RE = re.compile(r"[a-z0-9]+")
 _ANIMAL_QUANTITY_RE = re.compile(r"\b(\d{1,3})\s+(?:cats?|dogs?|animals?|pets?)\b", re.IGNORECASE)
@@ -71,6 +71,44 @@ _INFRASTRUCTURE_ASSET_CANONICAL = (
 # A death story can be framed as the death itself, a mourning statement, a
 # memorial, a cause-of-death disclosure, or a tribute.  All remain one
 # persistent incident when the same named person is the subject.
+
+# A formally named law-enforcement operation is a durable incident identifier.
+# Require both a title-cased multiword operation name and independent enforcement
+# context so generic phrases such as "operation underway" never become anchors.
+_NAMED_OPERATION_RE = re.compile(
+    r"\bOperation\s+[\"'“‘]?([A-Z][A-Za-z0-9'’-]+(?:\s+(?:the|of|and|for|[A-Z][A-Za-z0-9'’-]+)){1,5})[\"'”’]?",
+)
+_LAW_ENFORCEMENT_OPERATION_CONTEXT_RE = re.compile(
+    r"\b(?:sheriff|police|deput(?:y|ies)|narcotics?|drug|cocaine|fentanyl|methamphetamine|"
+    r"traffick(?:ing)?|arrest(?:ed|s)?|indict(?:ed|ment)?|dea|fbi|homeland security)\b",
+    re.IGNORECASE,
+)
+
+
+def _named_law_enforcement_operation_anchor(text: str) -> str:
+    if not _LAW_ENFORCEMENT_OPERATION_CONTEXT_RE.search(text):
+        return ""
+    matches = []
+    for match in _NAMED_OPERATION_RE.finditer(text):
+        name = re.sub(r"\s+", " ", match.group(1)).strip(" .,:;\"'“”‘’")
+        # Avoid over-capturing a following sentence word while retaining names
+        # such as "Beneath the Surface".
+        words = name.split()
+        while words and words[-1].casefold() in {
+            "and", "of", "for", "the",
+            "resulted", "resulting", "led", "targeted", "focused", "began", "started"
+        }:
+            words.pop()
+        if len(words) < 2:
+            continue
+        slug = _slug(" ".join(words))
+        if slug and slug not in {"underway", "in-progress", "ongoing-investigation"}:
+            matches.append(slug)
+    unique = tuple(dict.fromkeys(matches))
+    if len(unique) != 1:
+        return ""
+    return f"law-enforcement-operation:{unique[0]}"
+
 _DEATH_CONTEXT_RE = re.compile(
     r"\b(?:dies?|died|dead|death|deceased|killed|murdered|suicide|fatal(?:ity)?|"
     r"passes? away|passed away|mourns?|mourning|memorial|tribute|funeral|"
@@ -446,6 +484,10 @@ def incident_anchor_key(
         anchor, _people = _named_person_death_anchor(full_text, entities=entities)
         if anchor:
             return anchor
+
+    operation_anchor = _named_law_enforcement_operation_anchor(full_text)
+    if operation_anchor:
+        return operation_anchor
 
     infrastructure_anchor = _infrastructure_condition_anchor(full_text)
     if infrastructure_anchor:

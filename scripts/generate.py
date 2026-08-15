@@ -15828,7 +15828,7 @@ def _audit_locations(text):
         "port st lucie": "port-st-lucie", "st lucie": "st-lucie",
         "fort pierce": "fort-pierce", "stuart": "stuart",
         "hobe sound": "hobe-sound", "jensen beach": "jensen-beach",
-        "palm city": "palm-city", "vero beach": "vero-beach",
+        "palm city": "palm-city", "indiantown": "indiantown", "vero beach": "vero-beach",
         "sebastian": "sebastian", "fellsmere": "fellsmere",
         "indian river": "indian-river", "martin county": "martin-county",
         "st lucie county": "st-lucie-county", "indian river county": "indian-river-county",
@@ -17820,6 +17820,19 @@ PSL_ANIMAL_CRUELTY_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-08-08-port-st-lucie-man-arrested-on-animal-cruelty-charge-after-video-circulates-on-so",
 })
 
+# Verified Aug. 2026 production duplicate: CBS12 and WPTV covered the exact same
+# Martin County Sheriff's Office "Operation Beneath the Surface" cocaine case.
+# The generalized prevention fixes live in fact extraction, event-family identity,
+# named-operation anchoring and semantic candidate retrieval. These slugs exist only
+# to repair the two already-public URLs deterministically if model adjudication is
+# unavailable during the cleanup run.
+MARTIN_COCAINE_OPERATION_CANONICAL_SLUG = (
+    "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon"
+)
+MARTIN_COCAINE_OPERATION_DUPLICATE_SLUG = (
+    "2026-08-15-17-arrested-in-martin-county-cocaine-trafficking-bust-4-kilos-seized-in-indianto"
+)
+
 
 def _publication_slug_claim_diagnostics(item, entry):
     """Compare the immutable URL claim with the current headline/lead claim.
@@ -18938,7 +18951,13 @@ def _cross_source_event_families(item):
             r"|\b(help|search|seek|seeking|find|finding|locate|locating)\b.{0,75}"
             r"\b(missing|last seen|autistic|teen|boy|girl|child)\b"
         ),
-        "animal-case": r"\b(hoarding|animals?|cats?|dogs?|rescued|seized)\b",
+        # "seized" by itself is not an animal signal. Drug and gun stories routinely
+        # use that verb; treating it as animal-case poisoned cross-source identity.
+        "animal-case": r"\b(hoarding|animals?|cats?|dogs?|rescued)\b",
+        "drug-case": (
+            r"\b(?:drug|drugs|narcotic|narcotics|cocaine|fentanyl|methamphetamine|"
+            r"marijuana|traffick(?:ing)?|drug bust|drug ring|wiretap)\b"
+        ),
         "crash": r"\b(crash|collision|wreck)\b",
         "fire": r"\b(structure fire|house fire|store fire|commercial fire|electrical fire|brush fire|wildfire|fire-rescue|burning|arson|blaze)\b",
     }
@@ -21216,6 +21235,101 @@ def _repair_recent_semantic_archive_duplicates(
         "held_count": len(held),
         "held": held,
     }
+
+def _repair_verified_martin_cocaine_operation_duplicate(archive, report):
+    """Repair the already-public verified Operation Beneath the Surface duplicate.
+
+    This is a migration fallback, not the prevention mechanism. It runs only after
+    the generalized semantic repair had a chance to act, and only when both exact
+    production slugs are still present. The older Aug. 14 permalink remains canonical
+    and the Aug. 15 page is preserved as a permanent redirect.
+    """
+    rows = list(archive or [])
+    canonical = next(
+        (row for row in rows if row.get("slug") == MARTIN_COCAINE_OPERATION_CANONICAL_SLUG),
+        None,
+    )
+    duplicate = next(
+        (row for row in rows if row.get("slug") == MARTIN_COCAINE_OPERATION_DUPLICATE_SLUG),
+        None,
+    )
+    if not canonical or not duplicate:
+        return rows, [], {"repaired_count": 0, "status": "not_needed"}
+
+    _merge_category_memberships(
+        canonical, duplicate, canonical.get("category_key") or "martin"
+    )
+    shared_anchors = [
+        "Operation Beneath the Surface",
+        "17 arrests",
+        "four kilograms of cocaine",
+        "Indiantown",
+        "Martin County Sheriff's Office",
+    ]
+    redirect = {
+        "source_slug": MARTIN_COCAINE_OPERATION_DUPLICATE_SLUG,
+        "source_headline": duplicate.get("headline", ""),
+        "target_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+        "target_headline": canonical.get("headline", ""),
+        "story_stage": "verified-production-regression-migration",
+        "match_confidence": 100,
+        "canonical_is_custom": False,
+        "editorial_story_id": str(canonical.get("editorial_story_id") or ""),
+        "reason": (
+            "Verified production regression: both pages cover Martin County Sheriff's "
+            "Office Operation Beneath the Surface with 17 arrests and four kilograms "
+            "of cocaine seized. Preserve the older Aug. 14 permalink."
+        ),
+    }
+    decision = {
+        "phase": "verified_production_regression_migration",
+        "incoming_headline": duplicate.get("headline", ""),
+        "incoming_source_url": duplicate.get("source_url", ""),
+        "incoming_story_id": str(duplicate.get("editorial_story_id") or ""),
+        "candidates": [{
+            "slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+            "headline": canonical.get("headline", ""),
+            "evidence": {"verified_production_regression": True},
+        }],
+        "decision": {
+            "status": "validated",
+            "action": SEMANTIC_ACTION_DUPLICATE,
+            "selected_candidate_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+            "same_real_world_event": True,
+            "material_new_update": False,
+            "confidence": 1.0,
+            "shared_anchors": shared_anchors,
+            "novel_facts": [],
+            "reason": redirect["reason"],
+            "validation_errors": [],
+        },
+    }
+    report.setdefault("decisions", []).append(decision)
+    report.setdefault("archive_repairs", []).append({
+        "source_slug": MARTIN_COCAINE_OPERATION_DUPLICATE_SLUG,
+        "target_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+        "source_story_id": str(duplicate.get("editorial_story_id") or ""),
+        "target_story_id": str(canonical.get("editorial_story_id") or ""),
+        "source_url": duplicate.get("source_url", ""),
+        "source_headline": duplicate.get("headline", ""),
+        "target_headline": canonical.get("headline", ""),
+        "confidence": 1.0,
+        "shared_anchors": shared_anchors,
+        "repair_basis": "verified_production_regression_migration",
+    })
+    summary = report.setdefault("summary", {})
+    summary["retroactive_redirects"] = int(summary.get("retroactive_redirects", 0) or 0) + 1
+    cleaned = [
+        row for row in rows
+        if row.get("slug") != MARTIN_COCAINE_OPERATION_DUPLICATE_SLUG
+    ]
+    return cleaned, [redirect], {
+        "repaired_count": 1,
+        "status": "repaired",
+        "source_slug": MARTIN_COCAINE_OPERATION_DUPLICATE_SLUG,
+        "target_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+    }
+
 
 def _write_semantic_publication_gate_report(report, output_root=None):
     path = Path(output_root or OUTPUT_DIR) / "data" / "semantic-publication-gate.json"
@@ -24992,6 +25106,20 @@ def write_archives(all_categories, top_cat):
     _forward_identity_report["semantic_archive_repairs"] = (
         _semantic_archive_repair_report
     )
+    archive, _verified_cocaine_redirects, _verified_cocaine_repair = (
+        _repair_verified_martin_cocaine_operation_duplicate(
+            archive, _semantic_gate_report
+        )
+    )
+    _canonical_redirects.extend(_verified_cocaine_redirects)
+    _forward_identity_report["verified_martin_cocaine_operation_repair"] = (
+        _verified_cocaine_repair
+    )
+    if _verified_cocaine_redirects:
+        print(
+            "  Verified production duplicate repaired: Operation Beneath the Surface "
+            "Aug. 15 URL -> Aug. 14 canonical"
+        )
     _semantic_registry_consolidation = (
         _apply_semantic_duplicate_registry_consolidation(
             archive,

@@ -179,7 +179,10 @@ def extract_article_facts(
     if "closed" in lower:
         facts.append("road closed")
 
-    if "fire" in lower:
+    # Match an actual fire event, not substrings such as "firearm" or
+    # "firefighter". The old substring check poisoned drug/crime stories that
+    # mentioned seized firearms with a false fire event identity.
+    if re.search(r"\b(?:fire|blaze|burning|burned|arson)\b", lower):
         event_types.append("fire")
         facts.append("fire reported")
 

@@ -23,7 +23,7 @@ from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from typing import Any, Iterable, Mapping, Sequence
 
-SEMANTIC_PUBLICATION_GATE_VERSION = "1.4"
+SEMANTIC_PUBLICATION_GATE_VERSION = "1.5"
 SEMANTIC_PUBLICATION_GATE_PROMPT_VERSION = "1.0"
 DEFAULT_RECENT_WINDOW_DAYS = 7
 DEFAULT_MAX_CANDIDATES = 4
@@ -291,6 +291,27 @@ def candidate_evidence(
     context_compatible = bool(
         features["shared_locality"] and features["shared_event_families"]
     )
+    left_anchor_value = str(incoming.get("incident_anchor") or "").strip().casefold()
+    right_anchor_value = str(candidate.get("incident_anchor") or "").strip().casefold()
+    exact_named_operation_anchor = bool(
+        features["exact_incident_anchor"]
+        and left_anchor_value.startswith("law-enforcement-operation:")
+        and right_anchor_value == left_anchor_value
+    )
+    shared_numeric_tokens = {
+        token for token in shared_headline_tokens if token.isdigit()
+    }
+    drug_family_continuity = bool(
+        "drug-case" in features["shared_event_families"]
+        and features["shared_locality"]
+        and features["shared_agencies"]
+        and "arrest" in shared_topic_tokens
+        and shared_topic_tokens
+        & {"cocaine", "fentanyl", "methamphetamine", "marijuana", "narcotic", "drug"}
+        and shared_numeric_tokens
+        and similarity["score"] >= 0.45
+        and shared_count >= 5
+    )
 
     # The generated TCT headline is not an independent identity source. A model can
     # occasionally elevate a secondary paragraph and rewrite a story so that it
@@ -354,6 +375,13 @@ def candidate_evidence(
         similarity["score"] >= 0.64
         or (similarity["score"] >= 0.50 and context_compatible and contextual_anchor)
         or (similarity["score"] >= 0.56 and context_compatible and shared_count >= 6)
+        # A formally named police/sheriff operation is a concrete incident anchor.
+        # This only nominates the pair for adjudication; it never authorizes a merge.
+        or (exact_named_operation_anchor and similarity["score"] >= 0.40 and shared_count >= 4)
+        # Drug-bust headlines often split the same facts across "ring", "bust",
+        # "operation" and "investigation" wording. Same agency + locality + drug
+        # family + arrest + shared count is enough to let the final gate compare them.
+        or drug_family_continuity
         or strong_conflict_override
     )
     eligible = bool(
@@ -372,6 +400,10 @@ def candidate_evidence(
         reasons.append("shared_locality_and_event_family")
     if contextual_anchor:
         reasons.append("shared_incident_anchor")
+    if exact_named_operation_anchor:
+        reasons.append("exact_named_law_enforcement_operation")
+    if drug_family_continuity:
+        reasons.append("law_enforcement_drug_operation_continuity")
     if day_gap is not None:
         reasons.append(f"publication_gap_{day_gap}_days")
     if conflict:
