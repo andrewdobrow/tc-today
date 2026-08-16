@@ -33,7 +33,10 @@ def test_paywall_discloses_trial_and_post_trial_price():
     assert "tct-trial-urgency" in markup
     assert "tct-trial-price-old" in markup
     assert "$4.99/month after free trial" in markup
-    assert "Card required. You won’t be charged today." in markup
+    assert "Card required" not in markup
+    assert "Secure checkout powered by Stripe. You won’t be charged today." in markup
+    assert "Card required" not in (ROOT / "membership_paywall.py").read_text()
+    assert "Card required" not in (ROOT / "tct_engine/membership_paywall.py").read_text()
     assert "Cancel before the trial ends to avoid a charge." in markup
 
 
