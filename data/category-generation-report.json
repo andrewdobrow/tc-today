@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-15T20:45:23Z",
+  "generated_at": "2026-08-16T01:26:43Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,20 +16,23 @@
     "category_count": 9,
     "statuses": {
       "category_eligibility_archive_recovery": 2,
-      "generation_failed_archive_recovery": 7
+      "generated_live": 5,
+      "generation_failed_archive_recovery": 1,
+      "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "generation_exception": 7,
-      "no_category_eligible_sources": 2
+      "article_framing_integrity": 1,
+      "no_category_eligible_sources": 2,
+      "publication_quality_rejected": 1
     },
-    "model_attempt_count": 14,
-    "model_elapsed_seconds": 2.059,
-    "archive_recovery_requested_count": 9,
+    "model_attempt_count": 8,
+    "model_elapsed_seconds": 202.929,
+    "archive_recovery_requested_count": 4,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 22,
-    "published_story_duplicate_suppression_count": 18,
+    "article_framing_rejection_count": 3,
+    "category_eligibility_rejection_count": 19,
+    "published_story_duplicate_suppression_count": 21,
     "story_aware_update_context_count": 2
   },
   "categories": [
@@ -194,40 +197,30 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 11.587
+      "elapsed_seconds": 12.985
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generation_failed_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 10,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 11,
       "selected_source_count": 7,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.132,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.112,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5"
+          "elapsed_seconds": 35.733,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 0.244,
-      "failure_code": "generation_exception",
-      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5",
+      "model_elapsed_seconds": 35.733,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -236,7 +229,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 10,
+      "category_eligibility_assessed_count": 11,
       "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
         {
@@ -279,8 +272,18 @@
           "source_url": "https://www.hometownnewstc.com/crime/martin/gold-bars-and-empty-bank-accounts/article_0aa7deef-96a5-50c3-8bd6-4322916c1d6c.html"
         }
       ],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Uber passenger accused of beating driver, stealing car in Fort Pierce - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-uber-passenger-accused-of-beating-driver-stealing-car-in-fort-pierce/73439865",
+          "editorial_story_id": "story_003930",
+          "canonical_slug": "2026-08-15-uber-passenger-accused-of-beating-driver-stealing-tesla-in-fort-pierce-carjackin",
+          "canonical_headline": "Uber passenger accused of beating driver, stealing Tesla in Fort Pierce carjacking",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "New nonprofit in Indiantown aims to fund youth sports programs and facility upgrades",
@@ -303,21 +306,33 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Man shot, killed inside Fort Pierce home after attacking homeowner; no charges filed - WPEC",
-          "source_url": "https://cbs12.com/news/local/person-shot-killed-while-allegedly-trying-to-enter-fort-pierce-mobile-home-st-lucie-county-shooting-st-lucie-county-crime-deadly-shooting-fatal-shooting-orange-avenue-shooting-seminole-mobile-home-park-fort-pierce-crime-st-lucie-county-sheriff",
+          "source_headline": "Man shot, killed inside Fort Pierce home after attacking homeowner; no charges filed - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/person-shot-killed-while-allegedly-trying-to-enter-fort-pierce-mobile-home-st-lucie-county-shooting-st-lucie-county-crime-deadly-shooting-fatal-shooting-orange-avenue-shooting-seminole-mobile-home-park-fort-pierce-crime-st-lucie-county-sheriff",
           "editorial_story_id": "story_003628",
           "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
           "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "surface": "card",
+          "headline": "Stuart shooting range collects hundreds of donations for hoarded Border Collies",
+          "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "published_skip_placement_suppressed"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 11.628
+      "live_hero_headline": "Palm City woman held on $275,000 bond after 36 Border Collies rescued from filthy home",
+      "generated_card_count": 1,
+      "elapsed_seconds": 40.254
     },
     {
       "category_key": "business",
@@ -325,7 +340,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 11,
+      "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -342,8 +357,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 11,
-      "category_eligibility_rejection_count": 11,
+      "category_eligibility_assessed_count": 8,
+      "category_eligibility_rejection_count": 8,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -462,49 +477,6 @@
           "competing_signals": [],
           "headline": "'They've never had a voice': Big Dog Ranch Rescue welcomes final 155 beagles from Wisconsin testing lab",
           "source_url": "https://www.wptv.com/news/region-c-palm-beach-county/loxahatchee-acreage/theyve-never-had-a-voice-big-dog-ranch-rescue-in-loxahatchee-welcomes-final-155-beagles-from-wisconsin-testing-lab"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_treasure_coast_business_nexus",
-          "positive_signals": [],
-          "competing_signals": [
-            "animal_welfare:animal cruelty"
-          ],
-          "headline": "Riviera Beach domestic violence attack highlights new Florida pet protection law",
-          "source_url": "https://www.wptv.com/news/region-c-palm-beach-county/riviera-beach/riviera-beach-domestic-violence-attack-highlights-new-florida-pet-protection-law"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:charged"
-          ],
-          "headline": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
-          "source_url": "https://www.wptv.com/wptv-investigates/ive-never-seen-anything-like-it-deputies-describe-rescuing-36-neglected-border-collies-from-palm-city-home"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_treasure_coast_business_nexus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "$57 million in unclaimed property returned to Floridians in July 2026, CFO says",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/57-million-in-unclaimed-property-returned-to-floridians-in-july-2026-cfo-says"
         }
       ],
       "published_story_duplicate_suppression_count": 3,
@@ -542,41 +514,31 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 9.518
+      "new_publication_stale_rejected_count": 4,
+      "elapsed_seconds": 3.302
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
-      "status": "generation_failed_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 26,
       "fresh_candidate_count": 25,
       "publishable_source_count": 5,
-      "selected_source_count": 5,
+      "selected_source_count": 4,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.149,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.11,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5"
+          "elapsed_seconds": 15.38,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 0.259,
-      "failure_code": "generation_exception",
-      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5",
+      "model_elapsed_seconds": 15.38,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -604,9 +566,11 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 11.159
+      "live_hero_headline": "St. Lucie Mets rally for 7-2 victory over Jupiter Hammerheads",
+      "generated_card_count": 0,
+      "elapsed_seconds": 20.964
     },
     {
       "category_key": "things_to_do",
@@ -623,23 +587,23 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.213,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5"
+          "elapsed_seconds": 13.796,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals from Martin County hoarding cases show signs of recovery at Palm City shelter"
         },
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.111,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5"
+          "elapsed_seconds": 16.756,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals rescued from Martin County hoarding cases show signs of recovery at Palm City shelter"
         }
       ],
-      "model_elapsed_seconds": 0.324,
-      "failure_code": "generation_exception",
-      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5",
+      "model_elapsed_seconds": 30.552,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals rescued from Martin County hoarding cases show signs of recovery at Palm City shelter",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -693,40 +657,30 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 9.756
+      "elapsed_seconds": 35.645
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "generation_failed_archive_recovery",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
       "publishable_source_count": 1,
       "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.179,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.109,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5"
+          "elapsed_seconds": 10.433,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 0.288,
-      "failure_code": "generation_exception",
-      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5",
+      "model_elapsed_seconds": 10.433,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -743,42 +697,32 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 13.039
+      "elapsed_seconds": 19.737
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 25,
+      "status": "generated_live",
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 27,
       "publishable_source_count": 9,
       "selected_source_count": 9,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.173,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.111,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5"
+          "elapsed_seconds": 50.089,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 0.284,
-      "failure_code": "generation_exception",
-      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5",
+      "model_elapsed_seconds": 50.089,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -790,18 +734,8 @@
       "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "New nonprofit in Indiantown aims to fund youth sports programs and facility upgrades",
-          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/new-nonprofit-in-indiantown-aims-to-fund-youth-sports-programs-and-facility-upgrades",
-          "editorial_story_id": "story_003849",
-          "canonical_slug": "2026-08-14-new-nonprofit-in-indiantown-launches-to-fund-youth-sports-programs-and-upgrade-a",
-          "canonical_headline": "New nonprofit in Indiantown launches to fund youth sports programs and upgrade aging facilities",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "martin",
           "source_headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - WPEC",
@@ -811,6 +745,26 @@
           "canonical_headline": "17 arrested in Indiantown cocaine trafficking ring, three remain wanted after months-long investigation",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "surface": "hero",
+          "headline": "36 dogs rescued from Palm City home as lawmakers push for stronger animal cruelty laws",
+          "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "published_skip_placement_suppressed"
+        },
+        {
+          "category_key": "martin",
+          "surface": "card",
+          "headline": "Stuart shooting range collects hundreds of donations for rescued border collies",
+          "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "published_skip_placement_suppressed"
         }
       ],
       "story_aware_update_context_count": 1,
@@ -841,51 +795,118 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 8.955
+      "live_hero_headline": "17 arrested in Indiantown drug bust as authorities seize 4 kilos of cocaine",
+      "generated_card_count": 1,
+      "elapsed_seconds": 58.581
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generation_failed_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 29,
       "fresh_candidate_count": 25,
-      "publishable_source_count": 6,
-      "selected_source_count": 6,
+      "publishable_source_count": 7,
+      "selected_source_count": 7,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.129,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.249,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5"
+          "elapsed_seconds": 44.041,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 0.378,
-      "failure_code": "generation_exception",
-      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5",
+      "model_elapsed_seconds": 44.041,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Person dies after shooting at Seminole Mobile Home Park in Fort Pierce",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Person dies after shooting at Seminole Mobile Home Park in Fort Pierce",
+            "lead": "A person died after being shot Wednesday night at a residence in the Seminole Mobile Home Park community, according to the St. Lucie County Sheriff's Office. Deputies with the Sheriff's Office Patrol Operations Bureau and personnel from the St. Lucie County Fire District responded to the 3300 block of Orange Avenue at approximately 9:11 p.m. following reports of a shooting. The initial caller reported that an individual had been shot while allegedly attempting to enter a residence.",
+            "lead_word_count": 81,
+            "headline_overlap_ratio": 0.7,
+            "new_context_token_count": 37,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Person dies after shooting at Seminole Mobile Home Park in Fort Pierce",
+            "lead": "A person died after being shot Wednesday night at a residence in the Seminole Mobile Home Park community, according to the St. Lucie County Sheriff's Office. Deputies with the Sheriff's Office Patrol Operations Bureau and personnel from the St. Lucie County Fire District responded to the 3300 block of Orange Avenue at approximately 9:11 p.m. following reports of a shooting. The initial caller reported that an individual had been shot while allegedly attempting to enter a residence.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "fort_pierce"
+            ],
+            "lead_jurisdictions": [
+              "st_lucie_county"
+            ],
+            "missing_jurisdictions": [
+              "fort_pierce"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Person dies after shooting at Seminole Mobile Home Park in Fort Pierce",
+            "generated_lead": "A person died after being shot Wednesday night at a residence in the Seminole Mobile Home Park community, according to the St. Lucie County Sheriff's Office.",
+            "source_title": "Person dies after shooting at St. Lucie County mobile home park, investigation ongoing - WPBF",
+            "source_lead": "A person died after being shot Wednesday night at a residence in the Seminole Mobile Home Park community, according to the St. Lucie County Sheriff's Office.",
+            "title_similarity": {
+              "score": 0.5619,
+              "overlap": 0.6667,
+              "jaccard": 0.4,
+              "sorted_sequence": 0.5429,
+              "ordered_sequence": 0.6286,
+              "shared_token_count": 6.0
+            },
+            "lead_token_overlap": 1.0,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 4,
@@ -902,12 +923,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie police officers placed on leave during campaign sign investigations - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-police-political-signs-leave-fdle/73424548",
-          "editorial_story_id": "story_003655",
-          "canonical_slug": "2026-08-13-three-port-st-lucie-police-officers-placed-on-leave-during-campaign-sign-investi",
-          "canonical_headline": "Three Port St. Lucie police officers placed on leave during campaign sign investigations",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "Man shot, killed inside Fort Pierce home after attacking homeowner; no charges filed - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/person-shot-killed-while-allegedly-trying-to-enter-fort-pierce-mobile-home-st-lucie-county-shooting-st-lucie-county-crime-deadly-shooting-fatal-shooting-orange-avenue-shooting-seminole-mobile-home-park-fort-pierce-crime-st-lucie-county-sheriff",
+          "editorial_story_id": "story_003628",
+          "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
+          "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -934,42 +955,34 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 9.426
+      "live_hero_headline": "Tradition Lakes K-8 in St. Lucie County opens Monday after week-long construction delay",
+      "generated_card_count": 2,
+      "elapsed_seconds": 53.262
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generation_failed_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 26,
       "fresh_candidate_count": 24,
       "publishable_source_count": 7,
       "selected_source_count": 7,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.164,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 0.118,
-          "result": "generation_exception",
-          "error_type": "BadRequestError",
-          "error_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5"
+          "elapsed_seconds": 16.701,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 0.282,
-      "failure_code": "generation_exception",
-      "failure_summary": "Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011Ce5",
+      "model_elapsed_seconds": 16.701,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1007,9 +1020,11 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 7.634
+      "live_hero_headline": "Vero Beach High School honors 16-year-old killed in fall at abandoned Sebastian condo",
+      "generated_card_count": 0,
+      "elapsed_seconds": 22.74
     }
   ]
 }
