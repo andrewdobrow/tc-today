@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-16T10:48:46Z",
+  "generated_at": "2026-08-16T15:47:59Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,50 +15,46 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 2,
+      "cache_hit": 1,
+      "category_eligibility_archive_recovery": 1,
+      "category_exception_archive_recovery": 1,
       "county_zero_candidate_archive_recovery": 1,
-      "generated_live": 3,
+      "generated_live": 2,
       "generation_failed_archive_recovery": 1,
       "no_publishable_sources": 1,
       "sports_zero_candidate_archive_recovery": 1
     },
     "failures": {
       "article_framing_integrity": 1,
-      "no_category_eligible_sources": 2,
+      "missing_or_null_hero": 1,
+      "no_category_eligible_sources": 1,
       "no_source_backed_county_hero_candidates": 1,
       "no_sports_hero_candidates": 1
     },
     "model_attempt_count": 5,
-    "model_elapsed_seconds": 183.33,
+    "model_elapsed_seconds": 146.974,
     "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 2,
-    "category_eligibility_rejection_count": 15,
-    "published_story_duplicate_suppression_count": 32,
-    "story_aware_update_context_count": 1
+    "category_eligibility_rejection_count": 17,
+    "published_story_duplicate_suppression_count": 34,
+    "story_aware_update_context_count": 2
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generated_live",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 6,
+      "status": "cache_hit",
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 8,
       "selected_source_count": 1,
-      "cache_hit": false,
+      "cache_hit": true,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 11.451,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 11.451,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -69,9 +65,35 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 6,
-      "category_eligibility_rejection_count": 5,
+      "category_eligibility_assessed_count": 8,
+      "category_eligibility_rejection_count": 7,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Saint Lucie Nuclear Power Plant Unit 1 manually shut down after 3 control rods drop into reactor core",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/saint-lucie-nuclear-power-plant-unit-1-manually-shut-down-after-3-control-rods-drop-into-reactor-core"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "82-year-old Melbourne man dies after single-vehicle crash on I-95 in St. Lucie County",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/82-year-old-melbourne-man-dies-after-single-vehicle-crash-on-i-95-in-st-lucie-county"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -142,11 +164,11 @@
           "source_url": "https://www.hometownnewstc.com/crime/martin/gold-bars-and-empty-bank-accounts/article_0aa7deef-96a5-50c3-8bd6-4322916c1d6c.html"
         }
       ],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
-          "source_headline": "'It's beautiful': Tradition Lakes K-8 in St. Lucie County ready to open after week-long delay - WPBF",
+          "source_headline": "'It's beautiful': Tradition Lakes K-8 in St. Lucie County ready to open after week-long delay - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-tradition-lakes-school-construction-delays/73440832",
           "editorial_story_id": "story_003961",
           "canonical_slug": "2026-08-16-tradition-lakes-k-8-in-st-lucie-county-opens-monday-after-week-long-construction",
@@ -170,28 +192,35 @@
           "source_url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms",
           "editorial_story_id": "story_003960",
           "canonical_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
-          "canonical_headline": "17 arrested in Indiantown cocaine trafficking ring, three remain wanted after months-long investigation",
+          "canonical_headline": "17 arrested in Indiantown cocaine trafficking ring led by Cecil Trimble, 4 kilos seized in Operation Beneath the Surface",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Budget reviews saved $11M since 2019, helping avoid cuts in Indian River County schools - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/budget-reviews-saved-11m-since-2019-helping-avoid-cuts-in-indian-river-county-schools",
+          "editorial_story_id": "story_003630",
+          "canonical_slug": "2026-08-13-indian-river-county-schools-avoid-layoffs-give-all-teachers-raises-after-budget",
+          "canonical_headline": "Indian River County schools avoid layoffs, give all teachers raises after budget reviews save $11 million",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "new_publication_stale_rejected_count": 1,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
+      "new_publication_stale_rejected_count": 2,
       "live_hero_headline": "Fort Pierce begins search for new city attorney after contract not renewed",
-      "generated_card_count": 0,
-      "elapsed_seconds": 25.755
+      "elapsed_seconds": 13.615
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 10,
-      "selected_source_count": 7,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 11,
+      "selected_source_count": 8,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -199,11 +228,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 51.434,
+          "elapsed_seconds": 46.628,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 51.435,
+      "model_elapsed_seconds": 46.628,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -214,7 +243,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 10,
+      "category_eligibility_assessed_count": 11,
       "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
         {
@@ -257,11 +286,11 @@
           "source_url": "https://www.hometownnewstc.com/crime/martin/gold-bars-and-empty-bank-accounts/article_0aa7deef-96a5-50c3-8bd6-4322916c1d6c.html"
         }
       ],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "Uber passenger accused of beating driver, stealing car in Fort Pierce - WPBF",
+          "source_headline": "Uber passenger accused of beating driver, stealing car in Fort Pierce - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-uber-passenger-accused-of-beating-driver-stealing-car-in-fort-pierce/73439865",
           "editorial_story_id": "story_003930",
           "canonical_slug": "2026-08-15-uber-passenger-accused-of-beating-driver-stealing-tesla-in-fort-pierce-carjackin",
@@ -295,14 +324,24 @@
           "source_url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms",
           "editorial_story_id": "story_003960",
           "canonical_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
-          "canonical_headline": "17 arrested in Indiantown cocaine trafficking ring, three remain wanted after months-long investigation",
+          "canonical_headline": "17 arrested in Indiantown cocaine trafficking ring led by Cecil Trimble, 4 kilos seized in Operation Beneath the Surface",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "crime",
+          "surface": "hero",
+          "headline": "17 arrested in major cocaine bust targeting Indiantown trafficking ring in Martin County",
+          "editorial_story_id": "story_003960",
+          "canonical_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
+          "canonical_headline": "17 arrested in Indiantown cocaine trafficking ring led by Cecil Trimble, 4 kilos seized in Operation Beneath the Surface",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "published_skip_placement_suppressed"
+        },
+        {
+          "category_key": "crime",
           "surface": "card",
-          "headline": "Stuart shooting range collects hundreds of donations for Humane Society caring for hoarded Border Collies",
+          "headline": "Continental Shooting Center in Stuart collects hundreds of donations for Humane Society border collie rescue",
           "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
           "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
           "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
@@ -315,16 +354,16 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Palm City woman jailed on $275,000 bond after 36 Border Collies rescued from deplorable conditions",
+      "live_hero_headline": "Palm City woman charged with 36 felony counts after Border Collies rescued from home on Southwest Alligator Street",
       "generated_card_count": 1,
-      "elapsed_seconds": 57.368
+      "elapsed_seconds": 53.354
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 20,
+      "fresh_candidate_count": 19,
       "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -345,6 +384,32 @@
       "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 7,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Saint Lucie Nuclear Power Plant Unit 1 manually shut down after 3 control rods drop into reactor core",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/saint-lucie-nuclear-power-plant-unit-1-manually-shut-down-after-3-control-rods-drop-into-reactor-core"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "82-year-old Melbourne man dies after single-vehicle crash on I-95 in St. Lucie County",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/82-year-old-melbourne-man-dies-after-single-vehicle-crash-on-i-95-in-st-lucie-county"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -415,41 +480,9 @@
           "competing_signals": [],
           "headline": "Serenity Garden Tea House owner vows to find new home after eviction from West Palm Beach location",
           "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/serenity-garden-tea-house-owner-vows-to-find-new-home-after-eviction-from-west-palm-beach-location"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_treasure_coast_business_nexus",
-          "positive_signals": [],
-          "competing_signals": [
-            "election_political_process:ballot"
-          ],
-          "headline": "Florida releases court-ordered rewrite of Amendment 3 ballot language",
-          "source_url": "https://www.wptv.com/money/real-estate-news/florida-releases-court-ordered-rewrite-of-amendment-3-ballot-language"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [
-            "business_transaction:purchases"
-          ],
-          "competing_signals": [
-            "crime_public_safety:arrested"
-          ],
-          "headline": "Operation 'Beneath the Surface': 17 arrested, 4 kilos of cocaine seized in Martin County drug bust",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-to-hold-press-conference-on-large-scale-narcotics-bust"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -490,12 +523,22 @@
           "canonical_headline": "Port St. Lucie police investigate two separate campaign sign incidents involving Mayor Martin's husband",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Resident shoots, kills intruder at mobile home park in St. Lucie County; stand your ground case under review",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/person-shot-killed-while-attempting-to-enter-home-at-seminole-mobile-home-park",
+          "editorial_story_id": "story_003628",
+          "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
+          "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "new_publication_stale_rejected_count": 5,
-      "elapsed_seconds": 5.319
+      "new_publication_stale_rejected_count": 6,
+      "elapsed_seconds": 3.819
     },
     {
       "category_key": "sports",
@@ -538,7 +581,7 @@
         {
           "category_key": "sports",
           "source_headline": "Fatal I-95 crash jams traffic in St. Lucie County - cw34.com",
-          "source_url": "https://cw34.com/news/local/fatal-i-95-crash-stops-traffic-in-st-lucie-county-florida-news-florida-highway-patrol-fhp-fatal-crash-traffic-alert-florida-news?teaserSource=trending",
+          "source_url": "https://cw34.com/news/local/fatal-i-95-crash-stops-traffic-in-st-lucie-county-florida-news-florida-highway-patrol-fhp-fatal-crash-traffic-alert-florida-news",
           "editorial_story_id": "story_001557",
           "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
           "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
@@ -569,14 +612,14 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 12.326
+      "elapsed_seconds": 5.472
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
+      "fresh_candidate_count": 20,
       "publishable_source_count": 5,
       "selected_source_count": 5,
       "cache_hit": false,
@@ -586,23 +629,22 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 61.891,
+          "elapsed_seconds": 14.723,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Rescued Martin County hoarding animals show healing progress at Palm City shelter"
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals from Martin County hoarding cases begin recovery in Palm City"
         },
         {
           "attempt": 2,
-          "timeout_seconds": 118.1,
-          "elapsed_seconds": 16.342,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals from Martin County hoarding cases begin recovery in Palm City shelter"
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 51.725,
+          "result": "missing_or_null_hero",
+          "error_summary": "Model response did not contain a usable hero after normalization"
         }
       ],
-      "model_elapsed_seconds": 78.233,
-      "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals from Martin County hoarding cases begin recovery in Palm City shelter",
+      "model_elapsed_seconds": 66.449,
+      "failure_code": "missing_or_null_hero",
+      "failure_summary": "Model response did not contain a usable hero after normalization",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -618,7 +660,7 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "things_to_do",
-          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
+          "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-fun-things-across-treasure-coast-palm-beach-weekend-1784287590-1785499876-1786105000-1786703925/73434335",
           "editorial_story_id": "story_000091",
           "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
@@ -656,7 +698,7 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 83.178
+      "elapsed_seconds": 70.233
     },
     {
       "category_key": "florida",
@@ -689,16 +731,16 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 12.223
+      "elapsed_seconds": 17.141
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 25,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 24,
       "publishable_source_count": 6,
-      "selected_source_count": 6,
+      "selected_source_count": 5,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -706,11 +748,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 42.211,
+          "elapsed_seconds": 26.152,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 42.211,
+      "model_elapsed_seconds": 26.152,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -738,7 +780,7 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Male pedestrian, 65, struck, killed by vehicle on U.S. 1 in St. Lucie County - WPBF",
+          "source_headline": "Male pedestrian, 65, struck, killed by vehicle on U.S. 1 in St. Lucie County - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-pedestrian-struck-killed-by-vehicle-on-us-1-in-st-lucie-county/73442267",
           "editorial_story_id": "story_004042",
           "canonical_slug": "2026-08-16-stuart-man-65-struck-and-killed-crossing-us-1-in-st-lucie-county",
@@ -752,14 +794,14 @@
           "source_url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms",
           "editorial_story_id": "story_003960",
           "canonical_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
-          "canonical_headline": "17 arrested in Indiantown cocaine trafficking ring, three remain wanted after months-long investigation",
+          "canonical_headline": "17 arrested in Indiantown cocaine trafficking ring led by Cecil Trimble, 4 kilos seized in Operation Beneath the Surface",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "martin",
           "surface": "hero",
-          "headline": "36 dogs rescued from Palm City home as lawmakers push for stricter animal cruelty laws",
+          "headline": "36 dogs rescued from Palm City home prompt lawmakers to push for stricter animal cruelty laws",
           "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
           "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
           "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
@@ -769,7 +811,7 @@
         {
           "category_key": "martin",
           "surface": "card",
-          "headline": "Stuart shooting range collects hundreds of donations for rescued border collies",
+          "headline": "Continental Shooting Center in Stuart collects hundreds of donations for rescued border collies",
           "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
           "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
           "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
@@ -777,56 +819,150 @@
           "reason": "published_skip_placement_suppressed"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "36 dogs rescued from Palm City 'house of horror' as lawmakers push for new animal cruelty laws - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/15/36-dogs-rescued-palm-city-house-horror-lawmakers-push-new-animal-cruelty-laws?outputType=amp",
+          "publisher": "www.wflx.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:story_004022",
+            "source:https://www.wflx.com/2026/08/15/36-dogs-rescued-palm-city-house-horror-lawmakers-push-new-animal-cruelty-laws?outputType=amp"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "17 arrested in Indiantown cocaine trafficking operation, 4 kilos seized",
+      "live_hero_headline": "Martin County Sheriff's Office deputy dies from cancer at 42",
       "generated_card_count": 0,
-      "elapsed_seconds": 55.269
+      "elapsed_seconds": 43.626
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 1,
-      "selected_source_count": 0,
+      "status": "category_exception_archive_recovery",
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 5,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed St. Lucie County category eligibility contract",
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 7.745,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 7.745,
+      "failure_code": "article_framing_integrity",
+      "failure_summary": "Article framing integrity failed after enrichment: headline_jurisdiction_missing_from_lead — Port St. Lucie police investigate two separate campaign sign incidents involving Mayor Martin's husband",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "82-year-old Melbourne man dies after single-vehicle crash on I-95 in St. Lucie County",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "82-year-old Melbourne man dies after single-vehicle crash on I-95 in St. Lucie County",
+            "lead": "The crash was reported at 3:14 p.m. on August 14 on northbound I-95 south of Gatlin Boulevard. The driver was traveling north in the inside lane when his 2002 Jeep Wrangler traveled off the roadway to the left and onto the paved left shoulder.",
+            "lead_word_count": 47,
+            "headline_overlap_ratio": 0.143,
+            "new_context_token_count": 24,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "82-year-old Melbourne man dies after single-vehicle crash on I-95 in St. Lucie County",
+            "lead": "The crash was reported at 3:14 p.m. on August 14 on northbound I-95 south of Gatlin Boulevard. The driver was traveling north in the inside lane when his 2002 Jeep Wrangler traveled off the roadway to the left and onto the paved left shoulder.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "st_lucie_county"
+            ],
+            "lead_jurisdictions": [],
+            "missing_jurisdictions": [
+              "st_lucie_county"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "82-year-old Melbourne man dies after single-vehicle crash on I-95 in St. Lucie County",
+            "generated_lead": "The crash was reported at 3:14 p.m. on August 14 on northbound I-95 south of Gatlin Boulevard. The driver was traveling north in the inside lane when his 2002 Jeep Wrangler traveled off the roadway to the left and onto the paved left shoulder.",
+            "source_title": "82-year-old Melbourne man dies after single-vehicle crash on I-95 in St. Lucie County",
+            "source_lead": "An 82-year-old Melbourne man died Friday afternoon after his vehicle left northbound Interstate 95 in St. Lucie County and struck a tree in the median.",
+            "title_similarity": {
+              "score": 1.0,
+              "overlap": 1.0,
+              "jaccard": 1.0,
+              "sorted_sequence": 1.0,
+              "ordered_sequence": 1.0,
+              "shared_token_count": 13.0
+            },
+            "lead_token_overlap": 0.19,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Man, 82, dies in single-car crash on I-95 in Port St. Lucie - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-man-82-dies-single-car-crash-95-port-st-lucie/73443819",
-          "editorial_story_id": "story_001557",
-          "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
-          "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Male pedestrian, 65, struck, killed by vehicle on U.S. 1 in St. Lucie County - WPBF",
+          "source_headline": "Male pedestrian, 65, struck, killed by vehicle on U.S. 1 in St. Lucie County - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-pedestrian-struck-killed-by-vehicle-on-us-1-in-st-lucie-county/73442267",
           "editorial_story_id": "story_004042",
           "canonical_slug": "2026-08-16-stuart-man-65-struck-and-killed-crossing-us-1-in-st-lucie-county",
@@ -836,7 +972,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Uber passenger accused of beating driver, stealing car in Fort Pierce - WPBF",
+          "source_headline": "Uber passenger accused of beating driver, stealing car in Fort Pierce - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-uber-passenger-accused-of-beating-driver-stealing-car-in-fort-pierce/73439865",
           "editorial_story_id": "story_003930",
           "canonical_slug": "2026-08-15-uber-passenger-accused-of-beating-driver-stealing-tesla-in-fort-pierce-carjackin",
@@ -876,7 +1012,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "St. Lucie County officials discuss 2026 master plan for Port of Fort Pierce - WPBF",
+          "source_headline": "St. Lucie County officials discuss 2026 master plan for Port of Fort Pierce - wpbf.com",
           "source_url": "https://www.wpbf.com/article/florida-port-fort-pierce-waterfront-city-county-government/73407734",
           "editorial_story_id": "story_003375",
           "canonical_slug": "2026-08-12-st-lucie-county-officials-outline-2026-master-plan-for-port-of-fort-pierce",
@@ -888,16 +1024,18 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 14.961
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 12.931
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "county_zero_candidate_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 3,
-      "selected_source_count": 3,
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 7,
+      "selected_source_count": 5,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
@@ -913,7 +1051,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 3,
@@ -930,21 +1068,21 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "High school football game of the week preview: Cardinal Newman at Vero Beach - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-high-school-football-cardinal-newman-vero-beach/73440696",
-          "editorial_story_id": "story_003951",
-          "canonical_slug": "2026-08-16-cardinal-newman-to-face-vero-beach-in-high-school-football-preseason-kickoff-cla",
-          "canonical_headline": "Cardinal Newman to face Vero Beach in high school football Preseason Kickoff Classic",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "Vero Beach High School honors teen killed in fall at abandoned condo during season opener - WPEC",
+          "source_url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPS2Zpck9CMThIck9oSDZ0YkVvUDdrSWhZb3dvcWhvZWp4TUJQaGdOOWlpM0ZOSU41VU9zWDVTcDZyZlB4XzRibmpraTNiVlRRT1Q4azJ4d05OZWhQMEhrWExnZlRBeVpveG9MQzNfRUpTeVBlRm1sakw3RmpJSHlYeHo4TTRuRk9jNC1mTWt6ZFlGNTlGY1lCQ25XWHZqdkptOHRfcU5OaUtNOU1qbV9HaFlWZUJveFJxN2JuRGNPa3pTSE1vczU0Z0FpQm9OdVVhMEd0eTNTVnd6dzBLbkdxU09kQnREdXhs",
+          "editorial_story_id": "story_003927",
+          "canonical_slug": "2026-08-16-vero-beach-high-school-honors-16-year-old-killed-in-fall-at-abandoned-sebastian",
+          "canonical_headline": "Vero Beach High School honors 16-year-old killed in fall at abandoned Sebastian condo",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "indian_river",
-          "source_headline": "New nonprofit in Indiantown aims to fund youth sports programs and facility upgrades",
-          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/new-nonprofit-in-indiantown-aims-to-fund-youth-sports-programs-and-facility-upgrades",
-          "editorial_story_id": "story_003849",
-          "canonical_slug": "2026-08-14-new-nonprofit-in-indiantown-launches-to-fund-youth-sports-programs-and-upgrade-a",
-          "canonical_headline": "New nonprofit in Indiantown launches to fund youth sports programs and upgrade aging facilities",
+          "source_headline": "High school football game of the week preview: Cardinal Newman at Vero Beach - wpbf.com",
+          "source_url": "https://www.wpbf.com/article/florida-high-school-football-cardinal-newman-vero-beach/73440696",
+          "editorial_story_id": "story_003951",
+          "canonical_slug": "2026-08-16-cardinal-newman-to-face-vero-beach-in-high-school-football-preseason-kickoff-cla",
+          "canonical_headline": "Cardinal Newman to face Vero Beach in high school football Preseason Kickoff Classic",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -952,7 +1090,7 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 7.483
+      "elapsed_seconds": 5.385
     }
   ]
 }
