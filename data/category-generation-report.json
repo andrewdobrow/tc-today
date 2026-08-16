@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-16T01:47:33Z",
+  "generated_at": "2026-08-16T03:54:16Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,8 +15,10 @@
   "summary": {
     "category_count": 9,
     "statuses": {
+      "cache_hit": 1,
       "category_eligibility_archive_recovery": 2,
-      "generated_live": 4,
+      "county_zero_candidate_archive_recovery": 1,
+      "generated_live": 2,
       "generation_failed_archive_recovery": 1,
       "quality_gate_archive_recovery": 1,
       "sports_zero_candidate_archive_recovery": 1
@@ -24,17 +26,18 @@
     "failures": {
       "article_framing_integrity": 1,
       "no_category_eligible_sources": 2,
+      "no_source_backed_county_hero_candidates": 1,
       "no_sports_hero_candidates": 1,
       "publication_quality_rejected": 1
     },
-    "model_attempt_count": 8,
-    "model_elapsed_seconds": 150.413,
-    "archive_recovery_requested_count": 5,
+    "model_attempt_count": 6,
+    "model_elapsed_seconds": 135.622,
+    "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 3,
-    "category_eligibility_rejection_count": 15,
-    "published_story_duplicate_suppression_count": 38,
+    "article_framing_rejection_count": 4,
+    "category_eligibility_rejection_count": 14,
+    "published_story_duplicate_suppression_count": 36,
     "story_aware_update_context_count": 2
   },
   "categories": [
@@ -169,7 +172,7 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - WPEC",
+          "source_headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - cbs12.com",
           "source_url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms",
           "editorial_story_id": "story_003960",
           "canonical_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
@@ -181,28 +184,21 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 9.688
+      "elapsed_seconds": 11.624
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generated_live",
+      "status": "cache_hit",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 21,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 8,
       "selected_source_count": 6,
-      "cache_hit": false,
+      "cache_hit": true,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 37.853,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 37.853,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -243,18 +239,8 @@
           "source_url": "https://www.hometownnewstc.com/crime/st_lucie/port-st-lucie-man-jailed-for-alleged-child-porn-on-his-computer/article_ca4e6a76-c67d-57ee-9c4d-912303dd1ce4.html"
         }
       ],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "crime",
-          "source_headline": "Uber passenger accused of beating driver, stealing car in Fort Pierce - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-uber-passenger-accused-of-beating-driver-stealing-car-in-fort-pierce/73439865",
-          "editorial_story_id": "story_003930",
-          "canonical_slug": "2026-08-15-uber-passenger-accused-of-beating-driver-stealing-tesla-in-fort-pierce-carjackin",
-          "canonical_headline": "Uber passenger accused of beating driver, stealing Tesla in Fort Pierce carjacking",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "crime",
           "source_headline": "Vero Beach High School honors teen killed in fall at abandoned condo during season opener - cw34.com",
@@ -277,7 +263,7 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - WPEC",
+          "source_headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - cbs12.com",
           "source_url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms",
           "editorial_story_id": "story_003960",
           "canonical_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
@@ -304,36 +290,13 @@
           "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "surface": "card",
-          "headline": "17 arrested in Martin County drug trafficking operation centered in Indiantown",
-          "editorial_story_id": "story_003912",
-          "canonical_slug": "2026-08-16-17-arrested-in-major-martin-county-cocaine-bust-4-kilos-seized-in-indiantown-ope",
-          "canonical_headline": "17 arrested in major Martin County cocaine bust, 4 kilos seized in Indiantown operation",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
-        },
-        {
-          "category_key": "crime",
-          "surface": "card",
-          "headline": "Continental Shooting Center in Stuart collects hundreds of donations for rescued Border Collies",
-          "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
-          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
-          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
       "live_hero_headline": "Palm City woman held on $275,000 bond after 36 Border Collies rescued from Southwest Alligator Street home",
-      "generated_card_count": 0,
-      "elapsed_seconds": 43.702
+      "elapsed_seconds": 3.252
     },
     {
       "category_key": "business",
@@ -341,7 +304,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 20,
-      "publishable_source_count": 7,
+      "publishable_source_count": 6,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -358,8 +321,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 7,
-      "category_eligibility_rejection_count": 7,
+      "category_eligibility_assessed_count": 6,
+      "category_eligibility_rejection_count": 6,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -446,21 +409,6 @@
           ],
           "headline": "Florida releases court-ordered rewrite of Amendment 3 ballot language",
           "source_url": "https://www.wptv.com/money/real-estate-news/florida-releases-court-ordered-rewrite-of-amendment-3-ballot-language"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_treasure_coast_business_nexus",
-          "positive_signals": [
-            "business_opening_closure_expansion:closing"
-          ],
-          "competing_signals": [],
-          "headline": "'They've never had a voice': Big Dog Ranch Rescue welcomes final 155 beagles from Wisconsin testing lab",
-          "source_url": "https://www.wptv.com/news/region-c-palm-beach-county/loxahatchee-acreage/theyve-never-had-a-voice-big-dog-ranch-rescue-in-loxahatchee-welcomes-final-155-beagles-from-wisconsin-testing-lab"
         }
       ],
       "published_story_duplicate_suppression_count": 4,
@@ -509,7 +457,7 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 4,
-      "elapsed_seconds": 5.131
+      "elapsed_seconds": 3.552
     },
     {
       "category_key": "sports",
@@ -552,10 +500,10 @@
         {
           "category_key": "sports",
           "source_headline": "Fatal I-95 crash jams traffic in St. Lucie County - cw34.com",
-          "source_url": "https://cw34.com/news/local/fatal-i-95-crash-stops-traffic-in-st-lucie-county-florida-news-florida-highway-patrol-fhp-fatal-crash-traffic-alert-florida-news",
-          "editorial_story_id": "story_003321",
-          "canonical_slug": "2026-08-16-82-year-old-melbourne-man-dies-in-crash-on-i-95-in-port-st-lucie",
-          "canonical_headline": "82-year-old Melbourne man dies in crash on I-95 in Port St. Lucie",
+          "source_url": "https://cw34.com/news/local/fatal-i-95-crash-stops-traffic-in-st-lucie-county-florida-news-florida-highway-patrol-fhp-fatal-crash-traffic-alert-florida-news?teaserSource=trending",
+          "editorial_story_id": "story_001557",
+          "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+          "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -583,16 +531,16 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 4.768
+      "elapsed_seconds": 5.268
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 4,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 5,
+      "selected_source_count": 5,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 2,
@@ -600,23 +548,23 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.174,
+          "elapsed_seconds": 13.579,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 rescued animals from Martin County hoarding cases begin healing in Palm City shelter"
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 Animals from Martin County Hoarding Cases Show Signs of Recovery"
         },
         {
           "attempt": 2,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 16.575,
+          "elapsed_seconds": 14.153,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals rescued from Martin County hoarding cases begin recovery in Palm City"
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals rescued from Martin County hoarding cases show signs of recovery in Palm City"
         }
       ],
-      "model_elapsed_seconds": 32.75,
+      "model_elapsed_seconds": 27.732,
       "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals rescued from Martin County hoarding cases begin recovery in Palm City",
+      "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals rescued from Martin County hoarding cases show signs of recovery in Palm City",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -625,7 +573,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 1,
@@ -670,7 +618,7 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 37.543
+      "elapsed_seconds": 31.279
     },
     {
       "category_key": "florida",
@@ -687,11 +635,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 10.939,
+          "elapsed_seconds": 11.6,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 10.939,
+      "model_elapsed_seconds": 11.6,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -712,7 +660,7 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 15.848
+      "elapsed_seconds": 14.718
     },
     {
       "category_key": "martin",
@@ -720,8 +668,8 @@
       "status": "generated_live",
       "fetched_candidate_count": 28,
       "fresh_candidate_count": 25,
-      "publishable_source_count": 7,
-      "selected_source_count": 7,
+      "publishable_source_count": 9,
+      "selected_source_count": 8,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -729,29 +677,128 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 41.139,
+          "elapsed_seconds": 54.903,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 41.139,
+      "model_elapsed_seconds": 54.903,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Animals rescued from Martin County hoarding cases show signs of healing",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Animals rescued from Martin County hoarding cases show signs of healing",
+            "lead": "The Humane Society of the Treasure Coast in Palm City is caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino. Deputies found horrific conditions at Giustino's home on Southwest Meadowlark Circle in July, with no working air conditioning, little ventilation and up to a foot of animal feces covering the floor. The second case involved 36 Border Collies rescued from a Palm City home where Paige O'Donnell was arrested and faces 72 criminal charges.",
+            "lead_word_count": 102,
+            "headline_overlap_ratio": 0.333,
+            "new_context_token_count": 59,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "update",
+            "update_diagnostics": {
+              "required": true,
+              "passed": true,
+              "story_form": "update",
+              "lead_word_count": 102,
+              "baseline_anchor": "",
+              "baseline_present": true,
+              "baseline_anchor_present": true,
+              "baseline_details_present": true,
+              "baseline_context_hits": [
+                "animals",
+                "found",
+                "hoarding",
+                "home",
+                "stuart"
+              ],
+              "baseline_context_required": 2,
+              "canonical_context_available": true,
+              "canonical_context_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+              "novelty_anchor": "source_distinctive_detail",
+              "novelty_present": true,
+              "novelty_token_hits": [
+                "rescued"
+              ],
+              "missing": [],
+              "source_title": "Animals rescued from Martin County hoarding cases start to show signs of healing - WPTV",
+              "headline": "Animals rescued from Martin County hoarding cases show signs of healing"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Animals rescued from Martin County hoarding cases show signs of healing",
+            "lead": "The Humane Society of the Treasure Coast in Palm City is caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino. Deputies found horrific conditions at Giustino's home on Southwest Meadowlark Circle in July, with no working air conditioning, little ventilation and up to a foot of animal feces covering the floor. The second case involved 36 Border Collies rescued from a Palm City home where Paige O'Donnell was arrested and faces 72 criminal charges.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "martin_county"
+            ],
+            "lead_jurisdictions": [
+              "palm_city",
+              "stuart"
+            ],
+            "missing_jurisdictions": [
+              "martin_county"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Animals rescued from Martin County hoarding cases show signs of healing",
+            "generated_lead": "The Humane Society of the Treasure Coast in Palm City is caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino.",
+            "source_title": "Animals rescued from Martin County hoarding cases start to show signs of healing - WPTV",
+            "source_lead": "After two of the largest animal hoarding cases in recent Martin County history, the Humane Society of the Treasure Coast says many of the rescued animals are already beginning to heal.The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City.One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino. WPTV previously reported that deputies found",
+            "title_similarity": {
+              "score": 0.9294,
+              "overlap": 1.0,
+              "jaccard": 0.8182,
+              "sorted_sequence": 0.9197,
+              "ordered_sequence": 0.9197,
+              "shared_token_count": 9.0
+            },
+            "lead_token_overlap": 1.0,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
-          "source_headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - WPEC",
+          "source_headline": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - cbs12.com",
           "source_url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms",
           "editorial_story_id": "story_003960",
           "canonical_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
@@ -761,7 +808,7 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "WATCH: Martin County Sheriff's Office holds press conference on large-scale narcotics bust - wflx.com",
+          "source_headline": "WATCH: Martin County Sheriff's Office holds press conference on large-scale narcotics bust - WFLX",
           "source_url": "https://www.wflx.com/2026/08/14/watch-martin-county-sheriffs-office-holds-press-conference-large-scale-narcotics-bust?outputType=amp",
           "editorial_story_id": "story_003912",
           "canonical_slug": "2026-08-16-17-arrested-in-major-martin-county-cocaine-bust-4-kilos-seized-in-indiantown-ope",
@@ -782,7 +829,7 @@
         {
           "category_key": "martin",
           "surface": "hero",
-          "headline": "36 dogs rescued from Palm City home as lawmakers push for stricter animal cruelty laws",
+          "headline": "36 dogs rescued from Palm City home as Martin County sheriff, state lawmakers push for stricter animal cruelty laws",
           "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
           "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
           "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
@@ -802,7 +849,7 @@
         {
           "category_key": "martin",
           "surface": "card",
-          "headline": "Martin County drug bust leads to 17 arrests, 4 kilos of cocaine seized in Indiantown",
+          "headline": "Martin County drug bust in Indiantown leads to 17 arrests, seizure of cocaine and guns",
           "editorial_story_id": "story_003912",
           "canonical_slug": "2026-08-16-17-arrested-in-major-martin-county-cocaine-bust-4-kilos-seized-in-indiantown-ope",
           "canonical_headline": "17 arrested in major Martin County cocaine bust, 4 kilos seized in Indiantown operation",
@@ -840,9 +887,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Rescued animals from two Martin County hoarding cases show signs of healing",
+      "live_hero_headline": "Stuart voters may decide fate of Haney Creek commercial parcel in November referendum",
       "generated_card_count": 0,
-      "elapsed_seconds": 46.026
+      "elapsed_seconds": 61.087
     },
     {
       "category_key": "st_lucie",
@@ -854,16 +901,24 @@
       "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.105,
+          "elapsed_seconds": 20.267,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Stuart man, 65, killed crossing U.S. 1 near Mediterranean Boulevard in St. Lucie County"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 21.12,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 12.105,
+      "model_elapsed_seconds": 41.387,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -877,16 +932,16 @@
       "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
           "source_headline": "Man, 82, dies in single-car crash on I-95 in Port St. Lucie - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-man-82-dies-single-car-crash-95-port-st-lucie/73443819",
-          "editorial_story_id": "story_003321",
-          "canonical_slug": "2026-08-16-82-year-old-melbourne-man-dies-in-crash-on-i-95-in-port-st-lucie",
-          "canonical_headline": "82-year-old Melbourne man dies in crash on I-95 in Port St. Lucie",
-          "basis": "exact_source_and_persistent_story_skip",
+          "editorial_story_id": "story_001557",
+          "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+          "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -912,20 +967,20 @@
         {
           "category_key": "st_lucie",
           "source_headline": "Fatal I-95 crash jams traffic in St. Lucie County - cw34.com",
-          "source_url": "https://cw34.com/news/local/fatal-i-95-crash-stops-traffic-in-st-lucie-county-florida-news-florida-highway-patrol-fhp-fatal-crash-traffic-alert-florida-news",
-          "editorial_story_id": "story_003321",
-          "canonical_slug": "2026-08-16-82-year-old-melbourne-man-dies-in-crash-on-i-95-in-port-st-lucie",
-          "canonical_headline": "82-year-old Melbourne man dies in crash on I-95 in Port St. Lucie",
+          "source_url": "https://cw34.com/news/local/fatal-i-95-crash-stops-traffic-in-st-lucie-county-florida-news-florida-highway-patrol-fhp-fatal-crash-traffic-alert-florida-news?teaserSource=trending",
+          "editorial_story_id": "story_001557",
+          "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+          "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Fatal I-95 crash jams traffic in St. Lucie County - WPEC",
+          "source_headline": "Fatal I-95 crash jams traffic in St. Lucie County - cbs12.com",
           "source_url": "https://cbs12.com/news/florida/fatal-i-95-crash-stops-traffic-in-st-lucie-county-florida-news-florida-highway-patrol-fhp-fatal-crash-traffic-alert-florida-news",
-          "editorial_story_id": "story_003321",
-          "canonical_slug": "2026-08-16-82-year-old-melbourne-man-dies-in-crash-on-i-95-in-port-st-lucie",
-          "canonical_headline": "82-year-old Melbourne man dies in crash on I-95 in Port St. Lucie",
+          "editorial_story_id": "story_001557",
+          "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+          "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -941,7 +996,7 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Man shot, killed inside Fort Pierce home after attacking homeowner; no charges filed - WPEC",
+          "source_headline": "Man shot, killed inside Fort Pierce home after attacking homeowner; no charges filed - cbs12.com",
           "source_url": "https://cbs12.com/news/local/person-shot-killed-while-allegedly-trying-to-enter-fort-pierce-mobile-home-st-lucie-county-shooting-st-lucie-county-crime-deadly-shooting-fatal-shooting-orange-avenue-shooting-seminole-mobile-home-park-fort-pierce-crime-st-lucie-county-sheriff",
           "editorial_story_id": "story_003628",
           "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
@@ -958,6 +1013,16 @@
           "canonical_headline": "St. Lucie County officials outline 2026 master plan for Port of Fort Pierce",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "surface": "card",
+          "headline": "Person dies after shooting at St. Lucie County mobile home park",
+          "editorial_story_id": "story_003628",
+          "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
+          "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "published_skip_placement_suppressed"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -965,40 +1030,25 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Man shot and killed at Fort Pierce mobile home park, no charges filed",
-      "generated_card_count": 0,
-      "elapsed_seconds": 19.032
+      "live_hero_headline": "Stuart man, 65, struck and killed crossing U.S. 1 in St. Lucie County",
+      "generated_card_count": 1,
+      "elapsed_seconds": 45.286
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generated_live",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 6,
-      "selected_source_count": 6,
+      "status": "county_zero_candidate_archive_recovery",
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 5,
+      "selected_source_count": 5,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 2,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 8.305,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Cardinal Newman faces Vero Beach in high school football preseason kickoff game"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 7.322,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 15.627,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_source_backed_county_hero_candidates",
+      "failure_summary": "Selected Indian River County source pool contained no source-backed county hero candidate",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1007,7 +1057,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 4,
@@ -1024,12 +1074,12 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Vero Beach High School honors teen killed in fall at abandoned condo during season opener - WPEC",
-          "source_url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxOWWxISjFMZ2lDcDV2emh1X0JQcER3eTk3bUVuY2VtZmpZRnA3WGdZdlZqcERaTTRrWU5FTXFHOHc3dElrNU1pZ2RCQUlpVDNtUjNQQW9OOXEzb3lmTjZzWVpmZ2FDeElva25nMkpqUldDMnYxQkhJc3MzWVZwTnB6VEtPZDRrQVdCM3YwRWhCdkd4bkgxZ1hKRWVIb2g4R2xJUmwxTDI0VHdZLWFCZGZqSFd4SzhjcnJjZlplVmpMdXFkWmV2V29CVnZRUWdIX0RqcVpPZHZXYlZkTjY0cGhvMkw0WWFSeHVBWG9pNm9PbnNpRGFJaDBYdEpObw",
-          "editorial_story_id": "story_003927",
-          "canonical_slug": "2026-08-16-vero-beach-high-school-honors-16-year-old-killed-in-fall-at-abandoned-sebastian",
-          "canonical_headline": "Vero Beach High School honors 16-year-old killed in fall at abandoned Sebastian condo",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "High school football game of the week preview: Cardinal Newman at Vero Beach - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-high-school-football-cardinal-newman-vero-beach/73440696",
+          "editorial_story_id": "story_003951",
+          "canonical_slug": "2026-08-16-cardinal-newman-to-face-vero-beach-in-high-school-football-preseason-kickoff-cla",
+          "canonical_headline": "Cardinal Newman to face Vero Beach in high school football Preseason Kickoff Classic",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1056,11 +1106,7 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Cardinal Newman to face Vero Beach in high school football Preseason Kickoff Classic",
-      "generated_card_count": 0,
-      "elapsed_seconds": 28.304
+      "elapsed_seconds": 3.332
     }
   ]
 }
