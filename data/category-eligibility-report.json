@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-16T18:45:42Z",
+  "generated_at": "2026-08-16T20:03:48Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -9,8 +9,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, and Crime & Safety enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 47,
-    "rejected_count": 15,
+    "assessed_count": 49,
+    "rejected_count": 14,
     "enforced_categories": [
       "business",
       "crime",
@@ -46,10 +46,10 @@
           "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
           "competing_signals": [
-            "crime_incident:police say"
+            "crime_incident:homicide"
           ],
-          "headline": "Boynton Beach officer saves woman's life with CPR during Nashville vacation, nominated for lifesaving ribbon",
-          "source_url": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/boynton-beach-officer-saves-womans-life-with-cpr-during-nashville-vacation-nominated-for-lifesaving-ribbon"
+          "headline": "Woman found shot in Vero Beach roadway dies; IRCSO investigating as homicide, searching for person of interest",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/woman-found-shot-in-vero-beach-roadway-dies-ircso-investigating-as-homicide-searching-for-person-of-interest"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -58,11 +58,13 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "missing_central_government_action",
+          "reason": "competing_story_form_without_government_action",
           "positive_signals": [],
-          "competing_signals": [],
-          "headline": "St. Lucie Nuclear Power Plant Unit 1 manually shut down after 3 control rods drop into reactor core",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/saint-lucie-nuclear-power-plant-unit-1-manually-shut-down-after-3-control-rods-drop-into-reactor-core"
+          "competing_signals": [
+            "crime_incident:police say"
+          ],
+          "headline": "Boynton Beach officer saves woman's life with CPR during Nashville vacation, nominated for lifesaving ribbon",
+          "source_url": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/boynton-beach-officer-saves-womans-life-with-cpr-during-nashville-vacation-nominated-for-lifesaving-ribbon"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -125,7 +127,7 @@
       "category_label": "Crime & Safety",
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
-      "assessed_count": 9,
+      "assessed_count": 10,
       "rejected_count": 2,
       "rejections": [
         {
@@ -161,9 +163,24 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 7,
-      "rejected_count": 7,
+      "assessed_count": 6,
+      "rejected_count": 6,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:homicide"
+          ],
+          "headline": "Woman found shot in Vero Beach roadway dies; IRCSO investigating as homicide, searching for person of interest",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/woman-found-shot-in-vero-beach-roadway-dies-ircso-investigating-as-homicide-searching-for-person-of-interest"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -176,19 +193,6 @@
           "competing_signals": [],
           "headline": "Boynton Beach officer saves woman's life with CPR during Nashville vacation, nominated for lifesaving ribbon",
           "source_url": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/boynton-beach-officer-saves-womans-life-with-cpr-during-nashville-vacation-nominated-for-lifesaving-ribbon"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "St. Lucie Nuclear Power Plant Unit 1 manually shut down after 3 control rods drop into reactor core",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/saint-lucie-nuclear-power-plant-unit-1-manually-shut-down-after-3-control-rods-drop-into-reactor-core"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -245,21 +249,6 @@
           "competing_signals": [],
           "headline": "Fresh coat of paint sparks lasting bond between Riviera Beach resident and police officers",
           "source_url": "https://www.wptv.com/news/region-c-palm-beach-county/riviera-beach/fresh-coat-of-paint-sparks-lasting-bond-between-riviera-beach-resident-and-police-officers"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_treasure_coast_business_nexus",
-          "positive_signals": [
-            "business_opening_closure_expansion:closure"
-          ],
-          "competing_signals": [],
-          "headline": "Serenity Garden Tea House owner vows to find new home after eviction from West Palm Beach location",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/serenity-garden-tea-house-owner-vows-to-find-new-home-after-eviction-from-west-palm-beach-location"
         }
       ]
     },
@@ -268,7 +257,7 @@
       "category_label": "Sports",
       "mode": "observe_only",
       "policy": "existing_athletic_guard_retained",
-      "assessed_count": 2,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -304,7 +293,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 2,
+      "assessed_count": 1,
       "rejected_count": 0,
       "rejections": []
     },
@@ -313,7 +302,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 7,
+      "assessed_count": 9,
       "rejected_count": 0,
       "rejections": []
     }
