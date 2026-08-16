@@ -1,6 +1,6 @@
 import { withSupabase } from 'npm:@supabase/server@^1'
 import Stripe from 'npm:stripe@^22'
-import { idFromExpandable, maskedEmail, resolveMembershipUser, safeReturnPath, STRIPE_MODE, stripeObjectMatchesMode, stripeSecretMatchesMode, syncSubscription } from '../_shared/membership.ts'
+import { firstNameFromDisplayName, idFromExpandable, maskedEmail, resolveMembershipUser, safeReturnPath, STRIPE_MODE, stripeObjectMatchesMode, stripeSecretMatchesMode, syncSubscription } from '../_shared/membership.ts'
 
 const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY') ?? ''
 const siteUrl = (Deno.env.get('SITE_URL') ?? 'https://treasurecoast.today').replace(/\/$/, '')
@@ -31,6 +31,12 @@ export default {
       const email = session.customer_details?.email || session.customer_email
       const customerId = idFromExpandable(session.customer as any)
       const { userId, email: normalizedEmail } = await resolveMembershipUser(ctx.supabaseAdmin, email, customerId)
+      const firstName = firstNameFromDisplayName(session.customer_details?.individual_name || session.customer_details?.name)
+      if (firstName) {
+        const { error: nameError } = await ctx.supabaseAdmin.from('profiles')
+          .update({ first_name: firstName, updated_at: new Date().toISOString() }).eq('id', userId)
+        if (nameError) throw nameError
+      }
 
       const subscriptionId = typeof session.subscription === 'string' ? session.subscription : session.subscription?.id
       if (subscriptionId) {

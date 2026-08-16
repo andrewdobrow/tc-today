@@ -45,6 +45,7 @@ export default {
       const session = await stripe.checkout.sessions.create({
         mode: 'subscription',
         payment_method_collection: 'always',
+        name_collection: { individual: { enabled: true, optional: false } },
         line_items: [{ price: priceId, quantity: 1 }],
         success_url: `${siteUrl}/subscribe.html?checkout=success&session_id={CHECKOUT_SESSION_ID}&next=${next}`,
         cancel_url: `${siteUrl}/subscribe.html?checkout=cancelled&next=${next}`,

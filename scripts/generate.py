@@ -159,6 +159,7 @@ def _header_primary_cta_html():
             '<span class="membership-subscribe-price">Limited time &middot; 7 days free &middot; then $4.99/mo</span>'
             '</a>'
             f'<a href="{signin_href}" class="membership-header-signin">Sign in</a>'
+            '<a href="/subscribe.html" class="membership-header-welcome" data-membership-welcome aria-live="polite" aria-label="Open membership account">Welcome, subscriber</a>'
         )
     return '<a href="/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>'
 
@@ -191,30 +192,53 @@ def _homepage_support_card_html():
         </div>
       </a>'''
 
-def _apply_membership_site_chrome(root: Path) -> int:
-    """Normalize legacy/static page header actions to the current launch state.
+MEMBERSHIP_SITE_ASSET_VERSION = "1.13.6.2"
+MEMBERSHIP_MEMBER_HINT_KEY = "tct_member_entitled_hint"
+MEMBERSHIP_SITE_PREPAINT = (
+    '<script data-tct-member-prepaint>\n'
+    "(function(){try{if(localStorage.getItem('tct_member_entitled_hint')==='1')"
+    "document.documentElement.classList.add('tct-member-preverified')}catch(_e){}})();\n"
+    '</script>'
+)
 
-    Some retained policy/event pages are not regenerated from templates every run.
-    This bounded pass prevents a mixed Advertise/Subscribe header after launch while
-    preserving the dark-launch behavior before the switch is enabled.
+def _apply_membership_site_chrome(root: Path) -> int:
+    """Normalize sitewide membership chrome and load subscriber state everywhere.
+
+    Retained pages are not all regenerated from templates every run. When membership
+    is live, every public page with the shared header must be able to resolve an
+    authenticated subscriber, replace Subscribe/Sign in with the welcome state, and
+    suppress membership promo cards. Protected article text remains server-gated.
     """
     replacement = _header_primary_cta_html()
     pattern = re.compile(
         r'(<div\s+class="header-actions">\s*)(.*?)(\s*</div>)',
         re.I | re.S,
     )
+    js_pattern = re.compile(r"src=['\"]/?membership\.js(?:\?[^'\"]*)?['\"]", re.I)
     changed = 0
     for page in sorted(root.rglob("*.html")):
-        if page.name in {"subscribe.html", "membership-test.html"}:
+        if page.name == "membership-test.html":
             continue
         try:
             text = page.read_text(encoding="utf-8")
         except Exception:
             continue
-        if 'class="header-actions"' not in text:
-            continue
-        updated, count = pattern.subn(lambda m: m.group(1) + replacement + m.group(3), text, count=1)
-        if count and updated != text:
+        updated = text
+        if 'class="header-actions"' in updated:
+            updated = pattern.sub(lambda m: m.group(1) + replacement + m.group(3), updated, count=1)
+
+        if MEMBERSHIP_UI_ENABLED:
+            if "data-tct-member-prepaint" not in updated and "</head>" in updated:
+                updated = updated.replace("</head>", f"  {MEMBERSHIP_SITE_PREPAINT}\n</head>", 1)
+            if 'src="/membership-config.js"' not in updated and "</body>" in updated:
+                updated = updated.replace("</body>", '  <script src="/membership-config.js"></script>\n</body>', 1)
+            versioned_js = f'src="/membership.js?v={MEMBERSHIP_SITE_ASSET_VERSION}"'
+            if js_pattern.search(updated):
+                updated = js_pattern.sub(versioned_js, updated, count=1)
+            elif "</body>" in updated:
+                updated = updated.replace("</body>", f'  <script type="module" {versioned_js}></script>\n</body>', 1)
+
+        if updated != text:
             page.write_text(updated, encoding="utf-8")
             changed += 1
     return changed

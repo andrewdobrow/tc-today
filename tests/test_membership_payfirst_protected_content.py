@@ -382,8 +382,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.5.9b"' in page
-    assert 'src="/membership.js?v=1.13.5.9b"' in page
+    assert 'href="/membership.css?v=1.13.6.2"' in page
+    assert 'src="/membership.js?v=1.13.6.2"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -412,8 +412,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.5.9b') == 1
-    assert first.count('/membership.js?v=1.13.5.9b') == 1
+    assert first.count('/membership.css?v=1.13.6.2') == 1
+    assert first.count('/membership.js?v=1.13.6.2') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():

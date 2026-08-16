@@ -35,6 +35,8 @@ def test_launch_header_uses_coral_pricing_context_and_quiet_signin(monkeypatch):
     assert "Limited time &middot; 7 days free &middot; then $4.99/mo" in header
     assert "membership-header-signin" in header
     assert "signin=1" in header
+    assert 'data-membership-welcome' in header
+    assert "Welcome, subscriber" in header
     assert "#f26445" in css
     assert ".membership-subscribe-price { display: none; }" in css
     assert ".membership-header-signin { display: none !important; }" in css
@@ -56,6 +58,7 @@ def test_sitewide_chrome_normalizer_preserves_dark_mode_and_launches_retained_pa
     assert "membership-subscribe-btn" in launched
     assert "Limited time &middot; 7 days free &middot; then $4.99/mo" in launched
     assert "Sign in" in launched
+    assert 'data-membership-welcome' in launched
 
 
 def test_subscribe_page_is_real_landing_page_not_account_gate():
@@ -190,3 +193,44 @@ def test_membership_sitemap_is_python311_safe_and_launch_aware(monkeypatch):
     sitemap = g.update_sitemap([])
     assert f"{g.SITE_URL}/subscribe.html" in sitemap
     assert "<changefreq>monthly</changefreq>" in sitemap
+
+
+def test_sitewide_subscriber_chrome_loads_membership_state_and_prepaints(tmp_path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(g, "MEMBERSHIP_UI_ENABLED", True)
+    page = tmp_path / "index.html"
+    page.write_text('<!doctype html><html><head></head><body><header><div class="header-actions"><a href="/advertise.html" class="support-btn">Advertise</a></div></header></body></html>')
+    g._apply_membership_site_chrome(tmp_path)
+    rendered = page.read_text()
+    assert "data-tct-member-prepaint" in rendered
+    assert "tct_member_entitled_hint" in rendered
+    assert 'src="/membership-config.js"' in rendered
+    assert 'src="/membership.js?v=1.13.6.2"' in rendered
+    assert rendered.count('/membership.js?v=1.13.6.2') == 1
+
+
+def test_entitled_subscriber_chrome_replaces_sales_header_and_hides_membership_card():
+    script = (ROOT / "membership.js").read_text()
+    css = (ROOT / "style.css").read_text()
+    assert "function applySubscriberChrome(status)" in script
+    assert "`Welcome, ${firstName}`" in script
+    assert "status?.first_name" in script
+    assert "body.tct-member-entitled .membership-subscribe-btn" in css
+    assert "body.tct-member-entitled .membership-header-signin" in css
+    assert "body.tct-member-entitled .membership-header-welcome" in css
+    assert "body.tct-member-entitled .tct-membership-card" in css
+    assert "html.tct-member-preverified .tct-membership-card" in css
+
+
+def test_membership_status_persists_and_returns_first_name_without_weakening_entitlement():
+    migration = (ROOT / "supabase/migrations/202608160001_membership_subscriber_chrome.sql").read_text()
+    status = (ROOT / "supabase/functions/membership-status/index.ts").read_text()
+    checkout = (ROOT / "supabase/functions/create-checkout/index.ts").read_text()
+    complete = (ROOT / "supabase/functions/checkout-complete/index.ts").read_text()
+    webhook = (ROOT / "supabase/functions/stripe-webhook/index.ts").read_text()
+    assert "add column if not exists first_name text" in migration
+    assert "name_collection: { individual: { enabled: true, optional: false } }" in checkout
+    assert "first_name: firstName" in status
+    assert "Name personalization must never block an otherwise valid entitlement" in status
+    assert ".update({ first_name: firstName" in complete
+    assert "profileUpdate.first_name = firstName" in webhook

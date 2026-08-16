@@ -1,6 +1,6 @@
 import { withSupabase } from 'npm:@supabase/server@^1'
 import Stripe from 'npm:stripe@^22'
-import { idFromExpandable, resolveMembershipUser, STRIPE_MODE, stripeObjectMatchesMode, stripeSecretMatchesMode, syncSubscription } from '../_shared/membership.ts'
+import { firstNameFromDisplayName, idFromExpandable, resolveMembershipUser, STRIPE_MODE, stripeObjectMatchesMode, stripeSecretMatchesMode, syncSubscription } from '../_shared/membership.ts'
 
 const stripeSecret = Deno.env.get('STRIPE_SECRET_KEY') ?? ''
 const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? ''
@@ -48,9 +48,13 @@ export default {
         }
         if (!userId) throw new Error(`No membership identity for Checkout session ${session.id}`)
 
-        if (customerId) {
+        const firstName = firstNameFromDisplayName(session.customer_details?.individual_name || session.customer_details?.name)
+        if (customerId || firstName) {
+          const profileUpdate: Record<string, unknown> = { updated_at: new Date().toISOString() }
+          if (customerId) profileUpdate.stripe_customer_id = customerId
+          if (firstName) profileUpdate.first_name = firstName
           const { error } = await ctx.supabaseAdmin.from('profiles')
-            .update({ stripe_customer_id: customerId, updated_at: new Date().toISOString() }).eq('id', userId)
+            .update(profileUpdate).eq('id', userId)
           if (error) throw error
         }
 

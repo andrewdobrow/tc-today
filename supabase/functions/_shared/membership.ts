@@ -38,6 +38,13 @@ export function maskedEmail(email: string) {
   return `${visible}${'*'.repeat(Math.max(2, Math.min(6, local.length - visible.length)))}@${domain}`
 }
 
+export function firstNameFromDisplayName(value: unknown) {
+  const normalized = String(value ?? '').replace(/\s+/g, ' ').trim()
+  if (!normalized) return null
+  const first = normalized.split(' ')[0].trim().slice(0, 80)
+  return first || null
+}
+
 export function idFromExpandable(value: string | Stripe.Customer | Stripe.DeletedCustomer | null | undefined) {
   if (!value) return null
   return typeof value === 'string' ? value : value.id
