@@ -3,6 +3,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const config = window.TCT_MEMBERSHIP_CONFIG || {}
 const configured = Boolean(config.supabaseUrl && config.supabasePublishableKey)
 const supabase = configured ? createClient(config.supabaseUrl, config.supabasePublishableKey) : null
+let membershipStatusPromise = null
 
 const MEMBER_HINT_KEY = 'tct_member_entitled_hint'
 function setMemberHint(entitled){
@@ -80,32 +81,47 @@ async function sendMagicLink(form){
   setMessage(message, error ? `Sign-in failed: ${error.message}` : 'Check your email for your secure sign-in link.', Boolean(error))
 }
 
+function invalidateMembershipStatus(){ membershipStatusPromise = null }
+
 async function membershipStatus(){
   if (!supabase) return null
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) {
-    setMemberHint(false)
-    document.body.classList.remove('tct-member-entitled')
-    return { authenticated:false, entitled:false }
-  }
-  const { data, error } = await supabase.functions.invoke('membership-status')
-  if (error) {
-    // A transport/backend failure is not an entitlement decision. Reveal the
-    // normal paywall so its error state is visible, but keep the stored hint so
-    // the next navigation can still avoid a flash after service recovers.
-    endMemberPrepaint()
-    return { authenticated:true, entitled:false, error:error.message }
-  }
-  const entitled = Boolean(data?.entitled)
-  setMemberHint(entitled)
-  document.body.classList.toggle('tct-member-entitled', entitled)
-  return data
+  if (membershipStatusPromise) return membershipStatusPromise
+  membershipStatusPromise = (async () => {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      setMemberHint(false)
+      document.body.classList.remove('tct-member-entitled')
+      return { authenticated:false, entitled:false }
+    }
+    const { data, error } = await supabase.functions.invoke('membership-status')
+    if (error) {
+      // A transport/backend failure is not an entitlement decision. Reveal the
+      // normal paywall so its error state is visible, but keep the stored hint so
+      // the next navigation can still avoid a flash after service recovers.
+      endMemberPrepaint()
+      return { authenticated:true, entitled:false, error:error.message }
+    }
+    const entitled = Boolean(data?.entitled)
+    setMemberHint(entitled)
+    document.body.classList.toggle('tct-member-entitled', entitled)
+    return data
+  })()
+  return membershipStatusPromise
 }
 
-async function refreshSubscribeAccount(){
+function applySubscriberChrome(status){
+  const entitled = Boolean(status?.authenticated && status?.entitled)
+  const firstName = String(status?.first_name || '').trim()
+  qsa('[data-membership-welcome]').forEach(el => {
+    el.textContent = entitled && firstName ? `Welcome, ${firstName}` : 'Welcome, subscriber'
+  })
+  document.body.classList.toggle('tct-member-entitled', entitled)
+}
+
+async function refreshSubscribeAccount(statusOverride=null){
   const account = qs('[data-membership-account]')
   if (!account || !supabase) return
-  const status = await membershipStatus()
+  const status = statusOverride || await membershipStatus()
   const emailEl = qs('[data-account-email]', account)
   const statusEl = qs('[data-account-status]', account)
   const signedOut = qs('[data-signed-out]')
@@ -157,11 +173,11 @@ async function openPortal(button){
   window.location.assign(data.url)
 }
 
-async function unlockArticle(){
+async function unlockArticle(statusOverride=null){
   const paywall = qs('[data-tct-paywall]')
   if (!paywall || !supabase) return
   const slug = paywall.dataset.slug
-  const status = await membershipStatus()
+  const status = statusOverride || await membershipStatus()
   const signin = qs('[data-paywall-signin]', paywall)
   const plans = qs('[data-paywall-plans]', paywall)
   const message = qs('.membership-message', paywall)
@@ -242,14 +258,30 @@ if (!configured) {
   qsa('[data-signin-form]').forEach(form => form.addEventListener('submit', event => { event.preventDefault(); sendMagicLink(form) }))
   qsa('[data-reveal-signin]').forEach(button => button.addEventListener('click', () => revealSignIn(button)))
   qsa('[data-create-portal]').forEach(button => button.addEventListener('click', () => openPortal(button)))
-  qsa('[data-sign-out]').forEach(button => button.addEventListener('click', async () => { await supabase.auth.signOut(); setMemberHint(false); await refreshSubscribeAccount(); await unlockArticle() }))
+  qsa('[data-sign-out]').forEach(button => button.addEventListener('click', async () => {
+    await supabase.auth.signOut()
+    setMemberHint(false)
+    invalidateMembershipStatus()
+    const status = await membershipStatus()
+    applySubscriberChrome(status)
+    await refreshSubscribeAccount(status)
+    await unlockArticle(status)
+  }))
   revealRequestedSignIn()
   await finishCheckout()
-  await refreshSubscribeAccount()
-  await unlockArticle()
+  const initialStatus = await membershipStatus()
+  applySubscriberChrome(initialStatus)
+  await refreshSubscribeAccount(initialStatus)
+  await unlockArticle(initialStatus)
   supabase.auth.onAuthStateChange((event) => {
     if (event === 'SIGNED_OUT') setMemberHint(false)
-    setTimeout(async () => { await refreshSubscribeAccount(); await unlockArticle() }, 0)
+    invalidateMembershipStatus()
+    setTimeout(async () => {
+      const status = await membershipStatus()
+      applySubscriberChrome(status)
+      await refreshSubscribeAccount(status)
+      await unlockArticle(status)
+    }, 0)
   })
 }
 
