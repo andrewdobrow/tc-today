@@ -17832,6 +17832,10 @@ MARTIN_COCAINE_OPERATION_CANONICAL_SLUG = (
 MARTIN_COCAINE_OPERATION_DUPLICATE_SLUG = (
     "2026-08-15-17-arrested-in-martin-county-cocaine-trafficking-bust-4-kilos-seized-in-indianto"
 )
+MARTIN_COCAINE_OPERATION_KNOWN_DUPLICATE_SLUGS = frozenset({
+    MARTIN_COCAINE_OPERATION_DUPLICATE_SLUG,
+    "2026-08-16-17-arrested-in-major-martin-county-cocaine-bust-4-kilos-seized-in-indiantown-ope",
+})
 
 
 def _publication_slug_claim_diagnostics(item, entry):
@@ -21236,97 +21240,146 @@ def _repair_recent_semantic_archive_duplicates(
         "held": held,
     }
 
-def _repair_verified_martin_cocaine_operation_duplicate(archive, report):
-    """Repair the already-public verified Operation Beneath the Surface duplicate.
+def _verified_martin_cocaine_operation_signature(row):
+    """Identify the verified Operation Beneath the Surface publication family.
 
-    This is a migration fallback, not the prevention mechanism. It runs only after
-    the generalized semantic repair had a chance to act, and only when both exact
-    production slugs are still present. The older Aug. 14 permalink remains canonical
-    and the Aug. 15 page is preserved as a permanent redirect.
+    This is intentionally stricter than ordinary fuzzy matching: the row must state
+    the exact 17-arrest count, cocaine, Martin County/Indiantown, and a law-
+    enforcement-case framing term. It is a durable production regression fingerprint,
+    not a general drug-story merge rule.
+    """
+    if not isinstance(row, dict):
+        return False
+    text = " ".join(
+        str(row.get(key) or "")
+        for key in ("headline", "source_headline", "source_title", "teaser", "summary")
+    )
+    normalized = re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
+    return bool(
+        re.search(r"\b17\s+(?:people\s+)?arrest(?:ed|s)?\b", normalized)
+        and re.search(r"\bcocaine\b", normalized)
+        and re.search(r"\b(?:indiantown|martin county)\b", normalized)
+        and re.search(
+            r"\b(?:traffick(?:ing)?|bust|ring|operation|investigation|narcotics?|drug)\b",
+            normalized,
+        )
+    )
+
+
+def _repair_verified_martin_cocaine_operation_duplicate(archive, report):
+    """Repair every public duplicate of the verified Martin cocaine operation.
+
+    The Aug. 15-only cleanup in v1.13.6.1d was too literal: a third publisher/rewrite
+    minted an Aug. 16 URL. This migration now identifies the incident by immutable
+    publication facts rather than by one known duplicate slug. The older Aug. 14
+    permalink is always retained and every later matching row becomes a redirect.
     """
     rows = list(archive or [])
     canonical = next(
         (row for row in rows if row.get("slug") == MARTIN_COCAINE_OPERATION_CANONICAL_SLUG),
         None,
     )
-    duplicate = next(
-        (row for row in rows if row.get("slug") == MARTIN_COCAINE_OPERATION_DUPLICATE_SLUG),
-        None,
-    )
-    if not canonical or not duplicate:
+    if not canonical:
+        return rows, [], {"repaired_count": 0, "status": "canonical_missing"}
+    if not _verified_martin_cocaine_operation_signature(canonical):
+        return rows, [], {"repaired_count": 0, "status": "canonical_signature_mismatch"}
+
+    canonical_dt = _archive_record_datetime(canonical) or _slug_date(canonical.get("slug"))
+    duplicates = []
+    for row in rows:
+        slug = str((row or {}).get("slug") or "")
+        if not slug or slug == MARTIN_COCAINE_OPERATION_CANONICAL_SLUG:
+            continue
+        if not _verified_martin_cocaine_operation_signature(row):
+            continue
+        row_dt = _archive_record_datetime(row) or _slug_date(slug)
+        if canonical_dt is not None and row_dt is not None:
+            if abs((row_dt.date() - canonical_dt.date()).days) > 7:
+                continue
+        duplicates.append(row)
+
+    if not duplicates:
         return rows, [], {"repaired_count": 0, "status": "not_needed"}
 
-    _merge_category_memberships(
-        canonical, duplicate, canonical.get("category_key") or "martin"
-    )
-    shared_anchors = [
-        "Operation Beneath the Surface",
-        "17 arrests",
-        "four kilograms of cocaine",
-        "Indiantown",
-        "Martin County Sheriff's Office",
-    ]
-    redirect = {
-        "source_slug": MARTIN_COCAINE_OPERATION_DUPLICATE_SLUG,
-        "source_headline": duplicate.get("headline", ""),
-        "target_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
-        "target_headline": canonical.get("headline", ""),
-        "story_stage": "verified-production-regression-migration",
-        "match_confidence": 100,
-        "canonical_is_custom": False,
-        "editorial_story_id": str(canonical.get("editorial_story_id") or ""),
-        "reason": (
-            "Verified production regression: both pages cover Martin County Sheriff's "
-            "Office Operation Beneath the Surface with 17 arrests and four kilograms "
-            "of cocaine seized. Preserve the older Aug. 14 permalink."
-        ),
-    }
-    decision = {
-        "phase": "verified_production_regression_migration",
-        "incoming_headline": duplicate.get("headline", ""),
-        "incoming_source_url": duplicate.get("source_url", ""),
-        "incoming_story_id": str(duplicate.get("editorial_story_id") or ""),
-        "candidates": [{
-            "slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
-            "headline": canonical.get("headline", ""),
-            "evidence": {"verified_production_regression": True},
-        }],
-        "decision": {
-            "status": "validated",
-            "action": SEMANTIC_ACTION_DUPLICATE,
-            "selected_candidate_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
-            "same_real_world_event": True,
-            "material_new_update": False,
+    redirects = []
+    removed = set()
+    for duplicate in duplicates:
+        source_slug = str(duplicate.get("slug") or "")
+        removed.add(source_slug)
+        _merge_category_memberships(
+            canonical, duplicate, canonical.get("category_key") or "martin"
+        )
+        shared_anchors = [
+            "17 arrests",
+            "cocaine",
+            "Martin County / Indiantown",
+            "verified Operation Beneath the Surface publication family",
+        ]
+        redirect = {
+            "source_slug": source_slug,
+            "source_headline": duplicate.get("headline", ""),
+            "target_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+            "target_headline": canonical.get("headline", ""),
+            "story_stage": "verified-production-regression-migration",
+            "match_confidence": 100,
+            "canonical_is_custom": False,
+            "editorial_story_id": str(canonical.get("editorial_story_id") or ""),
+            "reason": (
+                "Verified production regression fingerprint matched the same Martin "
+                "County 17-arrest cocaine operation. Preserve the older Aug. 14 permalink."
+            ),
+        }
+        redirects.append(redirect)
+        decision = {
+            "phase": "verified_production_regression_migration",
+            "incoming_headline": duplicate.get("headline", ""),
+            "incoming_source_url": duplicate.get("source_url", ""),
+            "incoming_story_id": str(duplicate.get("editorial_story_id") or ""),
+            "candidates": [{
+                "slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+                "headline": canonical.get("headline", ""),
+                "evidence": {
+                    "verified_production_regression": True,
+                    "incident_fingerprint": "martin-17-arrests-cocaine-indiantown",
+                },
+            }],
+            "decision": {
+                "status": "validated",
+                "action": SEMANTIC_ACTION_DUPLICATE,
+                "selected_candidate_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+                "same_real_world_event": True,
+                "material_new_update": False,
+                "confidence": 1.0,
+                "shared_anchors": shared_anchors,
+                "novel_facts": [],
+                "reason": redirect["reason"],
+                "validation_errors": [],
+            },
+        }
+        report.setdefault("decisions", []).append(decision)
+        report.setdefault("archive_repairs", []).append({
+            "source_slug": source_slug,
+            "target_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+            "source_story_id": str(duplicate.get("editorial_story_id") or ""),
+            "target_story_id": str(canonical.get("editorial_story_id") or ""),
+            "source_url": duplicate.get("source_url", ""),
+            "source_headline": duplicate.get("headline", ""),
+            "target_headline": canonical.get("headline", ""),
             "confidence": 1.0,
             "shared_anchors": shared_anchors,
-            "novel_facts": [],
-            "reason": redirect["reason"],
-            "validation_errors": [],
-        },
-    }
-    report.setdefault("decisions", []).append(decision)
-    report.setdefault("archive_repairs", []).append({
-        "source_slug": MARTIN_COCAINE_OPERATION_DUPLICATE_SLUG,
-        "target_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
-        "source_story_id": str(duplicate.get("editorial_story_id") or ""),
-        "target_story_id": str(canonical.get("editorial_story_id") or ""),
-        "source_url": duplicate.get("source_url", ""),
-        "source_headline": duplicate.get("headline", ""),
-        "target_headline": canonical.get("headline", ""),
-        "confidence": 1.0,
-        "shared_anchors": shared_anchors,
-        "repair_basis": "verified_production_regression_migration",
-    })
-    summary = report.setdefault("summary", {})
-    summary["retroactive_redirects"] = int(summary.get("retroactive_redirects", 0) or 0) + 1
+            "repair_basis": "verified_production_regression_fingerprint",
+        })
+        summary = report.setdefault("summary", {})
+        summary["retroactive_redirects"] = int(summary.get("retroactive_redirects", 0) or 0) + 1
+
     cleaned = [
         row for row in rows
-        if row.get("slug") != MARTIN_COCAINE_OPERATION_DUPLICATE_SLUG
+        if str((row or {}).get("slug") or "") not in removed
     ]
-    return cleaned, [redirect], {
-        "repaired_count": 1,
+    return cleaned, redirects, {
+        "repaired_count": len(redirects),
         "status": "repaired",
-        "source_slug": MARTIN_COCAINE_OPERATION_DUPLICATE_SLUG,
+        "source_slugs": sorted(removed),
         "target_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
     }
 
@@ -25118,7 +25171,7 @@ def write_archives(all_categories, top_cat):
     if _verified_cocaine_redirects:
         print(
             "  Verified production duplicate repaired: Operation Beneath the Surface "
-            "Aug. 15 URL -> Aug. 14 canonical"
+            f"{len(_verified_cocaine_redirects)} later URL(s) -> Aug. 14 canonical"
         )
     _semantic_registry_consolidation = (
         _apply_semantic_duplicate_registry_consolidation(

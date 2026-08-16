@@ -23,7 +23,7 @@ from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from typing import Any, Iterable, Mapping, Sequence
 
-SEMANTIC_PUBLICATION_GATE_VERSION = "1.5"
+SEMANTIC_PUBLICATION_GATE_VERSION = "1.6"
 SEMANTIC_PUBLICATION_GATE_PROMPT_VERSION = "1.0"
 DEFAULT_RECENT_WINDOW_DAYS = 7
 DEFAULT_MAX_CANDIDATES = 4
@@ -195,6 +195,36 @@ def _article_datetime(article: Mapping[str, Any]) -> datetime | None:
     return None
 
 
+def _arrest_counts(article: Mapping[str, Any]) -> set[str]:
+    text = " ".join(
+        str(article.get(key) or "")
+        for key in ("headline", "source_headline", "lead", "teaser", "body")
+    )
+    return {
+        match.group(1)
+        for match in re.finditer(
+            r"\b(\d{1,3})\s+(?:people?\s+)?(?:were\s+)?arrest(?:ed|s)?\b",
+            text,
+            re.IGNORECASE,
+        )
+    }
+
+
+def _drug_terms(article: Mapping[str, Any]) -> set[str]:
+    text = " ".join(
+        str(article.get(key) or "")
+        for key in ("headline", "source_headline", "lead", "teaser", "body")
+    ).casefold()
+    aliases = {
+        "cocaine": r"\bcocaine\b",
+        "fentanyl": r"\bfentanyl\b",
+        "methamphetamine": r"\b(?:methamphetamine|meth)\b",
+        "marijuana": r"\b(?:marijuana|cannabis)\b",
+        "heroin": r"\bheroin\b",
+    }
+    return {name for name, pattern in aliases.items() if re.search(pattern, text, re.IGNORECASE)}
+
+
 def _shared_feature_evidence(
     incoming: Mapping[str, Any], candidate: Mapping[str, Any]
 ) -> dict[str, Any]:
@@ -301,16 +331,15 @@ def candidate_evidence(
     shared_numeric_tokens = {
         token for token in shared_headline_tokens if token.isdigit()
     }
+    shared_arrest_counts = _arrest_counts(incoming) & _arrest_counts(candidate)
+    shared_drug_terms = _drug_terms(incoming) & _drug_terms(candidate)
     drug_family_continuity = bool(
         "drug-case" in features["shared_event_families"]
         and features["shared_locality"]
         and features["shared_agencies"]
-        and "arrest" in shared_topic_tokens
-        and shared_topic_tokens
-        & {"cocaine", "fentanyl", "methamphetamine", "marijuana", "narcotic", "drug"}
-        and shared_numeric_tokens
-        and similarity["score"] >= 0.45
-        and shared_count >= 5
+        and shared_arrest_counts
+        and shared_drug_terms
+        and shared_count >= 3
     )
 
     # The generated TCT headline is not an independent identity source. A model can
@@ -342,7 +371,11 @@ def candidate_evidence(
     # similarity; the other requires a larger bundle of shared canonical tokens.
     # Both only nominate a pair for adjudication and never merge it directly.
     conflict_override_tier = ""
-    if conflict and similarity["score"] >= 0.74 and shared_count >= 6:
+    if conflict and exact_named_operation_anchor:
+        conflict_override_tier = "exact_named_law_enforcement_operation"
+    elif conflict and drug_family_continuity:
+        conflict_override_tier = "law_enforcement_drug_operation_continuity"
+    elif conflict and similarity["score"] >= 0.74 and shared_count >= 6:
         conflict_override_tier = "strong_headline_similarity"
     elif conflict and similarity["score"] >= 0.56 and shared_count >= 8:
         # Some publishers describe the same incident from different narrative
@@ -377,7 +410,7 @@ def candidate_evidence(
         or (similarity["score"] >= 0.56 and context_compatible and shared_count >= 6)
         # A formally named police/sheriff operation is a concrete incident anchor.
         # This only nominates the pair for adjudication; it never authorizes a merge.
-        or (exact_named_operation_anchor and similarity["score"] >= 0.40 and shared_count >= 4)
+        or exact_named_operation_anchor
         # Drug-bust headlines often split the same facts across "ring", "bust",
         # "operation" and "investigation" wording. Same agency + locality + drug
         # family + arrest + shared count is enough to let the final gate compare them.
@@ -386,7 +419,7 @@ def candidate_evidence(
     )
     eligible = bool(
         time_safe
-        and shared_count >= 4
+        and (shared_count >= 4 or exact_named_operation_anchor or drug_family_continuity)
         and similarity_gate
         and (not conflict or strong_conflict_override)
         and not source_headline_drift_conflict
@@ -414,6 +447,10 @@ def candidate_evidence(
         reasons.append("structured_identity_conflict_overridden_by_distinctive_overlap")
     elif conflict_override_tier == "policy_subject_continuity":
         reasons.append("structured_identity_conflict_overridden_by_policy_subject")
+    elif conflict_override_tier == "exact_named_law_enforcement_operation":
+        reasons.append("structured_identity_conflict_overridden_by_named_operation")
+    elif conflict_override_tier == "law_enforcement_drug_operation_continuity":
+        reasons.append("structured_identity_conflict_overridden_by_drug_operation")
     if source_headline_drift_conflict:
         reasons.append("source_headline_drift_conflict")
     if not time_safe:
@@ -429,6 +466,9 @@ def candidate_evidence(
         "similarity_basis": similarity_basis,
         "shared_headline_tokens": sorted(shared_headline_tokens),
         "shared_topic_tokens": sorted(shared_topic_tokens),
+        "shared_arrest_counts": sorted(shared_arrest_counts),
+        "shared_drug_terms": sorted(shared_drug_terms),
+        "shared_numeric_tokens": sorted(shared_numeric_tokens),
         "final_headline_similarity": final_similarity,
         "source_headline_similarity": source_similarity,
         "day_gap": day_gap,
