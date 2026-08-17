@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-17T01:45:23Z",
+  "generated_at": "2026-08-17T10:49:02Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,7 +10,7 @@
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, and Crime & Safety enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
     "assessed_count": 32,
-    "rejected_count": 9,
+    "rejected_count": 7,
     "enforced_categories": [
       "business",
       "crime",
@@ -33,9 +33,24 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 5,
-      "rejected_count": 4,
+      "assessed_count": 4,
+      "rejected_count": 3,
       "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrest"
+          ],
+          "headline": "Vero Beach woman shot and killed; sheriff's office searches for person of interest",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/woman-found-shot-in-vero-beach-roadway-dies-ircso-investigating-as-homicide-searching-for-person-of-interest"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -63,32 +78,6 @@
           "competing_signals": [],
           "headline": "Democrats keep South Carolina first, emphasizing diversity in early primaries",
           "source_url": "https://www.wptv.com/politics/america-votes/democrats-keep-south-carolina-first-emphasizing-diversity-in-early-primaries"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Delray Beach residents raise concerns about cemetery upkeep at city-owned burial ground",
-          "source_url": "https://www.wptv.com/news/region-s-palm-beach-county/delray-beach/delray-beach-residents-raise-concerns-about-cemetery-upkeep-at-city-owned-burial-ground"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "36 dogs rescued from Palm City 'house of horror' as lawmakers push for new animal cruelty laws",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws"
         }
       ]
     },
@@ -98,22 +87,8 @@
       "mode": "enforce",
       "policy": "primary_crime_safety_focus_required",
       "assessed_count": 5,
-      "rejected_count": 1,
-      "rejections": [
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Delray Beach residents raise concerns about cemetery upkeep at city-owned burial ground",
-          "source_url": "https://www.wptv.com/news/region-s-palm-beach-county/delray-beach/delray-beach-residents-raise-concerns-about-cemetery-upkeep-at-city-owned-burial-ground"
-        }
-      ]
+      "rejected_count": 0,
+      "rejections": []
     },
     {
       "category_key": "business",
@@ -123,6 +98,21 @@
       "assessed_count": 4,
       "rejected_count": 4,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:arrest"
+          ],
+          "headline": "Vero Beach woman shot and killed; sheriff's office searches for person of interest",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/woman-found-shot-in-vero-beach-roadway-dies-ircso-investigating-as-homicide-searching-for-person-of-interest"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -163,21 +153,6 @@
           ],
           "headline": "36 dogs rescued from Palm City 'house of horror' as lawmakers push for new animal cruelty laws",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:shooting"
-          ],
-          "headline": "Stuart shooting range raises hundreds of donations for Humane Society of the Treasure Coast",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/stuart-shooting-range-raises-hundreds-of-donations-for-humane-society-of-the-treasure-coast"
         }
       ]
     },
@@ -186,7 +161,7 @@
       "category_label": "Sports",
       "mode": "observe_only",
       "policy": "existing_athletic_guard_retained",
-      "assessed_count": 3,
+      "assessed_count": 4,
       "rejected_count": 0,
       "rejections": []
     },
@@ -195,7 +170,7 @@
       "category_label": "Things To Do",
       "mode": "observe_only",
       "policy": "future_explicit_contract",
-      "assessed_count": 0,
+      "assessed_count": 5,
       "rejected_count": 0,
       "rejections": []
     },
@@ -213,7 +188,7 @@
       "category_label": "Martin County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 5,
+      "assessed_count": 3,
       "rejected_count": 0,
       "rejections": []
     },
@@ -222,7 +197,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 3,
+      "assessed_count": 1,
       "rejected_count": 0,
       "rejections": []
     },
@@ -231,7 +206,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 7,
+      "assessed_count": 6,
       "rejected_count": 0,
       "rejections": []
     }
