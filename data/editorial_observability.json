@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-16T22:35:53Z",
+  "generated_at": "2026-08-17T01:46:50Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 3,
-    "placements_after": 3,
+    "placements_before": 4,
+    "placements_after": 4,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -51,24 +51,32 @@
   "audit": {
     "candidates_processed": 183,
     "routes": {
-      "generate_new": 18,
-      "skip": 164,
-      "update_existing": 1
+      "generate_new": 19,
+      "skip": 164
     },
     "eligibility": {
       "listing": 1,
-      "low_value": 127,
-      "publishable": 54,
+      "low_value": 128,
+      "publishable": 53,
       "search_page": 1
     },
     "source_classes": {
-      "aggregator": 128,
+      "aggregator": 129,
       "local_news": 34,
       "regional_news": 17,
-      "unknown": 4
+      "unknown": 3
     },
     "rejected_count": 2,
     "rejected_examples": [
+      {
+        "headline": "820 SE 13th St, Stuart, FL 34994 - Realtor.com",
+        "source_url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxQNk14OUNBemo0Ql9aMDBkRWs4V1FOX2I4V1p5aW53NldRaDlNN3JCczBJaHJPaDg5cW5QSFIxX3VqTTd3Sk4xeWRsbjZKTzlFdTZwS1Uxc1A2a1VuNm94cy1CN05kQTR2Y1d4aXNFcF92R3JWaXNBdjdRSzRady1qVEk4dTR1YU1FTGRV?oc=5",
+        "status": "listing",
+        "reasons": [
+          "Headline matches listing pattern 'realtor.com'"
+        ],
+        "source_class": "aggregator"
+      },
       {
         "headline": "Search is beginning for new city attorney - Hometown News Treasure Coast",
         "source_url": "https://www.hometownnewstc.com/news/st_lucie/search-is-beginning-for-new-city-attorney/article_68057e90-86d8-52bc-8ae2-f717650ee76d.html",
@@ -77,34 +85,27 @@
           "URL path matches blocked pattern '/search'"
         ],
         "source_class": "local_news"
-      },
-      {
-        "headline": "827 Winterside Dr, Apollo Beach, FL 33572 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOUGVPaGc5ZDlMOEtKemdxV0RYZnIxUUJaZlV0allfQlFFd1N6VkZ2UjFTUjY4NG1ZZWxUcHIzZFhPLVBMWE1VSjVnMm1fVUdoSDYzUXdRcFhVNDJpUGRUc3dEcURpZ2ZvOXE0c2hUMEU5b2o2UHRzTEZPUXJ4SGJ0VW8yd0EwSUNZNVJweHBTMWttaS1KWkxR?oc=5",
-        "status": "listing",
-        "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
-        ],
-        "source_class": "aggregator"
       }
     ]
   },
   "relationships": {
     "counts": {
-      "new_story": 10,
-      "same_event": 173
+      "new_story": 17,
+      "same_event": 166
     },
     "examples": [
       {
         "story_id": "story_004199",
         "title": "Woman killed in East-Central Florida shooting - Treasure Coast News",
         "event_key": "unknown-event-45c879e8f8",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -113,10 +114,11 @@
         "event_key": "unknown-event-091eb995e4",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMilgFBVV95cUxOS241RC11dVlvaHVyOE4yTXlRNEZUdzhuZjAwYXFSdU1ZMjA3Z09URlZjVnd5akcwLV9lVWJIVDZrV1JoaHdRaHF2SVBkTVB3bjdnaEMtdTdjVXBGS1RIRzR2RGpoZWZ1aUQ0cjIzQU9xSEJBa0owSUx5UGk2TFJKSmhwa2toSldzT0VyTG5HU0NyR1hSV2c",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -163,6 +165,18 @@
         ]
       },
       {
+        "story_id": "story_004212",
+        "title": "Deadline for Non-Partisan Race Filings Monday at Noon - The Anderson Observer",
+        "event_key": "unknown-event-e1f2b8fdaa",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_004133",
         "title": "St. Lucie Nuclear Power Plant Unit 1 manually shut down after 3 control rods drop into reactor core",
         "event_key": "unknown-event-ce61b86ed8",
@@ -189,6 +203,15 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
+      },
+      {
+        "story_id": "",
+        "title": "820 SE 13th St, Stuart, FL 34994 - Realtor.com",
+        "event_key": "",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "",
+        "decision_trace": []
       },
       {
         "story_id": "story_003011",
@@ -327,35 +350,8 @@
       },
       {
         "story_id": "story_004023",
-        "title": "Navy veteran Dan Green courts Indian River voters in District 9 primary - sebastiandaily.com",
-        "event_key": "unknown-event-9035d57e62",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
-        "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMiugFBVV95cUxNYXdTTUlibE5uRlNTbW9yZVJKV3M0bHJKeE1zeFZFM2lIWi0xM3VkTEk0NF8tSXJCU3RqTWlXaWJ3T2wzVjh3d3FvTkM1S2VJeTZFSDRHYUViYzREb25veEdMS2JXdFBOVU54Q25lS0h1SDRqUVlhVEVveUMtdHRQN0E2eFZVVkFwTm5CS1ZwODlOdG1GVlE0MHZ1ZHIzWGgya2s4cUNfOEJWUFh0OVUwaC14WVVzSDQ3c3c",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_004024",
-        "title": "US School Districts Integrate Artificial Intelligence into Classrooms - asatunews.co.id",
-        "event_key": "unknown-event-33721b508a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_004107",
-        "title": "School Districts Integrate Artificial Intelligence into Classroom Instruction - sekbernews.id",
-        "event_key": "unknown-event-5e7642eb62",
+        "title": "Navy veteran Dan Green courts Indian River voters in District 9 primary - Sebastian Daily",
+        "event_key": "unknown-event-ad01b3b5bb",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -372,13 +368,15 @@
         "story_id": "story_004199",
         "title": "Woman killed in East-Central Florida shooting - Treasure Coast News",
         "event_key": "unknown-event-45c879e8f8",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -388,10 +386,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMilgFBVV95cUxOS241RC11dVlvaHVyOE4yTXlRNEZUdzhuZjAwYXFSdU1ZMjA3Z09URlZjVnd5akcwLV9lVWJIVDZrV1JoaHdRaHF2SVBkTVB3bjdnaEMtdTdjVXBGS1RIRzR2RGpoZWZ1aUQ0cjIzQU9xSEJBa0owSUx5UGk2TFJKSmhwa2toSldzT0VyTG5HU0NyR1hSV2c",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -438,6 +437,19 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_004212",
+        "title": "Deadline for Non-Partisan Race Filings Monday at Noon - The Anderson Observer",
+        "event_key": "unknown-event-e1f2b8fdaa",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -607,15 +619,16 @@
       },
       {
         "story_id": "story_004023",
-        "title": "Navy veteran Dan Green courts Indian River voters in District 9 primary - sebastiandaily.com",
-        "event_key": "unknown-event-9035d57e62",
+        "title": "Navy veteran Dan Green courts Indian River voters in District 9 primary - Sebastian Daily",
+        "event_key": "unknown-event-ad01b3b5bb",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://news.google.com/rss/articles/CBMiugFBVV95cUxNYXdTTUlibE5uRlNTbW9yZVJKV3M0bHJKeE1zeFZFM2lIWi0xM3VkTEk0NF8tSXJCU3RqTWlXaWJ3T2wzVjh3d3FvTkM1S2VJeTZFSDRHYUViYzREb25veEdMS2JXdFBOVU54Q25lS0h1SDRqUVlhVEVveUMtdHRQN0E2eFZVVkFwTm5CS1ZwODlOdG1GVlE0MHZ1ZHIzWGgya2s4cUNfOEJWUFh0OVUwaC14WVVzSDQ3c3c",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -648,43 +661,114 @@
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
-      },
-      {
-        "story_id": "story_003961",
-        "title": "'It's beautiful': Tradition Lakes K-8 in St. Lucie County ready to open after week-long delay - wpbf.com",
-        "event_key": "unknown-event-3de0da4b15",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
       }
     ]
   },
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 0,
-    "high_confidence_candidate_count": 0,
+    "candidate_count": 2,
+    "high_confidence_candidate_count": 1,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {},
-    "milestones": {},
-    "reason_codes": {},
-    "examples": [],
+    "current_relationships": {
+      "new_story": 1,
+      "same_event": 1
+    },
+    "milestones": {
+      "death": 1,
+      "identified": 1
+    },
+    "reason_codes": {
+      "agency_match": 2,
+      "entity_match": 2,
+      "exact_event_key": 1,
+      "fact_continuity": 1,
+      "identity_anchor_qualified": 2,
+      "location_match": 2,
+      "novel_milestone": 2,
+      "title_continuity": 2
+    },
+    "examples": [
+      {
+        "headline": "Woman found with gunshot wound in Vero Beach dies; person of interest identified - wpbf.com",
+        "event_key": "named-person-death:first-street",
+        "current_story_id": "story_004180",
+        "current_relationship": "same_event",
+        "candidate_story_id": "story_004180",
+        "candidate_confidence": 1.0,
+        "candidate_milestones": [
+          "identified"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "exact_event_key",
+          "location_match",
+          "agency_match",
+          "entity_match",
+          "title_continuity",
+          "fact_continuity",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_004180",
+          "Novel milestones: identified",
+          "Exact event-key anchor: True",
+          "Facts overlap: 1.00",
+          "Title overlap: 0.75",
+          "Location match: True",
+          "Agency match: True",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 1.00"
+        ]
+      },
+      {
+        "headline": "Woman dies after being found shot in Vero Beach roadway, person of interest sought - WPEC",
+        "event_key": "named-person-death:street-sunday",
+        "current_story_id": "story_004225",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_004224",
+        "candidate_confidence": 0.741667,
+        "candidate_milestones": [
+          "death"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "agency_match",
+          "entity_match",
+          "title_continuity",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_004224",
+          "Novel milestones: death",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.42",
+          "Location match: True",
+          "Agency match: True",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.74"
+        ]
+      }
+    ],
     "retrospective_candidate_count": 16,
     "retrospective_high_confidence_candidate_count": 4,
     "retrospective_activation_eligible_candidate_count": 2,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1083,
-      "timeline_entries_examined": 2829,
-      "transitions_examined": 1639,
+      "stories_with_timelines": 1086,
+      "timeline_entries_examined": 2836,
+      "transitions_examined": 1642,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 16,
       "high_confidence_candidate_count": 4,
@@ -699,39 +783,6 @@
         "recovery": 2
       },
       "same_source_evolution_examples": [
-        {
-          "story_id": "story_003912",
-          "story_title": "Operation 'Beneath the Surface': 17 arrested, 4 kilos of cocaine seized in Martin County drug bust - WPTV",
-          "milestones": [
-            "arrest"
-          ],
-          "matched_phrases": {
-            "arrest": [
-              "arrested"
-            ]
-          },
-          "classification": "same_source_article_evolution",
-          "identity_anchor_codes": [
-            "exact_source_article_identity",
-            "identity_anchor_qualified"
-          ],
-          "prior_article": {
-            "article_id": "rss-80549bba84dee2137df8",
-            "event_key": "unknown-event-71a6ba6ae7",
-            "published_at": "2026-08-15T01:26:01.600639+00:00",
-            "title": "WATCH: Martin County Sheriff's Office holds press conference on large-scale narcotics bust",
-            "source": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-to-hold-press-conference-on-large-scale-narcotics-bust",
-            "url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-to-hold-press-conference-on-large-scale-narcotics-bust"
-          },
-          "newer_article": {
-            "article_id": "rss-d9d3f65f530f93274071",
-            "event_key": "fire-stuart-12cae92006",
-            "published_at": "2026-08-15T01:26:01.600639+00:00",
-            "title": "Operation 'Beneath the Surface': 17 arrested, 4 kilos of cocaine seized in Martin County drug bust",
-            "source": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-to-hold-press-conference-on-large-scale-narcotics-bust",
-            "url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-to-hold-press-conference-on-large-scale-narcotics-bust"
-          }
-        },
         {
           "story_id": "story_000695",
           "story_title": "West Palm Beach police seek public's help finding missing 10-year-old boy traveling with his aunt",
@@ -767,6 +818,39 @@
             "title": "Missing 10-Year-Old safely located in Tennessee, West Palm Beach Police say",
             "source": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/west-palm-beach-police-seek-publics-help-finding-missing-10-year-old-boy-traveling-with-his-aunt",
             "url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/west-palm-beach-police-seek-publics-help-finding-missing-10-year-old-boy-traveling-with-his-aunt"
+          }
+        },
+        {
+          "story_id": "story_003912",
+          "story_title": "Operation 'Beneath the Surface': 17 arrested, 4 kilos of cocaine seized in Martin County drug bust - WPTV",
+          "milestones": [
+            "arrest"
+          ],
+          "matched_phrases": {
+            "arrest": [
+              "arrested"
+            ]
+          },
+          "classification": "same_source_article_evolution",
+          "identity_anchor_codes": [
+            "exact_source_article_identity",
+            "identity_anchor_qualified"
+          ],
+          "prior_article": {
+            "article_id": "rss-80549bba84dee2137df8",
+            "event_key": "unknown-event-71a6ba6ae7",
+            "published_at": "2026-08-15T01:26:01.600639+00:00",
+            "title": "WATCH: Martin County Sheriff's Office holds press conference on large-scale narcotics bust",
+            "source": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-to-hold-press-conference-on-large-scale-narcotics-bust",
+            "url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-to-hold-press-conference-on-large-scale-narcotics-bust"
+          },
+          "newer_article": {
+            "article_id": "rss-d9d3f65f530f93274071",
+            "event_key": "fire-stuart-12cae92006",
+            "published_at": "2026-08-15T01:26:01.600639+00:00",
+            "title": "Operation 'Beneath the Surface': 17 arrested, 4 kilos of cocaine seized in Martin County drug bust",
+            "source": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-to-hold-press-conference-on-large-scale-narcotics-bust",
+            "url": "https://www.wptv.com/news/treasure-coast/region-martin-county/martin-county-sheriffs-office-to-hold-press-conference-on-large-scale-narcotics-bust"
           }
         },
         {
@@ -1397,11 +1481,11 @@
         "timeline_identity_unanchored": 12,
         "weak_title_continuity": 5
       },
-      "excluded_entry_count": 124,
+      "excluded_entry_count": 125,
       "exclusion_reasons": {
         "insufficient_title_detail": 42,
         "low_value_title": 20,
-        "social_source": 63
+        "social_source": 64
       },
       "examples": [
         {
@@ -2529,28 +2613,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 877,
-      "treasure_coast_local": 658,
+      "florida": 882,
+      "treasure_coast_local": 661,
       "treasure_coast_region": 319,
-      "unknown": 1756
+      "unknown": 1763
     },
-    "average_score": 59.44
+    "average_score": 59.43
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 877,
-      "treasure_coast_local": 658,
+      "florida": 882,
+      "treasure_coast_local": 661,
       "treasure_coast_region": 319,
-      "unknown": 1756
+      "unknown": 1763
     },
-    "average_priority": 3.77
+    "average_priority": 3.75
   },
   "story_lifecycle": {
     "counts": {
-      "active": 2705,
+      "active": 2723,
       "breaking": 1,
-      "developing": 169,
-      "ongoing": 733,
+      "developing": 165,
+      "ongoing": 734,
       "resolved": 2
     }
   },
@@ -2558,8 +2642,8 @@
     "repair_version": 14,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 3602,
-    "active_stories_after": 3602,
+    "active_stories_before": 3610,
+    "active_stories_after": 3610,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -2584,24 +2668,24 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 68,
+    "incident_anchor_to_story_count": 69,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-08-16T22:29:49Z",
-    "quarantined_story_records_retained": 262,
-    "active_story_count": 3610
+    "generated_at": "2026-08-17T01:41:47Z",
+    "quarantined_story_records_retained": 266,
+    "active_story_count": 3625
   },
   "stories": {
-    "total": 3610,
+    "total": 3625,
     "importance_levels": {
       "breaking": 7,
       "high": 64,
-      "normal": 549,
-      "low": 2990,
+      "normal": 552,
+      "low": 3002,
       "archived": 0
     },
-    "average_importance": 9.37,
+    "average_importance": 9.38,
     "top": [
       {
         "story_id": "story_001557",
@@ -2616,7 +2700,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 6.87
+          "age_hours": 10.05
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2651,8 +2735,8 @@
           "score": 100,
           "counties": [
             "St. Lucie County",
-            "Martin County",
-            "Indian River County"
+            "Indian River County",
+            "Martin County"
           ],
           "places": [
             "Port St. Lucie",
@@ -2672,27 +2756,27 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-08-16T15:41:39.398545+00:00",
-          "hours_since_update": 6.87,
+          "hours_since_update": 10.05,
           "event_count": 21,
           "timeline_entries": 20
         }
       },
       {
-        "story_id": "story_003628",
-        "title": "Resident shoots, kills intruder at mobile home park in St. Lucie County; stand your ground case under review",
-        "score": 85,
-        "editorial_priority": 82,
-        "editorial_score": 82,
+        "story_id": "story_004134",
+        "title": "82-year-old Melbourne man dies after single-vehicle crash on I-95 in St. Lucie County",
+        "score": 75,
+        "editorial_priority": 85,
+        "editorial_score": 85,
         "score_breakdown": {
-          "score": 82,
-          "importance": 85,
+          "score": 85,
+          "importance": 75,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
+          "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 68.87
+          "age_hours": 0.05
         },
-        "level": "breaking",
+        "level": "high",
         "importance_reasons": [
           {
             "code": "fatality",
@@ -2708,11 +2792,6 @@
             "code": "follow_up",
             "label": "Story has follow-up coverage",
             "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
           }
         ],
         "local_relevance": {
@@ -2721,26 +2800,24 @@
           "counties": [
             "St. Lucie County"
           ],
-          "places": [
-            "Fort Pierce"
-          ]
+          "places": []
         },
         "editorial_proximity": {
           "score": 100,
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 7,
-        "timeline_entries": 7,
+        "event_count": 2,
+        "timeline_entries": 2,
         "relationship_decisions": 1,
-        "canonical_source_candidates": 9,
+        "canonical_source_candidates": 2,
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 68.87,
-          "event_count": 7,
-          "timeline_entries": 7
+          "last_updated": "2026-08-17T01:41:33.127844+00:00",
+          "hours_since_update": 0.05,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       },
       {
@@ -2756,7 +2833,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 59.84
+          "age_hours": 63.06
         },
         "level": "breaking",
         "importance_reasons": [
@@ -2802,70 +2879,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-14T10:41:34.652293+00:00",
-          "hours_since_update": 59.84,
+          "hours_since_update": 63.06,
           "event_count": 4,
           "timeline_entries": 4
-        }
-      },
-      {
-        "story_id": "story_003681",
-        "title": "16-year-old girl dies after falling through roof of abandoned Sebastian building",
-        "score": 75,
-        "editorial_priority": 72,
-        "editorial_score": 72,
-        "score_breakdown": {
-          "score": 72,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 68.85
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Sebastian"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 3,
-        "timeline_entries": 3,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 3,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 68.85,
-          "event_count": 3,
-          "timeline_entries": 3
         }
       },
       {
@@ -2881,7 +2897,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 45.09
+          "age_hours": 48.28
         },
         "level": "high",
         "importance_reasons": [
@@ -2924,81 +2940,27 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-15T01:26:01.600639+00:00",
-          "hours_since_update": 45.09,
+          "hours_since_update": 48.28,
           "event_count": 2,
           "timeline_entries": 2
         }
       },
       {
-        "story_id": "story_004134",
-        "title": "82-year-old Melbourne man dies after single-vehicle crash on I-95 in St. Lucie County",
-        "score": 65,
-        "editorial_priority": 70,
-        "editorial_score": 70,
+        "story_id": "story_003628",
+        "title": "Resident shoots, kills intruder at mobile home park in St. Lucie County; stand your ground case under review",
+        "score": 85,
+        "editorial_priority": 68,
+        "editorial_score": 68,
         "score_breakdown": {
-          "score": 70,
-          "importance": 65,
+          "score": 68,
+          "importance": 85,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.95,
+          "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 6.84
+          "age_hours": 72.04
         },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "active",
-          "reason": "Single-event story is current",
-          "last_updated": "2026-08-16T15:41:39.398545+00:00",
-          "hours_since_update": 6.84,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_004067",
-        "title": "Pedestrian killed in crash along U.S. 1 in Florida - Treasure Coast News",
-        "score": 75,
-        "editorial_priority": 67,
-        "editorial_score": 67,
-        "score_breakdown": {
-          "score": 67,
-          "importance": 75,
-          "proximity_multiplier": 0.95,
-          "freshness_multiplier": 0.95,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 21.24
-        },
-        "level": "high",
+        "level": "breaking",
         "importance_reasons": [
           {
             "code": "fatality",
@@ -3014,62 +2976,10 @@
             "code": "follow_up",
             "label": "Story has follow-up coverage",
             "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_region",
-          "score": 95,
-          "counties": [],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 95,
-          "scope": "treasure_coast_region",
-          "reason": "Directly affects the Treasure Coast region"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-16T01:19:42.166524+00:00",
-          "hours_since_update": 21.24,
-          "event_count": 2,
-          "timeline_entries": 2
-        }
-      },
-      {
-        "story_id": "story_003710",
-        "title": "Stand your ground case under review after fatal shooting in St. Lucie County - wptv.com",
-        "score": 75,
-        "editorial_priority": 63,
-        "editorial_score": 63,
-        "score_breakdown": {
-          "score": 63,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 68.83
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
           },
           {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
             "points": 10
           }
         ],
@@ -3079,24 +2989,26 @@
           "counties": [
             "St. Lucie County"
           ],
-          "places": []
+          "places": [
+            "Fort Pierce"
+          ]
         },
         "editorial_proximity": {
           "score": 100,
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 2,
-        "timeline_entries": 2,
+        "event_count": 7,
+        "timeline_entries": 7,
         "relationship_decisions": 1,
-        "canonical_source_candidates": 2,
+        "canonical_source_candidates": 9,
         "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "state": "ongoing",
+          "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 68.83,
-          "event_count": 2,
-          "timeline_entries": 2
+          "hours_since_update": 72.04,
+          "event_count": 7,
+          "timeline_entries": 7
         }
       },
       {
@@ -3112,7 +3024,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 35.87
+          "age_hours": 39.05
         },
         "level": "high",
         "importance_reasons": [
@@ -3153,7 +3065,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-15T10:41:53.949415+00:00",
-          "hours_since_update": 35.87,
+          "hours_since_update": 39.05,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -3171,7 +3083,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 54.83
+          "age_hours": 58.02
         },
         "level": "high",
         "importance_reasons": [
@@ -3214,7 +3126,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-14T15:41:41.471758+00:00",
-          "hours_since_update": 54.83,
+          "hours_since_update": 58.02,
           "event_count": 11,
           "timeline_entries": 11
         }
@@ -3232,7 +3144,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 30.85
+          "age_hours": 34.04
         },
         "level": "high",
         "importance_reasons": [
@@ -3271,7 +3183,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-15T15:41:58.428218+00:00",
-          "hours_since_update": 30.85,
+          "hours_since_update": 34.04,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3289,7 +3201,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 0.04
+          "age_hours": 3.23
         },
         "level": "high",
         "importance_reasons": [
@@ -3323,9 +3235,127 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-16T22:29:28.377007+00:00",
-          "hours_since_update": 0.04,
+          "hours_since_update": 3.23,
           "event_count": 1,
           "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_003681",
+        "title": "16-year-old girl dies after falling through roof of abandoned Sebastian building",
+        "score": 75,
+        "editorial_priority": 60,
+        "editorial_score": 60,
+        "score_breakdown": {
+          "score": 60,
+          "importance": 75,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.7,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 72.04
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Sebastian"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 3,
+        "timeline_entries": 3,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 3,
+        "lifecycle": {
+          "state": "ongoing",
+          "reason": "Established multi-event story has not updated in the past 72 hours",
+          "last_updated": "2026-08-14T01:41:36.748145+00:00",
+          "hours_since_update": 72.04,
+          "event_count": 3,
+          "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_004067",
+        "title": "Pedestrian killed in crash along U.S. 1 in Florida - Treasure Coast News",
+        "score": 75,
+        "editorial_priority": 60,
+        "editorial_score": 60,
+        "score_breakdown": {
+          "score": 60,
+          "importance": 75,
+          "proximity_multiplier": 0.95,
+          "freshness_multiplier": 0.85,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 24.42
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_region",
+          "score": 95,
+          "counties": [],
+          "places": []
+        },
+        "editorial_proximity": {
+          "score": 95,
+          "scope": "treasure_coast_region",
+          "reason": "Directly affects the Treasure Coast region"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-08-16T01:19:42.166524+00:00",
+          "hours_since_update": 24.42,
+          "event_count": 2,
+          "timeline_entries": 2
         }
       },
       {
@@ -3341,7 +3371,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 255.67
+          "age_hours": 258.86
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3395,7 +3425,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-06T06:51:35.977301+00:00",
-          "hours_since_update": 255.67,
+          "hours_since_update": 258.86,
           "event_count": 40,
           "timeline_entries": 24
         }
@@ -3413,7 +3443,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 78.85
+          "age_hours": 82.04
         },
         "level": "high",
         "importance_reasons": [
@@ -3457,7 +3487,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-13T15:41:45.363233+00:00",
-          "hours_since_update": 78.85,
+          "hours_since_update": 82.04,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -3475,7 +3505,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 83.83
+          "age_hours": 87.02
         },
         "level": "high",
         "importance_reasons": [
@@ -3519,66 +3549,9 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-13T10:41:50.330585+00:00",
-          "hours_since_update": 83.83,
+          "hours_since_update": 87.02,
           "event_count": 1,
           "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_003927",
-        "title": "Vero Beach High School honors teen killed in fall at abandoned condo during season opener - cbs12.com",
-        "score": 50,
-        "editorial_priority": 56,
-        "editorial_score": 56,
-        "score_breakdown": {
-          "score": 56,
-          "importance": 50,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.12,
-          "source_trust": 90,
-          "age_hours": 3.91
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Vero Beach",
-            "Sebastian"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 5,
-        "timeline_entries": 5,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 8,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-16T18:39:22.574597+00:00",
-          "hours_since_update": 3.91,
-          "event_count": 5,
-          "timeline_entries": 5
         }
       },
       {
@@ -3594,7 +3567,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 35.83
+          "age_hours": 39.02
         },
         "level": "high",
         "importance_reasons": [
@@ -3630,7 +3603,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-15T10:41:53.949415+00:00",
-          "hours_since_update": 35.83,
+          "hours_since_update": 39.02,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3648,7 +3621,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 30.81
+          "age_hours": 34.0
         },
         "level": "high",
         "importance_reasons": [
@@ -3684,7 +3657,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-15T15:41:58.428218+00:00",
-          "hours_since_update": 30.81,
+          "hours_since_update": 34.0,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3702,7 +3675,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 390.84
+          "age_hours": 394.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3750,7 +3723,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 390.84,
+          "hours_since_update": 394.03,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3768,7 +3741,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 190.32
+          "age_hours": 193.51
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3816,9 +3789,139 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-09T00:12:17.273491+00:00",
-          "hours_since_update": 190.32,
+          "hours_since_update": 193.51,
           "event_count": 10,
           "timeline_entries": 7
+        }
+      },
+      {
+        "story_id": "story_003665",
+        "title": "'I've never seen anything like it': Deputies describe rescuing 36 neglected Border Collies from Palm City home",
+        "score": 55,
+        "editorial_priority": 53,
+        "editorial_score": 53,
+        "score_breakdown": {
+          "score": 53,
+          "importance": 55,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.85,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 51.9
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          },
+          {
+            "code": "multi_county",
+            "label": "Multi-county impact",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County",
+            "St. Lucie County",
+            "Indian River County"
+          ],
+          "places": [
+            "Stuart",
+            "Palm City",
+            "Hobe Sound",
+            "Port St. Lucie",
+            "Fort Pierce",
+            "Vero Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 79,
+        "timeline_entries": 79,
+        "relationship_decisions": 8,
+        "canonical_source_candidates": 113,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-08-14T21:50:09.640115+00:00",
+          "hours_since_update": 51.9,
+          "event_count": 79,
+          "timeline_entries": 79
+        }
+      },
+      {
+        "story_id": "story_003927",
+        "title": "Vero Beach High School honors teen killed in fall at abandoned condo during season opener - cbs12.com",
+        "score": 50,
+        "editorial_priority": 53,
+        "editorial_score": 53,
+        "score_breakdown": {
+          "score": 53,
+          "importance": 50,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.12,
+          "source_trust": 90,
+          "age_hours": 7.07
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Vero Beach",
+            "Sebastian"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 5,
+        "timeline_entries": 5,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 8,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-08-16T18:39:22.574597+00:00",
+          "hours_since_update": 7.07,
+          "event_count": 5,
+          "timeline_entries": 5
         }
       }
     ]
@@ -3826,7 +3929,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 6,
-    "generated_at": "2026-08-16T22:34:15Z",
+    "generated_at": "2026-08-17T01:45:23Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -3842,25 +3945,23 @@
       "category_count": 9,
       "statuses": {
         "cache_hit": 1,
-        "category_eligibility_archive_recovery": 2,
-        "generated_live": 3,
-        "no_publishable_sources": 1,
-        "quality_gate_archive_recovery": 1,
+        "category_eligibility_archive_recovery": 1,
+        "generated_live": 4,
+        "no_publishable_sources": 2,
         "sports_zero_candidate_archive_recovery": 1
       },
       "failures": {
-        "no_category_eligible_sources": 2,
-        "no_sports_hero_candidates": 1,
-        "publication_quality_rejected": 1
+        "no_category_eligible_sources": 1,
+        "no_sports_hero_candidates": 1
       },
       "model_attempt_count": 4,
-      "model_elapsed_seconds": 81.233,
-      "archive_recovery_requested_count": 5,
+      "model_elapsed_seconds": 64.7,
+      "archive_recovery_requested_count": 4,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 1,
+      "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 9,
-      "published_story_duplicate_suppression_count": 50,
+      "published_story_duplicate_suppression_count": 49,
       "story_aware_update_context_count": 1
     },
     "categories": [
@@ -3868,8 +3969,8 @@
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "cache_hit",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 22,
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 5,
         "selected_source_count": 1,
         "cache_hit": true,
@@ -4000,9 +4101,9 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "new_publication_stale_rejected_count": 2,
+        "new_publication_stale_rejected_count": 1,
         "live_hero_headline": "Fort Pierce begins search for new city attorney after contract not renewed",
-        "elapsed_seconds": 12.135
+        "elapsed_seconds": 9.762
       },
       {
         "category_key": "crime",
@@ -4019,97 +4120,19 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 22.51,
+            "elapsed_seconds": 22.006,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 22.51,
+        "model_elapsed_seconds": 22.006,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
         "contextual_update_lead_rejections": [],
-        "article_framing_rejection_count": 1,
-        "article_framing_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "headline": "Martin County Sheriff executes warrants in Indiantown, Stuart during cocaine trafficking bust",
-            "missing": [
-              "generated_copy_drifted_from_source_focus"
-            ],
-            "lead_independence": {
-              "required": true,
-              "passed": true,
-              "headline": "Martin County Sheriff executes warrants in Indiantown, Stuart during cocaine trafficking bust",
-              "lead": "Martin County Sheriff deputies executed three search warrants during the drug trafficking investigation announced Saturday, with two warrants served on homes in Indiantown and one in Stuart. The operation targeted a cocaine distribution network that extended from Indiantown to Port St. Lucie and Daytona Beach, resulting in the arrests of 17 people on more than 200 felony charges.",
-              "lead_word_count": 58,
-              "headline_overlap_ratio": 0.818,
-              "new_context_token_count": 31,
-              "opaque_references": [],
-              "undefined_references": [],
-              "story_form": "standard",
-              "update_diagnostics": {
-                "required": false,
-                "passed": true,
-                "story_form": "standard"
-              },
-              "missing": []
-            },
-            "claim_consistency": {
-              "required": true,
-              "passed": true,
-              "headline": "Martin County Sheriff executes warrants in Indiantown, Stuart during cocaine trafficking bust",
-              "lead": "Martin County Sheriff deputies executed three search warrants during the drug trafficking investigation announced Saturday, with two warrants served on homes in Indiantown and one in Stuart. The operation targeted a cocaine distribution network that extended from Indiantown to Port St. Lucie and Daytona Beach, resulting in the arrests of 17 people on more than 200 felony charges.",
-              "headline_money_claims": [],
-              "lead_money_claims": [],
-              "missing_money_claims": [],
-              "headline_jurisdictions": [
-                "indian_town",
-                "martin_county",
-                "stuart"
-              ],
-              "lead_jurisdictions": [
-                "indian_town",
-                "martin_county",
-                "port_st_lucie",
-                "stuart"
-              ],
-              "missing_jurisdictions": [],
-              "headline_policy_references": [],
-              "lead_policy_references": [],
-              "missing_policy_references": [],
-              "missing": []
-            },
-            "source_focus": {
-              "required": true,
-              "passed": false,
-              "generated_headline": "Martin County Sheriff executes warrants in Indiantown, Stuart during cocaine trafficking bust",
-              "generated_lead": "Martin County Sheriff deputies executed three search warrants during the drug trafficking investigation announced Saturday, with two warrants served on homes in Indiantown and one in Stuart. The operation targeted a cocaine distribution network that extended from Indiantown to Port St.",
-              "source_title": "Guns and kilos of cocaine seized in big Treasure Coast drug bust - wpbf.com",
-              "source_lead": "A three-month narcotics investigation in Martin County has led to 17 arrests, the seizure of drugs and guns, and more than 200 felony charges, according to authorities. Martin County Sheriff John Budensiek said deputies, working with federal partners, seized 4 kilos of cocaine, 8 guns, and other drugs, including marijuana. \"We're working together with our federal partners to keep our community safe.",
-              "title_similarity": {
-                "score": 0.2779,
-                "overlap": 0.1818,
-                "jaccard": 0.1,
-                "sorted_sequence": 0.4079,
-                "ordered_sequence": 0.3158,
-                "shared_token_count": 2.0
-              },
-              "lead_token_overlap": 0.25,
-              "missing": [
-                "generated_copy_drifted_from_source_focus"
-              ]
-            },
-            "source_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            }
-          }
-        ],
+        "article_framing_rejection_count": 0,
+        "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
         "category_eligibility_assessed_count": 5,
@@ -4129,7 +4152,7 @@
             "source_url": "https://www.wptv.com/news/region-s-palm-beach-county/delray-beach/delray-beach-residents-raise-concerns-about-cemetery-upkeep-at-city-owned-burial-ground"
           }
         ],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -4194,7 +4217,17 @@
           {
             "category_key": "crime",
             "surface": "hero",
-            "headline": "17 arrested in Indiantown cocaine trafficking operation as Martin County Sheriff seizes 4 kilos of drugs",
+            "headline": "17 arrested in Martin County drug trafficking operation centered in Indiantown",
+            "editorial_story_id": "story_003960",
+            "canonical_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
+            "canonical_headline": "17 arrested in Indiantown cocaine trafficking ring led by Cecil Trimble, 4 kilos seized in Operation Beneath the Surface",
+            "basis": "same_event_and_persistent_story_skip",
+            "reason": "published_skip_placement_suppressed"
+          },
+          {
+            "category_key": "crime",
+            "surface": "card",
+            "headline": "Cocaine seizure in Indiantown drug bust valued up to $200,000",
             "editorial_story_id": "story_003960",
             "canonical_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
             "canonical_headline": "17 arrested in Indiantown cocaine trafficking ring led by Cecil Trimble, 4 kilos seized in Operation Beneath the Surface",
@@ -4209,14 +4242,14 @@
         "budget_seconds": 180.0,
         "live_hero_headline": "",
         "generated_card_count": 0,
-        "elapsed_seconds": 30.083
+        "elapsed_seconds": 27.367
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 17,
+        "fresh_candidate_count": 16,
         "publishable_source_count": 4,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4294,7 +4327,7 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/stuart-shooting-range-raises-hundreds-of-donations-for-humane-society-of-the-treasure-coast"
           }
         ],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -4365,18 +4398,28 @@
             "canonical_headline": "Port St. Lucie police investigate two separate campaign sign incidents involving Mayor Martin's husband",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Resident shoots, kills intruder at mobile home park in St. Lucie County; stand your ground case under review",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/person-shot-killed-while-attempting-to-enter-home-at-seminole-mobile-home-park",
+            "editorial_story_id": "story_003628",
+            "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
+            "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "new_publication_stale_rejected_count": 7,
-        "elapsed_seconds": 3.291
+        "elapsed_seconds": 3.987
       },
       {
         "category_key": "sports",
         "category_label": "Sports",
         "status": "sports_zero_candidate_archive_recovery",
-        "fetched_candidate_count": 26,
+        "fetched_candidate_count": 25,
         "fresh_candidate_count": 21,
         "publishable_source_count": 3,
         "selected_source_count": 3,
@@ -4398,7 +4441,7 @@
         "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "sports",
@@ -4413,11 +4456,11 @@
           {
             "category_key": "sports",
             "source_headline": "Vero Beach High School honors teen killed in fall at abandoned condo during season opener - cw34.com",
-            "source_url": "https://cw34.com/newsletter-daily/vero-beach-high-school-honors-teen-killed-in-29-feet-fall-abandoned-indian-river-county-sheriffs-office-florida-news",
+            "source_url": "https://cw34.com/news/local/vero-beach-high-school-honors-teen-killed-in-29-feet-fall-abandoned-indian-river-county-sheriffs-office-florida-news",
             "editorial_story_id": "story_003927",
             "canonical_slug": "2026-08-16-vero-beach-high-school-honors-16-year-old-killed-in-fall-at-abandoned-sebastian",
             "canonical_headline": "Vero Beach High School honors 16-year-old killed in fall at abandoned Sebastian condo",
-            "basis": "exact_source_and_persistent_story_skip",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4428,16 +4471,6 @@
             "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
             "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
             "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "sports",
-            "source_headline": "Mets erupt late for 7-2 victory at Jupiter - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/sports/mets-erupt-late-for-7-2-victory-at-jupiter/article_4b448dd6-2750-5bc8-a4f9-84b5b82fe1fc.html",
-            "editorial_story_id": "story_003788",
-            "canonical_slug": "2026-08-16-st-lucie-mets-rally-for-7-2-victory-over-jupiter-hammerheads",
-            "canonical_headline": "St. Lucie Mets rally for 7-2 victory over Jupiter Hammerheads",
-            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4454,30 +4487,23 @@
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 6.299
+        "elapsed_seconds": 6.216
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
-        "status": "quality_gate_archive_recovery",
+        "status": "no_publishable_sources",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 5,
-        "selected_source_count": 5,
+        "fresh_candidate_count": 16,
+        "publishable_source_count": 0,
+        "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 14.602,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 14.602,
-        "failure_code": "publication_quality_rejected",
-        "failure_summary": "Generated content did not pass final publication quality gates",
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4486,21 +4512,11 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 5,
+        "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 1,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "things_to_do",
-            "source_headline": "Summer camp turns 91 young artists loose on creativity - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/news/indian_river/summer-camp-turns-91-young-artists-loose-on-creativity/article_64e3fb06-b454-5608-a3ee-e7ed0eebd18e.html",
-            "editorial_story_id": "story_004156",
-            "canonical_slug": "2026-08-16-vero-beach-art-club-hosts-summer-camp-for-91-young-artists",
-            "canonical_headline": "Vero Beach Art Club hosts summer camp for 91 young artists",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "things_to_do",
             "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - wpbf.com",
@@ -4512,36 +4528,10 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Animals rescued from Martin County hoarding cases start to show signs of healing",
-            "source_url": "https://www.wptv.com/shining-a-light/animals-rescued-from-martin-county-hoarding-cases-start-to-show-signs-of-healing",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
-            "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
-            "basis": "exact_structured_incident_key",
-            "identity_keys": [
-              "incident:mass-animal-hoarding:martin-county",
-              "story:story_003665",
-              "source:https://www.wptv.com/shining-a-light/animals-rescued-from-martin-county-hoarding-cases-start-to-show-signs-of-healing"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "incident"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "elapsed_seconds": 19.604
+        "elapsed_seconds": 4.116
       },
       {
         "category_key": "florida",
@@ -4574,15 +4564,15 @@
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 3.343
+        "elapsed_seconds": 7.28
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "generated_live",
-        "fetched_candidate_count": 30,
-        "fresh_candidate_count": 27,
-        "publishable_source_count": 7,
+        "fetched_candidate_count": 29,
+        "fresh_candidate_count": 26,
+        "publishable_source_count": 5,
         "selected_source_count": 5,
         "cache_hit": false,
         "archive_recovery_requested": false,
@@ -4591,11 +4581,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 36.005,
+            "elapsed_seconds": 30.516,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 36.005,
+        "model_elapsed_seconds": 30.516,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4606,7 +4596,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 7,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 6,
@@ -4644,7 +4634,7 @@
           {
             "category_key": "martin",
             "surface": "hero",
-            "headline": "17 arrested in months-long cocaine trafficking investigation centered in Indiantown",
+            "headline": "17 arrested in Martin County cocaine trafficking ring based in Indiantown",
             "editorial_story_id": "story_003960",
             "canonical_slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
             "canonical_headline": "17 arrested in Indiantown cocaine trafficking ring led by Cecil Trimble, 4 kilos seized in Operation Beneath the Surface",
@@ -4654,7 +4644,7 @@
           {
             "category_key": "martin",
             "surface": "card",
-            "headline": "36 dogs rescued from Palm City house prompt lawmakers to push for stronger animal cruelty laws",
+            "headline": "36 border collies rescued from Palm City house in hoarding case",
             "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
             "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
             "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
@@ -4664,7 +4654,7 @@
           {
             "category_key": "martin",
             "surface": "card",
-            "headline": "Continental Shooting Center in Stuart collects hundreds of donations for rescued border collies",
+            "headline": "Stuart shooting range collects hundreds of donations for Humane Society after dog rescue",
             "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
             "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
             "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
@@ -4679,23 +4669,30 @@
         "budget_seconds": 180.0,
         "live_hero_headline": "",
         "generated_card_count": 0,
-        "elapsed_seconds": 45.735
+        "elapsed_seconds": 35.669
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 29,
-        "fresh_candidate_count": 18,
-        "publishable_source_count": 2,
-        "selected_source_count": 0,
+        "status": "generated_live",
+        "fetched_candidate_count": 30,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 3,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed St. Lucie County category eligibility contract",
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 5.589,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 5.589,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -4704,10 +4701,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 11,
+        "published_story_duplicate_suppression_count": 10,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -4808,22 +4805,57 @@
             "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Man shot, killed inside Fort Pierce home after attacking homeowner; no charges filed - WPEC",
-            "source_url": "https://cbs12.com/news/local/person-shot-killed-while-allegedly-trying-to-enter-fort-pierce-mobile-home-st-lucie-county-shooting-st-lucie-county-crime-deadly-shooting-fatal-shooting-orange-avenue-shooting-seminole-mobile-home-park-fort-pierce-crime-st-lucie-county-sheriff",
-            "editorial_story_id": "story_003628",
-            "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
-            "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "82-year-old Melbourne man dies after single-vehicle crash on I-95 in St. Lucie County - WFLX",
+            "source_url": "https://www.wflx.com/2026/08/16/82-year-old-melbourne-man-dies-after-single-vehicle-crash-i-95-st-lucie-county?outputType=amp",
+            "publisher": "www.wflx.com",
+            "canonical_slug": "2026-08-16-melbourne-man-82-dies-after-jeep-strikes-tree-in-median-of-interstate-95-in-st-l",
+            "canonical_headline": "Melbourne man, 82, dies after Jeep strikes tree in median of Interstate 95 in St. Lucie County",
+            "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+            "identity_keys": [
+              "story:story_004134",
+              "source:https://www.wflx.com/2026/08/16/82-year-old-melbourne-man-dies-after-single-vehicle-crash-i-95-st-lucie-county?outputType=amp"
+            ],
+            "match_confidence": 0.95,
+            "evidence_dimensions": [
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_precise_location",
+              "shared_subject_phrase",
+              "shared_headline_topic",
+              "distinctive_fact_overlap"
+            ],
+            "decision_trace": [
+              "left_identity_origin=source_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=0",
+              "shared_locality=['st-lucie', 'st-lucie-county']",
+              "shared_event_families=['crash']",
+              "shared_named_people=[]",
+              "shared_precise_locations=['gatlin-boulevard']",
+              "shared_agencies=[]",
+              "shared_subject_phrases=['dies-single-vehicle', 'dies-single-vehicle-crash', 'melbourne-dies-single', 'melbourne-dies-single-vehicle', 'old-melbourne-dies', 'old-melbourne-dies-single', 'single-vehicle-crash']",
+              "shared_headline_topic_core=['crash', 'dies', 'melbourne', 'old', 'single', 'vehicle']",
+              "shared_distinctive_token_count=59",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 5.653
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Melbourne man, 82, dies after single-vehicle crash on I-95 in St. Lucie County",
+        "generated_card_count": 0,
+        "elapsed_seconds": 13.519
       },
       {
         "category_key": "indian_river",
@@ -4831,8 +4863,8 @@
         "status": "generated_live",
         "fetched_candidate_count": 27,
         "fresh_candidate_count": 20,
-        "publishable_source_count": 6,
-        "selected_source_count": 4,
+        "publishable_source_count": 7,
+        "selected_source_count": 5,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4840,11 +4872,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 8.116,
+            "elapsed_seconds": 6.589,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 8.116,
+        "model_elapsed_seconds": 6.589,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4855,11 +4887,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 6,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "Woman found shot in Vero Beach roadway dies; IRCSO investigating as homicide, searching for person of interest - WFLX",
+            "source_url": "https://www.wflx.com/2026/08/16/woman-found-shot-in-vero-beach-roadway-dies-ircso-investigating-as-homicide-searching-for-person-of-interest?outputType=amp",
+            "editorial_story_id": "story_004173",
+            "canonical_slug": "2026-08-16-woman-found-shot-in-vero-beach-roadway-dies-sheriffs-office-searching-for-person",
+            "canonical_headline": "Woman found shot in Vero Beach roadway dies; sheriff's office searching for person of interest",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "indian_river",
             "source_headline": "Woman found shot in road near Vero Beach dies; IRCSO investigating as homicide, search for person of interest",
@@ -4872,7 +4914,7 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Woman found shot in Vero Beach roadway dies; IRCSO investigating as homicide, searching for person of interest - WPTV",
+            "source_headline": "Woman found shot in road near Vero Beach dies; IRCSO investigating as homicide, search for person of interest - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/woman-found-shot-in-vero-beach-roadway-dies-ircso-investigating-as-homicide-searching-for-person-of-interest",
             "editorial_story_id": "story_004173",
             "canonical_slug": "2026-08-16-woman-found-shot-in-vero-beach-roadway-dies-sheriffs-office-searching-for-person",
@@ -4912,22 +4954,12 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Vero Beach High School honors teen killed in fall at abandoned condo during season opener - WPEC",
-            "source_url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPS2Zpck9CMThIck9oSDZ0YkVvUDdrSWhZb3dvcWhvZWp4TUJQaGdOOWlpM0ZOSU41VU9zWDVTcDZyZlB4XzRibmpraTNiVlRRT1Q4azJ4d05OZWhQMEhrWExnZlRBeVpveG9MQzNfRUpTeVBlRm1sakw3RmpJSHlYeHo4TTRuRk9jNC1mTWt6ZFlGNTlGY1lCQ25XWHZqdkptOHRfcU5OaUtNOU1qbV9HaFlWZUJveFJxN2JuRGNPa3pTSE1vczU0Z0FpQm9OdVVhMEd0eTNTVnd6dzBLbkdxU09kQnREdXhs",
-            "editorial_story_id": "story_003927",
-            "canonical_slug": "2026-08-16-vero-beach-high-school-honors-16-year-old-killed-in-fall-at-abandoned-sebastian",
-            "canonical_headline": "Vero Beach High School honors 16-year-old killed in fall at abandoned Sebastian condo",
+            "source_headline": "Fatal I-95 crash jams traffic in St. Lucie County - cw34.com",
+            "source_url": "https://cw34.com/news/local/fatal-i-95-crash-stops-traffic-in-st-lucie-county-florida-news-florida-highway-patrol-fhp-fatal-crash-traffic-alert-florida-news",
+            "editorial_story_id": "story_001557",
+            "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
             "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "High school football game of the week preview: Cardinal Newman at Vero Beach - wpbf.com",
-            "source_url": "https://www.wpbf.com/article/florida-high-school-football-cardinal-newman-vero-beach/73440696",
-            "editorial_story_id": "story_003951",
-            "canonical_slug": "2026-08-16-cardinal-newman-to-face-vero-beach-in-high-school-football-preseason-kickoff-cla",
-            "canonical_headline": "Cardinal Newman to face Vero Beach in high school football Preseason Kickoff Classic",
-            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -4936,9 +4968,9 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Woman found shot in Vero Beach roadway dies; sheriff's office seeks person of interest",
+        "live_hero_headline": "Woman found shot in Vero Beach roadway dies; Indian River County Sheriff identifies person of interest",
         "generated_card_count": 0,
-        "elapsed_seconds": 14.262
+        "elapsed_seconds": 20.55
       }
     ]
   }
