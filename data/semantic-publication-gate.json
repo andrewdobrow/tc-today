@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "gate_version": "1.6",
-  "generated_at": "2026-08-17T20:49:04.238178+00:00",
+  "generated_at": "2026-08-18T01:53:33.740052+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -44,24 +44,24 @@
     "custom_articles": "excluded_authoritative_custom_contract_retained"
   },
   "summary": {
-    "evaluations": 78,
-    "candidate_pairs": 0,
+    "evaluations": 85,
+    "candidate_pairs": 1,
     "structured_conflict_overrides": 0,
-    "model_calls": 0,
+    "model_calls": 1,
     "cache_hits": 0,
-    "no_candidate_passes": 78,
+    "no_candidate_passes": 84,
     "duplicates_preserved": 0,
-    "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
-    "retroactive_rows_retained": 77,
+    "canonical_updates_selected": 1,
+    "new_stories_allowed": 6,
+    "retroactive_rows_retained": 78,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
     "registry_aliases_written": 0,
-    "material_update_composer_calls": 0,
+    "material_update_composer_calls": 1,
     "material_updates_applied": 0,
     "material_update_redirects": 0,
-    "material_update_holds": 0,
+    "material_update_holds": 1,
     "material_update_replays_suppressed": 0
   },
   "decisions": [
@@ -1529,7 +1529,7 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Fort Pierce approves $183,200 pilot program for two code enforcement officers in redevelopment areas",
       "incoming_source_url": "https://www.hometownnewstc.com/news/st_lucie/code-enforcement-ramping-up-in-redevelopment-areas/article_ef2edbbd-0777-54c6-8626-b05c0fee11d4.html",
       "incoming_story_id": "story_004289",
@@ -1546,10 +1546,283 @@
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
       }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Martin County deputies rescue man attempting suicide in ocean",
+      "incoming_source_url": "https://cbs12.com/news/florida/martin-county-sheriffs-office-saves-distressed-man-in-middle-of-the-ocean-florida-news-florida-man-saved-middle-of-the-ocean-mcso-marine-deputies-martin-county-lifeguard",
+      "incoming_story_id": "story_004418",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "More than 50 St. Lucie County residents targeted in law enforcement impersonation scam",
+      "incoming_source_url": "https://cbs12.com/news/local/more-than-50-reports-linked-to-law-enforcement-impersonation-scam-in-st-lucie-county-florida-news",
+      "incoming_story_id": "story_004416",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "St. Lucie Nuclear Power Plant Unit 1 returns to full power after control rod incident",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-st-lucie-county/no-cause-for-worry-nuclear-engineering-professor-shares-thoughts-on-reactor-shutdown-at-st-lucie-plant",
+      "incoming_story_id": "story_004410",
+      "candidates": [
+        {
+          "slug": "2026-08-16-st-lucie-nuclear-power-plant-unit-1-manually-shut-down-after-control-rods-drop-i",
+          "headline": "St. Lucie Nuclear Power Plant Unit 1 manually shut down after control rods drop into reactor core",
+          "retrieval_score": 0.747,
+          "headline_similarity": 0.627,
+          "similarity_basis": "final_headline",
+          "shared_headline_tokens": [
+            "1",
+            "control",
+            "lucie",
+            "nuclear",
+            "plant",
+            "power",
+            "st",
+            "unit"
+          ],
+          "shared_topic_tokens": [
+            "1",
+            "control",
+            "nuclear",
+            "plant",
+            "power",
+            "unit"
+          ],
+          "day_gap": 1,
+          "structured_conflict_override": false,
+          "structured_conflict_override_tier": "",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": false,
+          "reasons": [
+            "moderate_fuzzy_headline",
+            "shared_locality_and_event_family",
+            "publication_gap_1_days"
+          ]
+        }
+      ],
+      "decision": {
+        "status": "validated",
+        "action": "update_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-08-16-st-lucie-nuclear-power-plant-unit-1-manually-shut-down-after-control-rods-drop-i",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "confidence": 0.95,
+        "shared_anchors": [
+          "St. Lucie Nuclear Power Plant Unit 1",
+          "Three control rods dropped into reactor core",
+          "Manual shutdown",
+          "Wednesday morning incident (published Aug 16, referenced as 'last week' in Aug 17 article)",
+          "Nuclear Regulatory Commission notification"
+        ],
+        "novel_facts": [
+          "Unit 1 has returned to full power",
+          "Repairs have been completed",
+          "Expert commentary from Dr. Donald Wall, nuclear engineering professor at University of Florida",
+          "Reference to similar incident in November 2024 involving Unit 1",
+          "Resident reaction from Forrest Blanton",
+          "Confirmation of no danger to public or staff, no power loss to customers"
+        ],
+        "reason": "Both articles cover the identical incident: three control rods dropping into Unit 1's reactor core at St. Lucie Nuclear Power Plant, prompting a manual shutdown. The incoming article provides a material update that the unit has returned to full power after repairs, which is a significant operational development that changes the status from 'shut down' to 'operational.' It also adds expert analysis and historical context about a similar November 2024 incident.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Home insurance premiums drop in Indian River County in first half of 2026",
+      "incoming_source_url": "https://www.wptv.com/money/real-estate-news/state-data-shows-decreasing-premiums-in-51-florida-counties",
+      "incoming_story_id": "story_004407",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fort Pierce man arrested on attempted murder charge after firing bullet through bathroom door",
+      "incoming_source_url": "https://www.wpbf.com/article/fort-pierce-man-firing-bullet-through-bathroom-door-nathan-hsu/73455544",
+      "incoming_story_id": "story_004305",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Vero Beach woman shot dead in roadway; Indian River County authorities search for Sebastian man nationwide",
+      "incoming_source_url": "https://www.wflx.com/2026/08/16/woman-found-shot-in-vero-beach-roadway-dies-ircso-investigating-as-homicide-searching-for-person-of-interest?outputType=amp",
+      "incoming_story_id": "story_004173",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Florida emergency management chief Kevin Guthrie joins Jay Collins gubernatorial ticket hours before primary",
+      "incoming_source_url": "https://www.wptv.com/news/state/lt-gov-jay-collins-picks-florida-emergency-management-director-kevin-guthrie-as-running-mate",
+      "incoming_story_id": "story_004401",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
     }
   ],
   "archive_repairs": [],
-  "material_update_compositions": [],
+  "material_update_compositions": [
+    {
+      "phase": "forward_publication",
+      "canonical_slug": "2026-08-16-st-lucie-nuclear-power-plant-unit-1-manually-shut-down-after-control-rods-drop-i",
+      "incoming_slug": "",
+      "status": "context_contract_failed",
+      "validation_errors": [
+        "new_development_missing"
+      ],
+      "word_count": 199,
+      "paragraph_count": 4,
+      "baseline_lead_hits": [
+        "control",
+        "core",
+        "down",
+        "lucie",
+        "manually",
+        "nuclear",
+        "plant",
+        "power",
+        "reactor",
+        "rods",
+        "shut",
+        "unit"
+      ],
+      "novelty_lead_hits": [
+        "commission",
+        "crews",
+        "customers",
+        "danger",
+        "full",
+        "incident",
+        "light",
+        "lost",
+        "public",
+        "regulatory",
+        "repairs",
+        "returned",
+        "staff",
+        "there",
+        "when"
+      ],
+      "headline_alignment": {
+        "aligned": true,
+        "reason": "aligned",
+        "token_similarity": 0.4,
+        "date_gap_days": 2,
+        "prospective": true,
+        "existing_headline": "St. Lucie Nuclear Power Plant Unit 1 manually shut down after control rods drop into reactor core",
+        "incoming_headline": "St. Lucie Nuclear Power Plant Unit 1 returns to full power after control rod incident",
+        "candidate_slug": "2026-08-16-st-lucie-nuclear-power-plant-unit-1-manually-shut-down-after-control-rods-drop-i",
+        "prospective_lastmod": "2026-08-18",
+        "timestamp_evidence": "stored_archive_timestamp"
+      },
+      "context_diagnostics": {
+        "required": true,
+        "passed": false,
+        "story_form": "update",
+        "lead_word_count": 66,
+        "baseline_anchor": "",
+        "baseline_present": true,
+        "baseline_anchor_present": true,
+        "baseline_details_present": true,
+        "baseline_context_hits": [
+          "control",
+          "core",
+          "down",
+          "lucie",
+          "manually",
+          "nuclear",
+          "plant",
+          "power",
+          "reactor",
+          "rods",
+          "shut",
+          "unit"
+        ],
+        "baseline_context_required": 2,
+        "canonical_context_available": true,
+        "canonical_context_headline": "St. Lucie Nuclear Power Plant Unit 1 manually shut down after control rods drop into reactor core",
+        "novelty_anchor": "source_distinctive_detail",
+        "novelty_present": false,
+        "novelty_token_hits": [],
+        "missing": [
+          "new_development_missing"
+        ],
+        "source_title": "'No cause for worry': Nuclear engineering professor shares thoughts on reactor shutdown at St. Lucie plant",
+        "headline": "St. Lucie Nuclear Power Plant Unit 1 returns to full power after control rod incident"
+      }
+    }
+  ],
   "material_updates": [],
   "registry_consolidation": {
     "status": "no_changes",
