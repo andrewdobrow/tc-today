@@ -63,6 +63,20 @@ class StoryRegistry:
     REGISTRY_MAX_BYTES = 50 * 1024 * 1024
 
     @staticmethod
+    def _serialize_payload(payload: dict[str, Any], *, indent: int | None) -> str:
+        """Serialize registry state without changing its semantic content.
+
+        Pretty two-space JSON remains the normal on-disk format.  Under repository
+        size pressure we reduce indentation before discarding any additional
+        diagnostic evidence; JSON consumers see the exact same payload either way.
+        """
+        if indent is None:
+            return json.dumps(
+                payload, ensure_ascii=False, separators=(",", ":")
+            )
+        return json.dumps(payload, indent=indent, ensure_ascii=False)
+
+    @staticmethod
     def _resolution_history_key(entry: dict[str, Any]) -> str:
         """Return a deterministic key for one resolver decision record."""
         return json.dumps(
@@ -402,16 +416,22 @@ class StoryRegistry:
         report["total_unified_incident_evidence_truncated"] = int(
             report.get("total_unified_incident_evidence_truncated", 0) or 0
         ) + incident_compaction["unique_entries_truncated"]
-        serialized = json.dumps(self.data, indent=2, ensure_ascii=False)
+        serialization_indent: int | None = 2
+        serialized = self._serialize_payload(self.data, indent=serialization_indent)
         size_bytes = len(serialized.encode("utf-8"))
         pressure_mode = "normal"
+        serialization_mode = "pretty_2"
         if size_bytes > self.REGISTRY_PRESSURE_BYTES:
             pressure_compaction = self._compact_payload_unified_incident_evidence(
                 self.data, limit=self.UNIFIED_INCIDENT_EVIDENCE_PRESSURE_LIMIT
             )
             report["last_unified_incident_evidence_pressure_write"] = pressure_compaction
             pressure_mode = "pressure"
-            serialized = json.dumps(self.data, indent=2, ensure_ascii=False)
+            # Formatting bytes are not identity.  Tighten indentation before
+            # discarding any more candidate evidence.
+            serialization_indent = 1
+            serialization_mode = "pressure_1"
+            serialized = self._serialize_payload(self.data, indent=serialization_indent)
             size_bytes = len(serialized.encode("utf-8"))
         if size_bytes > self.REGISTRY_MAX_BYTES:
             emergency_compaction = self._compact_payload_unified_incident_evidence(
@@ -419,19 +439,26 @@ class StoryRegistry:
             )
             report["last_unified_incident_evidence_emergency_write"] = emergency_compaction
             pressure_mode = "emergency"
-            serialized = json.dumps(self.data, indent=2, ensure_ascii=False)
+            # Compact JSON is the final lossless storage step before the hard ceiling.
+            serialization_indent = None
+            serialization_mode = "emergency_compact"
+            serialized = self._serialize_payload(self.data, indent=serialization_indent)
             size_bytes = len(serialized.encode("utf-8"))
         report["last_serialized_bytes"] = size_bytes
         report["max_serialized_bytes"] = self.REGISTRY_MAX_BYTES
         report["pressure_serialized_bytes"] = self.REGISTRY_PRESSURE_BYTES
         report["last_pressure_mode"] = pressure_mode
-        # Re-serialize once so the recorded byte count and pressure mode are present.
-        serialized = json.dumps(self.data, indent=2, ensure_ascii=False)
+        report["last_serialization_mode"] = serialization_mode
+        # Re-serialize so the recorded byte count and storage mode are present.
+        serialized = self._serialize_payload(self.data, indent=serialization_indent)
+        size_bytes = len(serialized.encode("utf-8"))
+        report["last_serialized_bytes"] = size_bytes
+        serialized = self._serialize_payload(self.data, indent=serialization_indent)
         size_bytes = len(serialized.encode("utf-8"))
         if size_bytes > self.REGISTRY_MAX_BYTES:
             raise RuntimeError(
                 "Editorial story registry exceeds the 50 MiB safety ceiling after "
-                "adaptive candidate-evidence compaction: "
+                "adaptive candidate-evidence compaction and lossless JSON compaction: "
                 f"{size_bytes / (1024 * 1024):.2f} MiB"
             )
         temporary = self.path.with_suffix(self.path.suffix + ".tmp")
