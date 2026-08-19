@@ -159,6 +159,7 @@ def _header_primary_cta_html():
             '<span class="membership-subscribe-price">Limited time &middot; 7 days free &middot; then $4.99/mo</span>'
             '</a>'
             f'<a href="{signin_href}" class="membership-header-signin">Sign in</a>'
+            f'<a href="{href}" class="membership-header-welcome" data-membership-welcome>Welcome, subscriber</a>'
         )
     return '<a href="/advertise.html" class="support-btn" style="text-decoration:none">Advertise</a>'
 
@@ -192,17 +193,23 @@ def _homepage_support_card_html():
       </a>'''
 
 def _apply_membership_site_chrome(root: Path) -> int:
-    """Normalize legacy/static page header actions to the current launch state.
+    """Normalize retained/generated page chrome to the current membership state.
 
-    Some retained policy/event pages are not regenerated from templates every run.
-    This bounded pass prevents a mixed Advertise/Subscribe header after launch while
-    preserving the dark-launch behavior before the switch is enabled.
+    The v1.13.6.2 subscriber-chrome release requires two pieces to move together:
+    the acquisition/welcome controls in ``header-actions`` and the shared membership
+    client/prepaint assets that resolve entitlement.  Treat them as one transaction
+    so a later generator replacement cannot leave the markup without its state layer.
     """
     replacement = _header_primary_cta_html()
     pattern = re.compile(
         r'(<div\s+class="header-actions">\s*)(.*?)(\s*</div>)',
         re.I | re.S,
     )
+    inject_membership_assets = None
+    if MEMBERSHIP_UI_ENABLED:
+        from tct_engine.membership_paywall import inject_membership_assets as _inject_membership_assets
+        inject_membership_assets = _inject_membership_assets
+
     changed = 0
     for page in sorted(root.rglob("*.html")):
         if page.name in {"subscribe.html", "membership-test.html"}:
@@ -213,8 +220,15 @@ def _apply_membership_site_chrome(root: Path) -> int:
             continue
         if 'class="header-actions"' not in text:
             continue
-        updated, count = pattern.subn(lambda m: m.group(1) + replacement + m.group(3), text, count=1)
-        if count and updated != text:
+
+        updated, _count = pattern.subn(
+            lambda m: m.group(1) + replacement + m.group(3), text, count=1
+        )
+        if inject_membership_assets is not None:
+            slug = page.stem if page.parent.name == "articles" else ""
+            updated = inject_membership_assets(updated, slug)
+
+        if updated != text:
             page.write_text(updated, encoding="utf-8")
             changed += 1
     return changed
@@ -18960,7 +18974,8 @@ def _cross_source_event_families(item):
             r"|\b(help|search|seek|seeking|find|finding|locate|locating)\b.{0,75}"
             r"\b(missing|last seen|autistic|teen|boy|girl|child)\b"
         ),
-        "animal-case": r"\b(hoarding|animals?|cats?|dogs?|rescued|seized)\b",
+        "animal-case": r"\b(hoarding|animals?|cats?|dogs?|rescued)\b",
+        "drug-case": r"\b(cocaine|fentanyl|heroin|methamphetamine|meth|marijuana|narcotics?|drug bust|drug trafficking|drug seizure|controlled substances?)\b",
         "crash": r"\b(crash|collision|wreck)\b",
         "fire": r"\b(structure fire|house fire|store fire|commercial fire|electrical fire|brush fire|wildfire|fire-rescue|burning|arson|blaze)\b",
     }
@@ -21238,6 +21253,174 @@ def _repair_recent_semantic_archive_duplicates(
         "held_count": len(held),
         "held": held,
     }
+
+
+
+# Verified production fingerprint for the Aug. 14-16 Martin County
+# "Operation Beneath the Surface" cocaine-bust fragmentation. The semantic gate
+# remains the general prevention mechanism; this bounded migration is a last-resort
+# cleanup for the two public URLs that escaped before the drug-operation identity
+# evidence was available. Exact historical slugs plus independent headline evidence
+# are required so no unrelated narcotics story can ever be collapsed by this repair.
+MARTIN_COCAINE_OPERATION_CANONICAL_SLUG = (
+    "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon"
+)
+MARTIN_COCAINE_OPERATION_DUPLICATE_SLUGS = frozenset({
+    "2026-08-15-17-arrested-in-martin-county-cocaine-trafficking-bust-4-kilos-seized-in-indianto",
+    "2026-08-16-17-arrested-in-major-martin-county-cocaine-bust-4-kilos-seized-in-indiantown-ope",
+})
+
+
+def _martin_cocaine_operation_fingerprint(row, *, canonical=False):
+    if not isinstance(row, dict):
+        return False
+    slug = str(row.get("slug") or "").strip()
+    expected = (
+        {MARTIN_COCAINE_OPERATION_CANONICAL_SLUG}
+        if canonical
+        else set(MARTIN_COCAINE_OPERATION_DUPLICATE_SLUGS)
+    )
+    if slug not in expected:
+        return False
+    text = re.sub(
+        r"[^a-z0-9]+",
+        " ",
+        " ".join(
+            str(row.get(key) or "")
+            for key in ("headline", "source_headline", "teaser", "source_url")
+        ).lower(),
+    )
+    return bool(
+        re.search(r"\b17\b", text)
+        and re.search(r"\bcocaine\b", text)
+        and re.search(r"\b(?:martin county|indiantown)\b", text)
+        and re.search(r"\b(?:arrest|arrested|bust|traffick|drug|narcotic)\w*\b", text)
+    )
+
+
+def _repair_verified_martin_cocaine_operation_duplicate(archive, report):
+    """Collapse only the verified Aug. 14-16 Operation Beneath the Surface URLs.
+
+    This is deliberately not a fuzzy matcher. It is a deterministic migration for
+    already-published production slugs. The general semantic/structured identity
+    layers should normally repair or prevent the duplicate first; if those rows are
+    already gone this returns ``not_needed`` without mutating anything.
+    """
+    rows = [row for row in (archive or []) if isinstance(row, dict)]
+    canonical = next(
+        (
+            row for row in rows
+            if str(row.get("slug") or "") == MARTIN_COCAINE_OPERATION_CANONICAL_SLUG
+            and _martin_cocaine_operation_fingerprint(row, canonical=True)
+        ),
+        None,
+    )
+    if canonical is None:
+        return list(archive or []), [], {
+            "status": "canonical_missing_or_fingerprint_mismatch",
+            "canonical_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+            "repaired_count": 0,
+        }
+
+    duplicates = [
+        row for row in rows
+        if str(row.get("slug") or "") in MARTIN_COCAINE_OPERATION_DUPLICATE_SLUGS
+        and _martin_cocaine_operation_fingerprint(row, canonical=False)
+    ]
+    if not duplicates:
+        return list(archive or []), [], {
+            "status": "not_needed",
+            "canonical_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+            "repaired_count": 0,
+        }
+
+    redirects = []
+    removed = set()
+    for duplicate in sorted(duplicates, key=_publication_canonical_key):
+        source_slug = str(duplicate.get("slug") or "")
+        removed.add(source_slug)
+        _merge_category_memberships(
+            canonical,
+            duplicate,
+            canonical.get("category_key") or duplicate.get("category_key") or "martin",
+        )
+        redirect = {
+            "source_slug": source_slug,
+            "source_headline": duplicate.get("headline", ""),
+            "target_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+            "target_headline": canonical.get("headline", ""),
+            "story_stage": "verified-production-fingerprint-migration",
+            "match_confidence": 100,
+            "canonical_is_custom": False,
+            "editorial_story_id": str(canonical.get("editorial_story_id") or ""),
+            "reason": (
+                "Verified production fingerprint migration for the Aug. 14-16 "
+                "Operation Beneath the Surface cocaine-bust duplicate URLs."
+            ),
+        }
+        redirects.append(redirect)
+
+        decision = {
+            "action": SEMANTIC_ACTION_DUPLICATE,
+            "same_real_world_event": True,
+            "material_new_update": False,
+            "confidence": 1.0,
+            "selected_candidate_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+            "reason": "verified_production_fingerprint_operation_beneath_the_surface",
+            "shared_anchors": [
+                "17 arrests",
+                "cocaine",
+                "Martin County/Indiantown",
+                "Operation Beneath the Surface production fingerprint",
+            ],
+            "novel_facts": [],
+        }
+        if isinstance(report, dict):
+            report.setdefault("decisions", []).append({
+                "phase": "verified_production_fingerprint_migration",
+                "incoming_headline": duplicate.get("headline", ""),
+                "incoming_source_url": str(
+                    duplicate.get("source_url") or duplicate.get("_source_url") or ""
+                ),
+                "incoming_story_id": str(duplicate.get("editorial_story_id") or ""),
+                "candidates": [{
+                    "slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+                    "headline": canonical.get("headline", ""),
+                    "retrieval_score": 1.0,
+                    "reasons": ["verified_production_fingerprint"],
+                }],
+                "decision": decision,
+            })
+            report.setdefault("archive_repairs", []).append({
+                "source_slug": source_slug,
+                "target_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+                "source_story_id": str(duplicate.get("editorial_story_id") or ""),
+                "target_story_id": str(canonical.get("editorial_story_id") or ""),
+                "source_url": str(
+                    duplicate.get("source_url") or duplicate.get("_source_url") or ""
+                ),
+                "source_headline": duplicate.get("headline", ""),
+                "target_headline": canonical.get("headline", ""),
+                "confidence": 1.0,
+                "shared_anchors": list(decision["shared_anchors"]),
+                "repair_basis": "verified_production_fingerprint",
+            })
+            summary = report.setdefault("summary", {})
+            summary["retroactive_redirects"] = int(
+                summary.get("retroactive_redirects", 0) or 0
+            ) + 1
+
+    cleaned = [
+        row for row in (archive or [])
+        if str((row or {}).get("slug") or "") not in removed
+    ]
+    return cleaned, redirects, {
+        "status": "repaired",
+        "canonical_slug": MARTIN_COCAINE_OPERATION_CANONICAL_SLUG,
+        "repaired_count": len(redirects),
+        "redirected_slugs": sorted(removed),
+    }
+
 
 def _write_semantic_publication_gate_report(report, output_root=None):
     path = Path(output_root or OUTPUT_DIR) / "data" / "semantic-publication-gate.json"
@@ -25014,6 +25197,20 @@ def write_archives(all_categories, top_cat):
     _forward_identity_report["semantic_archive_repairs"] = (
         _semantic_archive_repair_report
     )
+    archive, _martin_cocaine_redirects, _martin_cocaine_repair = (
+        _repair_verified_martin_cocaine_operation_duplicate(
+            archive, _semantic_gate_report
+        )
+    )
+    _canonical_redirects.extend(_martin_cocaine_redirects)
+    _forward_identity_report["martin_cocaine_operation_duplicate_repair"] = (
+        _martin_cocaine_repair
+    )
+    if _martin_cocaine_repair.get("status") == "repaired":
+        print(
+            "  Verified production duplicate repaired: Operation Beneath the Surface "
+            f"{_martin_cocaine_repair.get('repaired_count', 0)} later URL(s) -> Aug. 14 canonical"
+        )
     _semantic_registry_consolidation = (
         _apply_semantic_duplicate_registry_consolidation(
             archive,
