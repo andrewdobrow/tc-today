@@ -1,40 +1,33 @@
-# Treasure Coast Today v1.13.6.1e
-## Martin cocaine duplicate — conflict-override and fingerprint repair
+# v1.13.6.1e — Live category identity alignment stabilization hotfix
 
-### Production regression
-A third public permalink was created for the same Martin County Sheriff's Office cocaine operation:
+## Production failure addressed
 
-Canonical (preserve):
-- `2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon`
+The Aug. 19 production run reached the final live-category canonical gate after successfully passing forward live identity, live permalink integrity, canonical hero freshness, final image repair, and final county authority. The preceding canonicalization reported that it removed one duplicate placement and rewrote ten canonical placements, but the immediately following validator still found one duplicate/redirect-source placement.
 
-Later duplicates (redirect):
-- `2026-08-15-17-arrested-in-martin-county-cocaine-trafficking-bust-4-kilos-seized-in-indianto`
-- `2026-08-16-17-arrested-in-major-martin-county-cocaine-bust-4-kilos-seized-in-indiantown-ope`
+## Root cause
 
-### Root cause
-v1.13.6.1d added strong candidate evidence for a named law-enforcement operation and a drug-operation continuity bundle, but the final semantic eligibility expression could still veto those candidates whenever legacy/generated event keys conflicted. The prior regression fixture did not reproduce that conflict, so it passed while production still failed.
+`canonicalize_all_live_category_surfaces()` resolved each category hero from the full live hero object. However, when it called `_dedupe_homepage_cards_by_permalink()`, the card deduper reconstructed the hero identity from the hero permalink alone (`{}` + URL). The final validator used the full hero object again.
 
-The v1.13.6.1d migration fallback was also scoped to the one then-known Aug. 15 duplicate slug. It could repair that page, but it could not catch a newly minted Aug. 16 slug if generalized prevention failed.
+A current-run hero can legitimately carry durable story/incident identity in memory before every equivalent field is available from the archive row. In that case:
 
-### Fix
-- Semantic publication gate bumped from 1.5 to 1.6, invalidating stale gate-cache keys.
-- Exact matching named law-enforcement operations may now override a contradictory structured event key for *candidate retrieval only*.
-- Added a narrow independent drug-operation bundle: same `drug-case` family, shared locality, shared law-enforcement agency, exact arrest count, shared named drug and at least three shared headline tokens.
-- That strict bundle can override structured conflict for candidate retrieval only. It never directly authorizes a merge.
-- Preserved existing conflict behavior for all other story classes; `unknown-event-*` handling was not globally relaxed.
-- Replaced the Aug. 15-slug-only cleanup with a deterministic incident-fingerprint migration. Any later archive row within seven days that states 17 arrests + cocaine + Martin County/Indiantown + drug-operation framing is redirected to the Aug. 14 canonical.
-- The fingerprint is intentionally incident-specific and is not a general drug-story fuzzy merge rule.
+1. canonicalization sees the full hero identity;
+2. the nested card deduper loses that live-only identity by reducing the hero to its URL;
+3. an equivalent card survives;
+4. the final validator restores the full hero identity and correctly fails closed.
 
-### Safety
-- Aug. 14 remains the substantive canonical page.
-- Later duplicate URLs become permanent redirects; they are not deleted into 404s.
-- Different drug cases with a different arrest count are explicitly rejected by regression.
-- No membership, Stripe, custom-article, ranking or follow-up activation behavior changes.
+The canonicalizer and validator were therefore applying the same policy to different identity inputs.
 
-### Validation
-- Exact Martin cocaine regression suite: 8 passed.
-- Surrounding semantic/cross-source/incident/permalink suite: 106 passed.
-- Workflow-equivalent suite: 889 passed.
-- Package validation: 35 modules / 119 public exports.
-- Generator runtime guard: PASS.
-- False-jurisdiction guard: PASS.
+## Fix
+
+- `_dedupe_homepage_cards_by_permalink()` now accepts an optional `hero_item`.
+- When final surface context is active, hero identity is resolved from the full live hero object plus permalink—the same inputs used by the final validator.
+- Both all-category canonicalization and final homepage dedupe pass the live hero object.
+- The final live-category validator now emits category, placement, reason, identity key, href, and headline for up to ten violations before raising. This is diagnostics-only and does not weaken fail-closed behavior.
+
+## Regression coverage
+
+Added an exact regression where two placements share a live-only incident identity that is intentionally absent from their archive rows. The test proves URL-only hero resolution loses the identity, then verifies canonicalization removes the duplicate and the immediately following validator passes.
+
+## Behavior intentionally unchanged
+
+No changes to story matching, follow-up classification, story lifecycle, persistent story IDs, archive identity, redirect authority, county authority, ranking, hero freshness, image selection, membership, custom article authority, or the forward-live identity contract.
