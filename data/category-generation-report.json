@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-19T01:49:43Z",
+  "generated_at": "2026-08-19T23:11:47Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,42 +15,49 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 2,
-      "generated_live": 5,
-      "quality_gate_archive_recovery": 1,
-      "sports_zero_candidate_archive_recovery": 1
+      "category_eligibility_archive_recovery": 1,
+      "generated_live": 6,
+      "generation_failed_archive_recovery": 1,
+      "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "no_category_eligible_sources": 2,
-      "no_sports_hero_candidates": 1,
+      "missing_or_null_hero": 1,
+      "no_category_eligible_sources": 1,
       "publication_quality_rejected": 1
     },
-    "model_attempt_count": 6,
-    "model_elapsed_seconds": 251.393,
-    "archive_recovery_requested_count": 4,
-    "sports_expired_event_preview_count": 1,
-    "contextual_update_lead_rejection_count": 1,
-    "article_framing_rejection_count": 8,
-    "category_eligibility_rejection_count": 21,
-    "published_story_duplicate_suppression_count": 30,
-    "story_aware_update_context_count": 3
+    "model_attempt_count": 9,
+    "model_elapsed_seconds": 372.901,
+    "archive_recovery_requested_count": 3,
+    "sports_expired_event_preview_count": 0,
+    "contextual_update_lead_rejection_count": 0,
+    "article_framing_rejection_count": 4,
+    "category_eligibility_rejection_count": 29,
+    "published_story_duplicate_suppression_count": 11,
+    "story_aware_update_context_count": 4
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 27,
-      "publishable_source_count": 6,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 25,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 14,
+      "selected_source_count": 4,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Local Government category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 18.846,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 18.846,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -59,8 +66,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 6,
-      "category_eligibility_rejection_count": 6,
+      "category_eligibility_assessed_count": 14,
+      "category_eligibility_rejection_count": 10,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -72,60 +79,8 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Ryan Elijah ousts troubled Rep. Cory Mills in Florida's 7th District House primary",
-          "source_url": "https://www.wptv.com/politics/america-votes/ryan-elijah-ousts-troubled-rep-cory-mills-in-floridas-7th-district-house-primary"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Angie Nixon wins Democratic nomination for U.S. Senate in Florida special primary election",
-          "source_url": "https://www.wptv.com/news/politics/angie-nixon-wins-democratic-nomination-for-u-s-senate-in-florida-special-primary-election"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Former Rep. David Jolly wins Democratic nomination for governor in Florida",
-          "source_url": "https://www.wptv.com/news/politics/former-rep-david-jolly-wins-democratic-nomination-for-governor-in-florida"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "US Rep Byron Donalds wins GOP nod for governor in Florida, to face former Rep. David Jolly",
-          "source_url": "https://www.wptv.com/politics/america-votes/us-rep-byron-donalds-wins-gop-nod-for-governor-in-florida-to-face-former-rep-david-jolly"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Port St. Lucie mayoral candidates clash over growth, traffic and city’s future - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-mayor-race-where-the-candidates-stand-on-growth-traffic-trash-campaign-sign-investigation-shannon-martin-steven-giordano-eric-stazzeri-august-18-election"
+          "headline": "Derelict, at-risk boats near North Hutchinson Island creating dangerous conditions on Treasure Coast",
+          "source_url": "https://www.wptv.com/news/treasure-coast/derelict-at-risk-boats-near-north-hutchinson-island-creating-dangerous-conditions-on-treasure-coast"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -139,36 +94,137 @@
           "competing_signals": [
             "crime_incident:arrested"
           ],
-          "headline": "Florida woman posing as bank representative accused of Martin County credit card scam - cw34.com",
-          "source_url": "https://cw34.com/news/local/florida-woman-miami-poses-bank-representative-claims-credit-card-compromised-scam-martin-county-sheriffs-office-body-camera-florida-news"
-        }
-      ],
-      "published_story_duplicate_suppression_count": 1,
-      "published_story_duplicate_suppressions": [
+          "headline": "Boca Raton mother fights to see her children nearly 3 years after charges were dropped",
+          "source_url": "https://www.wptv.com/wptv-investigates/boca-raton-mother-fights-to-see-her-children-nearly-3-years-after-charges-were-dropped"
+        },
         {
+          "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
-          "source_headline": "I-95 southbound left lane blocked in Martin County due to roadway debris - WPEC",
-          "source_url": "https://cbs12.com/news/local/i-95-southbound-left-lane-blocked-in-martin-county-due-to-roadway-debris",
-          "editorial_story_id": "story_004509",
-          "canonical_slug": "2026-08-18-left-lane-of-i-95-southbound-blocked-near-stuart-due-to-roadway-debris",
-          "canonical_headline": "Left lane of I-95 southbound blocked near Stuart due to roadway debris",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:victim"
+          ],
+          "headline": "Michael Caruso child sex abuse case prompts discussion on warning signs of abuse and prevention",
+          "source_url": "https://www.wptv.com/lifestyle/family/michael-caruso-child-sex-abuse-case-prompts-discussion-on-warning-signs-of-sex-abuse-and-prevention"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Jupiter Narrows mangrove islands to be restored and named for local man killed in boating accident",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/jupiter-tequesta-juno-beach/jupiter-narrows-mangrove-islands-to-be-restored-and-named-for-local-man-killed-in-boating-accident"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Indian River County superintendent David K. Moore announces final year in role - WPBF",
+          "source_url": "https://www.wpbf.com/article/indian-river-county-superintendent-david-k-moore-announces-final-year/73477937"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrest"
+          ],
+          "headline": "'SEEKING JUSTICE,' attorney says alleged Caruso victim was between 3 and 5 years old",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/seeking-justice-attorney-says-alleged-caruso-victim-was-between-3-and-5-years-old"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Gunfire report delays dismissal at Treasure Coast Elementary School - WPBF",
+          "source_url": "https://www.wpbf.com/article/gunfire-report-delays-dismissal-at-treasure-coast-elementary-school/73478080"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Lawsuits over school bus and school speed zone camera tickets face setbacks in Florida",
+          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Port St. Lucie mayor race heads to November runoff between Shannon Martin, Steven Giordano - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/19/port-st-lucie-mayor-race-heads-november-runoff-between-shannon-martin-steven-giordano/"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Port St. Lucie mayor race heads to November runoff between Shannon Martin, Steven Giordano",
+          "source_url": "https://www.wptv.com/news/political/elections-local/port-st-lucie-mayor-race-heads-to-november-runoff-between-shannon-martin-steven-giordano"
         }
       ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 44.749
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Indian River County school superintendent Dr. Moore to step down June 2027",
+      "generated_card_count": 0,
+      "elapsed_seconds": 81.748
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 11,
-      "selected_source_count": 6,
+      "fresh_candidate_count": 27,
+      "publishable_source_count": 18,
+      "selected_source_count": 11,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -176,11 +232,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.629,
+          "elapsed_seconds": 75.884,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 12.629,
+      "model_elapsed_seconds": 75.884,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -191,8 +247,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 11,
-      "category_eligibility_rejection_count": 5,
+      "category_eligibility_assessed_count": 18,
+      "category_eligibility_rejection_count": 7,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -204,8 +260,8 @@
           "reason": "missing_primary_crime_safety_focus",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Lois Frankel wins Democratic nomination for U.S. House in Florida's 23rd Congressional District",
-          "source_url": "https://www.wptv.com/news/political/elections-local/lois-frankel-wins-democratic-nomination-for-u-s-house-in-floridas-23rd-congressional-district"
+          "headline": "Derelict, at-risk boats near North Hutchinson Island creating dangerous conditions on Treasure Coast",
+          "source_url": "https://www.wptv.com/news/treasure-coast/derelict-at-risk-boats-near-north-hutchinson-island-creating-dangerous-conditions-on-treasure-coast"
         },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -217,8 +273,8 @@
           "reason": "missing_primary_crime_safety_focus",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Palm Beach County primary voter turnout on par with previous years, no major issues reported",
-          "source_url": "https://www.wptv.com/news/political/elections-local/palm-beach-county-primary-voter-turnout-on-par-with-previous-years-no-major-issues-reported"
+          "headline": "Indian River County school superintendent announces plans to step down in 2027 - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/19/indian-river-county-school-superintendent-announces-plans-step-down-2027/?outputType=amp"
         },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -230,8 +286,8 @@
           "reason": "missing_primary_crime_safety_focus",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Palm Beach airport code officially changes from PBI to DJT for President Trump International Airport",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/palm-beach-airport-code-officially-changes-from-pbi-to-djt-for-president-trump-international-airport"
+          "headline": "Indian River County school superintendent announces plans to step down in 2027",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027"
         },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -243,8 +299,34 @@
           "reason": "missing_primary_crime_safety_focus",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Former Vero Beach Eagles secretary accused of blowing nearly $419K on guns, liquor, LEGOs - WPEC",
-          "source_url": "http://cbs12.com/news/crime/former-vero-beach-eagles-secretary-accused-of-blowing-nearly-419k-on-guns-liquor-legos-indian-river-county-vero-beach-fraternal-order-of-eagles-aerie-4374-robert-john-davison-embezzlement-grand-theft-419000-alleged-embezzlement-debit-card-org"
+          "headline": "Port St. Lucie mayor race heads to November runoff between Shannon Martin, Steven Giordano",
+          "source_url": "https://www.wptv.com/news/political/elections-local/port-st-lucie-mayor-race-heads-to-november-runoff-between-shannon-martin-steven-giordano"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Sara Baxter wins Republican primary for Palm Beach County Commission District 6 seat",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/sara-baxter-wins-republican-primary-for-palm-beach-county-commission-district-6-seat"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "I-95 southbound left lane blocked in Martin County due to roadway debris - WPEC",
+          "source_url": "https://cbs12.com/news/local/i-95-southbound-left-lane-blocked-in-martin-county-due-to-roadway-debris"
         },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -260,133 +342,74 @@
           "source_url": "https://cw34.com/newsletter-daily/fort-pierce-man-accused-of-firing-through-locked-door-at-woman-sparking-manhunt-fort-pierce-st-lucie-county-st-lucie-county-sheriffs-office-fort-pierce-police-department-nathan-hsu-domestic-disturbance-domestic-violence-shooting-gunfire"
         }
       ],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "Shannon Ramsey-Chessman sworn in as interim after clerk's arrest on child sex abuse charges",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/shannon-ramsey-chessman-sworn-in-as-interim-after-clerks-arrest-on-child-sex-abuse-charges",
-          "editorial_story_id": "story_004550",
-          "canonical_slug": "2026-08-18-shannon-ramsey-chessman-sworn-in-as-interim-palm-beach-county-clerk-after-michae",
-          "canonical_headline": "Shannon Ramsey-Chessman sworn in as interim Palm Beach County clerk after Michael Caruso arrest",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Stuart receives $79M federal grant to replace century-old St. Lucie River Bridge",
-          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-receives-79m-federal-grant-to-replace-century-old-st-lucie-river-bridge",
-          "editorial_story_id": "story_004502",
-          "canonical_slug": "2026-08-18-stuart-awarded-79-million-federal-grant-to-replace-century-old-st-lucie-river-ra",
-          "canonical_headline": "Stuart awarded $79 million federal grant to replace century-old St. Lucie River Railroad Bridge",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Can Flock find him? License plate cameras aid search after Vero Beach homicide - WPEC",
-          "source_url": "https://cbs12.com/news/local/can-flock-find-him-license-plate-cameras-aid-search-after-vero-beach-homicide",
-          "editorial_story_id": "story_004367",
-          "canonical_slug": "2026-08-17-flock-license-plate-cameras-aid-search-for-vero-beach-homicide-person-of-interes",
-          "canonical_headline": "Indian River County Sheriff's Office uses Flock cameras in search for Vero Beach homicide suspect",
+          "source_headline": "Florida woman posing as bank representative accused of Martin County credit card scam - cw34.com",
+          "source_url": "https://cw34.com/news/local/florida-woman-miami-poses-bank-representative-claims-credit-card-compromised-scam-martin-county-sheriffs-office-body-camera-florida-news",
+          "editorial_story_id": "story_004556",
+          "canonical_slug": "2026-08-18-miami-woman-accused-of-posing-as-bank-representative-in-martin-county-credit-car",
+          "canonical_headline": "Miami woman accused of posing as bank representative in Martin County credit card scam",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "crime",
-          "source_headline": "Fort Pierce man arrested after firing bullet through bathroom door at victim - WPBF",
-          "source_url": "https://www.wpbf.com/article/fort-pierce-man-firing-bullet-through-bathroom-door-nathan-hsu/73455544",
-          "editorial_story_id": "story_004305",
-          "canonical_slug": "2026-08-18-fort-pierce-man-arrested-on-attempted-murder-charge-after-firing-bullet-through",
-          "canonical_headline": "Fort Pierce man arrested on attempted murder charge after firing bullet through bathroom door",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "Former Vero Beach Eagles secretary accused of blowing nearly $419K on guns, liquor, LEGOs - WPEC",
+          "source_url": "http://cbs12.com/news/crime/former-vero-beach-eagles-secretary-accused-of-blowing-nearly-419k-on-guns-liquor-legos-indian-river-county-vero-beach-fraternal-order-of-eagles-aerie-4374-robert-john-davison-embezzlement-grand-theft-419000-alleged-embezzlement-debit-card-org",
+          "editorial_story_id": "story_004561",
+          "canonical_slug": "2026-08-19-former-vero-beach-eagles-secretary-accused-of-spending-419000-on-guns-liquor-leg",
+          "canonical_headline": "Former Vero Beach Eagles secretary accused of spending $419,000 on guns, liquor, LEGOs",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "crime",
-          "source_headline": "More than 50 reports linked to law enforcement impersonation scam in St. Lucie County - WPEC",
-          "source_url": "https://cbs12.com/news/local/more-than-50-reports-linked-to-law-enforcement-impersonation-scam-in-st-lucie-county-florida-news",
+          "source_headline": "More than 50 reports linked to law enforcement impersonation scam in St. Lucie County - cw34.com",
+          "source_url": "https://cw34.com/news/local/more-than-50-reports-linked-to-law-enforcement-impersonation-scam-in-st-lucie-county-florida-news?teaserSource=trending",
           "editorial_story_id": "story_004416",
           "canonical_slug": "2026-08-18-more-than-50-st-lucie-county-residents-targeted-in-law-enforcement-impersonation",
           "canonical_headline": "More than 50 St. Lucie County residents targeted in law enforcement impersonation scam",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "surface": "hero",
-          "headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle still at large",
-          "editorial_story_id": "story_004551",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle still at large",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
-        },
-        {
-          "category_key": "crime",
-          "surface": "card",
-          "headline": "911 calls released in fatal Vero Beach shooting as search continues for suspect",
-          "editorial_story_id": "story_004551",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle still at large",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
         }
       ],
       "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Woman killed in Vero Beach shooting identified, suspect still on the run - wflx.com",
-          "source_url": "https://www.wflx.com/2026/08/18/woman-killed-vero-beach-shooting-identified-suspect-still-run?outputType=amp",
-          "publisher": "www.wflx.com",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle still at large",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+          "source_headline": "I-95 southbound left lane blocked in Martin County due to roadway debris - WPEC",
+          "source_url": "https://cbs12.com/news/local/i-95-southbound-left-lane-blocked-in-martin-county-due-to-roadway-debris",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-08-18-left-lane-of-i-95-southbound-blocked-near-stuart-due-to-roadway-debris",
+          "canonical_headline": "Left lane of I-95 southbound blocked near Stuart due to roadway debris",
+          "basis": "exact_source_url",
           "identity_keys": [
-            "story:story_002912",
-            "source:https://www.wflx.com/2026/08/18/woman-killed-vero-beach-shooting-identified-suspect-still-run?outputType=amp"
+            "story:story_004509",
+            "source:https://cbs12.com/news/local/i-95-southbound-left-lane-blocked-in-martin-county-due-to-roadway-debris"
           ],
-          "match_confidence": 0.95,
+          "match_confidence": 0.99,
           "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
+            "story",
+            "source"
           ],
           "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['indian-river', 'indian-river-county', 'sebastian', 'vero-beach']",
-            "shared_event_families=['shooting', 'vehicle-chase']",
-            "shared_named_people=['dawn kriskewic', 'matthew allen waggle', 'still on the']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['indian-river-county-sheriff']",
-            "shared_subject_phrases=['identif-suspect-still', 'identif-suspect-still-run', 'kill-shoot-identif', 'kill-shoot-identif-suspect', 'shoot-identif-suspect', 'shoot-identif-suspect-still', 'suspect-still-run']",
-            "shared_headline_topic_core=['identif', 'kill', 'run', 'shoot', 'still', 'suspect']",
-            "shared_distinctive_token_count=112",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
+            "deterministic_identity_keys=story:story_004509,source:https://cbs12.com/news/local/i-95-southbound-left-lane-blocked-in-martin-county-due-to-roadway-debris",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
         },
         {
-          "source_headline": "Indian River County Sheriff identifies Vero Beachhomicide victim - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/crime/indian_river/indian-river-county-sheriff-identifies-vero-beachhomicide-victim/article_1d952709-43af-5679-b8c5-8d628013e3e8.html",
-          "publisher": "www.hometownnewstc.com",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle still at large",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+          "source_headline": "Vero Beach homicide victim identified as person of interest remains on the run - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/vero-beach-homicide-victim-identified-as-person-of-interest-remains-on-the-run-dawn-kriskewic-vero-beach-vero-beach-shooting-vero-beach-homicide-indian-river-county-indian-river-county-sheriffs-office-matthew-waggle-person-of-interest-armed",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-08-17-flock-license-plate-cameras-aid-search-for-vero-beach-homicide-person-of-interes",
+          "canonical_headline": "Indian River County Sheriff's Office uses Flock cameras in search for Vero Beach homicide suspect",
+          "basis": "event-identity-authority:participant_plus_precise_location",
           "identity_keys": [
-            "incident:named-person-death:dawn-kriskewicz",
             "story:story_002912",
-            "source:https://www.hometownnewstc.com/crime/indian_river/indian-river-county-sheriff-identifies-vero-beachhomicide-victim/article_1d952709-43af-5679-b8c5-8d628013e3e8.html"
+            "source:https://cw34.com/newsletter-daily/vero-beach-homicide-victim-identified-as-person-of-interest-remains-on-the-run-dawn-kriskewic-vero-beach-vero-beach-shooting-vero-beach-homicide-indian-river-county-indian-river-county-sheriffs-office-matthew-waggle-person-of-interest-armed"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
@@ -394,21 +417,22 @@
             "shared_locality",
             "shared_event_family",
             "shared_named_people",
+            "shared_precise_location",
             "shared_agency",
             "distinctive_fact_overlap"
           ],
           "decision_trace": [
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
-            "publication_gap_days=0",
+            "publication_gap_days=1",
             "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
             "shared_event_families=['shooting']",
-            "shared_named_people=['dawn kriskewic', 'matthew allen waggle']",
-            "shared_precise_locations=[]",
+            "shared_named_people=['matthew waggle']",
+            "shared_precise_locations=['first-street']",
             "shared_agencies=['indian-river-county-sheriff']",
             "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['identif']",
-            "shared_distinctive_token_count=69",
+            "shared_headline_topic_core=['homicide']",
+            "shared_distinctive_token_count=61",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
@@ -420,17 +444,17 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie Police seek help identifying man in active investigation",
-      "generated_card_count": 0,
-      "elapsed_seconds": 33.04
+      "live_hero_headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
+      "generated_card_count": 2,
+      "elapsed_seconds": 114.694
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 10,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -447,9 +471,37 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 10,
-      "category_eligibility_rejection_count": 10,
+      "category_eligibility_assessed_count": 12,
+      "category_eligibility_rejection_count": 12,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Derelict, at-risk boats near North Hutchinson Island creating dangerous conditions on Treasure Coast",
+          "source_url": "https://www.wptv.com/news/treasure-coast/derelict-at-risk-boats-near-north-hutchinson-island-creating-dangerous-conditions-on-treasure-coast"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_treasure_coast_business_nexus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:arrested"
+          ],
+          "headline": "Boca Raton mother fights to see her children nearly 3 years after charges were dropped",
+          "source_url": "https://www.wptv.com/wptv-investigates/boca-raton-mother-fights-to-see-her-children-nearly-3-years-after-charges-were-dropped"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -460,8 +512,8 @@
           "reason": "missing_treasure_coast_business_nexus",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Lois Frankel wins Democratic nomination for U.S. House in Florida's 23rd Congressional District",
-          "source_url": "https://www.wptv.com/news/political/elections-local/lois-frankel-wins-democratic-nomination-for-u-s-house-in-floridas-23rd-congressional-district"
+          "headline": "Michael Caruso child sex abuse case prompts discussion on warning signs of abuse and prevention",
+          "source_url": "https://www.wptv.com/lifestyle/family/michael-caruso-child-sex-abuse-case-prompts-discussion-on-warning-signs-of-sex-abuse-and-prevention"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -472,13 +524,11 @@
           "would_reject": true,
           "reason": "missing_treasure_coast_business_nexus",
           "positive_signals": [
-            "development_project:under construction"
+            "development_project:groundbreaking"
           ],
-          "competing_signals": [
-            "election_political_process:polling place"
-          ],
-          "headline": "Palm Beach County primary voter turnout on par with previous years, no major issues reported",
-          "source_url": "https://www.wptv.com/news/political/elections-local/palm-beach-county-primary-voter-turnout-on-par-with-previous-years-no-major-issues-reported"
+          "competing_signals": [],
+          "headline": "Jupiter Narrows mangrove islands to be restored and named for local man killed in boating accident",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/jupiter-tequesta-juno-beach/jupiter-narrows-mangrove-islands-to-be-restored-and-named-for-local-man-killed-in-boating-accident"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -490,11 +540,23 @@
           "reason": "missing_treasure_coast_business_nexus",
           "positive_signals": [],
           "competing_signals": [
-            "crime_public_safety:arrested",
-            "election_political_process:candidate"
+            "crime_public_safety:arrest"
           ],
-          "headline": "Palm Beach County clerk arrested; questions remain about his spot on November ballot",
-          "source_url": "https://www.wptv.com/wptv-investigates/palm-beach-county-clerk-arrested-questions-remain-about-his-spot-on-november-ballot"
+          "headline": "'SEEKING JUSTICE,' attorney says alleged Caruso victim was between 3 and 5 years old",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/seeking-justice-attorney-says-alleged-caruso-victim-was-between-3-and-5-years-old"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_treasure_coast_business_nexus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Lawsuits over school bus and school speed zone camera tickets face setbacks in Florida",
+          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -504,85 +566,70 @@
           "eligible": false,
           "would_reject": true,
           "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [
-            "jobs_employers_economic_development:jobs"
+          "positive_signals": [],
+          "competing_signals": [
+            "schools_education:school board"
           ],
+          "headline": "Indian River County school superintendent announces plans to step down in 2027",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "election_political_process:candidate"
+          ],
+          "headline": "Port St. Lucie mayor race heads to November runoff between Shannon Martin, Steven Giordano",
+          "source_url": "https://www.wptv.com/news/political/elections-local/port-st-lucie-mayor-race-heads-to-november-runoff-between-shannon-martin-steven-giordano"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_treasure_coast_business_nexus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:arrested"
+          ],
+          "headline": "No bond set for suspended Palm Beach County clerk accused of child sex abuse",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/no-bond-set-for-suspended-palm-beach-county-clerk-michael-caruso-accused-of-child-sex-abuse"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_treasure_coast_business_nexus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Wounded Veterans Relief Fund helps soldier after pet's wrong surgery",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/north-palm-beach/wrong-operation-on-dog-leads-to-help-from-local-veterans-group"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_treasure_coast_business_nexus",
+          "positive_signals": [],
           "competing_signals": [
             "election_political_process:election day"
           ],
-          "headline": "Port St. Lucie mayoral candidates clash over growth, traffic and city’s future - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-mayor-race-where-the-candidates-stand-on-growth-traffic-trash-campaign-sign-investigation-shannon-martin-steven-giordano-eric-stazzeri-august-18-election"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_treasure_coast_business_nexus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Palm Beach airport code officially changes from PBI to DJT for President Trump International Airport",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/palm-beach-airport-code-officially-changes-from-pbi-to-djt-for-president-trump-international-airport"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_treasure_coast_business_nexus",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:arrested"
-          ],
-          "headline": "Police arrest teen in connection with deadly Boynton Beach shooting",
-          "source_url": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_treasure_coast_business_nexus",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:arrested"
-          ],
-          "headline": "Palm Beach County Clerk of Court Michael Caruso arrested on child sex abuse charges",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/palm-beach-county-clerk-of-court-arrested-faces-charges-of-child-sexual-abuse"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_treasure_coast_business_nexus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Palm Beach Zoo shines a light on the 'engineers of our ecosystem'",
-          "source_url": "https://www.wptv.com/lifestyle/palm-beach-zoo/palm-beach-zoo-shines-a-light-on-the-engineers-of-our-ecosystem"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_treasure_coast_business_nexus",
-          "positive_signals": [],
-          "competing_signals": [
-            "election_political_process:early voting"
-          ],
-          "headline": "Voters head to the polls for Florida primary",
-          "source_url": "https://www.wptv.com/news/political/elections-local/voters-head-to-the-polls-for-florida-primary"
+          "headline": "Sara Baxter wins Republican primary for Palm Beach County Commission District 6 seat",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/sara-baxter-wins-republican-primary-for-palm-beach-county-commission-district-6-seat"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -600,89 +647,53 @@
           "source_url": "https://www.hometownnewstc.com/dining_and_entertainment/local_events/a-beautiful-return-on-creativity/article_04dd79fd-9d83-532e-a46a-d00d09801df9.html"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "business",
-          "source_headline": "Shannon Ramsey-Chessman sworn in as interim after clerk's arrest on child sex abuse charges",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/shannon-ramsey-chessman-sworn-in-as-interim-after-clerks-arrest-on-child-sex-abuse-charges",
-          "editorial_story_id": "story_004550",
-          "canonical_slug": "2026-08-18-shannon-ramsey-chessman-sworn-in-as-interim-palm-beach-county-clerk-after-michae",
-          "canonical_headline": "Shannon Ramsey-Chessman sworn in as interim Palm Beach County clerk after Michael Caruso arrest",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Woman killed in Vero Beach shooting identified, suspect still on the run",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/woman-killed-in-vero-beach-shooting-identified-suspect-still-sought",
-          "editorial_story_id": "story_004551",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle still at large",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Stuart receives $79M federal grant to replace century-old St. Lucie River Bridge",
-          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-receives-79m-federal-grant-to-replace-century-old-st-lucie-river-bridge",
-          "editorial_story_id": "story_004502",
-          "canonical_slug": "2026-08-18-stuart-awarded-79-million-federal-grant-to-replace-century-old-st-lucie-river-ra",
-          "canonical_headline": "Stuart awarded $79 million federal grant to replace century-old St. Lucie River Railroad Bridge",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "St. Lucie County population surges 22% since 2020, far outpacing Palm Beach County - WPEC",
-          "source_url": "https://cbs12.com/news/local/florida-population-growth-st-lucie-county-population-surges-22-percent-since-2020-far-outpacing-palm-beach-county-port-st-lucie-real-estate-construction-affordability-fast-growth",
-          "editorial_story_id": "story_004312",
-          "canonical_slug": "2026-08-17-st-lucie-county-population-jumps-22-since-2020-adding-more-than-73000-residents",
-          "canonical_headline": "St. Lucie County population jumps 22% since 2020, adding more than 73,000 residents",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 8.803
+      "elapsed_seconds": 31.167
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
-      "status": "sports_zero_candidate_archive_recovery",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 26,
-      "publishable_source_count": 7,
-      "selected_source_count": 5,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 8,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_sports_hero_candidates",
-      "failure_summary": "Selected Sports source pool contained no deterministic athletic hero candidate",
-      "sports_expired_event_preview_count": 1,
-      "sports_expired_event_previews": [
+      "attempt_count": 2,
+      "attempts": [
         {
-          "headline": "Panthers star Brad Marchand reveals he underwent off-season surgery",
-          "source_url": "https://www.wptv.com/sports/hockey/panthers/panthers-star-brad-marchand-reveals-he-underwent-off-season-surgery",
-          "published": "Mon, 17 Aug 2026 14:37:59 GMT",
-          "reason": "sports_event_window_expired",
-          "event_end_date": "2026-03-06",
-          "event_dates": [
-            "2026-03-06"
-          ]
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 63.753,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: generated_copy_drifted_from_source_focus — St. Lucie Mets host Lakeland Flying Tigers for final week at Clover Park"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 116.2,
+          "elapsed_seconds": 50.468,
+          "result": "missing_or_null_hero",
+          "error_summary": "Model response did not contain a usable hero after normalization"
         }
       ],
+      "model_elapsed_seconds": 114.222,
+      "failure_code": "missing_or_null_hero",
+      "failure_summary": "Model response did not contain a usable hero after normalization",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 1,
@@ -701,16 +712,18 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 12.048
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 147.973
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 17,
-      "publishable_source_count": 7,
-      "selected_source_count": 7,
+      "fresh_candidate_count": 13,
+      "publishable_source_count": 6,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 1,
@@ -718,11 +731,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 75.088,
+          "elapsed_seconds": 52.58,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 75.088,
+      "model_elapsed_seconds": 52.58,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -735,17 +748,17 @@
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Over 100 animals from Martin County hoarding cases show signs of recovery at Palm City shelter",
+          "headline": "Over 100 animals from Martin County hoarding cases begin healing at Palm City shelter",
           "missing": [
             "headline_jurisdiction_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Over 100 animals from Martin County hoarding cases show signs of recovery at Palm City shelter",
-            "lead": "The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino on Southwest Meadowlark Circle in July. The second case involved 36 Border Collies rescued from a Palm City home where Paige O'Donnell was arrested and faces 72 criminal charges.",
+            "headline": "Over 100 animals from Martin County hoarding cases begin healing at Palm City shelter",
+            "lead": "The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino on Southwest Meadowlark Circle in July. The second case involved 36 Border Collies rescued from a Palm City home after Paige O'Donnell was arrested and faces 72 criminal charges.",
             "lead_word_count": 77,
-            "headline_overlap_ratio": 0.462,
+            "headline_overlap_ratio": 0.5,
             "new_context_token_count": 41,
             "opaque_references": [],
             "undefined_references": [],
@@ -760,8 +773,8 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "Over 100 animals from Martin County hoarding cases show signs of recovery at Palm City shelter",
-            "lead": "The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino on Southwest Meadowlark Circle in July. The second case involved 36 Border Collies rescued from a Palm City home where Paige O'Donnell was arrested and faces 72 criminal charges.",
+            "headline": "Over 100 animals from Martin County hoarding cases begin healing at Palm City shelter",
+            "lead": "The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino on Southwest Meadowlark Circle in July. The second case involved 36 Border Collies rescued from a Palm City home after Paige O'Donnell was arrested and faces 72 criminal charges.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
@@ -786,17 +799,17 @@
           "source_focus": {
             "required": true,
             "passed": true,
-            "generated_headline": "Over 100 animals from Martin County hoarding cases show signs of recovery at Palm City shelter",
+            "generated_headline": "Over 100 animals from Martin County hoarding cases begin healing at Palm City shelter",
             "generated_lead": "The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino on Southwest Meadowlark Circle in July.",
             "source_title": "Animals rescued from Martin County hoarding cases start to show signs of healing",
             "source_lead": "After two of the largest animal hoarding cases in recent Martin County history, the Humane Society of the Treasure Coast says many of the rescued animals are already beginning to heal.The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City.One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino. WPTV previously reported that deputies found",
             "title_similarity": {
-              "score": 0.6315,
-              "overlap": 0.7,
-              "jaccard": 0.4667,
-              "sorted_sequence": 0.7075,
-              "ordered_sequence": 0.7075,
-              "shared_token_count": 7.0
+              "score": 0.5867,
+              "overlap": 0.6,
+              "jaccard": 0.4,
+              "sorted_sequence": 0.7092,
+              "ordered_sequence": 0.6667,
+              "shared_token_count": 6.0
             },
             "lead_token_overlap": 0.886,
             "missing": []
@@ -810,10 +823,10 @@
       ],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "things_to_do",
@@ -824,6 +837,16 @@
           "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "things_to_do",
+          "source_headline": "Big Taste of Martin County returns to support Big Brothers Big Sisters mentoring programs",
+          "source_url": "https://www.wptv.com/shining-a-light/big-taste-of-martin-county-returns-to-support-big-brothers-big-sisters-mentoring-programs",
+          "editorial_story_id": "story_000253",
+          "canonical_slug": "2026-07-23-big-taste-of-martin-county-returns-oct-6-to-support-youth-mentoring-programs",
+          "canonical_headline": "Big Brothers Big Sisters returns Big Taste of Martin County fundraiser to Stuart",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -831,7 +854,7 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 80.802
+      "elapsed_seconds": 63.139
     },
     {
       "category_key": "florida",
@@ -848,156 +871,19 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 57.751,
+          "elapsed_seconds": 17.463,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 57.751,
+      "model_elapsed_seconds": 17.463,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 2,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Debbie Wasserman Schultz defeats Sheila Cherfilus-McCormick in redrawn Florida congressional district",
-          "missing": [
-            "generated_copy_drifted_from_source_focus"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Debbie Wasserman Schultz defeats Sheila Cherfilus-McCormick in redrawn Florida congressional district",
-            "lead": "Debbie Wasserman Schultz tearfully thanked voters for having confidence in her Tuesday night after defeating four Black primary opponents in a plurality Black district. The redrawn Florida 20th is concentrated in the most diverse parts of South Florida's Broward County and is the most Democratic House district in Florida, meaning she will be a prohibitive favorite in November. Wasserman Schultz, who is white and has served in Congress since 2005, was the only white candidate in the district. Her four Black primary opponents, including Cherfilis-McCormick, had argued that the district requires a Black representative, but voters went with a candidate who touted long experience.",
-            "lead_word_count": 106,
-            "headline_overlap_ratio": 0.636,
-            "new_context_token_count": 49,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": true,
-            "headline": "Debbie Wasserman Schultz defeats Sheila Cherfilus-McCormick in redrawn Florida congressional district",
-            "lead": "Debbie Wasserman Schultz tearfully thanked voters for having confidence in her Tuesday night after defeating four Black primary opponents in a plurality Black district. The redrawn Florida 20th is concentrated in the most diverse parts of South Florida's Broward County and is the most Democratic House district in Florida, meaning she will be a prohibitive favorite in November. Wasserman Schultz, who is white and has served in Congress since 2005, was the only white candidate in the district. Her four Black primary opponents, including Cherfilis-McCormick, had argued that the district requires a Black representative, but voters went with a candidate who touted long experience.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [],
-            "lead_jurisdictions": [],
-            "missing_jurisdictions": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": []
-          },
-          "source_focus": {
-            "required": true,
-            "passed": false,
-            "generated_headline": "Debbie Wasserman Schultz defeats Sheila Cherfilus-McCormick in redrawn Florida congressional district",
-            "generated_lead": "Debbie Wasserman Schultz tearfully thanked voters for having confidence in her Tuesday night after defeating four Black primary opponents in a plurality Black district. The redrawn Florida 20th is concentrated in the most diverse parts of South Florida's Broward County and is the most Democratic House district in Florida, meaning she will be a prohibitive favorite in November.",
-            "source_title": "Byron Donalds wins Republican nomination for governor in Florida",
-            "source_lead": "Byron Donalds won the Republican nomination for Florida governor and former Rep. David Jolly captured the Democratic nomination on Tuesday, setting the stage for a November contest to replace outgoing Gov.",
-            "title_similarity": {
-              "score": 0.2612,
-              "overlap": 0.1429,
-              "jaccard": 0.0588,
-              "sorted_sequence": 0.3742,
-              "ordered_sequence": 0.2968,
-              "shared_token_count": 1.0
-            },
-            "lead_token_overlap": 0.19,
-            "missing": [
-              "generated_copy_drifted_from_source_focus"
-            ]
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Ryan Elijah ousts Cory Mills in Republican primary for Florida's 7th Congressional District",
-          "missing": [
-            "generated_copy_drifted_from_source_focus"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Ryan Elijah ousts Cory Mills in Republican primary for Florida's 7th Congressional District",
-            "lead": "Ryan Elijah won the Republican nomination for Florida's 7th Congressional District on Tuesday, defeating two-term congressman Cory Mills. Mills had spent months denying allegations of domestic violence against a former girlfriend and other controversies. Among allegations, Mills has denied accusations that he abused a former girlfriend.",
-            "lead_word_count": 48,
-            "headline_overlap_ratio": 0.818,
-            "new_context_token_count": 24,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": true,
-            "headline": "Ryan Elijah ousts Cory Mills in Republican primary for Florida's 7th Congressional District",
-            "lead": "Ryan Elijah won the Republican nomination for Florida's 7th Congressional District on Tuesday, defeating two-term congressman Cory Mills. Mills had spent months denying allegations of domestic violence against a former girlfriend and other controversies. Among allegations, Mills has denied accusations that he abused a former girlfriend.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [],
-            "lead_jurisdictions": [],
-            "missing_jurisdictions": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": []
-          },
-          "source_focus": {
-            "required": true,
-            "passed": false,
-            "generated_headline": "Ryan Elijah ousts Cory Mills in Republican primary for Florida's 7th Congressional District",
-            "generated_lead": "Ryan Elijah won the Republican nomination for Florida's 7th Congressional District on Tuesday, defeating two-term congressman Cory Mills. Mills had spent months denying allegations of domestic violence against a former girlfriend and other controversies.",
-            "source_title": "Byron Donalds wins Republican nomination for governor in Florida",
-            "source_lead": "Byron Donalds won the Republican nomination for Florida governor and former Rep. David Jolly captured the Democratic nomination on Tuesday, setting the stage for a November contest to replace outgoing Gov.",
-            "title_similarity": {
-              "score": 0.3799,
-              "overlap": 0.2857,
-              "jaccard": 0.125,
-              "sorted_sequence": 0.4748,
-              "ordered_sequence": 0.4317,
-              "shared_token_count": 2.0
-            },
-            "lead_token_overlap": 0.286,
-            "missing": [
-              "generated_copy_drifted_from_source_focus"
-            ]
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        }
-      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
       "category_eligibility_assessed_count": 4,
@@ -1010,113 +896,17 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Palm Beach County voters respond to arrest of Clerk and Comptroller Mike Caruso on primary election day",
+      "live_hero_headline": "Palm Beach County Clerk Michael Caruso extradited to Orange County jail on five felony child sex abuse charges",
       "generated_card_count": 2,
-      "elapsed_seconds": 76.633
+      "elapsed_seconds": 61.829
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
-      "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 9.863,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 9.863,
-      "failure_code": "",
-      "failure_summary": "",
-      "sports_expired_event_preview_count": 0,
-      "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 1,
-      "contextual_update_lead_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 66,
-          "baseline_anchor": "shooting",
-          "baseline_present": false,
-          "baseline_anchor_present": false,
-          "baseline_details_present": true,
-          "baseline_context_hits": [],
-          "baseline_context_required": 0,
-          "canonical_context_available": false,
-          "canonical_context_headline": "",
-          "novelty_anchor": "",
-          "novelty_present": true,
-          "novelty_token_hits": [
-            "blocked",
-            "debris",
-            "lane",
-            "left",
-            "roadway",
-            "southbound"
-          ],
-          "missing": [
-            "original_event_context_missing"
-          ],
-          "source_title": "I-95 southbound left lane blocked in Martin County due to roadway debris - cw34.com",
-          "headline": "Left lane blocked on I-95 southbound in Stuart after roadway debris closes highway"
-        }
-      ],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
-      "category_eligibility_mode": "existing_geographic_enforce",
-      "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
-      "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Florida woman posing as bank representative accused of Martin County credit card scam - WPEC",
-          "source_url": "https://cbs12.com/news/local/florida-woman-miami-poses-bank-representative-claims-credit-card-compromised-scam-martin-county-sheriffs-office-body-camera-florida-news",
-          "editorial_story_id": "story_004556",
-          "canonical_slug": "2026-08-18-miami-woman-accused-of-posing-as-bank-representative-in-martin-county-credit-car",
-          "canonical_headline": "Miami woman accused of posing as bank representative in Martin County credit card scam",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "I-95 southbound left lane blocked in Martin County due to roadway debris - WPEC",
-          "source_url": "https://cbs12.com/news/local/i-95-southbound-left-lane-blocked-in-martin-county-due-to-roadway-debris",
-          "editorial_story_id": "story_004509",
-          "canonical_slug": "2026-08-18-left-lane-of-i-95-southbound-blocked-near-stuart-due-to-roadway-debris",
-          "canonical_headline": "Left lane of I-95 southbound blocked near Stuart due to roadway debris",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Christopher 'Doc' Collins wins Martin County Commission District 2 seat",
-      "generated_card_count": 0,
-      "elapsed_seconds": 27.862
-    },
-    {
-      "category_key": "st_lucie",
-      "category_label": "St. Lucie County",
-      "status": "generated_live",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 5,
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 4,
       "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": false,
@@ -1125,35 +915,114 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 33.613,
+          "elapsed_seconds": 17.278,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 33.613,
+      "model_elapsed_seconds": 17.278,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 2,
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
+      "category_eligibility_mode": "existing_geographic_enforce",
+      "category_eligibility_policy": "county_locality",
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Christopher 'Doc' Collins wins Martin County District 2 commission seat - WPEC",
+          "source_url": "https://cbs12.com/news/election/christopher-doc-collins-wins-martin-county-district-2-commission-seat-florida-primary-florida-news",
+          "editorial_story_id": "story_004656",
+          "canonical_slug": "2026-08-19-christopher-doc-collins-wins-martin-county-commission-district-2-seat",
+          "canonical_headline": "Christopher 'Doc' Collins wins Martin County Commission District 2 seat",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "I-95 southbound left lane blocked in Martin County due to roadway debris - WPEC",
+          "source_url": "https://cbs12.com/news/local/i-95-southbound-left-lane-blocked-in-martin-county-due-to-roadway-debris",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-08-18-left-lane-of-i-95-southbound-blocked-near-stuart-due-to-roadway-debris",
+          "canonical_headline": "Left lane of I-95 southbound blocked near Stuart due to roadway debris",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_004509",
+            "source:https://cbs12.com/news/local/i-95-southbound-left-lane-blocked-in-martin-county-due-to-roadway-debris"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_004509,source:https://cbs12.com/news/local/i-95-southbound-left-lane-blocked-in-martin-county-due-to-roadway-debris",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "new_publication_stale_rejected_count": 0,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Miami woman accused of scamming Martin County seniors hid $3,200 in her body during jail intake",
+      "generated_card_count": 1,
+      "elapsed_seconds": 53.616
+    },
+    {
+      "category_key": "st_lucie",
+      "category_label": "St. Lucie County",
+      "status": "generated_live",
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 27,
+      "publishable_source_count": 8,
+      "selected_source_count": 7,
+      "cache_hit": false,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 30.49,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 30.49,
+      "failure_code": "",
+      "failure_summary": "",
+      "sports_expired_event_preview_count": 0,
+      "sports_expired_event_previews": [],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
+      "article_framing_rejection_count": 1,
       "article_framing_rejections": [
         {
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Fort Pierce man charged with attempted murder after firing through bathroom door at woman",
+          "headline": "Fort Pierce man charged with attempted murder after firing through locked bathroom door",
           "missing": [
             "headline_jurisdiction_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Fort Pierce man charged with attempted murder after firing through bathroom door at woman",
-            "lead": "Nathan Hsu was arrested Sunday and charged with Attempted Felony Murder, Kidnapping, Tampering with a Witness, Simple Battery (Domestic), and Grand Theft of a Motor Vehicle. The St. Lucie County Sheriff's Office said deputies responded around 11:30 a.m. Saturday to a home in the 1700 block of Wyoming Avenue for a domestic disturbance. Investigators said Hsu was involved in an argument with a woman who locked herself inside a bathroom, prompting Hsu to fire a round through the door before taking off in a getaway car.",
-            "lead_word_count": 89,
-            "headline_overlap_ratio": 0.583,
-            "new_context_token_count": 48,
+            "headline": "Fort Pierce man charged with attempted murder after firing through locked bathroom door",
+            "lead": "Nathan Hsu was arrested Sunday after deputies say he fired through a locked door with a woman on the other side and fled. The St. Lucie County Sheriff's Office said deputies responded around 11:30 a.m. on August 16 to a home in the 1700 block of Wyoming Avenue for a domestic disturbance. Investigators said Hsu was involved in an argument with a woman who locked herself inside a bathroom, prompting Hsu to fire a round through the door before taking off in a getaway car.",
+            "lead_word_count": 88,
+            "headline_overlap_ratio": 0.417,
+            "new_context_token_count": 45,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -1167,8 +1036,8 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "Fort Pierce man charged with attempted murder after firing through bathroom door at woman",
-            "lead": "Nathan Hsu was arrested Sunday and charged with Attempted Felony Murder, Kidnapping, Tampering with a Witness, Simple Battery (Domestic), and Grand Theft of a Motor Vehicle. The St. Lucie County Sheriff's Office said deputies responded around 11:30 a.m. Saturday to a home in the 1700 block of Wyoming Avenue for a domestic disturbance. Investigators said Hsu was involved in an argument with a woman who locked herself inside a bathroom, prompting Hsu to fire a round through the door before taking off in a getaway car.",
+            "headline": "Fort Pierce man charged with attempted murder after firing through locked bathroom door",
+            "lead": "Nathan Hsu was arrested Sunday after deputies say he fired through a locked door with a woman on the other side and fled. The St. Lucie County Sheriff's Office said deputies responded around 11:30 a.m. on August 16 to a home in the 1700 block of Wyoming Avenue for a domestic disturbance. Investigators said Hsu was involved in an argument with a woman who locked herself inside a bathroom, prompting Hsu to fire a round through the door before taking off in a getaway car.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
@@ -1191,92 +1060,20 @@
           "source_focus": {
             "required": true,
             "passed": true,
-            "generated_headline": "Fort Pierce man charged with attempted murder after firing through bathroom door at woman",
-            "generated_lead": "Nathan Hsu was arrested Sunday and charged with Attempted Felony Murder, Kidnapping, Tampering with a Witness, Simple Battery (Domestic), and Grand Theft of a Motor Vehicle. The St.",
-            "source_title": "Fort Pierce man accused of firing through locked door at woman, sparking manhunt - WPEC",
+            "generated_headline": "Fort Pierce man charged with attempted murder after firing through locked bathroom door",
+            "generated_lead": "Nathan Hsu was arrested Sunday after deputies say he fired through a locked door with a woman on the other side and fled. The St.",
+            "source_title": "Fort Pierce man accused of firing through locked door at woman, sparking manhunt - cw34.com",
             "source_lead": "A 23-year-old Fort Pierce man was arrested Sunday after deputies say he fired through a locked door with a woman on the other side and fled. Lucie County Sheriff's Office said deputies responded around 11:30 a.m.",
             "title_similarity": {
-              "score": 0.5757,
+              "score": 0.5793,
               "overlap": 0.6364,
-              "jaccard": 0.4375,
-              "sorted_sequence": 0.6316,
-              "ordered_sequence": 0.6184,
+              "jaccard": 0.4118,
+              "sorted_sequence": 0.6879,
+              "ordered_sequence": 0.586,
               "shared_token_count": 7.0
             },
-            "lead_token_overlap": 0.105,
+            "lead_token_overlap": 0.824,
             "missing": []
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Port St. Lucie police officers placed on leave amid campaign sign controversy",
-          "missing": [
-            "generated_copy_drifted_from_source_focus"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Port St. Lucie police officers placed on leave amid campaign sign controversy",
-            "lead": "The investigation involves two incidents earlier this month related to campaign signs in the Port St. Lucie mayoral race. Surveillance video shows a woman removing one of Mayor Shannon Martin's campaign signs, with her opponent, Steven Giordano, seen at the scene. In another incident, Giordano reported witnessing someone vandalizing his campaign sign.",
-            "lead_word_count": 53,
-            "headline_overlap_ratio": 0.455,
-            "new_context_token_count": 32,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": true,
-            "headline": "Port St. Lucie police officers placed on leave amid campaign sign controversy",
-            "lead": "The investigation involves two incidents earlier this month related to campaign signs in the Port St. Lucie mayoral race. Surveillance video shows a woman removing one of Mayor Shannon Martin's campaign signs, with her opponent, Steven Giordano, seen at the scene. In another incident, Giordano reported witnessing someone vandalizing his campaign sign.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "port_st_lucie"
-            ],
-            "lead_jurisdictions": [
-              "port_st_lucie"
-            ],
-            "missing_jurisdictions": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": []
-          },
-          "source_focus": {
-            "required": true,
-            "passed": false,
-            "generated_headline": "Port St. Lucie police officers placed on leave amid campaign sign controversy",
-            "generated_lead": "The investigation involves two incidents earlier this month related to campaign signs in the Port St. Lucie mayoral race.",
-            "source_title": "Port St. Lucie voters weigh priorities as mayoral race unfolds - WPBF",
-            "source_lead": "Lucie are casting their ballots on Tuesday in a mayoral race that has highlighted key community concerns and a recent campaign sign controversy involving police officers. As residents head to the polls, many are sharing their priorities for the city’s next mayor.",
-            "title_similarity": {
-              "score": 0.3494,
-              "overlap": 0.3,
-              "jaccard": 0.1667,
-              "sorted_sequence": 0.2794,
-              "ordered_sequence": 0.3971,
-              "shared_token_count": 3.0
-            },
-            "lead_token_overlap": 0.286,
-            "missing": [
-              "generated_copy_drifted_from_source_focus"
-            ]
           },
           "source_jurisdiction": {
             "required": false,
@@ -1287,29 +1084,19 @@
       ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "I-95 southbound left lane blocked in Martin County due to roadway debris - WPEC",
-          "source_url": "https://cbs12.com/news/local/i-95-southbound-left-lane-blocked-in-martin-county-due-to-roadway-debris",
-          "editorial_story_id": "story_004509",
-          "canonical_slug": "2026-08-18-left-lane-of-i-95-southbound-blocked-near-stuart-due-to-roadway-debris",
-          "canonical_headline": "Left lane of I-95 southbound blocked near Stuart due to roadway debris",
+          "source_headline": "Port St. Lucie mayoral candidates clash over growth, traffic and city’s future - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-mayor-race-where-the-candidates-stand-on-growth-traffic-trash-campaign-sign-investigation-shannon-martin-steven-giordano-eric-stazzeri-august-18-election",
+          "editorial_story_id": "story_004542",
+          "canonical_slug": "2026-08-19-port-st-lucie-mayoral-candidates-debate-growth-traffic-and-infrastructure-ahead",
+          "canonical_headline": "Port St. Lucie mayoral candidates debate growth, traffic, and infrastructure ahead of Election Day",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Stuart receives $79M federal grant to replace century-old St. Lucie River Bridge - WPTV",
-          "source_url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxPNlB0R01QSjFJczU2NnZlUURNMGhlenJPV1JuSG84Rm52Sm9lOWhnOVMyWTc0aWplLV9TTmt2bElCd2l5dmNPa3N3TWhuZDk5Q1BPTUx0WUwyYjY5Vkx5dWVRNnktZGs5b3JiSjNZdUNiekc3akFUWjJoLVZNN0czbE9zU0tSVzFhaUlQbEFwMndxVmdUVGw0dGNyWFBFU04yUFkwQm8zeWZHWGNpaGsxaExROGp2ck81aEF1MmU1MXVsenpmVXhHSHk4dm42VVY5U0lKLXpqTUV2bC1fQjkyYmhqTEJmMllnZkNrejBWdW05eWs",
-          "editorial_story_id": "story_004502",
-          "canonical_slug": "2026-08-18-stuart-awarded-79-million-federal-grant-to-replace-century-old-st-lucie-river-ra",
-          "canonical_headline": "Stuart awarded $79 million federal grant to replace century-old St. Lucie River Railroad Bridge",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1324,41 +1111,11 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "More than 50 reports linked to law enforcement impersonation scam in St. Lucie County - WPEC",
-          "source_url": "https://cbs12.com/news/local/more-than-50-reports-linked-to-law-enforcement-impersonation-scam-in-st-lucie-county-florida-news",
-          "editorial_story_id": "story_004416",
-          "canonical_slug": "2026-08-18-more-than-50-st-lucie-county-residents-targeted-in-law-enforcement-impersonation",
-          "canonical_headline": "More than 50 St. Lucie County residents targeted in law enforcement impersonation scam",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Port St. Lucie mayoral candidates make final pitch to voters - WPBF",
           "source_url": "https://www.wpbf.com/article/port-st-lucie-mayoral-candidates-make-final-pitch-to-voters/73456798",
           "editorial_story_id": "story_004403",
           "canonical_slug": "2026-08-18-port-st-lucie-voters-head-to-polls-tuesday-for-mayoral-election",
           "canonical_headline": "Port St. Lucie voters head to polls Tuesday for mayoral election",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "St. Lucie County population surges 22% since 2020, far outpacing Palm Beach County - WPEC",
-          "source_url": "https://cbs12.com/news/local/florida-population-growth-st-lucie-county-population-surges-22-percent-since-2020-far-outpacing-palm-beach-county-port-st-lucie-real-estate-construction-affordability-fast-growth",
-          "editorial_story_id": "story_004312",
-          "canonical_slug": "2026-08-17-st-lucie-county-population-jumps-22-since-2020-adding-more-than-73000-residents",
-          "canonical_headline": "St. Lucie County population jumps 22% since 2020, adding more than 73,000 residents",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Male pedestrian, 65, struck, killed by vehicle on U.S. 1 in St. Lucie County - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-pedestrian-struck-killed-by-vehicle-on-us-1-in-st-lucie-county/73442267",
-          "editorial_story_id": "story_004042",
-          "canonical_slug": "2026-08-16-stuart-man-65-struck-and-killed-crossing-us-1-in-st-lucie-county",
-          "canonical_headline": "Stuart man, 65, struck and killed crossing U.S. 1 in St. Lucie County",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -1368,18 +1125,18 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie mayoral candidates debate growth, traffic, and infrastructure ahead of Election Day",
-      "generated_card_count": 0,
-      "elapsed_seconds": 39.552
+      "live_hero_headline": "Port St. Lucie mayor race heads to November runoff between Shannon Martin and Steven Giordano",
+      "generated_card_count": 1,
+      "elapsed_seconds": 49.188
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generated_live",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 11,
-      "selected_source_count": 11,
+      "fresh_candidate_count": 27,
+      "publishable_source_count": 16,
+      "selected_source_count": 12,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1387,189 +1144,35 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 62.449,
+          "elapsed_seconds": 46.138,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 62.449,
+      "model_elapsed_seconds": 46.138,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 3,
+      "article_framing_rejection_count": 1,
       "article_framing_rejections": [
         {
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Vero Beach neighbors describe shooting victim and suspect as quiet couple",
-          "missing": [
-            "generated_copy_drifted_from_source_focus"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Vero Beach neighbors describe shooting victim and suspect as quiet couple",
-            "lead": "Jaiquan Parks, who lived next door to Dawn Kriskewic and Matthew Allen Waggle in Vero Beach, described them as a quiet couple who lived together. Parks said he probably ran into them a couple of times and saw them walking together with their dog. He told authorities he never heard anything alarming from their apartment.",
-            "lead_word_count": 55,
-            "headline_overlap_ratio": 0.444,
-            "new_context_token_count": 29,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": true,
-            "headline": "Vero Beach neighbors describe shooting victim and suspect as quiet couple",
-            "lead": "Jaiquan Parks, who lived next door to Dawn Kriskewic and Matthew Allen Waggle in Vero Beach, described them as a quiet couple who lived together. Parks said he probably ran into them a couple of times and saw them walking together with their dog. He told authorities he never heard anything alarming from their apartment.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "vero_beach"
-            ],
-            "lead_jurisdictions": [
-              "vero_beach"
-            ],
-            "missing_jurisdictions": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": []
-          },
-          "source_focus": {
-            "required": true,
-            "passed": false,
-            "generated_headline": "Vero Beach neighbors describe shooting victim and suspect as quiet couple",
-            "generated_lead": "Jaiquan Parks, who lived next door to Dawn Kriskewic and Matthew Allen Waggle in Vero Beach, described them as a quiet couple who lived together. Parks said he probably ran into them a couple of times and saw them walking together with their dog.",
-            "source_title": "Nationwide search underway for person of interest in Vero Beach homicide - WPBF",
-            "source_lead": "Authorities in Indian River County are investigating a homicide in Vero Beach that left one woman dead over the weekend, with 33-year-old Matthew Allen Waggle identified as a person of interest. Investigators believe Waggle is no longer in the area and are working to determine a motive.",
-            "title_similarity": {
-              "score": 0.2238,
-              "overlap": 0.2222,
-              "jaccard": 0.125,
-              "sorted_sequence": 0.3759,
-              "ordered_sequence": 0.2256,
-              "shared_token_count": 2.0
-            },
-            "lead_token_overlap": 0.192,
-            "missing": [
-              "generated_copy_drifted_from_source_focus"
-            ]
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "State representative discusses domestic violence protections after Vero Beach shooting",
-          "missing": [
-            "named_measure_undefined_in_lead",
-            "generated_copy_drifted_from_source_focus"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": false,
-            "headline": "State representative discusses domestic violence protections after Vero Beach shooting",
-            "lead": "State Rep. Debra Tendrich, who sponsored House Bill 277 to strengthen protections for domestic violence survivors, emphasized the importance of addressing domestic violence following the shooting death of a woman in Vero Beach. The bill, signed into law by Gov. Ron DeSantis in July, aims to prevent tragedies like the homicide under investigation by the Indian River County Sheriff's Office.",
-            "lead_word_count": 61,
-            "headline_overlap_ratio": 0.7,
-            "new_context_token_count": 34,
-            "opaque_references": [
-              "House Bill 277"
-            ],
-            "undefined_references": [
-              "House Bill 277"
-            ],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": [
-              "named_measure_undefined_in_lead"
-            ]
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": true,
-            "headline": "State representative discusses domestic violence protections after Vero Beach shooting",
-            "lead": "State Rep. Debra Tendrich, who sponsored House Bill 277 to strengthen protections for domestic violence survivors, emphasized the importance of addressing domestic violence following the shooting death of a woman in Vero Beach. The bill, signed into law by Gov. Ron DeSantis in July, aims to prevent tragedies like the homicide under investigation by the Indian River County Sheriff's Office.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "vero_beach"
-            ],
-            "lead_jurisdictions": [
-              "indian_river_county",
-              "vero_beach"
-            ],
-            "missing_jurisdictions": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [
-              "house bill 277"
-            ],
-            "missing_policy_references": [],
-            "missing": []
-          },
-          "source_focus": {
-            "required": true,
-            "passed": false,
-            "generated_headline": "State representative discusses domestic violence protections after Vero Beach shooting",
-            "generated_lead": "State Rep. Debra Tendrich, who sponsored House Bill 277 to strengthen protections for domestic violence survivors, emphasized the importance of addressing domestic violence following the shooting death of a woman in Vero Beach.",
-            "source_title": "Nationwide search underway for person of interest in Vero Beach homicide - WPBF",
-            "source_lead": "Authorities in Indian River County are investigating a homicide in Vero Beach that left one woman dead over the weekend, with 33-year-old Matthew Allen Waggle identified as a person of interest. Investigators believe Waggle is no longer in the area and are working to determine a motive.",
-            "title_similarity": {
-              "score": 0.2514,
-              "overlap": 0.2222,
-              "jaccard": 0.125,
-              "sorted_sequence": 0.381,
-              "ordered_sequence": 0.2857,
-              "shared_token_count": 2.0
-            },
-            "lead_token_overlap": 0.13,
-            "missing": [
-              "generated_copy_drifted_from_source_focus"
-            ]
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Indian River County sheriff treating Vero Beach death as domestic violence homicide",
+          "headline": "Vero Beach quarterback Champ Monds commits to Notre Dame",
           "missing": [
             "headline_jurisdiction_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Indian River County sheriff treating Vero Beach death as domestic violence homicide",
-            "lead": "Indian River County Sheriff Eric Flowers said the death of Dawn Kriskewic is being treated as a domestic violence homicide because of the relationship between her and Matthew Allen Waggle. The sheriff said the victim and Waggle were in some sort of relationship. Thats what we know at this point, is that they have some sort of relationship. We do have our domestic violence investigator out here, Flowers said.",
-            "lead_word_count": 69,
-            "headline_overlap_ratio": 0.727,
-            "new_context_token_count": 27,
+            "headline": "Vero Beach quarterback Champ Monds commits to Notre Dame",
+            "lead": "Monds says Notre Dame and head coach Marcus Freeman made him feel right at home on his visit. He chose the Fighting Irish over Ohio State and Florida State. Monds went to Notre Dame in the spring for spring practice, and the coaching staff and the players all treated him with the utmost respect. He said it was kind of an easy decision.",
+            "lead_word_count": 63,
+            "headline_overlap_ratio": 0.375,
+            "new_context_token_count": 34,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -1583,18 +1186,15 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "Indian River County sheriff treating Vero Beach death as domestic violence homicide",
-            "lead": "Indian River County Sheriff Eric Flowers said the death of Dawn Kriskewic is being treated as a domestic violence homicide because of the relationship between her and Matthew Allen Waggle. The sheriff said the victim and Waggle were in some sort of relationship. Thats what we know at this point, is that they have some sort of relationship. We do have our domestic violence investigator out here, Flowers said.",
+            "headline": "Vero Beach quarterback Champ Monds commits to Notre Dame",
+            "lead": "Monds says Notre Dame and head coach Marcus Freeman made him feel right at home on his visit. He chose the Fighting Irish over Ohio State and Florida State. Monds went to Notre Dame in the spring for spring practice, and the coaching staff and the players all treated him with the utmost respect. He said it was kind of an easy decision.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
             "headline_jurisdictions": [
-              "indian_river_county",
               "vero_beach"
             ],
-            "lead_jurisdictions": [
-              "indian_river_county"
-            ],
+            "lead_jurisdictions": [],
             "missing_jurisdictions": [
               "vero_beach"
             ],
@@ -1608,19 +1208,19 @@
           "source_focus": {
             "required": true,
             "passed": true,
-            "generated_headline": "Indian River County sheriff treating Vero Beach death as domestic violence homicide",
-            "generated_lead": "Indian River County Sheriff Eric Flowers said the death of Dawn Kriskewic is being treated as a domestic violence homicide because of the relationship between her and Matthew Allen Waggle. The sheriff said the victim and Waggle were in some sort of relationship.",
-            "source_title": "Woman found with gunshot wound in Vero Beach dies; person of interest identified - WPBF",
-            "source_lead": "The Indian River County Sheriff’s Office is investigating a death. The Sheriff’s Office announced that on Sunday, Aug.",
+            "generated_headline": "Vero Beach quarterback Champ Monds commits to Notre Dame",
+            "generated_lead": "Monds says Notre Dame and head coach Marcus Freeman made him feel right at home on his visit. He chose the Fighting Irish over Ohio State and Florida State.",
+            "source_title": "Star QB Champ Monds has unfinished business at Vero Beach prior to starting Notre Dame career - WPBF",
+            "source_lead": "Monds says Notre Dame and head coach Marcus Freeman made him feel right at home on his visit. He chose the Fighting Irish over Ohio State and Florida State.",
             "title_similarity": {
-              "score": 0.4229,
-              "overlap": 0.2727,
-              "jaccard": 0.1579,
-              "sorted_sequence": 0.3896,
-              "ordered_sequence": 0.4805,
-              "shared_token_count": 3.0
+              "score": 0.5981,
+              "overlap": 0.75,
+              "jaccard": 0.375,
+              "sorted_sequence": 0.5532,
+              "ordered_sequence": 0.4397,
+              "shared_token_count": 6.0
             },
-            "lead_token_overlap": 0.5,
+            "lead_token_overlap": 1.0,
             "missing": []
           },
           "source_jurisdiction": {
@@ -1632,51 +1232,11 @@
       ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 11,
+      "category_eligibility_assessed_count": 16,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "indian_river",
-          "source_headline": "Shannon Ramsey-Chessman sworn in as interim after clerk's arrest on child sex abuse charges",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/shannon-ramsey-chessman-sworn-in-as-interim-after-clerks-arrest-on-child-sex-abuse-charges",
-          "editorial_story_id": "story_004550",
-          "canonical_slug": "2026-08-18-shannon-ramsey-chessman-sworn-in-as-interim-palm-beach-county-clerk-after-michae",
-          "canonical_headline": "Shannon Ramsey-Chessman sworn in as interim Palm Beach County clerk after Michael Caruso arrest",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Woman killed in Vero Beach shooting identified, suspect still on the run",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/woman-killed-in-vero-beach-shooting-identified-suspect-still-sought",
-          "editorial_story_id": "story_004551",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle still at large",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Woman killed in Vero Beach shooting identified, suspect still on the run - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/woman-killed-in-vero-beach-shooting-identified-suspect-still-sought",
-          "editorial_story_id": "story_004551",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle still at large",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Stuart receives $79M federal grant to replace century-old St. Lucie River Bridge",
-          "source_url": "https://www.wptv.com/news/local-news/our-community-stuart-martin-county-okeechobee/stuart-receives-79m-federal-grant-to-replace-century-old-st-lucie-river-bridge",
-          "editorial_story_id": "story_004502",
-          "canonical_slug": "2026-08-18-stuart-awarded-79-million-federal-grant-to-replace-century-old-st-lucie-river-ra",
-          "canonical_headline": "Stuart awarded $79 million federal grant to replace century-old St. Lucie River Railroad Bridge",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "indian_river",
           "source_headline": "Can Flock find him? License plate cameras aid search after Vero Beach homicide - WPEC",
@@ -1686,40 +1246,20 @@
           "canonical_headline": "Indian River County Sheriff's Office uses Flock cameras in search for Vero Beach homicide suspect",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "surface": "card",
-          "headline": "Sheriff uses flock cameras, Real Time Crime Center in Vero Beach homicide search",
-          "editorial_story_id": "story_004551",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle still at large",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
-        },
-        {
-          "category_key": "indian_river",
-          "surface": "card",
-          "headline": "Vero Beach homicide investigation continues as search for suspect expands",
-          "editorial_story_id": "story_004367",
-          "canonical_slug": "2026-08-17-flock-license-plate-cameras-aid-search-for-vero-beach-homicide-person-of-interes",
-          "canonical_headline": "Indian River County Sheriff's Office uses Flock cameras in search for Vero Beach homicide suspect",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
         }
       ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "Woman identified in Vero Beach shooting, person of interest named - WPBF",
-          "source_url": "https://www.wpbf.com/article/dawn-kriskewic-identified-vero-beach-shooting-florida/73467330",
-          "publisher": "www.wpbf.com",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle still at large",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+          "source_headline": "Vero Beach homicide victim identified as person of interest remains on the run - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/vero-beach-homicide-victim-identified-as-person-of-interest-remains-on-the-run-dawn-kriskewic-vero-beach-vero-beach-shooting-vero-beach-homicide-indian-river-county-indian-river-county-sheriffs-office-matthew-waggle-person-of-interest-armed",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-08-17-flock-license-plate-cameras-aid-search-for-vero-beach-homicide-person-of-interes",
+          "canonical_headline": "Indian River County Sheriff's Office uses Flock cameras in search for Vero Beach homicide suspect",
+          "basis": "event-identity-authority:participant_plus_precise_location",
           "identity_keys": [
-            "story:story_002912",
-            "source:https://www.wpbf.com/article/dawn-kriskewic-identified-vero-beach-shooting-florida/73467330"
+            "story:story_004367",
+            "source:https://cw34.com/newsletter-daily/vero-beach-homicide-victim-identified-as-person-of-interest-remains-on-the-run-dawn-kriskewic-vero-beach-vero-beach-shooting-vero-beach-homicide-indian-river-county-indian-river-county-sheriffs-office-matthew-waggle-person-of-interest-armed"
           ],
           "match_confidence": 0.95,
           "evidence_dimensions": [
@@ -1727,22 +1267,22 @@
             "shared_locality",
             "shared_event_family",
             "shared_named_people",
+            "shared_precise_location",
             "shared_agency",
-            "shared_headline_topic",
             "distinctive_fact_overlap"
           ],
           "decision_trace": [
             "left_identity_origin=source_derived",
             "right_identity_origin=source_derived",
-            "publication_gap_days=0",
+            "publication_gap_days=1",
             "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
             "shared_event_families=['shooting']",
-            "shared_named_people=['dawn kriskewic', 'matthew allen waggle']",
-            "shared_precise_locations=[]",
+            "shared_named_people=['matthew waggle']",
+            "shared_precise_locations=['first-street']",
             "shared_agencies=['indian-river-county-sheriff']",
             "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['identif', 'shoot']",
-            "shared_distinctive_token_count=37",
+            "shared_headline_topic_core=['homicide']",
+            "shared_distinctive_token_count=61",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
             "write_authorized=True"
@@ -1754,9 +1294,9 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle remains at large",
-      "generated_card_count": 1,
-      "elapsed_seconds": 69.974
+      "live_hero_headline": "Indian River County school superintendent to step down in June 2027 after nearly seven years",
+      "generated_card_count": 2,
+      "elapsed_seconds": 58.362
     }
   ]
 }
