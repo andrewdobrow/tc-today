@@ -7,14 +7,10 @@ from tct_engine import (
 )
 
 
-DEFAULT_TIME = datetime(
-    2026,
-    7,
-    20,
-    12,
-    0,
-    tzinfo=timezone.utc,
-)
+# These tests exercise engine routing/relationship behavior, not lifecycle aging.
+# Keep their synthetic articles inside the active lifecycle window so the suite
+# cannot begin failing simply because a hard-coded fixture date turns 30 days old.
+DEFAULT_TIME = datetime.now(timezone.utc).replace(microsecond=0)
 
 
 def make_cat_story(
