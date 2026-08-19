@@ -167,3 +167,45 @@ def test_registry_pressure_mode_compacts_candidate_evidence_without_identity_los
     assert saved_story["sources"] == story["sources"]
     assert payload["event_to_story"] == {"event-1": "story_000001"}
     assert payload["history_compaction"]["last_pressure_mode"] == "pressure"
+
+
+def test_registry_pressure_uses_lossless_tighter_json_before_hard_ceiling(
+    tmp_path: Path, monkeypatch
+) -> None:
+    path = tmp_path / "editorial_story_registry.json"
+    registry = StoryRegistry(path)
+    story = _minimal_story("story_000001", [])
+    story["canonical_title"] = "Port St. Lucie council approves a public project"
+    story["entities"] = [f"entity-{index:04d}" for index in range(1800)]
+    registry.data["stories"] = {"story_000001": story}
+    registry.data["event_to_story"] = {"event-1": "story_000001"}
+
+    pretty_size = len(
+        StoryRegistry._serialize_payload(registry.data, indent=2).encode("utf-8")
+    )
+    tight_size = len(
+        StoryRegistry._serialize_payload(registry.data, indent=1).encode("utf-8")
+    )
+    assert tight_size < pretty_size
+
+    # Force pressure mode and place the ceiling between the two representations.
+    # The save must succeed by changing JSON formatting only, not story identity.
+    monkeypatch.setattr(StoryRegistry, "REGISTRY_PRESSURE_BYTES", 1)
+    monkeypatch.setattr(
+        StoryRegistry,
+        "REGISTRY_MAX_BYTES",
+        tight_size + max(4096, (pretty_size - tight_size) // 2),
+    )
+
+    expected_entities = list(story["entities"])
+    registry.save()
+
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    saved_story = payload["stories"]["story_000001"]
+    assert saved_story["story_id"] == "story_000001"
+    assert saved_story["canonical_title"] == story["canonical_title"]
+    assert saved_story["entities"] == expected_entities
+    assert payload["event_to_story"] == {"event-1": "story_000001"}
+    assert payload["history_compaction"]["last_pressure_mode"] == "pressure"
+    assert payload["history_compaction"]["last_serialization_mode"] == "pressure_1"
+    assert path.stat().st_size < StoryRegistry.REGISTRY_MAX_BYTES
