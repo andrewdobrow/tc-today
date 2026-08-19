@@ -1,58 +1,29 @@
-# Treasure Coast Today v1.13.6.1d — Martin cocaine duplicate identity hotfix
+# v1.13.6.1d — Registry pressure serialization hotfix
 
-## Production regression
+## Production failure addressed
 
-Two public TCT permalinks escaped for the same Martin County Sheriff's Office narcotics operation:
+The Aug. 19 production run aborted while flushing the deferred Local Government editorial-audit batch:
 
-- Canonical, older URL: `2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon`
-- Duplicate, newer URL: `2026-08-15-17-arrested-in-martin-county-cocaine-trafficking-bust-4-kilos-seized-in-indianto`
+`RuntimeError: Editorial story registry exceeds the 50 MiB safety ceiling after adaptive candidate-evidence compaction: 50.19 MiB`
 
-Both describe Operation Beneath the Surface, 17 arrests, four kilograms of cocaine seized, and the same Martin County/Indiantown investigation.
+The hard 50 MiB guard is retained.
 
 ## Root cause
 
-Three independent defects combined:
-
-1. `tct_engine/fact_extraction.py` used a raw substring check for `fire`, so `firearm`/`firearms` created a false `fire reported` fact and fire event family.
-2. `_cross_source_event_families()` treated `seized` alone as an `animal-case` signal, so drug-seizure coverage could be mislabeled as animal coverage.
-3. The final semantic retrieval gate shared five highly distinctive headline tokens for the production pair but scored 0.4928, narrowly below its 0.50 moderate-candidate threshold. There was no dedicated continuity path for a named law-enforcement operation or a same-agency/same-locality drug operation.
+The registry writer always emitted two-space pretty-printed JSON. At current registry scale, indentation alone consumes several MiB. Candidate-evidence compaction could therefore leave a semantically valid registry just above the safety ceiling even though the exact same JSON payload fits comfortably below the ceiling with tighter whitespace.
 
 ## Fix
 
-- Fire fact extraction now requires an actual standalone fire-event term and no longer matches `firearm`/`firearms` by substring.
-- `seized` alone no longer creates `animal-case` identity.
-- Added deterministic `drug-case` cross-source family evidence.
-- Added `Indiantown` to source/locality identity extraction.
-- Added durable named law-enforcement operation anchors such as `law-enforcement-operation:beneath-the-surface`.
-- Semantic candidate retrieval now allows a conservative candidate-only path when:
-  - a named law-enforcement operation anchor matches, or
-  - same locality + same agency + `drug-case` + shared arrest/drug/numeric headline evidence establish strong operation continuity.
-- These paths only nominate a pair for the existing semantic adjudication gate; they do not directly fuzzy-merge unrelated stories.
-- Semantic publication gate version bumped from 1.4 to 1.5 so stale candidate-decision cache entries cannot hide the new retrieval behavior.
+`tct_engine/story_registry.py` now uses adaptive, lossless serialization:
 
-## Existing URL repair
+- normal mode: two-space JSON, unchanged;
+- pressure mode: existing pressure evidence compaction plus one-space JSON;
+- emergency mode: existing emergency evidence compaction plus compact JSON separators;
+- the 50 MiB hard ceiling remains fail-closed after the lossless storage steps;
+- `history_compaction.last_serialization_mode` records the representation used.
 
-A verified migration fallback runs only if the generalized semantic repair did not already resolve the exact production pair. It:
+No story IDs, event mappings, canonical titles, timelines, quarantine rules, lifecycle rules, relationship rules, follow-up enforcement, ranking, membership, or publication behavior are changed by this hotfix.
 
-- preserves the Aug. 14 permalink as canonical;
-- converts the Aug. 15 permalink to the canonical redirect path;
-- removes the Aug. 15 duplicate row from archive-driven surfaces;
-- retains the URL as a permanent redirect rather than deleting it;
-- records the verified production regression in semantic/publication diagnostics.
+## Regression coverage
 
-This migration is not the prevention mechanism; the prevention is the generalized identity work above.
-
-## Validation
-
-- Exact production regression and focused identity suite: 40 passed.
-- Broader identity/publication suite: 119 passed.
-- Workflow-equivalent repository suite: 886 passed, 43 existing deprecation warnings.
-- Package validation: 35 modules / 119 public exports.
-- Generator runtime guard: PASS.
-- False-jurisdiction guard: PASS.
-- Redirect simulation on the fresh production repo confirmed:
-  - canonical retained;
-  - duplicate removed from archive surfaces;
-  - duplicate HTML contains `noindex,follow` and `window.location.replace` to canonical;
-  - `_redirects` contains a `301!` rule;
-  - canonical article remains substantive.
+`tests/test_editorial_registry_compaction.py` adds a case that places the safety ceiling between the two-space and one-space representations and verifies that pressure-mode save succeeds without changing story identity, event mapping, or entity data.
