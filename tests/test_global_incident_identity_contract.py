@@ -333,3 +333,68 @@ def test_pipeline_contains_global_archive_and_all_category_fail_closed_gates():
     assert source.index("canonicalize_all_live_category_surfaces(") < source.rindex(
         "index_html = render_index(all_categories, top_cat)"
     )
+
+
+def test_category_canonicalizer_uses_full_live_hero_identity_before_final_gate(tmp_path):
+    """Regression: URL-only hero identity could miss current-run incident metadata.
+
+    The canonicalizer and validator must resolve the hero from the same live object.
+    Otherwise a card can survive canonicalization under an incident identity that is
+    present on the hero in memory but not yet persisted onto its archive row, and the
+    immediately following validator will fail the production run.
+    """
+    g = _load_generate(tmp_path)
+    anchor = "named-person-death:shared-live-identity"
+    archive = [
+        {
+            "slug": "2026-08-19-first-live-placement",
+            "headline": "County officials release a morning update",
+            "teaser": "Officials shared new information Wednesday morning.",
+            "date": "2026-08-19",
+            "category_key": "crime",
+        },
+        {
+            "slug": "2026-08-19-second-live-placement",
+            "headline": "Agency provides an afternoon update",
+            "teaser": "The agency released additional information Wednesday.",
+            "date": "2026-08-19",
+            "category_key": "crime",
+        },
+    ]
+    _write_archive_and_redirects(tmp_path, archive, [])
+    hero = {
+        **archive[0],
+        "_archived_slug": archive[0]["slug"],
+        "incident_anchor_key": anchor,
+    }
+    card = {
+        **archive[1],
+        "_archived_slug": archive[1]["slug"],
+        "incident_anchor_key": anchor,
+    }
+    category = {
+        "category_key": "crime",
+        "category_label": "Crime & Safety",
+        "hero": hero,
+        "cards": [card],
+    }
+
+    # Prove the production mismatch that existed before this fix: resolving only
+    # the hero URL loses the live-only incident identity, while the validator's full
+    # hero object sees it.
+    context = g._build_final_canonical_surface_context(archive, tmp_path)
+    hero_permalink = g._live_item_permalink(hero)
+    assert g._final_canonical_surface_identity({}, hero_permalink, context)[
+        "identity_key"
+    ] != f"incident:{anchor}"
+    assert g._final_canonical_surface_identity(hero, hero_permalink, context)[
+        "identity_key"
+    ] == f"incident:{anchor}"
+
+    g.canonicalize_all_live_category_surfaces([category], category, tmp_path)
+    assert category["cards"] == []
+    report = g.validate_live_category_canonical_uniqueness(
+        [category], category, tmp_path
+    )
+    assert report["passed"] is True
+    assert report["violation_count"] == 0
