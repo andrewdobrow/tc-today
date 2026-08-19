@@ -10345,6 +10345,144 @@ def validate_homepage_permalink_uniqueness(index_html, output_root):
     return report
 
 
+def repair_final_canonical_surface_projection(
+    index_html,
+    output_root,
+    *,
+    identity_index=None,
+):
+    """Deterministically repair the *rendered* homepage canonical projection.
+
+    Earlier dedupe stages operate on rich live card objects, which can legitimately
+    carry current-run incident/story metadata that is not yet represented on every
+    persisted archive row.  The deployed homepage, however, exposes only URLs.  The
+    final validator therefore reconstructs public identity from those URLs plus the
+    persisted archive/redirect graph.  A rich-object dedupe pass can consequently
+    consider two placements distinct while the final public projection considers them
+    the same story.
+
+    This pass runs after rendering and uses the exact URL-only identity projection used
+    by ``validate_final_canonical_surface_uniqueness``.  Redirect-source links are
+    rebound to their direct canonical URL and later duplicate grid cards are removed.
+    The strict validator still runs immediately afterward; this is repair-before-fail,
+    not fail-open publication.
+    """
+    output_root = Path(output_root)
+    archive = load_archive(output_root / "archive.json")
+    context = _build_final_canonical_surface_context(
+        archive,
+        output_root,
+        identity_index=identity_index,
+    )
+    html = str(index_html or "")
+    rewrites = []
+    removed = []
+
+    # Repair the visible all-news hero first so cards are compared against the exact
+    # canonical identity that will be deployed.
+    hero_pattern = re.compile(
+        r'(?P<prefix><section[^>]*data-cat-hero="all"[^>]*>.*?'
+        r'<a[^>]*class="hero-v3-link"[^>]*href=")'
+        r'(?P<href>[^"]+)(?P<suffix>")',
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    hero_identity = {}
+
+    def _repair_hero(match):
+        nonlocal hero_identity
+        href = match.group("href")
+        hero_identity = _final_canonical_surface_identity({}, href, context)
+        canonical = str(hero_identity.get("canonical_permalink") or href)
+        if canonical != href:
+            rewrites.append({
+                "placement": "hero",
+                "reason": "redirect_source_rebound_in_final_projection",
+                "identity_key": hero_identity.get("identity_key", ""),
+                "identity_basis": hero_identity.get("identity_basis", ""),
+                "from": href,
+                "to": canonical,
+            })
+        return match.group("prefix") + canonical + match.group("suffix")
+
+    html, hero_subs = hero_pattern.subn(_repair_hero, html, count=1)
+    hero_key = str(hero_identity.get("identity_key") or "") if hero_subs else ""
+
+    # Grid cards contain no nested anchors, so matching one complete card anchor is a
+    # safe, deterministic unit for removal.  This targets only the primary homepage
+    # card grid consumed by the final canonical-surface validator.
+    card_pattern = re.compile(
+        r'(?P<block><a\s+href="(?P<href>[^"]+)"\s+'
+        r'class="grid-card\s+fade-in"[^>]*>.*?</a>)',
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    seen = set()
+    if hero_key:
+        seen.add(hero_key)
+
+    def _repair_card(match):
+        block = match.group("block")
+        href = match.group("href")
+        identity = _final_canonical_surface_identity({}, href, context)
+        key = str(identity.get("identity_key") or "")
+        canonical = str(identity.get("canonical_permalink") or href)
+
+        if key and key in seen:
+            removed.append({
+                "placement": "card",
+                "reason": (
+                    "duplicates_front_page_hero_in_final_projection"
+                    if key == hero_key
+                    else "canonical_equivalent_duplicate_in_final_projection"
+                ),
+                "identity_key": key,
+                "identity_basis": identity.get("identity_basis", ""),
+                "href": href,
+                "canonical_permalink": canonical,
+                "raw_slug": identity.get("raw_slug", ""),
+                "canonical_slug": identity.get("canonical_slug", ""),
+            })
+            return ""
+
+        if key:
+            seen.add(key)
+        if canonical != href:
+            rewrites.append({
+                "placement": "card",
+                "reason": "redirect_source_rebound_in_final_projection",
+                "identity_key": key,
+                "identity_basis": identity.get("identity_basis", ""),
+                "from": href,
+                "to": canonical,
+            })
+            return block.replace(f'href="{href}"', f'href="{canonical}"', 1)
+        return block
+
+    html, card_count = card_pattern.subn(_repair_card, html)
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "policy": (
+            "repair_rendered_homepage_to_same_persisted_identity_projection_used_by_"
+            "final_validator_then_fail_closed_if_any_violation_remains"
+        ),
+        "hero_found": bool(hero_subs),
+        "grid_cards_checked": card_count,
+        "rewrite_count": len(rewrites),
+        "removed_count": len(removed),
+        "rewrites": rewrites,
+        "removed": removed,
+    }
+    report_path = output_root / "data" / "final-canonical-surface-repair.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+    if rewrites or removed:
+        print(
+            "  Final rendered canonical projection self-healed "
+            f"{len(rewrites)} redirect link(s) and {len(removed)} duplicate card(s)"
+        )
+    return html, report
+
+
 def validate_final_canonical_surface_uniqueness(
     index_html,
     output_root,
@@ -29381,8 +29519,14 @@ def main():
             "story regression gate failed; deployment stopped"
         )
 
-    # Render and write homepage (now archive lookups resolve to real slugs)
+    # Render and write homepage (now archive lookups resolve to real slugs).  The
+    # final rendered projection is repaired with the exact URL/archive identity
+    # model used by the validator so a repairable duplicate cannot abort an
+    # otherwise-valid publication run.  The strict contracts still execute next.
     index_html = render_index(all_categories, top_cat)
+    index_html, _final_surface_projection_repair = repair_final_canonical_surface_projection(
+        index_html, OUTPUT_DIR
+    )
     validate_final_canonical_surface_uniqueness(index_html, OUTPUT_DIR)
     validate_homepage_permalink_uniqueness(index_html, OUTPUT_DIR)
     (OUTPUT_DIR / "index.html").write_text(index_html, encoding="utf-8")
