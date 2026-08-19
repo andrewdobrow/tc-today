@@ -68,3 +68,13 @@ def test_generator_active_release_contracts_survive_together(tmp_path, monkeypat
     source = (ROOT / "scripts" / "generate.py").read_text()
     assert "hero_item=hero" in source
     assert "missing_current_run_persistent_story_id" in source
+
+    # v1.13.6.4 production-continuity boundary: the final rendered homepage is
+    # deterministically repaired using the same persisted identity projection as
+    # the strict validator before deployment can be aborted for a repairable card.
+    assert "def repair_final_canonical_surface_projection(" in source
+    repair_call = "repair_final_canonical_surface_projection(\n        index_html, OUTPUT_DIR"
+    assert repair_call in source
+    assert source.index(repair_call) < source.index(
+        "validate_final_canonical_surface_uniqueness(index_html, OUTPUT_DIR)"
+    )

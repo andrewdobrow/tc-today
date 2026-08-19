@@ -374,3 +374,79 @@ def test_render_pipeline_uses_final_identity_context_and_fails_closed_before_wri
     literal_gate = source.index("validate_homepage_permalink_uniqueness(index_html, OUTPUT_DIR)")
     index_write = source.index('(OUTPUT_DIR / "index.html").write_text(index_html')
     assert final_gate < literal_gate < index_write
+
+
+def test_rendered_projection_self_heals_live_item_identity_drift_before_final_gate(tmp_path):
+    """Exact production failure class: rich live identity differs from URL projection.
+
+    Two current-run cards can carry distinct live-only incident anchors while their
+    persisted archive URLs belong to one safe story. The in-memory deduper may keep
+    both; the rendered projection must collapse them using the same URL/archive-only
+    identity that the final validator sees.
+    """
+    g = _load_generate()
+    story_id = "story_render_projection_drift"
+    archive = [
+        {
+            "slug": "older-canonical",
+            "headline": "Original coverage",
+            "date": "2026-08-19",
+            "editorial_story_id": story_id,
+        },
+        {
+            "slug": "newer-rewrite",
+            "headline": "Later rewrite",
+            "date": "2026-08-19",
+            "editorial_story_id": story_id,
+        },
+    ]
+    _write_surface_files(tmp_path, archive, [])
+    identity_index = _identity_index(story_id)
+    context = g._build_final_canonical_surface_context(
+        archive, tmp_path, identity_index=identity_index, redirect_map={}
+    )
+    cards = [
+        {
+            **archive[0],
+            "_archived_slug": archive[0]["slug"],
+            "incident_anchor_key": "live-only-anchor-a",
+            "cat_key": "crime",
+        },
+        {
+            **archive[1],
+            "_archived_slug": archive[1]["slug"],
+            "incident_anchor_key": "live-only-anchor-b",
+            "cat_key": "martin",
+        },
+    ]
+
+    # This is the exact mismatch that reached production: rich-object identity can
+    # distinguish the cards even though the final public URL projection cannot.
+    kept, rich_report = g._dedupe_homepage_cards_by_permalink(
+        cards, _resolver, surface_context=context
+    )
+    assert len(kept) == 2
+    assert rich_report["removed_count"] == 0
+
+    html = _homepage_html(
+        "https://treasurecoast.today/articles/unique-hero.html",
+        [_resolver(card) for card in kept],
+    )
+    with pytest.raises(RuntimeError, match="Final canonical surface contract FAILED"):
+        g.validate_final_canonical_surface_uniqueness(
+            html, tmp_path, identity_index=identity_index
+        )
+
+    repaired_html, repair = g.repair_final_canonical_surface_projection(
+        html, tmp_path, identity_index=identity_index
+    )
+    assert repair["removed_count"] == 1
+    assert repair["removed"][0]["identity_key"] == f"story:{story_id}"
+    assert repaired_html.count('class="grid-card fade-in"') == 1
+
+    final_report = g.validate_final_canonical_surface_uniqueness(
+        repaired_html, tmp_path, identity_index=identity_index
+    )
+    assert final_report["passed"] is True
+    assert final_report["canonical_duplicate_count"] == 0
+    assert final_report["redirect_source_link_count"] == 0
