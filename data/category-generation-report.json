@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-20T10:51:29Z",
+  "generated_at": "2026-08-20T15:52:39Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,33 +16,35 @@
     "category_count": 9,
     "statuses": {
       "category_eligibility_archive_recovery": 1,
-      "generated_live": 6,
+      "generated_live": 5,
       "generation_failed_archive_recovery": 1,
-      "no_publishable_sources": 1
+      "no_publishable_sources": 1,
+      "quality_gate_archive_recovery": 1
     },
     "failures": {
       "missing_or_null_hero": 1,
-      "no_category_eligible_sources": 1
+      "no_category_eligible_sources": 1,
+      "publication_quality_rejected": 1
     },
     "model_attempt_count": 8,
-    "model_elapsed_seconds": 375.558,
-    "archive_recovery_requested_count": 3,
+    "model_elapsed_seconds": 316.673,
+    "archive_recovery_requested_count": 4,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 5,
-    "category_eligibility_rejection_count": 20,
+    "category_eligibility_rejection_count": 23,
     "published_story_duplicate_suppression_count": 31,
-    "story_aware_update_context_count": 10
+    "story_aware_update_context_count": 0
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "generated_live",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 11,
-      "selected_source_count": 2,
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 27,
+      "publishable_source_count": 15,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -50,11 +52,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 18.104,
+          "elapsed_seconds": 36.61,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 18.104,
+      "model_elapsed_seconds": 36.61,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -65,9 +67,35 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 11,
-      "category_eligibility_rejection_count": 9,
+      "category_eligibility_assessed_count": 15,
+      "category_eligibility_rejection_count": 11,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "WHERE'S WALTER? Enjoying fresh citrus at Al's Family Farms",
+          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-enjoying-fresh-citrus-at-als-family-farms"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "'SIGNIFICANT INCIDENT': Students uninjured, 4 others taken to trauma center after school bus crash",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/students-safe-others-hospitalized-after-school-bus-crash-in-palm-beach-county"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -194,7 +222,7 @@
           "source_url": "https://www.hometownnewstc.com/community_page/calendar/st-lucie-county---week-of-aug-21/article_133c7a44-ff95-5f26-9d1d-cb1db89a0d82.html"
         }
       ],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -208,31 +236,11 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Woman accused of hiding $3,200 in her body during Martin County arrest faces new charges - WPEC",
-          "source_url": "https://cbs12.com/news/local/florida-crime-news-woman-accused-of-hiding-smuggling-3200-dollars-in-her-body-vagina-during-martin-county-arrest-faces-new-charges-elderly-victim-bank-scam-biohazard-money-felony-scheme-to-defraud",
-          "editorial_story_id": "story_004694",
-          "canonical_slug": "2026-08-19-miami-woman-accused-of-scamming-martin-county-seniors-hid-3200-in-her-body-durin",
-          "canonical_headline": "Miami woman accused of scamming Martin County seniors hid $3,200 in her body during jail intake",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Lawsuits over school bus and school speed zone camera tickets face setbacks in Florida",
-          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida",
-          "editorial_story_id": "story_004680",
-          "canonical_slug": "2026-08-19-florida-school-bus-and-speed-zone-camera-lawsuits-face-dismissals-and-legal-setb",
-          "canonical_headline": "Florida school bus and speed zone camera lawsuits face dismissals and legal setbacks",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Indian River County school superintendent announces plans to step down in 2027 - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/19/indian-river-county-school-superintendent-announces-plans-step-down-2027?outputType=amp",
+          "source_headline": "Indian River County school superintendent announces plans to step down in 2027 - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027",
           "editorial_story_id": "story_004684",
           "canonical_slug": "2026-08-19-indian-river-county-school-superintendent-dr-moore-to-step-down-june-2027",
-          "canonical_headline": "Indian River County school superintendent Dr. Moore to step down June 2027",
+          "canonical_headline": "Indian River County schools superintendent to step down June 2027",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -247,104 +255,23 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Person of interest in Vero Beach homicide arrested in West Virginia after nationwide search",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/person-of-interest-in-vero-beach-homicide-arrested-in-west-virginia-after-nationwide-search",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle remains at large",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
-          "identity_keys": [
-            "story:story_002912",
-            "source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/person-of-interest-in-vero-beach-homicide-arrested-in-west-virginia-after-nationwide-search"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=2",
-            "shared_locality=['indian-river', 'indian-river-county', 'sebastian', 'vero-beach']",
-            "shared_event_families=['shooting', 'vehicle-chase']",
-            "shared_named_people=['matthew allen waggle']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['indian-river-county-sheriff']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=[]",
-            "shared_distinctive_token_count=63",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Indian River County school superintendent announces plans to step down in 2027 - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-19-indian-river-county-school-superintendent-dr-moore-to-step-down-june-2027",
-          "canonical_headline": "Indian River County school superintendent Dr. Moore to step down June 2027",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_004684",
-            "source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['indian-river', 'indian-river-county']",
-            "shared_event_families=['public-policy']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['indian-river-county-superintendent-drive', 'no-1-best-place']",
-            "shared_agencies=['school-board']",
-            "shared_subject_phrases=['announc-plan-step', 'announc-plan-step-down', 'plan-step-down', 'plan-step-down-2027', 'school-superintendent-announc', 'school-superintendent-announc-plan', 'step-down-2027', 'superintendent-announc-plan', 'superintendent-announc-plan-step']",
-            "shared_headline_topic_core=['2027', 'announc', 'down', 'plan', 'step', 'superintendent']",
-            "shared_distinctive_token_count=147",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Indian River County schools superintendent to step down June 2027",
+      "live_hero_headline": "Fort Pierce commission rejects third settlement offer in Little Jim lawsuit",
       "generated_card_count": 0,
-      "elapsed_seconds": 36.432
+      "elapsed_seconds": 67.588
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 11,
-      "selected_source_count": 9,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 10,
+      "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -352,11 +279,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 77.399,
+          "elapsed_seconds": 33.426,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 77.399,
+      "model_elapsed_seconds": 33.426,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -369,18 +296,18 @@
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Hallandale Beach man arrested in Vero Beach after traveling to meet 14-year-old",
+          "headline": "Hallandale Beach man arrested in Vero Beach on charges of traveling to meet child",
           "missing": [
             "headline_jurisdiction_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Hallandale Beach man arrested in Vero Beach after traveling to meet 14-year-old",
-            "lead": "Emaad Mir, 27, of Hallandale Beach, was arrested on Aug. 8 after he allegedly traveled to Indian River County to meet a 14-year-old, according to Indian River County Sheriff's Office reports. Mir was communicating with undercover detectives working alongside the juvenile's parents for some time, with Mir believing that the person was 14. He is in the Indian River County Jail on charges of traveling to meet after use of a computer to lure a child, transmit information harmful to minors, and unlawful use of a two-way communications device.",
-            "lead_word_count": 94,
-            "headline_overlap_ratio": 0.818,
-            "new_context_token_count": 40,
+            "headline": "Hallandale Beach man arrested in Vero Beach on charges of traveling to meet child",
+            "lead": "Emaad Mir, 27, of Hallandale Beach was arrested on Aug. 8 after he allegedly traveled to Indian River County to meet a 14-year-old, according to Indian River County Sheriff's Office reports. Mir was communicating with undercover detectives, working alongside the juvenile's parents, for some time, with Mir believing that the person was 14.",
+            "lead_word_count": 57,
+            "headline_overlap_ratio": 0.444,
+            "new_context_token_count": 29,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -394,8 +321,8 @@
           "claim_consistency": {
             "required": true,
             "passed": false,
-            "headline": "Hallandale Beach man arrested in Vero Beach after traveling to meet 14-year-old",
-            "lead": "Emaad Mir, 27, of Hallandale Beach, was arrested on Aug. 8 after he allegedly traveled to Indian River County to meet a 14-year-old, according to Indian River County Sheriff's Office reports. Mir was communicating with undercover detectives working alongside the juvenile's parents for some time, with Mir believing that the person was 14. He is in the Indian River County Jail on charges of traveling to meet after use of a computer to lure a child, transmit information harmful to minors, and unlawful use of a two-way communications device.",
+            "headline": "Hallandale Beach man arrested in Vero Beach on charges of traveling to meet child",
+            "lead": "Emaad Mir, 27, of Hallandale Beach was arrested on Aug. 8 after he allegedly traveled to Indian River County to meet a 14-year-old, according to Indian River County Sheriff's Office reports. Mir was communicating with undercover detectives, working alongside the juvenile's parents, for some time, with Mir believing that the person was 14.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
@@ -418,17 +345,17 @@
           "source_focus": {
             "required": true,
             "passed": true,
-            "generated_headline": "Hallandale Beach man arrested in Vero Beach after traveling to meet 14-year-old",
-            "generated_lead": "Emaad Mir, 27, of Hallandale Beach, was arrested on Aug. 8 after he allegedly traveled to Indian River County to meet a 14-year-old, according to Indian River County Sheriff's Office reports.",
+            "generated_headline": "Hallandale Beach man arrested in Vero Beach on charges of traveling to meet child",
+            "generated_lead": "Emaad Mir, 27, of Hallandale Beach was arrested on Aug. 8 after he allegedly traveled to Indian River County to meet a 14-year-old, according to Indian River County Sheriff's Office reports.",
             "source_title": "Indian River County Sheriff arrests Hallandale man for traveling north to meet child - Hometown News Treasure Coast",
             "source_lead": "Emaad Mir, 27, of Hallandale Beach is in the Indian River County Jail on charges of traveling to meet after use of a computer to lure a child; transmit information harmful to minors; and unlawful use of a two-way communications device. He is being held on a $1.75 million bond.",
             "title_similarity": {
-              "score": 0.4372,
-              "overlap": 0.5,
-              "jaccard": 0.25,
-              "sorted_sequence": 0.561,
-              "ordered_sequence": 0.4235,
-              "shared_token_count": 5.0
+              "score": 0.5424,
+              "overlap": 0.6667,
+              "jaccard": 0.3333,
+              "sorted_sequence": 0.5455,
+              "ordered_sequence": 0.4094,
+              "shared_token_count": 6.0
             },
             "lead_token_overlap": 0.5,
             "missing": []
@@ -442,8 +369,8 @@
       ],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 11,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 10,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -455,8 +382,8 @@
           "reason": "missing_primary_crime_safety_focus",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Derelict, at-risk boats near North Hutchinson Island create dangerous conditions on Treasure Coast",
-          "source_url": "https://www.wptv.com/news/treasure-coast/derelict-at-risk-boats-near-north-hutchinson-island-creating-dangerous-conditions-on-treasure-coast"
+          "headline": "WHERE'S WALTER? Enjoying fresh citrus at Al's Family Farms",
+          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-enjoying-fresh-citrus-at-als-family-farms"
         },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -468,11 +395,24 @@
           "reason": "missing_primary_crime_safety_focus",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Indian River County school superintendent announces plans to step down in 2027",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027"
+          "headline": "Movie money, real arrests: Fake $100 bill lands two Fort Pierce women in jail - WPEC",
+          "source_url": "https://cbs12.com/news/local/100-movie-money-bill-turned-a-port-st-lucie-dinner-outing-into-a-trip-to-jail-port-st-lucie-st-lucie-county-st-lucie-county-sheriffs-office-st-lucie-draft-house-counterfeit-money-counterfeit-100-bill-fake-money-fake-100-bill-movie-money"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "St. Lucie County community urge fire board to reinstate fired firefighters during meeting - WPEC",
+          "source_url": "https://cbs12.com/news/local/st-lucie-county-community-urge-fire-board-to-reinstate-fired-firefighters-during-meeting-chief-retaliate-bug-zapper-florida-news"
         }
       ],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -496,16 +436,6 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Lawsuits over school bus and school speed zone camera tickets face setbacks in Florida",
-          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida",
-          "editorial_story_id": "story_004680",
-          "canonical_slug": "2026-08-19-florida-school-bus-and-speed-zone-camera-lawsuits-face-dismissals-and-legal-setb",
-          "canonical_headline": "Florida school bus and speed zone camera lawsuits face dismissals and legal setbacks",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "I-95 southbound left lane blocked in Martin County due to roadway debris - WPEC",
           "source_url": "https://cbs12.com/news/local/i-95-southbound-left-lane-blocked-in-martin-county-due-to-roadway-debris",
           "editorial_story_id": "story_004509",
@@ -516,200 +446,30 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Florida woman posing as bank representative accused of Martin County credit card scam - cw34.com",
-          "source_url": "https://cw34.com/news/local/florida-woman-miami-poses-bank-representative-claims-credit-card-compromised-scam-martin-county-sheriffs-office-body-camera-florida-news",
+          "source_headline": "Florida woman posing as bank representative accused of Martin County credit card scam - WPEC",
+          "source_url": "https://cbs12.com/news/local/florida-woman-miami-poses-bank-representative-claims-credit-card-compromised-scam-martin-county-sheriffs-office-body-camera-florida-news",
           "editorial_story_id": "story_004556",
           "canonical_slug": "2026-08-18-miami-woman-accused-of-posing-as-bank-representative-in-martin-county-credit-car",
           "canonical_headline": "Miami woman accused of posing as bank representative in Martin County credit card scam",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Former Vero Beach Eagles secretary accused of blowing nearly $419K on guns, liquor, LEGOs - WPEC",
-          "source_url": "http://cbs12.com/news/crime/former-vero-beach-eagles-secretary-accused-of-blowing-nearly-419k-on-guns-liquor-legos-indian-river-county-vero-beach-fraternal-order-of-eagles-aerie-4374-robert-john-davison-embezzlement-grand-theft-419000-alleged-embezzlement-debit-card-org",
-          "editorial_story_id": "story_004561",
-          "canonical_slug": "2026-08-19-former-vero-beach-eagles-secretary-accused-of-spending-419000-on-guns-liquor-leg",
-          "canonical_headline": "Former Vero Beach Eagles secretary accused of spending $419,000 on guns, liquor, LEGOs",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 4,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Person of interest in Vero Beach homicide arrested in West Virginia after nationwide search - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/20/person-interest-vero-beach-homicide-arrested-west-virginia-after-nationwide-search",
-          "publisher": "www.wflx.com",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle remains at large",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
-          "identity_keys": [
-            "story:story_002912",
-            "source:https://www.wflx.com/2026/08/20/person-interest-vero-beach-homicide-arrested-west-virginia-after-nationwide-search"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=2",
-            "shared_locality=['indian-river', 'indian-river-county', 'sebastian', 'vero-beach']",
-            "shared_event_families=['shooting', 'vehicle-chase']",
-            "shared_named_people=['matthew allen waggle']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['indian-river-county-sheriff']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=[]",
-            "shared_distinctive_token_count=63",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Person of interest in Vero Beach homicide arrested in West Virginia after nationwide search",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/person-of-interest-in-vero-beach-homicide-arrested-in-west-virginia-after-nationwide-search",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle remains at large",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
-          "identity_keys": [
-            "story:story_004551",
-            "source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/person-of-interest-in-vero-beach-homicide-arrested-in-west-virginia-after-nationwide-search"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=2",
-            "shared_locality=['indian-river', 'indian-river-county', 'sebastian', 'vero-beach']",
-            "shared_event_families=['shooting', 'vehicle-chase']",
-            "shared_named_people=['matthew allen waggle']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['indian-river-county-sheriff']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=[]",
-            "shared_distinctive_token_count=63",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Indian River County school superintendent announces plans to step down in 2027",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-19-indian-river-county-school-superintendent-dr-moore-to-step-down-june-2027",
-          "canonical_headline": "Indian River County school superintendent Dr. Moore to step down June 2027",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_004684",
-            "source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['indian-river', 'indian-river-county']",
-            "shared_event_families=['public-policy']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['indian-river-county-superintendent-drive', 'no-1-best-place']",
-            "shared_agencies=['school-board']",
-            "shared_subject_phrases=['announc-plan-step', 'announc-plan-step-down', 'plan-step-down', 'plan-step-down-2027', 'school-superintendent-announc', 'school-superintendent-announc-plan', 'step-down-2027', 'superintendent-announc-plan', 'superintendent-announc-plan-step']",
-            "shared_headline_topic_core=['2027', 'announc', 'down', 'plan', 'step', 'superintendent']",
-            "shared_distinctive_token_count=146",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Vero Beach homicide victim identified as person of interest remains on the run - cw34.com",
-          "source_url": "https://cw34.com/news/local/vero-beach-homicide-victim-identified-as-person-of-interest-remains-on-the-run-dawn-kriskewic-vero-beach-vero-beach-shooting-vero-beach-homicide-indian-river-county-indian-river-county-sheriffs-office-matthew-waggle-person-of-interest-armed",
-          "publisher": "cw34.com",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle remains at large",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
-          "identity_keys": [
-            "story:story_002912",
-            "source:https://cw34.com/news/local/vero-beach-homicide-victim-identified-as-person-of-interest-remains-on-the-run-dawn-kriskewic-vero-beach-vero-beach-shooting-vero-beach-homicide-indian-river-county-indian-river-county-sheriffs-office-matthew-waggle-person-of-interest-armed"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
-            "shared_event_families=['shooting']",
-            "shared_named_people=['dawn kriskewic']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['indian-river-county-sheriff']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['identif', 'run']",
-            "shared_distinctive_token_count=55",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Indian River County Sheriff identifies Vero Beach homicide victim as Dawn Kriskewic",
+      "live_hero_headline": "Sebastian man arrested in West Virginia for Vero Beach shooting death of Dawn Kriskewic",
       "generated_card_count": 1,
-      "elapsed_seconds": 88.33
+      "elapsed_seconds": 61.007
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 9,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -730,6 +490,34 @@
       "category_eligibility_assessed_count": 9,
       "category_eligibility_rejection_count": 9,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "WHERE'S WALTER? Enjoying fresh citrus at Al's Family Farms",
+          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-enjoying-fresh-citrus-at-als-family-farms"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_treasure_coast_business_nexus",
+          "positive_signals": [],
+          "competing_signals": [
+            "schools_education:school district"
+          ],
+          "headline": "'SIGNIFICANT INCIDENT': Students uninjured, 4 others taken to trauma center after school bus crash",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/students-safe-others-hospitalized-after-school-bus-crash-in-palm-beach-county"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -823,21 +611,6 @@
           "policy": "primary_business_development_focus_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [
-            "schools_education:school board"
-          ],
-          "headline": "Indian River County school superintendent announces plans to step down in 2027",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
           "reason": "missing_treasure_coast_business_nexus",
           "positive_signals": [],
           "competing_signals": [
@@ -845,22 +618,9 @@
           ],
           "headline": "No bond set for suspended Palm Beach County clerk accused of child sex abuse",
           "source_url": "https://www.wptv.com/news/palm-beach-county/no-bond-set-for-suspended-palm-beach-county-clerk-michael-caruso-accused-of-child-sex-abuse"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_treasure_coast_business_nexus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Wounded Veterans Relief Fund helps soldier after pet's wrong surgery",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/north-palm-beach/wrong-operation-on-dog-leads-to-help-from-local-veterans-group"
         }
       ],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -869,6 +629,16 @@
           "editorial_story_id": "story_004680",
           "canonical_slug": "2026-08-19-florida-school-bus-and-speed-zone-camera-lawsuits-face-dismissals-and-legal-setb",
           "canonical_headline": "Florida school bus and speed zone camera lawsuits face dismissals and legal setbacks",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Indian River County school superintendent announces plans to step down in 2027",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027",
+          "editorial_story_id": "story_004684",
+          "canonical_slug": "2026-08-19-indian-river-county-school-superintendent-dr-moore-to-step-down-june-2027",
+          "canonical_headline": "Indian River County schools superintendent to step down June 2027",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -883,100 +653,19 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Person of interest in Vero Beach homicide arrested in West Virginia after nationwide search",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/person-of-interest-in-vero-beach-homicide-arrested-in-west-virginia-after-nationwide-search",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle remains at large",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
-          "identity_keys": [
-            "story:story_004551",
-            "source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/person-of-interest-in-vero-beach-homicide-arrested-in-west-virginia-after-nationwide-search"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=2",
-            "shared_locality=['indian-river', 'indian-river-county', 'sebastian', 'vero-beach']",
-            "shared_event_families=['shooting', 'vehicle-chase']",
-            "shared_named_people=['matthew allen waggle']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['indian-river-county-sheriff']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=[]",
-            "shared_distinctive_token_count=63",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Indian River County school superintendent announces plans to step down in 2027",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-19-indian-river-county-school-superintendent-dr-moore-to-step-down-june-2027",
-          "canonical_headline": "Indian River County school superintendent Dr. Moore to step down June 2027",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_004684",
-            "source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['indian-river', 'indian-river-county']",
-            "shared_event_families=['public-policy']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['indian-river-county-superintendent-drive', 'no-1-best-place']",
-            "shared_agencies=['school-board']",
-            "shared_subject_phrases=['announc-plan-step', 'announc-plan-step-down', 'plan-step-down', 'plan-step-down-2027', 'school-superintendent-announc', 'school-superintendent-announc-plan', 'step-down-2027', 'superintendent-announc-plan', 'superintendent-announc-plan-step']",
-            "shared_headline_topic_core=['2027', 'announc', 'down', 'plan', 'step', 'superintendent']",
-            "shared_distinctive_token_count=146",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 9.357
+      "elapsed_seconds": 13.624
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 25,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 7,
-      "selected_source_count": 7,
+      "fetched_candidate_count": 24,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 6,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 2,
@@ -984,19 +673,19 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 72.032,
+          "elapsed_seconds": 77.218,
           "result": "missing_or_null_hero",
           "error_summary": "Model response did not contain a usable hero after normalization"
         },
         {
           "attempt": 2,
-          "timeout_seconds": 108.0,
-          "elapsed_seconds": 65.207,
+          "timeout_seconds": 102.8,
+          "elapsed_seconds": 16.182,
           "result": "missing_or_null_hero",
           "error_summary": "Model response did not contain a usable hero after normalization"
         }
       ],
-      "model_elapsed_seconds": 137.239,
+      "model_elapsed_seconds": 93.4,
       "failure_code": "missing_or_null_hero",
       "failure_summary": "Model response did not contain a usable hero after normalization",
       "sports_expired_event_preview_count": 0,
@@ -1007,40 +696,40 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
       "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "new_publication_stale_rejected_count": 1,
+      "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 151.963
+      "elapsed_seconds": 109.526
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
-      "status": "generated_live",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 13,
-      "publishable_source_count": 7,
-      "selected_source_count": 7,
+      "fresh_candidate_count": 15,
+      "publishable_source_count": 6,
+      "selected_source_count": 6,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 63.611,
+          "elapsed_seconds": 71.635,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 63.611,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 71.636,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1051,18 +740,18 @@
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Sebastian Historical Ghost Walk tours downtown Saturday night",
+          "headline": "Over 100 animals from Martin County hoarding cases begin healing at Palm City shelter",
           "missing": [
-            "generated_copy_drifted_from_source_focus"
+            "headline_jurisdiction_missing_from_lead"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Sebastian Historical Ghost Walk tours downtown Saturday night",
-            "lead": "A Sebastian Historical Ghost Walk will be at Sebastian Chamber of Commerce, 700 Main St. in Sebastian, on Saturday, Aug. 11. The walk costs $20 for those 12 and older, $15 for children ages 6 to 11, and free for those 5 and younger.",
-            "lead_word_count": 44,
-            "headline_overlap_ratio": 0.625,
-            "new_context_token_count": 17,
+            "headline": "Over 100 animals from Martin County hoarding cases begin healing at Palm City shelter",
+            "lead": "The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino on Southwest Meadowlark Circle in July, where deputies found horrific conditions with no working air conditioning, little ventilation and up to a foot of animal feces covering the floor. The second case involved 36 Border Collies rescued from a Palm City home after deputies described severe neglect conditions. Paige O'Donnell was arrested and faces 72 criminal charges.",
+            "lead_word_count": 105,
+            "headline_overlap_ratio": 0.5,
+            "new_context_token_count": 61,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -1075,43 +764,47 @@
           },
           "claim_consistency": {
             "required": true,
-            "passed": true,
-            "headline": "Sebastian Historical Ghost Walk tours downtown Saturday night",
-            "lead": "A Sebastian Historical Ghost Walk will be at Sebastian Chamber of Commerce, 700 Main St. in Sebastian, on Saturday, Aug. 11. The walk costs $20 for those 12 and older, $15 for children ages 6 to 11, and free for those 5 and younger.",
+            "passed": false,
+            "headline": "Over 100 animals from Martin County hoarding cases begin healing at Palm City shelter",
+            "lead": "The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino on Southwest Meadowlark Circle in July, where deputies found horrific conditions with no working air conditioning, little ventilation and up to a foot of animal feces covering the floor. The second case involved 36 Border Collies rescued from a Palm City home after deputies described severe neglect conditions. Paige O'Donnell was arrested and faces 72 criminal charges.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
             "headline_jurisdictions": [
-              "sebastian"
+              "martin_county",
+              "palm_city"
             ],
             "lead_jurisdictions": [
-              "sebastian"
+              "palm_city",
+              "stuart"
             ],
-            "missing_jurisdictions": [],
+            "missing_jurisdictions": [
+              "martin_county"
+            ],
             "headline_policy_references": [],
             "lead_policy_references": [],
             "missing_policy_references": [],
-            "missing": []
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
           },
           "source_focus": {
             "required": true,
-            "passed": false,
-            "generated_headline": "Sebastian Historical Ghost Walk tours downtown Saturday night",
-            "generated_lead": "A Sebastian Historical Ghost Walk will be at Sebastian Chamber of Commerce, 700 Main St. in Sebastian, on Saturday, Aug. 11.",
-            "source_title": "Indian River County - Week of Aug. 21 - Hometown News Treasure Coast",
-            "source_lead": "Panpim Thongsripong, UF/IFAS assistant professor of vector-borne disease ecology, left, and Eva Buckner, UF/IFAS associate professor, medical entomology specialist, along with Jeff Summersill, agricultural pilot and with Indian River Mosquito Control District will discuss insects during a Double Feature Lecture at the Environmental Learning Center, 255 Live Oak Drive, Vero Beach on Saturday, Aug. 22, from 12:30 to 2:30 p.m.",
+            "passed": true,
+            "generated_headline": "Over 100 animals from Martin County hoarding cases begin healing at Palm City shelter",
+            "generated_lead": "The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino on Southwest Meadowlark Circle in July, where deputies found horrific conditions with no working air conditioning, little ventilation and up to a foot of animal feces covering the floor.",
+            "source_title": "Animals rescued from Martin County hoarding cases start to show signs of healing",
+            "source_lead": "After two of the largest animal hoarding cases in recent Martin County history, the Humane Society of the Treasure Coast says many of the rescued animals are already beginning to heal.The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City.One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino. WPTV previously reported that deputies found",
             "title_similarity": {
-              "score": 0.32,
-              "overlap": 0.0,
-              "jaccard": 0.0,
-              "sorted_sequence": 0.3306,
-              "ordered_sequence": 0.3636,
-              "shared_token_count": 0.0
+              "score": 0.5867,
+              "overlap": 0.6,
+              "jaccard": 0.4,
+              "sorted_sequence": 0.7092,
+              "ordered_sequence": 0.6667,
+              "shared_token_count": 6.0
             },
-            "lead_token_overlap": 0.167,
-            "missing": [
-              "generated_copy_drifted_from_source_focus"
-            ]
+            "lead_token_overlap": 0.694,
+            "missing": []
           },
           "source_jurisdiction": {
             "required": false,
@@ -1122,11 +815,21 @@
       ],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "things_to_do",
+          "source_headline": "Indian River County - Week of Aug. 21 - Hometown News Treasure Coast",
+          "source_url": "https://www.hometownnewstc.com/community_page/calendar/indian-river-county---week-of-aug-21/article_8a182bce-b5c2-5ebd-8e55-4d3caee2766c.html",
+          "editorial_story_id": "story_004815",
+          "canonical_slug": "2026-08-20-environmental-learning-center-in-vero-beach-hosts-mosquito-and-insect-lecture-sa",
+          "canonical_headline": "Environmental Learning Center in Vero Beach hosts mosquito and insect lecture Saturday",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "things_to_do",
           "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
@@ -1136,16 +839,6 @@
           "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "things_to_do",
-          "source_headline": "Big Taste of Martin County returns to support Big Brothers Big Sisters mentoring programs",
-          "source_url": "https://www.wptv.com/shining-a-light/big-taste-of-martin-county-returns-to-support-big-brothers-big-sisters-mentoring-programs",
-          "editorial_story_id": "story_000253",
-          "canonical_slug": "2026-07-23-big-taste-of-martin-county-returns-oct-6-to-support-youth-mentoring-programs",
-          "canonical_headline": "Big Brothers Big Sisters returns Big Taste of Martin County fundraiser to Stuart",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -1153,9 +846,7 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Environmental Learning Center in Vero Beach hosts mosquito and insect lecture Saturday",
-      "generated_card_count": 1,
-      "elapsed_seconds": 71.536
+      "elapsed_seconds": 85.436
     },
     {
       "category_key": "florida",
@@ -1209,14 +900,14 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 11.009
+      "elapsed_seconds": 27.648
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 1,
       "selected_source_count": 1,
       "cache_hit": false,
@@ -1226,11 +917,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 9.482,
+          "elapsed_seconds": 7.06,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 9.482,
+      "model_elapsed_seconds": 7.06,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1244,8 +935,28 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Woman accused of hiding $3,200 in her body during Martin County arrest faces new charges - cw34.com",
+          "source_url": "https://news.google.com/rss/articles/CBMi5AJBVV95cUxPRk5tOU1vMGRfTnVvNnpvMEFMTEs0RVl3bjgwcVd0NmtZLURNN0JoTE16MHJ1dU5vN1FKckwyVmRHTG1sb1g2WVVtTGwyalRJRmpsTkxSYUxYbkNETWswV2FmYnZLRjB0NnhrNHVocmUyTlVlS1hlajlHX1ZEcmdnX1duVjBXRUxYYXBhcVkydGZzWk1MbExGSF81VGR4cElGYWo0eGVzUy15SDZ2X0lhVURSV3R6cUpYYXhucjVmcngtYkwwMDRmMlRNcGttTURnQ1l4THBfdUh1bC1YX1RrMUVHMTViNnZHeXZMZ3JzOGdwNW96aUNoSlNaZ1RBcWZCdXYzcDNKOGoyYXhlOUNjWlRydmZGalpGVWZrOHQ2dU1jVDUzT2NNOVZKNUlSQTJmZHJlbjdld0tyd1dKeVBDVFFIVkFFYlFmbzhwOF82dVhFVjJrUm52eUpHRWEtcU4yVEtDQw",
+          "editorial_story_id": "story_004694",
+          "canonical_slug": "2026-08-19-miami-woman-accused-of-scamming-martin-county-seniors-hid-3200-in-her-body-durin",
+          "canonical_headline": "Miami woman accused of scamming Martin County seniors hid $3,200 in her body during jail intake",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "'Everything that she had': Miami woman arrested in Martin County for posing as bank representative - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-martin-county-fraud-scam-elderly-cash/73475542",
+          "editorial_story_id": "story_004692",
+          "canonical_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
+          "canonical_headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "martin",
           "source_headline": "Woman accused of hiding $3,200 in her body during Martin County arrest faces new charges - WPEC",
@@ -1294,16 +1005,16 @@
       "budget_seconds": 180.0,
       "live_hero_headline": "Martin County deputies rescue man attempting suicide at Stuart's Bathtub Beach",
       "generated_card_count": 0,
-      "elapsed_seconds": 28.582
+      "elapsed_seconds": 20.682
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 6,
-      "selected_source_count": 6,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 10,
+      "selected_source_count": 8,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1311,35 +1022,35 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 45.698,
+          "elapsed_seconds": 42.483,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 45.698,
+      "model_elapsed_seconds": 42.483,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 3,
+      "article_framing_rejection_count": 2,
       "article_framing_rejections": [
         {
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Port St. Lucie to host garage sale at Minsky Gym in September",
+          "headline": "Enchanted tea party for young children scheduled at Port St. Lucie Community Center",
           "missing": [
             "generated_copy_drifted_from_source_focus"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Port St. Lucie to host garage sale at Minsky Gym in September",
-            "lead": "A Garage Sale in the overflow parking lot at Minsky Gym, 750 SW Darwin Blvd., Port St. Lucie, will be Saturday, Sept. 5. The event is one of several community activities scheduled at city facilities in the coming weeks.",
-            "lead_word_count": 39,
-            "headline_overlap_ratio": 0.778,
-            "new_context_token_count": 19,
+            "headline": "Enchanted tea party for young children scheduled at Port St. Lucie Community Center",
+            "lead": "The Enchanted Tea Party will take place at Port St. Lucie Community Center, 2195 SE Airoso Blvd., Port St. Lucie on Aug. 28 from 10:30 to 11:30 a.m. The event is for children ages 1 to 5. Young guests are encouraged to wear royal attire.",
+            "lead_word_count": 48,
+            "headline_overlap_ratio": 0.909,
+            "new_context_token_count": 18,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -1353,8 +1064,8 @@
           "claim_consistency": {
             "required": true,
             "passed": true,
-            "headline": "Port St. Lucie to host garage sale at Minsky Gym in September",
-            "lead": "A Garage Sale in the overflow parking lot at Minsky Gym, 750 SW Darwin Blvd., Port St. Lucie, will be Saturday, Sept. 5. The event is one of several community activities scheduled at city facilities in the coming weeks.",
+            "headline": "Enchanted tea party for young children scheduled at Port St. Lucie Community Center",
+            "lead": "The Enchanted Tea Party will take place at Port St. Lucie Community Center, 2195 SE Airoso Blvd., Port St. Lucie on Aug. 28 from 10:30 to 11:30 a.m. The event is for children ages 1 to 5. Young guests are encouraged to wear royal attire.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
@@ -1373,88 +1084,16 @@
           "source_focus": {
             "required": true,
             "passed": false,
-            "generated_headline": "Port St. Lucie to host garage sale at Minsky Gym in September",
-            "generated_lead": "A Garage Sale in the overflow parking lot at Minsky Gym, 750 SW Darwin Blvd., Port St. Lucie, will be Saturday, Sept.",
+            "generated_headline": "Enchanted tea party for young children scheduled at Port St. Lucie Community Center",
+            "generated_lead": "The Enchanted Tea Party will take place at Port St. Lucie Community Center, 2195 SE Airoso Blvd., Port St.",
             "source_title": "St. Lucie County - Week of Aug. 21 - Hometown News Treasure Coast",
             "source_lead": "The Downtown Fort Pierce Farmer s Market is at Marina Square, 101 Melody Lane, Fort Pierce on Saturdays, from 8 a.m. Call 772-940-1145 or go to fortpiercefarmersmarket.com .",
             "title_similarity": {
-              "score": 0.2212,
-              "overlap": 0.2222,
-              "jaccard": 0.1176,
-              "sorted_sequence": 0.3738,
-              "ordered_sequence": 0.243,
-              "shared_token_count": 2.0
-            },
-            "lead_token_overlap": 0.0,
-            "missing": [
-              "generated_copy_drifted_from_source_focus"
-            ]
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Port St. Lucie Police Athletic League offers beginner wrestling program for youth",
-          "missing": [
-            "generated_copy_drifted_from_source_focus"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Port St. Lucie Police Athletic League offers beginner wrestling program for youth",
-            "lead": "Port St. Lucie Police Athletic League will have a Beginner Wrestling Program at the PAL Gym, 2101 SE Tiffany Ave., Port St. Lucie running on Tuesdays and Thursdays through Dec. 10. The program is for boys and girls, ages 6 to 14.",
-            "lead_word_count": 42,
-            "headline_overlap_ratio": 0.818,
-            "new_context_token_count": 16,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": true,
-            "headline": "Port St. Lucie Police Athletic League offers beginner wrestling program for youth",
-            "lead": "Port St. Lucie Police Athletic League will have a Beginner Wrestling Program at the PAL Gym, 2101 SE Tiffany Ave., Port St. Lucie running on Tuesdays and Thursdays through Dec. 10. The program is for boys and girls, ages 6 to 14.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "port_st_lucie"
-            ],
-            "lead_jurisdictions": [
-              "port_st_lucie"
-            ],
-            "missing_jurisdictions": [],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": []
-          },
-          "source_focus": {
-            "required": true,
-            "passed": false,
-            "generated_headline": "Port St. Lucie Police Athletic League offers beginner wrestling program for youth",
-            "generated_lead": "Port St. Lucie Police Athletic League will have a Beginner Wrestling Program at the PAL Gym, 2101 SE Tiffany Ave., Port St.",
-            "source_title": "St. Lucie County - Week of Aug. 21 - Hometown News Treasure Coast",
-            "source_lead": "The Downtown Fort Pierce Farmer s Market is at Marina Square, 101 Melody Lane, Fort Pierce on Saturdays, from 8 a.m. Call 772-940-1145 or go to fortpiercefarmersmarket.com .",
-            "title_similarity": {
-              "score": 0.2013,
+              "score": 0.2418,
               "overlap": 0.2,
               "jaccard": 0.1053,
-              "sorted_sequence": 0.3485,
-              "ordered_sequence": 0.2273,
+              "sorted_sequence": 0.4122,
+              "ordered_sequence": 0.2748,
               "shared_token_count": 2.0
             },
             "lead_token_overlap": 0.0,
@@ -1472,18 +1111,18 @@
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "St. Lucie Chamber of Commerce hosts business lease seminar in Fort Pierce",
+          "headline": "Port St. Lucie Police Athletic League begins beginner wrestling program",
           "missing": [
             "generated_copy_drifted_from_source_focus"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "St. Lucie Chamber of Commerce hosts business lease seminar in Fort Pierce",
-            "lead": "St. Lucie Chamber of Commerce will host Before You Sign The Lease at Fort Pierce City Commission Chambers, 100 N. U.S. 1, Fort Pierce on Wednesday, Aug. 28. Admission is free, but registration is requested. Residents can email president@stluciechamber.org.",
-            "lead_word_count": 42,
-            "headline_overlap_ratio": 0.7,
-            "new_context_token_count": 22,
+            "headline": "Port St. Lucie Police Athletic League begins beginner wrestling program",
+            "lead": "The Beginner Wrestling Program will run on Tuesdays and Thursdays through Dec. 10 at the PAL Gym, 2101 SE Tiffany Ave., Port St. Lucie. The program is open to boys and girls ages 6 to 14.",
+            "lead_word_count": 36,
+            "headline_overlap_ratio": 0.6,
+            "new_context_token_count": 17,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -1497,16 +1136,16 @@
           "claim_consistency": {
             "required": true,
             "passed": true,
-            "headline": "St. Lucie Chamber of Commerce hosts business lease seminar in Fort Pierce",
-            "lead": "St. Lucie Chamber of Commerce will host Before You Sign The Lease at Fort Pierce City Commission Chambers, 100 N. U.S. 1, Fort Pierce on Wednesday, Aug. 28. Admission is free, but registration is requested. Residents can email president@stluciechamber.org.",
+            "headline": "Port St. Lucie Police Athletic League begins beginner wrestling program",
+            "lead": "The Beginner Wrestling Program will run on Tuesdays and Thursdays through Dec. 10 at the PAL Gym, 2101 SE Tiffany Ave., Port St. Lucie. The program is open to boys and girls ages 6 to 14.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
             "headline_jurisdictions": [
-              "fort_pierce"
+              "port_st_lucie"
             ],
             "lead_jurisdictions": [
-              "fort_pierce"
+              "port_st_lucie"
             ],
             "missing_jurisdictions": [],
             "headline_policy_references": [],
@@ -1517,19 +1156,19 @@
           "source_focus": {
             "required": true,
             "passed": false,
-            "generated_headline": "St. Lucie Chamber of Commerce hosts business lease seminar in Fort Pierce",
-            "generated_lead": "St. Lucie Chamber of Commerce will host Before You Sign The Lease at Fort Pierce City Commission Chambers, 100 N.",
+            "generated_headline": "Port St. Lucie Police Athletic League begins beginner wrestling program",
+            "generated_lead": "The Beginner Wrestling Program will run on Tuesdays and Thursdays through Dec. 10 at the PAL Gym, 2101 SE Tiffany Ave., Port St.",
             "source_title": "St. Lucie County - Week of Aug. 21 - Hometown News Treasure Coast",
             "source_lead": "The Downtown Fort Pierce Farmer s Market is at Marina Square, 101 Melody Lane, Fort Pierce on Saturdays, from 8 a.m. Call 772-940-1145 or go to fortpiercefarmersmarket.com .",
             "title_similarity": {
-              "score": 0.2597,
+              "score": 0.2095,
               "overlap": 0.2,
               "jaccard": 0.1111,
-              "sorted_sequence": 0.377,
-              "ordered_sequence": 0.2951,
+              "sorted_sequence": 0.3333,
+              "ordered_sequence": 0.2381,
               "shared_token_count": 2.0
             },
-            "lead_token_overlap": 0.133,
+            "lead_token_overlap": 0.0,
             "missing": [
               "generated_copy_drifted_from_source_focus"
             ]
@@ -1543,21 +1182,11 @@
       ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 10,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Bicyclist critically injured after being struck by driver in Port St. Lucie - WPEC",
-          "source_url": "https://cbs12.com/news/local/bicyclist-critically-injured-after-being-struck-by-driver-in-port-st-lucie-crash-southwest-rosser-boulevard-sw-meridian-avenue-hca-florida-lawnwood-hospital-florida-news",
-          "editorial_story_id": "story_004756",
-          "canonical_slug": "2026-08-19-bicyclist-critically-injured-in-port-st-lucie-crash-on-southwest-rosser-boulevar",
-          "canonical_headline": "Bicyclist critically injured in Port St. Lucie crash on Southwest Rosser Boulevard",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "st_lucie",
           "source_headline": "Port St. Lucie mayor race heads to November runoff between Shannon Martin, Steven Giordano",
@@ -1565,6 +1194,16 @@
           "editorial_story_id": "story_004686",
           "canonical_slug": "2026-08-19-port-st-lucie-mayor-race-heads-to-november-runoff-between-shannon-martin-and-ste",
           "canonical_headline": "Port St. Lucie mayor race heads to November runoff between Shannon Martin and Steven Giordano",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie mayoral candidates clash over growth, traffic and city’s future - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-mayor-race-where-the-candidates-stand-on-growth-traffic-trash-campaign-sign-investigation-shannon-martin-steven-giordano-eric-stazzeri-august-18-election",
+          "editorial_story_id": "story_004542",
+          "canonical_slug": "2026-08-19-port-st-lucie-mayoral-candidates-debate-growth-traffic-and-infrastructure-ahead",
+          "canonical_headline": "Port St. Lucie mayoral candidates debate growth, traffic, and infrastructure ahead of Election Day",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1590,18 +1229,8 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Man shot, killed inside Fort Pierce home after attacking homeowner; no charges filed - WPEC",
-          "source_url": "https://cbs12.com/news/local/person-shot-killed-while-allegedly-trying-to-enter-fort-pierce-mobile-home-st-lucie-county-shooting-st-lucie-county-crime-deadly-shooting-fatal-shooting-orange-avenue-shooting-seminole-mobile-home-park-fort-pierce-crime-st-lucie-county-sheriff",
-          "editorial_story_id": "story_003628",
-          "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
-          "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "surface": "hero",
-          "headline": "Port St. Lucie bicyclist in critical condition after Southwest Rosser Boulevard crash",
+          "surface": "card",
+          "headline": "Bicyclist airlifted to HCA Florida Lawnwood Hospital after Port St. Lucie crash",
           "editorial_story_id": "story_004756",
           "canonical_slug": "2026-08-19-bicyclist-critically-injured-in-port-st-lucie-crash-on-southwest-rosser-boulevar",
           "canonical_headline": "Bicyclist critically injured in Port St. Lucie crash on Southwest Rosser Boulevard",
@@ -1611,21 +1240,21 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "new_publication_stale_rejected_count": 2,
+      "new_publication_stale_rejected_count": 1,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "St. Lucie County fire board hears pleas to reinstate three firefighters fired over hazing allegations",
-      "generated_card_count": 1,
-      "elapsed_seconds": 56.862
+      "live_hero_headline": "Two Fort Pierce women arrested for using fake movie money at St. Lucie restaurant",
+      "generated_card_count": 2,
+      "elapsed_seconds": 54.89
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generated_live",
       "fetched_candidate_count": 29,
-      "fresh_candidate_count": 26,
-      "publishable_source_count": 10,
-      "selected_source_count": 9,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 8,
+      "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1633,25 +1262,101 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 24.025,
+          "elapsed_seconds": 32.058,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 24.025,
+      "model_elapsed_seconds": 32.058,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Indian River County Sheriff's Office investigating Vero Beach shooting as domestic violence homicide",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Indian River County Sheriff's Office investigating Vero Beach shooting as domestic violence homicide",
+            "lead": "The Indian River County Sheriff's Office received a 911 call at approximately 8:41 a.m. Sunday reporting a woman in the roadway in the 500 block of 1st Street. Deputies located Kriskewic with an apparent gunshot wound and began life-saving measures. She was transported to a trauma center, where she was later pronounced dead. Detectives and crime scene personnel processed the scene outside the victim's home.",
+            "lead_word_count": 70,
+            "headline_overlap_ratio": 0.417,
+            "new_context_token_count": 39,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Indian River County Sheriff's Office investigating Vero Beach shooting as domestic violence homicide",
+            "lead": "The Indian River County Sheriff's Office received a 911 call at approximately 8:41 a.m. Sunday reporting a woman in the roadway in the 500 block of 1st Street. Deputies located Kriskewic with an apparent gunshot wound and began life-saving measures. She was transported to a trauma center, where she was later pronounced dead. Detectives and crime scene personnel processed the scene outside the victim's home.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "indian_river_county",
+              "vero_beach"
+            ],
+            "lead_jurisdictions": [
+              "indian_river_county"
+            ],
+            "missing_jurisdictions": [
+              "vero_beach"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Indian River County Sheriff's Office investigating Vero Beach shooting as domestic violence homicide",
+            "generated_lead": "The Indian River County Sheriff's Office received a 911 call at approximately 8:41 a.m. Sunday reporting a woman in the roadway in the 500 block of 1st Street.",
+            "source_title": "Person of interest in Vero Beach homicide arrested in West Virginia after nationwide search",
+            "source_lead": "Marshals took a person of interest into custody Wednesday night in connection with the shooting death of a 52-year-old woman in Vero Beach, the Indian River County Sheriff's Office announced.Matthew Allen Waggle, 33, of Sebastian, was arrested at a motel near Dunbar, West Virginia. Detectives are working to return him to Indian River County.The Indian River County Sheriff's Office identified the victim as Dawn Kriskewic.",
+            "title_similarity": {
+              "score": 0.3124,
+              "overlap": 0.3,
+              "jaccard": 0.1579,
+              "sorted_sequence": 0.4852,
+              "ordered_sequence": 0.355,
+              "shared_token_count": 3.0
+            },
+            "lead_token_overlap": 0.333,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 10,
+      "category_eligibility_assessed_count": 8,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1675,6 +1380,16 @@
         },
         {
           "category_key": "indian_river",
+          "source_headline": "Indian River County school superintendent announces plans to step down in 2027 - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027",
+          "editorial_story_id": "story_004684",
+          "canonical_slug": "2026-08-19-indian-river-county-school-superintendent-dr-moore-to-step-down-june-2027",
+          "canonical_headline": "Indian River County schools superintendent to step down June 2027",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
           "source_headline": "Former Vero Beach Eagles secretary accused of blowing nearly $419K on guns, liquor, LEGOs - WPEC",
           "source_url": "https://cbs12.com/news/local/former-vero-beach-eagles-secretary-accused-of-blowing-nearly-419k-on-guns-liquor-legos-indian-river-county-vero-beach-fraternal-order-of-eagles-aerie-4374-robert-john-davison-embezzlement-grand-theft-419000-alleged-embezzlement-debit-card-org",
           "editorial_story_id": "story_004561",
@@ -1685,104 +1400,33 @@
         },
         {
           "category_key": "indian_river",
+          "surface": "hero",
+          "headline": "Suspect in fatal Vero Beach shooting arrested in West Virginia",
+          "editorial_story_id": "story_004367",
+          "canonical_slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
+          "canonical_headline": "Indian River County Sheriff's Office uses Flock license plate cameras in search for homicide suspect",
+          "basis": "same_event_and_persistent_story_skip",
+          "reason": "published_skip_placement_suppressed"
+        },
+        {
+          "category_key": "indian_river",
           "surface": "card",
-          "headline": "Vero Beach shooting suspect arrested in West Virginia after nationwide search",
-          "editorial_story_id": "story_004551",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle remains at large",
+          "headline": "Investigators delay releasing Vero Beach homicide victim's name while notifying out-of-state family",
+          "editorial_story_id": "story_004367",
+          "canonical_slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
+          "canonical_headline": "Indian River County Sheriff's Office uses Flock license plate cameras in search for homicide suspect",
           "basis": "same_event_and_persistent_story_skip",
           "reason": "published_skip_placement_suppressed"
         }
       ],
-      "story_aware_update_context_count": 2,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Person of interest in Vero Beach homicide arrested in West Virginia after nationwide search",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/person-of-interest-in-vero-beach-homicide-arrested-in-west-virginia-after-nationwide-search",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-18-vero-beach-shooting-victim-identified-as-dawn-kriskewic-suspect-matthew-waggle-s",
-          "canonical_headline": "Vero Beach shooting victim identified as Dawn Kriskewic, suspect Matthew Waggle remains at large",
-          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
-          "identity_keys": [
-            "story:story_004551",
-            "source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/person-of-interest-in-vero-beach-homicide-arrested-in-west-virginia-after-nationwide-search"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_agency",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=2",
-            "shared_locality=['indian-river', 'indian-river-county', 'sebastian', 'vero-beach']",
-            "shared_event_families=['shooting', 'vehicle-chase']",
-            "shared_named_people=['matthew allen waggle']",
-            "shared_precise_locations=[]",
-            "shared_agencies=['indian-river-county-sheriff']",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=[]",
-            "shared_distinctive_token_count=63",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Indian River County school superintendent announces plans to step down in 2027 - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-19-indian-river-county-school-superintendent-dr-moore-to-step-down-june-2027",
-          "canonical_headline": "Indian River County school superintendent Dr. Moore to step down June 2027",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_004684",
-            "source:https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['indian-river', 'indian-river-county']",
-            "shared_event_families=['public-policy']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['indian-river-county-superintendent-drive', 'no-1-best-place']",
-            "shared_agencies=['school-board']",
-            "shared_subject_phrases=['announc-plan-step', 'announc-plan-step-down', 'plan-step-down', 'plan-step-down-2027', 'school-superintendent-announc', 'school-superintendent-announc-plan', 'step-down-2027', 'superintendent-announc-plan', 'superintendent-announc-plan-step']",
-            "shared_headline_topic_core=['2027', 'announc', 'down', 'plan', 'step', 'superintendent']",
-            "shared_distinctive_token_count=147",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Indian River County school superintendent Dr. Moore to step down in June 2027",
+      "live_hero_headline": "Dawn Kriskewic identified as Vero Beach shooting victim, Matthew Waggle named person of interest",
       "generated_card_count": 0,
-      "elapsed_seconds": 37.484
+      "elapsed_seconds": 41.013
     }
   ]
 }
