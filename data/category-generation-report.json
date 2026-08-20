@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-20T15:52:39Z",
+  "generated_at": "2026-08-20T20:52:00Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -18,47 +18,46 @@
       "category_eligibility_archive_recovery": 1,
       "generated_live": 5,
       "generation_failed_archive_recovery": 1,
-      "no_publishable_sources": 1,
-      "quality_gate_archive_recovery": 1
+      "quality_gate_archive_recovery": 2
     },
     "failures": {
       "missing_or_null_hero": 1,
       "no_category_eligible_sources": 1,
-      "publication_quality_rejected": 1
+      "publication_quality_rejected": 2
     },
-    "model_attempt_count": 8,
-    "model_elapsed_seconds": 316.673,
+    "model_attempt_count": 10,
+    "model_elapsed_seconds": 317.442,
     "archive_recovery_requested_count": 4,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 5,
-    "category_eligibility_rejection_count": 23,
-    "published_story_duplicate_suppression_count": 31,
-    "story_aware_update_context_count": 0
+    "article_framing_rejection_count": 6,
+    "category_eligibility_rejection_count": 19,
+    "published_story_duplicate_suppression_count": 27,
+    "story_aware_update_context_count": 6
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generated_live",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 27,
-      "publishable_source_count": 15,
-      "selected_source_count": 3,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 10,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 36.61,
+          "elapsed_seconds": 7.057,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 36.61,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 7.057,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -67,9 +66,24 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 15,
-      "category_eligibility_rejection_count": 11,
+      "category_eligibility_assessed_count": 10,
+      "category_eligibility_rejection_count": 8,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "headline": "Flock license plate readers help crack Vero Beach homicide case, suspect caught in West Virginia",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/flock-license-plate-readers-help-crack-vero-beach-homicide-case-suspect-caught-in-west-virginia"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -80,8 +94,34 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "WHERE'S WALTER? Enjoying fresh citrus at Al's Family Farms",
-          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-enjoying-fresh-citrus-at-als-family-farms"
+          "headline": "Lawsuits over school bus and school speed zone camera tickets face setbacks in Florida",
+          "source_url": "https://www.wptv.com/wptv-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "SUV driver hospitalized after collision with Brightline in Hobe Sound",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/suv-driver-hospitalized-after-collision-with-brightline-in-hobe-sound"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Poll: El Sayed holds slight edge in Michigan Senate race, but struggles with older swing voters",
+          "source_url": "https://www.wptv.com/politics/america-votes/poll-el-sayed-holds-slight-edge-in-michigan-senate-race-but-struggles-with-older-swing-voters"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -121,77 +161,6 @@
           "reason": "missing_central_government_action",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "Derelict, at-risk boats near North Hutchinson Island create dangerous conditions on Treasure Coast",
-          "source_url": "https://www.wptv.com/news/treasure-coast/derelict-at-risk-boats-near-north-hutchinson-island-creating-dangerous-conditions-on-treasure-coast"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:arrested"
-          ],
-          "headline": "Boca Raton mother fights to see her children nearly one year after charges were dropped",
-          "source_url": "https://www.wptv.com/wptv-investigates/boca-raton-mother-fights-to-see-her-children-nearly-3-years-after-charges-were-dropped"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:victim"
-          ],
-          "headline": "Michael Caruso child sex abuse case prompts discussion on warning signs of abuse and prevention",
-          "source_url": "https://www.wptv.com/lifestyle/family/michael-caruso-child-sex-abuse-case-prompts-discussion-on-warning-signs-of-sex-abuse-and-prevention"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Jupiter Narrows mangrove islands to be restored and named for local man killed in boating accident",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/jupiter-tequesta-juno-beach/jupiter-narrows-mangrove-islands-to-be-restored-and-named-for-local-man-killed-in-boating-accident"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:arrest"
-          ],
-          "headline": "'SEEKING JUSTICE,' attorney says alleged Caruso victim was between 3 and 5 years old",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/seeking-justice-attorney-says-alleged-caruso-victim-was-between-3-and-5-years-old"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
           "headline": "Gunfire report delays dismissal at Treasure Coast Elementary School - WPBF",
           "source_url": "https://www.wpbf.com/article/gunfire-report-delays-dismissal-at-treasure-coast-elementary-school/73478080"
         },
@@ -207,23 +176,20 @@
           "competing_signals": [],
           "headline": "County election reveals fruit-basket turnover - Hometown News Treasure Coast",
           "source_url": "https://www.hometownnewstc.com/news/martin/county-election-reveals-fruit-basket-turnover/article_daa3a897-c877-54eb-b792-ef65bcc89c8c.html"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "St. Lucie County - Week of Aug. 21 - Hometown News Treasure Coast",
-          "source_url": "https://www.hometownnewstc.com/community_page/calendar/st-lucie-county---week-of-aug-21/article_133c7a44-ff95-5f26-9d1d-cb1db89a0d82.html"
         }
       ],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "WHERE'S WALTER? Enjoying fresh citrus at Al's Family Farms",
+          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-enjoying-fresh-citrus-at-als-family-farms",
+          "editorial_story_id": "story_004841",
+          "canonical_slug": "2026-08-20-als-family-farms-in-fort-pierce-celebrates-50-years-of-family-citrus-business",
+          "canonical_headline": "Al's Family Farms in Fort Pierce celebrates 50 years of family citrus business",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Indian River County superintendent David K. Moore announces final year in role - WPBF",
@@ -231,6 +197,16 @@
           "editorial_story_id": "story_004676",
           "canonical_slug": "2026-08-20-indian-river-county-schools-superintendent-david-k-moore-announces-final-year-le",
           "canonical_headline": "Indian River County schools superintendent David K. Moore announces final year leading district",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Bicyclist critically injured after being struck by driver in Port St. Lucie - WPEC",
+          "source_url": "https://cbs12.com/news/local/bicyclist-critically-injured-after-being-struck-by-driver-in-port-st-lucie-crash-southwest-rosser-boulevard-sw-meridian-avenue-hca-florida-lawnwood-hospital-florida-news",
+          "editorial_story_id": "story_004756",
+          "canonical_slug": "2026-08-19-bicyclist-critically-injured-in-port-st-lucie-crash-on-southwest-rosser-boulevar",
+          "canonical_headline": "Bicyclist critically injured in Port St. Lucie crash on Southwest Rosser Boulevard",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -255,23 +231,62 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Lawsuits over school bus and school speed zone camera tickets face setbacks in Florida",
+          "source_url": "https://www.wptv.com/wptv-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-08-19-florida-school-bus-and-speed-zone-camera-lawsuits-face-dismissals-and-legal-setb",
+          "canonical_headline": "Florida school bus and speed zone camera lawsuits face dismissals and legal setbacks",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_004680",
+            "source:https://www.wptv.com/wptv-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['miami-dade']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['be-a-bumpy-road']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['bus-school-speed', 'bus-school-speed-zone', 'camera-ticket-setback', 'lawsuit-school-bus', 'lawsuit-school-bus-school', 'school-bus-school', 'school-bus-school-speed', 'school-speed-zone', 'school-speed-zone-camera', 'speed-zone-camera', 'speed-zone-camera-ticket', 'zone-camera-ticket', 'zone-camera-ticket-setback']",
+            "shared_headline_topic_core=['bus', 'camera', 'lawsuit', 'setback', 'speed', 'ticket', 'zone']",
+            "shared_distinctive_token_count=173",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Fort Pierce commission rejects third settlement offer in Little Jim lawsuit",
-      "generated_card_count": 0,
-      "elapsed_seconds": 67.588
+      "elapsed_seconds": 34.184
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 10,
-      "selected_source_count": 7,
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 27,
+      "publishable_source_count": 12,
+      "selected_source_count": 11,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -279,98 +294,23 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 33.426,
+          "elapsed_seconds": 55.706,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 33.426,
+      "model_elapsed_seconds": 55.706,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 1,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Hallandale Beach man arrested in Vero Beach on charges of traveling to meet child",
-          "missing": [
-            "headline_jurisdiction_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Hallandale Beach man arrested in Vero Beach on charges of traveling to meet child",
-            "lead": "Emaad Mir, 27, of Hallandale Beach was arrested on Aug. 8 after he allegedly traveled to Indian River County to meet a 14-year-old, according to Indian River County Sheriff's Office reports. Mir was communicating with undercover detectives, working alongside the juvenile's parents, for some time, with Mir believing that the person was 14.",
-            "lead_word_count": 57,
-            "headline_overlap_ratio": 0.444,
-            "new_context_token_count": 29,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Hallandale Beach man arrested in Vero Beach on charges of traveling to meet child",
-            "lead": "Emaad Mir, 27, of Hallandale Beach was arrested on Aug. 8 after he allegedly traveled to Indian River County to meet a 14-year-old, according to Indian River County Sheriff's Office reports. Mir was communicating with undercover detectives, working alongside the juvenile's parents, for some time, with Mir believing that the person was 14.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "vero_beach"
-            ],
-            "lead_jurisdictions": [
-              "indian_river_county"
-            ],
-            "missing_jurisdictions": [
-              "vero_beach"
-            ],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "Hallandale Beach man arrested in Vero Beach on charges of traveling to meet child",
-            "generated_lead": "Emaad Mir, 27, of Hallandale Beach was arrested on Aug. 8 after he allegedly traveled to Indian River County to meet a 14-year-old, according to Indian River County Sheriff's Office reports.",
-            "source_title": "Indian River County Sheriff arrests Hallandale man for traveling north to meet child - Hometown News Treasure Coast",
-            "source_lead": "Emaad Mir, 27, of Hallandale Beach is in the Indian River County Jail on charges of traveling to meet after use of a computer to lure a child; transmit information harmful to minors; and unlawful use of a two-way communications device. He is being held on a $1.75 million bond.",
-            "title_similarity": {
-              "score": 0.5424,
-              "overlap": 0.6667,
-              "jaccard": 0.3333,
-              "sorted_sequence": 0.5455,
-              "ordered_sequence": 0.4094,
-              "shared_token_count": 6.0
-            },
-            "lead_token_overlap": 0.5,
-            "missing": []
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        }
-      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 10,
-      "category_eligibility_rejection_count": 3,
+      "category_eligibility_assessed_count": 12,
+      "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -382,87 +322,133 @@
           "reason": "missing_primary_crime_safety_focus",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "WHERE'S WALTER? Enjoying fresh citrus at Al's Family Farms",
-          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-enjoying-fresh-citrus-at-als-family-farms"
-        },
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "Movie money, real arrests: Fake $100 bill lands two Fort Pierce women in jail - WPEC",
-          "source_url": "https://cbs12.com/news/local/100-movie-money-bill-turned-a-port-st-lucie-dinner-outing-into-a-trip-to-jail-port-st-lucie-st-lucie-county-st-lucie-county-sheriffs-office-st-lucie-draft-house-counterfeit-money-counterfeit-100-bill-fake-money-fake-100-bill-movie-money"
-        },
-        {
-          "contract_version": "1.0-primary-crime-safety-focus",
-          "category_key": "crime",
-          "mode": "enforce",
-          "policy": "primary_crime_safety_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_crime_safety_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "St. Lucie County community urge fire board to reinstate fired firefighters during meeting - WPEC",
-          "source_url": "https://cbs12.com/news/local/st-lucie-county-community-urge-fire-board-to-reinstate-fired-firefighters-during-meeting-chief-retaliate-bug-zapper-florida-news"
+          "headline": "Movie money, real arrests: Fake $100 bill lands two Fort Pierce women in jail - cw34.com",
+          "source_url": "https://cw34.com/news/local/100-movie-money-bill-turned-a-port-st-lucie-dinner-outing-into-a-trip-to-jail-port-st-lucie-st-lucie-county-st-lucie-county-sheriffs-office-st-lucie-draft-house-counterfeit-money-counterfeit-100-bill-fake-money-fake-100-bill-movie-money"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "'Everything that she had': Miami woman arrested in Martin County for posing as bank representative - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-martin-county-fraud-scam-elderly-cash/73475542",
-          "editorial_story_id": "story_004692",
-          "canonical_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
-          "canonical_headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
+          "source_headline": "WHERE'S WALTER? Enjoying fresh citrus at Al's Family Farms",
+          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-enjoying-fresh-citrus-at-als-family-farms",
+          "editorial_story_id": "story_004841",
+          "canonical_slug": "2026-08-20-als-family-farms-in-fort-pierce-celebrates-50-years-of-family-citrus-business",
+          "canonical_headline": "Al's Family Farms in Fort Pierce celebrates 50 years of family citrus business",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "crime",
-          "source_headline": "Woman accused of hiding $3,200 in her body during Martin County arrest faces new charges - WPEC",
-          "source_url": "https://cbs12.com/news/local/florida-crime-news-woman-accused-of-hiding-smuggling-3200-dollars-in-her-body-vagina-during-martin-county-arrest-faces-new-charges-elderly-victim-bank-scam-biohazard-money-felony-scheme-to-defraud",
+          "source_headline": "Movie money, real arrests: Fake $100 bill lands two Fort Pierce women in jail - WPEC",
+          "source_url": "https://cbs12.com/news/local/100-movie-money-bill-turned-a-port-st-lucie-dinner-outing-into-a-trip-to-jail-port-st-lucie-st-lucie-county-st-lucie-county-sheriffs-office-st-lucie-draft-house-counterfeit-money-counterfeit-100-bill-fake-money-fake-100-bill-movie-money",
+          "editorial_story_id": "story_004853",
+          "canonical_slug": "2026-08-20-two-fort-pierce-women-arrested-for-using-fake-movie-money-at-st-lucie-restaurant",
+          "canonical_headline": "Two Fort Pierce women arrested for using fake movie money at St. Lucie restaurant",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Woman accused of hiding $3,200 in her body during Martin County arrest faces new charges - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/florida-crime-news-woman-accused-of-hiding-smuggling-3200-dollars-in-her-body-vagina-during-martin-county-arrest-faces-new-charges-elderly-victim-bank-scam-biohazard-money-felony-scheme-to-defraud",
           "editorial_story_id": "story_004694",
           "canonical_slug": "2026-08-19-miami-woman-accused-of-scamming-martin-county-seniors-hid-3200-in-her-body-durin",
           "canonical_headline": "Miami woman accused of scamming Martin County seniors hid $3,200 in her body during jail intake",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "I-95 southbound left lane blocked in Martin County due to roadway debris - WPEC",
-          "source_url": "https://cbs12.com/news/local/i-95-southbound-left-lane-blocked-in-martin-county-due-to-roadway-debris",
-          "editorial_story_id": "story_004509",
-          "canonical_slug": "2026-08-18-left-lane-of-i-95-southbound-blocked-near-stuart-due-to-roadway-debris",
-          "canonical_headline": "Left lane of I-95 southbound blocked near Stuart due to roadway debris",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Florida woman posing as bank representative accused of Martin County credit card scam - WPEC",
-          "source_url": "https://cbs12.com/news/local/florida-woman-miami-poses-bank-representative-claims-credit-card-compromised-scam-martin-county-sheriffs-office-body-camera-florida-news",
-          "editorial_story_id": "story_004556",
-          "canonical_slug": "2026-08-18-miami-woman-accused-of-posing-as-bank-representative-in-martin-county-credit-car",
-          "canonical_headline": "Miami woman accused of posing as bank representative in Martin County credit card scam",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 2,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Lawsuits over school bus and school speed zone camera tickets face setbacks in Florida",
+          "source_url": "https://www.wptv.com/wptv-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-08-19-florida-school-bus-and-speed-zone-camera-lawsuits-face-dismissals-and-legal-setb",
+          "canonical_headline": "Florida school bus and speed zone camera lawsuits face dismissals and legal setbacks",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_004680",
+            "source:https://www.wptv.com/wptv-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['miami-dade']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['be-a-bumpy-road']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['bus-school-speed', 'bus-school-speed-zone', 'camera-ticket-setback', 'lawsuit-school-bus', 'lawsuit-school-bus-school', 'school-bus-school', 'school-bus-school-speed', 'school-speed-zone', 'school-speed-zone-camera', 'speed-zone-camera', 'speed-zone-camera-ticket', 'zone-camera-ticket', 'zone-camera-ticket-setback']",
+            "shared_headline_topic_core=['bus', 'camera', 'lawsuit', 'setback', 'speed', 'ticket', 'zone']",
+            "shared_distinctive_token_count=173",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Movie money, real arrests: Fake $100 bill lands two Fort Pierce women in jail - cw34.com",
+          "source_url": "https://cw34.com/news/local/100-movie-money-bill-turned-a-port-st-lucie-dinner-outing-into-a-trip-to-jail-port-st-lucie-st-lucie-county-st-lucie-county-sheriffs-office-st-lucie-draft-house-counterfeit-money-counterfeit-100-bill-fake-money-fake-100-bill-movie-money",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-08-20-two-fort-pierce-women-arrested-for-using-fake-movie-money-at-st-lucie-restaurant",
+          "canonical_headline": "Two Fort Pierce women arrested for using fake movie money at St. Lucie restaurant",
+          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+          "identity_keys": [
+            "story:story_004853",
+            "source:https://cw34.com/news/local/100-movie-money-bill-turned-a-port-st-lucie-dinner-outing-into-a-trip-to-jail-port-st-lucie-st-lucie-county-st-lucie-county-sheriffs-office-st-lucie-draft-house-counterfeit-money-counterfeit-100-bill-fake-money-fake-100-bill-movie-money"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_agency",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['fort-pierce', 'palm-beach-county', 'st-lucie', 'st-lucie-county']",
+            "shared_event_families=['crash']",
+            "shared_named_people=['kamri ashanti reese', 'kayla reese']",
+            "shared_precise_locations=[]",
+            "shared_agencies=['st-lucie-county-sheriff']",
+            "shared_subject_phrases=['100-bill-land', '100-bill-land-two', 'bill-land-two', 'bill-land-two-fort', 'fake-100-bill', 'fake-100-bill-land', 'fort-women-jail', 'land-two-fort', 'land-two-fort-women', 'money-real-fake', 'money-real-fake-100', 'movie-money-real', 'movie-money-real-fake', 'real-fake-100', 'real-fake-100-bill', 'two-fort-women', 'two-fort-women-jail']",
+            "shared_headline_topic_core=['100', 'bill', 'fake', 'fort', 'jail', 'land', 'money', 'movie', 'real', 'two', 'women']",
+            "shared_distinctive_token_count=97",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Sebastian man arrested in West Virginia for Vero Beach shooting death of Dawn Kriskewic",
-      "generated_card_count": 1,
-      "elapsed_seconds": 61.007
+      "live_hero_headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
+      "generated_card_count": 3,
+      "elapsed_seconds": 90.553
     },
     {
       "category_key": "business",
@@ -470,7 +456,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 9,
+      "publishable_source_count": 10,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -487,9 +473,37 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 9,
-      "category_eligibility_rejection_count": 9,
+      "category_eligibility_assessed_count": 10,
+      "category_eligibility_rejection_count": 10,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:arrested"
+          ],
+          "headline": "Flock license plate readers help crack Vero Beach homicide case, suspect caught in West Virginia",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/flock-license-plate-readers-help-crack-vero-beach-homicide-case-suspect-caught-in-west-virginia"
+        },
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_treasure_coast_business_nexus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "headline": "Lawsuits over school bus and school speed zone camera tickets face setbacks in Florida",
+          "source_url": "https://www.wptv.com/wptv-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -500,8 +514,8 @@
           "reason": "missing_primary_business_development_focus",
           "positive_signals": [],
           "competing_signals": [],
-          "headline": "WHERE'S WALTER? Enjoying fresh citrus at Al's Family Farms",
-          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-enjoying-fresh-citrus-at-als-family-farms"
+          "headline": "SUV driver hospitalized after collision with Brightline in Hobe Sound",
+          "source_url": "https://www.wptv.com/news/region-martin-county/hobe-sound/suv-driver-hospitalized-after-collision-with-brightline-in-hobe-sound"
         },
         {
           "contract_version": "1.0-business-development-primary-focus",
@@ -603,32 +617,17 @@
           ],
           "headline": "'SEEKING JUSTICE,' attorney says alleged Caruso victim was between 3 and 5 years old",
           "source_url": "https://www.wptv.com/news/local-news/our-community/west-palm-beach/seeking-justice-attorney-says-alleged-caruso-victim-was-between-3-and-5-years-old"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_treasure_coast_business_nexus",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:arrested"
-          ],
-          "headline": "No bond set for suspended Palm Beach County clerk accused of child sex abuse",
-          "source_url": "https://www.wptv.com/news/palm-beach-county/no-bond-set-for-suspended-palm-beach-county-clerk-michael-caruso-accused-of-child-sex-abuse"
         }
       ],
       "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
-          "source_headline": "Lawsuits over school bus and school speed zone camera tickets face setbacks in Florida",
-          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida",
-          "editorial_story_id": "story_004680",
-          "canonical_slug": "2026-08-19-florida-school-bus-and-speed-zone-camera-lawsuits-face-dismissals-and-legal-setb",
-          "canonical_headline": "Florida school bus and speed zone camera lawsuits face dismissals and legal setbacks",
+          "source_headline": "WHERE'S WALTER? Enjoying fresh citrus at Al's Family Farms",
+          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-enjoying-fresh-citrus-at-als-family-farms",
+          "editorial_story_id": "story_004841",
+          "canonical_slug": "2026-08-20-als-family-farms-in-fort-pierce-celebrates-50-years-of-family-citrus-business",
+          "canonical_headline": "Al's Family Farms in Fort Pierce celebrates 50 years of family citrus business",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -653,19 +652,60 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Lawsuits over school bus and school speed zone camera tickets face setbacks in Florida",
+          "source_url": "https://www.wptv.com/wptv-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-08-19-florida-school-bus-and-speed-zone-camera-lawsuits-face-dismissals-and-legal-setb",
+          "canonical_headline": "Florida school bus and speed zone camera lawsuits face dismissals and legal setbacks",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_004680",
+            "source:https://www.wptv.com/wptv-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['miami-dade']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['be-a-bumpy-road']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['bus-school-speed', 'bus-school-speed-zone', 'camera-ticket-setback', 'lawsuit-school-bus', 'lawsuit-school-bus-school', 'school-bus-school', 'school-bus-school-speed', 'school-speed-zone', 'school-speed-zone-camera', 'speed-zone-camera', 'speed-zone-camera-ticket', 'zone-camera-ticket', 'zone-camera-ticket-setback']",
+            "shared_headline_topic_core=['bus', 'camera', 'lawsuit', 'setback', 'speed', 'ticket', 'zone']",
+            "shared_distinctive_token_count=173",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 13.624
+      "elapsed_seconds": 7.335
     },
     {
       "category_key": "sports",
       "category_label": "Sports",
       "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 24,
+      "fetched_candidate_count": 25,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 6,
-      "selected_source_count": 6,
+      "publishable_source_count": 3,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 2,
@@ -673,19 +713,19 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 77.218,
+          "elapsed_seconds": 19.308,
           "result": "missing_or_null_hero",
           "error_summary": "Model response did not contain a usable hero after normalization"
         },
         {
           "attempt": 2,
-          "timeout_seconds": 102.8,
-          "elapsed_seconds": 16.182,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 17.284,
           "result": "missing_or_null_hero",
           "error_summary": "Model response did not contain a usable hero after normalization"
         }
       ],
-      "model_elapsed_seconds": 93.4,
+      "model_elapsed_seconds": 36.592,
       "failure_code": "missing_or_null_hero",
       "failure_summary": "Model response did not contain a usable hero after normalization",
       "sports_expired_event_preview_count": 0,
@@ -696,17 +736,28 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "sports",
+          "source_headline": "Indian River County school superintendent announces plans to step down in 2027 - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/19/indian-river-county-school-superintendent-announces-plans-step-down-2027?outputType=amp",
+          "editorial_story_id": "story_004684",
+          "canonical_slug": "2026-08-19-indian-river-county-school-superintendent-dr-moore-to-step-down-june-2027",
+          "canonical_headline": "Indian River County schools superintendent to step down June 2027",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 109.526
+      "elapsed_seconds": 58.774
     },
     {
       "category_key": "things_to_do",
@@ -718,16 +769,24 @@
       "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
           "elapsed_seconds": 71.635,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals from Martin County hoarding cases begin recovery in Palm City"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 108.4,
+          "elapsed_seconds": 63.211,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 71.636,
+      "model_elapsed_seconds": 134.846,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -748,10 +807,10 @@
             "required": true,
             "passed": true,
             "headline": "Over 100 animals from Martin County hoarding cases begin healing at Palm City shelter",
-            "lead": "The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino on Southwest Meadowlark Circle in July, where deputies found horrific conditions with no working air conditioning, little ventilation and up to a foot of animal feces covering the floor. The second case involved 36 Border Collies rescued from a Palm City home after deputies described severe neglect conditions. Paige O'Donnell was arrested and faces 72 criminal charges.",
-            "lead_word_count": 105,
+            "lead": "The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home on Southwest Meadowlark Circle owned by 77-year-old Gail Giustino. The second case involved 36 Border Collies rescued from a Palm City home after Paige O'Donnell was arrested and faces 72 criminal charges.",
+            "lead_word_count": 75,
             "headline_overlap_ratio": 0.5,
-            "new_context_token_count": 61,
+            "new_context_token_count": 40,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -766,7 +825,7 @@
             "required": true,
             "passed": false,
             "headline": "Over 100 animals from Martin County hoarding cases begin healing at Palm City shelter",
-            "lead": "The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino on Southwest Meadowlark Circle in July, where deputies found horrific conditions with no working air conditioning, little ventilation and up to a foot of animal feces covering the floor. The second case involved 36 Border Collies rescued from a Palm City home after deputies described severe neglect conditions. Paige O'Donnell was arrested and faces 72 criminal charges.",
+            "lead": "The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home on Southwest Meadowlark Circle owned by 77-year-old Gail Giustino. The second case involved 36 Border Collies rescued from a Palm City home after Paige O'Donnell was arrested and faces 72 criminal charges.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
@@ -792,7 +851,7 @@
             "required": true,
             "passed": true,
             "generated_headline": "Over 100 animals from Martin County hoarding cases begin healing at Palm City shelter",
-            "generated_lead": "The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino on Southwest Meadowlark Circle in July, where deputies found horrific conditions with no working air conditioning, little ventilation and up to a foot of animal feces covering the floor.",
+            "generated_lead": "The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City. One case involved 108 cats and dogs rescued from a Stuart home on Southwest Meadowlark Circle owned by 77-year-old Gail Giustino.",
             "source_title": "Animals rescued from Martin County hoarding cases start to show signs of healing",
             "source_lead": "After two of the largest animal hoarding cases in recent Martin County history, the Humane Society of the Treasure Coast says many of the rescued animals are already beginning to heal.The Humane Society of the Treasure Coast in Palm City is now caring for over 100 animals connected to two separate hoarding investigations in Stuart and Palm City.One case involved 108 cats and dogs rescued from a Stuart home owned by 77-year-old Gail Giustino. WPTV previously reported that deputies found",
             "title_similarity": {
@@ -803,7 +862,7 @@
               "ordered_sequence": 0.6667,
               "shared_token_count": 6.0
             },
-            "lead_token_overlap": 0.694,
+            "lead_token_overlap": 0.912,
             "missing": []
           },
           "source_jurisdiction": {
@@ -846,21 +905,28 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 85.436
+      "elapsed_seconds": 142.669
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "no_publishable_sources",
+      "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 0,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 2,
+      "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 12.667,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 12.667,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -871,10 +937,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 1,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "florida",
@@ -885,31 +951,66 @@
           "canonical_headline": "Palm Beach County Clerk Michael Caruso extradited to Orange County jail on five felony child sex abuse charges",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "florida",
-          "source_headline": "Lawsuits over school bus and school speed zone camera tickets face setbacks in Florida",
-          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida",
-          "editorial_story_id": "story_004680",
-          "canonical_slug": "2026-08-19-florida-school-bus-and-speed-zone-camera-lawsuits-face-dismissals-and-legal-setb",
-          "canonical_headline": "Florida school bus and speed zone camera lawsuits face dismissals and legal setbacks",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Lawsuits over school bus and school speed zone camera tickets face setbacks in Florida",
+          "source_url": "https://www.wptv.com/wptv-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-08-19-florida-school-bus-and-speed-zone-camera-lawsuits-face-dismissals-and-legal-setb",
+          "canonical_headline": "Florida school bus and speed zone camera lawsuits face dismissals and legal setbacks",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_004680",
+            "source:https://www.wptv.com/wptv-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['miami-dade']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['be-a-bumpy-road']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['bus-school-speed', 'bus-school-speed-zone', 'camera-ticket-setback', 'lawsuit-school-bus', 'lawsuit-school-bus-school', 'school-bus-school', 'school-bus-school-speed', 'school-speed-zone', 'school-speed-zone-camera', 'speed-zone-camera', 'speed-zone-camera-ticket', 'zone-camera-ticket', 'zone-camera-ticket-setback']",
+            "shared_headline_topic_core=['bus', 'camera', 'lawsuit', 'setback', 'speed', 'ticket', 'zone']",
+            "shared_distinctive_token_count=173",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 27.648
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Florida school camera lawsuits face dismissals as judges side with automated enforcement systems",
+      "generated_card_count": 1,
+      "elapsed_seconds": 33.038
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 5,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -917,11 +1018,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 7.06,
+          "elapsed_seconds": 10.466,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 7.06,
+      "model_elapsed_seconds": 10.466,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -932,10 +1033,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
@@ -949,51 +1050,11 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "'Everything that she had': Miami woman arrested in Martin County for posing as bank representative - WPBF",
-          "source_url": "https://www.wpbf.com/article/florida-martin-county-fraud-scam-elderly-cash/73475542",
-          "editorial_story_id": "story_004692",
-          "canonical_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
-          "canonical_headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
           "source_headline": "Woman accused of hiding $3,200 in her body during Martin County arrest faces new charges - WPEC",
           "source_url": "https://cbs12.com/news/local/florida-crime-news-woman-accused-of-hiding-smuggling-3200-dollars-in-her-body-vagina-during-martin-county-arrest-faces-new-charges-elderly-victim-bank-scam-biohazard-money-felony-scheme-to-defraud",
           "editorial_story_id": "story_004694",
           "canonical_slug": "2026-08-19-miami-woman-accused-of-scamming-martin-county-seniors-hid-3200-in-her-body-durin",
           "canonical_headline": "Miami woman accused of scamming Martin County seniors hid $3,200 in her body during jail intake",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Christopher 'Doc' Collins wins Martin County District 2 commission seat - WPEC",
-          "source_url": "https://cbs12.com/news/election/christopher-doc-collins-wins-martin-county-district-2-commission-seat-florida-primary-florida-news",
-          "editorial_story_id": "story_004656",
-          "canonical_slug": "2026-08-19-christopher-doc-collins-wins-martin-county-commission-district-2-seat",
-          "canonical_headline": "Christopher 'Doc' Collins wins Martin County Commission District 2 seat",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "I-95 southbound left lane blocked in Martin County due to roadway debris - WPEC",
-          "source_url": "https://cbs12.com/news/local/i-95-southbound-left-lane-blocked-in-martin-county-due-to-roadway-debris",
-          "editorial_story_id": "story_004509",
-          "canonical_slug": "2026-08-18-left-lane-of-i-95-southbound-blocked-near-stuart-due-to-roadway-debris",
-          "canonical_headline": "Left lane of I-95 southbound blocked near Stuart due to roadway debris",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Florida woman posing as bank representative accused of Martin County credit card scam - WPEC",
-          "source_url": "https://cbs12.com/news/local/florida-woman-miami-poses-bank-representative-claims-credit-card-compromised-scam-martin-county-sheriffs-office-body-camera-florida-news",
-          "editorial_story_id": "story_004556",
-          "canonical_slug": "2026-08-18-miami-woman-accused-of-posing-as-bank-representative-in-martin-county-credit-car",
-          "canonical_headline": "Miami woman accused of posing as bank representative in Martin County credit card scam",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -1003,18 +1064,18 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Martin County deputies rescue man attempting suicide at Stuart's Bathtub Beach",
-      "generated_card_count": 0,
-      "elapsed_seconds": 20.682
+      "live_hero_headline": "SUV driver hospitalized after collision with Brightline train in Hobe Sound",
+      "generated_card_count": 1,
+      "elapsed_seconds": 39.609
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 26,
-      "publishable_source_count": 10,
-      "selected_source_count": 8,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 6,
+      "selected_source_count": 5,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1022,35 +1083,35 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 42.483,
+          "elapsed_seconds": 39.376,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 42.483,
+      "model_elapsed_seconds": 39.376,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 2,
+      "article_framing_rejection_count": 4,
       "article_framing_rejections": [
         {
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Enchanted tea party for young children scheduled at Port St. Lucie Community Center",
+          "headline": "St. Lucie Chamber to host lease advice event for entrepreneurs at Fort Pierce City Hall",
           "missing": [
             "generated_copy_drifted_from_source_focus"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Enchanted tea party for young children scheduled at Port St. Lucie Community Center",
-            "lead": "The Enchanted Tea Party will take place at Port St. Lucie Community Center, 2195 SE Airoso Blvd., Port St. Lucie on Aug. 28 from 10:30 to 11:30 a.m. The event is for children ages 1 to 5. Young guests are encouraged to wear royal attire.",
-            "lead_word_count": 48,
-            "headline_overlap_ratio": 0.909,
-            "new_context_token_count": 18,
+            "headline": "St. Lucie Chamber to host lease advice event for entrepreneurs at Fort Pierce City Hall",
+            "lead": "The St. Lucie Chamber of Commerce will host Before You Sign The Lease at Fort Pierce City Commission Chambers, 100 N. 1, Fort Pierce on Wednesday, Aug. 28. The event is free, though registration is requested.",
+            "lead_word_count": 36,
+            "headline_overlap_ratio": 0.75,
+            "new_context_token_count": 14,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -1064,8 +1125,80 @@
           "claim_consistency": {
             "required": true,
             "passed": true,
-            "headline": "Enchanted tea party for young children scheduled at Port St. Lucie Community Center",
-            "lead": "The Enchanted Tea Party will take place at Port St. Lucie Community Center, 2195 SE Airoso Blvd., Port St. Lucie on Aug. 28 from 10:30 to 11:30 a.m. The event is for children ages 1 to 5. Young guests are encouraged to wear royal attire.",
+            "headline": "St. Lucie Chamber to host lease advice event for entrepreneurs at Fort Pierce City Hall",
+            "lead": "The St. Lucie Chamber of Commerce will host Before You Sign The Lease at Fort Pierce City Commission Chambers, 100 N. 1, Fort Pierce on Wednesday, Aug. 28. The event is free, though registration is requested.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "fort_pierce"
+            ],
+            "lead_jurisdictions": [
+              "fort_pierce"
+            ],
+            "missing_jurisdictions": [],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": []
+          },
+          "source_focus": {
+            "required": true,
+            "passed": false,
+            "generated_headline": "St. Lucie Chamber to host lease advice event for entrepreneurs at Fort Pierce City Hall",
+            "generated_lead": "The St. Lucie Chamber of Commerce will host Before You Sign The Lease at Fort Pierce City Commission Chambers, 100 N.",
+            "source_title": "St. Lucie County - Week of Aug. 21 - Hometown News Treasure Coast",
+            "source_lead": "The Downtown Fort Pierce Farmer s Market is at Marina Square, 101 Melody Lane, Fort Pierce on Saturdays, from 8 a.m. Call 772-940-1145 or go to fortpiercefarmersmarket.com .",
+            "title_similarity": {
+              "score": 0.3333,
+              "overlap": 0.2,
+              "jaccard": 0.1,
+              "sorted_sequence": 0.3485,
+              "ordered_sequence": 0.3788,
+              "shared_token_count": 2.0
+            },
+            "lead_token_overlap": 0.133,
+            "missing": [
+              "generated_copy_drifted_from_source_focus"
+            ]
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        },
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Port St. Lucie Community Center to host Enchanted Tea Party for young children Aug. 28",
+          "missing": [
+            "generated_copy_drifted_from_source_focus"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Port St. Lucie Community Center to host Enchanted Tea Party for young children Aug. 28",
+            "lead": "An Enchanted Tea Party for ages 1 to 5 will be held at Port St. Lucie Community Center, 2195 SE Airoso Blvd., Port St. Lucie on Wednesday, Aug. 28, from 10:30 to 11:30 a.m. Young guests are encouraged to wear royal attire.",
+            "lead_word_count": 45,
+            "headline_overlap_ratio": 0.846,
+            "new_context_token_count": 15,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": true,
+            "headline": "Port St. Lucie Community Center to host Enchanted Tea Party for young children Aug. 28",
+            "lead": "An Enchanted Tea Party for ages 1 to 5 will be held at Port St. Lucie Community Center, 2195 SE Airoso Blvd., Port St. Lucie on Wednesday, Aug. 28, from 10:30 to 11:30 a.m. Young guests are encouraged to wear royal attire.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
@@ -1084,16 +1217,88 @@
           "source_focus": {
             "required": true,
             "passed": false,
-            "generated_headline": "Enchanted tea party for young children scheduled at Port St. Lucie Community Center",
-            "generated_lead": "The Enchanted Tea Party will take place at Port St. Lucie Community Center, 2195 SE Airoso Blvd., Port St.",
+            "generated_headline": "Port St. Lucie Community Center to host Enchanted Tea Party for young children Aug. 28",
+            "generated_lead": "An Enchanted Tea Party for ages 1 to 5 will be held at Port St. Lucie Community Center, 2195 SE Airoso Blvd., Port St.",
             "source_title": "St. Lucie County - Week of Aug. 21 - Hometown News Treasure Coast",
             "source_lead": "The Downtown Fort Pierce Farmer s Market is at Marina Square, 101 Melody Lane, Fort Pierce on Saturdays, from 8 a.m. Call 772-940-1145 or go to fortpiercefarmersmarket.com .",
             "title_similarity": {
-              "score": 0.2418,
+              "score": 0.3176,
+              "overlap": 0.3,
+              "jaccard": 0.15,
+              "sorted_sequence": 0.5113,
+              "ordered_sequence": 0.3609,
+              "shared_token_count": 3.0
+            },
+            "lead_token_overlap": 0.0,
+            "missing": [
+              "generated_copy_drifted_from_source_focus"
+            ]
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        },
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Port St. Lucie to hold 9/11 remembrance ceremony at MIDFLORIDA Event Center Sept. 11",
+          "missing": [
+            "generated_copy_drifted_from_source_focus"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Port St. Lucie to hold 9/11 remembrance ceremony at MIDFLORIDA Event Center Sept. 11",
+            "lead": "The 25th anniversary of the 9/11 events in New York City and Pennsylvania will be commemorated at the Memorial Fountain at MIDFLORIDA Event Center, 9221 SE Event Center Place, Port St. Lucie on Sept. 11 from 8:30 to 10:30 a.m.",
+            "lead_word_count": 44,
+            "headline_overlap_ratio": 0.727,
+            "new_context_token_count": 15,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": true,
+            "headline": "Port St. Lucie to hold 9/11 remembrance ceremony at MIDFLORIDA Event Center Sept. 11",
+            "lead": "The 25th anniversary of the 9/11 events in New York City and Pennsylvania will be commemorated at the Memorial Fountain at MIDFLORIDA Event Center, 9221 SE Event Center Place, Port St. Lucie on Sept. 11 from 8:30 to 10:30 a.m.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "port_st_lucie"
+            ],
+            "lead_jurisdictions": [
+              "port_st_lucie"
+            ],
+            "missing_jurisdictions": [],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": []
+          },
+          "source_focus": {
+            "required": true,
+            "passed": false,
+            "generated_headline": "Port St. Lucie to hold 9/11 remembrance ceremony at MIDFLORIDA Event Center Sept. 11",
+            "generated_lead": "The 25th anniversary of the 9/11 events in New York City and Pennsylvania will be commemorated at the Memorial Fountain at MIDFLORIDA Event Center, 9221 SE Event Center Place, Port St. Lucie on Sept.",
+            "source_title": "St. Lucie County - Week of Aug. 21 - Hometown News Treasure Coast",
+            "source_lead": "The Downtown Fort Pierce Farmer s Market is at Marina Square, 101 Melody Lane, Fort Pierce on Saturdays, from 8 a.m. Call 772-940-1145 or go to fortpiercefarmersmarket.com .",
+            "title_similarity": {
+              "score": 0.2933,
               "overlap": 0.2,
-              "jaccard": 0.1053,
-              "sorted_sequence": 0.4122,
-              "ordered_sequence": 0.2748,
+              "jaccard": 0.1,
+              "sorted_sequence": 0.3411,
+              "ordered_sequence": 0.3333,
               "shared_token_count": 2.0
             },
             "lead_token_overlap": 0.0,
@@ -1111,18 +1316,18 @@
           "surface": "card",
           "required": true,
           "passed": false,
-          "headline": "Port St. Lucie Police Athletic League begins beginner wrestling program",
+          "headline": "Port St. Lucie Police Athletic League begins beginner wrestling program for youth",
           "missing": [
             "generated_copy_drifted_from_source_focus"
           ],
           "lead_independence": {
             "required": true,
             "passed": true,
-            "headline": "Port St. Lucie Police Athletic League begins beginner wrestling program",
-            "lead": "The Beginner Wrestling Program will run on Tuesdays and Thursdays through Dec. 10 at the PAL Gym, 2101 SE Tiffany Ave., Port St. Lucie. The program is open to boys and girls ages 6 to 14.",
-            "lead_word_count": 36,
-            "headline_overlap_ratio": 0.6,
-            "new_context_token_count": 17,
+            "headline": "Port St. Lucie Police Athletic League begins beginner wrestling program for youth",
+            "lead": "Port St. Lucie Police Athletic League will have a Beginner Wrestling Program at the PAL Gym, 2101 SE Tiffany Ave., Port St. Lucie running on Tuesdays and Thursdays through Dec. 10. The program is for boys and girls ages 6 to 14.",
+            "lead_word_count": 42,
+            "headline_overlap_ratio": 0.818,
+            "new_context_token_count": 16,
             "opaque_references": [],
             "undefined_references": [],
             "story_form": "standard",
@@ -1136,8 +1341,8 @@
           "claim_consistency": {
             "required": true,
             "passed": true,
-            "headline": "Port St. Lucie Police Athletic League begins beginner wrestling program",
-            "lead": "The Beginner Wrestling Program will run on Tuesdays and Thursdays through Dec. 10 at the PAL Gym, 2101 SE Tiffany Ave., Port St. Lucie. The program is open to boys and girls ages 6 to 14.",
+            "headline": "Port St. Lucie Police Athletic League begins beginner wrestling program for youth",
+            "lead": "Port St. Lucie Police Athletic League will have a Beginner Wrestling Program at the PAL Gym, 2101 SE Tiffany Ave., Port St. Lucie running on Tuesdays and Thursdays through Dec. 10. The program is for boys and girls ages 6 to 14.",
             "headline_money_claims": [],
             "lead_money_claims": [],
             "missing_money_claims": [],
@@ -1156,16 +1361,16 @@
           "source_focus": {
             "required": true,
             "passed": false,
-            "generated_headline": "Port St. Lucie Police Athletic League begins beginner wrestling program",
-            "generated_lead": "The Beginner Wrestling Program will run on Tuesdays and Thursdays through Dec. 10 at the PAL Gym, 2101 SE Tiffany Ave., Port St.",
+            "generated_headline": "Port St. Lucie Police Athletic League begins beginner wrestling program for youth",
+            "generated_lead": "Port St. Lucie Police Athletic League will have a Beginner Wrestling Program at the PAL Gym, 2101 SE Tiffany Ave., Port St.",
             "source_title": "St. Lucie County - Week of Aug. 21 - Hometown News Treasure Coast",
             "source_lead": "The Downtown Fort Pierce Farmer s Market is at Marina Square, 101 Melody Lane, Fort Pierce on Saturdays, from 8 a.m. Call 772-940-1145 or go to fortpiercefarmersmarket.com .",
             "title_similarity": {
-              "score": 0.2095,
+              "score": 0.2,
               "overlap": 0.2,
-              "jaccard": 0.1111,
+              "jaccard": 0.1053,
               "sorted_sequence": 0.3333,
-              "ordered_sequence": 0.2381,
+              "ordered_sequence": 0.2273,
               "shared_token_count": 2.0
             },
             "lead_token_overlap": 0.0,
@@ -1182,11 +1387,41 @@
       ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 10,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "WHERE'S WALTER? Enjoying fresh citrus at Al's Family Farms",
+          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-enjoying-fresh-citrus-at-als-family-farms",
+          "editorial_story_id": "story_004841",
+          "canonical_slug": "2026-08-20-als-family-farms-in-fort-pierce-celebrates-50-years-of-family-citrus-business",
+          "canonical_headline": "Al's Family Farms in Fort Pierce celebrates 50 years of family citrus business",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "WHERE'S WALTER? Enjoying fresh citrus at Al's Family Farms - WPTV",
+          "source_url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPYWxjei1iRW16eEpKeUZkYzRwOXdDWklUYmdCMmIyYnFieENpbG1FMmNJeW8yTHYyYXQ0UmxMRndKY2ZmMDMxVVh2dk5MSlhsQURhWThHbUwxeHhlV0NXR1ZZUTBVLWhFZlR1QXo5RzVzS2YwTEJhZ3lxaFktU24zVmV0X0Y5UW1FTlZTcWd5TVhNeDVo",
+          "editorial_story_id": "story_004841",
+          "canonical_slug": "2026-08-20-als-family-farms-in-fort-pierce-celebrates-50-years-of-family-citrus-business",
+          "canonical_headline": "Al's Family Farms in Fort Pierce celebrates 50 years of family citrus business",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Bicyclist critically injured after being struck by driver in Port St. Lucie - WPEC",
+          "source_url": "https://cbs12.com/news/local/bicyclist-critically-injured-after-being-struck-by-driver-in-port-st-lucie-crash-southwest-rosser-boulevard-sw-meridian-avenue-hca-florida-lawnwood-hospital-florida-news",
+          "editorial_story_id": "story_004756",
+          "canonical_slug": "2026-08-19-bicyclist-critically-injured-in-port-st-lucie-crash-on-southwest-rosser-boulevar",
+          "canonical_headline": "Bicyclist critically injured in Port St. Lucie crash on Southwest Rosser Boulevard",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Port St. Lucie mayor race heads to November runoff between Shannon Martin, Steven Giordano",
@@ -1194,16 +1429,6 @@
           "editorial_story_id": "story_004686",
           "canonical_slug": "2026-08-19-port-st-lucie-mayor-race-heads-to-november-runoff-between-shannon-martin-and-ste",
           "canonical_headline": "Port St. Lucie mayor race heads to November runoff between Shannon Martin and Steven Giordano",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie mayoral candidates clash over growth, traffic and city’s future - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-mayor-race-where-the-candidates-stand-on-growth-traffic-trash-campaign-sign-investigation-shannon-martin-steven-giordano-eric-stazzeri-august-18-election",
-          "editorial_story_id": "story_004542",
-          "canonical_slug": "2026-08-19-port-st-lucie-mayoral-candidates-debate-growth-traffic-and-infrastructure-ahead",
-          "canonical_headline": "Port St. Lucie mayoral candidates debate growth, traffic, and infrastructure ahead of Election Day",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1229,13 +1454,13 @@
         },
         {
           "category_key": "st_lucie",
-          "surface": "card",
-          "headline": "Bicyclist airlifted to HCA Florida Lawnwood Hospital after Port St. Lucie crash",
-          "editorial_story_id": "story_004756",
-          "canonical_slug": "2026-08-19-bicyclist-critically-injured-in-port-st-lucie-crash-on-southwest-rosser-boulevar",
-          "canonical_headline": "Bicyclist critically injured in Port St. Lucie crash on Southwest Rosser Boulevard",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
+          "source_headline": "Man shot, killed inside Fort Pierce home after attacking homeowner; no charges filed - WPEC",
+          "source_url": "https://cbs12.com/news/local/person-shot-killed-while-allegedly-trying-to-enter-fort-pierce-mobile-home-st-lucie-county-shooting-st-lucie-county-crime-deadly-shooting-fatal-shooting-orange-avenue-shooting-seminole-mobile-home-park-fort-pierce-crime-st-lucie-county-sheriff",
+          "editorial_story_id": "story_003628",
+          "canonical_slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
+          "canonical_headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -1243,17 +1468,17 @@
       "new_publication_stale_rejected_count": 1,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Two Fort Pierce women arrested for using fake movie money at St. Lucie restaurant",
-      "generated_card_count": 2,
-      "elapsed_seconds": 54.89
+      "live_hero_headline": "Port St. Lucie man arrested on five sexual activity with minor charges after SWAT search warrant",
+      "generated_card_count": 1,
+      "elapsed_seconds": 52.66
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "generated_live",
       "fetched_candidate_count": 29,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 8,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 6,
       "selected_source_count": 6,
       "cache_hit": false,
       "archive_recovery_requested": false,
@@ -1262,102 +1487,36 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 32.058,
+          "elapsed_seconds": 20.732,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 32.058,
+      "model_elapsed_seconds": 20.732,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 1,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Indian River County Sheriff's Office investigating Vero Beach shooting as domestic violence homicide",
-          "missing": [
-            "headline_jurisdiction_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Indian River County Sheriff's Office investigating Vero Beach shooting as domestic violence homicide",
-            "lead": "The Indian River County Sheriff's Office received a 911 call at approximately 8:41 a.m. Sunday reporting a woman in the roadway in the 500 block of 1st Street. Deputies located Kriskewic with an apparent gunshot wound and began life-saving measures. She was transported to a trauma center, where she was later pronounced dead. Detectives and crime scene personnel processed the scene outside the victim's home.",
-            "lead_word_count": 70,
-            "headline_overlap_ratio": 0.417,
-            "new_context_token_count": 39,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Indian River County Sheriff's Office investigating Vero Beach shooting as domestic violence homicide",
-            "lead": "The Indian River County Sheriff's Office received a 911 call at approximately 8:41 a.m. Sunday reporting a woman in the roadway in the 500 block of 1st Street. Deputies located Kriskewic with an apparent gunshot wound and began life-saving measures. She was transported to a trauma center, where she was later pronounced dead. Detectives and crime scene personnel processed the scene outside the victim's home.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "indian_river_county",
-              "vero_beach"
-            ],
-            "lead_jurisdictions": [
-              "indian_river_county"
-            ],
-            "missing_jurisdictions": [
-              "vero_beach"
-            ],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "Indian River County Sheriff's Office investigating Vero Beach shooting as domestic violence homicide",
-            "generated_lead": "The Indian River County Sheriff's Office received a 911 call at approximately 8:41 a.m. Sunday reporting a woman in the roadway in the 500 block of 1st Street.",
-            "source_title": "Person of interest in Vero Beach homicide arrested in West Virginia after nationwide search",
-            "source_lead": "Marshals took a person of interest into custody Wednesday night in connection with the shooting death of a 52-year-old woman in Vero Beach, the Indian River County Sheriff's Office announced.Matthew Allen Waggle, 33, of Sebastian, was arrested at a motel near Dunbar, West Virginia. Detectives are working to return him to Indian River County.The Indian River County Sheriff's Office identified the victim as Dawn Kriskewic.",
-            "title_similarity": {
-              "score": 0.3124,
-              "overlap": 0.3,
-              "jaccard": 0.1579,
-              "sorted_sequence": 0.4852,
-              "ordered_sequence": 0.355,
-              "shared_token_count": 3.0
-            },
-            "lead_token_overlap": 0.333,
-            "missing": []
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        }
-      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "WHERE'S WALTER? Enjoying fresh citrus at Al's Family Farms",
+          "source_url": "https://www.wptv.com/wheres-walter/wheres-walter-enjoying-fresh-citrus-at-als-family-farms",
+          "editorial_story_id": "story_004841",
+          "canonical_slug": "2026-08-20-als-family-farms-in-fort-pierce-celebrates-50-years-of-family-citrus-business",
+          "canonical_headline": "Al's Family Farms in Fort Pierce celebrates 50 years of family citrus business",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Indian River County superintendent David K. Moore announces final year in role - WPBF",
@@ -1370,16 +1529,6 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Star QB Champ Monds has unfinished business at Vero Beach prior to starting Notre Dame career - WPBF",
-          "source_url": "https://www.wpbf.com/article/champ-monds-vero-beach-notre-dame/73476457",
-          "editorial_story_id": "story_004762",
-          "canonical_slug": "2026-08-20-vero-beach-quarterback-champ-monds-commits-to-notre-dame",
-          "canonical_headline": "Vero Beach quarterback Champ Monds commits to Notre Dame",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
           "source_headline": "Indian River County school superintendent announces plans to step down in 2027 - WPTV",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-indian-river-county/indian-river-county-school-superintendent-announces-plans-to-step-down-in-2027",
           "editorial_story_id": "story_004684",
@@ -1387,46 +1536,57 @@
           "canonical_headline": "Indian River County schools superintendent to step down June 2027",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Former Vero Beach Eagles secretary accused of blowing nearly $419K on guns, liquor, LEGOs - WPEC",
-          "source_url": "https://cbs12.com/news/local/former-vero-beach-eagles-secretary-accused-of-blowing-nearly-419k-on-guns-liquor-legos-indian-river-county-vero-beach-fraternal-order-of-eagles-aerie-4374-robert-john-davison-embezzlement-grand-theft-419000-alleged-embezzlement-debit-card-org",
-          "editorial_story_id": "story_004561",
-          "canonical_slug": "2026-08-19-former-vero-beach-eagles-secretary-accused-of-spending-419000-on-guns-liquor-leg",
-          "canonical_headline": "Former Vero Beach Eagles secretary accused of spending $419,000 on guns, liquor, LEGOs",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "surface": "hero",
-          "headline": "Suspect in fatal Vero Beach shooting arrested in West Virginia",
-          "editorial_story_id": "story_004367",
-          "canonical_slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
-          "canonical_headline": "Indian River County Sheriff's Office uses Flock license plate cameras in search for homicide suspect",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
-        },
-        {
-          "category_key": "indian_river",
-          "surface": "card",
-          "headline": "Investigators delay releasing Vero Beach homicide victim's name while notifying out-of-state family",
-          "editorial_story_id": "story_004367",
-          "canonical_slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
-          "canonical_headline": "Indian River County Sheriff's Office uses Flock license plate cameras in search for homicide suspect",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Lawsuits over school bus and school speed zone camera tickets face setbacks in Florida",
+          "source_url": "https://www.wptv.com/wptv-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-08-19-florida-school-bus-and-speed-zone-camera-lawsuits-face-dismissals-and-legal-setb",
+          "canonical_headline": "Florida school bus and speed zone camera lawsuits face dismissals and legal setbacks",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_004680",
+            "source:https://www.wptv.com/wptv-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['miami-dade']",
+            "shared_event_families=['public-policy']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['be-a-bumpy-road']",
+            "shared_agencies=[]",
+            "shared_subject_phrases=['bus-school-speed', 'bus-school-speed-zone', 'camera-ticket-setback', 'lawsuit-school-bus', 'lawsuit-school-bus-school', 'school-bus-school', 'school-bus-school-speed', 'school-speed-zone', 'school-speed-zone-camera', 'speed-zone-camera', 'speed-zone-camera-ticket', 'zone-camera-ticket', 'zone-camera-ticket-setback']",
+            "shared_headline_topic_core=['bus', 'camera', 'lawsuit', 'setback', 'speed', 'ticket', 'zone']",
+            "shared_distinctive_token_count=173",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Dawn Kriskewic identified as Vero Beach shooting victim, Matthew Waggle named person of interest",
+      "live_hero_headline": "Sebastian man arrested in West Virginia for Vero Beach homicide after Flock license plate readers track multi-state flight",
       "generated_card_count": 0,
-      "elapsed_seconds": 41.013
+      "elapsed_seconds": 34.136
     }
   ]
 }
