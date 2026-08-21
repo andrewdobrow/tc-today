@@ -1,0 +1,36 @@
+TCT v1.13.6.3 — Model Usage & Cost Observability
+
+REQUIRED REPOSITORY FILES
+=========================
+REPLACE:
+  scripts/generate.py
+
+ADD:
+  tct_engine/model_usage.py
+  tests/test_model_usage_observability.py
+
+ADD DOCUMENTATION:
+  PATCH_NOTES_v1.13.6.3.md
+  MODEL_USAGE_COST_OBSERVABILITY_REVIEW_GUIDE_v1.13.6.3.md
+  UPLOAD_MANIFEST_v1.13.6.3.txt
+
+POST-UPLOAD VERIFICATION IN GITHUB
+==================================
+1. scripts/generate.py contains:
+   MODEL_USAGE_REPORT_PATH = OUTPUT_DIR / "data" / "model-usage-report.json"
+
+2. tct_engine/model_usage.py exists and contains:
+   MODEL_USAGE_OBSERVABILITY_VERSION = "1.13.6.3"
+
+3. tests/test_model_usage_observability.py exists.
+
+4. DO NOT change these existing production model lines:
+   MODEL_ARTICLES = "claude-sonnet-4-5"
+   MODEL_SELECTION = "claude-sonnet-4-5"
+
+VALIDATION COMPLETED BEFORE PACKAGING
+=====================================
+pytest workflow-equivalent suite: 902 passed, 43 existing warnings
+scripts/validate_package.py: 36 modules / 119 exports passed
+scripts/apply_generator_runtime_hotfix.py --check: PASSED
+scripts/apply_false_jurisdiction_hotfix.py --check: PASSED

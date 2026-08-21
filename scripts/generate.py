@@ -32,6 +32,7 @@ if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
 from scripts.sanitize_generation_cache import sanitize_cache_payload
+from tct_engine.model_usage import ModelUsageTracker, instrument_anthropic_client
 
 # Editorial engine integration. Import failures remain fail-open. Production
 # behavior changes only through the separately gated v1.9 activation controller.
@@ -693,7 +694,10 @@ TRUSTED_SOURCE_RECOVERY_LOCK = threading.RLock()
 # supplies ANTHROPIC_API_KEY, so the runtime client is initialized there exactly
 # as before.
 _ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()
-client = anthropic.Anthropic(api_key=_ANTHROPIC_API_KEY) if _ANTHROPIC_API_KEY else None
+MODEL_USAGE_REPORT_PATH = OUTPUT_DIR / "data" / "model-usage-report.json"
+MODEL_USAGE_TRACKER = ModelUsageTracker(MODEL_USAGE_REPORT_PATH)
+_raw_anthropic_client = anthropic.Anthropic(api_key=_ANTHROPIC_API_KEY) if _ANTHROPIC_API_KEY else None
+client = instrument_anthropic_client(_raw_anthropic_client, MODEL_USAGE_TRACKER)
 
 # Persistent generation cache. The expensive source extraction and Claude work is
 # keyed to exact source/input fingerprints, so unchanged stories are reused while
@@ -29598,5 +29602,38 @@ def main():
     print(f"Done. {len(all_categories)} categories written.")
 
 
+def _finalize_model_usage_observability():
+    """Persist/print telemetry without ever changing generator success semantics."""
+    try:
+        report = MODEL_USAGE_TRACKER.write_report()
+        totals = report.get("totals", {})
+        print(
+            "  Model usage: "
+            f"{totals.get('requests', 0)} request(s), "
+            f"{totals.get('base_input_tokens', 0):,} base input, "
+            f"{totals.get('cache_write_tokens', 0):,} cache write, "
+            f"{totals.get('cache_read_tokens', 0):,} cache read, "
+            f"{totals.get('output_tokens', 0):,} output token(s), "
+            f"estimated list cost ${float(totals.get('estimated_list_cost_usd', 0.0)):.4f}"
+        )
+        for workload, values in (report.get("by_workload_class") or {}).items():
+            print(
+                "    " + workload + ": "
+                f"{values.get('requests', 0)} request(s), "
+                f"${float(values.get('estimated_list_cost_usd', 0.0)):.4f}"
+            )
+        if report.get("failed_requests_without_usage"):
+            print(
+                "    model request failures without usage metadata: "
+                f"{report['failed_requests_without_usage']}"
+            )
+    except Exception as exc:
+        print(f"  Model usage observability unavailable ({type(exc).__name__}); continuing")
+
+
 if __name__ == "__main__":
-    main()
+    MODEL_USAGE_TRACKER.reset()
+    try:
+        main()
+    finally:
+        _finalize_model_usage_observability()

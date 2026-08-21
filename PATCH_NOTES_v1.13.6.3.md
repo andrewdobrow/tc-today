@@ -1,39 +1,26 @@
-# TCT v1.13.6.3 — generator lineage reconciliation
+# TCT v1.13.6.3 — model usage and cost observability
 
-## Root cause
+## Scope
 
-The Aug. 19 failure chain was not a sequence of independent production defects. A later root-ready overlay replaced the entire `scripts/generate.py` with a copy built from an older repository snapshot. That silently rolled back generator-side work from releases that had already been applied, while their tests, supporting modules, CSS/JS, and release artifacts remained in the repository.
+Behavior-neutral production telemetry only. This release does **not** change the configured Claude model, prompts, story selection, category rules, ranking, duplicate handling, article generation, publication gates, membership behavior, or page rendering.
 
-The repository itself proves the divergence:
+## What changed
 
-- `RELEASE_MANIFEST_v1.13.6.2.sha256` records the pre-clobber generator hash `912795e7be5faf8d0fb5200c3073e4d2e0eba000084b4649f58b4630cb4fec21`.
-- The uploaded Aug. 19 repository's `scripts/generate.py` matched the later v1.13.6.1e overlay byte-for-byte at `b01ac0654a4e987327607c05a354114737b79971bb87b5f91e62315ce41c4ffb`.
-- The same repository still contained the newer v1.13.6.2 subscriber-chrome files/tests and the Martin cocaine regression modules/tests, proving only the generator side had been rolled back.
-- Historical release suffixes `1c`, `1d`, and `1e` had also been reused for unrelated patches, making lineage ambiguous.
+- Added `tct_engine/model_usage.py`, a transparent wrapper around the production Anthropic client.
+- Every Anthropic `messages.create()` response now contributes usage metadata to `data/model-usage-report.json`.
+- The report records raw base-input, prompt-cache write, prompt-cache read, total input-context and output token counts so the exact workload can be repriced against other models later.
+- Calls are grouped by model, call site and workload class. The large category request is intentionally labeled `mixed_generation_and_selection` because the current prompt both chooses stories and writes article copy in one call.
+- Current Claude Sonnet 4.5 standard/global list cost is estimated from Anthropic's 2026-06-30 list pricing: $3/M base input, $3.75/M 5-minute cache writes, $6/M 1-hour cache writes, $0.30/M cache reads, and $15/M output.
+- The production log prints a compact total and per-workload cost summary after the generator exits.
+- Failed model requests are counted without inventing token usage when the provider returns no usage metadata.
 
-## Reconciliation
+## Safety properties
 
-This release starts from the user's uploaded repository as the sole authority and restores the generator responsibilities that its surviving release contracts require:
+- No prompts, source article text, generated article text, API keys, or user data are written to the telemetry report.
+- Telemetry failures are fail-open: they cannot turn a successful publication run into a failed run or mask the generator's original exception.
+- `with_options()` clients remain instrumented, which covers timeout-bounded category and semantic calls.
+- Unknown/future models retain their raw token counts even when no price is registered, allowing later repricing.
 
-1. **v1.13.6.2 subscriber chrome**
-   - restores the hidden `Welcome, subscriber` header control (`data-membership-welcome`);
-   - restores sitewide membership prepaint/client injection on normalized pages;
-   - continues to use the existing server-authoritative entitlement path.
+## Production review
 
-2. **Martin County Operation Beneath the Surface duplicate protection**
-   - a drug seizure no longer becomes `animal-case` merely because the source says `seized`;
-   - narcotics coverage can emit `drug-case` evidence;
-   - restores the deterministic verified-production fallback for the Aug. 14/15/16 duplicate URLs;
-   - the general semantic/structured identity gate still runs first.
-
-3. **All Aug. 19 stabilization work is preserved**
-   - exact-headline runtime fix;
-   - forward publication identity reconciliation;
-   - registry pressure serialization;
-   - final live-category identity alignment and self-diagnosing failure output.
-
-## Prevention
-
-Adds `tests/test_generator_release_contract_coherence.py`. Its purpose is explicitly to fail when a stale whole-file generator overlay preserves one hotfix while silently erasing another active release contract.
-
-Future generator overlays must be built from the newest uploaded production repository, and release suffixes must not be reused for unrelated changes.
+After the next **Update Treasure Coast Today** run, inspect `data/model-usage-report.json` and the `Model usage:` lines in the workflow log. Those numbers provide the real workload needed for a model bake-off and cost projection before changing TCT's production model.
