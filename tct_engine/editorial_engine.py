@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import dataclass
 from datetime import datetime
@@ -104,6 +105,9 @@ class EditorialEngine:
 
         # A replayable journal provides persistence without exposing
         # private state from the lower-level pipeline components.
+        # Exact duplicate observations are compacted on load/save. Re-auditing the
+        # same unchanged feed record on a later workflow run must not make this
+        # journal grow forever or replay the same evidence repeatedly.
         self._history: list[dict[str, Any]] = []
 
     def process(
@@ -299,6 +303,47 @@ class EditorialEngine:
     def get_registry_health(self):
         return self._pipeline.get_registry_health()
 
+    @classmethod
+    def _compact_history_records(
+        cls,
+        records: list[dict[str, Any]],
+    ) -> tuple[list[dict[str, Any]], int]:
+        """Return first-seen exact journal records and the duplicate count.
+
+        The editorial state is a replay journal, not an observation counter. The
+        same unchanged RSS/feed entry can be encountered on many workflow runs.
+        Replaying an identical record again contributes no new source evidence,
+        while retaining it makes the state file grow without bound.
+
+        Only byte-equivalent JSON-safe records (after canonical key ordering) are
+        removed. Distinct revisions of the same URL remain separate records. First
+        occurrence order is preserved so the original event chronology is stable.
+        """
+
+        compacted: list[dict[str, Any]] = []
+        seen: set[bytes] = set()
+
+        for record in records:
+            # Validation belongs to load(); retain malformed values so compaction
+            # can never hide an invalid-state error.
+            if not isinstance(record, dict):
+                compacted.append(record)
+                continue
+
+            canonical = json.dumps(
+                cls._make_json_safe(record),
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+            fingerprint = hashlib.sha256(canonical).digest()
+            if fingerprint in seen:
+                continue
+            seen.add(fingerprint)
+            compacted.append(record)
+
+        return compacted, len(records) - len(compacted)
+
     def save(self, path: str | Path) -> None:
         """Save replayable editorial state to a JSON file."""
 
@@ -309,9 +354,14 @@ class EditorialEngine:
             exist_ok=True,
         )
 
+        compacted_history, _ = self._compact_history_records(self._history)
+        # Keep the in-memory journal bounded too, so a long-lived process cannot
+        # immediately reintroduce duplicates on a second save.
+        self._history = compacted_history
+
         payload = {
             "version": _STATE_VERSION,
-            "articles": self._history,
+            "articles": compacted_history,
         }
 
         temporary_path = state_path.with_suffix(
@@ -384,6 +434,8 @@ class EditorialEngine:
             raise EditorialStateError(
                 "Editorial state articles must be a list."
             )
+
+        articles, _ = cls._compact_history_records(articles)
 
         registry_already_exists = Path(registry_path).exists()
         with engine._pipeline.defer_registry_saves(
