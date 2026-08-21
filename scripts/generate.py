@@ -33,6 +33,7 @@ if str(_REPO_ROOT) not in sys.path:
 
 from scripts.sanitize_generation_cache import sanitize_cache_payload
 from tct_engine.model_usage import ModelUsageTracker, instrument_anthropic_client
+from tct_engine.model_bakeoff import write_bakeoff_artifacts
 
 # Editorial engine integration. Import failures remain fail-open. Production
 # behavior changes only through the separately gated v1.9 activation controller.
@@ -698,6 +699,22 @@ MODEL_USAGE_REPORT_PATH = OUTPUT_DIR / "data" / "model-usage-report.json"
 MODEL_USAGE_TRACKER = ModelUsageTracker(MODEL_USAGE_REPORT_PATH)
 _raw_anthropic_client = anthropic.Anthropic(api_key=_ANTHROPIC_API_KEY) if _ANTHROPIC_API_KEY else None
 client = instrument_anthropic_client(_raw_anthropic_client, MODEL_USAGE_TRACKER)
+
+# v1.13.6.5 opt-in model bake-off. Production remains on MODEL_ARTICLES. The
+# challenger receives copies of successful live category request packets only after
+# the normal site build is complete, and its output can never enter publication.
+MODEL_BAKEOFF_ENABLED = os.environ.get("TCT_MODEL_BAKEOFF", "false").strip().lower() in {
+    "1", "true", "yes", "on"
+}
+MODEL_BAKEOFF_CHALLENGER = os.environ.get(
+    "TCT_MODEL_BAKEOFF_CHALLENGER", "claude-sonnet-5"
+).strip() or "claude-sonnet-5"
+MODEL_BAKEOFF_TIMEOUT_SECONDS = 90.0
+MODEL_BAKEOFF_MAX_TOKENS = 8000
+MODEL_BAKEOFF_REPORT_PATH = OUTPUT_DIR / "data" / "model-bakeoff-report.json"
+MODEL_BAKEOFF_REVIEW_PATH = OUTPUT_DIR / "data" / "model-bakeoff-review.md"
+MODEL_BAKEOFF_ANSWER_KEY_PATH = OUTPUT_DIR / "data" / "model-bakeoff-answer-key.json"
+MODEL_BAKEOFF_PENDING = {}
 
 # Persistent generation cache. The expensive source extraction and Claude work is
 # keyed to exact source/input fingerprints, so unchanged stories are reused while
@@ -7024,6 +7041,19 @@ Return ONLY valid JSON:
     if not isinstance(data, dict):
         data = {"hero": {}, "cards": []}
 
+    # Capture the exact successful production request packet and raw normalized
+    # Sonnet 4.5 output before any downstream TCT post-processing. The challenger
+    # runs later, after the normal build, from an in-memory copy only.
+    if MODEL_BAKEOFF_ENABLED:
+        _queue_model_bakeoff_category(
+            category_key=category_key,
+            category_label=category_label,
+            headlines=headlines,
+            request_kwargs=request_kwargs,
+            baseline_output=data,
+            baseline_response=response,
+        )
+
     data["category_key"]   = category_key
     data["category_label"] = category_label
 
@@ -9150,6 +9180,180 @@ def _extract_model_text(response):
         if value:
             chunks.append(str(value))
     return "\n".join(chunks).strip()
+
+
+
+def _queue_model_bakeoff_category(
+    *, category_key, category_label, headlines, request_kwargs,
+    baseline_output, baseline_response,
+):
+    """Queue one exact successful live category packet for post-build shadow review."""
+    try:
+        source_pool = []
+        for source in headlines or []:
+            source_pool.append({
+                "title": str(source.get("title") or ""),
+                "published": str(source.get("published") or ""),
+                "source_type": str(source.get("source_type") or ""),
+                "source_quality": str(source.get("source_quality") or ""),
+                "hero_eligible": source.get("hero_eligible"),
+                "category_match_score": source.get("category_match_score"),
+            })
+        baseline_model = str(
+            getattr(baseline_response, "model", None)
+            or request_kwargs.get("model")
+            or MODEL_ARTICLES
+        )
+        # A retry replaces an earlier unusable attempt for the same category. Nothing
+        # here is written to the publication data structures or generation cache.
+        MODEL_BAKEOFF_PENDING[str(category_key)] = {
+            "category_key": str(category_key),
+            "category_label": str(category_label),
+            "source_pool": source_pool,
+            "request_kwargs": copy.deepcopy(request_kwargs),
+            "baseline_output": copy.deepcopy(baseline_output),
+            "baseline_model": baseline_model,
+        }
+    except Exception as exc:
+        print(
+            f"  Model bake-off queue unavailable for {category_label} "
+            f"({type(exc).__name__}); live generation unchanged"
+        )
+
+
+def _parse_model_bakeoff_category_json(raw):
+    """Parse challenger structured output without participating in live generation."""
+    text = str(raw or "").strip()
+    if text.startswith("```"):
+        parts = text.split("```")
+        text = parts[1] if len(parts) > 1 else text
+        if text.lstrip().startswith("json"):
+            text = text.lstrip()[4:]
+        text = text.strip()
+    try:
+        from json_repair import repair_json
+        data = json.loads(repair_json(text))
+    except Exception:
+        try:
+            data = json.loads(text, strict=False)
+        except Exception:
+            cleaned = text.encode("ascii", "ignore").decode("ascii")
+            start = cleaned.find("{")
+            end = cleaned.rfind("}") + 1
+            if start == -1 or end <= start:
+                raise ValueError(
+                    f"Challenger returned no JSON object ({len(cleaned)} chars)"
+                )
+            data = json.loads(cleaned[start:end], strict=False)
+    if isinstance(data, list):
+        if len(data) == 1 and isinstance(data[0], dict):
+            data = data[0]
+        elif data and isinstance(data[0], dict) and "hero" in data[0]:
+            data = data[0]
+        elif data and all(isinstance(item, dict) for item in data):
+            data = {"hero": data[0], "cards": data[1:]}
+        else:
+            data = {"hero": {}, "cards": []}
+    if not isinstance(data, dict):
+        data = {"hero": {}, "cards": []}
+    return data
+
+
+def _run_model_bakeoff_variant(packet):
+    """Run the challenger only; failures are contained and never affect publication."""
+    request_kwargs = copy.deepcopy(packet.get("request_kwargs") or {})
+    request_kwargs["model"] = MODEL_BAKEOFF_CHALLENGER
+    # Sonnet 5 enables adaptive thinking by default. Disable it for the first bake-off
+    # so we compare direct structured writing/selection against the non-thinking
+    # Sonnet 4.5 baseline. 8000 leaves headroom for Sonnet 5's newer tokenizer.
+    request_kwargs["thinking"] = {"type": "disabled"}
+    request_kwargs["max_tokens"] = MODEL_BAKEOFF_MAX_TOKENS
+    request_kwargs.pop("timeout", None)
+    request_client = client
+    if hasattr(client, "with_options"):
+        request_client = client.with_options(
+            timeout=MODEL_BAKEOFF_TIMEOUT_SECONDS,
+            max_retries=0,
+        )
+    started = time.perf_counter()
+    response = request_client.messages.create(**request_kwargs)
+    duration = time.perf_counter() - started
+    raw = _extract_model_text(response)
+    parsed = _parse_model_bakeoff_category_json(raw)
+    actual_model = str(
+        getattr(response, "model", None)
+        or MODEL_BAKEOFF_CHALLENGER
+    )
+    return parsed, actual_model, duration
+
+
+def _run_model_bakeoff_after_build():
+    """Execute queued Sonnet 5 comparisons after the normal site build has finished."""
+    if not MODEL_BAKEOFF_ENABLED:
+        return None
+
+    results = []
+    baseline_models = []
+    pending = list(MODEL_BAKEOFF_PENDING.values())
+    print(
+        f"  Model bake-off: {len(pending)} live-generated category packet(s) queued; "
+        f"challenger={MODEL_BAKEOFF_CHALLENGER}"
+    )
+    for packet in pending:
+        category_label = packet.get("category_label") or packet.get("category_key") or "category"
+        baseline_models.append(str(packet.get("baseline_model") or MODEL_ARTICLES))
+        result = {
+            "category_key": packet.get("category_key"),
+            "category_label": category_label,
+            "source_pool": packet.get("source_pool") or [],
+            "baseline_output": packet.get("baseline_output") or {},
+            "challenger_output": {},
+            "challenger_error": "",
+            "challenger_duration_seconds": None,
+        }
+        try:
+            challenger, actual_model, duration = _run_model_bakeoff_variant(packet)
+            result["challenger_output"] = challenger
+            result["challenger_duration_seconds"] = round(duration, 3)
+            result["challenger_actual_model"] = actual_model
+            print(
+                f"    {category_label}: challenger completed in {duration:.1f}s"
+            )
+        except Exception as exc:
+            result["challenger_error"] = (
+                f"{type(exc).__name__}: {_safe_exception_summary(exc, limit=220)}"
+            )
+            print(
+                f"    {category_label}: challenger failed ({type(exc).__name__}); "
+                "live publication unaffected"
+            )
+        results.append(result)
+
+    baseline_model = baseline_models[0] if baseline_models else MODEL_ARTICLES
+    if baseline_models and len(set(baseline_models)) > 1:
+        baseline_model = MODEL_ARTICLES
+    blind_salt = str(
+        os.environ.get("GITHUB_RUN_ID")
+        or os.environ.get("GITHUB_SHA")
+        or datetime.now(timezone.utc).isoformat()
+    )
+    report = write_bakeoff_artifacts(
+        results=results,
+        report_path=MODEL_BAKEOFF_REPORT_PATH,
+        review_path=MODEL_BAKEOFF_REVIEW_PATH,
+        answer_key_path=MODEL_BAKEOFF_ANSWER_KEY_PATH,
+        baseline_model=baseline_model,
+        challenger_model=MODEL_BAKEOFF_CHALLENGER,
+        blind_salt=blind_salt,
+        enabled=True,
+    )
+    print(
+        "  Model bake-off complete: "
+        f"{report.get('completed_categories', 0)} scoreable, "
+        f"{report.get('failed_categories', 0)} challenger failure(s). "
+        "Review data/model-bakeoff-review.md before opening the answer key."
+    )
+    return report
 
 
 def _parse_json_index_array(raw, max_index=None):
@@ -29599,6 +29803,18 @@ def main():
     print(f"  Generation cache activity: {GENERATION_CACHE.summary()}")
     print(f"  Timing: final data and static pages {time.perf_counter() - _stage_started:.1f}s")
     print(f"  Timing: total generator runtime {time.perf_counter() - _build_started:.1f}s")
+
+    # Shadow evaluation is deliberately last: the live site, caches, contracts and
+    # observability have already completed. A challenger failure can never change the
+    # publication result.
+    try:
+        _run_model_bakeoff_after_build()
+    except Exception as exc:
+        print(
+            f"  Model bake-off unavailable ({type(exc).__name__}); "
+            "live publication unchanged"
+        )
+
     print(f"Done. {len(all_categories)} categories written.")
 
 

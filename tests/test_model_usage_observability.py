@@ -124,3 +124,21 @@ def test_production_generator_uses_instrumented_client_and_finally_flushes_repor
     assert "MODEL_USAGE_TRACKER.reset()" in source
     assert "finally:\n        _finalize_model_usage_observability()" in source
     assert 'OUTPUT_DIR / "data" / "model-usage-report.json"' in source
+
+
+def test_sonnet_5_current_standard_pricing_is_recorded(tmp_path):
+    tracker = ModelUsageTracker(tmp_path / "model-usage-report.json")
+    fake = FakeClient(FakeMessages(_response(
+        model="claude-sonnet-5", base=1000, output=100, cache_write=2000, cache_read=3000
+    )))
+    client = instrument_anthropic_client(fake, tracker)
+    client.messages.create(model="claude-sonnet-5", max_tokens=100)
+
+    report = tracker.build_report()
+    totals = report["totals"]
+    # $0.002 input + $0.005 5m cache write + $0.0006 cache read + $0.001 output.
+    assert totals["estimated_list_cost_usd"] == 0.0086
+    pricing = report["pricing_catalog"]["claude-sonnet-5"]
+    assert pricing["usd_per_million_tokens"]["base_input"] == 2.0
+    assert pricing["usd_per_million_tokens"]["output"] == 10.0
+    assert "permanent" in pricing["scope"]
