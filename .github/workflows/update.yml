@@ -4,6 +4,12 @@ run-name: "TCT update v1.9.6 • ${{ github.ref_name }} • ${{ github.sha }}"
 
 on:
   workflow_dispatch:
+    inputs:
+      model_bakeoff:
+        description: "Run Sonnet 5 shadow model bake-off"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -116,6 +122,21 @@ jobs:
           # variable to paid_advertising when commercial banners return; sensitive-topic
           # notices and community resources will reactivate automatically.
           TCT_ARTICLE_BANNER_MODE: ${{ vars.TCT_ARTICLE_BANNER_MODE || 'reader_support' }}
+          # Manual-only, publication-isolated model evaluation. Routine runs stay off.
+          TCT_MODEL_BAKEOFF: ${{ inputs.model_bakeoff }}
+
+      - name: Upload model bake-off review
+        if: ${{ inputs.model_bakeoff == true }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: tct-model-bakeoff-${{ github.run_id }}
+          path: |
+            data/model-bakeoff-report.json
+            data/model-bakeoff-review.md
+            data/model-bakeoff-answer-key.json
+            data/model-usage-report.json
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Build dark-launch membership browser config
         env:
