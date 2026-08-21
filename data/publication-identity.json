@@ -9,8 +9,8 @@
   "archive_identity_backfill": {
     "version": "1.10.5",
     "scope_days": 30,
-    "records_examined": 824,
-    "already_identified": 259,
+    "records_examined": 825,
+    "already_identified": 260,
     "resolved": 0,
     "custom_isolated": 25,
     "custom_backfilled": 25,
@@ -336,12 +336,32 @@
   },
   "forward_publication_identity": {
     "version": "1.7",
-    "generated_at": "2026-08-21T10:51:24Z",
-    "new_articles_stamped": 1,
+    "generated_at": "2026-08-21T15:48:34Z",
+    "new_articles_stamped": 3,
     "existing_articles_preserved": 1,
     "exact_source_updates": 0,
-    "publication_holds": [],
-    "target_conflicts": [],
+    "publication_holds": [
+      {
+        "headline": "St. Lucie County Sheriff's Office searches for missing man last seen Thursday morning",
+        "source_url": "https://cw34.com/news/local/missing-man-last-seen-thursday-at-2-am-described-61-weighing-200-pounds-brown-hair-eyes-st-lucie-county-sheriffs-office-florida-news",
+        "candidate_slugs": [
+          "2026-08-05-indian-river-county-sheriffs-office-searches-for-missing-24-year-old-man-last-se"
+        ],
+        "reason": "Semantic gate model failure; fail-closed hold: Messages.create() got an unexpected keyword argument 'temperature'",
+        "validation_errors": [
+          "model_error"
+        ],
+        "action": "hold_new_permalink_semantic_identity_unresolved"
+      }
+    ],
+    "target_conflicts": [
+      {
+        "headline": "Murder suspect arrested in West Virginia after Vero Beach hairdresser shot outside home",
+        "candidate_slug": "2026-08-20-sebastian-man-arrested-in-west-virginia-for-vero-beach-homicide-after-license-pl",
+        "story_id": "story_002912",
+        "reason": "uncorroborated_persistent_story_id"
+      }
+    ],
     "quarantined_update_targets": [],
     "custom_series_repairs": [],
     "exact_headline_reconciliations": [],
@@ -350,7 +370,7 @@
     "claim_aligned_permalink_repairs": [],
     "exact_headline_incident_repairs": {
       "schema_version": 1,
-      "generated_at": "2026-08-21T10:51:47.005825+00:00",
+      "generated_at": "2026-08-21T15:48:49.264582+00:00",
       "release": "v1.12.0.8.4",
       "policy": "exact_final_headline_requires_locality_family_and_incident_corroboration",
       "repaired_count": 0,
@@ -361,13 +381,13 @@
     "late_reprint_identity_lock": {
       "schema_version": 1,
       "version": "1.0",
-      "generated_at": "2026-08-21T10:51:51.868106+00:00",
+      "generated_at": "2026-08-21T15:48:51.968679+00:00",
       "phase": "pre_publication",
       "window_days": 7,
       "retrospective_horizon_days": 30,
-      "records_scanned": 332,
-      "records_before": 823,
-      "records_after": 823,
+      "records_scanned": 327,
+      "records_before": 824,
+      "records_after": 824,
       "redirected_count": 0,
       "repairs": []
     },
@@ -456,7 +476,7 @@
     },
     "quarantined_story_id_revocations": [
       {
-        "story_id": "story_004509",
+        "story_id": "story_004994",
         "slug": "2026-08-18-left-lane-of-i-95-southbound-blocked-near-stuart-due-to-roadway-debris",
         "headline": "Left lane of I-95 southbound blocked near Stuart due to roadway debris"
       }
@@ -466,36 +486,123 @@
       "groups_collapsed": 0,
       "records_redirected": 0,
       "false_quarantines_repaired": 0,
-      "write_barrier_holds": [],
+      "write_barrier_holds": [
+        {
+          "headline": "Sheriff credits license plate readers in Vero Beach murder case",
+          "source_url": "https://cbs12.com/news/local/dawn-kriskewic-murder-suspect-matthew-waggle-indian-river-sheriff-credits-license-plate-readers-in-capture-of-murder-suspect-in-vero-beach-killing-flock-ex-wife-west-virginia-greyhound-bus-uber",
+          "editorial_story_id": "story_002912",
+          "canonical_slug": "2026-08-21-murder-suspect-arrested-in-west-virginia-after-vero-beach-hairdresser-shot-outsi",
+          "canonical_headline": "Murder suspect arrested in West Virginia after Vero Beach hairdresser shot outside home",
+          "identity_keys": [
+            "incident:named-person-death:dawn-kriskewicz",
+            "story:story_004903",
+            "source:https://cbs12.com/news/local/dawn-kriskewic-murder-suspect-matthew-waggle-indian-river-sheriff-credits-license-plate-readers-in-capture-of-murder-suspect-in-vero-beach-killing-flock-ex-wife-west-virginia-greyhound-bus-uber"
+          ],
+          "basis": "canonical_publication_ledger:exact_structured_incident_key",
+          "cross_source_identity": {
+            "incoming_headline": "Sheriff credits license plate readers in Vero Beach murder case",
+            "publisher": "cbs12.com",
+            "resolved_url": "https://cbs12.com/news/local/dawn-kriskewic-murder-suspect-matthew-waggle-indian-river-sheriff-credits-license-plate-readers-in-capture-of-murder-suspect-in-vero-beach-killing-flock-ex-wife-west-virginia-greyhound-bus-uber",
+            "matched_canonical_slug": "2026-08-21-murder-suspect-arrested-in-west-virginia-after-vero-beach-hairdresser-shot-outsi",
+            "matched_canonical_headline": "Murder suspect arrested in West Virginia after Vero Beach hairdresser shot outside home",
+            "incoming_story_id": "story_004903",
+            "canonical_story_id": "story_002912",
+            "evidence_dimensions": [
+              "incident"
+            ],
+            "confidence": 0.99,
+            "confidence_semantics": "legacy_compatibility_score_not_probability",
+            "relationship": "same_event_verified",
+            "identity_outcome": "same_event_verified",
+            "evidence_tier": "exact_identity",
+            "write_authorized": true,
+            "proof_type": "exact_structured_incident_key",
+            "reason_codes": [
+              "deterministic_identity_key"
+            ],
+            "match_reason": "exact_structured_incident_key",
+            "decision_trace": [
+              "deterministic_identity_keys=incident:named-person-death:dawn-kriskewicz",
+              "write_authorized=True"
+            ],
+            "final_publication_action": "preserve_existing_page_no_rewrite"
+          },
+          "action": "preserve_existing_page_no_rewrite"
+        }
+      ],
       "update_context_holds": [],
-      "same_run_groups_collapsed": 0,
-      "same_run_records_redirected": 0
+      "same_run_groups_collapsed": 1,
+      "same_run_records_redirected": 1
     },
+    "published_skip_preservations": [
+      {
+        "headline": "Sheriff credits license plate readers in Vero Beach murder case",
+        "source_url": "https://cbs12.com/news/local/dawn-kriskewic-murder-suspect-matthew-waggle-indian-river-sheriff-credits-license-plate-readers-in-capture-of-murder-suspect-in-vero-beach-killing-flock-ex-wife-west-virginia-greyhound-bus-uber",
+        "editorial_story_id": "story_002912",
+        "canonical_slug": "2026-08-21-murder-suspect-arrested-in-west-virginia-after-vero-beach-hairdresser-shot-outsi",
+        "canonical_headline": "Murder suspect arrested in West Virginia after Vero Beach hairdresser shot outside home",
+        "identity_keys": [
+          "incident:named-person-death:dawn-kriskewicz",
+          "story:story_004903",
+          "source:https://cbs12.com/news/local/dawn-kriskewic-murder-suspect-matthew-waggle-indian-river-sheriff-credits-license-plate-readers-in-capture-of-murder-suspect-in-vero-beach-killing-flock-ex-wife-west-virginia-greyhound-bus-uber"
+        ],
+        "basis": "canonical_publication_ledger:exact_structured_incident_key",
+        "cross_source_identity": {
+          "incoming_headline": "Sheriff credits license plate readers in Vero Beach murder case",
+          "publisher": "cbs12.com",
+          "resolved_url": "https://cbs12.com/news/local/dawn-kriskewic-murder-suspect-matthew-waggle-indian-river-sheriff-credits-license-plate-readers-in-capture-of-murder-suspect-in-vero-beach-killing-flock-ex-wife-west-virginia-greyhound-bus-uber",
+          "matched_canonical_slug": "2026-08-21-murder-suspect-arrested-in-west-virginia-after-vero-beach-hairdresser-shot-outsi",
+          "matched_canonical_headline": "Murder suspect arrested in West Virginia after Vero Beach hairdresser shot outside home",
+          "incoming_story_id": "story_004903",
+          "canonical_story_id": "story_002912",
+          "evidence_dimensions": [
+            "incident"
+          ],
+          "confidence": 0.99,
+          "confidence_semantics": "legacy_compatibility_score_not_probability",
+          "relationship": "same_event_verified",
+          "identity_outcome": "same_event_verified",
+          "evidence_tier": "exact_identity",
+          "write_authorized": true,
+          "proof_type": "exact_structured_incident_key",
+          "reason_codes": [
+            "deterministic_identity_key"
+          ],
+          "match_reason": "exact_structured_incident_key",
+          "decision_trace": [
+            "deterministic_identity_keys=incident:named-person-death:dawn-kriskewicz",
+            "write_authorized=True"
+          ],
+          "final_publication_action": "preserve_existing_page_no_rewrite"
+        },
+        "action": "preserve_existing_page_no_rewrite"
+      }
+    ],
     "late_reprint_same_run_final_barrier": {
       "schema_version": 1,
       "version": "1.0",
-      "generated_at": "2026-08-21T10:52:04.990117+00:00",
+      "generated_at": "2026-08-21T15:49:02.522049+00:00",
       "phase": "same_run_final_barrier",
       "window_days": 7,
       "retrospective_horizon_days": 30,
-      "records_scanned": 327,
-      "records_before": 824,
-      "records_after": 824,
+      "records_scanned": 329,
+      "records_before": 826,
+      "records_after": 826,
       "redirected_count": 0,
       "repairs": []
     },
     "semantic_publication_gate_summary": {
-      "evaluations": 63,
-      "candidate_pairs": 0,
+      "evaluations": 67,
+      "candidate_pairs": 1,
       "structured_conflict_overrides": 0,
-      "model_calls": 0,
+      "model_calls": 1,
       "cache_hits": 0,
-      "no_candidate_passes": 63,
+      "no_candidate_passes": 66,
       "duplicates_preserved": 0,
       "canonical_updates_selected": 0,
-      "new_stories_allowed": 1,
-      "retroactive_rows_retained": 62,
-      "holds": 0,
+      "new_stories_allowed": 3,
+      "retroactive_rows_retained": 63,
+      "holds": 1,
       "retroactive_redirects": 0,
       "registry_story_records_merged": 0,
       "registry_aliases_written": 0,
@@ -508,8 +615,8 @@
     "archive_identity": {
       "version": "1.10.5",
       "scope_days": 30,
-      "records_examined": 824,
-      "already_identified": 259,
+      "records_examined": 825,
+      "already_identified": 260,
       "resolved": 0,
       "custom_isolated": 25,
       "custom_backfilled": 25,
@@ -833,21 +940,21 @@
       ],
       "status": "complete"
     },
-    "active_archive_records": 824,
+    "active_archive_records": 825,
     "publication_behavior": "forward_identity_required"
   },
   "semantic_publication_gate": {
-    "evaluations": 63,
-    "candidate_pairs": 0,
+    "evaluations": 67,
+    "candidate_pairs": 1,
     "structured_conflict_overrides": 0,
-    "model_calls": 0,
+    "model_calls": 1,
     "cache_hits": 0,
-    "no_candidate_passes": 63,
+    "no_candidate_passes": 66,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
-    "retroactive_rows_retained": 62,
-    "holds": 0,
+    "new_stories_allowed": 3,
+    "retroactive_rows_retained": 63,
+    "holds": 1,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
     "registry_aliases_written": 0,
@@ -859,5 +966,5 @@
   },
   "generated_items_coalesced": 12,
   "redirects_created": 0,
-  "active_archive_records": 824
+  "active_archive_records": 825
 }
