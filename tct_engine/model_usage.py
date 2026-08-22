@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 MODEL_USAGE_REPORT_SCHEMA_VERSION = 1
-MODEL_USAGE_OBSERVABILITY_VERSION = "1.13.6.5"
+MODEL_USAGE_OBSERVABILITY_VERSION = "1.13.6.6"
 
 # Anthropic Claude API standard/global list pricing, USD per 1M tokens.
 # Source basis: Anthropic list prices published 2026-06-30.
@@ -58,6 +58,8 @@ _WORKLOAD_CLASS_BY_FUNCTION = {
     "adjudicate_candidates": "identity_decision",
     "compose_material_update": "update_decision",
     "_run_model_bakeoff_variant": "model_bakeoff_challenger",
+    "_run_assignment_editor": "assignment_editor_shadow",
+    "_run_assignment_writer": "assignment_writer_shadow",
 }
 
 

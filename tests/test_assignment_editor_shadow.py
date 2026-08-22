@@ -1,0 +1,304 @@
+import json
+import os
+import sys
+import types
+from pathlib import Path
+
+import pytest
+
+# Keep generator imports offline-safe in local validation environments. GitHub
+# installs the real dependencies before running this same suite.
+if "feedparser" not in sys.modules:
+    feedparser = types.ModuleType("feedparser")
+    feedparser.parse = lambda *args, **kwargs: types.SimpleNamespace(entries=[])
+    sys.modules["feedparser"] = feedparser
+if "anthropic" not in sys.modules:
+    anthropic = types.ModuleType("anthropic")
+
+    class _Anthropic:
+        def __init__(self, *args, **kwargs):
+            self.messages = types.SimpleNamespace(
+                create=lambda *a, **k: (_ for _ in ()).throw(RuntimeError("offline test"))
+            )
+
+    anthropic.Anthropic = _Anthropic
+    sys.modules["anthropic"] = anthropic
+os.environ.setdefault("ANTHROPIC_API_KEY", "offline-test-key")
+
+from tct_engine.assignment_editor_shadow import (
+    normalize_assignment_plan,
+    write_assignment_editor_artifacts,
+)
+from tct_engine.model_usage import _WORKLOAD_CLASS_BY_FUNCTION
+
+
+def _sample_output(prefix, hero_source=1, card_source=2):
+    return {
+        "hero": {
+            "headline": f"{prefix} hero",
+            "body": f"{prefix} hero body with local context.",
+            "urgency_score": 8,
+            "published": "Fri, 21 Aug 2026 20:00:00 -0400",
+            "source_index": hero_source,
+        },
+        "cards": [
+            {
+                "headline": f"{prefix} card",
+                "teaser": f"{prefix} teaser",
+                "body": f"{prefix} card body.",
+                "urgency_score": 6,
+                "published": "Fri, 21 Aug 2026 19:00:00 -0400",
+                "source_index": card_source,
+            }
+        ],
+    }
+
+
+def test_assignment_plan_enforces_exact_unique_source_mapping():
+    plan, diagnostics = normalize_assignment_plan(
+        {
+            "hero": {"source_index": 2, "angle": "Lead with the new arrest", "urgency_score": 9},
+            "cards": [
+                {"source_index": 2, "angle": "duplicate", "urgency_score": 5},
+                {"source_index": 9, "angle": "out of range", "urgency_score": 5},
+                {"source_index": 1, "angle": "supporting update", "urgency_score": 6},
+            ],
+        },
+        source_count=3,
+        max_cards=2,
+    )
+    assert plan["hero"]["source_index"] == 2
+    assert [card["source_index"] for card in plan["cards"]] == [1]
+    assert diagnostics["duplicate_source_indexes"] == [2]
+    assert diagnostics["invalid_source_indexes"] == [9]
+    assert diagnostics["source_mapping_valid"] is False
+    assert diagnostics["omitted_source_indexes"] == [3]
+
+
+def test_assignment_plan_requires_valid_hero():
+    plan, diagnostics = normalize_assignment_plan(
+        {"hero": {"source_index": 7}, "cards": []},
+        source_count=2,
+        max_cards=1,
+    )
+    assert plan["hero"] == {}
+    assert diagnostics["valid_hero"] is False
+    assert diagnostics["source_mapping_valid"] is False
+
+
+def test_blind_review_hides_architecture_and_models_but_answer_key_reveals_them(tmp_path):
+    report_path = tmp_path / "data" / "assignment-editor-shadow-report.json"
+    review_path = tmp_path / "data" / "assignment-editor-shadow-review.md"
+    key_path = tmp_path / "data" / "assignment-editor-shadow-answer-key.json"
+    results = [{
+        "category_key": "crime",
+        "category_label": "Crime & Safety",
+        "source_pool": [{"title": "First source"}, {"title": "Second source"}],
+        "baseline_output": _sample_output("Baseline", 1, 2),
+        "assignment_plan": {
+            "hero": {"source_index": 2, "angle": "Lead with arrest", "urgency_score": 9},
+            "cards": [{"source_index": 1, "angle": "Support", "urgency_score": 6}],
+        },
+        "assignment_diagnostics": {
+            "source_mapping_valid": True,
+            "selected_source_indexes": [2, 1],
+            "omitted_source_indexes": [],
+            "invalid_source_indexes": [],
+            "duplicate_source_indexes": [],
+        },
+        "challenger_output": _sample_output("Shadow", 2, 1),
+        "challenger_error": "",
+        "editor_duration_seconds": 4.2,
+        "writer_duration_seconds": 8.5,
+        "writer_actual_models": ["claude-sonnet-4-5-20250929", "claude-sonnet-4-5-20250929"],
+    }]
+
+    report = write_assignment_editor_artifacts(
+        results=results,
+        report_path=report_path,
+        review_path=review_path,
+        answer_key_path=key_path,
+        production_model="claude-sonnet-4-5-20250929",
+        editor_model="claude-sonnet-5",
+        writer_model="claude-sonnet-4-5",
+        blind_salt="run-456",
+        enabled=True,
+    )
+
+    review = review_path.read_text()
+    assert "Variant A" in review and "Variant B" in review
+    assert "claude-sonnet" not in review.lower()
+    assert "Supporting-story selection/omissions" in review
+    assert "Angle/new-development focus" in review
+    assert "Source mapping" in review
+    assert "First source" in review and "Second source" in review
+
+    key = json.loads(key_path.read_text())
+    paths = {
+        key["categories"]["crime"]["variant_a_path"],
+        key["categories"]["crime"]["variant_b_path"],
+    }
+    assert paths == {"current_production", "sonnet5_editor_sonnet45_writer"}
+    assert report["publication_isolation"] is True
+    assert report["completed_categories"] == 1
+    assert report["categories"][0]["comparison_signals"]["challenger_source_mapping_valid"] is True
+
+
+class _Block:
+    def __init__(self, text):
+        self.text = text
+
+
+class _Response:
+    def __init__(self, text, model="claude-sonnet-4-5-20250929"):
+        self.content = [_Block(text)]
+        self.model = model
+
+
+class _QueueMessages:
+    def __init__(self, responses):
+        self.responses = list(responses)
+        self.calls = []
+
+    def create(self, **kwargs):
+        self.calls.append(kwargs)
+        if not self.responses:
+            raise AssertionError("No fake response queued")
+        return self.responses.pop(0)
+
+
+class _FakeClient:
+    def __init__(self, responses):
+        self.messages = _QueueMessages(responses)
+
+    def with_options(self, **kwargs):
+        return self
+
+
+def _shadow_packet():
+    return {
+        "category_key": "martin",
+        "category_label": "Martin County",
+        "source_inputs": [
+            {
+                "source_index": 1,
+                "title": "PALM CITY SOURCE TITLE",
+                "published": "Fri, 21 Aug 2026 20:00:00 -0400",
+                "source_type": "publisher",
+                "source_quality": "full",
+                "hero_eligible": True,
+                "category_match_score": 9,
+                "story_form": "new",
+                "article_text": "UNIQUE_SOURCE_ONE_FACTS about Palm City and thirty-six dogs.",
+                "canonical_context_headline": "",
+                "canonical_context_body": "",
+            },
+            {
+                "source_index": 2,
+                "title": "HOBE SOUND SOURCE TITLE",
+                "published": "Fri, 21 Aug 2026 19:00:00 -0400",
+                "source_type": "publisher",
+                "source_quality": "full",
+                "hero_eligible": True,
+                "category_match_score": 8,
+                "story_form": "new",
+                "article_text": "UNIQUE_SOURCE_TWO_FACTS about a train collision.",
+                "canonical_context_headline": "",
+                "canonical_context_body": "",
+            },
+        ],
+    }
+
+
+def test_writer_receives_only_preassigned_single_source(monkeypatch):
+    # Import after test collection so generate.py remains side-effect free without an API key.
+    from scripts import generate
+
+    response = _Response(json.dumps({
+        "headline": "Palm City update",
+        "teaser": "A concise teaser.",
+        "body": "Paragraph one.\n\nParagraph two.",
+        "urgency_score": 1,
+        "published": "wrong",
+        "source_index": 99,
+    }))
+    fake = _FakeClient([response])
+    monkeypatch.setattr(generate, "client", fake)
+
+    item, actual_model, _duration = generate._run_assignment_writer(
+        _shadow_packet(),
+        {"source_index": 1, "angle": "Lead with the surrender", "urgency_score": 8},
+        role="card",
+    )
+    call = fake.messages.calls[0]
+    prompt = call["messages"][0]["content"]
+    assert "UNIQUE_SOURCE_ONE_FACTS" in prompt
+    assert "PALM CITY SOURCE TITLE" in prompt
+    assert "UNIQUE_SOURCE_TWO_FACTS" not in prompt
+    assert "HOBE SOUND SOURCE TITLE" not in prompt
+    assert call["model"] == generate.MODEL_ARTICLES
+    # Writer cannot override assignment metadata.
+    assert item["source_index"] == 1
+    assert item["urgency_score"] == 8
+    assert item["published"] == "Fri, 21 Aug 2026 20:00:00 -0400"
+    assert actual_model == "claude-sonnet-4-5-20250929"
+
+
+def test_editor_has_selection_authority_but_no_publication_writing_task(monkeypatch):
+    from scripts import generate
+
+    response = _Response(
+        json.dumps({
+            "hero": {"source_index": 2, "angle": "Lead with the collision impact", "urgency_score": 8},
+            "cards": [{"source_index": 1, "angle": "Lead with the surrender", "urgency_score": 7}],
+        }),
+        model="claude-sonnet-5",
+    )
+    fake = _FakeClient([response])
+    monkeypatch.setattr(generate, "client", fake)
+
+    plan, diagnostics, actual_model, _duration = generate._run_assignment_editor(_shadow_packet())
+    prompt = fake.messages.calls[0]["messages"][0]["content"]
+    assert "Your job is ONLY editorial assignment" in prompt
+    assert "Do not write an article, teaser, headline, or prose for publication" in prompt
+    assert [plan["hero"]["source_index"]] + [c["source_index"] for c in plan["cards"]] == [2, 1]
+    assert diagnostics["source_mapping_valid"] is True
+    assert actual_model == "claude-sonnet-5"
+
+
+def test_generator_shadow_is_opt_in_post_build_and_cannot_publish():
+    source = Path("scripts/generate.py").read_text()
+    assert '"TCT_ASSIGNMENT_EDITOR_SHADOW", "false"' in source
+    assert '"TCT_ASSIGNMENT_EDITOR_MODEL", "claude-sonnet-5"' in source
+    assert "_queue_assignment_editor_category(" in source
+    assert "_run_assignment_editor_shadow_after_build()" in source
+
+    normal_timing = source.index('print(f"  Timing: total generator runtime')
+    shadow_run = source.index("        _run_assignment_editor_shadow_after_build()")
+    done = source.index('print(f"Done. {len(all_categories)} categories written.")')
+    assert normal_timing < shadow_run < done
+
+    runner_start = source.index("def _run_assignment_editor_shadow_after_build():")
+    runner_end = source.index("\ndef _parse_json_index_array", runner_start)
+    runner = source[runner_start:runner_end]
+    assert 'result["challenger_output"] = {"hero": hero_item, "cards": cards}' in runner
+    assert "all_categories.append" not in runner
+    assert "GENERATION_CACHE.put" not in runner
+    assert "archive.json" not in runner
+
+
+def test_update_workflow_exposes_separate_assignment_editor_shadow_checkbox_and_artifact():
+    workflow = Path(".github/workflows/update.yml").read_text()
+    assert "assignment_editor_shadow:" in workflow
+    assert 'description: "Run Sonnet 5 assignment editor + Sonnet 4.5 writer shadow"' in workflow
+    assert "TCT_ASSIGNMENT_EDITOR_SHADOW: ${{ inputs.assignment_editor_shadow }}" in workflow
+    assert "Upload assignment editor shadow review" in workflow
+    assert "data/assignment-editor-shadow-report.json" in workflow
+    assert "data/assignment-editor-shadow-review.md" in workflow
+    assert "data/assignment-editor-shadow-answer-key.json" in workflow
+    assert "data/model-usage-report.json" in workflow
+
+
+def test_model_usage_distinguishes_editor_and_writer_shadow_costs():
+    assert _WORKLOAD_CLASS_BY_FUNCTION["_run_assignment_editor"] == "assignment_editor_shadow"
+    assert _WORKLOAD_CLASS_BY_FUNCTION["_run_assignment_writer"] == "assignment_writer_shadow"
