@@ -254,7 +254,6 @@ def compose_material_update(
     kwargs = {
         "model": model,
         "max_tokens": 1800,
-        "temperature": 0,
         "messages": [
             {
                 "role": "user",

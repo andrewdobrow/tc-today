@@ -733,7 +733,6 @@ def adjudicate_candidates(
     kwargs = {
         "model": model,
         "max_tokens": 900,
-        "temperature": 0,
         "messages": [{"role": "user", "content": _prompt(incoming, candidates)}],
     }
     try:

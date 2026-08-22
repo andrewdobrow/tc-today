@@ -234,7 +234,7 @@ def test_material_update_composer_calls_model_once_and_validates_result():
     )
     assert result["status"] == "validated"
     assert len(client.messages.calls) == 1
-    assert client.messages.calls[0]["temperature"] == 0
+    assert "temperature" not in client.messages.calls[0]
 
 
 def test_retroactive_material_update_rewrites_canonical_and_redirects_later_url(
@@ -454,3 +454,39 @@ def test_material_update_render_failure_is_transactional(tmp_path, monkeypatch):
     assert repair["held_count"] == 1
     assert report["summary"]["material_update_holds"] == 1
     assert canonical == original
+
+
+class _CurrentSdkStrictMaterialMessages:
+    """Minimal current Anthropic messages.create signature: no temperature kwarg."""
+
+    def __init__(self, payload: dict):
+        self.payload = payload
+        self.calls = []
+
+    def create(self, *, max_tokens, messages, model, timeout=None):
+        self.calls.append({
+            "max_tokens": max_tokens,
+            "messages": messages,
+            "model": model,
+            "timeout": timeout,
+        })
+        return _Response(self.payload)
+
+
+class _CurrentSdkStrictMaterialClient:
+    def __init__(self, payload: dict):
+        self.messages = _CurrentSdkStrictMaterialMessages(payload)
+
+
+def test_material_update_request_matches_current_anthropic_sdk_without_temperature():
+    client = _CurrentSdkStrictMaterialClient(_composition_payload())
+    result = compose_material_update(
+        client,
+        model="claude-sonnet-4-5",
+        canonical={"headline": CANONICAL_HEADLINE, "body": CANONICAL_BODY},
+        incoming={"headline": UPDATE_HEADLINE, "body": UPDATE_BODY},
+        decision=_decision(),
+    )
+
+    assert result["status"] == "validated"
+    assert len(client.messages.calls) == 1

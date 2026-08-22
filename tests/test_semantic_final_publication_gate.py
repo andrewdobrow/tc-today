@@ -1292,3 +1292,52 @@ def test_terminal_contamination_rejection_is_not_retried_from_prior_report(tmp_p
     )
 
     assert directives == []
+
+
+class _CurrentSdkStrictMessages:
+    """Minimal current Anthropic messages.create signature: no temperature kwarg."""
+
+    def __init__(self, payload: dict):
+        self.payload = payload
+        self.calls = []
+
+    def create(self, *, max_tokens, messages, model, timeout=None):
+        self.calls.append({
+            "max_tokens": max_tokens,
+            "messages": messages,
+            "model": model,
+            "timeout": timeout,
+        })
+        return _Response(json.dumps(self.payload))
+
+
+class _CurrentSdkStrictClient:
+    def __init__(self, payload: dict):
+        self.messages = _CurrentSdkStrictMessages(payload)
+
+
+def test_semantic_gate_request_matches_current_anthropic_sdk_without_temperature():
+    candidates = _candidate_row(
+        _article(CANONICAL_SLUG, CANONICAL_HEADLINE, "2026-07-31")
+    )
+    payload = {
+        "selected_candidate_slug": CANONICAL_SLUG,
+        "same_real_world_event": True,
+        "material_new_update": False,
+        "confidence": 0.99,
+        "shared_anchors": ["Marie Martin", "Savona and Lawndale"],
+        "novel_facts": [],
+        "reason": "The reports repeat the same fatal crash facts.",
+        "recommended_action": ACTION_DUPLICATE,
+    }
+    client = _CurrentSdkStrictClient(payload)
+
+    result = adjudicate_candidates(
+        client,
+        model="claude-sonnet-4-5",
+        incoming=_article("", INCOMING_HEADLINE, "2026-08-01"),
+        candidates=candidates,
+    )
+
+    assert result["action"] == ACTION_DUPLICATE
+    assert len(client.messages.calls) == 1
