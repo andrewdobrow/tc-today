@@ -1,6 +1,6 @@
 {
   "schema_version": 6,
-  "generated_at": "2026-08-21T23:54:51Z",
+  "generated_at": "2026-08-22T00:20:00Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,10 +15,12 @@
   "summary": {
     "category_count": 9,
     "statuses": {
+      "cache_hit": 1,
       "category_eligibility_archive_recovery": 1,
       "category_exception_archive_recovery": 1,
-      "generated_live": 5,
+      "generated_live": 3,
       "generation_failed_archive_recovery": 1,
+      "no_publishable_sources": 1,
       "sports_zero_candidate_archive_recovery": 1
     },
     "failures": {
@@ -26,15 +28,15 @@
       "no_category_eligible_sources": 1,
       "no_sports_hero_candidates": 1
     },
-    "model_attempt_count": 8,
-    "model_elapsed_seconds": 310.859,
-    "archive_recovery_requested_count": 4,
+    "model_attempt_count": 6,
+    "model_elapsed_seconds": 242.769,
+    "archive_recovery_requested_count": 5,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 5,
-    "category_eligibility_rejection_count": 19,
-    "published_story_duplicate_suppression_count": 59,
-    "story_aware_update_context_count": 2
+    "article_framing_rejection_count": 2,
+    "category_eligibility_rejection_count": 18,
+    "published_story_duplicate_suppression_count": 62,
+    "story_aware_update_context_count": 1
   },
   "categories": [
     {
@@ -42,8 +44,8 @@
       "category_label": "Local Government",
       "status": "category_exception_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 10,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 9,
       "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -52,11 +54,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 25.615,
+          "elapsed_seconds": 9.172,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 25.615,
+      "model_elapsed_seconds": 9.172,
       "failure_code": "article_framing_integrity",
       "failure_summary": "Article framing integrity failed after enrichment: named_measure_undefined_in_lead,headline_named_measure_missing_from_lead — Florida Tax Watch launches online tool showing Amendment 3 property tax impact by county",
       "sports_expired_event_preview_count": 0,
@@ -67,8 +69,8 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 10,
-      "category_eligibility_rejection_count": 6,
+      "category_eligibility_assessed_count": 9,
+      "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-local-government-central-action",
@@ -136,22 +138,9 @@
           ],
           "headline": "Judge delays decision on whether Boca Raton mother exonerated of sex crimes can see her children",
           "source_url": "https://www.wptv.com/wptv-investigates/judge-delays-decision-on-whether-boca-raton-mother-exonerated-of-sex-crimes-can-see-her-children"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "headline": "St. Lucie County deputy found guilty of DUI as internal probe continues - WPEC",
-          "source_url": "https://cbs12.com/newsletter-daily/st-lucie-county-deputy-found-guilty-of-dui-as-internal-probe-continues-st-lucie-county-sheriffs-office-st-lucie-county-deputy-arthur-alfaro-richard-del-toro-dui-dui-arrest-dui-conviction-guilty-verdict-deputy-guilty-sheriffs-deputy-law"
         }
       ],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
@@ -225,6 +214,16 @@
         },
         {
           "category_key": "local_gov",
+          "source_headline": "St. Lucie County deputy found guilty of DUI as internal probe continues - WPEC",
+          "source_url": "https://cbs12.com/newsletter-daily/st-lucie-county-deputy-found-guilty-of-dui-as-internal-probe-continues-st-lucie-county-sheriffs-office-st-lucie-county-deputy-arthur-alfaro-richard-del-toro-dui-dui-arrest-dui-conviction-guilty-verdict-deputy-guilty-sheriffs-deputy-law",
+          "editorial_story_id": "story_004849",
+          "canonical_slug": "2026-08-20-st-lucie-county-deputy-found-guilty-of-dui-remains-on-unpaid-leave-during-intern",
+          "canonical_headline": "St. Lucie County deputy found guilty of DUI, remains on unpaid leave during internal review",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
           "source_headline": "Indian River County superintendent David K. Moore announces final year in role - WPBF",
           "source_url": "https://www.wpbf.com/article/indian-river-county-superintendent-david-k-moore-announces-final-year/73477937",
           "editorial_story_id": "story_004676",
@@ -244,64 +243,21 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "St. Lucie County deputy found guilty of DUI as internal probe continues - WPEC",
-          "source_url": "https://cbs12.com/newsletter-daily/st-lucie-county-deputy-found-guilty-of-dui-as-internal-probe-continues-st-lucie-county-sheriffs-office-st-lucie-county-deputy-arthur-alfaro-richard-del-toro-dui-dui-arrest-dui-conviction-guilty-verdict-deputy-guilty-sheriffs-deputy-law",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-20-st-lucie-county-deputy-found-guilty-of-dui-remains-on-unpaid-leave-during-intern",
-          "canonical_headline": "St. Lucie County deputy found guilty of DUI, remains on unpaid leave during internal review",
-          "basis": "event-identity-authority:participant_plus_precise_location",
-          "identity_keys": [
-            "story:story_004849",
-            "source:https://cbs12.com/newsletter-daily/st-lucie-county-deputy-found-guilty-of-dui-as-internal-probe-continues-st-lucie-county-sheriffs-office-st-lucie-county-deputy-arthur-alfaro-richard-del-toro-dui-dui-arrest-dui-conviction-guilty-verdict-deputy-guilty-sheriffs-deputy-law"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_named_people",
-            "shared_precise_location",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['indian-river', 'indian-river-county', 'lake-worth', 'sebastian', 'st-lucie', 'st-lucie-county']",
-            "shared_event_families=['vehicle-chase']",
-            "shared_named_people=['year old alfaro']",
-            "shared_precise_locations=['indian-river-drive', 'stay-in-his-lane']",
-            "shared_agencies=['indian-river-county-sheriff', 'st-lucie-county-sheriff']",
-            "shared_subject_phrases=['deputy-found-guilty', 'deputy-found-guilty-dui', 'dui-internal-probe', 'dui-internal-probe-continu', 'found-guilty-dui', 'found-guilty-dui-internal', 'guilty-dui-internal', 'guilty-dui-internal-probe', 'internal-probe-continu', 'internal-probe-continu-wpec', 'probe-continu-wpec']",
-            "shared_headline_topic_core=['continu', 'deputy', 'dui', 'found', 'guilty', 'internal', 'probe', 'wpec']",
-            "shared_distinctive_token_count=167",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 42.094
+      "elapsed_seconds": 19.962
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 8,
-      "selected_source_count": 4,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 7,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -309,11 +265,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 28.172,
+          "elapsed_seconds": 24.907,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 28.172,
+      "model_elapsed_seconds": 24.907,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -324,7 +280,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 8,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 4,
       "category_eligibility_rejections": [
         {
@@ -380,7 +336,7 @@
           "source_url": "https://www.wptv.com/news/region-s-palm-beach-county/delray-beach/rising-rents-threaten-small-businesses-along-delray-beachs-atlantic-avenue"
         }
       ],
-      "published_story_duplicate_suppression_count": 13,
+      "published_story_duplicate_suppression_count": 14,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -444,6 +400,16 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "'Pretty easy for us': Treasure Coast investigators say robbery suspect left clues leading to his arrest - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-jensen-beach-jewelry-robber-arrest/73489927",
+          "editorial_story_id": "story_005026",
+          "canonical_slug": "2026-08-21-lauderhill-man-arrested-in-treasure-coast-mall-jewelry-kiosk-robbery-worth-over",
+          "canonical_headline": "Lauderhill man arrested in Treasure Coast Mall jewelry kiosk robbery worth over $22,000",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Flock license plate readers help crack Vero Beach homicide case, suspect caught in West Virginia - WFLX",
           "source_url": "https://www.wflx.com/2026/08/20/flock-license-plate-readers-help-crack-vero-beach-homicide-case-suspect-caught-west-virginia",
           "editorial_story_id": "story_002912",
@@ -454,22 +420,22 @@
         },
         {
           "category_key": "crime",
+          "source_headline": "Police: Port St. Lucie man faces 5 sexual activity with a minor charges - WPEC",
+          "source_url": "https://cbs12.com/news/crime/police-port-st-lucie-man-faces-5-sexual-activity-with-a-minor-charges-sounds-gunfire-noise-flash-diversion-devices-residents-swat-team-search-warrant-felony-contributing-delinquency",
+          "editorial_story_id": "story_004905",
+          "canonical_slug": "2026-08-20-port-st-lucie-man-arrested-on-sexual-activity-with-minor-charges-after-swat-oper",
+          "canonical_headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Sheriff credits license plate readers in capture of murder suspect in Vero Beach killing - WPEC",
           "source_url": "https://cbs12.com/news/local/dawn-kriskewic-murder-suspect-matthew-waggle-indian-river-sheriff-credits-license-plate-readers-in-capture-of-murder-suspect-in-vero-beach-killing-flock-ex-wife-west-virginia-greyhound-bus-uber",
           "editorial_story_id": "story_004903",
           "canonical_slug": "2026-08-21-sheriff-eric-flowers-credits-flock-license-plate-readers-in-vero-beach-murder-in",
           "canonical_headline": "Sheriff Eric Flowers credits Flock license plate readers in Vero Beach murder investigation",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Police: Port St. Lucie man faces 5 sexual activity with a minor charges - WPEC",
-          "source_url": "http://cbs12.com/news/crime/police-port-st-lucie-man-faces-5-sexual-activity-with-a-minor-charges-sounds-gunfire-noise-flash-diversion-devices-residents-swat-team-search-warrant-felony-contributing-delinquency",
-          "editorial_story_id": "story_004905",
-          "canonical_slug": "2026-08-20-port-st-lucie-man-arrested-on-sexual-activity-with-minor-charges-after-swat-oper",
-          "canonical_headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -495,7 +461,7 @@
         {
           "category_key": "crime",
           "surface": "hero",
-          "headline": "Ex-boyfriend arrested in Vero Beach shooting death of Dawn Kriskewic",
+          "headline": "Ex-boyfriend arrested in Vero Beach homicide after shooting victim in cold blood on First Street",
           "editorial_story_id": "story_002912",
           "canonical_slug": "2026-08-20-sebastian-man-arrested-in-west-virginia-for-vero-beach-homicide-after-license-pl",
           "canonical_headline": "Sebastian man arrested in West Virginia for Vero Beach homicide after license plate readers track multi-state flight",
@@ -505,7 +471,7 @@
         {
           "category_key": "crime",
           "surface": "card",
-          "headline": "Paige O'Donnell surrenders 36 Border Collies from Palm City hoarding case",
+          "headline": "Owner surrenders 36 Border Collies rescued from Palm City hoarding case, clearing path for adoptions",
           "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
           "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
           "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
@@ -520,7 +486,7 @@
       "budget_seconds": 180.0,
       "live_hero_headline": "",
       "generated_card_count": 0,
-      "elapsed_seconds": 38.37
+      "elapsed_seconds": 31.094
     },
     {
       "category_key": "business",
@@ -718,7 +684,7 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 7.496
+      "elapsed_seconds": 7.832
     },
     {
       "category_key": "sports",
@@ -762,7 +728,7 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 2,
-      "elapsed_seconds": 16.204
+      "elapsed_seconds": 7.352
     },
     {
       "category_key": "things_to_do",
@@ -779,23 +745,23 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 82.973,
+          "elapsed_seconds": 75.93,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
           "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals from Martin County hoarding cases begin recovery at Palm City shelter"
         },
         {
           "attempt": 2,
-          "timeout_seconds": 97.0,
-          "elapsed_seconds": 77.338,
+          "timeout_seconds": 104.1,
+          "elapsed_seconds": 76.498,
           "result": "article_framing_integrity",
           "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals from Martin County hoarding cases begin healing at Palm City shelter"
+          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals from Martin County hoarding cases begin recovery at Palm City shelter"
         }
       ],
-      "model_elapsed_seconds": 160.311,
+      "model_elapsed_seconds": 152.428,
       "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals from Martin County hoarding cases begin healing at Palm City shelter",
+      "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — Over 100 animals from Martin County hoarding cases begin recovery at Palm City shelter",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -859,28 +825,21 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "failed",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 168.015
+      "elapsed_seconds": 158.381
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "generated_live",
+      "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 0,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 7.821,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 7.821,
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -891,11 +850,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "florida",
+          "source_headline": "New TaxWatch tool maps Amendment 3’s impact county by county",
+          "source_url": "https://www.wptv.com/news/state/new-taxwatch-tool-maps-amendment-3s-impact-county-by-county",
+          "editorial_story_id": "story_005165",
+          "canonical_slug": "2026-08-21-florida-taxwatch-releases-county-by-county-analysis-of-amendment-3-property-tax",
+          "canonical_headline": "Florida TaxWatch releases county-by-county analysis of Amendment 3 property tax proposal",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "florida",
           "source_headline": "Florida Tax Watch launches online tool to help voters research Amendment 3 property tax measure",
@@ -920,18 +889,14 @@
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Florida TaxWatch releases county-by-county analysis of Amendment 3 property tax proposal",
-      "generated_card_count": 0,
-      "elapsed_seconds": 20.446
+      "elapsed_seconds": 5.55
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 22,
+      "fresh_candidate_count": 23,
       "publishable_source_count": 4,
       "selected_source_count": 4,
       "cache_hit": false,
@@ -941,11 +906,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 23.656,
+          "elapsed_seconds": 22.584,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 23.656,
+      "model_elapsed_seconds": 22.584,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -959,18 +924,8 @@
       "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "James Martin to take on Brian Mast after wining Democratic primary for Florida's 21st Congressional District",
-          "source_url": "https://www.wptv.com/news/political/elections-local/james-martin-to-take-on-brian-mast-after-wining-democratic-primary-for-floridas-21st-congressional-district",
-          "editorial_story_id": "story_005088",
-          "canonical_slug": "2026-08-21-james-martin-wins-democratic-primary-for-congressional-district-21-by-less-than",
-          "canonical_headline": "James Martin wins Democratic primary for Congressional District 21 by less than 1%, will face Brian Mast in November",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "martin",
           "source_headline": "James Martin to take on Brian Mast after wining Democratic primary for Florida's 21st Congressional District - WPTV",
@@ -979,6 +934,16 @@
           "canonical_slug": "2026-08-21-james-martin-wins-democratic-primary-for-congressional-district-21-by-less-than",
           "canonical_headline": "James Martin wins Democratic primary for Congressional District 21 by less than 1%, will face Brian Mast in November",
           "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "James Martin to take on Brian Mast after wining Democratic primary for Florida's 21st Congressional District",
+          "source_url": "https://www.wptv.com/news/political/elections-local/james-martin-to-take-on-brian-mast-after-wining-democratic-primary-for-floridas-21st-congressional-district",
+          "editorial_story_id": "story_005088",
+          "canonical_slug": "2026-08-21-james-martin-wins-democratic-primary-for-congressional-district-21-by-less-than",
+          "canonical_headline": "James Martin wins Democratic primary for Congressional District 21 by less than 1%, will face Brian Mast in November",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1033,31 +998,21 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Major accident shuts down 2 right lanes on I-95 North in Martin County - WPEC",
-          "source_url": "http://cbs12.com/news/florida/major-accident-shuts-down-2-right-lanes-on-i-95-north-in-martin-county-florida-news-florida-traffic-major-accident-511-fhp",
-          "editorial_story_id": "story_001557",
-          "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
-          "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
           "surface": "hero",
-          "headline": "Woman charged in Palm City hoarding case surrenders 36 Border Collies, clearing path for adoption",
-          "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
-          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
-          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "headline": "Motorist hospitalized with traumatic injuries after Brightline collision in Hobe Sound",
+          "editorial_story_id": "story_004892",
+          "canonical_slug": "2026-08-20-suv-driver-hospitalized-after-collision-with-brightline-train-in-hobe-sound",
+          "canonical_headline": "SUV driver hospitalized with traumatic injuries after collision with Brightline train in Hobe Sound",
           "basis": "same_event_and_persistent_story_skip",
           "reason": "published_skip_placement_suppressed"
         },
         {
           "category_key": "martin",
           "surface": "card",
-          "headline": "Motorist hospitalized with traumatic injuries after Brightline train collision in Hobe Sound",
-          "editorial_story_id": "story_004892",
-          "canonical_slug": "2026-08-20-suv-driver-hospitalized-after-collision-with-brightline-train-in-hobe-sound",
-          "canonical_headline": "SUV driver hospitalized with traumatic injuries after collision with Brightline train in Hobe Sound",
+          "headline": "Owner surrenders 36 Border Collies from Palm City hoarding case, clearing path to adoption",
+          "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
           "basis": "same_event_and_persistent_story_skip",
           "reason": "published_skip_placement_suppressed"
         }
@@ -1069,16 +1024,16 @@
       "budget_seconds": 180.0,
       "live_hero_headline": "",
       "generated_card_count": 0,
-      "elapsed_seconds": 35.765
+      "elapsed_seconds": 34.625
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 7,
-      "selected_source_count": 6,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 5,
+      "selected_source_count": 4,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1086,244 +1041,25 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 36.253,
+          "elapsed_seconds": 33.678,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 36.253,
+      "model_elapsed_seconds": 33.678,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 3,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "St. Lucie County community urges fire board to reinstate three fired firefighters",
-          "missing": [
-            "headline_jurisdiction_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "St. Lucie County community urges fire board to reinstate three fired firefighters",
-            "lead": "The meeting lasted about three hours Wednesday. While board members spent part of the meeting discussing the district's upcoming budget, much of the public comment period focused on criticism of Fire Chief Jeff Lee and the controversy surrounding the firefighters' terminations. Several speakers called on the board to bring the terminated firefighters back.",
-            "lead_word_count": 54,
-            "headline_overlap_ratio": 0.364,
-            "new_context_token_count": 31,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "St. Lucie County community urges fire board to reinstate three fired firefighters",
-            "lead": "The meeting lasted about three hours Wednesday. While board members spent part of the meeting discussing the district's upcoming budget, much of the public comment period focused on criticism of Fire Chief Jeff Lee and the controversy surrounding the firefighters' terminations. Several speakers called on the board to bring the terminated firefighters back.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "st_lucie_county"
-            ],
-            "lead_jurisdictions": [],
-            "missing_jurisdictions": [
-              "st_lucie_county"
-            ],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "St. Lucie County community urges fire board to reinstate three fired firefighters",
-            "generated_lead": "The meeting lasted about three hours Wednesday. While board members spent part of the meeting discussing the district's upcoming budget, much of the public comment period focused on criticism of Fire Chief Jeff Lee and the controversy surrounding the firefighters' terminations.",
-            "source_title": "St. Lucie County community urge fire board to reinstate fired firefighters during meeting - WPEC",
-            "source_lead": "Lucie County Fire District Board meeting turned into a show of support for three firefighters who were fired following an investigation into hazing allegations, with nearly every public speaker urging district leaders to reinstate them. The packed meeting lasted about three hours Wednesday.",
-            "title_similarity": {
-              "score": 0.7568,
-              "overlap": 0.8182,
-              "jaccard": 0.6,
-              "sorted_sequence": 0.8383,
-              "ordered_sequence": 0.8383,
-              "shared_token_count": 9.0
-            },
-            "lead_token_overlap": 0.379,
-            "missing": []
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Two Fort Pierce women arrested for using fake $100 bill at Port St. Lucie restaurant",
-          "missing": [
-            "headline_jurisdiction_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Two Fort Pierce women arrested for using fake $100 bill at Port St. Lucie restaurant",
-            "lead": "Three women went to a restaurant on St. Lucie West Boulevard on Aug. 8 and ordered food and drinks. When it was time to pay, one of the women handed an employee a fake $100 bill that had the words 'FOR MOTION PICTURE PURPOSES' printed on it. The women left the restaurant in a dark blue Dodge Charger.",
-            "lead_word_count": 58,
-            "headline_overlap_ratio": 0.538,
-            "new_context_token_count": 25,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Two Fort Pierce women arrested for using fake $100 bill at Port St. Lucie restaurant",
-            "lead": "Three women went to a restaurant on St. Lucie West Boulevard on Aug. 8 and ordered food and drinks. When it was time to pay, one of the women handed an employee a fake $100 bill that had the words 'FOR MOTION PICTURE PURPOSES' printed on it. The women left the restaurant in a dark blue Dodge Charger.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "fort_pierce",
-              "port_st_lucie"
-            ],
-            "lead_jurisdictions": [],
-            "missing_jurisdictions": [
-              "fort_pierce",
-              "port_st_lucie"
-            ],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "Two Fort Pierce women arrested for using fake $100 bill at Port St. Lucie restaurant",
-            "generated_lead": "Three women went to a restaurant on St. Lucie West Boulevard on Aug.",
-            "source_title": "Fake $100 movie bill allegedly used to cover Port St. Lucie tab - WPBF",
-            "source_lead": "Two Fort Pierce women were arrested after deputies said a counterfeit $100 bill was used to pay for food and drinks at a Port St. Lucie restaurant earlier this month.",
-            "title_similarity": {
-              "score": 0.4624,
-              "overlap": 0.5,
-              "jaccard": 0.3158,
-              "sorted_sequence": 0.5882,
-              "ordered_sequence": 0.4412,
-              "shared_token_count": 6.0
-            },
-            "lead_token_overlap": 0.444,
-            "missing": []
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        },
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "Disciplined St. Lucie County firefighters question district transparency",
-          "missing": [
-            "headline_jurisdiction_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "Disciplined St. Lucie County firefighters question district transparency",
-            "lead": "The fire district disciplined five firefighters following an independent investigation into alleged hazing incidents. Videos surfaced that appeared to show the firefighters administering electric shocks to newer employees. Three firefighters were terminated, and now they are questioning the integrity of the investigation.",
-            "lead_word_count": 42,
-            "headline_overlap_ratio": 0.375,
-            "new_context_token_count": 23,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "Disciplined St. Lucie County firefighters question district transparency",
-            "lead": "The fire district disciplined five firefighters following an independent investigation into alleged hazing incidents. Videos surfaced that appeared to show the firefighters administering electric shocks to newer employees. Three firefighters were terminated, and now they are questioning the integrity of the investigation.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "st_lucie_county"
-            ],
-            "lead_jurisdictions": [],
-            "missing_jurisdictions": [
-              "st_lucie_county"
-            ],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "Disciplined St. Lucie County firefighters question district transparency",
-            "generated_lead": "The fire district disciplined five firefighters following an independent investigation into alleged hazing incidents. Videos surfaced that appeared to show the firefighters administering electric shocks to newer employees.",
-            "source_title": "Disciplined St. Lucie County firefighters question district transparency - WPBF",
-            "source_lead": "Lucie County Fire District meeting, the community urged the district to reinstate the disciplined firefighters, alleging the investigation into hazing incidents was limited and mischaracterized. \"Even after being fired, we’re still here today trying to fix the process,\" said Jordon Hutchinson, one of the terminated firefighters. The fire district disciplined five firefighters following an independent investigation into alleged hazing incidents.",
-            "title_similarity": {
-              "score": 0.9599,
-              "overlap": 1.0,
-              "jaccard": 0.8889,
-              "sorted_sequence": 0.966,
-              "ordered_sequence": 0.966,
-              "shared_token_count": 8.0
-            },
-            "lead_token_overlap": 0.55,
-            "missing": []
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        }
-      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 11,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1333,6 +1069,26 @@
           "canonical_slug": "2026-08-21-abandoned-boats-fill-wildcat-cove-near-fort-pierce-creating-safety-hazards-betwe",
           "canonical_headline": "Abandoned boats fill Wildcat Cove near Fort Pierce, creating safety hazards between nature preserves",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fort Pierce police identify suspect in deadly shooting after Fourth of July - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/suspect-identified-dead-shooting-independence-day-fourth-of-july-south-14th-street-crime-shooting-shotspotter-st-lucie-county-jail-fort-pierce-police-department-florida-news",
+          "editorial_story_id": "story_004460",
+          "canonical_slug": "2026-07-07-28-year-old-man-dies-following-weekend-double-shooting-in-fort-pierce",
+          "canonical_headline": "Fort Pierce man, 28, dies after weekend shooting on South 14th Street",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fort Pierce police identify suspect in deadly shooting after Fourth of July - WPEC",
+          "source_url": "https://cbs12.com/news/local/suspect-identified-dead-shooting-independence-day-fourth-of-july-south-14th-street-crime-shooting-shotspotter-st-lucie-county-jail-fort-pierce-police-department-florida-news",
+          "editorial_story_id": "story_004460",
+          "canonical_slug": "2026-07-07-28-year-old-man-dies-following-weekend-double-shooting-in-fort-pierce",
+          "canonical_headline": "Fort Pierce man, 28, dies after weekend shooting on South 14th Street",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1421,30 +1177,23 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Fort Pierce police identify suspect in deadly shooting day after Fourth of July",
-      "generated_card_count": 1,
-      "elapsed_seconds": 43.972
+      "live_hero_headline": "Two Fort Pierce women arrested after fake movie money used at Port St. Lucie restaurant",
+      "generated_card_count": 3,
+      "elapsed_seconds": 41.654
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "generated_live",
+      "status": "cache_hit",
       "fetched_candidate_count": 27,
       "fresh_candidate_count": 19,
       "publishable_source_count": 7,
       "selected_source_count": 6,
-      "cache_hit": false,
+      "cache_hit": true,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 29.031,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 29.031,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1458,7 +1207,7 @@
       "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -1539,26 +1288,13 @@
           "canonical_headline": "Sebastian man arrested in West Virginia for Vero Beach homicide after license plate readers track multi-state flight",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "surface": "hero",
-          "headline": "Ex-boyfriend arrested in Vero Beach homicide after license plate readers track him to West Virginia",
-          "editorial_story_id": "story_002912",
-          "canonical_slug": "2026-08-20-sebastian-man-arrested-in-west-virginia-for-vero-beach-homicide-after-license-pl",
-          "canonical_headline": "Sebastian man arrested in West Virginia for Vero Beach homicide after license plate readers track multi-state flight",
-          "basis": "same_event_and_persistent_story_skip",
-          "reason": "published_skip_placement_suppressed"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
       "live_hero_headline": "Multi-million dollar crane flips on 90th Avenue in Vero Beach as residents demand road safety improvements",
-      "generated_card_count": 0,
-      "elapsed_seconds": 38.94
+      "elapsed_seconds": 7.363
     }
   ]
 }
