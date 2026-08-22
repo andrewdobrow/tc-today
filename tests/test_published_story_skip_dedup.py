@@ -221,8 +221,27 @@ def test_category_generation_report_counts_published_story_suppressions():
         "archive_recovery_requested": False,
         "published_story_duplicate_suppression_count": 2,
     }])
-    assert report["schema_version"] == 6
+    assert report["schema_version"] == 7
     assert report["summary"]["published_story_duplicate_suppression_count"] == 2
+
+
+def test_category_generation_report_counts_material_update_promotion_observability():
+    g = _load_generate()
+    report = g._build_category_generation_report([{
+        "status": "generated_live",
+        "attempt_count": 0,
+        "model_elapsed_seconds": 0,
+        "archive_recovery_requested": False,
+        "material_update_promotion_evaluation_count": 3,
+        "material_update_promotion_count": 1,
+        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_model_call_count": 2,
+    }])
+    summary = report["summary"]
+    assert summary["material_update_promotion_evaluation_count"] == 3
+    assert summary["material_update_promotion_count"] == 1
+    assert summary["material_update_promotion_cache_hit_count"] == 1
+    assert summary["material_update_promotion_model_call_count"] == 2
 
 
 def test_writer_preserves_repairable_quarantined_skip_without_minting_page(tmp_path, monkeypatch):
@@ -288,3 +307,375 @@ def test_writer_preserves_repairable_quarantined_skip_without_minting_page(tmp_p
     assert not (articles / "2026-07-29-big-taste-of-martin-county-fundraiser-set-for-october-in-stuart.html").exists()
     forward = json.loads((tmp_path / "data" / "forward-publication-identity.json").read_text(encoding="utf-8"))
     assert forward["published_skip_preservations"][0]["canonical_slug"] == g.BIG_TASTE_CANONICAL_SLUG
+
+
+def _material_update_decision(canonical_slug, novel_fact="material new development"):
+    return {
+        "status": "validated",
+        "action": "update_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": canonical_slug,
+        "same_real_world_event": True,
+        "material_new_update": True,
+        "confidence": 0.94,
+        "shared_anchors": ["same continuing local case"],
+        "novel_facts": [novel_fact],
+        "reason": "The newer source materially advances the already-published case.",
+        "validation_errors": [],
+    }
+
+
+def test_waggle_bodycam_material_update_is_adjudicated_before_skip_suppression(monkeypatch):
+    g = _load_generate()
+    g.CURRENT_RUN_EDITORIAL_IDENTITIES.clear()
+    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS.clear()
+    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
+    canonical = {
+        "slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
+        "headline": "Indian River County Sheriff's Office uses Flock cameras in search for Vero Beach murder suspect",
+        "teaser": "Deputies were searching for Matthew Waggle after Dawn Kriskewic was killed on First Street in Vero Beach.",
+        "body": " ".join(["Investigators searched for Matthew Waggle after Dawn Kriskewic was killed in Vero Beach."] * 40),
+        "category_key": "crime",
+        "date": "2026-08-20",
+        "lastmod": "2026-08-20",
+        "first_published": "Thu, 20 Aug 2026 12:00:00 -0400",
+        "source_url": "https://www.wpbf.com/article/florida-vero-beach-homicide-search-matthew-waggle/old",
+        "editorial_story_id": "story_004367",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+    }
+    incoming = {
+        "title": "Body cam video shows US Marshals arrest Indian River County murder suspect - WPBF",
+        "summary": "U.S. Marshals arrested Matthew Waggle in West Virginia and Florida authorities are working on extradition.",
+        "article_text": " ".join(["U.S. Marshals arrested Matthew Waggle in West Virginia and released body camera footage while Florida authorities prepared extradition in the Dawn Kriskewic murder case."] * 18),
+        "link": "https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988",
+        "source_url": "https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988",
+        "published": "Sat, 22 Aug 2026 03:13:00 GMT",
+        "source_quality": "full",
+        "editorial_story_id": "story_004367",
+        "_editorial_story_id": "story_004367",
+        "_editorial_route": "skip",
+        "_editorial_relationship": "same_event",
+        "_editorial_relationship_confidence": 1.0,
+    }
+    normalized = g._normalized_external_source_url(incoming["source_url"])
+    g.CURRENT_RUN_EDITORIAL_IDENTITIES[normalized] = {
+        "story_id": "story_004367",
+        "event_key": "named-person-death:dawn-kriskewic",
+        "route": "skip",
+        "relationship": "same_event",
+        "relationship_confidence": 1.0,
+        "new_facts": [],
+    }
+    calls = []
+
+    def adjudicate(*args, **kwargs):
+        calls.append(kwargs)
+        return _material_update_decision(
+            canonical["slug"], "Body camera footage documents Waggle's arrest and extradition is pending"
+        )
+
+    monkeypatch.setattr(g, "adjudicate_semantic_publication_candidates", adjudicate)
+    cache = {"schema_version": 1, "entries": {}}
+    result = g._promote_published_skip_material_updates(
+        [incoming], [canonical], "crime", cache=cache
+    )
+
+    assert len(calls) == 1
+    assert result["evaluated_count"] == 1
+    assert result["promoted_count"] == 1
+    assert incoming["_editorial_route"] == "update_existing"
+    assert incoming["_semantic_material_update"] is True
+    assert incoming["_canonical_context_slug"] == canonical["slug"]
+    kept, suppressed = g._filter_published_skip_candidates([incoming], [canonical], "crime")
+    assert kept == [incoming]
+    assert suppressed == []
+
+
+def test_palm_city_custom_canonical_can_receive_only_validated_material_update(monkeypatch):
+    g = _load_generate()
+    g.CURRENT_RUN_EDITORIAL_IDENTITIES.clear()
+    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS.clear()
+    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
+    canonical = {
+        "slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+        "headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+        "teaser": "Authorities rescued animals from a Palm City hoarding case and the owner faces criminal charges.",
+        "body": " ".join(["Martin County deputies and animal-welfare teams rescued animals from the Palm City hoarding case."] * 45),
+        "category_key": "martin",
+        "date": "2026-07-20",
+        "lastmod": "2026-07-20",
+        "first_published": "Mon, 20 Jul 2026 18:07:06 -0400",
+        "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/palm-city-home-condemned-after-woman-arrested-in-worst-animal-hoarding-case-humane-society-has-seen",
+        "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+        "is_custom": True,
+        "authoritative_custom": True,
+    }
+    incoming = {
+        "title": "Paige O'Donnell relinquishes 36 Border Collies rescued from Palm City hoarding case",
+        "summary": "O'Donnell legally surrendered the dogs, clearing the path for adoption applications beginning Sept. 1.",
+        "article_text": " ".join(["Paige O'Donnell legally surrendered 36 Border Collies from the Palm City hoarding case, clearing the legal path for adoption applications beginning Sept. 1 after medical evaluations."] * 18),
+        "link": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
+        "source_url": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
+        "published": "Fri, 21 Aug 2026 15:50:55 GMT",
+        "source_quality": "full",
+        "editorial_story_id": canonical["editorial_story_id"],
+        "_editorial_story_id": canonical["editorial_story_id"],
+        "_editorial_route": "skip",
+        "_editorial_relationship": "same_event",
+        "_editorial_relationship_confidence": 1.0,
+    }
+    normalized = g._normalized_external_source_url(incoming["source_url"])
+    g.CURRENT_RUN_EDITORIAL_IDENTITIES[normalized] = {
+        "story_id": canonical["editorial_story_id"],
+        "event_key": "animal-rescue-palm-city-cats",
+        "route": "skip",
+        "relationship": "same_event",
+        "relationship_confidence": 1.0,
+        "new_facts": [],
+    }
+    monkeypatch.setattr(
+        g,
+        "adjudicate_semantic_publication_candidates",
+        lambda *args, **kwargs: _material_update_decision(
+            canonical["slug"],
+            "O'Donnell legally surrendered 36 Border Collies and adoption applications open Sept. 1",
+        ),
+    )
+    result = g._promote_published_skip_material_updates(
+        [incoming], [canonical], "martin", cache={"schema_version": 1, "entries": {}}
+    )
+    assert result["promoted_count"] == 1
+    assert incoming["canonical_slug"] == canonical["slug"]
+    assert g._authorized_custom_material_update(incoming, canonical) is True
+
+    target, basis = g._find_forward_publication_target(
+        incoming, [canonical], canonical["editorial_story_id"]
+    )
+    assert target is canonical
+    valid, reason = g._forward_publication_target_valid(
+        incoming,
+        target,
+        canonical["editorial_story_id"],
+        basis,
+        now=datetime(2026, 8, 22, tzinfo=timezone.utc),
+    )
+    assert valid is True
+    assert reason == "pre_generation_material_update_authorized"
+
+
+def test_newer_same_story_semantic_duplicate_remains_suppressed(monkeypatch):
+    g = _load_generate()
+    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
+    canonical = _canonical()
+    canonical["lastmod"] = "2026-07-23"
+    incoming = _incoming()
+    incoming.update({
+        "published": "Wed, 29 Jul 2026 12:00:00 GMT",
+        "source_quality": "full",
+        "summary": " ".join(["The same fundraiser details remain unchanged."] * 40),
+        "article_text": " ".join(["The same fundraiser details remain unchanged at Atlantic Aviation in Stuart on Oct. 6."] * 25),
+    })
+    monkeypatch.setattr(
+        g,
+        "adjudicate_semantic_publication_candidates",
+        lambda *args, **kwargs: {
+            "status": "validated",
+            "action": "duplicate_use_existing_canonical",
+            "recommended_action": "duplicate_use_existing_canonical",
+            "selected_candidate_slug": canonical["slug"],
+            "same_real_world_event": True,
+            "material_new_update": False,
+            "confidence": 0.96,
+            "shared_anchors": ["same Oct. 6 fundraiser"],
+            "novel_facts": [],
+            "reason": "No material development.",
+            "validation_errors": [],
+        },
+    )
+    result = g._promote_published_skip_material_updates(
+        [incoming], [canonical], "things_to_do", cache={"schema_version": 1, "entries": {}}
+    )
+    assert result["evaluated_count"] == 1
+    assert result["promoted_count"] == 0
+    assert incoming["_editorial_route"] == "skip"
+    kept, suppressed = g._filter_published_skip_candidates(
+        [incoming], [canonical], "things_to_do"
+    )
+    assert kept == []
+    assert len(suppressed) == 1
+
+
+def test_not_newer_published_skip_never_spends_materiality_model_call(monkeypatch):
+    g = _load_generate()
+    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
+    canonical = _canonical()
+    canonical["lastmod"] = "2026-07-29"
+    incoming = _incoming()
+    incoming.update({
+        "published": "Tue, 28 Jul 2026 12:00:00 GMT",
+        "source_quality": "full",
+        "summary": " ".join(["Fundraiser details."] * 80),
+        "article_text": " ".join(["Fundraiser details remain the same."] * 80),
+    })
+    monkeypatch.setattr(
+        g,
+        "adjudicate_semantic_publication_candidates",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("model must not be called")),
+    )
+    result = g._promote_published_skip_material_updates(
+        [incoming], [canonical], "things_to_do", cache={"schema_version": 1, "entries": {}}
+    )
+    assert result["evaluated_count"] == 0
+    assert result["model_call_count"] == 0
+    assert result["promoted_count"] == 0
+
+
+def test_authorized_custom_material_update_rewrites_one_canonical_without_duplicate(tmp_path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(g, "OUTPUT_DIR", tmp_path)
+    monkeypatch.setattr(g, "SEMANTIC_GATE_CACHE_PATH", tmp_path / "data" / "semantic-publication-gate-cache.json")
+    monkeypatch.setattr(g, "SEMANTIC_GATE_REPORT_PATH", tmp_path / "data" / "semantic-publication-gate.json")
+    monkeypatch.setattr(g, "EDITORIAL_REGISTRY_PATH", tmp_path / "data" / "editorial_story_registry.json")
+    g.CURRENT_RUN_EDITORIAL_IDENTITIES.clear()
+    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS.clear()
+    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
+
+    canonical = {
+        "slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+        "headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+        "teaser": "Authorities rescued animals from a Palm City hoarding case.",
+        "body": " ".join(["Martin County deputies rescued animals from the Palm City hoarding case."] * 45),
+        "category_key": "martin",
+        "category_label": "Martin County",
+        "category_keys": ["martin", "crime"],
+        "county_keys": ["martin"],
+        "date": "2026-07-20",
+        "lastmod": "2026-07-20",
+        "first_published": "Mon, 20 Jul 2026 18:07:06 -0400",
+        "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/palm-city-home-condemned-after-woman-arrested-in-worst-animal-hoarding-case-humane-society-has-seen",
+        "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+        "is_custom": True,
+        "authoritative_custom": True,
+        "publication_id": "publication:custom-hoarding",
+        "canonical_publication_id": "publication:custom-hoarding",
+        "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+        "article_word_count": 300,
+        "article_paragraph_count": 4,
+    }
+    (tmp_path / "archive.json").write_text(json.dumps([canonical]), encoding="utf-8")
+    (tmp_path / "custom_articles.json").write_text("[]", encoding="utf-8")
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    canonical_page = articles / f"{canonical['slug']}.html"
+    canonical_page.write_text("ORIGINAL CUSTOM PAGE", encoding="utf-8")
+
+    source = {
+        "title": "Paige O'Donnell relinquishes 36 Border Collies rescued from Palm City hoarding case",
+        "summary": "O'Donnell surrendered the dogs, clearing the path for adoption applications beginning Sept. 1.",
+        "article_text": " ".join(["Paige O'Donnell legally surrendered 36 Border Collies from the Palm City hoarding case, clearing the path for adoption applications beginning Sept. 1 after medical evaluations."] * 18),
+        "link": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
+        "source_url": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
+        "published": "Fri, 21 Aug 2026 15:50:55 GMT",
+        "source_quality": "full",
+        "editorial_story_id": canonical["editorial_story_id"],
+        "_editorial_story_id": canonical["editorial_story_id"],
+        "_editorial_route": "skip",
+        "_editorial_relationship": "same_event",
+        "_editorial_relationship_confidence": 1.0,
+    }
+    normalized = g._normalized_external_source_url(source["source_url"])
+    g.CURRENT_RUN_EDITORIAL_IDENTITIES[normalized] = {
+        "story_id": canonical["editorial_story_id"],
+        "event_key": "animal-rescue-palm-city-cats",
+        "route": "skip",
+        "relationship": "same_event",
+        "relationship_confidence": 1.0,
+        "new_facts": [],
+    }
+    monkeypatch.setattr(
+        g,
+        "adjudicate_semantic_publication_candidates",
+        lambda *args, **kwargs: _material_update_decision(
+            canonical["slug"], "Legal surrender clears adoption path beginning Sept. 1"
+        ),
+    )
+    promoted = g._promote_published_skip_material_updates(
+        [source], [canonical], "martin", cache={"schema_version": 1, "entries": {}}
+    )
+    assert promoted["promoted_count"] == 1
+
+    generated = {
+        "headline": "Palm City hoarding case updated: 36 Border Collies surrendered, adoptions open Sept. 1",
+        "teaser": "The owner has legally surrendered the 36 Border Collies rescued from the Palm City hoarding case, clearing the way for adoption applications Sept. 1.",
+        "body": (
+            "The owner in the Palm City animal-hoarding case has legally surrendered the 36 Border Collies rescued from the home, a new development that clears the way for adoption applications beginning Sept. 1. The dogs were rescued earlier in the same Martin County case and remain under medical evaluation.\n\n"
+            + " ".join(["Shelter staff will complete medical care, vaccinations, microchipping and adoption vetting before placement."] * 45)
+        ),
+        "source_index": 1,
+        "source_url": source["source_url"],
+        "published": source["published"],
+        "urgency_score": 7,
+        "image_url": "/images/martin.png",
+        "enriched": True,
+    }
+    data = {"category_key": "martin", "category_label": "Martin County", "hero": generated, "cards": []}
+    assert g._stamp_current_run_story_ids(data, [source]) == 1
+    hero = data["hero"]
+    assert g._authorized_custom_material_update(hero, canonical) is True
+
+    identity_index = types.SimpleNamespace(
+        safe_story_ids={canonical["editorial_story_id"]},
+        all_story_ids={canonical["editorial_story_id"]},
+    )
+    monkeypatch.setattr(g, "load_custom_articles", lambda: [])
+    monkeypatch.setattr(g, "_sanitize_authoritative_custom_archive", lambda rows, *_: list(rows))
+    monkeypatch.setattr(g, "_purge_nonstory_archive_entries", lambda rows, *_: (list(rows), {}))
+    monkeypatch.setattr(g, "apply_canonical_story_cleanup", lambda rows, *_: (list(rows), []))
+    monkeypatch.setattr(g, "_repair_archive_article_lead_framing", lambda rows, *_: (list(rows), {}))
+    monkeypatch.setattr(g, "_repair_archive_claim_drifted_permalinks", lambda rows, *_: (list(rows), [], {}))
+    monkeypatch.setattr(g, "_load_publication_identity_index", lambda: identity_index)
+    monkeypatch.setattr(g, "_backfill_archive_editorial_story_ids", lambda rows, *_args, **_kwargs: (list(rows), {}))
+    monkeypatch.setattr(g, "_reconcile_archive_publication_identity", lambda rows, *_: (list(rows), [], {}))
+    monkeypatch.setattr(g, "enforce_canonical_redirects", lambda rows, *_args, **_kwargs: (list(rows), {}))
+    monkeypatch.setattr(g, "_backfill_archive_category_memberships", lambda rows, *_: (list(rows), {}))
+    monkeypatch.setattr(g, "_publishable_article", lambda *_args, **_kwargs: True)
+    monkeypatch.setattr(g, "render_article_page", lambda item, *_args, **_kwargs: f"UPDATED::{item['headline']}::{item['body'][:80]}")
+    monkeypatch.setattr(g, "write_story_regression_report", lambda *_args, **_kwargs: {"production_gate_passed": True})
+    monkeypatch.setattr(g, "write_story_health_report", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(g, "render_archive_page", lambda *_args, **_kwargs: "archive")
+    monkeypatch.setattr(g, "update_sitemap", lambda *_args, **_kwargs: "sitemap")
+    monkeypatch.setattr(g, "update_news_sitemap", lambda *_args, **_kwargs: "news-sitemap")
+
+    g.write_archives([data], data)
+
+    assert data["hero"]["_archived_slug"] == canonical["slug"]
+    assert data["hero"]["canonical_slug"] == canonical["slug"]
+    assert data["hero"]["link"] == f"{g.SITE_URL}/articles/{canonical['slug']}.html"
+    assert data["hero"].get("_publication_skip_reason") in (None, "")
+
+    saved = json.loads((tmp_path / "archive.json").read_text(encoding="utf-8"))
+    assert len(saved) == 1
+    updated = saved[0]
+    assert updated["slug"] == canonical["slug"]
+    assert updated["is_custom"] is True
+    assert updated["authoritative_custom"] is True
+    assert updated["headline"] == generated["headline"]
+    assert updated["meaningful_update_validated"] is True
+    assert updated["meaningful_update_basis"] == "semantic_material_update_gate"
+    assert any(
+        row.get("role") == "material_update" and row.get("source_url") == normalized
+        for row in updated.get("source_history", [])
+    )
+    assert canonical_page.read_text(encoding="utf-8").startswith("UPDATED::")
+    assert len(list(articles.glob("*.html"))) == 1
+    semantic_report = json.loads(g.SEMANTIC_GATE_REPORT_PATH.read_text(encoding="utf-8"))
+    assert semantic_report["schema_version"] == 4
+    assert semantic_report["summary"]["pre_generation_materiality_evaluations"] == 1
+    assert semantic_report["summary"]["pre_generation_materiality_promotions"] == 1
+    assert semantic_report["summary"]["pre_generation_materiality_model_calls"] == 1
+    assert semantic_report["summary"]["pre_generation_materiality_duplicates"] == 0

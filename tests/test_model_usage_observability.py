@@ -142,3 +142,18 @@ def test_sonnet_5_current_standard_pricing_is_recorded(tmp_path):
     assert pricing["usd_per_million_tokens"]["base_input"] == 2.0
     assert pricing["usd_per_million_tokens"]["output"] == 10.0
     assert "permanent" in pricing["scope"]
+
+
+def test_known_canonical_materiality_gate_has_dedicated_workload_class(tmp_path):
+    tracker = ModelUsageTracker(tmp_path / "model-usage-report.json")
+    fake = FakeClient(FakeMessages(_response(base=25, output=5, cache_write=0, cache_read=0)))
+    client = instrument_anthropic_client(fake, tracker)
+
+    def _run_known_canonical_materiality_gate():
+        return client.messages.create(model="claude-sonnet-4-5", max_tokens=50)
+
+    _run_known_canonical_materiality_gate()
+    report = tracker.build_report()
+    assert report["by_workload_class"]["material_update_decision"]["requests"] == 1
+    assert report["calls"][0]["workload_class"] == "material_update_decision"
+    assert report["calls"][0]["callsite"]["function"] == "_run_known_canonical_materiality_gate"

@@ -598,6 +598,8 @@ CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS = []
 CROSS_SOURCE_IDENTITY_OBSERVATIONS = []
 CURRENT_RUN_QUARANTINED_STORY_IDS = set()
 CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS = set()
+CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS = []
+CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
 CROSS_SOURCE_UPDATE_IDENTITY_SCHEMA_VERSION = 2
 CUSTOM_RETIREMENTS_PATH = OUTPUT_DIR / "data" / "custom-retirements.json"
 DEFAULT_AFFILIATE_DISCLOSURE = (
@@ -635,7 +637,7 @@ CATEGORY_GENERATION_BUDGET_SECONDS = _positive_float_env(
 )
 CATEGORY_GENERATION_MAX_ATTEMPTS = 2
 CATEGORY_GENERATION_MIN_RETRY_SECONDS = 15
-CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 6
+CATEGORY_GENERATION_REPORT_SCHEMA_VERSION = 7
 CATEGORY_ELIGIBILITY_REPORT_SCHEMA_VERSION = 1
 CATEGORY_ELIGIBILITY_CONTRACT_VERSION = "1.0-local-government-central-action"
 BUSINESS_ELIGIBILITY_CONTRACT_VERSION = "1.0-business-development-primary-focus"
@@ -1199,7 +1201,11 @@ SEMANTIC_GATE_MIN_CONFIDENCE = min(
 SEMANTIC_GATE_CACHE_PATH = OUTPUT_DIR / "data" / "semantic-publication-gate-cache.json"
 SEMANTIC_GATE_REPORT_PATH = OUTPUT_DIR / "data" / "semantic-publication-gate.json"
 SEMANTIC_GATE_CACHE_SCHEMA_VERSION = 1
-SEMANTIC_GATE_REPORT_SCHEMA_VERSION = 3
+SEMANTIC_GATE_REPORT_SCHEMA_VERSION = 4
+PREGEN_MATERIAL_UPDATE_VERSION = "1.0-known-canonical-before-suppression"
+PREGEN_MATERIAL_UPDATE_MAX_MODEL_CALLS = _positive_int_env(
+    "TCT_PREGEN_MATERIAL_UPDATE_MAX_MODEL_CALLS", 12
+)
 
 # Content bank — loaded once at startup, used for card enrichment
 CONTENT_BANK_FEEDS = [
@@ -7873,6 +7879,10 @@ def _build_category_generation_report(records):
     category_eligibility_rejection_count = 0
     published_story_duplicate_suppression_count = 0
     story_aware_update_context_count = 0
+    material_update_promotion_evaluation_count = 0
+    material_update_promotion_count = 0
+    material_update_promotion_cache_hit_count = 0
+    material_update_promotion_model_call_count = 0
     for record in records:
         status_counts[str(record.get("status") or "unknown")] += 1
         failure_code = str(record.get("failure_code") or "")
@@ -7909,6 +7919,18 @@ def _build_category_generation_report(records):
         story_aware_update_context_count += int(
             record.get("story_aware_update_context_count") or 0
         )
+        material_update_promotion_evaluation_count += int(
+            record.get("material_update_promotion_evaluation_count") or 0
+        )
+        material_update_promotion_count += int(
+            record.get("material_update_promotion_count") or 0
+        )
+        material_update_promotion_cache_hit_count += int(
+            record.get("material_update_promotion_cache_hit_count") or 0
+        )
+        material_update_promotion_model_call_count += int(
+            record.get("material_update_promotion_model_call_count") or 0
+        )
 
     return {
         "schema_version": CATEGORY_GENERATION_REPORT_SCHEMA_VERSION,
@@ -7937,6 +7959,10 @@ def _build_category_generation_report(records):
             "category_eligibility_rejection_count": category_eligibility_rejection_count,
             "published_story_duplicate_suppression_count": published_story_duplicate_suppression_count,
             "story_aware_update_context_count": story_aware_update_context_count,
+            "material_update_promotion_evaluation_count": material_update_promotion_evaluation_count,
+            "material_update_promotion_count": material_update_promotion_count,
+            "material_update_promotion_cache_hit_count": material_update_promotion_cache_hit_count,
+            "material_update_promotion_model_call_count": material_update_promotion_model_call_count,
         },
         "categories": records,
     }
@@ -21684,7 +21710,16 @@ def _new_semantic_publication_gate_report():
                 "canonical_url_policy": "preserve_original_permalink",
             },
             "failure_behavior": "hold_new_permalink_when_suspicious_candidate_exists",
-            "custom_articles": "excluded_authoritative_custom_contract_retained",
+            "custom_articles": (
+                "authoritative custom canonicals remain canonical; only a target-bound, "
+                "validated same-story material update may refresh them in place"
+            ),
+            "pre_generation_material_update_promotion": {
+                "version": PREGEN_MATERIAL_UPDATE_VERSION,
+                "max_model_calls_per_run": PREGEN_MATERIAL_UPDATE_MAX_MODEL_CALLS,
+                "eligibility": "newer source-backed published-skip candidates only",
+                "failure_behavior": "preserve existing canonical; never mint duplicate URL",
+            },
         },
         "summary": {
             "evaluations": 0,
@@ -21706,7 +21741,14 @@ def _new_semantic_publication_gate_report():
             "material_update_redirects": 0,
             "material_update_holds": 0,
             "material_update_replays_suppressed": 0,
+            "pre_generation_materiality_evaluations": 0,
+            "pre_generation_materiality_promotions": 0,
+            "pre_generation_materiality_duplicates": 0,
+            "pre_generation_materiality_holds": 0,
+            "pre_generation_materiality_model_calls": 0,
+            "pre_generation_materiality_cache_hits": 0,
         },
+        "pre_generation_materiality_decisions": [],
         "decisions": [],
         "archive_repairs": [],
         "material_update_compositions": [],
@@ -26189,6 +26231,12 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
     ledger_authorized = bool(
         ledger_basis and _canonical_write_authorized(item, entry)
     )
+    pre_generation_material_update_authorized = bool(
+        item.get("_pre_generation_material_update_promotion")
+        and _canonical_write_authorized(item, entry)
+        and str(item.get("_pre_generation_material_update_canonical_slug") or "")
+        == str(entry.get("slug") or "")
+    )
     route = str(item.get("_editorial_route") or item.get("editorial_route") or "").strip().lower()
     if (
         route == "skip"
@@ -26229,6 +26277,8 @@ def _forward_publication_target_valid(item, entry, story_id, basis, now=None):
     # headline of the same source article.
     if same_exact_source:
         return True, "exact_source_url"
+    if pre_generation_material_update_authorized:
+        return True, "pre_generation_material_update_authorized"
 
     claim_drift = _publication_slug_claim_diagnostics(item, entry)
     if claim_drift.get("rebind_required"):
@@ -26522,6 +26572,30 @@ def write_archives(all_categories, top_cat):
         _load_previous_semantic_publication_gate_report()
     )
     _semantic_gate_report = _new_semantic_publication_gate_report()
+    _semantic_gate_report["pre_generation_materiality_decisions"] = copy.deepcopy(
+        CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS
+    )
+    _pregen_rows = _semantic_gate_report["pre_generation_materiality_decisions"]
+    _semantic_gate_report["summary"]["pre_generation_materiality_evaluations"] = len(
+        _pregen_rows
+    )
+    _semantic_gate_report["summary"]["pre_generation_materiality_promotions"] = sum(
+        1 for row in _pregen_rows if row.get("promoted")
+    )
+    _semantic_gate_report["summary"]["pre_generation_materiality_duplicates"] = sum(
+        1 for row in _pregen_rows
+        if row.get("semantic_action") == SEMANTIC_ACTION_DUPLICATE
+    )
+    _semantic_gate_report["summary"]["pre_generation_materiality_holds"] = sum(
+        1 for row in _pregen_rows
+        if row.get("semantic_action") == SEMANTIC_ACTION_HOLD
+    )
+    _semantic_gate_report["summary"]["pre_generation_materiality_model_calls"] = sum(
+        1 for row in _pregen_rows if row.get("model_call")
+    )
+    _semantic_gate_report["summary"]["pre_generation_materiality_cache_hits"] = sum(
+        1 for row in _pregen_rows if row.get("cache_hit")
+    )
 
     # Canonical cleanup is handled below. Never unlink an already-published
     # duplicate URL: it is retained as a redirect destination so readers and search
@@ -27039,10 +27113,19 @@ def write_archives(all_categories, top_cat):
         # permalink is a pure duplicate. Clearing `existing` alone was not enough — it
         # let the feed story fall through and create a NEW article, which is exactly the
         # duplicate permalink this guard is meant to prevent. So we skip it entirely.
-        if existing and existing.get("is_custom") and not hero.get("is_custom"):
-            print(f"  PROTECTED: dropping feed story '{headline[:45]}' — already covered "
-                  f"by custom article '{existing.get('headline','')[:45]}'")
-            continue
+        if existing and (existing.get("is_custom") or existing.get("authoritative_custom")) and not (hero.get("is_custom") or hero.get("authoritative_custom")):
+            _custom_material_update_authorized = _authorized_custom_material_update(
+                hero, existing
+            )
+            if not _custom_material_update_authorized:
+                print(f"  PROTECTED: dropping feed story '{headline[:45]}' — already covered "
+                      f"by custom article '{existing.get('headline','')[:45]}'")
+                continue
+            hero["_authoritative_custom_material_update"] = True
+            print(
+                "  AUTHORIZED CUSTOM MATERIAL UPDATE: preserving custom canonical URL "
+                f"'{existing.get('slug','')}' while applying verified new development"
+            )
 
         # Skip cross-category duplicates within the same run
         if not existing and _is_duplicate_headline(headline, this_run_token_sets):
@@ -28690,6 +28773,9 @@ def _clear_quarantined_identity_fields(entry):
         "_canonical_context_headline", "_canonical_context_body",
         "_canonical_context_first_published", "_canonical_context_basis",
         "_story_aware_update_context", "_publication_route_repaired",
+        "_semantic_material_update", "_semantic_material_update_decision",
+        "_pre_generation_material_update_promotion",
+        "_pre_generation_material_update_canonical_slug",
         "canonical_slug", "canonical_publication_id",
     ):
         entry.pop(key, None)
@@ -28836,6 +28922,343 @@ def _published_skip_canonical(item, archive):
     return canonical, basis
 
 
+
+def _material_update_reference_datetime(item, *, canonical=False):
+    """Return the best available timestamp for material-update ordering."""
+    if not isinstance(item, dict):
+        return None
+    keys = (
+        (
+            "last_meaningful_update_at", "updated_at", "lastmod",
+            "first_published", "date",
+        )
+        if canonical
+        else (
+            "source_published", "published_raw", "published",
+            "first_published", "date",
+        )
+    )
+    parsed = []
+    for key in keys:
+        value = _parse_any_datetime(item.get(key))
+        if value is not None:
+            parsed.append(value.astimezone(timezone.utc))
+    return max(parsed) if parsed else None
+
+
+def _material_update_source_already_absorbed(item, canonical):
+    incoming_url = _normalized_external_source_url(
+        (item or {}).get("source_url")
+        or (item or {}).get("_source_url")
+        or (item or {}).get("link")
+    )
+    if not incoming_url:
+        return False
+    for row in (canonical or {}).get("source_history") or ():
+        if not isinstance(row, dict) or row.get("role") != "material_update":
+            continue
+        if _normalized_external_source_url(row.get("source_url")) == incoming_url:
+            return True
+    return False
+
+
+def _published_skip_material_update_candidate(item, canonical):
+    """Bound semantic materiality checks to genuinely newer, source-backed rows."""
+    if not isinstance(item, dict) or not isinstance(canonical, dict):
+        return False, "missing_item_or_canonical"
+    if not _source_candidate_publishable(item):
+        return False, "insufficient_source_depth"
+    if _material_update_source_already_absorbed(item, canonical):
+        return False, "material_update_source_already_absorbed"
+
+    incoming_dt = _material_update_reference_datetime(item, canonical=False)
+    canonical_dt = _material_update_reference_datetime(canonical, canonical=True)
+    if incoming_dt is None:
+        return False, "incoming_publication_time_unknown"
+    if canonical_dt is not None and incoming_dt <= canonical_dt:
+        return False, "incoming_not_newer_than_canonical"
+    return True, "newer_source_requires_materiality_decision"
+
+
+def _run_known_canonical_materiality_gate(item, canonical, cache, *, basis=""):
+    """Decide materiality before a proven same-story source is suppressed.
+
+    Identity has already been established by ``_published_skip_canonical``.  This
+    call therefore does not search the archive and cannot mint a new-story decision.
+    It asks the existing semantic publication adjudicator only whether the newer
+    source materially advances the known canonical.  Ambiguity fails closed.
+    """
+    global CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS
+
+    incoming_payload = _semantic_gate_article_payload(item, include_archive_body=False)
+    canonical_payload = _semantic_gate_article_payload(
+        canonical, include_archive_body=True
+    )
+    canonical_slug = str(canonical.get("slug") or "").strip()
+    candidate = {
+        "slug": canonical_slug,
+        "article": canonical_payload,
+        "evidence": {
+            "pre_generation_known_canonical": True,
+            "identity_basis": str(basis or "published_skip_canonical"),
+            "persistent_story_id_match": bool(
+                str(item.get("editorial_story_id") or item.get("_editorial_story_id") or "")
+                and str(item.get("editorial_story_id") or item.get("_editorial_story_id") or "")
+                == str(canonical.get("editorial_story_id") or "")
+            ),
+        },
+    }
+    candidates = [candidate]
+    cache_key = (
+        semantic_publication_decision_cache_key(
+            incoming_payload, candidates, model=MODEL_SELECTION
+        )
+        if semantic_publication_decision_cache_key is not None
+        else ""
+    )
+    cached_decision = dict(
+        ((cache or {}).get("entries", {}).get(cache_key, {}) or {}).get("decision")
+        or {}
+    )
+    if cache_key and _semantic_gate_cached_decision_valid(cached_decision, candidates):
+        return copy.deepcopy(cached_decision), candidates, True, False
+
+    if CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS >= PREGEN_MATERIAL_UPDATE_MAX_MODEL_CALLS:
+        return {
+            "status": "pre_generation_materiality_budget_exhausted",
+            "action": SEMANTIC_ACTION_HOLD,
+            "recommended_action": SEMANTIC_ACTION_HOLD,
+            "selected_candidate_slug": "",
+            "same_real_world_event": True,
+            "material_new_update": False,
+            "confidence": 0.0,
+            "shared_anchors": [],
+            "novel_facts": [],
+            "reason": "Pre-generation material-update model-call budget exhausted; preserve existing canonical.",
+            "validation_errors": ["pre_generation_materiality_budget_exhausted"],
+        }, candidates, False, False
+
+    CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS += 1
+    if adjudicate_semantic_publication_candidates is None:
+        decision = {
+            "status": "gate_adjudicator_unavailable",
+            "action": SEMANTIC_ACTION_HOLD,
+            "recommended_action": SEMANTIC_ACTION_HOLD,
+            "selected_candidate_slug": "",
+            "same_real_world_event": True,
+            "material_new_update": False,
+            "confidence": 0.0,
+            "shared_anchors": [],
+            "novel_facts": [],
+            "reason": "Semantic materiality adjudicator unavailable; preserve existing canonical.",
+            "validation_errors": ["gate_adjudicator_unavailable"],
+        }
+    else:
+        decision = adjudicate_semantic_publication_candidates(
+            client,
+            model=MODEL_SELECTION,
+            incoming=incoming_payload,
+            candidates=candidates,
+            timeout_seconds=SEMANTIC_GATE_TIMEOUT_SECONDS,
+            min_confidence=SEMANTIC_GATE_MIN_CONFIDENCE,
+        )
+
+    # This path begins with deterministic same-story identity. A contradictory
+    # ``new_story`` answer never authorizes a second URL; it is a fail-closed hold.
+    if str(decision.get("action") or "") == SEMANTIC_ACTION_NEW:
+        decision = {
+            **decision,
+            "status": "known_canonical_identity_conflict",
+            "action": SEMANTIC_ACTION_HOLD,
+            "recommended_action": SEMANTIC_ACTION_HOLD,
+            "reason": (
+                "Model contradicted the already-proven canonical identity; "
+                "preserve existing canonical and retry on a later run."
+            ),
+            "validation_errors": list(decision.get("validation_errors") or [])
+            + ["known_canonical_identity_conflict"],
+        }
+
+    if cache_key and str(decision.get("status") or "") == "validated":
+        cache.setdefault("entries", {})[cache_key] = {
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+            "decision": copy.deepcopy(decision),
+        }
+    return decision, candidates, False, True
+
+
+def _promote_published_skip_material_updates(
+    headlines, archive, category_key="", *, cache=None
+):
+    """Give newer same-story sources a material-update decision before suppression."""
+    decisions = []
+    promoted = 0
+    cache_hits = 0
+    model_calls = 0
+
+    for item in list(headlines or []):
+        canonical, basis = _published_skip_canonical(item, archive)
+        if canonical is None:
+            continue
+        should_check, eligibility_reason = _published_skip_material_update_candidate(
+            item, canonical
+        )
+        row = {
+            "category_key": category_key,
+            "source_headline": str(item.get("title") or item.get("headline") or ""),
+            "source_url": _normalized_external_source_url(
+                item.get("source_url") or item.get("link")
+            ),
+            "canonical_slug": str(canonical.get("slug") or ""),
+            "canonical_headline": str(canonical.get("headline") or ""),
+            "canonical_is_custom": bool(
+                canonical.get("is_custom") or canonical.get("authoritative_custom")
+            ),
+            "identity_basis": basis,
+            "eligibility_reason": eligibility_reason,
+            "evaluated": False,
+            "promoted": False,
+            "cache_hit": False,
+            "model_call": False,
+            "action": "preserve_existing_canonical",
+        }
+        if not should_check:
+            decisions.append(row)
+            continue
+
+        decision, candidates, cache_hit, model_call = (
+            _run_known_canonical_materiality_gate(
+                item, canonical, cache if cache is not None else {}, basis=basis
+            )
+        )
+        row.update({
+            "evaluated": True,
+            "cache_hit": bool(cache_hit),
+            "model_call": bool(model_call),
+            "semantic_status": str(decision.get("status") or ""),
+            "semantic_action": str(decision.get("action") or ""),
+            "confidence": float(decision.get("confidence") or 0.0),
+            "shared_anchors": list(decision.get("shared_anchors") or [])[:20],
+            "novel_facts": list(decision.get("novel_facts") or [])[:20],
+            "reason": str(decision.get("reason") or ""),
+            "validation_errors": list(decision.get("validation_errors") or []),
+        })
+        cache_hits += int(bool(cache_hit))
+        model_calls += int(bool(model_call))
+
+        valid_update = bool(
+            str(decision.get("status") or "") == "validated"
+            and str(decision.get("action") or "") == SEMANTIC_ACTION_UPDATE
+            and decision.get("same_real_world_event") is True
+            and decision.get("material_new_update") is True
+            and str(decision.get("selected_candidate_slug") or "")
+            == str(canonical.get("slug") or "")
+        )
+        if valid_update:
+            story_id = str(canonical.get("editorial_story_id") or "").strip()
+            evidence = {
+                "outcome": IDENTITY_OUTCOME_VERIFIED,
+                "identity_outcome": IDENTITY_OUTCOME_VERIFIED,
+                "evidence_tier": "known_canonical_plus_semantic_materiality",
+                "write_authorized": True,
+                "proof_type": "published_skip_canonical_plus_semantic_materiality",
+                "reason": str(decision.get("reason") or "material update"),
+                "reason_codes": [
+                    "published_skip_canonical_identity",
+                    "semantic_material_update_validated",
+                    "target_bound_authorization",
+                ],
+                "shared_anchors": list(decision.get("shared_anchors") or []),
+                "novel_facts": list(decision.get("novel_facts") or []),
+            }
+            authorization = _stamp_canonical_write_authorization(
+                item,
+                canonical,
+                evidence,
+                basis="pre_generation_material_update_promotion",
+            )
+            if authorization:
+                if story_id:
+                    item["editorial_story_id"] = story_id
+                    item["_editorial_story_id"] = story_id
+                item["_editorial_route"] = "update_existing"
+                item["editorial_route"] = "update_existing"
+                item["story_form"] = "update"
+                item["_editorial_relationship"] = IDENTITY_OUTCOME_VERIFIED
+                item["_editorial_relationship_confidence"] = float(
+                    decision.get("confidence") or 0.0
+                )
+                item["_editorial_new_facts"] = list(
+                    decision.get("novel_facts") or []
+                )
+                item["_semantic_material_update"] = True
+                item["_semantic_material_update_decision"] = copy.deepcopy(decision)
+                item["_pre_generation_material_update_promotion"] = True
+                item["_pre_generation_material_update_canonical_slug"] = str(
+                    canonical.get("slug") or ""
+                )
+                item["canonical_slug"] = str(canonical.get("slug") or "")
+                item["canonical_publication_id"] = _stable_publication_id(
+                    canonical.get("slug", "")
+                )
+                _attach_canonical_update_context(item, canonical, basis)
+
+                source_key = _normalized_external_source_url(
+                    item.get("source_url") or item.get("link")
+                )
+                identity = CURRENT_RUN_EDITORIAL_IDENTITIES.get(source_key, {})
+                if isinstance(identity, dict) and not identity.get("ambiguous"):
+                    identity.update({
+                        "story_id": story_id or identity.get("story_id", ""),
+                        "route": "update_existing",
+                        "relationship": IDENTITY_OUTCOME_VERIFIED,
+                        "relationship_confidence": float(
+                            decision.get("confidence") or 0.0
+                        ),
+                        "new_facts": list(decision.get("novel_facts") or []),
+                        "semantic_material_update": True,
+                        "semantic_material_update_decision": copy.deepcopy(decision),
+                        "pre_generation_material_update_promotion": True,
+                        "pre_generation_material_update_canonical_slug": str(
+                            canonical.get("slug") or ""
+                        ),
+                        "canonical_write_authorization": copy.deepcopy(authorization),
+                        "canonical_context_slug": str(item.get("_canonical_context_slug") or ""),
+                        "canonical_context_headline": str(item.get("_canonical_context_headline") or ""),
+                        "canonical_context_body": str(item.get("_canonical_context_body") or ""),
+                        "canonical_context_first_published": str(item.get("_canonical_context_first_published") or ""),
+                        "canonical_context_basis": str(item.get("_canonical_context_basis") or basis),
+                    })
+                row["promoted"] = True
+                row["action"] = "update_existing_canonical"
+                promoted += 1
+
+        decisions.append(row)
+        CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS.append(copy.deepcopy(row))
+
+    return {
+        "evaluated_count": sum(1 for row in decisions if row.get("evaluated")),
+        "promoted_count": promoted,
+        "cache_hit_count": cache_hits,
+        "model_call_count": model_calls,
+        "decisions": decisions,
+    }
+
+
+def _authorized_custom_material_update(item, canonical):
+    """Permit only a target-bound validated material update to modify a custom canonical."""
+    return bool(
+        isinstance(item, dict)
+        and isinstance(canonical, dict)
+        and (canonical.get("is_custom") or canonical.get("authoritative_custom"))
+        and not (item.get("is_custom") or item.get("authoritative_custom"))
+        and item.get("_pre_generation_material_update_promotion")
+        and item.get("_semantic_material_update")
+        and _canonical_write_authorized(item, canonical)
+        and str(item.get("_pre_generation_material_update_canonical_slug") or "")
+        == str(canonical.get("slug") or "")
+    )
+
 def _filter_published_skip_candidates(headlines, archive, category_key=""):
     """Remove already-published no-change sources before Claude sees them."""
     kept, suppressed = [], []
@@ -28961,6 +29384,46 @@ def _stamp_current_run_story_ids(data, headlines):
         item["source_url"] = normalized or str(source_url or "")
         if isinstance(source, dict) and source.get("title"):
             item["source_headline"] = source.get("title")
+        if identity.get("pre_generation_material_update_promotion") or (
+            isinstance(source, dict) and source.get("_pre_generation_material_update_promotion")
+        ):
+            item["_semantic_material_update"] = True
+            item["_pre_generation_material_update_promotion"] = True
+            item["_semantic_material_update_decision"] = copy.deepcopy(
+                identity.get("semantic_material_update_decision")
+                or (source or {}).get("_semantic_material_update_decision")
+                or {}
+            )
+            item["_pre_generation_material_update_canonical_slug"] = str(
+                identity.get("pre_generation_material_update_canonical_slug")
+                or (source or {}).get("_pre_generation_material_update_canonical_slug")
+                or ""
+            )
+            authorization = (
+                identity.get("canonical_write_authorization")
+                or (source or {}).get("_canonical_write_authorization")
+            )
+            if authorization:
+                item["_canonical_write_authorization"] = copy.deepcopy(authorization)
+            for target_key, identity_key, source_key in (
+                ("_canonical_context_slug", "canonical_context_slug", "_canonical_context_slug"),
+                ("_canonical_context_headline", "canonical_context_headline", "_canonical_context_headline"),
+                ("_canonical_context_body", "canonical_context_body", "_canonical_context_body"),
+                ("_canonical_context_first_published", "canonical_context_first_published", "_canonical_context_first_published"),
+                ("_canonical_context_basis", "canonical_context_basis", "_canonical_context_basis"),
+            ):
+                value = identity.get(identity_key) or (source or {}).get(source_key)
+                if value:
+                    item[target_key] = value
+            item["_story_aware_update_context"] = bool(
+                item.get("_canonical_context_slug")
+                and (item.get("_canonical_context_headline") or item.get("_canonical_context_body"))
+            )
+            if item.get("_pre_generation_material_update_canonical_slug"):
+                item["canonical_slug"] = item["_pre_generation_material_update_canonical_slug"]
+                item["canonical_publication_id"] = _stable_publication_id(
+                    item["canonical_slug"]
+                )
         stamped += 1
     return stamped
 
@@ -29008,6 +29471,37 @@ def _stamp_known_current_run_identity(entry):
     entry["_editorial_new_facts"] = list(identity.get("new_facts") or [])
     if str(identity.get("route") or "") in {"update_existing", "replace_canonical"}:
         entry["story_form"] = "update"
+    if identity.get("pre_generation_material_update_promotion"):
+        entry["_semantic_material_update"] = True
+        entry["_pre_generation_material_update_promotion"] = True
+        entry["_semantic_material_update_decision"] = copy.deepcopy(
+            identity.get("semantic_material_update_decision") or {}
+        )
+        entry["_pre_generation_material_update_canonical_slug"] = str(
+            identity.get("pre_generation_material_update_canonical_slug") or ""
+        )
+        authorization = identity.get("canonical_write_authorization")
+        if authorization:
+            entry["_canonical_write_authorization"] = copy.deepcopy(authorization)
+        for target_key, identity_key in (
+            ("_canonical_context_slug", "canonical_context_slug"),
+            ("_canonical_context_headline", "canonical_context_headline"),
+            ("_canonical_context_body", "canonical_context_body"),
+            ("_canonical_context_first_published", "canonical_context_first_published"),
+            ("_canonical_context_basis", "canonical_context_basis"),
+        ):
+            value = identity.get(identity_key)
+            if value:
+                entry[target_key] = value
+        entry["_story_aware_update_context"] = bool(
+            entry.get("_canonical_context_slug")
+            and (entry.get("_canonical_context_headline") or entry.get("_canonical_context_body"))
+        )
+        if entry.get("_pre_generation_material_update_canonical_slug"):
+            entry["canonical_slug"] = entry["_pre_generation_material_update_canonical_slug"]
+            entry["canonical_publication_id"] = _stable_publication_id(
+                entry["canonical_slug"]
+            )
     entry["_editorial_identity_origin"] = "current_run_editorial_decision_reuse"
     return True
 
@@ -29525,6 +30019,8 @@ def main():
     global CURRENT_RUN_EDITORIAL_IDENTITIES, CURRENT_RUN_CUSTOM_PUBLICATION_BINDINGS
     global CROSS_SOURCE_IDENTITY_OBSERVATIONS, CURRENT_RUN_QUARANTINED_STORY_IDS
     global CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS
+    global CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS
+    global CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS
     _build_started = time.perf_counter()
     _stage_started = _build_started
     GENERATION_CACHE.reset_stats()
@@ -29533,6 +30029,8 @@ def main():
     CROSS_SOURCE_IDENTITY_OBSERVATIONS = []
     CURRENT_RUN_QUARANTINED_STORY_IDS = set()
     CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS = set()
+    CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS = []
+    CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
     print("Treasure Coast Today — building site...")
     _slug_migration = _migrate_unsafe_article_slugs(OUTPUT_DIR)
     if _slug_migration.get("migrated"):
@@ -29576,6 +30074,10 @@ def main():
     _pre_generation_publication_ledger = _build_canonical_publication_ledger(
         _pre_generation_archive
     )
+    # The same semantic cache used by the final publication gate is loaded before
+    # category generation so a proven same-story source can be adjudicated for
+    # materiality before the no-change duplicate guard suppresses it.
+    _pre_generation_semantic_gate_cache = _load_semantic_publication_gate_cache()
     all_categories = []
     category_generation_records = []
     category_generation_report = {}
@@ -29647,6 +30149,11 @@ def main():
             "published_story_duplicate_suppressions": [],
             "story_aware_update_context_count": 0,
             "story_aware_update_context_bindings": [],
+            "material_update_promotion_evaluation_count": 0,
+            "material_update_promotion_count": 0,
+            "material_update_promotion_cache_hit_count": 0,
+            "material_update_promotion_model_call_count": 0,
+            "material_update_promotion_decisions": [],
             "_started": _category_started,
         }
         category_generation_records.append(_category_record)
@@ -29662,6 +30169,41 @@ def main():
             editorial_engine, headlines, cat_key,
             editorial_audited_keys, editorial_audit_rows,
         )
+
+        _material_update_promotions = _promote_published_skip_material_updates(
+            headlines,
+            _pre_generation_archive,
+            cat_key,
+            cache=_pre_generation_semantic_gate_cache,
+        )
+        _category_record["material_update_promotion_evaluation_count"] = int(
+            _material_update_promotions.get("evaluated_count") or 0
+        )
+        _category_record["material_update_promotion_count"] = int(
+            _material_update_promotions.get("promoted_count") or 0
+        )
+        _category_record["material_update_promotion_cache_hit_count"] = int(
+            _material_update_promotions.get("cache_hit_count") or 0
+        )
+        _category_record["material_update_promotion_model_call_count"] = int(
+            _material_update_promotions.get("model_call_count") or 0
+        )
+        _category_record["material_update_promotion_decisions"] = list(
+            _material_update_promotions.get("decisions") or []
+        )
+        if _material_update_promotions.get("promoted_count"):
+            print(
+                "  Material-update promotion: kept "
+                f"{_material_update_promotions['promoted_count']} newer same-story "
+                "source(s) for canonical refresh before duplicate suppression"
+            )
+        if (
+            _material_update_promotions.get("model_call_count")
+            or _material_update_promotions.get("cache_hit_count")
+        ):
+            _save_semantic_publication_gate_cache(
+                _pre_generation_semantic_gate_cache
+            )
 
         headlines, _published_story_suppressions = _filter_published_skip_candidates(
             headlines, _pre_generation_archive, cat_key
