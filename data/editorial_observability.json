@@ -7,9 +7,9 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-22T02:51:54Z",
+  "generated_at": "2026-08-22T03:49:35Z",
   "mode": "enforce",
-  "publication_behavior_changed": false,
+  "publication_behavior_changed": true,
   "activation": {
     "activation_version": "1.1",
     "requested_mode": "enforce",
@@ -19,16 +19,72 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 0,
-    "enforceable_recommendation_count": 0,
-    "applied_action_count": 0,
+    "recommendation_count": 1,
+    "enforceable_recommendation_count": 1,
+    "applied_action_count": 1,
     "circuit_breaker_tripped": false,
-    "placements_before": 3,
+    "placements_before": 4,
     "placements_after": 3,
-    "publication_behavior_changed": false,
+    "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
-    "recommendations": [],
-    "applied_actions": [],
+    "recommendations": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988",
+        "headline": "Body camera video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
+        "source_title_key": "body camera video shows u s marshals arrest vero beach murder suspect in west virginia",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-accused-allegedly-another-arrest-arresting-b04fa457",
+        "canonical_is_custom": false,
+        "canonical_title": "Body cam video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
+        "canonical_source": "",
+        "canonical_url": "https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988",
+        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
+        "category": "indian_river",
+        "placement": "card"
+      }
+    ],
+    "applied_actions": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988",
+        "headline": "Body camera video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
+        "source_title_key": "body camera video shows u s marshals arrest vero beach murder suspect in west virginia",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-accused-allegedly-another-arrest-arresting-b04fa457",
+        "canonical_is_custom": false,
+        "canonical_title": "Body cam video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
+        "canonical_source": "",
+        "canonical_url": "https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988",
+        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
+        "category": "indian_river",
+        "placement": "card",
+        "slug": "",
+        "source_title": "Body camera video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
+        "date": "A few minutes ago",
+        "category_key": "indian_river",
+        "is_custom": false,
+        "story_stage": "arrest-or-charges",
+        "decision": "SUPPRESSED_DUPLICATE",
+        "action_taken": true,
+        "eligible_for_activation": true,
+        "match_confidence": 98,
+        "matched_prior_slug": "",
+        "matched_prior_headline": "Body cam video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
+        "matched_prior_source": "",
+        "matched_prior_source_url": "https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988",
+        "matched_prior_is_custom": false,
+        "activation_managed": true
+      }
+    ],
     "enforcement_allowlist": [
       "custom_canonical_protection",
       "exact_normalized_title_identity",
@@ -49,18 +105,18 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 180,
+    "candidates_processed": 181,
     "routes": {
-      "generate_new": 6,
-      "skip": 173,
+      "generate_new": 8,
+      "skip": 172,
       "update_existing": 1
     },
     "eligibility": {
-      "low_value": 107,
+      "low_value": 108,
       "publishable": 73
     },
     "source_classes": {
-      "aggregator": 107,
+      "aggregator": 108,
       "local_news": 43,
       "regional_news": 25,
       "unknown": 5
@@ -70,8 +126,8 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 4,
-      "same_event": 176
+      "new_story": 7,
+      "same_event": 174
     },
     "examples": [
       {
@@ -173,6 +229,18 @@
         ]
       },
       {
+        "story_id": "story_005225",
+        "title": "Who will win this Pinellas school board race? They’re split by 7 votes. - Tampa Bay Times",
+        "event_key": "unknown-event-a42c4c3d2d",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_005134",
         "title": "Child struck by car in Delray Beach shopping center parking lot",
         "event_key": "unknown-event-562dd9a9ba",
@@ -201,17 +269,15 @@
         ]
       },
       {
-        "story_id": "story_005135",
-        "title": "Independent Candidate Mike Klein Highlights Veteran Healthcare Gaps at Ocala Briefing - 352Today.com",
-        "event_key": "unknown-event-25bd506819",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
+        "story_id": "story_005226",
+        "title": "Florida cyclosporiasis cases hit 450 as infections slow in Jacksonville - The Florida Times-Union",
+        "event_key": "unknown-event-262fb549bb",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -285,6 +351,19 @@
         ]
       },
       {
+        "story_id": "story_005146",
+        "title": "James Martin wins Democratic primary, will face Brian Mast in Florida’s 21st District - WPEC",
+        "event_key": "unknown-event-f9fec68403",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_005096",
         "title": "Abandoned condos where girl died were known safety hazard - Vero News",
         "event_key": "unknown-event-be932fb27c",
@@ -313,45 +392,15 @@
         ]
       },
       {
-        "story_id": "story_004996",
-        "title": "Rising rents threaten small businesses along Delray Beach's Atlantic Avenue",
-        "event_key": "unknown-event-3135a4ddb8",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
+        "story_id": "story_005227",
+        "title": "Engineer hired to evaluate Incubate Neighborhood structure - Hometown News Treasure Coast",
+        "event_key": "unknown-event-b252bbb9bf",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_004997",
-        "title": "Historic Florida theater hopes to spawn downtown revitalization - Treasure Coast News",
-        "event_key": "unknown-event-9d0f5ffb2d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_004998",
-        "title": "This 103-year-old Florida theater is under new management - Treasure Coast News",
-        "event_key": "unknown-event-82b4fbf83d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       }
     ],
@@ -462,6 +511,19 @@
         ]
       },
       {
+        "story_id": "story_005225",
+        "title": "Who will win this Pinellas school board race? They’re split by 7 votes. - Tampa Bay Times",
+        "event_key": "unknown-event-a42c4c3d2d",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_005134",
         "title": "Child struck by car in Delray Beach shopping center parking lot",
         "event_key": "unknown-event-562dd9a9ba",
@@ -492,18 +554,16 @@
         ]
       },
       {
-        "story_id": "story_005135",
-        "title": "Independent Candidate Mike Klein Highlights Veteran Healthcare Gaps at Ocala Briefing - 352Today.com",
-        "event_key": "unknown-event-25bd506819",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
+        "story_id": "story_005226",
+        "title": "Florida cyclosporiasis cases hit 450 as infections slow in Jacksonville - The Florida Times-Union",
+        "event_key": "unknown-event-262fb549bb",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -582,6 +642,20 @@
         ]
       },
       {
+        "story_id": "story_005146",
+        "title": "James Martin wins Democratic primary, will face Brian Mast in Florida’s 21st District - WPEC",
+        "event_key": "unknown-event-f9fec68403",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_005096",
         "title": "Abandoned condos where girl died were known safety hazard - Vero News",
         "event_key": "unknown-event-be932fb27c",
@@ -612,48 +686,16 @@
         ]
       },
       {
-        "story_id": "story_004996",
-        "title": "Rising rents threaten small businesses along Delray Beach's Atlantic Avenue",
-        "event_key": "unknown-event-3135a4ddb8",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
+        "story_id": "story_005227",
+        "title": "Engineer hired to evaluate Incubate Neighborhood structure - Hometown News Treasure Coast",
+        "event_key": "unknown-event-b252bbb9bf",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_004997",
-        "title": "Historic Florida theater hopes to spawn downtown revitalization - Treasure Coast News",
-        "event_key": "unknown-event-9d0f5ffb2d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_004998",
-        "title": "This 103-year-old Florida theater is under new management - Treasure Coast News",
-        "event_key": "unknown-event-82b4fbf83d",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       }
     ]
@@ -661,22 +703,101 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 0,
-    "high_confidence_candidate_count": 0,
+    "candidate_count": 2,
+    "high_confidence_candidate_count": 1,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {},
-    "milestones": {},
-    "reason_codes": {},
-    "examples": [],
+    "current_relationships": {
+      "new_story": 2
+    },
+    "milestones": {
+      "arrest": 2
+    },
+    "reason_codes": {
+      "agency_match": 2,
+      "entity_match": 2,
+      "identity_anchor_qualified": 2,
+      "location_match": 2,
+      "novel_milestone": 2,
+      "title_continuity": 1
+    },
+    "examples": [
+      {
+        "headline": "Body cam video shows US Marshals arrest Indian River County murder suspect - WPBF",
+        "event_key": "unknown-event-53b2e23278",
+        "current_story_id": "story_005228",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_003400",
+        "candidate_confidence": 0.727273,
+        "candidate_milestones": [
+          "arrest"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "agency_match",
+          "entity_match",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_003400",
+          "Novel milestones: arrest",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.27",
+          "Location match: True",
+          "Agency match: True",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.73"
+        ]
+      },
+      {
+        "headline": "Indian River County Sheriff's Office update on Vero Beach homicide arrest - WPTV",
+        "event_key": "unknown-event-df3a06d804",
+        "current_story_id": "story_005231",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_004224",
+        "candidate_confidence": 0.777778,
+        "candidate_milestones": [
+          "arrest"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "agency_match",
+          "entity_match",
+          "title_continuity",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_004224",
+          "Novel milestones: arrest",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.78",
+          "Location match: True",
+          "Agency match: True",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.78"
+        ]
+      }
+    ],
     "retrospective_candidate_count": 25,
     "retrospective_high_confidence_candidate_count": 5,
     "retrospective_activation_eligible_candidate_count": 3,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1255,
-      "timeline_entries_examined": 3304,
-      "transitions_examined": 1915,
+      "stories_with_timelines": 1256,
+      "timeline_entries_examined": 3308,
+      "transitions_examined": 1918,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 25,
       "high_confidence_candidate_count": 5,
@@ -798,39 +919,6 @@
           }
         },
         {
-          "story_id": "story_003960",
-          "story_title": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - cbs12.com",
-          "milestones": [
-            "investigation"
-          ],
-          "matched_phrases": {
-            "investigation": [
-              "investigation"
-            ]
-          },
-          "classification": "same_source_article_evolution",
-          "identity_anchor_codes": [
-            "exact_source_article_identity",
-            "identity_anchor_qualified"
-          ],
-          "prior_article": {
-            "article_id": "rss-967195fc21814a5f34ce",
-            "event_key": "unknown-event-39a90f31fc",
-            "published_at": "2026-08-15T02:55:04.806703+00:00",
-            "title": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - cbs12.com",
-            "source": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms",
-            "url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms"
-          },
-          "newer_article": {
-            "article_id": "rss-bca61f5be6e26def1af4",
-            "event_key": "unknown-event-3290fd865b",
-            "published_at": "2026-08-15T02:55:04.806703+00:00",
-            "title": "Martin County Sheriff holding news conference to announce major drug investigation - WPEC",
-            "source": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms",
-            "url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms"
-          }
-        },
-        {
           "story_id": "story_002349",
           "story_title": "St. Lucie County woman accused in $7 million fraud case as investigation continues - WPBF",
           "milestones": [
@@ -863,6 +951,39 @@
             "title": "St. Lucie County woman accused in $7 million fraud case as investigation continues - WPBF",
             "source": "https://www.wpbf.com/article/st-lucie-county-woman-accused-million-fraud-investigation/73353542",
             "url": "https://www.wpbf.com/article/st-lucie-county-woman-accused-million-fraud-investigation/73353542"
+          }
+        },
+        {
+          "story_id": "story_003960",
+          "story_title": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - cbs12.com",
+          "milestones": [
+            "investigation"
+          ],
+          "matched_phrases": {
+            "investigation": [
+              "investigation"
+            ]
+          },
+          "classification": "same_source_article_evolution",
+          "identity_anchor_codes": [
+            "exact_source_article_identity",
+            "identity_anchor_qualified"
+          ],
+          "prior_article": {
+            "article_id": "rss-967195fc21814a5f34ce",
+            "event_key": "unknown-event-39a90f31fc",
+            "published_at": "2026-08-15T02:55:04.806703+00:00",
+            "title": "17 arrested in Martin County drug bust; 4 kilos of cocaine, 2 lbs. of pot, 8 guns seized - cbs12.com",
+            "source": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms",
+            "url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms"
+          },
+          "newer_article": {
+            "article_id": "rss-bca61f5be6e26def1af4",
+            "event_key": "unknown-event-3290fd865b",
+            "published_at": "2026-08-15T02:55:04.806703+00:00",
+            "title": "Martin County Sheriff holding news conference to announce major drug investigation - WPEC",
+            "source": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms",
+            "url": "https://cbs12.com/news/local/martin-county-sheriff-holding-news-conference-to-announce-major-drug-investigation-cocaine-women-drugs-16-arrests-kilograms"
           }
         },
         {
@@ -3387,28 +3508,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 1104,
-      "treasure_coast_local": 843,
-      "treasure_coast_region": 401,
-      "unknown": 2098
+      "florida": 1105,
+      "treasure_coast_local": 844,
+      "treasure_coast_region": 402,
+      "unknown": 2100
     },
     "average_score": 60.19
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 1104,
-      "treasure_coast_local": 843,
-      "treasure_coast_region": 401,
-      "unknown": 2098
+      "florida": 1105,
+      "treasure_coast_local": 844,
+      "treasure_coast_region": 402,
+      "unknown": 2100
     },
     "average_priority": 3.43
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3630,
+      "active": 3652,
       "breaking": 1,
-      "developing": 101,
-      "ongoing": 712,
+      "developing": 102,
+      "ongoing": 694,
       "resolved": 2
     }
   },
@@ -3416,8 +3537,8 @@
     "repair_version": 14,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 4443,
-    "active_stories_after": 4443,
+    "active_stories_before": 4445,
+    "active_stories_after": 4445,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -3446,20 +3567,20 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-08-22T02:46:54Z",
-    "quarantined_story_records_retained": 391,
-    "active_story_count": 4446
+    "generated_at": "2026-08-22T03:44:21Z",
+    "quarantined_story_records_retained": 395,
+    "active_story_count": 4451
   },
   "stories": {
-    "total": 4446,
+    "total": 4451,
     "importance_levels": {
       "breaking": 7,
       "high": 71,
       "normal": 658,
-      "low": 3710,
+      "low": 3715,
       "archived": 0
     },
-    "average_importance": 8.94,
+    "average_importance": 8.93,
     "top": [
       {
         "story_id": "story_001557",
@@ -3474,7 +3595,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 0.83
+          "age_hours": 1.79
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3538,7 +3659,7 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-08-22T01:59:14.489220+00:00",
-          "hours_since_update": 0.83,
+          "hours_since_update": 1.79,
           "event_count": 34,
           "timeline_entries": 29
         }
@@ -3556,7 +3677,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 11.13
+          "age_hours": 12.06
         },
         "level": "high",
         "importance_reasons": [
@@ -3600,7 +3721,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-21T15:41:39.092086+00:00",
-          "hours_since_update": 11.13,
+          "hours_since_update": 12.06,
           "event_count": 34,
           "timeline_entries": 34
         }
@@ -3618,7 +3739,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 121.1
+          "age_hours": 122.06
         },
         "level": "high",
         "importance_reasons": [
@@ -3659,7 +3780,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-17T01:41:33.127844+00:00",
-          "hours_since_update": 121.1,
+          "hours_since_update": 122.06,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -3677,7 +3798,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 379.93
+          "age_hours": 380.89
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3731,7 +3852,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-06T06:51:35.977301+00:00",
-          "hours_since_update": 379.93,
+          "hours_since_update": 380.89,
           "event_count": 40,
           "timeline_entries": 24
         }
@@ -3749,7 +3870,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 16.12
+          "age_hours": 17.08
         },
         "level": "high",
         "importance_reasons": [
@@ -3803,7 +3924,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-21T10:42:11.995126+00:00",
-          "hours_since_update": 16.12,
+          "hours_since_update": 17.08,
           "event_count": 15,
           "timeline_entries": 11
         }
@@ -3821,7 +3942,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 515.1
+          "age_hours": 516.06
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3869,7 +3990,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 515.1,
+          "hours_since_update": 516.06,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3887,7 +4008,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 314.58
+          "age_hours": 315.54
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3935,7 +4056,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-09T00:12:17.273491+00:00",
-          "hours_since_update": 314.58,
+          "hours_since_update": 315.54,
           "event_count": 10,
           "timeline_entries": 7
         }
@@ -3953,7 +4074,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 193.1
+          "age_hours": 194.06
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4001,7 +4122,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 193.1,
+          "hours_since_update": 194.06,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -4019,7 +4140,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 184.1
+          "age_hours": 185.05
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4065,7 +4186,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T10:41:34.652293+00:00",
-          "hours_since_update": 184.1,
+          "hours_since_update": 185.05,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4083,7 +4204,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 97.1
+          "age_hours": 98.05
         },
         "level": "high",
         "importance_reasons": [
@@ -4124,7 +4245,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-18T01:41:42.161620+00:00",
-          "hours_since_update": 97.1,
+          "hours_since_update": 98.05,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4142,7 +4263,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 160.09
+          "age_hours": 161.05
         },
         "level": "high",
         "importance_reasons": [
@@ -4183,7 +4304,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-15T10:41:53.949415+00:00",
-          "hours_since_update": 160.09,
+          "hours_since_update": 161.05,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4201,7 +4322,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 155.09
+          "age_hours": 156.08
         },
         "level": "high",
         "importance_reasons": [
@@ -4240,7 +4361,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-15T15:41:58.428218+00:00",
-          "hours_since_update": 155.09,
+          "hours_since_update": 156.08,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4258,7 +4379,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 145.46
+          "age_hours": 146.42
         },
         "level": "high",
         "importance_reasons": [
@@ -4297,7 +4418,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-16T01:19:42.166524+00:00",
-          "hours_since_update": 145.46,
+          "hours_since_update": 146.42,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4315,7 +4436,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 6.13
+          "age_hours": 7.08
         },
         "level": "normal",
         "importance_reasons": [
@@ -4358,7 +4479,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-21T20:42:04.135455+00:00",
-          "hours_since_update": 6.13,
+          "hours_since_update": 7.08,
           "event_count": 10,
           "timeline_entries": 10
         }
@@ -4376,7 +4497,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 502.72
+          "age_hours": 503.68
         },
         "level": "high",
         "importance_reasons": [
@@ -4419,7 +4540,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 502.72,
+          "hours_since_update": 503.68,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4437,7 +4558,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 502.72
+          "age_hours": 503.68
         },
         "level": "high",
         "importance_reasons": [
@@ -4480,7 +4601,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 502.72,
+          "hours_since_update": 503.68,
           "event_count": 14,
           "timeline_entries": 7
         }
@@ -4498,7 +4619,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 193.1
+          "age_hours": 194.06
         },
         "level": "high",
         "importance_reasons": [
@@ -4541,7 +4662,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 193.1,
+          "hours_since_update": 194.06,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4559,7 +4680,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 561.01
+          "age_hours": 561.97
         },
         "level": "high",
         "importance_reasons": [
@@ -4603,7 +4724,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 561.01,
+          "hours_since_update": 561.97,
           "event_count": 6,
           "timeline_entries": 2
         }
@@ -4621,7 +4742,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 203.09
+          "age_hours": 204.05
         },
         "level": "high",
         "importance_reasons": [
@@ -4665,7 +4786,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-13T15:41:45.363233+00:00",
-          "hours_since_update": 203.09,
+          "hours_since_update": 204.05,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -4683,7 +4804,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 208.09
+          "age_hours": 209.05
         },
         "level": "high",
         "importance_reasons": [
@@ -4727,7 +4848,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-08-13T10:41:50.330585+00:00",
-          "hours_since_update": 208.09,
+          "hours_since_update": 209.05,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4737,7 +4858,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 6,
-    "generated_at": "2026-08-22T02:49:50Z",
+    "generated_at": "2026-08-22T03:47:53Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -4752,9 +4873,8 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "cache_hit": 2,
         "category_eligibility_archive_recovery": 3,
-        "generated_live": 2,
+        "generated_live": 4,
         "no_publishable_sources": 1,
         "sports_zero_candidate_archive_recovery": 1
       },
@@ -4762,24 +4882,24 @@
         "no_category_eligible_sources": 3,
         "no_sports_hero_candidates": 1
       },
-      "model_attempt_count": 2,
-      "model_elapsed_seconds": 46.132,
+      "model_attempt_count": 4,
+      "model_elapsed_seconds": 86.959,
       "archive_recovery_requested_count": 5,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 5,
-      "published_story_duplicate_suppression_count": 59,
-      "story_aware_update_context_count": 1
+      "published_story_duplicate_suppression_count": 61,
+      "story_aware_update_context_count": 3
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 30,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 8,
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 7,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4796,7 +4916,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
@@ -4899,8 +5019,8 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 13.695
+        "new_publication_stale_rejected_count": 0,
+        "elapsed_seconds": 19.675
       },
       {
         "category_key": "crime",
@@ -4909,7 +5029,7 @@
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 20,
         "publishable_source_count": 9,
-        "selected_source_count": 3,
+        "selected_source_count": 4,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -4917,11 +5037,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 29.079,
+            "elapsed_seconds": 32.902,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 29.079,
+        "model_elapsed_seconds": 32.902,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4932,7 +5052,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
@@ -5055,7 +5175,7 @@
           {
             "category_key": "crime",
             "surface": "hero",
-            "headline": "Vero Beach woman's ex-boyfriend arrested in fatal First Street shooting",
+            "headline": "Ex-boyfriend arrested in Vero Beach homicide used Uber to reach victim, sheriff says",
             "editorial_story_id": "story_002912",
             "canonical_slug": "2026-08-20-sebastian-man-arrested-in-west-virginia-for-vero-beach-homicide-after-license-pl",
             "canonical_headline": "Sebastian man arrested in West Virginia for Vero Beach homicide after license plate readers track multi-state flight",
@@ -5065,7 +5185,7 @@
           {
             "category_key": "crime",
             "surface": "card",
-            "headline": "Palm City woman surrenders 36 Border Collies in hoarding case",
+            "headline": "Palm City woman relinquishes 36 Border Collies in hoarding case",
             "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
             "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
             "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
@@ -5073,14 +5193,54 @@
             "reason": "published_skip_placement_suppressed"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Body cam video shows US Marshals arrest Indian River County murder suspect - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988",
+            "publisher": "www.wpbf.com",
+            "canonical_slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
+            "canonical_headline": "Indian River County Sheriff's Office uses Flock license plate cameras in search for homicide suspect",
+            "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+            "identity_keys": [
+              "story:story_005228",
+              "source:https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988"
+            ],
+            "match_confidence": 0.95,
+            "evidence_dimensions": [
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_precise_location",
+              "shared_agency",
+              "distinctive_fact_overlap"
+            ],
+            "decision_trace": [
+              "left_identity_origin=source_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=3",
+              "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
+              "shared_event_families=['shooting']",
+              "shared_named_people=[]",
+              "shared_precise_locations=['first-street']",
+              "shared_agencies=['indian-river-county-sheriff']",
+              "shared_subject_phrases=[]",
+              "shared_headline_topic_core=[]",
+              "shared_distinctive_token_count=36",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "",
+        "live_hero_headline": "Body cam video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
         "generated_card_count": 0,
-        "elapsed_seconds": 36.414
+        "elapsed_seconds": 42.699
       },
       {
         "category_key": "business",
@@ -5189,7 +5349,7 @@
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 7.023
+        "elapsed_seconds": 6.36
       },
       {
         "category_key": "sports",
@@ -5233,7 +5393,7 @@
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "new_publication_stale_rejected_count": 2,
-        "elapsed_seconds": 14.252
+        "elapsed_seconds": 8.436
       },
       {
         "category_key": "things_to_do",
@@ -5331,7 +5491,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 7.188
+        "elapsed_seconds": 6.637
       },
       {
         "category_key": "florida",
@@ -5395,7 +5555,7 @@
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 7.037
+        "elapsed_seconds": 6.153
       },
       {
         "category_key": "martin",
@@ -5403,8 +5563,8 @@
         "status": "generated_live",
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 2,
-        "selected_source_count": 2,
+        "publishable_source_count": 3,
+        "selected_source_count": 3,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -5412,11 +5572,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 17.053,
+            "elapsed_seconds": 17.215,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 17.053,
+        "model_elapsed_seconds": 17.215,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -5427,21 +5587,11 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "martin",
-            "source_headline": "James Martin to take on Brian Mast after wining Democratic primary for Florida's 21st Congressional District - WPTV",
-            "source_url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxNUy0tVVJBaU12a19MZ3V1T0pmVU52ZDZPZExfcFRXbGFmUW83eG1oV3ducUYzTFlnVmJCMzlfUl9OWFJ3bjBBSVY5QWRSQ2R5TEJyLWxQVktzdDRVa3JEU1A1QVlQZzJyN1ZHZTNyRGduSEdkcXhfVzdLbWhBUkNLU0hNMmhoZ2RRYW51aU1OVzBsMTR2SVZZcWlJTkktRGRvb0JSc3A1aHpzQm0wSk1aeDN4bUwydEVJNElmZ3E4RlNaY2pIZ2lNVnJnS3VRaFlnTkh3cFoxTllhUVlMNUE1WVRfeUYxOUpQR0QxWFZOdGw",
-            "editorial_story_id": "story_005088",
-            "canonical_slug": "2026-08-21-james-martin-wins-democratic-primary-for-congressional-district-21-by-less-than",
-            "canonical_headline": "James Martin wins Democratic primary for Congressional District 21 by less than 1%, will face Brian Mast in November",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "martin",
             "source_headline": "James Martin to take on Brian Mast after wining Democratic primary for Florida's 21st Congressional District",
@@ -5450,6 +5600,16 @@
             "canonical_slug": "2026-08-21-james-martin-wins-democratic-primary-for-congressional-district-21-by-less-than",
             "canonical_headline": "James Martin wins Democratic primary for Congressional District 21 by less than 1%, will face Brian Mast in November",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "James Martin to take on Brian Mast after wining Democratic primary for Florida's 21st Congressional District - WPTV",
+            "source_url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxNUy0tVVJBaU12a19MZ3V1T0pmVU52ZDZPZExfcFRXbGFmUW83eG1oV3ducUYzTFlnVmJCMzlfUl9OWFJ3bjBBSVY5QWRSQ2R5TEJyLWxQVktzdDRVa3JEU1A1QVlQZzJyN1ZHZTNyRGduSEdkcXhfVzdLbWhBUkNLU0hNMmhoZ2RRYW51aU1OVzBsMTR2SVZZcWlJTkktRGRvb0JSc3A1aHpzQm0wSk1aeDN4bUwydEVJNElmZ3E4RlNaY2pIZ2lNVnJnS3VRaFlnTkh3cFoxTllhUVlMNUE1WVRfeUYxOUpQR0QxWFZOdGw",
+            "editorial_story_id": "story_005088",
+            "canonical_slug": "2026-08-21-james-martin-wins-democratic-primary-for-congressional-district-21-by-less-than",
+            "canonical_headline": "James Martin wins Democratic primary for Congressional District 21 by less than 1%, will face Brian Mast in November",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5505,7 +5665,7 @@
           {
             "category_key": "martin",
             "surface": "hero",
-            "headline": "Owner surrenders 36 Border Collies rescued from Palm City hoarding case",
+            "headline": "Woman surrenders 36 Border Collies rescued from Palm City hoarding case",
             "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
             "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
             "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
@@ -5520,21 +5680,28 @@
         "budget_seconds": 180.0,
         "live_hero_headline": "",
         "generated_card_count": 0,
-        "elapsed_seconds": 24.847
+        "elapsed_seconds": 23.839
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "cache_hit",
-        "fetched_candidate_count": 29,
-        "fresh_candidate_count": 16,
-        "publishable_source_count": 3,
-        "selected_source_count": 2,
-        "cache_hit": true,
+        "status": "generated_live",
+        "fetched_candidate_count": 30,
+        "fresh_candidate_count": 15,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
+        "cache_hit": false,
         "archive_recovery_requested": false,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 6.593,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 6.593,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -5545,10 +5712,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 13,
+        "published_story_duplicate_suppression_count": 15,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -5598,6 +5765,16 @@
             "canonical_slug": "2026-08-21-fort-pierce-man-arrested-on-eight-burglary-charges-in-port-st-lucie-spanish-lake",
             "canonical_headline": "Fort Pierce man arrested on eight burglary charges in Port St. Lucie Spanish Lakes community",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Fake $100 movie bill allegedly used to cover Port St. Lucie tab - WPBF",
+            "source_url": "https://www.wpbf.com/article/two-women-arrested-fake-prop-bill-port-st-lucie-restaurant/73492934",
+            "editorial_story_id": "story_004853",
+            "canonical_slug": "2026-08-20-two-fort-pierce-women-arrested-for-using-fake-movie-money-at-st-lucie-restaurant",
+            "canonical_headline": "Two Fort Pierce women arrested for using fake movie money at St. Lucie restaurant",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -5679,27 +5856,47 @@
             "canonical_headline": "St. Lucie County population jumps 22% since 2020, adding more than 73,000 residents",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Male pedestrian, 65, struck, killed by vehicle on U.S. 1 in St. Lucie County - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-pedestrian-struck-killed-by-vehicle-on-us-1-in-st-lucie-county/73442267",
+            "editorial_story_id": "story_004042",
+            "canonical_slug": "2026-08-16-stuart-man-65-struck-and-killed-crossing-us-1-in-st-lucie-county",
+            "canonical_headline": "Stuart man, 65, struck and killed crossing U.S. 1 in St. Lucie County",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "new_publication_stale_rejected_count": 0,
-        "live_hero_headline": "Two Fort Pierce women arrested after counterfeit movie prop bill used at Port St. Lucie restaurant",
-        "elapsed_seconds": 6.91
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Fired St. Lucie County firefighters challenge hazing investigation at district meeting",
+        "generated_card_count": 0,
+        "elapsed_seconds": 13.314
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "cache_hit",
+        "status": "generated_live",
         "fetched_candidate_count": 28,
-        "fresh_candidate_count": 20,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 9,
-        "selected_source_count": 2,
-        "cache_hit": true,
+        "selected_source_count": 3,
+        "cache_hit": false,
         "archive_recovery_requested": false,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 30.249,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 30.249,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -5787,20 +5984,63 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Suspect in fatal Vero Beach shooting arrested in West Virginia - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-vero-beach-fatal-shooting-dawn-kriskewic-arrest/73480192",
+            "surface": "card",
+            "headline": "Ex-boyfriend arrested in Vero Beach homicide after traveling by Uber to kill victim",
             "editorial_story_id": "story_002912",
             "canonical_slug": "2026-08-20-sebastian-man-arrested-in-west-virginia-for-vero-beach-homicide-after-license-pl",
             "canonical_headline": "Sebastian man arrested in West Virginia for Vero Beach homicide after license plate readers track multi-state flight",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
+            "basis": "same_event_and_persistent_story_skip",
+            "reason": "published_skip_placement_suppressed"
           }
         ],
-        "story_aware_update_context_count": 0,
-        "story_aware_update_context_bindings": [],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Body cam video shows US Marshals arrest Indian River County murder suspect - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988",
+            "publisher": "www.wpbf.com",
+            "canonical_slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
+            "canonical_headline": "Indian River County Sheriff's Office uses Flock license plate cameras in search for homicide suspect",
+            "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+            "identity_keys": [
+              "story:story_004367",
+              "source:https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988"
+            ],
+            "match_confidence": 0.95,
+            "evidence_dimensions": [
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_precise_location",
+              "shared_agency",
+              "distinctive_fact_overlap"
+            ],
+            "decision_trace": [
+              "left_identity_origin=source_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=3",
+              "shared_locality=['indian-river', 'indian-river-county', 'vero-beach']",
+              "shared_event_families=['shooting']",
+              "shared_named_people=[]",
+              "shared_precise_locations=['first-street']",
+              "shared_agencies=['indian-river-county-sheriff']",
+              "shared_subject_phrases=[]",
+              "shared_headline_topic_core=[]",
+              "shared_distinctive_token_count=36",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
         "new_publication_stale_rejected_count": 0,
-        "live_hero_headline": "Multi-million dollar crane overturns in ditch near Oslo Road in Vero Beach",
-        "elapsed_seconds": 9.303
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Multi-million dollar crane crashes into ditch on 90th Avenue in Vero Beach",
+        "generated_card_count": 1,
+        "elapsed_seconds": 41.645
       }
     ]
   }
