@@ -14,8 +14,8 @@ from typing import Any, Dict, Iterable, List, Tuple
 
 from .model_bakeoff import compact_category_output
 
-ASSIGNMENT_EDITOR_SHADOW_SCHEMA_VERSION = 1
-ASSIGNMENT_EDITOR_SHADOW_VERSION = "1.13.6.6"
+ASSIGNMENT_EDITOR_SHADOW_SCHEMA_VERSION = 2
+ASSIGNMENT_EDITOR_SHADOW_VERSION = "1.13.6.6a"
 
 
 def _utc_now_iso() -> str:
@@ -171,6 +171,19 @@ def _selected_sources(output: Dict[str, Any]) -> List[int]:
     return indexes
 
 
+def _comparison_signals(output: Dict[str, Any], source_pool: List[Dict[str, Any]]) -> Dict[str, Any]:
+    selected = _selected_sources(output)
+    return {
+        "selected_source_indexes": selected,
+        "duplicate_source_indexes": sorted({idx for idx in selected if selected.count(idx) > 1}),
+        "omitted_source_indexes": [
+            idx for idx in range(1, len(source_pool) + 1) if idx not in selected
+        ],
+        "hero_source_index": (output.get("hero") or {}).get("source_index"),
+        "hero_headline": str((output.get("hero") or {}).get("headline") or ""),
+    }
+
+
 def write_assignment_editor_artifacts(
     *,
     results: Iterable[Dict[str, Any]],
@@ -183,7 +196,7 @@ def write_assignment_editor_artifacts(
     blind_salt: str,
     enabled: bool,
 ) -> Dict[str, Any]:
-    """Write machine report, blind A/B review, and separate architecture answer key."""
+    """Write final-pipeline-aligned machine, blind-review, and answer-key artifacts."""
     report_path = Path(report_path)
     review_path = Path(review_path)
     answer_key_path = Path(answer_key_path)
@@ -192,11 +205,11 @@ def write_assignment_editor_artifacts(
     report_rows: List[Dict[str, Any]] = []
     answer_categories: Dict[str, Any] = {}
     review_lines = [
-        "# TCT Assignment Editor Shadow Experiment — Blind Review",
+        "# TCT Assignment Editor Shadow Experiment — Final-Pipeline Blind Review",
         "",
-        "The live publisher was not changed. One variant is the current production category output; the other is a publication-isolated shadow path in which story assignment and story writing are separate stages. Model/path identities are intentionally omitted here.",
+        "The live publisher was not changed. Both displayed variants are final-pipeline comparison projections: the production side is captured from the actual final live category after normal deterministic corrections, and the publication-isolated shadow side is passed through the same shared eligibility, freshness, publication-quality, identity, suppression, county-authority, and canonical-surface rules before scoring. Raw pre-alignment model outputs remain available only in the machine report.",
         "",
-        "Judge the newsroom result, not verbosity. Score: (1) hero/story choice, (2) supporting-story selection and omissions, (3) ordering, (4) angle/new-development focus, (5) source mapping, (6) headline accuracy and strength, (7) lead/context, (8) factual fidelity, (9) completeness, (10) unnecessary filler, and (11) overall publishability. Record A, B, or Tie before opening the answer key.",
+        "Judge the final newsroom result, not verbosity. Score: (1) hero/story choice, (2) supporting-story selection and omissions, (3) ordering, (4) angle/new-development focus, (5) source mapping, (6) headline accuracy and strength, (7) lead/context, (8) factual fidelity, (9) completeness, (10) unnecessary filler, and (11) overall publishability. Record A, B, or Tie before opening the answer key.",
         "",
     ]
 
@@ -206,13 +219,24 @@ def write_assignment_editor_artifacts(
         category_key = str(row.get("category_key") or "unknown")
         category_label = str(row.get("category_label") or category_key)
         source_pool = list(row.get("source_pool") or [])
-        baseline = compact_category_output(row.get("baseline_output"))
-        challenger = compact_category_output(row.get("challenger_output"))
+
+        raw_baseline = compact_category_output(
+            row.get("raw_baseline_output") or row.get("baseline_output")
+        )
+        final_baseline = compact_category_output(
+            row.get("final_baseline_output") or row.get("baseline_output")
+        )
+        raw_challenger = compact_category_output(
+            row.get("raw_challenger_output") or row.get("challenger_output")
+        )
+        final_challenger = compact_category_output(
+            row.get("final_challenger_output") or row.get("challenger_output")
+        )
         error = str(row.get("challenger_error") or "")
         baseline_is_a = _variant_order(category_key, blind_salt)
 
-        variant_a = baseline if baseline_is_a else challenger
-        variant_b = challenger if baseline_is_a else baseline
+        variant_a = final_baseline if baseline_is_a else final_challenger
+        variant_b = final_challenger if baseline_is_a else final_baseline
         variant_a_path = "current_production" if baseline_is_a else "sonnet5_editor_sonnet45_writer"
         variant_b_path = "sonnet5_editor_sonnet45_writer" if baseline_is_a else "current_production"
 
@@ -221,10 +245,13 @@ def write_assignment_editor_artifacts(
         else:
             completed += 1
 
-        baseline_selected = _selected_sources(baseline)
-        challenger_selected = _selected_sources(challenger)
+        raw_baseline_signals = _comparison_signals(raw_baseline, source_pool)
+        final_baseline_signals = _comparison_signals(final_baseline, source_pool)
+        raw_challenger_signals = _comparison_signals(raw_challenger, source_pool)
+        final_challenger_signals = _comparison_signals(final_challenger, source_pool)
         assignment_plan = row.get("assignment_plan") or {}
         assignment_diag = row.get("assignment_diagnostics") or {}
+
         report_rows.append({
             "category_key": category_key,
             "category_label": category_label,
@@ -232,28 +259,46 @@ def write_assignment_editor_artifacts(
             "production_model": production_model,
             "editor_model": editor_model,
             "writer_model": writer_model,
-            "baseline_output": baseline,
+            "raw_baseline_output": raw_baseline,
+            "final_baseline_output": final_baseline,
+            # Backward-compatible aliases now intentionally point at the aligned objects.
+            "baseline_output": final_baseline,
             "assignment_plan": assignment_plan,
             "assignment_diagnostics": assignment_diag,
-            "challenger_output": challenger,
+            "raw_challenger_output": raw_challenger,
+            "final_challenger_output": final_challenger,
+            "challenger_output": final_challenger,
+            "alignment_diagnostics": row.get("alignment_diagnostics") or {},
             "challenger_error": error or None,
             "editor_duration_seconds": row.get("editor_duration_seconds"),
             "editor_actual_model": row.get("editor_actual_model"),
             "writer_duration_seconds": row.get("writer_duration_seconds"),
             "writer_actual_models": row.get("writer_actual_models") or [],
-            "comparison_signals": {
+            "raw_comparison_signals": {
+                "baseline": raw_baseline_signals,
+                "challenger": raw_challenger_signals,
                 "same_hero_source_index": (
-                    (baseline.get("hero") or {}).get("source_index") == (challenger.get("hero") or {}).get("source_index")
-                    if (baseline.get("hero") or {}).get("source_index") is not None
-                    and (challenger.get("hero") or {}).get("source_index") is not None
+                    raw_baseline_signals["hero_source_index"] == raw_challenger_signals["hero_source_index"]
+                    if raw_baseline_signals["hero_source_index"] is not None
+                    and raw_challenger_signals["hero_source_index"] is not None
                     else None
                 ),
-                "baseline_selected_source_indexes": baseline_selected,
-                "challenger_selected_source_indexes": challenger_selected,
-                "baseline_duplicate_source_indexes": sorted({idx for idx in baseline_selected if baseline_selected.count(idx) > 1}),
-                "challenger_duplicate_source_indexes": sorted({idx for idx in challenger_selected if challenger_selected.count(idx) > 1}),
-                "baseline_omitted_source_indexes": [idx for idx in range(1, len(source_pool) + 1) if idx not in baseline_selected],
-                "challenger_omitted_source_indexes": [idx for idx in range(1, len(source_pool) + 1) if idx not in challenger_selected],
+            },
+            "comparison_signals": {
+                "same_hero_source_index": (
+                    final_baseline_signals["hero_source_index"] == final_challenger_signals["hero_source_index"]
+                    if final_baseline_signals["hero_source_index"] is not None
+                    and final_challenger_signals["hero_source_index"] is not None
+                    else None
+                ),
+                "baseline_selected_source_indexes": final_baseline_signals["selected_source_indexes"],
+                "challenger_selected_source_indexes": final_challenger_signals["selected_source_indexes"],
+                "baseline_duplicate_source_indexes": final_baseline_signals["duplicate_source_indexes"],
+                "challenger_duplicate_source_indexes": final_challenger_signals["duplicate_source_indexes"],
+                "baseline_omitted_source_indexes": final_baseline_signals["omitted_source_indexes"],
+                "challenger_omitted_source_indexes": final_challenger_signals["omitted_source_indexes"],
+                "baseline_final_hero_headline": final_baseline_signals["hero_headline"],
+                "challenger_final_hero_headline": final_challenger_signals["hero_headline"],
                 "challenger_source_mapping_valid": bool(assignment_diag.get("source_mapping_valid")),
             },
         })
@@ -265,6 +310,7 @@ def write_assignment_editor_artifacts(
             "current_production_model": production_model,
             "shadow_assignment_editor_model": editor_model,
             "shadow_writer_model": writer_model,
+            "comparison_stage": "final_pipeline_aligned",
         }
 
         review_lines.extend([f"## {category_label}", "", "### Source pool", ""])
@@ -304,6 +350,7 @@ def write_assignment_editor_artifacts(
         "generated_at": generated_at,
         "enabled": bool(enabled),
         "publication_isolation": True,
+        "comparison_stage": "final_pipeline_aligned",
         "current_production_model": production_model,
         "shadow_architecture": {
             "assignment_editor_model": editor_model,
@@ -317,10 +364,11 @@ def write_assignment_editor_artifacts(
         "categories": report_rows,
     }
     answer_key = {
-        "schema_version": 1,
+        "schema_version": 2,
         "experiment_version": ASSIGNMENT_EDITOR_SHADOW_VERSION,
         "generated_at": generated_at,
-        "instruction": "Open only after scoring the blind review.",
+        "instruction": "Open only after scoring the final-pipeline blind review.",
+        "comparison_stage": "final_pipeline_aligned",
         "categories": answer_categories,
     }
 
@@ -330,3 +378,4 @@ def write_assignment_editor_artifacts(
     answer_key_path.write_text(json.dumps(answer_key, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     review_path.write_text("\n".join(review_lines).rstrip() + "\n", encoding="utf-8")
     return report
+

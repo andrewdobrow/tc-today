@@ -9365,6 +9365,7 @@ def _queue_model_bakeoff_category(
             "category_label": str(category_label),
             "source_pool": source_pool,
             "request_kwargs": copy.deepcopy(request_kwargs),
+            "raw_baseline_output": copy.deepcopy(baseline_output),
             "baseline_output": copy.deepcopy(baseline_output),
             "baseline_model": baseline_model,
         }
@@ -9535,6 +9536,17 @@ def _queue_assignment_editor_category(
                 "article_text": article_text,
                 "canonical_context_headline": str(source.get("_canonical_context_headline") or ""),
                 "canonical_context_body": str(source.get("_canonical_context_body") or "")[:2400],
+                "_canonical_context_headline": str(source.get("_canonical_context_headline") or ""),
+                "_canonical_context_body": str(source.get("_canonical_context_body") or "")[:2400],
+                "link": str(source.get("link") or ""),
+                "source_url": str(source.get("source_url") or source.get("link") or ""),
+                "image_url": str(source.get("image_url") or ""),
+                "summary": str(source.get("summary") or ""),
+                "feed_url": str(source.get("feed_url") or ""),
+                "editorial_story_id": str(source.get("editorial_story_id") or source.get("_editorial_story_id") or ""),
+                "_editorial_event_key": str(source.get("_editorial_event_key") or ""),
+                "_editorial_route": str(source.get("_editorial_route") or ""),
+                "_editorial_relationship": str(source.get("_editorial_relationship") or ""),
             })
             source_pool.append({
                 "title": str(source.get("title") or ""),
@@ -9543,6 +9555,7 @@ def _queue_assignment_editor_category(
                 "source_quality": str(source.get("source_quality") or ""),
                 "hero_eligible": source.get("hero_eligible"),
                 "category_match_score": source.get("category_match_score"),
+                "source_url": str(source.get("source_url") or source.get("link") or ""),
             })
         baseline_model = str(
             getattr(baseline_response, "model", None)
@@ -9553,6 +9566,7 @@ def _queue_assignment_editor_category(
             "category_label": str(category_label),
             "source_inputs": source_inputs,
             "source_pool": source_pool,
+            "raw_baseline_output": copy.deepcopy(baseline_output),
             "baseline_output": copy.deepcopy(baseline_output),
             "baseline_model": baseline_model,
         }
@@ -9813,29 +9827,494 @@ Writing rules:
     return item, actual_model, duration
 
 
-def _run_assignment_editor_shadow_after_build():
-    """Run Sonnet 5 editor -> Sonnet 4.5 writer after all production writes finish."""
+def _assignment_shadow_restore_source_index(item, packet):
+    """Recover a source-pool index on a final live/canonicalized placement when possible."""
+    if not isinstance(item, dict):
+        return None
+    sources = list(packet.get("source_inputs") or [])
+    try:
+        current = int(item.get("source_index"))
+    except (TypeError, ValueError):
+        current = None
+    if current is not None and 1 <= current <= len(sources):
+        return current
+
+    item_urls = {
+        _normalized_external_source_url(value)
+        for value in (
+            item.get("source_url"), item.get("latest_source_url"), item.get("_source_url"),
+            item.get("original_url"), item.get("link"),
+        )
+        if value
+    }
+    item_urls.discard("")
+    url_matches = []
+    for source in sources:
+        source_url = _normalized_external_source_url(
+            source.get("source_url") or source.get("link")
+        )
+        if source_url and source_url in item_urls:
+            url_matches.append(int(source.get("source_index") or 0))
+    url_matches = [idx for idx in url_matches if idx > 0]
+    if len(set(url_matches)) == 1:
+        item["source_index"] = url_matches[0]
+        return url_matches[0]
+
+    item_titles = {
+        _normalized_generated_headline_key(value)
+        for value in (
+            item.get("source_title"), item.get("source_headline"), item.get("headline"), item.get("title")
+        )
+        if value
+    }
+    item_titles.discard("")
+    title_matches = []
+    for source in sources:
+        source_key = _normalized_generated_headline_key(source.get("title") or "")
+        if source_key and source_key in item_titles:
+            title_matches.append(int(source.get("source_index") or 0))
+    title_matches = [idx for idx in title_matches if idx > 0]
+    if len(set(title_matches)) == 1:
+        item["source_index"] = title_matches[0]
+        return title_matches[0]
+    return None
+
+
+def _assignment_shadow_final_production_projection(packet, all_categories):
+    """Capture the actual final live category, excluding deterministic archive filler cards.
+
+    The hero is always retained because production may have deterministically recovered
+    an archive hero after the raw generated hero was suppressed. Supporting archive
+    filler cards are omitted from the comparison so the bake-off stays focused on the
+    current source packet rather than six identical deterministic backfill choices.
+    """
+    category_key = str(packet.get("category_key") or "")
+    source_count = len(packet.get("source_inputs") or [])
+    live = next(
+        (
+            copy.deepcopy(category)
+            for category in (all_categories or [])
+            if isinstance(category, dict) and str(category.get("category_key") or "") == category_key
+        ),
+        None,
+    )
+    if not isinstance(live, dict):
+        return copy.deepcopy(packet.get("raw_baseline_output") or packet.get("baseline_output") or {}), {
+            "final_live_category_found": False,
+            "archive_filler_cards_omitted": 0,
+        }
+
+    hero = live.get("hero") if isinstance(live.get("hero"), dict) else {}
+    if hero:
+        _assignment_shadow_restore_source_index(hero, packet)
+    retained_cards = []
+    omitted_fillers = 0
+    for card in list(live.get("cards") or []):
+        if not isinstance(card, dict):
+            continue
+        index = _assignment_shadow_restore_source_index(card, packet)
+        if index is not None and 1 <= index <= source_count:
+            retained_cards.append(card)
+        else:
+            omitted_fillers += 1
+    return {
+        "category_key": category_key,
+        "category_label": packet.get("category_label") or live.get("category_label") or category_key,
+        "hero": hero,
+        "cards": retained_cards,
+    }, {
+        "final_live_category_found": True,
+        "archive_filler_cards_omitted": omitted_fillers,
+        "final_live_hero_from_source_pool": bool(hero and hero.get("source_index")),
+        "final_live_hero_headline": str((hero or {}).get("headline") or ""),
+    }
+
+
+def _assignment_shadow_attach_source_metadata(data, packet):
+    """Attach the same source provenance live generated copy carries before guards."""
+    if not isinstance(data, dict):
+        return data
+    category_key = str(packet.get("category_key") or "")
+    category_label = str(packet.get("category_label") or category_key)
+    data["category_key"] = category_key
+    data["category_label"] = category_label
+    for item in [data.get("hero")] + list(data.get("cards") or []):
+        if not isinstance(item, dict):
+            continue
+        try:
+            source = _assignment_source_by_index(packet, item.get("source_index"))
+        except Exception:
+            continue
+        item["link"] = str(source.get("link") or "")
+        item["source_url"] = str(source.get("source_url") or source.get("link") or "")
+        item["image_url"] = str(source.get("image_url") or item.get("image_url") or "")
+        item["source_quality"] = str(source.get("source_quality") or "")
+        item["source_type"] = str(source.get("source_type") or "")
+        item["source_title"] = str(source.get("title") or "")
+        item["source_headline"] = str(source.get("title") or "")
+        item["article_text"] = str(source.get("article_text") or "")
+        item["source_summary"] = str(source.get("summary") or "")
+        item["feed_url"] = str(source.get("feed_url") or "")
+        item["story_form"] = str(source.get("story_form") or item.get("story_form") or "new")
+        item["_canonical_context_headline"] = str(source.get("_canonical_context_headline") or source.get("canonical_context_headline") or "")
+        item["_canonical_context_body"] = str(source.get("_canonical_context_body") or source.get("canonical_context_body") or "")
+        if source.get("editorial_story_id"):
+            item["editorial_story_id"] = source.get("editorial_story_id")
+            item["_editorial_story_id"] = source.get("editorial_story_id")
+        for key in ("_editorial_event_key", "_editorial_route", "_editorial_relationship"):
+            if source.get(key):
+                item[key] = source.get(key)
+        _apply_category_memberships(item, category_key)
+    return data
+
+
+def _assignment_shadow_source_published(item, packet):
+    try:
+        source = _assignment_source_by_index(packet, item.get("source_index"))
+    except Exception:
+        source = {}
+    return str(source.get("published") or item.get("published") or "")
+
+
+def _assignment_shadow_apply_age_caps(data, packet):
+    """Mirror the live generated-copy urgency decay/cap without touching live state."""
+    from email.utils import parsedate_to_datetime
+    from datetime import timedelta
+
+    now = datetime.now(timezone.utc)
+    fresh_words = (
+        "confirms", "confirmed", "announces", "announced", "charges", "charged",
+        "arrested", "arrest", "resigns", "resigned", "fired", "breaks", "exclusive",
+        "new details", "emerges", "emerged", "discovered", "uncovers", "uncovered",
+        "identified", "named", "ruled", "plot", "conspiracy", "indicted", "sentenced",
+        "found guilty", "linked", "motive", "cause of death",
+    )
+    one_time_events = (
+        "resigns", "resigned", "steps down", "fired", "dies", "dead at",
+        "killed in", "found dead", "passed away", "obituary",
+    )
+    for item in [data.get("hero")] + list(data.get("cards") or []):
+        if not isinstance(item, dict):
+            continue
+        raw = _assignment_shadow_source_published(item, packet)
+        try:
+            published = parsedate_to_datetime(raw).astimezone(timezone.utc)
+        except Exception:
+            continue
+        hours = max(0.0, (now - published).total_seconds() / 3600)
+        try:
+            score = int(item.get("urgency_score", 5) or 5)
+        except Exception:
+            score = 5
+        headline = str(item.get("headline") or "").lower()
+        if not any(word in headline for word in fresh_words):
+            if hours > 48:
+                score = min(score, 4)
+            elif hours > 36:
+                score = min(score, 5)
+            elif hours > 24:
+                score = min(score, 7)
+            elif hours > 12:
+                score = min(score, 8)
+        if hours > 48:
+            score = min(score, 4)
+        elif hours > 24:
+            score = min(score, 4 if any(word in headline for word in one_time_events) else 6)
+        elif hours > 12:
+            if any(word in headline for word in one_time_events):
+                score = min(score, 6)
+            else:
+                body = str(item.get("body") or "").lower()[:400]
+                dates = [
+                    (now - timedelta(days=days)).strftime("%B %d").lower().replace(" 0", " ")
+                    for days in range(2, 14)
+                ]
+                months = [
+                    (now - timedelta(days=months_back * 30)).strftime("%B").lower()
+                    for months_back in range(1, 6)
+                ]
+                stale_signals = [
+                    "last week", "last month", "a week ago", "days ago",
+                    "on monday", "on tuesday", "on wednesday", "on thursday",
+                    "on friday", "on saturday", "on sunday",
+                ] + dates + months
+                if any(signal in body for signal in stale_signals):
+                    score = min(score, 6)
+        item["urgency_score"] = score
+    return data
+
+
+def _assignment_shadow_story_is_stale(item, packet, archive):
+    """Mirror the live category stale-hero test for one shadow placement."""
+    from email.utils import parsedate_to_datetime
+    from datetime import timedelta
+
+    if not isinstance(item, dict):
+        return False
+    now = datetime.now(timezone.utc)
+    content = (str(item.get("teaser") or "") + " " + str(item.get("body") or "")[:800]).lower()
+    fresh_override = (
+        "today", "this morning", "this afternoon", "this evening", "hours ago",
+        "minutes ago", "just announced", "just released", "breaking", "moments ago",
+        "earlier today", "announced today", "arrested today", "ruled today", "confirmed today",
+    )
+    if any(phrase in content for phrase in fresh_override):
+        return False
+    try:
+        match = find_matching_entry(item.get("headline", ""), archive or [], item.get("link", ""))
+        if match:
+            lastmod = match.get("lastmod") or match.get("date", "")
+            if lastmod:
+                lastmod_dt = datetime.strptime(str(lastmod)[:10], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+                if (now - lastmod_dt).days <= 2:
+                    return False
+    except Exception:
+        pass
+    stale_days = {
+        (now - timedelta(days=days)).strftime("%A").lower()
+        for days in range(1, 5)
+    }
+    for day in stale_days:
+        if f" {day} " in content or f" {day}," in content or f" {day}." in content or content.startswith(f"{day} "):
+            return True
+    if any(
+        phrase in content
+        for phrase in (
+            "yesterday", "two days ago", "three days ago", "earlier this week",
+            "last week", "days ago", "happened on", "occurred on", "took place on",
+        )
+    ):
+        return True
+    raw = _assignment_shadow_source_published(item, packet)
+    try:
+        published = parsedate_to_datetime(raw).astimezone(timezone.utc)
+        if (now - published).total_seconds() / 3600 >= 24:
+            return True
+    except Exception:
+        pass
+    return False
+
+
+def _assignment_shadow_apply_stale_hero_swap(data, packet, archive):
+    hero = data.get("hero") if isinstance(data, dict) else None
+    if not isinstance(hero, dict) or not data.get("cards"):
+        return None
+    if not _assignment_shadow_story_is_stale(hero, packet, archive):
+        return None
+    category_key = str(packet.get("category_key") or "")
+    for index, card in enumerate(list(data.get("cards") or [])):
+        if _assignment_shadow_story_is_stale(card, packet, archive):
+            continue
+        if not _hero_eligible(category_key, card):
+            continue
+        old = hero
+        if not old.get("teaser"):
+            body = str(old.get("body") or "").strip()
+            first = body.split(". ")[0].strip()
+            old["teaser"] = (first[:160] + ".") if first else ""
+        data["hero"] = card
+        data["cards"][index] = old
+        return {
+            "from": str(old.get("headline") or ""),
+            "to": str(card.get("headline") or ""),
+        }
+    return None
+
+
+def _assignment_shadow_quality_guard(data, packet):
+    """Apply the same source-framing/category/publication-quality contracts used live."""
+    category_key = str(packet.get("category_key") or "")
+    diagnostics = {
+        "update_lead_rejections": [],
+        "article_framing_rejections": [],
+        "category_or_quality_rejections": [],
+    }
+
+    def passes_context(item):
+        if not isinstance(item, dict):
+            return False
+        try:
+            source = _assignment_source_by_index(packet, item.get("source_index"))
+        except Exception:
+            source = item
+        lead = _update_lead_diagnostics(item, source)
+        if lead.get("required") and not lead.get("passed"):
+            diagnostics["update_lead_rejections"].append({
+                "headline": item.get("headline", ""),
+                "missing": lead.get("missing", []),
+            })
+            return False
+        framing = _article_framing_diagnostics(item, source)
+        if framing.get("required") and not framing.get("passed"):
+            diagnostics["article_framing_rejections"].append({
+                "headline": item.get("headline", ""),
+                "missing": framing.get("missing", []),
+            })
+            return False
+        return True
+
+    cards = []
+    for card in list(data.get("cards") or []):
+        if not passes_context(card):
+            continue
+        if not (_hero_eligible(category_key, card) and _publishable_article(card, hero=False)):
+            diagnostics["category_or_quality_rejections"].append({
+                "surface": "card", "headline": card.get("headline", "")
+            })
+            continue
+        cards.append(card)
+    data["cards"] = cards
+
+    hero = data.get("hero") if isinstance(data.get("hero"), dict) else None
+    hero_ok = bool(
+        hero
+        and passes_context(hero)
+        and _hero_eligible(category_key, hero)
+        and _publishable_article(hero, hero=True)
+    )
+    if not hero_ok:
+        if hero:
+            diagnostics["category_or_quality_rejections"].append({
+                "surface": "hero", "headline": hero.get("headline", "")
+            })
+        replacement = next(
+            (
+                index for index, card in enumerate(data.get("cards") or [])
+                if _hero_eligible(category_key, card) and _publishable_article(card, hero=True)
+            ),
+            None,
+        )
+        if replacement is not None:
+            data["hero"] = data["cards"].pop(replacement)
+        else:
+            data["hero"] = None
+    return diagnostics
+
+
+def _assignment_shadow_apply_canonical_surface(data, output_root):
+    """Run the shared final canonical identity/dedup primitives without writing reports."""
+    archive = load_archive(Path(output_root) / "archive.json")
+    context = _build_final_canonical_surface_context(archive, output_root)
+    hero = data.get("hero") if isinstance(data.get("hero"), dict) else {}
+    hero_permalink = _live_item_permalink(hero)
+    hero_identity = _final_canonical_surface_identity(hero, hero_permalink, context)
+    hero_rewritten = _apply_final_canonical_surface_identity(hero, hero_identity) if hero else False
+    if hero_rewritten:
+        hero_permalink = hero_identity.get("canonical_permalink") or hero_permalink
+    cards, card_report = _dedupe_homepage_cards_by_permalink(
+        list(data.get("cards") or []),
+        _live_item_permalink,
+        hero_permalink=hero_permalink,
+        hero_item=hero,
+        surface_context=context,
+    )
+    data["cards"] = cards
+    return {
+        "hero_rewritten": bool(hero_rewritten),
+        "card_duplicate_removals": int(card_report.get("removed_count", 0) or 0),
+        "card_canonical_rewrites": int(card_report.get("canonical_rewrite_count", 0) or 0),
+    }
+
+
+def _assignment_shadow_final_projection(raw_shadow, packet, final_baseline, pre_generation_archive):
+    """Align a shadow category to the deterministic gates production must survive."""
+    data = copy.deepcopy(raw_shadow or {})
+    diagnostics = {
+        "stale_hero_swap": None,
+        "published_story_suppressions": [],
+        "county_authority_rejections": [],
+        "shared_archive_recovery_used": False,
+        "archive_filler_cards_omitted": 0,
+    }
+    _assignment_shadow_attach_source_metadata(data, packet)
+    _sanitize_nonstory_category(data, packet.get("category_label") or packet.get("category_key") or "")
+    _assignment_shadow_apply_age_caps(data, packet)
+    diagnostics["stale_hero_swap"] = _assignment_shadow_apply_stale_hero_swap(
+        data, packet, pre_generation_archive or []
+    )
+    diagnostics["quality_guard"] = _assignment_shadow_quality_guard(data, packet)
+
+    _stamp_current_run_story_ids(data, packet.get("source_inputs") or [])
+    diagnostics["published_story_suppressions"] = _suppress_published_skip_placements(
+        data, pre_generation_archive or [], str(packet.get("category_key") or "")
+    )
+    county_report = enforce_live_county_membership_authority([data])
+    diagnostics["county_authority_rejections"] = list(county_report.get("rejections") or [])
+
+    if not isinstance(data.get("hero"), dict) or not data.get("hero", {}).get("headline"):
+        fallback = copy.deepcopy((final_baseline or {}).get("hero") or {})
+        if fallback.get("headline"):
+            data["hero"] = fallback
+            diagnostics["shared_archive_recovery_used"] = True
+
+    diagnostics["canonical_surface"] = _assignment_shadow_apply_canonical_surface(
+        data, OUTPUT_DIR
+    )
+    county_report_final = enforce_live_county_membership_authority([data])
+    if county_report_final.get("rejections"):
+        diagnostics["county_authority_rejections"].extend(
+            county_report_final.get("rejections") or []
+        )
+    if not isinstance(data.get("hero"), dict) or not data.get("hero", {}).get("headline"):
+        fallback = copy.deepcopy((final_baseline or {}).get("hero") or {})
+        if fallback.get("headline"):
+            data["hero"] = fallback
+            diagnostics["shared_archive_recovery_used"] = True
+
+    source_count = len(packet.get("source_inputs") or [])
+    retained_cards = []
+    for card in list(data.get("cards") or []):
+        index = _assignment_shadow_restore_source_index(card, packet)
+        if index is not None and 1 <= index <= source_count:
+            retained_cards.append(card)
+        else:
+            diagnostics["archive_filler_cards_omitted"] += 1
+    data["cards"] = retained_cards
+    if isinstance(data.get("hero"), dict):
+        _assignment_shadow_restore_source_index(data["hero"], packet)
+    data["category_key"] = str(packet.get("category_key") or "")
+    data["category_label"] = str(packet.get("category_label") or "")
+    diagnostics["final_hero_headline"] = str((data.get("hero") or {}).get("headline") or "")
+    diagnostics["final_selected_source_indexes"] = [
+        item.get("source_index")
+        for item in [data.get("hero")] + list(data.get("cards") or [])
+        if isinstance(item, dict) and item.get("source_index") is not None
+    ]
+    return data, diagnostics
+
+
+def _run_assignment_editor_shadow_after_build(all_categories, pre_generation_archive):
+    """Run the editor->writer experiment after build and compare aligned final projections."""
     if not ASSIGNMENT_EDITOR_SHADOW_ENABLED:
         return None
 
     pending = list(ASSIGNMENT_EDITOR_PENDING.values())
     print(
         f"  Assignment-editor shadow: {len(pending)} live-generated category packet(s) queued; "
-        f"editor={ASSIGNMENT_EDITOR_MODEL}; writer={MODEL_ARTICLES}"
+        f"editor={ASSIGNMENT_EDITOR_MODEL}; writer={MODEL_ARTICLES}; comparison=final-pipeline-aligned"
     )
     results = []
     production_models = []
     for packet in pending:
         category_label = packet.get("category_label") or packet.get("category_key") or "category"
         production_models.append(str(packet.get("baseline_model") or MODEL_ARTICLES))
+        final_baseline, production_alignment = _assignment_shadow_final_production_projection(
+            packet, all_categories
+        )
         result = {
             "category_key": packet.get("category_key"),
             "category_label": category_label,
             "source_pool": packet.get("source_pool") or [],
-            "baseline_output": packet.get("baseline_output") or {},
+            "raw_baseline_output": packet.get("raw_baseline_output") or packet.get("baseline_output") or {},
+            "final_baseline_output": final_baseline,
             "assignment_plan": {},
             "assignment_diagnostics": {},
-            "challenger_output": {},
+            "raw_challenger_output": {},
+            "final_challenger_output": {},
+            "alignment_diagnostics": {
+                "production": production_alignment,
+                "shadow": {},
+            },
             "challenger_error": "",
             "editor_duration_seconds": None,
             "editor_actual_model": "",
@@ -9864,12 +10343,22 @@ def _run_assignment_editor_shadow_after_build():
                 writer_models.append(writer_model)
                 writer_duration += duration
                 cards.append(card_item)
-            result["challenger_output"] = {"hero": hero_item, "cards": cards}
+            raw_challenger = {"hero": hero_item, "cards": cards}
+            final_challenger, shadow_alignment = _assignment_shadow_final_projection(
+                raw_challenger,
+                packet,
+                final_baseline,
+                pre_generation_archive,
+            )
+            result["raw_challenger_output"] = raw_challenger
+            result["final_challenger_output"] = final_challenger
+            result["alignment_diagnostics"]["shadow"] = shadow_alignment
             result["writer_duration_seconds"] = round(writer_duration, 3)
             result["writer_actual_models"] = writer_models
             print(
                 f"    {category_label}: editor {editor_duration:.1f}s + "
-                f"{len(writer_models)} writer call(s) {writer_duration:.1f}s"
+                f"{len(writer_models)} writer call(s) {writer_duration:.1f}s; "
+                f"final hero='{str((final_challenger.get('hero') or {}).get('headline') or '')[:48]}'"
             )
         except Exception as exc:
             result["challenger_error"] = (
@@ -9903,7 +10392,8 @@ def _run_assignment_editor_shadow_after_build():
     print(
         "  Assignment-editor shadow complete: "
         f"{report.get('completed_categories', 0)} scoreable, "
-        f"{report.get('failed_categories', 0)} shadow failure(s). "
+        f"{report.get('failed_categories', 0)} shadow failure(s); "
+        "final-pipeline alignment applied. "
         "Review data/assignment-editor-shadow-review.md before opening the answer key."
     )
     return report
@@ -30375,7 +30865,7 @@ def main():
             "live publication unchanged"
         )
     try:
-        _run_assignment_editor_shadow_after_build()
+        _run_assignment_editor_shadow_after_build(all_categories, _pre_generation_archive)
     except Exception as exc:
         print(
             f"  Assignment-editor shadow unavailable ({type(exc).__name__}); "

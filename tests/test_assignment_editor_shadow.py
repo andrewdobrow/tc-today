@@ -94,7 +94,8 @@ def test_blind_review_hides_architecture_and_models_but_answer_key_reveals_them(
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "source_pool": [{"title": "First source"}, {"title": "Second source"}],
-        "baseline_output": _sample_output("Baseline", 1, 2),
+        "raw_baseline_output": _sample_output("RAW BASELINE", 1, 2),
+        "final_baseline_output": _sample_output("FINAL BASELINE", 2, 1),
         "assignment_plan": {
             "hero": {"source_index": 2, "angle": "Lead with arrest", "urgency_score": 9},
             "cards": [{"source_index": 1, "angle": "Support", "urgency_score": 6}],
@@ -106,7 +107,9 @@ def test_blind_review_hides_architecture_and_models_but_answer_key_reveals_them(
             "invalid_source_indexes": [],
             "duplicate_source_indexes": [],
         },
-        "challenger_output": _sample_output("Shadow", 2, 1),
+        "raw_challenger_output": _sample_output("RAW SHADOW", 2, 1),
+        "final_challenger_output": _sample_output("FINAL SHADOW", 1, 2),
+        "alignment_diagnostics": {"production": {"aligned": True}, "shadow": {"aligned": True}},
         "challenger_error": "",
         "editor_duration_seconds": 4.2,
         "writer_duration_seconds": 8.5,
@@ -132,6 +135,9 @@ def test_blind_review_hides_architecture_and_models_but_answer_key_reveals_them(
     assert "Angle/new-development focus" in review
     assert "Source mapping" in review
     assert "First source" in review and "Second source" in review
+    assert "FINAL BASELINE" in review and "FINAL SHADOW" in review
+    assert "RAW BASELINE" not in review and "RAW SHADOW" not in review
+    assert "final-pipeline" in review.lower()
 
     key = json.loads(key_path.read_text())
     paths = {
@@ -140,8 +146,14 @@ def test_blind_review_hides_architecture_and_models_but_answer_key_reveals_them(
     }
     assert paths == {"current_production", "sonnet5_editor_sonnet45_writer"}
     assert report["publication_isolation"] is True
+    assert report["comparison_stage"] == "final_pipeline_aligned"
     assert report["completed_categories"] == 1
-    assert report["categories"][0]["comparison_signals"]["challenger_source_mapping_valid"] is True
+    row = report["categories"][0]
+    assert row["raw_baseline_output"]["hero"]["headline"] == "RAW BASELINE hero"
+    assert row["final_baseline_output"]["hero"]["headline"] == "FINAL BASELINE hero"
+    assert row["raw_challenger_output"]["hero"]["headline"] == "RAW SHADOW hero"
+    assert row["final_challenger_output"]["hero"]["headline"] == "FINAL SHADOW hero"
+    assert row["comparison_signals"]["challenger_source_mapping_valid"] is True
 
 
 class _Block:
@@ -271,21 +283,104 @@ def test_generator_shadow_is_opt_in_post_build_and_cannot_publish():
     assert '"TCT_ASSIGNMENT_EDITOR_SHADOW", "false"' in source
     assert '"TCT_ASSIGNMENT_EDITOR_MODEL", "claude-sonnet-5"' in source
     assert "_queue_assignment_editor_category(" in source
-    assert "_run_assignment_editor_shadow_after_build()" in source
+    assert "_run_assignment_editor_shadow_after_build(all_categories, _pre_generation_archive)" in source
 
     normal_timing = source.index('print(f"  Timing: total generator runtime')
-    shadow_run = source.index("        _run_assignment_editor_shadow_after_build()")
+    shadow_run = source.index("        _run_assignment_editor_shadow_after_build(all_categories, _pre_generation_archive)")
     done = source.index('print(f"Done. {len(all_categories)} categories written.")')
     assert normal_timing < shadow_run < done
 
-    runner_start = source.index("def _run_assignment_editor_shadow_after_build():")
+    runner_start = source.index("def _run_assignment_editor_shadow_after_build(all_categories, pre_generation_archive):")
     runner_end = source.index("\ndef _parse_json_index_array", runner_start)
     runner = source[runner_start:runner_end]
-    assert 'result["challenger_output"] = {"hero": hero_item, "cards": cards}' in runner
+    assert 'result["raw_challenger_output"] = raw_challenger' in runner
+    assert 'result["final_challenger_output"] = final_challenger' in runner
+    assert "_assignment_shadow_final_production_projection" in runner
+    assert "_assignment_shadow_final_projection" in runner
     assert "all_categories.append" not in runner
     assert "GENERATION_CACHE.put" not in runner
-    assert "archive.json" not in runner
 
+
+
+def test_final_production_projection_uses_actual_live_hero_and_omits_archive_filler_cards():
+    from scripts import generate
+
+    packet = _shadow_packet()
+    packet["source_inputs"][0]["link"] = "https://example.com/source-one"
+    packet["source_inputs"][0]["source_url"] = "https://example.com/source-one"
+    final_categories = [{
+        "category_key": "martin",
+        "category_label": "Martin County",
+        "hero": {
+            "headline": "Brightline archive recovery hero",
+            "body": "A final deterministic recovery hero body with enough context.",
+            "_archive_only": True,
+            "_archive_verified_quality": True,
+        },
+        "cards": [
+            {
+                "headline": "Current packet story",
+                "source_title": "PALM CITY SOURCE TITLE",
+                "source_url": "https://example.com/source-one",
+                "body": "Current packet story body.",
+            },
+            {
+                "headline": "Older archive filler",
+                "_archive_only": True,
+                "_archive_verified_quality": True,
+            },
+        ],
+    }]
+    projection, diagnostics = generate._assignment_shadow_final_production_projection(
+        packet, final_categories
+    )
+    assert projection["hero"]["headline"] == "Brightline archive recovery hero"
+    assert [card["headline"] for card in projection["cards"]] == ["Current packet story"]
+    assert projection["cards"][0]["source_index"] == 1
+    assert diagnostics["archive_filler_cards_omitted"] == 1
+    assert diagnostics["final_live_hero_from_source_pool"] is False
+
+
+def test_shadow_alignment_uses_same_final_recovery_hero_when_shadow_is_suppressed(monkeypatch):
+    from scripts import generate
+
+    packet = _shadow_packet()
+    raw_shadow = _sample_output("Shadow", 1, 2)
+    final_baseline = {
+        "hero": {
+            "headline": "Shared deterministic archive recovery",
+            "body": "Recovered final production body.",
+            "_archive_only": True,
+            "_archive_verified_quality": True,
+        },
+        "cards": [],
+    }
+
+    monkeypatch.setattr(generate, "_assignment_shadow_quality_guard", lambda data, packet: {})
+    monkeypatch.setattr(generate, "_stamp_current_run_story_ids", lambda data, headlines: 0)
+
+    def suppress_hero(data, archive, category_key=""):
+        data["hero"] = None
+        data["cards"] = []
+        return [{"surface": "hero", "reason": "published_skip_placement_suppressed"}]
+
+    monkeypatch.setattr(generate, "_suppress_published_skip_placements", suppress_hero)
+    monkeypatch.setattr(
+        generate,
+        "enforce_live_county_membership_authority",
+        lambda categories: {"assessed_placements": 0, "rejections": []},
+    )
+    monkeypatch.setattr(
+        generate,
+        "_assignment_shadow_apply_canonical_surface",
+        lambda data, output_root: {"hero_rewritten": False, "card_duplicate_removals": 0, "card_canonical_rewrites": 0},
+    )
+    final_shadow, diagnostics = generate._assignment_shadow_final_projection(
+        raw_shadow, packet, final_baseline, []
+    )
+    assert final_shadow["hero"]["headline"] == "Shared deterministic archive recovery"
+    assert diagnostics["shared_archive_recovery_used"] is True
+    assert diagnostics["published_story_suppressions"][0]["surface"] == "hero"
 
 def test_update_workflow_exposes_separate_assignment_editor_shadow_checkbox_and_artifact():
     workflow = Path(".github/workflows/update.yml").read_text()
