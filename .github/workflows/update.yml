@@ -10,6 +10,11 @@ on:
         required: false
         default: false
         type: boolean
+      assignment_editor_shadow:
+        description: "Run Sonnet 5 assignment editor + Sonnet 4.5 writer shadow"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -124,6 +129,9 @@ jobs:
           TCT_ARTICLE_BANNER_MODE: ${{ vars.TCT_ARTICLE_BANNER_MODE || 'reader_support' }}
           # Manual-only, publication-isolated model evaluation. Routine runs stay off.
           TCT_MODEL_BAKEOFF: ${{ inputs.model_bakeoff }}
+          # Manual-only editor/writer architecture experiment. This runs only after
+          # the normal production build and cannot write live publication state.
+          TCT_ASSIGNMENT_EDITOR_SHADOW: ${{ inputs.assignment_editor_shadow }}
 
       - name: Upload model bake-off review
         if: ${{ inputs.model_bakeoff == true }}
@@ -134,6 +142,19 @@ jobs:
             data/model-bakeoff-report.json
             data/model-bakeoff-review.md
             data/model-bakeoff-answer-key.json
+            data/model-usage-report.json
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload assignment editor shadow review
+        if: ${{ inputs.assignment_editor_shadow == true }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: tct-assignment-editor-shadow-${{ github.run_id }}
+          path: |
+            data/assignment-editor-shadow-report.json
+            data/assignment-editor-shadow-review.md
+            data/assignment-editor-shadow-answer-key.json
             data/model-usage-report.json
           if-no-files-found: warn
           retention-days: 14
