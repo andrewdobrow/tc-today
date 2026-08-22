@@ -47,7 +47,8 @@ def test_shared_contract_registry_enforces_local_government_and_business():
     assert generate.CATEGORY_ELIGIBILITY_CONTRACTS["local_gov"]["mode"] == "enforce"
     assert generate.CATEGORY_ELIGIBILITY_CONTRACTS["business"]["mode"] == "enforce"
     assert generate.CATEGORY_ELIGIBILITY_CONTRACTS["crime"]["mode"] == "enforce"
-    for key in {"sports", "things_to_do", "florida"}:
+    assert generate.CATEGORY_ELIGIBILITY_CONTRACTS["things_to_do"]["mode"] == "enforce"
+    for key in {"sports", "florida"}:
         assert generate.CATEGORY_ELIGIBILITY_CONTRACTS[key]["mode"] == "observe_only"
     for key in {"martin", "st_lucie", "indian_river"}:
         assert generate.CATEGORY_ELIGIBILITY_CONTRACTS[key]["mode"] == "existing_geographic_enforce"
@@ -205,7 +206,7 @@ def test_category_eligibility_report_explains_incremental_rollout():
     assert report["schema_version"] == 1
     assert report["contract_version"] == generate.CATEGORY_ELIGIBILITY_CONTRACT_VERSION
     assert report["summary"]["rejected_count"] == 1
-    assert report["summary"]["enforced_categories"] == ["business", "crime", "local_gov"]
+    assert report["summary"]["enforced_categories"] == ["business", "crime", "local_gov", "things_to_do"]
     assert "sports" in report["summary"]["observe_only_categories"]
 
 
@@ -405,3 +406,175 @@ def test_crime_contract_version_invalidates_only_crime_cache(monkeypatch):
     sports_after = generate._category_generation_cache_key("sports", [source])
     assert crime_before != crime_after
     assert sports_before == sports_after
+
+
+def test_things_to_do_rejects_exact_martin_hoarding_recovery_story_even_if_classifier_is_wrong():
+    item = _item(
+        "Over 100 animals from Martin County hoarding cases begin recovery at Palm City shelter",
+        "The Humane Society of the Treasure Coast is caring for rescued animals from a Palm City hoarding case. "
+        "Paige O'Donnell faces 72 charges. Shelter staff said the dogs are healing and adoption applications begin Sept. 1.",
+        feed_url="https://www.wptv.com/news/region-martin-county.rss",
+    )
+    assessment = generate._category_eligibility_contract_assessment("things_to_do", item)
+    assert assessment["eligible"] is False
+    assert assessment["reason"] in {
+        "missing_attendable_activity_focus",
+        "competing_story_form_without_attendable_activity_focus",
+    }
+
+    previous = generate.STORY_CLASSIFICATION
+    try:
+        generate.STORY_CLASSIFICATION = {item["title"].lower(): {"things_to_do", "martin"}}
+        selected = generate.filter_category_headlines(
+            "things_to_do", [deepcopy(item)], target=12, min_keep=6
+        )
+    finally:
+        generate.STORY_CLASSIFICATION = previous
+    assert selected == []
+
+
+def test_things_to_do_hard_rejects_out_of_area_palm_beach_events_even_if_classified():
+    outside = _item(
+        "Palm Beach Food & Wine Festival unveils 2026 events and celebrity chefs",
+        "The Palm Beach Food & Wine Festival will run across Palm Beach County with tickets and tasting events.",
+        feed_url="https://www.wptv.com/news/local-news.rss",
+    )
+    previous = generate.STORY_CLASSIFICATION
+    try:
+        generate.STORY_CLASSIFICATION = {outside["title"].lower(): {"things_to_do"}}
+        selected = generate.filter_category_headlines(
+            "things_to_do", [deepcopy(outside)], target=12, min_keep=6
+        )
+    finally:
+        generate.STORY_CLASSIFICATION = previous
+    assert selected == []
+
+
+def test_things_to_do_accepts_local_attendable_event():
+    event = _item(
+        "Fort Pierce brewery hosts Sunday food festival and live music",
+        "A Fort Pierce brewery will host a food festival with live music Sunday. Tickets are available for the community event.",
+        feed_url="https://www.wptv.com/news/region-st-lucie-county.rss",
+    )
+    assessment = generate._category_eligibility_contract_assessment("things_to_do", event)
+    assert assessment["eligible"] is True
+    assert assessment["reason"] == "local_attendable_activity_confirmed"
+
+    previous = generate.STORY_CLASSIFICATION
+    try:
+        generate.STORY_CLASSIFICATION = {event["title"].lower(): {"things_to_do", "st_lucie"}}
+        selected = generate.filter_category_headlines(
+            "things_to_do", [deepcopy(event)], target=12, min_keep=6
+        )
+    finally:
+        generate.STORY_CLASSIFICATION = previous
+    assert [row["title"] for row in selected] == [event["title"]]
+    assert selected[0]["hero_eligible"] == "yes"
+
+
+def test_topic_routing_blocks_unclassified_story_instead_of_keyword_fallback():
+    event = _item(
+        "Fort Pierce weekend festival brings live music downtown",
+        "The Fort Pierce event includes a festival, live music and family activities downtown.",
+        feed_url="https://www.wptv.com/news/region-st-lucie-county.rss",
+    )
+    previous = generate.STORY_CLASSIFICATION
+    try:
+        generate.STORY_CLASSIFICATION = {}
+        selected = generate.filter_category_headlines(
+            "things_to_do", [deepcopy(event)], target=12, min_keep=6
+        )
+    finally:
+        generate.STORY_CLASSIFICATION = previous
+    assert selected == []
+
+
+def test_things_to_do_contract_version_invalidates_only_things_to_do_cache(monkeypatch):
+    source = _item(
+        "Fort Pierce festival returns downtown",
+        "A Fort Pierce festival returns with live music and tickets.",
+    )
+    things_before = generate._category_generation_cache_key("things_to_do", [source])
+    crime_before = generate._category_generation_cache_key("crime", [source])
+    monkeypatch.setattr(
+        generate,
+        "THINGS_TO_DO_ELIGIBILITY_CONTRACT_VERSION",
+        generate.THINGS_TO_DO_ELIGIBILITY_CONTRACT_VERSION + "-changed",
+    )
+    things_after = generate._category_generation_cache_key("things_to_do", [source])
+    crime_after = generate._category_generation_cache_key("crime", [source])
+    assert things_before != things_after
+    assert crime_before == crime_after
+
+
+def test_exact_aug22_things_to_do_contaminated_pool_is_empty_before_generation():
+    rows = [
+        _item(
+            "Palm Beach Food & Wine Festival unveils 2026 events, celebrity chefs and ticket sales",
+            "The Palm Beach Food & Wine Festival will feature ticketed tasting events across Palm Beach County.",
+            feed_url="https://www.wptv.com/news/local-news.rss",
+        ),
+        _item(
+            "Morikami Museum and Japanese Gardens in Delray Beach to celebrate Obon Weekend",
+            "The Delray Beach museum will host performances and activities during Obon Weekend.",
+            feed_url="https://www.wptv.com/news/local-news.rss",
+        ),
+        _item(
+            "Loggerhead Triathlon celebrates 40 years at Carlin Park in Jupiter",
+            "The Jupiter triathlon at Carlin Park includes registration for several race formats.",
+            feed_url="https://www.wptv.com/news/local-news.rss",
+        ),
+        _item(
+            "70 truckloads of dirt brought to Amerant Bank Arena ahead of Monster Jam this weekend",
+            "Monster Jam will take place at Amerant Bank Arena in Sunrise this weekend.",
+            feed_url="https://www.wptv.com/news/local-news.rss",
+        ),
+        _item(
+            "Palm Beach County homeowner surprised with fully furnished Habitat for Humanity home",
+            "A Palm Beach County homeowner received a furnished Habitat for Humanity home.",
+            feed_url="https://www.wptv.com/news/local-news.rss",
+        ),
+        _item(
+            "Vote daily for Palm Beach Gardens nonprofit in NASCAR Foundation's $100K award contest",
+            "A Palm Beach Gardens nonprofit founder is a finalist for a national award contest.",
+            feed_url="https://www.wptv.com/news/local-news.rss",
+        ),
+        _item(
+            "Animals rescued from Martin County hoarding cases start to show signs of healing",
+            "More than 100 rescued animals from Stuart and Palm City hoarding investigations are recovering. "
+            "One defendant faces animal cruelty charges and shelter staff described medical grooming and adoption applications.",
+            feed_url="https://www.wptv.com/news/region-martin-county.rss",
+        ),
+    ]
+    previous = generate.STORY_CLASSIFICATION
+    try:
+        # Deliberately simulate the worst case: stale/bad classifications label every
+        # row Things To Do. Deterministic locality + beat contracts must still win.
+        generate.STORY_CLASSIFICATION = {
+            row["title"].lower(): {"things_to_do"} for row in rows
+        }
+        selected = generate.filter_category_headlines(
+            "things_to_do", deepcopy(rows), target=12, min_keep=6
+        )
+    finally:
+        generate.STORY_CLASSIFICATION = previous
+
+    assert selected == []
+    assert generate._things_to_do_zero_candidate_fast_recovery("things_to_do", selected) is True
+
+
+def test_outside_area_crime_cannot_enter_local_crime_section_even_if_classifier_is_wrong():
+    outside = _item(
+        "Man arrested after shooting in Delray Beach",
+        "Delray Beach police arrested a suspect after a shooting in Palm Beach County.",
+        feed_url="https://www.wptv.com/news/local-news.rss",
+    )
+    previous = generate.STORY_CLASSIFICATION
+    try:
+        generate.STORY_CLASSIFICATION = {outside["title"].lower(): {"crime"}}
+        selected = generate.filter_category_headlines(
+            "crime", [deepcopy(outside)], target=12, min_keep=6
+        )
+    finally:
+        generate.STORY_CLASSIFICATION = previous
+    assert selected == []

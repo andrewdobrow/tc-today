@@ -639,6 +639,10 @@ CATEGORY_ELIGIBILITY_REPORT_SCHEMA_VERSION = 1
 CATEGORY_ELIGIBILITY_CONTRACT_VERSION = "1.0-local-government-central-action"
 BUSINESS_ELIGIBILITY_CONTRACT_VERSION = "1.0-business-development-primary-focus"
 CRIME_ELIGIBILITY_CONTRACT_VERSION = "1.0-primary-crime-safety-focus"
+THINGS_TO_DO_ELIGIBILITY_CONTRACT_VERSION = "1.0-local-attendable-activity-focus"
+CLASSIFICATION_BATCH_SIZE = 120
+TOPIC_CATEGORY_KEYS = frozenset({"local_gov", "crime", "business", "sports", "things_to_do", "florida"})
+LOCAL_TOPIC_CATEGORY_KEYS = TOPIC_CATEGORY_KEYS - {"florida"}
 COUNTY_MEMBERSHIP_AUTHORITY_SCHEMA_VERSION = 1
 COUNTY_MEMBERSHIP_AUTHORITY_VERSION = "1.1-source-derived-with-safe-legacy-migration"
 COUNTY_LEGACY_ARCHIVE_AUTHORITY_ORIGIN = "legacy_archive_membership_uncontradicted"
@@ -654,7 +658,7 @@ CATEGORY_ELIGIBILITY_CONTRACTS = {
     "crime": {"mode": "enforce", "policy": "primary_crime_safety_focus_required"},
     "business": {"mode": "enforce", "policy": "primary_business_development_focus_required"},
     "sports": {"mode": "observe_only", "policy": "existing_athletic_guard_retained"},
-    "things_to_do": {"mode": "observe_only", "policy": "future_explicit_contract"},
+    "things_to_do": {"mode": "enforce", "policy": "local_attendable_activity_required"},
     "florida": {"mode": "observe_only", "policy": "future_explicit_contract"},
     "martin": {"mode": "existing_geographic_enforce", "policy": "county_locality"},
     "st_lucie": {"mode": "existing_geographic_enforce", "policy": "county_locality"},
@@ -1050,6 +1054,8 @@ def _category_generation_cache_key(category_key, headlines):
             if category_key == "business"
             else CRIME_ELIGIBILITY_CONTRACT_VERSION
             if category_key == "crime"
+            else THINGS_TO_DO_ELIGIBILITY_CONTRACT_VERSION
+            if category_key == "things_to_do"
             else ""
         ),
         "county_membership_authority_version": (
@@ -1141,7 +1147,8 @@ def _cached_category_authority_assessment(category_key, item, headlines):
 
 
 # Populated once per run by classify_stories(); {headline_lower: set(category_keys)}.
-# None means classification unavailable -> keyword filtering is used instead.
+# Topic-category sources must be present in this map before generation. County pages
+# retain their separate deterministic source-authority fallback.
 STORY_CLASSIFICATION = None
 
 # Model selection — flip these to switch the whole pipeline between tiers.
@@ -5379,12 +5386,99 @@ def _crime_category_contract_assessment(item, base):
     return base
 
 
+def _things_to_do_category_contract_assessment(item, base):
+    """Require a genuinely local, attendable activity for Things To Do.
+
+    Classification is still required by the routing layer. This contract is a second,
+    deterministic boundary so a bad/stale classifier label cannot turn an animal-
+    welfare update, crime story, government action, or generic community reference
+    into an events/activities story.
+    """
+    title = _normalize_nonstory_text(str(item.get("headline") or item.get("title") or ""))
+    presentation = _normalize_nonstory_text(" ".join([
+        str(item.get("headline") or item.get("title") or ""),
+        str(item.get("teaser") or item.get("summary") or ""),
+        str(item.get("body") or item.get("article_text") or "")[:700],
+    ]))
+
+    activity_groups = {
+        "scheduled_event": [
+            "festival", "concert", "parade", "fair", "farmers market", "community event",
+            "family event", "holiday event", "celebration", "fundraiser", "benefit",
+            "movie night", "live music", "performance", "workshop", "class", "lecture",
+            "tickets", "registration", "open house", "block party", "street festival",
+        ],
+        "food_dining_experience": [
+            "food and wine", "food festival", "wine festival", "tasting", "grand opening",
+            "restaurant opens", "restaurant opening", "new restaurant", "dining event",
+        ],
+        "recreation_participation": [
+            "triathlon", "5k", "10k", "road race", "fun run", "charity walk",
+            "bike ride", "kayak", "paddle", "fishing tournament",
+        ],
+        "arts_culture_program": [
+            "art show", "art exhibition", "museum event", "museum program",
+            "theater performance", "theatre performance", "dance performance",
+            "author talk", "book signing",
+        ],
+    }
+    positive_signals = []
+    title_activity_hits = []
+    for name, terms in activity_groups.items():
+        hits = _category_contract_hits(presentation, terms)
+        if hits:
+            positive_signals.append(f"{name}:{hits[0]}")
+        title_activity_hits.extend(_category_contract_hits(title, terms))
+
+    competing_groups = {
+        "crime_public_safety": [
+            "arrested", "arrest", "charged", "charges", "sheriff", "deputies", "police",
+            "homicide", "murder", "shooting", "robbery", "burglary", "fatal crash",
+            "collision", "investigation",
+        ],
+        "animal_welfare_update": [
+            "hoarding case", "animal hoarding", "animal cruelty", "animals rescued",
+            "dogs rescued", "cats rescued", "medical grooming", "shelter staff",
+            "adoption applications", "rescued animals",
+        ],
+        "government_action": [
+            "county commission", "city council", "school board", "budget", "ordinance",
+            "rezoning", "tax rate", "public hearing",
+        ],
+    }
+    competing_signals = []
+    for name, terms in competing_groups.items():
+        hits = _category_contract_hits(presentation, terms)
+        if hits:
+            competing_signals.append(f"{name}:{hits[0]}")
+
+    local = _has_treasure_coast_locality(item)
+    eligible = bool(local and positive_signals)
+    reason = "local_attendable_activity_confirmed" if eligible else "missing_attendable_activity_focus"
+    if not local:
+        reason = "missing_treasure_coast_activity_nexus"
+    elif competing_signals and not title_activity_hits:
+        eligible = False
+        reason = "competing_story_form_without_attendable_activity_focus"
+
+    base.update({
+        "contract_version": THINGS_TO_DO_ELIGIBILITY_CONTRACT_VERSION,
+        "eligible": eligible,
+        "would_reject": not eligible,
+        "reason": reason,
+        "positive_signals": positive_signals,
+        "competing_signals": competing_signals,
+        "local_nexus_signals": ["treasure_coast_locality"] if local else [],
+    })
+    return base
+
+
 def _category_eligibility_contract_assessment(category_key, item):
     """Evaluate the explicit per-category semantic contract.
 
-    Local Government and Business & Development are enforced through the same shared
-    interface. Remaining topic beats stay observe-only until their own regression
-    fixtures are production-validated.
+    Local Government, Business & Development, Crime & Safety, and Things To Do are
+    enforced through the same shared interface. Remaining topic beats stay observe-only
+    until their own regression fixtures are production-validated.
     """
     config = _category_contract_config(category_key)
     base = {
@@ -5407,11 +5501,15 @@ def _category_eligibility_contract_assessment(category_key, item):
             base["contract_version"] = BUSINESS_ELIGIBILITY_CONTRACT_VERSION
         elif category_key == "crime":
             base["contract_version"] = CRIME_ELIGIBILITY_CONTRACT_VERSION
+        elif category_key == "things_to_do":
+            base["contract_version"] = THINGS_TO_DO_ELIGIBILITY_CONTRACT_VERSION
         return base
     if category_key == "business":
         return _business_category_contract_assessment(item, base)
     if category_key == "crime":
         return _crime_category_contract_assessment(item, base)
+    if category_key == "things_to_do":
+        return _things_to_do_category_contract_assessment(item, base)
     if category_key != "local_gov":
         return base
 
@@ -5554,6 +5652,7 @@ def _compact_category_contract_assessment(assessment, item=None):
         "reason": assessment.get("reason", ""),
         "positive_signals": list(assessment.get("positive_signals") or []),
         "competing_signals": list(assessment.get("competing_signals") or []),
+        "local_nexus_signals": list(assessment.get("local_nexus_signals") or []),
         "headline": str((item or {}).get("title") or (item or {}).get("headline") or ""),
         "source_url": str((item or {}).get("link") or (item or {}).get("source_url") or ""),
     }
@@ -5569,6 +5668,13 @@ def _sports_zero_candidate_fast_recovery(category_key, headlines):
     if category_key != "sports":
         return False
     return not any(_hero_eligible("sports", item) for item in (headlines or []))
+
+
+def _things_to_do_zero_candidate_fast_recovery(category_key, headlines):
+    """Do not ask Claude to choose a Things To Do lead from a non-event pool."""
+    if category_key != "things_to_do":
+        return False
+    return not any(_hero_eligible("things_to_do", item) for item in (headlines or []))
 
 
 def _county_zero_candidate_fast_recovery(category_key, headlines):
@@ -5909,24 +6015,36 @@ def filter_category_headlines(category_key, headlines, target=HEADLINES_PER_CATE
     """Return the best on-topic headlines for a section without blanking weak sections.
 
     Broad WPTV feeds are useful because they provide full bodies, but they can put crime,
-    schools, business, and county stories in the same pool. This layer promotes stories
-    that actually match the current section. If the filter would leave too little content,
-    it falls back to the original list so Claude still has something to work with.
+    schools, business, and county stories in the same pool. Topic beats now require an
+    explicit classification; local topic beats also require deterministic Treasure Coast
+    locality. County pages retain their separate geographic/source-authority fallback.
     """
     if not headlines:
         return headlines
 
     scored = []
+    _unclassified_rejections = 0
+    _locality_rejections = 0
     for h in headlines:
+        # Local topic beats are Treasure Coast sections, not South Florida sections.
+        # Locality is deterministic and cannot be bypassed by a classifier label.
+        if category_key in LOCAL_TOPIC_CATEGORY_KEYS and not _has_treasure_coast_locality(h):
+            _locality_rejections += 1
+            continue
+
         _contract = _category_eligibility_contract_assessment(category_key, h)
         h["_category_eligibility_contract"] = _compact_category_contract_assessment(_contract, h)
         if _contract.get("mode") == "enforce" and not _contract.get("eligible"):
             continue
-        # Classification-first: when the LLM classified this story, its assignment
-        # dominates. Assigned to this category -> strong score. Assigned 'none'
-        # (non-local filler) -> excluded entirely. Not in the map -> keyword score.
+        # Classification-first: every topic-category source must have an explicit
+        # classification. An absent mapping is no longer permission to use broad
+        # keywords; it is a fail-safe rejection to archive recovery. County pages
+        # retain their independent source-authority fallback.
         if STORY_CLASSIFICATION is not None:
             _cats = STORY_CLASSIFICATION.get((h.get("title", "") or "").lower())
+            if _cats is None and category_key in TOPIC_CATEGORY_KEYS:
+                _unclassified_rejections += 1
+                continue
             if _cats is not None:
                 if "none" in _cats and len(_cats) == 1:
                     continue  # non-local content, drop from every category
@@ -5942,6 +6060,12 @@ def filter_category_headlines(category_key, headlines, target=HEADLINES_PER_CATE
         h["category_match_score"] = score
         h["hero_eligible"] = "yes" if _hero_eligible(category_key, h) else "no"
         scored.append((score, h))
+
+    if _locality_rejections or _unclassified_rejections:
+        print(
+            f"  Category routing gate: rejected {_locality_rejections} outside-Treasure-Coast "
+            f"and {_unclassified_rejections} unclassified {CATEGORIES[category_key]['label']} source(s)"
+        )
 
     # For broad/local categories, require only a weak positive score. The goal is
     # to remove obvious mismatches, not starve the section.
@@ -7826,10 +7950,11 @@ def _build_category_eligibility_report(records):
             "local_gov": CATEGORY_ELIGIBILITY_CONTRACT_VERSION,
             "business": BUSINESS_ELIGIBILITY_CONTRACT_VERSION,
             "crime": CRIME_ELIGIBILITY_CONTRACT_VERSION,
+            "things_to_do": THINGS_TO_DO_ELIGIBILITY_CONTRACT_VERSION,
         },
         "rollout_policy": (
-            "shared_contract_interface; Local Government, Business & Development, and "
-            "Crime & Safety enforced; remaining topic contracts observe-only until regression fixtures "
+            "shared_contract_interface; Local Government, Business & Development, Crime & Safety, "
+            "and Things To Do enforced; remaining topic contracts observe-only until regression fixtures "
             "are production-validated"
         ),
         "summary": {
@@ -27127,18 +27252,18 @@ def validate_live_permalink_integrity(all_categories, top_cat=None, output_dir=N
     return report
 
 def classify_stories(feed_cache):
-    """ONE batched LLM call assigns categories to every unique story across all feeds.
-    Replaces the per-category banned-word lists with actual comprehension: the model
-    knows a DEA meth story is crime (not business because it says 'prices'), that
-    campaign fundraising is not local government, and that a national survey doesn't
-    belong on a hyperlocal site at all.
+    """Classify every unique feed story in bounded model batches.
 
-    Returns {headline_lower: set(category_keys)} or None on failure (caller falls
-    back to keyword behavior). A story can get MULTIPLE categories (e.g. a Hobe Sound
-    business opening is both 'business' and 'martin'). 'none' means the story does
-    not belong on the site (national fluff, out-of-area, syndicated filler).
+    The old implementation silently truncated the classification universe to the first
+    120 stories. Anything after that cap could fall back to loose keyword routing and
+    leak into the wrong section. We now classify the complete feed universe in chunks
+    of ``CLASSIFICATION_BATCH_SIZE`` and keep exact-input cache hits free.
+
+    The return value is always a mapping when stories exist. If a classification batch
+    fails, those stories remain absent from the mapping; topic-category routing treats
+    absence as ineligible rather than falling back to keywords. This fails safely to
+    archive recovery instead of publishing an unclassified story in the wrong beat.
     """
-    # Collect unique stories from all feeds
     seen = {}
     for url, entries in feed_cache.items():
         for e in entries[:15]:
@@ -27156,131 +27281,122 @@ def classify_stories(feed_cache):
     if not stories:
         return None
 
-    # Cap the batch to keep the call reasonable; freshest-first ordering is
-    # preserved by feed order. 120 covers a typical run's unique stories.
-    stories = stories[:120]
-
-    # Classifications are deterministic for the exact title + summary input. Only
-    # send new or materially changed stories to Claude; unchanged stories come from
-    # the persistent cache.
     result = {}
     uncached_stories = []
     for story in stories:
         cache_key = _classification_cache_key(story)
         cached = GENERATION_CACHE.get("classifications", cache_key)
         if cached is _CACHE_MISS:
-            story = dict(story)
-            story["_cache_key"] = cache_key
-            uncached_stories.append(story)
+            pending = dict(story)
+            pending["_cache_key"] = cache_key
+            uncached_stories.append(pending)
             continue
         cats = set(cached.get("categories", []))
         result[story["title"].lower()] = cats or {"none"}
 
-    if not uncached_stories:
-        n_none = sum(1 for value in result.values() if value == {"none"})
-        print(
-            f"  Story classification cache: {len(result)} hit(s), 0 Claude request(s) "
-            f"({n_none} rejected as non-local)"
-        )
-        return result
-
-    listing = "\n".join(
-        f"{i+1}. {story['title']}" + (f" — {story['summary'][:140]}" if story['summary'] else "")
-        for i, story in enumerate(uncached_stories)
-    )
-
-    prompt = (
-        "You classify stories for Treasure Coast Today, a hyperlocal news site covering "
-        "Martin County, St. Lucie County, and Indian River County, Florida (the Treasure Coast). "
-        "Palm Beach County, Miami, Orlando etc. are OUTSIDE the coverage area.\n\n"
-        "Categories:\n"
-        "- local_gov: city/county government, schools, budgets, ordinances, public meetings IN the three counties\n"
-        "- crime: crime, arrests, courts, fires, crashes, drug enforcement, public safety affecting the three counties "
-        "(including threats spreading INTO the area from elsewhere)\n"
-        "- business: local business openings/closings, development, real estate, economy IN the three counties\n"
-        "- sports: local sports specifically (St. Lucie Mets, Treasure Coast high schools and colleges). "
-        "Do NOT tag national or world sports (World Cup, NFL, NBA, national leagues) unless a Treasure Coast team, "
-        "school or athlete is the subject\n"
-        "- things_to_do: local events, festivals, restaurants, recreation in the three counties\n"
-        "- florida: statewide Florida news including state politics, laws, insurance, DeSantis, elections\n"
-        "- martin / st_lucie / indian_river: stories specifically tied to that county. Assign the county ONLY when "
-        "the story's events happen in, or its subject is clearly located in, that specific county. Assign the "
-        "CORRECT county and no other: a St. Lucie story is st_lucie, NOT indian_river or martin. A story about one "
-        "county must never be tagged with a different county. If a story spans the whole Treasure Coast, it may take "
-        "more than one county; if it names no specific county, assign NO county tag (a topic category or florida only)\n"
-        "- none: does NOT belong on this site. This includes:\n"
-        "  * national or world news with no Treasure Coast angle (e.g. 'World Cup boosts national beer sales')\n"
-        "  * stories about Palm Beach County, Miami, Orlando, Tampa or anywhere outside the three counties, "
-        "with no direct Treasure Coast impact\n"
-        "  * syndicated lifestyle, survey, or listicle filler\n"
-        "  * PROMOTIONAL or ADVERTORIAL content: sponsored posts, contributed 'articles' from law firms, "
-        "clinics, contractors or other businesses, SEO content marketing, and anything whose real purpose is to "
-        "advertise a service rather than report news (e.g. 'Vero Beach truck accident lawyer explains what to do "
-        "after a crash' is a law-firm ad, not news). If it reads like marketing or a business explaining/promoting "
-        "its own services, it is none\n"
-        "  * a TV or radio station promoting itself or its own people (weather spotter, anchor, reporter, "
-        "meteorologist or on-air personality profiles; behind-the-scenes-at-our-station pieces) — self-promotion "
-        "for a competing outlet, not news, even when it names a local town\n"
-        "  * NON-NEWSWORTHY or automated data: a private individual's routine activity, automated flight-tracking "
-        "or vessel-tracking logs (e.g. 'Piper Aztec flew from Stuart to Georgia'), weather-station readings, "
-        "auto-generated data pages, obituaries-as-listings, or anything with no genuine public interest. If it is "
-        "just a record of one person's or family's private activity and not a matter of public concern, it is none. "
-        "A local news site reports events that matter to the community, not logs of who flew or sailed where\n\n"
-        "Rules:\n"
-        "- A story can have multiple categories (e.g. a Stuart restaurant opening = business + martin + things_to_do)\n"
-        "- Statewide political stories (campaigns, fundraising, primaries) = florida ONLY, never local_gov\n"
-        "- A story about a threat/trend spreading INTO the Treasure Coast from outside IS relevant (crime/florida as fits)\n"
-        "- Feel-good human interest about a local person = the county + the closest topic fit\n"
-        "- NEVER assign a county tag to a national, statewide, or out-of-area story just because it mentions a topic; "
-        "a national business or sports story does not become local\n"
-        "- Be strict. This is a LOCAL news site. When in doubt between none and a category, choose none. It is far "
-        "better to drop a marginal or out-of-area story than to show it in a local section\n\n"
-        f"Stories:\n{listing}\n\n"
-        "Return ONLY a JSON object mapping story number to an array of category keys, e.g.\n"
-        '{"1": ["crime", "martin"], "2": ["none"], "3": ["florida"]}\n'
-        "Every story number must appear. No other text."
-    )
-
-    try:
-        resp = client.messages.create(
-            model=MODEL_SELECTION,
-            max_tokens=3000,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        raw = resp.content[0].text.strip()
-        if raw.startswith("```"):
-            raw = raw.split("```")[1].lstrip("json").strip()
-        mapping = json.loads(raw)
-    except Exception as e:
-        if result:
-            print(
-                f"  Story classification failed for {len(uncached_stories)} cache miss(es) ({e}); "
-                f"using {len(result)} cached classification(s) plus keyword fallback"
-            )
-            return result
-        print(f"  Story classification failed ({e}); falling back to keyword filters")
-        return None
-
     valid_keys = set(CATEGORIES.keys()) | {"none"}
-    for i, story in enumerate(uncached_stories):
-        cats = mapping.get(str(i + 1), [])
-        if isinstance(cats, str):
-            cats = [cats]
-        cats = {category for category in cats if category in valid_keys}
-        if not cats:
-            cats = {"none"}
-        result[story["title"].lower()] = cats
-        GENERATION_CACHE.put(
-            "classifications",
-            story["_cache_key"],
-            {"title": story["title"], "categories": sorted(cats)},
+    classified_now = 0
+    failed_now = 0
+    batch_calls = 0
+
+    for batch_start in range(0, len(uncached_stories), CLASSIFICATION_BATCH_SIZE):
+        batch = uncached_stories[batch_start:batch_start + CLASSIFICATION_BATCH_SIZE]
+        listing = "\n".join(
+            f"{i+1}. {story['title']}" + (f" — {story['summary'][:140]}" if story['summary'] else "")
+            for i, story in enumerate(batch)
         )
+        prompt = (
+            "You classify stories for Treasure Coast Today, a hyperlocal news site covering "
+            "Martin County, St. Lucie County, and Indian River County, Florida (the Treasure Coast). "
+            "Palm Beach County, Miami, Orlando etc. are OUTSIDE the coverage area.\n\n"
+            "Categories:\n"
+            "- local_gov: city/county government, schools, budgets, ordinances, public meetings IN the three counties\n"
+            "- crime: crime, arrests, courts, fires, crashes, drug enforcement, public safety affecting the three counties "
+            "(including threats spreading INTO the area from elsewhere)\n"
+            "- business: local business openings/closings, development, real estate, economy IN the three counties\n"
+            "- sports: local sports specifically (St. Lucie Mets, Treasure Coast high schools and colleges). "
+            "Do NOT tag national or world sports (World Cup, NFL, NBA, national leagues) unless a Treasure Coast team, "
+            "school or athlete is the subject\n"
+            "- things_to_do: local events, festivals, restaurants, recreation in the three counties\n"
+            "- florida: statewide Florida news including state politics, laws, insurance, DeSantis, elections\n"
+            "- martin / st_lucie / indian_river: stories specifically tied to that county. Assign the county ONLY when "
+            "the story's events happen in, or its subject is clearly located in, that specific county. Assign the "
+            "CORRECT county and no other: a St. Lucie story is st_lucie, NOT indian_river or martin. A story about one "
+            "county must never be tagged with a different county. If a story spans the whole Treasure Coast, it may take "
+            "more than one county; if it names no specific county, assign NO county tag (a topic category or florida only)\n"
+            "- none: does NOT belong on this site. This includes:\n"
+            "  * national or world news with no Treasure Coast angle (e.g. 'World Cup boosts national beer sales')\n"
+            "  * stories about Palm Beach County, Miami, Orlando, Tampa or anywhere outside the three counties, "
+            "with no direct Treasure Coast impact\n"
+            "  * syndicated lifestyle, survey, or listicle filler\n"
+            "  * PROMOTIONAL or ADVERTORIAL content: sponsored posts, contributed 'articles' from law firms, "
+            "clinics, contractors or other businesses, SEO content marketing, and anything whose real purpose is to "
+            "advertise a service rather than report news (e.g. 'Vero Beach truck accident lawyer explains what to do "
+            "after a crash' is a law-firm ad, not news). If it reads like marketing or a business explaining/promoting "
+            "its own services, it is none\n"
+            "  * a TV or radio station promoting itself or its own people (weather spotter, anchor, reporter, "
+            "meteorologist or on-air personality profiles; behind-the-scenes-at-our-station pieces) — self-promotion "
+            "for a competing outlet, not news, even when it names a local town\n"
+            "  * NON-NEWSWORTHY or automated data: a private individual's routine activity, automated flight-tracking "
+            "or vessel-tracking logs (e.g. 'Piper Aztec flew from Stuart to Georgia'), weather-station readings, "
+            "auto-generated data pages, obituaries-as-listings, or anything with no genuine public interest. If it is "
+            "just a record of one person's or family's private activity and not a matter of public concern, it is none. "
+            "A local news site reports events that matter to the community, not logs of who flew or sailed where\n\n"
+            "Rules:\n"
+            "- A story can have multiple categories (e.g. a Stuart restaurant opening = business + martin + things_to_do)\n"
+            "- Statewide political stories (campaigns, fundraising, primaries) = florida ONLY, never local_gov\n"
+            "- A story about a threat/trend spreading INTO the Treasure Coast from outside IS relevant (crime/florida as fits)\n"
+            "- Feel-good human interest about a local person = the county + the closest topic fit\n"
+            "- NEVER assign a county tag to a national, statewide, or out-of-area story just because it mentions a topic; "
+            "a national business or sports story does not become local\n"
+            "- Be strict. This is a LOCAL news site. When in doubt between none and a category, choose none. It is far "
+            "better to drop a marginal or out-of-area story than to show it in a local section\n\n"
+            f"Stories:\n{listing}\n\n"
+            "Return ONLY a JSON object mapping story number to an array of category keys, e.g.\n"
+            '{"1": ["crime", "martin"], "2": ["none"], "3": ["florida"]}\n'
+            "Every story number must appear. No other text."
+        )
+
+        batch_calls += 1
+        try:
+            resp = client.messages.create(
+                model=MODEL_SELECTION,
+                max_tokens=3000,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            raw = resp.content[0].text.strip()
+            if raw.startswith("```"):
+                raw = raw.split("```")[1].lstrip("json").strip()
+            mapping = json.loads(raw)
+        except Exception as e:
+            failed_now += len(batch)
+            print(
+                f"  Story classification batch {batch_calls} failed for {len(batch)} story/stories ({e}); "
+                "those stories are blocked from topic-category generation"
+            )
+            continue
+
+        for i, story in enumerate(batch):
+            cats = mapping.get(str(i + 1), [])
+            if isinstance(cats, str):
+                cats = [cats]
+            cats = {category for category in cats if category in valid_keys}
+            if not cats:
+                cats = {"none"}
+            result[story["title"].lower()] = cats
+            GENERATION_CACHE.put(
+                "classifications",
+                story["_cache_key"],
+                {"title": story["title"], "categories": sorted(cats)},
+            )
+            classified_now += 1
 
     n_none = sum(1 for value in result.values() if value == {"none"})
     cache_hits = len(stories) - len(uncached_stories)
     print(
-        f"  Story classification: {cache_hits} cache hit(s), "
-        f"{len(uncached_stories)} Claude-classified ({n_none} rejected as non-local)"
+        f"  Story classification: {cache_hits} cache hit(s), {classified_now} Claude-classified "
+        f"across {batch_calls} batch(es), {failed_now} unclassified/blocked "
+        f"({n_none} rejected as non-local)"
     )
     return result
 
@@ -28798,6 +28914,23 @@ def main():
 
         _category_record["selected_source_count"] = len(headlines)
         print(f"  {len(headlines)} publishable-source headlines fetched")
+        if _things_to_do_zero_candidate_fast_recovery(cat_key, headlines):
+            print(
+                "  Things To Do fast recovery: no deterministic local event/activity candidate; "
+                "skipping Claude and using verified archive recovery"
+            )
+            _finalize_category_generation_record(
+                _category_record,
+                "things_to_do_zero_candidate_archive_recovery",
+                _category_started,
+                archive_recovery_requested=True,
+                failure_code="no_things_to_do_hero_candidates",
+                failure_summary=(
+                    "Selected Things To Do source pool contained no deterministic local event/activity hero candidate"
+                ),
+            )
+            continue
+
         if _sports_zero_candidate_fast_recovery(cat_key, headlines):
             print(
                 "  Sports fast recovery: no deterministic hero candidate; "

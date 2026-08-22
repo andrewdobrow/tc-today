@@ -225,3 +225,58 @@ def test_generation_cache_persists_across_process_runs(tmp_path: Path):
     assert cached == {"categories": ["martin"]}
     assert path.exists()
     assert not path.with_suffix(".json.tmp").exists()
+
+
+def test_classification_batches_cover_story_121_instead_of_truncating(tmp_path: Path, monkeypatch):
+    generate = _load_generate_module()
+    cache = generate.PersistentGenerationCache(tmp_path / "generation-cache.json")
+    monkeypatch.setattr(generate, "GENERATION_CACHE", cache)
+
+    calls = []
+
+    class _Messages:
+        def create(self, **kwargs):
+            calls.append(kwargs)
+            prompt = kwargs["messages"][0]["content"]
+            story_lines = [line for line in prompt.splitlines() if line[:1].isdigit() and ". " in line]
+            mapping = {str(i + 1): ["crime", "st_lucie"] for i in range(len(story_lines))}
+            return _Response(json.dumps(mapping))
+
+    monkeypatch.setattr(generate, "client", types.SimpleNamespace(messages=_Messages()))
+    # classify_stories intentionally consumes the same first-15 slice per feed that
+    # fetch_headlines consumes. Spread 121 unique rows across feeds to exercise the
+    # old global 120-story cap boundary.
+    feed_cache = {}
+    for feed_index in range(9):
+        start = feed_index * 15
+        count = 15 if feed_index < 8 else 1
+        feed_cache[f"feed-{feed_index}"] = [
+            {"title": f"Fort Pierce arrest story {i:03d}", "summary": "Police announced an arrest in Fort Pierce."}
+            for i in range(start, start + count)
+        ]
+
+    result = generate.classify_stories(feed_cache)
+
+    assert len(result) == 121
+    assert result["fort pierce arrest story 120"] == {"crime", "st_lucie"}
+    assert len(calls) == 2
+
+
+def test_failed_classification_batch_leaves_stories_unclassified_for_safe_blocking(tmp_path: Path, monkeypatch):
+    generate = _load_generate_module()
+    cache = generate.PersistentGenerationCache(tmp_path / "generation-cache.json")
+    monkeypatch.setattr(generate, "GENERATION_CACHE", cache)
+
+    class _Messages:
+        def create(self, **kwargs):
+            raise RuntimeError("classification unavailable")
+
+    monkeypatch.setattr(generate, "client", types.SimpleNamespace(messages=_Messages()))
+    feed_cache = {
+        "feed": [
+            {"title": "Fort Pierce weekend festival", "summary": "A local festival with live music in Fort Pierce."}
+        ]
+    }
+
+    result = generate.classify_stories(feed_cache)
+    assert result == {}
