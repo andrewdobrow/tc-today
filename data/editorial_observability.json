@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-22T01:38:15Z",
+  "generated_at": "2026-08-22T01:47:30Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -49,20 +49,20 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 182,
+    "candidates_processed": 185,
     "routes": {
-      "generate_new": 10,
-      "skip": 171,
+      "generate_new": 3,
+      "skip": 181,
       "update_existing": 1
     },
     "eligibility": {
-      "low_value": 106,
-      "publishable": 76
+      "low_value": 108,
+      "publishable": 77
     },
     "source_classes": {
-      "aggregator": 106,
+      "aggregator": 108,
       "local_news": 43,
-      "regional_news": 28,
+      "regional_news": 29,
       "unknown": 5
     },
     "rejected_count": 0,
@@ -70,20 +70,22 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 10,
-      "same_event": 172
+      "new_story": 3,
+      "same_event": 182
     },
     "examples": [
       {
         "story_id": "story_005187",
         "title": "Westlake Mobil station dispensed diesel from premium gas pump, driver says, leading to $26K engine replacement",
         "event_key": "unknown-event-a904f48aad",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -204,10 +206,11 @@
         "event_key": "unknown-event-81488c7b0c",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -338,9 +341,9 @@
         ]
       },
       {
-        "story_id": "story_004999",
-        "title": "Data center concerns unseat council members in local Florida election - Treasure Coast News",
-        "event_key": "unknown-event-c9fe098133",
+        "story_id": "story_005000",
+        "title": "Nonprofit pushes for 'Dignity Bus' to aid Florida homeless - Treasure Coast News",
+        "event_key": "unknown-event-7845ccef98",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -357,13 +360,15 @@
         "story_id": "story_005187",
         "title": "Westlake Mobil station dispensed diesel from premium gas pump, driver says, leading to $26K engine replacement",
         "event_key": "unknown-event-a904f48aad",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -493,10 +498,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -636,9 +642,9 @@
         ]
       },
       {
-        "story_id": "story_004999",
-        "title": "Data center concerns unseat council members in local Florida election - Treasure Coast News",
-        "event_key": "unknown-event-c9fe098133",
+        "story_id": "story_005000",
+        "title": "Nonprofit pushes for 'Dignity Bus' to aid Florida homeless - Treasure Coast News",
+        "event_key": "unknown-event-7845ccef98",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -669,8 +675,8 @@
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
       "stories_with_timelines": 1253,
-      "timeline_entries_examined": 3295,
-      "transitions_examined": 1908,
+      "timeline_entries_examined": 3296,
+      "transitions_examined": 1909,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 25,
       "high_confidence_candidate_count": 5,
@@ -3382,26 +3388,26 @@
   "local_relevance": {
     "scopes": {
       "florida": 1104,
-      "treasure_coast_local": 844,
+      "treasure_coast_local": 845,
       "treasure_coast_region": 401,
-      "unknown": 2094
+      "unknown": 2095
     },
     "average_score": 60.22
   },
   "editorial_proximity": {
     "scopes": {
       "florida": 1104,
-      "treasure_coast_local": 844,
+      "treasure_coast_local": 845,
       "treasure_coast_region": 401,
-      "unknown": 2094
+      "unknown": 2095
     },
-    "average_priority": 3.47
+    "average_priority": 3.45
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3642,
-      "developing": 108,
-      "ongoing": 691,
+      "active": 3631,
+      "developing": 100,
+      "ongoing": 712,
       "resolved": 2
     }
   },
@@ -3409,8 +3415,8 @@
     "repair_version": 14,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 4432,
-    "active_stories_after": 4432,
+    "active_stories_before": 4441,
+    "active_stories_after": 4441,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -3439,20 +3445,20 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-08-22T01:32:02Z",
-    "quarantined_story_records_retained": 377,
-    "active_story_count": 4443
+    "generated_at": "2026-08-22T01:42:34Z",
+    "quarantined_story_records_retained": 382,
+    "active_story_count": 4445
   },
   "stories": {
-    "total": 4443,
+    "total": 4445,
     "importance_levels": {
       "breaking": 7,
       "high": 72,
-      "normal": 658,
-      "low": 3706,
+      "normal": 659,
+      "low": 3707,
       "archived": 0
     },
-    "average_importance": 8.94,
+    "average_importance": 8.95,
     "top": [
       {
         "story_id": "story_001557",
@@ -3467,7 +3473,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 14.88
+          "age_hours": 15.04
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3529,7 +3535,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-21T10:42:11.995126+00:00",
-          "hours_since_update": 14.88,
+          "hours_since_update": 15.04,
           "event_count": 28,
           "timeline_entries": 24
         }
@@ -3547,7 +3553,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 9.9
+          "age_hours": 10.06
         },
         "level": "high",
         "importance_reasons": [
@@ -3591,13 +3597,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-21T15:41:39.092086+00:00",
-          "hours_since_update": 9.9,
+          "hours_since_update": 10.06,
           "event_count": 34,
           "timeline_entries": 34
         }
       },
       {
-        "story_id": "story_005186",
+        "story_id": "story_005202",
         "title": "Motorist hospitalized after crash involving Brightline train in Hobe Sound - WPEC",
         "score": 55,
         "editorial_priority": 62,
@@ -3609,7 +3615,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 0.06
+          "age_hours": 0.04
         },
         "level": "high",
         "importance_reasons": [
@@ -3661,8 +3667,8 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-22T01:31:36.504717+00:00",
-          "hours_since_update": 0.06,
+          "last_updated": "2026-08-22T01:42:08.420969+00:00",
+          "hours_since_update": 0.04,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -3680,7 +3686,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 119.85
+          "age_hours": 120.03
         },
         "level": "high",
         "importance_reasons": [
@@ -3721,7 +3727,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-17T01:41:33.127844+00:00",
-          "hours_since_update": 119.85,
+          "hours_since_update": 120.03,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -3739,7 +3745,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 378.68
+          "age_hours": 378.86
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3793,7 +3799,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-06T06:51:35.977301+00:00",
-          "hours_since_update": 378.68,
+          "hours_since_update": 378.86,
           "event_count": 40,
           "timeline_entries": 24
         }
@@ -3811,7 +3817,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 14.89
+          "age_hours": 15.05
         },
         "level": "high",
         "importance_reasons": [
@@ -3865,7 +3871,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-21T10:42:11.995126+00:00",
-          "hours_since_update": 14.89,
+          "hours_since_update": 15.05,
           "event_count": 15,
           "timeline_entries": 11
         }
@@ -3883,7 +3889,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 513.85
+          "age_hours": 514.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3931,7 +3937,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 513.85,
+          "hours_since_update": 514.03,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3949,7 +3955,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 313.34
+          "age_hours": 313.51
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3997,7 +4003,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-09T00:12:17.273491+00:00",
-          "hours_since_update": 313.34,
+          "hours_since_update": 313.51,
           "event_count": 10,
           "timeline_entries": 7
         }
@@ -4015,7 +4021,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 191.85
+          "age_hours": 192.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4063,7 +4069,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 191.85,
+          "hours_since_update": 192.03,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -4081,7 +4087,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 182.85
+          "age_hours": 183.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4127,7 +4133,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T10:41:34.652293+00:00",
-          "hours_since_update": 182.85,
+          "hours_since_update": 183.03,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4145,7 +4151,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 95.85
+          "age_hours": 96.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4186,7 +4192,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-18T01:41:42.161620+00:00",
-          "hours_since_update": 95.85,
+          "hours_since_update": 96.03,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4204,7 +4210,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 158.85
+          "age_hours": 159.02
         },
         "level": "high",
         "importance_reasons": [
@@ -4245,7 +4251,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-15T10:41:53.949415+00:00",
-          "hours_since_update": 158.85,
+          "hours_since_update": 159.02,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4263,7 +4269,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 153.89
+          "age_hours": 154.05
         },
         "level": "high",
         "importance_reasons": [
@@ -4302,7 +4308,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-15T15:41:58.428218+00:00",
-          "hours_since_update": 153.89,
+          "hours_since_update": 154.05,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4320,7 +4326,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 4.89
+          "age_hours": 5.05
         },
         "level": "normal",
         "importance_reasons": [
@@ -4363,7 +4369,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-21T20:42:04.135455+00:00",
-          "hours_since_update": 4.89,
+          "hours_since_update": 5.05,
           "event_count": 10,
           "timeline_entries": 10
         }
@@ -4381,7 +4387,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 144.22
+          "age_hours": 144.39
         },
         "level": "high",
         "importance_reasons": [
@@ -4420,7 +4426,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-16T01:19:42.166524+00:00",
-          "hours_since_update": 144.22,
+          "hours_since_update": 144.39,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4438,7 +4444,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 501.47
+          "age_hours": 501.65
         },
         "level": "high",
         "importance_reasons": [
@@ -4481,7 +4487,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 501.47,
+          "hours_since_update": 501.65,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4499,7 +4505,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 501.47
+          "age_hours": 501.65
         },
         "level": "high",
         "importance_reasons": [
@@ -4542,7 +4548,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 501.47,
+          "hours_since_update": 501.65,
           "event_count": 14,
           "timeline_entries": 7
         }
@@ -4560,7 +4566,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 191.85
+          "age_hours": 192.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4603,7 +4609,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 191.85,
+          "hours_since_update": 192.03,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4621,7 +4627,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 559.76
+          "age_hours": 559.94
         },
         "level": "high",
         "importance_reasons": [
@@ -4665,7 +4671,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 559.76,
+          "hours_since_update": 559.94,
           "event_count": 6,
           "timeline_entries": 2
         }
@@ -4683,7 +4689,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 201.85
+          "age_hours": 202.02
         },
         "level": "high",
         "importance_reasons": [
@@ -4727,7 +4733,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-13T15:41:45.363233+00:00",
-          "hours_since_update": 201.85,
+          "hours_since_update": 202.02,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -4737,7 +4743,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 6,
-    "generated_at": "2026-08-22T01:36:08Z",
+    "generated_at": "2026-08-22T01:45:29Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -4752,8 +4758,9 @@
     "summary": {
       "category_count": 9,
       "statuses": {
+        "cache_hit": 2,
         "category_eligibility_archive_recovery": 3,
-        "generated_live": 4,
+        "generated_live": 2,
         "no_publishable_sources": 1,
         "sports_zero_candidate_archive_recovery": 1
       },
@@ -4761,14 +4768,14 @@
         "no_category_eligible_sources": 3,
         "no_sports_hero_candidates": 1
       },
-      "model_attempt_count": 4,
-      "model_elapsed_seconds": 72.013,
+      "model_attempt_count": 2,
+      "model_elapsed_seconds": 45.493,
       "archive_recovery_requested_count": 5,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 5,
-      "published_story_duplicate_suppression_count": 61,
+      "published_story_duplicate_suppression_count": 60,
       "story_aware_update_context_count": 1
     },
     "categories": [
@@ -4777,7 +4784,7 @@
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 22,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 7,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4813,7 +4820,7 @@
             "source_url": "https://www.wptv.com/news/local-news/our-community/wx-community-connection/backyard-cookout-hibachi-chef-what-one-family-can-expect-for-weather-this-weekend"
           }
         ],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -4843,6 +4850,16 @@
             "canonical_slug": "2026-08-21-abandoned-boats-fill-wildcat-cove-near-fort-pierce-creating-safety-hazards-betwe",
             "canonical_headline": "Abandoned boats fill Wildcat Cove near Fort Pierce, creating safety hazards between nature preserves",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "James Martin to take on Brian Mast after wining Democratic primary for Florida's 21st Congressional District - WFLX",
+            "source_url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQU3B5cTlhQ19Rd2V1bjZCWG5SYlZIRThyeEhJMEZnb0xKY2poaEpqcGlEaU55dWJDdTdIc2M5WTJHYkV6ODM0NFNJUmVlZlNfVjBhUTFHamZGdzh2M1NwRHdVbEJnZTZvSTFjSFlZUmtzU1RYZ2xfZDRvYWFrV0JlSFdDeTVQSGVpNGp6S2ZuamRNWXVBY0ZYa3dobmFjMTlZSk9Ka1dHb1pCc2NqeWVwUVBGbTZMV3ZTZUhTcDV4YkRPSHZpVjVHX2t30gHeAUFVX3lxTFA0NGtxdkw5bTZLX3JyQkJGMV83dXJDXzJNUkg3b3lvdDVPc2o2MnNab0J4dHhfZFd1bzhJLXNzbnFEbjgwbEVnN2poWHFCdXVZN2UtOTlNbnhHMHhOdUV4eU1lOFZLajM0MW16RHp4Um9YN25xSW1ldWZLXzd0UDU5c2d2eEhwOXAzRGVEcXpDeVkySmZCNUJPVkswdExxN09jbXVjY1dfTThQMFVkb0xxY0h0aUhoZVZlM1YtM2l5c3NPa1JDX04xZkw0VjhMRFh1X09iaS1CX1d1TGRWUQ",
+            "editorial_story_id": "story_005088",
+            "canonical_slug": "2026-08-21-james-martin-wins-democratic-primary-for-congressional-district-21-by-less-than",
+            "canonical_headline": "James Martin wins Democratic primary for Congressional District 21 by less than 1%, will face Brian Mast in November",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -4899,14 +4916,14 @@
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 18.572
+        "elapsed_seconds": 12.614
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 20,
+        "fresh_candidate_count": 19,
         "publishable_source_count": 8,
         "selected_source_count": 3,
         "cache_hit": false,
@@ -4916,11 +4933,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 29.009,
+            "elapsed_seconds": 25.842,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 29.009,
+        "model_elapsed_seconds": 25.842,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -4949,7 +4966,7 @@
             "source_url": "https://www.wptv.com/news/local-news/our-community/wx-community-connection/backyard-cookout-hibachi-chef-what-one-family-can-expect-for-weather-this-weekend"
           }
         ],
-        "published_story_duplicate_suppression_count": 12,
+        "published_story_duplicate_suppression_count": 13,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
@@ -5033,16 +5050,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Police: Port St. Lucie man faces 5 sexual activity with a minor charges - WPEC",
-            "source_url": "https://cbs12.com/news/crime/police-port-st-lucie-man-faces-5-sexual-activity-with-a-minor-charges-sounds-gunfire-noise-flash-diversion-devices-residents-swat-team-search-warrant-felony-contributing-delinquency",
-            "editorial_story_id": "story_004905",
-            "canonical_slug": "2026-08-20-port-st-lucie-man-arrested-on-sexual-activity-with-minor-charges-after-swat-oper",
-            "canonical_headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Sheriff credits license plate readers in capture of murder suspect in Vero Beach killing - WPEC",
             "source_url": "https://cbs12.com/news/local/dawn-kriskewic-murder-suspect-matthew-waggle-indian-river-sheriff-credits-license-plate-readers-in-capture-of-murder-suspect-in-vero-beach-killing-flock-ex-wife-west-virginia-greyhound-bus-uber",
             "editorial_story_id": "story_004903",
@@ -5053,8 +5060,28 @@
           },
           {
             "category_key": "crime",
+            "source_headline": "Police: Port St. Lucie man faces 5 sexual activity with a minor charges - WPEC",
+            "source_url": "http://cbs12.com/news/crime/police-port-st-lucie-man-faces-5-sexual-activity-with-a-minor-charges-sounds-gunfire-noise-flash-diversion-devices-residents-swat-team-search-warrant-felony-contributing-delinquency",
+            "editorial_story_id": "story_004905",
+            "canonical_slug": "2026-08-20-port-st-lucie-man-arrested-on-sexual-activity-with-minor-charges-after-swat-oper",
+            "canonical_headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "St. Lucie County deputy found guilty of DUI as internal probe continues - WPEC",
+            "source_url": "https://cbs12.com/news/local/st-lucie-county-deputy-found-guilty-of-dui-as-internal-probe-continues-st-lucie-county-sheriffs-office-st-lucie-county-deputy-arthur-alfaro-richard-del-toro-dui-dui-arrest-dui-conviction-guilty-verdict-deputy-guilty-sheriffs-deputy-law",
+            "editorial_story_id": "story_004849",
+            "canonical_slug": "2026-08-20-st-lucie-county-deputy-found-guilty-of-dui-remains-on-unpaid-leave-during-intern",
+            "canonical_headline": "St. Lucie County deputy found guilty of DUI, remains on unpaid leave during internal review",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
             "surface": "hero",
-            "headline": "Woman's ex-boyfriend arrested in Vero Beach murder after Flock cameras track suspect to West Virginia",
+            "headline": "Vero Beach woman's ex-boyfriend arrested in fatal First Street shooting",
             "editorial_story_id": "story_002912",
             "canonical_slug": "2026-08-20-sebastian-man-arrested-in-west-virginia-for-vero-beach-homicide-after-license-pl",
             "canonical_headline": "Sebastian man arrested in West Virginia for Vero Beach homicide after license plate readers track multi-state flight",
@@ -5064,7 +5091,7 @@
           {
             "category_key": "crime",
             "surface": "card",
-            "headline": "36 Border Collies from Palm City hoarding case cleared for adoption starting September",
+            "headline": "Palm City woman surrenders 36 Border Collies rescued from hoarding case",
             "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
             "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
             "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
@@ -5079,7 +5106,7 @@
         "budget_seconds": 180.0,
         "live_hero_headline": "",
         "generated_card_count": 0,
-        "elapsed_seconds": 36.357
+        "elapsed_seconds": 33.247
       },
       {
         "category_key": "business",
@@ -5188,7 +5215,7 @@
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 6.949
+        "elapsed_seconds": 6.77
       },
       {
         "category_key": "sports",
@@ -5232,7 +5259,7 @@
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "new_publication_stale_rejected_count": 2,
-        "elapsed_seconds": 9.365
+        "elapsed_seconds": 6.839
       },
       {
         "category_key": "things_to_do",
@@ -5330,7 +5357,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 7.084
+        "elapsed_seconds": 6.921
       },
       {
         "category_key": "florida",
@@ -5394,16 +5421,16 @@
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 14.404
+        "elapsed_seconds": 6.524
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 4,
-        "selected_source_count": 4,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 3,
+        "selected_source_count": 3,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -5411,11 +5438,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 23.245,
+            "elapsed_seconds": 19.651,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 23.245,
+        "model_elapsed_seconds": 19.651,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -5426,10 +5453,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
@@ -5493,28 +5520,8 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Major crash on I-95 North in Martin County, cleared - WPEC",
-            "source_url": "https://cbs12.com/news/florida/major-accident-shuts-down-2-right-lanes-on-i-95-north-in-martin-county-florida-news-florida-traffic-major-accident-511-fhp",
-            "editorial_story_id": "story_001557",
-            "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
-            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
             "surface": "hero",
-            "headline": "Motorist hospitalized with traumatic injuries after Brightline collision in Hobe Sound",
-            "editorial_story_id": "story_004892",
-            "canonical_slug": "2026-08-20-suv-driver-hospitalized-after-collision-with-brightline-train-in-hobe-sound",
-            "canonical_headline": "SUV driver hospitalized with traumatic injuries after collision with Brightline train in Hobe Sound",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "published_skip_placement_suppressed"
-          },
-          {
-            "category_key": "martin",
-            "surface": "card",
-            "headline": "Owner surrenders 36 Border Collies rescued from Palm City hoarding case",
+            "headline": "Palm City hoarding suspect relinquishes 36 Border Collies, clearing path for adoption",
             "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
             "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
             "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
@@ -5529,28 +5536,21 @@
         "budget_seconds": 180.0,
         "live_hero_headline": "",
         "generated_card_count": 0,
-        "elapsed_seconds": 38.627
+        "elapsed_seconds": 30.872
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 17,
         "publishable_source_count": 3,
         "selected_source_count": 2,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 7.963,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 7.963,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -5700,32 +5700,22 @@
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Two Fort Pierce women arrested after counterfeit movie prop bill used at Port St. Lucie restaurant",
-        "generated_card_count": 1,
-        "elapsed_seconds": 15.894
+        "elapsed_seconds": 6.703
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "generated_live",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 19,
-        "publishable_source_count": 8,
+        "status": "cache_hit",
+        "fetched_candidate_count": 28,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 7,
         "selected_source_count": 2,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 11.796,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 11.796,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -5736,10 +5726,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
@@ -5820,26 +5810,13 @@
             "canonical_headline": "Sebastian man arrested in West Virginia for Vero Beach homicide after license plate readers track multi-state flight",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "surface": "hero",
-            "headline": "Ex-boyfriend arrested in Vero Beach homicide after Flock system tracks suspect to West Virginia",
-            "editorial_story_id": "story_002912",
-            "canonical_slug": "2026-08-20-sebastian-man-arrested-in-west-virginia-for-vero-beach-homicide-after-license-pl",
-            "canonical_headline": "Sebastian man arrested in West Virginia for Vero Beach homicide after license plate readers track multi-state flight",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "published_skip_placement_suppressed"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Multi-million dollar crane overturns in ditch near Oslo Road in Vero Beach",
-        "generated_card_count": 0,
-        "elapsed_seconds": 23.29
+        "elapsed_seconds": 11.244
       }
     ]
   }
