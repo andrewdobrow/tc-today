@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-23T01:48:08Z",
+  "generated_at": "2026-08-23T02:34:03Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 4,
-    "placements_after": 4,
+    "placements_before": 3,
+    "placements_after": 3,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,20 +49,20 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 180,
+    "candidates_processed": 170,
     "routes": {
-      "generate_new": 16,
+      "generate_new": 6,
       "skip": 162,
       "update_existing": 2
     },
     "eligibility": {
-      "low_value": 115,
-      "publishable": 65
+      "low_value": 114,
+      "publishable": 56
     },
     "source_classes": {
-      "aggregator": 115,
-      "local_news": 43,
-      "regional_news": 19,
+      "aggregator": 114,
+      "local_news": 32,
+      "regional_news": 21,
       "unknown": 3
     },
     "rejected_count": 0,
@@ -70,7 +70,7 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 14,
+      "new_story": 4,
       "same_event": 166
     },
     "examples": [
@@ -94,10 +94,11 @@
         "event_key": "traffic-crash-2be28b7d8b-2be28b7d8b",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/region-c-palm-beach-county/lantana/plane-crashes-into-ocean-near-lantana-beach-no-injuries-reported",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -377,10 +378,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/region-c-palm-beach-county/lantana/plane-crashes-into-ocean-near-lantana-beach-no-injuries-reported",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -659,66 +661,22 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 1,
+    "candidate_count": 0,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {
-      "new_story": 1
-    },
-    "milestones": {
-      "investigation": 1
-    },
-    "reason_codes": {
-      "entity_match": 1,
-      "identity_anchor_qualified": 1,
-      "location_match": 1,
-      "novel_milestone": 1,
-      "title_continuity": 1
-    },
-    "examples": [
-      {
-        "headline": "St. Lucie deputies arrest Fort Pierce man in Spanish Lakes vehicle burglary investigation - WQCS",
-        "event_key": "unknown-event-ea2448ff29",
-        "current_story_id": "story_005334",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_005043",
-        "candidate_confidence": 0.65,
-        "candidate_milestones": [
-          "investigation"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "location_match",
-          "entity_match",
-          "title_continuity",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_005043",
-          "Novel milestones: investigation",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.50",
-          "Location match: True",
-          "Agency match: False",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.65"
-        ]
-      }
-    ],
+    "current_relationships": {},
+    "milestones": {},
+    "reason_codes": {},
+    "examples": [],
     "retrospective_candidate_count": 25,
     "retrospective_high_confidence_candidate_count": 5,
     "retrospective_activation_eligible_candidate_count": 3,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1188,
-      "timeline_entries_examined": 3166,
-      "transitions_examined": 1848,
+      "stories_with_timelines": 1190,
+      "timeline_entries_examined": 3170,
+      "transitions_examined": 1850,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 25,
       "high_confidence_candidate_count": 5,
@@ -3430,26 +3388,26 @@
   "local_relevance": {
     "scopes": {
       "florida": 1062,
-      "treasure_coast_local": 826,
+      "treasure_coast_local": 827,
       "treasure_coast_region": 389,
-      "unknown": 2032
+      "unknown": 2034
     },
     "average_score": 60.27
   },
   "editorial_proximity": {
     "scopes": {
       "florida": 1062,
-      "treasure_coast_local": 826,
+      "treasure_coast_local": 827,
       "treasure_coast_region": 389,
-      "unknown": 2032
+      "unknown": 2034
     },
-    "average_priority": 3.34
+    "average_priority": 3.35
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3468,
+      "active": 3469,
       "breaking": 1,
-      "developing": 88,
+      "developing": 90,
       "ongoing": 750,
       "resolved": 2
     }
@@ -3458,8 +3416,8 @@
     "repair_version": 14,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 4523,
-    "active_stories_after": 4523,
+    "active_stories_before": 4536,
+    "active_stories_after": 4536,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -3488,17 +3446,17 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-08-23T01:42:12Z",
-    "quarantined_story_records_retained": 419,
-    "active_story_count": 4536
+    "generated_at": "2026-08-23T02:29:18Z",
+    "quarantined_story_records_retained": 423,
+    "active_story_count": 4539
   },
   "stories": {
-    "total": 4309,
+    "total": 4312,
     "importance_levels": {
       "breaking": 7,
       "high": 71,
-      "normal": 626,
-      "low": 3605,
+      "normal": 627,
+      "low": 3607,
       "archived": 0
     },
     "average_importance": 8.81,
@@ -3516,7 +3474,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 5.05
+          "age_hours": 5.83
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3572,7 +3530,7 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 35,
+        "event_count": 36,
         "timeline_entries": 30,
         "relationship_decisions": 7,
         "canonical_source_candidates": 30,
@@ -3580,8 +3538,8 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-08-22T20:41:45.376071+00:00",
-          "hours_since_update": 5.05,
-          "event_count": 35,
+          "hours_since_update": 5.83,
+          "event_count": 36,
           "timeline_entries": 30
         }
       },
@@ -3598,7 +3556,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 34.03
+          "age_hours": 34.81
         },
         "level": "high",
         "importance_reasons": [
@@ -3642,7 +3600,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-21T15:41:39.092086+00:00",
-          "hours_since_update": 34.03,
+          "hours_since_update": 34.81,
           "event_count": 34,
           "timeline_entries": 34
         }
@@ -3660,7 +3618,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 144.02
+          "age_hours": 144.81
         },
         "level": "high",
         "importance_reasons": [
@@ -3701,7 +3659,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-17T01:41:33.127844+00:00",
-          "hours_since_update": 144.02,
+          "hours_since_update": 144.81,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -3719,7 +3677,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 402.85
+          "age_hours": 403.64
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3773,7 +3731,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-06T06:51:35.977301+00:00",
-          "hours_since_update": 402.85,
+          "hours_since_update": 403.64,
           "event_count": 40,
           "timeline_entries": 24
         }
@@ -3791,7 +3749,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 15.06
+          "age_hours": 15.83
         },
         "level": "high",
         "importance_reasons": [
@@ -3845,7 +3803,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-22T10:41:44.573199+00:00",
-          "hours_since_update": 15.06,
+          "hours_since_update": 15.83,
           "event_count": 17,
           "timeline_entries": 12
         }
@@ -3863,7 +3821,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 538.02
+          "age_hours": 538.81
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3911,7 +3869,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 538.02,
+          "hours_since_update": 538.81,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3929,7 +3887,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 337.51
+          "age_hours": 338.29
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3977,7 +3935,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-09T00:12:17.273491+00:00",
-          "hours_since_update": 337.51,
+          "hours_since_update": 338.29,
           "event_count": 10,
           "timeline_entries": 7
         }
@@ -3995,7 +3953,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 216.02
+          "age_hours": 216.81
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4043,7 +4001,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 216.02,
+          "hours_since_update": 216.81,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -4061,7 +4019,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 207.02
+          "age_hours": 207.81
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4107,7 +4065,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T10:41:34.652293+00:00",
-          "hours_since_update": 207.02,
+          "hours_since_update": 207.81,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4125,7 +4083,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 120.02
+          "age_hours": 120.8
         },
         "level": "high",
         "importance_reasons": [
@@ -4166,7 +4124,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-18T01:41:42.161620+00:00",
-          "hours_since_update": 120.02,
+          "hours_since_update": 120.8,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4184,7 +4142,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 21.52
+          "age_hours": 22.29
         },
         "level": "normal",
         "importance_reasons": [
@@ -4227,7 +4185,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-22T04:14:16.260764+00:00",
-          "hours_since_update": 21.52,
+          "hours_since_update": 22.29,
           "event_count": 11,
           "timeline_entries": 11
         }
@@ -4245,7 +4203,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 525.64
+          "age_hours": 526.42
         },
         "level": "high",
         "importance_reasons": [
@@ -4288,7 +4246,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 525.64,
+          "hours_since_update": 526.42,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4306,7 +4264,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 525.64
+          "age_hours": 526.43
         },
         "level": "high",
         "importance_reasons": [
@@ -4349,7 +4307,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 525.64,
+          "hours_since_update": 526.43,
           "event_count": 14,
           "timeline_entries": 7
         }
@@ -4367,7 +4325,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 216.02
+          "age_hours": 216.81
         },
         "level": "high",
         "importance_reasons": [
@@ -4410,7 +4368,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 216.02,
+          "hours_since_update": 216.81,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4428,7 +4386,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 583.93
+          "age_hours": 584.72
         },
         "level": "high",
         "importance_reasons": [
@@ -4472,7 +4430,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 583.93,
+          "hours_since_update": 584.72,
           "event_count": 6,
           "timeline_entries": 2
         }
@@ -4490,7 +4448,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 226.02
+          "age_hours": 226.8
         },
         "level": "high",
         "importance_reasons": [
@@ -4534,7 +4492,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-13T15:41:45.363233+00:00",
-          "hours_since_update": 226.02,
+          "hours_since_update": 226.8,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -4552,7 +4510,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 231.01
+          "age_hours": 231.8
         },
         "level": "high",
         "importance_reasons": [
@@ -4596,7 +4554,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-08-13T10:41:50.330585+00:00",
-          "hours_since_update": 231.01,
+          "hours_since_update": 231.8,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4614,7 +4572,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 192.28
+          "age_hours": 193.06
         },
         "level": "high",
         "importance_reasons": [
@@ -4657,7 +4615,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-15T01:26:01.600639+00:00",
-          "hours_since_update": 192.28,
+          "hours_since_update": 193.06,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4675,7 +4633,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 646.17
+          "age_hours": 646.95
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4719,7 +4677,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-27T03:32:10.873614+00:00",
-          "hours_since_update": 646.17,
+          "hours_since_update": 646.95,
           "event_count": 5,
           "timeline_entries": 3
         }
@@ -4737,7 +4695,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 125.57
+          "age_hours": 126.36
         },
         "level": "high",
         "importance_reasons": [
@@ -4771,7 +4729,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-17T20:08:29.029595+00:00",
-          "hours_since_update": 125.57,
+          "hours_since_update": 126.36,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4781,7 +4739,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-08-23T01:46:02Z",
+    "generated_at": "2026-08-23T02:32:10Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -4796,25 +4754,26 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "cache_hit": 1,
-        "category_eligibility_archive_recovery": 5,
-        "generated_live": 3
+        "cache_hit": 2,
+        "category_eligibility_archive_recovery": 4,
+        "generated_live": 2,
+        "no_publishable_sources": 1
       },
       "failures": {
-        "no_category_eligible_sources": 5
+        "no_category_eligible_sources": 4
       },
-      "model_attempt_count": 3,
-      "model_elapsed_seconds": 54.642,
+      "model_attempt_count": 2,
+      "model_elapsed_seconds": 22.07,
       "archive_recovery_requested_count": 5,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 5,
-      "published_story_duplicate_suppression_count": 50,
+      "published_story_duplicate_suppression_count": 41,
       "story_aware_update_context_count": 1,
-      "material_update_promotion_evaluation_count": 13,
+      "material_update_promotion_evaluation_count": 14,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 9,
+      "material_update_promotion_cache_hit_count": 10,
       "material_update_promotion_model_call_count": 4
     },
     "categories": [
@@ -4822,8 +4781,8 @@
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 20,
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 8,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -4859,7 +4818,7 @@
             "source_url": "https://www.wptv.com/news/local-news/our-community/wx-community-connection/backyard-cookout-hibachi-chef-what-one-family-can-expect-for-weather-this-weekend"
           }
         ],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "local_gov",
@@ -4910,34 +4869,14 @@
             "canonical_headline": "James Martin wins Democratic primary for Congressional District 21 by less than 1%, will face Brian Mast in November",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "McIntyre has declined Fort Pierce interim job - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/news/st_lucie/mcintyre-has-declined-fort-pierce-interim-job/article_b9e34749-0917-5e0d-bab9-e3c0383836b3.html",
-            "editorial_story_id": "story_005041",
-            "canonical_slug": "2026-08-21-fort-pierce-faces-legal-vacancy-after-daniel-mcintyre-declines-interim-city-atto",
-            "canonical_headline": "Fort Pierce faces legal vacancy after Daniel McIntyre declines interim city attorney job",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Major accident shuts down 2 right lanes on I-95 North in Martin County - WPEC",
-            "source_url": "http://cbs12.com/news/florida/major-accident-shuts-down-2-right-lanes-on-i-95-north-in-martin-county-florida-news-florida-traffic-major-accident-511-fhp",
-            "editorial_story_id": "story_001557",
-            "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
-            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 2,
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "local_gov",
@@ -5028,70 +4967,33 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "McIntyre has declined Fort Pierce interim job - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/news/st_lucie/mcintyre-has-declined-fort-pierce-interim-job/article_b9e34749-0917-5e0d-bab9-e3c0383836b3.html",
-            "canonical_slug": "2026-08-21-fort-pierce-faces-legal-vacancy-after-daniel-mcintyre-declines-interim-city-atto",
-            "canonical_headline": "Fort Pierce faces legal vacancy after Daniel McIntyre declines interim city attorney job",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "local_gov",
-            "source_headline": "Major accident shuts down 2 right lanes on I-95 North in Martin County - WPEC",
-            "source_url": "http://cbs12.com/news/florida/major-accident-shuts-down-2-right-lanes-on-i-95-north-in-martin-county-florida-news-florida-traffic-major-accident-511-fhp",
-            "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
-            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "known_canonical_identity_conflict",
-            "semantic_action": "hold",
-            "confidence": 0.95,
-            "shared_anchors": [],
-            "novel_facts": [
-              "I-95 North crash near Mile Marker 89 in Martin County",
-              "Occurred at approximately 5:16 p.m. on Thursday",
-              "Two right lanes temporarily blocked",
-              "Crash cleared according to Florida 511"
-            ],
-            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-            "validation_errors": [
-              "known_canonical_identity_conflict"
-            ]
           }
         ],
-        "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 21.517
+        "new_publication_stale_rejected_count": 2,
+        "elapsed_seconds": 13.058
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "category_eligibility_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 29,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 6,
-        "selected_source_count": 0,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 8,
+        "selected_source_count": 2,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Crime & Safety category eligibility contract",
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 14.356,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 14.356,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5100,7 +5002,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
@@ -5120,16 +5022,6 @@
         ],
         "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "crime",
-            "source_headline": "Vero Beach man arrested on attempted murder charge following birthday party - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/crime/indian_river/vero-beach-man-arrested-on-attempted-murder-charge-following-birthday-party/article_bc52cbd6-0a26-5967-82d8-be911b63901f.html",
-            "editorial_story_id": "story_005292",
-            "canonical_slug": "2026-08-22-vero-beach-man-arrested-on-attempted-murder-charge-after-birthday-party-assault",
-            "canonical_headline": "Vero Beach man arrested on attempted murder charge after birthday party assault",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "crime",
             "source_headline": "Vero Beach table tennis club faces closure, community rallies with GoFundMe campaign",
@@ -5162,26 +5054,6 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "Indian River County Sheriff’s Office working to bring murder suspect down to Florida - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/crime/indian_river/indian-river-county-sheriff-s-office-working-to-bring-murder-suspect-down-to-florida/article_6d24d44d-d604-523d-bb37-7396d14820be.html",
-            "editorial_story_id": "story_002912",
-            "canonical_slug": "2026-08-22-gun-used-in-vero-beach-homicide-belonged-to-suspects-ex-wife-indian-river-county",
-            "canonical_headline": "Gun used in Vero Beach homicide belonged to suspect's ex-wife, Indian River County sheriff says",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Fort Pierce man charged with eight Spanish Lakes/Port St. Lucie burglaries - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/crime/st_lucie/fort-pierce-man-charged-with-eight-spanish-lakes-port-st-lucie-burglaries/article_2f6111b4-b135-5170-ae29-ed03b9a8668b.html",
-            "editorial_story_id": "story_005043",
-            "canonical_slug": "2026-08-21-fort-pierce-man-arrested-on-eight-burglary-charges-in-port-st-lucie-spanish-lake",
-            "canonical_headline": "Fort Pierce man arrested on eight burglary charges in Port St. Lucie Spanish Lakes community",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
             "source_headline": "Movie money, real arrests: Fake $100 bill lands two Fort Pierce women in jail - cw34.com",
             "source_url": "https://cw34.com/newsletter-daily/100-movie-money-bill-turned-a-port-st-lucie-dinner-outing-into-a-trip-to-jail-port-st-lucie-st-lucie-county-st-lucie-county-sheriffs-office-st-lucie-draft-house-counterfeit-money-counterfeit-100-bill-fake-money-fake-100-bill-movie-money",
             "editorial_story_id": "story_004853",
@@ -5202,6 +5074,16 @@
           },
           {
             "category_key": "crime",
+            "source_headline": "Flock license plate readers help crack Vero Beach homicide case, suspect caught in West Virginia - WFLX",
+            "source_url": "https://www.wflx.com/2026/08/20/flock-license-plate-readers-help-crack-vero-beach-homicide-case-suspect-caught-west-virginia",
+            "editorial_story_id": "story_002912",
+            "canonical_slug": "2026-08-22-gun-used-in-vero-beach-homicide-belonged-to-suspects-ex-wife-indian-river-county",
+            "canonical_headline": "Gun used in Vero Beach homicide belonged to suspect's ex-wife, Indian River County sheriff says",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "Police: Port St. Lucie man faces 5 sexual activity with a minor charges - WPEC",
             "source_url": "https://cbs12.com/news/crime/police-port-st-lucie-man-faces-5-sexual-activity-with-a-minor-charges-sounds-gunfire-noise-flash-diversion-devices-residents-swat-team-search-warrant-felony-contributing-delinquency",
             "editorial_story_id": "story_004905",
@@ -5209,6 +5091,26 @@
             "canonical_headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
+            "surface": "hero",
+            "headline": "Body cam footage shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
+            "editorial_story_id": "story_004367",
+            "canonical_slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
+            "canonical_headline": "Body cam video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "published_skip_placement_suppressed"
+          },
+          {
+            "category_key": "crime",
+            "surface": "card",
+            "headline": "License plate readers helped track Vero Beach murder suspect to West Virginia, sheriff says",
+            "editorial_story_id": "story_004367",
+            "canonical_slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
+            "canonical_headline": "Body cam video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
+            "basis": "same_event_and_persistent_story_skip",
+            "reason": "published_skip_placement_suppressed"
           }
         ],
         "story_aware_update_context_count": 0,
@@ -5218,21 +5120,6 @@
         "material_update_promotion_cache_hit_count": 2,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "crime",
-            "source_headline": "Vero Beach man arrested on attempted murder charge following birthday party - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/crime/indian_river/vero-beach-man-arrested-on-attempted-murder-charge-following-birthday-party/article_bc52cbd6-0a26-5967-82d8-be911b63901f.html",
-            "canonical_slug": "2026-08-22-vero-beach-man-arrested-on-attempted-murder-charge-after-birthday-party-assault",
-            "canonical_headline": "Vero Beach man arrested on attempted murder charge after birthday party assault",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
           {
             "category_key": "crime",
             "source_headline": "Vero Beach table tennis club faces closure, community rallies with GoFundMe campaign",
@@ -5269,36 +5156,6 @@
             "source_url": "https://www.wptv.com/news/political/elections-local/james-martin-to-take-on-brian-mast-after-wining-democratic-primary-for-floridas-21st-congressional-district",
             "canonical_slug": "2026-08-21-james-martin-wins-democratic-primary-for-congressional-district-21-by-less-than",
             "canonical_headline": "James Martin wins Democratic primary for Congressional District 21 by less than 1%, will face Brian Mast in November",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Indian River County Sheriff’s Office working to bring murder suspect down to Florida - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/crime/indian_river/indian-river-county-sheriff-s-office-working-to-bring-murder-suspect-down-to-florida/article_6d24d44d-d604-523d-bb37-7396d14820be.html",
-            "canonical_slug": "2026-08-22-gun-used-in-vero-beach-homicide-belonged-to-suspects-ex-wife-indian-river-county",
-            "canonical_headline": "Gun used in Vero Beach homicide belonged to suspect's ex-wife, Indian River County sheriff says",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Fort Pierce man charged with eight Spanish Lakes/Port St. Lucie burglaries - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/crime/st_lucie/fort-pierce-man-charged-with-eight-spanish-lakes-port-st-lucie-burglaries/article_2f6111b4-b135-5170-ae29-ed03b9a8668b.html",
-            "canonical_slug": "2026-08-21-fort-pierce-man-arrested-on-eight-burglary-charges-in-port-st-lucie-spanish-lake",
-            "canonical_headline": "Fort Pierce man arrested on eight burglary charges in Port St. Lucie Spanish Lakes community",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -5356,6 +5213,21 @@
           },
           {
             "category_key": "crime",
+            "source_headline": "Flock license plate readers help crack Vero Beach homicide case, suspect caught in West Virginia - WFLX",
+            "source_url": "https://www.wflx.com/2026/08/20/flock-license-plate-readers-help-crack-vero-beach-homicide-case-suspect-caught-west-virginia",
+            "canonical_slug": "2026-08-22-gun-used-in-vero-beach-homicide-belonged-to-suspects-ex-wife-indian-river-county",
+            "canonical_headline": "Gun used in Vero Beach homicide belonged to suspect's ex-wife, Indian River County sheriff says",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "Police: Port St. Lucie man faces 5 sexual activity with a minor charges - WPEC",
             "source_url": "https://cbs12.com/news/crime/police-port-st-lucie-man-faces-5-sexual-activity-with-a-minor-charges-sounds-gunfire-noise-flash-diversion-devices-residents-swat-team-search-warrant-felony-contributing-delinquency",
             "canonical_slug": "2026-08-20-port-st-lucie-man-arrested-on-sexual-activity-with-minor-charges-after-swat-oper",
@@ -5392,14 +5264,18 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 12.915
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "",
+        "generated_card_count": 0,
+        "elapsed_seconds": 23.985
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 20,
+        "fetched_candidate_count": 24,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 9,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -5455,18 +5331,8 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case"
           }
         ],
-        "published_story_duplicate_suppression_count": 5,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "business",
-            "source_headline": "Field of Greens plants roots in Tradition - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/dining_and_entertainment/dining%20reviews/field-of-greens-plants-roots-in-tradition/article_4c8a655f-1ca6-55ca-b593-2ee8e67f7df2.html",
-            "editorial_story_id": "story_005298",
-            "canonical_slug": "2026-08-22-field-of-greens-to-open-first-treasure-coast-location-in-port-st-lucie",
-            "canonical_headline": "Field of Greens to open first Treasure Coast location in Port St. Lucie",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "business",
             "source_headline": "Vero Beach table tennis club faces closure, community rallies with GoFundMe campaign",
@@ -5496,16 +5362,6 @@
             "canonical_headline": "James Martin wins Democratic primary for Congressional District 21 by less than 1%, will face Brian Mast in November",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "IRC approves landmark Attainable Housing Trust - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/news/indian_river/irc-approves-landmark-attainable-housing-trust/article_347224f8-a694-541b-a860-4cfe70c1a965.html",
-            "editorial_story_id": "story_005299",
-            "canonical_slug": "2026-08-22-indian-river-county-creates-attainable-housing-trust-to-support-development",
-            "canonical_headline": "Indian River County creates Attainable Housing Trust to support development",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
@@ -5515,21 +5371,6 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "business",
-            "source_headline": "Field of Greens plants roots in Tradition - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/dining_and_entertainment/dining%20reviews/field-of-greens-plants-roots-in-tradition/article_4c8a655f-1ca6-55ca-b593-2ee8e67f7df2.html",
-            "canonical_slug": "2026-08-22-field-of-greens-to-open-first-treasure-coast-location-in-port-st-lucie",
-            "canonical_headline": "Field of Greens to open first Treasure Coast location in Port St. Lucie",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
           {
             "category_key": "business",
             "source_headline": "Vero Beach table tennis club faces closure, community rallies with GoFundMe campaign",
@@ -5574,32 +5415,17 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "IRC approves landmark Attainable Housing Trust - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/news/indian_river/irc-approves-landmark-attainable-housing-trust/article_347224f8-a694-541b-a860-4cfe70c1a965.html",
-            "canonical_slug": "2026-08-22-indian-river-county-creates-attainable-housing-trust-to-support-development",
-            "canonical_headline": "Indian River County creates Attainable Housing Trust to support development",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 5.914
+        "elapsed_seconds": 8.844
       },
       {
         "category_key": "sports",
         "category_label": "Sports",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 26,
+        "fetched_candidate_count": 24,
+        "fresh_candidate_count": 24,
         "publishable_source_count": 1,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -5620,44 +5446,17 @@
         "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 1,
-        "published_story_duplicate_suppressions": [
-          {
-            "category_key": "sports",
-            "source_headline": "Flying Tigers pull away late for 6-3 win over Mets - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/sports/flying-tigers-pull-away-late-for-6-3-win-over-mets/article_bdba096d-79b8-5f79-b1b1-2a1bc3586f89.html",
-            "editorial_story_id": "story_005239",
-            "canonical_slug": "2026-08-22-st-lucie-mets-fall-6-3-to-lakeland-flying-tigers-at-clover-park",
-            "canonical_headline": "St. Lucie Mets fall 6-3 to Lakeland Flying Tigers at Clover Park",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          }
-        ],
+        "published_story_duplicate_suppression_count": 0,
+        "published_story_duplicate_suppressions": [],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [
-          {
-            "category_key": "sports",
-            "source_headline": "Flying Tigers pull away late for 6-3 win over Mets - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/sports/flying-tigers-pull-away-late-for-6-3-win-over-mets/article_bdba096d-79b8-5f79-b1b1-2a1bc3586f89.html",
-            "canonical_slug": "2026-08-22-st-lucie-mets-fall-6-3-to-lakeland-flying-tigers-at-clover-park",
-            "canonical_headline": "St. Lucie Mets fall 6-3 to Lakeland Flying Tigers at Clover Park",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          }
-        ],
-        "new_publication_stale_rejected_count": 3,
-        "elapsed_seconds": 11.508
+        "material_update_promotion_decisions": [],
+        "new_publication_stale_rejected_count": 0,
+        "elapsed_seconds": 6.041
       },
       {
         "category_key": "things_to_do",
@@ -5705,7 +5504,7 @@
             "source_url": "https://www.wptv.com/shining-a-light/animals-rescued-from-martin-county-hoarding-cases-start-to-show-signs-of-healing"
           }
         ],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 1,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "things_to_do",
@@ -5715,16 +5514,6 @@
             "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
             "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
             "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "things_to_do",
-            "source_headline": "Indian River County - Week of Aug. 21 - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/community_page/calendar/indian-river-county---week-of-aug-21/article_8a182bce-b5c2-5ebd-8e55-4d3caee2766c.html",
-            "editorial_story_id": "story_004815",
-            "canonical_slug": "2026-08-20-environmental-learning-center-in-vero-beach-hosts-mosquito-and-insect-lecture-sa",
-            "canonical_headline": "Environmental Learning Center in Vero Beach hosts mosquito and insect lecture Saturday",
-            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -5777,63 +5566,40 @@
             "semantic_action": "hold",
             "confidence": 0.95,
             "shared_anchors": [
-              "Treasure Coast region",
-              "Palm City",
-              "weekend events roundup format",
-              "WPBF news source"
+              "Treasure Coast",
+              "Palm Beach County",
+              "weekend events roundup",
+              "WPBF news outlet"
             ],
             "novel_facts": [
-              "August 21, 2026 weekend",
-              "Newfield Farm gardening class",
+              "Newfield Farm gardening class on August 21, 2026",
               "Ukrainian Cultural Fest in West Palm Beach",
-              "Delray Beach women's health event",
-              "Peggy Adams adoption event",
+              "Delray's Hottest Party women's health event",
+              "Peggy Adams Animal Rescue League adoption event",
               "Loggerhead Triathlon in Jupiter"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
               "known_canonical_identity_conflict"
             ]
-          },
-          {
-            "category_key": "things_to_do",
-            "source_headline": "Indian River County - Week of Aug. 21 - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/community_page/calendar/indian-river-county---week-of-aug-21/article_8a182bce-b5c2-5ebd-8e55-4d3caee2766c.html",
-            "canonical_slug": "2026-08-20-environmental-learning-center-in-vero-beach-hosts-mosquito-and-insect-lecture-sa",
-            "canonical_headline": "Environmental Learning Center in Vero Beach hosts mosquito and insect lecture Saturday",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 14.785
+        "elapsed_seconds": 14.005
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
-        "status": "generated_live",
+        "status": "no_publishable_sources",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 1,
-        "selected_source_count": 1,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 0,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 7.083,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 7.083,
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -5844,11 +5610,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 1,
+        "category_eligibility_assessed_count": 0,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "florida",
+            "source_headline": "Publix removing 10-item limit from express checkout lanes",
+            "source_url": "https://www.wptv.com/business/company-news/publix-removing-10-item-limit-from-express-checkout-lanes",
+            "editorial_story_id": "story_005339",
+            "canonical_slug": "2026-08-23-publix-removes-10-item-limit-from-express-checkout-lanes-across-florida-stores",
+            "canonical_headline": "Publix removes 10-item limit from express checkout lanes across Florida stores",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "florida",
             "source_headline": "New TaxWatch tool maps Amendment 3’s impact county by county",
@@ -5889,6 +5665,21 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "florida",
+            "source_headline": "Publix removing 10-item limit from express checkout lanes",
+            "source_url": "https://www.wptv.com/business/company-news/publix-removing-10-item-limit-from-express-checkout-lanes",
+            "canonical_slug": "2026-08-23-publix-removes-10-item-limit-from-express-checkout-lanes-across-florida-stores",
+            "canonical_headline": "Publix removes 10-item limit from express checkout lanes across Florida stores",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "florida",
             "source_headline": "New TaxWatch tool maps Amendment 3’s impact county by county",
             "source_url": "https://www.wptv.com/news/state/new-taxwatch-tool-maps-amendment-3s-impact-county-by-county",
             "canonical_slug": "2026-08-21-florida-taxwatch-releases-county-by-county-analysis-of-amendment-3-property-tax",
@@ -5934,11 +5725,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Publix removes 10-item limit from express checkout lanes across Florida stores",
-        "generated_card_count": 0,
-        "elapsed_seconds": 18.152
+        "elapsed_seconds": 6.259
       },
       {
         "category_key": "martin",
@@ -5946,8 +5733,8 @@
         "status": "generated_live",
         "fetched_candidate_count": 30,
         "fresh_candidate_count": 25,
-        "publishable_source_count": 3,
-        "selected_source_count": 3,
+        "publishable_source_count": 2,
+        "selected_source_count": 2,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -5955,68 +5742,26 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 20.473,
+            "elapsed_seconds": 7.714,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 20.473,
+        "model_elapsed_seconds": 7.714,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 1,
-        "contextual_update_lead_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "story_form": "update",
-            "lead_word_count": 52,
-            "baseline_anchor": "fatality",
-            "baseline_present": false,
-            "baseline_anchor_present": false,
-            "baseline_details_present": true,
-            "baseline_context_hits": [],
-            "baseline_context_required": 0,
-            "canonical_context_available": false,
-            "canonical_context_headline": "",
-            "novelty_anchor": "",
-            "novelty_present": true,
-            "novelty_token_hits": [
-              "brightline",
-              "crash",
-              "hobe",
-              "hospitalized",
-              "motorist",
-              "sound",
-              "train"
-            ],
-            "missing": [
-              "original_event_context_missing"
-            ],
-            "source_title": "Motorist hospitalized after crash involving Brightline train in Hobe Sound - cw34.com",
-            "headline": "Motorist hospitalized with traumatic injuries after Brightline crash in Hobe Sound"
-          }
-        ],
+        "contextual_update_lead_rejection_count": 0,
+        "contextual_update_lead_rejections": [],
         "article_framing_rejection_count": 0,
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 6,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "martin",
-            "source_headline": "Martin County deputy helps local senior recover life savings from gold bar scam - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/news/martin/martin-county-deputy-helps-local-senior-recover-life-savings-from-gold-bar-scam/article_01b8be15-584a-5180-b834-cdc364064b05.html",
-            "editorial_story_id": "story_005316",
-            "canonical_slug": "2026-08-22-martin-county-deputy-stops-600000-gold-bar-scam-targeting-senior",
-            "canonical_headline": "Martin County deputy stops $600,000 gold bar scam targeting senior",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "martin",
             "source_headline": "Major crash on I-95 North in Martin County, cleared - WPEC",
@@ -6034,6 +5779,16 @@
             "editorial_story_id": "story_000091",
             "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
             "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Motorist hospitalized after crash involving Brightline train in Hobe Sound - cw34.com",
+            "source_url": "https://cw34.com/news/local/motorist-hospitalized-after-crash-involving-brightline-train-in-hobe-sound-martin-county-sheriffs-office-train-crash-train-accident-train-collision-vehicle-crash-vehicle-collision-motorist-hospitalized-hospitalized-injured-motorist",
+            "editorial_story_id": "story_001557",
+            "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -6070,26 +5825,11 @@
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 2,
+        "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_model_call_count": 2,
         "material_update_promotion_decisions": [
-          {
-            "category_key": "martin",
-            "source_headline": "Martin County deputy helps local senior recover life savings from gold bar scam - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/news/martin/martin-county-deputy-helps-local-senior-recover-life-savings-from-gold-bar-scam/article_01b8be15-584a-5180-b834-cdc364064b05.html",
-            "canonical_slug": "2026-08-22-martin-county-deputy-stops-600000-gold-bar-scam-targeting-senior",
-            "canonical_headline": "Martin County deputy stops $600,000 gold bar scam targeting senior",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
           {
             "category_key": "martin",
             "source_headline": "Major crash on I-95 North in Martin County, cleared - WPEC",
@@ -6124,16 +5864,48 @@
             "confidence": 0.95,
             "shared_anchors": [
               "Treasure Coast region",
-              "Palm City location",
-              "weekend events roundup format",
+              "Palm Beach County",
+              "weekend events roundup",
               "WPBF news source"
             ],
             "novel_facts": [
               "Ukrainian Cultural Fest on Saturday Aug 21",
-              "Newfield Farm garden class",
+              "Newfield Farm gardening class",
               "Delray women's health event",
               "Peggy Adams adoption event",
               "Loggerhead Triathlon in Jupiter"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Motorist hospitalized after crash involving Brightline train in Hobe Sound - cw34.com",
+            "source_url": "https://cw34.com/news/local/motorist-hospitalized-after-crash-involving-brightline-train-in-hobe-sound-martin-county-sheriffs-office-train-crash-train-accident-train-collision-vehicle-crash-vehicle-collision-motorist-hospitalized-hospitalized-injured-motorist",
+            "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+            "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.95,
+            "shared_anchors": [],
+            "novel_facts": [
+              "Brightline train collision in Hobe Sound",
+              "Thursday morning around 11 a.m.",
+              "SE Dixie Highway and SE Cross Rip Street intersection",
+              "Martin County Sheriff's Office and Fire Rescue responded",
+              "Motorist with traumatic injuries hospitalized",
+              "SUV with heavy front-end damage",
+              "Train tracks temporarily shut down"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -6195,7 +5967,7 @@
         "budget_seconds": 180.0,
         "live_hero_headline": "",
         "generated_card_count": 0,
-        "elapsed_seconds": 38.719
+        "elapsed_seconds": 30.711
       },
       {
         "category_key": "st_lucie",
@@ -6277,22 +6049,22 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "St. Lucie County Sheriff's Office seek missing man believed to be endangered - cw34.com",
-            "source_url": "https://cw34.com/news/local/missing-man-last-seen-thursday-at-2-am-described-61-weighing-200-pounds-brown-hair-eyes-st-lucie-county-sheriffs-office-florida-news",
-            "editorial_story_id": "story_004960",
-            "canonical_slug": "2026-08-06-us-1-closed-in-both-directions-near-tiffany-avenue-in-port-st-lucie-after-crash",
-            "canonical_headline": "U.S. 1 closed in both directions near Tiffany Avenue in Port St. Lucie after crash",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
             "source_headline": "'There's no doubt that this could work': Fort Pierce brewery to host Sunday church services - WPBF",
             "source_url": "https://www.wpbf.com/article/florida-church-brewery-firefighter-beer-bible/73488086",
             "editorial_story_id": "story_004981",
             "canonical_slug": "2026-08-21-fort-pierce-brewery-to-host-sunday-church-services-starting-in-september",
             "canonical_headline": "Fort Pierce brewery to host Sunday church services starting in September",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County Sheriff's Office seek missing man believed to be endangered - cw34.com",
+            "source_url": "https://cw34.com/news/local/missing-man-last-seen-thursday-at-2-am-described-61-weighing-200-pounds-brown-hair-eyes-st-lucie-county-sheriffs-office-florida-news?teaserSource=trending",
+            "editorial_story_id": "story_004960",
+            "canonical_slug": "2026-08-06-us-1-closed-in-both-directions-near-tiffany-avenue-in-port-st-lucie-after-crash",
+            "canonical_headline": "U.S. 1 closed in both directions near Tiffany Avenue in Port St. Lucie after crash",
+            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -6479,8 +6251,23 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "'There's no doubt that this could work': Fort Pierce brewery to host Sunday church services - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-church-brewery-firefighter-beer-bible/73488086",
+            "canonical_slug": "2026-08-21-fort-pierce-brewery-to-host-sunday-church-services-starting-in-september",
+            "canonical_headline": "Fort Pierce brewery to host Sunday church services starting in September",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "St. Lucie County Sheriff's Office seek missing man believed to be endangered - cw34.com",
-            "source_url": "https://cw34.com/news/local/missing-man-last-seen-thursday-at-2-am-described-61-weighing-200-pounds-brown-hair-eyes-st-lucie-county-sheriffs-office-florida-news",
+            "source_url": "https://cw34.com/news/local/missing-man-last-seen-thursday-at-2-am-described-61-weighing-200-pounds-brown-hair-eyes-st-lucie-county-sheriffs-office-florida-news?teaserSource=trending",
             "canonical_slug": "2026-08-06-us-1-closed-in-both-directions-near-tiffany-avenue-in-port-st-lucie-after-crash",
             "canonical_headline": "U.S. 1 closed in both directions near Tiffany Avenue in Port St. Lucie after crash",
             "canonical_is_custom": false,
@@ -6499,28 +6286,13 @@
               "Benton Doyle Tomlin reported missing",
               "Last seen Thursday at 2 a.m.",
               "Described as 6'1\", 200 pounds, brown hair and eyes",
-              "St. Lucie County Sheriff's Office seeking help",
+              "St. Lucie County Sheriff's Office seeking public help",
               "Contact Detective Corporal Drawdy at 772-462-3230"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
               "known_canonical_identity_conflict"
             ]
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "'There's no doubt that this could work': Fort Pierce brewery to host Sunday church services - WPBF",
-            "source_url": "https://www.wpbf.com/article/florida-church-brewery-firefighter-beer-bible/73488086",
-            "canonical_slug": "2026-08-21-fort-pierce-brewery-to-host-sunday-church-services-starting-in-september",
-            "canonical_headline": "Fort Pierce brewery to host Sunday church services starting in September",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "st_lucie",
@@ -6591,28 +6363,21 @@
         ],
         "new_publication_stale_rejected_count": 2,
         "live_hero_headline": "Fort Pierce police identify suspect in July 5 homicide on South 14th Street",
-        "elapsed_seconds": 18.305
+        "elapsed_seconds": 12.511
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "generated_live",
-        "fetched_candidate_count": 29,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 8,
-        "selected_source_count": 3,
-        "cache_hit": false,
+        "status": "cache_hit",
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 7,
+        "selected_source_count": 2,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 27.086,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 27.086,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6623,11 +6388,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 8,
+        "category_eligibility_assessed_count": 7,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "Body cam video shows US Marshals arrest Indian River County murder suspect - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988",
+            "editorial_story_id": "story_004367",
+            "canonical_slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
+            "canonical_headline": "Body cam video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "indian_river",
             "source_headline": "Vero Beach table tennis club faces closure, community rallies with GoFundMe campaign",
@@ -6647,65 +6422,45 @@
             "canonical_headline": "Vero Beach Table Tennis Club faces closure as owner seeks community support",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Indian River County Sheriff’s Office working to bring murder suspect down to Florida - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/crime/indian_river/indian-river-county-sheriff-s-office-working-to-bring-murder-suspect-down-to-florida/article_6d24d44d-d604-523d-bb37-7396d14820be.html",
-            "editorial_story_id": "story_002912",
-            "canonical_slug": "2026-08-22-gun-used-in-vero-beach-homicide-belonged-to-suspects-ex-wife-indian-river-county",
-            "canonical_headline": "Gun used in Vero Beach homicide belonged to suspect's ex-wife, Indian River County sheriff says",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "IRC approves landmark Attainable Housing Trust - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/news/indian_river/irc-approves-landmark-attainable-housing-trust/article_347224f8-a694-541b-a860-4cfe70c1a965.html",
-            "editorial_story_id": "story_005299",
-            "canonical_slug": "2026-08-22-indian-river-county-creates-attainable-housing-trust-to-support-development",
-            "canonical_headline": "Indian River County creates Attainable Housing Trust to support development",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Open Your Heart during Clear the Shelters at HSVB - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/news/indian_river/open-your-heart-during-clear-the-shelters-at-hsvb/article_95d77823-8a53-5828-9d87-2800ecff3570.html",
-            "editorial_story_id": "story_005328",
-            "canonical_slug": "2026-08-22-clear-the-shelters-waives-adoption-fees-saturday-at-vero-beach-animal-shelter",
-            "canonical_headline": "Clear the Shelters waives adoption fees Saturday at Vero Beach animal shelter",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "surface": "hero",
-            "headline": "Body camera video shows arrest of Vero Beach murder suspect in West Virginia",
-            "editorial_story_id": "story_004367",
-            "canonical_slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
-            "canonical_headline": "Body cam video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "published_skip_placement_suppressed"
-          },
-          {
-            "category_key": "indian_river",
-            "surface": "card",
-            "headline": "Ex-boyfriend arrested in Vero Beach shooting on First Street",
-            "editorial_story_id": "story_004367",
-            "canonical_slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
-            "canonical_headline": "Body cam video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
-            "basis": "same_event_and_persistent_story_skip",
-            "reason": "published_skip_placement_suppressed"
           }
         ],
         "story_aware_update_context_count": 0,
         "story_aware_update_context_bindings": [],
-        "material_update_promotion_evaluation_count": 0,
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
+        "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "Body cam video shows US Marshals arrest Indian River County murder suspect - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988",
+            "canonical_slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
+            "canonical_headline": "Body cam video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.98,
+            "shared_anchors": [
+              "Matthew Waggle arrest by U.S. Marshals",
+              "Body cam footage release by Indian River County Sheriff's Office",
+              "Murder of Dawn Kriskewic in Vero Beach",
+              "Arrest at motel in West Virginia on Wednesday night",
+              "Location: First Street, Vero Beach",
+              "Indian River County Sheriff Eric Flowers statements",
+              "Identical source URL"
+            ],
+            "novel_facts": [],
+            "reason": "The incoming article and candidate cover the exact same event: the release of body cam footage showing Matthew Waggle's arrest in West Virginia for the murder of Dawn Kriskewic. They share identical source URLs, specific details about the arrest location (motel in West Virginia), victim name and location (First Street, Vero Beach), the sheriff's quotes, and the Uber travel method. The incoming article provides the full text of what appears to be the same story, with no material updates beyond what was already published. The retrieval evidence confirms this is the same persistent story from the same source.",
+            "validation_errors": []
+          },
           {
             "category_key": "indian_river",
             "source_headline": "Vero Beach table tennis club faces closure, community rallies with GoFundMe campaign",
@@ -6727,51 +6482,6 @@
             "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-table-tennis-club-faces-closure-community-rallies-with-gofundme-campaign",
             "canonical_slug": "2026-08-21-vero-beach-table-tennis-club-faces-closure-as-owner-seeks-community-support",
             "canonical_headline": "Vero Beach Table Tennis Club faces closure as owner seeks community support",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Indian River County Sheriff’s Office working to bring murder suspect down to Florida - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/crime/indian_river/indian-river-county-sheriff-s-office-working-to-bring-murder-suspect-down-to-florida/article_6d24d44d-d604-523d-bb37-7396d14820be.html",
-            "canonical_slug": "2026-08-22-gun-used-in-vero-beach-homicide-belonged-to-suspects-ex-wife-indian-river-county",
-            "canonical_headline": "Gun used in Vero Beach homicide belonged to suspect's ex-wife, Indian River County sheriff says",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "IRC approves landmark Attainable Housing Trust - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/news/indian_river/irc-approves-landmark-attainable-housing-trust/article_347224f8-a694-541b-a860-4cfe70c1a965.html",
-            "canonical_slug": "2026-08-22-indian-river-county-creates-attainable-housing-trust-to-support-development",
-            "canonical_headline": "Indian River County creates Attainable Housing Trust to support development",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Open Your Heart during Clear the Shelters at HSVB - Hometown News Treasure Coast",
-            "source_url": "https://www.hometownnewstc.com/news/indian_river/open-your-heart-during-clear-the-shelters-at-hsvb/article_95d77823-8a53-5828-9d87-2800ecff3570.html",
-            "canonical_slug": "2026-08-22-clear-the-shelters-waives-adoption-fees-saturday-at-vero-beach-animal-shelter",
-            "canonical_headline": "Clear the Shelters waives adoption fees Saturday at Vero Beach animal shelter",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -6783,11 +6493,8 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Multi-million dollar crane crashes off 90th Avenue in Vero Beach",
-        "generated_card_count": 0,
-        "elapsed_seconds": 37.986
+        "live_hero_headline": "Multi-million dollar crane overturns in ditch near Oslo Road in Vero Beach",
+        "elapsed_seconds": 8.481
       }
     ]
   }

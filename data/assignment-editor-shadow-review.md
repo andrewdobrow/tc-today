@@ -9,24 +9,21 @@ Judge the final newsroom result, not verbosity. Score: (1) hero/story choice, (2
 ### Source pool
 
 1. Body cam video shows US Marshals arrest Indian River County murder suspect - WPBF
-2. Fort Pierce police identify suspect in deadly shooting after Fourth of July - WPEC
-3. Paige O'Donnell relinquishes 36 Border Collies rescued from Palm City hoarding case
-4. Ex-boyfriend arrested in Vero Beach homicide investigation - WPBF
-5. Man accused of grabbing $22K in gold chains from Treasure Coast Square Mall kiosk arrested - WPEC
+2. Ex-boyfriend arrested in Vero Beach homicide investigation - WPBF
 
 ### Variant A
 
-**Hero:** Fort Pierce man arrested on eight burglary charges in Port St. Lucie Spanish Lakes community
+**Hero:** Martin County deputy stops $600,000 gold bar scam targeting senior
 **Urgency:** 2
 
-Herman Ray Nettles, 44, of Fort Pierce, is in the St. Lucie County Jail on eight counts of burglary of an unoccupied conveyance while unarmed on a $20,000 bond, stemming from incidents in the Spanish Lakes community in Port St. Lucie.
+A Martin County senior nearly lost his life savings of $600,000 to a gold bar scam before a sheriff's deputy intervened and stopped the transaction.
 
 ### Variant B
 
-**Hero:** Fort Pierce man arrested on eight burglary charges in Port St. Lucie Spanish Lakes community
+**Hero:** Martin County deputy stops $600,000 gold bar scam targeting senior
 **Urgency:** 2
 
-Herman Ray Nettles, 44, of Fort Pierce, is in the St. Lucie County Jail on eight counts of burglary of an unoccupied conveyance while unarmed on a $20,000 bond, stemming from incidents in the Spanish Lakes community in Port St. Lucie.
+A Martin County senior nearly lost his life savings of $600,000 to a gold bar scam before a sheriff's deputy intervened and stopped the transaction.
 
 **Scorecard**
 
