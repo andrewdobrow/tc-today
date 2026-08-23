@@ -1,7 +1,7 @@
 {
   "schema_version": 4,
   "gate_version": "1.6",
-  "generated_at": "2026-08-23T20:46:11.587797+00:00",
+  "generated_at": "2026-08-23T22:56:43.501025+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -69,44 +69,14 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 9,
+    "pre_generation_materiality_evaluations": 13,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 6,
-    "pre_generation_materiality_holds": 3,
-    "pre_generation_materiality_model_calls": 3,
-    "pre_generation_materiality_cache_hits": 6
+    "pre_generation_materiality_duplicates": 0,
+    "pre_generation_materiality_holds": 13,
+    "pre_generation_materiality_model_calls": 12,
+    "pre_generation_materiality_cache_hits": 0
   },
   "pre_generation_materiality_decisions": [
-    {
-      "category_key": "local_gov",
-      "source_headline": "Abandoned boats near Fort Pierce nature preserves spark calls for removal amid safety fears - WPBF",
-      "source_url": "https://www.wpbf.com/article/florida-fort-pierce-abandoned-boats/73497445",
-      "canonical_slug": "2026-08-21-abandoned-boats-fill-wildcat-cove-near-fort-pierce-creating-safety-hazards-betwe",
-      "canonical_headline": "Abandoned boats fill Wildcat Cove near Fort Pierce, creating safety hazards between nature preserves",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 1.0,
-      "shared_anchors": [
-        "Wildcat Cove off North Hutchinson Island in Fort Pierce",
-        "Abandoned and derelict boats creating safety hazards",
-        "Location between two nature preserves",
-        "Popular spot for tubing and jet skiing",
-        "Philipe Chibas quote about 'boat junkyard'",
-        "45-day anchoring ordinance",
-        "Florida Fish and Wildlife Conservation Commission monitoring"
-      ],
-      "novel_facts": [],
-      "reason": "Both articles cover the exact same ongoing situation of abandoned boats in Wildcat Cove. They share the same source URL, same quotes from Philipe Chibas, same details about the 45-day ordinance, same environmental concerns, and same FWC response. The incoming article is identical to the candidate with no new developments, arrests, policy changes, or other material updates. This appears to be the same article republished one day later.",
-      "validation_errors": []
-    },
     {
       "category_key": "local_gov",
       "source_headline": "Paige O'Donnell relinquishes 36 Border Collies rescued from Palm City hoarding case",
@@ -126,16 +96,47 @@
       "confidence": 0.95,
       "shared_anchors": [
         "Martin County",
-        "animal hoarding case",
+        "animal hoarding",
         "Humane Society of the Treasure Coast"
       ],
       "novel_facts": [
-        "Paige O'Donnell as defendant",
+        "Paige O'Donnell is the suspect",
         "36 Border Collies specifically",
         "Palm City location",
-        "72 charges",
-        "Legal surrender of animals on Aug 21, 2026",
-        "Dogs available for adoption starting Sept 1"
+        "72 charges filed",
+        "Dogs legally surrendered on Aug 21, 2026",
+        "Adoptions to begin Sept 1"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "local_gov",
+      "source_headline": "Byron Donalds promises insurance cuts, defends data centers as race pivots to November",
+      "source_url": "https://www.wptv.com/news/state/donalds-promises-insurance-cuts-defends-data-centers-as-race-pivots-to-november",
+      "canonical_slug": "2026-08-12-martin-county-reviews-first-development-proposal-under-new-state-agricultural-en",
+      "canonical_headline": "Martin County reviews first development proposal under new state agricultural enclave law",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [],
+      "novel_facts": [
+        "Byron Donalds secured Republican nomination",
+        "Donalds positions on Amendment 3 property tax proposal",
+        "Promise of 20-25% insurance cost reduction",
+        "Donalds vs David Jolly race pivoting to November",
+        "Donalds position on school vaccine requirements",
+        "Data center development stance"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -144,33 +145,38 @@
     },
     {
       "category_key": "crime",
-      "source_headline": "Body cam video shows US Marshals arrest Indian River County murder suspect - WPBF",
-      "source_url": "https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988",
-      "canonical_slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
-      "canonical_headline": "Body cam video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
-      "canonical_is_custom": false,
-      "identity_basis": "pre_generation_ledger:exact_source_url",
+      "source_headline": "Paige O'Donnell relinquishes 36 Border Collies rescued from Palm City hoarding case",
+      "source_url": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
+      "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+      "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+      "canonical_is_custom": true,
+      "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
+      "cache_hit": false,
+      "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.92,
       "shared_anchors": [
-        "Matthew Waggle arrest by U.S. Marshals",
-        "Murder of Dawn Kriskewic in Vero Beach",
-        "Body cam footage from Indian River County Sheriff's Office",
-        "Arrest at motel in West Virginia on Wednesday night",
-        "Victim found on First Street",
-        "Shot to death last Sunday",
-        "Same source URL (wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988)"
+        "Martin County",
+        "animal hoarding case",
+        "Humane Society of the Treasure Coast"
       ],
-      "novel_facts": [],
-      "reason": "This is the exact same article - both incoming and candidate share the identical source URL, indicating they are the same publication. All core facts match: Matthew Waggle arrested in West Virginia for murdering ex-girlfriend Dawn Kriskewic in Vero Beach, body cam footage released, victim found on First Street, suspect used Uber from Orlando. The candidate article appears to be an earlier ingestion of this same story. No material updates are present.",
-      "validation_errors": []
+      "novel_facts": [
+        "Paige O'Donnell as defendant",
+        "36 Border Collies",
+        "Palm City location",
+        "72 charges",
+        "legal surrender of animals on Aug 21, 2026",
+        "adoption applications beginning Sept 1"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     },
     {
       "category_key": "business",
@@ -192,15 +198,15 @@
       "shared_anchors": [
         "Martin County",
         "animal hoarding case",
-        "Humane Society of the Treasure Coast"
+        "mass-animal-hoarding:martin-county incident anchor"
       ],
       "novel_facts": [
-        "Paige O'Donnell as defendant",
-        "36 Border Collies specifically",
-        "Palm City location",
-        "72 charges",
-        "legal surrender occurred",
-        "adoption applications starting Sept. 1"
+        "Paige O'Donnell is the accused in the incoming article",
+        "36 Border Collies rescued from Palm City home",
+        "Dogs legally surrendered on Aug 21, 2026",
+        "72 charges filed against O'Donnell",
+        "Adoption applications available Sept 1",
+        "9 pounds of matted fur removed from one dog"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -208,11 +214,11 @@
       ]
     },
     {
-      "category_key": "things_to_do",
-      "source_headline": "Fun things to do on the Treasure Coast and in Palm Beach this weekend - WPBF",
-      "source_url": "https://www.wpbf.com/article/florida-fun-things-across-treasure-coast-palm-beach-weekend-1784287590-1785499876-1786105000-1786703925-1787307338/73493258",
-      "canonical_slug": "2026-07-28-christmas-in-july-vendor-market-brings-holiday-cheer-to-palm-city-this-saturday",
-      "canonical_headline": "Stuart and Palm City events highlight weekend activities across Treasure Coast",
+      "category_key": "florida",
+      "source_headline": "Byron Donalds promises insurance cuts, defends data centers as race pivots to November",
+      "source_url": "https://www.wptv.com/news/state/donalds-promises-insurance-cuts-defends-data-centers-as-race-pivots-to-november",
+      "canonical_slug": "2026-08-12-martin-county-reviews-first-development-proposal-under-new-state-agricultural-en",
+      "canonical_headline": "Martin County reviews first development proposal under new state agricultural enclave law",
       "canonical_is_custom": false,
       "identity_basis": "registry_same_event_and_persistent_story_skip",
       "eligibility_reason": "newer_source_requires_materiality_decision",
@@ -224,17 +230,228 @@
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
       "confidence": 0.95,
+      "shared_anchors": [],
+      "novel_facts": [
+        "Byron Donalds secured Republican nomination for governor",
+        "Donalds outlined positions on property taxes, insurance, school vaccine requirements and data centers",
+        "Donalds supports Amendment 3 property-tax proposal",
+        "Donalds promises 20-25% insurance cost reduction through regulatory reform",
+        "Donalds stops short of eliminating polio and MMR vaccine requirements",
+        "Democratic opponent is David Jolly"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "martin",
+      "source_headline": "Paige O'Donnell relinquishes 36 Border Collies rescued from Palm City hoarding case",
+      "source_url": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
+      "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+      "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+      "canonical_is_custom": true,
+      "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
       "shared_anchors": [
-        "Both are weekend event roundups for Treasure Coast and Palm Beach area",
-        "Both mention Palm City as a location"
+        "Martin County",
+        "animal hoarding case",
+        "Humane Society of the Treasure Coast"
       ],
       "novel_facts": [
-        "Ukrainian Cultural Fest on Saturday 5pm in West Palm Beach",
-        "Newfield Farm gardening class on Saturday 10am in Palm City",
-        "Delray Beach women's health event",
-        "Peggy Adams animal adoption event",
-        "Loggerhead Triathlon in Jupiter",
-        "Published date is August 21, 2026 vs July 27, 2026"
+        "Paige O'Donnell is the subject",
+        "36 Border Collies specifically",
+        "Palm City location",
+        "72 charges filed",
+        "Legal surrender of animals occurred",
+        "Dogs will be available for adoption starting Sept. 1"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "martin",
+      "source_headline": "36 dogs rescued from Palm City 'house of horror' as lawmakers push for new animal cruelty laws",
+      "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/36-dogs-rescued-from-palm-city-house-of-horror-as-lawmakers-push-for-new-animal-cruelty-laws",
+      "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+      "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+      "canonical_is_custom": true,
+      "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.85,
+      "shared_anchors": [
+        "Martin County location",
+        "Humane Society of the Treasure Coast involved",
+        "Animal hoarding case",
+        "Multiple dogs rescued",
+        "Recent timeframe (within a month)"
+      ],
+      "novel_facts": [
+        "36 dogs rescued from Palm City (vs. 70+ animals from Stuart)",
+        "No arrest mentioned in incoming article",
+        "Legislative response with named lawmakers (Weinberger, Snyder, Harrell)",
+        "Sheriff Budensiek tour and comments",
+        "Specific grooming details (6 lbs of mat per dog, glass/metal found)",
+        "Owner described as former breeder, not arrested person Gail Giustino"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "martin",
+      "source_headline": "Stuart shooting range raises hundreds of donations for Humane Society of the Treasure Coast",
+      "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/stuart-shooting-range-raises-hundreds-of-donations-for-humane-society-of-the-treasure-coast",
+      "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+      "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+      "canonical_is_custom": true,
+      "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.85,
+      "shared_anchors": [
+        "Stuart/Martin County location",
+        "Animal hoarding case",
+        "Humane Society of the Treasure Coast involvement",
+        "Border collies mentioned"
+      ],
+      "novel_facts": [
+        "Continental Shooting Center fundraiser launching Thursday",
+        "Raffle for exclusive membership at $5 per entry",
+        "125 cans and 25 blankets collected on day one",
+        "36 border collies from recent case",
+        "Over 100 other animals from separate hoarding case a few weeks ago",
+        "Matthew Olivo and Daniel Martelle quotes about fundraiser"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "martin",
+      "source_headline": "Florida lawmaker pushes for breeder registry after Martin County animal hoarding case",
+      "source_url": "https://www.wptv.com/wptv-investigates/florida-lawmaker-pushes-for-breeder-registry-after-martin-county-animal-hoarding-case",
+      "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+      "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+      "canonical_is_custom": true,
+      "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Martin County",
+        "animal hoarding case",
+        "Humane Society of the Treasure Coast"
+      ],
+      "novel_facts": [
+        "36 Border Collies rescued from Palm City home",
+        "Paige O'Donnell arrested",
+        "72 criminal charges filed",
+        "Home condemned on Wednesday",
+        "Dogs had metal and glass shards in fur",
+        "State Rep. Meg Weinberger calling for breeder registry",
+        "Bond set at $270,000"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "martin",
+      "source_headline": "Palm City home condemned after woman arrested in worst animal hoarding case Humane Society has seen",
+      "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/palm-city-home-condemned-after-woman-arrested-in-worst-animal-hoarding-case-humane-society-has-seen",
+      "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+      "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+      "canonical_is_custom": true,
+      "identity_basis": "pre_generation_ledger:exact_source_url",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Martin County",
+        "animal hoarding case",
+        "same general topic area"
+      ],
+      "novel_facts": [
+        "Different suspect: Paige O'Donnell vs. Gail Giustino",
+        "Different location: Palm City vs. Stuart",
+        "Different animals: 36 Border Collies vs. 70+ animals (type unspecified)",
+        "Different charges: 72 charges vs. 2 misdemeanor charges",
+        "Different date: arrested Monday (August 2026) vs. July 20, 2026",
+        "Home condemned on Wednesday August 2026"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "martin",
+      "source_headline": "Border Collie Society of America condemns neglect in Palm City hoarding case, donates $1,000 to organization",
+      "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/border-collie-society-of-america-condemns-neglect-in-palm-city-hoarding-case-donates-1-000-to-organization",
+      "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+      "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+      "canonical_is_custom": true,
+      "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Martin County",
+        "animal hoarding case",
+        "Humane Society of the Treasure Coast"
+      ],
+      "novel_facts": [
+        "Paige O'Donnell, 62, arrested in Palm City",
+        "36 Border Collies rescued",
+        "Border Collie Society of America donated $1,000",
+        "O'Donnell was former BCSA member and board member",
+        "rescue occurred Monday",
+        "neighbors complained since 2020"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -243,131 +460,62 @@
     },
     {
       "category_key": "st_lucie",
-      "source_headline": "'Fantastic': Off-duty deputy spots and helps capture burglary suspect in St. Lucie County - WPBF",
-      "source_url": "https://www.wpbf.com/article/florida-off-duty-deputy-captures-burglary-suspect/73494790",
-      "canonical_slug": "2026-08-22-off-duty-st-lucie-county-deputy-spots-burglary-suspect-leads-to-arrest-near-port",
-      "canonical_headline": "Off-duty St. Lucie County deputy spots burglary suspect, leads to arrest near Port St. Lucie",
+      "source_headline": "16-year-old Centennial High School student hit by car while crossing Port St. Lucie intersection",
+      "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/16-year-old-student-hit-by-car-while-crossing-port-st-lucie-intersection",
+      "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+      "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
       "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
+      "cache_hit": false,
+      "model_call": true,
       "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
       "confidence": 1.0,
       "shared_anchors": [
-        "Herman Nettles, 44-year-old suspect",
-        "Spanish Lakes One community near Port St. Lucie",
-        "Off-duty St. Lucie County Sheriff's deputy spotted suspect",
-        "Deputy Martinez-Delgado assigned to case",
-        "Eight reported burglary incidents",
-        "Suspect spotted on U.S. highway",
-        "Charge of burglary of unoccupied conveyance",
-        "St. Lucie County Jail",
-        "Sheriff Richard Del Toro quote"
-      ],
-      "novel_facts": [],
-      "reason": "This is the exact same source URL (https://www.wpbf.com/article/florida-off-duty-deputy-captures-burglary-suspect/73494790) as the canonical candidate. The retrieval evidence confirms 'exact_source_and_persistent_story_skip' and 'persistent_story_id_match: true'. The incoming article contains identical details about the same arrest event: Herman Nettles apprehended by off-duty deputy in Spanish Lakes One community. No material updates are present - the incoming text appears to be the full body of the same article that was previously processed.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "st_lucie",
-      "source_headline": "Abandoned boats near Fort Pierce nature preserves spark calls for removal amid safety fears - WPBF",
-      "source_url": "https://www.wpbf.com/article/florida-fort-pierce-abandoned-boats/73497445",
-      "canonical_slug": "2026-08-21-abandoned-boats-fill-wildcat-cove-near-fort-pierce-creating-safety-hazards-betwe",
-      "canonical_headline": "Abandoned boats fill Wildcat Cove near Fort Pierce, creating safety hazards between nature preserves",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 1.0,
-      "shared_anchors": [
-        "Wildcat Cove off North Hutchinson Island in Fort Pierce",
-        "Abandoned and derelict boats creating safety hazards",
-        "Location between two nature preserves",
-        "Popular spot for tubing and jet skiing",
-        "Philipe Chibas quote about 'boat junkyard'",
-        "45-day anchoring ordinance",
-        "Florida Fish and Wildlife Conservation Commission monitoring"
-      ],
-      "novel_facts": [],
-      "reason": "Both articles cover the exact same ongoing situation of abandoned boats in Wildcat Cove. They share the same source URL, same quotes from Philipe Chibas, same details about the 45-day ordinance, same environmental concerns, and same FWC response. The incoming article is identical to the candidate with no new developments, arrests, policy changes, or other material updates. This appears to be the same article republished one day later.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "st_lucie",
-      "source_headline": "Police: Port St. Lucie man faces 5 sexual activity with a minor charges - WPEC",
-      "source_url": "https://cbs12.com/news/crime/police-port-st-lucie-man-faces-5-sexual-activity-with-a-minor-charges-sounds-gunfire-noise-flash-diversion-devices-residents-swat-team-search-warrant-felony-contributing-delinquency",
-      "canonical_slug": "2026-08-20-port-st-lucie-man-arrested-on-sexual-activity-with-minor-charges-after-swat-oper",
-      "canonical_headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Virgil Jason Vinz arrested",
-        "SW Jaslo Avenue location (900 block)",
-        "Thursday morning SWAT operation around 6 a.m.",
-        "5 counts sexual activity with minor",
-        "6 counts contributing to delinquency of child",
-        "Noise Flash Diversionary Devices used",
-        "Identical source URL"
+        "Port St. Lucie",
+        "crash",
+        "intersection",
+        "Port St. Lucie Police Department"
       ],
       "novel_facts": [
-        "Additional background on 2023 prior charges and Mental Health Court completion in October 2024",
-        "Quote from spokesperson Brandon Martinez",
-        "Vinz's age (48 years old)",
-        "Bond pending status as of Thursday night",
-        "Brief neighbor reaction details"
+        "16-year-old Centennial High School student struck Monday morning",
+        "Crosstown Parkway and Southwest Cameo Boulevard intersection",
+        "Shortly after 7 a.m.",
+        "Student crossed against pedestrian signal",
+        "Superficial injuries, declined medical transport"
       ],
-      "reason": "Both articles report the same arrest event - Virgil Jason Vinz arrested Thursday morning at 900 block SW Jaslo Avenue with identical charges (5 counts sexual activity with minor, 6 counts contributing to delinquency). The incoming article shares the exact same source URL as the candidate, confirming it's the same story. The additional details in the incoming article (quotes, age, background context) are routine scene detail and background explanation, not material updates like new charges, court actions, or victim identification.",
-      "validation_errors": []
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     },
     {
       "category_key": "indian_river",
-      "source_headline": "Body cam video shows US Marshals arrest Indian River County murder suspect - WPBF",
-      "source_url": "https://www.wpbf.com/article/florida-indian-river-county-murder-suspect-arrest-video-body-cam/73499988",
-      "canonical_slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
-      "canonical_headline": "Body cam video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
+      "source_headline": "Paige O'Donnell relinquishes 36 Border Collies rescued from Palm City hoarding case",
+      "source_url": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
+      "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+      "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+      "canonical_is_custom": true,
+      "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": true,
+      "cache_hit": false,
       "model_call": false,
       "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Matthew Waggle arrest by U.S. Marshals",
-        "Body cam footage release by Indian River County Sheriff's Office",
-        "Murder of Dawn Kriskewic in Vero Beach",
-        "Arrest at motel in West Virginia on Wednesday night",
-        "Location: First Street, Vero Beach",
-        "Indian River County Sheriff Eric Flowers statements",
-        "Identical source URL"
-      ],
+      "semantic_status": "pre_generation_materiality_budget_exhausted",
+      "semantic_action": "hold",
+      "confidence": 0.0,
+      "shared_anchors": [],
       "novel_facts": [],
-      "reason": "The incoming article and candidate cover the exact same event: the release of body cam footage showing Matthew Waggle's arrest in West Virginia for the murder of Dawn Kriskewic. They share identical source URLs, specific details about the arrest location (motel in West Virginia), victim name and location (First Street, Vero Beach), the sheriff's quotes, and the Uber travel method. The incoming article provides the full text of what appears to be the same story, with no material updates beyond what was already published. The retrieval evidence confirms this is the same persistent story from the same source.",
-      "validation_errors": []
+      "reason": "Pre-generation material-update model-call budget exhausted; preserve existing canonical.",
+      "validation_errors": [
+        "pre_generation_materiality_budget_exhausted"
+      ]
     }
   ],
   "decisions": [
@@ -1572,7 +1720,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Multi-million dollar crane remains stuck in ditch near Oslo Road in Vero Beach",
       "incoming_source_url": "https://cbs12.com/news/local/crane-crash-vero-vero-beach-ignites-traffic-concerns-90th-avenue-oslo-road-project-traffic-alert-driving-woes-crashed-into-ditch-commercial-trucks-treasure-coast-florida-news",
-      "incoming_story_id": "story_005443",
+      "incoming_story_id": "story_005455",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
