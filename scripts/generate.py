@@ -750,6 +750,20 @@ GENERATION_CACHE_PATH = OUTPUT_DIR / "data" / "generation-cache.json"
 GENERATION_CACHE_SCHEMA_VERSION = 1
 GENERATION_PROMPT_VERSION = "v1.9.4-incremental-generation-1"
 CATEGORY_GENERATION_PROMPT_VERSION = "v1.13.0.3-source-focus-cache-integrity"
+
+# Shared by the live mixed selector/writer and the publication-isolated assignment
+# writer. Keeping one literal contract prevents the Sonnet 5 editor -> Sonnet 4.5
+# writer experiment from drifting behind the deterministic publication guards.
+LEAD_AND_HEADLINE_INTEGRITY_STANDARD = """LEAD AND HEADLINE INTEGRITY STANDARD:
+- Every article and card body must begin with a self-contained news lead that tells a reader with no prior knowledge what happened and what is new now.
+- The lead must make sense without the headline. It must still make sense if the headline is completely removed. Do not use the headline as a substitute for context, and do not merely paraphrase it.
+- If the headline or lead names an amendment, bill, ordinance, referendum, resolution, program, proposal, measure, or numbered initiative, define what it would do in the FIRST paragraph. A phrase such as 'if Amendment 3 passes' is not a definition.
+- Every specific jurisdiction and monetary amount stated in the headline must also appear accurately in the FIRST paragraph. The headline and lead must describe the same government entity, amount, event, and central claim.
+- For items marked [story_form:update], the FIRST paragraph must explicitly state BOTH the original incident, decision, dispute, or event AND the new development being reported.
+- Never open an update only with a quote, scene description, official reaction, investigative procedure, or newly disclosed detail before identifying the underlying event.
+
+"""
+
 _CACHE_MISS = object()
 
 
@@ -6209,7 +6223,7 @@ _UPDATE_SOURCE_PATTERNS = (
 )
 
 _UPDATE_BASELINE_ANCHORS = (
-    ("fatality", re.compile(r"\b(?:death|died|dead|killed|fatal(?:ity)?|homicide)\b", re.IGNORECASE)),
+    ("fatality", re.compile(r"\b(?:death|died|dead|kill(?:ed|ing|s)?|fatal(?:ity)?|homicide|murder(?:ed|ing|s)?)\b", re.IGNORECASE)),
     ("shooting", re.compile(r"\b(?:shooting|shot|gunfire)\b", re.IGNORECASE)),
     ("crash", re.compile(r"\b(?:crash|collision|wreck)\b", re.IGNORECASE)),
     ("fire", re.compile(r"\b(?:fire|blaze|burned|burning)\b", re.IGNORECASE)),
@@ -6508,10 +6522,15 @@ def _meaningful_framing_tokens(text):
 
 
 def _extract_money_claims(text):
-    """Return normalized monetary magnitudes stated in prose or a URL slug."""
+    """Return normalized monetary magnitudes stated in prose or a URL slug.
+
+    Normalize both compact newsroom forms (``$22K``, ``48 million``) and ordinary
+    dollar literals (``$22,000``). Headline/lead integrity compares magnitudes, not
+    typography, so equivalent forms must resolve to the same integer value.
+    """
     normalized = re.sub(r"[-_]", " ", str(text or "").lower())
     claims = set()
-    pattern = re.compile(
+    magnitude_pattern = re.compile(
         r"(?<![a-z0-9])\$?\s*(\d+(?:\.\d+)?)\s*"
         r"(billion|million|thousand|[bmk])\b(?:\s+dollars?)?",
         re.I,
@@ -6524,10 +6543,27 @@ def _extract_money_claims(text):
         "thousand": 1_000,
         "k": 1_000,
     }
-    for match in pattern.finditer(normalized):
+    for match in magnitude_pattern.finditer(normalized):
         try:
             value = float(match.group(1)) * multipliers[match.group(2).lower()]
         except (TypeError, ValueError, KeyError):
+            continue
+        claims.add(int(round(value)))
+
+    dollar_literal_pattern = re.compile(
+        r"(?<![a-z0-9])\$\s*(\d[\d,]*(?:\.\d+)?)",
+        re.I,
+    )
+    for match in dollar_literal_pattern.finditer(normalized):
+        # Compact magnitude forms such as $22K are handled above. Skip them here
+        # after consuming the complete numeric token so regex backtracking cannot
+        # misread $22K as the plain-dollar value $2.
+        suffix = normalized[match.end():]
+        if re.match(r"\s*(?:billion|million|thousand|[bmk])\b", suffix, re.I):
+            continue
+        try:
+            value = float(match.group(1).replace(",", ""))
+        except (TypeError, ValueError):
             continue
         claims.add(int(round(value)))
     return claims
@@ -7077,15 +7113,7 @@ def generate_category_content(category_key, category_label, headlines, request_t
 
 """
 
-    lead_standard = """LEAD AND HEADLINE INTEGRITY STANDARD:
-- Every article and card body must begin with a self-contained news lead that tells a reader with no prior knowledge what happened and what is new now.
-- The lead must make sense without the headline. It must still make sense if the headline is completely removed. Do not use the headline as a substitute for context, and do not merely paraphrase it.
-- If the headline or lead names an amendment, bill, ordinance, referendum, resolution, program, proposal, measure, or numbered initiative, define what it would do in the FIRST paragraph. A phrase such as 'if Amendment 3 passes' is not a definition.
-- Every specific jurisdiction and monetary amount stated in the headline must also appear accurately in the FIRST paragraph. The headline and lead must describe the same government entity, amount, event, and central claim.
-- For items marked [story_form:update], the FIRST paragraph must explicitly state BOTH the original incident, decision, dispute, or event AND the new development being reported.
-- Never open an update only with a quote, scene description, official reaction, investigative procedure, or newly disclosed detail before identifying the underlying event.
-
-"""
+    lead_standard = LEAD_AND_HEADLINE_INTEGRITY_STANDARD
 
     if is_florida:
         prompt = f"""{_date_context}Florida news headlines:{rule_line}
@@ -9805,6 +9833,8 @@ STORY FORM: {story_form}
 
 SOURCE TEXT — this is the only factual source you may use:
 {source_text}
+
+{LEAD_AND_HEADLINE_INTEGRITY_STANDARD}For this assignment, the STORY FORM field above is authoritative. If it is `update`, treat the item as [story_form:update] for the standard above. Before returning JSON, verify that every money amount and local jurisdiction used in the headline also appears accurately in the FIRST paragraph; if the lead cannot support that claim cleanly, remove it from the headline instead of moving the supporting fact to a later paragraph.
 
 Writing rules:
 - Write ONLY the assigned source above. Do not substitute, combine, or refer to another story.

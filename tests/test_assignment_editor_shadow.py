@@ -397,3 +397,103 @@ def test_update_workflow_exposes_separate_assignment_editor_shadow_checkbox_and_
 def test_model_usage_distinguishes_editor_and_writer_shadow_costs():
     assert _WORKLOAD_CLASS_BY_FUNCTION["_run_assignment_editor"] == "assignment_editor_shadow"
     assert _WORKLOAD_CLASS_BY_FUNCTION["_run_assignment_writer"] == "assignment_writer_shadow"
+
+
+def test_assignment_writer_uses_live_lead_and_headline_integrity_standard(monkeypatch):
+    from scripts import generate
+
+    response = _Response(json.dumps({
+        "headline": "Palm City update",
+        "teaser": "A concise teaser.",
+        "body": "Paragraph one with the assigned news.\n\nParagraph two with supporting detail.",
+        "urgency_score": 8,
+        "published": "Fri, 21 Aug 2026 20:00:00 -0400",
+        "source_index": 1,
+    }))
+    fake = _FakeClient([response])
+    monkeypatch.setattr(generate, "client", fake)
+
+    generate._run_assignment_writer(
+        _shadow_packet(),
+        {"source_index": 1, "angle": "Lead with the surrender", "urgency_score": 8},
+        role="card",
+    )
+
+    prompt = fake.messages.calls[0]["messages"][0]["content"]
+    assert generate.LEAD_AND_HEADLINE_INTEGRITY_STANDARD in prompt
+    assert "Every specific jurisdiction and monetary amount stated in the headline" in prompt
+    assert "FIRST paragraph must explicitly state BOTH the original incident" in prompt
+    assert "If it is `update`, treat the item as [story_form:update]" in prompt
+    assert "if the lead cannot support that claim cleanly, remove it from the headline" in prompt
+
+
+def test_exact_crime_shadow_fort_pierce_update_lead_accepts_killing_as_original_event_context():
+    from scripts import generate
+
+    # Exact wording from the final-pipeline-aligned Crime challenger that was
+    # previously rejected as original_event_context_missing even though the lead
+    # states both the shooting death and the new suspect identification.
+    item = {
+        "headline": "Fort Pierce police identify suspect in fatal shooting day after Fourth of July",
+        "source_title": "Fort Pierce police identify suspect in deadly shooting after Fourth of July - WPEC",
+        "story_form": "update",
+        "article_text": (
+            "Fort Pierce police identified Cornelius Trevon Ivory in the July 5 shooting. "
+            "A 28-year-old man died after being shot on South 14th Street."
+        ),
+        "body": (
+            "The Fort Pierce Police Department announced Friday that investigators identified "
+            "Cornelius Trevon Ivory as the suspect accused of shooting and killing a 28-year-old "
+            "man on South 14th Street the day after the Fourth of July. Investigators obtained a "
+            "warrant charging Ivory in connection with the shooting. Ivory was served with the "
+            "warrant while in custody at the St. Lucie County Jail, where he is being held on "
+            "unrelated charges.\n\n"
+            "The shooting occurred at about 3:43 a.m. on July 5. When officers arrived, they found "
+            "two victims suffering from gunshot wounds."
+        ),
+    }
+
+    diagnostics = generate._update_lead_diagnostics(item, item)
+
+    assert diagnostics["required"] is True
+    assert diagnostics["baseline_anchor"] == "fatality"
+    assert diagnostics["baseline_anchor_present"] is True
+    assert diagnostics["novelty_anchor"] == "identity"
+    assert diagnostics["novelty_present"] is True
+    assert diagnostics["passed"] is True
+    assert diagnostics["missing"] == []
+
+
+def test_exact_crime_shadow_22k_headline_requires_amount_in_first_paragraph():
+    from scripts import generate
+
+    item = {
+        "headline": "Man accused of $22K gold chain grab at Treasure Coast Square Mall arrested, bonded out",
+        "body": (
+            "Dezmone Karlde' Rome Johnson, 25, of Lauderhill was arrested July 31 by Broward County "
+            "Sheriff's Office with help from the U.S. Marshals Fugitive Task Force for the July 20 "
+            "robbery at Royal Jewelers kiosk near the main entrance of Treasure Coast Square Mall "
+            "in Jensen Beach. He recently bonded out of Broward County Jail on separate charges.\n\n"
+            "Deputies say Johnson grabbed a display of nine gold chains. The stolen merchandise was "
+            "worth more than $22,000."
+        ),
+    }
+
+    diagnostics = generate._article_framing_diagnostics(item, item)
+
+    assert diagnostics["passed"] is False
+    assert diagnostics["claim_consistency"]["headline_money_claims"] == [22_000]
+    assert diagnostics["claim_consistency"]["missing_money_claims"] == [22_000]
+    assert "headline_money_claim_missing_from_lead" in diagnostics["missing"]
+
+    repaired = dict(item)
+    repaired["body"] = (
+        "Dezmone Karlde' Rome Johnson, 25, of Lauderhill was arrested in connection with the July 20 "
+        "robbery of more than $22,000 in gold chains from the Royal Jewelers kiosk at Treasure Coast "
+        "Square Mall in Jensen Beach, according to the Martin County Sheriff's Office. He later "
+        "bonded out on separate charges.\n\n"
+        "Deputies say Johnson grabbed a display holding nine gold chains before running from the mall."
+    )
+    repaired_diagnostics = generate._article_framing_diagnostics(repaired, repaired)
+    assert repaired_diagnostics["claim_consistency"]["passed"] is True
+    assert repaired_diagnostics["claim_consistency"]["missing_money_claims"] == []
