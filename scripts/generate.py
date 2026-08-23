@@ -676,8 +676,17 @@ THIN_SOURCE_DOMAINS = ["tcpalm.com", "sun-sentinel.com", "palmbeachpost.com"]
 # because its pages are paywalled and tend to produce thin/blocked extraction.
 FULL_TEXT_DOMAINS = [
     "wptv.com", "wpbf.com", "cbs12.com", "cw34.com", "wflx.com",
-    "sebastiandaily.com", "hometownnewstc.com", "floridapolitics.com",
+    "sebastiandaily.com", "floridapolitics.com",
 ]
+
+# v1.13.6.7b source-retirement policy. Hometown News frequently republishes
+# Treasure Coast stories days or weeks after the original reporting, which makes
+# its newly surfaced feed timestamps unreliable for TCT freshness and creates
+# avoidable duplicate-story pressure. Reject it at ingestion rather than teaching
+# story identity to compensate for a known stale publisher. Historical archive
+# provenance remains untouched.
+EXCLUDED_SOURCE_DOMAINS = ("hometownnewstc.com",)
+EXCLUDED_SOURCE_PUBLISHER_MARKERS = ("hometown news", "hometown news treasure coast")
 
 # Google News is useful for discovery, but its RSS entry is not enough source material
 # to write from. For trusted local publishers, resolve the Google wrapper back to the
@@ -692,7 +701,6 @@ TRUSTED_AGGREGATOR_PUBLISHERS = {
     "cw34": ("cw34.com", "cbs12.com"),
     "wflx": ("wflx.com",),
     "sebastian daily": ("sebastiandaily.com",),
-    "hometown news": ("hometownnewstc.com",),
 }
 TRUSTED_SOURCE_RECOVERY_ROWS = []
 TRUSTED_SOURCE_RECOVERY_LOCK = threading.RLock()
@@ -2851,6 +2859,9 @@ def build_image_bank(feed_documents=None):
             feed = feed_documents[url] if url in feed_documents else _fetch_feed_document(url)
             for entry in getattr(feed, "entries", [])[:60]:
                 title = entry.get("title", "").strip()
+                link = extract_publisher_url(entry)
+                if _is_excluded_source_entry(entry, title=title, link=link):
+                    continue
                 img = extract_image(entry)
                 if title and img:
                     bank.append({"title": title, "image_url": img, "source": url})
@@ -3310,6 +3321,39 @@ def get_domain(url):
         return ""
 
 
+def _is_excluded_source_entry(entry, title="", link=""):
+    """Return True for publishers TCT has intentionally retired from ingestion.
+
+    Check direct publisher URLs plus Google News ``source`` metadata / terminal
+    publisher suffixes. Do not scan article body text, where a blocked publisher
+    could be mentioned incidentally.
+    """
+    entry = entry if isinstance(entry, dict) else {}
+    urls = [str(link or ""), str(entry.get("link") or "")]
+    labels = []
+    source = entry.get("source", {})
+    if isinstance(source, dict):
+        urls.append(str(source.get("href") or ""))
+        labels.append(str(source.get("title") or ""))
+    elif source:
+        labels.append(str(source))
+
+    rendered_title = str(title or entry.get("title") or "")
+    if " - " in rendered_title:
+        labels.append(rendered_title.rsplit(" - ", 1)[-1])
+
+    for value in urls:
+        domain = get_domain(value)
+        if any(domain == blocked or domain.endswith("." + blocked) for blocked in EXCLUDED_SOURCE_DOMAINS):
+            return True
+
+    normalized_labels = [re.sub(r"\s+", " ", label).strip().casefold() for label in labels if label]
+    for label in normalized_labels:
+        if any(marker in label for marker in EXCLUDED_SOURCE_PUBLISHER_MARKERS):
+            return True
+    return False
+
+
 def classify_source(link):
     """Classify a source so the writer knows whether it has usable body text."""
     domain = get_domain(link)
@@ -3431,6 +3475,7 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
                 f.cancel()
 
     seen, entries = set(), []
+    excluded_source_count = 0
 
     # Obituary listings are excluded, but reported deaths remain eligible. A phrase
     # such as "survived by" alone is common in legitimate news coverage and is not
@@ -3442,12 +3487,18 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
         try:
             for entry in feed_entries[:15]:
                 title = sanitize_text(entry.get("title", "").strip())
-                if not title or title.lower() in seen:
+                if not title:
                     continue
-                seen.add(title.lower())
 
                 raw_link = entry.get("link", "") or getattr(entry, "link", "")
                 link = extract_publisher_url(entry)
+                if _is_excluded_source_entry(entry, title=title, link=link):
+                    excluded_source_count += 1
+                    continue
+                if title.lower() in seen:
+                    continue
+                seen.add(title.lower())
+
                 summary = extract_rss_text(entry)[:2500]
                 publisher_name, publisher_domains = _trusted_publisher_identity(entry, title)
 
@@ -3472,6 +3523,10 @@ def fetch_headlines(feeds, limit=HEADLINES_PER_CATEGORY, feed_cache=None):
                 })
         except Exception as e:
             print(f"  Feed error ({url[:60]}): {e}")
+
+    if excluded_source_count:
+        print(f"  Source policy excluded {excluded_source_count} Hometown News item(s)")
+
 
     # Sort by published date (freshest first), then fetch bodies for the candidate pool.
     def pub_sort(h):
@@ -8233,6 +8288,9 @@ def build_content_bank(feed_documents=None):
             feed = feed_documents[url] if url in feed_documents else _fetch_feed_document(url)
             for entry in getattr(feed, "entries", [])[:25]:
                 title = sanitize_text(entry.get("title", ""))
+                link = extract_publisher_url(entry)
+                if _is_excluded_source_entry(entry, title=title, link=link):
+                    continue
                 if not title or title.lower() in seen:
                     continue
                 seen.add(title.lower())
