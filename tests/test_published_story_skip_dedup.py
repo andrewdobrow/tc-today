@@ -679,3 +679,153 @@ def test_authorized_custom_material_update_rewrites_one_canonical_without_duplic
     assert semantic_report["summary"]["pre_generation_materiality_promotions"] == 1
     assert semantic_report["summary"]["pre_generation_materiality_model_calls"] == 1
     assert semantic_report["summary"]["pre_generation_materiality_duplicates"] == 0
+
+
+
+def test_fragmented_border_collie_story_id_uses_canonical_ledger_before_materiality(monkeypatch):
+    """Production regression: story_003665 must not bypass the custom canonical update gate."""
+    g = _load_generate()
+    g.CURRENT_RUN_EDITORIAL_IDENTITIES.clear()
+    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS.clear()
+    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
+
+    canonical = {
+        "slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+        "headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+        "teaser": "Authorities rescued animals from a Palm City hoarding case.",
+        "body": " ".join(["Martin County authorities rescued animals from the Palm City hoarding case."] * 45),
+        "date": "2026-07-20",
+        "lastmod": "2026-07-20",
+        "first_published": "Mon, 20 Jul 2026 18:07:06 -0400",
+        "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/palm-city-home-condemned-after-woman-arrested-in-worst-animal-hoarding-case-humane-society-has-seen",
+        "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+        "incident_anchor_key": "mass-animal-hoarding:martin-county",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+        "is_custom": True,
+        "authoritative_custom": True,
+    }
+    incoming = {
+        "title": "Paige O'Donnell relinquishes 36 Border Collies rescued from Palm City hoarding case",
+        "summary": "O'Donnell legally surrendered the dogs, clearing the path for adoption applications beginning Sept. 1.",
+        "article_text": " ".join(["Paige O'Donnell legally surrendered 36 Border Collies from the Palm City hoarding case, clearing the path for adoption applications beginning Sept. 1 after medical evaluations."] * 18),
+        "link": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
+        "source_url": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
+        "published": "Fri, 21 Aug 2026 15:50:55 GMT",
+        "source_quality": "full",
+        # This is the exact production defect: registry identity was fragmented even
+        # though publication identity had a hard structured-incident match.
+        "editorial_story_id": "story_003665",
+        "_editorial_story_id": "story_003665",
+        "incident_anchor_key": "mass-animal-hoarding:martin-county",
+        "_editorial_route": "skip",
+        "_editorial_relationship": "same_event",
+        "_editorial_relationship_confidence": 1.0,
+    }
+    normalized = g._normalized_external_source_url(incoming["source_url"])
+    g.CURRENT_RUN_EDITORIAL_IDENTITIES[normalized] = {
+        "story_id": "story_003665",
+        "event_key": "animal-rescue-palm-city-cats",
+        "route": "skip",
+        "relationship": "same_event",
+        "relationship_confidence": 1.0,
+        "new_facts": [],
+    }
+    monkeypatch.setattr(
+        g,
+        "adjudicate_semantic_publication_candidates",
+        lambda *args, **kwargs: _material_update_decision(
+            canonical["slug"],
+            "O'Donnell legally surrendered 36 Border Collies and adoption applications open Sept. 1",
+        ),
+    )
+
+    ledger = g._build_canonical_publication_ledger([canonical])
+    result = g._promote_published_skip_material_updates(
+        [incoming],
+        [canonical],
+        "martin",
+        cache={"schema_version": 1, "entries": {}},
+        ledger=ledger,
+    )
+
+    assert result["evaluated_count"] == 1
+    assert result["promoted_count"] == 1
+    assert result["decisions"][0]["identity_basis"].startswith("pre_generation_ledger:")
+    assert incoming["editorial_story_id"] == canonical["editorial_story_id"]
+    assert incoming["_editorial_route"] == "update_existing"
+    assert incoming["_pre_generation_material_update_canonical_slug"] == canonical["slug"]
+    assert incoming["_semantic_material_update"] is True
+    kept, suppressed = g._filter_published_skip_candidates([incoming], [canonical], "martin")
+    assert kept == [incoming]
+    assert suppressed == []
+
+
+def test_fragmented_same_story_without_material_change_is_still_suppressed(monkeypatch):
+    """Ledger repair grants comparison authority, never automatic update authority."""
+    g = _load_generate()
+    g.CURRENT_RUN_EDITORIAL_IDENTITIES.clear()
+    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS.clear()
+    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
+    canonical = {
+        "slug": "2026-08-20-two-fort-pierce-women-arrested-for-using-fake-movie-money-at-st-lucie-restaurant",
+        "headline": "Two Fort Pierce women arrested for using fake movie money at St. Lucie restaurant",
+        "body": " ".join(["Two women were arrested after using a fake movie-money $100 bill at a St. Lucie restaurant."] * 40),
+        "date": "2026-08-20",
+        "lastmod": "2026-08-20",
+        "source_url": "https://example.com/original-movie-money",
+        "editorial_story_id": "story_canonical_movie_money",
+        "incident_anchor_key": "movie-money:st-lucie-draft-house",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+    }
+    incoming = {
+        "title": "Movie money, real arrests: Fake $100 bill lands two Fort Pierce women in jail",
+        "summary": "The same two women were arrested in the same restaurant incident.",
+        "article_text": " ".join(["The same two women used the same fake $100 movie-money bill at the same St. Lucie restaurant."] * 30),
+        "link": "https://example.com/later-reprint",
+        "source_url": "https://example.com/later-reprint",
+        "published": "Sat, 22 Aug 2026 12:00:00 GMT",
+        "source_quality": "full",
+        "editorial_story_id": "story_fragmented_movie_money",
+        "_editorial_story_id": "story_fragmented_movie_money",
+        "incident_anchor_key": "movie-money:st-lucie-draft-house",
+        "_editorial_route": "skip",
+        "_editorial_relationship": "same_event",
+        "_editorial_relationship_confidence": 1.0,
+    }
+    normalized = g._normalized_external_source_url(incoming["source_url"])
+    g.CURRENT_RUN_EDITORIAL_IDENTITIES[normalized] = {
+        "story_id": "story_fragmented_movie_money",
+        "route": "skip",
+        "relationship": "same_event",
+        "relationship_confidence": 1.0,
+    }
+    monkeypatch.setattr(
+        g,
+        "adjudicate_semantic_publication_candidates",
+        lambda *args, **kwargs: {
+            "status": "validated",
+            "action": "duplicate_use_existing_canonical",
+            "recommended_action": "duplicate_use_existing_canonical",
+            "selected_candidate_slug": canonical["slug"],
+            "same_real_world_event": True,
+            "material_new_update": False,
+            "confidence": 0.99,
+            "shared_anchors": ["same people", "same restaurant", "same fake $100 bill"],
+            "novel_facts": [],
+            "reason": "No material development; this is a later reprint of the same incident.",
+            "validation_errors": [],
+        },
+    )
+    ledger = g._build_canonical_publication_ledger([canonical])
+    result = g._promote_published_skip_material_updates(
+        [incoming], [canonical], "crime", cache={"schema_version": 1, "entries": {}}, ledger=ledger
+    )
+    assert result["evaluated_count"] == 1
+    assert result["promoted_count"] == 0
+    assert incoming["editorial_story_id"] == canonical["editorial_story_id"]
+    assert incoming["_editorial_route"] == "skip"
+    kept, suppressed = g._filter_published_skip_candidates([incoming], [canonical], "crime")
+    assert kept == []
+    assert len(suppressed) == 1

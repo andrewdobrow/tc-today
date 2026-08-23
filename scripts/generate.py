@@ -28989,6 +28989,13 @@ def _published_skip_canonical(item, archive):
         if _same_event_items(item, entry):
             corroborated.append((entry, "same_event_and_persistent_story_skip"))
             continue
+        # A target-bound canonical authorization from the publication identity
+        # authority is stronger than the stale/fragmented registry story ID that
+        # may have brought this source here.  Preserve that proof so a semantic
+        # no-update decision still reaches terminal duplicate suppression.
+        if _canonical_write_authorized(item, entry):
+            corroborated.append((entry, "authorized_canonical_identity_skip"))
+            continue
         relationship = str(
             item.get("_editorial_relationship") or item.get("editorial_relationship") or ""
         ).strip().lower()
@@ -29176,16 +29183,40 @@ def _run_known_canonical_materiality_gate(item, canonical, cache, *, basis=""):
 
 
 def _promote_published_skip_material_updates(
-    headlines, archive, category_key="", *, cache=None
+    headlines, archive, category_key="", *, cache=None, ledger=None, identity_index=None
 ):
-    """Give newer same-story sources a material-update decision before suppression."""
+    """Give newer same-story sources a material-update decision before suppression.
+
+    Registry story IDs can lag the publication identity authority.  When a current
+    ``skip`` source carries a fragmented story ID, resolve the already-published
+    canonical through the stronger deterministic publication ledger *before* the
+    materiality decision.  Otherwise the source can miss this pass, become
+    canonical-bound later, and then be terminally suppressed without ever being
+    evaluated as a possible material update.
+    """
     decisions = []
     promoted = 0
     cache_hits = 0
     model_calls = 0
+    ledger = ledger or _build_canonical_publication_ledger(archive, identity_index)
 
     for item in list(headlines or []):
         canonical, basis = _published_skip_canonical(item, archive)
+        if canonical is None:
+            route = str(
+                item.get("_editorial_route") or item.get("editorial_route") or ""
+            ).strip().lower()
+            if route == "skip":
+                ledger_canonical, ledger_basis, _ledger_keys = (
+                    _canonical_publication_ledger_target(
+                        item, ledger, identity_index
+                    )
+                )
+                if ledger_canonical is not None:
+                    canonical = ledger_canonical
+                    basis = "pre_generation_ledger:" + str(
+                        ledger_basis or "canonical_publication_ledger"
+                    )
         if canonical is None:
             continue
         should_check, eligibility_reason = _published_skip_material_update_candidate(
@@ -30263,6 +30294,7 @@ def main():
             _pre_generation_archive,
             cat_key,
             cache=_pre_generation_semantic_gate_cache,
+            ledger=_pre_generation_publication_ledger,
         )
         _category_record["material_update_promotion_evaluation_count"] = int(
             _material_update_promotions.get("evaluated_count") or 0
