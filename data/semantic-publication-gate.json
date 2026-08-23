@@ -1,7 +1,7 @@
 {
   "schema_version": 4,
   "gate_version": "1.6",
-  "generated_at": "2026-08-23T03:47:12.107316+00:00",
+  "generated_at": "2026-08-23T05:04:59.246246+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -50,15 +50,15 @@
     }
   },
   "summary": {
-    "evaluations": 77,
+    "evaluations": 76,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 77,
+    "no_candidate_passes": 76,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 2,
+    "new_stories_allowed": 1,
     "retroactive_rows_retained": 75,
     "holds": 0,
     "retroactive_redirects": 0,
@@ -69,12 +69,12 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 18,
+    "pre_generation_materiality_evaluations": 20,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 9,
+    "pre_generation_materiality_duplicates": 11,
     "pre_generation_materiality_holds": 9,
     "pre_generation_materiality_model_calls": 10,
-    "pre_generation_materiality_cache_hits": 8
+    "pre_generation_materiality_cache_hits": 10
   },
   "pre_generation_materiality_decisions": [
     {
@@ -127,15 +127,15 @@
       "shared_anchors": [
         "Martin County",
         "animal hoarding case",
-        "mass-animal-hoarding:martin-county incident anchor"
+        "Humane Society of the Treasure Coast"
       ],
       "novel_facts": [
         "Paige O'Donnell as defendant",
         "36 Border Collies specifically",
         "Palm City location",
         "72 charges",
-        "Legal surrender occurred",
-        "Dogs cleared for adoption starting Sept 1"
+        "Legal surrender on Aug 21, 2026",
+        "Dogs available for adoption Sept 1"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -162,9 +162,9 @@
       "shared_anchors": [],
       "novel_facts": [
         "I-95 North crash near Mile Marker 89 in Martin County",
-        "Crash occurred around 5:16 p.m. on Thursday, August 20, 2026",
-        "Two right lanes temporarily blocked, later cleared",
-        "Location: before Mile Marker 89, near Indiantown Road"
+        "Occurred around 5:16 p.m. on Thursday August 20, 2026",
+        "Two right lanes blocked, later cleared",
+        "Location before Indiantown Road"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -182,8 +182,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -233,6 +233,41 @@
       "validation_errors": []
     },
     {
+      "category_key": "crime",
+      "source_headline": "Police: Port St. Lucie man faces 5 sexual activity with a minor charges - cw34.com",
+      "source_url": "https://cw34.com/news/local/police-port-st-lucie-man-faces-5-sexual-activity-with-a-minor-charges-sounds-gunfire-noise-flash-diversion-devices-residents-swat-team-search-warrant-felony-contributing-delinquency",
+      "canonical_slug": "2026-08-20-port-st-lucie-man-arrested-on-sexual-activity-with-minor-charges-after-swat-oper",
+      "canonical_headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Virgil Jason Vinz arrested",
+        "Search warrant executed Thursday morning",
+        "900 block of Southwest Jaslo Avenue",
+        "Port St. Lucie Police SWAT team operation around 6 a.m.",
+        "Five counts of sexual activity with a minor",
+        "Noise Flash Diversionary Devices used"
+      ],
+      "novel_facts": [
+        "Additional detail about six counts of contributing to delinquency charge",
+        "Quote from police spokesperson Brandon Martinez",
+        "Background on 2023 no contest plea and 2024 Mental Health Court completion",
+        "Jail status as of Thursday night with bond pending",
+        "Neighbor reactions to loud booms"
+      ],
+      "reason": "Both articles report the identical arrest event: Virgil Jason Vinz arrested Thursday morning at a home in the 900 block of SW Jaslo Avenue by Port St. Lucie Police SWAT team, facing 5 counts of sexual activity with a minor. The incoming article adds contextual details (quotes, prior criminal history, jail status) but contains no material updates such as new charges, court proceedings, bond amount, victim identification, or case developments. These are supplementary background details, not material developments that change what readers need to know about the case.",
+      "validation_errors": []
+    },
+    {
       "category_key": "business",
       "source_headline": "Paige O'Donnell relinquishes 36 Border Collies rescued from Palm City hoarding case",
       "source_url": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
@@ -255,11 +290,13 @@
         "Humane Society of the Treasure Coast"
       ],
       "novel_facts": [
-        "Paige O'Donnell as suspect",
-        "36 Border Collies",
+        "Paige O'Donnell as defendant",
         "Palm City location",
+        "36 Border Collies specifically",
+        "legal surrender occurred",
+        "adoption applications starting Sept 1",
         "72 charges",
-        "legal surrender of dogs on August 21, 2026"
+        "WPTV investigation role"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -284,16 +321,16 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Treasure Coast region",
+        "Treasure Coast",
         "Palm Beach County",
-        "weekend events roundup format",
-        "WPBF source"
+        "weekend events roundup",
+        "WPBF news source"
       ],
       "novel_facts": [
         "August 21, 2026 weekend",
         "Newfield Farm gardening class",
         "Ukrainian Cultural Fest",
-        "Delray's Hottest Party women's health event",
+        "Delray's Hottest Party menopause event",
         "Peggy Adams adoption event",
         "Loggerhead Triathlon"
       ],
@@ -320,9 +357,10 @@
       "semantic_action": "hold",
       "confidence": 0.92,
       "shared_anchors": [
-        "Martin County area",
-        "animal hoarding case",
-        "Humane Society of the Treasure Coast involvement"
+        "Martin County/Palm City area",
+        "Animal hoarding case",
+        "Humane Society of the Treasure Coast involvement",
+        "Similar timeframe (July-August 2026)"
       ],
       "novel_facts": [],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -349,7 +387,7 @@
       "confidence": 0.95,
       "shared_anchors": [
         "Martin County",
-        "animal hoarding",
+        "animal hoarding case",
         "Humane Society of the Treasure Coast"
       ],
       "novel_facts": [],
@@ -376,18 +414,17 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Treasure Coast region",
-        "Palm Beach County",
-        "weekend events roundup format",
+        "Treasure Coast",
+        "Palm Beach",
+        "weekend events",
         "WPBF source"
       ],
       "novel_facts": [
-        "August 21, 2026 weekend",
-        "Newfield Farm gardening class",
-        "Ukrainian Cultural Fest",
-        "Delray women's health event",
-        "Peggy Adams adoption event",
-        "Loggerhead Triathlon"
+        "Newfield Farm gardening class on August 23, 2026",
+        "Ukrainian Cultural Fest in West Palm Beach",
+        "Delray's Hottest Party women's health event",
+        "Peggy Adams name-your-price adoption event",
+        "Loggerhead Triathlon in Jupiter"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -410,9 +447,16 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.95,
+      "confidence": 1.0,
       "shared_anchors": [],
-      "novel_facts": [],
+      "novel_facts": [
+        "Brightline train collision with SUV in Hobe Sound",
+        "Occurred Thursday morning around 11 a.m.",
+        "Location: SE Dixie Highway and SE Cross Rip Street intersection",
+        "Motorist hospitalized with traumatic injuries",
+        "Martin County Sheriff's Office and Fire Rescue responded",
+        "Train tracks temporarily shut down then reopened"
+      ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
@@ -583,6 +627,41 @@
     },
     {
       "category_key": "st_lucie",
+      "source_headline": "Police: Port St. Lucie man faces 5 sexual activity with a minor charges - cw34.com",
+      "source_url": "https://cw34.com/news/local/police-port-st-lucie-man-faces-5-sexual-activity-with-a-minor-charges-sounds-gunfire-noise-flash-diversion-devices-residents-swat-team-search-warrant-felony-contributing-delinquency",
+      "canonical_slug": "2026-08-20-port-st-lucie-man-arrested-on-sexual-activity-with-minor-charges-after-swat-oper",
+      "canonical_headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Virgil Jason Vinz arrested",
+        "Search warrant executed Thursday morning",
+        "900 block of Southwest Jaslo Avenue",
+        "Port St. Lucie Police SWAT team operation around 6 a.m.",
+        "Five counts of sexual activity with a minor",
+        "Noise Flash Diversionary Devices used"
+      ],
+      "novel_facts": [
+        "Additional detail about six counts of contributing to delinquency charge",
+        "Quote from police spokesperson Brandon Martinez",
+        "Background on 2023 no contest plea and 2024 Mental Health Court completion",
+        "Jail status as of Thursday night with bond pending",
+        "Neighbor reactions to loud booms"
+      ],
+      "reason": "Both articles report the identical arrest event: Virgil Jason Vinz arrested Thursday morning at a home in the 900 block of SW Jaslo Avenue by Port St. Lucie Police SWAT team, facing 5 counts of sexual activity with a minor. The incoming article adds contextual details (quotes, prior criminal history, jail status) but contains no material updates such as new charges, court proceedings, bond amount, victim identification, or case developments. These are supplementary background details, not material developments that change what readers need to know about the case.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "st_lucie",
       "source_headline": "St. Lucie County Sheriff's Office seek missing man believed to be endangered - cw34.com",
       "source_url": "https://cw34.com/news/local/missing-man-last-seen-thursday-at-2-am-described-61-weighing-200-pounds-brown-hair-eyes-st-lucie-county-sheriffs-office-florida-news?teaserSource=trending",
       "canonical_slug": "2026-08-06-us-1-closed-in-both-directions-near-tiffany-avenue-in-port-st-lucie-after-crash",
@@ -600,7 +679,7 @@
       "confidence": 0.95,
       "shared_anchors": [],
       "novel_facts": [
-        "Benton Doyle Tomlin reported missing",
+        "Missing person case involving Benton Doyle Tomlin",
         "Last seen Thursday at 2 a.m.",
         "Described as 6'1\", 200 pounds, brown hair and eyes",
         "St. Lucie County Sheriff's Office seeking help",
@@ -1844,7 +1923,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Multi-million dollar crane remains stuck in ditch near Oslo Road in Vero Beach",
       "incoming_source_url": "https://cbs12.com/news/local/crane-crash-vero-vero-beach-ignites-traffic-concerns-90th-avenue-oslo-road-project-traffic-alert-driving-woes-crashed-into-ditch-commercial-trucks-treasure-coast-florida-news",
-      "incoming_story_id": "story_005354",
+      "incoming_story_id": "story_005363",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -2073,25 +2152,6 @@
       "incoming_headline": "Fort Pierce police identify suspect in July 5 homicide on South 14th Street",
       "incoming_source_url": "https://www.wpbf.com/article/fort-pierce-homicide-suspect-arrested/73500639",
       "incoming_story_id": "story_005322",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Port St. Lucie man arrested on 5 counts of sexual activity with minor after SWAT operation",
-      "incoming_source_url": "https://cw34.com/news/local/police-port-st-lucie-man-faces-5-sexual-activity-with-a-minor-charges-sounds-gunfire-noise-flash-diversion-devices-residents-swat-team-search-warrant-felony-contributing-delinquency",
-      "incoming_story_id": "story_004905",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
