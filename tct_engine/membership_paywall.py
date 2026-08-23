@@ -122,23 +122,6 @@ def split_article_body(body_html: str, preview_max_chars: int = PREVIEW_MAX_CHAR
     return ArticleSplit(preview_html=preview, protected_html=protected)
 
 
-def is_public_service_exception(headline: str, body_html: str) -> bool:
-    """Narrow, deterministic life-safety exceptions that remain fully free."""
-    text = _plain(f"{headline} {body_html}").lower()
-    if any(term in text for term in ("mandatory evacuation", "evacuation order", "ordered to evacuate")):
-        return True
-    if any(term in text for term in ("hurricane warning", "storm surge warning")):
-        return True
-    if "boil water" in text and any(term in text for term in ("notice", "advisory", "order")):
-        return True
-    if "missing" in text and any(term in text for term in ("child", "boy", "girl", "juvenile")) and any(term in text for term in ("amber alert", "missing child", "missing boy", "missing girl")):
-        return True
-    if "shelter" in text and any(term in text for term in ("emergency shelter", "shelters open", "shelter opens", "shelter locations")):
-        return True
-    if "bridge" in text and any(term in text for term in ("emergency closure", "closed until further notice", "bridge is closed", "bridge closed")):
-        return True
-    return False
-
 
 def paywall_html(slug: str) -> str:
     escaped_slug = html.escape(slug, quote=True)

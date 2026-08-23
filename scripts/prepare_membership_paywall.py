@@ -23,7 +23,6 @@ from tct_engine.membership_paywall import (
     FULL_BODY_MARKER,
     add_paywall_schema,
     inject_membership_assets,
-    is_public_service_exception,
     paywall_html,
     split_article_body,
 )
@@ -35,7 +34,6 @@ BODY_RE = re.compile(
     r'<div class="article-share">)',
     re.I | re.S,
 )
-HEADLINE_RE = re.compile(r'<h1\b[^>]*class="[^"]*article-headline[^"]*"[^>]*>(.*?)</h1>', re.I | re.S)
 TAG_RE = re.compile(r'<[^>]+>')
 PAYWALLED_RE = re.compile(
     r'<div class="article-body tct-member-preview">(.*?)</div>\s*'
@@ -133,7 +131,7 @@ def main() -> None:
     snapshot = _load_snapshot()
     snapshot_expected = bool(os.getenv("TCT_PROTECTED_SNAPSHOT_PATH", "").strip())
     protected: list[dict[str, str]] = []
-    rewritten = exempt = short = already = rehydrated = 0
+    rewritten = short = already = rehydrated = 0
     for path in sorted(ARTICLES.glob("*.html")):
         text = path.read_text(encoding="utf-8", errors="ignore")
         original_text = text
@@ -157,14 +155,7 @@ def main() -> None:
         body_match = BODY_RE.search(text)
         if not body_match:
             continue
-        headline_match = HEADLINE_RE.search(text)
-        headline = TAG_RE.sub(" ", headline_match.group(1) if headline_match else "")
         body_html = body_match.group(1)
-        if is_public_service_exception(headline, body_html):
-            exempt += 1
-            # Do not change an already-protected legacy page unless we can safely
-            # complete a new protected split in the same transaction.
-            continue
         split = split_article_body(body_html)
         if not split:
             short += 1
@@ -192,7 +183,7 @@ def main() -> None:
     export_path.write_text(json.dumps({"articles": protected}, ensure_ascii=False), encoding="utf-8")
     print(
         f"Membership paywall prepared: {rewritten} protected, {rehydrated} legacy/current pages rehydrated, "
-        f"{exempt} public-service free, {short} too short, {already} already protected without snapshot"
+        f"{short} too short, {already} already protected without snapshot"
     )
     print(f"Protected export written outside repo: {export_path}")
 

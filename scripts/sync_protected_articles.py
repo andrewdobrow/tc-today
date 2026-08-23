@@ -15,10 +15,8 @@ if str(ROOT) not in sys.path:
 
 import requests
 
-from tct_engine.membership_paywall import is_public_service_exception, split_article_body
+from tct_engine.membership_paywall import split_article_body
 BODY_RE = re.compile(r'<div class="article-body">(.*?)</div>', re.I | re.S)
-HEADLINE_RE = re.compile(r'<h1\b[^>]*class="[^"]*article-headline[^"]*"[^>]*>(.*?)</h1>', re.I | re.S)
-TAG_RE = re.compile(r'<[^>]+>')
 
 
 def scan_public_articles() -> list[dict[str, str]]:
@@ -29,10 +27,6 @@ def scan_public_articles() -> list[dict[str, str]]:
             continue
         match = BODY_RE.search(text)
         if not match:
-            continue
-        headline_match = HEADLINE_RE.search(text)
-        headline = TAG_RE.sub(" ", headline_match.group(1) if headline_match else "")
-        if is_public_service_exception(headline, match.group(1)):
             continue
         split = split_article_body(match.group(1))
         if split:

@@ -11,7 +11,6 @@ import sys
 from tct_engine.membership_paywall import (
     add_paywall_schema,
     inject_membership_assets,
-    is_public_service_exception,
     paywall_html,
     split_article_body,
 )
@@ -74,12 +73,83 @@ def test_short_article_keeps_meaningful_content_behind_paywall():
     assert len(full) - len(preview) >= 90
 
 
-def test_public_service_exceptions_are_narrow():
-    assert is_public_service_exception("Mandatory evacuation order issued for barrier island", "<p>Residents must leave now.</p>")
-    assert is_public_service_exception("Boil water notice issued in Stuart", "<p>The advisory remains active.</p>")
-    assert is_public_service_exception("Missing child alert issued", "<p>A missing girl was last seen Friday.</p>")
-    assert not is_public_service_exception("Candidate campaigns on hurricane preparedness", "<p>The election is Tuesday.</p>")
-    assert not is_public_service_exception("Bridge construction project advances", "<p>Lane closures begin next month.</p>")
+def _public_service_fixture_body():
+    return (
+        "<p>Deputies issued an Amber Alert for a missing child Saturday evening and asked residents across the county to check cameras and immediately report credible sightings to law enforcement.</p>"
+        "<p>Investigators released identifying details, the last known location and a description of the vehicle connected to the active search while patrol units continued checking nearby neighborhoods.</p>"
+        "<p>Authorities said anyone with information should contact the sheriff's office rather than approach the vehicle, and additional verified updates will be released as the search develops.</p>"
+    )
+
+
+def test_public_service_articles_are_not_exempt_from_protected_content_scan(tmp_path, monkeypatch):
+    script_path = ROOT / "scripts/sync_protected_articles.py"
+    spec = importlib.util.spec_from_file_location("sync_protected_articles_no_exemptions", script_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader
+    spec.loader.exec_module(module)
+
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    alert_slug = "amber-alert-missing-child"
+    alert_body = _public_service_fixture_body()
+    (articles / f"{alert_slug}.html").write_text(
+        '<h1 class="article-headline">Amber Alert issued for missing child</h1>'
+        f'<div class="article-body">{alert_body}</div>',
+        encoding="utf-8",
+    )
+
+    flock_slug = "flock-camera-homicide-story"
+    flock_body = (
+        "<p>The sheriff credited Flock safety cameras with helping investigators trace a homicide suspect and described how the system supported the arrest while detectives reconstructed the suspect's movements.</p>"
+        "<p>A resident said she sees value in the technology for serious cases such as locating missing children, but also wants clear rules governing retention, access and accountability.</p>"
+        "<p>Officials said the homicide investigation remains active and discussed the broader privacy debate surrounding automated license-plate reader systems used by law enforcement agencies.</p>"
+    )
+    (articles / f"{flock_slug}.html").write_text(
+        '<h1 class="article-headline">Sheriff credits Flock safety cameras in homicide investigation</h1>'
+        f'<div class="article-body">{flock_body}</div>',
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+
+    rows = module.scan_public_articles()
+    assert [row["slug"] for row in rows] == [alert_slug, flock_slug]
+    assert all(row["protected_body"].startswith("<!--tct-full-article-v2-->") for row in rows)
+
+
+def test_prepare_paywall_protects_public_service_article(tmp_path, monkeypatch):
+    script_path = ROOT / "scripts/prepare_membership_paywall.py"
+    spec = importlib.util.spec_from_file_location("prepare_membership_no_exemptions", script_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader
+    spec.loader.exec_module(module)
+
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    slug = "boil-water-emergency"
+    body = _public_service_fixture_body().replace("Amber Alert for a missing child", "boil water notice for residents")
+    page = (
+        '<!doctype html><html><head><script type="application/ld+json">'
+        '{"@context":"https://schema.org","@type":"NewsArticle","isAccessibleForFree":true}'
+        '</script></head><body>'
+        '<h1 class="article-headline">Boil water notice issued in Stuart</h1>'
+        f'<div class="article-body">{body}</div>'
+        '<div class="article-share">share</div></body></html>'
+    )
+    article_path = articles / f"{slug}.html"
+    article_path.write_text(page, encoding="utf-8")
+    export_path = tmp_path / "protected-export.json"
+
+    monkeypatch.setattr(module, "ARTICLES", articles)
+    monkeypatch.setenv("TCT_MEMBERSHIP_UI_ENABLED", "true")
+    monkeypatch.setenv("TCT_PROTECTED_EXPORT_PATH", str(export_path))
+    monkeypatch.delenv("TCT_PROTECTED_SNAPSHOT_PATH", raising=False)
+    module.main()
+
+    rewritten = article_path.read_text(encoding="utf-8")
+    assert 'data-tct-paywall' in rewritten
+    assert '"isAccessibleForFree":false' in rewritten
+    payload = json.loads(export_path.read_text(encoding="utf-8"))
+    assert [row["slug"] for row in payload["articles"]] == [slug]
 
 
 def test_paywall_markup_uses_locked_copy_and_pay_first_buttons():
