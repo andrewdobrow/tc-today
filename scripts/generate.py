@@ -6640,6 +6640,47 @@ def _extract_jurisdiction_claims(text):
     }
 
 
+# City/county containment is a geographic equivalence for headline/lead integrity,
+# but sibling cities are not interchangeable. A headline that says Port St. Lucie
+# is adequately grounded by a lead that says St. Lucie County; a headline that says
+# Port St. Lucie is NOT grounded by a lead that says Fort Pierce.
+_JURISDICTION_PARENT_COUNTY = {
+    "port_st_lucie": "st_lucie_county",
+    "fort_pierce": "st_lucie_county",
+    "stuart": "martin_county",
+    "jensen_beach": "martin_county",
+    "hobe_sound": "martin_county",
+    "palm_city": "martin_county",
+    "port_salerno": "martin_county",
+    "indian_town": "martin_county",
+    "vero_beach": "indian_river_county",
+    "sebastian": "indian_river_county",
+    "fellsmere": "indian_river_county",
+}
+
+
+def _jurisdiction_claim_covered(claim, lead_claims):
+    if claim in lead_claims:
+        return True
+    parent = _JURISDICTION_PARENT_COUNTY.get(claim)
+    if parent and parent in lead_claims:
+        return True
+    # A county headline may be grounded by a specific city inside that county.
+    if claim in {"st_lucie_county", "martin_county", "indian_river_county"}:
+        return any(
+            _JURISDICTION_PARENT_COUNTY.get(lead_claim) == claim
+            for lead_claim in lead_claims
+        )
+    return False
+
+
+def _missing_headline_jurisdiction_claims(headline_claims, lead_claims):
+    return sorted(
+        claim for claim in headline_claims
+        if not _jurisdiction_claim_covered(claim, lead_claims)
+    )
+
+
 def _extract_opaque_policy_references(text):
     value = re.sub(r"\s+", " ", str(text or "")).strip()
     references = []
@@ -6780,7 +6821,9 @@ def _headline_lead_claim_diagnostics(item):
     missing_money = sorted(headline_money - lead_money)
     if missing_money:
         missing.append("headline_money_claim_missing_from_lead")
-    missing_jurisdictions = sorted(headline_jurisdictions - lead_jurisdictions)
+    missing_jurisdictions = _missing_headline_jurisdiction_claims(
+        headline_jurisdictions, lead_jurisdictions
+    )
     if missing_jurisdictions:
         missing.append("headline_jurisdiction_missing_from_lead")
     missing_references = sorted(headline_references - lead_references)
@@ -11325,11 +11368,36 @@ def _apply_final_canonical_surface_identity(item, identity):
         )
     )
     if should_adopt_copy:
-        for key in ("headline", "teaser", "image_url", "image_credit"):
-            value = canonical_entry.get(key)
+        canonical_body = (
+            canonical_entry.get("body")
+            or canonical_entry.get("article_text")
+            or _archive_article_body(canonical_entry)
+            or canonical_entry.get("teaser")
+            or canonical_entry.get("headline")
+            or ""
+        )
+        canonical_story_copy = {
+            "headline": canonical_entry.get("headline"),
+            "teaser": canonical_entry.get("teaser"),
+            "body": canonical_body,
+            "image_url": canonical_entry.get("image_url"),
+            "image_credit": canonical_entry.get("image_credit"),
+            "published": (
+                canonical_entry.get("first_published")
+                or canonical_entry.get("date")
+                or canonical_entry.get("lastmod")
+            ),
+            "published_raw": (
+                canonical_entry.get("first_published")
+                or canonical_entry.get("date")
+                or canonical_entry.get("lastmod")
+            ),
+        }
+        for key, value in canonical_story_copy.items():
             if value not in (None, "") and item.get(key) != value:
-                item[key] = value
+                item[key] = copy.deepcopy(value)
                 changed = True
+        item["_canonical_story_copy_atomic"] = True
         # Canonical rebinding must carry the canonical owner's provenance along with
         # its copy. Otherwise a valid archive-recovered county story can lose the
         # source/legacy authority that justified its county membership and then fail
@@ -18528,12 +18596,26 @@ def apply_guarded_story_suppression(all_categories, archive, current_customs=Non
     def _filter_category(cat):
         category_key = str(cat.get("category_key") or "")
         hero = cat.get("hero")
-        if hero and evaluate(hero, category_key=category_key, placement="hero"):
-            cat["hero"] = None
+        if hero:
+            hero_suppression = evaluate(hero, category_key=category_key, placement="hero")
+            if hero_suppression:
+                matched_slug = str(hero_suppression.get("matched_prior_slug") or "").strip()
+                if matched_slug:
+                    preferred = cat.setdefault("_preferred_archive_recovery_slugs", [])
+                    if matched_slug not in preferred:
+                        preferred.append(matched_slug)
+                cat["hero"] = None
         kept = []
         for card in cat.get("cards", []) or []:
-            if not evaluate(card, category_key=category_key, placement="card"):
-                kept.append(card)
+            card_suppression = evaluate(card, category_key=category_key, placement="card")
+            if card_suppression:
+                matched_slug = str(card_suppression.get("matched_prior_slug") or "").strip()
+                if matched_slug:
+                    preferred = cat.setdefault("_preferred_archive_recovery_slugs", [])
+                    if matched_slug not in preferred:
+                        preferred.append(matched_slug)
+                continue
+            kept.append(card)
         cat["cards"] = kept
 
     for cat in all_categories or []:
@@ -28942,6 +29024,80 @@ def classify_stories(feed_cache):
 
 
 
+def enforce_final_topic_category_integrity(all_categories, output_root=None):
+    """Revalidate enforced topic sections after every canonical mutation boundary.
+
+    Generation-time routing is not enough because duplicate suppression, archive
+    recovery, and canonical rebinding can all mutate the visible package later. This
+    final gate uses the same enforced topic contracts, removes any placement that no
+    longer belongs, and promotes a surviving valid card before recovery is allowed.
+    County pages remain under the separate county-membership authority contract.
+    """
+    rejections = []
+    promotions = []
+    for category in list(all_categories or []):
+        if not isinstance(category, dict):
+            continue
+        category_key = str(category.get("category_key") or "")
+        config = _category_contract_config(category_key)
+        if config.get("mode") != "enforce":
+            continue
+
+        def valid(item, surface):
+            if not isinstance(item, dict) or not item.get("headline"):
+                return False
+            assessment = _category_eligibility_contract_assessment(category_key, item)
+            if assessment.get("eligible"):
+                return True
+            rejections.append({
+                "category_key": category_key,
+                "category_label": category.get("category_label", ""),
+                "surface": surface,
+                "headline": str(item.get("headline") or ""),
+                "reason": assessment.get("reason", "category_contract_rejected"),
+                "positive_signals": assessment.get("positive_signals", []),
+                "competing_signals": assessment.get("competing_signals", []),
+            })
+            return False
+
+        hero = category.get("hero") if isinstance(category.get("hero"), dict) else None
+        if hero and not valid(hero, "hero"):
+            category["hero"] = None
+
+        retained_cards = []
+        for card in list(category.get("cards") or []):
+            if valid(card, "card"):
+                retained_cards.append(card)
+        category["cards"] = retained_cards
+
+        if not category.get("hero") and category["cards"]:
+            category["hero"] = category["cards"].pop(0)
+            category["hero"]["_hero_recovery_basis"] = "final_topic_integrity_surviving_card"
+            promotions.append({
+                "category_key": category_key,
+                "headline": category["hero"].get("headline", ""),
+            })
+
+    root = Path(output_root or OUTPUT_DIR)
+    path = root / "data" / "final-topic-category-integrity.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "passed": not rejections,
+        "rejection_count": len(rejections),
+        "promotion_count": len(promotions),
+        "rejections": rejections,
+        "promotions": promotions,
+    }, indent=2, ensure_ascii=False), encoding="utf-8")
+    if rejections:
+        print(
+            "  Final topic-category integrity removed "
+            f"{len(rejections)} invalid placement(s) after canonicalization"
+        )
+    return {"rejections": rejections, "promotions": promotions}
+
+
 def ensure_all_category_sections(all_categories, min_cards=6):
     """Guarantee every configured category has a visible, populated section.
 
@@ -29140,6 +29296,48 @@ def ensure_all_category_sections(all_categories, min_cards=6):
             if item
         }
         candidates = [e for e in archive if entry_matches(e, category_key)]
+        candidate_by_slug = {
+            str(e.get("slug") or "").strip(): e for e in candidates if e.get("slug")
+        }
+
+        # A downstream suppression must never cause an unrelated archive story to
+        # leapfrog a still-valid generated card. Preserve the model's ranked order and
+        # promote the first surviving card that is independently hero-eligible.
+        if not category.get("hero") or not category["hero"].get("headline"):
+            replacement_i = next(
+                (i for i, card in enumerate(category.get("cards", []))
+                 if isinstance(card, dict) and _hero_eligible(category_key, card)),
+                None,
+            )
+            if replacement_i is not None:
+                category["hero"] = category["cards"].pop(replacement_i)
+                category["hero"]["_hero_recovery_basis"] = "surviving_live_card"
+                print(
+                    f"  Live-card hero recovery for {config['label']}: "
+                    f"'{category['hero'].get('headline','')[:55]}'"
+                )
+
+        # If the removed placement was a proven duplicate of an already-published
+        # canonical story, collapse back to THAT exact canonical before considering
+        # unrelated archive filler. Duplicate suppression may change the URL owner; it
+        # must not change the newsroom story.
+        if not category.get("hero") or not category["hero"].get("headline"):
+            for preferred_slug in list(category.get("_preferred_archive_recovery_slugs") or []):
+                entry = candidate_by_slug.get(str(preferred_slug or "").strip())
+                if not entry:
+                    continue
+                headline_key = entry.get("headline", "").strip().lower()
+                if not headline_key or headline_key in existing_headlines:
+                    continue
+                category["hero"] = archived_story(entry, category_key)
+                category["hero"]["_hero_recovery_basis"] = "suppressed_duplicate_canonical"
+                category["hero"]["_hero_recovery_source_slug"] = str(entry.get("slug") or "")
+                existing_headlines.add(headline_key)
+                print(
+                    f"  Canonical duplicate recovery hero for {config['label']}: "
+                    f"'{entry.get('headline','')[:55]}'"
+                )
+                break
 
         if not category.get("hero") or not category["hero"].get("headline"):
             for entry in candidates:
@@ -29147,6 +29345,8 @@ def ensure_all_category_sections(all_categories, min_cards=6):
                 if not headline_key or headline_key in existing_headlines:
                     continue
                 category["hero"] = archived_story(entry, category_key)
+                category["hero"]["_hero_recovery_basis"] = "generic_archive_recovery"
+                category["hero"]["_hero_recovery_source_slug"] = str(entry.get("slug") or "")
                 existing_headlines.add(headline_key)
                 print(f"  Permanent archive recovery hero for {config['label']}: "
                       f"'{entry.get('headline','')[:55]}'")
@@ -29162,9 +29362,6 @@ def ensure_all_category_sections(all_categories, min_cards=6):
                 continue
             category["cards"].append(archived_story(entry, category_key))
             existing_headlines.add(headline_key)
-
-        if not category.get("hero") and category.get("cards"):
-            category["hero"] = category["cards"].pop(0)
 
         # Absolute first-run safety. This should almost never be used once archive.json
         # contains stories, but it keeps the navigation and section structurally intact.
@@ -29862,6 +30059,11 @@ def _suppress_published_skip_placements(data, archive, category_key=""):
         canonical, basis = _published_skip_canonical(item, archive)
         if canonical is None:
             return False
+        canonical_slug = str(canonical.get("slug") or "").strip()
+        if canonical_slug:
+            preferred = data.setdefault("_preferred_archive_recovery_slugs", [])
+            if canonical_slug not in preferred:
+                preferred.append(canonical_slug)
         suppressed.append({
             "category_key": category_key,
             "surface": surface,
@@ -31852,6 +32054,27 @@ def main():
     # Reselection can promote a card and demote the former hero. Canonicalize once
     # more so every resulting placement still points directly at its final owner.
     canonicalize_all_live_category_surfaces(all_categories, top_cat, OUTPUT_DIR)
+
+    # Re-run enforced topic contracts after canonical rebinding. A final canonical
+    # mutation may change the visible story, but it may never bypass the category
+    # contract that generation had to satisfy. Recover only after surviving valid
+    # cards have had the first opportunity to become hero.
+    _final_topic_repair = enforce_final_topic_category_integrity(all_categories, OUTPUT_DIR)
+    if _final_topic_repair.get("rejections"):
+        ensure_all_category_sections(all_categories)
+        canonicalize_all_live_category_surfaces(all_categories, top_cat, OUTPUT_DIR)
+        _final_topic_repair_second = enforce_final_topic_category_integrity(
+            all_categories, OUTPUT_DIR
+        )
+        if _final_topic_repair_second.get("rejections"):
+            raise RuntimeError(
+                "Final topic-category integrity FAILED after recovery: "
+                + "; ".join(
+                    f"{row.get('category_label') or row.get('category_key')}: "
+                    f"{row.get('headline','')[:60]} ({row.get('reason','')})"
+                    for row in _final_topic_repair_second.get("rejections", [])[:5]
+                )
+            )
 
     # Canonical rebinding is intentionally late and can replace a live object with
     # persisted archive metadata. Re-run the county authority repair *after* that

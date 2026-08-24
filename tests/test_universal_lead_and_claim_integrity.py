@@ -164,9 +164,11 @@ def test_original_generated_headline_conflicted_with_lead_amount_and_jurisdictio
 
     assert diagnostics["passed"] is False
     assert diagnostics["missing_money_claims"] == [63_000_000]
-    assert diagnostics["missing_jurisdictions"] == ["st_lucie_county"]
+    # Port St. Lucie is geographically inside St. Lucie County, so the geography
+    # itself is grounded even though the headline's $63M county-level claim is wrong.
+    assert diagnostics["missing_jurisdictions"] == []
     assert "headline_money_claim_missing_from_lead" in diagnostics["missing"]
-    assert "headline_jurisdiction_missing_from_lead" in diagnostics["missing"]
+    assert "headline_jurisdiction_missing_from_lead" not in diagnostics["missing"]
 
 
 def test_slug_claim_guard_detects_exact_property_tax_permalink_drift():
