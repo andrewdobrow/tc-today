@@ -1,7 +1,7 @@
 {
   "schema_version": 4,
   "gate_version": "1.6",
-  "generated_at": "2026-08-24T10:48:54.032318+00:00",
+  "generated_at": "2026-08-24T15:48:57.294777+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -50,16 +50,16 @@
     }
   },
   "summary": {
-    "evaluations": 67,
+    "evaluations": 68,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 67,
+    "no_candidate_passes": 68,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
     "new_stories_allowed": 1,
-    "retroactive_rows_retained": 66,
+    "retroactive_rows_retained": 67,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -69,12 +69,12 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 5,
+    "pre_generation_materiality_evaluations": 7,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 1,
+    "pre_generation_materiality_duplicates": 3,
     "pre_generation_materiality_holds": 4,
-    "pre_generation_materiality_model_calls": 4,
-    "pre_generation_materiality_cache_hits": 1
+    "pre_generation_materiality_model_calls": 5,
+    "pre_generation_materiality_cache_hits": 2
   },
   "pre_generation_materiality_decisions": [
     {
@@ -96,12 +96,12 @@
       "confidence": 1.0,
       "shared_anchors": [],
       "novel_facts": [
-        "Ronald L. Corbin, choral teacher at Martin County High School for 34 years, died Saturday August 23, 2026",
-        "Led OPUS choir program until retirement in 2014",
-        "Received kidney transplant from daughter Candice Corbin in 2018",
+        "Ronald L. Corbin died Saturday August 23, 2026",
+        "Corbin was a choral teacher at Martin County High School for 34 years (1980-2014)",
+        "Led OPUS choir program at Martin County High School",
         "Corbin Musical Arts Center dedicated in his name in 2015",
-        "Added to Florida Vocal Association Roll of Distinction in 2014",
-        "Received R. Wayne Hugoboom Distinguished Service Award in 2017"
+        "Received kidney transplant from daughter Candice Corbin in 2018",
+        "Added to Florida Vocal Association Roll of Distinction in 2014"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -124,19 +124,19 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.95,
+      "confidence": 0.92,
       "shared_anchors": [
         "Martin County",
         "animal hoarding case",
         "mass-animal-hoarding:martin-county incident anchor"
       ],
       "novel_facts": [
-        "Paige O'Donnell as suspect",
-        "36 Border Collies",
+        "Paige O'Donnell as defendant",
+        "36 Border Collies specifically",
         "Palm City location",
         "72 charges",
-        "legal surrender of dogs on August 21, 2026",
-        "adoption applications available September 1"
+        "Legal surrender occurred",
+        "Dogs available for adoption starting Sept 1"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -161,13 +161,13 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Treasure Coast",
+        "Treasure Coast region",
         "Palm Beach County",
-        "weekend events roundup",
+        "weekend events roundup format",
         "WPBF news source"
       ],
       "novel_facts": [
-        "Newfield Farm gardening class on August 21",
+        "Newfield Farm gardening class on August 23, 2026",
         "Ukrainian Cultural Fest in West Palm Beach",
         "Delray Beach women's health event",
         "Peggy Adams adoption event",
@@ -177,6 +177,35 @@
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
+    },
+    {
+      "category_key": "martin",
+      "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
+      "source_url": "https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
+      "canonical_slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
+      "canonical_headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
+      "canonical_is_custom": false,
+      "identity_basis": "exact_source_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 1.0,
+      "shared_anchors": [
+        "Tornado/landspout near Jessica Clinton Park in Port St. Lucie on Sunday August 23, 2026",
+        "National Weather Service conducting damage survey on Monday morning",
+        "Specific location: Southbend Boulevard SE Navy Avenue area",
+        "Affected streets: SE Wake Road, Navy Avenue, West Snow Road",
+        "Same source URL: wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
+        "Tornado warning issued for St. Lucie and Martin counties"
+      ],
+      "novel_facts": [],
+      "reason": "This is exactly the same article covering the same tornado incident. Both reference the identical source URL, describe the same tornado near Jessica Clinton Park on Southbend Boulevard, mention the same affected streets (SE Wake Road, Navy Avenue, West Snow Road), and report the same NWS Monday morning damage survey. The retrieval evidence confirms this is a 'persistent_story_id_match' and 'exact_source_and_persistent_story_skip'. The incoming article contains no material updates beyond what the canonical already covers - same tornado event, same survey announcement, same damage details.",
+      "validation_errors": []
     },
     {
       "category_key": "martin",
@@ -197,18 +226,45 @@
       "confidence": 1.0,
       "shared_anchors": [],
       "novel_facts": [
-        "Ronald L. Corbin died Saturday, August 23, 2026",
-        "Corbin was a choral teacher at Martin County High School for 34 years (1980-2014)",
+        "Ronald L. Corbin, choral teacher at Martin County High School for 34 years, died Saturday August 23, 2026",
+        "Corbin taught from 1980-2014 at Martin County High School in Stuart",
         "Led OPUS choir program",
-        "Corbin Musical Arts Center dedicated in his name in 2015",
         "Received kidney transplant from daughter Candice Corbin in 2018",
-        "Added to FVA Roll of Distinction in 2014",
-        "Received R. Wayne Hugoboom Distinguished Service Award in 2017"
+        "Corbin Musical Arts Center dedicated in his name in 2015"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
+      "source_url": "https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
+      "canonical_slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
+      "canonical_headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
+      "canonical_is_custom": false,
+      "identity_basis": "exact_source_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 1.0,
+      "shared_anchors": [
+        "Tornado/landspout near Jessica Clinton Park in Port St. Lucie on Sunday August 23, 2026",
+        "National Weather Service conducting damage survey on Monday morning",
+        "Specific location: Southbend Boulevard SE Navy Avenue area",
+        "Affected streets: SE Wake Road, Navy Avenue, West Snow Road",
+        "Same source URL: wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
+        "Tornado warning issued for St. Lucie and Martin counties"
+      ],
+      "novel_facts": [],
+      "reason": "This is exactly the same article covering the same tornado incident. Both reference the identical source URL, describe the same tornado near Jessica Clinton Park on Southbend Boulevard, mention the same affected streets (SE Wake Road, Navy Avenue, West Snow Road), and report the same NWS Monday morning damage survey. The retrieval evidence confirms this is a 'persistent_story_id_match' and 'exact_source_and_persistent_story_skip'. The incoming article contains no material updates beyond what the canonical already covers - same tornado event, same survey announcement, same damage details.",
+      "validation_errors": []
     },
     {
       "category_key": "st_lucie",
@@ -1485,6 +1541,25 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
+      "incoming_source_url": "https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
+      "incoming_story_id": "story_005547",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Funnel cloud spotted over Port St. Lucie neighborhood during tornado warning Sunday",
       "incoming_source_url": "https://cbs12.com/news/local/tornado-warning-issued-for-parts-of-st-lucie-martin-counties",
       "incoming_story_id": "story_005501",
@@ -1504,8 +1579,8 @@
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
-      "incoming_source_url": "https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
+      "incoming_headline": "National Weather Service to update Port St. Lucie on possible tornado that struck Sunday",
+      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/national-weather-service-to-provide-update-on-possible-tornado-event-in-st-lucie-county",
       "incoming_story_id": "story_005547",
       "candidates": [],
       "decision": {

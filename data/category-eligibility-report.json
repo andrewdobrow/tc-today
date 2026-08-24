@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-24T10:47:25Z",
+  "generated_at": "2026-08-24T15:47:20Z",
   "contract_version": "1.0-local-government-central-action",
   "category_contract_versions": {
     "local_gov": "1.0-local-government-central-action",
@@ -10,8 +10,8 @@
   },
   "rollout_policy": "shared_contract_interface; Local Government, Business & Development, Crime & Safety, and Things To Do enforced; remaining topic contracts observe-only until regression fixtures are production-validated",
   "summary": {
-    "assessed_count": 17,
-    "rejected_count": 6,
+    "assessed_count": 21,
+    "rejected_count": 9,
     "enforced_categories": [
       "business",
       "crime",
@@ -34,9 +34,23 @@
       "category_label": "Local Government",
       "mode": "enforce",
       "policy": "central_government_action_required",
-      "assessed_count": 3,
-      "rejected_count": 3,
+      "assessed_count": 4,
+      "rejected_count": 4,
       "rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "National Weather Service to provide update on possible tornado event in St. Lucie County",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/national-weather-service-to-provide-update-on-possible-tornado-event-in-st-lucie-county"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -62,8 +76,8 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Port St. Lucie residents clean up after possible tornado or landspout hits neighborhood",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-clean-up-after-possible-tornado-or-landspout-hits-neighborhood"
+          "headline": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - cw34.com",
+          "source_url": "https://cw34.com/news/local/tornado-warning-issued-for-parts-of-st-lucie-martin-counties?teaserSource=trending"
         },
         {
           "contract_version": "1.0-local-government-central-action",
@@ -72,14 +86,12 @@
           "policy": "central_government_action_required",
           "eligible": false,
           "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
+          "reason": "missing_central_government_action",
           "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:arrest"
-          ],
+          "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Community divided over Flock Safety cameras after Treasure Coast homicide arrest",
-          "source_url": "https://www.wptv.com/news/treasure-coast/community-divided-over-flock-safety-cameras-after-treasure-coast-homicide-arrest"
+          "headline": "Port St. Lucie residents clean up after possible tornado or landspout hits neighborhood",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-clean-up-after-possible-tornado-or-landspout-hits-neighborhood"
         }
       ]
     },
@@ -97,9 +109,26 @@
       "category_label": "Business & Development",
       "mode": "enforce",
       "policy": "primary_business_development_focus_required",
-      "assessed_count": 2,
-      "rejected_count": 2,
+      "assessed_count": 3,
+      "rejected_count": 3,
       "rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "source_locality:st lucie county",
+            "source_locality:port st lucie"
+          ],
+          "headline": "National Weather Service to provide update on possible tornado event in St. Lucie County",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/national-weather-service-to-provide-update-on-possible-tornado-event-in-st-lucie-county"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -155,9 +184,25 @@
       "category_label": "Things To Do",
       "mode": "enforce",
       "policy": "local_attendable_activity_required",
-      "assessed_count": 1,
-      "rejected_count": 1,
+      "assessed_count": 2,
+      "rejected_count": 2,
       "rejections": [
+        {
+          "contract_version": "1.0-local-attendable-activity-focus",
+          "category_key": "things_to_do",
+          "mode": "enforce",
+          "policy": "local_attendable_activity_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_attendable_activity_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [
+            "treasure_coast_locality"
+          ],
+          "headline": "National Weather Service to provide update on possible tornado event in St. Lucie County - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/national-weather-service-to-provide-update-on-possible-tornado-event-in-st-lucie-county"
+        },
         {
           "contract_version": "1.0-local-attendable-activity-focus",
           "category_key": "things_to_do",
@@ -202,7 +247,7 @@
       "category_label": "St. Lucie County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 3,
+      "assessed_count": 5,
       "rejected_count": 0,
       "rejections": []
     },
@@ -211,7 +256,7 @@
       "category_label": "Indian River County",
       "mode": "existing_geographic_enforce",
       "policy": "county_locality",
-      "assessed_count": 5,
+      "assessed_count": 4,
       "rejected_count": 0,
       "rejections": []
     }
