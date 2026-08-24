@@ -688,6 +688,13 @@ FULL_TEXT_DOMAINS = [
 EXCLUDED_SOURCE_DOMAINS = ("hometownnewstc.com",)
 EXCLUDED_SOURCE_PUBLISHER_MARKERS = ("hometown news", "hometown news treasure coast")
 
+# v1.13.6.7d cleanup policy for already-published source failures. This is
+# deliberately slug-scoped rather than publisher-wide: historical Hometown News
+# stories that were timely/unique remain valid archive records, while the small set
+# of confirmed stale republications can never recover onto live surfaces again.
+SOURCE_RETIREMENT_CLEANUP_FILENAME = "source-retirement-cleanup.json"
+SOURCE_RETIREMENT_REPORT_FILENAME = "source-retirement-cleanup-report.json"
+
 # Google News is useful for discovery, but its RSS entry is not enough source material
 # to write from. For trusted local publishers, resolve the Google wrapper back to the
 # publisher page and run the normal full-text quality gate. This recovers important
@@ -13806,6 +13813,375 @@ def apply_custom_retirements_to_archive(output_root=None):
         }, indent=2, ensure_ascii=False), encoding="utf-8")
         print(f"  Purged {len(purged)} retired custom article(s) from public archive and discovery surfaces")
     return changed + len(purged)
+
+def _load_source_retirement_cleanup(output_root=None):
+    """Load explicit cleanup tombstones for already-published source failures.
+
+    This is not a publisher-wide historical ban. Each row names one TCT slug and
+    therefore cannot silently retire unrelated Hometown News archive coverage.
+    """
+    root = Path(output_root or OUTPUT_DIR)
+    path = root / "data" / SOURCE_RETIREMENT_CLEANUP_FILENAME
+    if not path.exists():
+        return []
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return []
+    rows = payload.get("retirements", []) if isinstance(payload, dict) else []
+    normalized = []
+    for raw in rows:
+        if not isinstance(raw, dict):
+            continue
+        slug = _normalize_existing_article_slug(raw.get("slug"))
+        action = str(raw.get("action") or "").strip().lower()
+        if not slug or action not in {"canonical_redirect", "retire", "retire_corrected_record"}:
+            continue
+        row = dict(raw)
+        row["slug"] = slug
+        row["action"] = action
+        if row.get("target_slug"):
+            row["target_slug"] = _normalize_existing_article_slug(row.get("target_slug"))
+        normalized.append(row)
+    return normalized
+
+
+def _source_retirement_policy_by_slug(output_root=None):
+    return {
+        row["slug"]: row
+        for row in _load_source_retirement_cleanup(output_root)
+        if row.get("slug")
+    }
+
+
+def _source_retirement_item_slugs(item):
+    if not isinstance(item, dict):
+        return set()
+    slugs = set()
+    for key in ("slug", "_archived_slug", "canonical_slug"):
+        slug = _normalize_existing_article_slug(item.get(key))
+        if slug:
+            slugs.add(slug)
+    for key in ("link", "url", "canonical_url"):
+        value = str(item.get(key) or "").strip()
+        match = re.search(r"/articles/([^/?#]+?)\.html(?:[?#]|$)", value)
+        if match:
+            slug = _normalize_existing_article_slug(match.group(1))
+            if slug:
+                slugs.add(slug)
+    return slugs
+
+
+def _source_retirement_policy_for_item(item, output_root=None):
+    policies = _source_retirement_policy_by_slug(output_root)
+    for slug in _source_retirement_item_slugs(item):
+        if slug in policies:
+            return policies[slug]
+    return None
+
+
+def _filter_source_retirement_archive_view(archive, output_root=None):
+    """Return an in-memory archive view with explicit source tombstones removed."""
+    policies = _source_retirement_policy_by_slug(output_root)
+    if not policies:
+        return list(archive or [])
+    return [
+        row for row in list(archive or [])
+        if not isinstance(row, dict)
+        or _normalize_existing_article_slug(row.get("slug")) not in policies
+    ]
+
+
+def apply_source_retirements_to_live(all_categories, top_cat=None, output_root=None):
+    """Remove explicitly retired source pages from every live placement surface."""
+    policies = _source_retirement_policy_by_slug(output_root)
+    if not policies:
+        return 0
+
+    def retired(item):
+        return bool(_source_retirement_policy_for_item(item, output_root))
+
+    removed = 0
+    for category in all_categories or []:
+        cards = list(category.get("cards") or [])
+        hero = category.get("hero")
+        if hero and retired(hero):
+            clean_cards = [card for card in cards if not retired(card)]
+            removed += 1 + (len(cards) - len(clean_cards))
+            category["hero"] = clean_cards.pop(0) if clean_cards else None
+            category["cards"] = clean_cards
+            continue
+        clean_cards = [card for card in cards if not retired(card)]
+        removed += len(cards) - len(clean_cards)
+        category["cards"] = clean_cards
+
+    if isinstance(top_cat, dict):
+        hero = top_cat.get("hero")
+        cards = list(top_cat.get("cards") or [])
+        if hero and retired(hero):
+            clean_cards = [card for card in cards if not retired(card)]
+            removed += 1 + (len(cards) - len(clean_cards))
+            top_cat["hero"] = clean_cards.pop(0) if clean_cards else None
+            top_cat["cards"] = clean_cards
+        else:
+            clean_cards = [card for card in cards if not retired(card)]
+            removed += len(cards) - len(clean_cards)
+            top_cat["cards"] = clean_cards
+
+    if removed:
+        print(f"  Source-retirement cleanup removed {removed} stale live placement(s)")
+    return removed
+
+
+def _source_retirement_domain_matches(entry, expected_domain):
+    expected = str(expected_domain or "").strip().lower().lstrip(".")
+    if not expected:
+        return True
+    for key in ("source_url", "latest_source_url"):
+        raw = str((entry or {}).get(key) or "").strip()
+        if not raw:
+            continue
+        try:
+            host = (urlsplit(raw).hostname or "").lower()
+            if host.startswith("www."):
+                host = host[4:]
+        except Exception:
+            host = ""
+        if host == expected or host.endswith("." + expected):
+            return True
+    return False
+
+
+def _render_source_retirement_handoff_page(headline, target_path):
+    target_path = str(target_path or "/archive.html").strip()
+    if not target_path.startswith("/"):
+        target_path = "/" + target_path
+    target_url = f"{SITE_URL}{target_path}"
+    safe_title = re.sub(r"[<>]", "", str(headline or "Retired article"))
+    return (
+        '<!doctype html>\n<html lang="en">\n<head>\n'
+        '  <meta charset="utf-8">\n'
+        '  <meta name="viewport" content="width=device-width,initial-scale=1">\n'
+        f'  <title>{safe_title} | {SITE_NAME}</title>\n'
+        f'  <link rel="canonical" href="{target_url}">\n'
+        '  <meta name="robots" content="noindex,nofollow">\n'
+        f'  <meta http-equiv="refresh" content="0; url={target_url}">\n'
+        f'  <script>window.location.replace({json.dumps(target_url)});</script>\n'
+        '</head>\n<body>\n'
+        f'  <p>This article has been retired. Continue to <a href="{target_url}">{SITE_NAME}</a>.</p>\n'
+        '</body>\n</html>'
+    )
+
+
+def _render_source_retirement_corrected_record(existing_html, policy):
+    """Correct a retired article in place and keep a noindex historical record.
+
+    This action is for stale publications that also require a factual correction.
+    The public URL remains available, but the slug is removed from archive/live
+    discovery by the same source-retirement policy that triggered the correction.
+    """
+    text = str(existing_html or "")
+    if not text.strip():
+        raise RuntimeError("Source-retirement corrected-record FAILED: article HTML is missing")
+
+    replacement_count = 0
+    for row in list((policy or {}).get("replacements") or []):
+        if not isinstance(row, dict):
+            continue
+        old = str(row.get("from") or "")
+        new = str(row.get("to") or "")
+        if not old:
+            continue
+        text, count = re.subn(re.escape(old), lambda _m, value=new: value, text, flags=re.I)
+        replacement_count += count
+
+    forbidden = [str(term or "").strip() for term in list((policy or {}).get("forbidden_terms") or []) if str(term or "").strip()]
+    remaining = [term for term in forbidden if re.search(re.escape(term), text, flags=re.I)]
+    if remaining:
+        raise RuntimeError(
+            "Source-retirement corrected-record FAILED: forbidden factual text remains: "
+            + ", ".join(remaining)
+        )
+    if (policy or {}).get("replacements") and replacement_count == 0:
+        raise RuntimeError(
+            "Source-retirement corrected-record FAILED: configured correction text was not found"
+        )
+
+    correction_date = str((policy or {}).get("correction_date") or "").strip()
+    correction_note = str((policy or {}).get("correction_note") or "").strip()
+    if correction_note:
+        label = f"Correction — {correction_date}:" if correction_date else "Correction:"
+        correction_html = (
+            '<div class="article-correction tct-retired-correction" data-source-retirement-correction="true">'
+            f'<p><strong>{html_lib.escape(label)}</strong> {html_lib.escape(correction_note)}</p>'
+            '</div>'
+        )
+        # Idempotent replacement if a prior run already inserted the correction.
+        existing = re.compile(
+            r'<div class="article-correction tct-retired-correction"[^>]*>.*?</div>',
+            re.I | re.S,
+        )
+        if existing.search(text):
+            text = existing.sub(correction_html, text, count=1)
+        else:
+            body_open = re.search(r'<div class="article-body(?:\s+[^"]*)?"[^>]*>', text, re.I)
+            if body_open:
+                pos = body_open.end()
+                text = text[:pos] + correction_html + text[pos:]
+            else:
+                body_tag = re.search(r'<body[^>]*>', text, re.I)
+                if body_tag:
+                    pos = body_tag.end()
+                    text = text[:pos] + correction_html + text[pos:]
+                else:
+                    raise RuntimeError(
+                        "Source-retirement corrected-record FAILED: article body container not found"
+                    )
+
+    robots = '<meta name="robots" content="noindex,follow">'
+    if re.search(r'<meta\s+name=["\']robots["\'][^>]*>', text, re.I):
+        text = re.sub(r'<meta\s+name=["\']robots["\'][^>]*>', robots, text, count=1, flags=re.I)
+    elif re.search(r'</head>', text, re.I):
+        text = re.sub(r'</head>', '  ' + robots + '\n</head>', text, count=1, flags=re.I)
+    else:
+        raise RuntimeError("Source-retirement corrected-record FAILED: </head> not found")
+
+    return text, replacement_count
+
+
+def apply_source_retirement_cleanup_to_archive(archive, articles_dir, output_root=None):
+    """Permanently remove known stale-source publications from active archive surfaces.
+
+    Duplicate republications are converted to article-to-article canonical redirects.
+    Stale unique republications are removed from archive/sitemap recovery and receive
+    a noindex handoff page to the configured section. No other historical rows from
+    the retired publisher are changed.
+    """
+    root = Path(output_root or OUTPUT_DIR)
+    articles_dir = Path(articles_dir)
+    policies = _source_retirement_policy_by_slug(root)
+    if not policies:
+        return list(archive or []), [], {"retired_count": 0, "redirect_count": 0}
+
+    rows = list(archive or [])
+    by_slug = {
+        _normalize_existing_article_slug(row.get("slug")): row
+        for row in rows if isinstance(row, dict) and row.get("slug")
+    }
+    kept = []
+    redirects = []
+    retired = []
+    corrected_records = []
+    mismatches = []
+    articles_dir.mkdir(parents=True, exist_ok=True)
+
+    for entry in rows:
+        if not isinstance(entry, dict):
+            kept.append(entry)
+            continue
+        slug = _normalize_existing_article_slug(entry.get("slug"))
+        policy = policies.get(slug)
+        if not policy:
+            kept.append(entry)
+            continue
+
+        expected_domain = str(policy.get("source_domain") or "").strip()
+        if expected_domain and not _source_retirement_domain_matches(entry, expected_domain):
+            mismatches.append({
+                "slug": slug,
+                "expected_source_domain": expected_domain,
+                "source_url": str(entry.get("source_url") or entry.get("latest_source_url") or ""),
+                "reason": "source_domain_mismatch_fail_safe",
+            })
+            kept.append(entry)
+            continue
+
+        action = policy.get("action")
+        if action == "canonical_redirect":
+            target_slug = _normalize_existing_article_slug(policy.get("target_slug"))
+            target = by_slug.get(target_slug)
+            if not target or target_slug == slug:
+                raise RuntimeError(
+                    "Source-retirement cleanup FAILED: canonical redirect target missing "
+                    f"for {slug} -> {target_slug or '(blank)'}"
+                )
+            redirects.append({
+                "source_slug": slug,
+                "source_headline": str(entry.get("headline") or ""),
+                "target_slug": target_slug,
+                "target_headline": str(target.get("headline") or ""),
+                "story_stage": "source-retirement-cleanup",
+                "match_confidence": 100,
+                "canonical_is_custom": bool(target.get("is_custom") or target.get("authoritative_custom")),
+                "editorial_story_id": str(target.get("editorial_story_id") or ""),
+                "reason": str(policy.get("reason") or "confirmed_stale_source_duplicate"),
+            })
+        elif action == "retire_corrected_record":
+            article_path = articles_dir / f"{slug}.html"
+            if not article_path.is_file():
+                raise RuntimeError(
+                    "Source-retirement corrected-record FAILED: published article page missing "
+                    f"for {slug}"
+                )
+            corrected_html, replacement_count = _render_source_retirement_corrected_record(
+                article_path.read_text(encoding="utf-8"), policy
+            )
+            article_path.write_text(corrected_html, encoding="utf-8")
+            corrected_records.append({
+                "slug": slug,
+                "headline": str(entry.get("headline") or ""),
+                "replacement_count": replacement_count,
+                "correction_date": str(policy.get("correction_date") or ""),
+                "reason": str(policy.get("reason") or "confirmed_stale_source_correction"),
+            })
+        else:
+            target_path = str(policy.get("target_path") or "/archive.html")
+            (articles_dir / f"{slug}.html").write_text(
+                _render_source_retirement_handoff_page(entry.get("headline", ""), target_path),
+                encoding="utf-8",
+            )
+
+        retired.append({
+            "slug": slug,
+            "headline": str(entry.get("headline") or ""),
+            "action": action,
+            "source_domain": expected_domain,
+            "target_slug": str(policy.get("target_slug") or ""),
+            "target_path": str(policy.get("target_path") or ""),
+            "reason": str(policy.get("reason") or ""),
+        })
+
+    report = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "policy_count": len(policies),
+        "retired_count": len(retired),
+        "redirect_count": len(redirects),
+        "corrected_record_count": len(corrected_records),
+        "mismatch_count": len(mismatches),
+        "retired": retired,
+        "corrected_records": corrected_records,
+        "mismatches": mismatches,
+    }
+    data_dir = root / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    (data_dir / SOURCE_RETIREMENT_REPORT_FILENAME).write_text(
+        json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+    if retired:
+        print(
+            "  Source-retirement cleanup retired "
+            f"{len(retired)} stale archive record(s) "
+            f"({len(redirects)} canonical redirect(s), "
+            f"{len(corrected_records)} corrected historical record(s))"
+        )
+    if mismatches:
+        print(
+            "  Source-retirement cleanup preserved "
+            f"{len(mismatches)} row(s) because source-domain proof did not match"
+        )
+    return kept, redirects, report
+
 
 def _declared_custom_category(item):
     """Return the normalized category explicitly assigned to a custom article."""
@@ -27988,6 +28364,15 @@ def write_archives(all_categories, top_cat):
     )
     _canonical_redirects.extend(_same_run_canonical_redirects)
 
+    # Explicit source-retirement tombstones run after normal identity cleanup so
+    # confirmed stale republications cannot remain recoverable simply because they
+    # carry a different fragmented story ID. Duplicate tombstones join the canonical
+    # redirect manifest; stale unique republications are removed from archive surfaces.
+    archive, _source_retirement_redirects, _source_retirement_report = (
+        apply_source_retirement_cleanup_to_archive(archive, articles_dir, OUTPUT_DIR)
+    )
+    _canonical_redirects.extend(_source_retirement_redirects)
+
     # Reapply all cumulative redirects now, then build archive/RSS/sitemaps only from
     # the cleaned canonical archive.
     archive, _redirect_verification = enforce_canonical_redirects(
@@ -28549,6 +28934,7 @@ def ensure_all_category_sections(all_categories, min_cards=6):
     archive = _sanitize_authoritative_custom_archive(
         load_archive(OUTPUT_DIR / "archive.json"), OUTPUT_DIR / "articles"
     )
+    archive = _filter_source_retirement_archive_view(archive, OUTPUT_DIR)
     archive, _ = _backfill_archive_editorial_story_ids(
         archive, _load_publication_identity_index(), output_root=None
     )
@@ -29037,6 +29423,13 @@ def _published_skip_canonical(item, archive):
         if _same_event_items(item, entry):
             corroborated.append((entry, "same_event_and_persistent_story_skip"))
             continue
+        # A target-bound canonical authorization from the publication identity
+        # authority is stronger than the stale/fragmented registry story ID that
+        # may have brought this source here.  Preserve that proof so a semantic
+        # no-update decision still reaches terminal duplicate suppression.
+        if _canonical_write_authorized(item, entry):
+            corroborated.append((entry, "authorized_canonical_identity_skip"))
+            continue
         relationship = str(
             item.get("_editorial_relationship") or item.get("editorial_relationship") or ""
         ).strip().lower()
@@ -29224,16 +29617,40 @@ def _run_known_canonical_materiality_gate(item, canonical, cache, *, basis=""):
 
 
 def _promote_published_skip_material_updates(
-    headlines, archive, category_key="", *, cache=None
+    headlines, archive, category_key="", *, cache=None, ledger=None, identity_index=None
 ):
-    """Give newer same-story sources a material-update decision before suppression."""
+    """Give newer same-story sources a material-update decision before suppression.
+
+    Registry story IDs can lag the publication identity authority.  When a current
+    ``skip`` source carries a fragmented story ID, resolve the already-published
+    canonical through the stronger deterministic publication ledger *before* the
+    materiality decision.  Otherwise the source can miss this pass, become
+    canonical-bound later, and then be terminally suppressed without ever being
+    evaluated as a possible material update.
+    """
     decisions = []
     promoted = 0
     cache_hits = 0
     model_calls = 0
+    ledger = ledger or _build_canonical_publication_ledger(archive, identity_index)
 
     for item in list(headlines or []):
         canonical, basis = _published_skip_canonical(item, archive)
+        if canonical is None:
+            route = str(
+                item.get("_editorial_route") or item.get("editorial_route") or ""
+            ).strip().lower()
+            if route == "skip":
+                ledger_canonical, ledger_basis, _ledger_keys = (
+                    _canonical_publication_ledger_target(
+                        item, ledger, identity_index
+                    )
+                )
+                if ledger_canonical is not None:
+                    canonical = ledger_canonical
+                    basis = "pre_generation_ledger:" + str(
+                        ledger_basis or "canonical_publication_ledger"
+                    )
         if canonical is None:
             continue
         should_check, eligibility_reason = _published_skip_material_update_candidate(
@@ -30311,6 +30728,7 @@ def main():
             _pre_generation_archive,
             cat_key,
             cache=_pre_generation_semantic_gate_cache,
+            ledger=_pre_generation_publication_ledger,
         )
         _category_record["material_update_promotion_evaluation_count"] = int(
             _material_update_promotions.get("evaluated_count") or 0
@@ -31214,7 +31632,9 @@ def main():
     # suppressions now pass through the same preflight, kill switch, action cap,
     # rollback, and action log as exact deterministic identity suppressions.
     _archive_path = OUTPUT_DIR / "archive.json"
-    _published_archive = load_archive(_archive_path)
+    _published_archive = _filter_source_retirement_archive_view(
+        load_archive(_archive_path), OUTPUT_DIR
+    )
     _archived_custom_authorities = [
         row for row in _published_archive
         if row.get("is_custom") or row.get("authoritative_custom")
@@ -31260,6 +31680,7 @@ def main():
         current_customs=custom_articles,
     )
     apply_custom_retirements_to_live(all_categories, output_root=OUTPUT_DIR)
+    apply_source_retirements_to_live(all_categories, output_root=OUTPUT_DIR)
 
     # Restore the v1.9.1 permalink contract inside the integrated v1.9.2 path.
     # Existing custom/archive stories are rebound only when their article file is
@@ -31272,6 +31693,7 @@ def main():
     )
     _custom_category_repair_after_rebind = enforce_custom_category_placement(all_categories)
     apply_custom_retirements_to_live(all_categories, output_root=OUTPUT_DIR)
+    apply_source_retirements_to_live(all_categories, output_root=OUTPUT_DIR)
 
     # Front page hero selection
     top_cat = select_front_page_hero(all_categories)

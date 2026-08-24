@@ -130,6 +130,19 @@ def _write_source_retirement_policy(root):
                     "target_path": "/indian_river.html",
                     "reason": "confirmed stale Hometown republication",
                 },
+                {
+                    "slug": "2026-08-22-vero-beach-man-arrested-on-attempted-murder-charge-after-birthday-party-assault",
+                    "source_domain": "hometownnewstc.com",
+                    "action": "retire_corrected_record",
+                    "correction_date": "Aug. 24, 2026",
+                    "correction_note": "An earlier version of this article incorrectly identified the accused's residential address. The article has been corrected to reflect the 5000 block of 33rd Avenue in Vero Beach.",
+                    "replacements": [
+                        {"from": "4900 block of Corsica Square", "to": "5000 block of 33rd Avenue"},
+                        {"from": "Corsica Square", "to": "33rd Avenue"},
+                    ],
+                    "forbidden_terms": ["Corsica Square", "4900 block of Corsica Square"],
+                    "reason": "confirmed stale Hometown arrest republication with corrected address",
+                },
             ],
         }),
         encoding="utf-8",
@@ -261,3 +274,74 @@ def test_source_retirement_archive_view_never_returns_tombstoned_housing_but_kee
     filtered = generate._filter_source_retirement_archive_view(archive, tmp_path)
 
     assert [row["slug"] for row in filtered] == [good_slug]
+
+
+def test_stale_hometown_smith_article_is_corrected_then_retired_as_noindex_record(tmp_path):
+    generate = _load_generate_module()
+    _write_source_retirement_policy(tmp_path)
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    slug = "2026-08-22-vero-beach-man-arrested-on-attempted-murder-charge-after-birthday-party-assault"
+    page = articles / f"{slug}.html"
+    page.write_text(
+        """<!doctype html>
+<html><head><title>Vero Beach man arrested</title></head><body>
+<article>
+<h1 class=\"article-headline\">Vero Beach man arrested on attempted murder charge after birthday party assault</h1>
+<div class=\"article-body\"><p>Collin Ryan Smith, 25, of the 4900 block of Corsica Square in Vero Beach, was arrested.</p>
+<p>Neighbors on Corsica Square were not part of the alleged incident.</p></div>
+<div class=\"article-share\"></div>
+</article></body></html>""",
+        encoding="utf-8",
+    )
+    stale = {
+        "slug": slug,
+        "headline": "Vero Beach man arrested on attempted murder charge after birthday party assault",
+        "source_url": "https://www.hometownnewstc.com/news/indian_river/stale-smith.html",
+        "editorial_story_id": "story_stale_smith",
+    }
+
+    cleaned, redirects, report = generate.apply_source_retirement_cleanup_to_archive(
+        [stale], articles, tmp_path
+    )
+
+    assert cleaned == []
+    assert redirects == []
+    assert report["retired_count"] == 1
+    assert report["corrected_record_count"] == 1
+    assert report["mismatch_count"] == 0
+    corrected = page.read_text(encoding="utf-8")
+    assert "5000 block of 33rd Avenue" in corrected
+    assert "Corsica Square" not in corrected
+    assert "4900 block" not in corrected
+    assert "Correction — Aug. 24, 2026:" in corrected
+    assert "incorrectly identified the accused&#x27;s residential address" in corrected
+    assert 'meta name="robots" content="noindex,follow"' in corrected
+    assert "http-equiv=\"refresh\"" not in corrected
+
+
+def test_corrected_record_retirement_fails_safe_if_wrong_source_domain(tmp_path):
+    generate = _load_generate_module()
+    _write_source_retirement_policy(tmp_path)
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    slug = "2026-08-22-vero-beach-man-arrested-on-attempted-murder-charge-after-birthday-party-assault"
+    page = articles / f"{slug}.html"
+    original = '<html><head></head><body><div class="article-body">4900 block of Corsica Square</div></body></html>'
+    page.write_text(original, encoding="utf-8")
+    row = {
+        "slug": slug,
+        "headline": "Vero Beach man arrested on attempted murder charge after birthday party assault",
+        "source_url": "https://example.com/not-hometown",
+    }
+
+    cleaned, redirects, report = generate.apply_source_retirement_cleanup_to_archive(
+        [row], articles, tmp_path
+    )
+
+    assert cleaned == [row]
+    assert redirects == []
+    assert report["retired_count"] == 0
+    assert report["corrected_record_count"] == 0
+    assert report["mismatch_count"] == 1
+    assert page.read_text(encoding="utf-8") == original
