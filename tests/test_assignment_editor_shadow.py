@@ -612,3 +612,108 @@ def test_county_assignment_editor_does_not_require_topic_fit_and_tornado_can_be_
     assert plan["hero"]["source_index"] == 2
     assert diagnostics["category_fit_required"] is False
     assert diagnostics["source_mapping_valid"] is True
+
+
+def test_fresh_current_day_confirmation_of_yesterdays_event_is_not_stale():
+    from datetime import datetime, timedelta, timezone
+    from email.utils import format_datetime
+    from scripts import generate
+
+    now = datetime.now(timezone.utc)
+    today = now.strftime("%A")
+    yesterday = (now - timedelta(days=1)).strftime("%A")
+    item = {
+        "headline": "National Weather Service confirms EF0 tornado damage in Port St. Lucie",
+        "teaser": f"The National Weather Service confirmed {today} that an EF0 tornado touched down {yesterday} evening.",
+        "body": (
+            f"The National Weather Service confirmed {today} morning that an EF0 tornado with peak winds "
+            f"of 75 mph touched down in Port St. Lucie {yesterday} evening after completing a damage survey."
+        ),
+    }
+    published = format_datetime(now - timedelta(hours=2))
+
+    assert generate._category_story_is_stale(item, [], published, now=now) is False
+
+
+def test_recent_feed_retouch_does_not_make_old_event_fresh_without_current_day_development():
+    from datetime import datetime, timedelta, timezone
+    from email.utils import format_datetime
+    from scripts import generate
+
+    now = datetime.now(timezone.utc)
+    yesterday = (now - timedelta(days=1)).strftime("%A")
+    item = {
+        "headline": "Vero Beach man arrested on attempted murder charge after birthday party assault",
+        "teaser": f"Deputies said the assault happened {yesterday} at a birthday party.",
+        "body": (
+            f"Investigators said the assault occurred {yesterday}. The suspect was arrested after the incident. "
+            "The article contains no new current-day development."
+        ),
+    }
+    # Simulate a publisher re-touching the feed today even though the event itself is old.
+    published = format_datetime(now - timedelta(hours=2))
+
+    assert generate._category_story_is_stale(item, [], published, now=now) is True
+
+
+def test_exact_st_lucie_shadow_keeps_fresh_tornado_hero_instead_of_swapping_to_city_attorney():
+    from datetime import datetime, timedelta, timezone
+    from email.utils import format_datetime
+    from scripts import generate
+
+    now = datetime.now(timezone.utc)
+    today = now.strftime("%A")
+    yesterday = (now - timedelta(days=1)).strftime("%A")
+    packet = {
+        "category_key": "st_lucie",
+        "category_label": "St. Lucie County",
+        "source_inputs": [
+            {
+                "source_index": 1,
+                "title": "GALLERY: EF-0 tornado carrying peak winds of 75 mph touches down in Port St. Lucie - WPEC",
+                "published": format_datetime(now - timedelta(hours=2)),
+                "source_type": "full_source",
+                "source_quality": "full",
+                "hero_eligible": True,
+                "category_match_score": 10,
+                "article_text": "Fresh NWS confirmation and damage survey.",
+            },
+            {
+                "source_index": 2,
+                "title": "Fort Pierce city meeting gets heated amid search for new city attorney",
+                "published": format_datetime(now - timedelta(hours=3)),
+                "source_type": "full_source",
+                "source_quality": "full",
+                "hero_eligible": True,
+                "category_match_score": 10,
+                "article_text": "Fresh city attorney resignation story.",
+            },
+        ],
+    }
+    data = {
+        "hero": {
+            "headline": "EF0 tornado with 75 mph winds damages Port St. Lucie Southbend neighborhood",
+            "teaser": f"The National Weather Service confirmed {today} that the tornado touched down {yesterday} evening.",
+            "body": (
+                f"The National Weather Service confirmed {today} morning that an EF0 tornado touched down in "
+                f"Port St. Lucie {yesterday} evening after a damage survey. No injuries were reported."
+            ),
+            "source_index": 1,
+            "urgency_score": 8,
+        },
+        "cards": [
+            {
+                "headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
+                "teaser": f"Fort Pierce commissioners met {today} after nearly the entire legal team resigned.",
+                "body": "The city approved an outside attorney search.",
+                "source_index": 2,
+                "urgency_score": 7,
+            }
+        ],
+    }
+
+    swap = generate._assignment_shadow_apply_stale_hero_swap(data, packet, [])
+
+    assert swap is None
+    assert data["hero"]["source_index"] == 1
+    assert "tornado" in data["hero"]["headline"].lower()

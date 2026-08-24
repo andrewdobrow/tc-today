@@ -7042,6 +7042,107 @@ def strip_markdown(text, headline=""):
     return text
 
 
+
+def _category_story_is_stale(item, archive, published_raw="", now=None):
+    """Shared live/shadow stale-story test for category hero preservation.
+
+    A recently re-touched source is not automatically fresh: old-event language can
+    still make it stale. But a genuinely current-day development (for example, NWS
+    confirming on Monday the tornado that occurred Sunday) must not be rejected just
+    because the underlying event happened the previous day.
+    """
+    from email.utils import parsedate_to_datetime
+    from datetime import timedelta
+
+    if not isinstance(item, dict):
+        return False
+    now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    content = (
+        str(item.get("headline") or "") + " " +
+        str(item.get("teaser") or "") + " " +
+        str(item.get("body") or "")[:900]
+    ).lower()
+    fresh_override = (
+        "today", "this morning", "this afternoon", "this evening", "hours ago",
+        "minutes ago", "just announced", "just released", "breaking", "moments ago",
+        "earlier today", "announced today", "arrested today", "ruled today",
+        "confirmed today",
+    )
+    if any(phrase in content for phrase in fresh_override):
+        return False
+
+    try:
+        match = find_matching_entry(
+            item.get("headline", ""), archive or [], item.get("link", "")
+        )
+        if match:
+            lastmod = match.get("lastmod") or match.get("date", "")
+            if lastmod:
+                lastmod_dt = datetime.strptime(str(lastmod)[:10], "%Y-%m-%d").replace(
+                    tzinfo=timezone.utc
+                )
+                if (now - lastmod_dt).days <= 2:
+                    return False
+    except Exception:
+        pass
+
+    published = None
+    try:
+        if published_raw:
+            published = parsedate_to_datetime(str(published_raw)).astimezone(timezone.utc)
+    except Exception:
+        published = None
+
+    # Preserve a genuinely new current-day development even when the underlying event
+    # occurred yesterday. This requires BOTH a fresh source timestamp and explicit
+    # current-day update language, so a publisher cannot revive an old incident merely
+    # by re-touching its feed timestamp.
+    if published is not None:
+        age_hours = max(0.0, (now - published).total_seconds() / 3600)
+        if age_hours < 24:
+            lead = content[:650]
+            current_day = now.strftime("%A").lower()
+            current_day_present = any(
+                marker in lead
+                for marker in (
+                    f" {current_day} ", f" {current_day},", f" {current_day}.",
+                    f" {current_day} morning", f" {current_day} afternoon",
+                    f" {current_day} evening",
+                )
+            ) or lead.startswith(f"{current_day} ")
+            update_terms = (
+                "confirm", "announc", "release", "issue", "findings", "survey",
+                "identify", "rule", "approve", "vote", "filed", "officially",
+            )
+            if current_day_present and any(term in lead for term in update_terms):
+                return False
+
+    stale_days = {
+        (now - timedelta(days=days)).strftime("%A").lower()
+        for days in range(1, 5)
+    }
+    for day in stale_days:
+        if (
+            f" {day} " in content
+            or f" {day}," in content
+            or f" {day}." in content
+            or content.startswith(f"{day} ")
+        ):
+            return True
+
+    if any(
+        phrase in content
+        for phrase in (
+            "yesterday", "two days ago", "three days ago", "earlier this week",
+            "last week", "days ago", "happened on", "occurred on", "took place on",
+        )
+    ):
+        return True
+
+    if published is not None and (now - published).total_seconds() / 3600 >= 24:
+        return True
+    return False
+
 def generate_category_content(category_key, category_label, headlines, request_timeout_seconds=None):
     # Build headlines with raw published strings for Claude to copy back
     def sanitize(text):
@@ -7580,64 +7681,24 @@ Return ONLY valid JSON:
     for card in data.get("cards", []):
         apply_age_cap(card)
 
-    # Stale-hero swap: if the chosen hero describes an OLD event (even with a refreshed
-    # timestamp), promote the freshest non-stale card to hero instead. Timestamp filtering
-    # alone misses stories that publishers re-touch, so we also scan the body content.
-    from email.utils import parsedate_to_datetime as _pdt
-    from datetime import timezone as _tzc, timedelta as _tdc
-    _now_c = datetime.now(_tzc.utc)
-    _yest  = (_now_c - _tdc(days=1)).strftime("%A").lower()
-    _2day  = (_now_c - _tdc(days=2)).strftime("%A").lower()
-    _3day  = (_now_c - _tdc(days=3)).strftime("%A").lower()
-    _4day  = (_now_c - _tdc(days=4)).strftime("%A").lower()
-    _stale_days = {_yest, _2day, _3day, _4day}
-    _fresh_override = ["today", "this morning", "this afternoon", "this evening",
-                       "hours ago", "minutes ago", "just announced", "just released",
-                       "breaking", "moments ago", "earlier today", "announced today",
-                       "arrested today", "ruled today", "confirmed today"]
-    _stale_phrases = ["yesterday", "two days ago", "three days ago", "earlier this week",
-                      "last week", "days ago", "happened on", "occurred on", "took place on"]
-
+    # Stale-hero swap: preserve the shared live/shadow stale-story contract.
+    # The test still catches publisher re-touches of old events, but no longer treats
+    # a genuinely current-day update as stale merely because it describes yesterday's
+    # underlying incident.
+    _now_c = datetime.now(timezone.utc)
     _stale_archive = load_archive(OUTPUT_DIR / "archive.json")
 
     def _story_is_stale(item):
-        content = (item.get("teaser", "") + " " + item.get("body", "")[:800]).lower()
-        # Fresh-development language always wins (e.g. "suspect arrested today" in an old story)
-        if any(p in content for p in _fresh_override):
-            return False
-        # If this story matches an archive entry we updated within the last 2 days,
-        # it is NOT stale — the content was refreshed on our site recently even if the
-        # original RSS published date is old (e.g. a "coming soon" story updated to
-        # "now open"). This prevents freshly-updated stories being swapped out.
-        try:
-            _m = find_matching_entry(item.get("headline",""), _stale_archive, item.get("link",""))
-            if _m:
-                _lm = _m.get("lastmod") or _m.get("date", "")
-                if _lm:
-                    _lmdt = datetime.strptime(_lm[:10], "%Y-%m-%d").replace(tzinfo=_tzc.utc)
-                    if (_now_c - _lmdt).days <= 2:
-                        return False
-        except Exception:
-            pass
-        # Past day-name reference (e.g. "on Thursday" when today is Saturday)
-        for day in _stale_days:
-            if f" {day} " in content or f" {day}," in content or f" {day}." in content or content.startswith(f"{day} "):
-                return True
-        # Stale-event phrases
-        if any(p in content for p in _stale_phrases):
-            return True
-        # Timestamp 24+ hours old via original RSS source
-        idx = item.get("source_index")
+        pub_raw = ""
+        idx = item.get("source_index") if isinstance(item, dict) else None
         if idx is not None:
             try:
                 pub_raw = headlines[int(idx) - 1].get("published", "")
-                if pub_raw:
-                    dt  = _pdt(pub_raw).astimezone(_tzc.utc)
-                    if (_now_c - dt).total_seconds() / 3600 >= 24:
-                        return True
             except Exception:
-                pass
-        return False
+                pub_raw = ""
+        return _category_story_is_stale(
+            item, _stale_archive, pub_raw, now=_now_c
+        )
 
     if _story_is_stale(data["hero"]) and data.get("cards"):
         for ci, card in enumerate(data["cards"]):
@@ -10214,54 +10275,12 @@ def _assignment_shadow_apply_age_caps(data, packet):
 
 
 def _assignment_shadow_story_is_stale(item, packet, archive):
-    """Mirror the live category stale-hero test for one shadow placement."""
-    from email.utils import parsedate_to_datetime
-    from datetime import timedelta
-
-    if not isinstance(item, dict):
-        return False
-    now = datetime.now(timezone.utc)
-    content = (str(item.get("teaser") or "") + " " + str(item.get("body") or "")[:800]).lower()
-    fresh_override = (
-        "today", "this morning", "this afternoon", "this evening", "hours ago",
-        "minutes ago", "just announced", "just released", "breaking", "moments ago",
-        "earlier today", "announced today", "arrested today", "ruled today", "confirmed today",
+    """Use the exact same stale-story contract as live category generation."""
+    return _category_story_is_stale(
+        item,
+        archive or [],
+        _assignment_shadow_source_published(item, packet),
     )
-    if any(phrase in content for phrase in fresh_override):
-        return False
-    try:
-        match = find_matching_entry(item.get("headline", ""), archive or [], item.get("link", ""))
-        if match:
-            lastmod = match.get("lastmod") or match.get("date", "")
-            if lastmod:
-                lastmod_dt = datetime.strptime(str(lastmod)[:10], "%Y-%m-%d").replace(tzinfo=timezone.utc)
-                if (now - lastmod_dt).days <= 2:
-                    return False
-    except Exception:
-        pass
-    stale_days = {
-        (now - timedelta(days=days)).strftime("%A").lower()
-        for days in range(1, 5)
-    }
-    for day in stale_days:
-        if f" {day} " in content or f" {day}," in content or f" {day}." in content or content.startswith(f"{day} "):
-            return True
-    if any(
-        phrase in content
-        for phrase in (
-            "yesterday", "two days ago", "three days ago", "earlier this week",
-            "last week", "days ago", "happened on", "occurred on", "took place on",
-        )
-    ):
-        return True
-    raw = _assignment_shadow_source_published(item, packet)
-    try:
-        published = parsedate_to_datetime(raw).astimezone(timezone.utc)
-        if (now - published).total_seconds() / 3600 >= 24:
-            return True
-    except Exception:
-        pass
-    return False
 
 
 def _assignment_shadow_apply_stale_hero_swap(data, packet, archive):
