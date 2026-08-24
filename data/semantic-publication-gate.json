@@ -1,7 +1,7 @@
 {
   "schema_version": 4,
   "gate_version": "1.6",
-  "generated_at": "2026-08-24T18:26:53.310847+00:00",
+  "generated_at": "2026-08-24T20:38:55.775528+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -50,16 +50,16 @@
     }
   },
   "summary": {
-    "evaluations": 69,
+    "evaluations": 70,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 69,
+    "no_candidate_passes": 70,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
     "new_stories_allowed": 2,
-    "retroactive_rows_retained": 67,
+    "retroactive_rows_retained": 68,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -69,14 +69,78 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 9,
-    "pre_generation_materiality_promotions": 0,
+    "pre_generation_materiality_evaluations": 14,
+    "pre_generation_materiality_promotions": 1,
     "pre_generation_materiality_duplicates": 3,
-    "pre_generation_materiality_holds": 6,
-    "pre_generation_materiality_model_calls": 6,
+    "pre_generation_materiality_holds": 10,
+    "pre_generation_materiality_model_calls": 11,
     "pre_generation_materiality_cache_hits": 3
   },
   "pre_generation_materiality_decisions": [
+    {
+      "category_key": "local_gov",
+      "source_headline": "Tracy Caruso, wife of suspended Palm Beach County clerk, resigns from 2 public positions",
+      "source_url": "https://www.wptv.com/news/palm-beach-county/tracy-caruso-wife-of-suspended-palm-beach-county-clerk-resigns-from-2-public-positions",
+      "canonical_slug": "2026-08-19-palm-beach-county-clerk-michael-caruso-extradited-to-orange-county-jail-on-five",
+      "canonical_headline": "Palm Beach County Clerk Michael Caruso extradited to Orange County jail on five felony child sex abuse charges",
+      "canonical_is_custom": false,
+      "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": true,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "update_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "update_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Mike Caruso - suspended Palm Beach County clerk arrested on child sexual abuse charges",
+        "Same underlying criminal case with five felony charges",
+        "Orange County jail detention",
+        "Tracy Caruso - wife of Mike Caruso"
+      ],
+      "novel_facts": [
+        "Tracy Caruso resigned from Health District of Palm Beach County board",
+        "Tracy Caruso resigned as vice chair of Palm Beach State College Board of Trustees",
+        "Tracy Caruso released public statement declaring husband's innocence",
+        "Resignations occurred nearly a week after Mike Caruso's arrest",
+        "Tracy was appointed to Health Care District by Gov. Ron DeSantis in December 2022",
+        "Statements released by Health Care District and PBSC Chairman Dave Kerner acknowledging resignation"
+      ],
+      "reason": "Both articles cover the Mike Caruso child sex abuse case. The candidate reports his arrest and extradition. The incoming article provides a material development: his wife Tracy Caruso resigned from two public board positions and released a statement supporting him. These resignations represent a significant consequence of the arrest and are newsworthy public actions by a government appointee, constituting a material update to the ongoing story.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "local_gov",
+      "source_headline": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - cw34.com",
+      "source_url": "https://cw34.com/news/local/tornado-warning-issued-for-parts-of-st-lucie-martin-counties?teaserSource=trending",
+      "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+      "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.98,
+      "shared_anchors": [],
+      "novel_facts": [
+        "Funnel cloud spotted over Port St. Lucie neighborhood",
+        "Tornado warning issued Sunday evening for southeastern St. Lucie County and northeastern Martin County",
+        "Warning in effect through 7 p.m.",
+        "Storm expected near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
+        "Hutchinson Island South affected by warning"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
     {
       "category_key": "local_gov",
       "source_headline": "Ronald L. Corbin, beloved choral teacher at Martin County High School for 34 years, dies - WPBF",
@@ -96,12 +160,41 @@
       "confidence": 1.0,
       "shared_anchors": [],
       "novel_facts": [
-        "Ronald L. Corbin died Saturday (August 23, 2026)",
-        "Choral teacher at Martin County High School for 34 years (1980-2014)",
-        "Led OPUS choir group",
-        "Received kidney transplant from daughter Candice Corbin in 2018",
+        "Ronald L. Corbin death on Saturday",
+        "34-year choral teacher at Martin County High School",
+        "Led OPUS choir program",
+        "Retired in 2014",
         "Corbin Musical Arts Center dedicated in his name in 2015",
-        "Received R. Wayne Hugoboom Distinguished Service Award in 2017"
+        "Received kidney transplant from daughter Candice in 2018"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "crime",
+      "source_headline": "BB gun shooting turns deadly: Fort Pierce man killed, suspect charged - WPEC",
+      "source_url": "http://cbs12.com/news/crime/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
+      "canonical_slug": "2026-08-06-12-year-old-describes-hit-and-run-that-injured-sister-in-fort-pierce",
+      "canonical_headline": "12-year-old describes hit-and-run that injured sister in Fort Pierce",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 1.0,
+      "shared_anchors": [],
+      "novel_facts": [
+        "34-year-old man shot with BB gun on Avenue G in Fort Pierce",
+        "Suspect Jabari Cowart charged with manslaughter",
+        "Victim died at HCA Florida Lawnwood Hospital",
+        "Incident occurred Saturday involving group shooting BB guns at trees"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -124,19 +217,19 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.92,
+      "confidence": 0.95,
       "shared_anchors": [
         "Martin County",
         "animal hoarding case",
-        "Humane Society of the Treasure Coast"
+        "mass-animal-hoarding:martin-county incident anchor"
       ],
       "novel_facts": [
         "Paige O'Donnell as defendant",
         "36 Border Collies specifically",
         "Palm City location",
-        "72 charges filed",
-        "Legal surrender of animals on August 21, 2026",
-        "Dogs cleared for adoption beginning Sept 1"
+        "72 charges",
+        "legal surrender of dogs on Aug 21, 2026",
+        "adoption applications starting Sept 1"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -161,16 +254,12 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Both are weekend event roundups for Treasure Coast and Palm Beach area",
-        "Both mention Palm City"
+        "Both are weekend events roundups for Treasure Coast and Palm Beach County"
       ],
       "novel_facts": [
-        "August 21, 2026 weekend (vs July 27, 2026)",
-        "Newfield Farm gardening class",
-        "Ukrainian Cultural Fest in West Palm Beach",
-        "Delray Beach women's health event",
-        "Peggy Adams animal adoption event",
-        "Loggerhead Triathlon in Jupiter"
+        "This is a different weekend (Aug 21, 2026 vs July 27, 2026)",
+        "Different events: Newfield Farm garden class, Ukrainian Cultural Fest, Delray women's health event, Peggy Adams adoption event, Loggerhead Triathlon",
+        "Previous weekend featured Christmas in July vendor market and Rockn Riverwalk concert series"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -225,12 +314,11 @@
       "confidence": 1.0,
       "shared_anchors": [],
       "novel_facts": [
-        "Ronald L. Corbin died Saturday (August 23, 2026)",
-        "Choral teacher at Martin County High School for 34 years (1980-2014)",
+        "Ronald L. Corbin died Saturday August 23, 2026",
+        "Corbin was choral teacher at Martin County High School for 34 years (1980-2014)",
         "Led OPUS choir program",
         "Received kidney transplant from daughter Candice Corbin in 2018",
         "Corbin Musical Arts Center dedicated in his name in 2015",
-        "Added to Florida Vocal Association Roll of Distinction in 2014",
         "Received R. Wayne Hugoboom Distinguished Service Award in 2017"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -261,8 +349,39 @@
       "novel_facts": [
         "Funnel cloud spotted Sunday evening",
         "Tornado warning issued for southeastern St. Lucie County and northeastern Martin County through 7 p.m.",
+        "National Weather Service issued warning",
         "Storm expected near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
         "Wind gusts up to 60 mph and quarter-sized hail"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "BB gun shooting turns deadly: Fort Pierce man killed, suspect charged - WPEC",
+      "source_url": "https://cbs12.com/news/local/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
+      "canonical_slug": "2026-08-06-12-year-old-describes-hit-and-run-that-injured-sister-in-fort-pierce",
+      "canonical_headline": "12-year-old describes hit-and-run that injured sister in Fort Pierce",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 1.0,
+      "shared_anchors": [],
+      "novel_facts": [
+        "34-year-old Fort Pierce man shot with BB gun on Saturday",
+        "Shooting occurred on Avenue G",
+        "Suspect Jabari Cowart charged with manslaughter",
+        "Victim died at HCA Florida Lawnwood Hospital",
+        "Group was shooting BB guns at trees before incident"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -316,10 +435,15 @@
       "semantic_action": "hold",
       "confidence": 1.0,
       "shared_anchors": [
-        "Port St. Lucie",
-        "St. Lucie County"
+        "Port St. Lucie location"
       ],
-      "novel_facts": [],
+      "novel_facts": [
+        "Funnel cloud spotted Sunday evening",
+        "Tornado warning issued for southeastern St. Lucie County and northeastern Martin County",
+        "Warning effective through 7 p.m.",
+        "Storm expected near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
+        "Wind gusts up to 60 mph and quarter-sized hail reported"
+      ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
@@ -360,6 +484,36 @@
       ],
       "reason": "Both articles report the same arrest event - Virgil Jason Vinz arrested Thursday morning at 900 block SW Jaslo Avenue with identical charges (5 counts sexual activity with minor, 6 counts contributing to delinquency). The incoming article shares the exact same source URL as the candidate, confirming it's the same story. The additional details in the incoming article (quotes, age, background context) are routine scene detail and background explanation, not material updates like new charges, court actions, or victim identification.",
       "validation_errors": []
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "St. Lucie County Sheriff's Office seek missing man believed to be endangered - WPEC",
+      "source_url": "https://cbs12.com/news/local/missing-man-last-seen-thursday-at-2-am-described-61-weighing-200-pounds-brown-hair-eyes-st-lucie-county-sheriffs-office-florida-news",
+      "canonical_slug": "2026-08-06-us-1-closed-in-both-directions-near-tiffany-avenue-in-port-st-lucie-after-crash",
+      "canonical_headline": "U.S. 1 closed in both directions near Tiffany Avenue in Port St. Lucie after crash",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [],
+      "novel_facts": [
+        "Missing person case involving Benton Doyle Tomlin",
+        "Last seen Thursday at 2 a.m.",
+        "Described as 6'1\", 200 pounds, brown hair and eyes",
+        "St. Lucie County Sheriff's Office seeking help",
+        "Contact Detective Corporal Drawdy at 772-462-3230"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     }
   ],
   "decisions": [
@@ -1619,25 +1773,6 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Funnel cloud spotted over Port St. Lucie neighborhood during tornado warning Sunday",
-      "incoming_source_url": "https://cbs12.com/news/local/tornado-warning-issued-for-parts-of-st-lucie-martin-counties",
-      "incoming_story_id": "story_005501",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "forward_publication",
       "incoming_headline": "Sheriff's helicopter spots massive barn fire on Southwest Martin Highway in Palm City",
       "incoming_source_url": "https://cbs12.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
       "incoming_story_id": "story_005650",
@@ -1656,9 +1791,47 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Fort Pierce man dies after BB gun shooting, suspect charged with manslaughter",
       "incoming_source_url": "http://cbs12.com/news/crime/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
+      "incoming_story_id": "story_002417",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
+      "incoming_source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
+      "incoming_story_id": "story_005664",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old on Avenue G",
+      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-man-charged-with-manslaughter-after-bb-gun-shooting-kills-34-year-old-victim",
       "incoming_story_id": "story_002417",
       "candidates": [],
       "decision": {

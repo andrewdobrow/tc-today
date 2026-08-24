@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-08-24T18:25:47Z",
+  "generated_at": "2026-08-24T20:37:09Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,45 +15,49 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 5,
-      "generated_live": 2,
-      "generation_failed_archive_recovery": 1,
-      "no_publishable_sources": 1
+      "category_eligibility_archive_recovery": 6,
+      "generated_live": 3
     },
     "failures": {
-      "article_framing_integrity": 1,
-      "no_category_eligible_sources": 5
+      "no_category_eligible_sources": 6
     },
-    "model_attempt_count": 4,
-    "model_elapsed_seconds": 76.381,
-    "archive_recovery_requested_count": 7,
+    "model_attempt_count": 3,
+    "model_elapsed_seconds": 37.296,
+    "archive_recovery_requested_count": 6,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
+    "contextual_update_lead_rejection_count": 1,
     "article_framing_rejection_count": 3,
-    "category_eligibility_rejection_count": 7,
-    "published_story_duplicate_suppression_count": 11,
-    "story_aware_update_context_count": 6,
-    "material_update_promotion_evaluation_count": 9,
-    "material_update_promotion_count": 0,
+    "category_eligibility_rejection_count": 9,
+    "published_story_duplicate_suppression_count": 17,
+    "story_aware_update_context_count": 7,
+    "material_update_promotion_evaluation_count": 14,
+    "material_update_promotion_count": 1,
     "material_update_promotion_cache_hit_count": 3,
-    "material_update_promotion_model_call_count": 6
+    "material_update_promotion_model_call_count": 11
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 6,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 8,
+      "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Local Government category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 6.917,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 6.917,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -62,9 +66,25 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:charged"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old victim",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-man-charged-with-manslaughter-after-bb-gun-shooting-kills-34-year-old-victim"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -92,24 +112,20 @@
           "local_nexus_signals": [],
           "headline": "National Weather Service confirms EF0 tornado touchdown in Port St. Lucie",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/national-weather-service-to-provide-update-on-possible-tornado-event-in-st-lucie-county"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "National Weather Service crews to assess Treasure Coast storm damage Monday - cw34.com",
-          "source_url": "https://cw34.com/newsletter-daily/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday"
         }
       ],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - cw34.com",
+          "source_url": "https://cw34.com/news/local/tornado-warning-issued-for-parts-of-st-lucie-martin-counties?teaserSource=trending",
+          "editorial_story_id": "story_001557",
+          "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+          "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Ronald L. Corbin, beloved choral teacher at Martin County High School for 34 years, dies - WPBF",
@@ -121,8 +137,48 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
+      "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old victim",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-man-charged-with-manslaughter-after-bb-gun-shooting-kills-34-year-old-victim",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-08-24-fort-pierce-man-dies-after-bb-gun-shooting-suspect-charged-with-manslaughter",
+          "canonical_headline": "Fort Pierce man dies after BB gun shooting, suspect charged with manslaughter",
+          "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
+          "identity_keys": [
+            "story:story_005665",
+            "source:https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-man-charged-with-manslaughter-after-bb-gun-shooting-kills-34-year-old-victim"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_named_people",
+            "shared_agency",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['fort-pierce']",
+            "shared_event_families=['shooting']",
+            "shared_named_people=['jabari cowart']",
+            "shared_precise_locations=[]",
+            "shared_agencies=['fort-pierce-police']",
+            "shared_subject_phrases=[]",
+            "shared_headline_topic_core=['fort', 'gun', 'kill', 'shoot']",
+            "shared_distinctive_token_count=34",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
         {
           "source_headline": "Tracy Caruso, wife of suspended Palm Beach County clerk, resigns from 2 public positions",
           "source_url": "https://www.wptv.com/news/palm-beach-county/tracy-caruso-wife-of-suspended-palm-beach-county-clerk-resigns-from-2-public-positions",
@@ -131,7 +187,7 @@
           "canonical_headline": "Palm Beach County Clerk Michael Caruso extradited to Orange County jail on five felony child sex abuse charges",
           "basis": "event-identity-authority:participant_plus_distinctive_incident_facts",
           "identity_keys": [
-            "story:story_005629",
+            "story:story_004729",
             "source:https://www.wptv.com/news/palm-beach-county/tracy-caruso-wife-of-suspended-palm-beach-county-clerk-resigns-from-2-public-positions"
           ],
           "match_confidence": 0.95,
@@ -164,11 +220,75 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 1,
-      "material_update_promotion_count": 0,
+      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_count": 1,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 3,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Tracy Caruso, wife of suspended Palm Beach County clerk, resigns from 2 public positions",
+          "source_url": "https://www.wptv.com/news/palm-beach-county/tracy-caruso-wife-of-suspended-palm-beach-county-clerk-resigns-from-2-public-positions",
+          "canonical_slug": "2026-08-19-palm-beach-county-clerk-michael-caruso-extradited-to-orange-county-jail-on-five",
+          "canonical_headline": "Palm Beach County Clerk Michael Caruso extradited to Orange County jail on five felony child sex abuse charges",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": true,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "update_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "update_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "Mike Caruso - suspended Palm Beach County clerk arrested on child sexual abuse charges",
+            "Same underlying criminal case with five felony charges",
+            "Orange County jail detention",
+            "Tracy Caruso - wife of Mike Caruso"
+          ],
+          "novel_facts": [
+            "Tracy Caruso resigned from Health District of Palm Beach County board",
+            "Tracy Caruso resigned as vice chair of Palm Beach State College Board of Trustees",
+            "Tracy Caruso released public statement declaring husband's innocence",
+            "Resignations occurred nearly a week after Mike Caruso's arrest",
+            "Tracy was appointed to Health Care District by Gov. Ron DeSantis in December 2022",
+            "Statements released by Health Care District and PBSC Chairman Dave Kerner acknowledging resignation"
+          ],
+          "reason": "Both articles cover the Mike Caruso child sex abuse case. The candidate reports his arrest and extradition. The incoming article provides a material development: his wife Tracy Caruso resigned from two public board positions and released a statement supporting him. These resignations represent a significant consequence of the arrest and are newsworthy public actions by a government appointee, constituting a material update to the ongoing story.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - cw34.com",
+          "source_url": "https://cw34.com/news/local/tornado-warning-issued-for-parts-of-st-lucie-martin-counties?teaserSource=trending",
+          "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+          "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.98,
+          "shared_anchors": [],
+          "novel_facts": [
+            "Funnel cloud spotted over Port St. Lucie neighborhood",
+            "Tornado warning issued Sunday evening for southeastern St. Lucie County and northeastern Martin County",
+            "Warning in effect through 7 p.m.",
+            "Storm expected near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
+            "Hutchinson Island South affected by warning"
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Ronald L. Corbin, beloved choral teacher at Martin County High School for 34 years, dies - WPBF",
@@ -188,12 +308,12 @@
           "confidence": 1.0,
           "shared_anchors": [],
           "novel_facts": [
-            "Ronald L. Corbin died Saturday (August 23, 2026)",
-            "Choral teacher at Martin County High School for 34 years (1980-2014)",
-            "Led OPUS choir group",
-            "Received kidney transplant from daughter Candice Corbin in 2018",
+            "Ronald L. Corbin death on Saturday",
+            "34-year choral teacher at Martin County High School",
+            "Led OPUS choir program",
+            "Retired in 2014",
             "Corbin Musical Arts Center dedicated in his name in 2015",
-            "Received R. Wayne Hugoboom Distinguished Service Award in 2017"
+            "Received kidney transplant from daughter Candice in 2018"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -201,17 +321,21 @@
           ]
         }
       ],
-      "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 34.786
+      "new_publication_stale_rejected_count": 1,
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
+      "generated_card_count": 0,
+      "elapsed_seconds": 50.753
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 4,
-      "selected_source_count": 2,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 5,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -219,101 +343,62 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 14.451,
+          "elapsed_seconds": 6.616,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 14.451,
+      "model_elapsed_seconds": 6.616,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
       "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 1,
-      "article_framing_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "headline": "National Weather Service confirms EF0 tornado touched down in Port St. Lucie Sunday",
-          "missing": [
-            "headline_jurisdiction_missing_from_lead"
-          ],
-          "lead_independence": {
-            "required": true,
-            "passed": true,
-            "headline": "National Weather Service confirms EF0 tornado touched down in Port St. Lucie Sunday",
-            "lead": "The National Weather Service confirmed Monday morning that an EF0 tornado touched down Sunday evening in St. Lucie County, damaging about 20 to 30 homes along a 2.1-mile path. Will Ulrich, warning coordination meteorologist with the National Weather Service Melbourne office, announced the findings during a press conference at Jessica Clinton Park following a damage survey of the affected areas.",
-            "lead_word_count": 62,
-            "headline_overlap_ratio": 0.833,
-            "new_context_token_count": 32,
-            "opaque_references": [],
-            "undefined_references": [],
-            "story_form": "standard",
-            "update_diagnostics": {
-              "required": false,
-              "passed": true,
-              "story_form": "standard"
-            },
-            "missing": []
-          },
-          "claim_consistency": {
-            "required": true,
-            "passed": false,
-            "headline": "National Weather Service confirms EF0 tornado touched down in Port St. Lucie Sunday",
-            "lead": "The National Weather Service confirmed Monday morning that an EF0 tornado touched down Sunday evening in St. Lucie County, damaging about 20 to 30 homes along a 2.1-mile path. Will Ulrich, warning coordination meteorologist with the National Weather Service Melbourne office, announced the findings during a press conference at Jessica Clinton Park following a damage survey of the affected areas.",
-            "headline_money_claims": [],
-            "lead_money_claims": [],
-            "missing_money_claims": [],
-            "headline_jurisdictions": [
-              "port_st_lucie"
-            ],
-            "lead_jurisdictions": [
-              "st_lucie_county"
-            ],
-            "missing_jurisdictions": [
-              "port_st_lucie"
-            ],
-            "headline_policy_references": [],
-            "lead_policy_references": [],
-            "missing_policy_references": [],
-            "missing": [
-              "headline_jurisdiction_missing_from_lead"
-            ]
-          },
-          "source_focus": {
-            "required": true,
-            "passed": true,
-            "generated_headline": "National Weather Service confirms EF0 tornado touched down in Port St. Lucie Sunday",
-            "generated_lead": "The National Weather Service confirmed Monday morning that an EF0 tornado touched down Sunday evening in St. Lucie County, damaging about 20 to 30 homes along a 2.1-mile path.",
-            "source_title": "National Weather Service confirms EF0 tornado touchdown in Port St. Lucie",
-            "source_lead": "The National Weather Service has confirmed that an EF0 tornado touched down Sunday evening in St. Lucie County, damaging about 20 to 30 homes along a 2.1-mile path.WATCH THE FULL PRESS CONFERENCE BELOW:Will Ulrich, warning coordination meteorologist with the National Weather Service Melbourne office, announced the findings Monday morning during a press conference at Jessica Clinton Park following a damage survey of the affected areas.The tornado, classified as a landspout, first touched down around 6:10 p.m. near Southeast Kitching Cove",
-            "title_similarity": {
-              "score": 0.8361,
-              "overlap": 0.9,
-              "jaccard": 0.6923,
-              "sorted_sequence": 0.8919,
-              "ordered_sequence": 0.9324,
-              "shared_token_count": 9.0
-            },
-            "lead_token_overlap": 1.0,
-            "missing": []
-          },
-          "source_jurisdiction": {
-            "required": false,
-            "passed": true,
-            "missing": []
-          }
-        }
-      ],
+      "article_framing_rejection_count": 0,
+      "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
+      "category_eligibility_assessed_count": 4,
+      "category_eligibility_rejection_count": 1,
+      "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns",
+          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns"
+        }
+      ],
+      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "BB gun shooting turns deadly: Fort Pierce man killed, suspect charged - WPEC",
+          "source_url": "http://cbs12.com/news/crime/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
+          "editorial_story_id": "story_002417",
+          "canonical_slug": "2026-08-06-12-year-old-describes-hit-and-run-that-injured-sister-in-fort-pierce",
+          "canonical_headline": "12-year-old describes hit-and-run that injured sister in Fort Pierce",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Sheriff's helicopter spots massive barn fire in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
+          "editorial_story_id": "story_005650",
+          "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
+          "canonical_headline": "Sheriff's helicopter spots massive barn fire on Southwest Martin Highway in Palm City",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
@@ -357,17 +442,62 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [],
+      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "crime",
+          "source_headline": "BB gun shooting turns deadly: Fort Pierce man killed, suspect charged - WPEC",
+          "source_url": "http://cbs12.com/news/crime/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
+          "canonical_slug": "2026-08-06-12-year-old-describes-hit-and-run-that-injured-sister-in-fort-pierce",
+          "canonical_headline": "12-year-old describes hit-and-run that injured sister in Fort Pierce",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 1.0,
+          "shared_anchors": [],
+          "novel_facts": [
+            "34-year-old man shot with BB gun on Avenue G in Fort Pierce",
+            "Suspect Jabari Cowart charged with manslaughter",
+            "Victim died at HCA Florida Lawnwood Hospital",
+            "Incident occurred Saturday involving group shooting BB guns at trees"
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Sheriff's helicopter spots massive barn fire in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
+          "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
+          "canonical_headline": "Sheriff's helicopter spots massive barn fire on Southwest Martin Highway in Palm City",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Fort Pierce man dies after BB gun shooting, suspect charged with manslaughter",
+      "live_hero_headline": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old on Avenue G",
       "generated_card_count": 0,
-      "elapsed_seconds": 28.214
+      "elapsed_seconds": 31.137
     },
     {
       "category_key": "business",
@@ -375,7 +505,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 21,
-      "publishable_source_count": 7,
+      "publishable_source_count": 9,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -392,9 +522,28 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 3,
+      "category_eligibility_assessed_count": 5,
+      "category_eligibility_rejection_count": 4,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-business-development-primary-focus",
+          "category_key": "business",
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_public_safety:charged"
+          ],
+          "local_nexus_signals": [
+            "source_locality:st lucie county",
+            "source_locality:fort pierce"
+          ],
+          "headline": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old victim",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-man-charged-with-manslaughter-after-bb-gun-shooting-kills-34-year-old-victim"
+        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -456,16 +605,6 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
-          "source_headline": "Vero Beach table tennis club faces closure, community rallies with GoFundMe campaign",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-table-tennis-club-faces-closure-community-rallies-with-gofundme-campaign",
-          "editorial_story_id": "story_005131",
-          "canonical_slug": "2026-08-21-vero-beach-table-tennis-club-faces-closure-as-owner-seeks-community-support",
-          "canonical_headline": "Vero Beach Table Tennis Club faces closure as owner seeks community support",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
           "source_headline": "James Martin to take on Brian Mast after wining Democratic primary for Florida's 21st Congressional District",
           "source_url": "https://www.wptv.com/news/political/elections-local/james-martin-to-take-on-brian-mast-after-wining-democratic-primary-for-floridas-21st-congressional-district",
           "editorial_story_id": "story_005088",
@@ -482,6 +621,16 @@
           "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
           "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
           "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Future of Brightline station in downtown Stuart uncertain after federal funds go elsewhere",
+          "source_url": "https://www.wptv.com/lifestyle/travel/future-of-brightline-station-in-downtown-stuart-uncertain-after-federal-funds-go-elsewhere",
+          "editorial_story_id": "story_004955",
+          "canonical_slug": "2026-08-21-brightline-station-in-downtown-stuart-unlikely-after-martin-county-denied-federa",
+          "canonical_headline": "Brightline station in downtown Stuart unlikely after Martin County denied federal funding",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -558,21 +707,6 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "business",
-          "source_headline": "Vero Beach table tennis club faces closure, community rallies with GoFundMe campaign",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-table-tennis-club-faces-closure-community-rallies-with-gofundme-campaign",
-          "canonical_slug": "2026-08-21-vero-beach-table-tennis-club-faces-closure-as-owner-seeks-community-support",
-          "canonical_headline": "Vero Beach Table Tennis Club faces closure as owner seeks community support",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
           "source_headline": "James Martin to take on Brian Mast after wining Democratic primary for Florida's 21st Congressional District",
           "source_url": "https://www.wptv.com/news/political/elections-local/james-martin-to-take-on-brian-mast-after-wining-democratic-primary-for-floridas-21st-congressional-district",
           "canonical_slug": "2026-08-21-james-martin-wins-democratic-primary-for-congressional-district-21-by-less-than",
@@ -602,28 +736,43 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
-          "confidence": 0.92,
+          "confidence": 0.95,
           "shared_anchors": [
             "Martin County",
             "animal hoarding case",
-            "Humane Society of the Treasure Coast"
+            "mass-animal-hoarding:martin-county incident anchor"
           ],
           "novel_facts": [
             "Paige O'Donnell as defendant",
             "36 Border Collies specifically",
             "Palm City location",
-            "72 charges filed",
-            "Legal surrender of animals on August 21, 2026",
-            "Dogs cleared for adoption beginning Sept 1"
+            "72 charges",
+            "legal surrender of dogs on Aug 21, 2026",
+            "adoption applications starting Sept 1"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Future of Brightline station in downtown Stuart uncertain after federal funds go elsewhere",
+          "source_url": "https://www.wptv.com/lifestyle/travel/future-of-brightline-station-in-downtown-stuart-uncertain-after-federal-funds-go-elsewhere",
+          "canonical_slug": "2026-08-21-brightline-station-in-downtown-stuart-unlikely-after-martin-county-denied-federa",
+          "canonical_headline": "Brightline station in downtown Stuart unlikely after Martin County denied federal funding",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 6,
-      "elapsed_seconds": 17.666
+      "new_publication_stale_rejected_count": 5,
+      "elapsed_seconds": 17.769
     },
     {
       "category_key": "sports",
@@ -660,15 +809,15 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 9,
-      "elapsed_seconds": 11.305
+      "new_publication_stale_rejected_count": 6,
+      "elapsed_seconds": 11.866
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
+      "fresh_candidate_count": 20,
       "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -771,16 +920,12 @@
           "semantic_action": "hold",
           "confidence": 0.95,
           "shared_anchors": [
-            "Both are weekend event roundups for Treasure Coast and Palm Beach area",
-            "Both mention Palm City"
+            "Both are weekend events roundups for Treasure Coast and Palm Beach County"
           ],
           "novel_facts": [
-            "August 21, 2026 weekend (vs July 27, 2026)",
-            "Newfield Farm gardening class",
-            "Ukrainian Cultural Fest in West Palm Beach",
-            "Delray Beach women's health event",
-            "Peggy Adams animal adoption event",
-            "Loggerhead Triathlon in Jupiter"
+            "This is a different weekend (Aug 21, 2026 vs July 27, 2026)",
+            "Different events: Newfield Farm garden class, Ukrainian Cultural Fest, Delray women's health event, Peggy Adams adoption event, Loggerhead Triathlon",
+            "Previous weekend featured Christmas in July vendor market and Rockn Riverwalk concert series"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -789,23 +934,23 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 15.267
+      "elapsed_seconds": 14.143
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "no_publishable_sources",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 0,
+      "publishable_source_count": 1,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
       "attempts": [],
       "model_elapsed_seconds": 0.0,
-      "failure_code": "",
-      "failure_summary": "",
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Florida category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -814,7 +959,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
@@ -827,30 +972,23 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 13.067
+      "elapsed_seconds": 18.993
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 26,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 1,
-      "selected_source_count": 1,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 4.969,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 4.969,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Martin County category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -862,8 +1000,18 @@
       "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Sheriff's helicopter spots massive barn fire in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
+          "editorial_story_id": "story_005650",
+          "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
+          "canonical_headline": "Sheriff's helicopter spots massive barn fire on Southwest Martin Highway in Palm City",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "martin",
           "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
@@ -902,6 +1050,21 @@
       "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Sheriff's helicopter spots massive barn fire in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
+          "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
+          "canonical_headline": "Sheriff's helicopter spots massive barn fire on Southwest Martin Highway in Palm City",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "martin",
           "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
@@ -950,12 +1113,11 @@
           "confidence": 1.0,
           "shared_anchors": [],
           "novel_facts": [
-            "Ronald L. Corbin died Saturday (August 23, 2026)",
-            "Choral teacher at Martin County High School for 34 years (1980-2014)",
+            "Ronald L. Corbin died Saturday August 23, 2026",
+            "Corbin was choral teacher at Martin County High School for 34 years (1980-2014)",
             "Led OPUS choir program",
             "Received kidney transplant from daughter Candice Corbin in 2018",
             "Corbin Musical Arts Center dedicated in his name in 2015",
-            "Added to Florida Vocal Association Roll of Distinction in 2014",
             "Received R. Wayne Hugoboom Distinguished Service Award in 2017"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -986,6 +1148,7 @@
           "novel_facts": [
             "Funnel cloud spotted Sunday evening",
             "Tornado warning issued for southeastern St. Lucie County and northeastern Martin County through 7 p.m.",
+            "National Weather Service issued warning",
             "Storm expected near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
             "Wind gusts up to 60 mph and quarter-sized hail"
           ],
@@ -996,57 +1159,313 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Sheriff's helicopter spots massive barn fire on Southwest Martin Highway in Palm City",
-      "generated_card_count": 0,
-      "elapsed_seconds": 51.834
+      "elapsed_seconds": 40.744
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generation_failed_archive_recovery",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 6,
-      "selected_source_count": 6,
+      "status": "generated_live",
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 10,
+      "selected_source_count": 10,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 29.311,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — National Weather Service confirms EF0 tornado touched down in Port St. Lucie"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 27.651,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — National Weather Service confirms EF0 tornado touched down in Port St. Lucie Sunday evening"
+          "elapsed_seconds": 23.763,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 56.961,
-      "failure_code": "article_framing_integrity",
-      "failure_summary": "Article framing integrity failed for hero: headline_jurisdiction_missing_from_lead — National Weather Service confirms EF0 tornado touched down in Port St. Lucie Sunday evening",
+      "model_elapsed_seconds": 23.763,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 42,
+          "baseline_anchor": "fatality",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [],
+          "baseline_context_required": 0,
+          "canonical_context_available": false,
+          "canonical_context_headline": "",
+          "novelty_anchor": "arrest_or_charge",
+          "novelty_present": false,
+          "novelty_token_hits": [
+            "fort",
+            "pierce",
+            "victim",
+            "year"
+          ],
+          "missing": [
+            "new_development_missing"
+          ],
+          "source_title": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old victim",
+          "headline": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old man"
+        }
+      ],
+      "article_framing_rejection_count": 3,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Fort Pierce entire legal team resigns, city to spend $31,000 to find replacement city attorney",
+          "missing": [
+            "headline_money_claim_missing_from_lead",
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Fort Pierce entire legal team resigns, city to spend $31,000 to find replacement city attorney",
+            "lead": "The mass departure followed the city's decision not to renew the current city attorney's contract, which expires in September. City staff confirmed that aside from one paralegal, the entire legal department has left. City Commissioner Michael Broderick told WPTV the entire staff left and there are no city attorneys right now. Broderick called the situation a self-inflicted wound and said he is not aware of any complaints, disciplinary action or poor performance reviews that would lead to the attorney leaving.",
+            "lead_word_count": 83,
+            "headline_overlap_ratio": 0.308,
+            "new_context_token_count": 46,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Fort Pierce entire legal team resigns, city to spend $31,000 to find replacement city attorney",
+            "lead": "The mass departure followed the city's decision not to renew the current city attorney's contract, which expires in September. City staff confirmed that aside from one paralegal, the entire legal department has left. City Commissioner Michael Broderick told WPTV the entire staff left and there are no city attorneys right now. Broderick called the situation a self-inflicted wound and said he is not aware of any complaints, disciplinary action or poor performance reviews that would lead to the attorney leaving.",
+            "headline_money_claims": [
+              31000
+            ],
+            "lead_money_claims": [],
+            "missing_money_claims": [
+              31000
+            ],
+            "headline_jurisdictions": [
+              "fort_pierce"
+            ],
+            "lead_jurisdictions": [],
+            "missing_jurisdictions": [
+              "fort_pierce"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_money_claim_missing_from_lead",
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Fort Pierce entire legal team resigns, city to spend $31,000 to find replacement city attorney",
+            "generated_lead": "The mass departure followed the city's decision not to renew the current city attorney's contract, which expires in September. City staff confirmed that aside from one paralegal, the entire legal department has left.",
+            "source_title": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns",
+            "source_lead": "Fort Pierce's city commission held a heated special meeting Monday after nearly the city's entire legal team resigned. This is leaving the city with no attorneys and forcing officials to spend $31,000 in taxpayer money to find a permanent replacement.The mass departure followed the city's decision not to renew the current city attorney's contract, which expires Sept.",
+            "title_similarity": {
+              "score": 0.5525,
+              "overlap": 0.6154,
+              "jaccard": 0.4,
+              "sorted_sequence": 0.6243,
+              "ordered_sequence": 0.3934,
+              "shared_token_count": 8.0
+            },
+            "lead_token_overlap": 0.636,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        },
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Port St. Lucie residents describe moments when tornado struck near Southbend Boulevard",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Port St. Lucie residents describe moments when tornado struck near Southbend Boulevard",
+            "lead": "Aaron Christiansen said he was home when he noticed something strange through his window. He said he looked across and saw dark clouds and a bunch of white. He said that looks like a lot of birds, and he got closer and realized that's not birds, that's debris. Christiansen tried to hustle his dogs into his bedroom so they could all take cover. He said they had about 10 seconds to react before the storm hit.",
+            "lead_word_count": 78,
+            "headline_overlap_ratio": 0.083,
+            "new_context_token_count": 45,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Port St. Lucie residents describe moments when tornado struck near Southbend Boulevard",
+            "lead": "Aaron Christiansen said he was home when he noticed something strange through his window. He said he looked across and saw dark clouds and a bunch of white. He said that looks like a lot of birds, and he got closer and realized that's not birds, that's debris. Christiansen tried to hustle his dogs into his bedroom so they could all take cover. He said they had about 10 seconds to react before the storm hit.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "port_st_lucie"
+            ],
+            "lead_jurisdictions": [],
+            "missing_jurisdictions": [
+              "port_st_lucie"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Port St. Lucie residents describe moments when tornado struck near Southbend Boulevard",
+            "generated_lead": "Aaron Christiansen said he was home when he noticed something strange through his window. He said he looked across and saw dark clouds and a bunch of white.",
+            "source_title": "Port St. Lucie residents clean up after possible tornado or landspout hits neighborhood - WPTV",
+            "source_lead": "Lucie residents are cleaning up after a possible tornado or landspout hit their neighborhood near Southbend Boulevard and Southeast Navy Ave on Sunday.Aaron Christiansen said he was home around 6 p.m. when he noticed something strange through his window. He immediately took cover, and moments later found significant damage in his backyard.\"Looked across, and I saw dark clouds and I saw a bunch of white.",
+            "title_similarity": {
+              "score": 0.5106,
+              "overlap": 0.4545,
+              "jaccard": 0.2778,
+              "sorted_sequence": 0.4691,
+              "ordered_sequence": 0.5802,
+              "shared_token_count": 5.0
+            },
+            "lead_token_overlap": 1.0,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        },
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Port St. Lucie to consider $14.83 annual trash fee increase amid pickup concerns",
+          "missing": [
+            "headline_money_claim_missing_from_lead",
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Port St. Lucie to consider $14.83 annual trash fee increase amid pickup concerns",
+            "lead": "The proposed increase comes after the city won a $24 million settlement with Waste Pro over poor service, but residents received a tax credit rather than refund checks. Trash collection became a central issue in this year's mayoral campaign, with residents and candidates debating the reliability of service and whether the city should restore twice-weekly garbage pickup.",
+            "lead_word_count": 59,
+            "headline_overlap_ratio": 0.231,
+            "new_context_token_count": 38,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Port St. Lucie to consider $14.83 annual trash fee increase amid pickup concerns",
+            "lead": "The proposed increase comes after the city won a $24 million settlement with Waste Pro over poor service, but residents received a tax credit rather than refund checks. Trash collection became a central issue in this year's mayoral campaign, with residents and candidates debating the reliability of service and whether the city should restore twice-weekly garbage pickup.",
+            "headline_money_claims": [
+              15
+            ],
+            "lead_money_claims": [
+              24000000
+            ],
+            "missing_money_claims": [
+              15
+            ],
+            "headline_jurisdictions": [
+              "port_st_lucie"
+            ],
+            "lead_jurisdictions": [],
+            "missing_jurisdictions": [
+              "port_st_lucie"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_money_claim_missing_from_lead",
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Port St. Lucie to consider $14.83 annual trash fee increase amid pickup concerns",
+            "generated_lead": "The proposed increase comes after the city won a $24 million settlement with Waste Pro over poor service, but residents received a tax credit rather than refund checks. Trash collection became a central issue in this year's mayoral campaign, with residents and candidates debating the reliability of service and whether the city should restore twice-weekly garbage pickup.",
+            "source_title": "Port St. Lucie to consider $14.83 annual trash fee increase amid lingering pickup concerns - WPEC",
+            "source_lead": "The proposed increase arrives after years of frustration over trash service in Port St. The city won a $24 million settlement with Waste Pro over poor service, but residents received a tax credit rather than refund checks.",
+            "title_similarity": {
+              "score": 0.9418,
+              "overlap": 1.0,
+              "jaccard": 0.8667,
+              "sorted_sequence": 0.9091,
+              "ordered_sequence": 0.9091,
+              "shared_token_count": 13.0
+            },
+            "lead_token_overlap": 0.821,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 10,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "BB gun shooting turns deadly: Fort Pierce man killed, suspect charged - WPEC",
+          "source_url": "https://cbs12.com/news/local/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
+          "editorial_story_id": "story_002417",
+          "canonical_slug": "2026-08-06-12-year-old-describes-hit-and-run-that-injured-sister-in-fort-pierce",
+          "canonical_headline": "12-year-old describes hit-and-run that injured sister in Fort Pierce",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
@@ -1076,15 +1495,55 @@
           "canonical_headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County Sheriff's Office seek missing man believed to be endangered - WPEC",
+          "source_url": "https://cbs12.com/news/local/missing-man-last-seen-thursday-at-2-am-described-61-weighing-200-pounds-brown-hair-eyes-st-lucie-county-sheriffs-office-florida-news",
+          "editorial_story_id": "story_004960",
+          "canonical_slug": "2026-08-06-us-1-closed-in-both-directions-near-tiffany-avenue-in-port-st-lucie-after-crash",
+          "canonical_headline": "U.S. 1 closed in both directions near Tiffany Avenue in Port St. Lucie after crash",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_evaluation_count": 5,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 3,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "BB gun shooting turns deadly: Fort Pierce man killed, suspect charged - WPEC",
+          "source_url": "https://cbs12.com/news/local/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
+          "canonical_slug": "2026-08-06-12-year-old-describes-hit-and-run-that-injured-sister-in-fort-pierce",
+          "canonical_headline": "12-year-old describes hit-and-run that injured sister in Fort Pierce",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 1.0,
+          "shared_anchors": [],
+          "novel_facts": [
+            "34-year-old Fort Pierce man shot with BB gun on Saturday",
+            "Shooting occurred on Avenue G",
+            "Suspect Jabari Cowart charged with manslaughter",
+            "Victim died at HCA Florida Lawnwood Hospital",
+            "Group was shooting BB guns at trees before incident"
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
@@ -1132,10 +1591,15 @@
           "semantic_action": "hold",
           "confidence": 1.0,
           "shared_anchors": [
-            "Port St. Lucie",
-            "St. Lucie County"
+            "Port St. Lucie location"
           ],
-          "novel_facts": [],
+          "novel_facts": [
+            "Funnel cloud spotted Sunday evening",
+            "Tornado warning issued for southeastern St. Lucie County and northeastern Martin County",
+            "Warning effective through 7 p.m.",
+            "Storm expected near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
+            "Wind gusts up to 60 mph and quarter-sized hail reported"
+          ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
@@ -1176,12 +1640,44 @@
           ],
           "reason": "Both articles report the same arrest event - Virgil Jason Vinz arrested Thursday morning at 900 block SW Jaslo Avenue with identical charges (5 counts sexual activity with minor, 6 counts contributing to delinquency). The incoming article shares the exact same source URL as the candidate, confirming it's the same story. The additional details in the incoming article (quotes, age, background context) are routine scene detail and background explanation, not material updates like new charges, court actions, or victim identification.",
           "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "St. Lucie County Sheriff's Office seek missing man believed to be endangered - WPEC",
+          "source_url": "https://cbs12.com/news/local/missing-man-last-seen-thursday-at-2-am-described-61-weighing-200-pounds-brown-hair-eyes-st-lucie-county-sheriffs-office-florida-news",
+          "canonical_slug": "2026-08-06-us-1-closed-in-both-directions-near-tiffany-avenue-in-port-st-lucie-after-crash",
+          "canonical_headline": "U.S. 1 closed in both directions near Tiffany Avenue in Port St. Lucie after crash",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.95,
+          "shared_anchors": [],
+          "novel_facts": [
+            "Missing person case involving Benton Doyle Tomlin",
+            "Last seen Thursday at 2 a.m.",
+            "Described as 6'1\", 200 pounds, brown hair and eyes",
+            "St. Lucie County Sheriff's Office seeking help",
+            "Contact Detective Corporal Drawdy at 772-462-3230"
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
         }
       ],
       "new_publication_stale_rejected_count": 1,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 76.576
+      "live_hero_headline": "National Weather Service confirms EF0 tornado touched down in Port St. Lucie Sunday evening",
+      "generated_card_count": 0,
+      "elapsed_seconds": 63.129
     },
     {
       "category_key": "indian_river",
@@ -1189,7 +1685,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 3,
+      "publishable_source_count": 5,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1206,7 +1702,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 5,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
@@ -1260,7 +1756,7 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 8.755
+      "elapsed_seconds": 8.824
     }
   ]
 }
