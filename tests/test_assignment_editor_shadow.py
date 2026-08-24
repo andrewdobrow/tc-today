@@ -497,3 +497,118 @@ def test_exact_crime_shadow_22k_headline_requires_amount_in_first_paragraph():
     repaired_diagnostics = generate._article_framing_diagnostics(repaired, repaired)
     assert repaired_diagnostics["claim_consistency"]["passed"] is True
     assert repaired_diagnostics["claim_consistency"]["missing_money_claims"] == []
+
+
+def test_topic_category_fit_rejection_is_binding_before_assignment():
+    plan, diagnostics = normalize_assignment_plan(
+        {
+            "category_fit": [
+                {"source_index": 1, "fits_category": True, "reason": "Fits the section."},
+                {"source_index": 2, "fits_category": False, "reason": "Wrong topic."},
+            ],
+            "hero": {"source_index": 2, "angle": "Should never survive", "urgency_score": 9},
+            "cards": [
+                {"source_index": 1, "angle": "Valid section story", "urgency_score": 7},
+            ],
+        },
+        source_count=2,
+        max_cards=1,
+        require_category_fit=True,
+    )
+    assert plan["hero"] == {}
+    assert [card["source_index"] for card in plan["cards"]] == [1]
+    assert diagnostics["category_fit_required"] is True
+    assert diagnostics["category_fit_complete"] is True
+    assert diagnostics["category_fit_accepted_source_indexes"] == [1]
+    assert diagnostics["category_fit_rejected_source_indexes"] == [2]
+    assert diagnostics["category_fit_selected_rejections"] == [2]
+    assert diagnostics["source_mapping_valid"] is False
+
+
+def test_topic_assignment_editor_adjudicates_tornado_out_of_crime_without_exclusion_list(monkeypatch):
+    from scripts import generate
+
+    packet = _shadow_packet()
+    packet["category_key"] = "crime"
+    packet["category_label"] = "Crime & Safety"
+    packet["source_inputs"][0]["title"] = "BB gun shooting turns deadly: Fort Pierce man killed, suspect charged"
+    packet["source_inputs"][0]["article_text"] = "A Fort Pierce man died and a suspect was charged with manslaughter."
+    packet["source_inputs"][1]["title"] = "National Weather Service confirms EF0 tornado touchdown in Port St. Lucie"
+    packet["source_inputs"][1]["article_text"] = "The National Weather Service confirmed an EF0 tornado damaged homes."
+
+    response = _Response(
+        json.dumps({
+            "category_fit": [
+                {"source_index": 1, "fits_category": True, "reason": "The central subject is a fatal shooting and manslaughter charge."},
+                {"source_index": 2, "fits_category": False, "reason": "The central subject does not belong in Crime & Safety."},
+            ],
+            "hero": {"source_index": 1, "angle": "Lead with the manslaughter charge", "urgency_score": 9},
+            "cards": [],
+        }),
+        model="claude-sonnet-5",
+    )
+    fake = _FakeClient([response])
+    monkeypatch.setattr(generate, "client", fake)
+
+    plan, diagnostics, actual_model, _duration = generate._run_assignment_editor(packet)
+    prompt = fake.messages.calls[0]["messages"][0]["content"]
+
+    assert "independently judge whether EACH numbered source genuinely belongs" in prompt
+    assert "Do not assume upstream routing is correct" in prompt
+    assert "Only sources you mark fits_category:true may be assigned" in prompt
+    # The contract asks for editorial judgment rather than encoding a weather-specific exclusion rule.
+    assert "exclude weather" not in prompt.lower()
+    assert "do not use weather" not in prompt.lower()
+    assert plan["hero"]["source_index"] == 1
+    assert plan["cards"] == []
+    assert diagnostics["category_fit_rejected_source_indexes"] == [2]
+    assert diagnostics["category_fit_selected_rejections"] == []
+    assert diagnostics["source_mapping_valid"] is True
+    assert actual_model == "claude-sonnet-5"
+
+
+def test_topic_assignment_editor_fails_closed_if_it_selects_a_source_it_rejected(monkeypatch):
+    from scripts import generate
+
+    packet = _shadow_packet()
+    packet["category_key"] = "crime"
+    packet["category_label"] = "Crime & Safety"
+    response = _Response(json.dumps({
+        "category_fit": [
+            {"source_index": 1, "fits_category": True, "reason": "Fits."},
+            {"source_index": 2, "fits_category": False, "reason": "Does not fit."},
+        ],
+        "hero": {"source_index": 2, "angle": "Invalid rejected assignment", "urgency_score": 8},
+        "cards": [],
+    }), model="claude-sonnet-5")
+    fake = _FakeClient([response])
+    monkeypatch.setattr(generate, "client", fake)
+
+    with pytest.raises(ValueError, match="selected source\\(s\\) it did not accept for category fit"):
+        generate._run_assignment_editor(packet)
+
+
+def test_county_assignment_editor_does_not_require_topic_fit_and_tornado_can_be_selected(monkeypatch):
+    from scripts import generate
+
+    packet = _shadow_packet()
+    packet["category_key"] = "st_lucie"
+    packet["category_label"] = "St. Lucie County"
+    packet["source_inputs"][1]["title"] = "National Weather Service confirms EF0 tornado touchdown in Port St. Lucie"
+    packet["source_inputs"][1]["article_text"] = "The National Weather Service confirmed an EF0 tornado in Port St. Lucie."
+
+    response = _Response(json.dumps({
+        "hero": {"source_index": 2, "angle": "Lead with the confirmed tornado damage", "urgency_score": 8},
+        "cards": [{"source_index": 1, "angle": "Supporting county story", "urgency_score": 6}],
+    }), model="claude-sonnet-5")
+    fake = _FakeClient([response])
+    monkeypatch.setattr(generate, "client", fake)
+
+    plan, diagnostics, _actual_model, _duration = generate._run_assignment_editor(packet)
+    prompt = fake.messages.calls[0]["messages"][0]["content"]
+
+    assert "independently judge whether EACH numbered source genuinely belongs" not in prompt
+    assert "category_fit" not in prompt
+    assert plan["hero"]["source_index"] == 2
+    assert diagnostics["category_fit_required"] is False
+    assert diagnostics["source_mapping_valid"] is True

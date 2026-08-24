@@ -15,7 +15,7 @@ from typing import Any, Dict, Iterable, List, Tuple
 from .model_bakeoff import compact_category_output
 
 ASSIGNMENT_EDITOR_SHADOW_SCHEMA_VERSION = 2
-ASSIGNMENT_EDITOR_SHADOW_VERSION = "1.13.6.6a"
+ASSIGNMENT_EDITOR_SHADOW_VERSION = "1.13.6.7f"
 
 
 def _utc_now_iso() -> str:
@@ -37,11 +37,14 @@ def normalize_assignment_plan(
     *,
     source_count: int,
     max_cards: int,
+    require_category_fit: bool = False,
 ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """Normalize an editor plan and return deterministic selection diagnostics.
 
     Invalid/out-of-range/duplicate source indexes are removed rather than silently
-    remapped. A missing valid hero leaves the plan unscoreable; callers fail closed.
+    remapped. For topic sections, category-fit adjudication is binding: a source must
+    be explicitly accepted by the assignment editor before it can be assigned.
+    County sections retain the legacy selection-only contract.
     """
     source_count = max(0, int(source_count or 0))
     max_cards = max(0, int(max_cards or 0))
@@ -49,14 +52,55 @@ def normalize_assignment_plan(
     raw_hero = raw.get("hero") if isinstance(raw.get("hero"), dict) else {}
     raw_cards = raw.get("cards") if isinstance(raw.get("cards"), list) else []
 
+    fit_decisions: List[Dict[str, Any]] = []
+    fit_by_index: Dict[int, bool] = {}
+    fit_invalid_indexes: List[Any] = []
+    fit_duplicate_indexes: List[int] = []
+    raw_fit = raw.get("category_fit") if isinstance(raw.get("category_fit"), list) else []
+    if require_category_fit:
+        for item in raw_fit:
+            if not isinstance(item, dict):
+                continue
+            index = _coerce_index(item.get("source_index"))
+            if index is None or index > source_count:
+                if item.get("source_index") not in (None, ""):
+                    fit_invalid_indexes.append(item.get("source_index"))
+                continue
+            if index in fit_by_index:
+                fit_duplicate_indexes.append(index)
+                continue
+            fits = item.get("fits_category")
+            if not isinstance(fits, bool):
+                fit_invalid_indexes.append(item.get("source_index"))
+                continue
+            fit_by_index[index] = fits
+            fit_decisions.append({
+                "source_index": index,
+                "fits_category": fits,
+                "reason": str(item.get("reason") or "").strip(),
+            })
+
     invalid_indexes: List[Any] = []
     duplicate_indexes: List[int] = []
+    selected_fit_rejections: List[int] = []
     selected: List[int] = []
+
+    def accepted_for_assignment(index: int | None) -> bool:
+        if index is None:
+            return False
+        if not require_category_fit:
+            return True
+        if fit_by_index.get(index) is True:
+            return True
+        selected_fit_rejections.append(index)
+        return False
 
     hero_index = _coerce_index(raw_hero.get("source_index"))
     if hero_index is None or hero_index > source_count:
         if raw_hero.get("source_index") not in (None, ""):
             invalid_indexes.append(raw_hero.get("source_index"))
+        hero_index = None
+    elif not accepted_for_assignment(hero_index):
         hero_index = None
 
     hero: Dict[str, Any] = {}
@@ -77,6 +121,8 @@ def normalize_assignment_plan(
             if item.get("source_index") not in (None, ""):
                 invalid_indexes.append(item.get("source_index"))
             continue
+        if not accepted_for_assignment(index):
+            continue
         if index in selected:
             duplicate_indexes.append(index)
             continue
@@ -90,15 +136,45 @@ def normalize_assignment_plan(
             break
 
     all_indexes = list(range(1, source_count + 1))
+    fit_missing_indexes = [idx for idx in all_indexes if idx not in fit_by_index] if require_category_fit else []
+    fit_accepted_indexes = [idx for idx in all_indexes if fit_by_index.get(idx) is True]
+    fit_rejected_indexes = [idx for idx in all_indexes if fit_by_index.get(idx) is False]
+    fit_complete = bool(
+        not require_category_fit
+        or (
+            len(fit_by_index) == source_count
+            and not fit_invalid_indexes
+            and not fit_duplicate_indexes
+        )
+    )
+    mapping_valid = bool(
+        hero_index is not None
+        and not invalid_indexes
+        and not duplicate_indexes
+        and not selected_fit_rejections
+        and fit_complete
+    )
     diagnostics = {
         "valid_hero": hero_index is not None,
-        "source_mapping_valid": hero_index is not None and not invalid_indexes and not duplicate_indexes,
+        "source_mapping_valid": mapping_valid,
         "selected_source_indexes": selected,
         "omitted_source_indexes": [idx for idx in all_indexes if idx not in selected],
         "invalid_source_indexes": invalid_indexes,
         "duplicate_source_indexes": duplicate_indexes,
+        "category_fit_required": bool(require_category_fit),
+        "category_fit_complete": fit_complete,
+        "category_fit_decisions": fit_decisions,
+        "category_fit_accepted_source_indexes": fit_accepted_indexes,
+        "category_fit_rejected_source_indexes": fit_rejected_indexes,
+        "category_fit_missing_source_indexes": fit_missing_indexes,
+        "category_fit_invalid_source_indexes": fit_invalid_indexes,
+        "category_fit_duplicate_source_indexes": fit_duplicate_indexes,
+        "category_fit_selected_rejections": sorted(set(selected_fit_rejections)),
     }
-    return {"hero": hero, "cards": cards}, diagnostics
+    plan: Dict[str, Any] = {"hero": hero, "cards": cards}
+    if require_category_fit:
+        plan["category_fit"] = fit_decisions
+    return plan, diagnostics
 
 
 def _variant_order(category_key: str, blind_salt: str) -> bool:
