@@ -1,7 +1,7 @@
 {
   "schema_version": 4,
   "gate_version": "1.6",
-  "generated_at": "2026-08-24T15:48:57.294777+00:00",
+  "generated_at": "2026-08-24T18:26:53.310847+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -50,15 +50,15 @@
     }
   },
   "summary": {
-    "evaluations": 68,
+    "evaluations": 69,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 68,
+    "no_candidate_passes": 69,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
+    "new_stories_allowed": 2,
     "retroactive_rows_retained": 67,
     "holds": 0,
     "retroactive_redirects": 0,
@@ -69,12 +69,12 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 7,
+    "pre_generation_materiality_evaluations": 9,
     "pre_generation_materiality_promotions": 0,
     "pre_generation_materiality_duplicates": 3,
-    "pre_generation_materiality_holds": 4,
-    "pre_generation_materiality_model_calls": 5,
-    "pre_generation_materiality_cache_hits": 2
+    "pre_generation_materiality_holds": 6,
+    "pre_generation_materiality_model_calls": 6,
+    "pre_generation_materiality_cache_hits": 3
   },
   "pre_generation_materiality_decisions": [
     {
@@ -96,12 +96,12 @@
       "confidence": 1.0,
       "shared_anchors": [],
       "novel_facts": [
-        "Ronald L. Corbin died Saturday August 23, 2026",
-        "Corbin was a choral teacher at Martin County High School for 34 years (1980-2014)",
-        "Led OPUS choir program at Martin County High School",
-        "Corbin Musical Arts Center dedicated in his name in 2015",
+        "Ronald L. Corbin died Saturday (August 23, 2026)",
+        "Choral teacher at Martin County High School for 34 years (1980-2014)",
+        "Led OPUS choir group",
         "Received kidney transplant from daughter Candice Corbin in 2018",
-        "Added to Florida Vocal Association Roll of Distinction in 2014"
+        "Corbin Musical Arts Center dedicated in his name in 2015",
+        "Received R. Wayne Hugoboom Distinguished Service Award in 2017"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -128,15 +128,15 @@
       "shared_anchors": [
         "Martin County",
         "animal hoarding case",
-        "mass-animal-hoarding:martin-county incident anchor"
+        "Humane Society of the Treasure Coast"
       ],
       "novel_facts": [
         "Paige O'Donnell as defendant",
         "36 Border Collies specifically",
         "Palm City location",
-        "72 charges",
-        "Legal surrender occurred",
-        "Dogs available for adoption starting Sept 1"
+        "72 charges filed",
+        "Legal surrender of animals on August 21, 2026",
+        "Dogs cleared for adoption beginning Sept 1"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -161,16 +161,15 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Treasure Coast region",
-        "Palm Beach County",
-        "weekend events roundup format",
-        "WPBF news source"
+        "Both are weekend event roundups for Treasure Coast and Palm Beach area",
+        "Both mention Palm City"
       ],
       "novel_facts": [
-        "Newfield Farm gardening class on August 23, 2026",
+        "August 21, 2026 weekend (vs July 27, 2026)",
+        "Newfield Farm gardening class",
         "Ukrainian Cultural Fest in West Palm Beach",
         "Delray Beach women's health event",
-        "Peggy Adams adoption event",
+        "Peggy Adams animal adoption event",
         "Loggerhead Triathlon in Jupiter"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -189,8 +188,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -226,11 +225,44 @@
       "confidence": 1.0,
       "shared_anchors": [],
       "novel_facts": [
-        "Ronald L. Corbin, choral teacher at Martin County High School for 34 years, died Saturday August 23, 2026",
-        "Corbin taught from 1980-2014 at Martin County High School in Stuart",
+        "Ronald L. Corbin died Saturday (August 23, 2026)",
+        "Choral teacher at Martin County High School for 34 years (1980-2014)",
         "Led OPUS choir program",
         "Received kidney transplant from daughter Candice Corbin in 2018",
-        "Corbin Musical Arts Center dedicated in his name in 2015"
+        "Corbin Musical Arts Center dedicated in his name in 2015",
+        "Added to Florida Vocal Association Roll of Distinction in 2014",
+        "Received R. Wayne Hugoboom Distinguished Service Award in 2017"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
+    {
+      "category_key": "martin",
+      "source_headline": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - WPEC",
+      "source_url": "https://cbs12.com/news/local/tornado-warning-issued-for-parts-of-st-lucie-martin-counties",
+      "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+      "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 1.0,
+      "shared_anchors": [
+        "Port St. Lucie location"
+      ],
+      "novel_facts": [
+        "Funnel cloud spotted Sunday evening",
+        "Tornado warning issued for southeastern St. Lucie County and northeastern Martin County through 7 p.m.",
+        "Storm expected near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
+        "Wind gusts up to 60 mph and quarter-sized hail"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -265,6 +297,33 @@
       "novel_facts": [],
       "reason": "This is exactly the same article covering the same tornado incident. Both reference the identical source URL, describe the same tornado near Jessica Clinton Park on Southbend Boulevard, mention the same affected streets (SE Wake Road, Navy Avenue, West Snow Road), and report the same NWS Monday morning damage survey. The retrieval evidence confirms this is a 'persistent_story_id_match' and 'exact_source_and_persistent_story_skip'. The incoming article contains no material updates beyond what the canonical already covers - same tornado event, same survey announcement, same damage details.",
       "validation_errors": []
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - WPEC",
+      "source_url": "https://cbs12.com/news/local/tornado-warning-issued-for-parts-of-st-lucie-martin-counties",
+      "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+      "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 1.0,
+      "shared_anchors": [
+        "Port St. Lucie",
+        "St. Lucie County"
+      ],
+      "novel_facts": [],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     },
     {
       "category_key": "st_lucie",
@@ -1579,9 +1638,28 @@
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "National Weather Service to update Port St. Lucie on possible tornado that struck Sunday",
-      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/national-weather-service-to-provide-update-on-possible-tornado-event-in-st-lucie-county",
-      "incoming_story_id": "story_005547",
+      "incoming_headline": "Sheriff's helicopter spots massive barn fire on Southwest Martin Highway in Palm City",
+      "incoming_source_url": "https://cbs12.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
+      "incoming_story_id": "story_005650",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fort Pierce man dies after BB gun shooting, suspect charged with manslaughter",
+      "incoming_source_url": "http://cbs12.com/news/crime/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
+      "incoming_story_id": "story_002417",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
