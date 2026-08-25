@@ -1,7 +1,7 @@
 {
   "schema_version": 4,
-  "gate_version": "1.6",
-  "generated_at": "2026-08-25T15:51:59.201690+00:00",
+  "gate_version": "1.7",
+  "generated_at": "2026-08-25T20:16:51.183683+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -33,6 +33,8 @@
       "effect": "candidate_only_model_adjudication_required"
     },
     "model": "claude-sonnet-4-5",
+    "angle_shifted_event_recall": "dense shared article facts may nominate a recent candidate even when headlines diverge; nomination never merges without model adjudication",
+    "independent_followup_policy": "same-event angle changes default to canonical update; a second permalink requires model-confirmed independent public-interest value plus a distinct persistent story identity",
     "material_update_composer": {
       "version": "1.0",
       "model": "claude-sonnet-4-5",
@@ -50,33 +52,31 @@
     }
   },
   "summary": {
-    "evaluations": 73,
-    "candidate_pairs": 1,
-    "structured_conflict_overrides": 1,
-    "model_calls": 1,
+    "evaluations": 67,
+    "candidate_pairs": 4,
+    "structured_conflict_overrides": 4,
+    "model_calls": 4,
     "cache_hits": 0,
-    "no_candidate_passes": 72,
-    "duplicates_preserved": 0,
-    "canonical_updates_selected": 1,
-    "new_stories_allowed": 0,
-    "retroactive_rows_retained": 72,
+    "no_candidate_passes": 63,
+    "duplicates_preserved": 1,
+    "canonical_updates_selected": 2,
+    "new_stories_allowed": 1,
+    "retroactive_rows_retained": 63,
     "holds": 0,
-    "retroactive_redirects": 0,
-    "registry_story_records_merged": 0,
-    "registry_aliases_written": 0,
-    "material_update_composer_calls": 1,
-    "material_updates_applied": 0,
-    "material_update_redirects": 0,
+    "retroactive_redirects": 2,
+    "registry_story_records_merged": 2,
+    "registry_aliases_written": 2,
+    "material_update_composer_calls": 2,
+    "material_updates_applied": 1,
+    "material_update_redirects": 1,
     "material_update_holds": 1,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 8,
+    "pre_generation_materiality_evaluations": 6,
     "pre_generation_materiality_promotions": 1,
-    "pre_generation_materiality_duplicates": 1,
-    "pre_generation_materiality_holds": 6,
-    "pre_generation_materiality_model_calls": 7,
-    "pre_generation_materiality_cache_hits": 1,
-    "late_published_skip_materiality_evaluations": 0,
-    "late_published_skip_materiality_promotions": 0
+    "pre_generation_materiality_duplicates": 0,
+    "pre_generation_materiality_holds": 5,
+    "pre_generation_materiality_model_calls": 6,
+    "pre_generation_materiality_cache_hits": 0
   },
   "pre_generation_materiality_decisions": [
     {
@@ -99,43 +99,9 @@
       "shared_anchors": [],
       "novel_facts": [
         "Structure fire on East Erie Drive in Fort Pierce on Sunday",
-        "Fire threatened mobile homes in St. Lucie County",
-        "Fire was contained to area of origin",
-        "Fire Marshal's Office investigating cause"
-      ],
-      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-      "validation_errors": [
-        "known_canonical_identity_conflict"
-      ]
-    },
-    {
-      "category_key": "business",
-      "source_headline": "Paige O'Donnell relinquishes 36 Border Collies rescued from Palm City hoarding case",
-      "source_url": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
-      "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
-      "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
-      "canonical_is_custom": true,
-      "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "known_canonical_identity_conflict",
-      "semantic_action": "hold",
-      "confidence": 0.92,
-      "shared_anchors": [
-        "Martin County location",
-        "animal hoarding case",
-        "mass-animal-hoarding:martin-county incident anchor"
-      ],
-      "novel_facts": [
-        "Paige O'Donnell is the defendant (not Gail Giustino)",
-        "36 Border Collies rescued from Palm City home",
-        "72 charges filed",
-        "Legal surrender occurred on August 21, 2026",
-        "Dogs cleared for adoption beginning September 1"
+        "Fire threatened mobile homes",
+        "Fire contained to area of origin",
+        "Fire Marshal investigating cause"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -159,91 +125,18 @@
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
       "confidence": 0.95,
-      "shared_anchors": [
-        "Treasure Coast region",
-        "Palm Beach County",
-        "weekend events roundup",
-        "WPBF news outlet"
-      ],
+      "shared_anchors": [],
       "novel_facts": [
-        "Ukrainian Cultural Fest on August 21",
-        "Newfield Farm gardening class",
-        "Delray's Hottest Party women's health event",
-        "Peggy Adams adoption event",
-        "Loggerhead Triathlon in Jupiter"
+        "Newfield Farm gardening class on Saturday Aug 21, 2026",
+        "Ukrainian Cultural Fest in West Palm Beach on Saturday",
+        "Delray's Hottest Party menopause health event",
+        "Peggy Adams Animal Rescue League name-your-price adoption event",
+        "Loggerhead Triathlon in Jupiter on Saturday"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
-    },
-    {
-      "category_key": "martin",
-      "source_headline": "Sheriff's helicopter spots massive fire in Martin County, helps firefighters save home - WPEC",
-      "source_url": "https://cbs12.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
-      "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
-      "canonical_headline": "Sheriff's helicopter crew spots garage fire on Southwest Martin Highway, helps save Palm City home",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Martin County Sheriff's Office Air One helicopter crew",
-        "Fire spotted around 10:30 p.m. Sunday night",
-        "Southwest Martin Highway location",
-        "1,600-square-foot detached garage/structure",
-        "Class C motorhome and Jeep inside destroyed",
-        "Fire contained before reaching main home",
-        "Homeowners not home at time of fire",
-        "State Fire Marshal notified"
-      ],
-      "novel_facts": [],
-      "reason": "The incoming article and candidate describe the exact same fire incident with identical specific details: helicopter crew discovery time (10:30 p.m. Sunday), exact location (Southwest Martin Highway), structure size (1,600 sq ft), vehicles destroyed (Class C motorhome and Jeep), and outcome (garage saved home). The source URLs are nearly identical, and the retrieval evidence confirms this is a persistent story match. The incoming article contains no material updates - it repeats the same facts with identical wording in many places. No new developments such as fire cause determination, damage estimates, or investigative findings are reported.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "martin",
-      "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
-      "source_url": "https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
-      "canonical_slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
-      "canonical_headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": true,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "update_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "update_existing_canonical",
-      "confidence": 0.95,
-      "shared_anchors": [
-        "Port St. Lucie tornado on August 24, 2026",
-        "Same date (2026-08-24)",
-        "Same locality (Port St. Lucie, St. Lucie)",
-        "Identical source URL (wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763)",
-        "National Weather Service damage survey mentioned in both"
-      ],
-      "novel_facts": [
-        "Tornado classified as EF0",
-        "Maximum wind gusts estimated between 65-75 mph",
-        "Specific start time: 6:10 p.m.",
-        "Precise starting coordinates: 27.253, -80.316 near SE Kitchen Cove Lane and SE Morningside Boulevard",
-        "Ending coordinates: 27.244, -80.346 near SE Quay Street and SE Cody Place",
-        "Track length: 2.1 miles",
-        "Maximum width: 200 yards",
-        "Tornado moved over St. Lucie River as a waterspout"
-      ],
-      "reason": "Same tornado event based on identical source URL, date, and location. Incoming article contains material updates: official EF0 classification, specific wind speeds, precise start time, GPS coordinates, track dimensions, and waterspout detail. These are findings from the National Weather Service survey that was only announced in the candidate.",
-      "validation_errors": []
     },
     {
       "category_key": "st_lucie",
@@ -266,8 +159,7 @@
       "novel_facts": [
         "Residential structure fire on East Erie Drive in Fort Pierce on Sunday",
         "Fire threatened mobile homes in St. Lucie County",
-        "Fire was contained to area of origin by St. Lucie County Fire District",
-        "Prevented spread to nearby mobile homes",
+        "Fire was contained to area of origin",
         "Cause under investigation by Fire Marshal's Office"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -294,11 +186,10 @@
       "confidence": 0.95,
       "shared_anchors": [],
       "novel_facts": [
-        "Structure fire on East Erie Drive in Fort Pierce",
-        "Fire occurred on Sunday",
-        "Fire threatened mobile homes",
+        "Residential structure fire on East Erie Drive in Fort Pierce on Sunday",
+        "Fire threatened mobile homes in St. Lucie County",
         "Fire was contained to area of origin",
-        "Fire Marshal's Office investigating cause"
+        "Investigation by Fire Marshal's Office underway"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -321,19 +212,55 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 1.0,
+      "confidence": 0.98,
       "shared_anchors": [],
       "novel_facts": [
-        "34-year-old man died from BB gun shooting on Avenue G",
-        "Jabari Cowart charged with manslaughter",
-        "Incident occurred Saturday August 24, 2026",
-        "Group shooting BB guns at trees when suspect asked to use one",
-        "Victim taken to HCA Florida Lawnwood Hospital where he died"
+        "34-year-old Fort Pierce man shot with BB gun on Avenue G on August 24, 2026",
+        "Suspect Jabari Cowart charged with manslaughter",
+        "Victim died at HCA Florida Lawnwood Hospital",
+        "Incident involved group shooting BB guns at trees"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
+      "source_url": "https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
+      "canonical_slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
+      "canonical_headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
+      "canonical_is_custom": false,
+      "identity_basis": "exact_source_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": true,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "update_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "update_existing_canonical",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Same date: August 24, 2026",
+        "Same location: Port St. Lucie",
+        "Same tornado event on Sunday evening",
+        "Same source URL (wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763)",
+        "Both reference National Weather Service survey"
+      ],
+      "novel_facts": [
+        "Official tornado classification as EF0",
+        "Specific wind speed estimates: 65-75 mph",
+        "Precise start time: 6:10 p.m.",
+        "Exact start location with coordinates: SE Kitchen Cove Lane and SE Morningside Boulevard (27.253, -80.316)",
+        "Exact end location with coordinates: SE Quay Street and SE Cody Place (27.244, -80.346)",
+        "Track length: 2.1 miles",
+        "Maximum width: 200 yards",
+        "Note that tornado moved over St. Lucie River as waterspout"
+      ],
+      "reason": "This is clearly the same tornado event in Port St. Lucie on August 24, 2026, from the identical source URL. The incoming article provides material new updates: the official EF0 classification, specific meteorological measurements (wind speeds, coordinates, track length, width), and precise timing. These are the results of the damage survey that was only announced as pending in the canonical candidate. This is not independently newsworthy as a separate story—it's the expected technical findings from the survey, which should update the existing canonical.",
+      "validation_errors": []
     }
   ],
   "decisions": [
@@ -349,6 +276,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -368,6 +296,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -387,6 +316,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -406,6 +336,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -425,6 +356,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -444,6 +376,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -463,6 +396,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -482,6 +416,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -501,6 +436,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -520,6 +456,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -539,6 +476,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -558,6 +496,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -577,6 +516,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -596,6 +536,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -615,6 +556,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -634,6 +576,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -653,6 +596,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -672,6 +616,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -691,6 +636,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -710,6 +656,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -722,17 +669,84 @@
       "incoming_headline": "Palm Beach County Clerk Michael Caruso extradited to Orange County jail on five felony child sex abuse charges",
       "incoming_source_url": "https://www.wptv.com/news/state/suspended-palm-beach-county-clerk-extradited-to-orange-county-jail-after-child-sex-abuse-arrest",
       "incoming_story_id": "story_004729",
-      "candidates": [],
+      "candidates": [
+        {
+          "slug": "2026-08-18-shannon-ramsey-chessman-sworn-in-as-interim-palm-beach-county-clerk-after-michae",
+          "headline": "Shannon Ramsey-Chessman sworn in as interim Palm Beach County clerk after Michael Caruso arrest",
+          "retrieval_score": 0.7112,
+          "headline_similarity": 0.4542,
+          "similarity_basis": "final_headline",
+          "shared_headline_tokens": [
+            "beach",
+            "caruso",
+            "clerk",
+            "county",
+            "michael",
+            "palm"
+          ],
+          "shared_topic_tokens": [
+            "caruso",
+            "clerk",
+            "michael",
+            "palm"
+          ],
+          "content_similarity": {
+            "score": 0.6226,
+            "overlap": 0.6842,
+            "jaccard": 0.4643,
+            "shared_token_count": 13,
+            "shared_tokens": [
+              "abuse",
+              "arrest",
+              "caruso",
+              "charge",
+              "child",
+              "clerk",
+              "court",
+              "felony",
+              "five",
+              "michael",
+              "palm",
+              "sex",
+              "suspended"
+            ]
+          },
+          "strong_content_event_continuity": true,
+          "day_gap": 1,
+          "structured_conflict_override": true,
+          "structured_conflict_override_tier": "strong_content_event_continuity",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": true,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "strong_content_event_continuity",
+            "publication_gap_1_days",
+            "structured_identity_conflict",
+            "structured_identity_conflict_overridden_by_content_continuity"
+          ]
+        }
+      ],
       "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "status": "validated",
+        "action": "update_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-08-18-shannon-ramsey-chessman-sworn-in-as-interim-palm-beach-county-clerk-after-michae",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [
+          "Michael Caruso, Palm Beach County Clerk of Court",
+          "Five felony child sex abuse charges",
+          "Caruso age 67",
+          "Suspended from office by Gov. Ron DeSantis",
+          "Same arrest incident"
+        ],
+        "novel_facts": [
+          "Caruso was extradited to Orange County jail on Wednesday",
+          "Transfer occurred one day after initial arrest and suspension"
+        ],
+        "reason": "Both articles cover the same underlying event: Michael Caruso's arrest on five felony child sex abuse charges and suspension from his role as Palm Beach County Clerk. The incoming article provides a material update—Caruso's extradition to Orange County jail on Wednesday, which is a significant procedural development following his Tuesday arrest. However, this is a routine legal step in the criminal process, not an independently newsworthy follow-up that would merit a separate story. The extradition detail should be added to the existing canonical article about his arrest and suspension.",
         "validation_errors": []
       }
     },
@@ -741,17 +755,82 @@
       "incoming_headline": "Miami woman accused of scamming Martin County seniors hid $3,200 in her body during jail intake",
       "incoming_source_url": "https://cbs12.com/news/local/florida-crime-news-woman-accused-of-hiding-smuggling-3200-dollars-in-her-body-vagina-during-martin-county-arrest-faces-new-charges-elderly-victim-bank-scam-biohazard-money-felony-scheme-to-defraud",
       "incoming_story_id": "story_004694",
-      "candidates": [],
+      "candidates": [
+        {
+          "slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
+          "headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
+          "retrieval_score": 0.6523,
+          "headline_similarity": 0.4632,
+          "similarity_basis": "final_headline",
+          "shared_headline_tokens": [
+            "body",
+            "county",
+            "martin",
+            "miami",
+            "woman"
+          ],
+          "shared_topic_tokens": [
+            "body",
+            "miami",
+            "woman"
+          ],
+          "content_similarity": {
+            "score": 0.4505,
+            "overlap": 0.5238,
+            "jaccard": 0.2619,
+            "shared_token_count": 11,
+            "shared_tokens": [
+              "arrest",
+              "bank",
+              "body",
+              "cash",
+              "hiding",
+              "miami",
+              "posing",
+              "representative",
+              "scam",
+              "she",
+              "woman"
+            ]
+          },
+          "strong_content_event_continuity": true,
+          "day_gap": 0,
+          "structured_conflict_override": true,
+          "structured_conflict_override_tier": "strong_content_event_continuity",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": true,
+          "reasons": [
+            "strong_content_event_continuity",
+            "publication_gap_0_days",
+            "structured_identity_conflict",
+            "structured_identity_conflict_overridden_by_content_continuity"
+          ]
+        }
+      ],
       "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "status": "validated",
+        "action": "update_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [
+          "Miami woman arrested in Martin County",
+          "Posed as bank representative to scam seniors/residents",
+          "Hid cash in her body",
+          "Martin County Sheriff's Office involvement",
+          "Same arrest date August 19, 2026"
+        ],
+        "novel_facts": [
+          "Specific amount hidden: $3,180",
+          "Woman identified as Monquie Love Turnbull, age 32",
+          "Additional charge for smuggling cash during jail intake",
+          "Money characterized as biohazard",
+          "New felony charges beyond original scam charges"
+        ],
+        "reason": "Both articles cover the same arrest of a Miami woman in Martin County who posed as a bank representative to scam elderly victims and hid cash in her body. The incoming article provides material updates including the suspect's name (Monquie Love Turnbull), age (32), the specific amount hidden ($3,180), and crucially that she now faces additional charges for smuggling the cash during jail intake. This is a material development - new criminal charges arising from her conduct during booking - that readers need to know and should update the existing canonical rather than create a separate URL.",
         "validation_errors": []
       }
     },
@@ -767,6 +846,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -786,6 +866,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -805,6 +886,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -824,6 +906,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -843,6 +926,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -862,6 +946,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -881,6 +966,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -900,6 +986,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -919,6 +1006,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -938,6 +1026,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -957,6 +1046,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -976,6 +1066,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -995,6 +1086,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1014,6 +1106,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1033,6 +1126,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1052,6 +1146,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1071,6 +1166,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1090,6 +1186,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1109,6 +1206,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1128,6 +1226,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1147,6 +1246,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1166,6 +1266,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1185,6 +1286,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1204,6 +1306,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1223,6 +1326,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1242,6 +1346,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1261,6 +1366,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1280,6 +1386,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1299,6 +1406,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1318,6 +1426,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1337,6 +1446,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1356,6 +1466,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1375,6 +1486,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1394,6 +1506,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1405,37 +1518,79 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Indian River County sheriff credits Flock Safety cameras in Vero Beach homicide arrest, sparking privacy debate",
       "incoming_source_url": "https://www.wptv.com/news/treasure-coast/community-divided-over-flock-safety-cameras-after-treasure-coast-homicide-arrest",
-      "incoming_story_id": "story_001592",
-      "candidates": [],
+      "incoming_story_id": "story_005818",
+      "candidates": [
+        {
+          "slug": "2026-08-21-sheriff-eric-flowers-credits-flock-license-plate-readers-in-vero-beach-murder-in",
+          "headline": "Sheriff Eric Flowers credits Flock license plate readers in Vero Beach murder investigation",
+          "retrieval_score": 0.7086,
+          "headline_similarity": 0.4784,
+          "similarity_basis": "final_headline",
+          "shared_headline_tokens": [
+            "beach",
+            "credits",
+            "flock",
+            "sheriff",
+            "vero"
+          ],
+          "shared_topic_tokens": [
+            "credits",
+            "flock",
+            "sheriff"
+          ],
+          "content_similarity": {
+            "score": 0.3645,
+            "overlap": 0.4091,
+            "jaccard": 0.25,
+            "shared_token_count": 9,
+            "shared_tokens": [
+              "credited",
+              "credits",
+              "eric",
+              "flock",
+              "flowers",
+              "license",
+              "plate",
+              "sheriff",
+              "suspect"
+            ]
+          },
+          "strong_content_event_continuity": true,
+          "day_gap": 2,
+          "structured_conflict_override": true,
+          "structured_conflict_override_tier": "strong_content_event_continuity",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": true,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "strong_content_event_continuity",
+            "publication_gap_2_days",
+            "structured_identity_conflict",
+            "structured_identity_conflict_overridden_by_content_continuity"
+          ]
+        }
+      ],
       "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
+        "status": "validated",
+        "action": "duplicate_use_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-08-21-sheriff-eric-flowers-credits-flock-license-plate-readers-in-vero-beach-murder-in",
+        "same_real_world_event": true,
         "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
-      "incoming_source_url": "https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
-      "incoming_story_id": "story_005547",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "independently_newsworthy_followup": false,
+        "confidence": 0.85,
+        "shared_anchors": [
+          "Sheriff Eric Flowers",
+          "Indian River County Sheriff",
+          "Flock license plate readers/cameras",
+          "Vero Beach homicide/murder",
+          "Arrest credited to technology"
+        ],
+        "novel_facts": [
+          "Community privacy debate angle",
+          "Community divided perspective"
+        ],
+        "reason": "Both articles cover the same real-world event: Sheriff Eric Flowers crediting Flock Safety license plate reader technology for helping make an arrest in a Vero Beach homicide case. The shared anchors are specific and concrete: same named sheriff, same agency, same technology (Flock), same locality, and same incident type. The incoming article (Aug 23) appears to be a follow-up angle focusing on community privacy debate sparked by the arrest announcement, but this is not independently newsworthy—it's a reaction/angle story about the same underlying arrest and technology use. The privacy debate context should be incorporated into the existing canonical rather than creating a new URL, as it doesn't introduce a distinct accountability finding, policy action, or investigation that would merit its own story independent of knowing about the arrest.",
         "validation_errors": []
       }
     },
@@ -1451,6 +1606,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1463,17 +1619,71 @@
       "incoming_headline": "Fort Pierce man identified as Jabari Cowart in fatal BB gun shooting on Avenue G",
       "incoming_source_url": "http://cbs12.com/news/crime/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
       "incoming_story_id": "story_002417",
-      "candidates": [],
+      "candidates": [
+        {
+          "slug": "2026-08-23-fort-pierce-police-identify-suspect-in-south-14th-street-homicide-from-july",
+          "headline": "Fort Pierce police identify suspect in South 14th Street homicide from July",
+          "retrieval_score": 0.667,
+          "headline_similarity": 0.44,
+          "similarity_basis": "final_headline",
+          "shared_headline_tokens": [
+            "fort",
+            "pierce"
+          ],
+          "shared_topic_tokens": [
+            "fort",
+            "pierce"
+          ],
+          "content_similarity": {
+            "score": 0.3498,
+            "overlap": 0.3913,
+            "jaccard": 0.2432,
+            "shared_token_count": 9,
+            "shared_tokens": [
+              "deadly",
+              "fort",
+              "identified",
+              "old",
+              "pierce",
+              "police",
+              "shooting",
+              "suspect",
+              "year"
+            ]
+          },
+          "strong_content_event_continuity": true,
+          "day_gap": 1,
+          "structured_conflict_override": true,
+          "structured_conflict_override_tier": "strong_content_event_continuity",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": true,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "strong_content_event_continuity",
+            "publication_gap_1_days",
+            "structured_identity_conflict",
+            "structured_identity_conflict_overridden_by_content_continuity"
+          ]
+        }
+      ],
       "decision": {
-        "status": "no_candidates",
+        "status": "validated",
         "action": "new_story",
+        "recommended_action": "new_story",
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
-        "confidence": 1.0,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
         "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "novel_facts": [
+          "Jabari Cowart identified as 36-year-old suspect",
+          "34-year-old victim died from BB gun shooting",
+          "Incident occurred Saturday in 2900 block of Avenue G",
+          "Suspect charged with manslaughter",
+          "Weapon was a BB gun"
+        ],
+        "reason": "These are clearly different incidents. The incoming article is about Jabari Cowart (36) charged with manslaughter after a fatal BB gun shooting on Avenue G. The candidate is about Cornelius Trevo (28) arrested for a July 5 homicide on South 14th Street. Different suspects, different victims, different locations (Avenue G vs South 14th Street), different dates (Saturday Aug 23 vs July 5), different weapons (BB gun vs unspecified shooting). The only commonality is Fort Pierce location and shooting event type, which is insufficient for same-event determination.",
         "validation_errors": []
       }
     },
@@ -1489,6 +1699,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1508,6 +1719,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1527,6 +1739,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1546,6 +1759,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1565,25 +1779,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "EF0 tornado touches down in Port St. Lucie, damages 20 to 30 homes along 2-mile path",
-      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/national-weather-service-to-provide-update-on-possible-tornado-event-in-st-lucie-county",
-      "incoming_story_id": "story_005569",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1603,77 +1799,11 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
-      "incoming_source_url": "https://cbs12.com/news/local/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday",
-      "incoming_story_id": "story_005683",
-      "candidates": [
-        {
-          "slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
-          "headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
-          "retrieval_score": 0.7781,
-          "headline_similarity": 0.6181,
-          "similarity_basis": "final_headline",
-          "shared_headline_tokens": [
-            "down",
-            "lucie",
-            "national",
-            "port",
-            "service",
-            "st",
-            "tornado",
-            "weather"
-          ],
-          "shared_topic_tokens": [
-            "down",
-            "national",
-            "service",
-            "tornado",
-            "weather"
-          ],
-          "day_gap": 0,
-          "structured_conflict_override": true,
-          "structured_conflict_override_tier": "distinctive_token_overlap",
-          "incident_anchor_conflict": false,
-          "known_event_key_conflict": true,
-          "reasons": [
-            "moderate_fuzzy_headline",
-            "shared_incident_anchor",
-            "publication_gap_0_days",
-            "structured_identity_conflict",
-            "structured_identity_conflict_overridden_by_distinctive_overlap"
-          ]
-        }
-      ],
-      "decision": {
-        "status": "validated",
-        "action": "update_existing_canonical",
-        "recommended_action": "update_existing_canonical",
-        "selected_candidate_slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
-        "same_real_world_event": true,
-        "material_new_update": true,
-        "confidence": 0.95,
-        "shared_anchors": [
-          "Tornado in Port St. Lucie on Sunday evening",
-          "National Weather Service survey/assessment",
-          "Same location: Southbend Boulevard",
-          "Same date: August 24, 2026 (published date indicates Sunday evening event)"
-        ],
-        "novel_facts": [
-          "EF-0 classification confirmed by National Weather Service",
-          "Peak winds of 75 mph confirmed",
-          "Emergency alerts arrived 20 minutes after storm passed (timing issue raised)",
-          "Additional damage locations: Southeast Kitchen Cove Lane, Southeast Morningside Boulevard"
-        ],
-        "reason": "Both articles cover the same tornado touchdown in Port St. Lucie on Sunday evening near Southbend Boulevard. The incoming article contains material updates: the National Weather Service has now confirmed the tornado classification (EF-0) and wind speed (75 mph), whereas the candidate only mentioned that a survey would be conducted Monday. The EF rating and wind speed are significant factual updates that readers need to know.",
         "validation_errors": []
       }
     },
@@ -1689,6 +1819,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1697,10 +1828,10 @@
       }
     },
     {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Tornado moves through Port St. Lucie neighborhood on Hurricane Andrew anniversary",
-      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/ef-0-tornado-tears-through-port-st-lucie-residents-clean-up-debris-and-damaged-structures",
-      "incoming_story_id": "story_005702",
+      "phase": "forward_publication",
+      "incoming_headline": "Vero Beach man crashes while fleeing deputies, K9 finds him hiding under brush",
+      "incoming_source_url": "https://cbs12.com/news/local/vero-beach-man-crashes-while-fleeing-deputies-k9-finds-him-hiding-under-brush-vero-beach-indian-river-county-indian-river-county-sheriff-christopher-john-baptist-fleeing-deputies-fleeing-and-eluding-high-speed-chase-police-pursuit-deputy-pursuit",
+      "incoming_story_id": "story_005892",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1708,63 +1839,7 @@
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
-      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
-      "incoming_story_id": "story_005782",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Radar limitations made it difficult to detect Port St. Lucie tornado, meteorologist says",
-      "incoming_source_url": "https://cbs12.com/news/local/why-some-port-st-lucie-residents-didnt-get-a-tornado-warning-until-after-it-hit-alert-aug-24-2026",
-      "incoming_story_id": "story_005808",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Port St. Lucie residents describe frightening sounds and damage from EF-0 tornado",
-      "incoming_source_url": "https://www.wpbf.com/article/florida-tornado-weather-city-scared-residents/73514064",
-      "incoming_story_id": "story_005718",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
+        "independently_newsworthy_followup": false,
         "confidence": 1.0,
         "shared_anchors": [],
         "novel_facts": [],
@@ -1773,77 +1848,256 @@
       }
     }
   ],
-  "archive_repairs": [],
+  "archive_repairs": [
+    {
+      "source_slug": "2026-08-23-indian-river-county-sheriff-credits-flock-safety-cameras-in-vero-beach-homicide",
+      "target_slug": "2026-08-21-sheriff-eric-flowers-credits-flock-license-plate-readers-in-vero-beach-murder-in",
+      "source_story_id": "story_005818",
+      "target_story_id": "story_004903",
+      "source_url": "https://www.wptv.com/news/treasure-coast/community-divided-over-flock-safety-cameras-after-treasure-coast-homicide-arrest",
+      "source_headline": "Indian River County sheriff credits Flock Safety cameras in Vero Beach homicide arrest, sparking privacy debate",
+      "target_headline": "Sheriff Eric Flowers credits Flock license plate readers in Vero Beach murder investigation",
+      "confidence": 0.85,
+      "shared_anchors": [
+        "Sheriff Eric Flowers",
+        "Indian River County Sheriff",
+        "Flock license plate readers/cameras",
+        "Vero Beach homicide/murder",
+        "Arrest credited to technology"
+      ]
+    }
+  ],
   "material_update_compositions": [
     {
       "phase": "retroactive_recent_archive_repair",
-      "canonical_slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
-      "incoming_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
+      "canonical_slug": "2026-08-18-shannon-ramsey-chessman-sworn-in-as-interim-palm-beach-county-clerk-after-michae",
+      "incoming_slug": "2026-08-19-palm-beach-county-clerk-michael-caruso-extradited-to-orange-county-jail-on-five",
       "status": "invalid_composition",
       "validation_errors": [
         "body_too_short"
       ],
-      "word_count": 156,
+      "word_count": 139,
       "paragraph_count": 4,
       "baseline_lead_hits": [
-        "down",
-        "lucie",
-        "monday",
-        "national",
-        "port",
-        "service",
-        "tornado",
-        "weather"
+        "beach",
+        "caruso",
+        "clerk",
+        "michael",
+        "palm"
       ],
       "novelty_lead_hits": [
-        "classification",
-        "confirmed",
-        "evening",
-        "mph",
-        "peak",
-        "winds"
+        "day",
+        "extradited",
+        "jail",
+        "orange"
       ],
       "reason": "composition_not_validated"
+    },
+    {
+      "phase": "retroactive_recent_archive_repair",
+      "canonical_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
+      "incoming_slug": "2026-08-19-miami-woman-accused-of-scamming-martin-county-seniors-hid-3200-in-her-body-durin",
+      "status": "validated",
+      "validation_errors": [],
+      "word_count": 195,
+      "paragraph_count": 4,
+      "baseline_lead_hits": [
+        "arrested",
+        "bank",
+        "body",
+        "cash",
+        "martin",
+        "miami",
+        "posing",
+        "representative",
+        "woman"
+      ],
+      "novelty_lead_hits": [
+        "180",
+        "additional",
+        "charge",
+        "deputies",
+        "during",
+        "faces",
+        "her",
+        "hid",
+        "intake",
+        "jail",
+        "love",
+        "monquie",
+        "say",
+        "seniors",
+        "she",
+        "smuggled",
+        "turnbull"
+      ],
+      "headline_alignment": {
+        "aligned": false,
+        "reason": "headline_slug_event_drift",
+        "token_similarity": 0.2105,
+        "date_gap_days": 6,
+        "prospective": true,
+        "existing_headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
+        "incoming_headline": "Miami woman accused of scamming Martin County seniors faces additional charge for hiding $3,180 in body during jail intake",
+        "candidate_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
+        "prospective_lastmod": "2026-08-25",
+        "timestamp_evidence": "stored_archive_timestamp"
+      },
+      "headline_preserved_for_permalink_alignment": true,
+      "context_diagnostics": {
+        "required": true,
+        "passed": true,
+        "story_form": "update",
+        "lead_word_count": 73,
+        "baseline_anchor": "",
+        "baseline_present": true,
+        "baseline_anchor_present": true,
+        "baseline_details_present": true,
+        "baseline_context_hits": [
+          "arrested",
+          "bank",
+          "body",
+          "cash",
+          "martin",
+          "miami",
+          "posing",
+          "representative",
+          "woman"
+        ],
+        "baseline_context_required": 2,
+        "canonical_context_available": true,
+        "canonical_context_headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
+        "novelty_anchor": "arrest_or_charge",
+        "novelty_present": true,
+        "novelty_token_hits": [
+          "faces"
+        ],
+        "missing": [],
+        "source_title": "Woman accused of hiding $3,200 in her body during Martin County arrest faces new charges - WPEC",
+        "headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body"
+      },
+      "headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body"
     }
   ],
-  "material_updates": [],
+  "material_updates": [
+    {
+      "source_slug": "2026-08-19-miami-woman-accused-of-scamming-martin-county-seniors-hid-3200-in-her-body-durin",
+      "target_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
+      "source_story_id": "story_004694",
+      "target_story_id": "story_004692",
+      "source_url": "https://cbs12.com/news/local/florida-crime-news-woman-accused-of-hiding-smuggling-3200-dollars-in-her-body-vagina-during-martin-county-arrest-faces-new-charges-elderly-victim-bank-scam-biohazard-money-felony-scheme-to-defraud",
+      "source_headline": "Miami woman accused of scamming Martin County seniors hid $3,200 in her body during jail intake",
+      "updated_headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Miami woman arrested in Martin County",
+        "Posed as bank representative to scam seniors/residents",
+        "Hid cash in her body",
+        "Martin County Sheriff's Office involvement",
+        "Same arrest date August 19, 2026"
+      ],
+      "novel_facts": [
+        "Specific amount hidden: $3,180",
+        "Woman identified as Monquie Love Turnbull, age 32",
+        "Additional charge for smuggling cash during jail intake",
+        "Money characterized as biohazard",
+        "New felony charges beyond original scam charges"
+      ],
+      "updated_at": "2026-08-25T20:15:52Z",
+      "composition": {
+        "phase": "retroactive_recent_archive_repair",
+        "canonical_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
+        "incoming_slug": "2026-08-19-miami-woman-accused-of-scamming-martin-county-seniors-hid-3200-in-her-body-durin",
+        "status": "validated",
+        "validation_errors": [],
+        "word_count": 195,
+        "paragraph_count": 4,
+        "baseline_lead_hits": [
+          "arrested",
+          "bank",
+          "body",
+          "cash",
+          "martin",
+          "miami",
+          "posing",
+          "representative",
+          "woman"
+        ],
+        "novelty_lead_hits": [
+          "180",
+          "additional",
+          "charge",
+          "deputies",
+          "during",
+          "faces",
+          "her",
+          "hid",
+          "intake",
+          "jail",
+          "love",
+          "monquie",
+          "say",
+          "seniors",
+          "she",
+          "smuggled",
+          "turnbull"
+        ],
+        "headline_alignment": {
+          "aligned": false,
+          "reason": "headline_slug_event_drift",
+          "token_similarity": 0.2105,
+          "date_gap_days": 6,
+          "prospective": true,
+          "existing_headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
+          "incoming_headline": "Miami woman accused of scamming Martin County seniors faces additional charge for hiding $3,180 in body during jail intake",
+          "candidate_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
+          "prospective_lastmod": "2026-08-25",
+          "timestamp_evidence": "stored_archive_timestamp"
+        },
+        "headline_preserved_for_permalink_alignment": true,
+        "context_diagnostics": {
+          "required": true,
+          "passed": true,
+          "story_form": "update",
+          "lead_word_count": 73,
+          "baseline_anchor": "",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "arrested",
+            "bank",
+            "body",
+            "cash",
+            "martin",
+            "miami",
+            "posing",
+            "representative",
+            "woman"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
+          "novelty_anchor": "arrest_or_charge",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "faces"
+          ],
+          "missing": [],
+          "source_title": "Woman accused of hiding $3,200 in her body during Martin County arrest faces new charges - WPEC",
+          "headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body"
+        },
+        "headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body"
+      }
+    }
+  ],
   "registry_consolidation": {
-    "status": "no_changes",
-    "directives_considered": 2,
-    "story_records_merged": 0,
-    "aliases_written": 0,
+    "status": "consolidated",
+    "directives_considered": 3,
+    "story_records_merged": 2,
+    "aliases_written": 2,
     "already_consolidated": 0,
     "skipped": [
-      {
-        "source_story_id": "story_005809",
-        "target_story_id": "story_002417",
-        "target_slug": "2026-08-24-fort-pierce-man-dies-after-bb-gun-shooting-suspect-charged-with-manslaughter",
-        "incoming_headline": "Fort Pierce man charged with manslaughter after BB gun shooting near elementary school",
-        "confidence": 0.95,
-        "shared_anchors": [
-          "34-year-old victim killed by BB gun",
-          "Fort Pierce location on Avenue G",
-          "Saturday shooting date",
-          "Suspect charged with manslaughter",
-          "Fort Pierce Police Department investigating"
-        ],
-        "reason": "Both articles describe the same Saturday BB gun fatal shooting in Fort Pierce on Avenue G involving a 34-year-old victim and manslaughter charge. The incoming article adds significant material updates: the suspect's identity (Jabari Cowart, 36), the specific block address (2900 block of Avenue G), detailed circumstances of the incident (group shooting at trees, suspect asked to use gun), and current custody location (St. Lucie County jail). These are material facts that change what readers need to know about this case.",
-        "relationship_type": "material_update",
-        "novel_facts": [
-          "Suspect identified as Jabari Cowart, age 36",
-          "Specific address: 2900 block of Avenue G",
-          "Context: group of men in 30s shooting BB gun at trees",
-          "Suspect asked to use BB gun before shooting victim",
-          "Suspect held at St. Lucie County jail",
-          "Location described as near elementary school"
-        ],
-        "reason_code": "merge_would_contaminate_target",
-        "quarantine_reasons": [
-          "unsupported_sparse_event_merge"
-        ],
-        "resolved_source_story_id": "story_005809",
-        "resolved_target_story_id": "story_002417"
-      },
       {
         "source_story_id": "story_003665",
         "target_story_id": "story_003121",
@@ -1905,54 +2159,55 @@
         ]
       }
     ],
-    "rejected_directives": [
+    "rejected_directives": [],
+    "merges": [
       {
-        "source_story_id": "story_005809",
-        "target_story_id": "story_002417",
-        "target_slug": "2026-08-24-fort-pierce-man-dies-after-bb-gun-shooting-suspect-charged-with-manslaughter",
-        "incoming_headline": "Fort Pierce man charged with manslaughter after BB gun shooting near elementary school",
+        "source_story_id": "story_004694",
+        "target_story_id": "story_004692",
+        "target_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
+        "incoming_headline": "Miami woman accused of scamming Martin County seniors hid $3,200 in her body during jail intake",
         "confidence": 0.95,
         "shared_anchors": [
-          "34-year-old victim killed by BB gun",
-          "Fort Pierce location on Avenue G",
-          "Saturday shooting date",
-          "Suspect charged with manslaughter",
-          "Fort Pierce Police Department investigating"
+          "Miami woman arrested in Martin County",
+          "Posed as bank representative to scam seniors/residents",
+          "Hid cash in her body",
+          "Martin County Sheriff's Office involvement",
+          "Same arrest date August 19, 2026"
         ],
-        "reason": "Both articles describe the same Saturday BB gun fatal shooting in Fort Pierce on Avenue G involving a 34-year-old victim and manslaughter charge. The incoming article adds significant material updates: the suspect's identity (Jabari Cowart, 36), the specific block address (2900 block of Avenue G), detailed circumstances of the incident (group shooting at trees, suspect asked to use gun), and current custody location (St. Lucie County jail). These are material facts that change what readers need to know about this case.",
+        "reason": "Both articles cover the same arrest of a Miami woman in Martin County who posed as a bank representative to scam elderly victims and hid cash in her body. The incoming article provides material updates including the suspect's name (Monquie Love Turnbull), age (32), the specific amount hidden ($3,180), and crucially that she now faces additional charges for smuggling the cash during jail intake. This is a material development - new criminal charges arising from her conduct during booking - that readers need to know and should update the existing canonical rather than create a separate URL.",
         "relationship_type": "material_update",
         "novel_facts": [
-          "Suspect identified as Jabari Cowart, age 36",
-          "Specific address: 2900 block of Avenue G",
-          "Context: group of men in 30s shooting BB gun at trees",
-          "Suspect asked to use BB gun before shooting victim",
-          "Suspect held at St. Lucie County jail",
-          "Location described as near elementary school"
+          "Specific amount hidden: $3,180",
+          "Woman identified as Monquie Love Turnbull, age 32",
+          "Additional charge for smuggling cash during jail intake",
+          "Money characterized as biohazard",
+          "New felony charges beyond original scam charges"
         ],
-        "reason_code": "merge_would_contaminate_target",
-        "quarantine_reasons": [
-          "unsupported_sparse_event_merge"
+        "resolved_source_story_id": "story_004694",
+        "resolved_target_story_id": "story_004692"
+      },
+      {
+        "source_story_id": "story_005818",
+        "target_story_id": "story_004903",
+        "target_slug": "2026-08-21-sheriff-eric-flowers-credits-flock-license-plate-readers-in-vero-beach-murder-in",
+        "incoming_headline": "Indian River County sheriff credits Flock Safety cameras in Vero Beach homicide arrest, sparking privacy debate",
+        "confidence": 0.85,
+        "shared_anchors": [
+          "Sheriff Eric Flowers",
+          "Indian River County Sheriff",
+          "Flock license plate readers/cameras",
+          "Vero Beach homicide/murder",
+          "Arrest credited to technology"
         ],
-        "resolved_source_story_id": "story_005809",
-        "resolved_target_story_id": "story_002417"
+        "reason": "Both articles cover the same real-world event: Sheriff Eric Flowers crediting Flock Safety license plate reader technology for helping make an arrest in a Vero Beach homicide case. The shared anchors are specific and concrete: same named sheriff, same agency, same technology (Flock), same locality, and same incident type. The incoming article (Aug 23) appears to be a follow-up angle focusing on community privacy debate sparked by the arrest announcement, but this is not independently newsworthy—it's a reaction/angle story about the same underlying arrest and technology use. The privacy debate context should be incorporated into the existing canonical rather than creating a new URL, as it doesn't introduce a distinct accountability finding, policy action, or investigation that would merit its own story independent of knowing about the arrest.",
+        "relationship_type": "duplicate",
+        "novel_facts": [
+          "Community privacy debate angle",
+          "Community divided perspective"
+        ],
+        "resolved_source_story_id": "story_001557",
+        "resolved_target_story_id": "story_004903"
       }
-    ],
-    "merges": []
-  },
-  "late_published_skip_materiality_decisions": [
-    {
-      "phase": "late_published_skip_write_barrier",
-      "source_headline": "Ronald L. Corbin, beloved choral teacher at Martin County High School for 34 years, dies - WPBF",
-      "source_url": "https://www.wpbf.com/article/ronald-l-corbin-beloved-choral-teacher-at-martin-high-school-for-34-years-dies/73506173",
-      "canonical_slug": "2026-08-23-indian-river-county-sheriff-credits-flock-safety-cameras-in-vero-beach-homicide",
-      "canonical_headline": "Indian River County sheriff credits Flock Safety cameras in Vero Beach homicide arrest, sparking privacy debate",
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
-      "eligibility_reason": "insufficient_source_depth",
-      "evaluated": false,
-      "promoted": false,
-      "cache_hit": false,
-      "model_call": false,
-      "action": "preserve_existing_canonical"
-    }
-  ]
+    ]
+  }
 }
