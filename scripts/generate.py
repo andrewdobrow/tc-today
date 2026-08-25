@@ -7157,7 +7157,33 @@ def _category_story_is_stale(item, archive, published_raw="", now=None):
                 "confirm", "announc", "release", "issue", "findings", "survey",
                 "identify", "rule", "approve", "vote", "filed", "officially",
             )
-            if current_day_present and any(term in lead for term in update_terms):
+            # A fresh timestamp alone is not enough to revive an old incident.
+            # The no-weekday exemption is intentionally limited to explicit official
+            # findings/status determinations in the current headline/teaser. Generic
+            # incident verbs such as "arrested" or "charged" can describe the old
+            # event itself and therefore still need current-day evidence.
+            update_surface = (
+                str(item.get("headline") or "") + " "
+                + str(item.get("teaser") or "")
+            ).lower()[:500]
+            completed_official_update = bool(re.search(
+                r"\b(?:confirms?|confirmed|determines?|determined|rules?|ruled|"
+                r"approves?|approved|rejects?|rejected|declares?|declared|lifts?|lifted)\b",
+                update_surface,
+            )) or bool(
+                re.search(
+                    r"\b(?:survey|investigation)\b.{0,90}\b(?:finds?|found|confirmed|determined)\b",
+                    update_surface,
+                )
+            )
+            forward_only = bool(re.search(
+                r"\b(?:will|plans? to|expected to|scheduled to|set to)\b.{0,100}"
+                r"\b(?:survey|announce|release|vote|rule|meet|decide)\b",
+                lead,
+            ))
+            if (
+                current_day_present and any(term in lead for term in update_terms)
+            ) or (completed_official_update and not forward_only):
                 return False
 
     stale_days = {
@@ -27635,32 +27661,71 @@ def write_archives(all_categories, top_cat):
 
         _skip_canonical, _skip_basis = _published_skip_canonical(hero, archive)
         if _skip_canonical is not None:
-            _finalize_cross_source_identity_observation(
-                hero, "preserve_existing_page_no_rewrite"
-            )
-            _bind_live_item_to_archive(
+            _late_update, _late_materiality = _late_published_skip_material_update_promotion(
                 hero,
                 _skip_canonical,
-                current_customs=_current_customs,
-                replace_with_custom=bool(
-                    _skip_canonical.get("is_custom")
-                    or _skip_canonical.get("authoritative_custom")
-                ),
+                _skip_basis,
+                _semantic_gate_cache,
+                _semantic_gate_report,
             )
-            _forward_identity_report.setdefault("published_skip_preservations", []).append({
-                "headline": headline,
-                "source_url": normalized_source_url,
-                "editorial_story_id": _editorial_story_id,
-                "canonical_slug": _skip_canonical.get("slug", ""),
-                "canonical_headline": _skip_canonical.get("headline", ""),
-                "basis": _skip_basis,
-                "action": "preserve_existing_page_no_rewrite",
-            })
-            print(
-                "  PUBLISHED STORY SKIP: preserved canonical page "
-                f"'{_skip_canonical.get('slug','')}' for '{headline[:60]}'"
-            )
-            continue
+            if _late_materiality is not None:
+                _semantic_gate_report.setdefault(
+                    "late_published_skip_materiality_decisions", []
+                ).append(copy.deepcopy(_late_materiality))
+                _semantic_gate_report["summary"]["late_published_skip_materiality_evaluations"] = int(
+                    _semantic_gate_report["summary"].get(
+                        "late_published_skip_materiality_evaluations", 0
+                    ) or 0
+                ) + int(bool(_late_materiality.get("evaluated")))
+                _semantic_gate_report["summary"]["late_published_skip_materiality_promotions"] = int(
+                    _semantic_gate_report["summary"].get(
+                        "late_published_skip_materiality_promotions", 0
+                    ) or 0
+                ) + int(bool(_late_materiality.get("promoted")))
+            if _late_update is not None:
+                hero.clear()
+                hero.update(_late_update)
+                headline = str(hero.get("headline") or headline)
+                existing = _skip_canonical
+                _editorial_story_id = str(
+                    existing.get("editorial_story_id") or _editorial_story_id or ""
+                )
+                _target_basis = "late_published_skip_material_update"
+                _finalize_cross_source_identity_observation(
+                    hero, "late_published_skip_material_update"
+                )
+                print(
+                    "  LATE MATERIAL UPDATE ROUTE: refreshed canonical page "
+                    f"'{existing.get('slug','')}' for '{headline[:60]}'"
+                )
+            else:
+                _finalize_cross_source_identity_observation(
+                    hero, "preserve_existing_page_no_rewrite"
+                )
+                _bind_live_item_to_archive(
+                    hero,
+                    _skip_canonical,
+                    current_customs=_current_customs,
+                    replace_with_custom=bool(
+                        _skip_canonical.get("is_custom")
+                        or _skip_canonical.get("authoritative_custom")
+                    ),
+                )
+                _forward_identity_report.setdefault("published_skip_preservations", []).append({
+                    "headline": headline,
+                    "source_url": normalized_source_url,
+                    "editorial_story_id": _editorial_story_id,
+                    "canonical_slug": _skip_canonical.get("slug", ""),
+                    "canonical_headline": _skip_canonical.get("headline", ""),
+                    "basis": _skip_basis,
+                    "action": "preserve_existing_page_no_rewrite",
+                    "late_materiality": copy.deepcopy(_late_materiality or {}),
+                })
+                print(
+                    "  PUBLISHED STORY SKIP: preserved canonical page "
+                    f"'{_skip_canonical.get('slug','')}' for '{headline[:60]}'"
+                )
+                continue
 
         _target_valid, _target_reason = _forward_publication_target_valid(
             hero, existing, _editorial_story_id, _target_basis
@@ -29725,7 +29790,9 @@ def _published_skip_material_update_candidate(item, canonical):
     return True, "newer_source_requires_materiality_decision"
 
 
-def _run_known_canonical_materiality_gate(item, canonical, cache, *, basis=""):
+def _run_known_canonical_materiality_gate(
+    item, canonical, cache, *, basis="", consume_pre_generation_budget=True
+):
     """Decide materiality before a proven same-story source is suppressed.
 
     Identity has already been established by ``_published_skip_canonical``.  This
@@ -29768,22 +29835,22 @@ def _run_known_canonical_materiality_gate(item, canonical, cache, *, basis=""):
     if cache_key and _semantic_gate_cached_decision_valid(cached_decision, candidates):
         return copy.deepcopy(cached_decision), candidates, True, False
 
-    if CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS >= PREGEN_MATERIAL_UPDATE_MAX_MODEL_CALLS:
-        return {
-            "status": "pre_generation_materiality_budget_exhausted",
-            "action": SEMANTIC_ACTION_HOLD,
-            "recommended_action": SEMANTIC_ACTION_HOLD,
-            "selected_candidate_slug": "",
-            "same_real_world_event": True,
-            "material_new_update": False,
-            "confidence": 0.0,
-            "shared_anchors": [],
-            "novel_facts": [],
-            "reason": "Pre-generation material-update model-call budget exhausted; preserve existing canonical.",
-            "validation_errors": ["pre_generation_materiality_budget_exhausted"],
-        }, candidates, False, False
-
-    CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS += 1
+    if consume_pre_generation_budget:
+        if CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS >= PREGEN_MATERIAL_UPDATE_MAX_MODEL_CALLS:
+            return {
+                "status": "pre_generation_materiality_budget_exhausted",
+                "action": SEMANTIC_ACTION_HOLD,
+                "recommended_action": SEMANTIC_ACTION_HOLD,
+                "selected_candidate_slug": "",
+                "same_real_world_event": True,
+                "material_new_update": False,
+                "confidence": 0.0,
+                "shared_anchors": [],
+                "novel_facts": [],
+                "reason": "Pre-generation material-update model-call budget exhausted; preserve existing canonical.",
+                "validation_errors": ["pre_generation_materiality_budget_exhausted"],
+            }, candidates, False, False
+        CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS += 1
     if adjudicate_semantic_publication_candidates is None:
         decision = {
             "status": "gate_adjudicator_unavailable",
@@ -30013,6 +30080,155 @@ def _promote_published_skip_material_updates(
         "decisions": decisions,
     }
 
+
+
+def _late_published_skip_material_update_promotion(
+    item, canonical, basis, cache, report
+):
+    """Give a late-resolved published source one final materiality decision.
+
+    Some source/canonical relationships are not write-authoritatively resolved until
+    forward publication. The terminal published-story skip must therefore repeat the
+    same materiality protection used before generation. Otherwise a fresh official
+    finding can be rebound to an older pre-development canonical and silently lose
+    the new facts.
+
+    This helper never creates a new permalink. Identity is already proven by
+    ``_published_skip_canonical``; it can only preserve the canonical or authorize a
+    contextual in-place material update of that exact canonical.
+    """
+    if not isinstance(item, dict) or not isinstance(canonical, dict):
+        return None, None
+    should_check, eligibility_reason = _published_skip_material_update_candidate(
+        item, canonical
+    )
+    row = {
+        "phase": "late_published_skip_write_barrier",
+        "source_headline": str(item.get("title") or item.get("source_headline") or item.get("headline") or ""),
+        "source_url": _normalized_external_source_url(
+            item.get("source_url") or item.get("_source_url") or item.get("link")
+        ),
+        "canonical_slug": str(canonical.get("slug") or ""),
+        "canonical_headline": str(canonical.get("headline") or ""),
+        "identity_basis": str(basis or "published_skip_canonical"),
+        "eligibility_reason": eligibility_reason,
+        "evaluated": False,
+        "promoted": False,
+        "cache_hit": False,
+        "model_call": False,
+        "action": "preserve_existing_canonical",
+    }
+    if not should_check:
+        return None, row
+
+    decision, _candidates, cache_hit, model_call = _run_known_canonical_materiality_gate(
+        item,
+        canonical,
+        cache if cache is not None else {},
+        basis=basis,
+        consume_pre_generation_budget=False,
+    )
+    row.update({
+        "evaluated": True,
+        "cache_hit": bool(cache_hit),
+        "model_call": bool(model_call),
+        "semantic_status": str(decision.get("status") or ""),
+        "semantic_action": str(decision.get("action") or ""),
+        "confidence": float(decision.get("confidence") or 0.0),
+        "shared_anchors": list(decision.get("shared_anchors") or [])[:20],
+        "novel_facts": list(decision.get("novel_facts") or [])[:20],
+        "reason": str(decision.get("reason") or ""),
+        "validation_errors": list(decision.get("validation_errors") or []),
+    })
+    valid_update = bool(
+        str(decision.get("status") or "") == "validated"
+        and str(decision.get("action") or "") == SEMANTIC_ACTION_UPDATE
+        and decision.get("same_real_world_event") is True
+        and decision.get("material_new_update") is True
+        and str(decision.get("selected_candidate_slug") or "")
+        == str(canonical.get("slug") or "")
+    )
+    if not valid_update:
+        return None, row
+
+    evidence = {
+        "outcome": IDENTITY_OUTCOME_VERIFIED,
+        "identity_outcome": IDENTITY_OUTCOME_VERIFIED,
+        "evidence_tier": "late_known_canonical_plus_semantic_materiality",
+        "write_authorized": True,
+        "proof_type": "late_published_skip_plus_semantic_materiality",
+        "reason": str(decision.get("reason") or "material update"),
+        "reason_codes": [
+            "published_skip_canonical_identity",
+            "semantic_material_update_validated",
+            "late_write_barrier_recall",
+            "target_bound_authorization",
+        ],
+        "shared_anchors": list(decision.get("shared_anchors") or []),
+        "novel_facts": list(decision.get("novel_facts") or []),
+    }
+    # Do not mutate the live placement until every destructive-write prerequisite
+    # succeeds. A failed semantic composition must leave the original skip row
+    # untouched so the terminal fallback can safely bind it to the existing page.
+    working = copy.deepcopy(item)
+    authorization = _stamp_canonical_write_authorization(
+        working, canonical, evidence, basis="late_published_skip_material_update"
+    )
+    if not authorization:
+        row["action"] = "hold_missing_canonical_write_authorization"
+        return None, row
+
+    story_id = str(canonical.get("editorial_story_id") or "").strip()
+    if story_id:
+        working["editorial_story_id"] = story_id
+        working["_editorial_story_id"] = story_id
+    working["_editorial_route"] = "update_existing"
+    working["editorial_route"] = "update_existing"
+    working["story_form"] = "update"
+    working["_editorial_relationship"] = IDENTITY_OUTCOME_VERIFIED
+    working["_editorial_relationship_confidence"] = float(decision.get("confidence") or 0.0)
+    working["_editorial_new_facts"] = list(decision.get("novel_facts") or [])
+    working["_semantic_material_update"] = True
+    working["_semantic_material_update_decision"] = copy.deepcopy(decision)
+    working["canonical_slug"] = str(canonical.get("slug") or "")
+    working["canonical_publication_id"] = _stable_publication_id(canonical.get("slug", ""))
+    _attach_canonical_update_context(working, canonical, basis)
+
+    merged, composition = _semantic_material_update_composition(
+        canonical,
+        working,
+        decision,
+        report,
+        phase="late_published_skip_write_barrier",
+    )
+    row["composition_status"] = str((composition or {}).get("status") or "")
+    if merged is None:
+        row["action"] = "hold_material_update_composition_failed"
+        row["validation_errors"] = list((composition or {}).get("validation_errors") or [])
+        return None, row
+
+    # Composition rebuilds a clean article payload, so re-stamp the target-bound
+    # authorization on that replacement before the destructive write barrier.
+    merged_authorization = _stamp_canonical_write_authorization(
+        merged, canonical, evidence, basis="late_published_skip_material_update"
+    )
+    if not merged_authorization:
+        row["action"] = "hold_missing_post_composition_authorization"
+        return None, row
+    if story_id:
+        merged["editorial_story_id"] = story_id
+        merged["_editorial_story_id"] = story_id
+    merged["_semantic_material_update"] = True
+    merged["_semantic_material_update_decision"] = copy.deepcopy(decision)
+    merged["_semantic_material_update_composition"] = copy.deepcopy(composition or {})
+    merged["_editorial_route"] = "update_existing"
+    merged["editorial_route"] = "update_existing"
+    merged["story_form"] = "update"
+    merged["canonical_slug"] = str(canonical.get("slug") or "")
+    merged["canonical_publication_id"] = _stable_publication_id(canonical.get("slug", ""))
+    row["promoted"] = True
+    row["action"] = "update_existing_canonical"
+    return merged, row
 
 def _authorized_custom_material_update(item, canonical):
     """Permit only a target-bound validated material update to modify a custom canonical."""

@@ -212,3 +212,36 @@ def test_final_topic_integrity_removes_wrong_crime_hero_and_promotes_valid_card(
     assert len(report["rejections"]) == 1
     assert categories[0]["hero"]["headline"].startswith("Flock Safety")
     assert categories[0]["hero"]["_hero_recovery_basis"] == "final_topic_integrity_surviving_card"
+
+
+def test_fresh_official_confirmation_is_not_stale_without_current_weekday_literal():
+    from datetime import datetime, timezone
+
+    g = _load_generate()
+    item = {
+        "headline": "NWS confirms EF0 tornado with 75 mph winds touched down in Port St. Lucie Sunday",
+        "teaser": "The National Weather Service confirmed the EF0 tornado after completing its damage survey.",
+        "body": (
+            "The National Weather Service confirmed an EF0 tornado with peak winds of 75 mph "
+            "touched down in Port St. Lucie Sunday evening. The completed survey found a 2.1-mile path."
+        ),
+    }
+    published = "Mon, 24 Aug 2026 20:23:50 GMT"
+    now = datetime(2026, 8, 24, 23, 54, tzinfo=timezone.utc)
+
+    assert g._category_story_is_stale(item, [], published_raw=published, now=now) is False
+
+
+def test_fresh_timestamp_alone_cannot_revive_old_incident_without_new_official_development():
+    from datetime import datetime, timezone
+
+    g = _load_generate()
+    item = {
+        "headline": "EF0 tornado touched down in Port St. Lucie Sunday",
+        "teaser": "A tornado touched down Sunday evening in Port St. Lucie.",
+        "body": "The tornado touched down Sunday evening and damaged fences in Port St. Lucie.",
+    }
+    published = "Mon, 24 Aug 2026 20:23:50 GMT"
+    now = datetime(2026, 8, 24, 23, 54, tzinfo=timezone.utc)
+
+    assert g._category_story_is_stale(item, [], published_raw=published, now=now) is True

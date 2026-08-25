@@ -681,151 +681,216 @@ def test_authorized_custom_material_update_rewrites_one_canonical_without_duplic
     assert semantic_report["summary"]["pre_generation_materiality_duplicates"] == 0
 
 
-
-def test_fragmented_border_collie_story_id_uses_canonical_ledger_before_materiality(monkeypatch):
-    """Production regression: story_003665 must not bypass the custom canonical update gate."""
+def test_late_published_skip_material_update_refreshes_exact_canonical(monkeypatch):
     g = _load_generate()
-    g.CURRENT_RUN_EDITORIAL_IDENTITIES.clear()
-    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS.clear()
-    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
-
     canonical = {
-        "slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
-        "headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
-        "teaser": "Authorities rescued animals from a Palm City hoarding case.",
-        "body": " ".join(["Martin County authorities rescued animals from the Palm City hoarding case."] * 45),
-        "date": "2026-07-20",
-        "lastmod": "2026-07-20",
-        "first_published": "Mon, 20 Jul 2026 18:07:06 -0400",
-        "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/palm-city-home-condemned-after-woman-arrested-in-worst-animal-hoarding-case-humane-society-has-seen",
-        "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
-        "incident_anchor_key": "mass-animal-hoarding:martin-county",
+        "slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
+        "headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
+        "teaser": "The National Weather Service said it would survey damage Monday after Sunday's tornado.",
+        "body": "The National Weather Service announced late Sunday night that it will conduct a storm survey Monday morning after a tornado touched down near Jessica Clinton Park in Port St. Lucie.",
+        "category_key": "st_lucie",
+        "date": "2026-08-24",
+        "lastmod": "2026-08-24",
+        "first_published": "Mon, 24 Aug 2026 06:48:23 -0400",
+        "source_url": "https://example.com/pre-survey",
+        "editorial_story_id": "story_tornado_psl",
         "legacy_identity_status": "identified",
         "ranking_eligible": True,
-        "is_custom": True,
-        "authoritative_custom": True,
     }
     incoming = {
-        "title": "Paige O'Donnell relinquishes 36 Border Collies rescued from Palm City hoarding case",
-        "summary": "O'Donnell legally surrendered the dogs, clearing the path for adoption applications beginning Sept. 1.",
-        "article_text": " ".join(["Paige O'Donnell legally surrendered 36 Border Collies from the Palm City hoarding case, clearing the path for adoption applications beginning Sept. 1 after medical evaluations."] * 18),
-        "link": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
-        "source_url": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
-        "published": "Fri, 21 Aug 2026 15:50:55 GMT",
+        "title": "NWS confirms EF0 tornado touched down Sunday in Port St. Lucie",
+        "headline": "NWS confirms EF0 tornado touched down Sunday in Port St. Lucie",
+        "summary": "NWS confirmed an EF0 tornado with peak winds of 75 mph after completing Monday's damage survey.",
+        "teaser": "NWS confirmed an EF0 tornado with peak winds of 75 mph after completing Monday's damage survey.",
+        "article_text": " ".join([
+            "The National Weather Service confirmed an EF0 tornado with peak winds of 75 mph touched down Sunday in Port St. Lucie after a Monday damage survey found a 2.1-mile path and damage to homes."
+        ] * 25),
+        "body": "The National Weather Service confirmed an EF0 tornado with peak winds of 75 mph touched down Sunday in Port St. Lucie after completing its Monday survey.",
+        "link": "https://example.com/nws-confirmed-ef0",
+        "source_url": "https://example.com/nws-confirmed-ef0",
+        "published": "Mon, 24 Aug 2026 21:31:00 GMT",
         "source_quality": "full",
-        # This is the exact production defect: registry identity was fragmented even
-        # though publication identity had a hard structured-incident match.
-        "editorial_story_id": "story_003665",
-        "_editorial_story_id": "story_003665",
-        "incident_anchor_key": "mass-animal-hoarding:martin-county",
+        "editorial_story_id": "story_tornado_psl",
+        "_editorial_story_id": "story_tornado_psl",
         "_editorial_route": "skip",
         "_editorial_relationship": "same_event",
         "_editorial_relationship_confidence": 1.0,
     }
-    normalized = g._normalized_external_source_url(incoming["source_url"])
-    g.CURRENT_RUN_EDITORIAL_IDENTITIES[normalized] = {
-        "story_id": "story_003665",
-        "event_key": "animal-rescue-palm-city-cats",
-        "route": "skip",
-        "relationship": "same_event",
-        "relationship_confidence": 1.0,
-        "new_facts": [],
-    }
+
     monkeypatch.setattr(
         g,
         "adjudicate_semantic_publication_candidates",
         lambda *args, **kwargs: _material_update_decision(
             canonical["slug"],
-            "O'Donnell legally surrendered 36 Border Collies and adoption applications open Sept. 1",
+            "NWS completed the survey and confirmed EF0 intensity, 75 mph winds and a 2.1-mile path",
         ),
     )
 
-    ledger = g._build_canonical_publication_ledger([canonical])
-    result = g._promote_published_skip_material_updates(
-        [incoming],
-        [canonical],
-        "martin",
-        cache={"schema_version": 1, "entries": {}},
-        ledger=ledger,
+    def _compose(canonical_arg, incoming_arg, decision_arg, report_arg, *, phase):
+        assert canonical_arg["slug"] == canonical["slug"]
+        assert phase == "late_published_skip_write_barrier"
+        merged = dict(incoming_arg)
+        merged.update({
+            "headline": "NWS confirms EF0 tornado with 75 mph winds in Port St. Lucie",
+            "teaser": "The completed NWS survey confirmed EF0 intensity, 75 mph winds and a 2.1-mile path.",
+            "body": (
+                "The National Weather Service completed its Monday damage survey and confirmed "
+                "the Sunday Port St. Lucie tornado was an EF0 with peak winds of 75 mph and a "
+                "2.1-mile path. This updates the earlier report that a survey was still pending."
+            ),
+            "story_form": "update",
+            "_editorial_route": "update_existing",
+            "editorial_route": "update_existing",
+            "canonical_slug": canonical["slug"],
+        })
+        return merged, {"status": "validated", "validation_errors": []}
+
+    monkeypatch.setattr(g, "_semantic_material_update_composition", _compose)
+
+    merged, row = g._late_published_skip_material_update_promotion(
+        incoming,
+        canonical,
+        "registry_same_event_and_persistent_story_skip",
+        {"schema_version": 1, "entries": {}},
+        {"summary": {}},
     )
 
-    assert result["evaluated_count"] == 1
-    assert result["promoted_count"] == 1
-    assert result["decisions"][0]["identity_basis"].startswith("pre_generation_ledger:")
-    assert incoming["editorial_story_id"] == canonical["editorial_story_id"]
-    assert incoming["_editorial_route"] == "update_existing"
-    assert incoming["_pre_generation_material_update_canonical_slug"] == canonical["slug"]
-    assert incoming["_semantic_material_update"] is True
-    kept, suppressed = g._filter_published_skip_candidates([incoming], [canonical], "martin")
-    assert kept == [incoming]
-    assert suppressed == []
+    assert merged is not None
+    assert row["evaluated"] is True
+    assert row["promoted"] is True
+    assert row["action"] == "update_existing_canonical"
+    assert merged["canonical_slug"] == canonical["slug"]
+    assert merged["editorial_story_id"] == canonical["editorial_story_id"]
+    assert merged["_editorial_route"] == "update_existing"
+    assert "confirmed" in merged["body"].lower()
+    assert "75 mph" in merged["body"].lower()
+    assert g._canonical_write_authorized(merged, canonical) is True
 
 
-def test_fragmented_same_story_without_material_change_is_still_suppressed(monkeypatch):
-    """Ledger repair grants comparison authority, never automatic update authority."""
+def test_late_published_skip_duplicate_preserves_existing_canonical(monkeypatch):
     g = _load_generate()
-    g.CURRENT_RUN_EDITORIAL_IDENTITIES.clear()
-    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS.clear()
-    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
     canonical = {
-        "slug": "2026-08-20-two-fort-pierce-women-arrested-for-using-fake-movie-money-at-st-lucie-restaurant",
-        "headline": "Two Fort Pierce women arrested for using fake movie money at St. Lucie restaurant",
-        "body": " ".join(["Two women were arrested after using a fake movie-money $100 bill at a St. Lucie restaurant."] * 40),
-        "date": "2026-08-20",
-        "lastmod": "2026-08-20",
-        "source_url": "https://example.com/original-movie-money",
-        "editorial_story_id": "story_canonical_movie_money",
-        "incident_anchor_key": "movie-money:st-lucie-draft-house",
+        "slug": "canonical-tornado",
+        "headline": "NWS confirms EF0 tornado in Port St. Lucie",
+        "teaser": "NWS confirmed an EF0 tornado.",
+        "body": "NWS confirmed the EF0 tornado after a damage survey.",
+        "category_key": "st_lucie",
+        "date": "2026-08-24",
+        "lastmod": "2026-08-24",
+        "first_published": "Mon, 24 Aug 2026 18:00:00 GMT",
+        "source_url": "https://example.com/canonical",
+        "editorial_story_id": "story_tornado",
         "legacy_identity_status": "identified",
         "ranking_eligible": True,
     }
     incoming = {
-        "title": "Movie money, real arrests: Fake $100 bill lands two Fort Pierce women in jail",
-        "summary": "The same two women were arrested in the same restaurant incident.",
-        "article_text": " ".join(["The same two women used the same fake $100 movie-money bill at the same St. Lucie restaurant."] * 30),
-        "link": "https://example.com/later-reprint",
-        "source_url": "https://example.com/later-reprint",
-        "published": "Sat, 22 Aug 2026 12:00:00 GMT",
+        "title": "NWS confirms EF0 tornado in Port St. Lucie - duplicate wire copy",
+        "summary": " ".join(["NWS confirmed the same EF0 tornado after a damage survey."] * 20),
+        "article_text": " ".join(["NWS confirmed the same EF0 tornado after a damage survey."] * 25),
+        "link": "https://example.com/duplicate",
+        "source_url": "https://example.com/duplicate",
+        "published": "Mon, 24 Aug 2026 19:00:00 GMT",
         "source_quality": "full",
-        "editorial_story_id": "story_fragmented_movie_money",
-        "_editorial_story_id": "story_fragmented_movie_money",
-        "incident_anchor_key": "movie-money:st-lucie-draft-house",
+        "editorial_story_id": "story_tornado",
+        "_editorial_story_id": "story_tornado",
         "_editorial_route": "skip",
         "_editorial_relationship": "same_event",
         "_editorial_relationship_confidence": 1.0,
-    }
-    normalized = g._normalized_external_source_url(incoming["source_url"])
-    g.CURRENT_RUN_EDITORIAL_IDENTITIES[normalized] = {
-        "story_id": "story_fragmented_movie_money",
-        "route": "skip",
-        "relationship": "same_event",
-        "relationship_confidence": 1.0,
     }
     monkeypatch.setattr(
         g,
         "adjudicate_semantic_publication_candidates",
         lambda *args, **kwargs: {
             "status": "validated",
-            "action": "duplicate_use_existing_canonical",
-            "recommended_action": "duplicate_use_existing_canonical",
+            "action": "keep_existing_canonical",
+            "recommended_action": "keep_existing_canonical",
             "selected_candidate_slug": canonical["slug"],
             "same_real_world_event": True,
             "material_new_update": False,
-            "confidence": 0.99,
-            "shared_anchors": ["same people", "same restaurant", "same fake $100 bill"],
+            "confidence": 0.97,
+            "shared_anchors": ["same NWS confirmation"],
             "novel_facts": [],
-            "reason": "No material development; this is a later reprint of the same incident.",
+            "reason": "No material new facts beyond the canonical article.",
             "validation_errors": [],
         },
     )
-    ledger = g._build_canonical_publication_ledger([canonical])
-    result = g._promote_published_skip_material_updates(
-        [incoming], [canonical], "crime", cache={"schema_version": 1, "entries": {}}, ledger=ledger
+    monkeypatch.setattr(
+        g,
+        "_semantic_material_update_composition",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("composer must not run")),
     )
-    assert result["evaluated_count"] == 1
-    assert result["promoted_count"] == 0
-    assert incoming["editorial_story_id"] == canonical["editorial_story_id"]
+
+    merged, row = g._late_published_skip_material_update_promotion(
+        incoming,
+        canonical,
+        "registry_same_event_and_persistent_story_skip",
+        {"schema_version": 1, "entries": {}},
+        {"summary": {}},
+    )
+
+    assert merged is None
+    assert row["evaluated"] is True
+    assert row["promoted"] is False
+    assert row["action"] == "preserve_existing_canonical"
+
+
+def test_late_material_update_composition_failure_leaves_original_skip_row_untouched(monkeypatch):
+    g = _load_generate()
+    canonical = {
+        "slug": "canonical-tornado-hold",
+        "headline": "Tornado touches down in Port St. Lucie, NWS plans survey",
+        "teaser": "A survey was planned.",
+        "body": "NWS said it planned to survey the tornado damage.",
+        "category_key": "st_lucie",
+        "date": "2026-08-24",
+        "lastmod": "2026-08-24",
+        "first_published": "Mon, 24 Aug 2026 06:00:00 GMT",
+        "source_url": "https://example.com/old-tornado",
+        "editorial_story_id": "story_tornado_hold",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+    }
+    incoming = {
+        "title": "NWS confirms EF0 tornado with 75 mph winds",
+        "summary": " ".join(["NWS confirmed EF0 intensity and 75 mph winds after the survey."] * 20),
+        "article_text": " ".join(["NWS confirmed EF0 intensity and 75 mph winds after the survey."] * 25),
+        "link": "https://example.com/new-tornado",
+        "source_url": "https://example.com/new-tornado",
+        "published": "Mon, 24 Aug 2026 20:00:00 GMT",
+        "source_quality": "full",
+        "editorial_story_id": "story_tornado_hold",
+        "_editorial_story_id": "story_tornado_hold",
+        "_editorial_route": "skip",
+        "_editorial_relationship": "same_event",
+        "_editorial_relationship_confidence": 1.0,
+    }
+    original = dict(incoming)
+    monkeypatch.setattr(
+        g,
+        "adjudicate_semantic_publication_candidates",
+        lambda *args, **kwargs: _material_update_decision(
+            canonical["slug"], "NWS confirmed EF0 intensity and 75 mph winds"
+        ),
+    )
+    monkeypatch.setattr(
+        g,
+        "_semantic_material_update_composition",
+        lambda *args, **kwargs: (
+            None,
+            {"status": "context_contract_failed", "validation_errors": ["original_event_context_missing"]},
+        ),
+    )
+
+    merged, row = g._late_published_skip_material_update_promotion(
+        incoming,
+        canonical,
+        "registry_same_event_and_persistent_story_skip",
+        {"schema_version": 1, "entries": {}},
+        {"summary": {}},
+    )
+
+    assert merged is None
+    assert row["action"] == "hold_material_update_composition_failed"
+    assert incoming == original
     assert incoming["_editorial_route"] == "skip"
-    kept, suppressed = g._filter_published_skip_candidates([incoming], [canonical], "crime")
-    assert kept == []
-    assert len(suppressed) == 1
+    assert "_canonical_write_authorization" not in incoming
