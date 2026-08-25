@@ -71,6 +71,9 @@ try:
         retrieve_semantic_publication_candidates,
         semantic_headline_similarity,
     )
+    from tct_engine.semantic_publication_gate import (
+        candidate_evidence as semantic_candidate_evidence,
+    )
     from tct_engine.registry_repair import (
         is_broad_event_class_key,
         merge_story_records,
@@ -111,6 +114,7 @@ except Exception as exc:
     semantic_publication_decision_cache_key = None
     retrieve_semantic_publication_candidates = None
     semantic_headline_similarity = None
+    semantic_candidate_evidence = None
     is_broad_event_class_key = None
     merge_story_records = None
     quarantine_active_story_contamination = None
@@ -12266,6 +12270,7 @@ def _select_latest_news_entries(archive_entries, limit=5):
 
 
 TOP_STORIES_LIMIT = 12
+TOP_STORIES_EVENT_CLUSTER_MAX = 2
 TOP_STORIES_FRESH_WINDOW_HOURS = 48.0
 TOP_STORIES_EXTENDED_WINDOW_HOURS = 60.0
 TOP_STORIES_EXTENDED_URGENCY_MIN = 8
@@ -12375,6 +12380,118 @@ def _apply_top_story_pins(selected, eligible_rows, limit):
         position = max(1, int(card.get("pin_position") or 1))
         result.insert(min(position - 1, len(result)), card)
     return result[:limit]
+
+
+def _top_story_event_cluster_root(card, archive_by_slug):
+    if not isinstance(card, dict):
+        return ""
+    slug = _top_story_archive_slug(card)
+    archive_row = archive_by_slug.get(slug, {}) if slug else {}
+    merged = {**archive_row, **card}
+    parent_story_id = str(
+        merged.get("related_parent_story_id")
+        or merged.get("_semantic_related_parent_story_id")
+        or ""
+    ).strip()
+    if parent_story_id:
+        return f"story:{parent_story_id}"
+    story_id = str(
+        merged.get("editorial_story_id")
+        or merged.get("_editorial_story_id")
+        or ""
+    ).strip()
+    if story_id:
+        return f"story:{story_id}"
+    anchor = str(
+        merged.get("incident_anchor_key")
+        or ((merged.get("event_identity") or {}).get("incident_anchor") if isinstance(merged.get("event_identity"), dict) else "")
+        or ""
+    ).strip()
+    if anchor:
+        return f"incident:{anchor}"
+    return ""
+
+
+def _top_story_cluster_payload(row, archive_by_slug):
+    card = row.get("card") or {}
+    slug = row.get("slug") or _top_story_archive_slug(card)
+    archive_row = archive_by_slug.get(slug, {}) if slug else {}
+    merged = {**archive_row, **card}
+    try:
+        return _semantic_gate_article_payload(merged, include_archive_body=True)
+    except Exception:
+        return {
+            "slug": slug,
+            "headline": str(merged.get("headline") or ""),
+            "source_headline": str(merged.get("source_headline") or ""),
+            "lead": str(merged.get("teaser") or ""),
+            "teaser": str(merged.get("teaser") or ""),
+            "body": str(merged.get("body") or ""),
+            "published_at": str(merged.get("first_published") or merged.get("date") or ""),
+            "locality": list(merged.get("locality") or ()),
+            "event_families": list(merged.get("event_families") or ()),
+            "people": list(merged.get("people") or ()),
+            "precise_locations": list(merged.get("precise_locations") or ()),
+            "agencies": list(merged.get("agencies") or ()),
+            "incident_anchor": str(merged.get("incident_anchor_key") or ""),
+            "known_event_key": str(merged.get("editorial_event_key") or ""),
+        }
+
+
+def _top_story_rows_same_event(left, right, archive_by_slug):
+    left_root = _top_story_event_cluster_root(left.get("card") or {}, archive_by_slug)
+    right_root = _top_story_event_cluster_root(right.get("card") or {}, archive_by_slug)
+    if left_root and right_root and left_root == right_root:
+        return True, "explicit_story_or_incident_identity"
+    if semantic_candidate_evidence is None:
+        return False, ""
+    try:
+        evidence = semantic_candidate_evidence(
+            _top_story_cluster_payload(left, archive_by_slug),
+            _top_story_cluster_payload(right, archive_by_slug),
+            window_days=2,
+        )
+    except Exception:
+        return False, ""
+    if evidence.get("strong_content_event_continuity"):
+        return True, "strong_content_event_continuity"
+    return False, ""
+
+
+def _apply_top_story_event_diversity(rows, archive_by_slug, limit):
+    """Cap one real-world event cluster at two visible Top Stories.
+
+    This is deliberately a presentation backstop. Publication identity should
+    normally consolidate same-event angle articles before this point; this guard
+    prevents one event from monopolizing Top Stories if fragmentation still escapes.
+    """
+    selected = []
+    excluded = []
+    for row in rows:
+        if row.get("pinned"):
+            selected.append(row)
+            if len(selected) >= limit:
+                break
+            continue
+        matching = []
+        reasons = []
+        for prior in selected:
+            same, reason = _top_story_rows_same_event(row, prior, archive_by_slug)
+            if same:
+                matching.append(prior)
+                reasons.append(reason)
+        if len(matching) >= TOP_STORIES_EVENT_CLUSTER_MAX:
+            excluded.append({
+                **{key: value for key, value in row.items() if key != "card"},
+                "reason": "event_cluster_diversity_cap",
+                "cluster_evidence": sorted(set(reasons)),
+                "cluster_with": [prior.get("slug") or prior.get("headline") for prior in matching],
+            })
+            continue
+        selected.append(row)
+        if len(selected) >= limit:
+            break
+    return selected, excluded
 
 
 def _select_top_story_cards(cards, archive_entries=(), *, hero_headline="", limit=TOP_STORIES_LIMIT, now=None):
@@ -12496,12 +12613,25 @@ def _select_top_story_cards(cards, archive_entries=(), *, hero_headline="", limi
         row["headline"].lower(),
     )
     primary = sorted([row for row in rows if row["primary_eligible"]], key=sort_key)
-    selected_rows = primary[:limit]
+    selected_rows, diversity_excluded = _apply_top_story_event_diversity(
+        primary, archive_by_slug, limit
+    )
+    excluded.extend(diversity_excluded)
 
     selected_rows = sorted(selected_rows, key=sort_key)[:limit]
     selected = [row["card"] for row in selected_rows]
     selected = _apply_top_story_pins(selected, rows, limit)
     selected_ids = {id(card) for card in selected}
+    diversity_excluded_slugs = {
+        str(row.get("slug") or "")
+        for row in diversity_excluded
+        if str(row.get("slug") or "")
+    }
+    diversity_excluded_headlines = {
+        str(row.get("headline") or "")
+        for row in diversity_excluded
+        if str(row.get("headline") or "")
+    }
 
     final_selected_rows = []
     for rank, card in enumerate(selected, start=1):
@@ -12512,7 +12642,12 @@ def _select_top_story_cards(cards, archive_entries=(), *, hero_headline="", limi
         })
 
     for row in rows:
-        if id(row["card"]) not in selected_ids and row["fallback_eligible"]:
+        if (
+            id(row["card"]) not in selected_ids
+            and row["fallback_eligible"]
+            and str(row.get("slug") or "") not in diversity_excluded_slugs
+            and str(row.get("headline") or "") not in diversity_excluded_headlines
+        ):
             excluded.append({
                 **{key: value for key, value in row.items() if key != "card"},
                 "reason": "outside_top_story_limit" if row["primary_eligible"] else row["eligibility_reason"],
@@ -12523,7 +12658,8 @@ def _select_top_story_cards(cards, archive_entries=(), *, hero_headline="", limi
         "generated_at": now.isoformat(),
         "policy": (
             "deterministic_urgency_plus_recency; normal<=48h; high_urgency<=60h; "
-            "transient_and_routine_sports<=24h; no_stale_backfill; max_12"
+            "transient_and_routine_sports<=24h; no_stale_backfill; max_12; "
+            "event_cluster_max_2"
         ),
         "limit": limit,
         "minimum_target": 0,
@@ -20634,7 +20770,11 @@ def _publication_ledger_identity_keys(item, identity_index=None, *, include_arch
             ).strip()
         except Exception:
             anchor = ""
-    if anchor:
+    independent_followup = bool(
+        item.get("_semantic_independent_followup")
+        or str(item.get("publication_relationship") or "") == "independent_followup"
+    )
+    if anchor and not independent_followup:
         keys.append(f"incident:{anchor}")
 
     story_id = str(
@@ -20685,7 +20825,7 @@ def _publication_ledger_identity_keys(item, identity_index=None, *, include_arch
         keys.append(f"custom-event:{custom_event}")
 
     weather_event = str(item.get("weather_event_key") or "").strip()
-    if weather_event:
+    if weather_event and not independent_followup:
         keys.append(f"weather:{weather_event}")
     return tuple(dict.fromkeys(keys))
 
@@ -22341,6 +22481,15 @@ def _new_semantic_publication_gate_report():
                 "effect": "candidate_only_model_adjudication_required",
             },
             "model": MODEL_SELECTION,
+            "angle_shifted_event_recall": (
+                "dense shared article facts may nominate a recent candidate even when "
+                "headlines diverge; nomination never merges without model adjudication"
+            ),
+            "independent_followup_policy": (
+                "same-event angle changes default to canonical update; a second permalink "
+                "requires model-confirmed independent public-interest value plus a distinct "
+                "persistent story identity"
+            ),
             "material_update_composer": {
                 "version": SEMANTIC_MATERIAL_UPDATE_VERSION,
                 "model": MODEL_ARTICLES,
@@ -22454,6 +22603,7 @@ def _run_semantic_publication_gate(
             "selected_candidate_slug": "",
             "same_real_world_event": False,
             "material_new_update": False,
+            "independently_newsworthy_followup": False,
             "confidence": 0.0,
             "shared_anchors": [],
             "novel_facts": [],
@@ -22479,6 +22629,7 @@ def _run_semantic_publication_gate(
                 "selected_candidate_slug": "",
                 "same_real_world_event": False,
                 "material_new_update": False,
+                "independently_newsworthy_followup": False,
                 "confidence": 1.0,
                 "shared_anchors": [],
                 "novel_facts": [],
@@ -22547,6 +22698,52 @@ def _run_semantic_publication_gate(
                     }
 
     action = str(decision.get("action") or SEMANTIC_ACTION_HOLD)
+    selected_slug = str(decision.get("selected_candidate_slug") or "")
+    selected = next(
+        (
+            row for row in recent_rows
+            if str(row.get("slug") or "") == selected_slug
+        ),
+        None,
+    )
+
+    # Same-event second permalinks are exceptional. Claude may recommend one only
+    # for an independently newsworthy accountability/consequence/policy follow-up,
+    # and the persistent story layer must already distinguish that follow-up from
+    # the underlying event. Otherwise collapse it back to the canonical update
+    # path so an angle change cannot mint another URL.
+    independent_followup = bool(
+        decision.get("independently_newsworthy_followup")
+        and decision.get("same_real_world_event")
+        and action == SEMANTIC_ACTION_NEW
+    )
+    if independent_followup and isinstance(selected, dict):
+        incoming_story_id = str(
+            incoming.get("editorial_story_id")
+            or incoming.get("_editorial_story_id")
+            or ""
+        ).strip()
+        selected_story_id = str(selected.get("editorial_story_id") or "").strip()
+        if not incoming_story_id or not selected_story_id or incoming_story_id == selected_story_id:
+            action = (
+                SEMANTIC_ACTION_UPDATE
+                if bool(decision.get("material_new_update"))
+                else SEMANTIC_ACTION_DUPLICATE
+            )
+            decision["action"] = action
+            decision["independent_followup_authorized"] = False
+            decision.setdefault("validation_notes", []).append(
+                "same_event_new_permalink_collapsed_without_distinct_story_identity"
+            )
+        else:
+            decision["independent_followup_authorized"] = True
+            decision["related_parent_slug"] = selected_slug
+            decision["related_parent_story_id"] = selected_story_id
+            incoming["_semantic_independent_followup"] = True
+            incoming["publication_relationship"] = "independent_followup"
+            incoming["related_parent_slug"] = selected_slug
+            incoming["related_parent_story_id"] = selected_story_id
+
     summary = report["summary"]
     summary["evaluations"] += 1
     summary["candidate_pairs"] += len(candidates)
@@ -22569,14 +22766,6 @@ def _run_semantic_publication_gate(
     else:
         summary["holds"] += 1
 
-    selected_slug = str(decision.get("selected_candidate_slug") or "")
-    selected = next(
-        (
-            row for row in recent_rows
-            if str(row.get("slug") or "") == selected_slug
-        ),
-        None,
-    )
     report["decisions"].append({
         "phase": phase,
         "incoming_headline": incoming_payload.get("headline", ""),
@@ -22602,6 +22791,14 @@ def _run_semantic_publication_gate(
                 ),
                 "shared_topic_tokens": list(
                     (row.get("evidence") or {}).get("shared_topic_tokens") or []
+                ),
+                "content_similarity": (row.get("evidence") or {}).get(
+                    "content_similarity", {}
+                ),
+                "strong_content_event_continuity": bool(
+                    (row.get("evidence") or {}).get(
+                        "strong_content_event_continuity"
+                    )
                 ),
                 "day_gap": (row.get("evidence") or {}).get("day_gap"),
                 "structured_conflict_override": bool(
@@ -23124,9 +23321,23 @@ def _repair_recent_semantic_archive_duplicates(
         }
     newest = max(valid_dates)
     cutoff = newest - timedelta(days=SEMANTIC_GATE_RECENT_DAYS)
+    # Explicit deterministic cleanup migrations outrank model-driven retroactive
+    # repair. Protect both named source slugs and their chosen canonical targets so
+    # a same-run semantic pass cannot delete a target before the explicit redirect
+    # transaction executes later in publication. Future incoming sources may still
+    # update those retained canonicals through the normal forward semantic gate.
+    retirement_policies = _source_retirement_policy_by_slug(output_root)
+    protected_cleanup_slugs = set(retirement_policies)
+    protected_cleanup_slugs.update(
+        str(row.get("target_slug") or "").strip()
+        for row in retirement_policies.values()
+        if str(row.get("target_slug") or "").strip()
+    )
     recent = [
         row for row, dt in dated
-        if dt is not None and dt >= cutoff
+        if dt is not None
+        and dt >= cutoff
+        and str(row.get("slug") or "") not in protected_cleanup_slugs
     ]
     recent.sort(key=_publication_canonical_key)
     survivors = []
@@ -28426,6 +28637,13 @@ def write_archives(all_categories, top_cat):
                 "event_url": hero.get("event_url", ""),
                 "event_link_text": hero.get("event_link_text", ""),
                 "editorial_story_id": _editorial_story_id,
+                "publication_relationship": str(
+                    hero.get("publication_relationship") or ""
+                ),
+                "related_parent_slug": str(hero.get("related_parent_slug") or ""),
+                "related_parent_story_id": str(
+                    hero.get("related_parent_story_id") or ""
+                ),
                 "identity_origin": (
                     hero.get("_editorial_identity_origin")
                     or ("custom_payload_identity" if hero.get("is_custom") else "forward_publication_create")
@@ -29859,6 +30077,7 @@ def _run_known_canonical_materiality_gate(
             "selected_candidate_slug": "",
             "same_real_world_event": True,
             "material_new_update": False,
+            "independently_newsworthy_followup": False,
             "confidence": 0.0,
             "shared_anchors": [],
             "novel_facts": [],

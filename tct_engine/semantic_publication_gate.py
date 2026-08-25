@@ -23,8 +23,8 @@ from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from typing import Any, Iterable, Mapping, Sequence
 
-SEMANTIC_PUBLICATION_GATE_VERSION = "1.6"
-SEMANTIC_PUBLICATION_GATE_PROMPT_VERSION = "1.0"
+SEMANTIC_PUBLICATION_GATE_VERSION = "1.7"
+SEMANTIC_PUBLICATION_GATE_PROMPT_VERSION = "1.1"
 DEFAULT_RECENT_WINDOW_DAYS = 7
 DEFAULT_MAX_CANDIDATES = 4
 DEFAULT_MIN_CONFIDENCE = 0.82
@@ -82,6 +82,68 @@ _GENERIC_CANDIDATE_CONTEXT_TOKENS = frozenset({
     "florida", "martin", "lucie", "indian", "river", "vero", "port",
     "st", "beach", "revise", "propose", "approve", "vote", "says", "must",
 })
+
+# Content continuity is candidate-recall evidence only. These generic newsroom and
+# locality words are intentionally removed so two unrelated stories from the same
+# county/day cannot become candidates merely because both mention police, residents,
+# officials, or Florida. Concrete event vocabulary (tornado, waterspout, roof,
+# intersection, defendant names, street names, amounts, etc.) remains available.
+_GENERIC_CONTENT_CONTEXT_TOKENS = _GENERIC_CANDIDATE_CONTEXT_TOKENS | frozenset({
+    "according", "official", "officials", "resident", "residents", "people",
+    "news", "story", "report", "reported", "reporting", "said", "saying",
+    "monday", "tuesday", "wednesday", "thursday", "friday", "saturday",
+    "sunday", "today", "yesterday", "morning", "afternoon", "evening",
+    "area", "community", "communities", "department", "office", "agency",
+    "authorities", "home", "homes", "nearby", "including", "also", "new",
+    "update", "updates", "latest", "still", "first", "another", "several",
+})
+
+
+def content_tokens(article: Mapping[str, Any]) -> frozenset[str]:
+    """Return distinctive article-level tokens for bounded candidate recall.
+
+    This is deliberately broader than headline similarity but weaker than identity.
+    It never merges stories. It only allows the final semantic adjudicator to see
+    angle-shifted coverage of a likely shared event.
+    """
+    text = " ".join(
+        str(article.get(key) or "")
+        for key in ("headline", "source_headline", "lead", "teaser", "body")
+    )[:12000]
+    tokens = set()
+    for raw in _clean_text(text).split():
+        if raw in _STOP_WORDS:
+            continue
+        token = _TOKEN_CANONICAL.get(raw, raw)
+        if token in _GENERIC_CONTENT_CONTEXT_TOKENS:
+            continue
+        if len(token) < 3 and not token.isdigit():
+            continue
+        tokens.add(token)
+    return frozenset(tokens)
+
+
+def content_similarity(left: Mapping[str, Any], right: Mapping[str, Any]) -> dict[str, Any]:
+    left_tokens = content_tokens(left)
+    right_tokens = content_tokens(right)
+    if not left_tokens or not right_tokens:
+        return {
+            "score": 0.0, "overlap": 0.0, "jaccard": 0.0,
+            "shared_token_count": 0, "shared_tokens": [],
+        }
+    shared = left_tokens & right_tokens
+    overlap = len(shared) / min(len(left_tokens), len(right_tokens))
+    jaccard = len(shared) / len(left_tokens | right_tokens)
+    # Favor containment because a short follow-up often repeats a compact subset of
+    # the original incident facts while focusing its headline on one new angle.
+    score = 0.72 * overlap + 0.28 * jaccard
+    return {
+        "score": round(min(1.0, score), 4),
+        "overlap": round(overlap, 4),
+        "jaccard": round(jaccard, 4),
+        "shared_token_count": len(shared),
+        "shared_tokens": sorted(shared)[:60],
+    }
 
 
 def _clean_text(value: object) -> str:
@@ -286,6 +348,7 @@ def candidate_evidence(
     shared_headline_tokens = left_similarity_tokens & right_similarity_tokens
     shared_topic_tokens = shared_headline_tokens - _GENERIC_CANDIDATE_CONTEXT_TOKENS
     features = _shared_feature_evidence(incoming, candidate)
+    content = content_similarity(incoming, candidate)
     incoming_dt = _article_datetime(incoming)
     candidate_dt = _article_datetime(candidate)
     day_gap = None
@@ -306,6 +369,8 @@ def candidate_evidence(
         score += 0.03
     if features["exact_incident_anchor"] or features["exact_known_event_key"]:
         score += 0.15
+    # Content continuity only nudges ranking after eligibility is established.
+    score += min(0.18, float(content.get("score") or 0.0) * 0.22)
     score = min(1.0, score)
 
     shared_count = int(similarity["shared_token_count"])
@@ -320,6 +385,30 @@ def candidate_evidence(
     )
     context_compatible = bool(
         features["shared_locality"] and features["shared_event_families"]
+    )
+    content_shared_count = int(content.get("shared_token_count") or 0)
+    content_score = float(content.get("score") or 0.0)
+    # Angle-shifted same-event coverage can have weak headline overlap. Candidate
+    # recall is allowed only with a dense bundle of shared article facts plus
+    # independent local/event context. This still requires model adjudication.
+    strong_content_event_continuity = bool(
+        day_gap is not None
+        and day_gap <= 2
+        and content_shared_count >= 8
+        and content_score >= 0.24
+        and (
+            context_compatible
+            or bool(features["shared_precise_locations"])
+            or bool(features["shared_people"])
+            or bool(features["exact_incident_anchor"])
+            or bool(features["exact_known_event_key"])
+            or (
+                bool(features["shared_locality"])
+                and bool(features["shared_agencies"])
+                and content_shared_count >= 10
+                and content_score >= 0.30
+            )
+        )
     )
     left_anchor_value = str(incoming.get("incident_anchor") or "").strip().casefold()
     right_anchor_value = str(candidate.get("incident_anchor") or "").strip().casefold()
@@ -402,6 +491,8 @@ def candidate_evidence(
         # family plus the regulation concept and two additional subject tokens.
         # This only lets Claude see the pair; it never merges automatically.
         conflict_override_tier = "policy_subject_continuity"
+    if conflict and not conflict_override_tier and strong_content_event_continuity:
+        conflict_override_tier = "strong_content_event_continuity"
     strong_conflict_override = bool(conflict_override_tier)
 
     similarity_gate = bool(
@@ -415,14 +506,20 @@ def candidate_evidence(
         # "operation" and "investigation" wording. Same agency + locality + drug
         # family + arrest + shared count is enough to let the final gate compare them.
         or drug_family_continuity
+        or strong_content_event_continuity
         or strong_conflict_override
     )
     eligible = bool(
         time_safe
-        and (shared_count >= 4 or exact_named_operation_anchor or drug_family_continuity)
+        and (
+            shared_count >= 4
+            or exact_named_operation_anchor
+            or drug_family_continuity
+            or strong_content_event_continuity
+        )
         and similarity_gate
         and (not conflict or strong_conflict_override)
-        and not source_headline_drift_conflict
+        and (not source_headline_drift_conflict or strong_content_event_continuity)
     )
     reasons: list[str] = []
     if similarity["score"] >= 0.64:
@@ -437,6 +534,8 @@ def candidate_evidence(
         reasons.append("exact_named_law_enforcement_operation")
     if drug_family_continuity:
         reasons.append("law_enforcement_drug_operation_continuity")
+    if strong_content_event_continuity:
+        reasons.append("strong_content_event_continuity")
     if day_gap is not None:
         reasons.append(f"publication_gap_{day_gap}_days")
     if conflict:
@@ -451,6 +550,8 @@ def candidate_evidence(
         reasons.append("structured_identity_conflict_overridden_by_named_operation")
     elif conflict_override_tier == "law_enforcement_drug_operation_continuity":
         reasons.append("structured_identity_conflict_overridden_by_drug_operation")
+    elif conflict_override_tier == "strong_content_event_continuity":
+        reasons.append("structured_identity_conflict_overridden_by_content_continuity")
     if source_headline_drift_conflict:
         reasons.append("source_headline_drift_conflict")
     if not time_safe:
@@ -469,6 +570,8 @@ def candidate_evidence(
         "shared_arrest_counts": sorted(shared_arrest_counts),
         "shared_drug_terms": sorted(shared_drug_terms),
         "shared_numeric_tokens": sorted(shared_numeric_tokens),
+        "content_similarity": content,
+        "strong_content_event_continuity": strong_content_event_continuity,
         "final_headline_similarity": final_similarity,
         "source_headline_similarity": source_similarity,
         "day_gap": day_gap,
@@ -608,6 +711,7 @@ def validate_model_decision(
     selected = str(raw_decision.get("selected_candidate_slug") or "").strip()
     same_event = raw_decision.get("same_real_world_event") is True
     material_update = raw_decision.get("material_new_update") is True
+    independent_followup = raw_decision.get("independently_newsworthy_followup") is True
     confidence = _clamp_confidence(raw_decision.get("confidence"))
     requested_action = str(raw_decision.get("recommended_action") or "").strip()
     reason = str(raw_decision.get("reason") or "").strip()
@@ -627,7 +731,13 @@ def validate_model_decision(
     if validation_errors:
         action = ACTION_HOLD
     elif same_event:
-        action = ACTION_UPDATE if material_update else ACTION_DUPLICATE
+        # Different angle alone is not a new story. A second permalink is allowed
+        # only when the model explicitly finds an independently newsworthy
+        # accountability/consequence/policy question that stands on its own.
+        if independent_followup and requested_action == ACTION_NEW and material_update:
+            action = ACTION_NEW
+        else:
+            action = ACTION_UPDATE if material_update else ACTION_DUPLICATE
     elif requested_action == ACTION_HOLD or confidence < 0.65:
         action = ACTION_HOLD
     else:
@@ -640,6 +750,7 @@ def validate_model_decision(
         "selected_candidate_slug": selected if selected in candidate_slugs else "",
         "same_real_world_event": same_event,
         "material_new_update": material_update,
+        "independently_newsworthy_followup": independent_followup,
         "confidence": confidence,
         "shared_anchors": shared_anchors[:20],
         "novel_facts": novel_facts[:20],
@@ -664,12 +775,14 @@ Compare the fully written INCOMING article with the RECENT CANONICAL CANDIDATES.
 
 Do not merge merely because two stories share a city, agency, topic, crime type, road, team, or generic headline vocabulary. The same real-world event requires concrete shared anchors such as the same named participant, exact location, date/time, vehicle, case, governing action, victim, business, or distinctive fact pattern.
 
-Then separately decide whether the incoming article contains a MATERIAL NEW UPDATE. Material updates include a victim being identified, a death after an earlier injury report, an arrest or charge, an official cause or finding, a court ruling or sentence, a consequential government vote, a meaningful casualty revision, or another development that changes what readers need to know. Another outlet repeating the same facts, reordered wording, an additional photograph, routine scene detail, or background explanation is NOT a material update.
+Then separately decide whether the incoming article contains a MATERIAL NEW UPDATE. Material updates include a victim being identified, a death after an earlier injury report, an arrest or charge, an official cause or finding, a court ruling or sentence, a consequential government vote, a meaningful casualty revision, or another development that changes what readers need to know. Another outlet repeating the same facts, reordered wording, an additional photograph, routine scene detail, witness color, cleanup detail, anniversary/color framing, or background explanation is NOT by itself a reason for a new URL.
+
+For the SAME EVENT, also decide whether the incoming article is an INDEPENDENTLY NEWSWORTHY FOLLOW-UP. This is rare. It must introduce a distinct accountability, consequence, policy, investigation, or public-interest question that would still merit its own headline even if the reader already knew the underlying event. Merely changing the angle, adding resident reactions, adding official classification/damage totals, explaining mechanics, or reporting cleanup should normally update the existing canonical instead. A technical explanation should be folded into the related accountability story when it mainly explains that question.
 
 Choose exactly one action:
 - duplicate_use_existing_canonical: same event, no material update; preserve the candidate page without rewriting it.
-- update_existing_canonical: same event and material update; update the candidate page rather than minting a new URL.
-- new_story: no candidate is the same event.
+- update_existing_canonical: same event and material update that belongs in the existing canonical; update it rather than minting a new URL.
+- new_story: either no candidate is the same event, OR the same event has a material, independently newsworthy follow-up as defined above.
 - hold: evidence is ambiguous or insufficient.
 
 Return ONLY one JSON object with this exact shape:
@@ -677,6 +790,7 @@ Return ONLY one JSON object with this exact shape:
   "selected_candidate_slug": "candidate slug or null",
   "same_real_world_event": true,
   "material_new_update": false,
+  "independently_newsworthy_followup": false,
   "confidence": 0.0,
   "shared_anchors": ["specific shared facts"],
   "novel_facts": ["specific genuinely new facts"],
@@ -709,6 +823,7 @@ def adjudicate_candidates(
             "selected_candidate_slug": "",
             "same_real_world_event": False,
             "material_new_update": False,
+            "independently_newsworthy_followup": False,
             "confidence": 1.0,
             "shared_anchors": [],
             "novel_facts": [],
@@ -722,6 +837,7 @@ def adjudicate_candidates(
             "selected_candidate_slug": "",
             "same_real_world_event": False,
             "material_new_update": False,
+            "independently_newsworthy_followup": False,
             "confidence": 0.0,
             "shared_anchors": [],
             "novel_facts": [],
@@ -757,6 +873,7 @@ def adjudicate_candidates(
             "selected_candidate_slug": "",
             "same_real_world_event": False,
             "material_new_update": False,
+            "independently_newsworthy_followup": False,
             "confidence": 0.0,
             "shared_anchors": [],
             "novel_facts": [],
