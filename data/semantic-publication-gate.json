@@ -1,7 +1,7 @@
 {
   "schema_version": 4,
   "gate_version": "1.6",
-  "generated_at": "2026-08-25T01:49:26.726184+00:00",
+  "generated_at": "2026-08-25T02:24:03.155042+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -50,16 +50,16 @@
     }
   },
   "summary": {
-    "evaluations": 72,
+    "evaluations": 70,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 72,
+    "no_candidate_passes": 70,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 1,
-    "retroactive_rows_retained": 71,
+    "new_stories_allowed": 5,
+    "retroactive_rows_retained": 65,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -69,12 +69,12 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 11,
+    "pre_generation_materiality_evaluations": 12,
     "pre_generation_materiality_promotions": 0,
-    "pre_generation_materiality_duplicates": 3,
+    "pre_generation_materiality_duplicates": 4,
     "pre_generation_materiality_holds": 8,
-    "pre_generation_materiality_model_calls": 9,
-    "pre_generation_materiality_cache_hits": 2
+    "pre_generation_materiality_model_calls": 8,
+    "pre_generation_materiality_cache_hits": 4
   },
   "pre_generation_materiality_decisions": [
     {
@@ -97,10 +97,11 @@
       "shared_anchors": [],
       "novel_facts": [
         "Ronald L. Corbin died Saturday",
-        "Corbin was a choral teacher at Martin County High School for 34 years (1980-2014)",
+        "Corbin was choral teacher at Martin County High School for 34 years (1980-2014)",
         "Led OPUS choir program",
-        "Received kidney transplant from daughter Candice Corbin in 2018",
+        "Received kidney transplant from daughter Candice in 2018",
         "Corbin Musical Arts Center dedicated in his name in 2015",
+        "Added to FVA Roll of Distinction in 2014",
         "Received R. Wayne Hugoboom Distinguished Service Award in 2017"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -127,16 +128,47 @@
       "confidence": 1.0,
       "shared_anchors": [],
       "novel_facts": [
-        "Funnel cloud spotted over Port St. Lucie neighborhood Sunday evening",
-        "Tornado warning issued for southeastern St. Lucie County and northeastern Martin County through 7 p.m.",
-        "Storm expected to move near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
-        "Video obtained by CBS12 showing the funnel cloud",
-        "Hutchinson Island South among affected areas"
+        "Funnel cloud spotted over Port St. Lucie Sunday evening",
+        "Tornado warning issued for southeastern St. Lucie County and northeastern Martin County",
+        "Warning in effect through 7 p.m.",
+        "Storm expected near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
+        "Video obtained by CBS12 showing funnel cloud"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
+    },
+    {
+      "category_key": "crime",
+      "source_headline": "Sheriff's helicopter spots massive fire in Martin County, helps firefighters save home - WPEC",
+      "source_url": "https://cbs12.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
+      "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
+      "canonical_headline": "Sheriff's helicopter crew spots garage fire on Southwest Martin Highway, helps save Palm City home",
+      "canonical_is_custom": false,
+      "identity_basis": "exact_source_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": true,
+      "model_call": false,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.98,
+      "shared_anchors": [
+        "Martin County Sheriff's Office Air One helicopter crew",
+        "Fire spotted around 10:30 p.m. Sunday night",
+        "Southwest Martin Highway location",
+        "1,600-square-foot detached garage/structure",
+        "Class C motorhome and Jeep inside destroyed",
+        "Fire contained before reaching main home",
+        "Homeowners not home at time of fire",
+        "State Fire Marshal notified"
+      ],
+      "novel_facts": [],
+      "reason": "The incoming article and candidate describe the exact same fire incident with identical specific details: helicopter crew discovery time (10:30 p.m. Sunday), exact location (Southwest Martin Highway), structure size (1,600 sq ft), vehicles destroyed (Class C motorhome and Jeep), and outcome (garage saved home). The source URLs are nearly identical, and the retrieval evidence confirms this is a persistent story match. The incoming article contains no material updates - it repeats the same facts with identical wording in many places. No new developments such as fire cause determination, damage estimates, or investigative findings are reported.",
+      "validation_errors": []
     },
     {
       "category_key": "business",
@@ -158,15 +190,15 @@
       "shared_anchors": [
         "Martin County",
         "animal hoarding case",
-        "Humane Society of the Treasure Coast"
+        "mass-animal-hoarding:martin-county incident anchor"
       ],
       "novel_facts": [
-        "Paige O'Donnell as defendant",
+        "Paige O'Donnell as suspect",
         "36 Border Collies specifically",
         "Palm City location",
         "72 charges",
-        "Legal surrender on August 21, 2026",
-        "Adoption applications beginning Sept. 1"
+        "Legal surrender on Aug 21, 2026",
+        "Adoption applications starting Sept 1"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -191,17 +223,15 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Treasure Coast region",
-        "Palm Beach area",
-        "weekend events",
-        "WPBF news source"
+        "Both are weekend event roundups for Treasure Coast and Palm Beach County"
       ],
       "novel_facts": [
-        "Newfield Farm gardening class on August 23, 2026",
-        "Ukrainian Cultural Fest in West Palm Beach",
+        "Incoming covers August 21, 2026 weekend with Newfield Farm gardening class",
+        "Ukrainian Cultural Fest on August 21",
         "Delray's Hottest Party women's health event",
-        "Peggy Adams Animal Rescue adoption event",
-        "Loggerhead Triathlon in Jupiter"
+        "Peggy Adams adoption event",
+        "Loggerhead Triathlon in Jupiter",
+        "Candidate covered July 27, 2026 weekend with Christmas in July market and Rockn Riverwalk concert series"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -219,8 +249,8 @@
       "eligibility_reason": "newer_source_requires_materiality_decision",
       "evaluated": true,
       "promoted": false,
-      "cache_hit": false,
-      "model_call": true,
+      "cache_hit": true,
+      "model_call": false,
       "action": "preserve_existing_canonical",
       "semantic_status": "validated",
       "semantic_action": "duplicate_use_existing_canonical",
@@ -258,11 +288,12 @@
       "confidence": 1.0,
       "shared_anchors": [],
       "novel_facts": [
-        "Ronald L. Corbin, choral teacher at Martin County High School for 34 years, died Saturday August 23, 2026",
-        "Led OPUS choir program until retirement in 2014",
+        "Ronald L. Corbin died Saturday, August 23, 2026",
+        "Corbin was a choral teacher at Martin County High School for 34 years (1980-2014)",
+        "Led OPUS choir program",
         "Received kidney transplant from daughter Candice Corbin in 2018",
         "Corbin Musical Arts Center dedicated in his name in 2015",
-        "Added to Florida Vocal Association Roll of Distinction in 2014",
+        "Added to Roll of Distinction in 2014",
         "Received R. Wayne Hugoboom Distinguished Service Award in 2017"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -315,15 +346,15 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.95,
+      "confidence": 1.0,
       "shared_anchors": [
         "Port St. Lucie location"
       ],
       "novel_facts": [
-        "Funnel cloud spotted Sunday evening",
+        "Funnel cloud sighting Sunday evening",
         "Tornado warning issued for southeastern St. Lucie County and northeastern Martin County",
-        "Warning through 7 p.m.",
-        "Storm near Walton, Stuart, St. Lucie Nuclear Power Plant around 6:30 p.m.",
+        "Warning in effect through 7 p.m.",
+        "Storm expected near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
         "Wind gusts up to 60 mph and quarter-sized hail"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -348,12 +379,14 @@
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
       "confidence": 1.0,
-      "shared_anchors": [],
+      "shared_anchors": [
+        "Both incidents occurred in Fort Pierce"
+      ],
       "novel_facts": [
-        "34-year-old man shot with BB gun on Avenue G",
+        "34-year-old man killed by BB gun shooting on Avenue G",
         "Suspect Jabari Cowart charged with manslaughter",
         "Victim died at HCA Florida Lawnwood Hospital",
-        "Incident occurred Saturday involving group shooting BB guns at trees"
+        "Incident involved group shooting BB guns at trees"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -408,10 +441,11 @@
       "confidence": 1.0,
       "shared_anchors": [],
       "novel_facts": [
-        "Funnel cloud spotted over Port St. Lucie neighborhood on Sunday evening",
+        "Funnel cloud spotted over Port St. Lucie neighborhood Sunday evening",
         "Tornado warning issued for southeastern St. Lucie County and northeastern Martin County through 7 p.m.",
         "Storm expected to move near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
-        "Wind gusts up to 60 mph and quarter-sized hail reported"
+        "Wind gusts up to 60 mph and quarter-sized hail reported",
+        "Video obtained by CBS12 showing funnel cloud"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -420,139 +454,6 @@
     }
   ],
   "decisions": [
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Melbourne man, 82, dies after single-vehicle crash on I-95 in St. Lucie County",
-      "incoming_source_url": "https://www.wflx.com/2026/08/16/82-year-old-melbourne-man-dies-after-single-vehicle-crash-i-95-st-lucie-county?outputType=amp",
-      "incoming_story_id": "story_004134",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Woman found shot in Vero Beach roadway dies; sheriff identifies person of interest as Matthew Allen Waggle",
-      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/woman-found-shot-in-vero-beach-roadway-dies-ircso-investigating-as-homicide-searching-for-person-of-interest",
-      "incoming_story_id": "story_004173",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Florida couple with full insurance and FEMA aid still unable to rebuild two years after 2024 hurricanes",
-      "incoming_source_url": "https://www.wptv.com/us-news/couple-had-full-insurance-and-fema-aid-but-still-cant-rebuild-after-2024-hurricanes",
-      "incoming_story_id": "story_004333",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "St. Lucie County population jumps 22% since 2020, adding more than 73,000 residents",
-      "incoming_source_url": "https://cbs12.com/news/local/florida-population-growth-st-lucie-county-population-surges-22-percent-since-2020-far-outpacing-palm-beach-county-port-st-lucie-real-estate-construction-affordability-fast-growth",
-      "incoming_story_id": "story_004312",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Port St. Lucie mayor's race tied to trash pickup problems ahead of primary",
-      "incoming_source_url": "https://cbs12.com/news/local/primary-election-preview-mayors-race-port-st-lucie-tied-to-lingering-trash-problems-shannon-miller-steve-giordano-eric-stazzeri-wastepro-settlement-campaign-sign-dispute-garbage-pickup-twice-weekly-24-million-tax-credit-no-refund",
-      "incoming_story_id": "story_004304",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Port St. Lucie police rescue ducklings trapped in storm drain on Southeast Oakridge Drive",
-      "incoming_source_url": "https://cw34.com/news/local/port-st-lucie-florida-police-officers-rescue-ducklings-trapped-in-storm-drain-reunite-with-mother-duck-southeast-oakridge-drive-southeast-oaklyn-street-quack-response-baby-ducks",
-      "incoming_story_id": "story_004361",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Fort Pierce approves $183,200 pilot program for two code enforcement officers in redevelopment areas",
-      "incoming_source_url": "https://www.hometownnewstc.com/news/st_lucie/code-enforcement-ramping-up-in-redevelopment-areas/article_ef2edbbd-0777-54c6-8626-b05c0fee11d4.html",
-      "incoming_story_id": "story_004289",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
     {
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Martin County deputies rescue man attempting suicide in ocean",
@@ -1770,10 +1671,105 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Florida Lt. Gov. Jay Collins leaves future in politics uncertain after primary loss",
       "incoming_source_url": "https://www.wptv.com/news/state/after-primary-loss-jay-collins-leaves-door-open-to-political-future",
       "incoming_story_id": "story_005749",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "EF0 tornado touches down in Port St. Lucie, damages 20 to 30 homes along 2-mile path",
+      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/national-weather-service-to-provide-update-on-possible-tornado-event-in-st-lucie-county",
+      "incoming_story_id": "story_005569",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Fort Pierce enforces two-hour parking limits downtown with $50 citations",
+      "incoming_source_url": "https://www.wpbf.com/article/fort-pierce-enforces-two-hour-parking-limits-downtown/73514245",
+      "incoming_story_id": "story_005717",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "St. Lucie County Fire District contains residential fire on East Erie Drive in Fort Pierce",
+      "incoming_source_url": "https://www.wpbf.com/article/st-lucie-county-fire-district-responds-to-residential-fire-in-fort-pierce/73515004",
+      "incoming_story_id": "story_005719",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Port St. Lucie residents receive tornado emergency alert 20 minutes after storm passed",
+      "incoming_source_url": "https://cbs12.com/news/local/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday",
+      "incoming_story_id": "story_005683",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Tornado moves through Port St. Lucie neighborhood on Hurricane Andrew anniversary",
+      "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/ef-0-tornado-tears-through-port-st-lucie-residents-clean-up-debris-and-damaged-structures",
+      "incoming_story_id": "story_005702",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
