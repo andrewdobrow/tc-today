@@ -1,7 +1,7 @@
 {
   "schema_version": 4,
   "gate_version": "1.7",
-  "generated_at": "2026-08-25T20:16:51.183683+00:00",
+  "generated_at": "2026-08-25T20:50:43.735932+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -53,32 +53,95 @@
   },
   "summary": {
     "evaluations": 67,
-    "candidate_pairs": 4,
-    "structured_conflict_overrides": 4,
-    "model_calls": 4,
-    "cache_hits": 0,
-    "no_candidate_passes": 63,
-    "duplicates_preserved": 1,
-    "canonical_updates_selected": 2,
-    "new_stories_allowed": 1,
+    "candidate_pairs": 2,
+    "structured_conflict_overrides": 2,
+    "model_calls": 0,
+    "cache_hits": 2,
+    "no_candidate_passes": 65,
+    "duplicates_preserved": 0,
+    "canonical_updates_selected": 1,
+    "new_stories_allowed": 3,
     "retroactive_rows_retained": 63,
     "holds": 0,
-    "retroactive_redirects": 2,
-    "registry_story_records_merged": 2,
-    "registry_aliases_written": 2,
-    "material_update_composer_calls": 2,
-    "material_updates_applied": 1,
-    "material_update_redirects": 1,
+    "retroactive_redirects": 0,
+    "registry_story_records_merged": 0,
+    "registry_aliases_written": 0,
+    "material_update_composer_calls": 1,
+    "material_updates_applied": 0,
+    "material_update_redirects": 0,
     "material_update_holds": 1,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 6,
+    "pre_generation_materiality_evaluations": 8,
     "pre_generation_materiality_promotions": 1,
-    "pre_generation_materiality_duplicates": 0,
-    "pre_generation_materiality_holds": 5,
-    "pre_generation_materiality_model_calls": 6,
+    "pre_generation_materiality_duplicates": 1,
+    "pre_generation_materiality_holds": 6,
+    "pre_generation_materiality_model_calls": 8,
     "pre_generation_materiality_cache_hits": 0
   },
   "pre_generation_materiality_decisions": [
+    {
+      "category_key": "local_gov",
+      "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - cw34.com",
+      "source_url": "https://cw34.com/news/local/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money?teaserSource=trending",
+      "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
+      "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
+      "canonical_is_custom": false,
+      "identity_basis": "same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": true,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "update_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "update_existing_canonical",
+      "confidence": 0.98,
+      "shared_anchors": [
+        "Two counterfeit $50 bills used for food delivery payment",
+        "$83.90 food order amount",
+        "Fort Pierce/St. Lucie County location",
+        "August 22 incident date",
+        "St. Lucie County Sheriff's Office",
+        "Residence on Miramar Avenue",
+        "19-year-old woman arrested"
+      ],
+      "novel_facts": [
+        "Suspect identified as Adrianna Marie Sheppard",
+        "Arrest occurred on Monday following August 22 incident",
+        "Specific charges: fraud utter bank bill, possession of counterfeited bank bill, and larceny"
+      ],
+      "reason": "This is clearly the same incident - identical dollar amounts, location, agency, date, and fact pattern. The incoming article adds material updates: the suspect's full name (Adrianna Marie Sheppard), the specific date of arrest (Monday following the August 22 incident), and the formal charges filed. The victim identification and formal charging constitute material updates that readers need to know, but this is not independently newsworthy enough to warrant a separate story - it's a standard arrest follow-up that should update the existing canonical.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "local_gov",
+      "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - cw34.com",
+      "source_url": "https://cw34.com/news/local/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire?teaserSource=trending",
+      "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+      "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [],
+      "novel_facts": [
+        "Structure fire on East Erie Drive in Fort Pierce on Sunday",
+        "Fire threatened mobile homes in St. Lucie County",
+        "Fire contained to area of origin",
+        "Fire Marshal's Office investigating cause"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
+    },
     {
       "category_key": "crime",
       "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
@@ -99,9 +162,9 @@
       "shared_anchors": [],
       "novel_facts": [
         "Structure fire on East Erie Drive in Fort Pierce on Sunday",
-        "Fire threatened mobile homes",
-        "Fire contained to area of origin",
-        "Fire Marshal investigating cause"
+        "Fire threatened mobile homes in St. Lucie County",
+        "Fire was contained to area of origin",
+        "Cause under investigation by Fire Marshal's Office"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -125,18 +188,53 @@
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
       "confidence": 0.95,
-      "shared_anchors": [],
+      "shared_anchors": [
+        "Same source outlet (WPBF)",
+        "Same generic article series format (weekend activities roundup)",
+        "Overlapping geographic coverage (Treasure Coast and Palm Beach)"
+      ],
       "novel_facts": [
-        "Newfield Farm gardening class on Saturday Aug 21, 2026",
-        "Ukrainian Cultural Fest in West Palm Beach on Saturday",
-        "Delray's Hottest Party menopause health event",
-        "Peggy Adams Animal Rescue League name-your-price adoption event",
-        "Loggerhead Triathlon in Jupiter on Saturday"
+        "Newfield Farm garden class on Saturday August 21, 2026",
+        "Ukrainian Cultural Fest in West Palm Beach",
+        "Delray's Hottest Party women's health event",
+        "Peggy Adams Animal Rescue League adoption event",
+        "Loggerhead Triathlon in Jupiter"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
+    },
+    {
+      "category_key": "martin",
+      "source_headline": "Sheriff's helicopter spots massive fire in Martin County, helps firefighters save home - cw34.com",
+      "source_url": "https://cw34.com/newsletter-daily/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
+      "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
+      "canonical_headline": "Sheriff's helicopter crew spots garage fire on Southwest Martin Highway, helps save Palm City home",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.98,
+      "shared_anchors": [
+        "Martin County Sheriff's Office Air One helicopter crew",
+        "Fire spotted around 10:30 p.m. Sunday night",
+        "Southwest Martin Highway location",
+        "1,600-square-foot detached garage/structure",
+        "Class C motorhome and Jeep inside destroyed",
+        "Fire threatened main home but firefighters saved it",
+        "Homeowners not home at time of fire",
+        "State Fire Marshal notified"
+      ],
+      "novel_facts": [],
+      "reason": "Both articles describe the identical fire incident: MCSO Air One helicopter crew spotted a garage fire on Southwest Martin Highway late Sunday night around 10:30 p.m., alerted firefighters, who saved the main home but lost the 1,600 sq ft garage and vehicles (Class C motorhome and Jeep) inside. The incoming article from cw34.com contains no new material information beyond what was already reported in the canonical article from WPEC/CBS12 published the previous day. The only differences are minor wording variations (detached garage vs. barn/garage, tactical flight observer vs. crew) but all substantive facts are identical.",
+      "validation_errors": []
     },
     {
       "category_key": "st_lucie",
@@ -157,10 +255,10 @@
       "confidence": 0.95,
       "shared_anchors": [],
       "novel_facts": [
-        "Residential structure fire on East Erie Drive in Fort Pierce on Sunday",
-        "Fire threatened mobile homes in St. Lucie County",
-        "Fire was contained to area of origin",
-        "Cause under investigation by Fire Marshal's Office"
+        "Structure fire on East Erie Drive in Fort Pierce on Sunday",
+        "Fire threatened multiple mobile homes in St. Lucie County",
+        "Fire was contained and prevented from spreading",
+        "Fire Marshal's Office investigating cause"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -189,7 +287,7 @@
         "Residential structure fire on East Erie Drive in Fort Pierce on Sunday",
         "Fire threatened mobile homes in St. Lucie County",
         "Fire was contained to area of origin",
-        "Investigation by Fire Marshal's Office underway"
+        "Fire Marshal's Office investigating cause"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -213,54 +311,20 @@
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
       "confidence": 0.98,
-      "shared_anchors": [],
+      "shared_anchors": [
+        "Fort Pierce locality"
+      ],
       "novel_facts": [
-        "34-year-old Fort Pierce man shot with BB gun on Avenue G on August 24, 2026",
+        "34-year-old man killed by BB gun shooting on Saturday",
+        "Incident occurred on Avenue G",
         "Suspect Jabari Cowart charged with manslaughter",
-        "Victim died at HCA Florida Lawnwood Hospital",
-        "Incident involved group shooting BB guns at trees"
+        "Group was shooting BB guns at trees",
+        "Victim died at HCA Florida Lawnwood Hospital"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
         "known_canonical_identity_conflict"
       ]
-    },
-    {
-      "category_key": "st_lucie",
-      "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
-      "source_url": "https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
-      "canonical_slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
-      "canonical_headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
-      "canonical_is_custom": false,
-      "identity_basis": "exact_source_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": true,
-      "cache_hit": false,
-      "model_call": true,
-      "action": "update_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "update_existing_canonical",
-      "confidence": 0.95,
-      "shared_anchors": [
-        "Same date: August 24, 2026",
-        "Same location: Port St. Lucie",
-        "Same tornado event on Sunday evening",
-        "Same source URL (wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763)",
-        "Both reference National Weather Service survey"
-      ],
-      "novel_facts": [
-        "Official tornado classification as EF0",
-        "Specific wind speed estimates: 65-75 mph",
-        "Precise start time: 6:10 p.m.",
-        "Exact start location with coordinates: SE Kitchen Cove Lane and SE Morningside Boulevard (27.253, -80.316)",
-        "Exact end location with coordinates: SE Quay Street and SE Cody Place (27.244, -80.346)",
-        "Track length: 2.1 miles",
-        "Maximum width: 200 yards",
-        "Note that tornado moved over St. Lucie River as waterspout"
-      ],
-      "reason": "This is clearly the same tornado event in Port St. Lucie on August 24, 2026, from the identical source URL. The incoming article provides material new updates: the official EF0 classification, specific meteorological measurements (wind speeds, coordinates, track length, width), and precise timing. These are the results of the damage survey that was only announced as pending in the canonical candidate. This is not independently newsworthy as a separate story—it's the expected technical findings from the survey, which should update the existing canonical.",
-      "validation_errors": []
     }
   ],
   "decisions": [
@@ -752,90 +816,6 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Miami woman accused of scamming Martin County seniors hid $3,200 in her body during jail intake",
-      "incoming_source_url": "https://cbs12.com/news/local/florida-crime-news-woman-accused-of-hiding-smuggling-3200-dollars-in-her-body-vagina-during-martin-county-arrest-faces-new-charges-elderly-victim-bank-scam-biohazard-money-felony-scheme-to-defraud",
-      "incoming_story_id": "story_004694",
-      "candidates": [
-        {
-          "slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
-          "headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
-          "retrieval_score": 0.6523,
-          "headline_similarity": 0.4632,
-          "similarity_basis": "final_headline",
-          "shared_headline_tokens": [
-            "body",
-            "county",
-            "martin",
-            "miami",
-            "woman"
-          ],
-          "shared_topic_tokens": [
-            "body",
-            "miami",
-            "woman"
-          ],
-          "content_similarity": {
-            "score": 0.4505,
-            "overlap": 0.5238,
-            "jaccard": 0.2619,
-            "shared_token_count": 11,
-            "shared_tokens": [
-              "arrest",
-              "bank",
-              "body",
-              "cash",
-              "hiding",
-              "miami",
-              "posing",
-              "representative",
-              "scam",
-              "she",
-              "woman"
-            ]
-          },
-          "strong_content_event_continuity": true,
-          "day_gap": 0,
-          "structured_conflict_override": true,
-          "structured_conflict_override_tier": "strong_content_event_continuity",
-          "incident_anchor_conflict": false,
-          "known_event_key_conflict": true,
-          "reasons": [
-            "strong_content_event_continuity",
-            "publication_gap_0_days",
-            "structured_identity_conflict",
-            "structured_identity_conflict_overridden_by_content_continuity"
-          ]
-        }
-      ],
-      "decision": {
-        "status": "validated",
-        "action": "update_existing_canonical",
-        "recommended_action": "update_existing_canonical",
-        "selected_candidate_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
-        "same_real_world_event": true,
-        "material_new_update": true,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [
-          "Miami woman arrested in Martin County",
-          "Posed as bank representative to scam seniors/residents",
-          "Hid cash in her body",
-          "Martin County Sheriff's Office involvement",
-          "Same arrest date August 19, 2026"
-        ],
-        "novel_facts": [
-          "Specific amount hidden: $3,180",
-          "Woman identified as Monquie Love Turnbull, age 32",
-          "Additional charge for smuggling cash during jail intake",
-          "Money characterized as biohazard",
-          "New felony charges beyond original scam charges"
-        ],
-        "reason": "Both articles cover the same arrest of a Miami woman in Martin County who posed as a bank representative to scam elderly victims and hid cash in her body. The incoming article provides material updates including the suspect's name (Monquie Love Turnbull), age (32), the specific amount hidden ($3,180), and crucially that she now faces additional charges for smuggling the cash during jail intake. This is a material development - new criminal charges arising from her conduct during booking - that readers need to know and should update the existing canonical rather than create a separate URL.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Florida school camera lawsuits face dismissals as judges side with automated enforcement systems",
       "incoming_source_url": "https://www.wptv.com/wptv-investigates/lawsuits-over-school-bus-and-school-speed-zone-camera-tickets-face-setbacks-in-florida",
       "incoming_story_id": "story_004680",
@@ -1119,26 +1099,6 @@
       "incoming_headline": "Fort Pierce brewery to host Sunday church services starting in September",
       "incoming_source_url": "https://www.wpbf.com/article/florida-church-brewery-firefighter-beer-bible/73488086",
       "incoming_story_id": "story_004981",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Sheriff Eric Flowers credits Flock license plate readers in Vero Beach murder investigation",
-      "incoming_source_url": "https://cbs12.com/news/local/dawn-kriskewic-murder-suspect-matthew-waggle-indian-river-sheriff-credits-license-plate-readers-in-capture-of-murder-suspect-in-vero-beach-killing-flock-ex-wife-west-virginia-greyhound-bus-uber",
-      "incoming_story_id": "story_004903",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1516,86 +1476,6 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Indian River County sheriff credits Flock Safety cameras in Vero Beach homicide arrest, sparking privacy debate",
-      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/community-divided-over-flock-safety-cameras-after-treasure-coast-homicide-arrest",
-      "incoming_story_id": "story_005818",
-      "candidates": [
-        {
-          "slug": "2026-08-21-sheriff-eric-flowers-credits-flock-license-plate-readers-in-vero-beach-murder-in",
-          "headline": "Sheriff Eric Flowers credits Flock license plate readers in Vero Beach murder investigation",
-          "retrieval_score": 0.7086,
-          "headline_similarity": 0.4784,
-          "similarity_basis": "final_headline",
-          "shared_headline_tokens": [
-            "beach",
-            "credits",
-            "flock",
-            "sheriff",
-            "vero"
-          ],
-          "shared_topic_tokens": [
-            "credits",
-            "flock",
-            "sheriff"
-          ],
-          "content_similarity": {
-            "score": 0.3645,
-            "overlap": 0.4091,
-            "jaccard": 0.25,
-            "shared_token_count": 9,
-            "shared_tokens": [
-              "credited",
-              "credits",
-              "eric",
-              "flock",
-              "flowers",
-              "license",
-              "plate",
-              "sheriff",
-              "suspect"
-            ]
-          },
-          "strong_content_event_continuity": true,
-          "day_gap": 2,
-          "structured_conflict_override": true,
-          "structured_conflict_override_tier": "strong_content_event_continuity",
-          "incident_anchor_conflict": false,
-          "known_event_key_conflict": true,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "strong_content_event_continuity",
-            "publication_gap_2_days",
-            "structured_identity_conflict",
-            "structured_identity_conflict_overridden_by_content_continuity"
-          ]
-        }
-      ],
-      "decision": {
-        "status": "validated",
-        "action": "duplicate_use_existing_canonical",
-        "recommended_action": "update_existing_canonical",
-        "selected_candidate_slug": "2026-08-21-sheriff-eric-flowers-credits-flock-license-plate-readers-in-vero-beach-murder-in",
-        "same_real_world_event": true,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.85,
-        "shared_anchors": [
-          "Sheriff Eric Flowers",
-          "Indian River County Sheriff",
-          "Flock license plate readers/cameras",
-          "Vero Beach homicide/murder",
-          "Arrest credited to technology"
-        ],
-        "novel_facts": [
-          "Community privacy debate angle",
-          "Community divided perspective"
-        ],
-        "reason": "Both articles cover the same real-world event: Sheriff Eric Flowers crediting Flock Safety license plate reader technology for helping make an arrest in a Vero Beach homicide case. The shared anchors are specific and concrete: same named sheriff, same agency, same technology (Flock), same locality, and same incident type. The incoming article (Aug 23) appears to be a follow-up angle focusing on community privacy debate sparked by the arrest announcement, but this is not independently newsworthy—it's a reaction/angle story about the same underlying arrest and technology use. The privacy debate context should be incorporated into the existing canonical rather than creating a new URL, as it doesn't introduce a distinct accountability finding, policy action, or investigation that would merit its own story independent of knowing about the arrest.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Sheriff's helicopter crew spots garage fire on Southwest Martin Highway, helps save Palm City home",
       "incoming_source_url": "https://cbs12.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
       "incoming_story_id": "story_005650",
@@ -1828,7 +1708,7 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Vero Beach man crashes while fleeing deputies, K9 finds him hiding under brush",
       "incoming_source_url": "https://cbs12.com/news/local/vero-beach-man-crashes-while-fleeing-deputies-k9-finds-him-hiding-under-brush-vero-beach-indian-river-county-indian-river-county-sheriff-christopher-john-baptist-fleeing-deputies-fleeing-and-eluding-high-speed-chase-police-pursuit-deputy-pursuit",
       "incoming_story_id": "story_005892",
@@ -1846,27 +1726,69 @@
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
         "validation_errors": []
       }
-    }
-  ],
-  "archive_repairs": [
+    },
     {
-      "source_slug": "2026-08-23-indian-river-county-sheriff-credits-flock-safety-cameras-in-vero-beach-homicide",
-      "target_slug": "2026-08-21-sheriff-eric-flowers-credits-flock-license-plate-readers-in-vero-beach-murder-in",
-      "source_story_id": "story_005818",
-      "target_story_id": "story_004903",
-      "source_url": "https://www.wptv.com/news/treasure-coast/community-divided-over-flock-safety-cameras-after-treasure-coast-homicide-arrest",
-      "source_headline": "Indian River County sheriff credits Flock Safety cameras in Vero Beach homicide arrest, sparking privacy debate",
-      "target_headline": "Sheriff Eric Flowers credits Flock license plate readers in Vero Beach murder investigation",
-      "confidence": 0.85,
-      "shared_anchors": [
-        "Sheriff Eric Flowers",
-        "Indian River County Sheriff",
-        "Flock license plate readers/cameras",
-        "Vero Beach homicide/murder",
-        "Arrest credited to technology"
-      ]
+      "phase": "forward_publication",
+      "incoming_headline": "All 36 Border Collies surrendered in Palm City cruelty case; adoptions open Sept. 1",
+      "incoming_source_url": "https://cbs12.com/news/local/palm-city-florida-border-collies-hoarding-case-shelter-groomed-recovery-humane-society-treasure-coast-adoptions-begin-september-1-paige-odonnell-animal-cruelty-medical-testing-behavioral-evaluations-spayed-neutered-vaccinated",
+      "incoming_story_id": "story_003665",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Florida leads nation in ACA coverage losses as 440,000 drop plans after subsidy expiration",
+      "incoming_source_url": "https://www.wptv.com/news/state/florida-hard-hit-by-obamacare-drop-off-feels-the-squeeze-of-rising-healthcare-costs",
+      "incoming_story_id": "story_005907",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
+      "incoming_source_url": "https://www.wpbf.com/article/ronald-l-corbin-beloved-choral-teacher-at-martin-high-school-for-34-years-dies/73506173",
+      "incoming_story_id": "story_005931",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
     }
   ],
+  "archive_repairs": [],
   "material_update_compositions": [
     {
       "phase": "retroactive_recent_archive_repair",
@@ -1876,9 +1798,10 @@
       "validation_errors": [
         "body_too_short"
       ],
-      "word_count": 139,
-      "paragraph_count": 4,
+      "word_count": 110,
+      "paragraph_count": 3,
       "baseline_lead_hits": [
+        "arrest",
         "beach",
         "caruso",
         "clerk",
@@ -1888,215 +1811,23 @@
       "novelty_lead_hits": [
         "day",
         "extradited",
+        "his",
         "jail",
-        "orange"
+        "one",
+        "orange",
+        "suspension",
+        "wednesday"
       ],
       "reason": "composition_not_validated"
-    },
-    {
-      "phase": "retroactive_recent_archive_repair",
-      "canonical_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
-      "incoming_slug": "2026-08-19-miami-woman-accused-of-scamming-martin-county-seniors-hid-3200-in-her-body-durin",
-      "status": "validated",
-      "validation_errors": [],
-      "word_count": 195,
-      "paragraph_count": 4,
-      "baseline_lead_hits": [
-        "arrested",
-        "bank",
-        "body",
-        "cash",
-        "martin",
-        "miami",
-        "posing",
-        "representative",
-        "woman"
-      ],
-      "novelty_lead_hits": [
-        "180",
-        "additional",
-        "charge",
-        "deputies",
-        "during",
-        "faces",
-        "her",
-        "hid",
-        "intake",
-        "jail",
-        "love",
-        "monquie",
-        "say",
-        "seniors",
-        "she",
-        "smuggled",
-        "turnbull"
-      ],
-      "headline_alignment": {
-        "aligned": false,
-        "reason": "headline_slug_event_drift",
-        "token_similarity": 0.2105,
-        "date_gap_days": 6,
-        "prospective": true,
-        "existing_headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
-        "incoming_headline": "Miami woman accused of scamming Martin County seniors faces additional charge for hiding $3,180 in body during jail intake",
-        "candidate_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
-        "prospective_lastmod": "2026-08-25",
-        "timestamp_evidence": "stored_archive_timestamp"
-      },
-      "headline_preserved_for_permalink_alignment": true,
-      "context_diagnostics": {
-        "required": true,
-        "passed": true,
-        "story_form": "update",
-        "lead_word_count": 73,
-        "baseline_anchor": "",
-        "baseline_present": true,
-        "baseline_anchor_present": true,
-        "baseline_details_present": true,
-        "baseline_context_hits": [
-          "arrested",
-          "bank",
-          "body",
-          "cash",
-          "martin",
-          "miami",
-          "posing",
-          "representative",
-          "woman"
-        ],
-        "baseline_context_required": 2,
-        "canonical_context_available": true,
-        "canonical_context_headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
-        "novelty_anchor": "arrest_or_charge",
-        "novelty_present": true,
-        "novelty_token_hits": [
-          "faces"
-        ],
-        "missing": [],
-        "source_title": "Woman accused of hiding $3,200 in her body during Martin County arrest faces new charges - WPEC",
-        "headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body"
-      },
-      "headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body"
     }
   ],
-  "material_updates": [
-    {
-      "source_slug": "2026-08-19-miami-woman-accused-of-scamming-martin-county-seniors-hid-3200-in-her-body-durin",
-      "target_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
-      "source_story_id": "story_004694",
-      "target_story_id": "story_004692",
-      "source_url": "https://cbs12.com/news/local/florida-crime-news-woman-accused-of-hiding-smuggling-3200-dollars-in-her-body-vagina-during-martin-county-arrest-faces-new-charges-elderly-victim-bank-scam-biohazard-money-felony-scheme-to-defraud",
-      "source_headline": "Miami woman accused of scamming Martin County seniors hid $3,200 in her body during jail intake",
-      "updated_headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
-      "confidence": 0.95,
-      "shared_anchors": [
-        "Miami woman arrested in Martin County",
-        "Posed as bank representative to scam seniors/residents",
-        "Hid cash in her body",
-        "Martin County Sheriff's Office involvement",
-        "Same arrest date August 19, 2026"
-      ],
-      "novel_facts": [
-        "Specific amount hidden: $3,180",
-        "Woman identified as Monquie Love Turnbull, age 32",
-        "Additional charge for smuggling cash during jail intake",
-        "Money characterized as biohazard",
-        "New felony charges beyond original scam charges"
-      ],
-      "updated_at": "2026-08-25T20:15:52Z",
-      "composition": {
-        "phase": "retroactive_recent_archive_repair",
-        "canonical_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
-        "incoming_slug": "2026-08-19-miami-woman-accused-of-scamming-martin-county-seniors-hid-3200-in-her-body-durin",
-        "status": "validated",
-        "validation_errors": [],
-        "word_count": 195,
-        "paragraph_count": 4,
-        "baseline_lead_hits": [
-          "arrested",
-          "bank",
-          "body",
-          "cash",
-          "martin",
-          "miami",
-          "posing",
-          "representative",
-          "woman"
-        ],
-        "novelty_lead_hits": [
-          "180",
-          "additional",
-          "charge",
-          "deputies",
-          "during",
-          "faces",
-          "her",
-          "hid",
-          "intake",
-          "jail",
-          "love",
-          "monquie",
-          "say",
-          "seniors",
-          "she",
-          "smuggled",
-          "turnbull"
-        ],
-        "headline_alignment": {
-          "aligned": false,
-          "reason": "headline_slug_event_drift",
-          "token_similarity": 0.2105,
-          "date_gap_days": 6,
-          "prospective": true,
-          "existing_headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
-          "incoming_headline": "Miami woman accused of scamming Martin County seniors faces additional charge for hiding $3,180 in body during jail intake",
-          "candidate_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
-          "prospective_lastmod": "2026-08-25",
-          "timestamp_evidence": "stored_archive_timestamp"
-        },
-        "headline_preserved_for_permalink_alignment": true,
-        "context_diagnostics": {
-          "required": true,
-          "passed": true,
-          "story_form": "update",
-          "lead_word_count": 73,
-          "baseline_anchor": "",
-          "baseline_present": true,
-          "baseline_anchor_present": true,
-          "baseline_details_present": true,
-          "baseline_context_hits": [
-            "arrested",
-            "bank",
-            "body",
-            "cash",
-            "martin",
-            "miami",
-            "posing",
-            "representative",
-            "woman"
-          ],
-          "baseline_context_required": 2,
-          "canonical_context_available": true,
-          "canonical_context_headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
-          "novelty_anchor": "arrest_or_charge",
-          "novelty_present": true,
-          "novelty_token_hits": [
-            "faces"
-          ],
-          "missing": [],
-          "source_title": "Woman accused of hiding $3,200 in her body during Martin County arrest faces new charges - WPEC",
-          "headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body"
-        },
-        "headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body"
-      }
-    }
-  ],
+  "material_updates": [],
   "registry_consolidation": {
-    "status": "consolidated",
-    "directives_considered": 3,
-    "story_records_merged": 2,
-    "aliases_written": 2,
-    "already_consolidated": 0,
+    "status": "no_changes",
+    "directives_considered": 2,
+    "story_records_merged": 0,
+    "aliases_written": 0,
+    "already_consolidated": 1,
     "skipped": [
       {
         "source_story_id": "story_003665",
@@ -2160,54 +1891,6 @@
       }
     ],
     "rejected_directives": [],
-    "merges": [
-      {
-        "source_story_id": "story_004694",
-        "target_story_id": "story_004692",
-        "target_slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
-        "incoming_headline": "Miami woman accused of scamming Martin County seniors hid $3,200 in her body during jail intake",
-        "confidence": 0.95,
-        "shared_anchors": [
-          "Miami woman arrested in Martin County",
-          "Posed as bank representative to scam seniors/residents",
-          "Hid cash in her body",
-          "Martin County Sheriff's Office involvement",
-          "Same arrest date August 19, 2026"
-        ],
-        "reason": "Both articles cover the same arrest of a Miami woman in Martin County who posed as a bank representative to scam elderly victims and hid cash in her body. The incoming article provides material updates including the suspect's name (Monquie Love Turnbull), age (32), the specific amount hidden ($3,180), and crucially that she now faces additional charges for smuggling the cash during jail intake. This is a material development - new criminal charges arising from her conduct during booking - that readers need to know and should update the existing canonical rather than create a separate URL.",
-        "relationship_type": "material_update",
-        "novel_facts": [
-          "Specific amount hidden: $3,180",
-          "Woman identified as Monquie Love Turnbull, age 32",
-          "Additional charge for smuggling cash during jail intake",
-          "Money characterized as biohazard",
-          "New felony charges beyond original scam charges"
-        ],
-        "resolved_source_story_id": "story_004694",
-        "resolved_target_story_id": "story_004692"
-      },
-      {
-        "source_story_id": "story_005818",
-        "target_story_id": "story_004903",
-        "target_slug": "2026-08-21-sheriff-eric-flowers-credits-flock-license-plate-readers-in-vero-beach-murder-in",
-        "incoming_headline": "Indian River County sheriff credits Flock Safety cameras in Vero Beach homicide arrest, sparking privacy debate",
-        "confidence": 0.85,
-        "shared_anchors": [
-          "Sheriff Eric Flowers",
-          "Indian River County Sheriff",
-          "Flock license plate readers/cameras",
-          "Vero Beach homicide/murder",
-          "Arrest credited to technology"
-        ],
-        "reason": "Both articles cover the same real-world event: Sheriff Eric Flowers crediting Flock Safety license plate reader technology for helping make an arrest in a Vero Beach homicide case. The shared anchors are specific and concrete: same named sheriff, same agency, same technology (Flock), same locality, and same incident type. The incoming article (Aug 23) appears to be a follow-up angle focusing on community privacy debate sparked by the arrest announcement, but this is not independently newsworthy—it's a reaction/angle story about the same underlying arrest and technology use. The privacy debate context should be incorporated into the existing canonical rather than creating a new URL, as it doesn't introduce a distinct accountability finding, policy action, or investigation that would merit its own story independent of knowing about the arrest.",
-        "relationship_type": "duplicate",
-        "novel_facts": [
-          "Community privacy debate angle",
-          "Community divided perspective"
-        ],
-        "resolved_source_story_id": "story_001557",
-        "resolved_target_story_id": "story_004903"
-      }
-    ]
+    "merges": []
   }
 }
