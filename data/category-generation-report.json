@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-08-25T10:48:22Z",
+  "generated_at": "2026-08-25T15:50:12Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,49 +16,45 @@
     "category_count": 9,
     "statuses": {
       "category_eligibility_archive_recovery": 5,
-      "generated_live": 3,
-      "no_publishable_sources": 1
+      "generated_live": 1,
+      "generation_failed_archive_recovery": 1,
+      "quality_gate_archive_recovery": 2
     },
     "failures": {
-      "no_category_eligible_sources": 5
+      "contextless_update_lead": 1,
+      "no_category_eligible_sources": 5,
+      "publication_quality_rejected": 2
     },
-    "model_attempt_count": 3,
-    "model_elapsed_seconds": 65.904,
-    "archive_recovery_requested_count": 6,
+    "model_attempt_count": 5,
+    "model_elapsed_seconds": 104.876,
+    "archive_recovery_requested_count": 8,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 1,
+    "contextual_update_lead_rejection_count": 2,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 7,
-    "published_story_duplicate_suppression_count": 29,
-    "story_aware_update_context_count": 10,
-    "material_update_promotion_evaluation_count": 10,
+    "category_eligibility_rejection_count": 5,
+    "published_story_duplicate_suppression_count": 41,
+    "story_aware_update_context_count": 5,
+    "material_update_promotion_evaluation_count": 8,
     "material_update_promotion_count": 1,
-    "material_update_promotion_cache_hit_count": 3,
+    "material_update_promotion_cache_hit_count": 1,
     "material_update_promotion_model_call_count": 7
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generated_live",
-      "fetched_candidate_count": 26,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 6,
-      "selected_source_count": 2,
+      "status": "category_eligibility_archive_recovery",
+      "fetched_candidate_count": 28,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 8,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 7.451,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 7.451,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Local Government category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -67,23 +63,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 4,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_central_government_action",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [],
-          "headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood"
-        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -97,10 +79,58 @@
           "local_nexus_signals": [],
           "headline": "Port St. Lucie to consider $14.83 annual trash fee increase amid lingering pickup concerns - WPEC",
           "source_url": "https://cbs12.com/news/local/port-st-lucie-to-consider-1483-annual-trash-fee-increase-amid-lingering-pickup-concerns-fcc-environmental-service-october-1-scott-samples-inflation-costs-labor-equipment-maintenance"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Ronald L. Corbin, beloved choral teacher at Martin County High School for 34 years, dies - WPBF",
+          "source_url": "https://www.wpbf.com/article/ronald-l-corbin-beloved-choral-teacher-at-martin-high-school-for-34-years-dies/73506173"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - cw34.com",
+          "source_url": "https://cw34.com/news/local/tornado-warning-issued-for-parts-of-st-lucie-martin-counties?teaserSource=trending"
         }
       ],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
+          "editorial_story_id": "story_005782",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "canonical_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "After primary loss, Jay Collins leaves door open to political future",
+          "source_url": "https://www.wptv.com/news/state/after-primary-loss-jay-collins-leaves-door-open-to-political-future",
+          "editorial_story_id": "story_005749",
+          "canonical_slug": "2026-08-25-florida-lt-gov-jay-collins-leaves-future-in-politics-uncertain-after-primary-los",
+          "canonical_headline": "Florida Lt. Gov. Jay Collins leaves future in politics uncertain after primary loss",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "SLCSO asks public for tips on missing Fort Pierce woman last seen Aug. 14 - WPEC",
@@ -133,79 +163,52 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old victim",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-man-charged-with-manslaughter-after-bb-gun-shooting-kills-34-year-old-victim",
-          "editorial_story_id": "story_002417",
-          "canonical_slug": "2026-08-24-fort-pierce-man-dies-after-bb-gun-shooting-suspect-charged-with-manslaughter",
-          "canonical_headline": "Fort Pierce man dies after BB gun shooting, suspect charged with manslaughter",
-          "basis": "authorized_canonical_identity_skip",
+          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
+          "editorial_story_id": "story_005664",
+          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
+          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
+        }
+      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "canonical_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Ronald L. Corbin, beloved choral teacher at Martin County High School for 34 years, dies - WPBF",
-          "source_url": "https://www.wpbf.com/article/ronald-l-corbin-beloved-choral-teacher-at-martin-high-school-for-34-years-dies/73506173",
-          "editorial_story_id": "story_001592",
-          "canonical_slug": "2026-08-23-indian-river-county-sheriff-credits-flock-safety-cameras-in-vero-beach-homicide",
-          "canonical_headline": "Indian River County sheriff credits Flock Safety cameras in Vero Beach homicide arrest, sparking privacy debate",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 2,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
-          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_005664",
-            "source:https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_005664,source:https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
+          "source_headline": "After primary loss, Jay Collins leaves door open to political future",
+          "source_url": "https://www.wptv.com/news/state/after-primary-loss-jay-collins-leaves-door-open-to-political-future",
+          "canonical_slug": "2026-08-25-florida-lt-gov-jay-collins-leaves-future-in-politics-uncertain-after-primary-los",
+          "canonical_headline": "Florida Lt. Gov. Jay Collins leaves future in politics uncertain after primary loss",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
-        {
-          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns",
-          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
-          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_005664",
-            "source:https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_005664,source:https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 1,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 1,
-      "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
           "source_headline": "SLCSO asks public for tips on missing Fort Pierce woman last seen Aug. 14 - WPEC",
@@ -253,73 +256,45 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old victim",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-man-charged-with-manslaughter-after-bb-gun-shooting-kills-34-year-old-victim",
-          "canonical_slug": "2026-08-24-fort-pierce-man-dies-after-bb-gun-shooting-suspect-charged-with-manslaughter",
-          "canonical_headline": "Fort Pierce man dies after BB gun shooting, suspect charged with manslaughter",
+          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
+          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
+          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
           "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Ronald L. Corbin, beloved choral teacher at Martin County High School for 34 years, dies - WPBF",
-          "source_url": "https://www.wpbf.com/article/ronald-l-corbin-beloved-choral-teacher-at-martin-high-school-for-34-years-dies/73506173",
-          "canonical_slug": "2026-08-23-indian-river-county-sheriff-credits-flock-safety-cameras-in-vero-beach-homicide",
-          "canonical_headline": "Indian River County sheriff credits Flock Safety cameras in Vero Beach homicide arrest, sparking privacy debate",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 1.0,
-          "shared_anchors": [],
-          "novel_facts": [],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Fort Pierce city commission approves $31,000 for attorney search after entire legal team resigns",
-      "generated_card_count": 0,
-      "elapsed_seconds": 37.267
+      "elapsed_seconds": 33.831
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generated_live",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 4,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 5,
       "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": false,
+      "archive_recovery_requested": true,
       "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 5.861,
+          "elapsed_seconds": 4.614,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 5.861,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 4.614,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -328,11 +303,31 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
+          "source_url": "https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
+          "editorial_story_id": "story_001215",
+          "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+          "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
+          "editorial_story_id": "story_005782",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "canonical_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - WPEC",
@@ -369,18 +364,104 @@
           "source_url": "https://www.wflx.com/2026/08/24/fort-pierce-man-charged-with-manslaughter-after-bb-gun-shooting-kills-34-year-old-victim?outputType=amp",
           "editorial_story_id": "story_002417",
           "canonical_slug": "2026-08-24-fort-pierce-man-dies-after-bb-gun-shooting-suspect-charged-with-manslaughter",
-          "canonical_headline": "Fort Pierce man dies after BB gun shooting, suspect charged with manslaughter",
+          "canonical_headline": "Fort Pierce man identified as Jabari Cowart in fatal BB gun shooting on Avenue G",
           "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Sheriff's helicopter spots massive fire in Martin County, helps firefighters save home - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
+          "publisher": "cw34.com",
+          "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
+          "canonical_headline": "Sheriff's helicopter crew spots garage fire on Southwest Martin Highway, helps save Palm City home",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_005650",
+            "source:https://cw34.com/newsletter-daily/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=1",
+            "shared_locality=['martin-county', 'port-st-lucie', 'st-lucie']",
+            "shared_event_families=['fire']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['southwest-martin-highway']",
+            "shared_agencies=['martin-county-sheriff']",
+            "shared_subject_phrases=['helicopt-spot-massive', 'sheriff-helicopt-spot', 'sheriff-helicopt-spot-massive']",
+            "shared_headline_topic_core=['fire', 'helicopt', 'massive', 'sheriff', 'spot']",
+            "shared_distinctive_token_count=52",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
+          "source_url": "https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
+          "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+          "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.95,
+          "shared_anchors": [],
+          "novel_facts": [
+            "Structure fire on East Erie Drive in Fort Pierce on Sunday",
+            "Fire threatened mobile homes in St. Lucie County",
+            "Fire was contained to area of origin",
+            "Fire Marshal's Office investigating cause"
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "canonical_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "crime",
           "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - WPEC",
@@ -431,7 +512,7 @@
           "source_headline": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old victim - WFLX",
           "source_url": "https://www.wflx.com/2026/08/24/fort-pierce-man-charged-with-manslaughter-after-bb-gun-shooting-kills-34-year-old-victim?outputType=amp",
           "canonical_slug": "2026-08-24-fort-pierce-man-dies-after-bb-gun-shooting-suspect-charged-with-manslaughter",
-          "canonical_headline": "Fort Pierce man dies after BB gun shooting, suspect charged with manslaughter",
+          "canonical_headline": "Fort Pierce man identified as Jabari Cowart in fatal BB gun shooting on Avenue G",
           "canonical_is_custom": false,
           "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -445,17 +526,15 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "19-year-old arrested in Fort Pierce after paying for food delivery with counterfeit $50 bills",
-      "generated_card_count": 0,
-      "elapsed_seconds": 17.631
+      "elapsed_seconds": 33.619
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 11,
+      "fresh_candidate_count": 17,
+      "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -472,46 +551,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 5,
-      "category_eligibility_rejection_count": 4,
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "source_locality:martin county",
-            "source_locality:st lucie county",
-            "source_locality:port st lucie"
-          ],
-          "headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:charged"
-          ],
-          "local_nexus_signals": [
-            "source_locality:st lucie county",
-            "source_locality:fort pierce"
-          ],
-          "headline": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old victim",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-man-charged-with-manslaughter-after-bb-gun-shooting-kills-34-year-old-victim"
-        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -527,33 +569,20 @@
           ],
           "headline": "Port St. Lucie residents clean up after possible tornado or landspout hits neighborhood",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-clean-up-after-possible-tornado-or-landspout-hits-neighborhood"
-        },
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [
-            "business_opening_closure_expansion:expands"
-          ],
-          "competing_signals": [
-            "crime_public_safety:arrest"
-          ],
-          "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:indian river county",
-            "source_locality:stuart",
-            "source_locality:vero beach"
-          ],
-          "headline": "Community divided over Flock Safety cameras after Treasure Coast homicide arrest",
-          "source_url": "https://www.wptv.com/news/treasure-coast/community-divided-over-flock-safety-cameras-after-treasure-coast-homicide-arrest"
         }
       ],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
+          "editorial_story_id": "story_005782",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "canonical_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures",
@@ -562,6 +591,26 @@
           "canonical_slug": "2026-08-25-tornado-moves-through-port-st-lucie-neighborhood-on-hurricane-andrew-anniversary",
           "canonical_headline": "Tornado moves through Port St. Lucie neighborhood on Hurricane Andrew anniversary",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns",
+          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
+          "editorial_story_id": "story_005664",
+          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
+          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old victim",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-man-charged-with-manslaughter-after-bb-gun-shooting-kills-34-year-old-victim",
+          "editorial_story_id": "story_002417",
+          "canonical_slug": "2026-08-24-fort-pierce-man-dies-after-bb-gun-shooting-suspect-charged-with-manslaughter",
+          "canonical_headline": "Fort Pierce man identified as Jabari Cowart in fatal BB gun shooting on Avenue G",
+          "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -593,43 +642,10 @@
           "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
           "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Future of Brightline station in downtown Stuart uncertain after federal funds go elsewhere",
-          "source_url": "https://www.wptv.com/lifestyle/travel/future-of-brightline-station-in-downtown-stuart-uncertain-after-federal-funds-go-elsewhere",
-          "editorial_story_id": "story_004955",
-          "canonical_slug": "2026-08-21-brightline-station-in-downtown-stuart-unlikely-after-martin-county-denied-federa",
-          "canonical_headline": "Brightline station in downtown Stuart unlikely after Martin County denied federal funding",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns",
-          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
-          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_005664",
-            "source:https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_005664,source:https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
         {
           "source_headline": "Community divided over Flock Safety cameras after Treasure Coast homicide arrest",
           "source_url": "https://www.wptv.com/news/treasure-coast/community-divided-over-flock-safety-cameras-after-treasure-coast-homicide-arrest",
@@ -638,16 +654,15 @@
           "canonical_headline": "Indian River County sheriff credits Flock Safety cameras in Vero Beach homicide arrest, sparking privacy debate",
           "basis": "exact_source_url",
           "identity_keys": [
-            "story:story_001592",
+            "story:story_005818",
             "source:https://www.wptv.com/news/treasure-coast/community-divided-over-flock-safety-cameras-after-treasure-coast-homicide-arrest"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
-            "story",
             "source"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=story:story_001592,source:https://www.wptv.com/news/treasure-coast/community-divided-over-flock-safety-cameras-after-treasure-coast-homicide-arrest",
+            "deterministic_identity_keys=source:https://www.wptv.com/news/treasure-coast/community-divided-over-flock-safety-cameras-after-treasure-coast-homicide-arrest",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -661,12 +676,57 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "business",
+          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "canonical_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
           "source_headline": "EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/ef-0-tornado-tears-through-port-st-lucie-residents-clean-up-debris-and-damaged-structures",
           "canonical_slug": "2026-08-25-tornado-moves-through-port-st-lucie-neighborhood-on-hurricane-andrew-anniversary",
           "canonical_headline": "Tornado moves through Port St. Lucie neighborhood on Hurricane Andrew anniversary",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns",
+          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
+          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
+          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old victim",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/fort-pierce-man-charged-with-manslaughter-after-bb-gun-shooting-kills-34-year-old-victim",
+          "canonical_slug": "2026-08-24-fort-pierce-man-dies-after-bb-gun-shooting-suspect-charged-with-manslaughter",
+          "canonical_headline": "Fort Pierce man identified as Jabari Cowart in fatal BB gun shooting on Avenue G",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_distinctive_incident_facts",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -722,42 +782,25 @@
           "semantic_action": "hold",
           "confidence": 0.92,
           "shared_anchors": [
-            "Martin County",
+            "Martin County location",
             "animal hoarding case",
-            "Humane Society of the Treasure Coast"
+            "mass-animal-hoarding:martin-county incident anchor"
           ],
           "novel_facts": [
-            "Paige O'Donnell is the subject",
-            "36 Border Collies specifically",
-            "Palm City location",
-            "Legal surrender occurred Friday August 21, 2026",
-            "Dogs will be available for adoption starting Sept 1",
-            "72 charges against O'Donnell",
-            "9 pounds of matted fur removed from one dog"
+            "Paige O'Donnell is the defendant (not Gail Giustino)",
+            "36 Border Collies rescued from Palm City home",
+            "72 charges filed",
+            "Legal surrender occurred on August 21, 2026",
+            "Dogs cleared for adoption beginning September 1"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Future of Brightline station in downtown Stuart uncertain after federal funds go elsewhere",
-          "source_url": "https://www.wptv.com/lifestyle/travel/future-of-brightline-station-in-downtown-stuart-uncertain-after-federal-funds-go-elsewhere",
-          "canonical_slug": "2026-08-21-brightline-station-in-downtown-stuart-unlikely-after-martin-county-denied-federa",
-          "canonical_headline": "Brightline station in downtown Stuart unlikely after Martin County denied federal funding",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 1,
-      "elapsed_seconds": 16.769
+      "new_publication_stale_rejected_count": 2,
+      "elapsed_seconds": 15.202
     },
     {
       "category_key": "sports",
@@ -765,7 +808,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 6,
+      "publishable_source_count": 7,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -782,7 +825,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "existing_athletic_guard_retained",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 0,
@@ -795,7 +838,7 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 25.482
+      "elapsed_seconds": 20.23
     },
     {
       "category_key": "things_to_do",
@@ -907,14 +950,14 @@
           "shared_anchors": [
             "Treasure Coast region",
             "Palm Beach County",
-            "weekend events roundup format",
-            "WPBF news source"
+            "weekend events roundup",
+            "WPBF news outlet"
           ],
           "novel_facts": [
-            "Newfield Farm gardening class on Saturday Aug 21",
-            "Ukrainian Cultural Fest in West Palm Beach",
-            "Delray Beach women's health event",
-            "Peggy Adams Animal Rescue adoption event",
+            "Ukrainian Cultural Fest on August 21",
+            "Newfield Farm gardening class",
+            "Delray's Hottest Party women's health event",
+            "Peggy Adams adoption event",
             "Loggerhead Triathlon in Jupiter"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -924,23 +967,30 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 24.554
+      "elapsed_seconds": 13.715
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "no_publishable_sources",
+      "status": "quality_gate_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 0,
-      "selected_source_count": 0,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "",
-      "failure_summary": "",
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 10.532,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 10.532,
+      "failure_code": "publication_quality_rejected",
+      "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -949,7 +999,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 1,
@@ -989,23 +1039,32 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.957
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 40.072
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 3,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 30,
+      "fresh_candidate_count": 27,
+      "publishable_source_count": 4,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Martin County category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 6.75,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 6.75,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1014,11 +1073,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "GALLERY: EF-0 tornado carrying peak winds of 75 mph touches down in Port St. Lucie - WPEC",
+          "source_url": "https://cbs12.com/news/local/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday",
+          "editorial_story_id": "story_005683",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
+          "canonical_headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "martin",
           "source_headline": "Sheriff's helicopter spots massive fire in Martin County, helps firefighters save home - WPEC",
@@ -1038,96 +1107,53 @@
           "canonical_headline": "Martin County schools ban fake squishy toys after federal safety alert",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Ronald L. Corbin, beloved choral teacher at Martin County High School for 34 years, dies - WPBF",
-          "source_url": "https://www.wpbf.com/article/ronald-l-corbin-beloved-choral-teacher-at-martin-high-school-for-34-years-dies/73506173",
-          "editorial_story_id": "story_001592",
-          "canonical_slug": "2026-08-23-indian-river-county-sheriff-credits-flock-safety-cameras-in-vero-beach-homicide",
-          "canonical_headline": "Indian River County sheriff credits Flock Safety cameras in Vero Beach homicide arrest, sparking privacy debate",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
-          "source_url": "https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
-          "editorial_story_id": "story_005547",
-          "canonical_slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
-          "canonical_headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "GALLERY: EF-0 tornado carrying peak winds of 75 mph touches down in Port St. Lucie - WPEC",
-          "source_url": "https://cbs12.com/news/local/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
-          "canonical_headline": "Port St. Lucie residents receive tornado emergency alert 20 minutes after storm passed",
-          "basis": "event-identity-authority:exact_source_url",
+          "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
+          "source_url": "https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
+          "publisher": "www.wpbf.com",
+          "canonical_slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
+          "canonical_headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
+          "basis": "exact_source_url",
           "identity_keys": [
-            "story:story_005683"
+            "story:story_005547",
+            "source:https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763"
           ],
-          "match_confidence": 1.0,
+          "match_confidence": 0.99,
           "evidence_dimensions": [
-            "source_url"
+            "story",
+            "source"
           ],
           "decision_trace": [
-            "exact_source_url=True",
+            "deterministic_identity_keys=story:story_005547,source:https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 4,
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 1,
-      "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 2,
+      "material_update_promotion_cache_hit_count": 1,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "martin",
           "source_headline": "GALLERY: EF-0 tornado carrying peak winds of 75 mph touches down in Port St. Lucie - WPEC",
           "source_url": "https://cbs12.com/news/local/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday",
           "canonical_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
-          "canonical_headline": "Port St. Lucie residents receive tornado emergency alert 20 minutes after storm passed",
+          "canonical_headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": true,
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
           "cache_hit": false,
-          "model_call": true,
-          "action": "update_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "update_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "EF-0 tornado in Port St. Lucie",
-            "Same source URL (cbs12.com/news/local/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday)",
-            "Southeast Kitchen Cove Lane and Southeast Morningside Boulevard location",
-            "Southbend Boulevard location",
-            "Carol Cadotte resident quote about delayed alert",
-            "Sunday evening storm event"
-          ],
-          "novel_facts": [
-            "National Weather Service official confirmation of EF0 rating with 75 mph peak winds",
-            "Specific touchdown time: 6:10 p.m.",
-            "Tornado traveled 2+ miles over 14-15 minutes",
-            "Became waterspout over St. Lucie River",
-            "Waterspout moved back onshore near Bay St. Lucie community at 6:20 p.m.",
-            "Will Ulrich identified as warning coordination meteorologist providing official assessment",
-            "Allison Rogers identified as resident witness with fence damage details",
-            "Additional resident damage details and specific damage path description",
-            "Explanation of landspout formation characteristics",
-            "Confirmation of damage near Treasure Coast Square Mall in Jensen Beach"
-          ],
-          "reason": "Same tornado event with identical source URL and locations. Incoming article contains material updates: official NWS confirmation of EF0 rating, specific wind speeds (75 mph), precise timeline (6:10 p.m. touchdown, 6:20 p.m. second landfall), meteorologist identification, detailed damage path assessment, and scientific explanation of landspout formation. These are substantive official findings beyond the initial delayed-alert story.",
-          "validation_errors": []
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "martin",
@@ -1177,38 +1203,6 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Ronald L. Corbin, beloved choral teacher at Martin County High School for 34 years, dies - WPBF",
-          "source_url": "https://www.wpbf.com/article/ronald-l-corbin-beloved-choral-teacher-at-martin-high-school-for-34-years-dies/73506173",
-          "canonical_slug": "2026-08-23-indian-river-county-sheriff-credits-flock-safety-cameras-in-vero-beach-homicide",
-          "canonical_headline": "Indian River County sheriff credits Flock Safety cameras in Vero Beach homicide arrest, sparking privacy debate",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 1.0,
-          "shared_anchors": [],
-          "novel_facts": [
-            "Ronald L. Corbin died Saturday, August 23, 2026",
-            "Choral teacher at Martin County High School for 34 years (1980-2014)",
-            "Led OPUS choir group",
-            "Corbin Musical Arts Center dedicated in his name in 2015",
-            "Received kidney transplant from daughter Candice Corbin in 2018",
-            "Added to Florida Vocal Association Roll of Distinction in 2014",
-            "Received R. Wayne Hugoboom Distinguished Service Award in 2017"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
-        },
-        {
-          "category_key": "martin",
           "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
           "source_url": "https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
           "canonical_slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
@@ -1217,95 +1211,85 @@
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
+          "promoted": true,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "update_existing_canonical",
           "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 1.0,
+          "semantic_action": "update_existing_canonical",
+          "confidence": 0.95,
           "shared_anchors": [
-            "Tornado/landspout near Jessica Clinton Park in Port St. Lucie on Sunday August 23, 2026",
-            "National Weather Service conducting damage survey on Monday morning",
-            "Specific location: Southbend Boulevard SE Navy Avenue area",
-            "Affected streets: SE Wake Road, Navy Avenue, West Snow Road",
-            "Same source URL: wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
-            "Tornado warning issued for St. Lucie and Martin counties"
+            "Port St. Lucie tornado on August 24, 2026",
+            "Same date (2026-08-24)",
+            "Same locality (Port St. Lucie, St. Lucie)",
+            "Identical source URL (wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763)",
+            "National Weather Service damage survey mentioned in both"
           ],
-          "novel_facts": [],
-          "reason": "This is exactly the same article covering the same tornado incident. Both reference the identical source URL, describe the same tornado near Jessica Clinton Park on Southbend Boulevard, mention the same affected streets (SE Wake Road, Navy Avenue, West Snow Road), and report the same NWS Monday morning damage survey. The retrieval evidence confirms this is a 'persistent_story_id_match' and 'exact_source_and_persistent_story_skip'. The incoming article contains no material updates beyond what the canonical already covers - same tornado event, same survey announcement, same damage details.",
+          "novel_facts": [
+            "Tornado classified as EF0",
+            "Maximum wind gusts estimated between 65-75 mph",
+            "Specific start time: 6:10 p.m.",
+            "Precise starting coordinates: 27.253, -80.316 near SE Kitchen Cove Lane and SE Morningside Boulevard",
+            "Ending coordinates: 27.244, -80.346 near SE Quay Street and SE Cody Place",
+            "Track length: 2.1 miles",
+            "Maximum width: 200 yards",
+            "Tornado moved over St. Lucie River as a waterspout"
+          ],
+          "reason": "Same tornado event based on identical source URL, date, and location. Incoming article contains material updates: official EF0 classification, specific wind speeds, precise start time, GPS coordinates, track dimensions, and waterspout detail. These are findings from the National Weather Service survey that was only announced in the candidate.",
           "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 37.942
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Ronald L. Corbin, Martin County High School choral teacher for 34 years, dies",
+      "generated_card_count": 0,
+      "elapsed_seconds": 41.625
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 11,
-      "selected_source_count": 11,
+      "fresh_candidate_count": 15,
+      "publishable_source_count": 7,
+      "selected_source_count": 7,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 52.591,
-          "result": "success"
+          "elapsed_seconds": 39.602,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — EF0 tornado leaves trail of damage through Port St. Lucie neighborhoods - WPEC"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 43.378,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: original_event_context_missing — EF0 tornado leaves trail of damage through Port St. Lucie neighborhoods - WPEC"
         }
       ],
-      "model_elapsed_seconds": 52.592,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 82.98,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: original_event_context_missing — EF0 tornado leaves trail of damage through Port St. Lucie neighborhoods - WPEC",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 1,
-      "contextual_update_lead_rejections": [
-        {
-          "surface": "card",
-          "required": true,
-          "passed": false,
-          "story_form": "update",
-          "lead_word_count": 61,
-          "baseline_anchor": "fatality",
-          "baseline_present": false,
-          "baseline_anchor_present": false,
-          "baseline_details_present": true,
-          "baseline_context_hits": [],
-          "baseline_context_required": 0,
-          "canonical_context_available": false,
-          "canonical_context_headline": "",
-          "novelty_anchor": "",
-          "novelty_present": true,
-          "novelty_token_hits": [
-            "crews",
-            "fire",
-            "fort",
-            "homes",
-            "mobile",
-            "pierce",
-            "structure"
-          ],
-          "missing": [
-            "original_event_context_missing"
-          ],
-          "source_title": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
-          "headline": "Fort Pierce fire crews contain structure blaze before it spreads to mobile homes"
-        }
-      ],
+      "contextual_update_lead_rejection_count": 0,
+      "contextual_update_lead_rejections": [],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 11,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 15,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1315,6 +1299,76 @@
           "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
           "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
           "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
+          "source_url": "https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
+          "editorial_story_id": "story_001215",
+          "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+          "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "GALLERY: EF-0 tornado carrying peak winds of 75 mph touches down in Port St. Lucie - WPEC",
+          "source_url": "https://cbs12.com/news/local/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday",
+          "editorial_story_id": "story_005683",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
+          "canonical_headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Why some Port St. Lucie residents didn’t get a tornado warning until after it hit - WPEC",
+          "source_url": "https://cbs12.com/news/local/why-some-port-st-lucie-residents-didnt-get-a-tornado-warning-until-after-it-hit-alert-aug-24-2026",
+          "editorial_story_id": "story_005808",
+          "canonical_slug": "2026-08-25-radar-limitations-made-it-difficult-to-detect-port-st-lucie-tornado-meteorologis",
+          "canonical_headline": "Radar limitations made it difficult to detect Port St. Lucie tornado, meteorologist says",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
+          "editorial_story_id": "story_005782",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "canonical_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
+          "editorial_story_id": "story_005782",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "canonical_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - WPEC",
+          "source_url": "https://cbs12.com/news/crime/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
+          "editorial_story_id": "story_005726",
+          "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
+          "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "'It was really frightening': Some Port St. Lucie residents describe EF0 tornado’s frightening impact - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-tornado-weather-city-scared-residents/73514064",
+          "editorial_story_id": "story_005718",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-describe-frightening-sounds-and-damage-from-ef-0-tornado",
+          "canonical_headline": "Port St. Lucie residents describe frightening sounds and damage from EF-0 tornado",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1339,6 +1393,16 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "SLCSO asks public for tips on missing Fort Pierce woman last seen Aug. 14 - WPEC",
+          "source_url": "https://news.google.com/rss/articles/CBMihgJBVV95cUxOc3J2TUgxTVRTcFNMTmRKUUM3eEFvQnUtMXFRN01xdmw0bG9sV251OU5xek11RjItNVFRRUhsQVBsZklQbDRWUDJBV25OT0dYNDRpd1pGQzlic0dPNHpydG9oZjJVQTVqQ0otZTVjNG14aVZadW9MUi1BZHpYSGdHYlRFNjFYcWJzYmxoUmdWSUltZDJMdlFGOUpmMVU1WEVMS2EtLVNsMGo2akg1bjFVUk0tUUY0RHpDMmtEZzVyeFFGaFlKSzU2UlcyNkpiUjZEVVF1aXZXbDByV0h5UW5xVlhkVWxqYWhFZUNpUHFkMTdVY1ozODZSdE1MaTJ0UmU1eHJ6am93",
+          "editorial_story_id": "story_001215",
+          "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+          "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/ef-0-tornado-tears-through-port-st-lucie-residents-clean-up-debris-and-damaged-structures",
           "editorial_story_id": "story_005702",
@@ -1359,6 +1423,16 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
+          "editorial_story_id": "story_005664",
+          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
+          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "BB gun shooting turns deadly: Fort Pierce man killed, suspect charged - WPEC",
           "source_url": "https://cbs12.com/news/local/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
           "editorial_story_id": "story_002417",
@@ -1366,61 +1440,20 @@
           "canonical_headline": "12-year-old describes hit-and-run that injured sister in Fort Pierce",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "National Weather Service confirms EF0 tornado touchdown in Port St. Lucie - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/national-weather-service-to-provide-update-on-possible-tornado-event-in-st-lucie-county",
-          "editorial_story_id": "story_005569",
-          "canonical_slug": "2026-08-25-ef0-tornado-touches-down-in-port-st-lucie-damages-20-to-30-homes-along-2-mile-pa",
-          "canonical_headline": "EF0 tornado touches down in Port St. Lucie, damages 20 to 30 homes along 2-mile path",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
-          "source_url": "https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
-          "editorial_story_id": "story_005547",
-          "canonical_slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
-          "canonical_headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 3,
+      "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
-          "source_headline": "GALLERY: EF-0 tornado carrying peak winds of 75 mph touches down in Port St. Lucie - WPEC",
-          "source_url": "https://cbs12.com/news/local/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
-          "canonical_headline": "Port St. Lucie residents receive tornado emergency alert 20 minutes after storm passed",
-          "basis": "event-identity-authority:exact_source_url",
-          "identity_keys": [
-            "story:story_005683"
-          ],
-          "match_confidence": 1.0,
-          "evidence_dimensions": [
-            "source_url"
-          ],
-          "decision_trace": [
-            "exact_source_url=True",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns",
-          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
-          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
+          "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
+          "source_url": "https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
+          "publisher": "www.wpbf.com",
+          "canonical_slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
+          "canonical_headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
           "basis": "exact_source_url",
           "identity_keys": [
-            "story:story_005664",
-            "source:https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns"
+            "story:story_005547",
+            "source:https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763"
           ],
           "match_confidence": 0.99,
           "evidence_dimensions": [
@@ -1428,30 +1461,7 @@
             "source"
           ],
           "decision_trace": [
-            "deterministic_identity_keys=story:story_005664,source:https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
-          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_005664",
-            "source:https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_005664,source:https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
+            "deterministic_identity_keys=story:story_005547,source:https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -1460,8 +1470,8 @@
       ],
       "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 2,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 3,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
@@ -1484,13 +1494,134 @@
           "novel_facts": [
             "Residential structure fire on East Erie Drive in Fort Pierce on Sunday",
             "Fire threatened mobile homes in St. Lucie County",
-            "Fire was contained and prevented from spreading",
+            "Fire was contained to area of origin by St. Lucie County Fire District",
+            "Prevented spread to nearby mobile homes",
+            "Cause under investigation by Fire Marshal's Office"
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
+          "source_url": "https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
+          "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+          "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.95,
+          "shared_anchors": [],
+          "novel_facts": [
+            "Structure fire on East Erie Drive in Fort Pierce",
+            "Fire occurred on Sunday",
+            "Fire threatened mobile homes",
+            "Fire was contained to area of origin",
             "Fire Marshal's Office investigating cause"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "GALLERY: EF-0 tornado carrying peak winds of 75 mph touches down in Port St. Lucie - WPEC",
+          "source_url": "https://cbs12.com/news/local/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
+          "canonical_headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Why some Port St. Lucie residents didn’t get a tornado warning until after it hit - WPEC",
+          "source_url": "https://cbs12.com/news/local/why-some-port-st-lucie-residents-didnt-get-a-tornado-warning-until-after-it-hit-alert-aug-24-2026",
+          "canonical_slug": "2026-08-25-radar-limitations-made-it-difficult-to-detect-port-st-lucie-tornado-meteorologis",
+          "canonical_headline": "Radar limitations made it difficult to detect Port St. Lucie tornado, meteorologist says",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "canonical_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "canonical_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - WPEC",
+          "source_url": "https://cbs12.com/news/crime/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
+          "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
+          "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "'It was really frightening': Some Port St. Lucie residents describe EF0 tornado’s frightening impact - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-tornado-weather-city-scared-residents/73514064",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-describe-frightening-sounds-and-damage-from-ef-0-tornado",
+          "canonical_headline": "Port St. Lucie residents describe frightening sounds and damage from EF-0 tornado",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "st_lucie",
@@ -1524,6 +1655,21 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "SLCSO asks public for tips on missing Fort Pierce woman last seen Aug. 14 - WPEC",
+          "source_url": "https://news.google.com/rss/articles/CBMihgJBVV95cUxOc3J2TUgxTVRTcFNMTmRKUUM3eEFvQnUtMXFRN01xdmw0bG9sV251OU5xek11RjItNVFRRUhsQVBsZklQbDRWUDJBV25OT0dYNDRpd1pGQzlic0dPNHpydG9oZjJVQTVqQ0otZTVjNG14aVZadW9MUi1BZHpYSGdHYlRFNjFYcWJzYmxoUmdWSUltZDJMdlFGOUpmMVU1WEVMS2EtLVNsMGo2akg1bjFVUk0tUUY0RHpDMmtEZzVyeFFGaFlKSzU2UlcyNkpiUjZEVVF1aXZXbDByV0h5UW5xVlhkVWxqYWhFZUNpUHFkMTdVY1ozODZSdE1MaTJ0UmU1eHJ6am93",
+          "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+          "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/ef-0-tornado-tears-through-port-st-lucie-residents-clean-up-debris-and-damaged-structures",
           "canonical_slug": "2026-08-25-tornado-moves-through-port-st-lucie-neighborhood-on-hurricane-andrew-anniversary",
@@ -1554,6 +1700,21 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns - WPTV",
+          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
+          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
+          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "BB gun shooting turns deadly: Fort Pierce man killed, suspect charged - WPEC",
           "source_url": "https://cbs12.com/news/local/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
           "canonical_slug": "2026-08-06-12-year-old-describes-hit-and-run-that-injured-sister-in-fort-pierce",
@@ -1571,76 +1732,30 @@
           "confidence": 1.0,
           "shared_anchors": [],
           "novel_facts": [
-            "34-year-old man shot with BB gun on Avenue G",
-            "Victim died at HCA Florida Lawnwood Hospital",
-            "Suspect Jabari Cowart charged with manslaughter",
-            "Incident occurred Saturday (2026-08-24)",
-            "Group shooting BB guns at trees before incident"
+            "34-year-old man died from BB gun shooting on Avenue G",
+            "Jabari Cowart charged with manslaughter",
+            "Incident occurred Saturday August 24, 2026",
+            "Group shooting BB guns at trees when suspect asked to use one",
+            "Victim taken to HCA Florida Lawnwood Hospital where he died"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "National Weather Service confirms EF0 tornado touchdown in Port St. Lucie - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/national-weather-service-to-provide-update-on-possible-tornado-event-in-st-lucie-county",
-          "canonical_slug": "2026-08-25-ef0-tornado-touches-down-in-port-st-lucie-damages-20-to-30-homes-along-2-mile-pa",
-          "canonical_headline": "EF0 tornado touches down in Port St. Lucie, damages 20 to 30 homes along 2-mile path",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF",
-          "source_url": "https://www.wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
-          "canonical_slug": "2026-08-24-tornado-touches-down-in-port-st-lucie-national-weather-service-surveys-damage-mo",
-          "canonical_headline": "Tornado touches down in Port St. Lucie, National Weather Service surveys damage Monday",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 1.0,
-          "shared_anchors": [
-            "Tornado/landspout near Jessica Clinton Park in Port St. Lucie on Sunday August 23, 2026",
-            "National Weather Service conducting damage survey on Monday morning",
-            "Specific location: Southbend Boulevard SE Navy Avenue area",
-            "Affected streets: SE Wake Road, Navy Avenue, West Snow Road",
-            "Same source URL: wpbf.com/article/tornado-warning-issued-for-st-lucie-and-martin-counties/73505763",
-            "Tornado warning issued for St. Lucie and Martin counties"
-          ],
-          "novel_facts": [],
-          "reason": "This is exactly the same article covering the same tornado incident. Both reference the identical source URL, describe the same tornado near Jessica Clinton Park on Southbend Boulevard, mention the same affected streets (SE Wake Road, Navy Avenue, West Snow Road), and report the same NWS Monday morning damage survey. The retrieval evidence confirms this is a 'persistent_story_id_match' and 'exact_source_and_persistent_story_skip'. The incoming article contains no material updates beyond what the canonical already covers - same tornado event, same survey announcement, same damage details.",
-          "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 1,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
-      "generated_card_count": 5,
-      "elapsed_seconds": 80.223
+      "elapsed_seconds": 113.888
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 6,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 4,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1657,11 +1772,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 6,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
+          "editorial_story_id": "story_005782",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "canonical_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures",
@@ -1673,37 +1798,28 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns",
-          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
-          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_005664",
-            "source:https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "story",
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=story:story_005664,source:https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "canonical_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures",
@@ -1721,7 +1837,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 20.458
+      "elapsed_seconds": 20.261
     }
   ]
 }
