@@ -7,9 +7,9 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-24T23:53:37Z",
+  "generated_at": "2026-08-25T01:49:50Z",
   "mode": "enforce",
-  "publication_behavior_changed": true,
+  "publication_behavior_changed": false,
   "activation": {
     "activation_version": "1.1",
     "requested_mode": "enforce",
@@ -19,72 +19,16 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 1,
-    "enforceable_recommendation_count": 1,
-    "applied_action_count": 1,
+    "recommendation_count": 0,
+    "enforceable_recommendation_count": 0,
+    "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 8,
-    "placements_after": 7,
-    "publication_behavior_changed": true,
+    "placements_before": 4,
+    "placements_after": 4,
+    "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
-    "recommendations": [
-      {
-        "action": "suppress_duplicate",
-        "enforceable": true,
-        "evidence": "guarded_same_story_stage_95",
-        "confidence": 0.95,
-        "source_url": "https://cbs12.com/news/crime/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
-        "headline": "Fort Pierce woman arrested for paying with counterfeit $50 bills at restaurant",
-        "source_title_key": "fort pierce woman arrested for paying with counterfeit 50 bills at restaurant",
-        "incoming_article_id": "",
-        "target_article_id": "",
-        "story_id": "story-83-90-19-year-old-according-adrianna-arrested-4d887c1c",
-        "canonical_is_custom": false,
-        "canonical_title": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
-        "canonical_source": "",
-        "canonical_url": "https://cw34.com/news/local/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
-        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 95% confidence.",
-        "category": "st_lucie",
-        "placement": "card"
-      }
-    ],
-    "applied_actions": [
-      {
-        "action": "suppress_duplicate",
-        "enforceable": true,
-        "evidence": "guarded_same_story_stage_95",
-        "confidence": 0.95,
-        "source_url": "https://cbs12.com/news/crime/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
-        "headline": "Fort Pierce woman arrested for paying with counterfeit $50 bills at restaurant",
-        "source_title_key": "fort pierce woman arrested for paying with counterfeit 50 bills at restaurant",
-        "incoming_article_id": "",
-        "target_article_id": "",
-        "story_id": "story-83-90-19-year-old-according-adrianna-arrested-4d887c1c",
-        "canonical_is_custom": false,
-        "canonical_title": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
-        "canonical_source": "",
-        "canonical_url": "https://cw34.com/news/local/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
-        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 95% confidence.",
-        "category": "st_lucie",
-        "placement": "card",
-        "slug": "",
-        "source_title": "Fort Pierce woman arrested for paying with counterfeit $50 bills at restaurant",
-        "date": "A few minutes ago",
-        "category_key": "st_lucie",
-        "is_custom": false,
-        "story_stage": "arrest-or-charges",
-        "decision": "SUPPRESSED_DUPLICATE",
-        "action_taken": true,
-        "eligible_for_activation": true,
-        "match_confidence": 95,
-        "matched_prior_slug": "",
-        "matched_prior_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
-        "matched_prior_source": "",
-        "matched_prior_source_url": "https://cw34.com/news/local/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
-        "matched_prior_is_custom": false,
-        "activation_managed": true
-      }
-    ],
+    "recommendations": [],
+    "applied_actions": [],
     "enforcement_allowlist": [
       "custom_canonical_protection",
       "exact_normalized_title_identity",
@@ -105,22 +49,22 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 172,
+    "candidates_processed": 174,
     "routes": {
-      "generate_new": 17,
+      "generate_new": 19,
       "skip": 153,
       "update_existing": 2
     },
     "eligibility": {
       "listing": 1,
-      "low_value": 113,
-      "publishable": 58
+      "low_value": 118,
+      "publishable": 55
     },
     "source_classes": {
-      "aggregator": 114,
+      "aggregator": 119,
       "local_news": 34,
-      "regional_news": 20,
-      "unknown": 4
+      "regional_news": 18,
+      "unknown": 3
     },
     "rejected_count": 1,
     "rejected_examples": [
@@ -137,10 +81,22 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 13,
-      "same_event": 159
+      "new_story": 19,
+      "same_event": 155
     },
     "examples": [
+      {
+        "story_id": "story_005743",
+        "title": "Firefighters make progress containing wildfire in Reno area, reduce evacuation orders - Scripps News",
+        "event_key": "unknown-event-69fbca4a34",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
       {
         "story_id": "story_005699",
         "title": "Titusville City Council to Vote on Stormwater Fee Increase, Data Center Ban, and Major Infrastructure Projects - TalkOfTitusville.com",
@@ -173,12 +129,14 @@
         "story_id": "story_005725",
         "title": "Vote for our Friday Night Blitz Game of the Week - WPEC",
         "event_key": "unknown-event-635f4dbcf0",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -187,10 +145,11 @@
         "event_key": "unknown-event-0b25ad886c",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/sports/local-sports/high-school/cardinal-newman-football-is-back",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -212,20 +171,6 @@
         "story_id": "story_005701",
         "title": "Palm Beach Co. employee on leave after allegation of antisemitic gesture, 'Heil Hitler' remark to driver",
         "event_key": "unknown-event-a41045eb64",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_004076",
-        "title": "Florida driver charged with extreme speeding in Vero Beach - AOL.com",
-        "event_key": "unknown-event-8661372dc6",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -293,6 +238,20 @@
         ]
       },
       {
+        "story_id": "story_005516",
+        "title": "Florida school superintendent hoping to spread impact on education - Treasure Coast News",
+        "event_key": "unknown-event-c8d607c03e",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_005664",
         "title": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns",
         "event_key": "unknown-event-01df28ec26",
@@ -303,6 +262,19 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_005692",
+        "title": "Florida proposes removing four vaccines from public, private school requirements - WPEC",
+        "event_key": "unknown-event-405fbc32b6",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -380,34 +352,6 @@
         "story_id": "story_005626",
         "title": "Houston County Schools highlight safety response after Warner Robins High shooting - 41NBC News",
         "event_key": "unknown-event-655c02d4a6",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_005513",
-        "title": "Mayors Race Enters Round Two, Runoff between Martin and Giordano - cw34.com",
-        "event_key": "unknown-event-c607bbeef9",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_005628",
-        "title": "School district, police stress importance of bus stop arm rules - WANE 15",
-        "event_key": "unknown-event-223570a615",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -421,6 +365,19 @@
     ],
     "decision_trace_examples": [
       {
+        "story_id": "story_005743",
+        "title": "Firefighters make progress containing wildfire in Reno area, reduce evacuation orders - Scripps News",
+        "event_key": "unknown-event-69fbca4a34",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
         "story_id": "story_005699",
         "title": "Titusville City Council to Vote on Stormwater Fee Increase, Data Center Ban, and Major Infrastructure Projects - TalkOfTitusville.com",
         "event_key": "unknown-event-fd9c19a923",
@@ -454,13 +411,15 @@
         "story_id": "story_005725",
         "title": "Vote for our Friday Night Blitz Game of the Week - WPEC",
         "event_key": "unknown-event-635f4dbcf0",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -470,10 +429,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/sports/local-sports/high-school/cardinal-newman-football-is-back",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -496,21 +456,6 @@
         "story_id": "story_005701",
         "title": "Palm Beach Co. employee on leave after allegation of antisemitic gesture, 'Heil Hitler' remark to driver",
         "event_key": "unknown-event-a41045eb64",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_004076",
-        "title": "Florida driver charged with extreme speeding in Vero Beach - AOL.com",
-        "event_key": "unknown-event-8661372dc6",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -583,6 +528,21 @@
         ]
       },
       {
+        "story_id": "story_005516",
+        "title": "Florida school superintendent hoping to spread impact on education - Treasure Coast News",
+        "event_key": "unknown-event-c8d607c03e",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_005664",
         "title": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns",
         "event_key": "unknown-event-01df28ec26",
@@ -594,6 +554,20 @@
           "Relationship: same_event",
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_005692",
+        "title": "Florida proposes removing four vaccines from public, private school requirements - WPEC",
+        "event_key": "unknown-event-405fbc32b6",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
           "Confidence: 1.00"
         ]
       },
@@ -676,36 +650,6 @@
         "story_id": "story_005626",
         "title": "Houston County Schools highlight safety response after Warner Robins High shooting - 41NBC News",
         "event_key": "unknown-event-655c02d4a6",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_005513",
-        "title": "Mayors Race Enters Round Two, Runoff between Martin and Giordano - cw34.com",
-        "event_key": "unknown-event-c607bbeef9",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_005628",
-        "title": "School district, police stress importance of bus stop arm rules - WANE 15",
-        "event_key": "unknown-event-223570a615",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -722,100 +666,21 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 2,
-    "high_confidence_candidate_count": 1,
+    "candidate_count": 0,
+    "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {
-      "new_story": 2
-    },
-    "milestones": {
-      "arrest": 2
-    },
-    "reason_codes": {
-      "agency_match": 2,
-      "entity_match": 2,
-      "event_type_match": 1,
-      "identity_anchor_qualified": 2,
-      "location_match": 2,
-      "novel_milestone": 2
-    },
-    "examples": [
-      {
-        "headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - cw34.com",
-        "event_key": "unknown-event-2b0feef7d4",
-        "current_story_id": "story_005726",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_002738",
-        "candidate_confidence": 0.722222,
-        "candidate_milestones": [
-          "arrest"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "location_match",
-          "agency_match",
-          "entity_match",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_002738",
-          "Novel milestones: arrest",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.22",
-          "Location match: True",
-          "Agency match: True",
-          "Event type match: False",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.72"
-        ]
-      },
-      {
-        "headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
-        "event_key": "fire-port-st-lucie-f6a0ebe3ca",
-        "current_story_id": "story_005728",
-        "current_relationship": "new_story",
-        "candidate_story_id": "story_005719",
-        "candidate_confidence": 0.813333,
-        "candidate_milestones": [
-          "arrest"
-        ],
-        "candidate_reason_codes": [
-          "novel_milestone",
-          "location_match",
-          "agency_match",
-          "event_type_match",
-          "entity_match",
-          "identity_anchor_qualified"
-        ],
-        "candidate_trace": [
-          "Follow-up candidate mode: observe_only",
-          "Candidate story: story_005719",
-          "Novel milestones: arrest",
-          "Exact event-key anchor: False",
-          "Facts overlap: 0.00",
-          "Title overlap: 0.33",
-          "Location match: True",
-          "Agency match: True",
-          "Event type match: True",
-          "Entity match: True",
-          "Agency conflict: False",
-          "Event type conflict: False",
-          "Candidate confidence: 0.81"
-        ]
-      }
-    ],
+    "current_relationships": {},
+    "milestones": {},
+    "reason_codes": {},
+    "examples": [],
     "retrospective_candidate_count": 25,
     "retrospective_high_confidence_candidate_count": 4,
     "retrospective_activation_eligible_candidate_count": 3,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1202,
-      "timeline_entries_examined": 3189,
+      "stories_with_timelines": 1201,
+      "timeline_entries_examined": 3188,
       "transitions_examined": 1854,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 25,
@@ -3562,28 +3427,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 1070,
-      "treasure_coast_local": 841,
+      "florida": 1073,
+      "treasure_coast_local": 840,
       "treasure_coast_region": 393,
-      "unknown": 2092
+      "unknown": 2090
     },
-    "average_score": 60.1
+    "average_score": 60.11
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 1070,
-      "treasure_coast_local": 841,
+      "florida": 1073,
+      "treasure_coast_local": 840,
       "treasure_coast_region": 393,
-      "unknown": 2092
+      "unknown": 2090
     },
-    "average_priority": 3.45
+    "average_priority": 3.46
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3568,
+      "active": 3597,
       "breaking": 1,
-      "developing": 83,
-      "ongoing": 742,
+      "developing": 82,
+      "ongoing": 714,
       "resolved": 2
     }
   },
@@ -3591,8 +3456,8 @@
     "repair_version": 14,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 4827,
-    "active_stories_after": 4827,
+    "active_stories_before": 4838,
+    "active_stories_after": 4838,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -3621,20 +3486,20 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-08-24T23:47:12Z",
-    "quarantined_story_records_retained": 487,
-    "active_story_count": 4839
+    "generated_at": "2026-08-25T01:42:45Z",
+    "quarantined_story_records_retained": 491,
+    "active_story_count": 4856
   },
   "stories": {
     "total": 4396,
     "importance_levels": {
       "breaking": 7,
-      "high": 72,
-      "normal": 648,
-      "low": 3669,
+      "high": 73,
+      "normal": 653,
+      "low": 3663,
       "archived": 0
     },
-    "average_importance": 8.82,
+    "average_importance": 8.86,
     "top": [
       {
         "story_id": "story_001557",
@@ -3649,7 +3514,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 8.14
+          "age_hours": 10.07
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3718,7 +3583,7 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-08-24T15:41:51.155161+00:00",
-          "hours_since_update": 8.14,
+          "hours_since_update": 10.07,
           "event_count": 37,
           "timeline_entries": 31
         }
@@ -3727,16 +3592,16 @@
         "story_id": "story_002417",
         "title": "'I was mad': 12-year-old brother of Fort Pierce girl injured in hit-and-run crash explains what happened - WPBF",
         "score": 75,
-        "editorial_priority": 84,
-        "editorial_score": 84,
+        "editorial_priority": 80,
+        "editorial_score": 80,
         "score_breakdown": {
-          "score": 84,
+          "score": 80,
           "importance": 75,
           "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 5.47
+          "age_hours": 7.43
         },
         "level": "high",
         "importance_reasons": [
@@ -3779,9 +3644,80 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-24T18:20:22.910749+00:00",
-          "hours_since_update": 5.47,
+          "hours_since_update": 7.43,
           "event_count": 3,
           "timeline_entries": 3
+        }
+      },
+      {
+        "story_id": "story_001215",
+        "title": "Woman accused of stealing from Walmart arrested for drug possession in Fort Pierce - cbs12.com",
+        "score": 55,
+        "editorial_priority": 62,
+        "editorial_score": 62,
+        "score_breakdown": {
+          "score": 62,
+          "importance": 55,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.12,
+          "source_trust": 90,
+          "age_hours": 1.99
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          },
+          {
+            "code": "multi_county",
+            "label": "Multi-county impact",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County",
+            "St. Lucie County",
+            "Indian River County"
+          ],
+          "places": [
+            "Stuart",
+            "Port St. Lucie",
+            "Fort Pierce",
+            "Vero Beach"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 10,
+        "timeline_entries": 9,
+        "relationship_decisions": 5,
+        "canonical_source_candidates": 11,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-08-24T23:46:44.943101+00:00",
+          "hours_since_update": 1.99,
+          "event_count": 10,
+          "timeline_entries": 9
         }
       },
       {
@@ -3797,7 +3733,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 80.11
+          "age_hours": 82.03
         },
         "level": "high",
         "importance_reasons": [
@@ -3841,7 +3777,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-21T15:41:39.092086+00:00",
-          "hours_since_update": 80.11,
+          "hours_since_update": 82.03,
           "event_count": 34,
           "timeline_entries": 34
         }
@@ -3859,7 +3795,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 448.94
+          "age_hours": 450.86
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3913,7 +3849,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-06T06:51:35.977301+00:00",
-          "hours_since_update": 448.94,
+          "hours_since_update": 450.86,
           "event_count": 40,
           "timeline_entries": 24
         }
@@ -3931,7 +3867,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 584.11
+          "age_hours": 586.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3979,7 +3915,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 584.11,
+          "hours_since_update": 586.03,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3997,7 +3933,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 383.59
+          "age_hours": 385.52
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4045,7 +3981,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-09T00:12:17.273491+00:00",
-          "hours_since_update": 383.59,
+          "hours_since_update": 385.52,
           "event_count": 10,
           "timeline_entries": 7
         }
@@ -4063,7 +3999,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 262.11
+          "age_hours": 264.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4111,7 +4047,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 262.11,
+          "hours_since_update": 264.03,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -4129,7 +4065,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 253.1
+          "age_hours": 255.03
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4175,66 +4111,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T10:41:34.652293+00:00",
-          "hours_since_update": 253.1,
-          "event_count": 4,
-          "timeline_entries": 4
-        }
-      },
-      {
-        "story_id": "story_003661",
-        "title": "Florida Shooting Leaves One Dead in St. Lucie County - The Boca Raton Tribune",
-        "score": 75,
-        "editorial_priority": 52,
-        "editorial_score": 52,
-        "score_breakdown": {
-          "score": 52,
-          "importance": 75,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 166.1
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": []
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 4,
-        "timeline_entries": 4,
-        "relationship_decisions": 2,
-        "canonical_source_candidates": 4,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Established multi-event story has not updated in the past 72 hours",
-          "last_updated": "2026-08-18T01:41:42.161620+00:00",
-          "hours_since_update": 166.1,
+          "hours_since_update": 255.03,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4252,7 +4129,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 61.1
+          "age_hours": 63.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4306,65 +4183,9 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-22T10:41:44.573199+00:00",
-          "hours_since_update": 61.1,
+          "hours_since_update": 63.03,
           "event_count": 17,
           "timeline_entries": 12
-        }
-      },
-      {
-        "story_id": "story_005569",
-        "title": "National Weather Service to provide update on possible tornado event in St. Lucie County",
-        "score": 45,
-        "editorial_priority": 51,
-        "editorial_score": 51,
-        "score_breakdown": {
-          "score": 51,
-          "importance": 45,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 1.0,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 5.48
-        },
-        "level": "normal",
-        "importance_reasons": [
-          {
-            "code": "weather_emergency",
-            "label": "Weather emergency",
-            "points": 35
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Port St. Lucie"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 2,
-        "timeline_entries": 2,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 2,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-24T18:20:22.910749+00:00",
-          "hours_since_update": 5.48,
-          "event_count": 2,
-          "timeline_entries": 2
         }
       },
       {
@@ -4380,7 +4201,7 @@
           "freshness_multiplier": 1.0,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 3.31
+          "age_hours": 5.24
         },
         "level": "normal",
         "importance_reasons": [
@@ -4421,7 +4242,63 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-24T20:31:28.207979+00:00",
-          "hours_since_update": 3.31,
+          "hours_since_update": 5.24,
+          "event_count": 2,
+          "timeline_entries": 2
+        }
+      },
+      {
+        "story_id": "story_005569",
+        "title": "National Weather Service to provide update on possible tornado event in St. Lucie County",
+        "score": 45,
+        "editorial_priority": 49,
+        "editorial_score": 49,
+        "score_breakdown": {
+          "score": 49,
+          "importance": 45,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.95,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 7.4
+        },
+        "level": "normal",
+        "importance_reasons": [
+          {
+            "code": "weather_emergency",
+            "label": "Weather emergency",
+            "points": 35
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Port St. Lucie"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 2,
+        "timeline_entries": 2,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "developing",
+          "reason": "Multiple events or follow-up decisions show the story is evolving",
+          "last_updated": "2026-08-24T18:20:22.910749+00:00",
+          "hours_since_update": 7.4,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4439,7 +4316,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 571.72
+          "age_hours": 573.65
         },
         "level": "high",
         "importance_reasons": [
@@ -4482,7 +4359,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 571.72,
+          "hours_since_update": 573.65,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4500,7 +4377,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 571.73
+          "age_hours": 573.65
         },
         "level": "high",
         "importance_reasons": [
@@ -4543,7 +4420,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 571.73,
+          "hours_since_update": 573.65,
           "event_count": 14,
           "timeline_entries": 7
         }
@@ -4561,7 +4438,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 584.13
+          "age_hours": 586.05
         },
         "level": "high",
         "importance_reasons": [
@@ -4606,7 +4483,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 584.13,
+          "hours_since_update": 586.05,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4624,7 +4501,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 262.11
+          "age_hours": 264.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4667,7 +4544,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 262.11,
+          "hours_since_update": 264.03,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4685,7 +4562,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 190.11
+          "age_hours": 192.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4726,7 +4603,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-17T01:41:33.127844+00:00",
-          "hours_since_update": 190.11,
+          "hours_since_update": 192.03,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -4744,7 +4621,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 630.02
+          "age_hours": 631.94
         },
         "level": "high",
         "importance_reasons": [
@@ -4788,7 +4665,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-29T17:46:26.277263+00:00",
-          "hours_since_update": 630.02,
+          "hours_since_update": 631.94,
           "event_count": 6,
           "timeline_entries": 2
         }
@@ -4806,7 +4683,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 272.1
+          "age_hours": 274.03
         },
         "level": "high",
         "importance_reasons": [
@@ -4850,7 +4727,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-13T15:41:45.363233+00:00",
-          "hours_since_update": 272.1,
+          "hours_since_update": 274.03,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -4868,7 +4745,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 277.1
+          "age_hours": 279.02
         },
         "level": "high",
         "importance_reasons": [
@@ -4912,7 +4789,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-08-13T10:41:50.330585+00:00",
-          "hours_since_update": 277.1,
+          "hours_since_update": 279.02,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4922,7 +4799,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-08-24T23:51:30Z",
+    "generated_at": "2026-08-25T01:47:47Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -4937,35 +4814,34 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 5,
-        "generated_live": 3,
-        "no_publishable_sources": 1
+        "category_eligibility_archive_recovery": 6,
+        "generated_live": 3
       },
       "failures": {
-        "no_category_eligible_sources": 5
+        "no_category_eligible_sources": 6
       },
       "model_attempt_count": 3,
-      "model_elapsed_seconds": 54.838,
+      "model_elapsed_seconds": 69.477,
       "archive_recovery_requested_count": 6,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 1,
-      "article_framing_rejection_count": 2,
-      "category_eligibility_rejection_count": 12,
-      "published_story_duplicate_suppression_count": 24,
-      "story_aware_update_context_count": 6,
-      "material_update_promotion_evaluation_count": 10,
+      "contextual_update_lead_rejection_count": 0,
+      "article_framing_rejection_count": 6,
+      "category_eligibility_rejection_count": 10,
+      "published_story_duplicate_suppression_count": 31,
+      "story_aware_update_context_count": 2,
+      "material_update_promotion_evaluation_count": 11,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 8
+      "material_update_promotion_model_call_count": 9
     },
     "categories": [
       {
         "category_key": "local_gov",
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 27,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 7,
+        "fetched_candidate_count": 26,
+        "fresh_candidate_count": 19,
+        "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4982,23 +4858,9 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 4,
-        "category_eligibility_rejection_count": 4,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 3,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "SLCSO asks public for tips on missing Fort Pierce woman last seen Aug. 14 - WPEC",
-            "source_url": "http://cbs12.com/news/florida/slcso-asks-public-for-tips-on-missing-fort-pierce-woman-last-seen-aug-14-st-lucie-county-sheriffs-office-slcso-racqueal-annalessa-martin"
-          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -5042,8 +4904,18 @@
             "source_url": "https://cw34.com/newsletter-daily/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday"
           }
         ],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "SLCSO asks public for tips on missing Fort Pierce woman last seen Aug. 14 - WPEC",
+            "source_url": "http://cbs12.com/news/florida/slcso-asks-public-for-tips-on-missing-fort-pierce-woman-last-seen-aug-14-st-lucie-county-sheriffs-office-slcso-racqueal-annalessa-martin",
+            "editorial_story_id": "story_001215",
+            "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+            "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Martin County schools issue warning about fake squishy toys - WPBF",
@@ -5114,6 +4986,21 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "local_gov",
+            "source_headline": "SLCSO asks public for tips on missing Fort Pierce woman last seen Aug. 14 - WPEC",
+            "source_url": "http://cbs12.com/news/florida/slcso-asks-public-for-tips-on-missing-fort-pierce-woman-last-seen-aug-14-st-lucie-county-sheriffs-office-slcso-racqueal-annalessa-martin",
+            "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+            "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
             "source_headline": "Martin County schools issue warning about fake squishy toys - WPBF",
             "source_url": "https://www.wpbf.com/article/martin-county-schools-issue-warning-about-fake-squishy-toys/73514336",
             "canonical_slug": "2026-08-24-martin-county-schools-ban-fake-squishy-toys-after-federal-safety-alert",
@@ -5191,12 +5078,11 @@
             "confidence": 1.0,
             "shared_anchors": [],
             "novel_facts": [
-              "Ronald L. Corbin died Saturday, August 23, 2026",
+              "Ronald L. Corbin died Saturday",
               "Corbin was a choral teacher at Martin County High School for 34 years (1980-2014)",
               "Led OPUS choir program",
-              "Corbin Musical Arts Center dedicated in his name in 2015",
               "Received kidney transplant from daughter Candice Corbin in 2018",
-              "Added to Roll of Distinction in 2014",
+              "Corbin Musical Arts Center dedicated in his name in 2015",
               "Received R. Wayne Hugoboom Distinguished Service Award in 2017"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -5223,12 +5109,11 @@
             "confidence": 1.0,
             "shared_anchors": [],
             "novel_facts": [
-              "Funnel cloud spotted over Port St. Lucie neighborhood",
-              "Tornado warning issued Sunday evening for southeastern St. Lucie County and northeastern Martin County",
-              "Warning in effect through 7 p.m.",
-              "Storm expected near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
-              "Hutchinson Island South affected by warning",
-              "Video obtained by CBS12 showing funnel cloud"
+              "Funnel cloud spotted over Port St. Lucie neighborhood Sunday evening",
+              "Tornado warning issued for southeastern St. Lucie County and northeastern Martin County through 7 p.m.",
+              "Storm expected to move near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
+              "Video obtained by CBS12 showing the funnel cloud",
+              "Hutchinson Island South among affected areas"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -5236,17 +5121,17 @@
             ]
           }
         ],
-        "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 30.273
+        "new_publication_stale_rejected_count": 0,
+        "elapsed_seconds": 30.145
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "generated_live",
-        "fetched_candidate_count": 26,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 8,
-        "selected_source_count": 4,
+        "fetched_candidate_count": 24,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 5,
+        "selected_source_count": 2,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -5254,11 +5139,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 11.633,
+            "elapsed_seconds": 4.489,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 11.633,
+        "model_elapsed_seconds": 4.489,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -5269,23 +5154,9 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 6,
-        "category_eligibility_rejection_count": 2,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-primary-crime-safety-focus",
-            "category_key": "crime",
-            "mode": "enforce",
-            "policy": "primary_crime_safety_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_primary_crime_safety_focus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
-            "source_url": "https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire"
-          },
           {
             "contract_version": "1.0-primary-crime-safety-focus",
             "category_key": "crime",
@@ -5303,6 +5174,16 @@
         ],
         "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "crime",
+            "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - WPEC",
+            "source_url": "https://cbs12.com/news/crime/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
+            "editorial_story_id": "story_005726",
+            "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
+            "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "crime",
             "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns",
@@ -5325,18 +5206,8 @@
           },
           {
             "category_key": "crime",
-            "source_headline": "BB gun shooting turns deadly: Fort Pierce man killed, suspect charged - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
-            "editorial_story_id": "story_002417",
-            "canonical_slug": "2026-08-06-12-year-old-describes-hit-and-run-that-injured-sister-in-fort-pierce",
-            "canonical_headline": "12-year-old describes hit-and-run that injured sister in Fort Pierce",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
             "surface": "hero",
-            "headline": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old",
+            "headline": "Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old on Avenue G",
             "editorial_story_id": "story_002417",
             "canonical_slug": "2026-08-24-fort-pierce-man-dies-after-bb-gun-shooting-suspect-charged-with-manslaughter",
             "canonical_headline": "Fort Pierce man dies after BB gun shooting, suspect charged with manslaughter",
@@ -5344,53 +5215,28 @@
             "reason": "published_skip_placement_suppressed"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
-            "source_url": "https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
-            "canonical_headline": "Sheriff's helicopter spots massive barn fire on Southwest Martin Highway in Palm City",
-            "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-            "identity_keys": [
-              "story:story_005728",
-              "source:https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_precise_location",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=0",
-              "shared_locality=['boca-raton', 'martin-county', 'port-st-lucie', 'st-lucie', 'st-lucie-county']",
-              "shared_event_families=['fire']",
-              "shared_named_people=[]",
-              "shared_precise_locations=['250-s-ocean-boulevard']",
-              "shared_agencies=[]",
-              "shared_subject_phrases=[]",
-              "shared_headline_topic_core=['fire', 'wpec']",
-              "shared_distinctive_token_count=105",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 1,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 0,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "crime",
+            "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - WPEC",
+            "source_url": "https://cbs12.com/news/crime/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
+            "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
+            "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "crime",
             "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns",
@@ -5420,51 +5266,21 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "BB gun shooting turns deadly: Fort Pierce man killed, suspect charged - WPEC",
-            "source_url": "https://cbs12.com/news/local/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
-            "canonical_slug": "2026-08-06-12-year-old-describes-hit-and-run-that-injured-sister-in-fort-pierce",
-            "canonical_headline": "12-year-old describes hit-and-run that injured sister in Fort Pierce",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "newer_source_requires_materiality_decision",
-            "evaluated": true,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
-            "action": "preserve_existing_canonical",
-            "semantic_status": "known_canonical_identity_conflict",
-            "semantic_action": "hold",
-            "confidence": 1.0,
-            "shared_anchors": [],
-            "novel_facts": [
-              "34-year-old man shot with BB gun on Avenue G",
-              "Jabari Cowart charged with manslaughter",
-              "Victim died at HCA Florida Lawnwood Hospital",
-              "Incident occurred Saturday, August 24, 2026",
-              "Group shooting BB guns at trees when incident occurred"
-            ],
-            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-            "validation_errors": [
-              "known_canonical_identity_conflict"
-            ]
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
+        "live_hero_headline": "",
         "generated_card_count": 0,
-        "elapsed_seconds": 38.766
+        "elapsed_seconds": 18.33
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 22,
+        "fresh_candidate_count": 21,
         "publishable_source_count": 11,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -5578,7 +5394,7 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/community-divided-over-flock-safety-cameras-after-treasure-coast-homicide-arrest"
           }
         ],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "business",
@@ -5598,6 +5414,16 @@
             "canonical_slug": "2026-08-21-james-martin-wins-democratic-primary-for-congressional-district-21-by-less-than",
             "canonical_headline": "James Martin wins Democratic primary for Congressional District 21 by less than 1%, will face Brian Mast in November",
             "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Paige O'Donnell relinquishes 36 Border Collies rescued from Palm City hoarding case",
+            "source_url": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
+            "editorial_story_id": "custom:887b7f68e86a4dd4d39e4aa93d4f0b89",
+            "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+            "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+            "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -5627,10 +5453,10 @@
             "final_publication_action": "canonical_bound_before_generation"
           }
         ],
-        "material_update_promotion_evaluation_count": 0,
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
           {
             "category_key": "business",
@@ -5661,10 +5487,45 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "business",
+            "source_headline": "Paige O'Donnell relinquishes 36 Border Collies rescued from Palm City hoarding case",
+            "source_url": "https://www.wptv.com/news/treasure-coast/paige-odonnell-relinquishes-border-collies-rescued-from-palm-city-hoarding-case",
+            "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+            "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+            "canonical_is_custom": true,
+            "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "known_canonical_identity_conflict",
+            "semantic_action": "hold",
+            "confidence": 0.95,
+            "shared_anchors": [
+              "Martin County",
+              "animal hoarding case",
+              "Humane Society of the Treasure Coast"
+            ],
+            "novel_facts": [
+              "Paige O'Donnell as defendant",
+              "36 Border Collies specifically",
+              "Palm City location",
+              "72 charges",
+              "Legal surrender on August 21, 2026",
+              "Adoption applications beginning Sept. 1"
+            ],
+            "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+            "validation_errors": [
+              "known_canonical_identity_conflict"
+            ]
           }
         ],
         "new_publication_stale_rejected_count": 2,
-        "elapsed_seconds": 6.709
+        "elapsed_seconds": 15.277
       },
       {
         "category_key": "sports",
@@ -5701,15 +5562,15 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
-        "new_publication_stale_rejected_count": 5,
-        "elapsed_seconds": 9.152
+        "new_publication_stale_rejected_count": 3,
+        "elapsed_seconds": 11.048
       },
       {
         "category_key": "things_to_do",
         "category_label": "Things To Do",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 19,
+        "fresh_candidate_count": 20,
         "publishable_source_count": 8,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -5812,14 +5673,16 @@
             "semantic_action": "hold",
             "confidence": 0.95,
             "shared_anchors": [
-              "Both are weekend event roundups covering Treasure Coast and Palm Beach County areas",
-              "Both mention Palm City"
+              "Treasure Coast region",
+              "Palm Beach area",
+              "weekend events",
+              "WPBF news source"
             ],
             "novel_facts": [
-              "Newfield Farm gardening class on August 21, 2026",
+              "Newfield Farm gardening class on August 23, 2026",
               "Ukrainian Cultural Fest in West Palm Beach",
-              "Delray Beach women's health event",
-              "Peggy Adams Animal Rescue League adoption event",
+              "Delray's Hottest Party women's health event",
+              "Peggy Adams Animal Rescue adoption event",
               "Loggerhead Triathlon in Jupiter"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -5829,21 +5692,28 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 14.434
+        "elapsed_seconds": 14.508
       },
       {
         "category_key": "florida",
         "category_label": "Florida",
-        "status": "no_publishable_sources",
+        "status": "generated_live",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 24,
-        "publishable_source_count": 0,
-        "selected_source_count": 0,
+        "publishable_source_count": 1,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 7.714,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 7.714,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -5854,7 +5724,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 0,
@@ -5867,30 +5737,27 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.204
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Florida Lt. Gov. Jay Collins leaves future in politics uncertain after primary loss",
+        "generated_card_count": 0,
+        "elapsed_seconds": 31.22
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generated_live",
-        "fetched_candidate_count": 25,
+        "status": "category_eligibility_archive_recovery",
+        "fetched_candidate_count": 26,
         "fresh_candidate_count": 21,
-        "publishable_source_count": 4,
-        "selected_source_count": 1,
+        "publishable_source_count": 3,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 4.77,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 4.77,
-        "failure_code": "",
-        "failure_summary": "",
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Martin County category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5899,11 +5766,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Sheriff's helicopter spots massive fire in Martin County, helps firefighters save home - WPEC",
+            "source_url": "https://cbs12.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
+            "editorial_story_id": "story_005650",
+            "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
+            "canonical_headline": "Sheriff's helicopter crew spots garage fire on Southwest Martin Highway, helps save Palm City home",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "martin",
             "source_headline": "Martin County schools issue warning about fake squishy toys - WPBF",
@@ -5945,37 +5822,44 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Sheriff's helicopter spots massive fire in Martin County, helps firefighters save home - WPEC",
-            "source_url": "https://cbs12.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
-            "canonical_headline": "Sheriff's helicopter spots massive barn fire on Southwest Martin Highway in Palm City",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_005650",
-              "source:https://cbs12.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_005650,source:https://cbs12.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 3,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 4,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
-        "material_update_promotion_model_call_count": 2,
+        "material_update_promotion_model_call_count": 3,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Sheriff's helicopter spots massive fire in Martin County, helps firefighters save home - WPEC",
+            "source_url": "https://cbs12.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
+            "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
+            "canonical_headline": "Sheriff's helicopter crew spots garage fire on Southwest Martin Highway, helps save Palm City home",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.98,
+            "shared_anchors": [
+              "Martin County Sheriff's Office Air One helicopter crew",
+              "Fire spotted around 10:30 p.m. Sunday night",
+              "Southwest Martin Highway location",
+              "1,600-square-foot detached garage/structure",
+              "Class C motorhome and Jeep inside destroyed",
+              "Fire contained before reaching main home",
+              "Homeowners not home at time of fire",
+              "State Fire Marshal notified"
+            ],
+            "novel_facts": [],
+            "reason": "The incoming article and candidate describe the exact same fire incident with identical specific details: helicopter crew discovery time (10:30 p.m. Sunday), exact location (Southwest Martin Highway), structure size (1,600 sq ft), vehicles destroyed (Class C motorhome and Jeep), and outcome (garage saved home). The source URLs are nearly identical, and the retrieval evidence confirms this is a persistent story match. The incoming article contains no material updates - it repeats the same facts with identical wording in many places. No new developments such as fire cause determination, damage estimates, or investigative findings are reported.",
+            "validation_errors": []
+          },
           {
             "category_key": "martin",
             "source_headline": "Martin County schools issue warning about fake squishy toys - WPBF",
@@ -6010,11 +5894,11 @@
             "confidence": 1.0,
             "shared_anchors": [],
             "novel_facts": [
-              "Ronald L. Corbin died Saturday August 23, 2026",
-              "Choral teacher at Martin County High School for 34 years (1980-2014)",
-              "Led OPUS choir program",
+              "Ronald L. Corbin, choral teacher at Martin County High School for 34 years, died Saturday August 23, 2026",
+              "Led OPUS choir program until retirement in 2014",
               "Received kidney transplant from daughter Candice Corbin in 2018",
               "Corbin Musical Arts Center dedicated in his name in 2015",
+              "Added to Florida Vocal Association Roll of Distinction in 2014",
               "Received R. Wayne Hugoboom Distinguished Service Award in 2017"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -6074,9 +5958,9 @@
             "novel_facts": [
               "Funnel cloud spotted Sunday evening",
               "Tornado warning issued for southeastern St. Lucie County and northeastern Martin County",
-              "Warning in effect through 7 p.m.",
-              "Storm expected near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
-              "Wind gusts up to 60 mph and quarter-sized hail reported"
+              "Warning through 7 p.m.",
+              "Storm near Walton, Stuart, St. Lucie Nuclear Power Plant around 6:30 p.m.",
+              "Wind gusts up to 60 mph and quarter-sized hail"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -6085,20 +5969,16 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Sheriff's helicopter crew spots garage fire on Southwest Martin Highway, helps save Palm City home",
-        "generated_card_count": 0,
-        "elapsed_seconds": 25.508
+        "elapsed_seconds": 40.401
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 29,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 15,
-        "selected_source_count": 12,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 9,
+        "selected_source_count": 9,
         "cache_hit": false,
         "archive_recovery_requested": false,
         "attempt_count": 1,
@@ -6106,67 +5986,35 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 38.435,
+            "elapsed_seconds": 57.274,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 38.435,
+        "model_elapsed_seconds": 57.274,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 1,
-        "contextual_update_lead_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "story_form": "update",
-            "lead_word_count": 62,
-            "baseline_anchor": "infrastructure_issue",
-            "baseline_present": false,
-            "baseline_anchor_present": false,
-            "baseline_details_present": false,
-            "baseline_context_hits": [],
-            "baseline_context_required": 2,
-            "canonical_context_available": true,
-            "canonical_context_headline": "Multi-million dollar crane remains stuck in ditch near Oslo Road in Vero Beach",
-            "novelty_anchor": "source_distinctive_detail",
-            "novelty_present": true,
-            "novelty_token_hits": [
-              "crews",
-              "fire",
-              "fort",
-              "homes",
-              "mobile",
-              "pierce",
-              "structure"
-            ],
-            "missing": [
-              "original_event_context_missing"
-            ],
-            "source_title": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - cw34.com",
-            "headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes"
-          }
-        ],
-        "article_framing_rejection_count": 2,
+        "contextual_update_lead_rejection_count": 0,
+        "contextual_update_lead_rejections": [],
+        "article_framing_rejection_count": 6,
         "article_framing_rejections": [
           {
             "surface": "card",
             "required": true,
             "passed": false,
-            "headline": "Port St. Lucie residents clean up debris after EF0 tornado tears through neighborhood",
+            "headline": "EF0 tornado touched down in Port St. Lucie Sunday evening, damaged 20 to 30 homes",
             "missing": [
               "headline_jurisdiction_missing_from_lead"
             ],
             "lead_independence": {
               "required": true,
               "passed": true,
-              "headline": "Port St. Lucie residents clean up debris after EF0 tornado tears through neighborhood",
-              "lead": "Aron Christiansen spent Monday morning pulling debris out of his pool after already retrieving furniture from the bottom. Video from a neighbor's camera captured the moment his patio broke apart during the storm. Half of the patio is now out on the curb, set to be salvaged for recycling. Christiansen said he looked out the windows Sunday night and saw a bunch of debris flying. He thought it was birds at first, but looked closer and saw debris. He had about 10 seconds before it hit the house.",
-              "lead_word_count": 89,
-              "headline_overlap_ratio": 0.154,
-              "new_context_token_count": 50,
+              "headline": "EF0 tornado touched down in Port St. Lucie Sunday evening, damaged 20 to 30 homes",
+              "lead": "The tornado first touched down around 6:10 p.m. near Southeast Kitching Cove Lane and Southeast Morningside Boulevard, close to the Tarpon Bay Yacht Club. The tornado produced minimal structural damage, including roof damage, soffit damage and pool enclosures lifted from their foundations.",
+              "lead_word_count": 44,
+              "headline_overlap_ratio": 0.231,
+              "new_context_token_count": 26,
               "opaque_references": [],
               "undefined_references": [],
               "story_form": "standard",
@@ -6180,8 +6028,8 @@
             "claim_consistency": {
               "required": true,
               "passed": false,
-              "headline": "Port St. Lucie residents clean up debris after EF0 tornado tears through neighborhood",
-              "lead": "Aron Christiansen spent Monday morning pulling debris out of his pool after already retrieving furniture from the bottom. Video from a neighbor's camera captured the moment his patio broke apart during the storm. Half of the patio is now out on the curb, set to be salvaged for recycling. Christiansen said he looked out the windows Sunday night and saw a bunch of debris flying. He thought it was birds at first, but looked closer and saw debris. He had about 10 seconds before it hit the house.",
+              "headline": "EF0 tornado touched down in Port St. Lucie Sunday evening, damaged 20 to 30 homes",
+              "lead": "The tornado first touched down around 6:10 p.m. near Southeast Kitching Cove Lane and Southeast Morningside Boulevard, close to the Tarpon Bay Yacht Club. The tornado produced minimal structural damage, including roof damage, soffit damage and pool enclosures lifted from their foundations.",
               "headline_money_claims": [],
               "lead_money_claims": [],
               "missing_money_claims": [],
@@ -6202,19 +6050,19 @@
             "source_focus": {
               "required": true,
               "passed": true,
-              "generated_headline": "Port St. Lucie residents clean up debris after EF0 tornado tears through neighborhood",
-              "generated_lead": "Aron Christiansen spent Monday morning pulling debris out of his pool after already retrieving furniture from the bottom. Video from a neighbor's camera captured the moment his patio broke apart during the storm.",
-              "source_title": "EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures - WPTV",
-              "source_lead": "Lucie residents spent Monday cleaning up after a storm tore through the area Sunday night, leaving behind damaged structures, debris-filled pools and downed foliage.The National Weather Service determined it was an EF-0 tornado, with 65-75 mph winds.Aron Christiansen spent the morning pulling debris out of his pool after already retrieving furniture from the bottom. Video from a neighbor's camera captured the moment his patio broke apart during the storm.",
+              "generated_headline": "EF0 tornado touched down in Port St. Lucie Sunday evening, damaged 20 to 30 homes",
+              "generated_lead": "The tornado first touched down around 6:10 p.m. near Southeast Kitching Cove Lane and Southeast Morningside Boulevard, close to the Tarpon Bay Yacht Club. The tornado produced minimal structural damage, including roof damage, soffit damage and pool enclosures lifted from their foundations.",
+              "source_title": "National Weather Service confirms EF0 tornado touchdown in Port St. Lucie - WPTV",
+              "source_lead": "The National Weather Service has confirmed that an EF0 tornado touched down Sunday evening in St. Lucie County, damaging about 20 to 30 homes along a 2.1-mile path.WATCH THE FULL PRESS CONFERENCE BELOW:Will Ulrich, warning coordination meteorologist with the National Weather Service Melbourne office, announced the findings Monday morning during a press conference at Jessica Clinton Park following a damage survey of the affected areas.The tornado, classified as a landspout, first touched down around 6:10 p.m. near Southeast Kitching Cove",
               "title_similarity": {
-                "score": 0.7455,
-                "overlap": 0.8333,
-                "jaccard": 0.5882,
-                "sorted_sequence": 0.7619,
-                "ordered_sequence": 0.5833,
-                "shared_token_count": 10.0
+                "score": 0.443,
+                "overlap": 0.4545,
+                "jaccard": 0.2632,
+                "sorted_sequence": 0.4762,
+                "ordered_sequence": 0.5034,
+                "shared_token_count": 5.0
               },
-              "lead_token_overlap": 1.0,
+              "lead_token_overlap": 0.379,
               "missing": []
             },
             "source_jurisdiction": {
@@ -6227,18 +6075,18 @@
             "surface": "card",
             "required": true,
             "passed": false,
-            "headline": "Fort Pierce enforces two-hour parking limits downtown with $50 citations",
+            "headline": "Port St. Lucie residents clean up after EF0 tornado tears through neighborhoods",
             "missing": [
               "headline_jurisdiction_missing_from_lead"
             ],
             "lead_independence": {
               "required": true,
               "passed": true,
-              "headline": "Fort Pierce enforces two-hour parking limits downtown with $50 citations",
-              "lead": "Drivers who stay longer than two hours will receive a $50 citation, which increases to $100 for repeat offenses. The initiative, which began in July, aims to increase parking turnover, improve traffic flow, and make it easier for visitors to find available spaces, according to city officials.",
-              "lead_word_count": 47,
-              "headline_overlap_ratio": 0.3,
-              "new_context_token_count": 31,
+              "headline": "Port St. Lucie residents clean up after EF0 tornado tears through neighborhoods",
+              "lead": "Aron Christiansen spent the morning pulling debris out of his pool after already retrieving furniture from the bottom. Video from a neighbor's camera captured the moment his patio broke apart during the storm. Half of the patio is now out on the curb, set to be salvaged for recycling. Christiansen said he looked out the windows Sunday night and saw debris flying, thinking it was birds at first before realizing it was debris and having about 10 seconds before it hit his house.",
+              "lead_word_count": 84,
+              "headline_overlap_ratio": 0.083,
+              "new_context_token_count": 48,
               "opaque_references": [],
               "undefined_references": [],
               "story_form": "standard",
@@ -6252,8 +6100,80 @@
             "claim_consistency": {
               "required": true,
               "passed": false,
-              "headline": "Fort Pierce enforces two-hour parking limits downtown with $50 citations",
-              "lead": "Drivers who stay longer than two hours will receive a $50 citation, which increases to $100 for repeat offenses. The initiative, which began in July, aims to increase parking turnover, improve traffic flow, and make it easier for visitors to find available spaces, according to city officials.",
+              "headline": "Port St. Lucie residents clean up after EF0 tornado tears through neighborhoods",
+              "lead": "Aron Christiansen spent the morning pulling debris out of his pool after already retrieving furniture from the bottom. Video from a neighbor's camera captured the moment his patio broke apart during the storm. Half of the patio is now out on the curb, set to be salvaged for recycling. Christiansen said he looked out the windows Sunday night and saw debris flying, thinking it was birds at first before realizing it was debris and having about 10 seconds before it hit his house.",
+              "headline_money_claims": [],
+              "lead_money_claims": [],
+              "missing_money_claims": [],
+              "headline_jurisdictions": [
+                "port_st_lucie"
+              ],
+              "lead_jurisdictions": [],
+              "missing_jurisdictions": [
+                "port_st_lucie"
+              ],
+              "headline_policy_references": [],
+              "lead_policy_references": [],
+              "missing_policy_references": [],
+              "missing": [
+                "headline_jurisdiction_missing_from_lead"
+              ]
+            },
+            "source_focus": {
+              "required": true,
+              "passed": true,
+              "generated_headline": "Port St. Lucie residents clean up after EF0 tornado tears through neighborhoods",
+              "generated_lead": "Aron Christiansen spent the morning pulling debris out of his pool after already retrieving furniture from the bottom. Video from a neighbor's camera captured the moment his patio broke apart during the storm.",
+              "source_title": "EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures",
+              "source_lead": "Lucie residents spent Monday cleaning up after a storm tore through the area Sunday night, leaving behind damaged structures, debris-filled pools and downed foliage.The National Weather Service determined it was an EF-0 tornado, with 65-75 mph winds.WATCH BELOW: Port St. Lucie tornado: 75 mph winds leave trail of damageAron Christiansen spent the morning pulling debris out of his pool after already retrieving furniture from the bottom.",
+              "title_similarity": {
+                "score": 0.7231,
+                "overlap": 0.8182,
+                "jaccard": 0.5625,
+                "sorted_sequence": 0.7261,
+                "ordered_sequence": 0.535,
+                "shared_token_count": 9.0
+              },
+              "lead_token_overlap": 0.583,
+              "missing": []
+            },
+            "source_jurisdiction": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            }
+          },
+          {
+            "surface": "card",
+            "required": true,
+            "passed": false,
+            "headline": "Fort Pierce enforces two-hour parking limits downtown, issues $50 citations",
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ],
+            "lead_independence": {
+              "required": true,
+              "passed": true,
+              "headline": "Fort Pierce enforces two-hour parking limits downtown, issues $50 citations",
+              "lead": "Drivers who stay longer than two hours will receive a $50 citation, which increases to $100 for repeat offenses. The initiative, which began in July, aims to increase parking turnover, improve traffic flow, and make it easier for visitors to find available spaces, according to city officials. The two-hour parking limits are enforced Monday through Friday from 8:30 a.m.",
+              "lead_word_count": 62,
+              "headline_overlap_ratio": 0.455,
+              "new_context_token_count": 36,
+              "opaque_references": [],
+              "undefined_references": [],
+              "story_form": "standard",
+              "update_diagnostics": {
+                "required": false,
+                "passed": true,
+                "story_form": "standard"
+              },
+              "missing": []
+            },
+            "claim_consistency": {
+              "required": true,
+              "passed": false,
+              "headline": "Fort Pierce enforces two-hour parking limits downtown, issues $50 citations",
+              "lead": "Drivers who stay longer than two hours will receive a $50 citation, which increases to $100 for repeat offenses. The initiative, which began in July, aims to increase parking turnover, improve traffic flow, and make it easier for visitors to find available spaces, according to city officials. The two-hour parking limits are enforced Monday through Friday from 8:30 a.m.",
               "headline_money_claims": [
                 50
               ],
@@ -6279,19 +6199,237 @@
             "source_focus": {
               "required": true,
               "passed": true,
-              "generated_headline": "Fort Pierce enforces two-hour parking limits downtown with $50 citations",
+              "generated_headline": "Fort Pierce enforces two-hour parking limits downtown, issues $50 citations",
               "generated_lead": "Drivers who stay longer than two hours will receive a $50 citation, which increases to $100 for repeat offenses. The initiative, which began in July, aims to increase parking turnover, improve traffic flow, and make it easier for visitors to find available spaces, according to city officials.",
               "source_title": "Fort Pierce enforces two-hour parking limits downtown - WPBF",
               "source_lead": "The city of Fort Pierce is enforcing two-hour parking limits in parts of downtown, with citations now being issued to drivers who exceed the limit. Drivers who stay longer than two hours will receive a $50 citation, which increases to $100 for repeat offenses.",
               "title_similarity": {
-                "score": 0.8336,
+                "score": 0.8063,
                 "overlap": 0.8889,
-                "jaccard": 0.7273,
-                "sorted_sequence": 0.8548,
-                "ordered_sequence": 0.871,
+                "jaccard": 0.6667,
+                "sorted_sequence": 0.8092,
+                "ordered_sequence": 0.8244,
                 "shared_token_count": 8.0
               },
               "lead_token_overlap": 0.586,
+              "missing": []
+            },
+            "source_jurisdiction": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            }
+          },
+          {
+            "surface": "card",
+            "required": true,
+            "passed": false,
+            "headline": "National Weather Service confirms EF0 tornado touched down in Port St. Lucie with winds up to 75 mph",
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ],
+            "lead_independence": {
+              "required": true,
+              "passed": true,
+              "headline": "National Weather Service confirms EF0 tornado touched down in Port St. Lucie with winds up to 75 mph",
+              "lead": "The tornado began at 6:10 p.m. near SE Kitchen Cove Lane and SE Morningside Boulevard, with coordinates 27.253, -80.316, and ended near SE Quay Street and SE Cody Place, with coordinates 27.244, -80.346. The track length of the tornado was 2.1 miles, with a maximum width of 200 yards.",
+              "lead_word_count": 56,
+              "headline_overlap_ratio": 0.067,
+              "new_context_token_count": 28,
+              "opaque_references": [],
+              "undefined_references": [],
+              "story_form": "standard",
+              "update_diagnostics": {
+                "required": false,
+                "passed": true,
+                "story_form": "standard"
+              },
+              "missing": []
+            },
+            "claim_consistency": {
+              "required": true,
+              "passed": false,
+              "headline": "National Weather Service confirms EF0 tornado touched down in Port St. Lucie with winds up to 75 mph",
+              "lead": "The tornado began at 6:10 p.m. near SE Kitchen Cove Lane and SE Morningside Boulevard, with coordinates 27.253, -80.316, and ended near SE Quay Street and SE Cody Place, with coordinates 27.244, -80.346. The track length of the tornado was 2.1 miles, with a maximum width of 200 yards.",
+              "headline_money_claims": [],
+              "lead_money_claims": [],
+              "missing_money_claims": [],
+              "headline_jurisdictions": [
+                "port_st_lucie"
+              ],
+              "lead_jurisdictions": [],
+              "missing_jurisdictions": [
+                "port_st_lucie"
+              ],
+              "headline_policy_references": [],
+              "lead_policy_references": [],
+              "missing_policy_references": [],
+              "missing": [
+                "headline_jurisdiction_missing_from_lead"
+              ]
+            },
+            "source_focus": {
+              "required": true,
+              "passed": true,
+              "generated_headline": "National Weather Service confirms EF0 tornado touched down in Port St. Lucie with winds up to 75 mph",
+              "generated_lead": "The tornado began at 6:10 p.m. near SE Kitchen Cove Lane and SE Morningside Boulevard, with coordinates 27.253, -80.316, and ended near SE Quay Street and SE Cody Place, with coordinates 27.244, -80.346. The track length of the tornado was 2.1 miles, with a maximum width of 200 yards.",
+              "source_title": "NWS confirms EF0 tornado touched down Sunday in Port St. Lucie - WPBF",
+              "source_lead": "An EF0 tornado touched down in Port St. Lucie Sunday evening, with maximum estimated wind gusts between 65 and 75 mph.",
+              "title_similarity": {
+                "score": 0.6347,
+                "overlap": 0.7273,
+                "jaccard": 0.4444,
+                "sorted_sequence": 0.6887,
+                "ordered_sequence": 0.7152,
+                "shared_token_count": 8.0
+              },
+              "lead_token_overlap": 0.118,
+              "missing": []
+            },
+            "source_jurisdiction": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            }
+          },
+          {
+            "surface": "card",
+            "required": true,
+            "passed": false,
+            "headline": "Port St. Lucie tornado causes damage to homes, pool enclosures and fences along 2-mile path",
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ],
+            "lead_independence": {
+              "required": true,
+              "passed": true,
+              "headline": "Port St. Lucie tornado causes damage to homes, pool enclosures and fences along 2-mile path",
+              "lead": "The tornado touched down at 6:10 p.m. near Southeast Kitchen Cove Lane and Southeast Morningside Boulevard, near the Tarpon Bay Club. It traveled a little more than two miles over 14 to 15 minutes. The tornado then moved over the St. Lucie River, where it became a waterspout that meandered very slowly over the St. Lucie River for five to seven minutes, traveling from north to south before moving back onshore near the Bay St. Lucie community at about 6:20 p.m.",
+              "lead_word_count": 85,
+              "headline_overlap_ratio": 0.231,
+              "new_context_token_count": 44,
+              "opaque_references": [],
+              "undefined_references": [],
+              "story_form": "standard",
+              "update_diagnostics": {
+                "required": false,
+                "passed": true,
+                "story_form": "standard"
+              },
+              "missing": []
+            },
+            "claim_consistency": {
+              "required": true,
+              "passed": false,
+              "headline": "Port St. Lucie tornado causes damage to homes, pool enclosures and fences along 2-mile path",
+              "lead": "The tornado touched down at 6:10 p.m. near Southeast Kitchen Cove Lane and Southeast Morningside Boulevard, near the Tarpon Bay Club. It traveled a little more than two miles over 14 to 15 minutes. The tornado then moved over the St. Lucie River, where it became a waterspout that meandered very slowly over the St. Lucie River for five to seven minutes, traveling from north to south before moving back onshore near the Bay St. Lucie community at about 6:20 p.m.",
+              "headline_money_claims": [],
+              "lead_money_claims": [],
+              "missing_money_claims": [],
+              "headline_jurisdictions": [
+                "port_st_lucie"
+              ],
+              "lead_jurisdictions": [],
+              "missing_jurisdictions": [
+                "port_st_lucie"
+              ],
+              "headline_policy_references": [],
+              "lead_policy_references": [],
+              "missing_policy_references": [],
+              "missing": [
+                "headline_jurisdiction_missing_from_lead"
+              ]
+            },
+            "source_focus": {
+              "required": true,
+              "passed": true,
+              "generated_headline": "Port St. Lucie tornado causes damage to homes, pool enclosures and fences along 2-mile path",
+              "generated_lead": "The tornado touched down at 6:10 p.m. near Southeast Kitchen Cove Lane and Southeast Morningside Boulevard, near the Tarpon Bay Club. It traveled a little more than two miles over 14 to 15 minutes.",
+              "source_title": "GALLERY: EF-0 tornado carrying peak winds of 75 mph touches down in Port St. Lucie - WPEC",
+              "source_lead": "The National Weather Service confirmed an EF0 tornado with peak winds of 75 mph touched down in Port St. Lucie before becoming a waterspout as it moved over the St.",
+              "title_similarity": {
+                "score": 0.2853,
+                "overlap": 0.2857,
+                "jaccard": 0.16,
+                "sorted_sequence": 0.472,
+                "ordered_sequence": 0.1863,
+                "shared_token_count": 4.0
+              },
+              "lead_token_overlap": 0.2,
+              "missing": []
+            },
+            "source_jurisdiction": {
+              "required": false,
+              "passed": true,
+              "missing": []
+            }
+          },
+          {
+            "surface": "card_after_enrichment",
+            "required": true,
+            "passed": false,
+            "headline": "St. Lucie County Fire District contains Fort Pierce residential fire, prevents spread to mobile homes",
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ],
+            "lead_independence": {
+              "required": true,
+              "passed": true,
+              "headline": "St. Lucie County Fire District contains Fort Pierce residential fire, prevents spread to mobile homes",
+              "lead": "Rewritten card body:",
+              "lead_word_count": 3,
+              "headline_overlap_ratio": 0.0,
+              "new_context_token_count": 3,
+              "opaque_references": [],
+              "undefined_references": [],
+              "story_form": "standard",
+              "update_diagnostics": {
+                "required": false,
+                "passed": true,
+                "story_form": "standard"
+              },
+              "missing": []
+            },
+            "claim_consistency": {
+              "required": true,
+              "passed": false,
+              "headline": "St. Lucie County Fire District contains Fort Pierce residential fire, prevents spread to mobile homes",
+              "lead": "Rewritten card body:",
+              "headline_money_claims": [],
+              "lead_money_claims": [],
+              "missing_money_claims": [],
+              "headline_jurisdictions": [
+                "fort_pierce",
+                "st_lucie_county"
+              ],
+              "lead_jurisdictions": [],
+              "missing_jurisdictions": [
+                "fort_pierce",
+                "st_lucie_county"
+              ],
+              "headline_policy_references": [],
+              "lead_policy_references": [],
+              "missing_policy_references": [],
+              "missing": [
+                "headline_jurisdiction_missing_from_lead"
+              ]
+            },
+            "source_focus": {
+              "required": true,
+              "passed": true,
+              "generated_headline": "St. Lucie County Fire District contains Fort Pierce residential fire, prevents spread to mobile homes",
+              "generated_lead": "Rewritten card body:",
+              "source_title": "St. Lucie County Fire District responds to residential fire in Fort Pierce - WPBF",
+              "source_lead": "Lucie County contained a residential fire in Fort Pierce, preventing it from spreading to nearby mobile homes, with the cause under investigation. Lucie County contained a residential fire in Fort Pierce, preventing it from spreading to nearby mobile homes, with the cause under investigation.",
+              "title_similarity": {
+                "score": 0.7043,
+                "overlap": 0.8,
+                "jaccard": 0.5333,
+                "sorted_sequence": 0.7215,
+                "ordered_sequence": 0.6548,
+                "shared_token_count": 8.0
+              },
+              "lead_token_overlap": 0.0,
               "missing": []
             },
             "source_jurisdiction": {
@@ -6303,11 +6441,51 @@
         ],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 15,
+        "category_eligibility_assessed_count": 9,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 10,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
+            "source_url": "https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
+            "editorial_story_id": "story_001215",
+            "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+            "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - cw34.com",
+            "source_url": "https://cw34.com/news/local/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
+            "editorial_story_id": "story_001215",
+            "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+            "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - WPEC",
+            "source_url": "https://cbs12.com/news/crime/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
+            "editorial_story_id": "story_005726",
+            "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
+            "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "SLCSO asks public for tips on missing Fort Pierce woman last seen Aug. 14 - WPEC",
+            "source_url": "https://cbs12.com/news/florida/slcso-asks-public-for-tips-on-missing-fort-pierce-woman-last-seen-aug-14-st-lucie-county-sheriffs-office-slcso-racqueal-annalessa-martin",
+            "editorial_story_id": "story_001215",
+            "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+            "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns",
@@ -6369,91 +6547,73 @@
             "reason": "published_skip_placement_suppressed"
           }
         ],
-        "story_aware_update_context_count": 2,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - cw34.com",
-            "source_url": "https://cw34.com/news/local/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
-            "publisher": "cw34.com",
-            "canonical_slug": "2026-08-21-multi-million-dollar-crane-crashes-off-90th-avenue-in-vero-beach-as-residents-ra",
-            "canonical_headline": "Multi-million dollar crane remains stuck in ditch near Oslo Road in Vero Beach",
-            "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-            "identity_keys": [
-              "story:story_005728",
-              "source:https://cw34.com/news/local/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_precise_location",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=3",
-              "shared_locality=['vero-beach']",
-              "shared_event_families=['crash']",
-              "shared_named_people=[]",
-              "shared_precise_locations=['90th-avenue-near-oslo-road', 'oslo-road']",
-              "shared_agencies=[]",
-              "shared_subject_phrases=[]",
-              "shared_headline_topic_core=[]",
-              "shared_distinctive_token_count=33",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          },
-          {
-            "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
-            "source_url": "https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
-            "canonical_headline": "Sheriff's helicopter spots massive barn fire on Southwest Martin Highway in Palm City",
-            "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-            "identity_keys": [
-              "story:story_005650",
-              "source:https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_precise_location",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=0",
-              "shared_locality=['boca-raton', 'martin-county', 'port-st-lucie', 'st-lucie', 'st-lucie-county']",
-              "shared_event_families=['fire']",
-              "shared_named_people=[]",
-              "shared_precise_locations=['250-s-ocean-boulevard']",
-              "shared_agencies=[]",
-              "shared_subject_phrases=[]",
-              "shared_headline_topic_core=['fire', 'wpec']",
-              "shared_distinctive_token_count=105",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 3,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 2,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
+            "source_url": "https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
+            "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+            "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - cw34.com",
+            "source_url": "https://cw34.com/news/local/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
+            "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+            "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - WPEC",
+            "source_url": "https://cbs12.com/news/crime/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
+            "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
+            "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "SLCSO asks public for tips on missing Fort Pierce woman last seen Aug. 14 - WPEC",
+            "source_url": "https://cbs12.com/news/florida/slcso-asks-public-for-tips-on-missing-fort-pierce-woman-last-seen-aug-14-st-lucie-county-sheriffs-office-slcso-racqueal-annalessa-martin",
+            "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
+            "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns",
@@ -6506,8 +6666,7 @@
               "34-year-old man shot with BB gun on Avenue G",
               "Suspect Jabari Cowart charged with manslaughter",
               "Victim died at HCA Florida Lawnwood Hospital",
-              "Incident occurred Saturday August 24, 2026",
-              "Group shooting BB guns at trees when incident occurred"
+              "Incident occurred Saturday involving group shooting BB guns at trees"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -6559,18 +6718,13 @@
             "action": "preserve_existing_canonical",
             "semantic_status": "known_canonical_identity_conflict",
             "semantic_action": "hold",
-            "confidence": 0.95,
-            "shared_anchors": [
-              "Port St. Lucie location"
-            ],
+            "confidence": 1.0,
+            "shared_anchors": [],
             "novel_facts": [
-              "Funnel cloud sighting",
-              "Tornado warning Sunday evening",
-              "Southeastern St. Lucie County and northeastern Martin County affected",
-              "Warning through 7 p.m.",
-              "Storm near Walton, Stuart, St. Lucie Nuclear Power Plant at 6:30 p.m.",
-              "Wind gusts up to 60 mph",
-              "Quarter-sized hail"
+              "Funnel cloud spotted over Port St. Lucie neighborhood on Sunday evening",
+              "Tornado warning issued for southeastern St. Lucie County and northeastern Martin County through 7 p.m.",
+              "Storm expected to move near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
+              "Wind gusts up to 60 mph and quarter-sized hail reported"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -6581,9 +6735,9 @@
         "new_publication_stale_rejected_count": 1,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "National Weather Service confirms EF0 tornado touched down Sunday in Port St. Lucie",
-        "generated_card_count": 2,
-        "elapsed_seconds": 61.756
+        "live_hero_headline": "",
+        "generated_card_count": 0,
+        "elapsed_seconds": 80.156
       },
       {
         "category_key": "indian_river",
@@ -6648,7 +6802,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 6.072
+        "elapsed_seconds": 6.052
       }
     ]
   }
