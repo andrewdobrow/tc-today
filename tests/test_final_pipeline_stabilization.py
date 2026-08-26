@@ -236,12 +236,19 @@ def test_fresh_timestamp_alone_cannot_revive_old_incident_without_new_official_d
     from datetime import datetime, timezone
 
     g = _load_generate()
+    source_url = "https://www.wptv.com/news/local/retouched-tornado-story"
     item = {
         "headline": "EF0 tornado touched down in Port St. Lucie Sunday",
         "teaser": "A tornado touched down Sunday evening in Port St. Lucie.",
         "body": "The tornado touched down Sunday evening and damaged fences in Port St. Lucie.",
+        "source_url": source_url,
     }
     published = "Mon, 24 Aug 2026 20:23:50 GMT"
     now = datetime(2026, 8, 24, 23, 54, tzinfo=timezone.utc)
+    archive = [{
+        "headline": item["headline"],
+        "source_url": source_url,
+        "first_published": "2026-08-21T20:23:50+00:00",
+    }]
 
-    assert g._category_story_is_stale(item, [], published_raw=published, now=now) is True
+    assert g._category_story_is_stale(item, archive, published_raw=published, now=now) is True

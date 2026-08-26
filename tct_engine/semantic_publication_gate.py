@@ -23,7 +23,7 @@ from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from typing import Any, Iterable, Mapping, Sequence
 
-SEMANTIC_PUBLICATION_GATE_VERSION = "1.7"
+SEMANTIC_PUBLICATION_GATE_VERSION = "1.8"
 SEMANTIC_PUBLICATION_GATE_PROMPT_VERSION = "1.1"
 DEFAULT_RECENT_WINDOW_DAYS = 7
 DEFAULT_MAX_CANDIDATES = 4
@@ -391,24 +391,34 @@ def candidate_evidence(
     # Angle-shifted same-event coverage can have weak headline overlap. Candidate
     # recall is allowed only with a dense bundle of shared article facts plus
     # independent local/event context. This still requires model adjudication.
-    strong_content_event_continuity = bool(
+    dense_shared_fact_continuity = bool(
         day_gap is not None
         and day_gap <= 2
-        and content_shared_count >= 8
-        and content_score >= 0.24
-        and (
-            context_compatible
-            or bool(features["shared_precise_locations"])
-            or bool(features["shared_people"])
-            or bool(features["exact_incident_anchor"])
-            or bool(features["exact_known_event_key"])
-            or (
-                bool(features["shared_locality"])
-                and bool(features["shared_agencies"])
-                and content_shared_count >= 10
-                and content_score >= 0.30
+        and content_shared_count >= 12
+        and content_score >= 0.20
+        and context_compatible
+    )
+    strong_content_event_continuity = bool(
+        (
+            day_gap is not None
+            and day_gap <= 2
+            and content_shared_count >= 8
+            and content_score >= 0.24
+            and (
+                context_compatible
+                or bool(features["shared_precise_locations"])
+                or bool(features["shared_people"])
+                or bool(features["exact_incident_anchor"])
+                or bool(features["exact_known_event_key"])
+                or (
+                    bool(features["shared_locality"])
+                    and bool(features["shared_agencies"])
+                    and content_shared_count >= 10
+                    and content_score >= 0.30
+                )
             )
         )
+        or dense_shared_fact_continuity
     )
     left_anchor_value = str(incoming.get("incident_anchor") or "").strip().casefold()
     right_anchor_value = str(candidate.get("incident_anchor") or "").strip().casefold()
@@ -572,6 +582,7 @@ def candidate_evidence(
         "shared_numeric_tokens": sorted(shared_numeric_tokens),
         "content_similarity": content,
         "strong_content_event_continuity": strong_content_event_continuity,
+        "dense_shared_fact_continuity": dense_shared_fact_continuity,
         "final_headline_similarity": final_similarity,
         "source_headline_similarity": source_similarity,
         "day_gap": day_gap,

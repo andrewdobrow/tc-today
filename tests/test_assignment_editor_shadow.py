@@ -642,6 +642,7 @@ def test_recent_feed_retouch_does_not_make_old_event_fresh_without_current_day_d
 
     now = datetime.now(timezone.utc)
     yesterday = (now - timedelta(days=1)).strftime("%A")
+    source_url = "https://www.wptv.com/news/local/old-birthday-party-assault"
     item = {
         "headline": "Vero Beach man arrested on attempted murder charge after birthday party assault",
         "teaser": f"Deputies said the assault happened {yesterday} at a birthday party.",
@@ -649,11 +650,18 @@ def test_recent_feed_retouch_does_not_make_old_event_fresh_without_current_day_d
             f"Investigators said the assault occurred {yesterday}. The suspect was arrested after the incident. "
             "The article contains no new current-day development."
         ),
+        "source_url": source_url,
     }
-    # Simulate a publisher re-touching the feed today even though the event itself is old.
+    # A fresh feed timestamp is a proven retouch only because this exact publisher URL
+    # already has an older archive receipt.
     published = format_datetime(now - timedelta(hours=2))
+    archive = [{
+        "headline": item["headline"],
+        "source_url": source_url,
+        "first_published": (now - timedelta(days=3)).isoformat(),
+    }]
 
-    assert generate._category_story_is_stale(item, [], published, now=now) is True
+    assert generate._category_story_is_stale(item, archive, published, now=now) is True
 
 
 def test_exact_st_lucie_shadow_keeps_fresh_tornado_hero_instead_of_swapping_to_city_attorney():
