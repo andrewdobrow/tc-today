@@ -1235,6 +1235,15 @@ SEMANTIC_GATE_CACHE_PATH = OUTPUT_DIR / "data" / "semantic-publication-gate-cach
 SEMANTIC_GATE_REPORT_PATH = OUTPUT_DIR / "data" / "semantic-publication-gate.json"
 SEMANTIC_GATE_CACHE_SCHEMA_VERSION = 1
 SEMANTIC_GATE_REPORT_SCHEMA_VERSION = 4
+# Per-run, in-memory source routing ledger.  The assignment-editor shadow runs after
+# live publication and can therefore reuse the exact publication identity outcome for
+# a source instead of inventing a second, slightly different notion of event identity.
+# Nothing here is persisted and nothing in the shadow may mutate live publication.
+SEMANTIC_PUBLICATION_SOURCE_OUTCOMES = {}
+# Publication-isolated semantic pair decisions used only to align the assignment
+# editor shadow with the live semantic publication gate. Keyed by normalized source
+# URL pair so one shadow run never pays twice for the same adjudication.
+ASSIGNMENT_SHADOW_SEMANTIC_PAIR_CACHE = {}
 PREGEN_MATERIAL_UPDATE_VERSION = "1.0-known-canonical-before-suppression"
 PREGEN_MATERIAL_UPDATE_MAX_MODEL_CALLS = _positive_int_env(
     "TCT_PREGEN_MATERIAL_UPDATE_MAX_MODEL_CALLS", 12
@@ -5827,7 +5836,12 @@ def _hero_eligible(category_key, h):
             if cats is not None:
                 _classified_cats = cats
                 break
-        if _classified_cats == {"none"}:
+        # Enforced per-category contracts are the final deterministic topic authority.
+        # A stale/missing classifier label may nominate candidates upstream, but it must
+        # not veto a story that the enforced contract itself proves belongs in the beat.
+        # This is especially important for obvious crime/public-safety stories whose
+        # classifier occasionally returns only a county label.
+        if _classified_cats == {"none"} and _contract_assessment.get("mode") != "enforce":
             return False
 
     # Outside-coverage-area block: WPTV serves Palm Beach County and the wider
@@ -5971,6 +5985,8 @@ def _hero_eligible(category_key, h):
             # them as sports or business.
             if not _has_any(text, _tc_places):
                 return False
+        if _contract_assessment.get("mode") == "enforce":
+            return bool(_contract_assessment.get("eligible"))
         if _classified_cats is not None:
             return category_key in _classified_cats
         return _has_any(title, topic_terms[category_key]) or _has_any(text, topic_terms[category_key])
@@ -6294,8 +6310,18 @@ _UPDATE_BASELINE_ANCHORS = (
     ("crash", re.compile(r"\b(?:crash|collision|wreck)\b", re.IGNORECASE)),
     ("fire", re.compile(r"\b(?:fire|blaze|burned|burning)\b", re.IGNORECASE)),
     ("missing_person", re.compile(r"\b(?:missing|disappeared|located safe|found safe)\b", re.IGNORECASE)),
-    ("abuse_or_neglect", re.compile(r"\b(?:abuse|neglect|malnutrition|dehydration)\b", re.IGNORECASE)),
-    ("criminal_case", re.compile(r"\b(?:crime|criminal|investigation|case|suspect|victim)\b", re.IGNORECASE)),
+    (
+        "abuse_or_neglect",
+        re.compile(
+            r"\b(?:abuse|neglect|malnutrition|dehydration|animal cruelty|animal hoarding|hoarding)\b"
+            r"|\b(?:dogs?|cats?|animals?|pets?|pupp(?:y|ies)|kittens?|border collies?)\b"
+            r".{0,100}\b(?:rescu(?:e|ed|ing)|removed?|seized?|surrender(?:ed|ing)?|cruelty|hoarding|neglect(?:ed|ing)?)\b"
+            r"|\b(?:rescu(?:e|ed|ing)|seized?|surrender(?:ed|ing)?)\b"
+            r".{0,100}\b(?:dogs?|cats?|animals?|pets?|pupp(?:y|ies)|kittens?|border collies?)\b",
+            re.IGNORECASE,
+        ),
+    ),
+    ("criminal_case", re.compile(r"\b(?:crime|criminal(?:\s+case|\s+investigation)?|investigation|suspect|victim)\b", re.IGNORECASE)),
     ("legal_case", re.compile(r"\b(?:lawsuit|trial|hearing|court|appeal)\b", re.IGNORECASE)),
     ("government_matter", re.compile(r"\b(?:proposal|application|ordinance|budget|project|rezoning|development)\b", re.IGNORECASE)),
     ("infrastructure_issue", re.compile(r"\b(?:traffic signal|traffic light|stoplight|bridge|road|intersection|crossing|station|facility|outage)\b", re.IGNORECASE)),
@@ -6578,6 +6604,22 @@ _DEFINITION_SIGNAL_PATTERN = re.compile(
     re.I,
 )
 
+# A named resolution/bill/amendment is intelligible when the lead states its actual
+# effect, even if newsroom shorthand in the headline (for example ``trash fee``) is
+# expressed with the formal term in the body (``solid waste assessment``).  Keep this
+# separate from generic procedural verbs such as ``approved``/``passed``: merely saying
+# that Resolution 26-R70 passed does not tell a first-time reader what it does.
+_POLICY_EFFECT_ACTION_PATTERN = re.compile(
+    r"\b(?:rais(?:e|es|ed|ing)|increas(?:e|es|ed|ing)|lower(?:s|ed|ing)?|"
+    r"reduc(?:e|es|ed|ing)|cut(?:s|ting)?|set(?:s|ting)?|chang(?:e|es|ed|ing)|"
+    r"requir(?:e|es|ed|ing)|authoriz(?:e|es|ed|ing)|creat(?:e|es|ed|ing)|"
+    r"fund(?:s|ed|ing)?|allow(?:s|ed|ing)?|ban(?:s|ned|ning)?|prohibit(?:s|ed|ing)?|"
+    r"exempt(?:s|ed|ing)?|extend(?:s|ed|ing)?|replac(?:e|es|ed|ing)|expand(?:s|ed|ing)?|"
+    r"eliminat(?:e|es|ed|ing)|impos(?:e|es|ed|ing)|levy|levies|levied|levying|"
+    r"restor(?:e|es|ed|ing)|remov(?:e|es|ed|ing))\b",
+    re.I,
+)
+
 
 def _meaningful_framing_tokens(text):
     return {
@@ -6700,7 +6742,14 @@ def _extract_opaque_policy_references(text):
 
 
 def _lead_defines_policy_reference(lead, reference):
-    """Require the first paragraph to explain a named measure, not merely name it."""
+    """Return True when the opening paragraph actually explains a named measure.
+
+    This is intentionally semantic at the clause level rather than a vocabulary
+    equivalence test.  Formal government language and newsroom shorthand often use
+    different nouns (``solid waste assessment`` vs. ``trash fee``), but the lead is
+    self-contained when the sentence naming the resolution/bill/amendment states the
+    concrete effect of that measure.
+    """
     lead_text = re.sub(r"\s+", " ", str(lead or "")).strip()
     reference_text = str((reference or {}).get("text") or "").strip()
     if not lead_text or not reference_text:
@@ -6709,31 +6758,54 @@ def _lead_defines_policy_reference(lead, reference):
     if not matches:
         return False
 
-    # A definition normally appears in an appositive or in the same clause shortly
-    # after the reference. "If Amendment 3 passes" is intentionally insufficient.
-    # Check every occurrence because a lead may name the measure in its impact sentence
-    # and then define it in the next sentence of the same opening paragraph.
+    reference_tokens = _meaningful_framing_tokens(reference_text)
+    procedural_only = {
+        "amendment", "measure", "proposition", "resolution", "ordinance",
+        "referendum", "house", "senate", "bill", "council", "commission",
+        "board", "city", "county", "meeting", "monday", "tuesday", "wednesday",
+        "thursday", "friday", "saturday", "sunday", "approved", "passed",
+        "adopted", "vote", "voted", "votes",
+    }
+
+    # Work sentence-by-sentence so an unrelated later policy effect cannot define a
+    # bare reference in the opening sentence by accident.
+    sentence_spans = list(re.finditer(r"[^.!?]+(?:[.!?]|$)", lead_text))
     for match in matches:
-        window = lead_text[match.start(): match.start() + 260]
+        sentence = next(
+            (
+                span.group(0).strip()
+                for span in sentence_spans
+                if span.start() <= match.start() < span.end()
+            ),
+            lead_text,
+        )
+
+        # Classic appositive definition: "Amendment 3, a proposed constitutional
+        # amendment that would raise ...".
         if re.search(
             re.escape(reference_text)
             + r"\s*,\s*(?:a|an|the)\b.{3,180}\b(?:that|which|would|will)\b",
-            window,
+            sentence,
             re.I,
         ):
             return True
-        if _DEFINITION_SIGNAL_PATTERN.search(window):
-            # "would" by itself can occur in an impact sentence. Require a concrete
-            # policy object or action in the same window so the reference is intelligible.
-            concrete = re.search(
-                r"\b(?:tax|exemption|revenue|property|budget|law|constitution|program|"
-                r"funding|rate|fee|zoning|development|benefit|coverage|eligibility|"
-                r"penalty|requirement|service|district|government|homestead)\b",
-                window,
-                re.I,
+
+        # Direct effect definition: "Resolution 26-R70, raising the annual solid
+        # waste assessment by $14.83 ..." or "HB 123 requires insurers to ...".
+        effect = _POLICY_EFFECT_ACTION_PATTERN.search(sentence)
+        if effect:
+            remainder = sentence[effect.end():]
+            substantive_tokens = (
+                _meaningful_framing_tokens(remainder)
+                - reference_tokens
+                - procedural_only
             )
-            if concrete:
+            # Require enough object/impact detail to distinguish a real definition
+            # from procedural copy such as "Resolution 26-R70 passed Monday." Money,
+            # percentages and dates are useful supporting detail but never required.
+            if len(substantive_tokens) >= 2:
                 return True
+
     return False
 
 
@@ -9787,8 +9859,10 @@ def _queue_assignment_editor_category(
                 "category_match_score": source.get("category_match_score"),
                 "story_form": _source_story_form(source),
                 "article_text": article_text,
+                "canonical_context_slug": str(source.get("_canonical_context_slug") or ""),
                 "canonical_context_headline": str(source.get("_canonical_context_headline") or ""),
                 "canonical_context_body": str(source.get("_canonical_context_body") or "")[:2400],
+                "_canonical_context_slug": str(source.get("_canonical_context_slug") or ""),
                 "_canonical_context_headline": str(source.get("_canonical_context_headline") or ""),
                 "_canonical_context_body": str(source.get("_canonical_context_body") or "")[:2400],
                 "link": str(source.get("link") or ""),
@@ -9800,6 +9874,16 @@ def _queue_assignment_editor_category(
                 "_editorial_event_key": str(source.get("_editorial_event_key") or ""),
                 "_editorial_route": str(source.get("_editorial_route") or ""),
                 "_editorial_relationship": str(source.get("_editorial_relationship") or ""),
+                "publication_relationship": str(source.get("publication_relationship") or ""),
+                "related_parent_slug": str(source.get("related_parent_slug") or ""),
+                "related_parent_story_id": str(source.get("related_parent_story_id") or ""),
+                "_semantic_independent_followup": bool(source.get("_semantic_independent_followup")),
+                "incident_anchor_key": str(source.get("incident_anchor_key") or ""),
+                "locality": list(source.get("locality") or []),
+                "event_families": list(source.get("event_families") or []),
+                "people": list(source.get("people") or []),
+                "precise_locations": list(source.get("precise_locations") or []),
+                "agencies": list(source.get("agencies") or []),
             })
             source_pool.append({
                 "title": str(source.get("title") or ""),
@@ -10271,6 +10355,362 @@ def _assignment_shadow_attach_source_metadata(data, packet):
     return data
 
 
+
+def _assignment_shadow_source_outcome(source):
+    """Return authoritative publication identity already known for one source.
+
+    Prefer the live semantic publication gate's per-run decision. If that gate did not
+    evaluate the source (common for an already-published update), fall back to the
+    canonical baseline attached *before generation*. That baseline came from the same
+    canonical publication ledger used by live production and is therefore stronger
+    evidence than asking the shadow to rediscover identity from prose.
+    """
+    if not isinstance(source, dict):
+        return {}
+    raw = str(source.get("source_url") or source.get("link") or "").strip()
+    normalized = _normalized_external_source_url(raw) or raw
+    outcome = dict(SEMANTIC_PUBLICATION_SOURCE_OUTCOMES.get(normalized, {}) or {})
+    if outcome:
+        return outcome
+    canonical_slug = str(
+        source.get("_canonical_context_slug")
+        or source.get("canonical_context_slug")
+        or ""
+    ).strip()
+    if canonical_slug:
+        return {
+            "action": "canonical_context_binding",
+            "selected_candidate_slug": canonical_slug,
+            "independent_followup_authorized": False,
+            "status": "pre_generation_canonical_authority",
+        }
+    return {}
+
+
+def _assignment_shadow_inferred_event_family(source):
+    """Infer one broad event family only for shadow display dedupe fallback.
+
+    This helper never writes story identity. It exists solely to let the shadow use
+    the same conservative content-continuity retrieval introduced by 6.7k when the
+    live publication gate did not record a source outcome (for example, an already
+    published source in the packet).
+    """
+    text = " ".join([
+        str(source.get("title") or ""),
+        str(source.get("article_text") or source.get("summary") or "")[:2600],
+    ]).lower()
+    families = []
+    if re.search(r"\b(?:tornado|landspout|waterspout|funnel cloud)\b", text):
+        families.append("weather_tornado")
+    if re.search(r"\b(?:shooting|shot|gunfire|manslaughter|homicide|murder)\b", text):
+        families.append("shooting_or_homicide")
+    if re.search(r"\b(?:crash|collision|wreck|hit[- ]and[- ]run)\b", text):
+        families.append("traffic_crash")
+    if re.search(r"\b(?:structure fire|house fire|garage fire|barn fire|blaze)\b", text):
+        families.append("fire")
+    if re.search(
+        r"\b(?:animal cruelty|animal hoarding|hoarding|border collies?|dogs?|cats?)\b",
+        text,
+    ) and re.search(r"\b(?:rescu|surrender|seiz|adopt|cruelty|hoarding)\w*\b", text):
+        families.append("animal_welfare")
+    if re.search(r"\b(?:city council|county commission|resolution|ordinance|assessment|fee|tax|budget)\b", text):
+        families.append("government_action")
+    return sorted(set(families))
+
+
+def _assignment_shadow_source_event_payload(source):
+    source = source if isinstance(source, dict) else {}
+    text = " ".join([
+        str(source.get("title") or ""),
+        str(source.get("article_text") or source.get("summary") or "")[:3000],
+    ])
+    locality = list(source.get("locality") or [])
+    if not locality:
+        locality = _extract_jurisdiction_claims(text)
+    event_families = list(source.get("event_families") or [])
+    if not event_families:
+        event_families = _assignment_shadow_inferred_event_family(source)
+    return {
+        "slug": f"shadow-source-{source.get('source_index', '')}",
+        "headline": str(source.get("title") or ""),
+        "source_headline": str(source.get("title") or ""),
+        "published_at": str(source.get("published") or ""),
+        "lead": str(source.get("summary") or "")[:800],
+        "teaser": str(source.get("summary") or "")[:800],
+        "body": str(source.get("article_text") or source.get("summary") or "")[:4200],
+        "locality": locality,
+        "event_families": event_families,
+        "people": list(source.get("people") or []),
+        "precise_locations": list(source.get("precise_locations") or []),
+        "agencies": list(source.get("agencies") or []),
+        "incident_anchor": str(source.get("incident_anchor_key") or ""),
+        "known_event_key": str(source.get("_editorial_event_key") or ""),
+    }
+
+
+def _assignment_shadow_angle_shift_candidate_evidence(left_payload, right_payload):
+    """Recall ambiguous same-event angle pairs for shadow-only adjudication.
+
+    Live publication identity is deliberately untouched here. The normal semantic
+    candidate gate remains the first authority. This fallback only broadens *recall*
+    for the publication-isolated shadow when two selected stories share a concrete
+    locality, a high-signal event family, and close publication timing but use very
+    different angle vocabulary. The semantic adjudicator must still validate the pair
+    before anything is consolidated.
+    """
+    if semantic_candidate_evidence is None:
+        return {}
+    try:
+        evidence = dict(
+            semantic_candidate_evidence(
+                left_payload,
+                right_payload,
+                window_days=SEMANTIC_GATE_RECENT_DAYS,
+            )
+            or {}
+        )
+    except Exception:
+        return {}
+    if evidence.get("eligible"):
+        return evidence
+    if (
+        evidence.get("incident_anchor_conflict")
+        or evidence.get("known_event_key_conflict")
+        or evidence.get("structured_conflict_override")
+    ):
+        return evidence
+
+    high_signal_families = {
+        "weather_tornado",
+        "shooting_or_homicide",
+        "traffic_crash",
+        "fire",
+        "animal_welfare",
+    }
+    shared_families = set(evidence.get("shared_event_families") or []) & high_signal_families
+    shared_locality = set(evidence.get("shared_locality") or [])
+    day_gap = evidence.get("day_gap")
+    try:
+        close_in_time = day_gap is not None and int(day_gap) <= 2
+    except Exception:
+        close_in_time = False
+    headline_score = float(
+        (evidence.get("headline_similarity") or {}).get("score") or 0.0
+    )
+    shared_content_count = int(
+        (evidence.get("content_similarity") or {}).get("shared_token_count") or 0
+    )
+
+    # This is candidate recall, never identity authority. A pair that merely happens
+    # in the same county does not qualify; it must share the same high-signal event
+    # family and enough textual continuity to make adjudication worthwhile.
+    if (
+        shared_families
+        and shared_locality
+        and close_in_time
+        and (headline_score >= 0.25 or shared_content_count >= 4)
+    ):
+        evidence["eligible"] = True
+        evidence["angle_shift_candidate_continuity"] = True
+        reasons = list(evidence.get("reasons") or [])
+        if "shadow_angle_shift_candidate_recall" not in reasons:
+            reasons.append("shadow_angle_shift_candidate_recall")
+        evidence["reasons"] = reasons
+    return evidence
+
+
+def _assignment_shadow_source_is_independent_followup(source):
+    if not isinstance(source, dict):
+        return False
+    outcome = _assignment_shadow_source_outcome(source)
+    return bool(
+        source.get("_semantic_independent_followup")
+        or str(source.get("publication_relationship") or "") == "independent_followup"
+        or outcome.get("independent_followup_authorized")
+    )
+
+
+def _assignment_shadow_sources_same_publication_event(left_source, right_source):
+    """Return (consolidate, reason, prefer_left) using live publication authority.
+
+    Exact live/persistent identity wins without another model call. For ambiguous
+    angle-shifted pairs, use the *same* semantic publication adjudicator as live
+    production. Candidate evidence only grants recall; the model remains the authority
+    on same-event/material-update/independent-follow-up semantics.
+    """
+    if not isinstance(left_source, dict) or not isinstance(right_source, dict):
+        return False, "", False
+    if (
+        _assignment_shadow_source_is_independent_followup(left_source)
+        or _assignment_shadow_source_is_independent_followup(right_source)
+    ):
+        return False, "independent_followup_authorized", False
+
+    left_outcome = _assignment_shadow_source_outcome(left_source)
+    right_outcome = _assignment_shadow_source_outcome(right_source)
+    left_target = str(left_outcome.get("selected_candidate_slug") or "").strip()
+    right_target = str(right_outcome.get("selected_candidate_slug") or "").strip()
+    if left_target and right_target and left_target == right_target:
+        # Both sources already resolved to one live canonical. Preserve the assignment
+        # editor's first representative; an individual historical update action does
+        # not prove this later shadow card should replace that representative.
+        return True, "shared_live_publication_canonical", False
+
+    left_story = str(left_source.get("editorial_story_id") or "").strip()
+    right_story = str(right_source.get("editorial_story_id") or "").strip()
+    if left_story and right_story and left_story == right_story:
+        return True, "shared_persistent_story_id", False
+
+    left_event = str(left_source.get("_editorial_event_key") or "").strip()
+    right_event = str(right_source.get("_editorial_event_key") or "").strip()
+    if (
+        left_event
+        and right_event
+        and left_event == right_event
+        and not left_event.startswith("unknown-event-")
+    ):
+        return True, "shared_editorial_event_key", False
+
+    left_payload = _assignment_shadow_source_event_payload(left_source)
+    right_payload = _assignment_shadow_source_event_payload(right_source)
+    evidence = _assignment_shadow_angle_shift_candidate_evidence(
+        left_payload, right_payload
+    )
+    if not evidence.get("eligible"):
+        return False, "", False
+
+    left_url = _normalized_external_source_url(
+        left_source.get("source_url") or left_source.get("link")
+    ) or str(left_source.get("source_url") or left_source.get("link") or "")
+    right_url = _normalized_external_source_url(
+        right_source.get("source_url") or right_source.get("link")
+    ) or str(right_source.get("source_url") or right_source.get("link") or "")
+    pair_key = tuple(sorted((left_url or f"left:{left_source.get('source_index')}",
+                             right_url or f"right:{right_source.get('source_index')}")))
+    decision = ASSIGNMENT_SHADOW_SEMANTIC_PAIR_CACHE.get(pair_key)
+    if decision is None:
+        if adjudicate_semantic_publication_candidates is None:
+            return False, "semantic_adjudicator_unavailable", False
+        candidate_slug = f"shadow-source-{right_source.get('source_index', 'candidate')}"
+        candidate_article = {**right_payload, "slug": candidate_slug}
+        try:
+            decision = adjudicate_semantic_publication_candidates(
+                client,
+                model=MODEL_SELECTION,
+                incoming=left_payload,
+                candidates=[{
+                    "slug": candidate_slug,
+                    "article": candidate_article,
+                    "evidence": evidence,
+                }],
+                timeout_seconds=SEMANTIC_GATE_TIMEOUT_SECONDS,
+                min_confidence=SEMANTIC_GATE_MIN_CONFIDENCE,
+            )
+        except Exception as exc:
+            decision = {
+                "status": "shadow_semantic_error",
+                "action": SEMANTIC_ACTION_HOLD,
+                "same_real_world_event": False,
+                "material_new_update": False,
+                "independently_newsworthy_followup": False,
+                "reason": f"{type(exc).__name__}: {exc}",
+            }
+        ASSIGNMENT_SHADOW_SEMANTIC_PAIR_CACHE[pair_key] = dict(decision or {})
+
+    if str((decision or {}).get("status") or "") != "validated":
+        return False, "semantic_adjudication_not_validated", False
+    same_event = bool((decision or {}).get("same_real_world_event"))
+    independent = bool((decision or {}).get("independently_newsworthy_followup"))
+    action = str((decision or {}).get("action") or "")
+    if not same_event or independent or action == SEMANTIC_ACTION_NEW:
+        return False, "independent_or_new_story", False
+    if action not in {SEMANTIC_ACTION_UPDATE, SEMANTIC_ACTION_DUPLICATE}:
+        return False, "semantic_hold", False
+    return (
+        True,
+        "semantic_publication_gate_same_event",
+        action == SEMANTIC_ACTION_UPDATE and bool((decision or {}).get("material_new_update")),
+    )
+
+
+def _assignment_shadow_consolidate_event_cluster_angles(data, packet):
+    """Collapse same-event angle placements before scoring the shadow result.
+
+    The live publication layer defaults same-event angle reporting to one canonical
+    URL. A material later source replaces the earlier representative atomically; a
+    duplicate is omitted; an independently newsworthy follow-up remains separate.
+    """
+    diagnostics = []
+    if not isinstance(data, dict):
+        return diagnostics
+    hero = data.get("hero") if isinstance(data.get("hero"), dict) else None
+    retained = [hero] if hero else []
+    retained_cards = []
+    for card in list(data.get("cards") or []):
+        if not isinstance(card, dict):
+            continue
+        try:
+            card_source = _assignment_source_by_index(packet, card.get("source_index"))
+        except Exception:
+            retained.append(card)
+            retained_cards.append(card)
+            continue
+        duplicate_index = None
+        reason = ""
+        prefer_card = False
+        for prior_index, prior in enumerate(retained):
+            try:
+                prior_source = _assignment_source_by_index(packet, prior.get("source_index"))
+            except Exception:
+                continue
+            same, same_reason, prefer_incoming = (
+                _assignment_shadow_sources_same_publication_event(card_source, prior_source)
+            )
+            if same:
+                duplicate_index = prior_index
+                reason = same_reason
+                prefer_card = bool(prefer_incoming)
+                break
+        if duplicate_index is None:
+            retained.append(card)
+            retained_cards.append(card)
+            continue
+
+        prior = retained[duplicate_index]
+        diag = {
+            "dropped_source_index": card.get("source_index"),
+            "dropped_headline": str(card.get("headline") or ""),
+            "retained_source_index": prior.get("source_index"),
+            "retained_headline": str(prior.get("headline") or ""),
+            "reason": reason,
+            "material_update_replaced_prior": False,
+        }
+        if prefer_card:
+            # A material update represents the single canonical after publication.
+            # Replace the prior placement atomically rather than showing both angles.
+            diag.update({
+                "dropped_source_index": prior.get("source_index"),
+                "dropped_headline": str(prior.get("headline") or ""),
+                "retained_source_index": card.get("source_index"),
+                "retained_headline": str(card.get("headline") or ""),
+                "material_update_replaced_prior": True,
+            })
+            retained[duplicate_index] = card
+            if duplicate_index == 0 and hero is not None:
+                data["hero"] = card
+                hero = card
+            else:
+                card_slot = duplicate_index - (1 if hero is not None else 0)
+                if 0 <= card_slot < len(retained_cards):
+                    retained_cards[card_slot] = card
+            diagnostics.append(diag)
+            continue
+        diagnostics.append(diag)
+
+    data["cards"] = retained_cards
+    return diagnostics
+
+
 def _assignment_shadow_source_published(item, packet):
     try:
         source = _assignment_source_by_index(packet, item.get("source_index"))
@@ -10486,6 +10926,7 @@ def _assignment_shadow_final_projection(raw_shadow, packet, final_baseline, pre_
         "county_authority_rejections": [],
         "shared_archive_recovery_used": False,
         "archive_filler_cards_omitted": 0,
+        "event_cluster_consolidations": [],
     }
     _assignment_shadow_attach_source_metadata(data, packet)
     _sanitize_nonstory_category(data, packet.get("category_label") or packet.get("category_key") or "")
@@ -10494,6 +10935,9 @@ def _assignment_shadow_final_projection(raw_shadow, packet, final_baseline, pre_
         data, packet, pre_generation_archive or []
     )
     diagnostics["quality_guard"] = _assignment_shadow_quality_guard(data, packet)
+    diagnostics["event_cluster_consolidations"] = (
+        _assignment_shadow_consolidate_event_cluster_angles(data, packet)
+    )
 
     _stamp_current_run_story_ids(data, packet.get("source_inputs") or [])
     diagnostics["published_story_suppressions"] = _suppress_published_skip_placements(
@@ -10772,45 +11216,73 @@ def promote_duplicate_heroes(top_cat, all_categories):
                 return True
         return False
 
-    # -- Deterministic pass: no duplicate story across category heroes (token-based) --
-    claimed_tokens = [ _sig_tokens(top_cat["hero"].get("headline","")) ]
+    # -- Deterministic pass: no duplicate story across TOPIC-category heroes. --
+    # County pages are geographic views, not competing topic sections. A fresh Vero
+    # Beach crime story may legitimately lead both Crime & Safety and Indian River
+    # County; demoting the county hero to an older archive filler solely for visual
+    # uniqueness destroys freshness and contradicts the site's cross-category policy.
+    claimed = [(fp_key, _sig_tokens(top_cat["hero"].get("headline", "")))]
+
+    def _duplicate_claim_keys(headline):
+        htok = _sig_tokens(headline)
+        if len(htok) < 3:
+            return []
+        return [key for key, tokens in claimed if _same_story(htok, tokens)]
+
     for cat in all_categories:
         if cat["category_key"] == fp_key:
             continue
-        h = cat["hero"].get("headline","")
-        if h and _dupe_of_claimed(h, claimed_tokens):
-            # Promote next non-duplicate card
+        h = cat["hero"].get("headline", "")
+        duplicate_keys = _duplicate_claim_keys(h) if h else []
+        if duplicate_keys:
+            cross_county_mirror = bool(
+                cat["category_key"] in COUNTY_KEYS
+                or any(key in COUNTY_KEYS for key in duplicate_keys)
+            )
+            if cross_county_mirror:
+                print(
+                    f"  Dedup: keeping shared hero for {cat['category_label']} "
+                    "(county/topic mirror is allowed)"
+                )
+                claimed.append((cat["category_key"], _sig_tokens(h)))
+                continue
+
+            # Topic-vs-topic duplicate: promote the first non-duplicate live card.
             promoted = None
             for ci, card in enumerate(cat.get("cards", [])):
-                if not _dupe_of_claimed(card.get("headline",""), claimed_tokens):
-                    promoted = (ci, card); break
+                if not _duplicate_claim_keys(card.get("headline", "")):
+                    promoted = (ci, card)
+                    break
             if promoted:
                 ci, card = promoted
                 cat["hero"] = dict(card)
-                cat["cards"] = cat["cards"][:ci] + cat["cards"][ci+1:]
-                claimed_tokens.append(_sig_tokens(card.get("headline","")))
-                print(f"  Dedup: promoted next card to hero for {cat['category_label']} (duplicate hero)")
-            elif cat["category_key"] in COUNTY_KEYS:
-                # County pages may share a hero with a topic category: a Hobe Sound
-                # business opening legitimately leads BOTH Business and Martin County
-                # (the user's stories-can-appear-in-both rule). Keep the shared hero
-                # rather than emptying the county page.
-                print(f"  Dedup: keeping shared hero for {cat['category_label']} (county may mirror a topic hero)")
-                claimed_tokens.append(_sig_tokens(h))
+                cat["cards"] = cat["cards"][:ci] + cat["cards"][ci + 1:]
+                claimed.append((cat["category_key"], _sig_tokens(card.get("headline", ""))))
+                print(
+                    f"  Dedup: promoted next card to hero for {cat['category_label']} "
+                    "(duplicate topic hero)"
+                )
             else:
-                # Never remove a category merely because its best available lead also
-                # appears elsewhere. A shared hero is preferable to an empty or hidden
-                # category, and the archive/card grid still gives the section depth.
-                print(f"  Dedup: keeping shared hero for {cat['category_label']} "
-                      f"(no non-duplicate alternative available)")
-                claimed_tokens.append(_sig_tokens(h))
-        else:
-            if h:
-                claimed_tokens.append(_sig_tokens(h))
+                # Never empty a topic category merely because its best available lead
+                # also appears elsewhere. A shared hero is preferable to a placeholder.
+                print(
+                    f"  Dedup: keeping shared hero for {cat['category_label']} "
+                    "(no non-duplicate alternative available)"
+                )
+                claimed.append((cat["category_key"], _sig_tokens(h)))
+        elif h:
+            claimed.append((cat["category_key"], _sig_tokens(h)))
 
-    # -- Semantic pass: catch differently-worded duplicates of the front page hero --
+    # -- Semantic pass: catch differently-worded duplicate TOPIC heroes only. --
+    # A county/topic mirror is intentionally valid, including when the county page is
+    # the front-page source. Do not ask the semantic deduper to undo that policy.
     fp_headline = top_cat["hero"].get("headline", "")
-    others      = [c for c in all_categories if c["category_key"] != fp_key]
+    if fp_key in COUNTY_KEYS:
+        return
+    others = [
+        c for c in all_categories
+        if c["category_key"] != fp_key and c["category_key"] not in COUNTY_KEYS
+    ]
     if not others or not fp_headline:
         return
 
@@ -22766,6 +23238,38 @@ def _run_semantic_publication_gate(
     else:
         summary["holds"] += 1
 
+    if phase == "forward_publication":
+        raw_source_url = str(incoming_payload.get("source_url") or "").strip()
+        normalized_source_url = (
+            _normalized_external_source_url(raw_source_url) or raw_source_url
+        )
+        if normalized_source_url:
+            selected_story_id = str(
+                (selected or {}).get("editorial_story_id")
+                or (selected or {}).get("_editorial_story_id")
+                or ""
+            ).strip()
+            SEMANTIC_PUBLICATION_SOURCE_OUTCOMES[normalized_source_url] = {
+                "action": action,
+                "selected_candidate_slug": selected_slug,
+                "selected_story_id": selected_story_id,
+                "incoming_story_id": str(
+                    incoming.get("editorial_story_id")
+                    or incoming.get("_editorial_story_id")
+                    or ""
+                ).strip(),
+                "same_real_world_event": bool(decision.get("same_real_world_event")),
+                "material_new_update": bool(decision.get("material_new_update")),
+                "independent_followup_authorized": bool(
+                    decision.get("independent_followup_authorized")
+                ),
+                "related_parent_slug": str(decision.get("related_parent_slug") or ""),
+                "related_parent_story_id": str(
+                    decision.get("related_parent_story_id") or ""
+                ),
+                "status": str(decision.get("status") or ""),
+            }
+
     report["decisions"].append({
         "phase": phase,
         "incoming_headline": incoming_payload.get("headline", ""),
@@ -31240,6 +31744,11 @@ def main():
     CURRENT_RUN_TIMELINE_INCOHERENT_STORY_IDS = set()
     CURRENT_RUN_PREGEN_MATERIAL_UPDATE_DECISIONS = []
     CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
+    # The publication-to-shadow identity bridge is strictly per build. A reused
+    # interpreter (tests, local tooling, or a future worker process) must never let a
+    # prior run's canonical decision influence the next shadow comparison.
+    SEMANTIC_PUBLICATION_SOURCE_OUTCOMES.clear()
+    ASSIGNMENT_SHADOW_SEMANTIC_PAIR_CACHE.clear()
     print("Treasure Coast Today — building site...")
     _slug_migration = _migrate_unsafe_article_slugs(OUTPUT_DIR)
     if _slug_migration.get("migrated"):
