@@ -122,15 +122,15 @@ def test_hero_semantic_dedup_uses_retry_result(monkeypatch):
         "cards": [],
     }
     other = {
-        "category_key": "martin",
-        "category_label": "Martin County",
+        "category_key": "business",
+        "category_label": "Business & Development",
         "hero": {"headline": "Different wording entirely"},
-        "cards": [{"headline": "Replacement county story"}],
+        "cards": [{"headline": "Replacement business story"}],
     }
 
     generate.promote_duplicate_heroes(top, [top, other])
 
-    assert other["hero"]["headline"] == "Replacement county story"
+    assert other["hero"]["headline"] == "Replacement business story"
     assert len(fake.messages.calls) == 2
 
 
@@ -146,13 +146,13 @@ def test_hero_semantic_dedup_preserves_deterministic_result_after_invalid_respon
         "cards": [],
     }
     other = {
-        "category_key": "martin",
-        "category_label": "Martin County",
-        "hero": {"headline": "Independent county story"},
-        "cards": [{"headline": "Replacement county story"}],
+        "category_key": "business",
+        "category_label": "Business & Development",
+        "hero": {"headline": "Independent business story"},
+        "cards": [{"headline": "Replacement business story"}],
     }
 
     generate.promote_duplicate_heroes(top, [top, other])
 
-    assert other["hero"]["headline"] == "Independent county story"
+    assert other["hero"]["headline"] == "Independent business story"
     assert len(fake.messages.calls) == 2
