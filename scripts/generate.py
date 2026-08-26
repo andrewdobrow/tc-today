@@ -1235,6 +1235,32 @@ SEMANTIC_GATE_CACHE_PATH = OUTPUT_DIR / "data" / "semantic-publication-gate-cach
 SEMANTIC_GATE_REPORT_PATH = OUTPUT_DIR / "data" / "semantic-publication-gate.json"
 SEMANTIC_GATE_CACHE_SCHEMA_VERSION = 1
 SEMANTIC_GATE_REPORT_SCHEMA_VERSION = 4
+
+# v1.13.6.7n terminal permalink authority. Earlier identity gates are intentionally
+# optimized for precision and can miss an angle-shifted duplicate. Every ordinary
+# generated article that is still about to mint a new public URL receives one final,
+# high-recall archive shortlist and Sonnet 5 adjudication immediately before the
+# permalink write. Retrieval may nominate unrelated candidates; only the model can
+# authorize NEW, and any ambiguity fails closed.
+TERMINAL_PERMALINK_GATE_VERSION = "1.0"
+TERMINAL_PERMALINK_RECENT_DAYS = _positive_int_env(
+    "TCT_TERMINAL_PERMALINK_RECENT_DAYS", 14
+)
+TERMINAL_PERMALINK_MAX_CANDIDATES = _positive_int_env(
+    "TCT_TERMINAL_PERMALINK_MAX_CANDIDATES", 12
+)
+TERMINAL_PERMALINK_TIMEOUT_SECONDS = _positive_float_env(
+    "TCT_TERMINAL_PERMALINK_TIMEOUT_SECONDS", 60
+)
+TERMINAL_PERMALINK_MODEL = os.environ.get(
+    "TCT_TERMINAL_PERMALINK_MODEL", ASSIGNMENT_EDITOR_MODEL
+).strip() or ASSIGNMENT_EDITOR_MODEL
+TERMINAL_PERMALINK_MIN_CONFIDENCE = min(
+    0.99, max(0.70, _positive_float_env(
+        "TCT_TERMINAL_PERMALINK_MIN_CONFIDENCE", 0.82
+    ))
+)
+
 # Per-run, in-memory source routing ledger.  The assignment-editor shadow runs after
 # live publication and can therefore reuse the exact publication identity outcome for
 # a source instead of inventing a second, slightly different notion of event identity.
@@ -3715,6 +3741,25 @@ def _text_for_category_match(h):
 def _has_any(text, terms):
     return any(term in text for term in terms)
 
+
+def _has_any_bounded_term(text, terms):
+    """Match editorial exclusion terms on token/phrase boundaries.
+
+    Hard-negative category vocabularies are semantic words/phrases, not arbitrary
+    character fragments.  A term such as ``event`` must match ``event`` but never
+    the letters inside ``prevents``.  Keep the older substring helper for callers
+    that intentionally use fragments (for example ``announc`` freshness stems).
+    """
+    value = str(text or "").casefold()
+    for raw_term in terms or ():
+        term = str(raw_term or "").strip().casefold()
+        if not term:
+            continue
+        pattern = re.escape(term).replace(r"\ ", r"\s+")
+        if re.search(rf"(?<![a-z0-9]){pattern}(?![a-z0-9])", value):
+            return True
+    return False
+
 def _story_locality_blob(item):
     return " ".join([
         item.get("source_title", ""),
@@ -5935,7 +5980,7 @@ def _hero_eligible(category_key, h):
         return _county_locality_evidence(category_key, h)
 
     if category_key in topic_terms:
-        if _has_any(text, hard_negatives.get(category_key, [])):
+        if _has_any_bounded_term(text, hard_negatives.get(category_key, [])):
             return False
         if category_key == "sports" and not _sports_relevance_evidence(h):
             return False
@@ -6337,6 +6382,19 @@ _UPDATE_NOVELTY_ANCHORS = (
     ("arrest_or_charge", re.compile(r"\b(?:arrest|arrests|arrested|charge|charges|charged)\b", re.IGNORECASE)),
     ("decision", re.compile(r"\b(?:approve|approves|approved|reject|rejects|rejected|vote|votes|voted|rule|rules|ruled)\b", re.IGNORECASE)),
     ("status_change", re.compile(r"\b(?:reopen|reopens|reopened|close|closes|closed|resume|resumes|resumed|suspend|suspends|suspended)\b", re.IGNORECASE)),
+    ("legal_or_control_status", re.compile(
+        r"\b(?:surrender(?:s|ed|ing)?|relinquish(?:es|ed|ing)?|transfer(?:s|red|ring)?|"
+        r"turn(?:s|ed|ing)?\s+over|release(?:s|d|ing)?|clear(?:s|ed|ing)?|"
+        r"authorize(?:s|d|ing)?|award(?:s|ed|ing)?\s+custody)\b",
+        re.IGNORECASE,
+    )),
+    ("access_or_availability", re.compile(
+        r"(?:\b(?:applications?|registration|enrollment|adoptions?|appointments?|access)\b"
+        r".{0,80}\b(?:open|opens|opened|opening|begin|begins|began|available|starts?|started)\b)"
+        r"|(?:\b(?:open|opens|opened|opening|begin|begins|began|available|starts?|started)\b"
+        r".{0,80}\b(?:applications?|registration|enrollment|adoptions?|appointments?|access)\b)",
+        re.IGNORECASE,
+    )),
     ("continuing_status", re.compile(r"\b(?:still|remains?|continues?|now|after\s+\d+|months?|weeks?|days?)\b", re.IGNORECASE)),
     ("community_reaction", re.compile(
         r"\b(?:neighbor|neighbors|resident|residents|community|family|families)\b"
@@ -7162,25 +7220,94 @@ def strip_markdown(text, headline=""):
 
 
 
-def _category_story_is_stale(item, archive, published_raw="", now=None):
-    """Shared live/shadow stale-story test for category hero preservation.
+def _category_story_source_url(item):
+    """Return the external publisher URL used to distinguish a retouch from new reporting."""
+    if not isinstance(item, dict):
+        return ""
+    for key in ("source_url", "latest_source_url", "_source_url", "original_url", "link"):
+        raw = str(item.get(key) or "").strip()
+        if not raw:
+            continue
+        normalized = _normalized_external_source_url(raw)
+        if normalized:
+            return normalized
+    return ""
 
-    A recently re-touched source is not automatically fresh: old-event language can
-    still make it stale. But a genuinely current-day development (for example, NWS
-    confirming on Monday the tornado that occurred Sunday) must not be rejected just
-    because the underlying event happened the previous day.
+
+def _category_story_matching_source_receipt(item, archive):
+    """Find an older archive receipt for the exact external publisher article URL."""
+    source_url = _category_story_source_url(item)
+    if not source_url:
+        return None
+    for row in archive or []:
+        if not isinstance(row, dict):
+            continue
+        for key in ("source_url", "latest_source_url", "original_url"):
+            candidate = _normalized_external_source_url(row.get(key))
+            if candidate and candidate == source_url:
+                return row
+    return None
+
+
+def _category_story_receipt_datetime(row):
+    if not isinstance(row, dict):
+        return None
+    from email.utils import parsedate_to_datetime
+    for key in ("first_published", "published_raw", "published", "date", "lastmod"):
+        raw = row.get(key)
+        if not raw:
+            continue
+        try:
+            dt = parsedate_to_datetime(str(raw))
+        except Exception:
+            dt = None
+        if dt is None:
+            try:
+                dt = datetime.fromisoformat(str(raw).replace("Z", "+00:00"))
+            except Exception:
+                try:
+                    dt = datetime.strptime(str(raw)[:10], "%Y-%m-%d")
+                except Exception:
+                    continue
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc)
+    return None
+
+
+def _category_story_has_validated_update_authority(item):
+    if not isinstance(item, dict):
+        return False
+    route = str(item.get("_editorial_route") or item.get("editorial_route") or "").strip().lower()
+    return bool(
+        item.get("meaningful_update_validated")
+        or item.get("_semantic_material_update")
+        or item.get("_pre_generation_material_update_promotion")
+        or route in {"update_existing", "replace_canonical", "publish_major_update"}
+    )
+
+
+def _category_story_is_stale(item, archive, published_raw="", now=None):
+    """Shared live/shadow stale-story test based on publication evidence.
+
+    A freshly published article is not stale merely because it reports an event that
+    happened yesterday.  Previous-day words describe event time, not publication
+    freshness.  A fresh feed timestamp is treated as a stale *retouch* only when the
+    same external publisher URL already has an older archive receipt and no validated
+    material-update authority exists.  This separates genuine next-day reporting from
+    RSS timestamp churn without relying on brittle weekday vocabulary.
     """
     from email.utils import parsedate_to_datetime
-    from datetime import timedelta
 
     if not isinstance(item, dict):
         return False
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     content = (
-        str(item.get("headline") or "") + " " +
-        str(item.get("teaser") or "") + " " +
-        str(item.get("body") or "")[:900]
+        str(item.get("headline") or "") + " "
+        + str(item.get("teaser") or "") + " "
+        + str(item.get("body") or "")[:900]
     ).lower()
+
     fresh_override = (
         "today", "this morning", "this afternoon", "this evening", "hours ago",
         "minutes ago", "just announced", "just released", "breaking", "moments ago",
@@ -7189,79 +7316,41 @@ def _category_story_is_stale(item, archive, published_raw="", now=None):
     )
     if any(phrase in content for phrase in fresh_override):
         return False
-
-    try:
-        match = find_matching_entry(
-            item.get("headline", ""), archive or [], item.get("link", "")
-        )
-        if match:
-            lastmod = match.get("lastmod") or match.get("date", "")
-            if lastmod:
-                lastmod_dt = datetime.strptime(str(lastmod)[:10], "%Y-%m-%d").replace(
-                    tzinfo=timezone.utc
-                )
-                if (now - lastmod_dt).days <= 2:
-                    return False
-    except Exception:
-        pass
+    if _category_story_has_validated_update_authority(item):
+        return False
 
     published = None
     try:
         if published_raw:
-            published = parsedate_to_datetime(str(published_raw)).astimezone(timezone.utc)
+            published = parsedate_to_datetime(str(published_raw))
+            if published.tzinfo is None:
+                published = published.replace(tzinfo=timezone.utc)
+            published = published.astimezone(timezone.utc)
     except Exception:
         published = None
 
-    # Preserve a genuinely new current-day development even when the underlying event
-    # occurred yesterday. This requires BOTH a fresh source timestamp and explicit
-    # current-day update language, so a publisher cannot revive an old incident merely
-    # by re-touching its feed timestamp.
     if published is not None:
         age_hours = max(0.0, (now - published).total_seconds() / 3600)
-        if age_hours < 24:
-            lead = content[:650]
-            current_day = now.strftime("%A").lower()
-            current_day_present = any(
-                marker in lead
-                for marker in (
-                    f" {current_day} ", f" {current_day},", f" {current_day}.",
-                    f" {current_day} morning", f" {current_day} afternoon",
-                    f" {current_day} evening",
-                )
-            ) or lead.startswith(f"{current_day} ")
-            update_terms = (
-                "confirm", "announc", "release", "issue", "findings", "survey",
-                "identify", "rule", "approve", "vote", "filed", "officially",
-            )
-            # A fresh timestamp alone is not enough to revive an old incident.
-            # The no-weekday exemption is intentionally limited to explicit official
-            # findings/status determinations in the current headline/teaser. Generic
-            # incident verbs such as "arrested" or "charged" can describe the old
-            # event itself and therefore still need current-day evidence.
-            update_surface = (
-                str(item.get("headline") or "") + " "
-                + str(item.get("teaser") or "")
-            ).lower()[:500]
-            completed_official_update = bool(re.search(
-                r"\b(?:confirms?|confirmed|determines?|determined|rules?|ruled|"
-                r"approves?|approved|rejects?|rejected|declares?|declared|lifts?|lifted)\b",
-                update_surface,
-            )) or bool(
-                re.search(
-                    r"\b(?:survey|investigation)\b.{0,90}\b(?:finds?|found|confirmed|determined)\b",
-                    update_surface,
-                )
-            )
-            forward_only = bool(re.search(
-                r"\b(?:will|plans? to|expected to|scheduled to|set to)\b.{0,100}"
-                r"\b(?:survey|announce|release|vote|rule|meet|decide)\b",
-                lead,
-            ))
-            if (
-                current_day_present and any(term in lead for term in update_terms)
-            ) or (completed_official_update and not forward_only):
-                return False
+        if age_hours >= 24:
+            return True
 
+        # A fresh source URL with no prior receipt is genuinely fresh reporting even
+        # when its subject occurred Monday/Sunday/yesterday.  Only an exact publisher
+        # URL already received as an older article can prove timestamp retouching.
+        receipt = _category_story_matching_source_receipt(item, archive)
+        receipt_dt = _category_story_receipt_datetime(receipt)
+        if receipt_dt is not None:
+            receipt_age_hours = max(0.0, (now - receipt_dt).total_seconds() / 3600)
+            # Require a materially older receipt.  A same-day archive copy is simply
+            # the current canonical representation and must not demote the story.
+            if receipt_age_hours >= 24:
+                return True
+        return False
+
+    # If no trustworthy source timestamp exists, retain a conservative textual
+    # fallback.  This path is deliberately secondary: event-day language must never
+    # override a valid fresh publication receipt.
+    from datetime import timedelta
     stale_days = {
         (now - timedelta(days=days)).strftime("%A").lower()
         for days in range(1, 5)
@@ -7274,7 +7363,6 @@ def _category_story_is_stale(item, archive, published_raw="", now=None):
             or content.startswith(f"{day} ")
         ):
             return True
-
     if any(
         phrase in content
         for phrase in (
@@ -7282,9 +7370,6 @@ def _category_story_is_stale(item, archive, published_raw="", now=None):
             "last week", "days ago", "happened on", "occurred on", "took place on",
         )
     ):
-        return True
-
-    if published is not None and (now - published).total_seconds() / 3600 >= 24:
         return True
     return False
 
@@ -8365,6 +8450,14 @@ def _now_eastern_rfc822():
     eastern = u + _td(hours=offset)
     tzname = "-0400" if offset == -4 else "-0500"
     return eastern.strftime(f"%a, %d %b %Y %H:%M:%S {tzname}")
+
+
+def _today_eastern_iso(now=None):
+    """Return the Treasure Coast local calendar date for publication permalinks."""
+    now = now or datetime.now(timezone.utc)
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=timezone.utc)
+    return now.astimezone(ZoneInfo("America/New_York")).date().isoformat()
 
 
 def canonical_image_url(url):
@@ -10005,6 +10098,39 @@ def _run_assignment_editor(packet):
     require_category_fit = _assignment_editor_requires_category_fit(category_key)
     listing = _assignment_editor_source_listing(packet)
 
+    # If deterministic eligibility says no current source may lead the section, there
+    # is no assignment-editor decision to test.  Treat this as a normal no-op and let
+    # the shared final projection recover the same baseline/archive hero production
+    # uses.  Calling the model here can only manufacture an invalid hero or a shadow
+    # failure, neither of which is meaningful bakeoff evidence.
+    hero_eligibility_marks = [
+        str(source.get("hero_eligible") or "").strip().lower()
+        for source in sources
+    ]
+    no_explicit_hero_candidate = bool(hero_eligibility_marks) and all(
+        mark == "no" for mark in hero_eligibility_marks
+    )
+    if no_explicit_hero_candidate:
+        diagnostics = {
+            "category_fit_required": require_category_fit,
+            "category_fit_complete": True,
+            "category_fit_decisions": [],
+            "category_fit_accepted_source_indexes": [],
+            "category_fit_rejected_source_indexes": [],
+            "category_fit_missing_source_indexes": [],
+            "category_fit_invalid_source_indexes": [],
+            "category_fit_duplicate_source_indexes": [],
+            "category_fit_selected_rejections": [],
+            "selected_source_indexes": [],
+            "omitted_source_indexes": list(range(1, len(sources) + 1)),
+            "duplicate_source_indexes": [],
+            "invalid_source_indexes": [],
+            "source_mapping_valid": True,
+            "valid_hero": False,
+            "no_eligible_hero_source": True,
+        }
+        return {"hero": None, "cards": []}, diagnostics, "deterministic_noop", 0.0
+
     if require_category_fit:
         fit_instruction = f"""
 Before assigning a hero or card, independently judge whether EACH numbered source genuinely belongs in the {category_label} section.
@@ -11035,6 +11161,27 @@ def _run_assignment_editor_shadow_after_build(all_categories, pre_generation_arc
 
             writer_models = []
             writer_duration = 0.0
+            if not isinstance(plan.get("hero"), dict):
+                raw_challenger = {"hero": None, "cards": []}
+                final_challenger, shadow_alignment = _assignment_shadow_final_projection(
+                    raw_challenger,
+                    packet,
+                    final_baseline,
+                    pre_generation_archive,
+                )
+                shadow_alignment["deterministic_no_eligible_hero"] = True
+                result["raw_challenger_output"] = raw_challenger
+                result["final_challenger_output"] = final_challenger
+                result["alignment_diagnostics"]["shadow"] = shadow_alignment
+                result["writer_duration_seconds"] = 0.0
+                result["writer_actual_models"] = []
+                print(
+                    f"    {category_label}: no eligible current hero; deterministic "
+                    f"shared fallback='{str((final_challenger.get('hero') or {}).get('headline') or '')[:48]}'"
+                )
+                results.append(result)
+                continue
+
             hero_item, writer_model, duration = _run_assignment_writer(
                 packet, plan["hero"], role="hero"
             )
@@ -23333,6 +23480,317 @@ def _run_semantic_publication_gate(
     return decision, selected, candidates
 
 
+
+def _terminal_permalink_recent_archive_rows(incoming, archive):
+    """Return a high-recall recent archive pool for the final new-URL authority.
+
+    Unlike the normal semantic gate, this function intentionally does not require a
+    fuzzy threshold before a row can be shown to the model. The terminal gate is the
+    last authority before a public permalink exists, so recall is more important than
+    precision here: irrelevant candidates cost tokens, but a missed duplicate creates
+    a permanent public URL.
+    """
+    incoming_payload = _semantic_gate_article_payload(incoming, include_archive_body=False)
+    incoming_dt = _cross_source_date_value(incoming) or datetime.now(timezone.utc).date()
+    incoming_date = incoming_dt.date() if isinstance(incoming_dt, datetime) else incoming_dt
+    incoming_category = str(incoming.get("category_key") or incoming.get("category") or "").strip()
+    rows = []
+    for row in archive or []:
+        if not isinstance(row, dict) or not row.get("slug"):
+            continue
+        if row.get("is_custom") or row.get("authoritative_custom"):
+            continue
+        if not _archive_entry_live_identity_safe(row):
+            continue
+        row_dt = _archive_record_datetime(row) or _slug_date(row.get("slug"))
+        if row_dt is None or incoming_date is None:
+            continue
+        row_date = row_dt.date() if isinstance(row_dt, datetime) else row_dt
+        try:
+            day_gap = abs((incoming_date - row_date).days)
+        except Exception:
+            continue
+        if day_gap > TERMINAL_PERMALINK_RECENT_DAYS:
+            continue
+
+        candidate_payload = _semantic_gate_article_payload(
+            row, include_archive_body=False
+        )
+        evidence = (
+            semantic_candidate_evidence(
+                incoming_payload,
+                candidate_payload,
+                window_days=TERMINAL_PERMALINK_RECENT_DAYS,
+            )
+            if semantic_candidate_evidence is not None
+            else {}
+        )
+        shared_locality = bool(evidence.get("shared_locality"))
+        shared_family = bool(evidence.get("shared_event_families"))
+        shared_people = bool(evidence.get("shared_people"))
+        shared_precise = bool(evidence.get("shared_precise_locations"))
+        shared_agency = bool(evidence.get("shared_agencies"))
+        exact_anchor = bool(
+            evidence.get("exact_incident_anchor") or evidence.get("exact_known_event_key")
+        )
+        incoming_source = _normalized_external_source_url(
+            incoming.get("source_url") or incoming.get("_source_url") or incoming.get("link")
+        )
+        candidate_source = _normalized_external_source_url(
+            row.get("source_url") or row.get("original_url") or row.get("link")
+        )
+        exact_source = bool(incoming_source and incoming_source == candidate_source)
+        row_categories = set(_item_category_memberships(row, row.get("category_key")))
+        same_category = bool(incoming_category and incoming_category in row_categories)
+        headline_score = float(
+            ((evidence.get("headline_similarity") or {}).get("score") or 0.0)
+        )
+        content_score = float(
+            ((evidence.get("content_similarity") or {}).get("score") or 0.0)
+        )
+        shared_content = int(
+            ((evidence.get("content_similarity") or {}).get("shared_token_count") or 0)
+        )
+
+        # Priority tiers are recall-only. They never establish identity.
+        if exact_source:
+            tier = 6
+        elif exact_anchor or shared_people or shared_precise:
+            tier = 5
+        elif shared_locality and shared_family:
+            tier = 4
+        elif shared_locality and same_category:
+            tier = 3
+        elif shared_family and same_category:
+            tier = 2
+        elif headline_score >= 0.24 or content_score >= 0.12 or shared_content >= 5:
+            tier = 1
+        elif same_category and day_gap <= 3:
+            tier = 0
+        else:
+            continue
+
+        score = float(evidence.get("retrieval_score") or 0.0)
+        score += 0.35 if exact_source else 0.0
+        score += 0.20 if exact_anchor else 0.0
+        score += 0.14 if shared_people or shared_precise else 0.0
+        score += 0.10 if shared_locality and shared_family else 0.0
+        score += 0.05 if shared_agency else 0.0
+        score += 0.03 if same_category else 0.0
+        score += max(0.0, 0.04 - 0.003 * day_gap)
+        rows.append({
+            "slug": str(row.get("slug") or ""),
+            "headline": str(row.get("headline") or ""),
+            "article": row,
+            "evidence": {
+                **evidence,
+                "terminal_recall_tier": tier,
+                "terminal_recall_score": round(score, 4),
+                "terminal_exact_source": exact_source,
+                "terminal_same_category": same_category,
+                "terminal_day_gap": day_gap,
+            },
+        })
+
+    rows.sort(
+        key=lambda rec: (
+            int((rec.get("evidence") or {}).get("terminal_recall_tier") or 0),
+            float((rec.get("evidence") or {}).get("terminal_recall_score") or 0.0),
+            -int((rec.get("evidence") or {}).get("terminal_day_gap") or 0),
+            str(rec.get("slug") or ""),
+        ),
+        reverse=True,
+    )
+    selected = rows[: max(1, TERMINAL_PERMALINK_MAX_CANDIDATES)]
+    # Enrich only the bounded shortlist with the canonical article body. Reading every
+    # recent article HTML would be wasteful and is not needed for recall ranking.
+    enriched = []
+    for rec in selected:
+        source_row = rec.get("article") or {}
+        enriched.append({
+            **rec,
+            "article": _semantic_gate_article_payload(
+                source_row, include_archive_body=True
+            ),
+        })
+    return enriched
+
+
+def _run_terminal_permalink_gate(incoming, archive, cache, report):
+    """Final fail-closed Sonnet 5 authority before any ordinary new permalink.
+
+    Every non-custom article reaching the create branch must receive an explicit NEW
+    decision here. Earlier deterministic and semantic gates may still prevent work,
+    but none of them can bypass this terminal authority.
+    """
+    incoming_payload = _semantic_gate_article_payload(incoming, include_archive_body=False)
+    candidates = _terminal_permalink_recent_archive_rows(incoming, archive)
+    summary = report.setdefault("summary", {})
+    summary["terminal_permalink_evaluations"] = int(
+        summary.get("terminal_permalink_evaluations", 0) or 0
+    ) + 1
+    summary["terminal_permalink_candidate_pairs"] = int(
+        summary.get("terminal_permalink_candidate_pairs", 0) or 0
+    ) + len(candidates)
+
+    if not candidates:
+        # A genuinely empty recent archive has nothing for a duplicate adjudicator to
+        # compare. This is the only non-model NEW path and is explicitly audited.
+        decision = {
+            "status": "no_recent_archive_candidates",
+            "action": SEMANTIC_ACTION_NEW,
+            "selected_candidate_slug": "",
+            "same_real_world_event": False,
+            "material_new_update": False,
+            "independently_newsworthy_followup": False,
+            "confidence": 1.0,
+            "shared_anchors": [],
+            "novel_facts": [],
+            "reason": "No recent canonical archive rows were available for terminal comparison.",
+            "validation_errors": [],
+        }
+    else:
+        base_key = (
+            semantic_publication_decision_cache_key(
+                incoming_payload, candidates, model=TERMINAL_PERMALINK_MODEL
+            )
+            if semantic_publication_decision_cache_key is not None
+            else ""
+        )
+        cache_key = f"terminal_permalink:{TERMINAL_PERMALINK_GATE_VERSION}:{base_key}" if base_key else ""
+        cached = dict((cache or {}).get("entries", {}).get(cache_key, {}) or {})
+        cached_decision = cached.get("decision")
+        if cache_key and _semantic_gate_cached_decision_valid(cached_decision, candidates):
+            decision = copy.deepcopy(cached_decision)
+            summary["terminal_permalink_cache_hits"] = int(
+                summary.get("terminal_permalink_cache_hits", 0) or 0
+            ) + 1
+        else:
+            summary["terminal_permalink_model_calls"] = int(
+                summary.get("terminal_permalink_model_calls", 0) or 0
+            ) + 1
+            if adjudicate_semantic_publication_candidates is None:
+                decision = {
+                    "status": "terminal_adjudicator_unavailable",
+                    "action": SEMANTIC_ACTION_HOLD,
+                    "selected_candidate_slug": "",
+                    "same_real_world_event": False,
+                    "material_new_update": False,
+                    "independently_newsworthy_followup": False,
+                    "confidence": 0.0,
+                    "shared_anchors": [],
+                    "novel_facts": [],
+                    "reason": "Terminal permalink adjudicator unavailable; fail-closed hold.",
+                    "validation_errors": ["terminal_adjudicator_unavailable"],
+                }
+            else:
+                decision = adjudicate_semantic_publication_candidates(
+                    client,
+                    model=TERMINAL_PERMALINK_MODEL,
+                    incoming=incoming_payload,
+                    candidates=candidates,
+                    timeout_seconds=TERMINAL_PERMALINK_TIMEOUT_SECONDS,
+                    min_confidence=TERMINAL_PERMALINK_MIN_CONFIDENCE,
+                )
+            if cache_key and str(decision.get("status") or "") == "validated":
+                cache.setdefault("entries", {})[cache_key] = {
+                    "updated_at": datetime.now(timezone.utc).isoformat(),
+                    "decision": copy.deepcopy(decision),
+                }
+
+    selected_slug = str(decision.get("selected_candidate_slug") or "")
+    selected = next(
+        (
+            row.get("article")
+            for row in candidates
+            if str(row.get("slug") or "") == selected_slug
+        ),
+        None,
+    )
+    # The enriched candidate payload is a copy; resolve the actual archive row so any
+    # subsequent update writes the authoritative object in place.
+    selected_archive = next(
+        (
+            row for row in archive or []
+            if str((row or {}).get("slug") or "") == selected_slug
+        ),
+        None,
+    )
+    if selected_archive is not None:
+        selected = selected_archive
+
+    action = str(decision.get("action") or SEMANTIC_ACTION_HOLD)
+    independent_followup = bool(
+        decision.get("independently_newsworthy_followup")
+        and decision.get("same_real_world_event")
+        and action == SEMANTIC_ACTION_NEW
+    )
+    if independent_followup and isinstance(selected, dict):
+        incoming_story_id = str(
+            incoming.get("editorial_story_id") or incoming.get("_editorial_story_id") or ""
+        ).strip()
+        selected_story_id = str(selected.get("editorial_story_id") or "").strip()
+        if not incoming_story_id or not selected_story_id or incoming_story_id == selected_story_id:
+            action = (
+                SEMANTIC_ACTION_UPDATE
+                if bool(decision.get("material_new_update"))
+                else SEMANTIC_ACTION_DUPLICATE
+            )
+            decision["action"] = action
+            decision["independent_followup_authorized"] = False
+            decision.setdefault("validation_notes", []).append(
+                "terminal_same_event_new_permalink_collapsed_without_distinct_story_identity"
+            )
+        else:
+            decision["independent_followup_authorized"] = True
+            incoming["publication_relationship"] = "independent_followup"
+            incoming["related_parent_slug"] = selected_slug
+            incoming["related_parent_story_id"] = selected_story_id
+
+    if action == SEMANTIC_ACTION_NEW:
+        summary["terminal_permalink_new_authorized"] = int(
+            summary.get("terminal_permalink_new_authorized", 0) or 0
+        ) + 1
+    elif action == SEMANTIC_ACTION_DUPLICATE:
+        summary["terminal_permalink_duplicates_blocked"] = int(
+            summary.get("terminal_permalink_duplicates_blocked", 0) or 0
+        ) + 1
+    elif action == SEMANTIC_ACTION_UPDATE:
+        summary["terminal_permalink_updates_routed"] = int(
+            summary.get("terminal_permalink_updates_routed", 0) or 0
+        ) + 1
+    else:
+        summary["terminal_permalink_holds"] = int(
+            summary.get("terminal_permalink_holds", 0) or 0
+        ) + 1
+
+    report.setdefault("decisions", []).append({
+        "phase": "terminal_permalink_authority",
+        "gate_version": TERMINAL_PERMALINK_GATE_VERSION,
+        "model": TERMINAL_PERMALINK_MODEL,
+        "incoming_headline": incoming_payload.get("headline", ""),
+        "incoming_source_url": incoming_payload.get("source_url", ""),
+        "incoming_story_id": str(
+            incoming.get("editorial_story_id") or incoming.get("_editorial_story_id") or ""
+        ),
+        "candidates": [
+            {
+                "slug": row.get("slug", ""),
+                "headline": row.get("headline", ""),
+                "terminal_recall_tier": (row.get("evidence") or {}).get("terminal_recall_tier"),
+                "terminal_recall_score": (row.get("evidence") or {}).get("terminal_recall_score"),
+                "retrieval_score": (row.get("evidence") or {}).get("retrieval_score", 0),
+                "reasons": (row.get("evidence") or {}).get("reasons", []),
+            }
+            for row in candidates
+        ],
+        "decision": {
+            key: value for key, value in decision.items() if key != "raw_model_decision"
+        },
+    })
+    return decision, selected, candidates
+
+
 def _semantic_gate_identity_evidence(decision, candidates):
     selected_slug = str(decision.get("selected_candidate_slug") or "")
     selected_candidate = next(
@@ -27247,7 +27705,13 @@ def _archive_headline_slug_alignment(entry):
         "with", "after", "before", "as", "is", "are", "was", "were", "this", "that",
         "new", "says", "say", "florida", "county", "story", "today",
     }
-    headline_tokens = {t for t in re.sub(r"[^a-z0-9]+", " ", headline.lower()).split() if len(t) > 2 and t not in stop}
+    # Slug integrity is anchored to the headline that CREATED the permalink, not to
+    # whatever headline the living canonical carries today. A newsroom canonical is
+    # expected to evolve as facts develop. New publications persist this immutable
+    # origin headline so future safety checks can distinguish legitimate evolution
+    # from the historical bug where an unrelated story overwrote an old URL.
+    origin_headline = str((entry or {}).get("permalink_origin_headline") or headline)
+    headline_tokens = {t for t in re.sub(r"[^a-z0-9]+", " ", origin_headline.lower()).split() if len(t) > 2 and t not in stop}
     slug_tokens = {t for t in re.sub(r"[^a-z0-9]+", " ", slug_without_date.lower()).split() if len(t) > 2 and t not in stop}
     union = headline_tokens | slug_tokens
     similarity = len(headline_tokens & slug_tokens) / len(union) if union else 1.0
@@ -27256,6 +27720,30 @@ def _archive_headline_slug_alignment(entry):
     date_gap_days = None
     if slug_dt and record_dt:
         date_gap_days = (record_dt.date() - slug_dt.date()).days
+
+    # A canonical URL is allowed to outlive its original headline when the engine has
+    # explicitly validated a material update. This is normal newsroom behavior: an
+    # article can move from "to consider" to "approved", or from "survey planned" to
+    # "NWS confirms", without minting another permalink. Treat that persisted update
+    # receipt as stronger authority than lexical slug/headline similarity. Without
+    # this exception the overwrite-safety guard eventually quarantines correctly
+    # evolved canonicals and forces the duplicate URLs it was meant to prevent.
+    validated_evolution = bool(
+        entry.get("meaningful_update_validated")
+        and entry.get("last_meaningful_update_at")
+        and str(entry.get("meaningful_update_basis") or "") in {
+            "contextual_update_contract",
+            "semantic_material_update_gate",
+        }
+    )
+    if validated_evolution:
+        return {
+            "aligned": True,
+            "reason": "validated_canonical_headline_evolution",
+            "token_similarity": round(similarity, 4),
+            "date_gap_days": date_gap_days,
+            "meaningful_update_basis": str(entry.get("meaningful_update_basis") or ""),
+        }
 
     # Substantial headline/URL drift several days after the original URL was created
     # is the signature of the historical overwrite bug. Keep uncertain old pages in
@@ -27903,7 +28391,7 @@ def write_archives(all_categories, top_cat):
     archive, _nonstory_purge_report = _purge_nonstory_archive_entries(
         archive, articles_dir, OUTPUT_DIR
     )
-    today         = datetime.utcnow().strftime("%Y-%m-%d")
+    today         = _today_eastern_iso()
     new_count     = 0
     updated_count = 0
     this_run_token_sets = []
@@ -28846,6 +29334,156 @@ def write_archives(all_categories, top_cat):
                 continue
 
 
+        # TERMINAL NEW-PERMALINK AUTHORITY (v1.13.6.7n). This is deliberately after
+        # all earlier deterministic and semantic routing. If an ordinary generated
+        # article is still about to create a new URL, Sonnet 5 must explicitly
+        # authorize NEW against a broader, high-recall recent archive shortlist.
+        # Any duplicate/update/ambiguous result is resolved here before slug creation.
+        if existing is None and not (
+            hero.get("is_custom") or hero.get("authoritative_custom")
+        ):
+            _terminal_decision, _terminal_canonical, _terminal_candidates = (
+                _run_terminal_permalink_gate(
+                    hero,
+                    archive,
+                    _semantic_gate_cache,
+                    _semantic_gate_report,
+                )
+            )
+            _terminal_action = str(
+                _terminal_decision.get("action") or SEMANTIC_ACTION_HOLD
+            )
+            _forward_identity_report.setdefault(
+                "terminal_permalink_authority", []
+            ).append({
+                "headline": headline,
+                "source_url": normalized_source_url,
+                "action": _terminal_action,
+                "canonical_slug": str(
+                    (_terminal_canonical or {}).get("slug") or ""
+                ) if isinstance(_terminal_canonical, dict) else "",
+                "confidence": float(_terminal_decision.get("confidence") or 0.0),
+                "candidate_slugs": [row.get("slug", "") for row in _terminal_candidates],
+                "reason": str(_terminal_decision.get("reason") or ""),
+            })
+
+            if (
+                _terminal_action == SEMANTIC_ACTION_DUPLICATE
+                and isinstance(_terminal_canonical, dict)
+            ):
+                _terminal_evidence = _semantic_gate_identity_evidence(
+                    _terminal_decision, _terminal_candidates
+                )
+                _bind_live_item_to_archive(
+                    hero,
+                    _terminal_canonical,
+                    current_customs=_current_customs,
+                    replace_with_custom=False,
+                )
+                _record_cross_source_identity_observation(
+                    hero,
+                    _terminal_canonical,
+                    _terminal_evidence,
+                    action="terminal_permalink_duplicate_existing_page",
+                )
+                _forward_identity_report["existing_articles_preserved"] += 1
+                hero["_publication_skip_reason"] = (
+                    "terminal_permalink_duplicate_existing_page_preserved"
+                )
+                print(
+                    "  TERMINAL PERMALINK DUPLICATE LOCK: preserved "
+                    f"'{_terminal_canonical.get('slug','')}' for '{headline[:60]}'"
+                )
+                continue
+
+            if (
+                _terminal_action == SEMANTIC_ACTION_UPDATE
+                and isinstance(_terminal_canonical, dict)
+            ):
+                _terminal_merged_update, _terminal_composition = (
+                    _semantic_material_update_composition(
+                        _terminal_canonical,
+                        hero,
+                        _terminal_decision,
+                        _semantic_gate_report,
+                        phase="terminal_permalink_authority",
+                    )
+                )
+                if _terminal_merged_update is None:
+                    _forward_identity_report["publication_holds"].append({
+                        "headline": headline,
+                        "source_url": normalized_source_url,
+                        "candidate_slug": _terminal_canonical.get("slug", ""),
+                        "reason": _terminal_composition.get("reason")
+                        or "terminal_material_update_composition_failed",
+                        "validation_errors": _terminal_composition.get(
+                            "validation_errors", []
+                        ),
+                        "action": "terminal_hold_material_update_preserve_existing",
+                    })
+                    hero["_publication_skip_reason"] = (
+                        "terminal_material_update_composition_hold"
+                    )
+                    print(
+                        "  TERMINAL PERMALINK UPDATE HOLD: preserved canonical page "
+                        f"'{_terminal_canonical.get('slug','')}' because the merged "
+                        "article did not pass the update contract"
+                    )
+                    continue
+
+                hero.clear()
+                hero.update(_terminal_merged_update)
+                headline = str(hero.get("headline") or headline)
+                existing = _terminal_canonical
+                _editorial_story_id = _apply_semantic_gate_update_identity(
+                    hero,
+                    existing,
+                    _terminal_decision,
+                    _terminal_candidates,
+                ) or str(
+                    existing.get("editorial_story_id") or _editorial_story_id or ""
+                )
+                _target_basis = "semantic_final_publication_gate"
+                hero["canonical_slug"] = existing.get("slug", "")
+                hero["canonical_publication_id"] = _stable_publication_id(
+                    existing.get("slug", "")
+                )
+                hero["_semantic_material_update_composition"] = _terminal_composition
+                hero["_terminal_permalink_update_routed"] = True
+                print(
+                    "  TERMINAL PERMALINK UPDATE ROUTE: refreshing "
+                    f"'{existing.get('slug','')}' for '{headline[:60]}'"
+                )
+
+            elif _terminal_action == SEMANTIC_ACTION_HOLD:
+                _forward_identity_report["publication_holds"].append({
+                    "headline": headline,
+                    "source_url": normalized_source_url,
+                    "candidate_slugs": [
+                        row.get("slug", "") for row in _terminal_candidates
+                    ],
+                    "reason": _terminal_decision.get("reason", ""),
+                    "validation_errors": _terminal_decision.get(
+                        "validation_errors", []
+                    ),
+                    "action": "terminal_hold_new_permalink_identity_unresolved",
+                })
+                hero["_publication_skip_reason"] = (
+                    "terminal_permalink_identity_unresolved_hold"
+                )
+                print(
+                    "  TERMINAL PERMALINK HOLD: no new URL for "
+                    f"'{headline[:60]}' because final identity was unresolved"
+                )
+                continue
+
+            elif _terminal_action == SEMANTIC_ACTION_NEW:
+                # Defense-in-depth receipt checked again in the create branch below.
+                hero["_terminal_permalink_new_authorized"] = True
+                hero["_terminal_permalink_gate_version"] = TERMINAL_PERMALINK_GATE_VERSION
+
+
+
         if (
             existing
             and not (hero.get("is_custom") or hero.get("authoritative_custom"))
@@ -29069,7 +29707,21 @@ def write_archives(all_categories, top_cat):
             _forward_identity_report["existing_articles_preserved"] += 1
             updated_count += 1
         else:
-            # New story — create new page
+            # New story — create new page. Ordinary generated articles may reach
+            # this branch only with an explicit terminal permalink NEW receipt.
+            if not (hero.get("is_custom") or hero.get("authoritative_custom")) and not hero.get("_terminal_permalink_new_authorized"):
+                _forward_identity_report["publication_holds"].append({
+                    "headline": headline,
+                    "source_url": normalized_source_url,
+                    "reason": "missing_terminal_permalink_new_authorization",
+                    "action": "fail_closed_before_slug_creation",
+                })
+                hero["_publication_skip_reason"] = "missing_terminal_permalink_new_authorization"
+                print(
+                    "  TERMINAL PERMALINK WRITE BARRIER: no new URL for "
+                    f"'{headline[:60]}' because NEW was not explicitly authorized"
+                )
+                continue
             existing_slugs = {e["slug"] for e in archive}
             if _forced_slug:
                 base_slug = _forced_slug
@@ -29097,6 +29749,8 @@ def write_archives(all_categories, top_cat):
             _new_event_identity = _persist_event_identity(hero)
             archive.append({
                 "slug": slug, "headline": headline,
+                "permalink_origin_headline": headline,
+                "permalink_origin_date": today,
                 "teaser": hero.get("teaser","") or hero.get("body","")[:180],
                 "category_key": cat_key, "category_label": cat_label,
                 "category_keys": _item_category_memberships(hero, cat_key),
