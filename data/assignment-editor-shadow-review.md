@@ -4,64 +4,77 @@ The live publisher was not changed. Both displayed variants are final-pipeline c
 
 Judge the final newsroom result, not verbosity. Score: (1) hero/story choice, (2) supporting-story selection and omissions, (3) ordering, (4) angle/new-development focus, (5) source mapping, (6) headline accuracy and strength, (7) lead/context, (8) factual fidelity, (9) completeness, (10) unnecessary filler, and (11) overall publishability. Record A, B, or Tie before opening the answer key.
 
-## Local Government
+## Crime & Safety
 
 ### Source pool
 
-1. Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes
-2. Port St. Lucie approves higher annual trash fee for residents despite pickup woes - WPEC
+1. Gail Giustino pleads no contest in Martin County's worst animal hoarding case
+2. Stolen guns recovered as 2 teens face charges in Martin County burglary - WPBF
+3. Martin County Sheriff's Office detectives arrest 2 men in string of burglaries, recover stolen guns - WPTV
+4. Martin County Sheriff's Office detectives arrest 2 men in string of burglaries, recover stolen guns
+5. 2 arrested in string of firearm burglaries in Martin County - WPEC
+6. Martin County Sheriff's Office detectives arrest 2 men in string of burglaries, recover stolen guns - WFLX
+7. Man charged with manslaughter after BB gun shooting in Fort Pierce - WPBF
 
 ### Variant A
 
-**Hero:** Port St. Lucie raises annual trash fee to $482 despite ongoing pickup complaints
-**Hero source choice:** Source #2: Port St. Lucie approves higher annual trash fee for residents despite pickup woes - WPEC
-**Urgency:** 7
+**Hero:** Fort Pierce man charged with manslaughter after fatal BB gun shooting near elementary school
+**Hero source choice:** Source #7: Man charged with manslaughter after BB gun shooting in Fort Pierce - WPBF
+**Urgency:** 6
 
-The Port St. Lucie City Council approved Resolution 26-R70 Monday night, raising the annual solid waste assessment by $14.83 per dwelling unit, from $467.33 to $482.16 for the fiscal year beginning in October. The council approved the item with no public comment or discussion. The assessment pays for garbage collection, disposal services, facilities and related solid waste programs and is collected through property tax bills.
+Jabari Cowart, 36, has been charged with manslaughter after Fort Pierce police say he fatally shot a 34-year-old man with a BB gun on Saturday near an elementary school. The incident happened in the 2900 block of Avenue G, where a group of men in their 30s had been shooting a BB gun at trees. Investigators believe Cowart asked to use the BB gun and later pointed it at one of the men before pulling the trigger. The victim fell to the ground, and officers were called to the scene.
 
- The increase amounts to about $1.24 more per month for residential properties. City officials said the increase is required under Port St. Lucie's solid waste franchise agreement with FCC Environmental Service and reflects rising costs for labor, equipment, vehicle maintenance and fuel. The new $482.16 assessment remains below the city's previously established maximum rate of $513.70.
+Ken Noble, marketing manager at The Tactical Store in Fort Pierce, said BB guns can be extremely dangerous because they involve a piece of metal moving really fast. Noble explained that anything with a projectile can be a weapon and that anything moving fast enough can penetrate skin, hit vital spots, and be very lethal.
 
- The increase comes as Port St. Lucie's trash service remains a major issue for residents. The city previously reached a $24 million settlement with Waste Pro over poor service. Voters are expected to decide in November whether to bring back twice-weekly garbage pickup.
+Fort Pierce police said Cowart is being held at the St. Lucie County Jail. Noble shared safety advice for handling firearms, including BB guns, saying you should not point anything at anyone and that following safety procedures prevents problems.
 
 **Additional stories**
 
-**1. Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup**
-Source #1: Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes
-Teaser: The Stuart City Commission voted Monday night to replace Mayor Sean Reed with Commissioner Eula Clarke and fire City Manager Michael Giardino after just four months on the job. The
+**1. Fort Pierce man identified as Jabari Cowart in fatal BB gun shooting on Avenue G**
+Source #7: Man charged with manslaughter after BB gun shooting in Fort Pierce - WPBF
+Teaser: Fort Pierce police have identified 36-year-old Jabari Cowart as the suspect charged with manslaughter after a 34-year-old man died Saturday from a BB gun shooting in the 2900 block of Avenue G.
 
-The Stuart City Commission voted Monday night to replace Mayor Sean Reed with Commissioner Eula Clarke and fire City Manager Michael Giardino after just four months on the job. The changes followed a recent election that flipped the commission majority less than a week ago. Commissioner Laura Giobbi opposed the mayoral change and walked out of the meeting before the city manager vote.
+Fort Pierce police have identified 36-year-old Jabari Cowart as the suspect charged with manslaughter after a 34-year-old man died Saturday from a BB gun shooting in the 2900 block of Avenue G.
 
- The commission voted 3 to 1 to dismiss Giardino and moved to bring back former City Manager Michael Mortell, who was fired by the previous commission 10 months ago. Commissioner Campbell Rich defended the move by referencing concerns over Florida's Amendment 3, which would significantly reduce property tax revenue for municipalities. Rich said the city needs the most experienced leadership possible to navigate that potential budget crisis.
+**2. Two St. Lucie County men arrested in Martin County burglaries, 13 cases closed**
+Source #4: Martin County Sheriff's Office detectives arrest 2 men in string of burglaries, recover stolen guns
+Teaser: Martin County detectives arrested two 19-year-old St. Lucie County men and recovered multiple stolen firearms after a string of burglaries in Martin County neighborhoods that began in early August.
 
- Giobbi said over the phone she felt Giardino was very capable of running city operations and that the move was politically motivated and not necessary. She had argued that Reed should have been allowed to serve a full year as mayor. Reed posted on Facebook that he was disappointed his fellow commissioners felt it was necessary to remove him as mayor prior to the board's scheduled reorganization in December.
+Stephen Ivan Morris, 19, and Shaun Alexander Bilbrey, 19, both of St. Lucie County, were arrested on multiple charges after Martin County Sheriff's Office detectives solved an ongoing burglary case involving the theft of multiple firearms from several neighborhoods, including gated communities. The burglaries began in early August and detectives identified commonalities that led them to Morris and Bilbrey.
 
- Resident Catherine Collier Kyroulis expressed concern about the direction of the changes, saying going backwards is not the correct direction. Resident Andy Noble, who spoke during public comment at the meeting, said the outcome restored some faith that the democratic process works. The new interim city manager acknowledged the weight of the evening, calling it a night of change and a very unusual night.
+ With assistance from the St. Lucie County Sheriff's Office SWAT Team and the St. Lucie County Sheriff's Criminal Investigations Division, Martin County detectives served simultaneous search warrants early Wednesday morning at the homes of both men. Multiple stolen firearms were recovered and detectives were able to close at least 13 cases.
+
+ Morris and Bilbrey face multiple charges, including grand theft, armed burglary, larceny and traveling to commit burglary. They are being held at Martin County Jail.
 
 ### Variant B
 
-**Hero:** Port St. Lucie raises annual trash fee to $482 despite ongoing pickup complaints
-**Hero source choice:** Source #2: Port St. Lucie approves higher annual trash fee for residents despite pickup woes - WPEC
+**Hero:** More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response
+**Hero source choice:** Source #1: Gail Giustino pleads no contest in Martin County's worst animal hoarding case
 **Urgency:** 6
 
-The Port St. Lucie City Council approved Resolution 26-R70 Monday night, raising the annual solid waste assessment by $14.83 per dwelling unit, from $467.33 to $482.16 for the fiscal year beginning in October. The council approved the item with no public comment or discussion. The assessment pays for garbage collection, disposal services, facilities and related solid waste programs and is collected through property tax bills.
+Gail Giustino pleaded no contest Tuesday to two animal abuse charges stemming from the rescue of 108 animals from a property near Hobe Sound in what officials call Martin County's worst animal hoarding case. Giustino, a 77-year-old mail carrier, will serve two years of probation and is prohibited from having any contact with animals. A no-contest plea means she did not admit guilt but chose not to fight the charges at trial.
 
- The increase amounts to about $1.24 more per month for residential properties. City officials said the increase is required under Port St. Lucie's solid waste franchise agreement with FCC Environmental Service and reflects rising costs for labor, equipment, vehicle maintenance and fuel. The new $482.16 assessment remains below the city's previously established maximum rate of $513.70.
+ Attorney Josh Deckard addressed the sentence outside the Stuart courthouse. "While there was no jail time imposed, my client is required to be on probation for a period of two years. The most important caveat that she has to follow is that she has no contact with any animals," Deckard said.
 
- The increase comes as Port St. Lucie's trash service remains a major issue for residents. The city previously reached a $24 million settlement with Waste Pro over poor service. Voters are expected to decide in November whether to bring back twice-weekly garbage pickup.
+ The judge also ordered Giustino to undergo a mental health evaluation and follow any recommended treatment. Violating probation could mean up to two years in county jail.
+
+ Tish Ott adopted one of the rescued animals, a dog named Gracie Anne, and described the conditions at the property. "No air conditioning, bad ventilation, lots of fecal matter everywhere," Ott said. Ott has since nursed Gracie Anne back to health and documented the recovery on Facebook.
+
+ "When I saw her, she had such a look of hopelessness in her eyes, and the moment that I saw that, I just felt that I needed to step up," Ott said. "Now she sleeps in my bed, she's carried around in a snuggle bag 20 hours a day, and as you can see, she's got hope, and she's gorgeous."
+
+ Ott reflected on what the animals endured. "No animal deserves to ever, ever live in a situation like that," Ott said. All 108 animals were removed from the property during the rescue operation that led to the charges against Giustino.
 
 **Additional stories**
 
-**1. Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup**
-Source #1: Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes
-Teaser: The Stuart City Commission voted Monday night to replace Mayor Sean Reed with Commissioner Eula Clarke and fire City Manager Michael Giardino after just four months on the job. The
+**1. Two St. Lucie County men arrested in Martin County burglaries, 13 cases closed**
+Source #3: Martin County Sheriff's Office detectives arrest 2 men in string of burglaries, recover stolen guns - WPTV
+Teaser: Martin County detectives arrested two 19-year-old St. Lucie County men and recovered multiple stolen firearms after a string of burglaries in Martin County neighborhoods that began in early August.
 
-The Stuart City Commission voted Monday night to replace Mayor Sean Reed with Commissioner Eula Clarke and fire City Manager Michael Giardino after just four months on the job. The changes followed a recent election that flipped the commission majority less than a week ago. Commissioner Laura Giobbi opposed the mayoral change and walked out of the meeting before the city manager vote.
+Stephen Ivan Morris, 19, and Shaun Alexander Bilbrey, 19, both of St. Lucie County, were arrested on multiple charges after Martin County Sheriff's Office detectives solved an ongoing burglary case involving the theft of multiple firearms from several neighborhoods, including gated communities. The burglaries began in early August and detectives identified commonalities that led them to Morris and Bilbrey.
 
- The commission voted 3 to 1 to dismiss Giardino and moved to bring back former City Manager Michael Mortell, who was fired by the previous commission 10 months ago. Commissioner Campbell Rich defended the move by referencing concerns over Florida's Amendment 3, which would significantly reduce property tax revenue for municipalities. Rich said the city needs the most experienced leadership possible to navigate that potential budget crisis.
+ With assistance from the St. Lucie County Sheriff's Office SWAT Team and the St. Lucie County Sheriff's Criminal Investigations Division, Martin County detectives served simultaneous search warrants early Wednesday morning at the homes of both men. Multiple stolen firearms were recovered and detectives were able to close at least 13 cases.
 
- Giobbi said over the phone she felt Giardino was very capable of running city operations and that the move was politically motivated and not necessary. She had argued that Reed should have been allowed to serve a full year as mayor. Reed posted on Facebook that he was disappointed his fellow commissioners felt it was necessary to remove him as mayor prior to the board's scheduled reorganization in December.
-
- Resident Catherine Collier Kyroulis expressed concern about the direction of the changes, saying going backwards is not the correct direction. Resident Andy Noble, who spoke during public comment at the meeting, said the outcome restored some faith that the democratic process works. The new interim city manager acknowledged the weight of the evening, calling it a night of change and a very unusual night.
+ Morris and Bilbrey face multiple charges, including grand theft, armed burglary, larceny and traveling to commit burglary. They are being held at Martin County Jail.
 
 **Scorecard**
 
@@ -79,43 +92,39 @@ The Stuart City Commission voted Monday night to replace Mayor Sean Reed with Co
 
 ---
 
-## Crime & Safety
+## Things To Do
 
 ### Source pool
 
-1. Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - cw34.com
-2. Man charged with manslaughter after BB gun shooting in Fort Pierce - WPBF
-3. Martin County man faces DUI, fleeing charges after SUV slams into church - WPEC
+1. Martin County PAL hosting Jeep Duck Scavenger Hunt fundraiser
 
 ### Variant A
 
-**Hero:** Man charged with manslaughter after BB gun shooting kills 34-year-old near Fort Pierce elementary school
-**Hero source choice:** Source #2: Man charged with manslaughter after BB gun shooting in Fort Pierce - WPBF
+**Hero:** Martin County PAL Jeep Duck Scavenger Hunt fundraiser set for Sept. 19
+**Hero source choice:** Source #1: Martin County PAL hosting Jeep Duck Scavenger Hunt fundraiser
 **Urgency:** 6
 
-Jabari Cowart, a 36-year-old man, has been charged with manslaughter after Fort Pierce police say he fatally shot a 34-year-old man with a BB gun on Saturday in the 2900 block of Avenue G near an elementary school. Investigators believe Cowart asked to use the BB gun during a gathering where a group of men in their 30s had been shooting at trees, then pointed it at the victim before pulling the trigger. The victim fell to the ground, and officers were called to the scene. Cowart is being held at the St. Lucie County jail.
+Martin County Police Athletic League is hosting a Jeep Duck Scavenger Hunt on Sept. 19 to raise money for youth mentorship, leadership and athletics programs in Martin County. Registration costs $25 per Jeep, and participants can purchase a $10 clue sheet that includes hints and a map to help teams navigate the scavenger hunt route. Participants must complete the scavenger hunt in a Jeep.
 
-The incident happened in a residential area near an elementary school, raising concerns about the dangers of BB guns in populated areas. Fort Pierce police said the shooting occurred after the group had been using the BB gun for target practice on trees.
+ Martin County PAL Executive Director Noel DelValle said the nonprofit works closely with children and teens throughout the community through leadership and athletic programming. The organization also partners with schools and the court system through intervention and diversion programs aimed at helping children stay on a positive path. DelValle said Martin County Police Athletic League works with youth in Martin County and develops kids into healthy, productive leaders of the future.
 
-Ken Noble, marketing manager at The Tactical Store in Fort Pierce, spoke about the dangers of BB guns. "They can be extremely dangerous. It's a piece of metal moving really, really fast," Noble said. He explained that BB guns, while often considered less harmful than traditional firearms, can still cause serious injury or death. "Anything with a projectile can be a weapon. As I stated before, anything's moving fast enough, it can penetrate skin, hit vital spots, and it can be very lethal," Noble said.
+ The fundraiser centers around Jeep culture and the popular ducking tradition, where Jeep owners exchange decorative rubber ducks as a way to recognize customized vehicles and fellow Jeep enthusiasts. Director of Strategic Growth Meg Shirey said the event has become one of the organizations signature fundraisers. Shirey said the event helps showcase both local businesses and the nonprofits community programs while bringing Jeep owners together from across Martin County.
 
-Noble also shared safety advice for handling firearms, including BB guns. "You shouldn't point anything at anyone," he said. "As long as you follow safety procedures and use a little bit of sense, you ain't got anything to worry about."
+ Program Manager Kim Zimmerman said the scavenger hunt includes themed awards and unique Jeep duck trophies for participants. Zimmerman said each duck is given to the most unique Jeep in different categories. Proceeds from the fundraiser directly support programs that provide mentorship opportunities, athletics and leadership development for local children and teens. Registration information is available at martincountypal.org.
 
 ### Variant B
 
-**Hero:** Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery
-**Hero source choice:** Source #1: Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - cw34.com
-**Urgency:** 2
+**Hero:** Martin County PAL Jeep Duck Scavenger Hunt fundraiser set for Sept. 19
+**Hero source choice:** Source #1: Martin County PAL hosting Jeep Duck Scavenger Hunt fundraiser
+**Urgency:** 4
 
-A 19-year-old woman was arrested after using two fake $50 bills to pay for an $83.90 food delivery order in Fort Pierce.
+Martin County Police Athletic League is hosting a Jeep Duck Scavenger Hunt on Sept. 19 to raise money for youth mentorship, leadership and athletics programs in Martin County. Registration costs $25 per Jeep, and participants can purchase a $10 clue sheet that includes hints and a map to help teams navigate the scavenger hunt route. Participants must complete the scavenger hunt in a Jeep.
 
-**Additional stories**
+ Martin County PAL Executive Director Noel DelValle said the nonprofit works closely with children and teens throughout the community through leadership and athletic programming. The organization also partners with schools and the court system through intervention and diversion programs aimed at helping children stay on a positive path. DelValle said Martin County Police Athletic League works with youth in Martin County and develops kids into healthy, productive leaders of the future.
 
-**1. Fort Pierce man identified as Jabari Cowart in fatal BB gun shooting on Avenue G**
-Source #2: Man charged with manslaughter after BB gun shooting in Fort Pierce - WPBF
-Teaser: Fort Pierce police have identified 36-year-old Jabari Cowart as the suspect charged with manslaughter after a 34-year-old man died Saturday from a BB gun shooting in the 2900 block of Avenue G.
+ The fundraiser centers around Jeep culture and the popular ducking tradition, where Jeep owners exchange decorative rubber ducks as a way to recognize customized vehicles and fellow Jeep enthusiasts. Director of Strategic Growth Meg Shirey said the event has become one of the organizations signature fundraisers. Shirey said the event helps showcase both local businesses and the nonprofits community programs while bringing Jeep owners together from across Martin County.
 
-Fort Pierce police have identified 36-year-old Jabari Cowart as the suspect charged with manslaughter after a 34-year-old man died Saturday from a BB gun shooting in the 2900 block of Avenue G.
+ Program Manager Kim Zimmerman said the scavenger hunt includes themed awards and unique Jeep duck trophies for participants. Zimmerman said each duck is given to the most unique Jeep in different categories. Proceeds from the fundraiser directly support programs that provide mentorship opportunities, athletics and leadership development for local children and teens. Registration information is available at martincountypal.org.
 
 **Scorecard**
 
@@ -137,9 +146,64 @@ Fort Pierce police have identified 36-year-old Jabari Cowart as the suspect char
 
 ### Source pool
 
-1. Byron Donalds selects Bryan Avila as running mate in Florida governor’s race
+1. Gov. Ron DeSantis orders flags to half-staff following Dolly Parton's death
+2. Byron Donalds selects Bryan Avila as running mate in Florida governor’s race
 
-**The shadow architecture failed for this category. This category is not scoreable.**
+### Variant A
+
+**Hero:** Gov. DeSantis orders Florida flags to half-staff through Sept. 1 following Dolly Parton's death
+**Hero source choice:** Source #1: Gov. Ron DeSantis orders flags to half-staff following Dolly Parton's death
+**Urgency:** 7
+
+Gov. Ron DeSantis on Tuesday ordered flags across Florida lowered to half-staff following the death of country music icon Dolly Parton. The directive applies to U.S. and Florida flags at all state and local government buildings, installations and grounds through sunset Sept. 1.
+
+ The governor's office said the order follows a directive from the president. Parton died peacefully Tuesday in Nashville at age 80, according to her publicist. The Tennessee native became one of the most recognizable figures in country music during a career that spanned decades.
+
+ Parton wrote hundreds of songs, including Jolene, Coat of Many Colors and I Will Always Love You, while also building a career in film, business and philanthropy. She founded the Imagination Library, which provides free books to children, and opened Dollywood in Pigeon Forge, Tennessee.
+
+ The governor's office released a statement saying the flags will be flown at half-staff as a mark of respect pursuant to the president's order. The flag directive covers all state and local government facilities throughout Florida until the end of the day Sept. 1.
+
+### Variant B
+
+**Hero:** Gov. DeSantis orders Florida flags to half-staff through Sept. 1 following Dolly Parton's death
+**Hero source choice:** Source #1: Gov. Ron DeSantis orders flags to half-staff following Dolly Parton's death
+**Urgency:** 4
+
+Gov. Ron DeSantis on Tuesday ordered flags across Florida lowered to half-staff following the death of country music icon Dolly Parton. The directive applies to U.S. and Florida flags at all state and local government buildings, installations and grounds through sunset Sept. 1.
+
+ The governor's office said the order follows a directive from the president. Parton died peacefully Tuesday in Nashville at age 80, according to her publicist. The Tennessee native became one of the most recognizable figures in country music during a career that spanned decades.
+
+ Parton wrote hundreds of songs, including Jolene, Coat of Many Colors and I Will Always Love You, while also building a career in film, business and philanthropy. She founded the Imagination Library, which provides free books to children, and opened Dollywood in Pigeon Forge, Tennessee.
+
+ The governor's office released a statement saying the flags will be flown at half-staff as a mark of respect pursuant to the president's order. The flag directive covers all state and local government facilities throughout Florida until the end of the day Sept. 1.
+
+**Additional stories**
+
+**1. Byron Donalds selects Bryan Avila as running mate in Florida governor's race**
+Source #2: Byron Donalds selects Bryan Avila as running mate in Florida governor’s race
+Teaser: Republican gubernatorial nominee Byron Donalds selected Miami-Dade state Sen.
+
+Republican gubernatorial nominee Byron Donalds selected Miami-Dade state Sen. Bryan Avila as his running mate Tuesday, adding a Cuban-American lawmaker, educator and Florida Army National Guard captain to the GOP ticket. Donalds announced the pick at Miami's Freedom Tower, a landmark closely tied to South Florida's Cuban exile community. The selection gives Donalds, a Southwest Florida congressman, a running mate with deep political and personal ties to Miami-Dade and its influential Cuban-American community ahead of the November general election.
+
+Avila was born and raised in Hialeah after his parents, Adrian and Rosa Maria Avila, fled Cuba. He was first elected to the Florida House in 2014 and eventually rose to speaker pro tempore. He won election to the Senate in 2022 and currently chairs the Finance and Tax Committee. Avila also sponsored the Stop WOKE Act, one of Gov. Ron DeSantis' signature culture-war measures. The law restricts certain instruction and training involving race, discrimination and privilege in schools and workplaces. Critics called it an attack on free speech, and parts of the law have been blocked by federal courts.
+
+Donalds framed the partnership around their families' pursuit of opportunity and a shared commitment to conservative policies. He praised Avila as a proven warrior, pointing to his work on property taxes, toll relief, human trafficking, conservation and a new law intended to protect utility customers and water supplies as large-scale data centers expand in Florida. Avila used his first speech as running mate to focus on his parents' experience under communism and draw a contrast with Democrats he accused of embracing socialism. He said that with Donalds as governor and him as lieutenant governor, socialism will never find a home in the state.
+
+Donalds and Avila will campaign on affordability, lower taxes, public safety, parental rights and school choice. They face Democratic nominee David Jolly and his running mate, former Democratic Congresswoman Gwen Graham, in the November general election. Jolly congratulated Avila on the selection but argued the race will remain centered on Donalds' close political alliance with President Donald Trump. Beyond politics, Avila serves as a captain in the Florida Army National Guard and works as an academic dean at the Doral College School of Criminal Justice.
+
+**Scorecard**
+
+- Hero/story choice: A / B / Tie
+- Supporting-story selection/omissions: A / B / Tie
+- Story ordering: A / B / Tie
+- Angle/new-development focus: A / B / Tie
+- Source mapping: A / B / Tie
+- Headline: A / B / Tie
+- Lead and context: A / B / Tie
+- Factual fidelity: A / B / Tie
+- Completeness: A / B / Tie
+- Least filler: A / B / Tie
+- Overall publishability: A / B / Tie
 
 ---
 
@@ -147,67 +211,91 @@ Fort Pierce police have identified 36-year-old Jabari Cowart as the suspect char
 
 ### Source pool
 
-1. Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes
-2. Martin County man faces DUI, fleeing charges after SUV slams into church - WPEC
-3. All 36 Border Collies surrendered after Palm City case; adoption applications open Sept. 1 - WPEC
+1. Gail Giustino pleads no contest in Martin County's worst animal hoarding case
+2. Gail Giustino pleads no contest in Martin County's worst animal hoarding case - WFLX
+3. Martin County Sheriff's Office detectives arrest 2 men in string of burglaries, recover stolen guns
+4. 2 arrested in string of firearm burglaries in Martin County - WPEC
+5. All 36 Border Collies surrendered after Palm City case; adoption applications open Sept. 1 - WPEC
 
 ### Variant A
 
-**Hero:** Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup
-**Hero source choice:** Source #1: Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes
-**Urgency:** 9
+**Hero:** More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response
+**Hero source choice:** Source #1: Gail Giustino pleads no contest in Martin County's worst animal hoarding case
+**Urgency:** 7
 
-The Stuart City Commission voted Monday night to replace Mayor Sean Reed with Commissioner Eula Clarke and fire City Manager Michael Giardino after just four months on the job. The changes followed a recent election that flipped the commission majority less than a week ago. Commissioner Laura Giobbi opposed the mayoral change and walked out of the meeting before the city manager vote.
+Gail Giustino pleaded no contest Tuesday to two animal abuse charges stemming from the rescue of 108 animals from a property near Hobe Sound in what officials call Martin County's worst animal hoarding case. Giustino, a 77-year-old mail carrier, will serve two years of probation and is prohibited from having any contact with animals. A no-contest plea means she did not admit guilt but chose not to fight the charges at trial.
 
- The commission voted 3 to 1 to dismiss Giardino and moved to bring back former City Manager Michael Mortell, who was fired by the previous commission 10 months ago. Commissioner Campbell Rich defended the move by referencing concerns over Florida's Amendment 3, which would significantly reduce property tax revenue for municipalities. Rich said the city needs the most experienced leadership possible to navigate that potential budget crisis.
+ Attorney Josh Deckard addressed the sentence outside the Stuart courthouse. "While there was no jail time imposed, my client is required to be on probation for a period of two years. The most important caveat that she has to follow is that she has no contact with any animals," Deckard said.
 
- Giobbi said over the phone she felt Giardino was very capable of running city operations and that the move was politically motivated and not necessary. She had argued that Reed should have been allowed to serve a full year as mayor. Reed posted on Facebook that he was disappointed his fellow commissioners felt it was necessary to remove him as mayor prior to the board's scheduled reorganization in December.
+ The judge also ordered Giustino to undergo a mental health evaluation and follow any recommended treatment. Violating probation could mean up to two years in county jail.
 
- Resident Catherine Collier Kyroulis expressed concern about the direction of the changes, saying going backwards is not the correct direction. Resident Andy Noble, who spoke during public comment at the meeting, said the outcome restored some faith that the democratic process works. The new interim city manager acknowledged the weight of the evening, calling it a night of change and a very unusual night.
+ Tish Ott adopted one of the rescued animals, a dog named Gracie Anne, and described the conditions at the property. "No air conditioning, bad ventilation, lots of fecal matter everywhere," Ott said. Ott has since nursed Gracie Anne back to health and documented the recovery on Facebook.
+
+ "When I saw her, she had such a look of hopelessness in her eyes, and the moment that I saw that, I just felt that I needed to step up," Ott said. "Now she sleeps in my bed, she's carried around in a snuggle bag 20 hours a day, and as you can see, she's got hope, and she's gorgeous."
+
+ Ott reflected on what the animals endured. "No animal deserves to ever, ever live in a situation like that," Ott said. All 108 animals were removed from the property during the rescue operation that led to the charges against Giustino.
 
 **Additional stories**
 
-**1. Martin County man crashes SUV into church after fleeing deputies, faces DUI charges**
-Source #2: Martin County man faces DUI, fleeing charges after SUV slams into church - WPEC
-Teaser: A Martin County man who crashed into a church is accused of driving under the influence and fleeing from police after deputies say he swerved onto the grass while traveling northbound on SW Washington Avenue through a residential neighborhood.
+**1. Two St. Lucie County men arrested in Martin County burglaries, 13 cases closed**
+Source #3: Martin County Sheriff's Office detectives arrest 2 men in string of burglaries, recover stolen guns
+Teaser: Martin County detectives arrested two 19-year-old St. Lucie County men and recovered multiple stolen firearms after a string of burglaries in Martin County neighborhoods that began in early August.
 
-Geremias Pascual, 28, was seen swerving onto the grass while traveling northbound on SW Washington Avenue through a residential neighborhood Monday, according to the Martin County Sheriff's Office. Despite deputies attempts to stop him, Pascual refused to stop. Deputies used a PIT maneuver to slow down the SUV Pascual was traveling in, but the maneuver did not work. Pascual only started going faster after the attempted PIT maneuver.
+Stephen Ivan Morris, 19, and Shaun Alexander Bilbrey, 19, both of St. Lucie County, were arrested on multiple charges after Martin County Sheriff's Office detectives solved an ongoing burglary case involving the theft of multiple firearms from several neighborhoods, including gated communities. The burglaries began in early August and detectives identified commonalities that led them to Morris and Bilbrey.
 
- Pascual then crashed into a tree, a power pole, and the side of a local church. The damage to the church destroyed its air-conditioning unit and caused thousands of dollars in damages. Deputies ordered Pascual to step out of the vehicle and placed him under arrest.
+ With assistance from the St. Lucie County Sheriff's Office SWAT Team and the St. Lucie County Sheriff's Criminal Investigations Division, Martin County detectives served simultaneous search warrants early Wednesday morning at the homes of both men. Multiple stolen firearms were recovered and detectives were able to close at least 13 cases.
 
- Pascual is being charged with fleeing and eluding, DUI, and four counts of criminal mischief or damage to property.
+ Morris and Bilbrey face multiple charges, including grand theft, armed burglary, larceny and traveling to commit burglary. They are being held at Martin County Jail.
 
 **2. All 36 Border Collies surrendered in Palm City cruelty case; adoptions open Sept. 1**
-Source #3: All 36 Border Collies surrendered after Palm City case; adoption applications open Sept. 1 - WPEC
-Teaser: All 36 Border Collies removed from a Palm City home earlier this month have been legally surrendered to the Humane Society of the Treasure Coast, clearing the way for medical evalu
+Source #5: All 36 Border Collies surrendered after Palm City case; adoption applications open Sept. 1 - WPEC
+Teaser: All 36 Border Collies removed from a Palm City home earlier this month have been legally surrendered to the Humane Society of the Treasure Coast. Adoption applications will be available beginning Sept. 1.
 
-All 36 Border Collies removed from a Palm City home earlier this month have been legally surrendered to the Humane Society of the Treasure Coast, clearing the way for medical evalu
+All 36 Border Collies removed from a Palm City home earlier this month have been legally surrendered to the Humane Society of the Treasure Coast, clearing the way for medical evaluations and eventual adoptions. The dogs were rescued Aug. 10 from a home on Southwest Alligator Street, where investigators said they found them living without air conditioning and surrounded by feces, urine-soaked materials and debris. Paige O'Donnell, 62, was arrested in the case and faces 72 charges, including 36 third-degree felony counts of animal cruelty and 36 misdemeanor counts alleging animals were kept without sufficient exercise and air.
+
+Shelter staff have removed the dogs' matted fur and cleaned away layers of dried feces as the animals begin their recovery. The dogs have received several baths, vaccinations and veterinary care. Some have been treated for skin infections, body sores, eye infections and intestinal parasites. The Humane Society said it has seen organ abnormalities in some dogs that are believed to be defects from inbreeding.
+
+Adoption applications for the Border Collies, including applications from nonprofit rescue groups, will be available beginning Sept. 1 through the Humane Society's website and Facebook page. Adoption fees will be $140 for adult Border Collies and $175 for puppies. The shelter is accepting donations to its Emergency Medical Fund to help cover veterinary care for the Border Collies and other shelter animals.
 
 ### Variant B
 
-**Hero:** Martin County man crashes SUV into church after fleeing deputies, faces DUI charges
-**Hero source choice:** Source #2: Martin County man faces DUI, fleeing charges after SUV slams into church - WPEC
-**Urgency:** 5
+**Hero:** Palm City Border Collie adoption applications open Sept. 1 after all 36 dogs surrendered
+**Hero source choice:** Source #5: All 36 Border Collies surrendered after Palm City case; adoption applications open Sept. 1 - WPEC
+**Urgency:** 6
 
-Geremias Pascual, 28, was seen swerving onto the grass while traveling northbound on SW Washington Avenue through a residential neighborhood Monday, according to the Martin County Sheriff's Office. Despite deputies attempts to stop him, Pascual refused to stop. Deputies used a PIT maneuver to slow down the SUV Pascual was traveling in, but the maneuver did not work. Pascual only started going faster after the attempted PIT maneuver.
+All 36 Border Collies removed from a Palm City home earlier this month have been legally surrendered to the Humane Society of the Treasure Coast, clearing the way for medical evaluations and eventual adoptions. The dogs were rescued Aug. 10 from a home on Southwest Alligator Street, where investigators said they found them living without air conditioning and surrounded by feces, urine-soaked materials and debris. Many arrived at the shelter dirty, severely matted and covered in dried waste.
 
- Pascual then crashed into a tree, a power pole, and the side of a local church. The damage to the church destroyed its air-conditioning unit and caused thousands of dollars in damages. Deputies ordered Pascual to step out of the vehicle and placed him under arrest.
+Shelter staff have removed the dogs' matted fur and cleaned away the layers of dried feces as the animals begin their recovery. They have received several baths, vaccinations and veterinary care. Some have been treated for skin infections, body sores, eye infections and intestinal parasites. "I distinctly remember the second day that I came in and the first dog wagged its tail at me and for me, that was, I'll never forget that moment. I will never forget that moment. It was amazing," said Lori Tucker, Humane Society of the Treasure Coast Director of Operations, as she fought back tears.
 
- Pascual is being charged with fleeing and eluding, DUI, and four counts of criminal mischief or damage to property.
+Adoption applications for the Border Collies, including applications from nonprofit rescue groups, will be available beginning Sept. 1 through the Humane Society's website and Facebook page. Adoption fees will be $140 for adult Border Collies and $175 for puppies. Paige O'Donnell, 62, was arrested in the case and faces 72 charges, including 36 third-degree felony counts of animal cruelty and 36 misdemeanor counts alleging animals were kept without sufficient exercise and air. Her bond was set at $270,000.
 
 **Additional stories**
 
-**1. Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup**
-Source #1: Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes
-Teaser: The Stuart City Commission voted Monday night to replace Mayor Sean Reed with Commissioner Eula Clarke and fire City Manager Michael Giardino after just four months on the job. The
+**1. More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response**
+Source #1: Gail Giustino pleads no contest in Martin County's worst animal hoarding case
+Teaser: 77-year-old Gail Giustino was arrested on two misdemeanor animal cruelty-related charges following the search of a Stuart home where Martin County authorities found more than 70 an
 
-The Stuart City Commission voted Monday night to replace Mayor Sean Reed with Commissioner Eula Clarke and fire City Manager Michael Giardino after just four months on the job. The changes followed a recent election that flipped the commission majority less than a week ago. Commissioner Laura Giobbi opposed the mayoral change and walked out of the meeting before the city manager vote.
+Gail Giustino pleaded no contest Tuesday to two animal abuse charges stemming from the rescue of 108 animals from a property near Hobe Sound in what officials call Martin County's worst animal hoarding case. Giustino, a 77-year-old mail carrier, will serve two years of probation and is prohibited from having any contact with animals. A no-contest plea means she did not admit guilt but chose not to fight the charges at trial.
 
- The commission voted 3 to 1 to dismiss Giardino and moved to bring back former City Manager Michael Mortell, who was fired by the previous commission 10 months ago. Commissioner Campbell Rich defended the move by referencing concerns over Florida's Amendment 3, which would significantly reduce property tax revenue for municipalities. Rich said the city needs the most experienced leadership possible to navigate that potential budget crisis.
+ Attorney Josh Deckard addressed the sentence outside the Stuart courthouse. "While there was no jail time imposed, my client is required to be on probation for a period of two years. The most important caveat that she has to follow is that she has no contact with any animals," Deckard said.
 
- Giobbi said over the phone she felt Giardino was very capable of running city operations and that the move was politically motivated and not necessary. She had argued that Reed should have been allowed to serve a full year as mayor. Reed posted on Facebook that he was disappointed his fellow commissioners felt it was necessary to remove him as mayor prior to the board's scheduled reorganization in December.
+ The judge also ordered Giustino to undergo a mental health evaluation and follow any recommended treatment. Violating probation could mean up to two years in county jail.
 
- Resident Catherine Collier Kyroulis expressed concern about the direction of the changes, saying going backwards is not the correct direction. Resident Andy Noble, who spoke during public comment at the meeting, said the outcome restored some faith that the democratic process works. The new interim city manager acknowledged the weight of the evening, calling it a night of change and a very unusual night.
+ Tish Ott adopted one of the rescued animals, a dog named Gracie Anne, and described the conditions at the property. "No air conditioning, bad ventilation, lots of fecal matter everywhere," Ott said. Ott has since nursed Gracie Anne back to health and documented the recovery on Facebook.
+
+ "When I saw her, she had such a look of hopelessness in her eyes, and the moment that I saw that, I just felt that I needed to step up," Ott said. "Now she sleeps in my bed, she's carried around in a snuggle bag 20 hours a day, and as you can see, she's got hope, and she's gorgeous."
+
+ Ott reflected on what the animals endured. "No animal deserves to ever, ever live in a situation like that," Ott said. All 108 animals were removed from the property during the rescue operation that led to the charges against Giustino.
+
+**2. Two St. Lucie County men arrested in Martin County burglaries, 13 cases closed**
+Source #3: Martin County Sheriff's Office detectives arrest 2 men in string of burglaries, recover stolen guns
+Teaser: Martin County detectives arrested two 19-year-old St. Lucie County men and recovered multiple stolen firearms after a string of burglaries in Martin County neighborhoods that began in early August.
+
+Stephen Ivan Morris, 19, and Shaun Alexander Bilbrey, 19, both of St. Lucie County, were arrested on multiple charges after Martin County Sheriff's Office detectives solved an ongoing burglary case involving the theft of multiple firearms from several neighborhoods, including gated communities. The burglaries began in early August and detectives identified commonalities that led them to Morris and Bilbrey.
+
+ With assistance from the St. Lucie County Sheriff's Office SWAT Team and the St. Lucie County Sheriff's Criminal Investigations Division, Martin County detectives served simultaneous search warrants early Wednesday morning at the homes of both men. Multiple stolen firearms were recovered and detectives were able to close at least 13 cases.
+
+ Morris and Bilbrey face multiple charges, including grand theft, armed burglary, larceny and traveling to commit burglary. They are being held at Martin County Jail.
 
 **Scorecard**
 
@@ -229,139 +317,38 @@ The Stuart City Commission voted Monday night to replace Mayor Sean Reed with Co
 
 ### Source pool
 
-1. Port St. Lucie High School senior, football player in ICE custody - WPBF
-2. Port St. Lucie approves higher annual trash fee for residents despite pickup woes - WPEC
-3. Man charged with manslaughter after BB gun shooting in Fort Pierce - WPBF
-4. NWS confirms EF0 tornado touched down Sunday in Port St. Lucie - WPBF
-5. EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures - WPTV
-6. EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures
-7. Tornado touches down in Port St. Lucie; damage survey happening on Monday - WPBF
-8. Port St. Lucie residents clean up after possible tornado or landspout hits neighborhood - WPTV
-9. Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - WPEC
+1. How the NWS issues tornado warnings following the Port St. Lucie tornado - WPBF
+2. Man charged with manslaughter after BB gun shooting in Fort Pierce - WPBF
+3. EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures - WPTV
 
 ### Variant A
 
 **Hero:** Port St. Lucie High School senior in ICE custody after traffic stop on way to school
-**Hero source choice:** Source #1: Port St. Lucie High School senior, football player in ICE custody - WPBF
-**Urgency:** 9
+**Urgency:** 2
 
-Port St. Lucie High School senior Emmanuel Nelson, an 18-year-old football player and wrestler, has been held in U.S. Immigration and Customs Enforcement custody since last Wednesday following a traffic stop on his way to school. Port St. Lucie police stopped Nelson around 8:30 a.m. on Wednesday for traveling 45 miles per hour in an active school zone with a 20-mile-per-hour speed limit.
-
- The officer ran Nelson's information through D.A.V.I.D., a Driver and Vehicle Information Database, which showed the student as a non-U.S. citizen. The officer contacted ICE, arrested Nelson and placed him on ICE detainer.
-
- Nelson is now at an ICE detention center in Broward County. An ICE spokesperson said Nelson legally entered the United States on Jan. 16, 2016, but failed to comply with the terms of his admission and is now in violation of immigration law. He will remain in ICE custody pending removal proceedings.
-
- A family spokesperson said Nelson entered the country under the Haitian Family Reunification Program and has been petitioned for by a U.S. citizen step-parent. The spokesperson said the appropriate documentation was submitted for permanent residency and the application is pending. During that time, Nelson was issued a valid employment authorization document and a Social Security number.
-
- He was enrolled in school and had a valid driver's license while waiting for the application to be approved. The spokesperson added that people are considered minors until the age of 21 for immigration purposes.
-
- The St. Lucie County School District released a statement saying St. Lucie Public Schools does not comment on immigration enforcement matters, as they fall under the authority of federal agencies and are outside the school district's jurisdiction. The Port St. Lucie High School community has shown an outpouring of support for Nelson on social media.
+Port St. Lucie High School senior Emmanuel Nelson, an 18-year-old football player and wrestler, has been held in U.S. Immigration and Customs Enforcement custody since last Wednesd
 
 **Additional stories**
 
-**1. Port St. Lucie raises annual trash fee to $482 despite ongoing pickup complaints**
-Source #2: Port St. Lucie approves higher annual trash fee for residents despite pickup woes - WPEC
-Teaser: The Port St. Lucie City Council approved a $14.83 increase to the annual solid waste assessment Monday night, raising the fee from $467.33 to $482.16 per dwelling unit starting in October.
-
-The Port St. Lucie City Council approved Resolution 26-R70 Monday night, raising the annual solid waste assessment by $14.83 per dwelling unit, from $467.33 to $482.16 for the fiscal year beginning in October. The council approved the item with no public comment or discussion. The assessment pays for garbage collection, disposal services, facilities and related solid waste programs and is collected through property tax bills.
-
- The increase amounts to about $1.24 more per month for residential properties. City officials said the increase is required under Port St. Lucie's solid waste franchise agreement with FCC Environmental Service and reflects rising costs for labor, equipment, vehicle maintenance and fuel. The new $482.16 assessment remains below the city's previously established maximum rate of $513.70.
-
- The increase comes as Port St. Lucie's trash service remains a major issue for residents. The city previously reached a $24 million settlement with Waste Pro over poor service. Voters are expected to decide in November whether to bring back twice-weekly garbage pickup.
-
-**2. Fort Pierce man charged with manslaughter in fatal BB gun shooting near elementary school**
-Source #3: Man charged with manslaughter after BB gun shooting in Fort Pierce - WPBF
-Teaser: A 36-year-old Fort Pierce man faces manslaughter charges after police say he fatally shot a 34-year-old man with a BB gun during a group outing near an elementary school Saturday.
-
-Jabari Cowart, 36, has been charged with manslaughter after Fort Pierce police say he fatally shot a 34-year-old man with a BB gun on Saturday in the 2900 block of Avenue G near an elementary school. Police said a group of men in their 30s had been shooting a BB gun at trees when Cowart asked to use the weapon and later pointed it at one of the men before pulling the trigger. The victim fell to the ground, and officers were called to the scene.
-
-Ken Noble, marketing manager at The Tactical Store in Fort Pierce, said BB guns can be extremely dangerous. "It's a piece of metal moving really, really fast," Noble said. "Anything with a projectile can be a weapon. As I stated before, anything's moving fast enough, it can penetrate skin, hit vital spots, and it can be very lethal."
-
-Noble said people should never point BB guns or any firearm at anyone. "As long as you follow safety procedures and use a little bit of sense, you ain't got anything to worry about," he said. Fort Pierce police said Cowart is being held at the St. Lucie County jail.
-
-**3. Port St. Lucie residents clean up debris, damaged structures after Sunday tornado**
-Source #5: EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures - WPTV
-Teaser: Port St. Lucie residents spent Monday cleaning up after an EF0 tornado tore through the area Sunday night with 65 to 75 mph winds, leaving behind damaged structures, debris-filled pools and downed foliage.
-
-Port St. Lucie residents spent Monday cleaning up after a storm tore through the area Sunday night, leaving behind damaged structures, debris-filled pools and downed foliage. The National Weather Service determined it was an EF0 tornado, with 65 to 75 mph winds. Aron Christiansen spent the morning pulling debris out of his pool after already retrieving furniture from the bottom.
-
- Video from a neighbor's camera captured the moment his patio broke apart during the storm. Half of the patio is now out on the curb, set to be salvaged for recycling. Christiansen said he looked out the windows and saw debris flying, thinking it was birds at first. He had about 10 seconds before it hit his house.
-
- Janelle Pierre-Louis said she was surprised by the amount of damage to her backyard foliage after dealing with damage at the front of her house first. Her front door caved in and dirt came through the cracks. Around the corner, Mitch Brewer had debris piled out front, most of it from a shed he had tied down.
-
- He said it looked like it caught some heavy updrafts and left. Brewer said he had been thinking about demolishing the old shed at some point, but Mother Nature beat him to it.
-
- Florida sees about 65 to 70 tornadoes a year, according to the Florida Climate Center, and has a higher frequency per 10,000 square miles than any other state, including Oklahoma. Marlene Torres had just come back from Jensen Beach celebrating her birthday Sunday night before returning home to find the storm had moved through her neighborhood. Her home was not damaged, but she needed an electrician to fix her meter. Torres said she is the only one with no electricity because her power was more damaged than other folks in the area.
-
-### Variant B
-
-**Hero:** Port St. Lucie High School senior in ICE custody after traffic stop on way to school
-**Hero source choice:** Source #1: Port St. Lucie High School senior, football player in ICE custody - WPBF
-**Urgency:** 9
-
-Port St. Lucie High School senior Emmanuel Nelson, an 18-year-old football player and wrestler, has been held in U.S. Immigration and Customs Enforcement custody since last Wednesday following a traffic stop on his way to school. Port St. Lucie police stopped Nelson around 8:30 a.m. on Wednesday for traveling 45 miles per hour in an active school zone with a 20-mile-per-hour speed limit.
-
- The officer ran Nelson's information through D.A.V.I.D., a Driver and Vehicle Information Database, which showed the student as a non-U.S. citizen. The officer contacted ICE, arrested Nelson and placed him on ICE detainer.
-
- Nelson is now at an ICE detention center in Broward County. An ICE spokesperson said Nelson legally entered the United States on Jan. 16, 2016, but failed to comply with the terms of his admission and is now in violation of immigration law. He will remain in ICE custody pending removal proceedings.
-
- A family spokesperson said Nelson entered the country under the Haitian Family Reunification Program and has been petitioned for by a U.S. citizen step-parent. The spokesperson said the appropriate documentation was submitted for permanent residency and the application is pending. During that time, Nelson was issued a valid employment authorization document and a Social Security number.
-
- He was enrolled in school and had a valid driver's license while waiting for the application to be approved. The spokesperson added that people are considered minors until the age of 21 for immigration purposes.
-
- The St. Lucie County School District released a statement saying St. Lucie Public Schools does not comment on immigration enforcement matters, as they fall under the authority of federal agencies and are outside the school district's jurisdiction. The Port St. Lucie High School community has shown an outpouring of support for Nelson on social media.
-
-**Additional stories**
-
-**1. Port St. Lucie raises annual trash fee to $482 despite ongoing pickup complaints**
-Source #2: Port St. Lucie approves higher annual trash fee for residents despite pickup woes - WPEC
-Teaser: The Port St. Lucie City Council approved a $14.83 increase to the annual solid waste assessment Monday night, raising the fee from $467.33 to $482.16 per dwelling unit starting in October.
-
-The Port St. Lucie City Council approved Resolution 26-R70 Monday night, raising the annual solid waste assessment by $14.83 per dwelling unit, from $467.33 to $482.16 for the fiscal year beginning in October. The council approved the item with no public comment or discussion. The assessment pays for garbage collection, disposal services, facilities and related solid waste programs and is collected through property tax bills.
-
- The increase amounts to about $1.24 more per month for residential properties. City officials said the increase is required under Port St. Lucie's solid waste franchise agreement with FCC Environmental Service and reflects rising costs for labor, equipment, vehicle maintenance and fuel. The new $482.16 assessment remains below the city's previously established maximum rate of $513.70.
-
- The increase comes as Port St. Lucie's trash service remains a major issue for residents. The city previously reached a $24 million settlement with Waste Pro over poor service. Voters are expected to decide in November whether to bring back twice-weekly garbage pickup.
-
-**2. Fort Pierce man charged with manslaughter after BB gun shooting kills 34-year-old**
-Source #3: Man charged with manslaughter after BB gun shooting in Fort Pierce - WPBF
-Teaser: A 36-year-old man faces manslaughter charges after Fort Pierce police say he fatally shot a 34-year-old man with a BB gun Saturday in the 2900 block of Avenue G.
-
-Jabari Cowart, 36, has been charged with manslaughter after Fort Pierce police say he fatally shot a 34-year-old man with a BB gun on Saturday near an elementary school. Police said the incident happened in the 2900 block of Avenue G, where a group of men in their 30s had been shooting a BB gun at trees. Investigators believe Cowart asked to use the BB gun and later pointed it at one of the men before pulling the trigger. The victim fell to the ground, and officers were called to the scene.
-
-Ken Noble, marketing manager at The Tactical Store in Fort Pierce, spoke about the dangers of BB guns. He explained that BB guns, while often considered less harmful than traditional firearms, can still cause serious injury or death. Noble said anything with a projectile can be a weapon and that anything moving fast enough can penetrate skin, hit vital spots, and can be very lethal. He also shared safety advice for handling firearms, including BB guns, saying people should not point anything at anyone. Fort Pierce police said Cowart is being held at the St. Lucie County jail.
-
-**3. Port St. Lucie residents clean up debris, damaged structures after Sunday tornado**
-Source #5: EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures - WPTV
-Teaser: Port St. Lucie residents spent Monday cleaning up after an EF0 tornado tore through the area Sunday night with 65 to 75 mph winds, leaving behind damaged structures, debris-filled pools and downed foliage.
-
-Port St. Lucie residents spent Monday cleaning up after a storm tore through the area Sunday night, leaving behind damaged structures, debris-filled pools and downed foliage. The National Weather Service determined it was an EF0 tornado, with 65 to 75 mph winds. Aron Christiansen spent the morning pulling debris out of his pool after already retrieving furniture from the bottom.
-
- Video from a neighbor's camera captured the moment his patio broke apart during the storm. Half of the patio is now out on the curb, set to be salvaged for recycling. Christiansen said he looked out the windows and saw debris flying, thinking it was birds at first. He had about 10 seconds before it hit his house.
-
- Janelle Pierre-Louis said she was surprised by the amount of damage to her backyard foliage after dealing with damage at the front of her house first. Her front door caved in and dirt came through the cracks. Around the corner, Mitch Brewer had debris piled out front, most of it from a shed he had tied down.
-
- He said it looked like it caught some heavy updrafts and left. Brewer said he had been thinking about demolishing the old shed at some point, but Mother Nature beat him to it.
-
- Florida sees about 65 to 70 tornadoes a year, according to the Florida Climate Center, and has a higher frequency per 10,000 square miles than any other state, including Oklahoma. Marlene Torres had just come back from Jensen Beach celebrating her birthday Sunday night before returning home to find the storm had moved through her neighborhood. Her home was not damaged, but she needed an electrician to fix her meter. Torres said she is the only one with no electricity because her power was more damaged than other folks in the area.
-
-**4. Port St. Lucie resident takes cover as possible tornado hits neighborhood Sunday**
-Source #8: Port St. Lucie residents clean up after possible tornado or landspout hits neighborhood - WPTV
-Teaser: Aaron Christiansen was home around 6 p.m. Sunday when he noticed strange weather through his window near Southbend Boulevard and Southeast Navy Avenue in Port St. Lucie and immediately took cover.
-
-Port St. Lucie residents are cleaning up after a possible tornado or landspout hit their neighborhood near Southbend Boulevard and Southeast Navy Avenue on Sunday. Aaron Christiansen said he was home around 6 p.m. when he noticed something strange through his window. He immediately took cover, and moments later found significant damage in his backyard.
-
- Christiansen said he saw dark clouds and a bunch of white objects that he thought looked like birds. He got closer and realized it was debris. He tried to hustle his dogs into his bedroom so they could all take cover. He had about 10 seconds to react before the storm hit.
-
- His patio furniture was submerged in his pool, his pool fence was blown toward his home, debris was scattered across the ground and plants were blown away. Christiansen, originally from Minnesota, said his experience with tornado-like weather helped him know what precautions to take. He and his family and pets were not injured.
-
- Christiansen said he received the emergency alert after the storm had already hit. He said he plans to begin cleanup efforts Monday and will also have his roof inspected.
-
-**5. Fort Pierce man identified as Jabari Cowart in fatal BB gun shooting on Avenue G**
-Source #3: Man charged with manslaughter after BB gun shooting in Fort Pierce - WPBF
+**1. Fort Pierce man identified as Jabari Cowart in fatal BB gun shooting on Avenue G**
+Source #2: Man charged with manslaughter after BB gun shooting in Fort Pierce - WPBF
 Teaser: Fort Pierce police have identified 36-year-old Jabari Cowart as the suspect charged with manslaughter after a 34-year-old man died Saturday from a BB gun shooting in the 2900 block of Avenue G.
 
 Fort Pierce police have identified 36-year-old Jabari Cowart as the suspect charged with manslaughter after a 34-year-old man died Saturday from a BB gun shooting in the 2900 block of Avenue G.
+
+### Variant B
+
+**Hero:** NWS Melbourne tornado warning for Port St. Lucie came after twister dissipated Sunday due to shallow circulation
+**Hero source choice:** Source #1: How the NWS issues tornado warnings following the Port St. Lucie tornado - WPBF
+**Urgency:** 7
+
+The National Weather Service in Melbourne issued a tornado warning Sunday evening after an EF-0 tornado in Port St. Lucie had already dissipated, leaving residents questioning why the alert came too late. The tornado featured very shallow circulation that was not picked up well by radar. Reports of the funnel cloud prompted the warning for the twister that became a waterspout at a point.
+
+Will Ulrich, a meteorologist with NWS Melbourne, said Sunday's event was unique because it stayed on the ground for 10 to 15 minutes, which is not typical during summer months. The tornado formed during a typical summer afternoon thunderstorm and produced winds of 60 to 70 mph. Ulrich said the event serves as a good reminder that Mother Nature will always throw curveballs regardless of the time of year.
+
+The National Weather Service issues a tornado warning once meteorologists are able to detect a tornado. Tornadoes are not uncommon in South Florida, but depending on the time of year they can form quickly without much time for notice.
+
+The National Weather Service says residents should have multiple ways to receive warnings to keep themselves and their loved ones safe. WPBF 25 News will be on-air and streaming live online when a tornado warning is issued in the area.
 
 **Scorecard**
 
