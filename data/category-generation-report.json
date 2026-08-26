@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-08-26T01:46:05Z",
+  "generated_at": "2026-08-26T10:47:55Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,46 +15,51 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 5,
-      "generated_live": 2,
-      "generation_failed_archive_recovery": 1,
+      "category_eligibility_archive_recovery": 4,
+      "generated_live": 4,
       "quality_gate_archive_recovery": 1
     },
     "failures": {
-      "contextless_update_lead": 1,
-      "no_category_eligible_sources": 5,
+      "no_category_eligible_sources": 4,
       "publication_quality_rejected": 1
     },
     "model_attempt_count": 5,
-    "model_elapsed_seconds": 44.606,
-    "archive_recovery_requested_count": 7,
+    "model_elapsed_seconds": 89.763,
+    "archive_recovery_requested_count": 5,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 2,
+    "contextual_update_lead_rejection_count": 1,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 2,
-    "published_story_duplicate_suppression_count": 54,
+    "category_eligibility_rejection_count": 3,
+    "published_story_duplicate_suppression_count": 47,
     "story_aware_update_context_count": 2,
-    "material_update_promotion_evaluation_count": 14,
+    "material_update_promotion_evaluation_count": 18,
     "material_update_promotion_count": 1,
-    "material_update_promotion_cache_hit_count": 8,
-    "material_update_promotion_model_call_count": 6
+    "material_update_promotion_cache_hit_count": 10,
+    "material_update_promotion_model_call_count": 8
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 3,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 22,
+      "publishable_source_count": 8,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Local Government category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 4.445,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 4.445,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -63,21 +68,44 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 10,
-      "published_story_duplicate_suppressions": [
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 2,
+      "category_eligibility_rejections": [
         {
+          "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
-          "source_headline": "Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/stuart-city-commission-appoints-new-mayor-fires-city-manager-in-sweeping-overnight-changes",
-          "editorial_story_id": "story_005956",
-          "canonical_slug": "2026-08-26-stuart-city-commission-ousts-mayor-fires-city-manager-in-sweeping-leadership-sha",
-          "canonical_headline": "Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrest"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Vero Beach man crashes while fleeing deputies, K9 finds him hiding under brush - cw34.com",
+          "source_url": "https://cw34.com/news/local/vero-beach-man-crashes-while-fleeing-deputies-k9-finds-him-hiding-under-brush-vero-beach-indian-river-county-indian-river-county-sheriff-christopher-john-baptist-fleeing-deputies-fleeing-and-eluding-high-speed-chase-police-pursuit-deputy-pursuit"
         },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_government_action",
+          "positive_signals": [],
+          "competing_signals": [
+            "crime_incident:arrested"
+          ],
+          "local_nexus_signals": [],
+          "headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - cw34.com",
+          "source_url": "https://cw34.com/news/local/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money?teaserSource=trending"
+        }
+      ],
+      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppressions": [
         {
           "category_key": "local_gov",
           "source_headline": "Port St. Lucie High School senior, football player in ICE custody - WPBF",
@@ -85,6 +113,26 @@
           "editorial_story_id": "story_005957",
           "canonical_slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
           "canonical_headline": "Port St. Lucie High School senior in ICE custody after traffic stop on way to school",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "All 36 Border Collies surrendered after Palm City case; adoption applications open Sept. 1 - cw34.com",
+          "source_url": "https://cw34.com/news/local/palm-city-florida-border-collies-hoarding-case-shelter-groomed-recovery-humane-society-treasure-coast-adoptions-begin-september-1-paige-odonnell-animal-cruelty-medical-testing-behavioral-evaluations-spayed-neutered-vaccinated",
+          "editorial_story_id": "story_003665",
+          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
+          "canonical_headline": "All 36 Border Collies surrendered in Palm City cruelty case; adoptions open Sept. 1",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/stuart-city-commission-appoints-new-mayor-fires-city-manager-in-sweeping-overnight-changes",
+          "editorial_story_id": "story_005956",
+          "canonical_slug": "2026-08-26-stuart-city-commission-ousts-mayor-fires-city-manager-in-sweeping-leadership-sha",
+          "canonical_headline": "Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -100,21 +148,21 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Country music legend Dolly Parton dead at 80 - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQUkNzUmJGTEJmS0FuVTMzd0ZiOVEwV1ltZVp0eUtBXzgzT0lOUnk0cDRiaVFlQThEN0FkN0RiMmFmNTluaUgtdFh0XzdpUXhNR0FsRDB3aFhEVllXUk1GYjNsMERhTVIyaGxaVnFOdm9YT1BYNHZha0dCWWgxYWdhRzJRQ1ZGdHhiZFJvYnBNMVVrR3fSAZMBQVVfeXFMUFJDc1JiRkxCZktBblUzM3dGYjlRMFdZbWVadHlLQV84M09JTlJ5NHA0YmlRZUE4RDdBZDdEYjJhZjU5bmlILXRYdF83aVF4TUdBbEQwd2hYRFZZV1JNRmIzbDBEYU1SMmhsWlZxTnZvWE9QWDR2YWtHQlloMWFnYUcyUUNWRnR4YmRSb2JwTTFVa0d3",
-          "editorial_story_id": "story_005154",
-          "canonical_slug": "2026-08-26-martin-county-man-crashes-suv-into-church-after-fleeing-deputies-faces-dui-charg",
-          "canonical_headline": "Martin County man crashes SUV into church after fleeing deputies, faces DUI charges",
-          "basis": "authorized_canonical_identity_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
           "source_headline": "Port St. Lucie approves higher annual trash fee for residents despite pickup woes - WPEC",
           "source_url": "https://cbs12.com/newsletter-daily/port-st-lucie-approves-higher-annual-trash-fee-for-residents-despite-pickup-woes-port-st-lucie-trash-assessment-solid-waste-assessment-trash-fee-garbage-collection-garbage-service-trash-pickup-port-st-lucie-city-council-city-council-resolution",
           "editorial_story_id": "story_005863",
           "canonical_slug": "2026-08-26-port-st-lucie-raises-annual-trash-fee-to-482-despite-ongoing-pickup-complaints",
           "canonical_headline": "Port St. Lucie raises annual trash fee to $482 despite ongoing pickup complaints",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Port St. Lucie to consider $14.83 annual trash fee increase amid lingering pickup concerns - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/port-st-lucie-to-consider-1483-annual-trash-fee-increase-amid-lingering-pickup-concerns-fcc-environmental-service-october-1-scott-samples-inflation-costs-labor-equipment-maintenance",
+          "editorial_story_id": "story_005623",
+          "canonical_slug": "2026-08-26-port-st-lucie-to-consider-1483-annual-trash-fee-increase",
+          "canonical_headline": "Port St. Lucie to consider $14.83 annual trash fee increase",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -127,76 +175,81 @@
           "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - WPEC",
-          "source_url": "https://cbs12.com/news/crime/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
-          "editorial_story_id": "story_005726",
-          "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
-          "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "SLCSO asks public for tips on missing Fort Pierce woman last seen Aug. 14 - WPEC",
-          "source_url": "http://cbs12.com/news/florida/slcso-asks-public-for-tips-on-missing-fort-pierce-woman-last-seen-aug-14-st-lucie-county-sheriffs-office-slcso-racqueal-annalessa-martin",
-          "editorial_story_id": "story_001215",
-          "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
-          "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Martin County schools issue warning about fake squishy toys - WPBF",
-          "source_url": "https://www.wpbf.com/article/martin-county-schools-issue-warning-about-fake-squishy-toys/73514336",
-          "editorial_story_id": "story_005703",
-          "canonical_slug": "2026-08-24-martin-county-schools-ban-fake-squishy-toys-after-federal-safety-alert",
-          "canonical_headline": "Martin County schools ban fake squishy toys after federal safety alert",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-          "editorial_story_id": "story_005664",
-          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
-          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 2,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_evaluation_count": 5,
+      "material_update_promotion_count": 1,
+      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_model_call_count": 3,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "local_gov",
-          "source_headline": "Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/stuart-city-commission-appoints-new-mayor-fires-city-manager-in-sweeping-overnight-changes",
-          "canonical_slug": "2026-08-26-stuart-city-commission-ousts-mayor-fires-city-manager-in-sweeping-leadership-sha",
-          "canonical_headline": "Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "local_gov",
           "source_headline": "Port St. Lucie High School senior, football player in ICE custody - WPBF",
           "source_url": "https://www.wpbf.com/article/port-st-lucie-high-school-student-ice-custody-emmanuel/73525281",
           "canonical_slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
           "canonical_headline": "Port St. Lucie High School senior in ICE custody after traffic stop on way to school",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 1.0,
+          "shared_anchors": [
+            "Emmanuel Nelson, 18-year-old Port St. Lucie High School senior",
+            "ICE custody following traffic stop on way to school",
+            "Stopped Wednesday around 8:30 a.m. for speeding in school zone",
+            "Football player and wrestler",
+            "Detention center in Broward County",
+            "Identical source URL: https://www.wpbf.com/article/port-st-lucie-high-school-student-ice-custody-emmanuel/73525281"
+          ],
+          "novel_facts": [],
+          "reason": "This is exactly the same article from the same source URL covering the identical incident. The incoming article and the canonical candidate share the same source URL, the same named individual (Emmanuel Nelson), the same traffic stop details (Wednesday 8:30 a.m., speeding in school zone), and the same custody situation. The incoming article contains no material new updates—it provides the same information about his immigration status, the traffic stop circumstances, his activities at school, and community support. The retrieval evidence confirms this is a 'persistent_story_id_match' with 'exact_source_and_persistent_story_skip' as the identity basis.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "All 36 Border Collies surrendered after Palm City case; adoption applications open Sept. 1 - cw34.com",
+          "source_url": "https://cw34.com/news/local/palm-city-florida-border-collies-hoarding-case-shelter-groomed-recovery-humane-society-treasure-coast-adoptions-begin-september-1-paige-odonnell-animal-cruelty-medical-testing-behavioral-evaluations-spayed-neutered-vaccinated",
+          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
+          "canonical_headline": "All 36 Border Collies surrendered in Palm City cruelty case; adoptions open Sept. 1",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "36 Border Collies from Palm City home",
+            "Southwest Alligator Street location",
+            "Paige O'Donnell, 62, arrested",
+            "Legal surrender to Humane Society of the Treasure Coast",
+            "Adoption applications opening Sept. 1",
+            "Dogs rescued Aug. 10",
+            "72 charges (36 felony, 36 misdemeanor)",
+            "$270,000 bond"
+          ],
+          "novel_facts": [],
+          "reason": "Both articles cover the identical event: the surrender of 36 Border Collies from the same Palm City address, same defendant, same rescue date, same adoption timeline. The incoming article contains no material new update beyond the existing canonical - both report the surrender is complete, adoptions opening Sept. 1, same medical conditions, same quotes from shelter staff. The incoming article simply provides more detail and color quotes about grooming progress and emotional reactions, but no new substantive developments like additional charges, court proceedings, medical findings, or policy changes that would constitute a material update.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/stuart-city-commission-appoints-new-mayor-fires-city-manager-in-sweeping-overnight-changes",
+          "canonical_slug": "2026-08-26-stuart-city-commission-ousts-mayor-fires-city-manager-in-sweeping-leadership-sha",
+          "canonical_headline": "Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -243,21 +296,6 @@
         },
         {
           "category_key": "local_gov",
-          "source_headline": "Country music legend Dolly Parton dead at 80 - WFLX",
-          "source_url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQUkNzUmJGTEJmS0FuVTMzd0ZiOVEwV1ltZVp0eUtBXzgzT0lOUnk0cDRiaVFlQThEN0FkN0RiMmFmNTluaUgtdFh0XzdpUXhNR0FsRDB3aFhEVllXUk1GYjNsMERhTVIyaGxaVnFOdm9YT1BYNHZha0dCWWgxYWdhRzJRQ1ZGdHhiZFJvYnBNMVVrR3fSAZMBQVVfeXFMUFJDc1JiRkxCZktBblUzM3dGYjlRMFdZbWVadHlLQV84M09JTlJ5NHA0YmlRZUE4RDdBZDdEYjJhZjU5bmlILXRYdF83aVF4TUdBbEQwd2hYRFZZV1JNRmIzbDBEYU1SMmhsWlZxTnZvWE9QWDR2YWtHQlloMWFnYUcyUUNWRnR4YmRSb2JwTTFVa0d3",
-          "canonical_slug": "2026-08-26-martin-county-man-crashes-suv-into-church-after-fleeing-deputies-faces-dui-charg",
-          "canonical_headline": "Martin County man crashes SUV into church after fleeing deputies, faces DUI charges",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:exact_structured_incident_key",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
           "source_headline": "Port St. Lucie approves higher annual trash fee for residents despite pickup woes - WPEC",
           "source_url": "https://cbs12.com/newsletter-daily/port-st-lucie-approves-higher-annual-trash-fee-for-residents-despite-pickup-woes-port-st-lucie-trash-assessment-solid-waste-assessment-trash-fee-garbage-collection-garbage-service-trash-pickup-port-st-lucie-city-council-city-council-resolution",
           "canonical_slug": "2026-08-26-port-st-lucie-raises-annual-trash-fee-to-482-despite-ongoing-pickup-complaints",
@@ -270,6 +308,55 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Port St. Lucie to consider $14.83 annual trash fee increase amid lingering pickup concerns - cw34.com",
+          "source_url": "https://cw34.com/newsletter-daily/port-st-lucie-to-consider-1483-annual-trash-fee-increase-amid-lingering-pickup-concerns-fcc-environmental-service-october-1-scott-samples-inflation-costs-labor-equipment-maintenance",
+          "canonical_slug": "2026-08-26-port-st-lucie-to-consider-1483-annual-trash-fee-increase",
+          "canonical_headline": "Port St. Lucie to consider $14.83 annual trash fee increase",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - cw34.com",
+          "source_url": "https://cw34.com/news/local/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money?teaserSource=trending",
+          "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
+          "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
+          "canonical_is_custom": false,
+          "identity_basis": "same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": true,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "update_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "update_existing_canonical",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Two counterfeit $50 bills used for food delivery payment",
+            "$83.90 food order amount",
+            "Fort Pierce/St. Lucie County location",
+            "August 22 incident date",
+            "St. Lucie County Sheriff's Office",
+            "Residence on Miramar Avenue",
+            "19-year-old woman arrested"
+          ],
+          "novel_facts": [
+            "Suspect identified as Adrianna Marie Sheppard",
+            "Arrest occurred on Monday following August 22 incident",
+            "Specific charges: fraud utter bank bill, possession of counterfeited bank bill, and larceny"
+          ],
+          "reason": "This is clearly the same incident - identical dollar amounts, location, agency, date, and fact pattern. The incoming article adds material updates: the suspect's full name (Adrianna Marie Sheppard), the specific date of arrest (Monday following the August 22 incident), and the formal charges filed. The victim identification and formal charging constitute material updates that readers need to know, but this is not independently newsworthy enough to warrant a separate story - it's a standard arrest follow-up that should update the existing canonical.",
+          "validation_errors": []
         },
         {
           "category_key": "local_gov",
@@ -291,86 +378,31 @@
           "shared_anchors": [],
           "novel_facts": [
             "Structure fire on East Erie Drive in Fort Pierce on Sunday",
-            "Fire threatened mobile homes but was contained",
-            "Fire Marshal investigation underway"
+            "Fire threatened mobile homes in St. Lucie County",
+            "Fire was contained and prevented from spreading",
+            "Fire Marshal's Office investigating cause"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
             "known_canonical_identity_conflict"
           ]
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - WPEC",
-          "source_url": "https://cbs12.com/news/crime/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
-          "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
-          "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "SLCSO asks public for tips on missing Fort Pierce woman last seen Aug. 14 - WPEC",
-          "source_url": "http://cbs12.com/news/florida/slcso-asks-public-for-tips-on-missing-fort-pierce-woman-last-seen-aug-14-st-lucie-county-sheriffs-office-slcso-racqueal-annalessa-martin",
-          "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
-          "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Martin County schools issue warning about fake squishy toys - WPBF",
-          "source_url": "https://www.wpbf.com/article/martin-county-schools-issue-warning-about-fake-squishy-toys/73514336",
-          "canonical_slug": "2026-08-24-martin-county-schools-ban-fake-squishy-toys-after-federal-safety-alert",
-          "canonical_headline": "Martin County schools ban fake squishy toys after federal safety alert",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
-          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 21.403
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Port St. Lucie approves $14.83 annual trash fee increase despite ongoing service complaints",
+      "generated_card_count": 0,
+      "elapsed_seconds": 55.908
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 5,
-      "selected_source_count": 2,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 7,
+      "selected_source_count": 3,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -378,11 +410,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 9.451,
+          "elapsed_seconds": 14.677,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 9.451,
+      "model_elapsed_seconds": 14.677,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -393,21 +425,11 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 9,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "crime",
-          "source_headline": "Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/stuart-city-commission-appoints-new-mayor-fires-city-manager-in-sweeping-overnight-changes",
-          "editorial_story_id": "story_005956",
-          "canonical_slug": "2026-08-26-stuart-city-commission-ousts-mayor-fires-city-manager-in-sweeping-leadership-sha",
-          "canonical_headline": "Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "crime",
           "source_headline": "Martin County man faces DUI, fleeing charges after SUV slams into church - WPEC",
@@ -415,6 +437,16 @@
           "editorial_story_id": "story_005154",
           "canonical_slug": "2026-08-26-martin-county-man-crashes-suv-into-church-after-fleeing-deputies-faces-dui-charg",
           "canonical_headline": "Martin County man crashes SUV into church after fleeing deputies, faces DUI charges",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/stuart-city-commission-appoints-new-mayor-fires-city-manager-in-sweeping-overnight-changes",
+          "editorial_story_id": "story_005956",
+          "canonical_slug": "2026-08-26-stuart-city-commission-ousts-mayor-fires-city-manager-in-sweeping-leadership-sha",
+          "canonical_headline": "Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -430,32 +462,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Martin County animal hoarder pleads no contest to animal cruelty - Treasure Coast News",
-          "source_url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxNd0lwZmpQeFBVQUJtcm1pNXVDUndRQ0VlQXRaUWdWc0JER3RvZDZySC1hUGNIREVUdW1DY2VWNDNwRFNISVpDODZIOEU4cDRDTzJTcTktQ2lpZWV1QmdlZFRLOThvUnBRU1VFak9hY2VuUnoxalZnYzhtaHZCTUpzcmlwTGRTelIyNnlJYzltUTdmQnlRckg3SW9UWVo3QXBETU52Q2x1M2hHS0N2V3ZwdnJxTnFXMmt6eEdYd2VyYUdHeExQYzJMb3dVUlQ3NUd5QWQ4TDV1R2tyMEdFbGRKd0Jkai1fWVZsUS1jUXFKZGF5QQ",
-          "editorial_story_id": "story_003665",
-          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-          "canonical_headline": "All 36 Border Collies surrendered in Palm City cruelty case; adoptions open Sept. 1",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "Vero Beach man crashes while fleeing deputies, K9 finds him hiding under brush - WPEC",
           "source_url": "https://cbs12.com/news/local/vero-beach-man-crashes-while-fleeing-deputies-k9-finds-him-hiding-under-brush-vero-beach-indian-river-county-indian-river-county-sheriff-christopher-john-baptist-fleeing-deputies-fleeing-and-eluding-high-speed-chase-police-pursuit-deputy-pursuit",
           "editorial_story_id": "story_005892",
           "canonical_slug": "2026-08-25-vero-beach-man-crashes-while-fleeing-deputies-k9-finds-him-hiding-under-brush",
           "canonical_headline": "Vero Beach man crashes while fleeing deputies, K9 finds him hiding under brush",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
-          "source_url": "https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
-          "editorial_story_id": "story_001215",
-          "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
-          "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
-          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -491,32 +503,53 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 3,
-      "material_update_promotion_count": 1,
-      "material_update_promotion_cache_hit_count": 2,
+      "material_update_promotion_evaluation_count": 2,
+      "material_update_promotion_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "crime",
-          "source_headline": "Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/stuart-city-commission-appoints-new-mayor-fires-city-manager-in-sweeping-overnight-changes",
-          "canonical_slug": "2026-08-26-stuart-city-commission-ousts-mayor-fires-city-manager-in-sweeping-leadership-sha",
-          "canonical_headline": "Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "crime",
           "source_headline": "Martin County man faces DUI, fleeing charges after SUV slams into church - WPEC",
           "source_url": "https://cbs12.com/news/crime/martin-county-man-faces-dui-fleeing-charges-after-suv-slams-into-church-florida-crime-florida-news-local-crime-local-news-suv-slams-into-church-ac-unit-broken",
           "canonical_slug": "2026-08-26-martin-county-man-crashes-suv-into-church-after-fleeing-deputies-faces-dui-charg",
           "canonical_headline": "Martin County man crashes SUV into church after fleeing deputies, faces DUI charges",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 1.0,
+          "shared_anchors": [
+            "Martin County SUV crash into church",
+            "SW Washington Avenue location",
+            "Martin County Sheriff's Office involved",
+            "Driver fleeing from deputies",
+            "DUI charges",
+            "Geremias Pascual, 28, named suspect",
+            "Same source URL (cbs12.com)"
+          ],
+          "novel_facts": [
+            "PIT maneuver attempted",
+            "Crashed into tree and power pole in addition to church",
+            "AC unit destroyed",
+            "Thousands in damages specified",
+            "Four counts of criminal mischief/damage to property detailed"
+          ],
+          "reason": "This is clearly the same incident - identical source URL, same suspect (Geremias Pascual, 28), same location (SW Washington Avenue, Martin County), same church crash, same DUI/fleeing charges. The incoming article adds scene details (PIT maneuver, tree/pole damage, AC unit, damage amount) but these are routine elaborations, not material updates like an arrest after a search, new charges after investigation, or victim identification. The additional details are color/mechanics that should update the existing canonical rather than create a new URL.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/stuart-city-commission-appoints-new-mayor-fires-city-manager-in-sweeping-overnight-changes",
+          "canonical_slug": "2026-08-26-stuart-city-commission-ousts-mayor-fires-city-manager-in-sweeping-leadership-sha",
+          "canonical_headline": "Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -563,21 +596,6 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Martin County animal hoarder pleads no contest to animal cruelty - Treasure Coast News",
-          "source_url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxNd0lwZmpQeFBVQUJtcm1pNXVDUndRQ0VlQXRaUWdWc0JER3RvZDZySC1hUGNIREVUdW1DY2VWNDNwRFNISVpDODZIOEU4cDRDTzJTcTktQ2lpZWV1QmdlZFRLOThvUnBRU1VFak9hY2VuUnoxalZnYzhtaHZCTUpzcmlwTGRTelIyNnlJYzltUTdmQnlRckg3SW9UWVo3QXBETU52Q2x1M2hHS0N2V3ZwdnJxTnFXMmt6eEdYd2VyYUdHeExQYzJMb3dVUlQ3NUd5QWQ4TDV1R2tyMEdFbGRKd0Jkai1fWVZsUS1jUXFKZGF5QQ",
-          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-          "canonical_headline": "All 36 Border Collies surrendered in Palm City cruelty case; adoptions open Sept. 1",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "insufficient_source_depth",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "Vero Beach man crashes while fleeing deputies, K9 finds him hiding under brush - WPEC",
           "source_url": "https://cbs12.com/news/local/vero-beach-man-crashes-while-fleeing-deputies-k9-finds-him-hiding-under-brush-vero-beach-indian-river-county-indian-river-county-sheriff-christopher-john-baptist-fleeing-deputies-fleeing-and-eluding-high-speed-chase-police-pursuit-deputy-pursuit",
           "canonical_slug": "2026-08-25-vero-beach-man-crashes-while-fleeing-deputies-k9-finds-him-hiding-under-brush",
@@ -590,69 +608,6 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - cw34.com",
-          "source_url": "https://cw34.com/news/local/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money?teaserSource=trending",
-          "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
-          "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
-          "canonical_is_custom": false,
-          "identity_basis": "same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": true,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "update_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "update_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Two counterfeit $50 bills used for food delivery payment",
-            "$83.90 food order amount",
-            "Fort Pierce/St. Lucie County location",
-            "August 22 incident date",
-            "St. Lucie County Sheriff's Office",
-            "Residence on Miramar Avenue",
-            "19-year-old woman arrested"
-          ],
-          "novel_facts": [
-            "Suspect identified as Adrianna Marie Sheppard",
-            "Arrest occurred on Monday following August 22 incident",
-            "Specific charges: fraud utter bank bill, possession of counterfeited bank bill, and larceny"
-          ],
-          "reason": "This is clearly the same incident - identical dollar amounts, location, agency, date, and fact pattern. The incoming article adds material updates: the suspect's full name (Adrianna Marie Sheppard), the specific date of arrest (Monday following the August 22 incident), and the formal charges filed. The victim identification and formal charging constitute material updates that readers need to know, but this is not independently newsworthy enough to warrant a separate story - it's a standard arrest follow-up that should update the existing canonical.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
-          "source_url": "https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
-          "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
-          "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.95,
-          "shared_anchors": [],
-          "novel_facts": [
-            "Structure fire on East Erie Drive in Fort Pierce on Sunday",
-            "Fire threatened mobile homes in St. Lucie County",
-            "Fire was contained to area of origin",
-            "Fire Marshal investigating cause"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
         },
         {
           "category_key": "crime",
@@ -703,16 +658,16 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Fort Pierce woman arrested after paying for food delivery with counterfeit $50 bills",
-      "generated_card_count": 0,
-      "elapsed_seconds": 31.789
+      "live_hero_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
+      "generated_card_count": 1,
+      "elapsed_seconds": 35.736
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 17,
+      "fresh_candidate_count": 18,
       "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -730,28 +685,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 1,
-      "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "missing_primary_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [],
-          "local_nexus_signals": [
-            "source_locality:st lucie county",
-            "source_locality:port st lucie"
-          ],
-          "headline": "National Weather Service confirms EF0 tornado touchdown in Port St. Lucie",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/national-weather-service-to-provide-update-on-possible-tornado-event-in-st-lucie-county"
-        }
-      ],
-      "published_story_duplicate_suppression_count": 7,
+      "category_eligibility_assessed_count": 0,
+      "category_eligibility_rejection_count": 0,
+      "category_eligibility_rejections": [],
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "business",
@@ -811,16 +748,6 @@
           "canonical_slug": "2026-08-24-fort-pierce-man-dies-after-bb-gun-shooting-suspect-charged-with-manslaughter",
           "canonical_headline": "Fort Pierce man identified as Jabari Cowart in fatal BB gun shooting on Avenue G",
           "basis": "authorized_canonical_identity_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Port St. Lucie residents clean up after possible tornado or landspout hits neighborhood",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-clean-up-after-possible-tornado-or-landspout-hits-neighborhood",
-          "editorial_story_id": "story_005520",
-          "canonical_slug": "2026-08-26-port-st-lucie-resident-takes-cover-as-possible-tornado-hits-neighborhood-sunday",
-          "canonical_headline": "Port St. Lucie resident takes cover as possible tornado hits neighborhood Sunday",
-          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -940,25 +867,10 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Port St. Lucie residents clean up after possible tornado or landspout hits neighborhood",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-clean-up-after-possible-tornado-or-landspout-hits-neighborhood",
-          "canonical_slug": "2026-08-26-port-st-lucie-resident-takes-cover-as-possible-tornado-hits-neighborhood-sunday",
-          "canonical_headline": "Port St. Lucie resident takes cover as possible tornado hits neighborhood Sunday",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 5.782
+      "elapsed_seconds": 8.484
     },
     {
       "category_key": "sports",
@@ -966,7 +878,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 7,
+      "publishable_source_count": 5,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -996,14 +908,14 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 5.517
+      "elapsed_seconds": 9.941
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 19,
+      "fresh_candidate_count": 18,
       "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -1106,14 +1018,17 @@
           "semantic_action": "hold",
           "confidence": 0.95,
           "shared_anchors": [
-            "Both are weekend event roundups for Treasure Coast and Palm Beach areas"
+            "Both are weekend event roundups for Treasure Coast and Palm Beach County",
+            "Both mention Palm City as a location",
+            "Both are published by WPBF with similar headline format"
           ],
           "novel_facts": [
-            "Ukrainian Cultural Fest on August 23",
-            "Newfield Farm gardening class on August 23",
-            "Delray's Hottest Party women's health event",
-            "Peggy Adams name-your-price adoption event August 23",
-            "Loggerhead Triathlon on August 23"
+            "Incoming article published August 21, 2026 covering a different weekend",
+            "Newfield Farm gardening class on Saturday",
+            "Ukrainian Cultural Fest in West Palm Beach",
+            "Delray Beach women's health event",
+            "Peggy Adams adoption event",
+            "Loggerhead Triathlon in Jupiter"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1122,7 +1037,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 14.374
+      "elapsed_seconds": 16.049
     },
     {
       "category_key": "florida",
@@ -1139,11 +1054,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 6.495,
+          "elapsed_seconds": 6.955,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 6.495,
+      "model_elapsed_seconds": 6.955,
       "failure_code": "publication_quality_rejected",
       "failure_summary": "Generated content did not pass final publication quality gates",
       "sports_expired_event_preview_count": 0,
@@ -1196,63 +1111,74 @@
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 12.152
+      "elapsed_seconds": 23.094
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "generation_failed_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 3,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 20,
+      "publishable_source_count": 2,
+      "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 2,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 7.901,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: new_development_missing — All 36 Border Collies surrendered after Palm City case; adoption applications open Sept. 1 - WPEC"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 6.359,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: new_development_missing — All 36 Border Collies surrendered after Palm City case; adoption applications open Sept. 1 - WPEC"
+          "elapsed_seconds": 21.42,
+          "result": "success"
         }
       ],
-      "model_elapsed_seconds": 14.261,
-      "failure_code": "contextless_update_lead",
-      "failure_summary": "Contextless update lead for hero: new_development_missing — All 36 Border Collies surrendered after Palm City case; adoption applications open Sept. 1 - WPEC",
+      "model_elapsed_seconds": 21.42,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 79,
+          "baseline_anchor": "abuse_or_neglect",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "adoptions",
+            "border",
+            "city",
+            "collies",
+            "palm",
+            "surrendered"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "All 36 Border Collies surrendered in Palm City cruelty case; adoptions open Sept. 1",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": false,
+          "novelty_token_hits": [],
+          "missing": [
+            "new_development_missing"
+          ],
+          "source_title": "All 36 Border Collies surrendered after Palm City case; adoption applications open Sept. 1 - WPEC",
+          "headline": "All 36 Border Collies surrendered after Palm City rescue, adoptions open Sept. 1"
+        }
+      ],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "martin",
-          "source_headline": "Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/stuart-city-commission-appoints-new-mayor-fires-city-manager-in-sweeping-overnight-changes",
-          "editorial_story_id": "story_005956",
-          "canonical_slug": "2026-08-26-stuart-city-commission-ousts-mayor-fires-city-manager-in-sweeping-leadership-sha",
-          "canonical_headline": "Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "martin",
           "source_headline": "Martin County man faces DUI, fleeing charges after SUV slams into church - WPEC",
@@ -1265,7 +1191,17 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "36 rescued border collies available for adoption Sept. 1 after Palm City hoarding investigation - WPTV",
+          "source_headline": "Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/stuart-city-commission-appoints-new-mayor-fires-city-manager-in-sweeping-overnight-changes",
+          "editorial_story_id": "story_005956",
+          "canonical_slug": "2026-08-26-stuart-city-commission-ousts-mayor-fires-city-manager-in-sweeping-leadership-sha",
+          "canonical_headline": "Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "36 rescued border collies available for adoption Sept. 1 after Palm City hoarding investigation",
           "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/36-rescued-border-collies-available-for-adoption-sept-1-after-palm-city-hoarding-investigation",
           "editorial_story_id": "story_003665",
           "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
@@ -1275,7 +1211,7 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "36 rescued border collies available for adoption Sept. 1 after Palm City hoarding investigation",
+          "source_headline": "36 rescued border collies available for adoption Sept. 1 after Palm City hoarding investigation - WPTV",
           "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/36-rescued-border-collies-available-for-adoption-sept-1-after-palm-city-hoarding-investigation",
           "editorial_story_id": "story_003665",
           "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
@@ -1315,9 +1251,29 @@
         },
         {
           "category_key": "martin",
+          "source_headline": "NWS confirms EF0 tornado touched down Sunday in Port St. Lucie - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-nws-confirms-ef-0-tornado-port-st-lucie/73511880",
+          "editorial_story_id": "story_005683",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
+          "canonical_headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/ef-0-tornado-tears-through-port-st-lucie-residents-clean-up-debris-and-damaged-structures",
+          "editorial_story_id": "story_005702",
+          "canonical_slug": "2026-08-26-port-st-lucie-residents-clean-up-debris-damaged-structures-after-sunday-tornado",
+          "canonical_headline": "Port St. Lucie residents clean up debris, damaged structures after Sunday tornado",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
           "source_headline": "Ronald L. Corbin, beloved choral teacher at Martin County High School for 34 years, dies - WPBF",
           "source_url": "https://www.wpbf.com/article/ronald-l-corbin-beloved-choral-teacher-at-martin-high-school-for-34-years-dies/73506173",
-          "editorial_story_id": "story_005949",
+          "editorial_story_id": "story_005982",
           "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
           "canonical_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
           "basis": "exact_source_and_persistent_story_skip",
@@ -1350,11 +1306,47 @@
           "final_publication_action": "canonical_bound_before_generation"
         }
       ],
-      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_evaluation_count": 4,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 3,
+      "material_update_promotion_cache_hit_count": 4,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Martin County man faces DUI, fleeing charges after SUV slams into church - WPEC",
+          "source_url": "https://cbs12.com/news/crime/martin-county-man-faces-dui-fleeing-charges-after-suv-slams-into-church-florida-crime-florida-news-local-crime-local-news-suv-slams-into-church-ac-unit-broken",
+          "canonical_slug": "2026-08-26-martin-county-man-crashes-suv-into-church-after-fleeing-deputies-faces-dui-charg",
+          "canonical_headline": "Martin County man crashes SUV into church after fleeing deputies, faces DUI charges",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": true,
+          "model_call": false,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 1.0,
+          "shared_anchors": [
+            "Martin County SUV crash into church",
+            "SW Washington Avenue location",
+            "Martin County Sheriff's Office involved",
+            "Driver fleeing from deputies",
+            "DUI charges",
+            "Geremias Pascual, 28, named suspect",
+            "Same source URL (cbs12.com)"
+          ],
+          "novel_facts": [
+            "PIT maneuver attempted",
+            "Crashed into tree and power pole in addition to church",
+            "AC unit destroyed",
+            "Thousands in damages specified",
+            "Four counts of criminal mischief/damage to property detailed"
+          ],
+          "reason": "This is clearly the same incident - identical source URL, same suspect (Geremias Pascual, 28), same location (SW Washington Avenue, Martin County), same church crash, same DUI/fleeing charges. The incoming article adds scene details (PIT maneuver, tree/pole damage, AC unit, damage amount) but these are routine elaborations, not material updates like an arrest after a search, new charges after investigation, or victim identification. The additional details are color/mechanics that should update the existing canonical rather than create a new URL.",
+          "validation_errors": []
+        },
         {
           "category_key": "martin",
           "source_headline": "Stuart city commission appoints new mayor, fires city manager in sweeping overnight changes",
@@ -1372,18 +1364,38 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Martin County man faces DUI, fleeing charges after SUV slams into church - WPEC",
-          "source_url": "https://cbs12.com/news/crime/martin-county-man-faces-dui-fleeing-charges-after-suv-slams-into-church-florida-crime-florida-news-local-crime-local-news-suv-slams-into-church-ac-unit-broken",
-          "canonical_slug": "2026-08-26-martin-county-man-crashes-suv-into-church-after-fleeing-deputies-faces-dui-charg",
-          "canonical_headline": "Martin County man crashes SUV into church after fleeing deputies, faces DUI charges",
+          "source_headline": "36 rescued border collies available for adoption Sept. 1 after Palm City hoarding investigation",
+          "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/36-rescued-border-collies-available-for-adoption-sept-1-after-palm-city-hoarding-investigation",
+          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
+          "canonical_headline": "All 36 Border Collies surrendered in Palm City cruelty case; adoptions open Sept. 1",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
+          "cache_hit": true,
           "model_call": false,
-          "action": "preserve_existing_canonical"
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "36 border collies from Palm City home",
+            "Humane Society of the Treasure Coast",
+            "adoption applications opening Sept. 1",
+            "dogs removed Aug. 10",
+            "hoarding investigation"
+          ],
+          "novel_facts": [
+            "Details about dogs' physical condition (saturated in urine/feces, skin infections, wounds)",
+            "Information about reproductive anatomy abnormalities from spaying/neutering",
+            "Staff quotes from Lori Tucker about recovery timeline and matching process",
+            "Two dogs still 'shut down' and struggling",
+            "72 criminal charges mentioned",
+            "Home condemned by county"
+          ],
+          "reason": "Both articles cover the identical event: 36 border collies removed from a Palm City home on Aug. 10, now available for adoption Sept. 1 through Humane Society of the Treasure Coast. The incoming article provides extensive color details (condition quotes, medical specifics, adoption matching process, Tucker quotes) and mentions criminal charges/condemned home, but these are elaborative rather than material updates. The core news—legal surrender and Sept. 1 adoption opening—was already in the canonical. Additional detail about the dogs' condition, staff observations, and adoption procedures are reportorial depth on the same announcement, not a distinct newsworthy development.",
+          "validation_errors": []
         },
         {
           "category_key": "martin",
@@ -1419,41 +1431,6 @@
             "Increased adoptions at shelter over past two weeks"
           ],
           "reason": "Both articles cover the identical event: 36 border collies removed from a Palm City home on Aug. 10 in a hoarding case, now at the Humane Society of the Treasure Coast with adoptions opening Sept. 1. The incoming article provides additional detail about the owner facing 72 charges, the home being condemned, specific medical conditions, and the matching process, but these are elaborations on the known story rather than a material development like an arrest, court action, or victim identification. The core news—dogs surrendered and adoptions opening Sept. 1—was already reported in the canonical.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "36 rescued border collies available for adoption Sept. 1 after Palm City hoarding investigation",
-          "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/36-rescued-border-collies-available-for-adoption-sept-1-after-palm-city-hoarding-investigation",
-          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-          "canonical_headline": "All 36 Border Collies surrendered in Palm City cruelty case; adoptions open Sept. 1",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.95,
-          "shared_anchors": [
-            "36 border collies from Palm City home",
-            "Humane Society of the Treasure Coast",
-            "adoption applications opening Sept. 1",
-            "dogs removed Aug. 10",
-            "hoarding investigation"
-          ],
-          "novel_facts": [
-            "Details about dogs' physical condition (saturated in urine/feces, skin infections, wounds)",
-            "Information about reproductive anatomy abnormalities from spaying/neutering",
-            "Staff quotes from Lori Tucker about recovery timeline and matching process",
-            "Two dogs still 'shut down' and struggling",
-            "72 criminal charges mentioned",
-            "Home condemned by county"
-          ],
-          "reason": "Both articles cover the identical event: 36 border collies removed from a Palm City home on Aug. 10, now available for adoption Sept. 1 through Humane Society of the Treasure Coast. The incoming article provides extensive color details (condition quotes, medical specifics, adoption matching process, Tucker quotes) and mentions criminal charges/condemned home, but these are elaborative rather than material updates. The core news—legal surrender and Sept. 1 adoption opening—was already in the canonical. Additional detail about the dogs' condition, staff observations, and adoption procedures are reportorial depth on the same announcement, not a distinct newsworthy development.",
           "validation_errors": []
         },
         {
@@ -1519,6 +1496,36 @@
         },
         {
           "category_key": "martin",
+          "source_headline": "NWS confirms EF0 tornado touched down Sunday in Port St. Lucie - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-nws-confirms-ef-0-tornado-port-st-lucie/73511880",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
+          "canonical_headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "EF-0 tornado tears through Port St. Lucie, residents clean up debris and damaged structures - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/ef-0-tornado-tears-through-port-st-lucie-residents-clean-up-debris-and-damaged-structures",
+          "canonical_slug": "2026-08-26-port-st-lucie-residents-clean-up-debris-damaged-structures-after-sunday-tornado",
+          "canonical_headline": "Port St. Lucie residents clean up debris, damaged structures after Sunday tornado",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
           "source_headline": "Ronald L. Corbin, beloved choral teacher at Martin County High School for 34 years, dies - WPBF",
           "source_url": "https://www.wpbf.com/article/ronald-l-corbin-beloved-choral-teacher-at-martin-high-school-for-34-years-dies/73506173",
           "canonical_slug": "2026-08-25-ronald-corbin-martin-county-high-school-choral-teacher-for-34-years-dies",
@@ -1534,18 +1541,20 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
+      "generation_status": "success",
       "budget_seconds": 180.0,
-      "elapsed_seconds": 24.134
+      "live_hero_headline": "Martin County commissioners move toward one-year pause on large data center development",
+      "generated_card_count": 0,
+      "elapsed_seconds": 32.206
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 16,
-      "publishable_source_count": 5,
-      "selected_source_count": 5,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 7,
+      "selected_source_count": 7,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1553,11 +1562,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 14.399,
+          "elapsed_seconds": 42.266,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 14.399,
+      "model_elapsed_seconds": 42.266,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1568,10 +1577,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 7,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 14,
+      "published_story_duplicate_suppression_count": 12,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1585,28 +1594,8 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie approves higher annual trash fee for residents despite pickup woes - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-approves-higher-annual-trash-fee-for-residents-despite-pickup-woes-port-st-lucie-trash-assessment-solid-waste-assessment-trash-fee-garbage-collection-garbage-service-trash-pickup-port-st-lucie-city-council-city-council-resolution",
-          "editorial_story_id": "story_005863",
-          "canonical_slug": "2026-08-26-port-st-lucie-raises-annual-trash-fee-to-482-despite-ongoing-pickup-complaints",
-          "canonical_headline": "Port St. Lucie raises annual trash fee to $482 despite ongoing pickup complaints",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - cw34.com",
           "source_url": "https://cw34.com/news/local/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
-          "editorial_story_id": "story_001215",
-          "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
-          "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
-          "source_url": "https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
           "editorial_story_id": "story_001215",
           "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
           "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
@@ -1645,12 +1634,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - WPEC",
-          "source_url": "https://cbs12.com/news/crime/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
-          "editorial_story_id": "story_005726",
-          "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
-          "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "Fort Pierce enforces two-hour parking limits downtown - WPBF",
+          "source_url": "https://www.wpbf.com/article/fort-pierce-enforces-two-hour-parking-limits-downtown/73514245",
+          "editorial_story_id": "story_005717",
+          "canonical_slug": "2026-08-25-fort-pierce-enforces-two-hour-parking-limits-downtown-with-50-citations",
+          "canonical_headline": "Fort Pierce enforces two-hour parking limits downtown with $50 citations",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1661,6 +1650,16 @@
           "canonical_slug": "2026-08-25-st-lucie-county-fire-district-contains-residential-fire-on-east-erie-drive-in-fo",
           "canonical_headline": "St. Lucie County Fire District contains residential fire on East Erie Drive in Fort Pierce",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "NWS confirms EF0 tornado touched down Sunday in Port St. Lucie - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-nws-confirms-ef-0-tornado-port-st-lucie/73511880",
+          "editorial_story_id": "story_005683",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
+          "canonical_headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -1685,16 +1684,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-          "editorial_story_id": "story_005664",
-          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
-          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "BB gun shooting turns deadly: Fort Pierce man killed, suspect charged - WPEC",
           "source_url": "https://cbs12.com/news/local/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
           "editorial_story_id": "story_002417",
@@ -1705,20 +1694,20 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie residents clean up after possible tornado or landspout hits neighborhood - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-clean-up-after-possible-tornado-or-landspout-hits-neighborhood",
-          "editorial_story_id": "story_005520",
-          "canonical_slug": "2026-08-26-port-st-lucie-resident-takes-cover-as-possible-tornado-hits-neighborhood-sunday",
-          "canonical_headline": "Port St. Lucie resident takes cover as possible tornado hits neighborhood Sunday",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - WPEC",
+          "source_url": "https://cbs12.com/news/local/tornado-warning-issued-for-parts-of-st-lucie-martin-counties",
+          "editorial_story_id": "story_004903",
+          "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+          "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 3,
+      "material_update_promotion_evaluation_count": 4,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 3,
       "material_update_promotion_decisions": [
         {
@@ -1729,27 +1718,26 @@
           "canonical_headline": "Port St. Lucie High School senior in ICE custody after traffic stop on way to school",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
-          "cache_hit": false,
+          "cache_hit": true,
           "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie approves higher annual trash fee for residents despite pickup woes - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-approves-higher-annual-trash-fee-for-residents-despite-pickup-woes-port-st-lucie-trash-assessment-solid-waste-assessment-trash-fee-garbage-collection-garbage-service-trash-pickup-port-st-lucie-city-council-city-council-resolution",
-          "canonical_slug": "2026-08-26-port-st-lucie-raises-annual-trash-fee-to-482-despite-ongoing-pickup-complaints",
-          "canonical_headline": "Port St. Lucie raises annual trash fee to $482 despite ongoing pickup complaints",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 1.0,
+          "shared_anchors": [
+            "Emmanuel Nelson, 18-year-old Port St. Lucie High School senior",
+            "ICE custody following traffic stop on way to school",
+            "Stopped Wednesday around 8:30 a.m. for speeding in school zone",
+            "Football player and wrestler",
+            "Detention center in Broward County",
+            "Identical source URL: https://www.wpbf.com/article/port-st-lucie-high-school-student-ice-custody-emmanuel/73525281"
+          ],
+          "novel_facts": [],
+          "reason": "This is exactly the same article from the same source URL covering the identical incident. The incoming article and the canonical candidate share the same source URL, the same named individual (Emmanuel Nelson), the same traffic stop details (Wednesday 8:30 a.m., speeding in school zone), and the same custody situation. The incoming article contains no material new updates—it provides the same information about his immigration status, the traffic stop circumstances, his activities at school, and community support. The retrieval evidence confirms this is a 'persistent_story_id_match' with 'exact_source_and_persistent_story_skip' as the identity basis.",
+          "validation_errors": []
         },
         {
           "category_key": "st_lucie",
@@ -1771,39 +1759,10 @@
           "shared_anchors": [],
           "novel_facts": [
             "Structure fire on East Erie Drive in Fort Pierce",
-            "Fire occurred on Sunday",
             "Fire threatened mobile homes",
+            "Fire occurred on Sunday",
             "Fire was contained to area of origin",
-            "Cause under investigation by Fire Marshal's Office"
-          ],
-          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
-          "validation_errors": [
-            "known_canonical_identity_conflict"
-          ]
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - WPEC",
-          "source_url": "https://cbs12.com/news/florida/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire",
-          "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
-          "canonical_headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": true,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "known_canonical_identity_conflict",
-          "semantic_action": "hold",
-          "confidence": 0.95,
-          "shared_anchors": [],
-          "novel_facts": [
-            "Residential structure fire on East Erie Drive in Fort Pierce on Sunday",
-            "Fire threatened mobile homes in St. Lucie County",
-            "Fire was contained before spreading to nearby mobile homes",
-            "Cause under investigation by Fire Marshal's Office"
+            "Under investigation by Fire Marshal's Office"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1857,12 +1816,12 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - WPEC",
-          "source_url": "https://cbs12.com/news/crime/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
-          "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
-          "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
+          "source_headline": "Fort Pierce enforces two-hour parking limits downtown - WPBF",
+          "source_url": "https://www.wpbf.com/article/fort-pierce-enforces-two-hour-parking-limits-downtown/73514245",
+          "canonical_slug": "2026-08-25-fort-pierce-enforces-two-hour-parking-limits-downtown-with-50-citations",
+          "canonical_headline": "Fort Pierce enforces two-hour parking limits downtown with $50 citations",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1878,6 +1837,21 @@
           "canonical_headline": "St. Lucie County Fire District contains residential fire on East Erie Drive in Fort Pierce",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "NWS confirms EF0 tornado touched down Sunday in Port St. Lucie - WPBF",
+          "source_url": "https://www.wpbf.com/article/florida-nws-confirms-ef-0-tornado-port-st-lucie/73511880",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
+          "canonical_headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1917,21 +1891,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Fort Pierce city meeting gets heated amid search for new city attorney after nearly entire legal team resigns - WPTV",
-          "source_url": "https://www.wptv.com/wptv-investigates/fort-pierce-city-meeting-gets-heated-amid-search-for-new-city-attorney-after-nearly-entire-legal-team-resigns",
-          "canonical_slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
-          "canonical_headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "BB gun shooting turns deadly: Fort Pierce man killed, suspect charged - WPEC",
           "source_url": "https://cbs12.com/news/local/florida-crime-news-fort-pierce-man-34-shot-bb-gun-avenue-g-deadly-shooting-crime-fort-pierce-police-department-florida-news-suspect-in-custody",
           "canonical_slug": "2026-08-06-12-year-old-describes-hit-and-run-that-injured-sister-in-fort-pierce",
@@ -1946,15 +1905,16 @@
           "action": "preserve_existing_canonical",
           "semantic_status": "known_canonical_identity_conflict",
           "semantic_action": "hold",
-          "confidence": 0.95,
+          "confidence": 0.98,
           "shared_anchors": [
-            "Fort Pierce locality"
+            "Fort Pierce location"
           ],
           "novel_facts": [
-            "34-year-old man shot with BB gun on Avenue G on Saturday August 24, 2026",
+            "34-year-old man shot with BB gun on Avenue G",
             "Victim died at HCA Florida Lawnwood Hospital",
-            "Suspect Jabari Cowart charged with manslaughter",
-            "Group shooting BB guns at trees when incident occurred"
+            "Jabari Cowart charged with manslaughter",
+            "Incident occurred Saturday (2026-08-24)",
+            "Group shooting BB guns at trees before incident"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1963,33 +1923,51 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Port St. Lucie residents clean up after possible tornado or landspout hits neighborhood - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-clean-up-after-possible-tornado-or-landspout-hits-neighborhood",
-          "canonical_slug": "2026-08-26-port-st-lucie-resident-takes-cover-as-possible-tornado-hits-neighborhood-sunday",
-          "canonical_headline": "Port St. Lucie resident takes cover as possible tornado hits neighborhood Sunday",
+          "source_headline": "Funnel cloud spotted above Port St. Lucie neighborhood amid tornado warning - WPEC",
+          "source_url": "https://cbs12.com/news/local/tornado-warning-issued-for-parts-of-st-lucie-martin-counties",
+          "canonical_slug": "2026-07-31-woman-86-dies-in-port-st-lucie-crash-after-failing-to-yield-at-intersection",
+          "canonical_headline": "86-year-old woman dies after Port St. Lucie intersection crash",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
           "promoted": false,
           "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 0.98,
+          "shared_anchors": [
+            "Port St. Lucie location",
+            "St. Lucie County"
+          ],
+          "novel_facts": [
+            "Funnel cloud sighting Sunday evening",
+            "Tornado warning for southeastern St. Lucie County and northeastern Martin County",
+            "Warning in effect through 7 p.m.",
+            "Storm moving near Walton, Stuart, and St. Lucie Nuclear Power Plant around 6:30 p.m.",
+            "Hutchinson Island South affected"
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
         }
       ],
       "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie to consider $14.83 annual trash fee increase",
-      "generated_card_count": 3,
-      "elapsed_seconds": 43.242
+      "live_hero_headline": "Port St. Lucie approves $14.83 annual trash fee increase despite ongoing service complaints",
+      "generated_card_count": 4,
+      "elapsed_seconds": 70.538
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 20,
+      "fresh_candidate_count": 21,
       "publishable_source_count": 6,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -2010,7 +1988,7 @@
       "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "indian_river",
@@ -2039,16 +2017,6 @@
           "editorial_story_id": "story_005892",
           "canonical_slug": "2026-08-25-vero-beach-man-crashes-while-fleeing-deputies-k9-finds-him-hiding-under-brush",
           "canonical_headline": "Vero Beach man crashes while fleeing deputies, K9 finds him hiding under brush",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
-          "editorial_story_id": "story_005782",
-          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
-          "canonical_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
@@ -2124,25 +2092,10 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
-          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
-          "canonical_headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 5.353
+      "elapsed_seconds": 10.082
     }
   ]
 }
