@@ -1,7 +1,7 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "gate_version": "1.8",
-  "generated_at": "2026-08-26T21:06:11.224006+00:00",
+  "generated_at": "2026-08-27T00:36:54.015299+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -49,39 +49,56 @@
       "max_model_calls_per_run": 12,
       "eligibility": "newer source-backed published-skip candidates only",
       "failure_behavior": "preserve existing canonical; never mint duplicate URL"
+    },
+    "terminal_permalink_authority": {
+      "version": "1.1",
+      "model": "claude-sonnet-5",
+      "recent_window_days": 14,
+      "max_candidates": 12,
+      "resolution_version": "1.0",
+      "resolution_max_candidates": 5,
+      "resolution_policy": "one focused second pass for validated first-pass HOLD only",
+      "failure_behavior": "final unresolved identity remains HOLD"
     }
   },
   "summary": {
-    "evaluations": 65,
-    "candidate_pairs": 0,
+    "evaluations": 66,
+    "candidate_pairs": 1,
     "structured_conflict_overrides": 0,
-    "model_calls": 0,
+    "model_calls": 1,
     "cache_hits": 0,
     "no_candidate_passes": 65,
     "duplicates_preserved": 0,
-    "canonical_updates_selected": 0,
-    "new_stories_allowed": 3,
-    "retroactive_rows_retained": 62,
+    "canonical_updates_selected": 1,
+    "new_stories_allowed": 2,
+    "retroactive_rows_retained": 63,
     "holds": 0,
     "retroactive_redirects": 0,
-    "registry_story_records_merged": 0,
-    "registry_aliases_written": 0,
-    "material_update_composer_calls": 0,
-    "material_updates_applied": 0,
+    "registry_story_records_merged": 1,
+    "registry_aliases_written": 1,
+    "material_update_composer_calls": 1,
+    "material_updates_applied": 1,
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 1,
-    "pre_generation_materiality_evaluations": 12,
+    "pre_generation_materiality_evaluations": 11,
     "pre_generation_materiality_promotions": 1,
-    "pre_generation_materiality_duplicates": 6,
+    "pre_generation_materiality_duplicates": 5,
     "pre_generation_materiality_holds": 5,
-    "pre_generation_materiality_model_calls": 5,
-    "pre_generation_materiality_cache_hits": 7,
-    "terminal_permalink_evaluations": 3,
-    "terminal_permalink_candidate_pairs": 36,
-    "terminal_permalink_model_calls": 3,
-    "terminal_permalink_holds": 2,
-    "terminal_permalink_new_authorized": 1
+    "pre_generation_materiality_model_calls": 6,
+    "pre_generation_materiality_cache_hits": 5,
+    "terminal_permalink_evaluations": 2,
+    "terminal_permalink_candidate_pairs": 24,
+    "terminal_permalink_model_calls": 2,
+    "terminal_permalink_cache_hits": 0,
+    "terminal_permalink_resolution_evaluations": 0,
+    "terminal_permalink_resolution_model_calls": 0,
+    "terminal_permalink_resolution_cache_hits": 0,
+    "terminal_permalink_holds_resolved": 0,
+    "terminal_permalink_new_authorized": 1,
+    "terminal_permalink_duplicates_blocked": 0,
+    "terminal_permalink_updates_routed": 0,
+    "terminal_permalink_holds": 1
   },
   "pre_generation_materiality_decisions": [
     {
@@ -154,6 +171,40 @@
     },
     {
       "category_key": "crime",
+      "source_headline": "Stolen guns recovered as 2 teens face charges in Martin County burglary - WPBF",
+      "source_url": "https://www.wpbf.com/article/two-arrested-martin-county-gun-theft-burglaries/73530636",
+      "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+      "canonical_headline": "Two St. Lucie County men arrested in Martin County burglaries, 13 cases closed",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "validated",
+      "semantic_action": "duplicate_use_existing_canonical",
+      "confidence": 0.98,
+      "shared_anchors": [
+        "Stephen Ivan Morris, 19-year-old",
+        "Shaun Alexander Bilbrey, 19-year-old",
+        "Martin County burglaries beginning in early August",
+        "13 cases closed",
+        "Multiple stolen firearms recovered",
+        "St. Lucie County residents",
+        "Martin County Sheriff's Office investigation"
+      ],
+      "novel_facts": [
+        "Specific charges listed: grand theft, armed burglary, larceny, traveling to commit burglary",
+        "St. Lucie County SWAT Team involvement mentioned",
+        "Gated communities specifically mentioned as affected"
+      ],
+      "reason": "Both articles report the exact same arrests of Morris and Bilbrey for the same Martin County burglary series that closed 13 cases and recovered stolen firearms. The incoming article adds minor details about specific charges and SWAT involvement, but these are routine case details that do not constitute a material update requiring a separate story. No new consequential development like a court action, additional arrest, or significant finding is present.",
+      "validation_errors": []
+    },
+    {
+      "category_key": "crime",
       "source_headline": "Port St. Lucie police search for endangered man last seen at Jimmy John's in Fort Pierce - WPEC",
       "source_url": "https://cbs12.com/news/local/port-st-lucie-police-seek-endangered-missing-man-mental-health-issues-tinkerbell-tattoo-weighs-185-pounds-port-st-lucie-police-department-jimmy-johns-florida-news",
       "canonical_slug": "2026-08-06-us-1-closed-in-both-directions-near-tiffany-avenue-in-port-st-lucie-after-crash",
@@ -168,13 +219,14 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 0.95,
+      "confidence": 0.98,
       "shared_anchors": [],
       "novel_facts": [
-        "Missing person search for Johnley Cadet",
+        "Johnley Cadet reported missing",
         "Last seen Sunday at Jimmy John's in Fort Pierce",
-        "Described as endangered man with mental health diagnosis",
-        "Physical description: 5'9\", 185 lbs, tattoo reading 'Boo and Tinkerbell'",
+        "Diagnosed with mental health illness",
+        "Physical description: 5'9\", 185 pounds",
+        "Tattoo reading 'Boo and Tinkerbell' on right arm",
         "Wearing white T-shirt, black shorts, black shoes"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -232,15 +284,16 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Both are weekend event roundup articles from WPBF",
-        "Both cover Treasure Coast and Palm Beach County areas",
-        "Both mention Palm City"
+        "Weekly 'fun things to do' roundup format from WPBF",
+        "Treasure Coast and Palm Beach County geographic coverage",
+        "Weekend event listings genre"
       ],
       "novel_facts": [
-        "Incoming article is dated August 21, 2026",
-        "Features completely different events: Newfield Farm gardening class, Ukrainian Cultural Fest, women's health event in Delray Beach, Peggy Adams pet adoption, Loggerhead Triathlon",
-        "Candidate is dated July 27, 2026",
-        "Candidate features Christmas in July vendor market and Rockin Riverwalk concert series"
+        "Newfield Farm gardening class on August 21, 2026",
+        "Ukrainian Cultural Fest in West Palm Beach",
+        "Delray's Hottest Party women's health event",
+        "Peggy Adams Animal Rescue adoption event",
+        "Loggerhead Triathlon in Jupiter"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -266,9 +319,10 @@
       "confidence": 1.0,
       "shared_anchors": [],
       "novel_facts": [
-        "Dolly Parton's death on Tuesday at age 80 in Nashville",
-        "Gov. Ron DeSantis ordered Florida flags to half-staff following presidential directive",
-        "Flags to remain at half-staff until sunset September 1, 2026"
+        "Dolly Parton's death on August 26, 2026",
+        "Gov. DeSantis ordering flags to half-staff until September 1",
+        "Presidential directive for flags at half-staff",
+        "Parton died peacefully in Nashville at age 80"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -307,37 +361,6 @@
       "validation_errors": []
     },
     {
-      "category_key": "martin",
-      "source_headline": "Sheriff's helicopter spots massive fire in Martin County, helps firefighters save home - cw34.com",
-      "source_url": "https://cw34.com/news/local/martin-county-sheriffs-office-spot-massive-barn-martin-county-fire-rescue-respond-to-scene-1600-square-foot-barn-in-flames-class-ce-motorhome-jeep-florida-news",
-      "canonical_slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
-      "canonical_headline": "Sheriff's helicopter crew spots garage fire on Southwest Martin Highway, helps save Palm City home",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 0.98,
-      "shared_anchors": [
-        "Martin County Sheriff's Office helicopter crew (Air One)",
-        "Southwest Martin Highway location",
-        "Late Sunday night around 10:30 p.m. timing",
-        "1,600-square-foot structure/garage/barn",
-        "Class C motorhome and Jeep inside",
-        "Flames prevented from spreading to main home",
-        "Homeowners not home at time of fire",
-        "State Fire Marshal notified"
-      ],
-      "novel_facts": [],
-      "reason": "Both articles describe the identical incident: a Martin County Sheriff's helicopter crew spotting a large fire at a detached garage on Southwest Martin Highway late Sunday night around 10:30 p.m., finding a 1,600-square-foot structure with a motorhome and Jeep inside, and firefighters preventing spread to the main home. The incoming article contains no material updates beyond the existing canonical—it provides the same facts about the discovery, response, and outcome. The only differences are minor wording variations (calling it a 'garage' vs 'barn') and routine details. No new developments such as a cause determination, arrest, injury, or other material change are reported.",
-      "validation_errors": []
-    },
-    {
       "category_key": "st_lucie",
       "source_headline": "Port St. Lucie police search for endangered man last seen at Jimmy John's in Fort Pierce - WPEC",
       "source_url": "https://cbs12.com/news/local/port-st-lucie-police-seek-endangered-missing-man-mental-health-issues-tinkerbell-tattoo-weighs-185-pounds-port-st-lucie-police-department-jimmy-johns-florida-news",
@@ -356,12 +379,11 @@
       "confidence": 0.98,
       "shared_anchors": [],
       "novel_facts": [
-        "Missing person case for Johnley Cadet",
+        "Missing person case involving Johnley Cadet",
         "Last seen Sunday at Jimmy John's in Fort Pierce",
-        "Described as 5'9\", 185 pounds",
-        "Has tattoo reading 'Boo and Tinkerbell' on right arm",
         "Diagnosed with mental health illness",
-        "Wearing white T-shirt, black shorts, black shoes",
+        "Physical description: 5'9\", 185 pounds, tattoo reading 'Boo and Tinkerbell' on right arm",
+        "Last seen wearing white T-shirt, black shorts, black shoes",
         "Port St. Lucie Police Department seeking endangered man"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -403,42 +425,6 @@
     },
     {
       "category_key": "st_lucie",
-      "source_headline": "Port St. Lucie approves higher annual trash fee for residents despite pickup woes - WPEC",
-      "source_url": "https://cbs12.com/features/the-wellness-experience/photos/port-st-lucie-approves-higher-annual-trash-fee-for-residents-despite-pickup-woes-port-st-lucie-trash-assessment-solid-waste-assessment-trash-fee-garbage-collection-garbage-service-trash-pickup-port-st-lucie-city-council-city-council-resolution",
-      "canonical_slug": "2026-08-26-port-st-lucie-raises-annual-trash-fee-to-482-despite-ongoing-pickup-complaints",
-      "canonical_headline": "Port St. Lucie raises annual trash fee to $482 despite ongoing pickup complaints",
-      "canonical_is_custom": false,
-      "identity_basis": "registry_same_event_and_persistent_story_skip",
-      "eligibility_reason": "newer_source_requires_materiality_decision",
-      "evaluated": true,
-      "promoted": false,
-      "cache_hit": true,
-      "model_call": false,
-      "action": "preserve_existing_canonical",
-      "semantic_status": "validated",
-      "semantic_action": "duplicate_use_existing_canonical",
-      "confidence": 1.0,
-      "shared_anchors": [
-        "Port St. Lucie City Council meeting Monday night",
-        "Resolution 26-R70",
-        "$14.83 increase to annual solid waste assessment",
-        "Fee raised from $467.33 to $482.16 per dwelling unit",
-        "Fiscal year beginning in October",
-        "FCC Environmental Service franchise agreement"
-      ],
-      "novel_facts": [
-        "No public comment or council discussion before approval",
-        "$1.24 per month increase calculation",
-        "Maximum rate of $513.70 mentioned",
-        "Rising costs for labor, equipment, vehicle maintenance and fuel cited",
-        "$24 million settlement with Waste Pro mentioned",
-        "November vote on twice-weekly pickup mentioned"
-      ],
-      "reason": "Both articles cover the identical City Council action on Monday night approving the same resolution (26-R70) with the same fee increase ($14.83, from $467.33 to $482.16). The incoming article adds contextual details about the lack of discussion, cost justifications, and background about service issues, but these are explanatory details, not material updates that change the core newsworthy fact (the council's approval of the fee increase). The settlement and November vote references are background context, not new developments.",
-      "validation_errors": []
-    },
-    {
-      "category_key": "st_lucie",
       "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - cw34.com",
       "source_url": "https://cw34.com/news/local/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire?teaserSource=trending",
       "canonical_slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
@@ -456,9 +442,9 @@
       "confidence": 0.95,
       "shared_anchors": [],
       "novel_facts": [
-        "Residential structure fire on East Erie Drive in Fort Pierce on Sunday",
+        "Structure fire on East Erie Drive in Fort Pierce on Sunday",
         "Fire threatened mobile homes in St. Lucie County",
-        "Fire was contained to area of origin",
+        "Fire contained to area of origin",
         "Fire Marshal's Office investigating cause"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
@@ -1510,7 +1496,7 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "All 36 Border Collies surrendered after Palm City rescue; adoption applications open Sept. 1",
+      "incoming_headline": "All 36 Border Collies surrendered in Palm City case, adoptions open Sept. 1",
       "incoming_source_url": "https://cbs12.com/news/local/palm-city-florida-border-collies-hoarding-case-shelter-groomed-recovery-humane-society-treasure-coast-adoptions-begin-september-1-paige-odonnell-animal-cruelty-medical-testing-behavioral-evaluations-spayed-neutered-vaccinated",
       "incoming_story_id": "story_003665",
       "candidates": [],
@@ -1552,7 +1538,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
       "incoming_source_url": "https://www.wpbf.com/article/ronald-l-corbin-beloved-choral-teacher-at-martin-high-school-for-34-years-dies/73506173",
-      "incoming_story_id": "story_006107",
+      "incoming_story_id": "story_006129",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1709,8 +1695,28 @@
       }
     },
     {
+      "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "DeSantis seeks statewide review of license plate camera use amid surveillance concerns",
+      "incoming_source_url": "https://www.wptv.com/news/state/i-dont-want-to-have-this-become-a-surveillance-state-desantis-seeks-overview-of-license-plate-camera-use",
+      "incoming_story_id": "story_006138",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
       "phase": "forward_publication",
-      "incoming_headline": "Martin County deputies search for hit-and-run suspect in Palm City neighborhood",
+      "incoming_headline": "Hit-and-run suspect captured after hours-long manhunt through swamp in Palm City",
       "incoming_source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
       "incoming_story_id": "story_006122",
       "candidates": [],
@@ -1730,136 +1736,427 @@
     },
     {
       "phase": "terminal_permalink_authority",
-      "gate_version": "1.0",
+      "gate_version": "1.1",
+      "resolution_version": "1.0",
       "model": "claude-sonnet-5",
-      "incoming_headline": "Martin County deputies search for hit-and-run suspect in Palm City neighborhood",
+      "incoming_headline": "Hit-and-run suspect captured after hours-long manhunt through swamp in Palm City",
       "incoming_source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
       "incoming_story_id": "story_006122",
       "candidates": [
         {
-          "slug": "2026-08-18-martin-county-deputies-rescue-man-attempting-suicide-in-ocean",
-          "headline": "Martin County deputies rescue man attempting suicide in ocean",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.7018,
-          "retrieval_score": 0.6358,
+          "slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
+          "headline": "Martin County commissioners move toward one-year pause on large data center development",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6073,
+          "retrieval_score": 0.4673,
           "reasons": [
-            "moderate_fuzzy_headline",
-            "publication_gap_9_days"
+            "shared_locality_and_event_family",
+            "publication_gap_0_days"
           ]
         },
         {
-          "slug": "2026-08-13-martin-county-deputies-save-senior-from-600000-gold-bar-scam",
-          "headline": "Martin County deputies save senior from $600,000 gold bar scam",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.615,
-          "retrieval_score": 0.564,
+          "slug": "2026-08-19-bicyclist-critically-injured-in-port-st-lucie-crash-on-southwest-rosser-boulevar",
+          "headline": "Bicyclist critically injured in Port St. Lucie crash on Southwest Rosser Boulevard",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5758,
+          "retrieval_score": 0.4568,
           "reasons": [
-            "publication_gap_13_days"
+            "shared_locality_and_event_family",
+            "publication_gap_7_days"
           ]
         },
         {
-          "slug": "2026-08-24-sheriffs-helicopter-spots-massive-barn-fire-on-southwest-martin-highway-in-palm",
-          "headline": "Sheriff's helicopter crew spots garage fire on Southwest Martin Highway, helps save Palm City home",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5687,
-          "retrieval_score": 0.4847,
+          "slug": "2026-08-24-martin-county-schools-ban-fake-squishy-toys-after-federal-safety-alert",
+          "headline": "Martin County schools ban fake squishy toys after federal safety alert",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5654,
+          "retrieval_score": 0.4314,
           "reasons": [
+            "shared_locality_and_event_family",
             "publication_gap_2_days"
           ]
         },
         {
-          "slug": "2026-08-26-martin-county-man-crashes-suv-into-church-after-fleeing-deputies-faces-dui-charg",
-          "headline": "Martin County man crashes SUV into church after fleeing deputies, faces DUI charges",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5677,
-          "retrieval_score": 0.4777,
+          "slug": "2026-08-16-melbourne-man-82-dies-after-jeep-strikes-tree-in-median-of-interstate-95-in-st-l",
+          "headline": "Melbourne man, 82, dies after single-vehicle crash on I-95 in St. Lucie County",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5614,
+          "retrieval_score": 0.4484,
           "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_10_days"
+          ]
+        },
+        {
+          "slug": "2026-08-18-fort-pierce-city-council-selects-former-st-lucie-county-attorney-as-interim-city",
+          "headline": "Fort Pierce City Council selects former St. Lucie County attorney as interim city attorney",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5351,
+          "retrieval_score": 0.4191,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-08-20-st-lucie-county-deputy-found-guilty-of-dui-remains-on-unpaid-leave-during-intern",
+          "headline": "St. Lucie County deputy found guilty of DUI, remains on unpaid leave during internal review",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.534,
+          "retrieval_score": 0.412,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-08-18-st-lucie-nuclear-plant-back-at-full-power-after-control-rod-failure-prompted-shu",
+          "headline": "St. Lucie Nuclear Plant back at full power after control rod failure prompted shutdown",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5326,
+          "retrieval_score": 0.4166,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-08-13-trail-camera-airtags-fuel-sign-theft-allegations-between-martin-county-candidate",
+          "headline": "Trail camera, AirTags fuel sign theft allegations between Martin County candidates",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5131,
+          "retrieval_score": 0.4121,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-08-12-martin-county-reviews-first-development-proposal-under-new-state-agricultural-en",
+          "headline": "Martin County reviews first development proposal under new state agricultural enclave law",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5114,
+          "retrieval_score": 0.4114,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-08-20-two-fort-pierce-women-arrested-for-using-fake-movie-money-at-st-lucie-restaurant",
+          "headline": "Two Fort Pierce women arrested for using fake movie money at St. Lucie restaurant",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5057,
+          "retrieval_score": 0.3837,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-08-21-fort-pierce-faces-legal-vacancy-after-daniel-mcintyre-declines-interim-city-atto",
+          "headline": "Fort Pierce faces legal vacancy after Daniel McIntyre declines interim city attorney job",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.5049,
+          "retrieval_score": 0.3799,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-port-st-lucie-raises-annual-trash-fee-to-482-despite-ongoing-pickup-complaints",
+          "headline": "Port St. Lucie raises annual trash fee to $482 despite ongoing pickup complaints",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.4927,
+          "retrieval_score": 0.3527,
+          "reasons": [
+            "shared_locality_and_event_family",
             "publication_gap_1_days"
           ]
-        },
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "hit-and-run suspect Likenson Daceus, 39, captured after manhunt through swamp near Martin-St. Lucie county line",
+          "Martin County Sheriff's Office led search with FWC and Port St. Lucie Police",
+          "search involved K-9s, aviation and drone units"
+        ],
+        "reason": "None of the candidate articles concern a hit-and-run crash, manhunt, or suspect named Likenson Daceus. Candidates cover unrelated topics (data center moratorium, bicyclist crash, squishy toy ban, I-95 fatal crash, city attorney appointment, DUI conviction, nuclear plant, sign theft, agricultural enclave, counterfeit money arrest, trash fee increase). No shared named suspect, victim, date, or precise location ties this incoming article to any candidate.",
+        "validation_errors": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "hit-and-run suspect Likenson Daceus, 39, captured after manhunt through swamp near Martin-St. Lucie county line",
+          "Martin County Sheriff's Office led search with FWC and Port St. Lucie Police",
+          "search involved K-9s, aviation and drone units"
+        ],
+        "reason": "None of the candidate articles concern a hit-and-run crash, manhunt, or suspect named Likenson Daceus. Candidates cover unrelated topics (data center moratorium, bicyclist crash, squishy toy ban, I-95 fatal crash, city attorney appointment, DUI conviction, nuclear plant, sign theft, agricultural enclave, counterfeit money arrest, trash fee increase). No shared named suspect, victim, date, or precise location ties this incoming article to any candidate.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Two Port St. Lucie teens arrested in monthlong burglary spree across Martin County",
+      "incoming_source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/2-port-st-lucie-teens-accused-of-15-burglaries-and-gun-thefts-across-martin-county",
+      "incoming_story_id": "story_006151",
+      "candidates": [
         {
-          "slug": "2026-08-11-palm-city-woman-arrested-after-36-border-collies-found-living-in-feces-covered-h",
-          "headline": "Palm City woman held on $275,000 bond after 36 Border Collies rescued from home",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.549,
-          "retrieval_score": 0.492,
+          "slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+          "headline": "Two St. Lucie County men arrested in Martin County burglaries, 13 cases closed",
+          "retrieval_score": 0.6728,
+          "headline_similarity": 0.4986,
+          "similarity_basis": "final_headline",
+          "shared_headline_tokens": [
+            "arrest",
+            "county",
+            "lucie",
+            "martin",
+            "st",
+            "two"
+          ],
+          "shared_topic_tokens": [
+            "arrest",
+            "two"
+          ],
+          "content_similarity": {
+            "score": 0.3826,
+            "overlap": 0.5,
+            "jaccard": 0.0805,
+            "shared_token_count": 12,
+            "shared_tokens": [
+              "19",
+              "2",
+              "arrest",
+              "began",
+              "burglaries",
+              "firearms",
+              "guns",
+              "recovered",
+              "sheriff",
+              "stolen",
+              "two",
+              "year"
+            ]
+          },
+          "strong_content_event_continuity": true,
+          "day_gap": 0,
+          "structured_conflict_override": false,
+          "structured_conflict_override_tier": "",
+          "incident_anchor_conflict": false,
+          "known_event_key_conflict": false,
           "reasons": [
-            "publication_gap_16_days",
-            "outside_recent_window"
+            "strong_content_event_continuity",
+            "publication_gap_0_days"
           ]
-        },
+        }
+      ],
+      "decision": {
+        "status": "validated",
+        "action": "update_existing_canonical",
+        "recommended_action": "update_existing_canonical",
+        "selected_candidate_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+        "same_real_world_event": true,
+        "material_new_update": true,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.98,
+        "shared_anchors": [
+          "Two 19-year-old suspects from St. Lucie County",
+          "Martin County Sheriff's Office arrests",
+          "String of burglaries in Martin County beginning in early August",
+          "Multiple stolen firearms recovered",
+          "St. Lucie County Sheriff's Office SWAT team assistance",
+          "Named suspects: Stephen Ivan Morris and Shaun Alexander Bilbrey"
+        ],
+        "novel_facts": [
+          "15 burglaries total (vs 13 cases closed in candidate)",
+          "Seven stolen firearms recovered (vs 'multiple' in candidate)",
+          "36 charges each including specific charge types: grand theft, armed burglary, larceny, traveling to commit burglary",
+          "Held with no bond at Martin County Jail",
+          "Specific locations: Hobe Sound, Palm City, Stuart, Stuart Yacht and Country Club",
+          "Burglary spree began specifically on Aug. 1",
+          "Suspects traveled by motorcycle",
+          "Targeted unlocked vehicles in gated and open communities",
+          "Climbed wall and stole golf cart at Stuart Yacht and Country Club to commit additional burglaries",
+          "Surveillance video captured suspect",
+          "One firearm traded at gas station for cash and still missing",
+          "Specific location: Southeast Bahama Circle in Hobe Sound",
+          "Resident reactions from Kevin Milliken and Carrie Boutwell"
+        ],
+        "reason": "This is clearly the same arrest event involving Morris and Bilbrey for Martin County burglaries. The incoming article provides substantial material updates including specific charge counts (36 each), bond status (no bond), precise burglary count (15 vs 13), exact firearm count (7), specific methodologies (motorcycle travel, golf cart theft), locations, and case details. These are material facts that change what readers need to know about the arrests, warranting an update to the existing canonical rather than a new story.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "Florida emergency management director faces 41-day overdue report on $4.7 billion disaster fund",
+      "incoming_source_url": "https://www.wptv.com/news/state/new-fdem-chief-inherits-overdue-accounting-for-florida-emergency-fund",
+      "incoming_story_id": "story_006161",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.1",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "Florida emergency management director faces 41-day overdue report on $4.7 billion disaster fund",
+      "incoming_source_url": "https://www.wptv.com/news/state/new-fdem-chief-inherits-overdue-accounting-for-florida-emergency-fund",
+      "incoming_story_id": "story_006161",
+      "candidates": [
         {
-          "slug": "2026-08-16-martin-county-corrections-deputy-mark-budensiek-dies-from-cancer",
-          "headline": "Martin County corrections deputy Mark Budensiek dies from cancer",
+          "slug": "2026-08-18-florida-emergency-management-chief-kevin-guthrie-joins-jay-collins-gubernatorial",
+          "headline": "Florida emergency management chief Kevin Guthrie joins Jay Collins gubernatorial ticket hours before primary",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5327,
-          "retrieval_score": 0.4727,
+          "terminal_recall_score": 0.483,
+          "retrieval_score": 0.47,
           "reasons": [
             "publication_gap_10_days"
           ]
         },
         {
-          "slug": "2026-08-19-miami-woman-arrested-in-martin-county-for-posing-as-bank-representative-hiding-s",
-          "headline": "Miami woman arrested in Martin County for posing as bank representative, hiding stolen cash in body",
+          "slug": "2026-08-19-angie-nixon-wins-democratic-nomination-for-florida-us-senate-special-primary-ele",
+          "headline": "Angie Nixon wins Democratic nomination for Florida U.S. Senate special primary election",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5323,
-          "retrieval_score": 0.4453,
+          "terminal_recall_score": 0.3933,
+          "retrieval_score": 0.3773,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-08-13-vehicle-connected-to-fatal-hit-and-run-in-indian-river-county-recovered",
+          "headline": "Vehicle connected to fatal hit-and-run in Indian River County recovered",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3911,
+          "retrieval_score": 0.3911,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-08-20-two-fort-pierce-women-arrested-for-using-fake-movie-money-at-st-lucie-restaurant",
+          "headline": "Two Fort Pierce women arrested for using fake movie money at St. Lucie restaurant",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.389,
+          "retrieval_score": 0.37,
           "reasons": [
             "publication_gap_7_days"
           ]
         },
         {
-          "slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
-          "headline": "Two St. Lucie County men arrested in Martin County burglaries, 13 cases closed",
+          "slug": "2026-08-20-vero-beach-quarterback-champ-monds-commits-to-notre-dame",
+          "headline": "Vero Beach quarterback Champ Monds commits to Notre Dame",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5312,
-          "retrieval_score": 0.4412,
+          "terminal_recall_score": 0.3889,
+          "retrieval_score": 0.3699,
           "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-08-20-port-st-lucie-man-arrested-on-sexual-activity-with-minor-charges-after-swat-oper",
-          "headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5079,
-          "retrieval_score": 0.4859,
-          "reasons": [
-            "publication_gap_6_days"
+            "publication_gap_8_days"
           ]
         },
         {
           "slug": "2026-08-26-martin-county-pal-jeep-duck-scavenger-hunt-fundraiser-set-for-sept-19",
           "headline": "Martin County PAL Jeep Duck Scavenger Hunt fundraiser set for Sept. 19",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5004,
-          "retrieval_score": 0.4604,
+          "terminal_recall_score": 0.38,
+          "retrieval_score": 0.343,
           "reasons": [
-            "publication_gap_0_days"
+            "publication_gap_1_days"
           ]
         },
         {
-          "slug": "2026-08-18-miami-woman-accused-of-posing-as-bank-representative-in-martin-county-credit-car",
-          "headline": "Miami woman accused of posing as bank representative in Martin County credit card scam",
+          "slug": "2026-08-20-indian-river-county-sheriffs-office-uses-flock-license-plate-cameras-in-search-f",
+          "headline": "Body cam video shows U.S. Marshals arrest Vero Beach murder suspect in West Virginia",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4881,
-          "retrieval_score": 0.4221,
+          "terminal_recall_score": 0.3794,
+          "retrieval_score": 0.3544,
           "reasons": [
             "publication_gap_8_days"
           ]
         },
         {
-          "slug": "2026-08-21-lauderhill-man-arrested-in-treasure-coast-mall-jewelry-kiosk-robbery-worth-over",
-          "headline": "Lauderhill man arrested in Treasure Coast Mall jewelry kiosk robbery worth over $22,000",
+          "slug": "2026-08-25-florida-leads-nation-in-aca-coverage-losses-as-440000-drop-plans-after-subsidy-e",
+          "headline": "Florida leads nation in ACA coverage losses as 440,000 drop plans after subsidy expiration",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4696,
-          "retrieval_score": 0.3946,
+          "terminal_recall_score": 0.3741,
+          "retrieval_score": 0.3401,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-08-21-fort-pierce-faces-legal-vacancy-after-daniel-mcintyre-declines-interim-city-atto",
+          "headline": "Fort Pierce faces legal vacancy after Daniel McIntyre declines interim city attorney job",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.374,
+          "retrieval_score": 0.352,
+          "reasons": [
+            "publication_gap_6_days"
+          ]
+        },
+        {
+          "slug": "2026-08-24-fort-pierce-man-dies-after-bb-gun-shooting-suspect-charged-with-manslaughter",
+          "headline": "Fort Pierce man identified as Jabari Cowart in fatal BB gun shooting on Avenue G",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3712,
+          "retrieval_score": 0.3372,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-08-25-florida-lt-gov-jay-collins-leaves-future-in-politics-uncertain-after-primary-los",
+          "headline": "Florida Lt. Gov. Jay Collins leaves future in politics uncertain after primary loss",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3686,
+          "retrieval_score": 0.3346,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-08-22-clear-the-shelters-waives-adoption-fees-saturday-at-vero-beach-animal-shelter",
+          "headline": "Clear the Shelters waives adoption fees Saturday at Vero Beach animal shelter",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3675,
+          "retrieval_score": 0.3425,
           "reasons": [
             "publication_gap_5_days"
           ]
         }
       ],
-      "decision": {
+      "initial_decision": {
         "status": "model_error",
         "action": "hold",
         "selected_candidate_slug": "",
@@ -1873,328 +2170,8 @@
         "validation_errors": [
           "model_error"
         ]
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "DeSantis seeks statewide review of license plate camera use amid surveillance concerns",
-      "incoming_source_url": "https://www.wptv.com/news/state/i-dont-want-to-have-this-become-a-surveillance-state-desantis-seeks-overview-of-license-plate-camera-use",
-      "incoming_story_id": "story_006138",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "DeSantis seeks statewide review of license plate camera use amid surveillance concerns",
-      "incoming_source_url": "https://www.wptv.com/news/state/i-dont-want-to-have-this-become-a-surveillance-state-desantis-seeks-overview-of-license-plate-camera-use",
-      "incoming_story_id": "story_006138",
-      "candidates": [
-        {
-          "slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
-          "headline": "Martin County commissioners move toward one-year pause on large data center development",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4044,
-          "retrieval_score": 0.3644,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-08-13-three-port-st-lucie-police-officers-placed-on-leave-during-campaign-sign-investi",
-          "headline": "Three Port St. Lucie police officers placed on leave during campaign sign investigations",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3968,
-          "retrieval_score": 0.3958,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
-          "headline": "Two St. Lucie County men arrested in Martin County burglaries, 13 cases closed",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3663,
-          "retrieval_score": 0.3263,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-08-21-brightline-station-in-downtown-stuart-unlikely-after-martin-county-denied-federa",
-          "headline": "Brightline station in downtown Stuart unlikely after Martin County denied federal funding",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3639,
-          "retrieval_score": 0.3389,
-          "reasons": [
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-08-25-vero-beach-man-crashes-while-fleeing-deputies-k9-finds-him-hiding-under-brush",
-          "headline": "Vero Beach man crashes while fleeing deputies, K9 finds him hiding under brush",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3539,
-          "retrieval_score": 0.3169,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-08-18-port-st-lucie-to-reconsider-led-sign-rules-after-church-request",
-          "headline": "Port St. Lucie to reconsider LED sign rules after church request",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3454,
-          "retrieval_score": 0.3294,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
-          "headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3432,
-          "retrieval_score": 0.3092,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
-          "headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3412,
-          "retrieval_score": 0.3042,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-08-19-florida-school-bus-and-speed-zone-camera-lawsuits-face-dismissals-and-legal-setb",
-          "headline": "Florida school camera lawsuits face dismissals as judges side with automated enforcement systems",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3398,
-          "retrieval_score": 0.3178,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-08-12-bobcat-seen-weekly-in-port-st-lucie-pga-village-neighborhood",
-          "headline": "Bobcat seen weekly in Port St. Lucie PGA Village neighborhood",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3394,
-          "retrieval_score": 0.3394,
-          "reasons": [
-            "publication_gap_15_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-08-12-martin-county-reviews-first-development-proposal-under-new-state-agricultural-en",
-          "headline": "Martin County reviews first development proposal under new state agricultural enclave law",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3377,
-          "retrieval_score": 0.3377,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-08-17-port-st-lucie-police-rescue-ducklings-trapped-in-storm-drain-on-southeast-oakrid",
-          "headline": "Port St. Lucie police rescue ducklings trapped in storm drain on Southeast Oakridge Drive",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3363,
-          "retrieval_score": 0.3233,
-          "reasons": [
-            "publication_gap_9_days"
-          ]
-        }
-      ],
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.95,
-        "shared_anchors": [],
-        "novel_facts": [
-          "DeSantis announced a statewide review of license plate camera use",
-          "Haines City Police Department officer accused of tracking estranged wife's vehicle",
-          "Pasco County Sheriff terminating license plate detection agreement"
-        ],
-        "reason": "None of the candidates concern DeSantis, license plate readers/Flock cameras, Haines City, or Pasco County. The closest topical match (school camera lawsuits) involves a different technology (school bus/speed cameras), different jurisdiction, and different legal issue. No shared participants, agencies, or incident anchors exist with any candidate.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "National Weather Service explains radar limitations after Port St. Lucie tornado",
-      "incoming_source_url": "https://www.wpbf.com/article/florida-port-st-lucie-tornado-nws-tornado-warnings/73524632",
-      "incoming_story_id": "story_006024",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "National Weather Service explains radar limitations after Port St. Lucie tornado",
-      "incoming_source_url": "https://www.wpbf.com/article/florida-port-st-lucie-tornado-nws-tornado-warnings/73524632",
-      "incoming_story_id": "story_006024",
-      "candidates": [
-        {
-          "slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
-          "headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.7833,
-          "retrieval_score": 0.7433,
-          "reasons": [
-            "moderate_fuzzy_headline",
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-08-12-bobcat-seen-weekly-in-port-st-lucie-pga-village-neighborhood",
-          "headline": "Bobcat seen weekly in Port St. Lucie PGA Village neighborhood",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5341,
-          "retrieval_score": 0.5331,
-          "reasons": [
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-08-24-martin-county-schools-ban-fake-squishy-toys-after-federal-safety-alert",
-          "headline": "Martin County schools ban fake squishy toys after federal safety alert",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5244,
-          "retrieval_score": 0.4874,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
-          "headline": "Port St. Lucie residents question why tornado alerts arrived late or never came at all",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5231,
-          "retrieval_score": 0.4831,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
-          "headline": "Port St. Lucie High School senior in ICE custody after traffic stop on way to school",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5058,
-          "retrieval_score": 0.4688,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-08-18-port-st-lucie-voters-head-to-polls-tuesday-for-mayoral-election",
-          "headline": "Port St. Lucie voters head to polls Tuesday for mayoral election",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4953,
-          "retrieval_score": 0.4763,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-08-16-melbourne-man-82-dies-after-jeep-strikes-tree-in-median-of-interstate-95-in-st-l",
-          "headline": "Melbourne man, 82, dies after single-vehicle crash on I-95 in St. Lucie County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4857,
-          "retrieval_score": 0.4697,
-          "reasons": [
-            "publication_gap_9_days"
-          ]
-        },
-        {
-          "slug": "2026-08-16-stuart-man-65-struck-and-killed-crossing-us-1-in-st-lucie-county",
-          "headline": "Stuart man, 65, struck and killed crossing U.S. 1 in St. Lucie County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4711,
-          "retrieval_score": 0.4581,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-08-11-port-st-lucie-residents-rescue-autistic-child-from-retention-pond",
-          "headline": "Port St. Lucie residents rescue autistic child from retention pond",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4668,
-          "retrieval_score": 0.4668,
-          "reasons": [
-            "publication_gap_15_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-08-20-two-fort-pierce-women-arrested-for-using-fake-movie-money-at-st-lucie-restaurant",
-          "headline": "Two Fort Pierce women arrested for using fake movie money at St. Lucie restaurant",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4517,
-          "retrieval_score": 0.4267,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-08-12-st-lucie-county-officials-outline-2026-master-plan-for-port-of-fort-pierce",
-          "headline": "St. Lucie County officials outline 2026 master plan for Port of Fort Pierce",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4507,
-          "retrieval_score": 0.4497,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-08-12-construction-worker-killed-by-vehicle-in-i-95-work-zone-south-of-tradition",
-          "headline": "Construction worker killed by vehicle in I-95 work zone south of Tradition",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4496,
-          "retrieval_score": 0.4486,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        }
-      ],
+      },
+      "resolution_decision": {},
       "decision": {
         "status": "model_error",
         "action": "hold",
@@ -2213,14 +2190,226 @@
     }
   ],
   "archive_repairs": [],
-  "material_update_compositions": [],
-  "material_updates": [],
+  "material_update_compositions": [
+    {
+      "phase": "forward_publication",
+      "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+      "incoming_slug": "",
+      "status": "validated",
+      "validation_errors": [],
+      "word_count": 298,
+      "paragraph_count": 4,
+      "baseline_lead_hits": [
+        "arrested",
+        "burglaries",
+        "cases",
+        "closed",
+        "lucie",
+        "martin",
+        "men",
+        "two"
+      ],
+      "novelty_lead_hits": [
+        "alexander",
+        "armed",
+        "arrests",
+        "bilbrey",
+        "bond",
+        "both",
+        "burglary",
+        "charges",
+        "commit",
+        "each",
+        "face",
+        "grand",
+        "held",
+        "including",
+        "ivan",
+        "jail",
+        "larceny",
+        "morris",
+        "port",
+        "seven",
+        "shaun",
+        "stephen",
+        "theft",
+        "traveling"
+      ],
+      "headline_alignment": {
+        "aligned": true,
+        "reason": "validated_canonical_headline_evolution",
+        "token_similarity": 1.0,
+        "date_gap_days": 1,
+        "meaningful_update_basis": "semantic_material_update_gate",
+        "prospective": true,
+        "existing_headline": "Two St. Lucie County men arrested in Martin County burglaries, 13 cases closed",
+        "incoming_headline": "Two Port St. Lucie teens face 36 charges each in Martin County burglary spree, 15 cases closed",
+        "candidate_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+        "prospective_lastmod": "2026-08-27",
+        "timestamp_evidence": "stored_archive_timestamp"
+      },
+      "context_diagnostics": {
+        "required": true,
+        "passed": true,
+        "story_form": "update",
+        "lead_word_count": 80,
+        "baseline_anchor": "",
+        "baseline_present": true,
+        "baseline_anchor_present": true,
+        "baseline_details_present": true,
+        "baseline_context_hits": [
+          "arrested",
+          "burglaries",
+          "cases",
+          "closed",
+          "lucie",
+          "martin"
+        ],
+        "baseline_context_required": 2,
+        "canonical_context_available": true,
+        "canonical_context_headline": "Two St. Lucie County men arrested in Martin County burglaries, 13 cases closed",
+        "novelty_anchor": "source_distinctive_detail",
+        "novelty_present": true,
+        "novelty_token_hits": [
+          "port"
+        ],
+        "missing": [],
+        "source_title": "2 Port St. Lucie teens accused of 15 burglaries and gun thefts across Martin County",
+        "headline": "Two Port St. Lucie teens face 36 charges each in Martin County burglary spree, 15 cases closed"
+      },
+      "headline": "Two Port St. Lucie teens face 36 charges each in Martin County burglary spree, 15 cases closed"
+    }
+  ],
+  "material_updates": [
+    {
+      "phase": "forward_publication",
+      "source_slug": "",
+      "target_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+      "source_story_id": "story_006151",
+      "target_story_id": "story_006042",
+      "source_headline": "2 Port St. Lucie teens accused of 15 burglaries and gun thefts across Martin County",
+      "updated_headline": "Two Port St. Lucie teens face 36 charges each in Martin County burglary spree, 15 cases closed",
+      "confidence": 0.98,
+      "shared_anchors": [
+        "Two 19-year-old suspects from St. Lucie County",
+        "Martin County Sheriff's Office arrests",
+        "String of burglaries in Martin County beginning in early August",
+        "Multiple stolen firearms recovered",
+        "St. Lucie County Sheriff's Office SWAT team assistance",
+        "Named suspects: Stephen Ivan Morris and Shaun Alexander Bilbrey"
+      ],
+      "novel_facts": [
+        "15 burglaries total (vs 13 cases closed in candidate)",
+        "Seven stolen firearms recovered (vs 'multiple' in candidate)",
+        "36 charges each including specific charge types: grand theft, armed burglary, larceny, traveling to commit burglary",
+        "Held with no bond at Martin County Jail",
+        "Specific locations: Hobe Sound, Palm City, Stuart, Stuart Yacht and Country Club",
+        "Burglary spree began specifically on Aug. 1",
+        "Suspects traveled by motorcycle",
+        "Targeted unlocked vehicles in gated and open communities",
+        "Climbed wall and stole golf cart at Stuart Yacht and Country Club to commit additional burglaries",
+        "Surveillance video captured suspect",
+        "One firearm traded at gas station for cash and still missing",
+        "Specific location: Southeast Bahama Circle in Hobe Sound",
+        "Resident reactions from Kevin Milliken and Carrie Boutwell"
+      ],
+      "updated_at": "2026-08-27T00:36:07Z",
+      "composition": {
+        "phase": "forward_publication",
+        "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+        "incoming_slug": "",
+        "status": "validated",
+        "validation_errors": [],
+        "word_count": 298,
+        "paragraph_count": 4,
+        "baseline_lead_hits": [
+          "arrested",
+          "burglaries",
+          "cases",
+          "closed",
+          "lucie",
+          "martin",
+          "men",
+          "two"
+        ],
+        "novelty_lead_hits": [
+          "alexander",
+          "armed",
+          "arrests",
+          "bilbrey",
+          "bond",
+          "both",
+          "burglary",
+          "charges",
+          "commit",
+          "each",
+          "face",
+          "grand",
+          "held",
+          "including",
+          "ivan",
+          "jail",
+          "larceny",
+          "morris",
+          "port",
+          "seven",
+          "shaun",
+          "stephen",
+          "theft",
+          "traveling"
+        ],
+        "headline_alignment": {
+          "aligned": true,
+          "reason": "validated_canonical_headline_evolution",
+          "token_similarity": 1.0,
+          "date_gap_days": 1,
+          "meaningful_update_basis": "semantic_material_update_gate",
+          "prospective": true,
+          "existing_headline": "Two St. Lucie County men arrested in Martin County burglaries, 13 cases closed",
+          "incoming_headline": "Two Port St. Lucie teens face 36 charges each in Martin County burglary spree, 15 cases closed",
+          "candidate_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+          "prospective_lastmod": "2026-08-27",
+          "timestamp_evidence": "stored_archive_timestamp"
+        },
+        "context_diagnostics": {
+          "required": true,
+          "passed": true,
+          "story_form": "update",
+          "lead_word_count": 80,
+          "baseline_anchor": "",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "arrested",
+            "burglaries",
+            "cases",
+            "closed",
+            "lucie",
+            "martin"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Two St. Lucie County men arrested in Martin County burglaries, 13 cases closed",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": true,
+          "novelty_token_hits": [
+            "port"
+          ],
+          "missing": [],
+          "source_title": "2 Port St. Lucie teens accused of 15 burglaries and gun thefts across Martin County",
+          "headline": "Two Port St. Lucie teens face 36 charges each in Martin County burglary spree, 15 cases closed"
+        },
+        "headline": "Two Port St. Lucie teens face 36 charges each in Martin County burglary spree, 15 cases closed"
+      }
+    }
+  ],
   "registry_consolidation": {
-    "status": "no_changes",
-    "directives_considered": 3,
-    "story_records_merged": 0,
-    "aliases_written": 0,
-    "already_consolidated": 2,
+    "status": "consolidated",
+    "directives_considered": 1,
+    "story_records_merged": 1,
+    "aliases_written": 1,
+    "already_consolidated": 0,
     "skipped": [
       {
         "source_story_id": "story_003665",
@@ -2284,6 +2473,41 @@
       }
     ],
     "rejected_directives": [],
-    "merges": []
+    "merges": [
+      {
+        "source_story_id": "story_006151",
+        "target_story_id": "story_006042",
+        "target_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+        "incoming_headline": "Two Port St. Lucie teens arrested in monthlong burglary spree across Martin County",
+        "confidence": 0.98,
+        "shared_anchors": [
+          "Two 19-year-old suspects from St. Lucie County",
+          "Martin County Sheriff's Office arrests",
+          "String of burglaries in Martin County beginning in early August",
+          "Multiple stolen firearms recovered",
+          "St. Lucie County Sheriff's Office SWAT team assistance",
+          "Named suspects: Stephen Ivan Morris and Shaun Alexander Bilbrey"
+        ],
+        "reason": "This is clearly the same arrest event involving Morris and Bilbrey for Martin County burglaries. The incoming article provides substantial material updates including specific charge counts (36 each), bond status (no bond), precise burglary count (15 vs 13), exact firearm count (7), specific methodologies (motorcycle travel, golf cart theft), locations, and case details. These are material facts that change what readers need to know about the arrests, warranting an update to the existing canonical rather than a new story.",
+        "relationship_type": "material_update",
+        "novel_facts": [
+          "15 burglaries total (vs 13 cases closed in candidate)",
+          "Seven stolen firearms recovered (vs 'multiple' in candidate)",
+          "36 charges each including specific charge types: grand theft, armed burglary, larceny, traveling to commit burglary",
+          "Held with no bond at Martin County Jail",
+          "Specific locations: Hobe Sound, Palm City, Stuart, Stuart Yacht and Country Club",
+          "Burglary spree began specifically on Aug. 1",
+          "Suspects traveled by motorcycle",
+          "Targeted unlocked vehicles in gated and open communities",
+          "Climbed wall and stole golf cart at Stuart Yacht and Country Club to commit additional burglaries",
+          "Surveillance video captured suspect",
+          "One firearm traded at gas station for cash and still missing",
+          "Specific location: Southeast Bahama Circle in Hobe Sound",
+          "Resident reactions from Kevin Milliken and Carrie Boutwell"
+        ],
+        "resolved_source_story_id": "story_006151",
+        "resolved_target_story_id": "story_006042"
+      }
+    ]
   }
 }
