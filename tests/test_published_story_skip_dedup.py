@@ -674,7 +674,7 @@ def test_authorized_custom_material_update_rewrites_one_canonical_without_duplic
     assert canonical_page.read_text(encoding="utf-8").startswith("UPDATED::")
     assert len(list(articles.glob("*.html"))) == 1
     semantic_report = json.loads(g.SEMANTIC_GATE_REPORT_PATH.read_text(encoding="utf-8"))
-    assert semantic_report["schema_version"] == 4
+    assert semantic_report["schema_version"] == 5
     assert semantic_report["summary"]["pre_generation_materiality_evaluations"] == 1
     assert semantic_report["summary"]["pre_generation_materiality_promotions"] == 1
     assert semantic_report["summary"]["pre_generation_materiality_model_calls"] == 1

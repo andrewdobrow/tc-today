@@ -244,3 +244,45 @@ def test_final_freshness_gate_can_reselect_recent_archive_recovery(tmp_path):
     assert '"passed": true' in report
     assert '"action": "reselected_after_final_canonical_binding"' in report
     assert "fresh-fort-pierce-public-safety-development" in report
+
+
+
+def test_final_canonical_binding_preserves_giustino_material_update_freshness_and_new_headline(tmp_path):
+    g = _load_generate()
+    old = (datetime.now(timezone.utc) - timedelta(days=37)).strftime("%a, %d %b %Y %H:%M:%S GMT")
+    fresh_update = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat(timespec="seconds").replace("+00:00", "Z")
+    canonical = {
+        "slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+        "headline": "Martin County woman pleads no contest in animal hoarding case, receives probation",
+        "permalink_origin_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+        "teaser": "A no-contest plea and probation mark the latest development in the Martin County animal-hoarding case.",
+        "date": "2026-07-20",
+        "first_published": old,
+        "canonical_first_published_at": old,
+        "meaningful_update_validated": True,
+        "meaningful_update_basis": "semantic_material_update_gate",
+        "last_meaningful_update_at": fresh_update,
+        "canonical_last_material_update_at": fresh_update,
+        "editorial_story_id": "story_giustino_hoarding",
+    }
+    card = {
+        "headline": "Woman pleads no contest in Martin County animal hoarding case",
+        "_archived_slug": canonical["slug"],
+        "editorial_story_id": canonical["editorial_story_id"],
+    }
+    identity = {
+        "canonical_slug": canonical["slug"],
+        "canonical_permalink": f"https://treasurecoast.today/articles/{canonical['slug']}.html",
+        "canonical_entry": canonical,
+        "identity_basis": "persistent_story_id",
+        "story_id": canonical["editorial_story_id"],
+        "redirect_source": False,
+    }
+    assert g._apply_final_canonical_surface_identity(card, identity)
+    assert card["headline"] == canonical["headline"]
+    assert card["canonical_last_material_update_at"] == fresh_update
+    assert card["published_raw"] == fresh_update
+    assessment = g._canonical_hero_freshness_assessment(card, now=datetime.now(timezone.utc))
+    assert assessment["stale"] is False
+    assert assessment["date_field"] == "canonical_last_material_update_at"
+    assert assessment["reason"] == "validated_meaningful_update_fresh"

@@ -450,3 +450,41 @@ def test_rendered_projection_self_heals_live_item_identity_drift_before_final_ga
     assert final_report["passed"] is True
     assert final_report["canonical_duplicate_count"] == 0
     assert final_report["redirect_source_link_count"] == 0
+
+
+
+def test_redirect_backed_tornado_card_is_canonicalized_before_it_can_compete_as_independent_homepage_story(tmp_path):
+    g = _load_generate()
+    canonical_slug = "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p"
+    retired_slug = "2026-08-26-national-weather-service-explains-port-st-lucie-tornado-warning"
+    canonical = {
+        "slug": canonical_slug,
+        "headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
+        "date": "2026-08-25",
+        "editorial_story_id": "story_psl_tornado",
+    }
+    context = g._build_final_canonical_surface_context([canonical], tmp_path, identity_index=_identity_index("story_psl_tornado"), redirect_map={retired_slug: canonical_slug})
+    retired_card = {"headline": "NWS explains Port St. Lucie tornado warning", "_archived_slug": retired_slug, "editorial_story_id": "story_psl_tornado", "urgency_score": 10}
+    canonical_card = {"headline": canonical["headline"], "_archived_slug": canonical_slug, "editorial_story_id": "story_psl_tornado", "urgency_score": 7}
+    kept, report = g._dedupe_homepage_cards_by_permalink([retired_card, canonical_card], _resolver, surface_context=context)
+    assert len(kept) == 1
+    assert kept[0]["_archived_slug"] == canonical_slug
+    assert kept[0]["headline"] == canonical["headline"]
+    assert report["removed_count"] == 1
+    assert report["canonical_rewrite_count"] >= 1
+
+
+def test_two_redirect_placements_rebound_to_same_canonical_are_collapsed_before_final_render(tmp_path):
+    g = _load_generate()
+    canonical = {"slug": "2026-08-25-tornado-canonical", "headline": "Port St. Lucie tornado canonical", "date": "2026-08-25"}
+    context = g._build_final_canonical_surface_context([canonical], tmp_path, identity_index=_identity_index(), redirect_map={"old-tornado-alert": canonical["slug"], "nws-tornado-explanation": canonical["slug"]})
+    cards = [
+        {"headline": "Old tornado alert", "_archived_slug": "old-tornado-alert", "urgency_score": 8},
+        {"headline": "NWS tornado explanation", "_archived_slug": "nws-tornado-explanation", "urgency_score": 9},
+    ]
+    kept, report = g._dedupe_homepage_cards_by_permalink(cards, _resolver, surface_context=context)
+    assert len(kept) == 1
+    assert kept[0]["_archived_slug"] == canonical["slug"]
+    assert kept[0]["headline"] == canonical["headline"]
+    assert report["removed_count"] == 1
+    assert report["canonical_rewrite_count"] == 2

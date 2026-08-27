@@ -725,3 +725,46 @@ def test_exact_st_lucie_shadow_keeps_fresh_tornado_hero_instead_of_swapping_to_c
     assert swap is None
     assert data["hero"]["source_index"] == 1
     assert "tornado" in data["hero"]["headline"].lower()
+
+
+
+def test_shadow_terminal_alignment_cannot_publish_a_source_live_terminal_authority_held(monkeypatch):
+    from scripts import generate
+
+    source_url = "https://example.com/byron-donalds-running-mate"
+    packet = {
+        "category_key": "florida",
+        "category_label": "Florida",
+        "source_inputs": [{
+            "source_index": 1,
+            "title": "Byron Donalds selects Miami-Dade Sen. Bryan Avila as running mate",
+            "source_url": source_url,
+            "link": source_url,
+        }],
+    }
+    data = {
+        "hero": {
+            "headline": "Byron Donalds selects Bryan Avila as running mate",
+            "source_index": 1,
+        },
+        "cards": [],
+    }
+    normalized = generate._normalized_external_source_url(source_url) or source_url
+    monkeypatch.setitem(generate.SEMANTIC_PUBLICATION_SOURCE_OUTCOMES, normalized, {
+        "authority_stage": "terminal_permalink_authority",
+        "action": generate.SEMANTIC_ACTION_HOLD,
+        "status": "validated",
+        "selected_candidate_slug": "",
+    })
+
+    diagnostics = generate._assignment_shadow_apply_terminal_publication_authority(data, packet)
+
+    assert data["hero"] is None
+    assert diagnostics == [{
+        "role": "hero",
+        "source_index": 1,
+        "headline": "Byron Donalds selects Bryan Avila as running mate",
+        "action": generate.SEMANTIC_ACTION_HOLD,
+        "selected_candidate_slug": "",
+        "result": "dropped_terminal_hold",
+    }]

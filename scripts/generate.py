@@ -67,7 +67,9 @@ try:
         SEMANTIC_GATE_DEFAULT_MIN_CONFIDENCE,
         SEMANTIC_GATE_DEFAULT_RECENT_WINDOW_DAYS,
         adjudicate_semantic_publication_candidates,
+        resolve_semantic_publication_hold,
         semantic_publication_decision_cache_key,
+        semantic_publication_resolution_cache_key,
         retrieve_semantic_publication_candidates,
         semantic_headline_similarity,
     )
@@ -111,7 +113,9 @@ except Exception as exc:
     SEMANTIC_GATE_DEFAULT_MIN_CONFIDENCE = 0.82
     SEMANTIC_GATE_DEFAULT_RECENT_WINDOW_DAYS = 7
     adjudicate_semantic_publication_candidates = None
+    resolve_semantic_publication_hold = None
     semantic_publication_decision_cache_key = None
+    semantic_publication_resolution_cache_key = None
     retrieve_semantic_publication_candidates = None
     semantic_headline_similarity = None
     semantic_candidate_evidence = None
@@ -1234,7 +1238,7 @@ SEMANTIC_GATE_MIN_CONFIDENCE = min(
 SEMANTIC_GATE_CACHE_PATH = OUTPUT_DIR / "data" / "semantic-publication-gate-cache.json"
 SEMANTIC_GATE_REPORT_PATH = OUTPUT_DIR / "data" / "semantic-publication-gate.json"
 SEMANTIC_GATE_CACHE_SCHEMA_VERSION = 1
-SEMANTIC_GATE_REPORT_SCHEMA_VERSION = 4
+SEMANTIC_GATE_REPORT_SCHEMA_VERSION = 5
 
 # v1.13.6.7n terminal permalink authority. Earlier identity gates are intentionally
 # optimized for precision and can miss an angle-shifted duplicate. Every ordinary
@@ -1242,12 +1246,16 @@ SEMANTIC_GATE_REPORT_SCHEMA_VERSION = 4
 # high-recall archive shortlist and Sonnet 5 adjudication immediately before the
 # permalink write. Retrieval may nominate unrelated candidates; only the model can
 # authorize NEW, and any ambiguity fails closed.
-TERMINAL_PERMALINK_GATE_VERSION = "1.0"
+TERMINAL_PERMALINK_GATE_VERSION = "1.1"
+TERMINAL_PERMALINK_RESOLUTION_VERSION = "1.0"
 TERMINAL_PERMALINK_RECENT_DAYS = _positive_int_env(
     "TCT_TERMINAL_PERMALINK_RECENT_DAYS", 14
 )
 TERMINAL_PERMALINK_MAX_CANDIDATES = _positive_int_env(
     "TCT_TERMINAL_PERMALINK_MAX_CANDIDATES", 12
+)
+TERMINAL_PERMALINK_RESOLUTION_MAX_CANDIDATES = _positive_int_env(
+    "TCT_TERMINAL_PERMALINK_RESOLUTION_MAX_CANDIDATES", 5
 )
 TERMINAL_PERMALINK_TIMEOUT_SECONDS = _positive_float_env(
     "TCT_TERMINAL_PERMALINK_TIMEOUT_SECONDS", 60
@@ -9087,8 +9095,12 @@ def _canonical_hero_freshness_assessment(item, now=None):
     meaningful_validated = bool(item.get("meaningful_update_validated"))
     candidates = []
     if meaningful_validated:
-        candidates.append(("last_meaningful_update_at", item.get("last_meaningful_update_at")))
+        candidates.extend([
+            ("canonical_last_material_update_at", item.get("canonical_last_material_update_at")),
+            ("last_meaningful_update_at", item.get("last_meaningful_update_at")),
+        ])
     candidates.extend([
+        ("canonical_first_published_at", item.get("canonical_first_published_at")),
         ("first_published", item.get("first_published")),
         ("date", item.get("date")),
     ])
@@ -9123,7 +9135,7 @@ def _canonical_hero_freshness_assessment(item, now=None):
 
     age_hours = max(0.0, (now - timestamp).total_seconds() / 3600)
     stale = age_hours >= CANONICAL_HERO_FRESHNESS_MAX_AGE_HOURS
-    if field == "last_meaningful_update_at":
+    if field in {"canonical_last_material_update_at", "last_meaningful_update_at"}:
         reason = "validated_meaningful_update_fresh" if not stale else "validated_meaningful_update_stale"
     elif canonical_bound:
         reason = "canonical_publication_fresh" if not stale else "canonical_publication_stale"
@@ -9159,10 +9171,28 @@ def _record_validated_meaningful_update(existing, item, diagnostics, *, changed,
         return False
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     stamp = now.isoformat(timespec="seconds").replace("+00:00", "Z")
+    canonical_first = str(
+        existing.get("canonical_first_published_at")
+        or existing.get("first_published")
+        or existing.get("date")
+        or ""
+    )
+    origin_headline = str(
+        existing.get("permalink_origin_headline")
+        or existing.get("headline")
+        or ""
+    )
+    if canonical_first:
+        existing["canonical_first_published_at"] = canonical_first
+        item["canonical_first_published_at"] = canonical_first
+    if origin_headline and not existing.get("permalink_origin_headline"):
+        existing["permalink_origin_headline"] = origin_headline
     existing["last_meaningful_update_at"] = stamp
+    existing["canonical_last_material_update_at"] = stamp
     existing["meaningful_update_validated"] = True
     existing["meaningful_update_basis"] = "contextual_update_contract"
     item["last_meaningful_update_at"] = stamp
+    item["canonical_last_material_update_at"] = stamp
     item["meaningful_update_validated"] = True
     item["meaningful_update_basis"] = "contextual_update_contract"
     item["_canonical_freshness_bound"] = True
@@ -10513,6 +10543,72 @@ def _assignment_shadow_source_outcome(source):
     return {}
 
 
+
+def _assignment_shadow_apply_terminal_publication_authority(data, packet):
+    """Apply the live terminal permalink outcome to shadow-selected source placements.
+
+    The shadow may compare writing/selection quality, but it cannot resurrect a source
+    that live publication held. Duplicate/update outcomes are rebound to the selected
+    canonical before the shared final-surface pass so both paths compare the same
+    publication identity.
+    """
+    diagnostics = []
+    if not isinstance(data, dict):
+        return diagnostics
+
+    def _apply(item, role):
+        if not isinstance(item, dict):
+            return item
+        index = _assignment_shadow_restore_source_index(item, packet)
+        if index is None:
+            return item
+        try:
+            source = _assignment_source_by_index(packet, index)
+        except Exception:
+            return item
+        outcome = _assignment_shadow_source_outcome(source)
+        if str(outcome.get("authority_stage") or "") != "terminal_permalink_authority":
+            return item
+        action = str(outcome.get("action") or "")
+        record = {
+            "role": role,
+            "source_index": index,
+            "headline": str(item.get("headline") or ""),
+            "action": action,
+            "selected_candidate_slug": str(outcome.get("selected_candidate_slug") or ""),
+        }
+        if action == SEMANTIC_ACTION_HOLD:
+            record["result"] = "dropped_terminal_hold"
+            diagnostics.append(record)
+            return None
+        if action in {SEMANTIC_ACTION_DUPLICATE, SEMANTIC_ACTION_UPDATE}:
+            canonical_slug = str(outcome.get("selected_candidate_slug") or "").strip()
+            if not canonical_slug:
+                record["result"] = "dropped_missing_terminal_canonical"
+                diagnostics.append(record)
+                return None
+            item["_archived_slug"] = canonical_slug
+            item["canonical_slug"] = canonical_slug
+            item["link"] = _canonical_article_permalink(canonical_slug)
+            selected_story_id = str(outcome.get("selected_story_id") or "").strip()
+            if selected_story_id:
+                item["editorial_story_id"] = selected_story_id
+                item["_editorial_story_id"] = selected_story_id
+            item["_terminal_publication_rebound"] = True
+            record["result"] = "rebound_to_terminal_canonical"
+            diagnostics.append(record)
+        return item
+
+    hero = _apply(data.get("hero"), "hero")
+    data["hero"] = hero
+    retained_cards = []
+    for card in list(data.get("cards") or []):
+        resolved = _apply(card, "card")
+        if isinstance(resolved, dict):
+            retained_cards.append(resolved)
+    data["cards"] = retained_cards
+    return diagnostics
+
 def _assignment_shadow_inferred_event_family(source):
     """Infer one broad event family only for shadow display dedupe fallback.
 
@@ -11068,6 +11164,9 @@ def _assignment_shadow_final_projection(raw_shadow, packet, final_baseline, pre_
     _stamp_current_run_story_ids(data, packet.get("source_inputs") or [])
     diagnostics["published_story_suppressions"] = _suppress_published_skip_placements(
         data, pre_generation_archive or [], str(packet.get("category_key") or "")
+    )
+    diagnostics["terminal_publication_authority"] = (
+        _assignment_shadow_apply_terminal_publication_authority(data, packet)
     )
     county_report = enforce_live_county_membership_authority([data])
     diagnostics["county_authority_rejections"] = list(county_report.get("rejections") or [])
@@ -12025,28 +12124,43 @@ def _apply_final_canonical_surface_identity(item, identity):
             or canonical_entry.get("headline")
             or ""
         )
+        canonical_first = (
+            canonical_entry.get("canonical_first_published_at")
+            or canonical_entry.get("first_published")
+            or canonical_entry.get("date")
+            or canonical_entry.get("lastmod")
+        )
+        canonical_update = (
+            canonical_entry.get("canonical_last_material_update_at")
+            or canonical_entry.get("last_meaningful_update_at")
+        ) if canonical_entry.get("meaningful_update_validated") else ""
+        effective_publication = canonical_update or canonical_first
         canonical_story_copy = {
             "headline": canonical_entry.get("headline"),
             "teaser": canonical_entry.get("teaser"),
             "body": canonical_body,
             "image_url": canonical_entry.get("image_url"),
             "image_credit": canonical_entry.get("image_credit"),
-            "published": (
-                canonical_entry.get("first_published")
-                or canonical_entry.get("date")
-                or canonical_entry.get("lastmod")
-            ),
-            "published_raw": (
-                canonical_entry.get("first_published")
-                or canonical_entry.get("date")
-                or canonical_entry.get("lastmod")
-            ),
+            "published": effective_publication,
+            "published_raw": effective_publication,
+            "first_published": canonical_entry.get("first_published") or canonical_first,
+            "canonical_first_published_at": canonical_first,
+            "canonical_last_material_update_at": canonical_entry.get("canonical_last_material_update_at") or "",
+            "last_meaningful_update_at": canonical_entry.get("last_meaningful_update_at") or "",
+            "meaningful_update_validated": canonical_entry.get("meaningful_update_validated"),
+            "meaningful_update_basis": canonical_entry.get("meaningful_update_basis"),
+            "permalink_origin_headline": canonical_entry.get("permalink_origin_headline") or "",
+            "updated_at": canonical_entry.get("updated_at") or "",
+            "lastmod": canonical_entry.get("lastmod") or "",
         }
         for key, value in canonical_story_copy.items():
             if value not in (None, "") and item.get(key) != value:
                 item[key] = copy.deepcopy(value)
                 changed = True
         item["_canonical_story_copy_atomic"] = True
+        if not item.get("_canonical_freshness_bound"):
+            item["_canonical_freshness_bound"] = True
+            changed = True
         # Canonical rebinding must carry the canonical owner's provenance along with
         # its copy. Otherwise a valid archive-recovered county story can lose the
         # source/legacy authority that justified its county membership and then fail
@@ -12929,9 +13043,10 @@ def _top_story_effective_datetime(card, archive_by_slug=None):
         if not isinstance(item, dict):
             continue
         if item.get("meaningful_update_validated"):
-            parsed = _parse_any_datetime(item.get("last_meaningful_update_at"))
-            if parsed is not None:
-                return parsed.astimezone(timezone.utc), f"{source}:last_meaningful_update_at"
+            for key in ("canonical_last_material_update_at", "last_meaningful_update_at"):
+                parsed = _parse_any_datetime(item.get(key))
+                if parsed is not None:
+                    return parsed.astimezone(timezone.utc), f"{source}:{key}"
 
     if isinstance(archive_entry, dict):
         parsed = _latest_news_publication_datetime(archive_entry)
@@ -13592,9 +13707,26 @@ def render_index(all_categories, top_cat):
             f"{len(_article_framing_live_suppressions)} generated article(s)"
         )
 
-    # Top Stories is a small current-news surface, not an archive and not a model
-    # ranking. Select it deterministically from urgency + true publication age.
+    # Resolve redirects and durable canonical identity BEFORE ranking. A retired
+    # historical slug is never allowed to compete for a Top Stories slot as though
+    # it were a distinct current story. This first pass also collapses multiple live
+    # placements that already resolve to the same canonical.
     enriched_pool.sort(key=lambda c: int(c.get("urgency_score", 0) or 0), reverse=True)
+    _pre_rank_hero_permalink = _surface_permalink(
+        top_cat.get("hero", {}),
+        allow_fallback=True,
+        placement="hero:all-pre-rank",
+    )
+    enriched_pool, _pre_ranking_permalink_report = _dedupe_homepage_cards_by_permalink(
+        enriched_pool,
+        lambda card: _raw_surface_permalink(card, allow_fallback=False) or None,
+        hero_permalink=_pre_rank_hero_permalink,
+        hero_item=top_cat.get("hero", {}),
+        surface_context=_surface_context,
+    )
+
+    # Top Stories is a small current-news surface, not an archive and not a model
+    # ranking. Select it deterministically from urgency + canonical freshness.
     topnews, _top_stories_pre_dedupe_report = _select_top_story_cards(
         enriched_pool,
         _bf_archive,
@@ -13603,10 +13735,10 @@ def render_index(all_categories, top_cat):
         now=_now_bf,
     )
     topnews_ids = {id(c) for c in topnews}
-    remaining   = [c for c in enriched_pool if id(c) not in topnews_ids]
+    remaining = [c for c in enriched_pool if id(c) not in topnews_ids]
     all_cards_display = topnews + remaining
 
-    # Apply pin_position overrides — pinned custom articles lock to specific slots
+    # Apply pin_position overrides — pinned custom articles lock to specific slots.
     pinned = [(c.get("pin_position"), c) for c in all_cards_display if c.get("pin_position")]
     if pinned:
         unpinned = [c for c in all_cards_display if not c.get("pin_position")]
@@ -13621,9 +13753,6 @@ def render_index(all_categories, top_cat):
     archive_for_links = load_archive(OUTPUT_DIR / "archive.json")
 
     def card_permalink(card):
-        # The dedupe pass needs the pre-resolution URL so it can report redirect-source
-        # rewrites. Winning cards are rebound in place, so later renderer calls return
-        # the direct canonical URL automatically.
         return _raw_surface_permalink(card, allow_fallback=False) or None
 
     _hero_permalink = _surface_permalink(
@@ -13631,7 +13760,7 @@ def render_index(all_categories, top_cat):
         allow_fallback=True,
         placement="hero:all-final",
     )
-    all_cards_display, _homepage_permalink_report = _dedupe_homepage_cards_by_permalink(
+    all_cards_display, _post_selection_permalink_report = _dedupe_homepage_cards_by_permalink(
         all_cards_display,
         card_permalink,
         hero_permalink=_hero_permalink,
@@ -13639,26 +13768,10 @@ def render_index(all_categories, top_cat):
         topnews_ids=topnews_ids,
         surface_context=_surface_context,
     )
-    _homepage_permalink_report["generated_at"] = datetime.now(timezone.utc).isoformat()
-    _homepage_permalink_report["hero_rewrite_count"] = len(_hero_canonical_rewrites)
-    _homepage_permalink_report["hero_rewrites"] = _hero_canonical_rewrites
-    _homepage_permalink_report_path = OUTPUT_DIR / "data" / "homepage-permalink-dedupe.json"
-    _homepage_permalink_report_path.parent.mkdir(parents=True, exist_ok=True)
-    _homepage_permalink_report_path.write_text(
-        json.dumps(_homepage_permalink_report, indent=2), encoding="utf-8"
-    )
-    (OUTPUT_DIR / "data" / "final-canonical-surface-dedup.json").write_text(
-        json.dumps(_homepage_permalink_report, indent=2), encoding="utf-8"
-    )
-    if _homepage_permalink_report.get("removed_count"):
-        print(
-            "  Final canonical surface dedupe removed "
-            f"{_homepage_permalink_report['removed_count']} duplicate card placement(s)"
-        )
 
-    # Canonical dedupe can remove one of the preliminary Top Stories. Re-run the
-    # deterministic selector against the surviving canonical cards so the visible
-    # list stays full, fresh, and correctly ranked.
+    # Re-rank after canonical collapse, then run the same authority one final time.
+    # This second post-binding pass is deliberate defense in depth: if two placements
+    # rebound to one canonical during final binding, only one survives render.
     topnews, _top_stories_report = _select_top_story_cards(
         all_cards_display,
         archive_for_links,
@@ -13669,7 +13782,56 @@ def render_index(all_categories, top_cat):
     topnews_ids = {id(c) for c in topnews}
     remaining = [c for c in all_cards_display if id(c) not in topnews_ids]
     all_cards_display = topnews + remaining
+    all_cards_display, _post_binding_permalink_report = _dedupe_homepage_cards_by_permalink(
+        all_cards_display,
+        card_permalink,
+        hero_permalink=_hero_permalink,
+        hero_item=top_cat.get("hero", {}),
+        topnews_ids=topnews_ids,
+        surface_context=_surface_context,
+    )
+    if _post_binding_permalink_report.get("removed_count"):
+        topnews, _top_stories_report = _select_top_story_cards(
+            all_cards_display,
+            archive_for_links,
+            hero_headline=top_cat["hero"].get("headline", ""),
+            limit=TOP_STORIES_LIMIT,
+            now=datetime.now(timezone.utc),
+        )
+        topnews_ids = {id(c) for c in topnews}
+        remaining = [c for c in all_cards_display if id(c) not in topnews_ids]
+        all_cards_display = topnews + remaining
+
+    _homepage_permalink_report = {
+        "schema_version": 3,
+        "policy": "canonicalize_before_ranking_then_dedupe_after_final_binding",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "hero_rewrite_count": len(_hero_canonical_rewrites),
+        "hero_rewrites": _hero_canonical_rewrites,
+        "pre_ranking": _pre_ranking_permalink_report,
+        "post_selection": _post_selection_permalink_report,
+        "post_binding": _post_binding_permalink_report,
+        "removed_count": sum(int(report.get("removed_count", 0) or 0) for report in (
+            _pre_ranking_permalink_report, _post_selection_permalink_report, _post_binding_permalink_report
+        )),
+        "canonical_rewrite_count": sum(int(report.get("canonical_rewrite_count", 0) or 0) for report in (
+            _pre_ranking_permalink_report, _post_selection_permalink_report, _post_binding_permalink_report
+        )),
+    }
+    _homepage_permalink_report_path = OUTPUT_DIR / "data" / "homepage-permalink-dedupe.json"
+    _homepage_permalink_report_path.parent.mkdir(parents=True, exist_ok=True)
+    _homepage_permalink_report_path.write_text(
+        json.dumps(_homepage_permalink_report, indent=2), encoding="utf-8"
+    )
+    (OUTPUT_DIR / "data" / "final-canonical-surface-dedup.json").write_text(
+        json.dumps(_homepage_permalink_report, indent=2), encoding="utf-8"
+    )
     _write_top_stories_ranking_report(_top_stories_report, OUTPUT_DIR)
+    if _homepage_permalink_report.get("removed_count"):
+        print(
+            "  Final canonical surface authority removed "
+            f"{_homepage_permalink_report['removed_count']} duplicate card placement(s) across all stages"
+        )
     if _homepage_permalink_report.get("canonical_rewrite_count") or _hero_canonical_rewrites:
         print(
             "  Final canonical surface binding rewrote "
@@ -23127,6 +23289,16 @@ def _new_semantic_publication_gate_report():
                 "eligibility": "newer source-backed published-skip candidates only",
                 "failure_behavior": "preserve existing canonical; never mint duplicate URL",
             },
+            "terminal_permalink_authority": {
+                "version": TERMINAL_PERMALINK_GATE_VERSION,
+                "model": TERMINAL_PERMALINK_MODEL,
+                "recent_window_days": TERMINAL_PERMALINK_RECENT_DAYS,
+                "max_candidates": TERMINAL_PERMALINK_MAX_CANDIDATES,
+                "resolution_version": TERMINAL_PERMALINK_RESOLUTION_VERSION,
+                "resolution_max_candidates": TERMINAL_PERMALINK_RESOLUTION_MAX_CANDIDATES,
+                "resolution_policy": "one focused second pass for validated first-pass HOLD only",
+                "failure_behavior": "final unresolved identity remains HOLD",
+            },
         },
         "summary": {
             "evaluations": 0,
@@ -23154,6 +23326,18 @@ def _new_semantic_publication_gate_report():
             "pre_generation_materiality_holds": 0,
             "pre_generation_materiality_model_calls": 0,
             "pre_generation_materiality_cache_hits": 0,
+            "terminal_permalink_evaluations": 0,
+            "terminal_permalink_candidate_pairs": 0,
+            "terminal_permalink_model_calls": 0,
+            "terminal_permalink_cache_hits": 0,
+            "terminal_permalink_resolution_evaluations": 0,
+            "terminal_permalink_resolution_model_calls": 0,
+            "terminal_permalink_resolution_cache_hits": 0,
+            "terminal_permalink_holds_resolved": 0,
+            "terminal_permalink_new_authorized": 0,
+            "terminal_permalink_duplicates_blocked": 0,
+            "terminal_permalink_updates_routed": 0,
+            "terminal_permalink_holds": 0,
         },
         "pre_generation_materiality_decisions": [],
         "decisions": [],
@@ -23617,11 +23801,12 @@ def _terminal_permalink_recent_archive_rows(incoming, archive):
 
 
 def _run_terminal_permalink_gate(incoming, archive, cache, report):
-    """Final fail-closed Sonnet 5 authority before any ordinary new permalink.
+    """Final fail-closed authority before any ordinary new permalink.
 
-    Every non-custom article reaching the create branch must receive an explicit NEW
-    decision here. Earlier deterministic and semantic gates may still prevent work,
-    but none of them can bypass this terminal authority.
+    The first pass remains the broad high-recall Sonnet 5 comparison. A validated
+    HOLD receives exactly one focused second pass over the strongest bounded
+    shortlist. The second pass is resolution, not an open-ended retry loop: model
+    errors and unresolved ambiguity still fail closed.
     """
     incoming_payload = _semantic_gate_article_payload(incoming, include_archive_body=False)
     candidates = _terminal_permalink_recent_archive_rows(incoming, archive)
@@ -23632,10 +23817,10 @@ def _run_terminal_permalink_gate(incoming, archive, cache, report):
     summary["terminal_permalink_candidate_pairs"] = int(
         summary.get("terminal_permalink_candidate_pairs", 0) or 0
     ) + len(candidates)
+    initial_decision = None
+    resolution_decision = None
 
     if not candidates:
-        # A genuinely empty recent archive has nothing for a duplicate adjudicator to
-        # compare. This is the only non-model NEW path and is explicitly audited.
         decision = {
             "status": "no_recent_archive_candidates",
             "action": SEMANTIC_ACTION_NEW,
@@ -23698,22 +23883,91 @@ def _run_terminal_permalink_gate(incoming, archive, cache, report):
                     "decision": copy.deepcopy(decision),
                 }
 
+        initial_decision = copy.deepcopy(decision)
+        if (
+            str(decision.get("status") or "") == "validated"
+            and str(decision.get("action") or "") == SEMANTIC_ACTION_HOLD
+        ):
+            focused_candidates = candidates[: max(1, TERMINAL_PERMALINK_RESOLUTION_MAX_CANDIDATES)]
+            summary["terminal_permalink_resolution_evaluations"] = int(
+                summary.get("terminal_permalink_resolution_evaluations", 0) or 0
+            ) + 1
+            resolution_base_key = (
+                semantic_publication_resolution_cache_key(
+                    incoming_payload,
+                    focused_candidates,
+                    initial_decision,
+                    model=TERMINAL_PERMALINK_MODEL,
+                )
+                if semantic_publication_resolution_cache_key is not None
+                else ""
+            )
+            resolution_key = (
+                f"terminal_permalink_resolution:{TERMINAL_PERMALINK_RESOLUTION_VERSION}:{resolution_base_key}"
+                if resolution_base_key else ""
+            )
+            cached_resolution = dict(
+                (cache or {}).get("entries", {}).get(resolution_key, {}) or {}
+            ).get("decision")
+            if (
+                resolution_key
+                and _semantic_gate_cached_decision_valid(cached_resolution, focused_candidates)
+            ):
+                resolution_decision = copy.deepcopy(cached_resolution)
+                summary["terminal_permalink_resolution_cache_hits"] = int(
+                    summary.get("terminal_permalink_resolution_cache_hits", 0) or 0
+                ) + 1
+            else:
+                summary["terminal_permalink_resolution_model_calls"] = int(
+                    summary.get("terminal_permalink_resolution_model_calls", 0) or 0
+                ) + 1
+                if resolve_semantic_publication_hold is None:
+                    resolution_decision = {
+                        "status": "terminal_resolution_unavailable",
+                        "action": SEMANTIC_ACTION_HOLD,
+                        "selected_candidate_slug": "",
+                        "same_real_world_event": False,
+                        "material_new_update": False,
+                        "independently_newsworthy_followup": False,
+                        "confidence": 0.0,
+                        "shared_anchors": [],
+                        "novel_facts": [],
+                        "reason": "Focused terminal resolver unavailable; fail-closed hold.",
+                        "validation_errors": ["terminal_resolution_unavailable"],
+                        "resolution_pass": True,
+                    }
+                else:
+                    resolution_decision = resolve_semantic_publication_hold(
+                        client,
+                        model=TERMINAL_PERMALINK_MODEL,
+                        incoming=incoming_payload,
+                        candidates=focused_candidates,
+                        initial_decision=initial_decision,
+                        timeout_seconds=TERMINAL_PERMALINK_TIMEOUT_SECONDS,
+                        min_confidence=TERMINAL_PERMALINK_MIN_CONFIDENCE,
+                    )
+                if (
+                    resolution_key
+                    and str(resolution_decision.get("status") or "") == "validated"
+                ):
+                    cache.setdefault("entries", {})[resolution_key] = {
+                        "updated_at": datetime.now(timezone.utc).isoformat(),
+                        "decision": copy.deepcopy(resolution_decision),
+                    }
+            if str((resolution_decision or {}).get("status") or "") == "validated":
+                decision = copy.deepcopy(resolution_decision)
+                decision["resolved_from_initial_terminal_hold"] = True
+                summary["terminal_permalink_holds_resolved"] = int(
+                    summary.get("terminal_permalink_holds_resolved", 0) or 0
+                ) + 1
+
     selected_slug = str(decision.get("selected_candidate_slug") or "")
     selected = next(
-        (
-            row.get("article")
-            for row in candidates
-            if str(row.get("slug") or "") == selected_slug
-        ),
+        (row.get("article") for row in candidates if str(row.get("slug") or "") == selected_slug),
         None,
     )
-    # The enriched candidate payload is a copy; resolve the actual archive row so any
-    # subsequent update writes the authoritative object in place.
     selected_archive = next(
-        (
-            row for row in archive or []
-            if str((row or {}).get("slug") or "") == selected_slug
-        ),
+        (row for row in archive or [] if str((row or {}).get("slug") or "") == selected_slug),
         None,
     )
     if selected_archive is not None:
@@ -23731,11 +23985,7 @@ def _run_terminal_permalink_gate(incoming, archive, cache, report):
         ).strip()
         selected_story_id = str(selected.get("editorial_story_id") or "").strip()
         if not incoming_story_id or not selected_story_id or incoming_story_id == selected_story_id:
-            action = (
-                SEMANTIC_ACTION_UPDATE
-                if bool(decision.get("material_new_update"))
-                else SEMANTIC_ACTION_DUPLICATE
-            )
+            action = SEMANTIC_ACTION_UPDATE if bool(decision.get("material_new_update")) else SEMANTIC_ACTION_DUPLICATE
             decision["action"] = action
             decision["independent_followup_authorized"] = False
             decision.setdefault("validation_notes", []).append(
@@ -23748,31 +23998,45 @@ def _run_terminal_permalink_gate(incoming, archive, cache, report):
             incoming["related_parent_story_id"] = selected_story_id
 
     if action == SEMANTIC_ACTION_NEW:
-        summary["terminal_permalink_new_authorized"] = int(
-            summary.get("terminal_permalink_new_authorized", 0) or 0
-        ) + 1
+        summary["terminal_permalink_new_authorized"] = int(summary.get("terminal_permalink_new_authorized", 0) or 0) + 1
     elif action == SEMANTIC_ACTION_DUPLICATE:
-        summary["terminal_permalink_duplicates_blocked"] = int(
-            summary.get("terminal_permalink_duplicates_blocked", 0) or 0
-        ) + 1
+        summary["terminal_permalink_duplicates_blocked"] = int(summary.get("terminal_permalink_duplicates_blocked", 0) or 0) + 1
     elif action == SEMANTIC_ACTION_UPDATE:
-        summary["terminal_permalink_updates_routed"] = int(
-            summary.get("terminal_permalink_updates_routed", 0) or 0
-        ) + 1
+        summary["terminal_permalink_updates_routed"] = int(summary.get("terminal_permalink_updates_routed", 0) or 0) + 1
     else:
-        summary["terminal_permalink_holds"] = int(
-            summary.get("terminal_permalink_holds", 0) or 0
-        ) + 1
+        summary["terminal_permalink_holds"] = int(summary.get("terminal_permalink_holds", 0) or 0) + 1
+
+    raw_source_url = str(incoming_payload.get("source_url") or "").strip()
+    normalized_source_url = _normalized_external_source_url(raw_source_url) or raw_source_url
+    if normalized_source_url:
+        selected_story_id = str(
+            (selected or {}).get("editorial_story_id")
+            or (selected or {}).get("_editorial_story_id")
+            or ""
+        ).strip()
+        SEMANTIC_PUBLICATION_SOURCE_OUTCOMES[normalized_source_url] = {
+            "authority_stage": "terminal_permalink_authority",
+            "action": action,
+            "selected_candidate_slug": selected_slug,
+            "selected_story_id": selected_story_id,
+            "incoming_story_id": str(
+                incoming.get("editorial_story_id") or incoming.get("_editorial_story_id") or ""
+            ).strip(),
+            "same_real_world_event": bool(decision.get("same_real_world_event")),
+            "material_new_update": bool(decision.get("material_new_update")),
+            "independent_followup_authorized": bool(decision.get("independent_followup_authorized")),
+            "status": str(decision.get("status") or ""),
+            "resolved_from_initial_hold": bool(decision.get("resolved_from_initial_terminal_hold")),
+        }
 
     report.setdefault("decisions", []).append({
         "phase": "terminal_permalink_authority",
         "gate_version": TERMINAL_PERMALINK_GATE_VERSION,
+        "resolution_version": TERMINAL_PERMALINK_RESOLUTION_VERSION,
         "model": TERMINAL_PERMALINK_MODEL,
         "incoming_headline": incoming_payload.get("headline", ""),
         "incoming_source_url": incoming_payload.get("source_url", ""),
-        "incoming_story_id": str(
-            incoming.get("editorial_story_id") or incoming.get("_editorial_story_id") or ""
-        ),
+        "incoming_story_id": str(incoming.get("editorial_story_id") or incoming.get("_editorial_story_id") or ""),
         "candidates": [
             {
                 "slug": row.get("slug", ""),
@@ -23784,12 +24048,11 @@ def _run_terminal_permalink_gate(incoming, archive, cache, report):
             }
             for row in candidates
         ],
-        "decision": {
-            key: value for key, value in decision.items() if key != "raw_model_decision"
-        },
+        "initial_decision": {key: value for key, value in (initial_decision or {}).items() if key != "raw_model_decision"},
+        "resolution_decision": {key: value for key, value in (resolution_decision or {}).items() if key != "raw_model_decision"},
+        "decision": {key: value for key, value in decision.items() if key != "raw_model_decision"},
     })
     return decision, selected, candidates
-
 
 def _semantic_gate_identity_evidence(decision, candidates):
     selected_slug = str(decision.get("selected_candidate_slug") or "")
@@ -24113,11 +24376,29 @@ def _semantic_material_update_composition(
             or ""
         ),
     })
-    alignment = _prospective_archive_update_alignment(merged, canonical or {})
+    # A validated material update is allowed to evolve the live headline while the
+    # permalink remains anchored to the headline that originally created it. Freeze
+    # that immutable origin in the prospective copy before evaluating the new live
+    # headline. Do not silently restore stale copy: if the prospective canonical is
+    # unsafe for any other reason, fail the entire update transaction closed.
+    alignment_canonical = dict(canonical or {})
+    if not alignment_canonical.get("permalink_origin_headline"):
+        alignment_canonical["permalink_origin_headline"] = str(
+            (canonical or {}).get("headline") or ""
+        )
+    alignment_canonical["meaningful_update_validated"] = True
+    alignment_canonical["meaningful_update_basis"] = "semantic_material_update_gate"
+    alignment_canonical["last_meaningful_update_at"] = "prospective_material_update"
+    alignment = _prospective_archive_update_alignment(merged, alignment_canonical)
     result["headline_alignment"] = alignment
     if not alignment.get("aligned", False):
-        merged["headline"] = str((canonical or {}).get("headline") or merged.get("headline") or "")
-        result["headline_preserved_for_permalink_alignment"] = True
+        result["status"] = "permalink_alignment_failed"
+        result["validation_errors"] = [str(alignment.get("reason") or "permalink_alignment_failed")]
+        report.setdefault("material_update_compositions", []).append(result)
+        summary["material_update_holds"] = int(
+            summary.get("material_update_holds", 0) or 0
+        ) + 1
+        return None, result
 
     diagnostics = _update_replacement_diagnostics(merged, canonical or {})
     result["context_diagnostics"] = diagnostics
@@ -24147,6 +24428,19 @@ def _apply_semantic_material_update_metadata(
 ):
     """Persist canonical article metadata after a validated material update."""
     today = str(today or datetime.now(timezone.utc).date().isoformat())
+    # Freeze immutable publication identity BEFORE evolving the live canonical copy.
+    # Legacy rows may predate these fields, so derive them exactly once from the
+    # stored canonical rather than from the incoming update.
+    if not canonical.get("permalink_origin_headline"):
+        canonical["permalink_origin_headline"] = str(canonical.get("headline") or "")
+    canonical_first = str(
+        canonical.get("canonical_first_published_at")
+        or canonical.get("first_published")
+        or canonical.get("date")
+        or ""
+    )
+    if canonical_first:
+        canonical["canonical_first_published_at"] = canonical_first
     canonical["headline"] = str(merged.get("headline") or canonical.get("headline") or "")
     canonical["teaser"] = str(merged.get("teaser") or "")
     canonical["article_word_count"] = _word_count(merged.get("body", ""))
@@ -24182,9 +24476,13 @@ def _apply_semantic_material_update_metadata(
 
     stamp = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
     canonical["last_meaningful_update_at"] = stamp
+    canonical["canonical_last_material_update_at"] = stamp
     canonical["updated_at"] = stamp
     merged["last_meaningful_update_at"] = stamp
+    merged["canonical_last_material_update_at"] = stamp
     merged["updated_at"] = stamp
+    if canonical_first:
+        merged["canonical_first_published_at"] = canonical_first
     merged["meaningful_update_validated"] = True
     merged["meaningful_update_basis"] = "semantic_material_update_gate"
     merged["semantic_material_update_version"] = SEMANTIC_MATERIAL_UPDATE_VERSION
@@ -29760,7 +30058,9 @@ def write_archives(all_categories, top_cat):
                 # RFC-822. This is what the RSS feed uses for pubDate so Nextdoor and
                 # other consumers show when the story appeared on OUR site, not when
                 # the original source posted it.
-                "first_published": _now_eastern_rfc822(),
+                "first_published": hero.get("first_published", ""),
+                "canonical_first_published_at": hero.get("first_published", ""),
+                "canonical_last_material_update_at": "",
                 "image_url": hero.get("image_url",""),
                 "feed_url": hero.get("feed_url",""),
                 "source_url": normalized_source_url,

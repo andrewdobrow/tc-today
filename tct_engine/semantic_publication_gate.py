@@ -25,6 +25,7 @@ from typing import Any, Iterable, Mapping, Sequence
 
 SEMANTIC_PUBLICATION_GATE_VERSION = "1.8"
 SEMANTIC_PUBLICATION_GATE_PROMPT_VERSION = "1.1"
+SEMANTIC_PUBLICATION_RESOLUTION_PROMPT_VERSION = "1.0"
 DEFAULT_RECENT_WINDOW_DAYS = 7
 DEFAULT_MAX_CANDIDATES = 4
 DEFAULT_MIN_CONFIDENCE = 0.82
@@ -675,6 +676,39 @@ def decision_cache_key(
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
+
+def resolution_decision_cache_key(
+    incoming: Mapping[str, Any],
+    candidates: Sequence[Mapping[str, Any]],
+    initial_decision: Mapping[str, Any],
+    *,
+    model: str,
+) -> str:
+    """Cache a single focused HOLD-resolution decision separately from first pass."""
+    payload = {
+        "gate_version": SEMANTIC_PUBLICATION_GATE_VERSION,
+        "prompt_version": SEMANTIC_PUBLICATION_RESOLUTION_PROMPT_VERSION,
+        "model": str(model or ""),
+        "incoming": _compact_article(incoming),
+        "candidates": [
+            {
+                "article": _compact_article(row.get("article") or row),
+                "evidence": row.get("evidence") or {},
+            }
+            for row in candidates
+        ],
+        "initial_decision": {
+            key: initial_decision.get(key)
+            for key in (
+                "action", "selected_candidate_slug", "same_real_world_event",
+                "material_new_update", "independently_newsworthy_followup",
+                "confidence", "shared_anchors", "novel_facts", "reason",
+            )
+        },
+    }
+    raw = json.dumps(payload, sort_keys=True, ensure_ascii=False, default=str)
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
 def _json_object(raw: str) -> dict[str, Any]:
     text = str(raw or "").strip()
     if text.startswith("```"):
@@ -891,3 +925,139 @@ def adjudicate_candidates(
             "reason": f"Semantic gate model failure; fail-closed hold: {exc}",
             "validation_errors": ["model_error"],
         }
+
+def _resolution_prompt(
+    incoming: Mapping[str, Any],
+    candidates: Sequence[Mapping[str, Any]],
+    initial_decision: Mapping[str, Any],
+) -> str:
+    candidate_payload = []
+    for row in candidates:
+        article = row.get("article") or row
+        candidate_payload.append({
+            "article": _compact_article(article),
+            "retrieval_evidence": row.get("evidence") or {},
+        })
+    initial = {
+        key: initial_decision.get(key)
+        for key in (
+            "selected_candidate_slug", "same_real_world_event",
+            "material_new_update", "independently_newsworthy_followup",
+            "confidence", "shared_anchors", "novel_facts", "reason",
+        )
+    }
+    return f"""You are the second and FINAL identity-resolution pass for a local news publication gate.
+
+The first pass returned HOLD. That HOLD is not evidence that the incoming story matches any candidate. Re-read the FULL incoming article and only the strongest bounded canonical shortlist below. Resolve the identity now whenever the facts support it.
+
+Use concrete event anchors: named people, exact incident or case, location, governing action, business/event, date/time, distinctive facts, and chronology. Shared county, agency, topic, crime type, political office, or generic wording is not enough.
+
+Decision rules:
+- If NO candidate is the same concrete real-world event, choose new_story. Do not hold merely because candidates are topically similar.
+- If one candidate is the same event with no material new development, choose duplicate_use_existing_canonical.
+- If one candidate is the same event and the new facts belong in that living canonical, choose update_existing_canonical.
+- A separate new_story for the same event is rare and requires a material independently newsworthy accountability, consequence, policy, investigation, or public-interest question.
+- Use hold only when the supplied evidence is genuinely contradictory or too sparse to distinguish identity safely. There will be no third pass.
+
+Return ONLY one JSON object with this exact shape:
+{{
+  "selected_candidate_slug": "candidate slug or null",
+  "same_real_world_event": true,
+  "material_new_update": false,
+  "independently_newsworthy_followup": false,
+  "confidence": 0.0,
+  "shared_anchors": ["specific shared facts"],
+  "novel_facts": ["specific genuinely new facts"],
+  "reason": "brief evidence-based explanation",
+  "recommended_action": "new_story"
+}}
+
+INITIAL HOLD (context only; do not defer to it):
+{json.dumps(initial, ensure_ascii=False, indent=2)}
+
+INCOMING ARTICLE:
+{json.dumps(_compact_article(incoming), ensure_ascii=False, indent=2)}
+
+STRONGEST CANONICAL CANDIDATES:
+{json.dumps(candidate_payload, ensure_ascii=False, indent=2)}
+"""
+
+
+def adjudicate_resolution(
+    client: Any,
+    *,
+    model: str,
+    incoming: Mapping[str, Any],
+    candidates: Sequence[Mapping[str, Any]],
+    initial_decision: Mapping[str, Any],
+    timeout_seconds: float = 45.0,
+    min_confidence: float = DEFAULT_MIN_CONFIDENCE,
+) -> dict[str, Any]:
+    """Run exactly one focused second pass for a validated first-pass HOLD."""
+    if not candidates:
+        return {
+            "status": "no_candidates",
+            "action": ACTION_NEW,
+            "selected_candidate_slug": "",
+            "same_real_world_event": False,
+            "material_new_update": False,
+            "independently_newsworthy_followup": False,
+            "confidence": 1.0,
+            "shared_anchors": [],
+            "novel_facts": [],
+            "reason": "No canonical candidates remain in the focused resolution shortlist.",
+            "validation_errors": [],
+        }
+    if client is None or not getattr(client, "messages", None):
+        return {
+            "status": "model_unavailable",
+            "action": ACTION_HOLD,
+            "selected_candidate_slug": "",
+            "same_real_world_event": False,
+            "material_new_update": False,
+            "independently_newsworthy_followup": False,
+            "confidence": 0.0,
+            "shared_anchors": [],
+            "novel_facts": [],
+            "reason": "Terminal resolution model unavailable; fail-closed hold.",
+            "validation_errors": ["model_unavailable"],
+        }
+
+    request_client = client
+    kwargs = {
+        "model": model,
+        "max_tokens": 900,
+        "messages": [{"role": "user", "content": _resolution_prompt(incoming, candidates, initial_decision)}],
+    }
+    try:
+        if hasattr(client, "with_options"):
+            request_client = client.with_options(
+                timeout=max(1.0, float(timeout_seconds)), max_retries=0
+            )
+        else:
+            kwargs["timeout"] = max(1.0, float(timeout_seconds))
+        response = request_client.messages.create(**kwargs)
+        raw_text = response.content[0].text if getattr(response, "content", None) else ""
+        parsed = _json_object(raw_text)
+        validated = validate_model_decision(
+            parsed, candidates, min_confidence=min_confidence
+        )
+        validated["raw_model_decision"] = parsed
+        validated["resolution_pass"] = True
+        return validated
+    except Exception as exc:
+        return {
+            "status": "model_error",
+            "action": ACTION_HOLD,
+            "selected_candidate_slug": "",
+            "same_real_world_event": False,
+            "material_new_update": False,
+            "independently_newsworthy_followup": False,
+            "confidence": 0.0,
+            "shared_anchors": [],
+            "novel_facts": [],
+            "reason": f"Terminal resolution model failure; fail-closed hold: {exc}",
+            "validation_errors": ["model_error"],
+            "resolution_pass": True,
+        }
+
