@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.8",
-  "generated_at": "2026-08-27T20:49:58.040875+00:00",
+  "generated_at": "2026-08-27T22:34:13.516806+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -70,8 +70,8 @@
     "no_candidate_passes": 61,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 4,
-    "retroactive_rows_retained": 57,
+    "new_stories_allowed": 3,
+    "retroactive_rows_retained": 58,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -87,18 +87,18 @@
     "pre_generation_materiality_holds": 1,
     "pre_generation_materiality_model_calls": 1,
     "pre_generation_materiality_cache_hits": 5,
-    "terminal_permalink_evaluations": 4,
-    "terminal_permalink_candidate_pairs": 48,
-    "terminal_permalink_model_calls": 4,
+    "terminal_permalink_evaluations": 3,
+    "terminal_permalink_candidate_pairs": 36,
+    "terminal_permalink_model_calls": 3,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 1,
+    "terminal_permalink_new_authorized": 2,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
-    "terminal_permalink_holds": 3
+    "terminal_permalink_holds": 1
   },
   "pre_generation_materiality_decisions": [
     {
@@ -224,16 +224,14 @@
       "semantic_action": "hold",
       "confidence": 0.95,
       "shared_anchors": [
-        "Same recurring weekend events roundup format",
-        "Same geographic coverage area (Treasure Coast and Palm Beach County)",
-        "Same source outlet (WPBF)"
+        "Both are weekend event roundups for Treasure Coast and Palm Beach County",
+        "Both published by WPBF",
+        "Similar headline format"
       ],
       "novel_facts": [
-        "Newfield Farm gardening class on August 21",
-        "Ukrainian Cultural Fest in West Palm Beach",
-        "Delray's Hottest Party women's health event",
-        "Peggy Adams Animal Rescue League adoption event",
-        "Loggerhead Triathlon in Jupiter"
+        "Incoming article covers weekend of August 21, 2026",
+        "Features entirely different events: Newfield Farm gardening class, Ukrainian Cultural Fest, Delray's Hottest Party women's health event, Peggy Adams adoption event, Loggerhead Triathlon",
+        "Different specific dates, locations, and activities than July 27 candidate"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -1216,7 +1214,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
       "incoming_source_url": "https://www.wpbf.com/article/ronald-l-corbin-beloved-choral-teacher-at-martin-high-school-for-34-years-dies/73506173",
-      "incoming_story_id": "story_006283",
+      "incoming_story_id": "story_006309",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1453,7 +1451,7 @@
       }
     },
     {
-      "phase": "forward_publication",
+      "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Vero Beach utility bills to rise 46% over four years as city approves rate increases for water reclamation plant",
       "incoming_source_url": "https://www.wflx.com/2026/08/27/vero-beach-utility-bills-rise-over-next-4-years-city-approves-rate-increases?outputType=amp",
       "incoming_story_id": "story_006319",
@@ -1469,191 +1467,6 @@
         "shared_anchors": [],
         "novel_facts": [],
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.1",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "Vero Beach utility bills to rise 46% over four years as city approves rate increases for water reclamation plant",
-      "incoming_source_url": "https://www.wflx.com/2026/08/27/vero-beach-utility-bills-rise-over-next-4-years-city-approves-rate-increases?outputType=amp",
-      "incoming_story_id": "story_006319",
-      "candidates": [
-        {
-          "slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
-          "headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6228,
-          "retrieval_score": 0.4918,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_3_days"
-          ]
-        },
-        {
-          "slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5757,
-          "retrieval_score": 0.4357,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-08-19-indian-river-county-school-superintendent-dr-moore-to-step-down-june-2027",
-          "headline": "Indian River County schools superintendent to step down June 2027",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5677,
-          "retrieval_score": 0.4487,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-08-18-fort-pierce-city-council-selects-former-st-lucie-county-attorney-as-interim-city",
-          "headline": "Fort Pierce City Council selects former St. Lucie County attorney as interim city attorney",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5578,
-          "retrieval_score": 0.4448,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_9_days"
-          ]
-        },
-        {
-          "slug": "2026-08-21-abandoned-boats-fill-wildcat-cove-near-fort-pierce-creating-safety-hazards-betwe",
-          "headline": "Abandoned boats fill Wildcat Cove near Fort Pierce, creating safety hazards between nature preserves",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5224,
-          "retrieval_score": 0.4004,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-08-20-fort-pierce-commission-rejects-third-settlement-offer-in-little-jim-lawsuit",
-          "headline": "Fort Pierce commission rejects third settlement offer in Little Jim lawsuit",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5005,
-          "retrieval_score": 0.3815,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-08-21-fort-pierce-faces-legal-vacancy-after-daniel-mcintyre-declines-interim-city-atto",
-          "headline": "Fort Pierce faces legal vacancy after Daniel McIntyre declines interim city attorney job",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.4873,
-          "retrieval_score": 0.3653,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_6_days"
-          ]
-        },
-        {
-          "slug": "2026-08-17-fort-pierce-approves-183200-pilot-program-for-two-code-enforcement-officers-in-r",
-          "headline": "Fort Pierce approves $183,200 pilot program for two code enforcement officers in redevelopment areas",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.4807,
-          "retrieval_score": 0.3707,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-08-13-indian-river-county-school-district-plans-to-sell-10-properties-across-county",
-          "headline": "Indian River County school district plans to sell 10 properties across county",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.4744,
-          "retrieval_score": 0.3744,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_15_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-08-13-fort-pierce-proposes-fines-up-to-500-per-day-for-chronic-noise-violators",
-          "headline": "Fort Pierce proposes fines up to $500 per day for chronic noise violators",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.4729,
-          "retrieval_score": 0.3729,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_15_days",
-            "outside_recent_window"
-          ]
-        },
-        {
-          "slug": "2026-08-18-home-insurance-premiums-drop-in-indian-river-county-in-first-half-of-2026",
-          "headline": "Home insurance premiums drop in Indian River County in first half of 2026",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.4581,
-          "retrieval_score": 0.3451,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-08-27-vero-beach-woman-billed-922-for-electricity-after-fire-destroys-home",
-          "headline": "Vero Beach woman billed $922 for electricity after fire destroys home",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5218,
-          "retrieval_score": 0.4818,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.97,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Vero Beach City Council and Utility Commission unanimously approved rate increase plan",
-          "46.7% cumulative increase over four years",
-          "$217 million capital improvement program through 2030",
-          "New Water Reclamation Facility financed by $125 million revenue bonds in Feb 2027",
-          "New Wastewater Readiness-to-Serve Charge for septic customers"
-        ],
-        "reason": "No candidate concerns Vero Beach utility rates or the water reclamation facility. The closest Vero Beach candidate (FPL billing dispute after a house fire) is an unrelated utility billing complaint involving a different utility (FPL electricity) and a different real-world incident. All other candidates are Fort Pierce/Indian River government stories on unrelated topics (city attorney turnover, boats, school superintendent, etc.). This is a distinct city council rate-approval event with no matching candidate.",
-        "validation_errors": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.97,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Vero Beach City Council and Utility Commission unanimously approved rate increase plan",
-          "46.7% cumulative increase over four years",
-          "$217 million capital improvement program through 2030",
-          "New Water Reclamation Facility financed by $125 million revenue bonds in Feb 2027",
-          "New Wastewater Readiness-to-Serve Charge for septic customers"
-        ],
-        "reason": "No candidate concerns Vero Beach utility rates or the water reclamation facility. The closest Vero Beach candidate (FPL billing dispute after a house fire) is an unrelated utility billing complaint involving a different utility (FPL electricity) and a different real-world incident. All other candidates are Fort Pierce/Indian River government stories on unrelated topics (city attorney turnover, boats, school superintendent, etc.). This is a distinct city council rate-approval event with no matching candidate.",
         "validation_errors": []
       }
     },
@@ -1812,40 +1625,46 @@
         }
       ],
       "initial_decision": {
-        "status": "model_error",
-        "action": "hold",
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.0,
+        "confidence": 0.95,
         "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "Semantic gate model failure; fail-closed hold: 'ThinkingBlock' object has no attribute 'text'",
-        "validation_errors": [
-          "model_error"
-        ]
+        "novel_facts": [
+          "Thomas Earl Steffens, 72, indicted on federal attempted murder charges",
+          "March 2 shootout with five deputy U.S. Marshals at 12th Street and Commerce Avenue in Vero Beach",
+          "Steffens wanted in Colorado on sexual assault and strangulation charges"
+        ],
+        "reason": "None of the candidates involve Thomas Earl Steffens, the March 2 shootout at 12th Street/Commerce Avenue, or U.S. Marshals fugitive task force pursuit. Candidates cover unrelated Vero Beach incidents (crane crash, Waggle murder case, Baptist chase, church crash, etc.) with no overlapping named participants, dates, or locations. This is a distinct new incident.",
+        "validation_errors": []
       },
       "resolution_decision": {},
       "decision": {
-        "status": "model_error",
-        "action": "hold",
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.0,
+        "confidence": 0.95,
         "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "Semantic gate model failure; fail-closed hold: 'ThinkingBlock' object has no attribute 'text'",
-        "validation_errors": [
-          "model_error"
-        ]
+        "novel_facts": [
+          "Thomas Earl Steffens, 72, indicted on federal attempted murder charges",
+          "March 2 shootout with five deputy U.S. Marshals at 12th Street and Commerce Avenue in Vero Beach",
+          "Steffens wanted in Colorado on sexual assault and strangulation charges"
+        ],
+        "reason": "None of the candidates involve Thomas Earl Steffens, the March 2 shootout at 12th Street/Commerce Avenue, or U.S. Marshals fugitive task force pursuit. Candidates cover unrelated Vero Beach incidents (crane crash, Waggle murder case, Baptist chase, church crash, etc.) with no overlapping named participants, dates, or locations. This is a distinct new incident.",
+        "validation_errors": []
       }
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "Fort Pierce loses city attorney, assistant as major development decisions loom",
+      "incoming_headline": "Fort Pierce appoints deputy city manager as interim city attorney amid legal department shakeup",
       "incoming_source_url": "https://cbs12.com/news/local/fort-pierce-legal-department-shakeup-sparks-debate-over-development-decision",
       "incoming_story_id": "story_006184",
       "candidates": [],
@@ -1868,7 +1687,7 @@
       "gate_version": "1.1",
       "resolution_version": "1.0",
       "model": "claude-sonnet-5",
-      "incoming_headline": "Fort Pierce loses city attorney, assistant as major development decisions loom",
+      "incoming_headline": "Fort Pierce appoints deputy city manager as interim city attorney amid legal department shakeup",
       "incoming_source_url": "https://cbs12.com/news/local/fort-pierce-legal-department-shakeup-sparks-debate-over-development-decision",
       "incoming_story_id": "story_006184",
       "candidates": [
@@ -1876,52 +1695,52 @@
           "slug": "2026-08-24-fort-pierce-left-without-city-attorneys-after-nearly-entire-legal-team-resigns",
           "headline": "Fort Pierce left without city attorneys after nearly entire legal team resigns",
           "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.7912,
-          "retrieval_score": 0.6602,
+          "terminal_recall_score": 0.8127,
+          "retrieval_score": 0.6817,
           "reasons": [
             "shared_locality_and_event_family",
             "publication_gap_3_days"
           ]
         },
         {
-          "slug": "2026-08-17-fort-pierce-approves-183200-pilot-program-for-two-code-enforcement-officers-in-r",
-          "headline": "Fort Pierce approves $183,200 pilot program for two code enforcement officers in redevelopment areas",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6702,
-          "retrieval_score": 0.5602,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-08-18-fort-pierce-city-council-selects-former-st-lucie-county-attorney-as-interim-city",
-          "headline": "Fort Pierce City Council selects former St. Lucie County attorney as interim city attorney",
-          "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6665,
-          "retrieval_score": 0.5535,
-          "reasons": [
-            "shared_locality_and_event_family",
-            "publication_gap_9_days"
-          ]
-        },
-        {
           "slug": "2026-08-21-fort-pierce-faces-legal-vacancy-after-daniel-mcintyre-declines-interim-city-atto",
           "headline": "Fort Pierce faces legal vacancy after Daniel McIntyre declines interim city attorney job",
           "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6543,
-          "retrieval_score": 0.5323,
+          "terminal_recall_score": 0.7531,
+          "retrieval_score": 0.6311,
           "reasons": [
             "shared_locality_and_event_family",
             "publication_gap_6_days"
           ]
         },
         {
+          "slug": "2026-08-18-fort-pierce-city-council-selects-former-st-lucie-county-attorney-as-interim-city",
+          "headline": "Fort Pierce City Council selects former St. Lucie County attorney as interim city attorney",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.7078,
+          "retrieval_score": 0.5948,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-08-17-fort-pierce-approves-183200-pilot-program-for-two-code-enforcement-officers-in-r",
+          "headline": "Fort Pierce approves $183,200 pilot program for two code enforcement officers in redevelopment areas",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.667,
+          "retrieval_score": 0.557,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_10_days"
+          ]
+        },
+        {
           "slug": "2026-08-21-abandoned-boats-fill-wildcat-cove-near-fort-pierce-creating-safety-hazards-betwe",
           "headline": "Abandoned boats fill Wildcat Cove near Fort Pierce, creating safety hazards between nature preserves",
           "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6185,
-          "retrieval_score": 0.4965,
+          "terminal_recall_score": 0.6285,
+          "retrieval_score": 0.5065,
           "reasons": [
             "shared_locality_and_event_family",
             "publication_gap_6_days"
@@ -1931,8 +1750,8 @@
           "slug": "2026-08-20-fort-pierce-commission-rejects-third-settlement-offer-in-little-jim-lawsuit",
           "headline": "Fort Pierce commission rejects third settlement offer in Little Jim lawsuit",
           "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.6158,
-          "retrieval_score": 0.4968,
+          "terminal_recall_score": 0.5869,
+          "retrieval_score": 0.4679,
           "reasons": [
             "shared_locality_and_event_family",
             "publication_gap_7_days"
@@ -1942,8 +1761,8 @@
           "slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
           "headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
           "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.5752,
-          "retrieval_score": 0.4352,
+          "terminal_recall_score": 0.5751,
+          "retrieval_score": 0.4351,
           "reasons": [
             "shared_locality_and_event_family",
             "publication_gap_1_days"
@@ -1953,8 +1772,8 @@
           "slug": "2026-08-13-fort-pierce-proposes-fines-up-to-500-per-day-for-chronic-noise-violators",
           "headline": "Fort Pierce proposes fines up to $500 per day for chronic noise violators",
           "terminal_recall_tier": 4,
-          "terminal_recall_score": 0.55,
-          "retrieval_score": 0.45,
+          "terminal_recall_score": 0.5697,
+          "retrieval_score": 0.4697,
           "reasons": [
             "shared_locality_and_event_family",
             "publication_gap_15_days",
@@ -1972,6 +1791,16 @@
           ]
         },
         {
+          "slug": "2026-08-26-stuart-city-commission-ousts-mayor-fires-city-manager-in-sweeping-leadership-sha",
+          "headline": "Stuart city commission ousts mayor, fires city manager in sweeping leadership shakeup",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5607,
+          "retrieval_score": 0.5237,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
           "slug": "2026-08-21-fort-pierce-man-arrested-on-eight-burglary-charges-in-port-st-lucie-spanish-lake",
           "headline": "Fort Pierce man arrested on eight burglary charges in Port St. Lucie Spanish Lakes community",
           "terminal_recall_tier": 1,
@@ -1985,21 +1814,10 @@
           "slug": "2026-08-20-two-fort-pierce-women-arrested-for-using-fake-movie-money-at-st-lucie-restaurant",
           "headline": "Two Fort Pierce women arrested for using fake movie money at St. Lucie restaurant",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4787,
-          "retrieval_score": 0.4597,
+          "terminal_recall_score": 0.4852,
+          "retrieval_score": 0.4662,
           "reasons": [
             "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-07-07-28-year-old-man-dies-following-weekend-double-shooting-in-fort-pierce",
-          "headline": "Fort Pierce police identify suspect in deadly Fourth of July shooting",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4569,
-          "retrieval_score": 0.4319,
-          "reasons": [
-            "publication_gap_51_days",
-            "outside_recent_window"
           ]
         }
       ],
@@ -2037,9 +1855,9 @@
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "National Weather Service explains tornado warning timing after Port St. Lucie EF0 strike",
-      "incoming_source_url": "https://www.wpbf.com/article/florida-port-st-lucie-tornado-nws-tornado-warnings/73524632",
-      "incoming_story_id": "story_006024",
+      "incoming_headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
+      "incoming_source_url": "https://cbs12.com/newsletter-daily/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
+      "incoming_story_id": "story_006364",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -2060,163 +1878,173 @@
       "gate_version": "1.1",
       "resolution_version": "1.0",
       "model": "claude-sonnet-5",
-      "incoming_headline": "National Weather Service explains tornado warning timing after Port St. Lucie EF0 strike",
-      "incoming_source_url": "https://www.wpbf.com/article/florida-port-st-lucie-tornado-nws-tornado-warnings/73524632",
-      "incoming_story_id": "story_006024",
+      "incoming_headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
+      "incoming_source_url": "https://cbs12.com/newsletter-daily/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
+      "incoming_story_id": "story_006364",
       "candidates": [
         {
-          "slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
-          "headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.7053,
-          "retrieval_score": 0.6653,
+          "slug": "2026-08-20-port-st-lucie-man-arrested-on-sexual-activity-with-minor-charges-after-swat-oper",
+          "headline": "Port St. Lucie man arrested on sexual activity with minor charges after SWAT operation",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.8628,
+          "retrieval_score": 0.6938,
           "reasons": [
-            "moderate_fuzzy_headline",
-            "publication_gap_1_days"
+            "shared_locality_and_event_family",
+            "publication_gap_7_days"
           ]
         },
         {
-          "slug": "2026-08-12-bobcat-seen-weekly-in-port-st-lucie-pga-village-neighborhood",
-          "headline": "Bobcat seen weekly in Port St. Lucie PGA Village neighborhood",
+          "slug": "2026-08-17-port-st-lucie-police-rescue-ducklings-trapped-in-storm-drain-on-southeast-oakrid",
+          "headline": "Port St. Lucie police rescue ducklings trapped in storm drain on Southeast Oakridge Drive",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.8489,
+          "retrieval_score": 0.6889,
+          "reasons": [
+            "moderate_fuzzy_headline",
+            "shared_locality_and_event_family",
+            "publication_gap_10_days"
+          ]
+        },
+        {
+          "slug": "2026-08-13-person-shot-and-killed-while-attempting-to-enter-residence-at-seminole-mobile-ho",
+          "headline": "Homeowner shoots, kills man who attacked him at St. Lucie County mobile home park; stand your ground case under review",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6826,
+          "retrieval_score": 0.5326,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-08-15-sheriffs-deputies-recover-firearm-in-fatal-fort-pierce-mobile-home-park-shooting",
+          "headline": "Sheriff's deputies recover firearm in fatal Fort Pierce mobile home park shooting",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6392,
+          "retrieval_score": 0.4852,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-08-13-three-port-st-lucie-police-officers-placed-on-leave-during-campaign-sign-investi",
+          "headline": "Three Port St. Lucie police officers placed on leave during campaign sign investigations",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5427,
-          "retrieval_score": 0.5417,
+          "terminal_recall_score": 0.6034,
+          "retrieval_score": 0.5534,
           "reasons": [
             "publication_gap_14_days"
           ]
         },
         {
-          "slug": "2026-08-24-martin-county-schools-ban-fake-squishy-toys-after-federal-safety-alert",
-          "headline": "Martin County schools ban fake squishy toys after federal safety alert",
+          "slug": "2026-08-08-port-st-lucie-police-investigate-two-separate-campaign-sign-incidents-involving",
+          "headline": "Port St. Lucie police investigate two separate campaign sign incidents involving Mayor Martin's husband",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5246,
-          "retrieval_score": 0.4876,
+          "terminal_recall_score": 0.5906,
+          "retrieval_score": 0.5406,
           "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-08-18-port-st-lucie-voters-head-to-polls-tuesday-for-mayoral-election",
-          "headline": "Port St. Lucie voters head to polls Tuesday for mayoral election",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4954,
-          "retrieval_score": 0.4764,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
-          "headline": "Port St. Lucie High School football player held in ICE custody after school zone speeding violation",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4946,
-          "retrieval_score": 0.4606,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
-          "headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4911,
-          "retrieval_score": 0.4541,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-08-16-stuart-man-65-struck-and-killed-crossing-us-1-in-st-lucie-county",
-          "headline": "Stuart man, 65, struck and killed crossing U.S. 1 in St. Lucie County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4712,
-          "retrieval_score": 0.4582,
-          "reasons": [
-            "publication_gap_10_days"
+            "publication_gap_20_days",
+            "outside_recent_window"
           ]
         },
         {
           "slug": "2026-08-20-two-fort-pierce-women-arrested-for-using-fake-movie-money-at-st-lucie-restaurant",
           "headline": "Two Fort Pierce women arrested for using fake movie money at St. Lucie restaurant",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4671,
-          "retrieval_score": 0.4421,
+          "terminal_recall_score": 0.5466,
+          "retrieval_score": 0.4776,
           "reasons": [
-            "publication_gap_5_days"
+            "publication_gap_7_days"
           ]
         },
         {
-          "slug": "2026-08-11-port-st-lucie-residents-rescue-autistic-child-from-retention-pond",
-          "headline": "Port St. Lucie residents rescue autistic child from retention pond",
+          "slug": "2026-08-18-more-than-50-st-lucie-county-residents-targeted-in-law-enforcement-impersonation",
+          "headline": "More than 50 St. Lucie County residents targeted in law enforcement impersonation scam",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4668,
-          "retrieval_score": 0.4668,
+          "terminal_recall_score": 0.5227,
+          "retrieval_score": 0.4597,
           "reasons": [
-            "publication_gap_15_days",
-            "outside_recent_window"
+            "publication_gap_10_days"
           ]
         },
         {
-          "slug": "2026-08-12-st-lucie-county-officials-outline-2026-master-plan-for-port-of-fort-pierce",
-          "headline": "St. Lucie County officials outline 2026 master plan for Port of Fort Pierce",
+          "slug": "2026-08-18-port-st-lucie-to-reconsider-led-sign-rules-after-church-request",
+          "headline": "Port St. Lucie to reconsider LED sign rules after church request",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4508,
-          "retrieval_score": 0.4498,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-08-12-construction-worker-killed-by-vehicle-in-i-95-work-zone-south-of-tradition",
-          "headline": "Construction worker killed by vehicle in I-95 work zone south of Tradition",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4497,
-          "retrieval_score": 0.4487,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-08-16-melbourne-man-82-dies-after-jeep-strikes-tree-in-median-of-interstate-95-in-st-l",
-          "headline": "Melbourne man, 82, dies after single-vehicle crash on I-95 in St. Lucie County",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4493,
-          "retrieval_score": 0.4333,
+          "terminal_recall_score": 0.4911,
+          "retrieval_score": 0.4781,
           "reasons": [
             "publication_gap_9_days"
+          ]
+        },
+        {
+          "slug": "2026-08-19-port-st-lucie-mayor-race-heads-to-november-runoff-between-shannon-martin-and-ste",
+          "headline": "Port St. Lucie mayor race heads to November runoff between Shannon Martin and Steven Giordano",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4867,
+          "retrieval_score": 0.4707,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-08-20-st-lucie-county-deputy-found-guilty-of-dui-remains-on-unpaid-leave-during-intern",
+          "headline": "St. Lucie County deputy found guilty of DUI, remains on unpaid leave during internal review",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4832,
+          "retrieval_score": 0.4142,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-08-19-bicyclist-critically-injured-in-port-st-lucie-crash-on-southwest-rosser-boulevar",
+          "headline": "Bicyclist critically injured in Port St. Lucie crash on Southwest Rosser Boulevard",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4812,
+          "retrieval_score": 0.4652,
+          "reasons": [
+            "publication_gap_8_days"
           ]
         }
       ],
       "initial_decision": {
-        "status": "model_error",
-        "action": "hold",
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.0,
+        "confidence": 0.95,
         "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "Semantic gate model failure; fail-closed hold: 'ThinkingBlock' object has no attribute 'text'",
-        "validation_errors": [
-          "model_error"
-        ]
+        "novel_facts": [
+          "New SWAT operation on Southeast West Dunbrooke Circle on 2026-08-27",
+          "Active shooter rumor debunked by Port St. Lucie Police",
+          "Different location and date than the Aug 20 SW Jaslo Avenue SWAT operation involving Virgil Jason Vinz"
+        ],
+        "reason": "The closest candidate (2026-08-20 SW Jaslo Avenue SWAT arrest of Virgil Jason Vinz) is a distinct incident at a different address and date. The incoming article describes a separate SWAT search warrant operation at Southeast West Dunbrooke Circle on Aug 27 that sparked false active-shooter rumors, with no named suspect or arrest. No candidate shares the same location, date, or specific incident details, so this is a new, unrelated event.",
+        "validation_errors": []
       },
       "resolution_decision": {},
       "decision": {
-        "status": "model_error",
-        "action": "hold",
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
         "selected_candidate_slug": "",
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.0,
+        "confidence": 0.95,
         "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "Semantic gate model failure; fail-closed hold: 'ThinkingBlock' object has no attribute 'text'",
-        "validation_errors": [
-          "model_error"
-        ]
+        "novel_facts": [
+          "New SWAT operation on Southeast West Dunbrooke Circle on 2026-08-27",
+          "Active shooter rumor debunked by Port St. Lucie Police",
+          "Different location and date than the Aug 20 SW Jaslo Avenue SWAT operation involving Virgil Jason Vinz"
+        ],
+        "reason": "The closest candidate (2026-08-20 SW Jaslo Avenue SWAT arrest of Virgil Jason Vinz) is a distinct incident at a different address and date. The incoming article describes a separate SWAT search warrant operation at Southeast West Dunbrooke Circle on Aug 27 that sparked false active-shooter rumors, with no named suspect or arrest. No candidate shares the same location, date, or specific incident details, so this is a new, unrelated event.",
+        "validation_errors": []
       }
     }
   ],
@@ -2225,10 +2053,10 @@
   "material_updates": [],
   "registry_consolidation": {
     "status": "no_changes",
-    "directives_considered": 2,
+    "directives_considered": 1,
     "story_records_merged": 0,
     "aliases_written": 0,
-    "already_consolidated": 1,
+    "already_consolidated": 0,
     "skipped": [
       {
         "source_story_id": "story_003665",
