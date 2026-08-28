@@ -11,7 +11,7 @@ on:
         default: false
         type: boolean
       assignment_editor_shadow:
-        description: "Run Sonnet 5 assignment editor + Sonnet 4.5 writer shadow"
+        description: "Run 3-way assignment-editor shadow: production vs Sonnet 5 vs Opus 5"
         required: false
         default: false
         type: boolean
@@ -129,7 +129,8 @@ jobs:
           TCT_ARTICLE_BANNER_MODE: ${{ vars.TCT_ARTICLE_BANNER_MODE || 'reader_support' }}
           # Manual-only, publication-isolated model evaluation. Routine runs stay off.
           TCT_MODEL_BAKEOFF: ${{ inputs.model_bakeoff }}
-          # Manual-only editor/writer architecture experiment. This runs only after
+          # Manual-only three-way editor experiment: production Sonnet 4.5 vs Sonnet 5
+          # editor vs Opus 5 editor, with the same Sonnet 4.5 writer. Runs only after
           # the normal production build and cannot write live publication state.
           TCT_ASSIGNMENT_EDITOR_SHADOW: ${{ inputs.assignment_editor_shadow }}
 
