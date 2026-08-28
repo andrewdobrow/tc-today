@@ -14,8 +14,8 @@ from typing import Any, Dict, Iterable, List, Tuple
 
 from .model_bakeoff import compact_category_output
 
-ASSIGNMENT_EDITOR_SHADOW_SCHEMA_VERSION = 3
-ASSIGNMENT_EDITOR_SHADOW_VERSION = "1.13.6.7r"
+ASSIGNMENT_EDITOR_SHADOW_SCHEMA_VERSION = 4
+ASSIGNMENT_EDITOR_SHADOW_VERSION = "1.13.6.7s"
 
 
 def _utc_now_iso() -> str:
@@ -177,9 +177,24 @@ def normalize_assignment_plan(
     return plan, diagnostics
 
 
+def _ordered_variant_paths(category_key: str, blind_salt: str, paths: Iterable[str]) -> List[str]:
+    """Return a deterministic blind ordering for two or more experiment paths."""
+    return sorted(
+        list(paths),
+        key=lambda path: hashlib.sha256(
+            f"assignment-editor:{blind_salt}:{category_key}:{path}".encode("utf-8")
+        ).digest(),
+    )
+
+
 def _variant_order(category_key: str, blind_salt: str) -> bool:
-    digest = hashlib.sha256(f"assignment-editor:{blind_salt}:{category_key}".encode("utf-8")).digest()
-    return bool(digest[0] & 1)
+    """Backward-compatible two-way helper retained for older callers/tests."""
+    order = _ordered_variant_paths(
+        category_key,
+        blind_salt,
+        ["current_production", "sonnet5_editor_sonnet45_writer"],
+    )
+    return order[0] == "current_production"
 
 
 def _source_title_for_index(source_pool: List[Dict[str, Any]], source_index: Any) -> str:
@@ -271,21 +286,34 @@ def write_assignment_editor_artifacts(
     writer_model: str,
     blind_salt: str,
     enabled: bool,
+    opus_editor_model: str | None = None,
 ) -> Dict[str, Any]:
-    """Write final-pipeline-aligned machine, blind-review, and answer-key artifacts."""
+    """Write final-pipeline-aligned machine, blind-review, and answer-key artifacts.
+
+    The writer supports the historical two-way production-vs-Sonnet comparison and,
+    when ``opus_editor_model`` is supplied, the v1.13.6.7s three-way comparison:
+    production Sonnet 4.5 vs Sonnet 5 editor vs Opus 5 editor. Both challenger
+    architectures use the same production writer and deterministic final pipeline.
+    """
     report_path = Path(report_path)
     review_path = Path(review_path)
     answer_key_path = Path(answer_key_path)
     rows = list(results)
 
+    sonnet_path = "sonnet5_editor_sonnet45_writer"
+    opus_path = "opus5_editor_sonnet45_writer"
+    production_path = "current_production"
+    three_way = bool(opus_editor_model)
+
     report_rows: List[Dict[str, Any]] = []
     answer_categories: Dict[str, Any] = {}
+    comparison_noun = "All displayed variants" if three_way else "Both displayed variants"
     review_lines = [
         "# TCT Assignment Editor Shadow Experiment — Final-Pipeline Blind Review",
         "",
-        "The live publisher was not changed. Both displayed variants are final-pipeline comparison projections: the production side is captured from the actual final live category after normal deterministic corrections, and the publication-isolated shadow side is passed through the same shared eligibility, freshness, publication-quality, identity, suppression, county-authority, and canonical-surface rules before scoring. Raw pre-alignment model outputs remain available only in the machine report.",
+        f"The live publisher was not changed. {comparison_noun} are final-pipeline comparison projections: the production path is captured from the actual final live category after normal deterministic corrections, and each publication-isolated shadow path is passed through the same shared eligibility, freshness, publication-quality, identity, suppression, county-authority, canonical-surface, and final source-integrity rules before scoring. Raw pre-alignment model outputs remain available only in the machine report.",
         "",
-        "Judge the final newsroom result, not verbosity. Score: (1) hero/story choice, (2) supporting-story selection and omissions, (3) ordering, (4) angle/new-development focus, (5) source mapping, (6) headline accuracy and strength, (7) lead/context, (8) factual fidelity, (9) completeness, (10) unnecessary filler, and (11) overall publishability. Record A, B, or Tie before opening the answer key.",
+        "Judge the final newsroom result, not verbosity. Score: (1) hero/story choice, (2) supporting-story selection and omissions, (3) ordering, (4) angle/new-development focus, (5) source mapping, (6) headline accuracy and strength, (7) lead/context, (8) factual fidelity, (9) completeness, (10) unnecessary filler, and (11) overall publishability. Record the winning variant letter or Tie before opening the answer key.",
         "",
     ]
 
@@ -302,132 +330,251 @@ def write_assignment_editor_artifacts(
         final_baseline = compact_category_output(
             row.get("final_baseline_output") or row.get("baseline_output")
         )
-        raw_challenger = compact_category_output(
+        raw_sonnet = compact_category_output(
             row.get("raw_challenger_output") or row.get("challenger_output")
         )
-        final_challenger = compact_category_output(
+        final_sonnet = compact_category_output(
             row.get("final_challenger_output") or row.get("challenger_output")
         )
-        error = str(row.get("challenger_error") or "")
-        baseline_is_a = _variant_order(category_key, blind_salt)
+        sonnet_error = str(row.get("challenger_error") or "")
 
-        variant_a = final_baseline if baseline_is_a else final_challenger
-        variant_b = final_challenger if baseline_is_a else final_baseline
-        variant_a_path = "current_production" if baseline_is_a else "sonnet5_editor_sonnet45_writer"
-        variant_b_path = "sonnet5_editor_sonnet45_writer" if baseline_is_a else "current_production"
+        raw_opus = compact_category_output(
+            row.get("raw_opus_challenger_output") or row.get("opus_challenger_output")
+        ) if three_way else {}
+        final_opus = compact_category_output(
+            row.get("final_opus_challenger_output") or row.get("opus_challenger_output")
+        ) if three_way else {}
+        opus_error = str(row.get("opus_challenger_error") or "") if three_way else ""
 
-        if error:
+        variants: Dict[str, Dict[str, Any]] = {
+            production_path: {
+                "raw_output": raw_baseline,
+                "final_output": final_baseline,
+                "error": "",
+                "editor_model": production_model,
+                "writer_model": production_model,
+                "assignment_plan": {},
+                "assignment_diagnostics": {},
+                "alignment_diagnostics": (row.get("alignment_diagnostics") or {}).get("production") or {},
+            },
+            sonnet_path: {
+                "raw_output": raw_sonnet,
+                "final_output": final_sonnet,
+                "error": sonnet_error,
+                "editor_model": editor_model,
+                "writer_model": writer_model,
+                "assignment_plan": row.get("assignment_plan") or {},
+                "assignment_diagnostics": row.get("assignment_diagnostics") or {},
+                "alignment_diagnostics": (row.get("alignment_diagnostics") or {}).get("shadow") or {},
+                "editor_duration_seconds": row.get("editor_duration_seconds"),
+                "editor_actual_model": row.get("editor_actual_model"),
+                "writer_duration_seconds": row.get("writer_duration_seconds"),
+                "writer_actual_models": row.get("writer_actual_models") or [],
+            },
+        }
+        if three_way:
+            variants[opus_path] = {
+                "raw_output": raw_opus,
+                "final_output": final_opus,
+                "error": opus_error,
+                "editor_model": opus_editor_model,
+                "writer_model": writer_model,
+                "assignment_plan": row.get("opus_assignment_plan") or {},
+                "assignment_diagnostics": row.get("opus_assignment_diagnostics") or {},
+                "alignment_diagnostics": (row.get("alignment_diagnostics") or {}).get("opus_shadow") or {},
+                "editor_duration_seconds": row.get("opus_editor_duration_seconds"),
+                "editor_actual_model": row.get("opus_editor_actual_model"),
+                "writer_duration_seconds": row.get("opus_writer_duration_seconds"),
+                "writer_actual_models": row.get("opus_writer_actual_models") or [],
+            }
+
+        challenger_errors = [
+            variant.get("error")
+            for path, variant in variants.items()
+            if path != production_path and variant.get("error")
+        ]
+        if challenger_errors:
             failed += 1
         else:
             completed += 1
 
-        raw_baseline_signals = _comparison_signals(raw_baseline, source_pool)
-        final_baseline_signals = _comparison_signals(final_baseline, source_pool)
-        raw_challenger_signals = _comparison_signals(raw_challenger, source_pool)
-        final_challenger_signals = _comparison_signals(final_challenger, source_pool)
-        assignment_plan = row.get("assignment_plan") or {}
-        assignment_diag = row.get("assignment_diagnostics") or {}
-        shadow_alignment = (row.get("alignment_diagnostics") or {}).get("shadow") or {}
-        final_source_mapping = shadow_alignment.get("final_source_mapping") or {}
-        final_mapping_valid = bool(
-            final_source_mapping.get(
-                "source_mapping_valid", assignment_diag.get("source_mapping_valid")
+        variant_signals: Dict[str, Dict[str, Any]] = {}
+        for path, variant in variants.items():
+            raw_signals = _comparison_signals(variant["raw_output"], source_pool)
+            final_signals = _comparison_signals(variant["final_output"], source_pool)
+            alignment = variant.get("alignment_diagnostics") or {}
+            final_source_mapping = alignment.get("final_source_mapping") or {}
+            assignment_diag = variant.get("assignment_diagnostics") or {}
+            mapping_valid = True if path == production_path else bool(
+                final_source_mapping.get(
+                    "source_mapping_valid", assignment_diag.get("source_mapping_valid")
+                )
             )
-        )
+            variant_signals[path] = {
+                "raw": raw_signals,
+                "final": final_signals,
+                "final_source_mapping": final_source_mapping,
+                "source_mapping_valid": mapping_valid,
+            }
 
-        report_rows.append({
+        report_row = {
             "category_key": category_key,
             "category_label": category_label,
             "source_pool": source_pool,
             "production_model": production_model,
             "editor_model": editor_model,
+            "opus_editor_model": opus_editor_model if three_way else None,
             "writer_model": writer_model,
             "raw_baseline_output": raw_baseline,
             "final_baseline_output": final_baseline,
-            # Backward-compatible aliases now intentionally point at the aligned objects.
             "baseline_output": final_baseline,
-            "assignment_plan": assignment_plan,
-            "assignment_diagnostics": assignment_diag,
-            "raw_challenger_output": raw_challenger,
-            "final_challenger_output": final_challenger,
-            "challenger_output": final_challenger,
-            "alignment_diagnostics": row.get("alignment_diagnostics") or {},
-            "challenger_error": error or None,
+            "assignment_plan": row.get("assignment_plan") or {},
+            "assignment_diagnostics": row.get("assignment_diagnostics") or {},
+            "raw_challenger_output": raw_sonnet,
+            "final_challenger_output": final_sonnet,
+            "challenger_output": final_sonnet,
+            "challenger_error": sonnet_error or None,
             "editor_duration_seconds": row.get("editor_duration_seconds"),
             "editor_actual_model": row.get("editor_actual_model"),
             "writer_duration_seconds": row.get("writer_duration_seconds"),
             "writer_actual_models": row.get("writer_actual_models") or [],
-            "raw_comparison_signals": {
-                "baseline": raw_baseline_signals,
-                "challenger": raw_challenger_signals,
-                "same_hero_source_index": (
-                    raw_baseline_signals["hero_source_index"] == raw_challenger_signals["hero_source_index"]
-                    if raw_baseline_signals["hero_source_index"] is not None
-                    and raw_challenger_signals["hero_source_index"] is not None
-                    else None
-                ),
-            },
-            "comparison_signals": {
-                "same_hero_source_index": (
-                    final_baseline_signals["hero_source_index"] == final_challenger_signals["hero_source_index"]
-                    if final_baseline_signals["hero_source_index"] is not None
-                    and final_challenger_signals["hero_source_index"] is not None
-                    else None
-                ),
-                "baseline_selected_source_indexes": final_baseline_signals["selected_source_indexes"],
-                "challenger_selected_source_indexes": final_challenger_signals["selected_source_indexes"],
-                "baseline_duplicate_source_indexes": final_baseline_signals["duplicate_source_indexes"],
-                "challenger_duplicate_source_indexes": final_challenger_signals["duplicate_source_indexes"],
-                "baseline_omitted_source_indexes": final_baseline_signals["omitted_source_indexes"],
-                "challenger_omitted_source_indexes": final_challenger_signals["omitted_source_indexes"],
-                "baseline_final_hero_headline": final_baseline_signals["hero_headline"],
-                "challenger_final_hero_headline": final_challenger_signals["hero_headline"],
-                "challenger_source_mapping_valid": final_mapping_valid,
-                "challenger_final_source_mapping": final_source_mapping,
-            },
-        })
+            "alignment_diagnostics": row.get("alignment_diagnostics") or {},
+            "variants": variants,
+            "variant_comparison_signals": variant_signals,
+        }
+        if three_way:
+            report_row.update({
+                "opus_assignment_plan": row.get("opus_assignment_plan") or {},
+                "opus_assignment_diagnostics": row.get("opus_assignment_diagnostics") or {},
+                "raw_opus_challenger_output": raw_opus,
+                "final_opus_challenger_output": final_opus,
+                "opus_challenger_output": final_opus,
+                "opus_challenger_error": opus_error or None,
+                "opus_editor_duration_seconds": row.get("opus_editor_duration_seconds"),
+                "opus_editor_actual_model": row.get("opus_editor_actual_model"),
+                "opus_writer_duration_seconds": row.get("opus_writer_duration_seconds"),
+                "opus_writer_actual_models": row.get("opus_writer_actual_models") or [],
+            })
 
-        answer_categories[category_key] = {
+        # Preserve the historical Sonnet comparison keys while adding explicit
+        # per-path signals for the new three-way experiment.
+        sonnet_raw = variant_signals[sonnet_path]["raw"]
+        sonnet_final = variant_signals[sonnet_path]["final"]
+        baseline_raw = variant_signals[production_path]["raw"]
+        baseline_final = variant_signals[production_path]["final"]
+        report_row["raw_comparison_signals"] = {
+            "baseline": baseline_raw,
+            "challenger": sonnet_raw,
+            "same_hero_source_index": (
+                baseline_raw["hero_source_index"] == sonnet_raw["hero_source_index"]
+                if baseline_raw["hero_source_index"] is not None
+                and sonnet_raw["hero_source_index"] is not None
+                else None
+            ),
+        }
+        report_row["comparison_signals"] = {
+            "same_hero_source_index": (
+                baseline_final["hero_source_index"] == sonnet_final["hero_source_index"]
+                if baseline_final["hero_source_index"] is not None
+                and sonnet_final["hero_source_index"] is not None
+                else None
+            ),
+            "baseline_selected_source_indexes": baseline_final["selected_source_indexes"],
+            "challenger_selected_source_indexes": sonnet_final["selected_source_indexes"],
+            "baseline_duplicate_source_indexes": baseline_final["duplicate_source_indexes"],
+            "challenger_duplicate_source_indexes": sonnet_final["duplicate_source_indexes"],
+            "baseline_omitted_source_indexes": baseline_final["omitted_source_indexes"],
+            "challenger_omitted_source_indexes": sonnet_final["omitted_source_indexes"],
+            "baseline_final_hero_headline": baseline_final["hero_headline"],
+            "challenger_final_hero_headline": sonnet_final["hero_headline"],
+            "challenger_source_mapping_valid": variant_signals[sonnet_path]["source_mapping_valid"],
+            "challenger_final_source_mapping": variant_signals[sonnet_path]["final_source_mapping"],
+        }
+        if three_way:
+            opus_raw_signals = variant_signals[opus_path]["raw"]
+            opus_final_signals = variant_signals[opus_path]["final"]
+            report_row["comparison_signals"].update({
+                "opus_same_hero_source_index": (
+                    baseline_final["hero_source_index"] == opus_final_signals["hero_source_index"]
+                    if baseline_final["hero_source_index"] is not None
+                    and opus_final_signals["hero_source_index"] is not None
+                    else None
+                ),
+                "opus_selected_source_indexes": opus_final_signals["selected_source_indexes"],
+                "opus_duplicate_source_indexes": opus_final_signals["duplicate_source_indexes"],
+                "opus_omitted_source_indexes": opus_final_signals["omitted_source_indexes"],
+                "opus_final_hero_headline": opus_final_signals["hero_headline"],
+                "opus_source_mapping_valid": variant_signals[opus_path]["source_mapping_valid"],
+                "opus_final_source_mapping": variant_signals[opus_path]["final_source_mapping"],
+            })
+            report_row["raw_comparison_signals"]["opus"] = opus_raw_signals
+        report_rows.append(report_row)
+
+        paths = list(variants.keys())
+        ordered_paths = _ordered_variant_paths(category_key, blind_salt, paths)
+        labels = [chr(ord("A") + idx) for idx in range(len(ordered_paths))]
+        label_to_path = dict(zip(labels, ordered_paths))
+        answer_entry = {
             "category_label": category_label,
-            "variant_a_path": variant_a_path,
-            "variant_b_path": variant_b_path,
             "current_production_model": production_model,
             "shadow_assignment_editor_model": editor_model,
             "shadow_writer_model": writer_model,
             "comparison_stage": "final_pipeline_aligned",
         }
+        if three_way:
+            answer_entry["opus_assignment_editor_model"] = opus_editor_model
+        for label, path in label_to_path.items():
+            answer_entry[f"variant_{label.lower()}_path"] = path
+        answer_categories[category_key] = answer_entry
 
         review_lines.extend([f"## {category_label}", "", "### Source pool", ""])
         for index, source in enumerate(source_pool, 1):
             review_lines.append(f"{index}. {source.get('title') or '(untitled source)'}")
         review_lines.append("")
-        if error:
+        if challenger_errors:
             review_lines.extend([
-                "**The shadow architecture failed for this category. This category is not scoreable.**",
+                "**At least one publication-isolated shadow path failed for this category. The full comparison is not scoreable.**",
                 "",
             ])
         else:
-            review_lines.extend(_variant_markdown("A", variant_a, source_pool))
-            review_lines.extend(_variant_markdown("B", variant_b, source_pool))
+            for label in labels:
+                path = label_to_path[label]
+                review_lines.extend(_variant_markdown(label, variants[path]["final_output"], source_pool))
+            choices = " / ".join(labels + ["Tie"])
             review_lines.extend([
                 "**Scorecard**",
                 "",
-                "- Hero/story choice: A / B / Tie",
-                "- Supporting-story selection/omissions: A / B / Tie",
-                "- Story ordering: A / B / Tie",
-                "- Angle/new-development focus: A / B / Tie",
-                "- Source mapping: A / B / Tie",
-                "- Headline: A / B / Tie",
-                "- Lead and context: A / B / Tie",
-                "- Factual fidelity: A / B / Tie",
-                "- Completeness: A / B / Tie",
-                "- Least filler: A / B / Tie",
-                "- Overall publishability: A / B / Tie",
+                f"- Hero/story choice: {choices}",
+                f"- Supporting-story selection/omissions: {choices}",
+                f"- Story ordering: {choices}",
+                f"- Angle/new-development focus: {choices}",
+                f"- Source mapping: {choices}",
+                f"- Headline: {choices}",
+                f"- Lead and context: {choices}",
+                f"- Factual fidelity: {choices}",
+                f"- Completeness: {choices}",
+                f"- Least filler: {choices}",
+                f"- Overall publishability: {choices}",
                 "",
             ])
         review_lines.extend(["---", ""])
 
     generated_at = _utc_now_iso()
+    challenger_architectures = {
+        sonnet_path: {
+            "assignment_editor_model": editor_model,
+            "writer_model": writer_model,
+            "editor_role": "story selection, hero/supporting order, angle, urgency, exact source mapping",
+            "writer_role": "write only the preassigned single source/angle; no story selection",
+        }
+    }
+    if three_way:
+        challenger_architectures[opus_path] = {
+            "assignment_editor_model": opus_editor_model,
+            "writer_model": writer_model,
+            "editor_role": "story selection, hero/supporting order, angle, urgency, exact source mapping",
+            "writer_role": "write only the preassigned single source/angle; no story selection",
+        }
     report = {
         "schema_version": ASSIGNMENT_EDITOR_SHADOW_SCHEMA_VERSION,
         "experiment_version": ASSIGNMENT_EDITOR_SHADOW_VERSION,
@@ -436,19 +583,16 @@ def write_assignment_editor_artifacts(
         "publication_isolation": True,
         "comparison_stage": "final_pipeline_aligned",
         "current_production_model": production_model,
-        "shadow_architecture": {
-            "assignment_editor_model": editor_model,
-            "writer_model": writer_model,
-            "editor_role": "story selection, hero/supporting order, angle, urgency, exact source mapping",
-            "writer_role": "write only the preassigned single source/angle; no story selection",
-        },
+        # Backward-compatible Sonnet architecture plus the authoritative map.
+        "shadow_architecture": challenger_architectures[sonnet_path],
+        "challenger_architectures": challenger_architectures,
         "queued_categories": len(rows),
         "completed_categories": completed,
         "failed_categories": failed,
         "categories": report_rows,
     }
     answer_key = {
-        "schema_version": 2,
+        "schema_version": 3 if three_way else 2,
         "experiment_version": ASSIGNMENT_EDITOR_SHADOW_VERSION,
         "generated_at": generated_at,
         "instruction": "Open only after scoring the final-pipeline blind review.",

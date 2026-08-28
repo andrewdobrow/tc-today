@@ -756,6 +756,9 @@ ASSIGNMENT_EDITOR_SHADOW_ENABLED = os.environ.get(
 ASSIGNMENT_EDITOR_MODEL = os.environ.get(
     "TCT_ASSIGNMENT_EDITOR_MODEL", "claude-sonnet-5"
 ).strip() or "claude-sonnet-5"
+ASSIGNMENT_EDITOR_OPUS_MODEL = os.environ.get(
+    "TCT_ASSIGNMENT_EDITOR_OPUS_MODEL", "claude-opus-5"
+).strip() or "claude-opus-5"
 ASSIGNMENT_EDITOR_TIMEOUT_SECONDS = 60.0
 ASSIGNMENT_WRITER_TIMEOUT_SECONDS = 90.0
 ASSIGNMENT_EDITOR_MAX_TOKENS = 1800
@@ -10155,8 +10158,8 @@ def _assignment_editor_source_listing(packet):
     return "\n\n".join(rows)
 
 
-def _run_assignment_editor(packet):
-    """Sonnet 5 chooses only assignments/angles; it never writes publication copy."""
+def _run_assignment_editor(packet, *, model=None):
+    """A shadow assignment editor chooses assignments/angles; it never writes publication copy."""
     sources = packet.get("source_inputs") or []
     if not sources:
         raise ValueError("No source inputs were queued for assignment editor")
@@ -10253,8 +10256,9 @@ SOURCE PACKET:
 Return ONLY valid JSON in exactly this shape:
 {response_shape}
 """
+    editor_model = str(model or ASSIGNMENT_EDITOR_MODEL).strip() or ASSIGNMENT_EDITOR_MODEL
     request_kwargs = {
-        "model": ASSIGNMENT_EDITOR_MODEL,
+        "model": editor_model,
         "max_tokens": ASSIGNMENT_EDITOR_MAX_TOKENS,
         "messages": [{"role": "user", "content": prompt}],
     }
@@ -10294,7 +10298,7 @@ Return ONLY valid JSON in exactly this shape:
             f"invalid={diagnostics.get('invalid_source_indexes')}, "
             f"duplicates={diagnostics.get('duplicate_source_indexes')}"
         )
-    actual_model = str(getattr(response, "model", None) or ASSIGNMENT_EDITOR_MODEL)
+    actual_model = str(getattr(response, "model", None) or editor_model)
     return plan, diagnostics, actual_model, duration
 
 def _assignment_source_by_index(packet, source_index):
@@ -11510,79 +11514,49 @@ def _assignment_shadow_final_projection(raw_shadow, packet, final_baseline, pre_
     return data, diagnostics
 
 
-def _run_assignment_editor_shadow_after_build(all_categories, pre_generation_archive):
-    """Run the editor->writer experiment after build and compare aligned final projections."""
-    if not ASSIGNMENT_EDITOR_SHADOW_ENABLED:
-        return None
-
-    pending = list(ASSIGNMENT_EDITOR_PENDING.values())
-    print(
-        f"  Assignment-editor shadow: {len(pending)} live-generated category packet(s) queued; "
-        f"editor={ASSIGNMENT_EDITOR_MODEL}; writer={MODEL_ARTICLES}; comparison=final-pipeline-aligned"
-    )
-    results = []
-    production_models = []
-    for packet in pending:
-        category_label = packet.get("category_label") or packet.get("category_key") or "category"
-        production_models.append(str(packet.get("baseline_model") or MODEL_ARTICLES))
-        final_baseline, production_alignment = _assignment_shadow_final_production_projection(
-            packet, all_categories
+def _run_assignment_editor_shadow_variant(
+    packet,
+    *,
+    editor_model,
+    final_baseline,
+    pre_generation_archive,
+):
+    """Execute one publication-isolated editor -> production-writer shadow path."""
+    outcome = {
+        "assignment_plan": {},
+        "assignment_diagnostics": {},
+        "raw_output": {},
+        "final_output": {},
+        "alignment_diagnostics": {},
+        "error": "",
+        "editor_duration_seconds": None,
+        "editor_actual_model": "",
+        "writer_duration_seconds": 0.0,
+        "writer_actual_models": [],
+        "deterministic_no_eligible_hero": False,
+    }
+    try:
+        plan, diagnostics, editor_actual, editor_duration = _run_assignment_editor(
+            packet, model=editor_model
         )
-        result = {
-            "category_key": packet.get("category_key"),
-            "category_label": category_label,
-            "source_pool": packet.get("source_pool") or [],
-            "raw_baseline_output": packet.get("raw_baseline_output") or packet.get("baseline_output") or {},
-            "final_baseline_output": final_baseline,
-            "assignment_plan": {},
-            "assignment_diagnostics": {},
-            "raw_challenger_output": {},
-            "final_challenger_output": {},
-            "alignment_diagnostics": {
-                "production": production_alignment,
-                "shadow": {},
-            },
-            "challenger_error": "",
-            "editor_duration_seconds": None,
-            "editor_actual_model": "",
-            "writer_duration_seconds": 0.0,
-            "writer_actual_models": [],
-        }
-        try:
-            plan, diagnostics, editor_actual, editor_duration = _run_assignment_editor(packet)
-            result["assignment_plan"] = plan
-            result["assignment_diagnostics"] = diagnostics
-            result["editor_duration_seconds"] = round(editor_duration, 3)
-            result["editor_actual_model"] = editor_actual
+        outcome["assignment_plan"] = plan
+        outcome["assignment_diagnostics"] = diagnostics
+        outcome["editor_duration_seconds"] = round(editor_duration, 3)
+        outcome["editor_actual_model"] = editor_actual
 
-            writer_models = []
-            writer_duration = 0.0
-            if not isinstance(plan.get("hero"), dict):
-                raw_challenger = {"hero": None, "cards": []}
-                final_challenger, shadow_alignment = _assignment_shadow_final_projection(
-                    raw_challenger,
-                    packet,
-                    final_baseline,
-                    pre_generation_archive,
-                )
-                shadow_alignment["deterministic_no_eligible_hero"] = True
-                result["raw_challenger_output"] = raw_challenger
-                result["final_challenger_output"] = final_challenger
-                result["alignment_diagnostics"]["shadow"] = shadow_alignment
-                final_mapping = shadow_alignment.get("final_source_mapping") or {}
-                if not bool(final_mapping.get("source_mapping_valid", True)):
-                    result["challenger_error"] = (
-                        "FinalSourceMappingError: final-pipeline shadow source mapping failed closed"
-                    )
-                result["writer_duration_seconds"] = 0.0
-                result["writer_actual_models"] = []
-                print(
-                    f"    {category_label}: no eligible current hero; deterministic "
-                    f"shared fallback='{str((final_challenger.get('hero') or {}).get('headline') or '')[:48]}'"
-                )
-                results.append(result)
-                continue
-
+        writer_models = []
+        writer_duration = 0.0
+        if not isinstance(plan.get("hero"), dict):
+            raw_output = {"hero": None, "cards": []}
+            final_output, shadow_alignment = _assignment_shadow_final_projection(
+                raw_output,
+                packet,
+                final_baseline,
+                pre_generation_archive,
+            )
+            shadow_alignment["deterministic_no_eligible_hero"] = True
+            outcome["deterministic_no_eligible_hero"] = True
+        else:
             hero_item, writer_model, duration = _run_assignment_writer(
                 packet, plan["hero"], role="hero"
             )
@@ -11596,39 +11570,120 @@ def _run_assignment_editor_shadow_after_build(all_categories, pre_generation_arc
                 writer_models.append(writer_model)
                 writer_duration += duration
                 cards.append(card_item)
-            raw_challenger = {"hero": hero_item, "cards": cards}
-            final_challenger, shadow_alignment = _assignment_shadow_final_projection(
-                raw_challenger,
+            raw_output = {"hero": hero_item, "cards": cards}
+            final_output, shadow_alignment = _assignment_shadow_final_projection(
+                raw_output,
                 packet,
                 final_baseline,
                 pre_generation_archive,
             )
-            result["raw_challenger_output"] = raw_challenger
-            result["final_challenger_output"] = final_challenger
-            result["alignment_diagnostics"]["shadow"] = shadow_alignment
-            final_mapping = shadow_alignment.get("final_source_mapping") or {}
-            if not bool(final_mapping.get("source_mapping_valid", True)):
-                mismatch_count = len(final_mapping.get("mismatches") or [])
-                result["challenger_error"] = (
-                    "FinalSourceMappingError: final-pipeline shadow source mapping failed closed "
-                    f"({mismatch_count} mismatch(es))"
-                )
-            result["writer_duration_seconds"] = round(writer_duration, 3)
-            result["writer_actual_models"] = writer_models
-            print(
-                f"    {category_label}: editor {editor_duration:.1f}s + "
-                f"{len(writer_models)} writer call(s) {writer_duration:.1f}s; "
-                f"final hero='{str((final_challenger.get('hero') or {}).get('headline') or '')[:48]}'"
+
+        outcome["raw_output"] = raw_output
+        outcome["final_output"] = final_output
+        outcome["alignment_diagnostics"] = shadow_alignment
+        final_mapping = shadow_alignment.get("final_source_mapping") or {}
+        if not bool(final_mapping.get("source_mapping_valid", True)):
+            mismatch_count = len(final_mapping.get("mismatches") or [])
+            outcome["error"] = (
+                "FinalSourceMappingError: final-pipeline shadow source mapping failed closed "
+                f"({mismatch_count} mismatch(es))"
             )
-        except Exception as exc:
-            result["challenger_error"] = (
-                f"{type(exc).__name__}: {_safe_exception_summary(exc, limit=220)}"
-            )
-            print(
-                f"    {category_label}: assignment-editor shadow failed "
-                f"({type(exc).__name__}); live publication unaffected"
-            )
+        outcome["writer_duration_seconds"] = round(writer_duration, 3)
+        outcome["writer_actual_models"] = writer_models
+    except Exception as exc:
+        outcome["error"] = f"{type(exc).__name__}: {_safe_exception_summary(exc, limit=220)}"
+    return outcome
+
+
+def _run_assignment_editor_shadow_after_build(all_categories, pre_generation_archive):
+    """Run the three-way editor experiment after build and compare aligned projections."""
+    if not ASSIGNMENT_EDITOR_SHADOW_ENABLED:
+        return None
+
+    pending = list(ASSIGNMENT_EDITOR_PENDING.values())
+    print(
+        f"  Assignment-editor shadow: {len(pending)} live-generated category packet(s) queued; "
+        f"editors={ASSIGNMENT_EDITOR_MODEL},{ASSIGNMENT_EDITOR_OPUS_MODEL}; "
+        f"writer={MODEL_ARTICLES}; comparison=three-way-final-pipeline-aligned"
+    )
+    results = []
+    production_models = []
+    for packet in pending:
+        category_label = packet.get("category_label") or packet.get("category_key") or "category"
+        production_models.append(str(packet.get("baseline_model") or MODEL_ARTICLES))
+        final_baseline, production_alignment = _assignment_shadow_final_production_projection(
+            packet, all_categories
+        )
+
+        sonnet = _run_assignment_editor_shadow_variant(
+            packet,
+            editor_model=ASSIGNMENT_EDITOR_MODEL,
+            final_baseline=final_baseline,
+            pre_generation_archive=pre_generation_archive,
+        )
+        opus = _run_assignment_editor_shadow_variant(
+            packet,
+            editor_model=ASSIGNMENT_EDITOR_OPUS_MODEL,
+            final_baseline=final_baseline,
+            pre_generation_archive=pre_generation_archive,
+        )
+
+        result = {
+            "category_key": packet.get("category_key"),
+            "category_label": category_label,
+            "source_pool": packet.get("source_pool") or [],
+            "raw_baseline_output": packet.get("raw_baseline_output") or packet.get("baseline_output") or {},
+            "final_baseline_output": final_baseline,
+            # Historical challenger fields remain Sonnet 5 for report compatibility.
+            "assignment_plan": sonnet["assignment_plan"],
+            "assignment_diagnostics": sonnet["assignment_diagnostics"],
+            "raw_challenger_output": sonnet["raw_output"],
+            "final_challenger_output": sonnet["final_output"],
+            "challenger_error": sonnet["error"],
+            "editor_duration_seconds": sonnet["editor_duration_seconds"],
+            "editor_actual_model": sonnet["editor_actual_model"],
+            "writer_duration_seconds": sonnet["writer_duration_seconds"],
+            "writer_actual_models": sonnet["writer_actual_models"],
+            # v1.13.6.7s Opus challenger fields.
+            "opus_assignment_plan": opus["assignment_plan"],
+            "opus_assignment_diagnostics": opus["assignment_diagnostics"],
+            "raw_opus_challenger_output": opus["raw_output"],
+            "final_opus_challenger_output": opus["final_output"],
+            "opus_challenger_error": opus["error"],
+            "opus_editor_duration_seconds": opus["editor_duration_seconds"],
+            "opus_editor_actual_model": opus["editor_actual_model"],
+            "opus_writer_duration_seconds": opus["writer_duration_seconds"],
+            "opus_writer_actual_models": opus["writer_actual_models"],
+            "alignment_diagnostics": {
+                "production": production_alignment,
+                "shadow": sonnet["alignment_diagnostics"],
+                "opus_shadow": opus["alignment_diagnostics"],
+            },
+        }
         results.append(result)
+
+        for label, editor_model, variant in (
+            ("Sonnet 5", ASSIGNMENT_EDITOR_MODEL, sonnet),
+            ("Opus 5", ASSIGNMENT_EDITOR_OPUS_MODEL, opus),
+        ):
+            if variant["error"]:
+                print(
+                    f"    {category_label} / {label}: shadow failed "
+                    f"({variant['error'][:120]}); live publication unaffected"
+                )
+            elif variant["deterministic_no_eligible_hero"]:
+                print(
+                    f"    {category_label} / {label}: no eligible current hero; deterministic "
+                    f"shared fallback='{str((variant['final_output'].get('hero') or {}).get('headline') or '')[:48]}'"
+                )
+            else:
+                editor_duration = float(variant["editor_duration_seconds"] or 0.0)
+                writer_duration = float(variant["writer_duration_seconds"] or 0.0)
+                print(
+                    f"    {category_label} / {label}: editor {editor_duration:.1f}s + "
+                    f"{len(variant['writer_actual_models'])} writer call(s) {writer_duration:.1f}s; "
+                    f"final hero='{str((variant['final_output'].get('hero') or {}).get('headline') or '')[:48]}'"
+                )
 
     production_model = production_models[0] if production_models else MODEL_ARTICLES
     if production_models and len(set(production_models)) > 1:
@@ -11645,15 +11700,16 @@ def _run_assignment_editor_shadow_after_build(all_categories, pre_generation_arc
         answer_key_path=ASSIGNMENT_EDITOR_ANSWER_KEY_PATH,
         production_model=production_model,
         editor_model=ASSIGNMENT_EDITOR_MODEL,
+        opus_editor_model=ASSIGNMENT_EDITOR_OPUS_MODEL,
         writer_model=MODEL_ARTICLES,
         blind_salt=blind_salt,
         enabled=True,
     )
     print(
-        "  Assignment-editor shadow complete: "
+        "  Assignment-editor three-way shadow complete: "
         f"{report.get('completed_categories', 0)} scoreable, "
         f"{report.get('failed_categories', 0)} shadow failure(s); "
-        "final-pipeline alignment applied. "
+        "final-pipeline alignment + source-integrity validation applied. "
         "Review data/assignment-editor-shadow-review.md before opening the answer key."
     )
     return report

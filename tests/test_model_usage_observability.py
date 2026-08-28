@@ -144,6 +144,23 @@ def test_sonnet_5_current_standard_pricing_is_recorded(tmp_path):
     assert "permanent" in pricing["scope"]
 
 
+def test_opus_5_current_standard_pricing_is_recorded(tmp_path):
+    tracker = ModelUsageTracker(tmp_path / "model-usage-report.json")
+    fake = FakeClient(FakeMessages(_response(
+        model="claude-opus-5", base=1000, output=100, cache_write=2000, cache_read=3000
+    )))
+    client = instrument_anthropic_client(fake, tracker)
+    client.messages.create(model="claude-opus-5", max_tokens=100)
+
+    report = tracker.build_report()
+    totals = report["totals"]
+    # $0.005 input + $0.0125 5m cache write + $0.0015 cache read + $0.0025 output.
+    assert totals["estimated_list_cost_usd"] == 0.0215
+    pricing = report["pricing_catalog"]["claude-opus-5"]
+    assert pricing["usd_per_million_tokens"]["base_input"] == 5.0
+    assert pricing["usd_per_million_tokens"]["output"] == 25.0
+
+
 def test_known_canonical_materiality_gate_has_dedicated_workload_class(tmp_path):
     tracker = ModelUsageTracker(tmp_path / "model-usage-report.json")
     fake = FakeClient(FakeMessages(_response(base=25, output=5, cache_write=0, cache_read=0)))

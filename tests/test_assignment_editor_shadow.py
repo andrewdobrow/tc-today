@@ -156,6 +156,72 @@ def test_blind_review_hides_architecture_and_models_but_answer_key_reveals_them(
     assert row["comparison_signals"]["challenger_source_mapping_valid"] is True
 
 
+def test_three_way_blind_review_randomizes_production_sonnet_and_opus_without_model_leak(tmp_path):
+    report_path = tmp_path / "report.json"
+    review_path = tmp_path / "review.md"
+    key_path = tmp_path / "key.json"
+    results = [{
+        "category_key": "st_lucie",
+        "category_label": "St. Lucie County",
+        "source_pool": [{"title": "First source"}, {"title": "Second source"}],
+        "raw_baseline_output": _sample_output("PRODUCTION RAW", 1, 2),
+        "final_baseline_output": _sample_output("PRODUCTION FINAL", 1, 2),
+        "assignment_plan": {"hero": {"source_index": 2}},
+        "assignment_diagnostics": {"source_mapping_valid": True},
+        "raw_challenger_output": _sample_output("SONNET RAW", 2, 1),
+        "final_challenger_output": _sample_output("SONNET FINAL", 2, 1),
+        "challenger_error": "",
+        "opus_assignment_plan": {"hero": {"source_index": 1}},
+        "opus_assignment_diagnostics": {"source_mapping_valid": True},
+        "raw_opus_challenger_output": _sample_output("OPUS RAW", 1, 2),
+        "final_opus_challenger_output": _sample_output("OPUS FINAL", 1, 2),
+        "opus_challenger_error": "",
+        "alignment_diagnostics": {
+            "production": {"aligned": True},
+            "shadow": {"final_source_mapping": {"source_mapping_valid": True, "mismatches": []}},
+            "opus_shadow": {"final_source_mapping": {"source_mapping_valid": True, "mismatches": []}},
+        },
+    }]
+
+    report = write_assignment_editor_artifacts(
+        results=results,
+        report_path=report_path,
+        review_path=review_path,
+        answer_key_path=key_path,
+        production_model="claude-sonnet-4-5-20250929",
+        editor_model="claude-sonnet-5",
+        opus_editor_model="claude-opus-5",
+        writer_model="claude-sonnet-4-5",
+        blind_salt="three-way-test",
+        enabled=True,
+    )
+
+    review = review_path.read_text()
+    assert "Variant A" in review and "Variant B" in review and "Variant C" in review
+    assert "A / B / C / Tie" in review
+    assert "claude-sonnet" not in review.lower()
+    assert "claude-opus" not in review.lower()
+    assert "PRODUCTION FINAL" in review
+    assert "SONNET FINAL" in review
+    assert "OPUS FINAL" in review
+    assert "PRODUCTION RAW" not in review and "SONNET RAW" not in review and "OPUS RAW" not in review
+
+    key = json.loads(key_path.read_text())
+    entry = key["categories"]["st_lucie"]
+    paths = {entry["variant_a_path"], entry["variant_b_path"], entry["variant_c_path"]}
+    assert paths == {
+        "current_production",
+        "sonnet5_editor_sonnet45_writer",
+        "opus5_editor_sonnet45_writer",
+    }
+    assert key["schema_version"] == 3
+    assert report["schema_version"] == 4
+    assert report["challenger_architectures"]["opus5_editor_sonnet45_writer"]["assignment_editor_model"] == "claude-opus-5"
+    row = report["categories"][0]
+    assert row["comparison_signals"]["opus_source_mapping_valid"] is True
+    assert row["final_opus_challenger_output"]["hero"]["headline"] == "OPUS FINAL hero"
+
+
 class _Block:
     def __init__(self, text):
         self.text = text
@@ -278,6 +344,30 @@ def test_editor_has_selection_authority_but_no_publication_writing_task(monkeypa
     assert actual_model == "claude-sonnet-5"
 
 
+def test_assignment_editor_accepts_explicit_opus_model_without_changing_prompt_contract(monkeypatch):
+    from scripts import generate
+
+    response = _Response(
+        json.dumps({
+            "hero": {"source_index": 2, "angle": "Lead with the collision impact", "urgency_score": 8},
+            "cards": [{"source_index": 1, "angle": "Lead with the surrender", "urgency_score": 7}],
+        }),
+        model="claude-opus-5",
+    )
+    fake = _FakeClient([response])
+    monkeypatch.setattr(generate, "client", fake)
+
+    plan, diagnostics, actual_model, _duration = generate._run_assignment_editor(
+        _shadow_packet(), model="claude-opus-5"
+    )
+    assert fake.messages.calls[0]["model"] == "claude-opus-5"
+    prompt = fake.messages.calls[0]["messages"][0]["content"]
+    assert "Your job is ONLY editorial assignment" in prompt
+    assert [plan["hero"]["source_index"]] + [c["source_index"] for c in plan["cards"]] == [2, 1]
+    assert diagnostics["source_mapping_valid"] is True
+    assert actual_model == "claude-opus-5"
+
+
 def test_generator_shadow_is_opt_in_post_build_and_cannot_publish():
     source = Path("scripts/generate.py").read_text()
     assert '"TCT_ASSIGNMENT_EDITOR_SHADOW", "false"' in source
@@ -293,12 +383,15 @@ def test_generator_shadow_is_opt_in_post_build_and_cannot_publish():
     runner_start = source.index("def _run_assignment_editor_shadow_after_build(all_categories, pre_generation_archive):")
     runner_end = source.index("\ndef _parse_json_index_array", runner_start)
     runner = source[runner_start:runner_end]
-    assert 'result["raw_challenger_output"] = raw_challenger' in runner
-    assert 'result["final_challenger_output"] = final_challenger' in runner
+    helper_start = source.index("def _run_assignment_editor_shadow_variant(")
+    helper = source[helper_start:runner_start]
+    assert '"raw_challenger_output": sonnet["raw_output"]' in runner
+    assert '"raw_opus_challenger_output": opus["raw_output"]' in runner
+    assert "ASSIGNMENT_EDITOR_OPUS_MODEL" in runner
     assert "_assignment_shadow_final_production_projection" in runner
-    assert "_assignment_shadow_final_projection" in runner
-    assert "all_categories.append" not in runner
-    assert "GENERATION_CACHE.put" not in runner
+    assert "_assignment_shadow_final_projection" in helper
+    assert "all_categories.append" not in runner + helper
+    assert "GENERATION_CACHE.put" not in runner + helper
 
 
 
@@ -385,7 +478,7 @@ def test_shadow_alignment_uses_same_final_recovery_hero_when_shadow_is_suppresse
 def test_update_workflow_exposes_separate_assignment_editor_shadow_checkbox_and_artifact():
     workflow = Path(".github/workflows/update.yml").read_text()
     assert "assignment_editor_shadow:" in workflow
-    assert 'description: "Run Sonnet 5 assignment editor + Sonnet 4.5 writer shadow"' in workflow
+    assert 'description: "Run 3-way assignment-editor shadow: production vs Sonnet 5 vs Opus 5"' in workflow
     assert "TCT_ASSIGNMENT_EDITOR_SHADOW: ${{ inputs.assignment_editor_shadow }}" in workflow
     assert "Upload assignment editor shadow review" in workflow
     assert "data/assignment-editor-shadow-report.json" in workflow
@@ -972,7 +1065,7 @@ def test_shadow_artifact_reports_final_mapping_validity_not_only_assignment_plan
     )
 
     row = report["categories"][0]
-    assert report["schema_version"] == 3
+    assert report["schema_version"] == 4
     assert report["failed_categories"] == 1
     assert row["comparison_signals"]["challenger_source_mapping_valid"] is False
     assert row["comparison_signals"]["challenger_final_source_mapping"]["mismatches"][0]["source_index"] == 1

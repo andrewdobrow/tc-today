@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 MODEL_USAGE_REPORT_SCHEMA_VERSION = 1
-MODEL_USAGE_OBSERVABILITY_VERSION = "1.13.6.7"
+MODEL_USAGE_OBSERVABILITY_VERSION = "1.13.6.7s"
 
 # Anthropic Claude API standard/global list pricing, USD per 1M tokens.
 # Source basis: Anthropic list prices published 2026-06-30.
@@ -42,6 +42,15 @@ _ANTHROPIC_PRICING = {
         "output": 10.00,
         "source_date": "2026-08-21",
         "scope": "Claude API standard/global; $2/$10 pricing is now permanent",
+    },
+    "claude-opus-5": {
+        "base_input": 5.00,
+        "cache_write_5m": 6.25,
+        "cache_write_1h": 10.00,
+        "cache_read": 0.50,
+        "output": 25.00,
+        "source_date": "2026-07-24",
+        "scope": "Claude API standard/global",
     },
 }
 
