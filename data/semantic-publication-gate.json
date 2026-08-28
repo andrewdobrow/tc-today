@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.8",
-  "generated_at": "2026-08-28T15:48:28.616045+00:00",
+  "generated_at": "2026-08-28T16:33:05.806373+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,15 +62,15 @@
     }
   },
   "summary": {
-    "evaluations": 65,
+    "evaluations": 64,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 65,
+    "no_candidate_passes": 64,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 2,
+    "new_stories_allowed": 1,
     "retroactive_rows_retained": 63,
     "holds": 0,
     "retroactive_redirects": 0,
@@ -81,21 +81,21 @@
     "material_update_redirects": 0,
     "material_update_holds": 0,
     "material_update_replays_suppressed": 0,
-    "pre_generation_materiality_evaluations": 3,
+    "pre_generation_materiality_evaluations": 4,
     "pre_generation_materiality_promotions": 0,
     "pre_generation_materiality_duplicates": 3,
-    "pre_generation_materiality_holds": 0,
-    "pre_generation_materiality_model_calls": 0,
+    "pre_generation_materiality_holds": 1,
+    "pre_generation_materiality_model_calls": 1,
     "pre_generation_materiality_cache_hits": 3,
-    "terminal_permalink_evaluations": 2,
-    "terminal_permalink_candidate_pairs": 24,
-    "terminal_permalink_model_calls": 2,
+    "terminal_permalink_evaluations": 1,
+    "terminal_permalink_candidate_pairs": 12,
+    "terminal_permalink_model_calls": 1,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 1,
+    "terminal_permalink_new_authorized": 0,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 1
@@ -205,6 +205,40 @@
       ],
       "reason": "Both articles cover the identical hoarding case: 36 Border Collies removed from Palm City on Aug. 10, now at Humane Society of the Treasure Coast with adoptions opening Sept. 1. The incoming article adds breed education, volunteer observations about recovery, and adoption criteria details (fenced yards, no apartments), but these are explanatory background and routine progress updates, not material developments like charges, court rulings, or victim identification. The breed education angle is useful context but does not constitute an independently newsworthy follow-up that would merit its own headline for readers already aware of the rescue. This content should update the existing canonical.",
       "validation_errors": []
+    },
+    {
+      "category_key": "st_lucie",
+      "source_headline": "Corgi reunited with owner after tornado in Port St. Lucie - WPBF",
+      "source_url": "https://www.wpbf.com/article/corgi-reunited-tornado-port-st-lucie-florida/73542668",
+      "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
+      "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
+      "canonical_is_custom": false,
+      "identity_basis": "registry_same_event_and_persistent_story_skip",
+      "eligibility_reason": "newer_source_requires_materiality_decision",
+      "evaluated": true,
+      "promoted": false,
+      "cache_hit": false,
+      "model_call": true,
+      "action": "preserve_existing_canonical",
+      "semantic_status": "known_canonical_identity_conflict",
+      "semantic_action": "hold",
+      "confidence": 0.95,
+      "shared_anchors": [
+        "Port St. Lucie location"
+      ],
+      "novel_facts": [
+        "EF0 tornado struck Port St. Lucie",
+        "Corgi named Luna went missing during tornado",
+        "Owner Molly Wing-Berman",
+        "Bay St. Lucie community",
+        "Luna found three streets away by neighbors",
+        "Luna reunited with owner",
+        "August 2026 date"
+      ],
+      "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+      "validation_errors": [
+        "known_canonical_identity_conflict"
+      ]
     }
   ],
   "decisions": [
@@ -1112,7 +1146,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
       "incoming_source_url": "https://www.wpbf.com/article/ronald-l-corbin-beloved-choral-teacher-at-martin-high-school-for-34-years-dies/73506173",
-      "incoming_story_id": "story_006429",
+      "incoming_story_id": "story_006467",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1656,196 +1690,6 @@
         "validation_errors": [
           "model_error"
         ]
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "Corgi reunited with owner after EF0 tornado in Port St. Lucie",
-      "incoming_source_url": "https://www.wpbf.com/article/corgi-reunited-tornado-port-st-lucie-florida/73542668",
-      "incoming_story_id": "story_002646",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.1",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "Corgi reunited with owner after EF0 tornado in Port St. Lucie",
-      "incoming_source_url": "https://www.wpbf.com/article/corgi-reunited-tornado-port-st-lucie-florida/73542668",
-      "incoming_story_id": "story_002646",
-      "candidates": [
-        {
-          "slug": "2026-07-04-costco-plans-first-treasure-coast-location-in-port-st-lucie",
-          "headline": "Costco plans first Treasure Coast store in Port St. Lucie",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5412,
-          "retrieval_score": 0.5222,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-06-29-third-chipotle-mexican-restaurant-coming-to-port-st-lucie",
-          "headline": "Third Chipotle Mexican restaurant coming to Port St. Lucie",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5304,
-          "retrieval_score": 0.4964,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-06-28-craig-c-matthews-obituary-in-port-st-lucie",
-          "headline": "Craig C. Matthews obituary in Port St. Lucie",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5252,
-          "retrieval_score": 0.4882,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-07-06-construction-begins-on-18-hole-golf-course-at-esplanade-at-solaeris-in-port-st-l",
-          "headline": "Construction begins on 18-hole golf course at Esplanade at Solaeris in Port St. Lucie",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4997,
-          "retrieval_score": 0.4897,
-          "reasons": [
-            "publication_gap_9_days"
-          ]
-        },
-        {
-          "slug": "2026-07-02-driver-held-teens-at-gunpoint-after-they-shot-orbeez-pellets-at-his-car-in-port",
-          "headline": "Driver held teens at gunpoint after Orbeez pellet shooting in Port St. Lucie",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4827,
-          "retrieval_score": 0.4637,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-06-28-port-st-lucie-woman-dies-after-suv-rolls-backward-in-driveway",
-          "headline": "78-year-old woman killed after SUV rolls backward in Port St. Lucie driveway",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4542,
-          "retrieval_score": 0.4232,
-          "reasons": [
-            "publication_gap_1_days"
-          ]
-        },
-        {
-          "slug": "2026-07-10-woman-charged-after-inhaling-nitrous-oxide-in-port-st-lucie-police-department-pa",
-          "headline": "Woman charged with inhaling nitrous oxide in parking lot of Port St. Lucie Police Department",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4533,
-          "retrieval_score": 0.4523,
-          "reasons": [
-            "publication_gap_13_days"
-          ]
-        },
-        {
-          "slug": "2026-07-04-legacy-lions-football-standings-updated-for-port-st-lucie-team",
-          "headline": "Legacy Lions Football standings updated for Port St. Lucie team",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4513,
-          "retrieval_score": 0.4323,
-          "reasons": [
-            "publication_gap_7_days"
-          ]
-        },
-        {
-          "slug": "2026-06-17-port-st-lucie-residents-to-receive-credits-after-24-million-settlement-with-form",
-          "headline": "Port St. Lucie residents getting money back after $24 million settlement with former trash hauler",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4303,
-          "retrieval_score": 0.4203,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-07-02-fort-pierce-manufactured-home-owners-can-now-access-167-million-in-florida-storm",
-          "headline": "Florida manufactured home owners can now apply for storm-hardening and repair funding starting in August",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.43,
-          "retrieval_score": 0.405,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-06-27-port-st-lucie-man-accused-of-trying-to-meet-minor-for-sex-at-palm-beach-gardens",
-          "headline": "Port St. Lucie man accused of trying to meet minor for sex at Palm Beach Gardens mall",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4264,
-          "retrieval_score": 0.3864,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-07-08-port-st-lucie-city-manager-releases-proposed-fy-2026-27-budget",
-          "headline": "Port St. Lucie City Manager Releases Proposed FY 2026-27 Budget",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4198,
-          "retrieval_score": 0.4158,
-          "reasons": [
-            "publication_gap_11_days"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.97,
-        "shared_anchors": [],
-        "novel_facts": [
-          "EF0 tornado struck Port St. Lucie's Bay St. Lucie community",
-          "Molly Wing-Berman's home damaged, front door pushed open, hole in wall",
-          "Corgi named Luna went missing and was found three streets away",
-          "Second dog Enzo, a 2-year-old rescue"
-        ],
-        "reason": "None of the candidates relate to a tornado, missing pet, or the named individuals (Molly Wing-Berman, Luna, Enzo). Candidates cover unrelated Port St. Lucie topics (Costco, Chipotle, obituary, golf course, Orbeez shooting, SUV death, nitrous oxide arrest, football standings, trash settlement, manufactured home funding, sex-crime accusation, city budget). No shared anchors beyond city/county locality tokens, which is insufficient per the matching criteria.",
-        "validation_errors": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.97,
-        "shared_anchors": [],
-        "novel_facts": [
-          "EF0 tornado struck Port St. Lucie's Bay St. Lucie community",
-          "Molly Wing-Berman's home damaged, front door pushed open, hole in wall",
-          "Corgi named Luna went missing and was found three streets away",
-          "Second dog Enzo, a 2-year-old rescue"
-        ],
-        "reason": "None of the candidates relate to a tornado, missing pet, or the named individuals (Molly Wing-Berman, Luna, Enzo). Candidates cover unrelated Port St. Lucie topics (Costco, Chipotle, obituary, golf course, Orbeez shooting, SUV death, nitrous oxide arrest, football standings, trash settlement, manufactured home funding, sex-crime accusation, city budget). No shared anchors beyond city/county locality tokens, which is insufficient per the matching criteria.",
-        "validation_errors": []
       }
     }
   ],
