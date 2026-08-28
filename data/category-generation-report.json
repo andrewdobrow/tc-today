@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-08-28T01:48:14Z",
+  "generated_at": "2026-08-28T01:59:48Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -16,25 +16,24 @@
     "category_count": 9,
     "statuses": {
       "cache_hit": 1,
-      "category_eligibility_archive_recovery": 4,
-      "generated_live": 3,
-      "generation_failed_archive_recovery": 1
+      "category_eligibility_archive_recovery": 6,
+      "generated_live": 1,
+      "no_publishable_sources": 1
     },
     "failures": {
-      "contextless_update_lead": 1,
-      "no_category_eligible_sources": 4
+      "no_category_eligible_sources": 6
     },
-    "model_attempt_count": 7,
-    "model_elapsed_seconds": 106.071,
-    "archive_recovery_requested_count": 5,
+    "model_attempt_count": 1,
+    "model_elapsed_seconds": 17.484,
+    "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 4,
-    "article_framing_rejection_count": 1,
-    "category_eligibility_rejection_count": 7,
-    "published_story_duplicate_suppression_count": 50,
-    "story_aware_update_context_count": 7,
+    "contextual_update_lead_rejection_count": 1,
+    "article_framing_rejection_count": 0,
+    "category_eligibility_rejection_count": 4,
+    "published_story_duplicate_suppression_count": 64,
+    "story_aware_update_context_count": 0,
     "material_update_promotion_evaluation_count": 6,
-    "material_update_promotion_count": 1,
+    "material_update_promotion_count": 0,
     "material_update_promotion_cache_hit_count": 4,
     "material_update_promotion_model_call_count": 2
   },
@@ -43,9 +42,9 @@
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "cache_hit",
-      "fetched_candidate_count": 27,
-      "fresh_candidate_count": 19,
-      "publishable_source_count": 13,
+      "fetched_candidate_count": 26,
+      "fresh_candidate_count": 16,
+      "publishable_source_count": 10,
       "selected_source_count": 1,
       "cache_hit": true,
       "archive_recovery_requested": false,
@@ -62,25 +61,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 5,
-      "category_eligibility_rejection_count": 4,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 2,
       "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:arrested"
-          ],
-          "local_nexus_signals": [],
-          "headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush"
-        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -108,26 +91,20 @@
           "local_nexus_signals": [],
           "headline": "Presidential fitness test returns to some schools after President Donald Trump signs executive order",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/presidential-fitness-test-returns-to-some-schools-after-president-donald-trump-signs-executive-order"
-        },
-        {
-          "contract_version": "1.0-local-government-central-action",
-          "category_key": "local_gov",
-          "mode": "enforce",
-          "policy": "central_government_action_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_government_action",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_incident:police say"
-          ],
-          "local_nexus_signals": [],
-          "headline": "Port St. Lucie police search for endangered man last seen at Jimmy John's in Fort Pierce - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-police-seek-endangered-missing-man-mental-health-issues-tinkerbell-tattoo-weighs-185-pounds-port-st-lucie-police-department-jimmy-johns-florida-news"
         }
       ],
-      "published_story_duplicate_suppression_count": 8,
+      "published_story_duplicate_suppression_count": 10,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+          "editorial_story_id": "story_006122",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions",
@@ -145,6 +122,16 @@
           "editorial_story_id": "story_006380",
           "canonical_slug": "2026-08-27-david-jolly-calls-for-reopened-hope-florida-investigation-after-grand-jury-finds",
           "canonical_headline": "David Jolly calls for reopened Hope Florida investigation after grand jury finds $10 million in taxpayer money misappropriated",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "New College of Florida is spending nearly $1 million on outside PR consultants",
+          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/new-college-of-florida-is-spending-nearly-1-million-on-outside-pr-consultants-one-is-a-former-desantis-spokesperson",
+          "editorial_story_id": "story_006356",
+          "canonical_slug": "2026-08-27-new-college-of-florida-spent-800000-on-outside-pr-consultants-despite-13-member",
+          "canonical_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -209,92 +196,27 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
-          "basis": "event-identity-authority:governing_body_plus_policy_subject",
-          "identity_keys": [
-            "story:story_006122",
-            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['martin-county', 'palm-city']",
-            "shared_event_families=['public-policy', 'vehicle-chase']",
-            "shared_named_people=[]",
-            "shared_precise_locations=[]",
-            "shared_agencies=['martin-county-sheriff']",
-            "shared_subject_phrases=['hit-run-suspect']",
-            "shared_headline_topic_core=['hit', 'manhunt', 'palm', 'run', 'suspect', 'swamp']",
-            "shared_distinctive_token_count=34",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
-      "material_update_promotion_evaluation_count": 1,
-      "material_update_promotion_count": 1,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
         {
           "category_key": "local_gov",
           "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "canonical_is_custom": false,
           "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": true,
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
           "cache_hit": false,
-          "model_call": true,
-          "action": "update_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "update_existing_canonical",
-          "confidence": 0.95,
-          "shared_anchors": [
-            "Hit-and-run in Palm City",
-            "Manhunt through swamp in Martin County",
-            "Martin County Sheriff's Office involved",
-            "Multi-hour search ending in arrest",
-            "Same geographic area (Palm City/Martin County swamp)"
-          ],
-          "novel_facts": [
-            "Suspect identified as Likenson Daceus",
-            "Initial incident involved suspected palmetto berry theft from Savannah Preserve",
-            "Crash location specified as SW Rivers End Way and Murphy Road",
-            "Suspect left a juvenile in his car before fleeing",
-            "Driver suffered minor injuries in head-on collision",
-            "Specific charges: one felony and one misdemeanor for fleeing with disregard for safety and resisting arrest",
-            "Search covered quarter mile into Palm City natural lands",
-            "Multiple agencies involved: MCSO, FWC, Port St. Lucie police",
-            "Detailed quotes from Sheriff John Budensiek",
-            "Neighbor Tanya Talanczuck quotes about sheltering in place"
-          ],
-          "reason": "This is clearly the same hit-and-run and swamp manhunt event from August 26, 2026. The incoming article provides material updates including suspect identification (Likenson Daceus), specific charges filed, the initial cause (palmetto berry theft investigation), exact crash location, presence of a juvenile in the vehicle, and victim injury status. These are material facts readers need to know that constitute a significant development from the initial capture report.",
-          "validation_errors": []
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "local_gov",
@@ -317,6 +239,21 @@
           "source_url": "https://www.wptv.com/news/state/jolly-calls-for-hope-florida-investigation-to-be-reopened-after-leak-of-grand-jury-report",
           "canonical_slug": "2026-08-27-david-jolly-calls-for-reopened-hope-florida-investigation-after-grand-jury-finds",
           "canonical_headline": "David Jolly calls for reopened Hope Florida investigation after grand jury finds $10 million in taxpayer money misappropriated",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "New College of Florida is spending nearly $1 million on outside PR consultants",
+          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/new-college-of-florida-is-spending-nearly-1-million-on-outside-pr-consultants-one-is-a-former-desantis-spokesperson",
+          "canonical_slug": "2026-08-27-new-college-of-florida-spent-800000-on-outside-pr-consultants-despite-13-member",
+          "canonical_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -419,40 +356,23 @@
       ],
       "new_publication_stale_rejected_count": 0,
       "live_hero_headline": "Fort Pierce appoints deputy city manager as interim city attorney amid legal department shakeup",
-      "elapsed_seconds": 26.109
+      "elapsed_seconds": 14.412
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generation_failed_archive_recovery",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 11,
-      "selected_source_count": 2,
+      "fresh_candidate_count": 16,
+      "publishable_source_count": 7,
+      "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 2,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.078,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: original_event_context_missing — Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WFLX"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.904,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: original_event_context_missing — Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WFLX"
-        }
-      ],
-      "model_elapsed_seconds": 24.981,
-      "failure_code": "contextless_update_lead",
-      "failure_summary": "Contextless update lead for hero: original_event_context_missing — Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WFLX",
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Crime & Safety category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -461,7 +381,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
@@ -479,8 +399,38 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/presidential-fitness-test-returns-to-some-schools-after-president-donald-trump-signs-executive-order"
         }
       ],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 14,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "crime",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/27/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-brush?outputType=amp",
+          "editorial_story_id": "story_006122",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+          "editorial_story_id": "story_006122",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+          "editorial_story_id": "story_006122",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "crime",
           "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions",
@@ -488,6 +438,16 @@
           "editorial_story_id": "story_006379",
           "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
           "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "New College of Florida is spending nearly $1 million on outside PR consultants",
+          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/new-college-of-florida-is-spending-nearly-1-million-on-outside-pr-consultants-one-is-a-former-desantis-spokesperson",
+          "editorial_story_id": "story_006356",
+          "canonical_slug": "2026-08-27-new-college-of-florida-spent-800000-on-outside-pr-consultants-despite-13-member",
+          "canonical_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -537,7 +497,7 @@
           "source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
           "editorial_story_id": "story_006122",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -547,7 +507,7 @@
           "source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
           "editorial_story_id": "story_006122",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -582,89 +542,8 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/27/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-brush?outputType=amp",
-          "publisher": "www.wflx.com",
-          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
-          "basis": "event-identity-authority:governing_body_plus_policy_subject",
-          "identity_keys": [
-            "story:story_006378",
-            "source:https://www.wflx.com/2026/08/27/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-brush?outputType=amp"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=2",
-            "shared_locality=['martin-county', 'palm-city']",
-            "shared_event_families=['public-policy', 'vehicle-chase']",
-            "shared_named_people=[]",
-            "shared_precise_locations=[]",
-            "shared_agencies=['martin-county-sheriff']",
-            "shared_subject_phrases=['hit-run-suspect']",
-            "shared_headline_topic_core=['hit', 'manhunt', 'palm', 'run', 'suspect', 'swamp']",
-            "shared_distinctive_token_count=34",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
-          "basis": "event-identity-authority:governing_body_plus_policy_subject",
-          "identity_keys": [
-            "story:story_006122",
-            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['martin-county', 'palm-city']",
-            "shared_event_families=['public-policy', 'vehicle-chase']",
-            "shared_named_people=[]",
-            "shared_precise_locations=[]",
-            "shared_agencies=['martin-county-sheriff']",
-            "shared_subject_phrases=['hit-run-suspect']",
-            "shared_headline_topic_core=['hit', 'manhunt', 'palm', 'run', 'suspect', 'swamp']",
-            "shared_distinctive_token_count=34",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
@@ -672,10 +551,70 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WFLX",
+          "source_url": "https://www.wflx.com/2026/08/27/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-brush?outputType=amp",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
           "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions",
           "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
           "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
           "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "New College of Florida is spending nearly $1 million on outside PR consultants",
+          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/new-college-of-florida-is-spending-nearly-1-million-on-outside-pr-consultants-one-is-a-former-desantis-spokesperson",
+          "canonical_slug": "2026-08-27-new-college-of-florida-spent-800000-on-outside-pr-consultants-despite-13-member",
+          "canonical_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -770,7 +709,7 @@
           "source_headline": "Martin County deputies capture Palm City hit-and-run suspect in swamp - WPBF",
           "source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "canonical_is_custom": false,
           "identity_basis": "pre_generation_ledger:exact_source_url",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -785,7 +724,7 @@
           "source_headline": "Hit-and-run suspect captured after hours-long manhunt through swamp in Palm City - WPEC",
           "source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "material_update_source_already_absorbed",
@@ -842,17 +781,15 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "failed",
-      "budget_seconds": 180.0,
-      "elapsed_seconds": 33.536
+      "elapsed_seconds": 8.179
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 12,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 10,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -869,30 +806,9 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 2,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
-        {
-          "contract_version": "1.0-business-development-primary-focus",
-          "category_key": "business",
-          "mode": "enforce",
-          "policy": "primary_business_development_focus_required",
-          "eligible": false,
-          "would_reject": true,
-          "reason": "competing_story_form_without_business_development_focus",
-          "positive_signals": [],
-          "competing_signals": [
-            "crime_public_safety:arrested"
-          ],
-          "local_nexus_signals": [
-            "source_locality:treasure coast",
-            "source_locality:martin county",
-            "source_locality:palm city",
-            "source_locality:port st lucie"
-          ],
-          "headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush"
-        },
         {
           "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
@@ -913,8 +829,18 @@
           "source_url": "https://www.wptv.com/news/treasure-coast/region-okeechobee-county/presidential-fitness-test-returns-to-some-schools-after-president-donald-trump-signs-executive-order"
         }
       ],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+          "editorial_story_id": "story_006122",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions",
@@ -922,6 +848,16 @@
           "editorial_story_id": "story_006379",
           "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
           "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "New College of Florida is spending nearly $1 million on outside PR consultants",
+          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/new-college-of-florida-is-spending-nearly-1-million-on-outside-pr-consultants-one-is-a-former-desantis-spokesperson",
+          "editorial_story_id": "story_006356",
+          "canonical_slug": "2026-08-27-new-college-of-florida-spent-800000-on-outside-pr-consultants-despite-13-member",
+          "canonical_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -956,49 +892,8 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
-          "basis": "event-identity-authority:governing_body_plus_policy_subject",
-          "identity_keys": [
-            "story:story_006122",
-            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['martin-county', 'palm-city']",
-            "shared_event_families=['public-policy', 'vehicle-chase']",
-            "shared_named_people=[]",
-            "shared_precise_locations=[]",
-            "shared_agencies=['martin-county-sheriff']",
-            "shared_subject_phrases=['hit-run-suspect']",
-            "shared_headline_topic_core=['hit', 'manhunt', 'palm', 'run', 'suspect', 'swamp']",
-            "shared_distinctive_token_count=34",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
@@ -1006,10 +901,40 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "business",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
           "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions",
           "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
           "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
           "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "business",
+          "source_headline": "New College of Florida is spending nearly $1 million on outside PR consultants",
+          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/new-college-of-florida-is-spending-nearly-1-million-on-outside-pr-consultants-one-is-a-former-desantis-spokesperson",
+          "canonical_slug": "2026-08-27-new-college-of-florida-spent-800000-on-outside-pr-consultants-despite-13-member",
+          "canonical_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1124,7 +1049,7 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 12.535
+      "elapsed_seconds": 7.197
     },
     {
       "category_key": "things_to_do",
@@ -1260,13 +1185,16 @@
           "semantic_action": "hold",
           "confidence": 0.95,
           "shared_anchors": [
-            "Both are weekend event roundups for Treasure Coast and Palm Beach County",
-            "Both published by WPBF with nearly identical source headlines",
-            "Both cover Palm City area"
+            "Same recurring 'weekend events' roundup format",
+            "Same WPBF source",
+            "Same geographic coverage area (Treasure Coast and Palm Beach County)",
+            "Same generic headline pattern"
           ],
           "novel_facts": [
-            "Incoming covers weekend of August 21, 2026 with completely different events: Newfield Farm gardening class, Ukrainian Cultural Fest, Delray women's health event, Peggy Adams adoption event, Loggerhead Triathlon",
-            "Candidate covers weekend of July 27, 2026 with Christmas in July vendor market and Rockn Riverwalk concert series"
+            "Incoming article covers events for weekend of August 21, 2026",
+            "Different specific events: Newfield Farm gardening class, Ukrainian Cultural Fest, Delray women's health event, Peggy Adams adoption event, Loggerhead Triathlon",
+            "Candidate article covers events for weekend of July 27-28, 2026",
+            "Candidate featured Christmas in July market and Rockin Riverwalk concert series"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1275,38 +1203,23 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 17.082
+      "elapsed_seconds": 16.693
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 4,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 3,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 2,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.811,
-          "result": "article_framing_integrity",
-          "error_type": "ArticleFramingIntegrityError",
-          "error_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — New College of Florida spent nearly $1 million on outside PR consultants despite 13-member in-house team"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 15.814,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 31.626,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Florida category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1315,10 +1228,10 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 4,
+      "category_eligibility_assessed_count": 3,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "florida",
@@ -1327,6 +1240,16 @@
           "editorial_story_id": "story_006380",
           "canonical_slug": "2026-08-27-david-jolly-calls-for-reopened-hope-florida-investigation-after-grand-jury-finds",
           "canonical_headline": "David Jolly calls for reopened Hope Florida investigation after grand jury finds $10 million in taxpayer money misappropriated",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "florida",
+          "source_headline": "New College of Florida is spending nearly $1 million on outside PR consultants",
+          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/new-college-of-florida-is-spending-nearly-1-million-on-outside-pr-consultants-one-is-a-former-desantis-spokesperson",
+          "editorial_story_id": "story_006356",
+          "canonical_slug": "2026-08-27-new-college-of-florida-spent-800000-on-outside-pr-consultants-despite-13-member",
+          "canonical_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1365,6 +1288,21 @@
         },
         {
           "category_key": "florida",
+          "source_headline": "New College of Florida is spending nearly $1 million on outside PR consultants",
+          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/new-college-of-florida-is-spending-nearly-1-million-on-outside-pr-consultants-one-is-a-former-desantis-spokesperson",
+          "canonical_slug": "2026-08-27-new-college-of-florida-spent-800000-on-outside-pr-consultants-despite-13-member",
+          "canonical_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "florida",
           "source_headline": "Tropical Storm Dolly forms 2 days after Dolly Parton dies. What we know - Ocala StarBanner",
           "source_url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNR2ZPOFZqQ0tXbnlZS1ZwT3l1S09wM1VkdzhkWWZKZnRHTFh6Z250NEdRVThwNjRlY0NQTmlyenNKbHJDUk0wc0tpT016TEpsZlhzem5uM1ZsSGNfWXl6TXRyUzZLdVBqRlVYOXFEUGx3eWdDUy1VekI5NzhsRUZ6VDhnQm1SbW1iOUs0dzhRVldHREFDVENFM1liYld6S1JPbmpZY00zb3Q1TTkxT3ZqQTN4aFA1LU5nM1E",
           "canonical_slug": "2026-08-26-martin-county-man-crashes-suv-into-church-after-fleeing-deputies-faces-dui-charg",
@@ -1380,40 +1318,21 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
-      "generated_card_count": 0,
-      "elapsed_seconds": 41.833
+      "elapsed_seconds": 9.401
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "generated_live",
+      "status": "no_publishable_sources",
       "fetched_candidate_count": 29,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 2,
-      "selected_source_count": 2,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 0,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 2,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.084,
-          "result": "contextless_update_lead",
-          "error_type": "ContextualUpdateLeadError",
-          "error_summary": "Contextless update lead for hero: original_event_context_missing — Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WPTV"
-        },
-        {
-          "attempt": 2,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 12.321,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 24.406,
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1424,11 +1343,31 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 8,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+          "editorial_story_id": "story_006122",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+          "editorial_story_id": "story_006122",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "martin",
           "source_headline": "Not every home is right for a border collie — here's what future adopters need to know",
@@ -1445,7 +1384,7 @@
           "source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
           "editorial_story_id": "story_006122",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1455,7 +1394,7 @@
           "source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
           "editorial_story_id": "story_006122",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1490,94 +1429,43 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 2,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
-          "basis": "event-identity-authority:governing_body_plus_policy_subject",
-          "identity_keys": [
-            "story:story_006122",
-            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['martin-county', 'palm-city']",
-            "shared_event_families=['public-policy', 'vehicle-chase']",
-            "shared_named_people=[]",
-            "shared_precise_locations=[]",
-            "shared_agencies=['martin-county-sheriff']",
-            "shared_subject_phrases=['hit-run-suspect']",
-            "shared_headline_topic_core=['hit', 'manhunt', 'palm', 'run', 'suspect', 'swamp']",
-            "shared_distinctive_token_count=34",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        },
-        {
-          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
-          "basis": "event-identity-authority:governing_body_plus_policy_subject",
-          "identity_keys": [
-            "story:story_006122",
-            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['martin-county', 'palm-city']",
-            "shared_event_families=['public-policy', 'vehicle-chase']",
-            "shared_named_people=[]",
-            "shared_precise_locations=[]",
-            "shared_agencies=['martin-county-sheriff']",
-            "shared_subject_phrases=['hit-run-suspect']",
-            "shared_headline_topic_core=['hit', 'manhunt', 'palm', 'run', 'suspect', 'swamp']",
-            "shared_distinctive_token_count=34",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WPTV",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "martin",
           "source_headline": "Not every home is right for a border collie — here's what future adopters need to know",
@@ -1618,7 +1506,7 @@
           "source_headline": "Martin County deputies capture Palm City hit-and-run suspect in swamp - WPBF",
           "source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1633,7 +1521,7 @@
           "source_headline": "Hit-and-run suspect captured after hours-long manhunt through swamp in Palm City - WPEC",
           "source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "material_update_source_already_absorbed",
@@ -1690,20 +1578,16 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-      "generated_card_count": 0,
-      "elapsed_seconds": 37.291
+      "elapsed_seconds": 7.08
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
       "status": "generated_live",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 3,
-      "selected_source_count": 3,
+      "fresh_candidate_count": 19,
+      "publishable_source_count": 2,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
       "attempt_count": 1,
@@ -1711,11 +1595,11 @@
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 25.058,
+          "elapsed_seconds": 17.484,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 25.058,
+      "model_elapsed_seconds": 17.484,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1727,7 +1611,7 @@
           "required": true,
           "passed": false,
           "story_form": "update",
-          "lead_word_count": 49,
+          "lead_word_count": 34,
           "baseline_anchor": "fatality",
           "baseline_present": false,
           "baseline_anchor_present": false,
@@ -1753,17 +1637,17 @@
             "original_event_context_missing"
           ],
           "source_title": "Port St. Lucie police search for endangered man last seen at Jimmy John's in Fort Pierce - WPEC",
-          "headline": "Port St. Lucie police search for man last seen at Fort Pierce Jimmy John's"
+          "headline": "Port St. Lucie police search for missing man with mental illness last seen at Fort Pierce Jimmy John's"
         }
       ],
       "article_framing_rejection_count": 0,
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 10,
+      "published_story_duplicate_suppression_count": 11,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
@@ -1787,11 +1671,21 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "Corgi reunited with owner after tornado in Port St. Lucie - WPBF",
+          "source_url": "https://www.wpbf.com/article/corgi-reunited-tornado-port-st-lucie-florida/73542668",
+          "editorial_story_id": "story_002646",
+          "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
+          "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "Martin County deputies capture Palm City hit-and-run suspect in swamp - WPBF",
           "source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
           "editorial_story_id": "story_006122",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1801,7 +1695,7 @@
           "source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
           "editorial_story_id": "story_006122",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -1868,10 +1762,10 @@
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
+      "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
@@ -1905,10 +1799,42 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "Corgi reunited with owner after tornado in Port St. Lucie - WPBF",
+          "source_url": "https://www.wpbf.com/article/corgi-reunited-tornado-port-st-lucie-florida/73542668",
+          "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
+          "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "known_canonical_identity_conflict",
+          "semantic_action": "hold",
+          "confidence": 1.0,
+          "shared_anchors": [
+            "Port St. Lucie location"
+          ],
+          "novel_facts": [
+            "EF0 tornado struck Port St. Lucie",
+            "Corgi named Luna went missing during tornado",
+            "Luna found three streets away in Bay St. Lucie community",
+            "Owner Molly Wing-Berman",
+            "Tornado damaged home, pushed door open, created hole in wall"
+          ],
+          "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
+          "validation_errors": [
+            "known_canonical_identity_conflict"
+          ]
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "Martin County deputies capture Palm City hit-and-run suspect in swamp - WPBF",
           "source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1923,7 +1849,7 @@
           "source_headline": "Hit-and-run suspect captured after hours-long manhunt through swamp in Palm City - WPEC",
           "source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "material_update_source_already_absorbed",
@@ -2024,20 +1950,20 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 1,
+      "new_publication_stale_rejected_count": 0,
       "generation_status": "success",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Fort Pierce city attorney departures spark concern over development decisions",
-      "generated_card_count": 1,
-      "elapsed_seconds": 36.822
+      "live_hero_headline": "Fort Pierce City Commission appoints deputy city manager as interim city attorney amid legal department exodus",
+      "generated_card_count": 0,
+      "elapsed_seconds": 40.007
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 20,
-      "publishable_source_count": 9,
+      "fresh_candidate_count": 18,
+      "publishable_source_count": 6,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -2054,11 +1980,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 9,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+          "editorial_story_id": "story_006122",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions",
@@ -2071,7 +2007,17 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases",
+          "source_headline": "New College of Florida is spending nearly $1 million on outside PR consultants",
+          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/new-college-of-florida-is-spending-nearly-1-million-on-outside-pr-consultants-one-is-a-former-desantis-spokesperson",
+          "editorial_story_id": "story_006356",
+          "canonical_slug": "2026-08-27-new-college-of-florida-spent-800000-on-outside-pr-consultants-despite-13-member",
+          "canonical_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-utility-bills-to-rise-nearly-47-over-four-years-as-city-approves-major-rate-increases",
           "editorial_story_id": "story_006319",
           "canonical_slug": "2026-08-27-vero-beach-utility-bills-to-rise-46-over-four-years-as-city-approves-rate-increa",
@@ -2081,7 +2027,7 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases - WPTV",
+          "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases",
           "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-utility-bills-to-rise-nearly-47-over-four-years-as-city-approves-major-rate-increases",
           "editorial_story_id": "story_006319",
           "canonical_slug": "2026-08-27-vero-beach-utility-bills-to-rise-46-over-four-years-as-city-approves-rate-increa",
@@ -2115,69 +2061,43 @@
           "source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
           "editorial_story_id": "story_006122",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
-          "editorial_story_id": "story_006379",
-          "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
-          "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
-          "basis": "exact_source_and_persistent_story_skip",
+          "source_headline": "2 arrested in string of car burglaries in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/crime/two-men-arrested-string-firearm-burglaries-plagued-neighborhoods-gated-communities-martin-county-st-lucie-county-martin-county-sheriffs-office-st-lucie-county-sheriffs-office-guns-crime-florida-news",
+          "editorial_story_id": "story_006042",
+          "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+          "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
-          "publisher": "www.wptv.com",
-          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
-          "basis": "event-identity-authority:governing_body_plus_policy_subject",
-          "identity_keys": [
-            "story:story_006122",
-            "source:https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_agency",
-            "shared_subject_phrase",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['martin-county', 'palm-city']",
-            "shared_event_families=['public-policy', 'vehicle-chase']",
-            "shared_named_people=[]",
-            "shared_precise_locations=[]",
-            "shared_agencies=['martin-county-sheriff']",
-            "shared_subject_phrases=['hit-run-suspect']",
-            "shared_headline_topic_core=['hit', 'manhunt', 'palm', 'run', 'suspect', 'swamp']",
-            "shared_distinctive_token_count=34",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
+          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions",
@@ -2195,7 +2115,22 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases",
+          "source_headline": "New College of Florida is spending nearly $1 million on outside PR consultants",
+          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/new-college-of-florida-is-spending-nearly-1-million-on-outside-pr-consultants-one-is-a-former-desantis-spokesperson",
+          "canonical_slug": "2026-08-27-new-college-of-florida-spent-800000-on-outside-pr-consultants-despite-13-member",
+          "canonical_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-utility-bills-to-rise-nearly-47-over-four-years-as-city-approves-major-rate-increases",
           "canonical_slug": "2026-08-27-vero-beach-utility-bills-to-rise-46-over-four-years-as-city-approves-rate-increa",
           "canonical_headline": "Vero Beach utility bills to rise 46% over four years as city approves rate increases for water reclamation plant",
@@ -2210,7 +2145,7 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases - WPTV",
+          "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases",
           "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-utility-bills-to-rise-nearly-47-over-four-years-as-city-approves-major-rate-increases",
           "canonical_slug": "2026-08-27-vero-beach-utility-bills-to-rise-46-over-four-years-as-city-approves-rate-increa",
           "canonical_headline": "Vero Beach utility bills to rise 46% over four years as city approves rate increases for water reclamation plant",
@@ -2258,7 +2193,7 @@
           "source_headline": "Hit-and-run suspect captured after hours-long manhunt through swamp in Palm City - WPEC",
           "source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Martin County deputies capture Fort Pierce man after hours-long swamp search following Palm City hit-and-run",
+          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "material_update_source_already_absorbed",
@@ -2270,12 +2205,12 @@
         },
         {
           "category_key": "indian_river",
-          "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
-          "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
-          "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
+          "source_headline": "2 arrested in string of car burglaries in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/crime/two-men-arrested-string-firearm-burglaries-plagued-neighborhoods-gated-communities-martin-county-st-lucie-county-martin-county-sheriffs-office-st-lucie-county-sheriffs-office-guns-crime-florida-news",
+          "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+          "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -2285,7 +2220,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 12.452
+      "elapsed_seconds": 10.823
     }
   ]
 }
