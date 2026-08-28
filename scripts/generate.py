@@ -9050,8 +9050,9 @@ def _format_category_hero_timestamp(item, archive_entries=None):
 
 
 
-CANONICAL_HERO_FRESHNESS_VERSION = "1.0"
+CANONICAL_HERO_FRESHNESS_VERSION = "1.1"
 CANONICAL_HERO_FRESHNESS_MAX_AGE_HOURS = 18
+CANONICAL_HERO_REFRESHED_SLUGS_THIS_RUN = set()
 
 
 def _parse_publication_timestamp(value):
@@ -9196,6 +9197,9 @@ def _record_validated_meaningful_update(existing, item, diagnostics, *, changed,
     item["meaningful_update_validated"] = True
     item["meaningful_update_basis"] = "contextual_update_contract"
     item["_canonical_freshness_bound"] = True
+    refreshed_slug = str(existing.get("slug") or item.get("canonical_slug") or item.get("_archived_slug") or "").strip()
+    if refreshed_slug:
+        CANONICAL_HERO_REFRESHED_SLUGS_THIS_RUN.add(refreshed_slug)
     return True
 
 
@@ -9261,9 +9265,29 @@ def enforce_final_canonical_hero_freshness(all_categories, top_cat, output_root=
                     **assessment,
                 })
 
+    refreshed_slugs = {str(slug or "").strip() for slug in CANONICAL_HERO_REFRESHED_SLUGS_THIS_RUN if str(slug or "").strip()}
+    refreshed_candidates = [
+        row for row in fresh_candidates
+        if str(row.get("canonical_slug") or "").strip() in refreshed_slugs
+    ]
+
     action = "retained_fresh_canonical_hero"
     selected = top_cat
-    if before_assessment.get("stale") and fresh_candidates:
+    if refreshed_candidates:
+        # A canonical can become legitimately fresh only inside write_archives(),
+        # which runs after the initial homepage hero selection. Reopen the normal
+        # guarded hero competition exactly once when that happens so the refreshed
+        # canonical is not excluded merely because its permalink is older. Use the
+        # normal selector (including its editorial model choice) rather than forcing
+        # a deterministic promotion of the updated story.
+        selected = select_front_page_hero(all_categories)
+        if selected is None:
+            raise RuntimeError(
+                "Canonical hero freshness contract FAILED: a same-run validated material "
+                "update became fresh but hero reselection produced no hero"
+            )
+        action = "reselected_after_same_run_material_update"
+    elif before_assessment.get("stale") and fresh_candidates:
         selected = select_front_page_hero(all_categories, deterministic_only=True)
         if selected is None:
             raise RuntimeError(
@@ -9284,6 +9308,8 @@ def enforce_final_canonical_hero_freshness(all_categories, top_cat, output_root=
             "after": {"headline": after.get("headline", ""), **after_assessment},
             "fresh_candidate_count": len(fresh_candidates),
             "fresh_candidates": fresh_candidates,
+            "same_run_material_update_candidate_count": len(refreshed_candidates),
+            "same_run_material_update_candidates": refreshed_candidates,
         }
         _write_canonical_hero_freshness_report(report)
         raise RuntimeError(
@@ -9308,6 +9334,8 @@ def enforce_final_canonical_hero_freshness(all_categories, top_cat, output_root=
         },
         "fresh_candidate_count": len(fresh_candidates),
         "fresh_candidates": fresh_candidates,
+        "same_run_material_update_candidate_count": len(refreshed_candidates),
+        "same_run_material_update_candidates": refreshed_candidates,
     }
     _write_canonical_hero_freshness_report(report)
     print(
@@ -9319,6 +9347,16 @@ def enforce_final_canonical_hero_freshness(all_categories, top_cat, output_root=
 
 HERO_PREFILTER_AUDIT = []
 FRONT_PAGE_HERO_AUDIT = {}
+
+def _write_front_page_hero_audit(output_root=None):
+    root = Path(output_root or OUTPUT_DIR)
+    path = root / "data" / "front-page-hero-selection.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(FRONT_PAGE_HERO_AUDIT, indent=2, ensure_ascii=False),
+        encoding="utf-8",
+    )
+    return path
 
 def select_front_page_hero(all_categories, deterministic_only=False):
     """Select the strongest current front-page story across every live placement.
@@ -10496,6 +10534,24 @@ def _assignment_shadow_attach_source_metadata(data, packet):
         item["source_title"] = str(source.get("title") or "")
         item["source_headline"] = str(source.get("title") or "")
         item["article_text"] = str(source.get("article_text") or "")
+        # Immutable shadow-assignment provenance. Final canonicalization may replace
+        # live-facing source metadata only when it can prove that the canonical target
+        # belongs to this exact assignment. These fields are never adopted from an
+        # archive canonical and therefore survive as the post-pipeline audit anchor.
+        assigned_source_url = _normalized_external_source_url(
+            source.get("source_url") or source.get("link")
+        ) or str(source.get("source_url") or source.get("link") or "")
+        item["_assignment_source_index"] = int(source.get("source_index") or item.get("source_index") or 0)
+        item["_assignment_source_url"] = assigned_source_url
+        item["_assignment_source_title"] = str(source.get("title") or "")
+        authorized_slug = str(
+            source.get("_canonical_context_slug")
+            or source.get("canonical_context_slug")
+            or ""
+        ).strip()
+        if authorized_slug:
+            item["_assignment_authorized_canonical_slug"] = authorized_slug
+            item["_assignment_canonical_authority"] = "pre_generation_canonical_context"
         item["source_summary"] = str(source.get("summary") or "")
         item["feed_url"] = str(source.get("feed_url") or "")
         item["story_form"] = str(source.get("story_form") or item.get("story_form") or "new")
@@ -10595,6 +10651,8 @@ def _assignment_shadow_apply_terminal_publication_authority(data, packet):
                 item["editorial_story_id"] = selected_story_id
                 item["_editorial_story_id"] = selected_story_id
             item["_terminal_publication_rebound"] = True
+            item["_assignment_authorized_canonical_slug"] = canonical_slug
+            item["_assignment_canonical_authority"] = "terminal_permalink_authority"
             record["result"] = "rebound_to_terminal_canonical"
             diagnostics.append(record)
         return item
@@ -11114,28 +11172,259 @@ def _assignment_shadow_quality_guard(data, packet):
     return diagnostics
 
 
+def _assignment_shadow_canonical_rewrite_authorization(item, identity):
+    """Decide whether final shadow canonicalization may replace assigned story copy.
+
+    The live final-surface resolver is intentionally aggressive because it operates on
+    already-published placements. A publication-isolated shadow card is different: its
+    ``source_index`` is an experimental contract. A contaminated persistent story ID
+    must never be allowed to turn that assigned source into an unrelated archive story.
+
+    Authorize a copy-changing canonical rebound only when one of these is true:
+      * live terminal/canonical-context authority explicitly bound this source to slug;
+      * the canonical archive row carries the exact assigned publisher source URL;
+      * the placement is deterministic fallback copy and has no assignment source.
+    """
+    if not isinstance(item, dict) or not isinstance(identity, dict):
+        return {"authorized": False, "reason": "invalid_payload"}
+
+    try:
+        source_index = int(item.get("_assignment_source_index") or item.get("source_index"))
+    except (TypeError, ValueError):
+        source_index = None
+    if source_index is None:
+        return {"authorized": True, "reason": "unscoped_deterministic_placement"}
+
+    canonical_slug = str(identity.get("canonical_slug") or "").strip()
+    current_slug = _normalize_existing_article_slug(
+        item.get("_archived_slug") or item.get("canonical_slug") or item.get("slug")
+    )
+    current_permalink = _live_item_permalink(item)
+    canonical_permalink = str(identity.get("canonical_permalink") or "").strip()
+    canonical_entry = identity.get("canonical_entry") or {}
+
+    # A true no-op cannot corrupt the assignment and needs no stronger authority.
+    if (
+        canonical_slug
+        and current_slug == canonical_slug
+        and (not canonical_permalink or canonical_permalink == current_permalink)
+    ):
+        return {"authorized": True, "reason": "already_bound_to_same_canonical"}
+
+    authorized_slug = str(item.get("_assignment_authorized_canonical_slug") or "").strip()
+    if authorized_slug:
+        resolved_authorized_slug, _ = _follow_canonical_redirect_slug(
+            authorized_slug, _load_canonical_redirect_slug_map(OUTPUT_DIR)
+        )
+        resolved_authorized_slug = resolved_authorized_slug or authorized_slug
+        if canonical_slug and canonical_slug == resolved_authorized_slug:
+            return {
+                "authorized": True,
+                "reason": str(item.get("_assignment_canonical_authority") or "explicit_canonical_authority"),
+            }
+
+    assigned_url = _normalized_external_source_url(
+        item.get("_assignment_source_url") or ""
+    ) or str(item.get("_assignment_source_url") or "")
+    canonical_urls = {
+        _normalized_external_source_url(value)
+        for value in (
+            canonical_entry.get("source_url"),
+            canonical_entry.get("latest_source_url"),
+            canonical_entry.get("original_url"),
+        )
+        if value
+    }
+    canonical_urls.discard("")
+    if assigned_url and assigned_url in canonical_urls:
+        return {"authorized": True, "reason": "exact_assigned_source_provenance"}
+
+    return {
+        "authorized": False,
+        "reason": "canonical_target_not_proven_for_assigned_source",
+        "source_index": source_index,
+        "assigned_source_url": assigned_url,
+        "canonical_slug": canonical_slug,
+        "canonical_source_urls": sorted(canonical_urls),
+        "identity_basis": str(identity.get("identity_basis") or ""),
+    }
+
+
+def _assignment_shadow_canonical_rewrite_needed(item, identity):
+    if not isinstance(item, dict) or not isinstance(identity, dict):
+        return False
+    current_permalink = _live_item_permalink(item)
+    canonical_permalink = str(identity.get("canonical_permalink") or "").strip()
+    canonical_entry = identity.get("canonical_entry") or {}
+    copy_rebind = bool(
+        canonical_entry
+        and (
+            identity.get("redirect_source")
+            or identity.get("identity_basis") in {
+                "persistent_story_id",
+                "durable_custom_event",
+                "structured_incident_anchor",
+            }
+        )
+    )
+    return bool(
+        (canonical_permalink and canonical_permalink != current_permalink)
+        or copy_rebind
+    )
+
+
 def _assignment_shadow_apply_canonical_surface(data, output_root):
-    """Run the shared final canonical identity/dedup primitives without writing reports."""
+    """Apply final canonical identity without crossing an assignment-source boundary.
+
+    Canonical identity is still used when it is authoritative, but raw shadow sources
+    are not allowed to inherit archive copy solely because a contaminated story ID or
+    incident anchor points at an unrelated canonical. After guarded rebounds, ordinary
+    URL dedupe runs without another semantic rewrite.
+    """
     archive = load_archive(Path(output_root) / "archive.json")
     context = _build_final_canonical_surface_context(archive, output_root)
+    blocked = []
+    hero_rewritten = False
+    card_rewrites = 0
+
+    def guarded_rebind(item, role):
+        nonlocal hero_rewritten, card_rewrites
+        if not isinstance(item, dict):
+            return
+        # Probe on a copy because durable incident inference may annotate its input.
+        probe = copy.deepcopy(item)
+        permalink = _live_item_permalink(probe)
+        identity = _final_canonical_surface_identity(probe, permalink, context)
+        authorization = _assignment_shadow_canonical_rewrite_authorization(item, identity)
+        rewrite_needed = _assignment_shadow_canonical_rewrite_needed(item, identity)
+        if rewrite_needed and not authorization.get("authorized"):
+            blocked.append({
+                "role": role,
+                "source_index": item.get("source_index"),
+                "headline": str(item.get("headline") or ""),
+                "raw_permalink": permalink,
+                "canonical_slug": str(identity.get("canonical_slug") or ""),
+                "identity_basis": str(identity.get("identity_basis") or ""),
+                "reason": authorization.get("reason"),
+                "assigned_source_url": authorization.get("assigned_source_url", ""),
+                "canonical_source_urls": authorization.get("canonical_source_urls", []),
+            })
+            return
+        if authorization.get("authorized") and _apply_final_canonical_surface_identity(item, identity):
+            if role == "hero":
+                hero_rewritten = True
+            else:
+                card_rewrites += 1
+
     hero = data.get("hero") if isinstance(data.get("hero"), dict) else {}
+    guarded_rebind(hero, "hero")
+    for card in list(data.get("cards") or []):
+        guarded_rebind(card, "card")
+
+    # Once guarded rebounds are complete, exact-URL dedupe is sufficient. Same-event
+    # shadow consolidation and terminal publication authority have already run; a
+    # second story-ID/incident rewrite here would reopen the contamination path.
     hero_permalink = _live_item_permalink(hero)
-    hero_identity = _final_canonical_surface_identity(hero, hero_permalink, context)
-    hero_rewritten = _apply_final_canonical_surface_identity(hero, hero_identity) if hero else False
-    if hero_rewritten:
-        hero_permalink = hero_identity.get("canonical_permalink") or hero_permalink
     cards, card_report = _dedupe_homepage_cards_by_permalink(
         list(data.get("cards") or []),
         _live_item_permalink,
         hero_permalink=hero_permalink,
         hero_item=hero,
-        surface_context=context,
+        surface_context=None,
     )
     data["cards"] = cards
     return {
         "hero_rewritten": bool(hero_rewritten),
         "card_duplicate_removals": int(card_report.get("removed_count", 0) or 0),
-        "card_canonical_rewrites": int(card_report.get("canonical_rewrite_count", 0) or 0),
+        "card_canonical_rewrites": int(card_rewrites),
+        "blocked_source_integrity_rewrite_count": len(blocked),
+        "blocked_source_integrity_rewrites": blocked,
+    }
+
+
+def _assignment_shadow_final_source_mapping(data, packet, *, shared_archive_recovery_used=False):
+    """Revalidate exact source mapping after every deterministic shadow correction."""
+    sources = list(packet.get("source_inputs") or [])
+    mismatches = []
+    invalid_indexes = []
+    selected = []
+
+    def validate(item, role):
+        if not isinstance(item, dict):
+            return
+        try:
+            index = int(item.get("source_index"))
+        except (TypeError, ValueError):
+            index = None
+        if index is None:
+            if role == "hero" and shared_archive_recovery_used:
+                return
+            mismatches.append({
+                "role": role,
+                "headline": str(item.get("headline") or ""),
+                "reason": "missing_final_source_index",
+            })
+            return
+        selected.append(index)
+        if not (1 <= index <= len(sources)):
+            invalid_indexes.append(index)
+            mismatches.append({
+                "role": role,
+                "source_index": index,
+                "headline": str(item.get("headline") or ""),
+                "reason": "final_source_index_out_of_range",
+            })
+            return
+        source = sources[index - 1]
+        expected_url = _normalized_external_source_url(
+            source.get("source_url") or source.get("link")
+        ) or str(source.get("source_url") or source.get("link") or "")
+        immutable_url = _normalized_external_source_url(
+            item.get("_assignment_source_url") or ""
+        ) or str(item.get("_assignment_source_url") or "")
+        current_urls = {
+            _normalized_external_source_url(value)
+            for value in (
+                item.get("source_url"), item.get("latest_source_url"), item.get("original_url")
+            )
+            if value
+        }
+        current_urls.discard("")
+        final_slug = _normalize_existing_article_slug(
+            item.get("_archived_slug") or item.get("canonical_slug") or _article_slug_from_permalink(item.get("link"))
+        )
+        authorized_slug = str(item.get("_assignment_authorized_canonical_slug") or "").strip()
+        if authorized_slug:
+            authorized_slug, _ = _follow_canonical_redirect_slug(
+                authorized_slug, _load_canonical_redirect_slug_map(OUTPUT_DIR)
+            )
+        exact_source = bool(expected_url and expected_url in current_urls)
+        explicit_binding = bool(authorized_slug and final_slug == authorized_slug)
+        immutable_match = bool(not expected_url or not immutable_url or immutable_url == expected_url)
+        if not immutable_match or not (exact_source or explicit_binding):
+            mismatches.append({
+                "role": role,
+                "source_index": index,
+                "headline": str(item.get("headline") or ""),
+                "reason": "final_story_no_longer_matches_assigned_source",
+                "expected_source_url": expected_url,
+                "immutable_assignment_source_url": immutable_url,
+                "final_source_urls": sorted(current_urls),
+                "final_slug": final_slug,
+                "authorized_canonical_slug": authorized_slug,
+            })
+
+    validate(data.get("hero"), "hero")
+    for card in list(data.get("cards") or []):
+        validate(card, "card")
+    duplicates = sorted({idx for idx in selected if selected.count(idx) > 1})
+    valid = not mismatches and not invalid_indexes and not duplicates
+    return {
+        "source_mapping_valid": bool(valid),
+        "selected_source_indexes": selected,
+        "invalid_source_indexes": sorted(set(invalid_indexes)),
+        "duplicate_source_indexes": duplicates,
+        "mismatches": mismatches,
     }
 
 
@@ -11210,6 +11499,14 @@ def _assignment_shadow_final_projection(raw_shadow, packet, final_baseline, pre_
         for item in [data.get("hero")] + list(data.get("cards") or [])
         if isinstance(item, dict) and item.get("source_index") is not None
     ]
+    diagnostics["final_source_mapping"] = _assignment_shadow_final_source_mapping(
+        data,
+        packet,
+        shared_archive_recovery_used=bool(diagnostics.get("shared_archive_recovery_used")),
+    )
+    diagnostics["source_mapping_valid"] = bool(
+        diagnostics["final_source_mapping"].get("source_mapping_valid")
+    )
     return data, diagnostics
 
 
@@ -11272,6 +11569,11 @@ def _run_assignment_editor_shadow_after_build(all_categories, pre_generation_arc
                 result["raw_challenger_output"] = raw_challenger
                 result["final_challenger_output"] = final_challenger
                 result["alignment_diagnostics"]["shadow"] = shadow_alignment
+                final_mapping = shadow_alignment.get("final_source_mapping") or {}
+                if not bool(final_mapping.get("source_mapping_valid", True)):
+                    result["challenger_error"] = (
+                        "FinalSourceMappingError: final-pipeline shadow source mapping failed closed"
+                    )
                 result["writer_duration_seconds"] = 0.0
                 result["writer_actual_models"] = []
                 print(
@@ -11304,6 +11606,13 @@ def _run_assignment_editor_shadow_after_build(all_categories, pre_generation_arc
             result["raw_challenger_output"] = raw_challenger
             result["final_challenger_output"] = final_challenger
             result["alignment_diagnostics"]["shadow"] = shadow_alignment
+            final_mapping = shadow_alignment.get("final_source_mapping") or {}
+            if not bool(final_mapping.get("source_mapping_valid", True)):
+                mismatch_count = len(final_mapping.get("mismatches") or [])
+                result["challenger_error"] = (
+                    "FinalSourceMappingError: final-pipeline shadow source mapping failed closed "
+                    f"({mismatch_count} mismatch(es))"
+                )
             result["writer_duration_seconds"] = round(writer_duration, 3)
             result["writer_actual_models"] = writer_models
             print(
@@ -33844,12 +34153,7 @@ def main():
             "Front page hero contract FAILED: selected hero is section/status metadata"
         )
 
-    _hero_audit_path = OUTPUT_DIR / "data" / "front-page-hero-selection.json"
-    _hero_audit_path.parent.mkdir(parents=True, exist_ok=True)
-    _hero_audit_path.write_text(
-        json.dumps(FRONT_PAGE_HERO_AUDIT, indent=2, ensure_ascii=False),
-        encoding="utf-8",
-    )
+    _write_front_page_hero_audit(OUTPUT_DIR)
 
     # Promote duplicate heroes
     promote_duplicate_heroes(top_cat, all_categories)
@@ -33949,6 +34253,10 @@ def main():
     top_cat = enforce_final_canonical_hero_freshness(
         all_categories, top_cat, OUTPUT_DIR
     )
+    # The final freshness gate can legitimately reopen hero competition after a
+    # same-run canonical material update. Persist the final audit, not the earlier
+    # pre-archive decision that did not yet know the canonical was fresh.
+    _write_front_page_hero_audit(OUTPUT_DIR)
     # Reselection can promote a card and demote the former hero. Canonicalize once
     # more so every resulting placement still points directly at its final owner.
     canonicalize_all_live_category_surfaces(all_categories, top_cat, OUTPUT_DIR)

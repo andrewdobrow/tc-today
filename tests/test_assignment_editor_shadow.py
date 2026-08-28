@@ -768,3 +768,212 @@ def test_shadow_terminal_alignment_cannot_publish_a_source_live_terminal_authori
         "selected_candidate_slug": "",
         "result": "dropped_terminal_hold",
     }]
+
+
+def test_corgi_shadow_blocks_contaminated_story_id_rewrite_to_unrelated_orbeez_canonical(monkeypatch, tmp_path):
+    """Regression from 2026-08-27 St. Lucie shadow: corgi source #2 -> Orbeez canonical."""
+    import copy
+    from scripts import generate
+
+    corgi_url = "https://www.wpbf.com/article/corgi-reunited-tornado-port-st-lucie-florida/73542668"
+    orbeez_url = "https://cbs12.com/news/local/florida-crime-news-citizens-arrest-charges-dropped-against-man-who-held-teens-at-gunpoint-orbeez-prank-port-st-lucie-felony-state-attorney"
+    orbeez_slug = "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank"
+    archive = [{
+        "slug": orbeez_slug,
+        "headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
+        "body": "Prosecutors dropped six felony charges after the Orbeez incident.",
+        "source_url": orbeez_url,
+        "editorial_story_id": "story_002646",
+        "date": "2026-06-27",
+        "lastmod": "2026-07-31",
+    }]
+    context = {
+        "archive_by_slug": {orbeez_slug: archive[0]},
+        "redirect_map": {},
+        "safe_story_ids": {"story_002646"},
+        "story_canonical_slugs": {"story_002646": orbeez_slug},
+        "custom_event_canonical_slugs": {},
+        "incident_anchor_canonical_slugs": {},
+    }
+    monkeypatch.setattr(generate, "load_archive", lambda _path: copy.deepcopy(archive))
+    monkeypatch.setattr(
+        generate,
+        "_build_final_canonical_surface_context",
+        lambda _archive, _root: context,
+    )
+    monkeypatch.setattr(generate, "_durable_incident_anchor", lambda *_a, **_k: "")
+
+    packet = {
+        "category_key": "st_lucie",
+        "category_label": "St. Lucie County",
+        "source_inputs": [
+            {"source_index": 1, "title": "Other story", "source_url": "https://example.com/other"},
+            {
+                "source_index": 2,
+                "title": "Corgi reunited with owner after tornado in Port St. Lucie - WPBF",
+                "source_url": corgi_url,
+                "link": corgi_url,
+            },
+        ],
+    }
+    card = {
+        "headline": "Corgi swept away in Port St. Lucie tornado reunited with owner in Bay St. Lucie",
+        "body": "Luna was found three streets away and reunited with her owner.",
+        "teaser": "A 6-year-old corgi was reunited with her owner after the EF0 tornado.",
+        "published": "Thu, 27 Aug 2026 16:53:00 GMT",
+        "source_index": 2,
+        "_assignment_source_index": 2,
+        "_assignment_source_url": corgi_url,
+        "_assignment_source_title": packet["source_inputs"][1]["title"],
+        "source_url": corgi_url,
+        "source_title": packet["source_inputs"][1]["title"],
+        "link": corgi_url,
+        # Reproduce the contaminated persistent identity that previously authorized
+        # final canonical copy adoption into the unrelated Orbeez archive story.
+        "editorial_story_id": "story_002646",
+        "_editorial_story_id": "story_002646",
+    }
+    data = {"hero": None, "cards": [card]}
+
+    probe = generate._final_canonical_surface_identity(
+        copy.deepcopy(card), corgi_url, context
+    )
+    assert probe["identity_basis"] == "persistent_story_id"
+    assert probe["canonical_slug"] == orbeez_slug
+
+    diagnostics = generate._assignment_shadow_apply_canonical_surface(data, tmp_path)
+
+    assert diagnostics["blocked_source_integrity_rewrite_count"] == 1
+    assert diagnostics["card_canonical_rewrites"] == 0
+    assert diagnostics["blocked_source_integrity_rewrites"][0]["source_index"] == 2
+    assert diagnostics["blocked_source_integrity_rewrites"][0]["canonical_slug"] == orbeez_slug
+    assert data["cards"][0]["headline"].startswith("Corgi swept away")
+    assert data["cards"][0]["source_url"] == corgi_url
+    assert "Orbeez" not in data["cards"][0]["headline"]
+
+    final_mapping = generate._assignment_shadow_final_source_mapping(data, packet)
+    assert final_mapping["source_mapping_valid"] is True
+    assert final_mapping["mismatches"] == []
+
+
+def test_shadow_canonical_surface_allows_exact_assigned_source_provenance(monkeypatch, tmp_path):
+    from scripts import generate
+
+    source_url = "https://www.wpec.com/local/current-story"
+    slug = "2026-08-27-current-story"
+    archive = [{
+        "slug": slug,
+        "headline": "Canonical current story headline",
+        "body": "Canonical current story body.",
+        "source_url": source_url,
+        "editorial_story_id": "story_current",
+        "date": "2026-08-27",
+    }]
+    context = {
+        "archive_by_slug": {slug: archive[0]},
+        "redirect_map": {},
+        "safe_story_ids": {"story_current"},
+        "story_canonical_slugs": {"story_current": slug},
+        "custom_event_canonical_slugs": {},
+        "incident_anchor_canonical_slugs": {},
+    }
+    monkeypatch.setattr(generate, "load_archive", lambda _path: archive)
+    monkeypatch.setattr(generate, "_build_final_canonical_surface_context", lambda _a, _r: context)
+    monkeypatch.setattr(generate, "_durable_incident_anchor", lambda *_a, **_k: "")
+
+    data = {"hero": {
+        "headline": "Draft current story headline",
+        "body": "Draft body.",
+        "source_index": 1,
+        "_assignment_source_index": 1,
+        "_assignment_source_url": source_url,
+        "source_url": source_url,
+        "link": source_url,
+        "editorial_story_id": "story_current",
+        "_editorial_story_id": "story_current",
+    }, "cards": []}
+
+    diagnostics = generate._assignment_shadow_apply_canonical_surface(data, tmp_path)
+
+    assert diagnostics["hero_rewritten"] is True
+    assert diagnostics["blocked_source_integrity_rewrite_count"] == 0
+    assert data["hero"]["headline"] == "Canonical current story headline"
+    assert data["hero"]["source_url"] == source_url
+    assert data["hero"]["_assignment_source_url"] == source_url
+
+
+def test_final_shadow_source_mapping_rejects_unrelated_story_even_when_source_index_survives():
+    from scripts import generate
+
+    corgi_url = "https://www.wpbf.com/article/corgi-reunited-tornado-port-st-lucie-florida/73542668"
+    orbeez_url = "https://cbs12.com/news/local/orbeez-charges-dropped"
+    packet = {
+        "source_inputs": [
+            {"source_index": 1, "title": "Other", "source_url": "https://example.com/other"},
+            {"source_index": 2, "title": "Corgi reunited with owner after tornado", "source_url": corgi_url},
+        ]
+    }
+    corrupted = {
+        "hero": None,
+        "cards": [{
+            "headline": "Charges dropped against Port St. Lucie man after Orbeez shooting",
+            "source_index": 2,
+            "_assignment_source_index": 2,
+            "_assignment_source_url": corgi_url,
+            "source_url": orbeez_url,
+            "link": "/articles/2026-06-27-orbeez.html",
+            "_archived_slug": "2026-06-27-orbeez",
+        }],
+    }
+
+    diagnostics = generate._assignment_shadow_final_source_mapping(corrupted, packet)
+
+    assert diagnostics["source_mapping_valid"] is False
+    assert diagnostics["selected_source_indexes"] == [2]
+    assert diagnostics["mismatches"][0]["reason"] == "final_story_no_longer_matches_assigned_source"
+    assert diagnostics["mismatches"][0]["expected_source_url"] == corgi_url
+
+
+def test_shadow_artifact_reports_final_mapping_validity_not_only_assignment_plan(tmp_path):
+    report_path = tmp_path / "report.json"
+    review_path = tmp_path / "review.md"
+    key_path = tmp_path / "key.json"
+    results = [{
+        "category_key": "st_lucie",
+        "category_label": "St. Lucie County",
+        "source_pool": [{"title": "Corgi story"}],
+        "raw_baseline_output": _sample_output("BASE", 1, 1),
+        "final_baseline_output": _sample_output("BASE", 1, 1),
+        "assignment_plan": {"hero": {"source_index": 1}},
+        "assignment_diagnostics": {"source_mapping_valid": True},
+        "raw_challenger_output": _sample_output("SHADOW", 1, 1),
+        "final_challenger_output": _sample_output("SHADOW", 1, 1),
+        "alignment_diagnostics": {
+            "shadow": {
+                "final_source_mapping": {
+                    "source_mapping_valid": False,
+                    "mismatches": [{"source_index": 1, "reason": "different_story"}],
+                }
+            }
+        },
+        "challenger_error": "FinalSourceMappingError: failed closed",
+    }]
+
+    report = write_assignment_editor_artifacts(
+        results=results,
+        report_path=report_path,
+        review_path=review_path,
+        answer_key_path=key_path,
+        production_model="claude-sonnet-4-5-20250929",
+        editor_model="claude-sonnet-5",
+        writer_model="claude-sonnet-4-5",
+        blind_salt="source-integrity-regression",
+        enabled=True,
+    )
+
+    row = report["categories"][0]
+    assert report["schema_version"] == 3
+    assert report["failed_categories"] == 1
+    assert row["comparison_signals"]["challenger_source_mapping_valid"] is False
+    assert row["comparison_signals"]["challenger_final_source_mapping"]["mismatches"][0]["source_index"] == 1
+    assert "not scoreable" in review_path.read_text().lower()

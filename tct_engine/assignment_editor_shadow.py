@@ -14,8 +14,8 @@ from typing import Any, Dict, Iterable, List, Tuple
 
 from .model_bakeoff import compact_category_output
 
-ASSIGNMENT_EDITOR_SHADOW_SCHEMA_VERSION = 2
-ASSIGNMENT_EDITOR_SHADOW_VERSION = "1.13.6.7f"
+ASSIGNMENT_EDITOR_SHADOW_SCHEMA_VERSION = 3
+ASSIGNMENT_EDITOR_SHADOW_VERSION = "1.13.6.7r"
 
 
 def _utc_now_iso() -> str:
@@ -327,6 +327,13 @@ def write_assignment_editor_artifacts(
         final_challenger_signals = _comparison_signals(final_challenger, source_pool)
         assignment_plan = row.get("assignment_plan") or {}
         assignment_diag = row.get("assignment_diagnostics") or {}
+        shadow_alignment = (row.get("alignment_diagnostics") or {}).get("shadow") or {}
+        final_source_mapping = shadow_alignment.get("final_source_mapping") or {}
+        final_mapping_valid = bool(
+            final_source_mapping.get(
+                "source_mapping_valid", assignment_diag.get("source_mapping_valid")
+            )
+        )
 
         report_rows.append({
             "category_key": category_key,
@@ -375,7 +382,8 @@ def write_assignment_editor_artifacts(
                 "challenger_omitted_source_indexes": final_challenger_signals["omitted_source_indexes"],
                 "baseline_final_hero_headline": final_baseline_signals["hero_headline"],
                 "challenger_final_hero_headline": final_challenger_signals["hero_headline"],
-                "challenger_source_mapping_valid": bool(assignment_diag.get("source_mapping_valid")),
+                "challenger_source_mapping_valid": final_mapping_valid,
+                "challenger_final_source_mapping": final_source_mapping,
             },
         })
 
