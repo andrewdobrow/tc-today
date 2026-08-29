@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-08-28T21:21:34Z",
+  "generated_at": "2026-08-29T02:39:41Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,22 +15,23 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "cache_hit": 1,
-      "category_eligibility_archive_recovery": 7,
-      "no_publishable_sources": 1
+      "category_eligibility_archive_recovery": 5,
+      "generated_live": 2,
+      "generation_failed_archive_recovery": 2
     },
     "failures": {
-      "no_category_eligible_sources": 7
+      "contextless_update_lead": 2,
+      "no_category_eligible_sources": 5
     },
-    "model_attempt_count": 0,
-    "model_elapsed_seconds": 0.0,
-    "archive_recovery_requested_count": 8,
+    "model_attempt_count": 7,
+    "model_elapsed_seconds": 112.231,
+    "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 1,
-    "published_story_duplicate_suppression_count": 41,
-    "story_aware_update_context_count": 5,
+    "contextual_update_lead_rejection_count": 5,
+    "article_framing_rejection_count": 2,
+    "category_eligibility_rejection_count": 7,
+    "published_story_duplicate_suppression_count": 26,
+    "story_aware_update_context_count": 8,
     "material_update_promotion_evaluation_count": 3,
     "material_update_promotion_count": 1,
     "material_update_promotion_cache_hit_count": 2,
@@ -41,9 +42,9 @@
       "category_key": "local_gov",
       "category_label": "Local Government",
       "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 28,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 8,
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 25,
+      "publishable_source_count": 12,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -60,9 +61,37 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 1,
-      "category_eligibility_rejection_count": 1,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election"
+        },
+        {
+          "contract_version": "1.0-local-government-central-action",
+          "category_key": "local_gov",
+          "mode": "enforce",
+          "policy": "central_government_action_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_central_government_action",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Port St. Lucie residents to see solid waste bill credits from $24 million Waste Pro settlement",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-to-see-solid-waste-bill-credits-from-24-million-waste-pro-settlement"
+        },
         {
           "contract_version": "1.0-local-government-central-action",
           "category_key": "local_gov",
@@ -271,23 +300,40 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 14.49
+      "elapsed_seconds": 35.617
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "category_eligibility_archive_recovery",
-      "fetched_candidate_count": 30,
-      "fresh_candidate_count": 17,
-      "publishable_source_count": 10,
-      "selected_source_count": 0,
+      "status": "generation_failed_archive_recovery",
+      "fetched_candidate_count": 29,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 13,
+      "selected_source_count": 1,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Crime & Safety category eligibility contract",
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 5.298,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 5.811,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC"
+        }
+      ],
+      "model_elapsed_seconds": 11.109,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: new_development_missing — Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -296,10 +342,39 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 13,
+      "category_eligibility_assessed_count": 3,
+      "category_eligibility_rejection_count": 2,
+      "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "Port St. Lucie residents to see solid waste bill credits from $24 million Waste Pro settlement",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-to-see-solid-waste-bill-credits-from-24-million-waste-pro-settlement"
+        }
+      ],
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
@@ -323,36 +398,6 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
-          "editorial_story_id": "story_006122",
-          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-          "basis": "authorized_canonical_identity_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
-          "editorial_story_id": "story_006379",
-          "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
-          "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "New College of Florida is spending nearly $1 million on outside PR consultants",
-          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/new-college-of-florida-is-spending-nearly-1-million-on-outside-pr-consultants-one-is-a-former-desantis-spokesperson",
-          "editorial_story_id": "story_006356",
-          "canonical_slug": "2026-08-27-new-college-of-florida-spent-800000-on-outside-pr-consultants-despite-13-member",
-          "canonical_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "Port St. Lucie High football player held on ICE detainer after school zone speeding stop - WPEC",
           "source_url": "https://cbs12.com/news/local/port-st-lucie-high-football-player-held-on-ice-detainer-after-school-zone-speeding-stop-us-immigration-customs-enforcement-st-lucie-county-sheriffs-office-florida-news",
           "editorial_story_id": "story_005957",
@@ -363,22 +408,12 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-utility-bills-to-rise-nearly-47-over-four-years-as-city-approves-major-rate-increases",
-          "editorial_story_id": "story_006319",
-          "canonical_slug": "2026-08-27-vero-beach-utility-bills-to-rise-46-over-four-years-as-city-approves-rate-increa",
-          "canonical_headline": "Vero Beach utility bills to rise 46% over four years as city approves rate increases for water reclamation plant",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "Man indicted on attempted murder charges after Vero Beach shootout with deputies - WPEC",
-          "source_url": "https://cbs12.com/news/local/colorado-man-thomas-earl-steffens-72-indicted-vero-beach-shooting-five-deputy-us-marshals-us-southern-district-of-florida-indian-river-county-sheriffs-office-martin-county-sheriffs-office-florida-news",
+          "source_url": "https://news.google.com/rss/articles/CBMi2AJBVV95cUxPWEItSDMzdDNOa3RPMkRQSGdrVGZiTkVyd2hjSUpwY1l1TldXd2owZ1hNbW5CU0ZuVVlLRkV6Y2c0WDNZOElsYkpDOTdTSWl5LV9BUUU4V2dXMGRZRm9aUXJUWlpTS1BjeHI4OThiOWpmQ2xvY1g2REFHazV2UHlTQ2xVQlFOVXkyRUdOVENqeWNoMzhIWFRUci1MQ29laXdqR0dDeVlGMEFwYncxc19lQk1RZ2JDOGM2RWdqYWRyODVfNExBY0hMa3RBdjZfOVdObWdUN2hnaFlZbHVENGpwb3paVlN6bHlHalczMEpjRHdoNWJJdkFGZ0hXTWpCbnBsZjMzc0JWTGt1X0VydHkzMFhKRVhFLVRtTmRpQi1LaEZJSWJBMXNRbkNGMkZlY1ZvbndLZG9zdF9LZlZEQVNNZEZ1SmhMMkplVGdrM1kyVFdIblJKZ3FFQg",
           "editorial_story_id": "story_006320",
           "canonical_slug": "2026-08-27-colorado-man-indicted-on-attempted-murder-charges-after-vero-beach-shootout-with",
           "canonical_headline": "Colorado man indicted on attempted murder charges after Vero Beach shootout with deputies",
-          "basis": "exact_source_and_persistent_story_skip",
+          "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -400,39 +435,9 @@
           "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "2 arrested in string of car burglaries in Martin County - cw34.com",
-          "source_url": "https://cw34.com/news/local/two-men-arrested-string-firearm-burglaries-plagued-neighborhoods-gated-communities-martin-county-st-lucie-county-martin-county-sheriffs-office-st-lucie-county-sheriffs-office-guns-crime-florida-news",
-          "editorial_story_id": "story_006042",
-          "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
-          "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Stolen guns recovered as 2 teens face charges in Martin County burglary - WPBF",
-          "source_url": "https://www.wpbf.com/article/two-arrested-martin-county-gun-theft-burglaries/73530636",
-          "editorial_story_id": "story_006042",
-          "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
-          "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "2 Port St. Lucie teens accused of 15 burglaries and gun thefts across Martin County - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/2-port-st-lucie-teens-accused-of-15-burglaries-and-gun-thefts-across-martin-county",
-          "editorial_story_id": "story_006042",
-          "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
-          "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
+      "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
         {
           "source_headline": "Former Palm Beach County clerk accused of child sex abuse being released on $160K bond",
@@ -470,6 +475,29 @@
             "shared_distinctive_token_count=80",
             "identity_outcome=same_event_verified",
             "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
+          "source_url": "https://cbs12.com/newsletter-daily/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-08-27-port-st-lucie-police-dispel-active-shooter-rumor-after-swat-operation-on-southea",
+          "canonical_headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_006364",
+            "source:https://cbs12.com/newsletter-daily/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_006364,source:https://cbs12.com/newsletter-daily/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
             "write_authorized=True"
           ],
           "relationship": "same_event_verified",
@@ -513,51 +541,6 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
-          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
-          "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
-          "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "New College of Florida is spending nearly $1 million on outside PR consultants",
-          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/new-college-of-florida-is-spending-nearly-1-million-on-outside-pr-consultants-one-is-a-former-desantis-spokesperson",
-          "canonical_slug": "2026-08-27-new-college-of-florida-spent-800000-on-outside-pr-consultants-despite-13-member",
-          "canonical_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "Port St. Lucie High football player held on ICE detainer after school zone speeding stop - WPEC",
           "source_url": "https://cbs12.com/news/local/port-st-lucie-high-football-player-held-on-ice-detainer-after-school-zone-speeding-stop-us-immigration-customs-enforcement-st-lucie-county-sheriffs-office-florida-news",
           "canonical_slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
@@ -573,28 +556,13 @@
         },
         {
           "category_key": "crime",
-          "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-utility-bills-to-rise-nearly-47-over-four-years-as-city-approves-major-rate-increases",
-          "canonical_slug": "2026-08-27-vero-beach-utility-bills-to-rise-46-over-four-years-as-city-approves-rate-increa",
-          "canonical_headline": "Vero Beach utility bills to rise 46% over four years as city approves rate increases for water reclamation plant",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
           "source_headline": "Man indicted on attempted murder charges after Vero Beach shootout with deputies - WPEC",
-          "source_url": "https://cbs12.com/news/local/colorado-man-thomas-earl-steffens-72-indicted-vero-beach-shooting-five-deputy-us-marshals-us-southern-district-of-florida-indian-river-county-sheriffs-office-martin-county-sheriffs-office-florida-news",
+          "source_url": "https://news.google.com/rss/articles/CBMi2AJBVV95cUxPWEItSDMzdDNOa3RPMkRQSGdrVGZiTkVyd2hjSUpwY1l1TldXd2owZ1hNbW5CU0ZuVVlLRkV6Y2c0WDNZOElsYkpDOTdTSWl5LV9BUUU4V2dXMGRZRm9aUXJUWlpTS1BjeHI4OThiOWpmQ2xvY1g2REFHazV2UHlTQ2xVQlFOVXkyRUdOVENqeWNoMzhIWFRUci1MQ29laXdqR0dDeVlGMEFwYncxc19lQk1RZ2JDOGM2RWdqYWRyODVfNExBY0hMa3RBdjZfOVdObWdUN2hnaFlZbHVENGpwb3paVlN6bHlHalczMEpjRHdoNWJJdkFGZ0hXTWpCbnBsZjMzc0JWTGt1X0VydHkzMFhKRVhFLVRtTmRpQi1LaEZJSWJBMXNRbkNGMkZlY1ZvbndLZG9zdF9LZlZEQVNNZEZ1SmhMMkplVGdrM1kyVFdIblJKZ3FFQg",
           "canonical_slug": "2026-08-27-colorado-man-indicted-on-attempted-murder-charges-after-vero-beach-shootout-with",
           "canonical_headline": "Colorado man indicted on attempted murder charges after Vero Beach shootout with deputies",
           "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -630,63 +598,20 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "2 arrested in string of car burglaries in Martin County - cw34.com",
-          "source_url": "https://cw34.com/news/local/two-men-arrested-string-firearm-burglaries-plagued-neighborhoods-gated-communities-martin-county-st-lucie-county-martin-county-sheriffs-office-st-lucie-county-sheriffs-office-guns-crime-florida-news",
-          "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
-          "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "Stolen guns recovered as 2 teens face charges in Martin County burglary - WPBF",
-          "source_url": "https://www.wpbf.com/article/two-arrested-martin-county-gun-theft-burglaries/73530636",
-          "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
-          "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "crime",
-          "source_headline": "2 Port St. Lucie teens accused of 15 burglaries and gun thefts across Martin County - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/2-port-st-lucie-teens-accused-of-15-burglaries-and-gun-thefts-across-martin-county",
-          "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
-          "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 12.841
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 26.996
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 21,
-      "publishable_source_count": 10,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 11,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -703,42 +628,48 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 3,
-      "published_story_duplicate_suppressions": [
+      "category_eligibility_assessed_count": 2,
+      "category_eligibility_rejection_count": 2,
+      "category_eligibility_rejections": [
         {
+          "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
-          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
-          "editorial_story_id": "story_006122",
-          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-          "basis": "authorized_canonical_identity_skip",
-          "reason": "registry_skip_story_already_published"
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "election_political_process:ballot"
+          ],
+          "local_nexus_signals": [
+            "source_locality:port st lucie"
+          ],
+          "headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election"
         },
         {
+          "contract_version": "1.0-business-development-primary-focus",
           "category_key": "business",
-          "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
-          "editorial_story_id": "story_006379",
-          "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
-          "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "New College of Florida is spending nearly $1 million on outside PR consultants",
-          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/new-college-of-florida-is-spending-nearly-1-million-on-outside-pr-consultants-one-is-a-former-desantis-spokesperson",
-          "editorial_story_id": "story_006356",
-          "canonical_slug": "2026-08-27-new-college-of-florida-spent-800000-on-outside-pr-consultants-despite-13-member",
-          "canonical_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
+          "mode": "enforce",
+          "policy": "primary_business_development_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_business_development_focus",
+          "positive_signals": [],
+          "competing_signals": [
+            "election_political_process:ballot"
+          ],
+          "local_nexus_signals": [
+            "source_locality:port st lucie"
+          ],
+          "headline": "Port St. Lucie residents to see solid waste bill credits from $24 million Waste Pro settlement",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-to-see-solid-waste-bill-credits-from-24-million-waste-pro-settlement"
         }
       ],
+      "published_story_duplicate_suppression_count": 0,
+      "published_story_duplicate_suppressions": [],
       "story_aware_update_context_count": 1,
       "story_aware_update_context_bindings": [
         {
@@ -787,55 +718,9 @@
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [
-        {
-          "category_key": "business",
-          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
-          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
-          "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
-          "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "New College of Florida is spending nearly $1 million on outside PR consultants",
-          "source_url": "https://www.wptv.com/news/local-news/i-team-investigates/new-college-of-florida-is-spending-nearly-1-million-on-outside-pr-consultants-one-is-a-former-desantis-spokesperson",
-          "canonical_slug": "2026-08-27-new-college-of-florida-spent-800000-on-outside-pr-consultants-despite-13-member",
-          "canonical_headline": "New College of Florida spent $800,000 on outside PR consultants despite 13-member in-house communications team",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        }
-      ],
+      "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 7.328
+      "elapsed_seconds": 14.565
     },
     {
       "category_key": "sports",
@@ -843,7 +728,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 24,
-      "publishable_source_count": 3,
+      "publishable_source_count": 2,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -872,8 +757,8 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
-      "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 7.111
+      "new_publication_stale_rejected_count": 2,
+      "elapsed_seconds": 12.413
     },
     {
       "category_key": "things_to_do",
@@ -983,7 +868,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 9.742
+      "elapsed_seconds": 11.518
     },
     {
       "category_key": "florida",
@@ -991,7 +876,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 22,
-      "publishable_source_count": 3,
+      "publishable_source_count": 2,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1008,7 +893,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 2,
@@ -1115,21 +1000,28 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 7.417
+      "elapsed_seconds": 15.042
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "no_publishable_sources",
-      "fetched_candidate_count": 29,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 0,
-      "selected_source_count": 0,
+      "status": "generated_live",
+      "fetched_candidate_count": 27,
+      "fresh_candidate_count": 24,
+      "publishable_source_count": 1,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 8.61,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 8.611,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -1140,24 +1032,14 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 0,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 6,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
           "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WPTV",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
-          "editorial_story_id": "story_006122",
-          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-          "basis": "authorized_canonical_identity_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
           "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
           "editorial_story_id": "story_006122",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
@@ -1183,26 +1065,6 @@
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
           "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
           "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "2 arrested in string of car burglaries in Martin County - cw34.com",
-          "source_url": "https://cw34.com/news/local/two-men-arrested-string-firearm-burglaries-plagued-neighborhoods-gated-communities-martin-county-st-lucie-county-martin-county-sheriffs-office-st-lucie-county-sheriffs-office-guns-crime-florida-news",
-          "editorial_story_id": "story_006042",
-          "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
-          "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County commissioners move toward pause on data center development - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/27/martin-county-commissioners-move-toward-pause-data-center-development?outputType=amp",
-          "editorial_story_id": "story_006022",
-          "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
-          "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
-          "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -1230,21 +1092,6 @@
         },
         {
           "category_key": "martin",
-          "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
-          "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-          "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
-          "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
           "source_headline": "Martin County deputies capture Palm City hit-and-run suspect in swamp - WPBF",
           "source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
           "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
@@ -1272,65 +1119,159 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "2 arrested in string of car burglaries in Martin County - cw34.com",
-          "source_url": "https://cw34.com/news/local/two-men-arrested-string-firearm-burglaries-plagued-neighborhoods-gated-communities-martin-county-st-lucie-county-martin-county-sheriffs-office-st-lucie-county-sheriffs-office-guns-crime-florida-news",
-          "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
-          "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "martin",
-          "source_headline": "Martin County commissioners move toward pause on data center development - WFLX",
-          "source_url": "https://www.wflx.com/2026/08/27/martin-county-commissioners-move-toward-pause-data-center-development?outputType=amp",
-          "canonical_slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
-          "canonical_headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 10.451
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Martin County deputies use drones to capture hit-and-run suspect hiding underwater in Palm City swamp",
+      "generated_card_count": 0,
+      "elapsed_seconds": 23.274
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "cache_hit",
+      "status": "generated_live",
       "fetched_candidate_count": 30,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
-      "cache_hit": true,
+      "publishable_source_count": 6,
+      "selected_source_count": 6,
+      "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 38.02,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Port St. Lucie homeowners to receive up to $364 credits on solid waste bills from $24 million Waste Pro settlement"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 35.098,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 73.118,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
-      "contextual_update_lead_rejection_count": 0,
-      "contextual_update_lead_rejections": [],
-      "article_framing_rejection_count": 0,
-      "article_framing_rejections": [],
+      "contextual_update_lead_rejection_count": 1,
+      "contextual_update_lead_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "story_form": "update",
+          "lead_word_count": 70,
+          "baseline_anchor": "",
+          "baseline_present": true,
+          "baseline_anchor_present": true,
+          "baseline_details_present": true,
+          "baseline_context_hits": [
+            "circle",
+            "dunbrooke",
+            "lucie",
+            "operation",
+            "southeast",
+            "swat",
+            "west"
+          ],
+          "baseline_context_required": 2,
+          "canonical_context_available": true,
+          "canonical_context_headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
+          "novelty_anchor": "source_distinctive_detail",
+          "novelty_present": false,
+          "novelty_token_hits": [],
+          "missing": [
+            "new_development_missing"
+          ],
+          "source_title": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
+          "headline": "Port St. Lucie police clear up active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle"
+        }
+      ],
+      "article_framing_rejection_count": 1,
+      "article_framing_rejections": [
+        {
+          "surface": "card",
+          "required": true,
+          "passed": false,
+          "headline": "Fort Pierce legal department overhaul raises questions as development decisions loom",
+          "missing": [
+            "headline_jurisdiction_missing_from_lead"
+          ],
+          "lead_independence": {
+            "required": true,
+            "passed": true,
+            "headline": "Fort Pierce legal department overhaul raises questions as development decisions loom",
+            "lead": "The uncertainty follows the City Commission's decision not to renew City Attorney Sara Hedges' contract. At the same time, Assistant City Attorney Felicia Holloman has resigned, and temporary attorney Caroline Valentin is set to leave at the end of the month, leaving the city searching for new legal leadership. Commissioners voted 3-2 to move forward with appointing Deputy City Manager Camille Wallace as interim city attorney while a search is conducted for a permanent replacement.",
+            "lead_word_count": 77,
+            "headline_overlap_ratio": 0.1,
+            "new_context_token_count": 43,
+            "opaque_references": [],
+            "undefined_references": [],
+            "story_form": "standard",
+            "update_diagnostics": {
+              "required": false,
+              "passed": true,
+              "story_form": "standard"
+            },
+            "missing": []
+          },
+          "claim_consistency": {
+            "required": true,
+            "passed": false,
+            "headline": "Fort Pierce legal department overhaul raises questions as development decisions loom",
+            "lead": "The uncertainty follows the City Commission's decision not to renew City Attorney Sara Hedges' contract. At the same time, Assistant City Attorney Felicia Holloman has resigned, and temporary attorney Caroline Valentin is set to leave at the end of the month, leaving the city searching for new legal leadership. Commissioners voted 3-2 to move forward with appointing Deputy City Manager Camille Wallace as interim city attorney while a search is conducted for a permanent replacement.",
+            "headline_money_claims": [],
+            "lead_money_claims": [],
+            "missing_money_claims": [],
+            "headline_jurisdictions": [
+              "fort_pierce"
+            ],
+            "lead_jurisdictions": [],
+            "missing_jurisdictions": [
+              "fort_pierce"
+            ],
+            "headline_policy_references": [],
+            "lead_policy_references": [],
+            "missing_policy_references": [],
+            "missing": [
+              "headline_jurisdiction_missing_from_lead"
+            ]
+          },
+          "source_focus": {
+            "required": true,
+            "passed": true,
+            "generated_headline": "Fort Pierce legal department overhaul raises questions as development decisions loom",
+            "generated_lead": "The uncertainty follows the City Commission's decision not to renew City Attorney Sara Hedges' contract. At the same time, Assistant City Attorney Felicia Holloman has resigned, and temporary attorney Caroline Valentin is set to leave at the end of the month, leaving the city searching for new legal leadership.",
+            "source_title": "Fort Pierce legal department shakeup sparks debate over development decision - WPEC",
+            "source_lead": "A major transition inside Fort Pierce's legal department is raising questions about who will help guide the city through several high-profile development issues expected to come before the City Commission. The uncertainty follows the City Commission's decision not to renew City Attorney Sara Hedges' contract.",
+            "title_similarity": {
+              "score": 0.6726,
+              "overlap": 0.5,
+              "jaccard": 0.3333,
+              "sorted_sequence": 0.7006,
+              "ordered_sequence": 0.7643,
+              "shared_token_count": 5.0
+            },
+            "lead_token_overlap": 0.414,
+            "missing": []
+          },
+          "source_jurisdiction": {
+            "required": false,
+            "passed": true,
+            "missing": []
+          }
+        }
+      ],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 7,
@@ -1357,16 +1298,6 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
-          "editorial_story_id": "story_006364",
-          "canonical_slug": "2026-08-27-port-st-lucie-police-dispel-active-shooter-rumor-after-swat-operation-on-southea",
-          "canonical_headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "Martin County deputies capture Palm City hit-and-run suspect in swamp - WPBF",
           "source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
           "editorial_story_id": "story_006122",
@@ -1387,8 +1318,8 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "2 arrested in string of car burglaries in Martin County - cw34.com",
-          "source_url": "https://cw34.com/news/local/two-men-arrested-string-firearm-burglaries-plagued-neighborhoods-gated-communities-martin-county-st-lucie-county-martin-county-sheriffs-office-st-lucie-county-sheriffs-office-guns-crime-florida-news",
+          "source_headline": "2 arrested in string of car burglaries in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/two-men-arrested-string-firearm-burglaries-plagued-neighborhoods-gated-communities-martin-county-st-lucie-county-martin-county-sheriffs-office-st-lucie-county-sheriffs-office-guns-crime-florida-news",
           "editorial_story_id": "story_006042",
           "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
           "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
@@ -1397,17 +1328,69 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "2 arrested in string of car burglaries in Martin County - WPEC",
-          "source_url": "https://cbs12.com/news/local/two-men-arrested-string-firearm-burglaries-plagued-neighborhoods-gated-communities-martin-county-st-lucie-county-martin-county-sheriffs-office-st-lucie-county-sheriffs-office-guns-crime-florida-news",
-          "editorial_story_id": "story_006042",
-          "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
-          "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
-          "basis": "registry_same_event_and_persistent_story_skip",
+          "source_headline": "GALLERY: EF-0 tornado carrying peak winds of 75 mph touches down in Port St. Lucie - WPEC",
+          "source_url": "https://cbs12.com/news/local/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday",
+          "editorial_story_id": "story_005683",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
+          "canonical_headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
+          "editorial_story_id": "story_005782",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "canonical_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
+          "publisher": "cbs12.com",
+          "canonical_slug": "2026-08-27-port-st-lucie-police-dispel-active-shooter-rumor-after-swat-operation-on-southea",
+          "canonical_headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
+          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_keys": [
+            "story:story_006364",
+            "source:https://cbs12.com/news/local/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news"
+          ],
+          "match_confidence": 0.95,
+          "evidence_dimensions": [
+            "bounded_time_window",
+            "shared_locality",
+            "shared_event_family",
+            "shared_precise_location",
+            "shared_agency",
+            "shared_subject_phrase",
+            "shared_headline_topic",
+            "distinctive_fact_overlap"
+          ],
+          "decision_trace": [
+            "left_identity_origin=source_derived",
+            "right_identity_origin=source_derived",
+            "publication_gap_days=0",
+            "shared_locality=['port-st-lucie', 'st-lucie', 'st-lucie-county']",
+            "shared_event_families=['shooting']",
+            "shared_named_people=[]",
+            "shared_precise_locations=['southeast-west-dunbrooke-circle']",
+            "shared_agencies=['port-st-lucie-police', 'st-lucie-county-sheriff']",
+            "shared_subject_phrases=['active-shoot-rumor', 'active-shoot-rumor-swat', 'dispel-active-shoot', 'dispel-active-shoot-rumor', 'rumor-swat-operation', 'rumor-swat-operation-wpec', 'shoot-rumor-swat', 'shoot-rumor-swat-operation', 'swat-operation-wpec']",
+            "shared_headline_topic_core=['active', 'dispel', 'operation', 'rumor', 'shoot', 'swat', 'wpec']",
+            "shared_distinctive_token_count=84",
+            "identity_outcome=same_event_verified",
+            "evidence_tier=hard_composite_identity",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 1,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
@@ -1432,11 +1415,11 @@
           "confidence": 0.98,
           "shared_anchors": [],
           "novel_facts": [
-            "Luna, a 6-year-old corgi, went missing during an EF0 tornado in Bay St. Lucie community",
-            "Owner Molly Wing-Berman had her front door pushed open by tornado force",
-            "Tornado damaged home, creating hole in wall and depositing items in pool",
-            "Luna was found three streets away by neighbors",
-            "Dog now reunited with owner and given nickname Luna ToTo"
+            "EF0 tornado struck Port St. Lucie on or around August 28, 2026",
+            "Corgi named Luna went missing from Bay St. Lucie community",
+            "Owner Molly Wing-Berman's home damaged by tornado",
+            "Luna found three streets away by neighbors",
+            "Luna reunited with owner"
           ],
           "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
           "validation_errors": [
@@ -1452,21 +1435,6 @@
           "canonical_is_custom": false,
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "material_update_source_already_absorbed",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
-          "source_url": "https://cbs12.com/news/local/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
-          "canonical_slug": "2026-08-27-port-st-lucie-police-dispel-active-shooter-rumor-after-swat-operation-on-southea",
-          "canonical_headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
-          "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
           "cache_hit": false,
@@ -1505,8 +1473,8 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "2 arrested in string of car burglaries in Martin County - cw34.com",
-          "source_url": "https://cw34.com/news/local/two-men-arrested-string-firearm-burglaries-plagued-neighborhoods-gated-communities-martin-county-st-lucie-county-martin-county-sheriffs-office-st-lucie-county-sheriffs-office-guns-crime-florida-news",
+          "source_headline": "2 arrested in string of car burglaries in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/two-men-arrested-string-firearm-burglaries-plagued-neighborhoods-gated-communities-martin-county-st-lucie-county-martin-county-sheriffs-office-st-lucie-county-sheriffs-office-guns-crime-florida-news",
           "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
           "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
           "canonical_is_custom": false,
@@ -1520,12 +1488,27 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "2 arrested in string of car burglaries in Martin County - WPEC",
-          "source_url": "https://cbs12.com/news/local/two-men-arrested-string-firearm-burglaries-plagued-neighborhoods-gated-communities-martin-county-st-lucie-county-martin-county-sheriffs-office-st-lucie-county-sheriffs-office-guns-crime-florida-news",
-          "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
-          "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
+          "source_headline": "GALLERY: EF-0 tornado carrying peak winds of 75 mph touches down in Port St. Lucie - WPEC",
+          "source_url": "https://cbs12.com/news/local/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
+          "canonical_headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
           "canonical_is_custom": false,
-          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
+          "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
+          "canonical_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1535,24 +1518,44 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "live_hero_headline": "Fort Pierce names interim city attorney as legal staff exits ahead of major development decisions",
-      "elapsed_seconds": 16.186
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Port St. Lucie homeowners to receive solid waste bill credits from $24 million Waste Pro settlement",
+      "generated_card_count": 1,
+      "elapsed_seconds": 91.841
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 28,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 7,
-      "selected_source_count": 0,
+      "fresh_candidate_count": 26,
+      "publishable_source_count": 14,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Indian River County category eligibility contract",
+      "attempt_count": 2,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 7.507,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 11.886,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV"
+        }
+      ],
+      "model_elapsed_seconds": 19.393,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: new_development_missing — Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -1561,21 +1564,11 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 7,
+      "category_eligibility_assessed_count": 14,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
-        {
-          "category_key": "indian_river",
-          "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
-          "editorial_story_id": "story_006379",
-          "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
-          "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
         {
           "category_key": "indian_river",
           "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases - WPTV",
@@ -1595,19 +1588,9 @@
           "canonical_headline": "Colorado man indicted on attempted murder charges after Vero Beach shootout with deputies",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Vero Beach woman billed $922 for electricity after fire destroys home - WPBF",
-          "source_url": "https://www.wpbf.com/article/vero-beach-woman-billed-922-for-electricity-after-fire-destroys-home/73538412",
-          "editorial_story_id": "story_006233",
-          "canonical_slug": "2026-08-27-vero-beach-woman-billed-922-for-electricity-after-fire-destroys-home",
-          "canonical_headline": "Vero Beach woman billed $922 for electricity after fire destroys home",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
+      "story_aware_update_context_count": 2,
       "story_aware_update_context_bindings": [
         {
           "source_headline": "Former Palm Beach County clerk accused of child sex abuse being released on $160K bond",
@@ -1649,6 +1632,29 @@
           ],
           "relationship": "same_event_verified",
           "final_publication_action": "canonical_bound_before_generation"
+        },
+        {
+          "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
+          "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
+          "basis": "exact_source_url",
+          "identity_keys": [
+            "story:story_006379",
+            "source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "story",
+            "source"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=story:story_006379,source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
         }
       ],
       "material_update_promotion_evaluation_count": 0,
@@ -1656,21 +1662,6 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
-        {
-          "category_key": "indian_river",
-          "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
-          "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
-          "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
-          "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
-        },
         {
           "category_key": "indian_river",
           "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases - WPTV",
@@ -1700,25 +1691,12 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "indian_river",
-          "source_headline": "Vero Beach woman billed $922 for electricity after fire destroys home - WPBF",
-          "source_url": "https://www.wpbf.com/article/vero-beach-woman-billed-922-for-electricity-after-fire-destroys-home/73538412",
-          "canonical_slug": "2026-08-27-vero-beach-woman-billed-922-for-electricity-after-fire-destroys-home",
-          "canonical_headline": "Vero Beach woman billed $922 for electricity after fire destroys home",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 7.185
+      "generation_status": "failed",
+      "budget_seconds": 180.0,
+      "elapsed_seconds": 29.409
     }
   ]
 }
