@@ -30,15 +30,17 @@ def test_checkout_completion_keeps_backward_compatibility_for_old_trial_sessions
 def test_paywall_discloses_one_dollar_intro_and_renewal_price():
     from tct_engine.membership_paywall import paywall_html
     markup = paywall_html("example-story")
-    assert "Continue reading with Treasure Coast Today." in markup
+    assert "Continue reading Treasure Coast Today for just $1." in markup
     assert "Treasure Coast Today Membership" in markup
     assert "Introductory offer" in markup
     assert '<strong>$1</strong><span>for your first month</span>' in markup
     assert "Then $4.99/month. Cancel anytime." in markup
     assert "Continue for $1" in markup
-    assert "Prefer annual access?" in markup
-    assert "$49/year" in markup
-    assert "Unlimited local reporting" in markup
+    assert "Annual membership" in markup
+    assert '<strong>$49</strong><span>per year</span>' in markup
+    assert "Continue annually" in markup
+    assert "Get unlimited, ad-free access to independent local reporting" in markup
+    assert "Comprehensive local reporting" in markup
     assert "Secure checkout powered by Stripe." in markup
     assert "FREE for 1 week" not in markup
     assert "free trial" not in markup.lower()
@@ -73,11 +75,13 @@ def test_article_paywall_uses_restrained_publication_presentation():
     from tct_engine.membership_paywall import paywall_html
     markup = paywall_html("example-story")
     css = (ROOT / "membership.css").read_text()
-    assert "tct-paywall-primary-offer" in markup
-    assert "tct-paywall-annual-row" in markup
+    assert markup.count("tct-paywall-plan-offer") >= 2
+    assert "tct-paywall-plan-offer-monthly" in markup
+    assert "tct-paywall-plan-offer-annual" in markup
     assert "tct-paywall-benefits" in markup
     assert "tct-paywall-plan best" not in markup
-    assert "publication-grade article paywall" in css
+    assert "offer-forward publication paywall" in css
     assert "border-top:5px solid var(--pw-green)" in css
-    assert "grid-template-columns:minmax(0,1fr) auto" in css
-    assert "linear-gradient(135deg,#f26445" not in css.split("TCT v1.13.6.8e",1)[1]
+    release_css = css.split("TCT v1.13.6.8g",1)[1]
+    assert "grid-template-columns:minmax(0,1fr) auto" in release_css
+    assert "linear-gradient(135deg,#f26445" not in release_css

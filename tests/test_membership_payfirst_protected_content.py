@@ -154,13 +154,13 @@ def test_prepare_paywall_protects_public_service_article(tmp_path, monkeypatch):
 
 def test_paywall_markup_uses_locked_copy_and_pay_first_buttons():
     markup = paywall_html("example-story")
-    assert "Continue reading with Treasure Coast Today." in markup
+    assert "Continue reading Treasure Coast Today for just $1." in markup
     assert "Treasure Coast Today Membership" in markup
     assert "Introductory offer" in markup
     assert '<strong>$1</strong><span>for your first month</span>' in markup
     assert "Continue for $1" in markup
     assert markup.count("Continue for $1") == 1
-    assert markup.count("Choose annual") == 1
+    assert markup.count("Continue annually") == 1
     assert "Already a subscriber?" in markup
     assert "Create account" not in markup
     assert "password" not in markup.lower()
@@ -188,7 +188,7 @@ def test_subscribe_page_has_no_registration_gate_before_plan_buttons():
 
 
 
-def test_membership_article_paywall_uses_publication_grade_single_offer_hierarchy():
+def test_membership_article_paywall_uses_publication_grade_equal_plan_hierarchy():
     page = (ROOT / "subscribe.html").read_text()
     css = (ROOT / "membership.css").read_text()
     markup = paywall_html("example-story")
@@ -196,13 +196,15 @@ def test_membership_article_paywall_uses_publication_grade_single_offer_hierarch
     assert "Best annual value" in page
     assert '<div class="membership-price">$1 first month</div>' in page
     assert '<div class="membership-plan-note">Then $4.99/month</div>' in page
-    # The in-article gate is deliberately calmer: one dominant offer plus an annual text row.
-    assert "tct-paywall-primary-offer" in markup
-    assert "tct-paywall-annual-row" in markup
+    # The in-article gate uses the same restrained editorial structure for both plans.
+    assert "tct-paywall-plan-offer-monthly" in markup
+    assert "tct-paywall-plan-offer-annual" in markup
+    assert "Continue for $1" in markup
+    assert "Continue annually" in markup
     assert "tct-paywall-plan best" not in markup
-    release_css = css.split("TCT v1.13.6.8e", 1)[1]
-    assert "background:var(--pw-paper)" in release_css
-    assert "border-top:5px solid var(--pw-green)" in release_css
+    release_css = css.split("TCT v1.13.6.8g", 1)[1]
+    assert "background:var(--pw-paper)" in css
+    assert "border-top:5px solid var(--pw-green)" in css
     assert "grid-template-columns:minmax(0,1fr) auto" in release_css
     assert "linear-gradient(135deg,#f26445" not in release_css
 
@@ -455,8 +457,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.6.8e"' in page
-    assert 'src="/membership.js?v=1.13.6.8e"' in page
+    assert 'href="/membership.css?v=1.13.6.8g"' in page
+    assert 'src="/membership.js?v=1.13.6.8g"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -485,8 +487,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.6.8e') == 1
-    assert first.count('/membership.js?v=1.13.6.8e') == 1
+    assert first.count('/membership.css?v=1.13.6.8g') == 1
+    assert first.count('/membership.js?v=1.13.6.8g') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():

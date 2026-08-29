@@ -128,7 +128,7 @@ def paywall_section_html(slug: str) -> str:
     return f'''<section class="tct-paywall" data-tct-paywall data-slug="{escaped_slug}" aria-label="Treasure Coast Today membership">
   <div class="tct-paywall-topline">Already a subscriber? <button class="tct-member-link" type="button" data-reveal-signin>Sign in</button></div>
   <div class="tct-paywall-brand">Treasure Coast Today Membership</div>
-  <h2 class="tct-paywall-offer-headline">Continue reading with Treasure Coast Today.</h2>
+  <h2 class="tct-paywall-offer-headline">Continue reading Treasure Coast Today for just $1.</h2>
   <p class="tct-paywall-copy">Get unlimited, ad-free access to independent local reporting across Martin, St. Lucie and Indian River counties.</p>
   <div class="membership-message hidden"></div>
   <div class="tct-paywall-signin hidden" data-paywall-signin>
@@ -139,21 +139,25 @@ def paywall_section_html(slug: str) -> str:
     <div class="membership-message hidden"></div>
   </div>
   <div class="tct-paywall-plans" data-paywall-plans>
-    <div class="tct-paywall-primary-offer">
+    <div class="tct-paywall-plan-offer tct-paywall-plan-offer-monthly">
       <div class="tct-paywall-offer-copy">
         <span class="tct-paywall-eyebrow">Introductory offer</span>
         <div class="tct-paywall-price-line"><strong>$1</strong><span>for your first month</span></div>
         <div class="tct-paywall-plan-note">Then $4.99/month. Cancel anytime.</div>
       </div>
-      <button class="tct-member-btn tct-paywall-primary-button" data-plan="monthly" type="button">Continue for $1</button>
+      <button class="tct-member-btn tct-paywall-plan-button" data-plan="monthly" type="button">Continue for $1</button>
     </div>
-    <div class="tct-paywall-annual-row">
-      <div><strong>Prefer annual access?</strong> $49/year <span>· about $4.08/month</span></div>
-      <button class="tct-member-btn tct-member-btn-secondary" data-plan="annual" type="button">Choose annual</button>
+    <div class="tct-paywall-plan-offer tct-paywall-plan-offer-annual">
+      <div class="tct-paywall-offer-copy">
+        <span class="tct-paywall-eyebrow">Annual membership</span>
+        <div class="tct-paywall-price-line"><strong>$49</strong><span>per year</span></div>
+        <div class="tct-paywall-plan-note">About $4.08/month. Cancel anytime.</div>
+      </div>
+      <button class="tct-member-btn tct-paywall-plan-button" data-plan="annual" type="button">Continue annually</button>
     </div>
   </div>
   <div class="tct-paywall-benefits" aria-label="Membership benefits">
-    <span>Unlimited local reporting</span>
+    <span>Comprehensive local reporting</span>
     <span>Ad-free reading</span>
     <span>Support independent journalism</span>
   </div>
@@ -190,7 +194,7 @@ def add_paywall_schema(page_html: str) -> str:
 
 
 MEMBER_HINT_KEY = "tct_member_entitled_hint"
-MEMBERSHIP_ASSET_VERSION = "1.13.6.8e"
+MEMBERSHIP_ASSET_VERSION = "1.13.6.8g"
 MEMBER_PREPAINT_MARKER = "data-tct-member-prepaint"
 MEMBER_PREPAINT_SCRIPT = (
     '<script data-tct-member-prepaint>\n'
