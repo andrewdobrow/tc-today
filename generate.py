@@ -210,7 +210,7 @@ def _apply_membership_site_chrome(root: Path) -> int:
     footer_replacement = (
         '<a class="footer-subscribe-cta" href="/subscribe.html">'
         '<span>Get first month for $1</span>'
-        '<small>Limited time &middot; $1 first month &middot; then $4.99/mo</small></a>'
+        '<small>Limited time &middot; $1 first month</small></a>'
     )
     changed = 0
     for page in sorted(root.rglob("*.html")):
@@ -17154,7 +17154,7 @@ def _page_footer():
         connect_column = """<div class="footer-column footer-connect footer-membership-ask">
         <strong>Support local journalism</strong>
         <p>Unlimited articles. No ads. Help fund independent Treasure Coast reporting.</p>
-        <a class="footer-subscribe-cta" href="/subscribe.html"><span>Get first month for $1</span><small>Limited time &middot; $1 first month &middot; then $4.99/mo</small></a>
+        <a class="footer-subscribe-cta" href="/subscribe.html"><span>Get first month for $1</span><small>Limited time &middot; $1 first month</small></a>
       </div>"""
     else:
         connect_column = """<div class="footer-column footer-connect"><strong>Stay Connected</strong><p>Join our local community for news, updates and discussion.</p><a class="footer-cta" href="/contact.html">Connect with TCT</a></div>"""
