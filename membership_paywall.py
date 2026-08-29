@@ -126,10 +126,10 @@ def split_article_body(body_html: str, preview_max_chars: int = PREVIEW_MAX_CHAR
 def paywall_section_html(slug: str) -> str:
     escaped_slug = html.escape(slug, quote=True)
     return f'''<section class="tct-paywall" data-tct-paywall data-slug="{escaped_slug}" aria-label="Treasure Coast Today membership">
-  <div class="tct-paywall-topline">Already a member?&nbsp;<button class="tct-member-link" type="button" data-reveal-signin>Sign in</button></div>
-  <div class="tct-trial-urgency">Limited-time offer</div>
-  <h2 class="tct-paywall-offer-headline">Keep reading for <span class="tct-intro-price">$1 for your first month</span></h2>
-  <p class="tct-paywall-copy">Get unlimited, ad-free access for $1 today. Your monthly membership renews at $4.99/month after the first month. Or choose annual access for $49/year.</p>
+  <div class="tct-paywall-topline">Already a subscriber? <button class="tct-member-link" type="button" data-reveal-signin>Sign in</button></div>
+  <div class="tct-paywall-brand">Treasure Coast Today Membership</div>
+  <h2 class="tct-paywall-offer-headline">Continue reading with Treasure Coast Today.</h2>
+  <p class="tct-paywall-copy">Get unlimited, ad-free access to independent local reporting across Martin, St. Lucie and Indian River counties.</p>
   <div class="membership-message hidden"></div>
   <div class="tct-paywall-signin hidden" data-paywall-signin>
     <form class="membership-form" data-signin-form>
@@ -139,24 +139,25 @@ def paywall_section_html(slug: str) -> str:
     <div class="membership-message hidden"></div>
   </div>
   <div class="tct-paywall-plans" data-paywall-plans>
-    <article class="tct-paywall-plan best">
-      <span class="tct-paywall-badge">Limited-time offer</span>
-      <h3>Monthly membership</h3>
-      <div class="tct-paywall-price">$1 first month</div>
-      <div class="tct-paywall-plan-note">Then $4.99/month</div>
-      <button class="tct-member-btn" data-plan="monthly" type="button">Get your first month for $1</button>
-    </article>
-    <article class="tct-paywall-plan">
-      <span class="tct-paywall-badge tct-paywall-badge-flexible">Best annual value</span>
-      <h3>Annual membership</h3>
-      <div class="tct-paywall-price">$49/year</div>
-      <div class="tct-paywall-plan-note">About $4.08/month</div>
-      <button class="tct-member-btn" data-plan="annual" type="button">Subscribe annually</button>
-    </article>
+    <div class="tct-paywall-primary-offer">
+      <div class="tct-paywall-offer-copy">
+        <span class="tct-paywall-eyebrow">Introductory offer</span>
+        <div class="tct-paywall-price-line"><strong>$1</strong><span>for your first month</span></div>
+        <div class="tct-paywall-plan-note">Then $4.99/month. Cancel anytime.</div>
+      </div>
+      <button class="tct-member-btn tct-paywall-primary-button" data-plan="monthly" type="button">Continue for $1</button>
+    </div>
+    <div class="tct-paywall-annual-row">
+      <div><strong>Prefer annual access?</strong> $49/year <span>· about $4.08/month</span></div>
+      <button class="tct-member-btn tct-member-btn-secondary" data-plan="annual" type="button">Choose annual</button>
+    </div>
   </div>
-  <p class="tct-paywall-benefits">Unlimited articles · No ads · Support independent local journalism</p>
-  <p class="tct-paywall-secure">Secure checkout powered by Stripe. Monthly offer charges $1 today.</p>
-  <p class="tct-paywall-renewal">Monthly: $1 today, then $4.99/month starting one month later. Annual: $49/year. Subscriptions renew automatically until canceled.</p>
+  <div class="tct-paywall-benefits" aria-label="Membership benefits">
+    <span>Unlimited local reporting</span>
+    <span>Ad-free reading</span>
+    <span>Support independent journalism</span>
+  </div>
+  <p class="tct-paywall-secure">Secure checkout powered by Stripe. Subscriptions renew automatically until canceled.</p>
 </section>'''
 
 
@@ -189,7 +190,7 @@ def add_paywall_schema(page_html: str) -> str:
 
 
 MEMBER_HINT_KEY = "tct_member_entitled_hint"
-MEMBERSHIP_ASSET_VERSION = "1.13.6.8"
+MEMBERSHIP_ASSET_VERSION = "1.13.6.8e"
 MEMBER_PREPAINT_MARKER = "data-tct-member-prepaint"
 MEMBER_PREPAINT_SCRIPT = (
     '<script data-tct-member-prepaint>\n'

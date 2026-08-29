@@ -131,7 +131,9 @@ def test_paid_content_schema_targets_protected_content_placeholder():
     assert '"cssSelector":".tct-paywalled-content"' in transformed
     markup = paywall_html("example-story")
     assert "tct-paywalled-content" in markup
-    assert "Monthly: $1 today, then $4.99/month starting one month later. Annual: $49/year. Subscriptions renew automatically until canceled." in markup
+    assert "Then $4.99/month. Cancel anytime." in markup
+    assert "Prefer annual access?</strong> $49/year" in markup
+    assert "Subscriptions renew automatically until canceled." in markup
 
 
 def test_workflow_passes_payment_mode_to_browser_launch_guard():
@@ -206,8 +208,8 @@ def test_sitewide_subscriber_chrome_loads_membership_state_and_prepaints(tmp_pat
     assert "data-tct-member-prepaint" in rendered
     assert "tct_member_entitled_hint" in rendered
     assert 'src="/membership-config.js"' in rendered
-    assert 'src="/membership.js?v=1.13.6.8"' in rendered
-    assert rendered.count('/membership.js?v=1.13.6.8') == 1
+    assert 'src="/membership.js?v=1.13.6.8e"' in rendered
+    assert rendered.count('/membership.js?v=1.13.6.8e') == 1
 
 
 def test_entitled_subscriber_chrome_replaces_sales_header_and_hides_membership_card():
@@ -253,4 +255,5 @@ def test_sitewide_chrome_normalizer_migrates_retained_free_trial_footer(tmp_path
     assert "Start free trial" not in rendered
     assert "7 days free" not in rendered
     assert "Get first month for $1" in rendered
-    assert "Limited time &middot; $1 first month &middot; then $4.99/mo" in rendered
+    assert "Limited time &middot; $1 first month" in rendered
+    assert "then $4.99/mo" not in rendered

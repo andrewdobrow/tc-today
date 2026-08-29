@@ -171,3 +171,236 @@ html.tct-member-preverified .tct-preview-copy {
 /* TCT v1.13.6.8 — $1 first-month introductory offer */
 .membership-intro-price,.tct-intro-price{color:#fff4c2;font-weight:950;letter-spacing:.01em}
 .tct-paywall-offer-headline .tct-intro-price{font-size:inherit}
+
+/* ================================================================
+   TCT v1.13.6.8e — publication-grade article paywall
+   Quiet editorial treatment: one primary offer, one secondary annual choice.
+   ================================================================ */
+.tct-paywall {
+  --pw-ink:#171a18;
+  --pw-muted:#626963;
+  --pw-rule:#d9ddd8;
+  --pw-paper:#fff;
+  --pw-soft:#f5f7f4;
+  --pw-green:#174f3d;
+  position:relative;
+  z-index:3;
+  margin:0 0 38px;
+  padding:clamp(26px,4.5vw,44px);
+  background:var(--pw-paper);
+  color:var(--pw-ink);
+  border:1px solid var(--pw-rule);
+  border-top:5px solid var(--pw-green);
+  border-radius:4px;
+  box-shadow:0 10px 30px rgba(20,35,28,.07);
+}
+.tct-paywall-topline {
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:.35em;
+  margin:0 0 24px;
+  color:var(--pw-muted);
+  font-size:.84rem;
+  line-height:1.3;
+}
+.tct-paywall .tct-member-link {
+  border:0;
+  padding:0;
+  background:none;
+  color:var(--pw-green);
+  font:inherit;
+  font-weight:800;
+  text-decoration:underline;
+  text-underline-offset:2px;
+  cursor:pointer;
+}
+.tct-paywall-brand {
+  margin:0 0 12px;
+  color:var(--pw-green);
+  font-size:.72rem;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.tct-paywall h2,
+.tct-paywall .tct-paywall-offer-headline {
+  max-width:690px;
+  margin:0 0 14px;
+  color:var(--pw-ink);
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(2rem,4.3vw,3.15rem);
+  line-height:1.04;
+  letter-spacing:-.025em;
+  text-wrap:balance;
+}
+.tct-paywall-copy {
+  max-width:690px;
+  margin:0;
+  color:#3e4540;
+  font-size:1.02rem;
+  line-height:1.62;
+}
+.tct-paywall-plans {
+  display:block;
+  margin:28px 0 0;
+}
+.tct-paywall-primary-offer {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:28px;
+  padding:24px 0;
+  border-top:1px solid var(--pw-rule);
+  border-bottom:1px solid var(--pw-rule);
+}
+.tct-paywall-offer-copy { min-width:0; }
+.tct-paywall-eyebrow {
+  display:block;
+  margin:0 0 8px;
+  color:var(--pw-green);
+  font-size:.7rem;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+.tct-paywall-price-line {
+  display:flex;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:8px 12px;
+  margin:0 0 5px;
+}
+.tct-paywall-price-line strong {
+  color:var(--pw-ink);
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(3.15rem,7vw,4.45rem);
+  line-height:.9;
+  letter-spacing:-.055em;
+  font-weight:700;
+}
+.tct-paywall-price-line span {
+  color:#2f3632;
+  font-size:1rem;
+  font-weight:750;
+}
+.tct-paywall-plan-note {
+  min-height:0;
+  margin:0;
+  color:var(--pw-muted);
+  font-size:.83rem;
+  line-height:1.45;
+  text-align:left;
+}
+.tct-paywall .tct-member-btn {
+  box-sizing:border-box;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:auto;
+  min-height:46px;
+  margin:0;
+  padding:12px 22px;
+  border:1px solid var(--pw-green);
+  border-radius:3px;
+  background:var(--pw-green);
+  color:#fff;
+  font:inherit;
+  font-weight:900;
+  line-height:1.2;
+  text-decoration:none;
+  cursor:pointer;
+}
+.tct-paywall .tct-member-btn:hover { filter:brightness(.96); }
+.tct-paywall .tct-member-btn:focus-visible,
+.tct-paywall .tct-member-link:focus-visible {
+  outline:3px solid rgba(23,79,61,.22);
+  outline-offset:3px;
+}
+.tct-paywall .tct-paywall-primary-button {
+  min-width:190px;
+  font-size:.98rem;
+}
+.tct-paywall-annual-row {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding:17px 0 0;
+  color:#454c47;
+  font-size:.9rem;
+  line-height:1.45;
+}
+.tct-paywall-annual-row span { color:var(--pw-muted); }
+.tct-paywall .tct-member-btn-secondary {
+  flex:0 0 auto;
+  min-height:auto;
+  padding:7px 0;
+  border:0;
+  background:transparent;
+  color:var(--pw-green);
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.tct-paywall .tct-member-btn-secondary:hover { filter:none; }
+.tct-paywall-benefits {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  margin:28px 0 0;
+  padding:17px 0;
+  border-top:1px solid var(--pw-rule);
+  border-bottom:1px solid var(--pw-rule);
+  color:#333a36;
+  font-size:.78rem;
+  line-height:1.35;
+  font-weight:800;
+  text-align:center;
+}
+.tct-paywall-benefits span {
+  padding:0 12px;
+  border-right:1px solid var(--pw-rule);
+}
+.tct-paywall-benefits span:first-child { padding-left:0; }
+.tct-paywall-benefits span:last-child { padding-right:0;border-right:0; }
+.tct-paywall-secure {
+  margin:13px 0 0;
+  color:#777d78;
+  font-size:.72rem;
+  line-height:1.45;
+  text-align:center;
+}
+.tct-paywall-signin {
+  margin-top:20px;
+  padding:16px;
+  border:1px solid var(--pw-rule);
+  border-radius:3px;
+  background:var(--pw-soft);
+  color:var(--pw-ink);
+}
+.tct-paywall-signin .membership-form input {
+  border-color:#bfc6c0;
+  border-radius:3px;
+  background:#fff;
+}
+.tct-paywall .membership-message {
+  color:var(--pw-ink);
+  background:var(--pw-soft);
+  border-radius:3px;
+}
+@media(max-width:680px){
+  .tct-paywall { padding:25px 20px 24px;border-radius:2px; }
+  .tct-paywall-topline { justify-content:flex-start;margin-bottom:20px; }
+  .tct-paywall h2,.tct-paywall .tct-paywall-offer-headline { font-size:clamp(1.95rem,9vw,2.65rem); }
+  .tct-paywall-primary-offer { grid-template-columns:1fr;gap:18px;padding:22px 0; }
+  .tct-paywall .tct-paywall-primary-button { width:100%;min-width:0; }
+  .tct-paywall-annual-row { align-items:flex-start;flex-direction:column;gap:4px; }
+  .tct-paywall-benefits { grid-template-columns:1fr;text-align:left; }
+  .tct-paywall-benefits span { padding:9px 0;border-right:0;border-bottom:1px solid var(--pw-rule); }
+  .tct-paywall-benefits span:first-child { padding-top:0; }
+  .tct-paywall-benefits span:last-child { padding-bottom:0;border-bottom:0; }
+  .tct-paywall-signin .membership-form { grid-template-columns:1fr; }
+  .tct-paywall-signin .tct-member-btn { width:100%; }
+}
