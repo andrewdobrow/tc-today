@@ -165,9 +165,9 @@ def _header_primary_cta_html():
         signin_href = f"{href}{joiner}signin=1"
         return (
             f'<a href="{href}" class="support-btn membership-subscribe-btn" '
-            'style="text-decoration:none" aria-label="Start a 7-day free Treasure Coast Today trial — then $4.99 monthly or $49 annually">'
+            'style="text-decoration:none" aria-label="Subscribe to Treasure Coast Today — $1 first month, then $4.99 monthly, or $49 annually">'
             '<span class="membership-subscribe-label">Subscribe</span>'
-            '<span class="membership-subscribe-price">Limited time &middot; 7 days free &middot; then $4.99/mo</span>'
+            '<span class="membership-subscribe-price">Limited time &middot; $1 first month &middot; then $4.99/mo</span>'
             '</a>'
             f'<a href="{signin_href}" class="membership-header-signin">Sign in</a>'
             f'<a href="{href}" class="membership-header-welcome" data-membership-welcome>Welcome, subscriber</a>'
@@ -182,12 +182,12 @@ def _homepage_support_card_html():
       <a href="{href}" class="grid-card tct-membership-card" data-cat="all" data-support-card="true" aria-label="Subscribe to Treasure Coast Today">
         <div class="tct-membership-card-inner">
           <span class="tct-membership-kicker">Treasure Coast Today Membership</span>
-          <h2 class="tct-membership-headline">Unlimited local news. Free for your first week.</h2>
-          <p class="tct-membership-copy">Start with 7 days free, then keep unlimited ad-free access while supporting independent journalism across Martin, St. Lucie and Indian River counties.</p>
+          <h2 class="tct-membership-headline">Unlimited local news for $1 your first month.</h2>
+          <p class="tct-membership-copy">Get your first month for $1, then keep unlimited ad-free access for $4.99/month while supporting independent journalism across Martin, St. Lucie and Indian River counties.</p>
           <span class="tct-membership-options" aria-hidden="true">
-            <span>7 days free</span><span>$4.99 monthly</span><span>$49 annually</span><span>Completely ad-free</span>
+            <span>$1 first month</span><span>$4.99/month after</span><span>$49 annually</span><span>Completely ad-free</span>
           </span>
-          <span class="tct-membership-cta">Start your free trial <b>&rarr;</b></span>
+          <span class="tct-membership-cta">Get your first month for $1 <b>&rarr;</b></span>
         </div>
       </a>'''
     return '''
@@ -216,6 +216,15 @@ def _apply_membership_site_chrome(root: Path) -> int:
         r'(<div\s+class="header-actions">\s*)(.*?)(\s*</div>)',
         re.I | re.S,
     )
+    footer_pattern = re.compile(
+        r'<a\s+class="footer-subscribe-cta"\s+href="/subscribe\.html">.*?</a>',
+        re.I | re.S,
+    )
+    footer_replacement = (
+        '<a class="footer-subscribe-cta" href="/subscribe.html">'
+        '<span>Get first month for $1</span>'
+        '<small>Limited time &middot; $1 first month &middot; then $4.99/mo</small></a>'
+    )
     inject_membership_assets = None
     if MEMBERSHIP_UI_ENABLED:
         from tct_engine.membership_paywall import inject_membership_assets as _inject_membership_assets
@@ -235,6 +244,8 @@ def _apply_membership_site_chrome(root: Path) -> int:
         updated, _count = pattern.subn(
             lambda m: m.group(1) + replacement + m.group(3), text, count=1
         )
+        if MEMBERSHIP_UI_ENABLED:
+            updated = footer_pattern.sub(footer_replacement, updated)
         if inject_membership_assets is not None:
             slug = page.stem if page.parent.name == "articles" else ""
             updated = inject_membership_assets(updated, slug)
@@ -20528,7 +20539,7 @@ def _page_footer():
         connect_column = """<div class="footer-column footer-connect footer-membership-ask">
         <strong>Support local journalism</strong>
         <p>Unlimited articles. No ads. Help fund independent Treasure Coast reporting.</p>
-        <a class="footer-subscribe-cta" href="/subscribe.html"><span>Start free trial</span><small>Limited time &middot; 7 days free &middot; then $4.99/mo</small></a>
+        <a class="footer-subscribe-cta" href="/subscribe.html"><span>Get first month for $1</span><small>Limited time &middot; $1 first month &middot; then $4.99/mo</small></a>
       </div>"""
     else:
         connect_column = """<div class="footer-column footer-connect"><strong>Stay Connected</strong><p>Join our local community for news, updates and discussion.</p><a class="footer-cta" href="/contact.html">Connect with TCT</a></div>"""

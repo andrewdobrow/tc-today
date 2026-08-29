@@ -32,7 +32,7 @@ def test_launch_header_uses_coral_pricing_context_and_quiet_signin(monkeypatch):
     header = g._header_primary_cta_html()
     css = (ROOT / "style.css").read_text()
     assert "membership-subscribe-btn" in header
-    assert "Limited time &middot; 7 days free &middot; then $4.99/mo" in header
+    assert "Limited time &middot; $1 first month &middot; then $4.99/mo" in header
     assert "membership-header-signin" in header
     assert "signin=1" in header
     assert 'data-membership-welcome' in header
@@ -56,7 +56,7 @@ def test_sitewide_chrome_normalizer_preserves_dark_mode_and_launches_retained_pa
     g._apply_membership_site_chrome(tmp_path)
     launched = sample.read_text()
     assert "membership-subscribe-btn" in launched
-    assert "Limited time &middot; 7 days free &middot; then $4.99/mo" in launched
+    assert "Limited time &middot; $1 first month &middot; then $4.99/mo" in launched
     assert "Sign in" in launched
     assert 'data-membership-welcome' in launched
 
@@ -69,8 +69,8 @@ def test_subscribe_page_is_real_landing_page_not_account_gate():
     assert 'data-plan="monthly"' in page
     assert "Create account" not in page
     assert 'type="password"' not in page
-    assert "Limited time &middot; 7 days free &middot; then $4.99/mo" in page
-    assert "After your 7-day free trial, your selected subscription renews automatically until canceled" in page
+    assert "Limited time &middot; $1 first month &middot; then $4.99/mo" in page
+    assert "Monthly: $1 today, then $4.99/month starting one month later. Annual: $49/year. Subscriptions renew automatically until canceled." in page
 
 
 def test_browser_config_requires_explicit_live_payment_mode_before_public_launch(monkeypatch, tmp_path):
@@ -130,7 +130,7 @@ def test_paid_content_schema_targets_protected_content_placeholder():
     assert '"cssSelector":".tct-paywalled-content"' in transformed
     markup = paywall_html("example-story")
     assert "tct-paywalled-content" in markup
-    assert "After your 7-day free trial, your selected subscription renews automatically until canceled" in markup
+    assert "Monthly: $1 today, then $4.99/month starting one month later. Annual: $49/year. Subscriptions renew automatically until canceled." in markup
 
 
 def test_workflow_passes_payment_mode_to_browser_launch_guard():
@@ -205,8 +205,8 @@ def test_sitewide_subscriber_chrome_loads_membership_state_and_prepaints(tmp_pat
     assert "data-tct-member-prepaint" in rendered
     assert "tct_member_entitled_hint" in rendered
     assert 'src="/membership-config.js"' in rendered
-    assert 'src="/membership.js?v=1.13.6.2"' in rendered
-    assert rendered.count('/membership.js?v=1.13.6.2') == 1
+    assert 'src="/membership.js?v=1.13.6.8"' in rendered
+    assert rendered.count('/membership.js?v=1.13.6.8') == 1
 
 
 def test_entitled_subscriber_chrome_replaces_sales_header_and_hides_membership_card():
@@ -234,3 +234,22 @@ def test_membership_status_persists_and_returns_first_name_without_weakening_ent
     assert "Name personalization must never block an otherwise valid entitlement" in status
     assert ".update({ first_name: firstName" in complete
     assert "profileUpdate.first_name = firstName" in webhook
+
+
+def test_sitewide_chrome_normalizer_migrates_retained_free_trial_footer(tmp_path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(g, "MEMBERSHIP_UI_ENABLED", True)
+    page = tmp_path / "retained-article.html"
+    page.write_text(
+        '<!doctype html><html><head></head><body>'
+        '<header><div class="header-actions"><a href="/advertise.html" class="support-btn">Advertise</a></div></header>'
+        '<footer><a class="footer-subscribe-cta" href="/subscribe.html"><span>Start free trial</span>'
+        '<small>Limited time &middot; 7 days free &middot; then $4.99/mo</small></a></footer>'
+        '</body></html>'
+    )
+    g._apply_membership_site_chrome(tmp_path)
+    rendered = page.read_text()
+    assert "Start free trial" not in rendered
+    assert "7 days free" not in rendered
+    assert "Get first month for $1" in rendered
+    assert "Limited time &middot; $1 first month &middot; then $4.99/mo" in rendered

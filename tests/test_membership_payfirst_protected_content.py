@@ -155,12 +155,13 @@ def test_prepare_paywall_protects_public_service_article(tmp_path, monkeypatch):
 def test_paywall_markup_uses_locked_copy_and_pay_first_buttons():
     markup = paywall_html("example-story")
     assert "Keep reading for" in markup
-    assert "FREE for 1 week" in markup
-    assert "Annual — $49/year" in markup
+    assert "$1 for your first month" in markup
+    assert "Annual membership" in markup
     assert "Monthly membership" in markup
-    assert "Free for 1 week" in markup
-    assert "Start 7-day free trial" in markup
-    assert markup.count("Start 7-day free trial") == 2
+    assert "$1 first month" in markup
+    assert "Get your first month for $1" in markup
+    assert markup.count("Get your first month for $1") == 1
+    assert markup.count("Subscribe annually") == 1
     assert "Already a member?" in markup
     assert "Create account" not in markup
     assert "password" not in markup.lower()
@@ -192,10 +193,10 @@ def test_membership_plan_cards_are_visually_balanced_and_gradient_backed():
     page = (ROOT / "subscribe.html").read_text()
     css = (ROOT / "membership.css").read_text()
     markup = paywall_html("example-story")
-    assert "Most flexible" in page
-    assert "Most flexible" in markup
-    assert '<div class="membership-price">Free for 1 week</div>' in page
-    assert '<div class="membership-plan-note">$4.99/month after free trial</div>' in page
+    assert "Best annual value" in page
+    assert "Best annual value" in markup
+    assert '<div class="membership-price">$1 first month</div>' in page
+    assert '<div class="membership-plan-note">Then $4.99/month</div>' in page
     assert 'linear-gradient(135deg,#f26445 0%,#f87858 48%,#e9583e 100%)' in css
     assert 'color:#fff}.membership-kicker' in css
     assert 'background:var(--tct-member-paper);color:var(--tct-member-charcoal)' in css
@@ -452,8 +453,8 @@ def test_verified_member_hint_suppresses_paywall_before_first_paint_without_gran
 
     # Retained pages receive cache-busted assets so the no-flash code takes effect
     # immediately after deployment rather than waiting on an old browser cache.
-    assert 'href="/membership.css?v=1.13.6.2"' in page
-    assert 'src="/membership.js?v=1.13.6.2"' in page
+    assert 'href="/membership.css?v=1.13.6.8"' in page
+    assert 'src="/membership.js?v=1.13.6.8"' in page
 
     # The hint only changes presentation: the sales card/fade are suppressed and
     # the teaser is shown without its anonymous-reader mask while verification runs.
@@ -482,8 +483,8 @@ def test_membership_asset_injection_is_idempotent_and_upgrades_old_unversioned_a
     second = inject_membership_assets(first, "old")
     assert first == second
     assert first.count('data-tct-member-prepaint') == 1
-    assert first.count('/membership.css?v=1.13.6.2') == 1
-    assert first.count('/membership.js?v=1.13.6.2') == 1
+    assert first.count('/membership.css?v=1.13.6.8') == 1
+    assert first.count('/membership.js?v=1.13.6.8') == 1
 
 
 def test_prepare_body_match_keeps_nested_manual_update_inside_full_article():

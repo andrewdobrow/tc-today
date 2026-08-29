@@ -153,13 +153,18 @@ async function finishCheckout(){
   const sessionId = params.get('session_id') || ''
   const message = qs('[data-membership-message]')
   if (!sessionId) { setMessage(message, 'Stripe returned without a Checkout session reference.', true); return }
-  setMessage(message, 'Your 7-day free trial has started. Setting up your membership…')
+  setMessage(message, 'Your payment was successful. Setting up your membership…')
   const { data, error } = await supabase.functions.invoke('checkout-complete', { body: { session_id: sessionId } })
   if (error || !data?.complete) {
     setMessage(message, `Your payment succeeded, but automatic sign-in setup needs another try. ${data?.error || error?.message || ''}`.trim(), true)
     return
   }
-  setMessage(message, `Your 7-day free trial is active. We sent a secure sign-in link to ${data.email}. Open it to activate unlimited access on this device.`)
+  const planMessage = data.plan === 'monthly'
+    ? 'Your $1 first month is active.'
+    : data.plan === 'annual'
+      ? 'Your annual membership is active.'
+      : 'Your membership is active.'
+  setMessage(message, `${planMessage} We sent a secure sign-in link to ${data.email}. Open it to activate unlimited access on this device.`)
 }
 
 async function openPortal(button){
