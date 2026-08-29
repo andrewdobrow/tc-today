@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-29T15:49:48Z",
+  "generated_at": "2026-08-29T15:59:46Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -23,8 +23,8 @@
     "enforceable_recommendation_count": 0,
     "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 5,
-    "placements_after": 5,
+    "placements_before": 4,
+    "placements_after": 4,
     "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
     "recommendations": [],
@@ -49,18 +49,18 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 164,
+    "candidates_processed": 166,
     "routes": {
-      "generate_new": 23,
-      "skip": 141
+      "generate_new": 1,
+      "skip": 165
     },
     "eligibility": {
       "listing": 3,
-      "low_value": 128,
+      "low_value": 130,
       "publishable": 33
     },
     "source_classes": {
-      "aggregator": 131,
+      "aggregator": 133,
       "local_news": 19,
       "regional_news": 14
     },
@@ -97,32 +97,36 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 22,
-      "same_event": 142
+      "new_story": 4,
+      "same_event": 162
     },
     "examples": [
       {
         "story_id": "story_006684",
         "title": "Early-morning stabbing leaves 1 dead, 3 injured in Lake Worth Beach, suspect unknown",
         "event_key": "named-person-death:crime-stoppers",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: conservative merge requirements were not met",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "No sufficiently supported match",
-          "Threshold: 0.78"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_006685",
         "title": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
         "event_key": "unknown-event-c23790c000",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -145,10 +149,11 @@
         "event_key": "unknown-event-7b25861fc1",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -382,26 +387,30 @@
         "story_id": "story_006684",
         "title": "Early-morning stabbing leaves 1 dead, 3 injured in Lake Worth Beach, suspect unknown",
         "event_key": "named-person-death:crime-stoppers",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: conservative merge requirements were not met",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "No sufficiently supported match",
-          "Threshold: 0.78"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_006685",
         "title": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
         "event_key": "unknown-event-c23790c000",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -426,10 +435,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -1580,7 +1590,7 @@
           ]
         },
         {
-          "story_id": "story_006681",
+          "story_id": "story_006710",
           "story_title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
           "transition_count": 1,
           "blocking_reasons": {
@@ -1591,7 +1601,7 @@
               "prior_article": {
                 "article_id": "rss-a159016d9d6f5bf11bcf",
                 "event_key": "missing-person-bc2bfac354",
-                "published_at": "2026-08-29T15:42:54.351178+00:00",
+                "published_at": "2026-08-29T15:55:17.924455+00:00",
                 "title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
                 "source": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia",
                 "url": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia"
@@ -1599,7 +1609,7 @@
               "newer_article": {
                 "article_id": "rss-a875a76fc20cb08f71fe",
                 "event_key": "unknown-event-b3ff31e321",
-                "published_at": "2026-08-29T15:42:54.351178+00:00",
+                "published_at": "2026-08-29T15:55:17.924455+00:00",
                 "title": "Police arrest teen in connection with deadly Boynton Beach shooting",
                 "source": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting",
                 "url": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting"
@@ -3452,7 +3462,7 @@
           ]
         },
         {
-          "story_id": "story_006681",
+          "story_id": "story_006710",
           "story_title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
           "milestones": [
             "arrest",
@@ -3493,7 +3503,7 @@
           "prior_article": {
             "article_id": "rss-a159016d9d6f5bf11bcf",
             "event_key": "missing-person-bc2bfac354",
-            "published_at": "2026-08-29T15:42:54.351178+00:00",
+            "published_at": "2026-08-29T15:55:17.924455+00:00",
             "title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
             "source": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia",
             "url": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia"
@@ -3501,14 +3511,14 @@
           "newer_article": {
             "article_id": "rss-a875a76fc20cb08f71fe",
             "event_key": "unknown-event-b3ff31e321",
-            "published_at": "2026-08-29T15:42:54.351178+00:00",
+            "published_at": "2026-08-29T15:55:17.924455+00:00",
             "title": "Police arrest teen in connection with deadly Boynton Beach shooting",
             "source": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting",
             "url": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_006681",
+            "Story: story_006710",
             "Novel milestones: arrest, death",
             "Identity anchor qualified: False",
             "Identity anchor codes: identity_anchor_missing",
@@ -3533,24 +3543,24 @@
       "florida": 1061,
       "treasure_coast_local": 850,
       "treasure_coast_region": 403,
-      "unknown": 2024
+      "unknown": 2025
     },
-    "average_score": 60.65
+    "average_score": 60.64
   },
   "editorial_proximity": {
     "scopes": {
       "florida": 1061,
       "treasure_coast_local": 850,
       "treasure_coast_region": 403,
-      "unknown": 2024
+      "unknown": 2025
     },
     "average_priority": 3.53
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3523,
+      "active": 3496,
       "developing": 98,
-      "ongoing": 715,
+      "ongoing": 743,
       "resolved": 2
     }
   },
@@ -3558,8 +3568,8 @@
     "repair_version": 14,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 5461,
-    "active_stories_after": 5461,
+    "active_stories_before": 5480,
+    "active_stories_after": 5480,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -3584,21 +3594,21 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 94,
+    "incident_anchor_to_story_count": 95,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-08-29T15:43:26Z",
-    "quarantined_story_records_retained": 651,
-    "active_story_count": 5481
+    "generated_at": "2026-08-29T15:55:43Z",
+    "quarantined_story_records_retained": 656,
+    "active_story_count": 5482
   },
   "stories": {
-    "total": 4338,
+    "total": 4339,
     "importance_levels": {
       "breaking": 7,
       "high": 83,
       "normal": 659,
-      "low": 3589,
+      "low": 3590,
       "archived": 0
     },
     "average_importance": 9.06,
@@ -3616,7 +3626,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 23.27
+          "age_hours": 23.49
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3670,7 +3680,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 23.27,
+          "hours_since_update": 23.49,
           "event_count": 41,
           "timeline_entries": 25
         }
@@ -3688,7 +3698,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 68.47
+          "age_hours": 68.64
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3752,7 +3762,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-26T19:18:41.219878+00:00",
-          "hours_since_update": 68.47,
+          "hours_since_update": 68.64,
           "event_count": 28,
           "timeline_entries": 20
         }
@@ -3770,7 +3780,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 86.04
+          "age_hours": 86.24
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3839,13 +3849,13 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-26T01:42:10.693389+00:00",
-          "hours_since_update": 86.04,
+          "hours_since_update": 86.24,
           "event_count": 40,
           "timeline_entries": 32
         }
       },
       {
-        "story_id": "story_006677",
+        "story_id": "story_006706",
         "title": "Community divided over Flock Safety cameras after Treasure Coast homicide arrest",
         "score": 100,
         "editorial_priority": 62,
@@ -3857,7 +3867,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 696.05
+          "age_hours": 696.25
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3914,7 +3924,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 696.05,
+          "hours_since_update": 696.25,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3932,7 +3942,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 77.03
+          "age_hours": 77.23
         },
         "level": "high",
         "importance_reasons": [
@@ -3975,7 +3985,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-26T10:42:22.175311+00:00",
-          "hours_since_update": 77.03,
+          "hours_since_update": 77.23,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -3993,7 +4003,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 68.43
+          "age_hours": 68.63
         },
         "level": "high",
         "importance_reasons": [
@@ -4032,7 +4042,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-26T19:18:41.219878+00:00",
-          "hours_since_update": 68.43,
+          "hours_since_update": 68.63,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4050,7 +4060,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 38.02
+          "age_hours": 38.23
         },
         "level": "high",
         "importance_reasons": [
@@ -4088,7 +4098,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-28T01:42:52.960630+00:00",
-          "hours_since_update": 38.02,
+          "hours_since_update": 38.23,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4106,7 +4116,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 696.04
+          "age_hours": 696.25
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4154,7 +4164,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 696.04,
+          "hours_since_update": 696.25,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4172,7 +4182,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 374.04
+          "age_hours": 374.25
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4220,7 +4230,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 374.04,
+          "hours_since_update": 374.25,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -4238,7 +4248,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 365.04
+          "age_hours": 365.24
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4284,7 +4294,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T10:41:34.652293+00:00",
-          "hours_since_update": 365.04,
+          "hours_since_update": 365.24,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4302,7 +4312,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 48.01
+          "age_hours": 48.2
         },
         "level": "high",
         "importance_reasons": [
@@ -4357,7 +4367,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-27T15:44:47.058272+00:00",
-          "hours_since_update": 48.01,
+          "hours_since_update": 48.2,
           "event_count": 87,
           "timeline_entries": 87
         }
@@ -4375,7 +4385,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 46.13
+          "age_hours": 46.3
         },
         "level": "high",
         "importance_reasons": [
@@ -4427,7 +4437,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-27T17:39:05.927333+00:00",
-          "hours_since_update": 46.13,
+          "hours_since_update": 46.3,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -4445,7 +4455,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 23.28
+          "age_hours": 23.48
         },
         "level": "normal",
         "importance_reasons": [
@@ -4489,7 +4499,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 23.28,
+          "hours_since_update": 23.48,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4507,7 +4517,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 683.66
+          "age_hours": 683.86
         },
         "level": "high",
         "importance_reasons": [
@@ -4550,7 +4560,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 683.66,
+          "hours_since_update": 683.86,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4568,7 +4578,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 683.66
+          "age_hours": 683.87
         },
         "level": "high",
         "importance_reasons": [
@@ -4611,7 +4621,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 683.66,
+          "hours_since_update": 683.87,
           "event_count": 14,
           "timeline_entries": 7
         }
@@ -4629,7 +4639,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 192.04
+          "age_hours": 192.25
         },
         "level": "high",
         "importance_reasons": [
@@ -4673,7 +4683,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-21T15:41:39.092086+00:00",
-          "hours_since_update": 192.04,
+          "hours_since_update": 192.25,
           "event_count": 34,
           "timeline_entries": 34
         }
@@ -4691,7 +4701,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 374.04
+          "age_hours": 374.25
         },
         "level": "high",
         "importance_reasons": [
@@ -4734,7 +4744,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 374.04,
+          "hours_since_update": 374.25,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4752,7 +4762,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 302.04
+          "age_hours": 302.25
         },
         "level": "high",
         "importance_reasons": [
@@ -4793,7 +4803,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-17T01:41:33.127844+00:00",
-          "hours_since_update": 302.04,
+          "hours_since_update": 302.25,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -4811,7 +4821,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 101.03
+          "age_hours": 101.24
         },
         "level": "high",
         "importance_reasons": [
@@ -4850,7 +4860,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-25T10:42:16.525222+00:00",
-          "hours_since_update": 101.03,
+          "hours_since_update": 101.24,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4868,7 +4878,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 384.04
+          "age_hours": 384.24
         },
         "level": "high",
         "importance_reasons": [
@@ -4912,7 +4922,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-13T15:41:45.363233+00:00",
-          "hours_since_update": 384.04,
+          "hours_since_update": 384.24,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -4922,7 +4932,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-08-29T15:47:23Z",
+    "generated_at": "2026-08-29T15:57:59Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -4937,23 +4947,22 @@
     "summary": {
       "category_count": 9,
       "statuses": {
+        "cache_hit": 1,
         "category_eligibility_archive_recovery": 5,
         "generated_live": 2,
-        "no_publishable_sources": 1,
-        "quality_gate_archive_recovery": 1
+        "no_publishable_sources": 1
       },
       "failures": {
-        "no_category_eligible_sources": 5,
-        "publication_quality_rejected": 1
+        "no_category_eligible_sources": 5
       },
       "model_attempt_count": 3,
-      "model_elapsed_seconds": 41.29,
-      "archive_recovery_requested_count": 7,
+      "model_elapsed_seconds": 18.392,
+      "archive_recovery_requested_count": 6,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 0,
-      "category_eligibility_rejection_count": 6,
-      "published_story_duplicate_suppression_count": 31,
+      "article_framing_rejection_count": 1,
+      "category_eligibility_rejection_count": 4,
+      "published_story_duplicate_suppression_count": 38,
       "story_aware_update_context_count": 4,
       "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 1,
@@ -4966,8 +4975,8 @@
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 12,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 10,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -4984,23 +4993,9 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 4,
-        "category_eligibility_rejection_count": 4,
+        "category_eligibility_assessed_count": 2,
+        "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
-            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats"
-          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -5028,24 +5023,20 @@
             "local_nexus_signals": [],
             "headline": "Port St. Lucie residents to see solid waste bill credits from $24 million Waste Pro settlement - WFLX",
             "source_url": "https://www.wflx.com/2026/08/28/port-st-lucie-residents-see-solid-waste-bill-credits-24-million-waste-pro-settlement/?outputType=amp"
-          },
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "St. Lucie County school bus driver faces disciplinary action for illegal U-turn - WPBF",
-            "source_url": "https://www.wpbf.com/article/st-lucie-county-school-bus-driver-faces-disciplinary-action-for-illegal-u-turn/73543463"
           }
         ],
-        "published_story_duplicate_suppression_count": 6,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
+            "editorial_story_id": "story_006685",
+            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Florida now the sole state to reject share of $18B Meta youth safety settlement",
@@ -5063,6 +5054,16 @@
             "editorial_story_id": "story_006602",
             "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
             "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "local_gov",
+            "source_headline": "St. Lucie County school bus driver faces disciplinary action for illegal U-turn - WPBF",
+            "source_url": "https://www.wpbf.com/article/st-lucie-county-school-bus-driver-faces-disciplinary-action-for-illegal-u-turn/73543463",
+            "editorial_story_id": "story_006321",
+            "canonical_slug": "2026-08-29-st-lucie-county-school-bus-driver-faces-discipline-for-illegal-u-turn-on-i-95-in",
+            "canonical_headline": "St. Lucie County school bus driver faces discipline for illegal U-turn on I-95 in Fort Pierce",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -5158,6 +5159,21 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "local_gov",
+            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
+            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
             "source_headline": "Florida now the sole state to reject share of $18B Meta youth safety settlement",
             "source_url": "https://www.wptv.com/news/palm-beach-county/florida-now-the-sole-state-to-reject-share-of-18b-meta-youth-safety-settlement",
             "canonical_slug": "2026-08-29-florida-rejects-18-billion-meta-settlement-becomes-sole-state-to-pursue-independ",
@@ -5227,6 +5243,21 @@
           },
           {
             "category_key": "local_gov",
+            "source_headline": "St. Lucie County school bus driver faces disciplinary action for illegal U-turn - WPBF",
+            "source_url": "https://www.wpbf.com/article/st-lucie-county-school-bus-driver-faces-disciplinary-action-for-illegal-u-turn/73543463",
+            "canonical_slug": "2026-08-29-st-lucie-county-school-bus-driver-faces-discipline-for-illegal-u-turn-on-i-95-in",
+            "canonical_headline": "St. Lucie County school bus driver faces discipline for illegal U-turn on I-95 in Fort Pierce",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "local_gov",
             "source_headline": "Port St. Lucie High football player held on ICE detainer after school zone speeding stop - WPEC",
             "source_url": "https://cbs12.com/news/local/port-st-lucie-high-football-player-held-on-ice-detainer-after-school-zone-speeding-stop-us-immigration-customs-enforcement-st-lucie-county-sheriffs-office-florida-news",
             "canonical_slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
@@ -5287,15 +5318,15 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 20.956
+        "elapsed_seconds": 10.923
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 29,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 7,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 6,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5312,7 +5343,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
@@ -5330,8 +5361,18 @@
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-to-see-solid-waste-bill-credits-from-24-million-waste-pro-settlement"
           }
         ],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 8,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "crime",
+            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
+            "editorial_story_id": "story_006685",
+            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "crime",
             "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
@@ -5410,6 +5451,21 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "crime",
+            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
+            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "crime",
             "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
@@ -5517,15 +5573,15 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 20.458
+        "elapsed_seconds": 5.771
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 10,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 9,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5542,7 +5598,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
@@ -5564,8 +5620,18 @@
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-to-see-solid-waste-bill-credits-from-24-million-waste-pro-settlement"
           }
         ],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "business",
+            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
+            "editorial_story_id": "story_006685",
+            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "business",
             "source_headline": "Florida now the sole state to reject share of $18B Meta youth safety settlement",
@@ -5638,6 +5704,21 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "business",
+            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
+            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "business",
             "source_headline": "Florida now the sole state to reject share of $18B Meta youth safety settlement",
             "source_url": "https://www.wptv.com/news/palm-beach-county/florida-now-the-sole-state-to-reject-share-of-18b-meta-youth-safety-settlement",
             "canonical_slug": "2026-08-29-florida-rejects-18-billion-meta-settlement-becomes-sole-state-to-pursue-independ",
@@ -5668,7 +5749,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 6.937
+        "elapsed_seconds": 5.805
       },
       {
         "category_key": "sports",
@@ -5706,7 +5787,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 19.254
+        "elapsed_seconds": 5.644
       },
       {
         "category_key": "things_to_do",
@@ -5816,7 +5897,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 9.262
+        "elapsed_seconds": 5.662
       },
       {
         "category_key": "florida",
@@ -5923,28 +6004,21 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 16.662
+        "elapsed_seconds": 5.814
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 25,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 2,
-        "selected_source_count": 2,
-        "cache_hit": false,
+        "fresh_candidate_count": 22,
+        "publishable_source_count": 1,
+        "selected_source_count": 1,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 22.423,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 22.423,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -5955,11 +6029,31 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
+            "editorial_story_id": "story_006685",
+            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats - WPTV",
+            "source_url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPOVZNdVJEVTNoeDJGSURnWld3bXlWU1dUc2tLNVk0eU85cFF2OFlidGE3Z25FMkppNHhucVl4aExCTUM1LWFpV2hTRnVkNU9SZmMtbWthdVNsQlBqbWNxQm9HVUQyc3lsQXV5OEVKaFMwWmszVTg4Sk1yZVdaeGdLUXZQblhlRXd6WlNzWHRkZFlXUll1YUJ2bWdQWVBJYll6UUpONDA3THFGYi1ZWktmY3VCX0NRWkctSVZxWUhqQVZ5dVZITzJiSm9Bdy1yb25iWmxZV3pIRzQxTU5lRzJ2Zm45YzRxVDJG",
+            "editorial_story_id": "story_006685",
+            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "martin",
             "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WPTV",
@@ -5980,6 +6074,36 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "martin",
+            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
+            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats - WPTV",
+            "source_url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPOVZNdVJEVTNoeDJGSURnWld3bXlWU1dUc2tLNVk0eU85cFF2OFlidGE3Z25FMkppNHhucVl4aExCTUM1LWFpV2hTRnVkNU9SZmMtbWthdVNsQlBqbWNxQm9HVUQyc3lsQXV5OEVKaFMwWmszVTg4Sk1yZVdaeGdLUXZQblhlRXd6WlNzWHRkZFlXUll1YUJ2bWdQWVBJYll6UUpONDA3THFGYi1ZWktmY3VCX0NRWkctSVZxWUhqQVZ5dVZITzJiSm9Bdy1yb25iWmxZV3pIRzQxTU5lRzJ2Zm45YzRxVDJG",
+            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
             "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WPTV",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
             "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
@@ -5995,32 +6119,37 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
-        "generated_card_count": 1,
-        "elapsed_seconds": 37.413
+        "live_hero_headline": "Martin County deputies use drones to catch hit-and-run suspect hiding underwater in Palm City swamp",
+        "elapsed_seconds": 7.72
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 22,
-        "publishable_source_count": 3,
-        "selected_source_count": 3,
+        "fresh_candidate_count": 21,
+        "publishable_source_count": 2,
+        "selected_source_count": 2,
         "cache_hit": false,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
+        "attempt_count": 2,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 14.326,
+            "elapsed_seconds": 6.104,
+            "result": "article_framing_integrity",
+            "error_type": "ArticleFramingIntegrityError",
+            "error_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Port St. Lucie homeowners to receive up to $364 credits on solid waste bills from $24 million Waste Pro settlement"
+          },
+          {
+            "attempt": 2,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 6.148,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 14.326,
+        "model_elapsed_seconds": 12.252,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6031,10 +6160,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 8,
+        "published_story_duplicate_suppression_count": 9,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -6043,16 +6172,6 @@
             "editorial_story_id": "story_006639",
             "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
             "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
-            "editorial_story_id": "story_006602",
-            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
-            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -6068,11 +6187,31 @@
           },
           {
             "category_key": "st_lucie",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
+            "editorial_story_id": "story_006602",
+            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
             "source_headline": "Corgi reunited with owner after tornado in Port St. Lucie - WPBF",
             "source_url": "https://www.wpbf.com/article/corgi-reunited-tornado-port-st-lucie-florida/73542668",
             "editorial_story_id": "story_002646",
             "canonical_slug": "2026-06-27-port-st-lucie-man-arrested-after-holding-teens-at-gunpoint-during-orbeez-prank",
             "canonical_headline": "Charges dropped against Port St. Lucie man who held teens at gunpoint after Orbeez shooting",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Community support grows for son of PBSO employee after Port St. Lucie murder-suicide - WPEC",
+            "source_url": "https://news.google.com/rss/articles/CBMirwJBVV95cUxOWjJPM0k2Y2NMaHJ0VmZwZXpGSmxocUUzRWpqdWMtVFVzN0dzSERpamhRZm9BQmxwVER0UU84TG10U2lmdFB3SUNfR3A3TzdsdHd4cUVpd01sT2tYaTU2MWRqSFpJX1NORFE3YXh4dXFsUmR3ZEZib2J4SVJZUFQyZkhpUnpJUkJja0tjT1NoNC13MENSamFlY2x4RG1pYUJZc0FZT3Z5OTNPNGxtX0RUcndfTk00WVYxZ1JmSEdiOUlTclduU2pWWUFPdHZtaEFNQ0lDYU1IZDdPZ1ZrdHA1S1Zmemh3aGl3UGlCdDdUbTZxODMwd2dLS2pwUGp4TGt3MmZlV0VkRFFRTmVkZXhqTHh6RDFKUjE4d1hWTkI4dFNXTndndFFzUFQyOVotY0U",
+            "editorial_story_id": "story_001880",
+            "canonical_slug": "2026-08-02-elizabeth-ortega-killed-ralph-varela-sr-dead-in-port-st-lucie-murder-suicide-on",
+            "canonical_headline": "Port St. Lucie police release 911 call in fatal domestic shooting of Palm Beach Sheriff's Office employee",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -6141,7 +6280,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election - WPTV",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
             "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
             "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
@@ -6156,7 +6295,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
             "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
             "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
@@ -6185,20 +6324,38 @@
             "action": "preserve_existing_canonical",
             "semantic_status": "known_canonical_identity_conflict",
             "semantic_action": "hold",
-            "confidence": 1.0,
+            "confidence": 0.98,
             "shared_anchors": [
-              "Port St. Lucie location only"
+              "Both stories are in Port St. Lucie/St. Lucie area"
             ],
             "novel_facts": [
-              "EF0 tornado struck Port St. Lucie on August 28, 2026",
-              "Corgi named Luna went missing during tornado",
-              "Owner Molly Wing-Berman found Luna three streets away in Bay St. Lucie community",
-              "Tornado damaged Berman's home, pushing open doors and depositing items in pool"
+              "EF0 tornado struck Port St. Lucie",
+              "Luna the corgi went missing after tornado",
+              "Bay St. Lucie community",
+              "Owner Molly Wing-Berman",
+              "Tornado opened front door and damaged home",
+              "Dog found three streets away by neighbors",
+              "August 28, 2026 date"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
               "known_canonical_identity_conflict"
             ]
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Community support grows for son of PBSO employee after Port St. Lucie murder-suicide - WPEC",
+            "source_url": "https://news.google.com/rss/articles/CBMirwJBVV95cUxOWjJPM0k2Y2NMaHJ0VmZwZXpGSmxocUUzRWpqdWMtVFVzN0dzSERpamhRZm9BQmxwVER0UU84TG10U2lmdFB3SUNfR3A3TzdsdHd4cUVpd01sT2tYaTU2MWRqSFpJX1NORFE3YXh4dXFsUmR3ZEZib2J4SVJZUFQyZkhpUnpJUkJja0tjT1NoNC13MENSamFlY2x4RG1pYUJZc0FZT3Z5OTNPNGxtX0RUcndfTk00WVYxZ1JmSEdiOUlTclduU2pWWUFPdHZtaEFNQ0lDYU1IZDdPZ1ZrdHA1S1Zmemh3aGl3UGlCdDdUbTZxODMwd2dLS2pwUGp4TGt3MmZlV0VkRFFRTmVkZXhqTHh6RDFKUjE4d1hWTkI4dFNXTndndFFzUFQyOVotY0U",
+            "canonical_slug": "2026-08-02-elizabeth-ortega-killed-ralph-varela-sr-dead-in-port-st-lucie-murder-suicide-on",
+            "canonical_headline": "Port St. Lucie police release 911 call in fatal domestic shooting of Palm Beach Sheriff's Office employee",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           },
           {
             "category_key": "st_lucie",
@@ -6265,31 +6422,31 @@
         "generation_status": "success",
         "budget_seconds": 180.0,
         "live_hero_headline": "Port St. Lucie homeowners to receive credits on solid waste bills from $24 million Waste Pro settlement",
-        "generated_card_count": 1,
-        "elapsed_seconds": 28.513
+        "generated_card_count": 0,
+        "elapsed_seconds": 25.345
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "quality_gate_archive_recovery",
-        "fetched_candidate_count": 28,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 12,
+        "status": "generated_live",
+        "fetched_candidate_count": 27,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 10,
         "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
+        "archive_recovery_requested": false,
         "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 4.541,
+            "elapsed_seconds": 6.14,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 4.541,
-        "failure_code": "publication_quality_rejected",
-        "failure_summary": "Generated content did not pass final publication quality gates",
+        "model_elapsed_seconds": 6.14,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -6298,11 +6455,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 12,
+        "category_eligibility_assessed_count": 10,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
+            "editorial_story_id": "story_006685",
+            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "indian_river",
             "source_headline": "Florida now the sole state to reject share of $18B Meta youth safety settlement",
@@ -6321,16 +6488,6 @@
             "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
             "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "indian_river",
-            "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-utility-bills-to-rise-nearly-47-over-four-years-as-city-approves-major-rate-increases",
-            "editorial_story_id": "story_006319",
-            "canonical_slug": "2026-08-27-vero-beach-utility-bills-to-rise-46-over-four-years-as-city-approves-rate-increa",
-            "canonical_headline": "Vero Beach utility bills to rise 46% over four years as city approves rate increases for water reclamation plant",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -6395,6 +6552,21 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "indian_river",
+            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
+            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "indian_river",
             "source_headline": "Florida now the sole state to reject share of $18B Meta youth safety settlement",
             "source_url": "https://www.wptv.com/news/palm-beach-county/florida-now-the-sole-state-to-reject-share-of-18b-meta-youth-safety-settlement",
             "canonical_slug": "2026-08-29-florida-rejects-18-billion-meta-settlement-becomes-sole-state-to-pursue-independ",
@@ -6425,21 +6597,6 @@
           },
           {
             "category_key": "indian_river",
-            "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-utility-bills-to-rise-nearly-47-over-four-years-as-city-approves-major-rate-increases",
-            "canonical_slug": "2026-08-27-vero-beach-utility-bills-to-rise-46-over-four-years-as-city-approves-rate-increa",
-            "canonical_headline": "Vero Beach utility bills to rise 46% over four years as city approves rate increases for water reclamation plant",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "indian_river",
             "source_headline": "Man indicted on attempted murder charges after Vero Beach shootout with deputies - WPEC",
             "source_url": "https://cbs12.com/news/local/colorado-man-thomas-earl-steffens-72-indicted-vero-beach-shooting-five-deputy-us-marshals-us-southern-district-of-florida-indian-river-county-sheriffs-office-martin-county-sheriffs-office-florida-news",
             "canonical_slug": "2026-08-27-colorado-man-indicted-on-attempted-murder-charges-after-vero-beach-shootout-with",
@@ -6457,7 +6614,9 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 14.418
+        "live_hero_headline": "Vero Beach hosts Atlantic in Friday night football opener",
+        "generated_card_count": 0,
+        "elapsed_seconds": 12.078
       }
     ]
   }

@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.8",
-  "generated_at": "2026-08-29T15:49:15.355586+00:00",
+  "generated_at": "2026-08-29T15:59:22.178532+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,16 +62,16 @@
     }
   },
   "summary": {
-    "evaluations": 46,
+    "evaluations": 47,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 46,
+    "no_candidate_passes": 47,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 3,
-    "retroactive_rows_retained": 43,
+    "new_stories_allowed": 2,
+    "retroactive_rows_retained": 45,
     "holds": 0,
     "retroactive_redirects": 0,
     "registry_story_records_merged": 0,
@@ -87,15 +87,15 @@
     "pre_generation_materiality_holds": 1,
     "pre_generation_materiality_model_calls": 1,
     "pre_generation_materiality_cache_hits": 2,
-    "terminal_permalink_evaluations": 3,
-    "terminal_permalink_candidate_pairs": 36,
-    "terminal_permalink_model_calls": 3,
+    "terminal_permalink_evaluations": 2,
+    "terminal_permalink_candidate_pairs": 24,
+    "terminal_permalink_model_calls": 2,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 2,
+    "terminal_permalink_new_authorized": 1,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 1
@@ -191,15 +191,18 @@
       "action": "preserve_existing_canonical",
       "semantic_status": "known_canonical_identity_conflict",
       "semantic_action": "hold",
-      "confidence": 1.0,
+      "confidence": 0.98,
       "shared_anchors": [
-        "Port St. Lucie location only"
+        "Both stories are in Port St. Lucie/St. Lucie area"
       ],
       "novel_facts": [
-        "EF0 tornado struck Port St. Lucie on August 28, 2026",
-        "Corgi named Luna went missing during tornado",
-        "Owner Molly Wing-Berman found Luna three streets away in Bay St. Lucie community",
-        "Tornado damaged Berman's home, pushing open doors and depositing items in pool"
+        "EF0 tornado struck Port St. Lucie",
+        "Luna the corgi went missing after tornado",
+        "Bay St. Lucie community",
+        "Owner Molly Wing-Berman",
+        "Tornado opened front door and damaged home",
+        "Dog found three streets away by neighbors",
+        "August 28, 2026 date"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -652,7 +655,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
       "incoming_source_url": "https://www.wpbf.com/article/ronald-l-corbin-beloved-choral-teacher-at-martin-high-school-for-34-years-dies/73506173",
-      "incoming_story_id": "story_006649",
+      "incoming_story_id": "story_006677",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1069,6 +1072,46 @@
       }
     },
     {
+      "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+      "incoming_source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
+      "incoming_story_id": "story_006685",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "retroactive_recent_archive_repair",
+      "incoming_headline": "St. Lucie County school bus driver faces discipline for illegal U-turn on I-95 in Fort Pierce",
+      "incoming_source_url": "https://www.wpbf.com/article/st-lucie-county-school-bus-driver-faces-disciplinary-action-for-illegal-u-turn/73543463",
+      "incoming_story_id": "story_006321",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
       "phase": "forward_publication",
       "incoming_headline": "Port St. Lucie homeowners to receive credits on solid waste bills from $24 million Waste Pro settlement",
       "incoming_source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-to-see-solid-waste-bill-credits-from-24-million-waste-pro-settlement",
@@ -1111,18 +1154,28 @@
           "slug": "2026-08-17-port-st-lucie-mayors-race-tied-to-trash-pickup-problems-ahead-of-primary",
           "headline": "Port St. Lucie mayor's race tied to trash pickup problems ahead of primary",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5152,
-          "retrieval_score": 0.5082,
+          "terminal_recall_score": 0.515,
+          "retrieval_score": 0.508,
           "reasons": [
             "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-08-29-st-lucie-county-school-bus-driver-faces-discipline-for-illegal-u-turn-on-i-95-in",
+          "headline": "St. Lucie County school bus driver faces discipline for illegal U-turn on I-95 in Fort Pierce",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5136,
+          "retrieval_score": 0.4766,
+          "reasons": [
+            "publication_gap_1_days"
           ]
         },
         {
           "slug": "2026-08-18-port-st-lucie-voters-head-to-polls-tuesday-for-mayoral-election",
           "headline": "Port St. Lucie voters head to polls Tuesday for mayoral election",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5092,
-          "retrieval_score": 0.4992,
+          "terminal_recall_score": 0.5091,
+          "retrieval_score": 0.4991,
           "reasons": [
             "publication_gap_10_days"
           ]
@@ -1131,8 +1184,8 @@
           "slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
           "headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.503,
-          "retrieval_score": 0.463,
+          "terminal_recall_score": 0.5029,
+          "retrieval_score": 0.4629,
           "reasons": [
             "publication_gap_0_days"
           ]
@@ -1141,8 +1194,8 @@
           "slug": "2026-08-26-port-st-lucie-raises-annual-trash-fee-to-482-despite-ongoing-pickup-complaints",
           "headline": "Port St. Lucie raises annual trash fee to $482 despite ongoing pickup complaints",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5014,
-          "retrieval_score": 0.4674,
+          "terminal_recall_score": 0.5012,
+          "retrieval_score": 0.4672,
           "reasons": [
             "publication_gap_3_days"
           ]
@@ -1201,18 +1254,8 @@
           "slug": "2026-08-18-port-st-lucie-to-reconsider-led-sign-rules-after-church-request",
           "headline": "Port St. Lucie to reconsider LED sign rules after church request",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4192,
-          "retrieval_score": 0.4092,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-08-18-st-lucie-nuclear-plant-back-at-full-power-after-control-rod-failure-prompted-shu",
-          "headline": "St. Lucie Nuclear Plant back at full power after control rod failure prompted shutdown",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4183,
-          "retrieval_score": 0.4083,
+          "terminal_recall_score": 0.4191,
+          "retrieval_score": 0.4091,
           "reasons": [
             "publication_gap_10_days"
           ]
@@ -1252,9 +1295,9 @@
     },
     {
       "phase": "forward_publication",
-      "incoming_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
-      "incoming_source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
-      "incoming_story_id": "story_006685",
+      "incoming_headline": "Vero Beach hosts Atlantic in Friday night football opener",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-vero-beach-atlantic-high-school-football-game-of-the-week/73556466",
+      "incoming_story_id": "story_006627",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -1275,318 +1318,129 @@
       "gate_version": "1.1",
       "resolution_version": "1.0",
       "model": "claude-sonnet-5",
-      "incoming_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
-      "incoming_source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
-      "incoming_story_id": "story_006685",
+      "incoming_headline": "Vero Beach hosts Atlantic in Friday night football opener",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-vero-beach-atlantic-high-school-football-game-of-the-week/73556466",
+      "incoming_story_id": "story_006627",
       "candidates": [
         {
-          "slug": "2026-08-26-martin-county-man-crashes-suv-into-church-after-fleeing-deputies-faces-dui-charg",
-          "headline": "Martin County man crashes SUV into church after fleeing deputies, faces DUI charges",
+          "slug": "2026-08-16-cardinal-newman-to-face-vero-beach-in-high-school-football-preseason-kickoff-cla",
+          "headline": "Cardinal Newman to face Vero Beach in high school football Preseason Kickoff Classic",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4338,
-          "retrieval_score": 0.4028,
+          "terminal_recall_score": 0.5593,
+          "retrieval_score": 0.5553,
           "reasons": [
-            "publication_gap_4_days"
+            "publication_gap_13_days"
+          ]
+        },
+        {
+          "slug": "2026-08-20-vero-beach-quarterback-champ-monds-commits-to-notre-dame",
+          "headline": "Vero Beach quarterback Champ Monds commits to Notre Dame",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4914,
+          "retrieval_score": 0.4754,
+          "reasons": [
+            "publication_gap_9_days"
           ]
         },
         {
           "slug": "2026-08-21-multi-million-dollar-crane-crashes-off-90th-avenue-in-vero-beach-as-residents-ra",
           "headline": "Multi-million dollar crane remains stuck in ditch near Oslo Road in Vero Beach",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4269,
-          "retrieval_score": 0.4079,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-08-25-fort-pierce-enforces-two-hour-parking-limits-downtown-with-50-citations",
-          "headline": "Fort Pierce enforces two-hour parking limits downtown with $50 citations",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.39,
-          "retrieval_score": 0.362,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-08-21-james-martin-wins-democratic-primary-for-congressional-district-21-by-less-than",
-          "headline": "James Martin wins Democratic primary for Congressional District 21 by less than 1%, will face Brian Mast in November",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3828,
-          "retrieval_score": 0.3668,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-08-21-brightline-station-in-downtown-stuart-unlikely-after-martin-county-denied-federa",
-          "headline": "Brightline station in downtown Stuart unlikely after Martin County denied federal funding",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.381,
-          "retrieval_score": 0.365,
-          "reasons": [
-            "publication_gap_9_days"
-          ]
-        },
-        {
-          "slug": "2026-08-26-martin-county-commissioners-move-toward-one-year-pause-on-large-data-center-deve",
-          "headline": "Martin County commissioners set vote on data center moratorium after residents voice concerns",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3804,
-          "retrieval_score": 0.3464,
-          "reasons": [
-            "publication_gap_3_days"
-          ]
-        },
-        {
-          "slug": "2026-08-24-martin-county-schools-ban-fake-squishy-toys-after-federal-safety-alert",
-          "headline": "Martin County schools ban fake squishy toys after federal safety alert",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3771,
-          "retrieval_score": 0.3521,
-          "reasons": [
-            "publication_gap_5_days"
-          ]
-        },
-        {
-          "slug": "2026-08-21-lauderhill-man-arrested-in-treasure-coast-mall-jewelry-kiosk-robbery-worth-over",
-          "headline": "Lauderhill man arrested in Treasure Coast Mall jewelry kiosk robbery worth over $22,000",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.375,
-          "retrieval_score": 0.359,
-          "reasons": [
-            "publication_gap_8_days"
-          ]
-        },
-        {
-          "slug": "2026-08-18-martin-county-deputies-rescue-man-attempting-suicide-in-ocean",
-          "headline": "Martin County deputies rescue man attempting suicide in ocean",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3725,
-          "retrieval_score": 0.3655,
-          "reasons": [
-            "publication_gap_12_days"
-          ]
-        },
-        {
-          "slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-          "headline": "All 36 Border Collies surrendered to Humane Society after Palm City rescue, adoptions open Sept. 1",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3648,
-          "retrieval_score": 0.3338,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-08-27-david-jolly-calls-for-reopened-hope-florida-investigation-after-grand-jury-finds",
-          "headline": "David Jolly calls for reopened Hope Florida investigation after grand jury finds $10 million in taxpayer money misappropriated",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3616,
-          "retrieval_score": 0.3276,
-          "reasons": [
-            "publication_gap_2_days"
-          ]
-        },
-        {
-          "slug": "2026-08-14-17-arrested-in-indiantown-cocaine-trafficking-ring-three-remain-wanted-after-mon",
-          "headline": "17 arrested in Indiantown cocaine trafficking ring led by Cecil Trimble, 4 kilos seized in Operation Beneath the Surface",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.3604,
-          "retrieval_score": 0.3594,
-          "reasons": [
-            "publication_gap_15_days",
-            "outside_recent_window"
-          ]
-        }
-      ],
-      "initial_decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.97,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Charlie Leighton Park $4.5 million boat ramp renovation in Palm City",
-          "Boaters Nick Yahn and Casey Wallace raising parking space size concerns",
-          "New parking spaces are 45 feet, boat ramp scheduled to open late September"
-        ],
-        "reason": "No candidate covers the Charlie Leighton Park boat ramp renovation or parking dispute. The closest topical match is a Fort Pierce downtown parking citation story, which is an unrelated policy about street parking, not boat ramp trailer parking. No shared participants, location, or governing action exists with any candidate.",
-        "validation_errors": []
-      },
-      "resolution_decision": {},
-      "decision": {
-        "status": "validated",
-        "action": "new_story",
-        "recommended_action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 0.97,
-        "shared_anchors": [],
-        "novel_facts": [
-          "Charlie Leighton Park $4.5 million boat ramp renovation in Palm City",
-          "Boaters Nick Yahn and Casey Wallace raising parking space size concerns",
-          "New parking spaces are 45 feet, boat ramp scheduled to open late September"
-        ],
-        "reason": "No candidate covers the Charlie Leighton Park boat ramp renovation or parking dispute. The closest topical match is a Fort Pierce downtown parking citation story, which is an unrelated policy about street parking, not boat ramp trailer parking. No shared participants, location, or governing action exists with any candidate.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "forward_publication",
-      "incoming_headline": "St. Lucie County school bus driver faces discipline for illegal U-turn on I-95 in Fort Pierce",
-      "incoming_source_url": "https://www.wpbf.com/article/st-lucie-county-school-bus-driver-faces-disciplinary-action-for-illegal-u-turn/73543463",
-      "incoming_story_id": "story_006321",
-      "candidates": [],
-      "decision": {
-        "status": "no_candidates",
-        "action": "new_story",
-        "selected_candidate_slug": "",
-        "same_real_world_event": false,
-        "material_new_update": false,
-        "independently_newsworthy_followup": false,
-        "confidence": 1.0,
-        "shared_anchors": [],
-        "novel_facts": [],
-        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
-        "validation_errors": []
-      }
-    },
-    {
-      "phase": "terminal_permalink_authority",
-      "gate_version": "1.1",
-      "resolution_version": "1.0",
-      "model": "claude-sonnet-5",
-      "incoming_headline": "St. Lucie County school bus driver faces discipline for illegal U-turn on I-95 in Fort Pierce",
-      "incoming_source_url": "https://www.wpbf.com/article/st-lucie-county-school-bus-driver-faces-disciplinary-action-for-illegal-u-turn/73543463",
-      "incoming_story_id": "story_006321",
-      "candidates": [
-        {
-          "slug": "2026-08-15-sheriffs-deputies-recover-firearm-in-fatal-fort-pierce-mobile-home-park-shooting",
-          "headline": "Sheriff's deputies recover firearm in fatal Fort Pierce mobile home park shooting",
-          "terminal_recall_tier": 5,
-          "terminal_recall_score": 0.6634,
-          "retrieval_score": 0.5224,
-          "reasons": [
-            "shared_incident_anchor",
-            "publication_gap_14_days"
-          ]
-        },
-        {
-          "slug": "2026-08-25-st-lucie-county-fire-district-contains-residential-fire-on-east-erie-drive-in-fo",
-          "headline": "St. Lucie County Fire District contains residential fire on East Erie Drive in Fort Pierce",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.6047,
-          "retrieval_score": 0.5737,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-08-24-martin-county-schools-ban-fake-squishy-toys-after-federal-safety-alert",
-          "headline": "Martin County schools ban fake squishy toys after federal safety alert",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5312,
-          "retrieval_score": 0.5032,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-08-24-st-lucie-county-sheriffs-office-seeks-help-finding-fort-pierce-woman-missing-sin",
-          "headline": "St. Lucie County Sheriff's Office seeks help finding Fort Pierce woman missing since August 14",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5254,
-          "retrieval_score": 0.4974,
-          "reasons": [
-            "publication_gap_4_days"
-          ]
-        },
-        {
-          "slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
-          "headline": "Port St. Lucie High School football player held in ICE custody after school zone speeding violation",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.5061,
-          "retrieval_score": 0.4691,
-          "reasons": [
-            "publication_gap_3_days"
-          ]
-        },
-        {
-          "slug": "2026-08-18-fort-pierce-city-council-selects-former-st-lucie-county-attorney-as-interim-city",
-          "headline": "Fort Pierce City Council selects former St. Lucie County attorney as interim city attorney",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4978,
-          "retrieval_score": 0.4878,
-          "reasons": [
-            "publication_gap_10_days"
-          ]
-        },
-        {
-          "slug": "2026-08-17-st-lucie-county-population-jumps-22-since-2020-adding-more-than-73000-residents",
-          "headline": "St. Lucie County population jumps 22% since 2020, adding more than 73,000 residents",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4853,
-          "retrieval_score": 0.4783,
-          "reasons": [
-            "publication_gap_11_days"
-          ]
-        },
-        {
-          "slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
-          "headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4843,
-          "retrieval_score": 0.4443,
-          "reasons": [
-            "publication_gap_0_days"
-          ]
-        },
-        {
-          "slug": "2026-08-22-off-duty-st-lucie-county-deputy-spots-burglary-suspect-leads-to-arrest-near-port",
-          "headline": "Off-duty St. Lucie County deputy spots burglary suspect, leads to arrest near Port St. Lucie",
-          "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4836,
-          "retrieval_score": 0.4616,
+          "terminal_recall_score": 0.4444,
+          "retrieval_score": 0.4224,
           "reasons": [
             "publication_gap_7_days"
           ]
         },
         {
-          "slug": "2026-08-15-uber-passenger-accused-of-beating-driver-stealing-tesla-in-fort-pierce-carjackin",
-          "headline": "Uber passenger accused of beating driver, stealing Tesla in Fort Pierce carjacking",
+          "slug": "2026-08-16-vero-beach-high-school-honors-16-year-old-killed-in-fall-at-abandoned-sebastian",
+          "headline": "Vero Beach High School honors 16-year-old killed in fall at abandoned Sebastian condo",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4818,
-          "retrieval_score": 0.4808,
+          "terminal_recall_score": 0.4409,
+          "retrieval_score": 0.4369,
           "reasons": [
-            "publication_gap_14_days"
+            "publication_gap_13_days"
           ]
         },
         {
-          "slug": "2026-08-19-indian-river-county-school-superintendent-dr-moore-to-step-down-june-2027",
-          "headline": "Indian River County schools superintendent to step down June 2027",
+          "slug": "2026-08-27-colorado-man-indicted-on-attempted-murder-charges-after-vero-beach-shootout-with",
+          "headline": "Colorado man indicted on attempted murder charges after Vero Beach shootout with deputies",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4786,
-          "retrieval_score": 0.4626,
+          "terminal_recall_score": 0.4385,
+          "retrieval_score": 0.4015,
           "reasons": [
-            "publication_gap_9_days"
+            "publication_gap_1_days"
           ]
         },
         {
-          "slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
-          "headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
+          "slug": "2026-08-16-vero-beach-art-club-hosts-summer-camp-for-91-young-artists",
+          "headline": "Vero Beach Art Club hosts summer camp for 91 young artists",
           "terminal_recall_tier": 1,
-          "terminal_recall_score": 0.4773,
-          "retrieval_score": 0.4373,
+          "terminal_recall_score": 0.4291,
+          "retrieval_score": 0.4251,
           "reasons": [
-            "publication_gap_0_days"
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-08-16-woman-found-shot-in-vero-beach-roadway-dies-sheriffs-office-searching-for-person",
+          "headline": "Woman found shot in Vero Beach roadway dies; sheriff identifies person of interest as Matthew Allen Waggle",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4283,
+          "retrieval_score": 0.4213,
+          "reasons": [
+            "publication_gap_12_days"
+          ]
+        },
+        {
+          "slug": "2026-08-20-environmental-learning-center-in-vero-beach-hosts-mosquito-and-insect-lecture-sa",
+          "headline": "Environmental Learning Center in Vero Beach hosts mosquito and insect lecture Saturday",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4254,
+          "retrieval_score": 0.4094,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-08-14-florida-retirement-costs-show-600000-gap-between-gulf-coast-and-atlantic-coast",
+          "headline": "Florida retirement costs show $600,000 gap between Gulf Coast and Atlantic Coast",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4009,
+          "retrieval_score": 0.4009,
+          "reasons": [
+            "publication_gap_15_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-08-25-vero-beach-man-crashes-while-fleeing-deputies-k9-finds-him-hiding-under-brush",
+          "headline": "Vero Beach man crashes while fleeing deputies, K9 finds him hiding under brush",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3992,
+          "retrieval_score": 0.3682,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-08-27-vero-beach-woman-billed-922-for-electricity-after-fire-destroys-home",
+          "headline": "Vero Beach woman billed $922 for electricity after fire destroys home",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3924,
+          "retrieval_score": 0.3554,
+          "reasons": [
+            "publication_gap_1_days"
+          ]
+        },
+        {
+          "slug": "2026-08-20-suv-driver-hospitalized-after-collision-with-brightline-train-in-hobe-sound",
+          "headline": "SUV driver hospitalized with traumatic injuries after collision with Brightline train in Hobe Sound",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.3845,
+          "retrieval_score": 0.3655,
+          "reasons": [
+            "publication_gap_8_days"
           ]
         }
       ],
@@ -1598,14 +1452,12 @@
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.97,
+        "confidence": 0.95,
         "shared_anchors": [],
         "novel_facts": [
-          "St. Lucie County school bus driver made illegal U-turn on I-95 northbound between Orange Avenue and Indrio Road",
-          "Driver faces disciplinary action under district's Safe Driver Plan",
-          "No students were on the bus at the time"
+          "Vero Beach vs Atlantic season-opener game of the week (Aug 28)"
         ],
-        "reason": "None of the candidates describe a school bus driver making an illegal U-turn on I-95 in Fort Pierce. The closest locality/agency overlaps (fatal shooting, fire, missing person, drug arrests) involve entirely different participants, locations, and incident types. No shared named participant, vehicle, or distinctive fact pattern exists with any candidate.",
+        "reason": "No candidate covers this specific Vero Beach vs Atlantic season-opener football game. The closest candidate (Cardinal Newman preseason kickoff classic) is a different, earlier preseason matchup against a different opponent, not the same real-world game. Other candidates involve unrelated topics (recruiting commitment, crashes, crime, community events).",
         "validation_errors": []
       },
       "resolution_decision": {},
@@ -1617,14 +1469,12 @@
         "same_real_world_event": false,
         "material_new_update": false,
         "independently_newsworthy_followup": false,
-        "confidence": 0.97,
+        "confidence": 0.95,
         "shared_anchors": [],
         "novel_facts": [
-          "St. Lucie County school bus driver made illegal U-turn on I-95 northbound between Orange Avenue and Indrio Road",
-          "Driver faces disciplinary action under district's Safe Driver Plan",
-          "No students were on the bus at the time"
+          "Vero Beach vs Atlantic season-opener game of the week (Aug 28)"
         ],
-        "reason": "None of the candidates describe a school bus driver making an illegal U-turn on I-95 in Fort Pierce. The closest locality/agency overlaps (fatal shooting, fire, missing person, drug arrests) involve entirely different participants, locations, and incident types. No shared named participant, vehicle, or distinctive fact pattern exists with any candidate.",
+        "reason": "No candidate covers this specific Vero Beach vs Atlantic season-opener football game. The closest candidate (Cardinal Newman preseason kickoff classic) is a different, earlier preseason matchup against a different opponent, not the same real-world game. Other candidates involve unrelated topics (recruiting commitment, crashes, crime, community events).",
         "validation_errors": []
       }
     }
