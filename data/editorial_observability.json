@@ -7,9 +7,9 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-29T17:44:56Z",
+  "generated_at": "2026-08-29T18:09:27Z",
   "mode": "enforce",
-  "publication_behavior_changed": true,
+  "publication_behavior_changed": false,
   "activation": {
     "activation_version": "1.1",
     "requested_mode": "enforce",
@@ -19,72 +19,16 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 1,
-    "enforceable_recommendation_count": 1,
-    "applied_action_count": 1,
+    "recommendation_count": 0,
+    "enforceable_recommendation_count": 0,
+    "applied_action_count": 0,
     "circuit_breaker_tripped": false,
-    "placements_before": 4,
+    "placements_before": 3,
     "placements_after": 3,
-    "publication_behavior_changed": true,
+    "publication_behavior_changed": false,
     "current_regression_gate_passed": true,
-    "recommendations": [
-      {
-        "action": "suppress_duplicate",
-        "enforceable": true,
-        "evidence": "guarded_same_story_stage_95",
-        "confidence": 0.98,
-        "source_url": "https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149",
-        "headline": "Three arrested after drug search at St. Lucie County convenience store yields crack cocaine, marijuana",
-        "source_title_key": "three arrested after drug search at st lucie county convenience store yields crack cocaine marijuana",
-        "incoming_article_id": "",
-        "target_article_id": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
-        "story_id": "story-1502-arrested-avenue-charges-convenience-72d9bcea",
-        "canonical_is_custom": false,
-        "canonical_title": "Three St. Lucie County men arrested on drug charges after search at convenience store",
-        "canonical_source": "",
-        "canonical_url": "https://treasurecoast.today/articles/2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s.html",
-        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
-        "category": "st_lucie",
-        "placement": "hero"
-      }
-    ],
-    "applied_actions": [
-      {
-        "action": "suppress_duplicate",
-        "enforceable": true,
-        "evidence": "guarded_same_story_stage_95",
-        "confidence": 0.98,
-        "source_url": "https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149",
-        "headline": "Three arrested after drug search at St. Lucie County convenience store yields crack cocaine, marijuana",
-        "source_title_key": "three arrested after drug search at st lucie county convenience store yields crack cocaine marijuana",
-        "incoming_article_id": "",
-        "target_article_id": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
-        "story_id": "story-1502-arrested-avenue-charges-convenience-72d9bcea",
-        "canonical_is_custom": false,
-        "canonical_title": "Three St. Lucie County men arrested on drug charges after search at convenience store",
-        "canonical_source": "",
-        "canonical_url": "https://treasurecoast.today/articles/2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s.html",
-        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
-        "category": "st_lucie",
-        "placement": "hero",
-        "slug": "",
-        "source_title": "Three arrested after drug search at St. Lucie County convenience store yields crack cocaine, marijuana",
-        "date": "A few minutes ago",
-        "category_key": "st_lucie",
-        "is_custom": false,
-        "story_stage": "arrest-or-charges",
-        "decision": "SUPPRESSED_DUPLICATE",
-        "action_taken": true,
-        "eligible_for_activation": true,
-        "match_confidence": 98,
-        "matched_prior_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
-        "matched_prior_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
-        "matched_prior_source": "",
-        "matched_prior_source_url": "https://treasurecoast.today/articles/2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s.html",
-        "matched_prior_is_custom": false,
-        "activation_managed": true
-      }
-    ],
+    "recommendations": [],
+    "applied_actions": [],
     "enforcement_allowlist": [
       "custom_canonical_protection",
       "exact_normalized_title_identity",
@@ -105,18 +49,18 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 168,
+    "candidates_processed": 167,
     "routes": {
-      "generate_new": 9,
-      "skip": 159
+      "generate_new": 5,
+      "skip": 162
     },
     "eligibility": {
       "listing": 3,
-      "low_value": 129,
+      "low_value": 128,
       "publishable": 36
     },
     "source_classes": {
-      "aggregator": 132,
+      "aggregator": 131,
       "local_news": 20,
       "regional_news": 16
     },
@@ -153,20 +97,22 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 10,
-      "same_event": 158
+      "new_story": 7,
+      "same_event": 160
     },
     "examples": [
       {
         "story_id": "story_006724",
         "title": "Sam Williams, former Ocala Police chief, has died at age 79 - Ocala StarBanner",
         "event_key": "named-person-death:sam-williams",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: conservative merge requirements were not met",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "No sufficiently supported match",
-          "Threshold: 0.78"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -338,6 +284,19 @@
         ]
       },
       {
+        "story_id": "story_006533",
+        "title": "Construction worker injured at Tradition Lakes K-8 School - WPEC",
+        "event_key": "unknown-event-94494009eb",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_006606",
         "title": "Holiday airfares rising: Why experts say book now, not later",
         "event_key": "unknown-event-b23adacc97",
@@ -383,20 +342,6 @@
         "story_id": "story_006561",
         "title": "Florida trial on track for former Fort Pierce City Manager Nick Mimms - Treasure Coast News",
         "event_key": "unknown-event-acb94f7c09",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_006533",
-        "title": "Construction worker injured at Tradition Lakes K-8 School - WPEC",
-        "event_key": "unknown-event-b5f1cc8542",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -441,13 +386,15 @@
         "story_id": "story_006724",
         "title": "Sam Williams, former Ocala Police chief, has died at age 79 - Ocala StarBanner",
         "event_key": "named-person-death:sam-williams",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: conservative merge requirements were not met",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "No sufficiently supported match",
-          "Threshold: 0.78"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -631,6 +578,20 @@
         ]
       },
       {
+        "story_id": "story_006533",
+        "title": "Construction worker injured at Tradition Lakes K-8 School - WPEC",
+        "event_key": "unknown-event-94494009eb",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_006606",
         "title": "Holiday airfares rising: Why experts say book now, not later",
         "event_key": "unknown-event-b23adacc97",
@@ -679,21 +640,6 @@
         "story_id": "story_006561",
         "title": "Florida trial on track for former Fort Pierce City Manager Nick Mimms - Treasure Coast News",
         "event_key": "unknown-event-acb94f7c09",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_006533",
-        "title": "Construction worker injured at Tradition Lakes K-8 School - WPEC",
-        "event_key": "unknown-event-b5f1cc8542",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -754,8 +700,8 @@
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
       "stories_with_timelines": 1161,
-      "timeline_entries_examined": 3170,
-      "transitions_examined": 1884,
+      "timeline_entries_examined": 3171,
+      "transitions_examined": 1885,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 27,
       "high_confidence_candidate_count": 6,
@@ -1642,7 +1588,7 @@
           ]
         },
         {
-          "story_id": "story_006721",
+          "story_id": "story_006738",
           "story_title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
           "transition_count": 1,
           "blocking_reasons": {
@@ -1653,7 +1599,7 @@
               "prior_article": {
                 "article_id": "rss-a159016d9d6f5bf11bcf",
                 "event_key": "missing-person-bc2bfac354",
-                "published_at": "2026-08-29T17:39:34.612903+00:00",
+                "published_at": "2026-08-29T18:04:12.477579+00:00",
                 "title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
                 "source": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia",
                 "url": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia"
@@ -1661,7 +1607,7 @@
               "newer_article": {
                 "article_id": "rss-a875a76fc20cb08f71fe",
                 "event_key": "unknown-event-b3ff31e321",
-                "published_at": "2026-08-29T17:39:34.612903+00:00",
+                "published_at": "2026-08-29T18:04:12.477579+00:00",
                 "title": "Police arrest teen in connection with deadly Boynton Beach shooting",
                 "source": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting",
                 "url": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting"
@@ -3514,7 +3460,7 @@
           ]
         },
         {
-          "story_id": "story_006721",
+          "story_id": "story_006738",
           "story_title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
           "milestones": [
             "arrest",
@@ -3555,7 +3501,7 @@
           "prior_article": {
             "article_id": "rss-a159016d9d6f5bf11bcf",
             "event_key": "missing-person-bc2bfac354",
-            "published_at": "2026-08-29T17:39:34.612903+00:00",
+            "published_at": "2026-08-29T18:04:12.477579+00:00",
             "title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
             "source": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia",
             "url": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia"
@@ -3563,14 +3509,14 @@
           "newer_article": {
             "article_id": "rss-a875a76fc20cb08f71fe",
             "event_key": "unknown-event-b3ff31e321",
-            "published_at": "2026-08-29T17:39:34.612903+00:00",
+            "published_at": "2026-08-29T18:04:12.477579+00:00",
             "title": "Police arrest teen in connection with deadly Boynton Beach shooting",
             "source": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting",
             "url": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_006721",
+            "Story: story_006738",
             "Novel milestones: arrest, death",
             "Identity anchor qualified: False",
             "Identity anchor codes: identity_anchor_missing",
@@ -3594,23 +3540,23 @@
     "scopes": {
       "florida": 1061,
       "treasure_coast_local": 852,
-      "treasure_coast_region": 403,
-      "unknown": 2030
+      "treasure_coast_region": 404,
+      "unknown": 2033
     },
-    "average_score": 60.63
+    "average_score": 60.62
   },
   "editorial_proximity": {
     "scopes": {
       "florida": 1061,
       "treasure_coast_local": 852,
-      "treasure_coast_region": 403,
-      "unknown": 2030
+      "treasure_coast_region": 404,
+      "unknown": 2033
     },
     "average_priority": 3.53
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3491,
+      "active": 3495,
       "developing": 99,
       "ongoing": 754,
       "resolved": 2
@@ -3620,8 +3566,8 @@
     "repair_version": 14,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 5481,
-    "active_stories_after": 5481,
+    "active_stories_before": 5488,
+    "active_stories_after": 5488,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -3646,24 +3592,24 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 95,
+    "incident_anchor_to_story_count": 96,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-08-29T17:40:06Z",
-    "quarantined_story_records_retained": 661,
-    "active_story_count": 5489
+    "generated_at": "2026-08-29T18:04:44Z",
+    "quarantined_story_records_retained": 666,
+    "active_story_count": 5493
   },
   "stories": {
-    "total": 4346,
+    "total": 4350,
     "importance_levels": {
       "breaking": 7,
       "high": 83,
-      "normal": 660,
-      "low": 3596,
+      "normal": 662,
+      "low": 3598,
       "archived": 0
     },
-    "average_importance": 9.06,
+    "average_importance": 9.07,
     "top": [
       {
         "story_id": "story_002646",
@@ -3678,7 +3624,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 70.4
+          "age_hours": 70.8
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3742,7 +3688,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-26T19:18:41.219878+00:00",
-          "hours_since_update": 70.4,
+          "hours_since_update": 70.8,
           "event_count": 28,
           "timeline_entries": 20
         }
@@ -3760,7 +3706,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 25.22
+          "age_hours": 25.63
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3814,7 +3760,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 25.22,
+          "hours_since_update": 25.63,
           "event_count": 41,
           "timeline_entries": 25
         }
@@ -3832,7 +3778,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 87.98
+          "age_hours": 88.39
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3901,13 +3847,13 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-26T01:42:10.693389+00:00",
-          "hours_since_update": 87.98,
+          "hours_since_update": 88.39,
           "event_count": 40,
           "timeline_entries": 32
         }
       },
       {
-        "story_id": "story_006717",
+        "story_id": "story_006734",
         "title": "Community divided over Flock Safety cameras after Treasure Coast homicide arrest",
         "score": 100,
         "editorial_priority": 62,
@@ -3919,7 +3865,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 697.99
+          "age_hours": 698.4
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3976,7 +3922,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 697.99,
+          "hours_since_update": 698.4,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -3994,7 +3940,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 78.98
+          "age_hours": 79.39
         },
         "level": "high",
         "importance_reasons": [
@@ -4037,7 +3983,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-26T10:42:22.175311+00:00",
-          "hours_since_update": 78.98,
+          "hours_since_update": 79.39,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4055,7 +4001,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 70.37
+          "age_hours": 70.78
         },
         "level": "high",
         "importance_reasons": [
@@ -4094,7 +4040,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-26T19:18:41.219878+00:00",
-          "hours_since_update": 70.37,
+          "hours_since_update": 70.78,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4112,7 +4058,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 39.97
+          "age_hours": 40.38
         },
         "level": "high",
         "importance_reasons": [
@@ -4150,7 +4096,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-28T01:42:52.960630+00:00",
-          "hours_since_update": 39.97,
+          "hours_since_update": 40.38,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4168,7 +4114,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 697.99
+          "age_hours": 698.4
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4216,7 +4162,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 697.99,
+          "hours_since_update": 698.4,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4234,7 +4180,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 375.99
+          "age_hours": 376.4
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4282,7 +4228,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 375.99,
+          "hours_since_update": 376.4,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -4300,7 +4246,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 366.99
+          "age_hours": 367.4
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4346,7 +4292,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T10:41:34.652293+00:00",
-          "hours_since_update": 366.99,
+          "hours_since_update": 367.4,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4364,7 +4310,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 49.95
+          "age_hours": 50.36
         },
         "level": "high",
         "importance_reasons": [
@@ -4419,7 +4365,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-27T15:44:47.058272+00:00",
-          "hours_since_update": 49.95,
+          "hours_since_update": 50.36,
           "event_count": 87,
           "timeline_entries": 87
         }
@@ -4437,7 +4383,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 48.06
+          "age_hours": 48.46
         },
         "level": "high",
         "importance_reasons": [
@@ -4489,7 +4435,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-27T17:39:05.927333+00:00",
-          "hours_since_update": 48.06,
+          "hours_since_update": 48.46,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -4507,7 +4453,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 685.6
+          "age_hours": 686.01
         },
         "level": "high",
         "importance_reasons": [
@@ -4550,7 +4496,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 685.6,
+          "hours_since_update": 686.01,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4568,7 +4514,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 685.61
+          "age_hours": 686.02
         },
         "level": "high",
         "importance_reasons": [
@@ -4611,7 +4557,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 685.61,
+          "hours_since_update": 686.02,
           "event_count": 14,
           "timeline_entries": 7
         }
@@ -4629,7 +4575,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 193.99
+          "age_hours": 194.4
         },
         "level": "high",
         "importance_reasons": [
@@ -4673,7 +4619,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-21T15:41:39.092086+00:00",
-          "hours_since_update": 193.99,
+          "hours_since_update": 194.4,
           "event_count": 34,
           "timeline_entries": 34
         }
@@ -4691,7 +4637,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 375.99
+          "age_hours": 376.4
         },
         "level": "high",
         "importance_reasons": [
@@ -4734,7 +4680,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 375.99,
+          "hours_since_update": 376.4,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4752,7 +4698,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 303.99
+          "age_hours": 304.4
         },
         "level": "high",
         "importance_reasons": [
@@ -4793,7 +4739,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-17T01:41:33.127844+00:00",
-          "hours_since_update": 303.99,
+          "hours_since_update": 304.4,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -4811,7 +4757,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 102.98
+          "age_hours": 103.39
         },
         "level": "high",
         "importance_reasons": [
@@ -4850,7 +4796,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-25T10:42:16.525222+00:00",
-          "hours_since_update": 102.98,
+          "hours_since_update": 103.39,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4868,7 +4814,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 385.98
+          "age_hours": 386.39
         },
         "level": "high",
         "importance_reasons": [
@@ -4912,7 +4858,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-13T15:41:45.363233+00:00",
-          "hours_since_update": 385.98,
+          "hours_since_update": 386.39,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -4930,7 +4876,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 390.98
+          "age_hours": 391.39
         },
         "level": "high",
         "importance_reasons": [
@@ -4974,7 +4920,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-08-13T10:41:50.330585+00:00",
-          "hours_since_update": 390.98,
+          "hours_since_update": 391.39,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4984,7 +4930,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-08-29T17:43:05Z",
+    "generated_at": "2026-08-29T18:07:18Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -4999,27 +4945,26 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "cache_hit": 1,
-        "category_eligibility_archive_recovery": 5,
-        "generated_live": 2,
+        "cache_hit": 2,
+        "category_eligibility_archive_recovery": 6,
         "no_publishable_sources": 1
       },
       "failures": {
-        "no_category_eligible_sources": 5
+        "no_category_eligible_sources": 6
       },
-      "model_attempt_count": 2,
-      "model_elapsed_seconds": 14.82,
-      "archive_recovery_requested_count": 6,
+      "model_attempt_count": 0,
+      "model_elapsed_seconds": 0.0,
+      "archive_recovery_requested_count": 7,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
-      "article_framing_rejection_count": 1,
+      "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 4,
-      "published_story_duplicate_suppression_count": 42,
-      "story_aware_update_context_count": 6,
-      "material_update_promotion_evaluation_count": 3,
+      "published_story_duplicate_suppression_count": 43,
+      "story_aware_update_context_count": 4,
+      "material_update_promotion_evaluation_count": 5,
       "material_update_promotion_count": 1,
-      "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 1
+      "material_update_promotion_cache_hit_count": 3,
+      "material_update_promotion_model_call_count": 2
     },
     "categories": [
       {
@@ -5370,30 +5315,23 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 19.224
+        "elapsed_seconds": 13.11
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "generated_live",
+        "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 7,
-        "selected_source_count": 1,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 6,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 5.386,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 5.386,
-        "failure_code": "",
-        "failure_summary": "",
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Crime & Safety category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5402,7 +5340,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
           {
@@ -5420,8 +5358,18 @@
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-to-see-solid-waste-bill-credits-from-24-million-waste-pro-settlement"
           }
         ],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 10,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "crime",
+            "source_headline": "St. Lucie County store bust uncovers crack cocaine, marijuana - WPBF",
+            "source_url": "https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149",
+            "editorial_story_id": "story_006639",
+            "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
+            "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "crime",
             "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
@@ -5513,55 +5461,48 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "St. Lucie County store bust uncovers crack cocaine, marijuana - WPBF",
-            "source_url": "https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
-            "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
-            "basis": "event-identity-authority:participant_plus_precise_location",
-            "identity_keys": [
-              "story:story_006725",
-              "source:https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_named_people",
-              "shared_precise_location",
-              "shared_agency",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=1",
-              "shared_locality=['st-lucie', 'st-lucie-county']",
-              "shared_event_families=['drug-case']",
-              "shared_named_people=['ayhem jaber ubayda', 'melvin james kelly']",
-              "shared_precise_locations=['1502-avenue', 'sam-s-drive', 'sams-drive']",
-              "shared_agencies=['st-lucie-county-sheriff']",
-              "shared_subject_phrases=[]",
-              "shared_headline_topic_core=['cocaine', 'marijuana']",
-              "shared_distinctive_token_count=41",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 0,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "crime",
+            "source_headline": "St. Lucie County store bust uncovers crack cocaine, marijuana - WPBF",
+            "source_url": "https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149",
+            "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
+            "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_precise_location",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": true,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.98,
+            "shared_anchors": [
+              "Sam's Drive Thru convenience store at 1502 Avenue D/Drive",
+              "Friday search warrant execution",
+              "St. Lucie County Sheriff's Office",
+              "Three arrests",
+              "Ayhem Jaber Ubayda, 21",
+              "Melvin James Kelly, 60",
+              "14 grams crack cocaine recovered",
+              "128 grams marijuana recovered",
+              "Charges of possession with intent to sell within 1,000 feet of convenience store"
+            ],
+            "novel_facts": [
+              "Incoming identifies third suspect as 'Mobley, 71' while candidate has 'Alvin Mobley'",
+              "Minor detail variations in address format (Avenue D vs Avenue Drive)"
+            ],
+            "reason": "Both articles report the identical event: a Friday drug bust at Sam's Drive Thru at 1502 Avenue D involving the same three suspects (Ubayda, Kelly, and Mobley), same quantities of drugs (14g crack cocaine, 128g marijuana), and same charges. The incoming article from WPBF published 8/29 contains no material new information beyond what the canonical from WPEC published 8/28 already covered. The only differences are minor presentation variations and the incoming providing Mobley's age (71) and first name abbreviation. This is the same outlet reporting the same facts one day later.",
+            "validation_errors": []
+          },
           {
             "category_key": "crime",
             "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
@@ -5699,11 +5640,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Three arrested after St. Lucie County detectives find crack cocaine, marijuana at convenience store",
-        "generated_card_count": 0,
-        "elapsed_seconds": 18.843
+        "elapsed_seconds": 15.999
       },
       {
         "category_key": "business",
@@ -5879,7 +5816,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 7.556
+        "elapsed_seconds": 7.171
       },
       {
         "category_key": "sports",
@@ -5917,7 +5854,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 7.021
+        "elapsed_seconds": 6.694
       },
       {
         "category_key": "things_to_do",
@@ -6027,7 +5964,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 7.18
+        "elapsed_seconds": 9.255
       },
       {
         "category_key": "florida",
@@ -6134,13 +6071,13 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 9.7
+        "elapsed_seconds": 11.623
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
         "status": "cache_hit",
-        "fetched_candidate_count": 26,
+        "fetched_candidate_count": 25,
         "fresh_candidate_count": 22,
         "publishable_source_count": 1,
         "selected_source_count": 1,
@@ -6162,18 +6099,8 @@
         "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 3,
         "published_story_duplicate_suppressions": [
-          {
-            "category_key": "martin",
-            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
-            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
-            "editorial_story_id": "story_006685",
-            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
-            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
           {
             "category_key": "martin",
             "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats - WPTV",
@@ -6186,12 +6113,12 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WFLX",
-            "source_url": "https://www.wflx.com/2026/08/27/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-brush?outputType=amp",
-            "editorial_story_id": "story_006122",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Martin County deputies used drones to track hit-and-run suspect hiding underwater in Palm City swamp",
-            "basis": "authorized_canonical_identity_skip",
+            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
+            "editorial_story_id": "story_006685",
+            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
+            "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -6214,21 +6141,6 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "martin",
-            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
-            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
-            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
-            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
             "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats - WPTV",
             "source_url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPOVZNdVJEVTNoeDJGSURnWld3bXlWU1dUc2tLNVk0eU85cFF2OFlidGE3Z25FMkppNHhucVl4aExCTUM1LWFpV2hTRnVkNU9SZmMtbWthdVNsQlBqbWNxQm9HVUQyc3lsQXV5OEVKaFMwWmszVTg4Sk1yZVdaeGdLUXZQblhlRXd6WlNzWHRkZFlXUll1YUJ2bWdQWVBJYll6UUpONDA3THFGYi1ZWktmY3VCX0NRWkctSVZxWUhqQVZ5dVZITzJiSm9Bdy1yb25iWmxZV3pIRzQxTU5lRzJ2Zm45YzRxVDJG",
             "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
@@ -6244,12 +6156,12 @@
           },
           {
             "category_key": "martin",
-            "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WFLX",
-            "source_url": "https://www.wflx.com/2026/08/27/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-brush?outputType=amp",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Martin County deputies used drones to track hit-and-run suspect hiding underwater in Palm City swamp",
+            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
+            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
+            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
+            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
             "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+            "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -6275,122 +6187,46 @@
         ],
         "new_publication_stale_rejected_count": 0,
         "live_hero_headline": "Martin County deputies use drones to catch hit-and-run suspect hiding underwater in Palm City swamp",
-        "elapsed_seconds": 14.787
+        "elapsed_seconds": 9.441
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "generated_live",
+        "status": "cache_hit",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 3,
-        "selected_source_count": 3,
-        "cache_hit": false,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 2,
+        "selected_source_count": 2,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 9.434,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 9.434,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
         "contextual_update_lead_rejections": [],
-        "article_framing_rejection_count": 1,
-        "article_framing_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "headline": "Port St. Lucie homeowners to receive up to $364 credits on solid waste bills from Waste Pro settlement",
-            "missing": [
-              "headline_money_claim_missing_from_lead"
-            ],
-            "lead_independence": {
-              "required": true,
-              "passed": true,
-              "headline": "Port St. Lucie homeowners to receive up to $364 credits on solid waste bills from Waste Pro settlement",
-              "lead": "Port St. Lucie homeowners will receive credits applied to their solid waste bills this year following a $24 million settlement the city received from its former trash hauler, Waste Pro, after a legal dispute related to its prior solid waste collection contract. The city has begun mailing flyers to residents explaining the credits, which will be applied to the 2026-2027 tax bill. Scott Samples with the city said the full settlement amount is being returned to residents.",
-              "lead_word_count": 78,
-              "headline_overlap_ratio": 0.846,
-              "new_context_token_count": 33,
-              "opaque_references": [],
-              "undefined_references": [],
-              "story_form": "standard",
-              "update_diagnostics": {
-                "required": false,
-                "passed": true,
-                "story_form": "standard"
-              },
-              "missing": []
-            },
-            "claim_consistency": {
-              "required": true,
-              "passed": false,
-              "headline": "Port St. Lucie homeowners to receive up to $364 credits on solid waste bills from Waste Pro settlement",
-              "lead": "Port St. Lucie homeowners will receive credits applied to their solid waste bills this year following a $24 million settlement the city received from its former trash hauler, Waste Pro, after a legal dispute related to its prior solid waste collection contract. The city has begun mailing flyers to residents explaining the credits, which will be applied to the 2026-2027 tax bill. Scott Samples with the city said the full settlement amount is being returned to residents.",
-              "headline_money_claims": [
-                364
-              ],
-              "lead_money_claims": [
-                24000000
-              ],
-              "missing_money_claims": [
-                364
-              ],
-              "headline_jurisdictions": [
-                "port_st_lucie"
-              ],
-              "lead_jurisdictions": [
-                "port_st_lucie"
-              ],
-              "missing_jurisdictions": [],
-              "headline_policy_references": [],
-              "lead_policy_references": [],
-              "missing_policy_references": [],
-              "missing": [
-                "headline_money_claim_missing_from_lead"
-              ]
-            },
-            "source_focus": {
-              "required": true,
-              "passed": true,
-              "generated_headline": "Port St. Lucie homeowners to receive up to $364 credits on solid waste bills from Waste Pro settlement",
-              "generated_lead": "Port St. Lucie homeowners will receive credits applied to their solid waste bills this year following a $24 million settlement the city received from its former trash hauler, Waste Pro, after a legal dispute related to its prior solid waste collection contract.",
-              "source_title": "Port St. Lucie residents to see solid waste bill credits from $24 million Waste Pro settlement - WPTV",
-              "source_lead": "Thousands of homeowners in Port St Lucie will be getting credits applied to their solid waste bills this year.This follows a $24 million settlement the city received from its former trash hauler, Waste Pro, after a legal dispute related to its prior solid waste collection contract.WATCH BELOW: Residents to receive up to $364 credits from $24M settlementThe city has begun mailing flyers to residents explaining the credits, which will be applied to the 2026-2027 tax bill.Scott Samples with the city",
-              "title_similarity": {
-                "score": 0.5934,
-                "overlap": 0.6154,
-                "jaccard": 0.4211,
-                "sorted_sequence": 0.7362,
-                "ordered_sequence": 0.6743,
-                "shared_token_count": 8.0
-              },
-              "lead_token_overlap": 0.964,
-              "missing": []
-            },
-            "source_jurisdiction": {
-              "required": false,
-              "passed": true,
-              "missing": []
-            }
-          }
-        ],
+        "article_framing_rejection_count": 0,
+        "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 3,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 10,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County store bust uncovers crack cocaine, marijuana - WPBF",
+            "source_url": "https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149",
+            "editorial_story_id": "story_006639",
+            "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
+            "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
@@ -6403,7 +6239,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election - WPTV",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
             "editorial_story_id": "story_006602",
             "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
@@ -6413,7 +6249,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
             "editorial_story_id": "story_006602",
             "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
@@ -6482,55 +6318,48 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "St. Lucie County store bust uncovers crack cocaine, marijuana - WPBF",
-            "source_url": "https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149",
-            "publisher": "www.wpbf.com",
-            "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
-            "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
-            "basis": "event-identity-authority:participant_plus_precise_location",
-            "identity_keys": [
-              "story:story_006639",
-              "source:https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_named_people",
-              "shared_precise_location",
-              "shared_agency",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=1",
-              "shared_locality=['st-lucie', 'st-lucie-county']",
-              "shared_event_families=['drug-case']",
-              "shared_named_people=['ayhem jaber ubayda', 'melvin james kelly']",
-              "shared_precise_locations=['1502-avenue', 'sam-s-drive', 'sams-drive']",
-              "shared_agencies=['st-lucie-county-sheriff']",
-              "shared_subject_phrases=[]",
-              "shared_headline_topic_core=['cocaine', 'marijuana']",
-              "shared_distinctive_token_count=41",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 1,
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
+        "material_update_promotion_evaluation_count": 2,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
+        "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County store bust uncovers crack cocaine, marijuana - WPBF",
+            "source_url": "https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149",
+            "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
+            "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_precise_location",
+            "eligibility_reason": "newer_source_requires_materiality_decision",
+            "evaluated": true,
+            "promoted": false,
+            "cache_hit": true,
+            "model_call": false,
+            "action": "preserve_existing_canonical",
+            "semantic_status": "validated",
+            "semantic_action": "duplicate_use_existing_canonical",
+            "confidence": 0.98,
+            "shared_anchors": [
+              "Sam's Drive Thru convenience store at 1502 Avenue D/Drive",
+              "Friday search warrant execution",
+              "St. Lucie County Sheriff's Office",
+              "Three arrests",
+              "Ayhem Jaber Ubayda, 21",
+              "Melvin James Kelly, 60",
+              "14 grams crack cocaine recovered",
+              "128 grams marijuana recovered",
+              "Charges of possession with intent to sell within 1,000 feet of convenience store"
+            ],
+            "novel_facts": [
+              "Incoming identifies third suspect as 'Mobley, 71' while candidate has 'Alvin Mobley'",
+              "Minor detail variations in address format (Avenue D vs Avenue Drive)"
+            ],
+            "reason": "Both articles report the identical event: a Friday drug bust at Sam's Drive Thru at 1502 Avenue D involving the same three suspects (Ubayda, Kelly, and Mobley), same quantities of drugs (14g crack cocaine, 128g marijuana), and same charges. The incoming article from WPBF published 8/29 contains no material new information beyond what the canonical from WPEC published 8/28 already covered. The only differences are minor presentation variations and the incoming providing Mobley's age (71) and first name abbreviation. This is the same outlet reporting the same facts one day later.",
+            "validation_errors": []
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
@@ -6548,7 +6377,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election - WPTV",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
             "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
             "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
@@ -6563,7 +6392,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election - WPTV",
             "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
             "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
             "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
@@ -6594,15 +6423,15 @@
             "semantic_action": "hold",
             "confidence": 1.0,
             "shared_anchors": [
-              "Port St. Lucie locality"
+              "Port St. Lucie city location only"
             ],
             "novel_facts": [
-              "EF0 tornado struck Port St. Lucie on or around August 28, 2026",
-              "6-year-old corgi named Luna went missing during tornado",
+              "EF0 tornado struck Port St. Lucie in Bay St. Lucie community",
+              "Corgi named Luna went missing during tornado",
               "Owner Molly Wing-Berman",
-              "Bay St. Lucie community location",
-              "Luna found three streets away by neighbors",
-              "Tornado damaged home, pushed open front door, created hole in wall"
+              "Dog found three streets away by neighbors",
+              "Luna reunited with owner",
+              "Tornado damaged Berman's home, pushed front door open"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -6686,11 +6515,8 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Three arrested after drug search at St. Lucie County convenience store yields crack cocaine, marijuana",
-        "generated_card_count": 0,
-        "elapsed_seconds": 23.281
+        "live_hero_headline": "Port St. Lucie homeowners to receive credits on solid waste bills from $24 million Waste Pro settlement",
+        "elapsed_seconds": 12.465
       },
       {
         "category_key": "indian_river",
@@ -6922,7 +6748,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 7.112
+        "elapsed_seconds": 7.021
       }
     ]
   }
