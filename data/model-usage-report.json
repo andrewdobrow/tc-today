@@ -2,21 +2,31 @@
   "billing_note": "Estimated standard/global Claude API list cost from response usage metadata. Actual invoice cost can differ because of credits, negotiated pricing, regional inference, or provider billing adjustments. Prompts and generated text are never stored in this report.",
   "by_callsite": {
     "generate.py:classify_stories": {
-      "base_input_tokens": 1135,
+      "base_input_tokens": 1403,
       "cache_read_tokens": 0,
       "cache_write_tokens": 0,
-      "estimated_list_cost_usd": 0.003975,
-      "output_tokens": 38,
+      "estimated_list_cost_usd": 0.005469,
+      "output_tokens": 84,
       "requests": 1,
-      "total_input_context_tokens": 1135,
+      "total_input_context_tokens": 1403,
+      "unpriced_requests": 0
+    },
+    "generate.py:generate_category_content": {
+      "base_input_tokens": 2392,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.016761,
+      "output_tokens": 639,
+      "requests": 1,
+      "total_input_context_tokens": 2392,
       "unpriced_requests": 0
     },
     "semantic_publication_gate.py:adjudicate_candidates": {
       "base_input_tokens": 1673,
       "cache_read_tokens": 0,
       "cache_write_tokens": 0,
-      "estimated_list_cost_usd": 0.009699,
-      "output_tokens": 312,
+      "estimated_list_cost_usd": 0.010164,
+      "output_tokens": 343,
       "requests": 1,
       "total_input_context_tokens": 1673,
       "unpriced_requests": 0
@@ -24,35 +34,45 @@
   },
   "by_model": {
     "claude-sonnet-4-5-20250929": {
-      "base_input_tokens": 2808,
+      "base_input_tokens": 5468,
       "cache_read_tokens": 0,
       "cache_write_tokens": 0,
-      "estimated_list_cost_usd": 0.013674,
-      "output_tokens": 350,
-      "requests": 2,
-      "total_input_context_tokens": 2808,
+      "estimated_list_cost_usd": 0.032394,
+      "output_tokens": 1066,
+      "requests": 3,
+      "total_input_context_tokens": 5468,
       "unpriced_requests": 0
     }
   },
   "by_workload_class": {
     "classification": {
-      "base_input_tokens": 1135,
+      "base_input_tokens": 1403,
       "cache_read_tokens": 0,
       "cache_write_tokens": 0,
-      "estimated_list_cost_usd": 0.003975,
-      "output_tokens": 38,
+      "estimated_list_cost_usd": 0.005469,
+      "output_tokens": 84,
       "requests": 1,
-      "total_input_context_tokens": 1135,
+      "total_input_context_tokens": 1403,
       "unpriced_requests": 0
     },
     "identity_decision": {
       "base_input_tokens": 1673,
       "cache_read_tokens": 0,
       "cache_write_tokens": 0,
-      "estimated_list_cost_usd": 0.009699,
-      "output_tokens": 312,
+      "estimated_list_cost_usd": 0.010164,
+      "output_tokens": 343,
       "requests": 1,
       "total_input_context_tokens": 1673,
+      "unpriced_requests": 0
+    },
+    "mixed_generation_and_selection": {
+      "base_input_tokens": 2392,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "estimated_list_cost_usd": 0.016761,
+      "output_tokens": 639,
+      "requests": 1,
+      "total_input_context_tokens": 2392,
       "unpriced_requests": 0
     }
   },
@@ -64,27 +84,56 @@
         "line": 31101
       },
       "cost_components_usd": {
-        "base_input_usd": 0.003405,
+        "base_input_usd": 0.004209,
         "cache_read_usd": 0.0,
         "cache_write_1h_usd": 0.0,
         "cache_write_5m_usd": 0.0,
-        "output_usd": 0.00057
+        "output_usd": 0.00126
       },
-      "duration_seconds": 1.451,
-      "estimated_list_cost_usd": 0.003975,
+      "duration_seconds": 1.921,
+      "estimated_list_cost_usd": 0.005469,
       "model": "claude-sonnet-4-5-20250929",
       "requested_model": "claude-sonnet-4-5",
       "sequence": 1,
       "tokens": {
-        "base_input": 1135,
+        "base_input": 1403,
         "cache_read": 0,
         "cache_write": 0,
         "cache_write_1h": 0,
         "cache_write_5m": 0,
-        "output": 38,
-        "total_input_context": 1135
+        "output": 84,
+        "total_input_context": 1403
       },
       "workload_class": "classification"
+    },
+    {
+      "callsite": {
+        "file": "generate.py",
+        "function": "generate_category_content",
+        "line": 7591
+      },
+      "cost_components_usd": {
+        "base_input_usd": 0.007176,
+        "cache_read_usd": 0.0,
+        "cache_write_1h_usd": 0.0,
+        "cache_write_5m_usd": 0.0,
+        "output_usd": 0.009585
+      },
+      "duration_seconds": 8.205,
+      "estimated_list_cost_usd": 0.016761,
+      "model": "claude-sonnet-4-5-20250929",
+      "requested_model": "claude-sonnet-4-5",
+      "sequence": 2,
+      "tokens": {
+        "base_input": 2392,
+        "cache_read": 0,
+        "cache_write": 0,
+        "cache_write_1h": 0,
+        "cache_write_5m": 0,
+        "output": 639,
+        "total_input_context": 2392
+      },
+      "workload_class": "mixed_generation_and_selection"
     },
     {
       "callsite": {
@@ -97,20 +146,20 @@
         "cache_read_usd": 0.0,
         "cache_write_1h_usd": 0.0,
         "cache_write_5m_usd": 0.0,
-        "output_usd": 0.00468
+        "output_usd": 0.005145
       },
-      "duration_seconds": 5.846,
-      "estimated_list_cost_usd": 0.009699,
+      "duration_seconds": 6.522,
+      "estimated_list_cost_usd": 0.010164,
       "model": "claude-sonnet-4-5-20250929",
       "requested_model": "claude-sonnet-4-5",
-      "sequence": 2,
+      "sequence": 3,
       "tokens": {
         "base_input": 1673,
         "cache_read": 0,
         "cache_write": 0,
         "cache_write_1h": 0,
         "cache_write_5m": 0,
-        "output": 312,
+        "output": 343,
         "total_input_context": 1673
       },
       "workload_class": "identity_decision"
@@ -118,7 +167,7 @@
   ],
   "failed_requests_without_usage": 0,
   "failures": [],
-  "finished_at": "2026-08-29T18:22:47Z",
+  "finished_at": "2026-08-29T18:55:36Z",
   "observability_version": "1.13.6.7s",
   "pricing_catalog": {
     "claude-opus-5": {
@@ -157,15 +206,15 @@
   },
   "provider": "anthropic",
   "schema_version": 1,
-  "started_at": "2026-08-29T18:19:27Z",
+  "started_at": "2026-08-29T18:50:32Z",
   "totals": {
-    "base_input_tokens": 2808,
+    "base_input_tokens": 5468,
     "cache_read_tokens": 0,
     "cache_write_tokens": 0,
-    "estimated_list_cost_usd": 0.013674,
-    "output_tokens": 350,
-    "requests": 2,
-    "total_input_context_tokens": 2808,
+    "estimated_list_cost_usd": 0.032394,
+    "output_tokens": 1066,
+    "requests": 3,
+    "total_input_context_tokens": 5468,
     "unpriced_requests": 0
   }
 }
