@@ -42,7 +42,8 @@ def test_membership_ui_prebuild_has_locked_subscribe_copy_but_only_when_enabled(
     card = g._homepage_support_card_html()
     assert 'href="/subscribe.html"' in header
     assert 'membership-subscribe-label">Subscribe</span>' in header
-    assert 'Limited time &middot; $1 first month &middot; then $4.99/mo' in header
+    assert 'Limited time &middot; $1 first month' in header
+    assert 'then $4.99' not in header
     assert 'membership-header-signin' in header
     assert 'signin=1' in header
     assert "tct-membership-card" in card

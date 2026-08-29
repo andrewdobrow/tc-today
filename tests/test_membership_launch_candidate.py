@@ -32,7 +32,8 @@ def test_launch_header_uses_coral_pricing_context_and_quiet_signin(monkeypatch):
     header = g._header_primary_cta_html()
     css = (ROOT / "style.css").read_text()
     assert "membership-subscribe-btn" in header
-    assert "Limited time &middot; $1 first month &middot; then $4.99/mo" in header
+    assert "Limited time &middot; $1 first month" in header
+    assert "then $4.99" not in header
     assert "membership-header-signin" in header
     assert "signin=1" in header
     assert 'data-membership-welcome' in header
@@ -56,7 +57,7 @@ def test_sitewide_chrome_normalizer_preserves_dark_mode_and_launches_retained_pa
     g._apply_membership_site_chrome(tmp_path)
     launched = sample.read_text()
     assert "membership-subscribe-btn" in launched
-    assert "Limited time &middot; $1 first month &middot; then $4.99/mo" in launched
+    assert "Limited time &middot; $1 first month" in launched
     assert "Sign in" in launched
     assert 'data-membership-welcome' in launched
 
@@ -69,7 +70,7 @@ def test_subscribe_page_is_real_landing_page_not_account_gate():
     assert 'data-plan="monthly"' in page
     assert "Create account" not in page
     assert 'type="password"' not in page
-    assert "Limited time &middot; $1 first month &middot; then $4.99/mo" in page
+    assert "Limited time &middot; $1 first month" in page
     assert "Monthly: $1 today, then $4.99/month starting one month later. Annual: $49/year. Subscriptions renew automatically until canceled." in page
 
 

@@ -154,9 +154,9 @@ def _header_primary_cta_html():
         signin_href = f"{href}{joiner}signin=1"
         return (
             f'<a href="{href}" class="support-btn membership-subscribe-btn" '
-            'style="text-decoration:none" aria-label="Subscribe to Treasure Coast Today — $1 first month, then $4.99 monthly, or $49 annually">'
+            'style="text-decoration:none" aria-label="Subscribe to Treasure Coast Today — $1 first month">'
             '<span class="membership-subscribe-label">Subscribe</span>'
-            '<span class="membership-subscribe-price">Limited time &middot; $1 first month &middot; then $4.99/mo</span>'
+            '<span class="membership-subscribe-price">Limited time &middot; $1 first month</span>'
             '</a>'
             f'<a href="{signin_href}" class="membership-header-signin">Sign in</a>'
         )
