@@ -18,6 +18,7 @@ from tct_engine.semantic_publication_gate import (
     ACTION_HOLD,
     ACTION_UPDATE,
     adjudicate_candidates,
+    adjudicate_resolution,
     headline_similarity,
     retrieve_recent_candidates,
 )
@@ -1292,6 +1293,81 @@ def test_terminal_contamination_rejection_is_not_retried_from_prior_report(tmp_p
     )
 
     assert directives == []
+
+
+class _ThinkingThenTextResponse:
+    def __init__(self, text: str):
+        self.content = [
+            types.SimpleNamespace(type="thinking", thinking="internal reasoning"),
+            types.SimpleNamespace(type="text", text=text),
+        ]
+
+
+class _ThinkingThenTextMessages:
+    def __init__(self, payload: dict):
+        self.payload = payload
+        self.calls = []
+
+    def create(self, **kwargs):
+        self.calls.append(kwargs)
+        return _ThinkingThenTextResponse(json.dumps(self.payload))
+
+
+class _ThinkingThenTextClient:
+    def __init__(self, payload: dict):
+        self.messages = _ThinkingThenTextMessages(payload)
+
+
+def test_semantic_gate_ignores_thinking_blocks_before_text_response():
+    candidates = _candidate_row(
+        _article(CANONICAL_SLUG, CANONICAL_HEADLINE, "2026-07-31")
+    )
+    payload = {
+        "selected_candidate_slug": None,
+        "same_real_world_event": False,
+        "material_new_update": False,
+        "independently_newsworthy_followup": False,
+        "confidence": 0.99,
+        "shared_anchors": [],
+        "novel_facts": ["distinct event"],
+        "reason": "The incoming story is unrelated to the candidate.",
+        "recommended_action": "new_story",
+    }
+    result = adjudicate_candidates(
+        _ThinkingThenTextClient(payload),
+        model="claude-sonnet-5",
+        incoming=_article("", "Port St. Lucie homeowners receive Waste Pro settlement credits", "2026-08-29"),
+        candidates=candidates,
+    )
+    assert result["status"] == "validated"
+    assert result["action"] == "new_story"
+
+
+def test_semantic_resolution_ignores_thinking_blocks_before_text_response():
+    candidates = _candidate_row(
+        _article(CANONICAL_SLUG, CANONICAL_HEADLINE, "2026-07-31")
+    )
+    payload = {
+        "selected_candidate_slug": None,
+        "same_real_world_event": False,
+        "material_new_update": False,
+        "independently_newsworthy_followup": False,
+        "confidence": 0.99,
+        "shared_anchors": [],
+        "novel_facts": ["distinct event"],
+        "reason": "The incoming story is unrelated to the candidate.",
+        "recommended_action": "new_story",
+    }
+    result = adjudicate_resolution(
+        _ThinkingThenTextClient(payload),
+        model="claude-sonnet-5",
+        incoming=_article("", "Port St. Lucie homeowners receive Waste Pro settlement credits", "2026-08-29"),
+        candidates=candidates,
+        initial_decision={"action": ACTION_HOLD, "status": "validated"},
+    )
+    assert result["status"] == "validated"
+    assert result["action"] == "new_story"
+    assert result["resolution_pass"] is True
 
 
 class _CurrentSdkStrictMessages:

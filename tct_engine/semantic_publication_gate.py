@@ -732,6 +732,16 @@ def _json_object(raw: str) -> dict[str, Any]:
     return parsed
 
 
+def _response_text(response: Any) -> str:
+    """Return textual message content while safely ignoring thinking/tool blocks."""
+    chunks: list[str] = []
+    for block in getattr(response, "content", []) or []:
+        value = getattr(block, "text", None)
+        if value:
+            chunks.append(str(value))
+    return "\n".join(chunks).strip()
+
+
 def _clamp_confidence(value: object) -> float:
     try:
         number = float(value)
@@ -904,7 +914,7 @@ def adjudicate_candidates(
         else:
             kwargs["timeout"] = max(1.0, float(timeout_seconds))
         response = request_client.messages.create(**kwargs)
-        raw_text = response.content[0].text if getattr(response, "content", None) else ""
+        raw_text = _response_text(response)
         parsed = _json_object(raw_text)
         validated = validate_model_decision(
             parsed, candidates, min_confidence=min_confidence
@@ -1037,7 +1047,7 @@ def adjudicate_resolution(
         else:
             kwargs["timeout"] = max(1.0, float(timeout_seconds))
         response = request_client.messages.create(**kwargs)
-        raw_text = response.content[0].text if getattr(response, "content", None) else ""
+        raw_text = _response_text(response)
         parsed = _json_object(raw_text)
         validated = validate_model_decision(
             parsed, candidates, min_confidence=min_confidence
