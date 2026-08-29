@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 from contextlib import contextmanager
 import re
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Mapping
 
 from .story_importance import StoryImportance, StoryImportanceEngine, ImportanceLevel
 from .story_resolver import StoryResolution, StoryResolver
@@ -61,6 +62,9 @@ class StoryRegistry:
     UNIFIED_INCIDENT_EVIDENCE_EMERGENCY_LIMIT = 2
     REGISTRY_PRESSURE_BYTES = 45 * 1024 * 1024
     REGISTRY_MAX_BYTES = 50 * 1024 * 1024
+    QUARANTINE_TOMBSTONE_VERSION = 1
+    QUARANTINE_TITLE_SAMPLE_LIMIT = 4
+    QUARANTINE_SOURCE_SAMPLE_LIMIT = 4
 
     @staticmethod
     def _serialize_payload(payload: dict[str, Any], *, indent: int | None) -> str:
@@ -177,6 +181,114 @@ class StoryRegistry:
                 "unique_entries_truncated",
             ):
                 totals[key] += stats[key]
+        return totals
+
+    @staticmethod
+    def _sample_quarantine_values(values: Iterable[Any] | None, *, limit: int) -> list[Any]:
+        """Keep a small deterministic sample from historical quarantine evidence."""
+        original = list(values or ())
+        if not original or limit <= 0:
+            return []
+        selected: list[Any] = []
+        seen: set[str] = set()
+        # Preserve both the oldest and newest evidence without retaining an entire
+        # contaminated story snapshot forever.
+        indexes = list(range(min(limit // 2, len(original))))
+        tail_count = max(0, limit - len(indexes))
+        indexes.extend(range(max(len(original) - tail_count, len(indexes)), len(original)))
+        for index in indexes:
+            value = original[index]
+            key = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+            if key in seen:
+                continue
+            seen.add(key)
+            selected.append(value)
+        return selected[:limit]
+
+    @classmethod
+    def _quarantine_tombstone(
+        cls, story_id: str, snapshot: Mapping[str, Any] | Any
+    ) -> tuple[dict[str, Any], bool, int, int]:
+        """Reduce a quarantined story to the evidence needed to keep it blocked.
+
+        Quarantined stories have no publication authority; operational code uses the
+        mapping key as a permanent denylist. Keeping a full copy of every polluted
+        timeline, resolver trace and candidate payload caused dead diagnostic data to
+        consume roughly a third of the registry. Preserve an auditable tombstone
+        instead: identity, reason, timestamp, representative provenance, counts and a
+        digest of the original snapshot.
+        """
+        if not isinstance(snapshot, Mapping):
+            snapshot = {"story_id": story_id, "legacy_snapshot": snapshot}
+        before = len(
+            json.dumps(snapshot, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+        )
+        if int(snapshot.get("quarantine_tombstone_version", 0) or 0) >= cls.QUARANTINE_TOMBSTONE_VERSION:
+            tombstone = dict(snapshot)
+            after = len(
+                json.dumps(tombstone, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+            )
+            return tombstone, False, before, after
+
+        digest_payload = json.dumps(
+            snapshot, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+        ).encode("utf-8")
+        titles = list(snapshot.get("titles") or ())
+        sources = list(snapshot.get("sources") or ())
+        tombstone = {
+            "story_id": str(snapshot.get("story_id") or story_id),
+            "canonical_title": str(snapshot.get("canonical_title") or ""),
+            "events": list(snapshot.get("events") or ()),
+            "status": str(snapshot.get("status") or ""),
+            "quarantined_at": str(snapshot.get("quarantined_at") or ""),
+            "quarantine_reasons": list(snapshot.get("quarantine_reasons") or ()),
+            "repair_version": snapshot.get("repair_version"),
+            "quarantine_tombstone_version": cls.QUARANTINE_TOMBSTONE_VERSION,
+            "original_snapshot_sha256": hashlib.sha256(digest_payload).hexdigest(),
+            "evidence_counts": {
+                "titles": len(titles),
+                "sources": len(sources),
+                "timeline": len(snapshot.get("timeline") or ()),
+                "resolution_history": len(snapshot.get("resolution_history") or ()),
+                "relationship_history": len(snapshot.get("relationship_history") or ()),
+                "unified_incident_evidence": len(snapshot.get("unified_incident_evidence") or ()),
+            },
+            "representative_titles": cls._sample_quarantine_values(
+                titles, limit=cls.QUARANTINE_TITLE_SAMPLE_LIMIT
+            ),
+            "representative_sources": cls._sample_quarantine_values(
+                sources, limit=cls.QUARANTINE_SOURCE_SAMPLE_LIMIT
+            ),
+        }
+        after = len(
+            json.dumps(tombstone, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+        )
+        return tombstone, True, before, after
+
+    @classmethod
+    def _compact_payload_quarantined_stories(cls, payload: dict[str, Any]) -> dict[str, int]:
+        quarantined = payload.get("quarantined_stories", {})
+        totals = {
+            "records_before": 0,
+            "records_after": 0,
+            "records_compacted": 0,
+            "bytes_before": 0,
+            "bytes_after": 0,
+            "bytes_reclaimed": 0,
+        }
+        if not isinstance(quarantined, dict):
+            return totals
+        totals["records_before"] = len(quarantined)
+        for story_id, snapshot in list(quarantined.items()):
+            tombstone, changed, before, after = cls._quarantine_tombstone(
+                str(story_id), snapshot
+            )
+            quarantined[story_id] = tombstone
+            totals["records_compacted"] += int(changed)
+            totals["bytes_before"] += before
+            totals["bytes_after"] += after
+        totals["records_after"] = len(quarantined)
+        totals["bytes_reclaimed"] = max(0, totals["bytes_before"] - totals["bytes_after"])
         return totals
 
     @classmethod
@@ -396,6 +508,7 @@ class StoryRegistry:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         compaction = self._compact_payload_resolution_history(self.data)
         incident_compaction = self._compact_payload_unified_incident_evidence(self.data)
+        quarantine_compaction = self._compact_payload_quarantined_stories(self.data)
         report = self.data.setdefault("history_compaction", {})
         report.update({
             "version": 1,
@@ -403,6 +516,7 @@ class StoryRegistry:
             "unified_incident_evidence_limit_per_story": self.UNIFIED_INCIDENT_EVIDENCE_LIMIT,
             "last_write": compaction,
             "last_unified_incident_evidence_write": incident_compaction,
+            "last_quarantine_tombstone_write": quarantine_compaction,
         })
         report["total_duplicates_removed"] = int(
             report.get("total_duplicates_removed", 0) or 0

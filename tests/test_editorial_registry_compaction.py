@@ -209,3 +209,78 @@ def test_registry_pressure_uses_lossless_tighter_json_before_hard_ceiling(
     assert payload["history_compaction"]["last_pressure_mode"] == "pressure"
     assert payload["history_compaction"]["last_serialization_mode"] == "pressure_1"
     assert path.stat().st_size < StoryRegistry.REGISTRY_MAX_BYTES
+
+
+def _quarantined_snapshot(story_id: str) -> dict:
+    story = _minimal_story(story_id, [_entry(f"event-{index}") for index in range(40)])
+    story["canonical_title"] = "Contaminated historical story retained only for quarantine"
+    story["titles"] = [f"Unrelated historical headline {index}" for index in range(120)]
+    story["sources"] = [f"https://example.com/archive/{index}" for index in range(80)]
+    story["timeline"] = [
+        {"title": f"Timeline row {index}", "source": f"https://example.com/timeline/{index}"}
+        for index in range(80)
+    ]
+    story["unified_incident_evidence"] = [_incident_evidence(index) for index in range(20)]
+    story["quarantined_at"] = "2026-08-28T22:00:00Z"
+    story["quarantine_reasons"] = ["impossible_title_fanout", "unsupported_sparse_event_merge"]
+    story["repair_version"] = 1
+    return story
+
+
+def test_registry_write_replaces_full_quarantine_snapshots_with_auditable_tombstones(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "editorial_story_registry.json"
+    registry = StoryRegistry(path)
+    snapshot = _quarantined_snapshot("story_009999")
+    registry.data["quarantined_stories"] = {"story_009999": snapshot}
+    before = len(json.dumps(snapshot, separators=(",", ":")).encode("utf-8"))
+
+    registry.save()
+
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    tombstone = payload["quarantined_stories"]["story_009999"]
+    after = len(json.dumps(tombstone, separators=(",", ":")).encode("utf-8"))
+    assert after < before / 4
+    assert tombstone["story_id"] == "story_009999"
+    assert tombstone["canonical_title"] == snapshot["canonical_title"]
+    assert tombstone["events"] == snapshot["events"]
+    assert tombstone["quarantine_reasons"] == snapshot["quarantine_reasons"]
+    assert tombstone["quarantined_at"] == snapshot["quarantined_at"]
+    assert tombstone["quarantine_tombstone_version"] == StoryRegistry.QUARANTINE_TOMBSTONE_VERSION
+    assert len(tombstone["original_snapshot_sha256"]) == 64
+    assert tombstone["evidence_counts"]["titles"] == 120
+    assert tombstone["evidence_counts"]["sources"] == 80
+    assert tombstone["evidence_counts"]["timeline"] == 80
+    assert "timeline" not in tombstone
+    assert "resolution_history" not in tombstone
+    assert "unified_incident_evidence" not in tombstone
+    report = payload["history_compaction"]["last_quarantine_tombstone_write"]
+    assert report["records_compacted"] == 1
+    assert report["bytes_reclaimed"] > 0
+
+
+def test_quarantine_tombstone_compaction_is_idempotent_and_preserves_denylist_identity(
+    tmp_path: Path,
+) -> None:
+    from tct_engine.publication_identity import build_publication_identity_index
+
+    path = tmp_path / "editorial_story_registry.json"
+    registry = StoryRegistry(path)
+    registry.data["quarantined_stories"] = {
+        "story_009998": _quarantined_snapshot("story_009998")
+    }
+    registry.save()
+    first_payload = json.loads(path.read_text(encoding="utf-8"))
+    first = dict(first_payload["quarantined_stories"]["story_009998"])
+
+    reloaded = StoryRegistry(path)
+    reloaded.save()
+    second_payload = json.loads(path.read_text(encoding="utf-8"))
+    second = second_payload["quarantined_stories"]["story_009998"]
+
+    assert second == first
+    assert second_payload["history_compaction"]["last_quarantine_tombstone_write"]["records_compacted"] == 0
+    identity = build_publication_identity_index(second_payload)
+    assert "story_009998" in identity.quarantined_story_ids
+    assert "story_009998" not in identity.safe_story_ids
