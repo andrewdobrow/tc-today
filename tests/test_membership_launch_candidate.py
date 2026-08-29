@@ -74,8 +74,12 @@ def test_subscribe_page_is_real_landing_page_not_account_gate():
     assert "membership-story-card" in page
     assert "membership-landing-value-grid" in page
     assert "membership-faq-grid" in page
-    assert 'data-plan="annual"' in page
-    assert 'data-plan="monthly"' in page
+    assert "membership-hero-plans" in page
+    assert "membership-hero-plan-monthly" in page
+    assert "membership-hero-plan-annual" in page
+    assert page.index("membership-hero-plans") < page.index("membership-landing-value")
+    assert page.count('data-plan="annual"') >= 2
+    assert page.count('data-plan="monthly"') >= 2
     assert "Create account" not in page
     assert 'type="password"' not in page
     assert "Limited time &middot; $1 first month" in page
