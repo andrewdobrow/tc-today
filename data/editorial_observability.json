@@ -7,9 +7,9 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-29T02:42:22Z",
+  "generated_at": "2026-08-29T03:52:58Z",
   "mode": "enforce",
-  "publication_behavior_changed": false,
+  "publication_behavior_changed": true,
   "activation": {
     "activation_version": "1.1",
     "requested_mode": "enforce",
@@ -19,16 +19,72 @@
     "kill_switch": false,
     "maximum_actions_per_run": 8,
     "minimum_confidence": 1.0,
-    "recommendation_count": 0,
-    "enforceable_recommendation_count": 0,
-    "applied_action_count": 0,
+    "recommendation_count": 1,
+    "enforceable_recommendation_count": 1,
+    "applied_action_count": 1,
     "circuit_breaker_tripped": false,
-    "placements_before": 4,
+    "placements_before": 5,
     "placements_after": 4,
-    "publication_behavior_changed": false,
+    "publication_behavior_changed": true,
     "current_regression_gate_passed": true,
-    "recommendations": [],
-    "applied_actions": [],
+    "recommendations": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
+        "headline": "Three St. Lucie County men arrested after narcotics search at convenience store",
+        "source_title_key": "three st lucie county men arrested after narcotics search at convenience store",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-1-000-1502-according-alvin-around-52f4d5c7",
+        "canonical_is_custom": false,
+        "canonical_title": "Three St. Lucie County men arrested on drug charges after search at convenience store",
+        "canonical_source": "",
+        "canonical_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
+        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
+        "category": "st_lucie",
+        "placement": "card"
+      }
+    ],
+    "applied_actions": [
+      {
+        "action": "suppress_duplicate",
+        "enforceable": true,
+        "evidence": "guarded_same_story_stage_95",
+        "confidence": 0.98,
+        "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
+        "headline": "Three St. Lucie County men arrested after narcotics search at convenience store",
+        "source_title_key": "three st lucie county men arrested after narcotics search at convenience store",
+        "incoming_article_id": "",
+        "target_article_id": "",
+        "story_id": "story-1-000-1502-according-alvin-around-52f4d5c7",
+        "canonical_is_custom": false,
+        "canonical_title": "Three St. Lucie County men arrested on drug charges after search at convenience store",
+        "canonical_source": "",
+        "canonical_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
+        "reason": "Same story and safe normalized stage 'arrest-or-charges' at 98% confidence.",
+        "category": "st_lucie",
+        "placement": "card",
+        "slug": "",
+        "source_title": "Three St. Lucie County men arrested after narcotics search at convenience store",
+        "date": "10:40 PM ET",
+        "category_key": "st_lucie",
+        "is_custom": false,
+        "story_stage": "arrest-or-charges",
+        "decision": "SUPPRESSED_DUPLICATE",
+        "action_taken": true,
+        "eligible_for_activation": true,
+        "match_confidence": 98,
+        "matched_prior_slug": "",
+        "matched_prior_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
+        "matched_prior_source": "",
+        "matched_prior_source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
+        "matched_prior_is_custom": false,
+        "activation_managed": true
+      }
+    ],
     "enforcement_allowlist": [
       "custom_canonical_protection",
       "exact_normalized_title_identity",
@@ -49,21 +105,20 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 162,
+    "candidates_processed": 166,
     "routes": {
-      "generate_new": 36,
-      "skip": 124,
-      "update_existing": 2
+      "generate_new": 9,
+      "skip": 157
     },
     "eligibility": {
       "listing": 1,
-      "low_value": 118,
-      "publishable": 43
+      "low_value": 121,
+      "publishable": 44
     },
     "source_classes": {
-      "aggregator": 119,
+      "aggregator": 122,
       "local_news": 27,
-      "regional_news": 16
+      "regional_news": 17
     },
     "rejected_count": 1,
     "rejected_examples": [
@@ -80,80 +135,91 @@
   },
   "relationships": {
     "counts": {
-      "new_story": 29,
-      "same_event": 133
+      "new_story": 9,
+      "same_event": 157
     },
     "examples": [
       {
         "story_id": "story_006600",
         "title": "Florida now the sole state to reject share of $18B Meta youth safety settlement",
         "event_key": "unknown-event-7df556e607",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_006601",
         "title": "Florida high school football scores: Palm Beach County Week 2 results - The Palm Beach Post",
         "event_key": "unknown-event-3cdb5eb0f2",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_006602",
         "title": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
         "event_key": "unknown-event-e7fc09948c",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_006603",
         "title": "PBSO to register every county daycare for AWARE real-time crime alerts - WPEC",
-        "event_key": "unknown-event-768dabdb3c",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "event_key": "unknown-event-9ed6b81859",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_006604",
         "title": "Trooper sustained minor injuries after crash on Bee Line Highway: FHP",
         "event_key": "traffic-crash-d12ff97fa4-d12ff97fa4",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_006605",
         "title": "'Insufficient evidence': Why Florida judge granted ex-Palm Beach Co. clerk accused of child sex abuse bond",
         "event_key": "missing-person-32ae67107e",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -171,27 +237,45 @@
         ]
       },
       {
+        "story_id": "story_006515",
+        "title": "Construction worker injured at new Tradition Lakes K-8 - WPBF",
+        "event_key": "unknown-event-66a10ac05a",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_006606",
         "title": "Holiday airfares rising: Why experts say book now, not later",
         "event_key": "unknown-event-b23adacc97",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_006607",
         "title": "Port St. Lucie residents to see solid waste bill credits from $24 million Waste Pro settlement",
         "event_key": "unknown-event-be122a904e",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -206,6 +290,18 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_006638",
+        "title": "Florida schools to use 'Lake America' name immediately, education chief says - WPEC",
+        "event_key": "unknown-event-1da3c9c504",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -240,20 +336,6 @@
         "story_id": "story_006563",
         "title": "Riviera Beach cracks down on long-term anchoring in the Intracoastal Waterway",
         "event_key": "unknown-event-3f63e72a60",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_006565",
-        "title": "Sheriff says man who eluded deputies was picking saw palmetto berries - WPEC",
-        "event_key": "unknown-event-d38bae309f",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -324,20 +406,6 @@
         "story_id": "story_006517",
         "title": "Palm Beach County dog park on Hypoluxo Road targeted for February 2028 completion",
         "event_key": "unknown-event-fe49e82242",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_006474",
-        "title": "Palm Beach Zoo keeps bears cool with ice enrichments during Florida's hot months",
-        "event_key": "unknown-event-df454e49aa",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -354,78 +422,89 @@
         "story_id": "story_006600",
         "title": "Florida now the sole state to reject share of $18B Meta youth safety settlement",
         "event_key": "unknown-event-7df556e607",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_006601",
         "title": "Florida high school football scores: Palm Beach County Week 2 results - The Palm Beach Post",
         "event_key": "unknown-event-3cdb5eb0f2",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_006602",
         "title": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
         "event_key": "unknown-event-e7fc09948c",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_006603",
         "title": "PBSO to register every county daycare for AWARE real-time crime alerts - WPEC",
-        "event_key": "unknown-event-768dabdb3c",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "event_key": "unknown-event-9ed6b81859",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_006604",
         "title": "Trooper sustained minor injuries after crash on Bee Line Highway: FHP",
         "event_key": "traffic-crash-d12ff97fa4-d12ff97fa4",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_006605",
         "title": "'Insufficient evidence': Why Florida judge granted ex-Palm Beach Co. clerk accused of child sex abuse bond",
         "event_key": "missing-person-32ae67107e",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -444,29 +523,48 @@
         ]
       },
       {
+        "story_id": "story_006515",
+        "title": "Construction worker injured at new Tradition Lakes K-8 - WPBF",
+        "event_key": "unknown-event-66a10ac05a",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
+        ]
+      },
+      {
         "story_id": "story_006606",
         "title": "Holiday airfares rising: Why experts say book now, not later",
         "event_key": "unknown-event-b23adacc97",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_006607",
         "title": "Port St. Lucie residents to see solid waste bill credits from $24 million Waste Pro settlement",
         "event_key": "unknown-event-be122a904e",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -482,6 +580,19 @@
           "Exact event-key mapping: true",
           "No novel follow-up milestone: true",
           "Confidence: 1.00"
+        ]
+      },
+      {
+        "story_id": "story_006638",
+        "title": "Florida schools to use 'Lake America' name immediately, education chief says - WPEC",
+        "event_key": "unknown-event-1da3c9c504",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
         ]
       },
       {
@@ -518,21 +629,6 @@
         "story_id": "story_006563",
         "title": "Riviera Beach cracks down on long-term anchoring in the Intracoastal Waterway",
         "event_key": "unknown-event-3f63e72a60",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_006565",
-        "title": "Sheriff says man who eluded deputies was picking saw palmetto berries - WPEC",
-        "event_key": "unknown-event-d38bae309f",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -608,21 +704,6 @@
         "story_id": "story_006517",
         "title": "Palm Beach County dog park on Hypoluxo Road targeted for February 2028 completion",
         "event_key": "unknown-event-fe49e82242",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_006474",
-        "title": "Palm Beach Zoo keeps bears cool with ice enrichments during Florida's hot months",
-        "event_key": "unknown-event-df454e49aa",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -652,8 +733,8 @@
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1186,
-      "timeline_entries_examined": 3231,
+      "stories_with_timelines": 1182,
+      "timeline_entries_examined": 3221,
       "transitions_examined": 1912,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 28,
@@ -1576,7 +1657,7 @@
           ]
         },
         {
-          "story_id": "story_006597",
+          "story_id": "story_006635",
           "story_title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
           "transition_count": 1,
           "blocking_reasons": {
@@ -1587,7 +1668,7 @@
               "prior_article": {
                 "article_id": "rss-a159016d9d6f5bf11bcf",
                 "event_key": "missing-person-bc2bfac354",
-                "published_at": "2026-08-29T02:33:42.998530+00:00",
+                "published_at": "2026-08-29T03:46:57.863369+00:00",
                 "title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
                 "source": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia",
                 "url": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia"
@@ -1595,7 +1676,7 @@
               "newer_article": {
                 "article_id": "rss-a875a76fc20cb08f71fe",
                 "event_key": "unknown-event-b3ff31e321",
-                "published_at": "2026-08-29T02:33:42.998530+00:00",
+                "published_at": "2026-08-29T03:46:57.863369+00:00",
                 "title": "Police arrest teen in connection with deadly Boynton Beach shooting",
                 "source": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting",
                 "url": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting"
@@ -1629,11 +1710,11 @@
         "timeline_identity_unanchored": 21,
         "weak_title_continuity": 8
       },
-      "excluded_entry_count": 145,
+      "excluded_entry_count": 139,
       "exclusion_reasons": {
         "insufficient_title_detail": 43,
         "low_value_title": 15,
-        "social_source": 88
+        "social_source": 82
       },
       "examples": [
         {
@@ -3513,7 +3594,7 @@
           ]
         },
         {
-          "story_id": "story_006597",
+          "story_id": "story_006635",
           "story_title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
           "milestones": [
             "arrest",
@@ -3554,7 +3635,7 @@
           "prior_article": {
             "article_id": "rss-a159016d9d6f5bf11bcf",
             "event_key": "missing-person-bc2bfac354",
-            "published_at": "2026-08-29T02:33:42.998530+00:00",
+            "published_at": "2026-08-29T03:46:57.863369+00:00",
             "title": "Palm Springs police ask for help locating missing 55-year-old woman with dementia",
             "source": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia",
             "url": "https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/palm-springs-police-ask-for-help-locating-missing-55-year-old-woman-with-dementia"
@@ -3562,14 +3643,14 @@
           "newer_article": {
             "article_id": "rss-a875a76fc20cb08f71fe",
             "event_key": "unknown-event-b3ff31e321",
-            "published_at": "2026-08-29T02:33:42.998530+00:00",
+            "published_at": "2026-08-29T03:46:57.863369+00:00",
             "title": "Police arrest teen in connection with deadly Boynton Beach shooting",
             "source": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting",
             "url": "https://www.wptv.com/news/region-s-palm-beach-county/boynton-beach/police-arrest-teen-in-connection-with-deadly-boynton-beach-shooting"
           },
           "candidate_trace": [
             "Follow-up candidate mode: retrospective_observe_only",
-            "Story: story_006597",
+            "Story: story_006635",
             "Novel milestones: arrest, death",
             "Identity anchor qualified: False",
             "Identity anchor codes: identity_anchor_missing",
@@ -3591,28 +3672,28 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 1067,
-      "treasure_coast_local": 859,
+      "florida": 1069,
+      "treasure_coast_local": 857,
       "treasure_coast_region": 401,
-      "unknown": 2021
+      "unknown": 2017
     },
     "average_score": 60.74
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 1067,
-      "treasure_coast_local": 859,
+      "florida": 1069,
+      "treasure_coast_local": 857,
       "treasure_coast_region": 401,
-      "unknown": 2021
+      "unknown": 2017
     },
-    "average_priority": 3.57
+    "average_priority": 3.56
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3529,
+      "active": 3537,
       "breaking": 1,
-      "developing": 104,
-      "ongoing": 712,
+      "developing": 105,
+      "ongoing": 699,
       "resolved": 2
     }
   },
@@ -3620,8 +3701,8 @@
     "repair_version": 14,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 5407,
-    "active_stories_after": 5407,
+    "active_stories_before": 5435,
+    "active_stories_after": 5435,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -3650,20 +3731,20 @@
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-08-29T02:34:14Z",
-    "quarantined_story_records_retained": 636,
-    "active_story_count": 5436
+    "generated_at": "2026-08-29T03:47:29Z",
+    "quarantined_story_records_retained": 641,
+    "active_story_count": 5444
   },
   "stories": {
-    "total": 4348,
+    "total": 4344,
     "importance_levels": {
       "breaking": 7,
-      "high": 83,
-      "normal": 663,
+      "high": 82,
+      "normal": 660,
       "low": 3595,
       "archived": 0
     },
-    "average_importance": 9.14,
+    "average_importance": 9.1,
     "top": [
       {
         "story_id": "story_001880",
@@ -3678,7 +3759,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 10.12
+          "age_hours": 11.34
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3732,7 +3813,7 @@
           "state": "breaking",
           "reason": "Breaking importance with a current or undated update",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 10.12,
+          "hours_since_update": 11.34,
           "event_count": 41,
           "timeline_entries": 25
         }
@@ -3750,7 +3831,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 55.32
+          "age_hours": 56.52
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3814,7 +3895,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-26T19:18:41.219878+00:00",
-          "hours_since_update": 55.32,
+          "hours_since_update": 56.52,
           "event_count": 28,
           "timeline_entries": 20
         }
@@ -3832,7 +3913,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 72.88
+          "age_hours": 74.1
         },
         "level": "breaking",
         "importance_reasons": [
@@ -3901,7 +3982,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-26T01:42:10.693389+00:00",
-          "hours_since_update": 72.88,
+          "hours_since_update": 74.1,
           "event_count": 40,
           "timeline_entries": 32
         }
@@ -3919,7 +4000,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 63.88
+          "age_hours": 65.1
         },
         "level": "high",
         "importance_reasons": [
@@ -3962,13 +4043,13 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-26T10:42:22.175311+00:00",
-          "hours_since_update": 63.88,
+          "hours_since_update": 65.1,
           "event_count": 4,
           "timeline_entries": 4
         }
       },
       {
-        "story_id": "story_006593",
+        "story_id": "story_006631",
         "title": "Community divided over Flock Safety cameras after Treasure Coast homicide arrest",
         "score": 100,
         "editorial_priority": 62,
@@ -3980,7 +4061,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 682.89
+          "age_hours": 684.12
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4037,7 +4118,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 682.89,
+          "hours_since_update": 684.12,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4055,7 +4136,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 55.27
+          "age_hours": 56.49
         },
         "level": "high",
         "importance_reasons": [
@@ -4094,7 +4175,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-26T19:18:41.219878+00:00",
-          "hours_since_update": 55.27,
+          "hours_since_update": 56.49,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4112,7 +4193,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 24.87
+          "age_hours": 26.09
         },
         "level": "high",
         "importance_reasons": [
@@ -4150,7 +4231,7 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-28T01:42:52.960630+00:00",
-          "hours_since_update": 24.87,
+          "hours_since_update": 26.09,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4168,7 +4249,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 682.89
+          "age_hours": 684.11
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4216,7 +4297,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-07-31T15:41:27.895225+00:00",
-          "hours_since_update": 682.89,
+          "hours_since_update": 684.11,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4234,7 +4315,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 360.89
+          "age_hours": 362.11
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4282,7 +4363,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 360.89,
+          "hours_since_update": 362.11,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -4300,7 +4381,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 351.89
+          "age_hours": 353.11
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4346,7 +4427,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T10:41:34.652293+00:00",
-          "hours_since_update": 351.89,
+          "hours_since_update": 353.11,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4364,7 +4445,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 34.87
+          "age_hours": 36.08
         },
         "level": "high",
         "importance_reasons": [
@@ -4419,7 +4500,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-27T15:44:47.058272+00:00",
-          "hours_since_update": 34.87,
+          "hours_since_update": 36.08,
           "event_count": 87,
           "timeline_entries": 87
         }
@@ -4437,7 +4518,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 32.98
+          "age_hours": 34.18
         },
         "level": "high",
         "importance_reasons": [
@@ -4489,7 +4570,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-27T17:39:05.927333+00:00",
-          "hours_since_update": 32.98,
+          "hours_since_update": 34.18,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -4507,7 +4588,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 10.13
+          "age_hours": 11.35
         },
         "level": "normal",
         "importance_reasons": [
@@ -4551,7 +4632,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 10.13,
+          "hours_since_update": 11.35,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4569,7 +4650,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 670.51
+          "age_hours": 671.73
         },
         "level": "high",
         "importance_reasons": [
@@ -4612,7 +4693,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 670.51,
+          "hours_since_update": 671.73,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4630,7 +4711,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 670.51
+          "age_hours": 671.73
         },
         "level": "high",
         "importance_reasons": [
@@ -4673,7 +4754,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-01T04:03:52.676583+00:00",
-          "hours_since_update": 670.51,
+          "hours_since_update": 671.73,
           "event_count": 14,
           "timeline_entries": 7
         }
@@ -4691,7 +4772,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 178.89
+          "age_hours": 180.11
         },
         "level": "high",
         "importance_reasons": [
@@ -4735,7 +4816,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-21T15:41:39.092086+00:00",
-          "hours_since_update": 178.89,
+          "hours_since_update": 180.11,
           "event_count": 34,
           "timeline_entries": 34
         }
@@ -4753,7 +4834,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 360.89
+          "age_hours": 362.11
         },
         "level": "high",
         "importance_reasons": [
@@ -4796,7 +4877,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 360.89,
+          "hours_since_update": 362.11,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4814,7 +4895,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 288.89
+          "age_hours": 290.11
         },
         "level": "high",
         "importance_reasons": [
@@ -4855,7 +4936,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-17T01:41:33.127844+00:00",
-          "hours_since_update": 288.89,
+          "hours_since_update": 290.11,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -4873,7 +4954,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 87.88
+          "age_hours": 89.1
         },
         "level": "high",
         "importance_reasons": [
@@ -4912,7 +4993,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-25T10:42:16.525222+00:00",
-          "hours_since_update": 87.88,
+          "hours_since_update": 89.1,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4930,7 +5011,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 370.88
+          "age_hours": 372.11
         },
         "level": "high",
         "importance_reasons": [
@@ -4974,7 +5055,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-13T15:41:45.363233+00:00",
-          "hours_since_update": 370.88,
+          "hours_since_update": 372.11,
           "event_count": 15,
           "timeline_entries": 15
         }
@@ -4984,7 +5065,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-08-29T02:39:41Z",
+    "generated_at": "2026-08-29T03:50:36Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -4999,23 +5080,24 @@
     "summary": {
       "category_count": 9,
       "statuses": {
+        "cache_hit": 1,
         "category_eligibility_archive_recovery": 5,
         "generated_live": 2,
-        "generation_failed_archive_recovery": 2
+        "quality_gate_archive_recovery": 1
       },
       "failures": {
-        "contextless_update_lead": 2,
-        "no_category_eligible_sources": 5
+        "no_category_eligible_sources": 5,
+        "publication_quality_rejected": 1
       },
-      "model_attempt_count": 7,
-      "model_elapsed_seconds": 112.231,
-      "archive_recovery_requested_count": 7,
+      "model_attempt_count": 3,
+      "model_elapsed_seconds": 24.011,
+      "archive_recovery_requested_count": 6,
       "sports_expired_event_preview_count": 0,
-      "contextual_update_lead_rejection_count": 5,
-      "article_framing_rejection_count": 2,
-      "category_eligibility_rejection_count": 7,
-      "published_story_duplicate_suppression_count": 26,
-      "story_aware_update_context_count": 8,
+      "contextual_update_lead_rejection_count": 0,
+      "article_framing_rejection_count": 1,
+      "category_eligibility_rejection_count": 4,
+      "published_story_duplicate_suppression_count": 31,
+      "story_aware_update_context_count": 5,
       "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 1,
       "material_update_promotion_cache_hit_count": 2,
@@ -5027,8 +5109,8 @@
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 29,
-        "fresh_candidate_count": 25,
-        "publishable_source_count": 12,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 11,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5045,23 +5127,9 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 3,
+        "category_eligibility_assessed_count": 2,
+        "category_eligibility_rejection_count": 2,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election"
-          },
           {
             "contract_version": "1.0-local-government-central-action",
             "category_key": "local_gov",
@@ -5091,8 +5159,18 @@
             "source_url": "https://www.wpbf.com/article/st-lucie-county-school-bus-driver-faces-disciplinary-action-for-illegal-u-turn/73543463"
           }
         ],
-        "published_story_duplicate_suppression_count": 4,
+        "published_story_duplicate_suppression_count": 5,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
+            "editorial_story_id": "story_006602",
+            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Port St. Lucie High football player held on ICE detainer after school zone speeding stop - WPEC",
@@ -5183,6 +5261,21 @@
         "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
+            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Former Palm Beach County clerk accused of child sex abuse being released on $160K bond",
@@ -5284,40 +5377,30 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 35.617
+        "elapsed_seconds": 16.441
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
-        "status": "generation_failed_archive_recovery",
+        "status": "generated_live",
         "fetched_candidate_count": 29,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 13,
+        "publishable_source_count": 11,
         "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 5.298,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: new_development_missing — Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 5.811,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: new_development_missing — Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC"
+            "elapsed_seconds": 5.077,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 11.109,
-        "failure_code": "contextless_update_lead",
-        "failure_summary": "Contextless update lead for hero: new_development_missing — Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
+        "model_elapsed_seconds": 5.077,
+        "failure_code": "",
+        "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5326,23 +5409,9 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 3,
-        "category_eligibility_rejection_count": 2,
+        "category_eligibility_assessed_count": 2,
+        "category_eligibility_rejection_count": 1,
         "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-primary-crime-safety-focus",
-            "category_key": "crime",
-            "mode": "enforce",
-            "policy": "primary_crime_safety_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_primary_crime_safety_focus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election"
-          },
           {
             "contract_version": "1.0-primary-crime-safety-focus",
             "category_key": "crime",
@@ -5362,11 +5431,21 @@
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
+            "editorial_story_id": "story_006602",
+            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WFLX",
             "source_url": "https://www.wflx.com/2026/08/27/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-brush?outputType=amp",
             "editorial_story_id": "story_006122",
             "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+            "canonical_headline": "Martin County deputies used drones to track hit-and-run suspect hiding underwater in Palm City swamp",
             "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -5376,7 +5455,7 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
             "editorial_story_id": "story_006122",
             "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+            "canonical_headline": "Martin County deputies used drones to track hit-and-run suspect hiding underwater in Palm City swamp",
             "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -5392,6 +5471,16 @@
           },
           {
             "category_key": "crime",
+            "source_headline": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
+            "source_url": "https://cbs12.com/newsletter-daily/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
+            "editorial_story_id": "story_006364",
+            "canonical_slug": "2026-08-27-port-st-lucie-police-dispel-active-shooter-rumor-after-swat-operation-on-southea",
+            "canonical_headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "crime",
             "source_headline": "Man indicted on attempted murder charges after Vero Beach shootout with deputies - WPEC",
             "source_url": "https://news.google.com/rss/articles/CBMi2AJBVV95cUxPWEItSDMzdDNOa3RPMkRQSGdrVGZiTkVyd2hjSUpwY1l1TldXd2owZ1hNbW5CU0ZuVVlLRkV6Y2c0WDNZOElsYkpDOTdTSWl5LV9BUUU4V2dXMGRZRm9aUXJUWlpTS1BjeHI4OThiOWpmQ2xvY1g2REFHazV2UHlTQ2xVQlFOVXkyRUdOVENqeWNoMzhIWFRUci1MQ29laXdqR0dDeVlGMEFwYncxc19lQk1RZ2JDOGM2RWdqYWRyODVfNExBY0hMa3RBdjZfOVdObWdUN2hnaFlZbHVENGpwb3paVlN6bHlHalczMEpjRHdoNWJJdkFGZ0hXTWpCbnBsZjMzc0JWTGt1X0VydHkzMFhKRVhFLVRtTmRpQi1LaEZJSWJBMXNRbkNGMkZlY1ZvbndLZG9zdF9LZlZEQVNNZEZ1SmhMMkplVGdrM1kyVFdIblJKZ3FFQg",
             "editorial_story_id": "story_006320",
@@ -5399,261 +5488,8 @@
             "canonical_headline": "Colorado man indicted on attempted murder charges after Vero Beach shootout with deputies",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Martin County deputies capture Palm City hit-and-run suspect in swamp - WPBF",
-            "source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
-            "editorial_story_id": "story_006122",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Hit-and-run suspect captured after hours-long manhunt through swamp in Palm City - WPEC",
-            "source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
-            "editorial_story_id": "story_006122",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-            "basis": "registry_same_event_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 2,
-        "story_aware_update_context_bindings": [
-          {
-            "source_headline": "Former Palm Beach County clerk accused of child sex abuse being released on $160K bond",
-            "source_url": "https://www.wptv.com/news/state/bond-set-at-160k-for-former-palm-beach-county-clerk-accused-of-child-sex-abuse",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-08-19-palm-beach-county-clerk-michael-caruso-extradited-to-orange-county-jail-on-five",
-            "canonical_headline": "Palm Beach County Clerk Michael Caruso extradited to Orange County jail on five felony child sex abuse charges",
-            "basis": "event-identity-authority:participant_plus_precise_location",
-            "identity_keys": [
-              "story:story_004729",
-              "source:https://www.wptv.com/news/state/bond-set-at-160k-for-former-palm-beach-county-clerk-accused-of-child-sex-abuse"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_named_people",
-              "shared_precise_location",
-              "shared_subject_phrase",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=9",
-              "shared_locality=['palm-beach-county']",
-              "shared_event_families=['child-death']",
-              "shared_named_people=['disclosed the abuse', 'spanning nearly']",
-              "shared_precise_locations=['december-2025-court']",
-              "shared_agencies=[]",
-              "shared_subject_phrases=['child-sex-abuse']",
-              "shared_headline_topic_core=['abuse', 'child', 'clerk', 'palm', 'sex']",
-              "shared_distinctive_token_count=80",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          },
-          {
-            "source_headline": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
-            "source_url": "https://cbs12.com/newsletter-daily/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-08-27-port-st-lucie-police-dispel-active-shooter-rumor-after-swat-operation-on-southea",
-            "canonical_headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_006364",
-              "source:https://cbs12.com/newsletter-daily/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_006364,source:https://cbs12.com/newsletter-daily/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
-          }
-        ],
-        "material_update_promotion_evaluation_count": 0,
-        "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [
-          {
-            "category_key": "crime",
-            "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WFLX",
-            "source_url": "https://www.wflx.com/2026/08/27/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-brush?outputType=amp",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WPTV",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Port St. Lucie High football player held on ICE detainer after school zone speeding stop - WPEC",
-            "source_url": "https://cbs12.com/news/local/port-st-lucie-high-football-player-held-on-ice-detainer-after-school-zone-speeding-stop-us-immigration-customs-enforcement-st-lucie-county-sheriffs-office-florida-news",
-            "canonical_slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
-            "canonical_headline": "Port St. Lucie High School football player held in ICE custody after school zone speeding violation",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Man indicted on attempted murder charges after Vero Beach shootout with deputies - WPEC",
-            "source_url": "https://news.google.com/rss/articles/CBMi2AJBVV95cUxPWEItSDMzdDNOa3RPMkRQSGdrVGZiTkVyd2hjSUpwY1l1TldXd2owZ1hNbW5CU0ZuVVlLRkV6Y2c0WDNZOElsYkpDOTdTSWl5LV9BUUU4V2dXMGRZRm9aUXJUWlpTS1BjeHI4OThiOWpmQ2xvY1g2REFHazV2UHlTQ2xVQlFOVXkyRUdOVENqeWNoMzhIWFRUci1MQ29laXdqR0dDeVlGMEFwYncxc19lQk1RZ2JDOGM2RWdqYWRyODVfNExBY0hMa3RBdjZfOVdObWdUN2hnaFlZbHVENGpwb3paVlN6bHlHalczMEpjRHdoNWJJdkFGZ0hXTWpCbnBsZjMzc0JWTGt1X0VydHkzMFhKRVhFLVRtTmRpQi1LaEZJSWJBMXNRbkNGMkZlY1ZvbndLZG9zdF9LZlZEQVNNZEZ1SmhMMkplVGdrM1kyVFdIblJKZ3FFQg",
-            "canonical_slug": "2026-08-27-colorado-man-indicted-on-attempted-murder-charges-after-vero-beach-shootout-with",
-            "canonical_headline": "Colorado man indicted on attempted murder charges after Vero Beach shootout with deputies",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Martin County deputies capture Palm City hit-and-run suspect in swamp - WPBF",
-            "source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-            "canonical_is_custom": false,
-            "identity_basis": "pre_generation_ledger:exact_source_url",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Hit-and-run suspect captured after hours-long manhunt through swamp in Palm City - WPEC",
-            "source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          }
-        ],
-        "new_publication_stale_rejected_count": 0,
-        "generation_status": "failed",
-        "budget_seconds": 180.0,
-        "elapsed_seconds": 26.996
-      },
-      {
-        "category_key": "business",
-        "category_label": "Business & Development",
-        "status": "category_eligibility_archive_recovery",
-        "fetched_candidate_count": 24,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 11,
-        "selected_source_count": 0,
-        "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
-        "failure_code": "no_category_eligible_sources",
-        "failure_summary": "No source passed Business & Development category eligibility contract",
-        "sports_expired_event_preview_count": 0,
-        "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 0,
-        "contextual_update_lead_rejections": [],
-        "article_framing_rejection_count": 0,
-        "article_framing_rejections": [],
-        "category_eligibility_mode": "enforce",
-        "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 2,
-        "category_eligibility_rejection_count": 2,
-        "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-business-development-primary-focus",
-            "category_key": "business",
-            "mode": "enforce",
-            "policy": "primary_business_development_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "competing_story_form_without_business_development_focus",
-            "positive_signals": [],
-            "competing_signals": [
-              "election_political_process:ballot"
-            ],
-            "local_nexus_signals": [
-              "source_locality:port st lucie"
-            ],
-            "headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election"
-          },
-          {
-            "contract_version": "1.0-business-development-primary-focus",
-            "category_key": "business",
-            "mode": "enforce",
-            "policy": "primary_business_development_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "competing_story_form_without_business_development_focus",
-            "positive_signals": [],
-            "competing_signals": [
-              "election_political_process:ballot"
-            ],
-            "local_nexus_signals": [
-              "source_locality:port st lucie"
-            ],
-            "headline": "Port St. Lucie residents to see solid waste bill credits from $24 million Waste Pro settlement",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-to-see-solid-waste-bill-credits-from-24-million-waste-pro-settlement"
-          }
-        ],
-        "published_story_duplicate_suppression_count": 0,
-        "published_story_duplicate_suppressions": [],
         "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
@@ -5702,9 +5538,230 @@
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
-        "material_update_promotion_decisions": [],
+        "material_update_promotion_decisions": [
+          {
+            "category_key": "crime",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
+            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WFLX",
+            "source_url": "https://www.wflx.com/2026/08/27/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-brush?outputType=amp",
+            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+            "canonical_headline": "Martin County deputies used drones to track hit-and-run suspect hiding underwater in Palm City swamp",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WPTV",
+            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
+            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
+            "canonical_headline": "Martin County deputies used drones to track hit-and-run suspect hiding underwater in Palm City swamp",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Port St. Lucie High football player held on ICE detainer after school zone speeding stop - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-high-football-player-held-on-ice-detainer-after-school-zone-speeding-stop-us-immigration-customs-enforcement-st-lucie-county-sheriffs-office-florida-news",
+            "canonical_slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
+            "canonical_headline": "Port St. Lucie High School football player held in ICE custody after school zone speeding violation",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "material_update_source_already_absorbed",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
+            "source_url": "https://cbs12.com/newsletter-daily/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
+            "canonical_slug": "2026-08-27-port-st-lucie-police-dispel-active-shooter-rumor-after-swat-operation-on-southea",
+            "canonical_headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "crime",
+            "source_headline": "Man indicted on attempted murder charges after Vero Beach shootout with deputies - WPEC",
+            "source_url": "https://news.google.com/rss/articles/CBMi2AJBVV95cUxPWEItSDMzdDNOa3RPMkRQSGdrVGZiTkVyd2hjSUpwY1l1TldXd2owZ1hNbW5CU0ZuVVlLRkV6Y2c0WDNZOElsYkpDOTdTSWl5LV9BUUU4V2dXMGRZRm9aUXJUWlpTS1BjeHI4OThiOWpmQ2xvY1g2REFHazV2UHlTQ2xVQlFOVXkyRUdOVENqeWNoMzhIWFRUci1MQ29laXdqR0dDeVlGMEFwYncxc19lQk1RZ2JDOGM2RWdqYWRyODVfNExBY0hMa3RBdjZfOVdObWdUN2hnaFlZbHVENGpwb3paVlN6bHlHalczMEpjRHdoNWJJdkFGZ0hXTWpCbnBsZjMzc0JWTGt1X0VydHkzMFhKRVhFLVRtTmRpQi1LaEZJSWJBMXNRbkNGMkZlY1ZvbndLZG9zdF9LZlZEQVNNZEZ1SmhMMkplVGdrM1kyVFdIblJKZ3FFQg",
+            "canonical_slug": "2026-08-27-colorado-man-indicted-on-attempted-murder-charges-after-vero-beach-shootout-with",
+            "canonical_headline": "Colorado man indicted on attempted murder charges after Vero Beach shootout with deputies",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "insufficient_source_depth",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          }
+        ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 14.565
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
+        "generated_card_count": 0,
+        "elapsed_seconds": 22.923
+      },
+      {
+        "category_key": "business",
+        "category_label": "Business & Development",
+        "status": "category_eligibility_archive_recovery",
+        "fetched_candidate_count": 24,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 10,
+        "selected_source_count": 0,
+        "cache_hit": false,
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Business & Development category eligibility contract",
+        "sports_expired_event_preview_count": 0,
+        "sports_expired_event_previews": [],
+        "contextual_update_lead_rejection_count": 0,
+        "contextual_update_lead_rejections": [],
+        "article_framing_rejection_count": 0,
+        "article_framing_rejections": [],
+        "category_eligibility_mode": "enforce",
+        "category_eligibility_policy": "primary_business_development_focus_required",
+        "category_eligibility_assessed_count": 1,
+        "category_eligibility_rejection_count": 1,
+        "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-business-development-primary-focus",
+            "category_key": "business",
+            "mode": "enforce",
+            "policy": "primary_business_development_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "competing_story_form_without_business_development_focus",
+            "positive_signals": [],
+            "competing_signals": [
+              "election_political_process:ballot"
+            ],
+            "local_nexus_signals": [
+              "source_locality:port st lucie"
+            ],
+            "headline": "Port St. Lucie residents to see solid waste bill credits from $24 million Waste Pro settlement",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-to-see-solid-waste-bill-credits-from-24-million-waste-pro-settlement"
+          }
+        ],
+        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppressions": [
+          {
+            "category_key": "business",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
+            "editorial_story_id": "story_006602",
+            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          }
+        ],
+        "story_aware_update_context_count": 1,
+        "story_aware_update_context_bindings": [
+          {
+            "source_headline": "Former Palm Beach County clerk accused of child sex abuse being released on $160K bond",
+            "source_url": "https://www.wptv.com/news/state/bond-set-at-160k-for-former-palm-beach-county-clerk-accused-of-child-sex-abuse",
+            "publisher": "www.wptv.com",
+            "canonical_slug": "2026-08-19-palm-beach-county-clerk-michael-caruso-extradited-to-orange-county-jail-on-five",
+            "canonical_headline": "Palm Beach County Clerk Michael Caruso extradited to Orange County jail on five felony child sex abuse charges",
+            "basis": "event-identity-authority:participant_plus_precise_location",
+            "identity_keys": [
+              "story:story_004729",
+              "source:https://www.wptv.com/news/state/bond-set-at-160k-for-former-palm-beach-county-clerk-accused-of-child-sex-abuse"
+            ],
+            "match_confidence": 0.95,
+            "evidence_dimensions": [
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_named_people",
+              "shared_precise_location",
+              "shared_subject_phrase",
+              "shared_headline_topic",
+              "distinctive_fact_overlap"
+            ],
+            "decision_trace": [
+              "left_identity_origin=source_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=9",
+              "shared_locality=['palm-beach-county']",
+              "shared_event_families=['child-death']",
+              "shared_named_people=['disclosed the abuse', 'spanning nearly']",
+              "shared_precise_locations=['december-2025-court']",
+              "shared_agencies=[]",
+              "shared_subject_phrases=['child-sex-abuse']",
+              "shared_headline_topic_core=['abuse', 'child', 'clerk', 'palm', 'sex']",
+              "shared_distinctive_token_count=80",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
+              "write_authorized=True"
+            ],
+            "relationship": "same_event_verified",
+            "final_publication_action": "canonical_bound_before_generation"
+          }
+        ],
+        "material_update_promotion_evaluation_count": 0,
+        "material_update_promotion_count": 0,
+        "material_update_promotion_cache_hit_count": 0,
+        "material_update_promotion_model_call_count": 0,
+        "material_update_promotion_decisions": [
+          {
+            "category_key": "business",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
+            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          }
+        ],
+        "new_publication_stale_rejected_count": 0,
+        "elapsed_seconds": 7.202
       },
       {
         "category_key": "sports",
@@ -5742,7 +5799,7 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 2,
-        "elapsed_seconds": 12.413
+        "elapsed_seconds": 12.164
       },
       {
         "category_key": "things_to_do",
@@ -5852,7 +5909,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 11.518
+        "elapsed_seconds": 7.04
       },
       {
         "category_key": "florida",
@@ -5860,7 +5917,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 22,
-        "publishable_source_count": 2,
+        "publishable_source_count": 3,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5877,7 +5934,7 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "observe_only",
         "category_eligibility_policy": "future_explicit_contract",
-        "category_eligibility_assessed_count": 2,
+        "category_eligibility_assessed_count": 3,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 2,
@@ -5984,28 +6041,21 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 15.042
+        "elapsed_seconds": 7.216
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generated_live",
-        "fetched_candidate_count": 27,
+        "status": "cache_hit",
+        "fetched_candidate_count": 25,
         "fresh_candidate_count": 24,
         "publishable_source_count": 1,
         "selected_source_count": 1,
-        "cache_hit": false,
+        "cache_hit": true,
         "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 8.61,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 8.611,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6019,7 +6069,7 @@
         "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 3,
+        "published_story_duplicate_suppression_count": 1,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "martin",
@@ -6027,28 +6077,8 @@
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
             "editorial_story_id": "story_006122",
             "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+            "canonical_headline": "Martin County deputies used drones to track hit-and-run suspect hiding underwater in Palm City swamp",
             "basis": "authorized_canonical_identity_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Martin County deputies capture Palm City hit-and-run suspect in swamp - WPBF",
-            "source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
-            "editorial_story_id": "story_006122",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Hit-and-run suspect captured after hours-long manhunt through swamp in Palm City - WPEC",
-            "source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
-            "editorial_story_id": "story_006122",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -6064,39 +6094,9 @@
             "source_headline": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WPTV",
             "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-and-brush",
             "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+            "canonical_headline": "Martin County deputies used drones to track hit-and-run suspect hiding underwater in Palm City swamp",
             "canonical_is_custom": false,
             "identity_basis": "pre_generation_ledger:event-identity-authority:governing_body_plus_policy_subject",
-            "eligibility_reason": "material_update_source_already_absorbed",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Martin County deputies capture Palm City hit-and-run suspect in swamp - WPBF",
-            "source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "martin",
-            "source_headline": "Hit-and-run suspect captured after hours-long manhunt through swamp in Palm City - WPEC",
-            "source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
             "eligibility_reason": "material_update_source_already_absorbed",
             "evaluated": false,
             "promoted": false,
@@ -6106,96 +6106,53 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
         "live_hero_headline": "Martin County deputies use drones to capture hit-and-run suspect hiding underwater in Palm City swamp",
-        "generated_card_count": 0,
-        "elapsed_seconds": 23.274
+        "elapsed_seconds": 9.526
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
         "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 23,
-        "publishable_source_count": 6,
-        "selected_source_count": 6,
+        "fresh_candidate_count": 20,
+        "publishable_source_count": 4,
+        "selected_source_count": 4,
         "cache_hit": false,
         "archive_recovery_requested": false,
-        "attempt_count": 2,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 38.02,
-            "result": "article_framing_integrity",
-            "error_type": "ArticleFramingIntegrityError",
-            "error_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Port St. Lucie homeowners to receive up to $364 credits on solid waste bills from $24 million Waste Pro settlement"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 35.098,
+            "elapsed_seconds": 13.232,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 73.118,
+        "model_elapsed_seconds": 13.232,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
-        "contextual_update_lead_rejection_count": 1,
-        "contextual_update_lead_rejections": [
-          {
-            "surface": "card",
-            "required": true,
-            "passed": false,
-            "story_form": "update",
-            "lead_word_count": 70,
-            "baseline_anchor": "",
-            "baseline_present": true,
-            "baseline_anchor_present": true,
-            "baseline_details_present": true,
-            "baseline_context_hits": [
-              "circle",
-              "dunbrooke",
-              "lucie",
-              "operation",
-              "southeast",
-              "swat",
-              "west"
-            ],
-            "baseline_context_required": 2,
-            "canonical_context_available": true,
-            "canonical_context_headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
-            "novelty_anchor": "source_distinctive_detail",
-            "novelty_present": false,
-            "novelty_token_hits": [],
-            "missing": [
-              "new_development_missing"
-            ],
-            "source_title": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
-            "headline": "Port St. Lucie police clear up active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle"
-          }
-        ],
+        "contextual_update_lead_rejection_count": 0,
+        "contextual_update_lead_rejections": [],
         "article_framing_rejection_count": 1,
         "article_framing_rejections": [
           {
             "surface": "card",
             "required": true,
             "passed": false,
-            "headline": "Fort Pierce legal department overhaul raises questions as development decisions loom",
+            "headline": "Fort Pierce legal department shakeup raises questions over development decisions",
             "missing": [
               "headline_jurisdiction_missing_from_lead"
             ],
             "lead_independence": {
               "required": true,
               "passed": true,
-              "headline": "Fort Pierce legal department overhaul raises questions as development decisions loom",
-              "lead": "The uncertainty follows the City Commission's decision not to renew City Attorney Sara Hedges' contract. At the same time, Assistant City Attorney Felicia Holloman has resigned, and temporary attorney Caroline Valentin is set to leave at the end of the month, leaving the city searching for new legal leadership. Commissioners voted 3-2 to move forward with appointing Deputy City Manager Camille Wallace as interim city attorney while a search is conducted for a permanent replacement.",
-              "lead_word_count": 77,
+              "headline": "Fort Pierce legal department shakeup raises questions over development decisions",
+              "lead": "The City Commission decided not to renew City Attorney Sara Hedges' contract. At the same time, Assistant City Attorney Felicia Holloman has resigned, and temporary attorney Caroline Valentin is set to leave at the end of the month, leaving the city searching for new legal leadership. This week, commissioners voted 3-2 to move forward with appointing Deputy City Manager Camille Wallace as interim city attorney while a search is conducted for a permanent replacement.",
+              "lead_word_count": 75,
               "headline_overlap_ratio": 0.1,
-              "new_context_token_count": 43,
+              "new_context_token_count": 42,
               "opaque_references": [],
               "undefined_references": [],
               "story_form": "standard",
@@ -6209,8 +6166,8 @@
             "claim_consistency": {
               "required": true,
               "passed": false,
-              "headline": "Fort Pierce legal department overhaul raises questions as development decisions loom",
-              "lead": "The uncertainty follows the City Commission's decision not to renew City Attorney Sara Hedges' contract. At the same time, Assistant City Attorney Felicia Holloman has resigned, and temporary attorney Caroline Valentin is set to leave at the end of the month, leaving the city searching for new legal leadership. Commissioners voted 3-2 to move forward with appointing Deputy City Manager Camille Wallace as interim city attorney while a search is conducted for a permanent replacement.",
+              "headline": "Fort Pierce legal department shakeup raises questions over development decisions",
+              "lead": "The City Commission decided not to renew City Attorney Sara Hedges' contract. At the same time, Assistant City Attorney Felicia Holloman has resigned, and temporary attorney Caroline Valentin is set to leave at the end of the month, leaving the city searching for new legal leadership. This week, commissioners voted 3-2 to move forward with appointing Deputy City Manager Camille Wallace as interim city attorney while a search is conducted for a permanent replacement.",
               "headline_money_claims": [],
               "lead_money_claims": [],
               "missing_money_claims": [],
@@ -6231,19 +6188,19 @@
             "source_focus": {
               "required": true,
               "passed": true,
-              "generated_headline": "Fort Pierce legal department overhaul raises questions as development decisions loom",
-              "generated_lead": "The uncertainty follows the City Commission's decision not to renew City Attorney Sara Hedges' contract. At the same time, Assistant City Attorney Felicia Holloman has resigned, and temporary attorney Caroline Valentin is set to leave at the end of the month, leaving the city searching for new legal leadership.",
+              "generated_headline": "Fort Pierce legal department shakeup raises questions over development decisions",
+              "generated_lead": "The City Commission decided not to renew City Attorney Sara Hedges' contract. At the same time, Assistant City Attorney Felicia Holloman has resigned, and temporary attorney Caroline Valentin is set to leave at the end of the month, leaving the city searching for new legal leadership.",
               "source_title": "Fort Pierce legal department shakeup sparks debate over development decision - WPEC",
               "source_lead": "A major transition inside Fort Pierce's legal department is raising questions about who will help guide the city through several high-profile development issues expected to come before the City Commission. The uncertainty follows the City Commission's decision not to renew City Attorney Sara Hedges' contract.",
               "title_similarity": {
-                "score": 0.6726,
-                "overlap": 0.5,
-                "jaccard": 0.3333,
-                "sorted_sequence": 0.7006,
-                "ordered_sequence": 0.7643,
-                "shared_token_count": 5.0
+                "score": 0.7343,
+                "overlap": 0.6667,
+                "jaccard": 0.4615,
+                "sorted_sequence": 0.755,
+                "ordered_sequence": 0.8344,
+                "shared_token_count": 6.0
               },
-              "lead_token_overlap": 0.414,
+              "lead_token_overlap": 0.333,
               "missing": []
             },
             "source_jurisdiction": {
@@ -6255,11 +6212,31 @@
         ],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 6,
+        "category_eligibility_assessed_count": 4,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 7,
+        "published_story_duplicate_suppression_count": 10,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
+            "editorial_story_id": "story_006602",
+            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
+            "editorial_story_id": "story_006602",
+            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "Corgi reunited with owner after tornado in Port St. Lucie - WPBF",
@@ -6282,21 +6259,11 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Martin County deputies capture Palm City hit-and-run suspect in swamp - WPBF",
-            "source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
-            "editorial_story_id": "story_006122",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Hit-and-run suspect captured after hours-long manhunt through swamp in Palm City - WPEC",
-            "source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
-            "editorial_story_id": "story_006122",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+            "source_headline": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
+            "editorial_story_id": "story_006364",
+            "canonical_slug": "2026-08-27-port-st-lucie-police-dispel-active-shooter-rumor-after-swat-operation-on-southea",
+            "canonical_headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -6329,57 +6296,65 @@
             "canonical_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          }
-        ],
-        "story_aware_update_context_count": 1,
-        "story_aware_update_context_bindings": [
+          },
           {
-            "source_headline": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
-            "source_url": "https://cbs12.com/news/local/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-08-27-port-st-lucie-police-dispel-active-shooter-rumor-after-swat-operation-on-southea",
-            "canonical_headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
-            "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-            "identity_keys": [
-              "story:story_006364",
-              "source:https://cbs12.com/news/local/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news"
-            ],
-            "match_confidence": 0.95,
-            "evidence_dimensions": [
-              "bounded_time_window",
-              "shared_locality",
-              "shared_event_family",
-              "shared_precise_location",
-              "shared_agency",
-              "shared_subject_phrase",
-              "shared_headline_topic",
-              "distinctive_fact_overlap"
-            ],
-            "decision_trace": [
-              "left_identity_origin=source_derived",
-              "right_identity_origin=source_derived",
-              "publication_gap_days=0",
-              "shared_locality=['port-st-lucie', 'st-lucie', 'st-lucie-county']",
-              "shared_event_families=['shooting']",
-              "shared_named_people=[]",
-              "shared_precise_locations=['southeast-west-dunbrooke-circle']",
-              "shared_agencies=['port-st-lucie-police', 'st-lucie-county-sheriff']",
-              "shared_subject_phrases=['active-shoot-rumor', 'active-shoot-rumor-swat', 'dispel-active-shoot', 'dispel-active-shoot-rumor', 'rumor-swat-operation', 'rumor-swat-operation-wpec', 'shoot-rumor-swat', 'shoot-rumor-swat-operation', 'swat-operation-wpec']",
-              "shared_headline_topic_core=['active', 'dispel', 'operation', 'rumor', 'shoot', 'swat', 'wpec']",
-              "shared_distinctive_token_count=84",
-              "identity_outcome=same_event_verified",
-              "evidence_tier=hard_composite_identity",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
+            "category_key": "st_lucie",
+            "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - WPEC",
+            "source_url": "https://cbs12.com/news/crime/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
+            "editorial_story_id": "story_005726",
+            "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
+            "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
+            "basis": "registry_same_event_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County Fire District responds to residential fire in Fort Pierce - WPBF",
+            "source_url": "https://www.wpbf.com/article/st-lucie-county-fire-district-responds-to-residential-fire-in-fort-pierce/73515004",
+            "editorial_story_id": "story_005719",
+            "canonical_slug": "2026-08-25-st-lucie-county-fire-district-contains-residential-fire-on-east-erie-drive-in-fo",
+            "canonical_headline": "St. Lucie County Fire District contains residential fire on East Erie Drive in Fort Pierce",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
           }
         ],
+        "story_aware_update_context_count": 0,
+        "story_aware_update_context_bindings": [],
         "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 1,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "st_lucie",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
+            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
+            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "st_lucie",
             "source_headline": "Corgi reunited with owner after tornado in Port St. Lucie - WPBF",
@@ -6397,13 +6372,15 @@
             "semantic_status": "known_canonical_identity_conflict",
             "semantic_action": "hold",
             "confidence": 0.98,
-            "shared_anchors": [],
+            "shared_anchors": [
+              "Port St. Lucie locality"
+            ],
             "novel_facts": [
-              "EF0 tornado struck Port St. Lucie on or around August 28, 2026",
-              "Corgi named Luna went missing from Bay St. Lucie community",
-              "Owner Molly Wing-Berman's home damaged by tornado",
-              "Luna found three streets away by neighbors",
-              "Luna reunited with owner"
+              "Luna the corgi went missing during EF0 tornado in Bay St. Lucie community",
+              "Owner Molly Wing-Berman",
+              "Tornado pushed front door open and caused home damage",
+              "Dog found three streets away by neighbors",
+              "August 28, 2026 date"
             ],
             "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
             "validation_errors": [
@@ -6427,28 +6404,13 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "Martin County deputies capture Palm City hit-and-run suspect in swamp - WPBF",
-            "source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Hit-and-run suspect captured after hours-long manhunt through swamp in Palm City - WPEC",
-            "source_url": "https://cbs12.com/news/local/large-police-perimeter-set-up-in-palm-city-as-hit-and-run-suspect-remains-at-large-palm-city-martin-county-martin-county-sheriffs-office-hit-and-run-hit-and-run-suspect-suspect-search-manhunt-police-search-law-enforcement-activity-deputies-fle",
-            "canonical_slug": "2026-08-26-hit-and-run-suspect-captured-after-hours-long-manhunt-through-swamp-in-palm-city",
-            "canonical_headline": "Palm City hit-and-run suspect arrested after two-hour manhunt through swamps",
+            "source_headline": "Police dispel active shooter rumor in Port St. Lucie after SWAT operation - WPEC",
+            "source_url": "https://cbs12.com/news/local/port-st-lucie-police-department-clear-up-active-shooter-rumor-circulating-social-media-st-lucie-county-sheriffs-office-swat-operation-florida-news",
+            "canonical_slug": "2026-08-27-port-st-lucie-police-dispel-active-shooter-rumor-after-swat-operation-on-southea",
+            "canonical_headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
             "canonical_is_custom": false,
             "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "material_update_source_already_absorbed",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -6499,47 +6461,67 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Woman arrested in St. Lucie County accused of paying with counterfeit $50 bills - WPEC",
+            "source_url": "https://cbs12.com/news/crime/woman-arrested-in-st-lucie-county-accused-of-paying-with-counterfeit-50-bills-florida-news-florida-crime-local-news-local-crime-fake-money",
+            "canonical_slug": "2026-08-24-fort-pierce-woman-arrested-for-using-counterfeit-50-bills-to-pay-for-food-delive",
+            "canonical_headline": "Fort Pierce woman arrested for using counterfeit $50 bills to pay for food delivery",
+            "canonical_is_custom": false,
+            "identity_basis": "registry_same_event_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "St. Lucie County Fire District responds to residential fire in Fort Pierce - WPBF",
+            "source_url": "https://www.wpbf.com/article/st-lucie-county-fire-district-responds-to-residential-fire-in-fort-pierce/73515004",
+            "canonical_slug": "2026-08-25-st-lucie-county-fire-district-contains-residential-fire-on-east-erie-drive-in-fo",
+            "canonical_headline": "St. Lucie County Fire District contains residential fire on East Erie Drive in Fort Pierce",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Port St. Lucie homeowners to receive solid waste bill credits from $24 million Waste Pro settlement",
+        "live_hero_headline": "Port St. Lucie homeowners to receive credits on solid waste bills from $24 million Waste Pro settlement",
         "generated_card_count": 1,
-        "elapsed_seconds": 91.841
+        "elapsed_seconds": 27.356
       },
       {
         "category_key": "indian_river",
         "category_label": "Indian River County",
-        "status": "generation_failed_archive_recovery",
+        "status": "quality_gate_archive_recovery",
         "fetched_candidate_count": 28,
-        "fresh_candidate_count": 26,
-        "publishable_source_count": 14,
-        "selected_source_count": 2,
+        "fresh_candidate_count": 24,
+        "publishable_source_count": 12,
+        "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": true,
-        "attempt_count": 2,
+        "attempt_count": 1,
         "attempts": [
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 7.507,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: new_development_missing — Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV"
-          },
-          {
-            "attempt": 2,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 11.886,
-            "result": "contextless_update_lead",
-            "error_type": "ContextualUpdateLeadError",
-            "error_summary": "Contextless update lead for hero: new_development_missing — Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV"
+            "elapsed_seconds": 5.702,
+            "result": "success"
           }
         ],
-        "model_elapsed_seconds": 19.393,
-        "failure_code": "contextless_update_lead",
-        "failure_summary": "Contextless update lead for hero: new_development_missing — Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
+        "model_elapsed_seconds": 5.702,
+        "failure_code": "publication_quality_rejected",
+        "failure_summary": "Generated content did not pass final publication quality gates",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -6548,11 +6530,31 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 14,
+        "category_eligibility_assessed_count": 12,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 2,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
+            "editorial_story_id": "story_006602",
+            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
+            "editorial_story_id": "story_006379",
+            "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
+            "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "indian_river",
             "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases - WPTV",
@@ -6574,7 +6576,7 @@
             "reason": "registry_skip_story_already_published"
           }
         ],
-        "story_aware_update_context_count": 2,
+        "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
             "source_headline": "Former Palm Beach County clerk accused of child sex abuse being released on $160K bond",
@@ -6616,29 +6618,6 @@
             ],
             "relationship": "same_event_verified",
             "final_publication_action": "canonical_bound_before_generation"
-          },
-          {
-            "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
-            "publisher": "www.wptv.com",
-            "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
-            "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
-            "basis": "exact_source_url",
-            "identity_keys": [
-              "story:story_006379",
-              "source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions"
-            ],
-            "match_confidence": 0.99,
-            "evidence_dimensions": [
-              "story",
-              "source"
-            ],
-            "decision_trace": [
-              "deterministic_identity_keys=story:story_006379,source:https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
-              "write_authorized=True"
-            ],
-            "relationship": "same_event_verified",
-            "final_publication_action": "canonical_bound_before_generation"
           }
         ],
         "material_update_promotion_evaluation_count": 0,
@@ -6646,6 +6625,36 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "indian_river",
+            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
+            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
+            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "indian_river",
+            "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
+            "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
+            "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
+            "canonical_headline": "Vero Beach flooding on Ocean Drive threatens businesses as city says fix could cost millions",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "indian_river",
             "source_headline": "Vero Beach utility bills to rise over the next 4 years as city approves rate increases - WPTV",
@@ -6678,9 +6687,9 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "failed",
+        "generation_status": "success",
         "budget_seconds": 180.0,
-        "elapsed_seconds": 29.409
+        "elapsed_seconds": 13.594
       }
     ]
   }
