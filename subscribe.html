@@ -8,12 +8,12 @@
   <meta name="description" content="Unlimited, ad-free access to Treasure Coast Today and support for independent local journalism across Martin, St. Lucie and Indian River counties.">
   <link rel="canonical" href="https://treasurecoast.today/subscribe.html">
   <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/membership.css">
+  <link rel="stylesheet" href="/membership.css?v=1.13.6.8h">
   <script data-tct-member-prepaint>
 (function(){try{if(localStorage.getItem('tct_member_entitled_hint')==='1')document.documentElement.classList.add('tct-member-preverified')}catch(_e){}})();
-</script>
+  </script>
 </head>
-<body class="membership-page">
+<body class="membership-page membership-landing-page">
   <header class="membership-site-header">
     <div class="header-inner">
       <div class="header-top">
@@ -39,64 +39,237 @@
     </div>
   </header>
 
-  <main class="membership-shell">
-    <a class="membership-back" href="/">← Back to Treasure Coast Today</a>
+  <main class="membership-landing">
     <div class="membership-sandbox-banner hidden" data-membership-sandbox>Sandbox test — Stripe is not in live mode</div>
     <div class="membership-launch-note hidden" data-membership-live-validation>Live payment validation — membership is still hidden from readers</div>
 
-    <section class="membership-hero">
-      <div class="membership-topline">Already a member?&nbsp;<button class="membership-link-button" type="button" data-reveal-signin>Sign in</button></div>
-      <span class="membership-kicker">Treasure Coast Today Membership</span>
-      <h1>Treasure Coast news without the noise.</h1>
-      <div class="membership-trial-urgency">Limited-time offer</div>
-      <p class="membership-value membership-trial-value">Your first month for <span class="membership-intro-price">$1</span></p>
-      <p class="membership-copy">Get unlimited, ad-free access for $1 today. Your monthly membership renews at $4.99/month after the first month. Or choose annual access for $49/year.</p>
-
-      <div class="membership-message hidden" data-membership-message></div>
-
-      <section class="membership-panel hidden" data-paywall-signin data-signed-out>
-        <h2>Sign in</h2>
-        <p>Enter the email used for your membership. We'll send a secure sign-in link — no password needed.</p>
-        <form class="membership-form" data-signin-form data-return-path="/subscribe.html">
-          <input type="email" autocomplete="email" placeholder="Email address" required>
-          <button class="membership-btn" type="submit">Email me a sign-in link</button>
-        </form>
-        <div class="membership-message hidden"></div>
-      </section>
-
-      <section class="membership-panel hidden" data-membership-account>
-        <h2>Your membership</h2>
-        <div data-account-email></div>
-        <p data-account-status></p>
-        <div class="membership-account-actions">
-          <button class="membership-btn" type="button" data-create-portal>Manage billing</button>
-          <button class="membership-btn secondary" type="button" data-sign-out>Sign out</button>
+    <section class="membership-landing-hero" aria-labelledby="membership-title">
+      <div class="membership-landing-hero-copy">
+        <span class="membership-landing-kicker">Treasure Coast Today Membership</span>
+        <h1 id="membership-title">Know what’s happening across the Treasure Coast.</h1>
+        <p class="membership-landing-deck">Get unlimited, ad-free access to independent local reporting across Martin, St. Lucie and Indian River counties — and help sustain journalism focused on the communities you live in.</p>
+        <div class="membership-landing-offer-line"><strong>$1 for your first month.</strong> Then $4.99/month.</div>
+        <div class="membership-landing-hero-actions">
+          <a class="membership-landing-primary" href="#membership-plans">Choose your membership</a>
+          <button class="membership-landing-signin" type="button" data-reveal-signin>Already a member? Sign in</button>
         </div>
-      </section>
+      </div>
+      <div class="membership-landing-proof" aria-label="Membership highlights">
+        <div><strong>3 counties</strong><span>Martin, St. Lucie &amp; Indian River</span></div>
+        <div><strong>Ad-free</strong><span>A cleaner reading experience</span></div>
+        <div><strong>Independent</strong><span>Local journalism worth supporting</span></div>
+      </div>
+    </section>
 
-      <section id="membership-plans" class="membership-plans" data-membership-plans aria-label="Membership plans">
-        <article class="membership-plan best">
+    <div class="membership-message hidden membership-landing-message" data-membership-message></div>
+
+    <section class="membership-panel hidden membership-landing-signin-panel" data-paywall-signin data-signed-out>
+      <h2>Sign in to your membership</h2>
+      <p>Enter the email used for your membership. We'll send a secure sign-in link — no password needed.</p>
+      <form class="membership-form" data-signin-form data-return-path="/subscribe.html">
+        <input type="email" autocomplete="email" placeholder="Email address" required>
+        <button class="membership-btn" type="submit">Email me a sign-in link</button>
+      </form>
+      <div class="membership-message hidden"></div>
+    </section>
+
+    <section class="membership-panel hidden membership-landing-account" data-membership-account>
+      <h2>Your membership</h2>
+      <div data-account-email></div>
+      <p data-account-status></p>
+      <div class="membership-account-actions">
+        <button class="membership-btn" type="button" data-create-portal>Manage billing</button>
+        <button class="membership-btn secondary" type="button" data-sign-out>Sign out</button>
+      </div>
+    </section>
+
+    <section class="membership-landing-section membership-landing-value" aria-labelledby="membership-value-title">
+      <div class="membership-landing-section-heading">
+        <span class="membership-landing-kicker">Why membership matters</span>
+        <h2 id="membership-value-title">More local reporting. Less noise.</h2>
+        <p>Treasure Coast Today is built around the stories that shape daily life here — local government decisions, public safety, schools, development, community events and the issues affecting your county.</p>
+      </div>
+      <div class="membership-landing-value-grid">
+        <article><span class="membership-value-number">01</span><h3>Comprehensive local reporting</h3><p>Coverage across Martin, St. Lucie and Indian River counties, with context that helps you understand what changed and why it matters.</p></article>
+        <article><span class="membership-value-number">02</span><h3>Ad-free reading</h3><p>Read the news without display ads competing for your attention.</p></article>
+        <article><span class="membership-value-number">03</span><h3>Support independent journalism</h3><p>Your membership directly supports a local publication focused on the Treasure Coast rather than a national audience.</p></article>
+      </div>
+    </section>
+
+    <section class="membership-landing-section membership-landing-plans-section" aria-labelledby="membership-plans-title">
+      <div class="membership-landing-section-heading centered">
+        <span class="membership-landing-kicker">Choose your plan</span>
+        <h2 id="membership-plans-title">Full access starts at $1.</h2>
+        <p>Both plans include the same unlimited, ad-free access to Treasure Coast Today.</p>
+      </div>
+
+      <section id="membership-plans" class="membership-plans membership-landing-plans" data-membership-plans aria-label="Membership plans">
+        <article class="membership-plan best membership-landing-plan">
           <span class="membership-badge">Limited-time offer</span>
           <h2>Monthly membership</h2>
-          <div class="membership-price">$1 first month</div>
+          <div class="membership-price"><span class="membership-price-dollar">$1</span><span class="membership-price-period"> first month</span></div>
           <div class="membership-plan-note">Then $4.99/month</div>
+          <ul class="membership-plan-includes">
+            <li>Unlimited article access</li>
+            <li>Ad-free reading</li>
+            <li>Cancel anytime</li>
+          </ul>
           <button class="membership-btn" data-plan="monthly" type="button">Get your first month for $1</button>
         </article>
-        <article class="membership-plan">
+        <article class="membership-plan membership-landing-plan">
           <span class="membership-badge membership-badge-flexible">Best annual value</span>
           <h2>Annual membership</h2>
-          <div class="membership-price">$49/year</div>
+          <div class="membership-price"><span class="membership-price-dollar">$49</span><span class="membership-price-period"> / year</span></div>
           <div class="membership-plan-note">About $4.08/month</div>
+          <ul class="membership-plan-includes">
+            <li>Unlimited article access</li>
+            <li>Ad-free reading</li>
+            <li>One annual payment</li>
+          </ul>
           <button class="membership-btn" data-plan="annual" type="button">Subscribe annually</button>
         </article>
       </section>
-      <p class="membership-benefits">Unlimited articles · No ads · Support independent local journalism</p>
-      <p class="membership-secure">Secure checkout powered by Stripe. Monthly offer charges $1 today.</p>
-      <p class="membership-renewal">Monthly: $1 today, then $4.99/month starting one month later. Annual: $49/year. Subscriptions renew automatically until canceled.</p>
+      <p class="membership-secure membership-landing-secure">Secure checkout powered by Stripe. Monthly offer charges $1 today.</p>
+      <p class="membership-renewal membership-landing-renewal">Monthly: $1 today, then $4.99/month starting one month later. Annual: $49/year. Subscriptions renew automatically until canceled.</p>
+    </section>
+
+    <section class="membership-landing-section membership-story-showcase" aria-labelledby="membership-stories-title">
+      <div class="membership-story-heading">
+        <div>
+          <span class="membership-landing-kicker">What you’ll unlock</span>
+          <h2 id="membership-stories-title">Don’t miss stories like these.</h2>
+          <p>Your membership gives you full access to the reporting readers are following across the Treasure Coast right now.</p>
+        </div>
+        <a href="/" class="membership-story-all">See all top news →</a>
+      </div>
+      <div class="membership-story-grid" data-membership-top-stories aria-live="polite">
+        <div class="membership-story-loading">Loading current top stories…</div>
+      </div>
+    </section>
+
+    <section class="membership-landing-section membership-support-section" aria-labelledby="membership-support-title">
+      <div class="membership-support-copy">
+        <span class="membership-landing-kicker">Built for the Treasure Coast</span>
+        <h2 id="membership-support-title">Your membership helps keep local coverage sustainable.</h2>
+        <p>Reader support gives Treasure Coast Today more room to focus on substantive local reporting, maintain the site, expand coverage and keep improving the news product for people who live here.</p>
+      </div>
+      <div class="membership-support-list">
+        <div><strong>Local first</strong><span>Stories selected for Treasure Coast relevance.</span></div>
+        <div><strong>Reader supported</strong><span>Membership helps fund continued reporting and product development.</span></div>
+        <div><strong>Clear standards</strong><span><a href="/editorial-standards.html">Read our editorial standards</a> and <a href="/corrections-policy.html">corrections policy</a>.</span></div>
+      </div>
+    </section>
+
+    <section class="membership-landing-section membership-faq" aria-labelledby="membership-faq-title">
+      <div class="membership-landing-section-heading centered">
+        <span class="membership-landing-kicker">Membership FAQ</span>
+        <h2 id="membership-faq-title">A few things to know.</h2>
+      </div>
+      <div class="membership-faq-grid">
+        <details><summary>What does membership include?</summary><p>Membership includes unlimited access to Treasure Coast Today articles and an ad-free reading experience while your membership is active.</p></details>
+        <details><summary>How does the $1 offer work?</summary><p>The monthly plan costs $1 for your first month, then renews at $4.99 per month unless you cancel. The annual plan is $49 per year.</p></details>
+        <details><summary>Can I cancel?</summary><p>Yes. You can manage or cancel your subscription through the billing portal after signing in.</p></details>
+        <details><summary>Already subscribed?</summary><p>Use the sign-in option at the top of this page. We’ll email you a secure sign-in link, so there is no password to remember.</p></details>
+      </div>
+    </section>
+
+    <section class="membership-landing-final-cta">
+      <span class="membership-landing-kicker">Stay connected locally</span>
+      <h2>Read Treasure Coast Today without limits.</h2>
+      <p>Start your first month for $1 and get full access today.</p>
+      <a href="#membership-plans" class="membership-landing-primary">Choose your membership</a>
     </section>
   </main>
 
+  <footer class="membership-landing-footer">
+    <div class="membership-landing-footer-inner">
+      <div><strong>Treasure Coast Today</strong><span>Independent, hyperlocal journalism for the Treasure Coast.</span></div>
+      <nav aria-label="Membership footer navigation"><a href="/about.html">About</a><a href="/editorial-standards.html">Editorial Standards</a><a href="/corrections-policy.html">Corrections</a><a href="/privacy.html">Privacy</a><a href="/contact.html">Contact</a></nav>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    const container = document.querySelector('[data-membership-top-stories]');
+    if (!container) return;
+
+    const normalize = value => String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    const make = (tag, className, text) => {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    };
+
+    Promise.all([
+      fetch('/data.json', {cache:'no-store'}).then(r => { if (!r.ok) throw new Error('data'); return r.json(); }),
+      fetch('/archive.json', {cache:'no-store'}).then(r => { if (!r.ok) throw new Error('archive'); return r.json(); })
+    ]).then(([data, archive]) => {
+      const front = data && data.front_page ? data.front_page : {};
+      const sourceStories = [front.hero].concat(Array.isArray(front.cards) ? front.cards : []).filter(Boolean);
+      const unique = [];
+      const seen = new Set();
+      for (const story of sourceStories) {
+        const key = normalize(story.headline);
+        if (!key || seen.has(key)) continue;
+        seen.add(key);
+        unique.push(story);
+        if (unique.length === 4) break;
+      }
+
+      const archiveByHeadline = new Map();
+      (Array.isArray(archive) ? archive : []).forEach(item => {
+        const key = normalize(item && item.headline);
+        if (key && !archiveByHeadline.has(key)) archiveByHeadline.set(key, item);
+      });
+
+      container.textContent = '';
+      unique.forEach((story, index) => {
+        const archived = archiveByHeadline.get(normalize(story.headline));
+        const slug = archived && (archived.canonical_slug || archived.slug);
+        const href = slug ? '/articles/' + slug + '.html' : '/';
+        const card = make('article', 'membership-story-card' + (index === 0 ? ' featured' : ''));
+        const link = make('a', 'membership-story-card-link');
+        link.href = href;
+
+        const imageWrap = make('div', 'membership-story-image');
+        if (story.image_url) {
+          const image = document.createElement('img');
+          image.src = story.image_url;
+          image.alt = '';
+          image.loading = 'lazy';
+          image.decoding = 'async';
+          image.addEventListener('error', () => imageWrap.classList.add('image-unavailable'));
+          imageWrap.appendChild(image);
+        } else {
+          imageWrap.classList.add('image-unavailable');
+        }
+
+        const copy = make('div', 'membership-story-copy');
+        copy.appendChild(make('span', 'membership-story-category', story.cat_label || (archived && archived.category_label) || 'Top News'));
+        copy.appendChild(make('h3', '', story.headline || 'Treasure Coast Today'));
+        if (story.teaser) copy.appendChild(make('p', '', story.teaser));
+        copy.appendChild(make('span', 'membership-story-read', 'Read story →'));
+        link.appendChild(imageWrap);
+        link.appendChild(copy);
+        card.appendChild(link);
+        container.appendChild(card);
+      });
+
+      if (!container.children.length) throw new Error('empty');
+    }).catch(() => {
+      container.textContent = '';
+      const fallback = make('div', 'membership-story-loading');
+      fallback.appendChild(document.createTextNode('See the latest reporting on '));
+      const link = make('a', '', 'Top News');
+      link.href = '/';
+      fallback.appendChild(link);
+      fallback.appendChild(document.createTextNode('.'));
+      container.appendChild(fallback);
+    });
+  })();
+  </script>
   <script src="/membership-config.js"></script>
-  <script type="module" src="/membership.js?v=1.13.6.8"></script>
+  <script type="module" src="/membership.js?v=1.13.6.8h"></script>
 </body>
 </html>

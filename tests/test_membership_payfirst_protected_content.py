@@ -194,7 +194,8 @@ def test_membership_article_paywall_uses_publication_grade_equal_plan_hierarchy(
     markup = paywall_html("example-story")
     # The standalone subscribe page keeps its full two-plan treatment.
     assert "Best annual value" in page
-    assert '<div class="membership-price">$1 first month</div>' in page
+    assert 'membership-price-dollar">$1</span>' in page
+    assert 'membership-price-period"> first month</span>' in page
     assert '<div class="membership-plan-note">Then $4.99/month</div>' in page
     # The in-article gate uses the same restrained editorial structure for both plans.
     assert "tct-paywall-plan-offer-monthly" in markup

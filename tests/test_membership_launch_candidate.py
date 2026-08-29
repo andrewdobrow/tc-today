@@ -64,8 +64,16 @@ def test_sitewide_chrome_normalizer_preserves_dark_mode_and_launches_retained_pa
 
 def test_subscribe_page_is_real_landing_page_not_account_gate():
     page = (ROOT / "subscribe.html").read_text()
-    assert "Treasure Coast news without the noise." in page
+    assert "Know what’s happening across the Treasure Coast." in page
     assert 'id="membership-plans"' in page
+    assert "Don’t miss stories like these." in page
+    assert "data-membership-top-stories" in page
+    assert "archive.json" in page
+    assert "front.hero" in page
+    assert "front.cards" in page
+    assert "membership-story-card" in page
+    assert "membership-landing-value-grid" in page
+    assert "membership-faq-grid" in page
     assert 'data-plan="annual"' in page
     assert 'data-plan="monthly"' in page
     assert "Create account" not in page
