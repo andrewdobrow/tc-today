@@ -32,6 +32,7 @@ if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
 from scripts.sanitize_generation_cache import sanitize_cache_payload
+from scripts.compact_editorial_audit import compact_editorial_audit_log
 from tct_engine.model_usage import ModelUsageTracker, instrument_anthropic_client
 from tct_engine.model_bakeoff import write_bakeoff_artifacts
 from tct_engine.assignment_editor_shadow import normalize_assignment_plan, write_assignment_editor_artifacts
@@ -32702,7 +32703,15 @@ def _save_editorial_engine_audit(engine, audit_rows):
             with EDITORIAL_AUDIT_LOG_PATH.open("a", encoding="utf-8") as audit_file:
                 for row in audit_rows:
                     audit_file.write(json.dumps(row, ensure_ascii=False) + "\n")
+            retention = compact_editorial_audit_log(EDITORIAL_AUDIT_LOG_PATH)
             print(f"  Editorial audit logged {len(audit_rows)} unique candidate decision(s)")
+            if retention.get("compacted"):
+                print(
+                    "  Editorial audit retention: "
+                    f"{retention['bytes_before'] / (1024 * 1024):.2f} MiB -> "
+                    f"{retention['bytes_after'] / (1024 * 1024):.2f} MiB; "
+                    f"retained {retention['retained_rows']} newest decision(s)"
+                )
         except Exception as exc:
             print(f"  Editorial audit log failed; publication output is unchanged: {exc}")
 
