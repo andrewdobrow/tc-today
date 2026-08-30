@@ -8,93 +8,49 @@ Judge the final newsroom result, not verbosity. Score: (1) hero/story choice, (2
 
 ### Source pool
 
-1. Port St. Lucie residents to see solid waste bill credits from $24 million Waste Pro settlement - WPTV
-2. Port St. Lucie residents to see solid waste bill credits from $24 million Waste Pro settlement
+1. Treasure Coast Hyrox Trials this weekend as Iron Knight Gym builds powerlifting community in Port St. Lucie
 
 ### Variant A
 
-**Hero:** St. Lucie County school bus driver faces discipline for illegal U-turn on I-95 in Fort Pierce
-**Urgency:** 2
-
-A St. Lucie County school bus driver made an illegal U-turn on I-95 in Fort Pierce between Orange Avenue and Indrio Road. No students were on board at the time.
-
-### Variant B
-
-**Hero:** St. Lucie County school bus driver faces discipline for illegal U-turn on I-95 in Fort Pierce
-**Urgency:** 2
-
-A St. Lucie County school bus driver made an illegal U-turn on I-95 in Fort Pierce between Orange Avenue and Indrio Road. No students were on board at the time.
-
-### Variant C
-
-**Hero:** St. Lucie County school bus driver faces discipline for illegal U-turn on I-95 in Fort Pierce
-**Urgency:** 2
-
-A St. Lucie County school bus driver made an illegal U-turn on I-95 in Fort Pierce between Orange Avenue and Indrio Road. No students were on board at the time.
-
-**Scorecard**
-
-- Hero/story choice: A / B / C / Tie
-- Supporting-story selection/omissions: A / B / C / Tie
-- Story ordering: A / B / C / Tie
-- Angle/new-development focus: A / B / C / Tie
-- Source mapping: A / B / C / Tie
-- Headline: A / B / C / Tie
-- Lead and context: A / B / C / Tie
-- Factual fidelity: A / B / C / Tie
-- Completeness: A / B / C / Tie
-- Least filler: A / B / C / Tie
-- Overall publishability: A / B / C / Tie
-
----
-
-## Indian River County
-
-### Source pool
-
-1. Friday night lights return with Vero Beach vs. Atlantic as Game of the Week - WPBF
-
-### Variant A
-
-**Hero:** Vero Beach hosts Atlantic in Friday night football opener
-**Hero source choice:** Source #1: Friday night lights return with Vero Beach vs. Atlantic as Game of the Week - WPBF
+**Hero:** Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend
+**Hero source choice:** Source #1: Treasure Coast Hyrox Trials this weekend as Iron Knight Gym builds powerlifting community in Port St. Lucie
 **Urgency:** 5
 
-Vero Beach High School hosted Atlantic High School Friday night at 7 p.m. in what was designated the game of the week for local high school football. The matchup marked the return of Friday night lights across the area as the high school football season kicked off.
+Over 70 athletes are competing this weekend in the Treasure Coast Hyrox Trials, a local fitness competition hosted by Iron Knight Gym in Port St. Lucie. The gym opened in 2017 and has grown over the past nine years as a facility dedicated to powerlifting and the community built around it.
 
- WPBF sports anchor Yianni Kourakis broadcast live from Vero Beach for the game. Meteorologist Glenn Glazer provided the Football Friday forecast for the evening's matchups.
+ Nikki Baker, the gym's general manager, said the sport is about more than moving heavy weight. Baker said athletes and coaches push themselves and a whole lot of weight in pursuit of something deeper than physical strength. Baker said the philosophy is personal for her, noting that physical strength helped her understand her mental strength as well.
 
- High school football games took place Friday night across the region as teams opened their seasons. The Vero Beach versus Atlantic game drew attention as the featured contest of the opening week.
+ Baker said growth at Iron Knight is measured not just in weight lifted, but in personal progress. She described it as being better than you were a week ago or a day ago, and overcoming things that you literally walked in and said you could not do. Beyond the physical and mental gains, Baker said building community is central to what the gym does.
 
- The game was one of multiple Friday night matchups bringing high school football back to local communities for the fall season. WPBF 25 provided coverage of the games and weather conditions throughout the evening.
+ Baker said the gym knows what your name is, what your dog's name is, and what your goals are. In addition to powerlifting, Iron Knight Gym offers group classes, online coaching, and personal training. Baker said Iron Knight welcomes everyone from beginners to professionals.
 
 ### Variant B
 
-**Hero:** Vero Beach hosts Atlantic in Friday night football opener
-**Hero source choice:** Source #1: Friday night lights return with Vero Beach vs. Atlantic as Game of the Week - WPBF
-**Urgency:** 4
+**Hero:** Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend
+**Hero source choice:** Source #1: Treasure Coast Hyrox Trials this weekend as Iron Knight Gym builds powerlifting community in Port St. Lucie
+**Urgency:** 5
 
-Vero Beach High School hosted Atlantic High School Friday night at 7 p.m. in what was designated the game of the week for local high school football. The matchup marked the return of Friday night lights across the area as the high school football season kicked off.
+Over 70 athletes are competing this weekend in the Treasure Coast Hyrox Trials, a local fitness competition hosted by Iron Knight Gym in Port St. Lucie. The gym opened in 2017 and has grown over the past nine years as a facility dedicated to powerlifting and the community built around it.
 
- WPBF sports anchor Yianni Kourakis broadcast live from Vero Beach for the game. Meteorologist Glenn Glazer provided the Football Friday forecast for the evening's matchups.
+ Nikki Baker, the gym's general manager, said the sport is about more than moving heavy weight. Baker said athletes and coaches push themselves and a whole lot of weight in pursuit of something deeper than physical strength. Baker said the philosophy is personal for her, noting that physical strength helped her understand her mental strength as well.
 
- High school football games took place Friday night across the region as teams opened their seasons. The Vero Beach versus Atlantic game drew attention as the featured contest of the opening week.
+ Baker said growth at Iron Knight is measured not just in weight lifted, but in personal progress. She described it as being better than you were a week ago or a day ago, and overcoming things that you literally walked in and said you could not do. Beyond the physical and mental gains, Baker said building community is central to what the gym does.
 
- The game was one of multiple Friday night matchups bringing high school football back to local communities for the fall season. WPBF 25 provided coverage of the games and weather conditions throughout the evening.
+ Baker said the gym knows what your name is, what your dog's name is, and what your goals are. In addition to powerlifting, Iron Knight Gym offers group classes, online coaching, and personal training. Baker said Iron Knight welcomes everyone from beginners to professionals.
 
 ### Variant C
 
-**Hero:** Vero Beach hosts Atlantic in Friday night football opener
-**Hero source choice:** Source #1: Friday night lights return with Vero Beach vs. Atlantic as Game of the Week - WPBF
-**Urgency:** 6
+**Hero:** Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend
+**Hero source choice:** Source #1: Treasure Coast Hyrox Trials this weekend as Iron Knight Gym builds powerlifting community in Port St. Lucie
+**Urgency:** 4
 
-Vero Beach High School hosted Atlantic High School Friday night at 7 p.m. in what was designated the game of the week for local high school football. The matchup marked the return of Friday night lights across the area as the high school football season kicked off.
+Over 70 athletes are competing this weekend in the Treasure Coast Hyrox Trials, a local fitness competition hosted by Iron Knight Gym in Port St. Lucie. The gym opened in 2017 and has grown over the past nine years as a facility dedicated to powerlifting and the community built around it.
 
- WPBF sports anchor Yianni Kourakis broadcast live from Vero Beach for the game. Meteorologist Glenn Glazer provided the Football Friday forecast for the evening's matchups.
+ Nikki Baker, the gym's general manager, said the sport is about more than moving heavy weight. Baker said athletes and coaches push themselves and a whole lot of weight in pursuit of something deeper than physical strength. Baker said the philosophy is personal for her, noting that physical strength helped her understand her mental strength as well.
 
- High school football games took place Friday night across the region as teams opened their seasons. The Vero Beach versus Atlantic game drew attention as the featured contest of the opening week.
+ Baker said growth at Iron Knight is measured not just in weight lifted, but in personal progress. She described it as being better than you were a week ago or a day ago, and overcoming things that you literally walked in and said you could not do. Beyond the physical and mental gains, Baker said building community is central to what the gym does.
 
- The game was one of multiple Friday night matchups bringing high school football back to local communities for the fall season. WPBF 25 provided coverage of the games and weather conditions throughout the evening.
+ Baker said the gym knows what your name is, what your dog's name is, and what your goals are. In addition to powerlifting, Iron Knight Gym offers group classes, online coaching, and personal training. Baker said Iron Knight welcomes everyone from beginners to professionals.
 
 **Scorecard**
 
