@@ -56,7 +56,8 @@ def _family(text: str) -> str:
             "missing_person",
             r"\b(?:missing|reported missing|went missing|last seen)\b.{0,90}\b(?:person|child|boy|girl|teen|teenager|man|woman|student)\b"
             r"|\b(?:help|search|seek|seeking|find|finding|locate|locating)\b.{0,75}\b(?:missing|last seen|autistic|teen|boy|girl|child)\b"
-            r"|\b(?:person|child|boy|girl|teen|teenager|man|woman|student)\b.{0,75}\b(?:missing|last seen|reported missing|went missing)\b",
+            r"|\b(?:person|child|boy|girl|teen|teenager|man|woman|student)\b.{0,75}\b(?:missing|last seen|reported missing|went missing)\b"
+            r"|\b(?:search(?:ing)? for|locat(?:e|ing))\b.{0,120}\b(?:disappeared|disappearance|has not been heard from|family has not heard)\b",
         ),
         ("traffic_crash", r"\b(?:crash|collision|wreck|vehicle overturned|hit and run)\b"),
         ("murder_suicide", r"\bmurder[- ]suicide\b|\bdomestic[- ]related\b.{0,45}\b(?:two|2) dead\b"),
@@ -86,7 +87,7 @@ def _concepts(text: str) -> set[str]:
         ("kanner_highway", r"\bkanner (?:highway|hwy|road)\b"),
         ("martin_stuart", r"\bmartin county\b|\bstuart\b"),
         ("fourth_arrest", r"\b(?:4th|fourth) arrest\b|\b4 (?:people )?arrested\b"),
-        ("missing_person_signal", r"\b(?:missing|reported missing|went missing|last seen)\b|\b(?:help|search|seek|seeking|find|finding|locate|locating)\b.{0,45}\b(?:person|child|boy|girl|teen|teenager|man|woman|student|autistic)\b"),
+        ("missing_person_signal", r"\b(?:missing|reported missing|went missing|last seen|disappeared|disappearance)\b|\b(?:help|search|seek|seeking|find|finding|locate|locating|searching for)\b.{0,75}\b(?:person|child|boy|girl|teen|teenager|man|woman|student|autistic|disappeared)\b"),
         ("last_seen", r"\blast seen\b"),
         ("public_search", r"\b(?:help|search|seek|seeking|find|finding|locate|locating|looking)\b"),
         ("autistic_subject", r"\bautistic\b|\bautism\b"),

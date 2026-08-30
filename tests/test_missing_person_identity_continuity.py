@@ -264,3 +264,179 @@ def test_existing_missing_person_duplicate_redirects_to_first_canonical(tmp_path
     rendered = (articles / f"{DUPLICATE}.html").read_text()
     assert f"/articles/{CANONICAL}.html" in rendered
     assert "noindex,follow" in rendered
+
+
+def _debevec_custom_canonical():
+    return {
+        "slug": (
+            "2026-08-29-martin-county-sheriffs-office-searches-for-missing-"
+            "oklahoma-visitor-last-seen-at-chastain-beach"
+        ),
+        "headline": (
+            "Martin County Sheriff's Office searches for missing Oklahoma visitor "
+            "last seen at Chastain Beach"
+        ),
+        "teaser": (
+            "The Martin County Sheriff's Office is asking for help finding Michael "
+            "Anthony Debevec II, an Oklahoma visitor last seen Aug. 26 after going "
+            "to Chastain Beach."
+        ),
+        "category_key": "martin",
+        "category_label": "Martin County",
+        "date": "2026-08-29",
+        "lastmod": "2026-08-29",
+        "first_published": "Sat, 29 Aug 2026 21:48:09 -0400",
+        "editorial_story_id": "custom:debevec",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+        "is_custom": True,
+        "authoritative_custom": True,
+    }
+
+
+def _debevec_later_publisher_source():
+    body = (
+        "Martin County Sheriff's Office deputies say they're searching for Michael "
+        "Anthony Debevec II, who was visiting the area with family when he disappeared "
+        "on August 26. Debevec went to Chastain Beach, also known as the rocks, and "
+        "his vehicle was later found nearby. His family has not heard from him and "
+        "authorities say he may be experiencing an emotional breakdown. Debevec is "
+        "described as 5 feet, 7 inches tall with blue eyes."
+    )
+    return {
+        "title": "Search underway for Oklahoma man after vehicle found at Chastain Beach",
+        "headline": "Search underway for Oklahoma man after vehicle found at Chastain Beach",
+        "summary": body,
+        "article_text": body + " " + body + " " + body,
+        "source_url": (
+            "https://cbs12.com/news/local/search-underway-for-oklahoma-man-after-"
+            "vehicle-found-at-chastain-beach"
+        ),
+        "link": (
+            "https://cbs12.com/news/local/search-underway-for-oklahoma-man-after-"
+            "vehicle-found-at-chastain-beach"
+        ),
+        "published": "Sun, 30 Aug 2026 16:00:00 GMT",
+        "source_quality": "full",
+        # Deliberately fragmented registry identity: durable custom incident identity
+        # must outrank this and prevent a second public URL.
+        "editorial_story_id": "story_fragmented_debevec",
+        "_editorial_story_id": "story_fragmented_debevec",
+        "_editorial_route": "new_story",
+    }
+
+
+def test_named_missing_person_publisher_drift_matches_authoritative_custom():
+    g = _load_generate_module()
+    matched, key = g._durable_custom_identity_match(
+        _debevec_later_publisher_source(), _debevec_custom_canonical()
+    )
+    assert matched is True
+    assert key == "missing-person|michael-anthony-debevec"
+
+
+def test_fragmented_registry_cannot_mint_second_url_for_named_custom_missing_person():
+    g = _load_generate_module()
+    custom = _debevec_custom_canonical()
+    source = _debevec_later_publisher_source()
+
+    canonical, basis = g._published_skip_canonical(source, [custom])
+
+    assert canonical is custom
+    assert basis.startswith("durable_custom_incident_identity:missing-person|")
+
+
+def test_existing_debevec_duplicate_redirects_to_custom_canonical(tmp_path: Path):
+    g = _load_generate_module()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    custom = _debevec_custom_canonical()
+    duplicate = {
+        "slug": (
+            "2026-08-30-martin-county-sheriffs-office-searches-for-missing-"
+            "oklahoma-man-last-seen-at-hut"
+        ),
+        **_debevec_later_publisher_source(),
+        "headline": (
+            "Martin County Sheriff's Office searches for missing Oklahoma man "
+            "last seen at Hutchinson Island"
+        ),
+        "teaser": _debevec_later_publisher_source()["summary"],
+        "date": "2026-08-30",
+        "lastmod": "2026-08-30",
+        "first_published": "Sun, 30 Aug 2026 13:30:00 -0400",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+        "is_custom": False,
+        "authoritative_custom": False,
+    }
+
+    cleaned, redirects = g.apply_canonical_story_cleanup(
+        [custom, duplicate], articles, tmp_path
+    )
+
+    assert [row["slug"] for row in cleaned] == [custom["slug"]]
+    redirect = next(row for row in redirects if row["source_slug"] == duplicate["slug"])
+    assert redirect["target_slug"] == custom["slug"]
+    assert redirect["canonical_is_custom"] is True
+    rendered = (articles / f"{duplicate['slug']}.html").read_text(encoding="utf-8")
+    assert f"/articles/{custom['slug']}.html" in rendered
+    assert "noindex,follow" in rendered
+
+
+def test_newer_fragmented_missing_person_source_can_update_custom_in_place(monkeypatch):
+    g = _load_generate_module()
+    g.CURRENT_RUN_PREGEN_MATERIAL_UPDATE_MODEL_CALLS = 0
+    g.CURRENT_RUN_EDITORIAL_IDENTITIES.clear()
+    custom = _debevec_custom_canonical()
+    source = _debevec_later_publisher_source()
+
+    monkeypatch.setattr(
+        g,
+        "adjudicate_semantic_publication_candidates",
+        lambda *args, **kwargs: {
+            "status": "validated",
+            "action": "update_existing_canonical",
+            "recommended_action": "update_existing_canonical",
+            "selected_candidate_slug": custom["slug"],
+            "same_real_world_event": True,
+            "material_new_update": True,
+            "independently_newsworthy_followup": False,
+            "confidence": 0.99,
+            "shared_anchors": ["Michael Anthony Debevec II", "Chastain Beach"],
+            "novel_facts": ["Later publisher reporting adds family-visit context."],
+            "reason": "Same named missing-person incident with a material new detail.",
+            "validation_errors": [],
+        },
+    )
+
+    result = g._promote_published_skip_material_updates(
+        [source],
+        [custom],
+        "martin",
+        cache={"schema_version": 1, "entries": {}},
+    )
+
+    assert result["evaluated_count"] == 1
+    assert result["promoted_count"] == 1
+    assert source["canonical_slug"] == custom["slug"]
+    assert source["editorial_story_id"] == custom["editorial_story_id"]
+    assert source["_editorial_route"] == "update_existing"
+    assert g._authorized_custom_material_update(source, custom) is True
+
+
+def test_known_debevec_duplicate_url_remains_redirect_even_after_archive_row_is_removed(tmp_path: Path):
+    g = _load_generate_module()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    custom = _debevec_custom_canonical()
+
+    cleaned, redirects = g.apply_canonical_story_cleanup([custom], articles, tmp_path)
+
+    assert [row["slug"] for row in cleaned] == [custom["slug"]]
+    source_slug = next(iter(g.DEBEVEC_MISSING_REDIRECT_SOURCE_SLUGS))
+    redirect = next(row for row in redirects if row["source_slug"] == source_slug)
+    assert redirect["target_slug"] == g.DEBEVEC_MISSING_CANONICAL_SLUG
+    rendered = (articles / f"{source_slug}.html").read_text(encoding="utf-8")
+    assert f"/articles/{g.DEBEVEC_MISSING_CANONICAL_SLUG}.html" in rendered
+    assert "noindex,follow" in rendered

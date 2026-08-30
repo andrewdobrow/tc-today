@@ -15489,17 +15489,99 @@ def _sports_award_period_compatible(left, right):
     return False
 
 
-def _durable_custom_identity_match(candidate, authority):
-    """Return a deterministic cross-origin match for archived custom authority.
+def _durable_custom_missing_person_identity_match(candidate, authority):
+    """Return a narrow durable identity for named missing-person custom coverage.
 
-    The first contract covers recurring sports awards. It intentionally requires the
-    same team, award, person and award/publication week, so ordinary game recaps and a
-    later award for the same player remain separate stories.
+    Missing-person alerts routinely drift from an initial sheriff/Facebook wording to
+    a later publisher headline ("visitor" -> "man", "last seen" -> "vehicle found").
+    A custom canonical must survive that wording change.  This contract requires the
+    same missing-person event family, an exact shared participant name, and the
+    existing conservative unified-incident confidence threshold.  It therefore does
+    not merge two unnamed alerts in the same city or two different people.
     """
     if not isinstance(candidate, dict) or not isinstance(authority, dict):
         return False, ""
     if not (authority.get("is_custom") or authority.get("authoritative_custom")):
         return False, ""
+    try:
+        from tct_engine.unified_incident_identity import (
+            build_unified_incident_evidence,
+            compare_unified_incident_evidence,
+        )
+    except Exception:
+        return False, ""
+
+    def _published_iso(item):
+        for key in (
+            "source_published", "published_raw", "published",
+            "first_published", "date", "lastmod",
+        ):
+            parsed = _parse_any_datetime(item.get(key))
+            if parsed is not None:
+                return parsed.astimezone(timezone.utc).isoformat()
+        return ""
+
+    def _evidence(item):
+        text = _cross_source_text(item)
+        return build_unified_incident_evidence(
+            title=str(item.get("headline") or item.get("title") or ""),
+            body=text,
+            locations=tuple(sorted(_audit_locations(text))),
+            agencies=tuple(sorted(_cross_source_agencies(item))),
+            published_at=_published_iso(item),
+            source_url=str(
+                item.get("source_url") or item.get("original_url")
+                or item.get("link") or ""
+            ),
+        )
+
+    incoming = _evidence(candidate)
+    canonical = _evidence(authority)
+    if incoming.family != "missing_person" or canonical.family != "missing_person":
+        return False, ""
+
+    shared_people = set(incoming.people) & set(canonical.people)
+    strong_people = sorted(
+        name for name in shared_people
+        if len(name.split()) >= 2
+        and not any(
+            token in {
+                "county", "sheriff", "police", "office", "beach",
+                "deputies", "department", "facility", "city",
+            }
+            for token in name.split()
+        )
+    )
+    if not strong_people:
+        return False, ""
+
+    confidence, _trace = compare_unified_incident_evidence(incoming, canonical)
+    if confidence < 0.96:
+        return False, ""
+
+    person = strong_people[0].replace(" ", "-")
+    return True, f"missing-person|{person}"
+
+
+def _durable_custom_identity_match(candidate, authority):
+    """Return a deterministic cross-origin match for archived custom authority.
+
+    Named missing-person incidents and recurring sports awards have durable identity
+    contracts because both are known to arrive later under materially different
+    publisher wording.  These contracts are intentionally narrow and require concrete
+    participant/event evidence rather than generic topic similarity.
+    """
+    if not isinstance(candidate, dict) or not isinstance(authority, dict):
+        return False, ""
+    if not (authority.get("is_custom") or authority.get("authoritative_custom")):
+        return False, ""
+
+    missing_match, missing_key = _durable_custom_missing_person_identity_match(
+        candidate, authority
+    )
+    if missing_match:
+        return True, missing_key
+
     left = _sports_award_identity(candidate)
     right = _sports_award_identity(authority)
     if not left or not right:
@@ -17851,6 +17933,18 @@ PSL_ANIMAL_CRUELTY_CANONICAL_SLUG = (
 )
 PSL_ANIMAL_CRUELTY_REDIRECT_SOURCE_SLUGS = frozenset({
     "2026-08-08-port-st-lucie-man-arrested-on-animal-cruelty-charge-after-video-circulates-on-so",
+})
+
+# Permanent regression for the Aug. 2026 Michael Anthony Debevec II missing-person
+# alert. A later publisher version escaped as a second permalink after the initial
+# Sheriff's Office custom article. The custom URL is the permanent canonical; later
+# source reporting may update its content in place but may never mint another URL.
+DEBEVEC_MISSING_CANONICAL_SLUG = (
+    "2026-08-29-martin-county-sheriffs-office-searches-for-missing-oklahoma-"
+    "visitor-last-seen-at-chastain-beach"
+)
+DEBEVEC_MISSING_REDIRECT_SOURCE_SLUGS = frozenset({
+    "2026-08-30-martin-county-sheriffs-office-searches-for-missing-oklahoma-man-last-seen-at-hut",
 })
 
 
@@ -23190,6 +23284,47 @@ def apply_canonical_story_cleanup(archive, articles_dir, output_root):
             })
             removed_slugs.add(source_slug)
 
+    # Permanent cleanup for the Debevec missing-person duplicate that escaped after
+    # a later publisher version was fragmented into a new registry story. The generic
+    # named-missing-person custom identity above prevents future escapes; this explicit
+    # redirect repairs the public URL that already existed.
+    debevec_canonical = next(
+        (e for e in archive if e.get("slug") == DEBEVEC_MISSING_CANONICAL_SLUG),
+        None,
+    )
+    if debevec_canonical:
+        debevec_canonical.pop("exclude_from_live_recovery", None)
+        debevec_canonical.pop("identity_quarantine_reason", None)
+        debevec_canonical["legacy_identity_status"] = "identified"
+        debevec_canonical["ranking_eligible"] = True
+        for source_slug in sorted(DEBEVEC_MISSING_REDIRECT_SOURCE_SLUGS):
+            duplicate = next((e for e in archive if e.get("slug") == source_slug), None)
+            if duplicate:
+                _merge_category_memberships(
+                    debevec_canonical,
+                    duplicate,
+                    debevec_canonical.get("category_key")
+                    or duplicate.get("category_key")
+                    or "martin",
+                )
+            _upsert_canonical_redirect(redirects, {
+                "source_slug": source_slug,
+                "source_headline": (
+                    "Martin County Sheriff's Office searches for missing Oklahoma man"
+                ),
+                "target_slug": DEBEVEC_MISSING_CANONICAL_SLUG,
+                "target_headline": debevec_canonical.get("headline", ""),
+                "story_stage": "canonical-migration",
+                "match_confidence": 100,
+                "canonical_is_custom": True,
+                "editorial_story_id": debevec_canonical.get("editorial_story_id", ""),
+                "reason": (
+                    "Permanent regression migration for the named missing-person "
+                    "publisher duplicate; preserve the authoritative custom permalink."
+                ),
+            })
+            removed_slugs.add(source_slug)
+
     # Permanent cleanup for the Port St. Lucie animal-cruelty duplicate that
     # escaped across two category runs.  This is intentionally slug-specific as a
     # production regression, while the generalized prevention mechanism lives in
@@ -27193,19 +27328,41 @@ def _remember_current_run_editorial_identity(entry, row):
 
 
 def _published_skip_canonical(item, archive):
-    """Resolve a no-change registry decision to an already published TCT page.
+    """Resolve an incoming source to an already published TCT canonical.
 
-    This is a narrow deterministic enforcement path, not broad semantic activation.
-    It applies only when the current editorial decision is ``skip``, the source has a
-    persistent story ID, and an archive row with that same ID is independently
-    corroborated by exact source identity or the shared same-event matcher.
-
-    A prospective quarantine created by the old overwrite guard may participate only
-    when the row's *current* headline still aligns with its own slug. That permits the
-    next run to repair false quarantines without reviving genuinely drifted pages.
+    Ordinary registry suppression remains restricted to a ``skip`` decision plus a
+    persistent story ID.  Authoritative custom coverage has one stronger exception:
+    a durable incident identity may resolve the custom canonical even when the mutable
+    registry fragmented the incoming source into a new story ID.  That prevents a
+    later publisher version of the same named incident from minting a parallel URL and
+    lets the normal material-update gate decide whether new facts should refresh the
+    custom permalink in place.
     """
     if not isinstance(item, dict):
         return None, ""
+
+    if not (item.get("is_custom") or item.get("authoritative_custom")):
+        durable_custom_matches = []
+        for entry in archive or []:
+            if not isinstance(entry, dict) or not entry.get("slug"):
+                continue
+            if not (entry.get("is_custom") or entry.get("authoritative_custom")):
+                continue
+            if not _archive_entry_live_identity_safe(entry):
+                continue
+            matched, durable_key = _durable_custom_identity_match(item, entry)
+            if matched:
+                durable_custom_matches.append((entry, durable_key))
+        if durable_custom_matches:
+            canonical = min(
+                (row[0] for row in durable_custom_matches),
+                key=_incident_canonical_key,
+            )
+            durable_key = next(
+                row[1] for row in durable_custom_matches if row[0] is canonical
+            )
+            return canonical, f"durable_custom_incident_identity:{durable_key}"
+
     route = str(item.get("_editorial_route") or item.get("editorial_route") or "").strip().lower()
     story_id = str(item.get("editorial_story_id") or item.get("_editorial_story_id") or "").strip()
     if route != "skip" or not story_id:
