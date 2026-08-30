@@ -3,14 +3,22 @@ from __future__ import annotations
 
 from copy import deepcopy
 from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 import json
 from pathlib import Path
 import re
 from typing import Any, Iterable, Mapping, Sequence
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
-RANKING_RECOMMENDATION_VERSION = "1.3"
+RANKING_RECOMMENDATION_VERSION = "1.13.7.0-shadow"
 RANKING_MODE = "recommend"
+RANKING_SCHEMA_VERSION = 4
+RANKING_DECK_LIMIT = 12
+RANKING_FRESH_WINDOW_HOURS = 48.0
+RANKING_EXTENDED_WINDOW_HOURS = 60.0
+RANKING_EXTENDED_URGENCY_MIN = 8
+RANKING_TRANSIENT_MAX_HOURS = 24.0
+RANKING_SPORTS_MAX_HOURS = 24.0
 
 
 
@@ -308,22 +316,231 @@ def _resolve_story(
     return None, "unmatched", archive_entry, "unmatched", [], ""
 
 
-def _score_card(card: Mapping[str, Any], story: Mapping[str, Any] | None) -> tuple[int, dict[str, Any]]:
-    if story is not None:
-        score = int(story.get("editorial_score", story.get("editorial_priority", 0)) or 0)
-        breakdown = deepcopy(story.get("score_breakdown") or {})
-        breakdown.setdefault("score", score)
-        breakdown["basis"] = "persistent_story_registry"
-        return score, breakdown
+def _parse_datetime(value: Any) -> datetime | None:
+    if isinstance(value, datetime):
+        parsed = value
+    elif isinstance(value, str) and value.strip():
+        raw = value.strip()
+        try:
+            parsed = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        except ValueError:
+            try:
+                parsed = parsedate_to_datetime(raw)
+            except (TypeError, ValueError, OverflowError):
+                try:
+                    parsed = datetime.strptime(raw[:10], "%Y-%m-%d")
+                except ValueError:
+                    return None
+    else:
+        return None
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
 
-    urgency = max(0, min(10, int(card.get("urgency_score", 0) or 0)))
-    score = urgency * 8
-    if card.get("is_custom") or card.get("authoritative_custom"):
-        score = min(100, score + 10)
+
+def _reference_datetime(generated_at: str | None) -> datetime:
+    parsed = _parse_datetime(generated_at)
+    return parsed or datetime.now(timezone.utc)
+
+
+def _effective_publication_datetime(
+    card: Mapping[str, Any],
+    story: Mapping[str, Any] | None,
+    archive_entry: Mapping[str, Any] | None,
+) -> tuple[datetime | None, str]:
+    """Return the newsroom-freshness timestamp without letting routine edits revive old news."""
+    for source_name, source in (("archive", archive_entry), ("card", card)):
+        if not isinstance(source, Mapping):
+            continue
+        if source.get("meaningful_update_validated"):
+            for key in ("canonical_last_material_update_at", "last_meaningful_update_at"):
+                parsed = _parse_datetime(source.get(key))
+                if parsed is not None:
+                    return parsed, f"{source_name}:{key}"
+
+    if isinstance(archive_entry, Mapping):
+        for key in ("first_published", "date"):
+            parsed = _parse_datetime(archive_entry.get(key))
+            if parsed is not None:
+                return parsed, f"archive:{key}"
+
+    if isinstance(story, Mapping):
+        latest: datetime | None = None
+        for entry in story.get("timeline") or []:
+            if not isinstance(entry, Mapping):
+                continue
+            parsed = _parse_datetime(entry.get("published_at"))
+            if parsed is not None and (latest is None or parsed > latest):
+                latest = parsed
+        if latest is not None:
+            return latest, "registry:latest_timeline"
+
+    for key in ("first_published", "published_raw", "published", "date"):
+        parsed = _parse_datetime(card.get(key))
+        if parsed is not None:
+            return parsed, f"card:{key}"
+    return None, "missing"
+
+
+def _age_hours(published_at: datetime | None, reference: datetime) -> float | None:
+    if published_at is None:
+        return None
+    return max(0.0, (reference - published_at).total_seconds() / 3600.0)
+
+
+def _freshness_score(age_hours: float | None) -> float:
+    if age_hours is None:
+        return 20.0
+    return round(max(0.0, 100.0 * (1.0 - min(age_hours, RANKING_EXTENDED_WINDOW_HOURS) / RANKING_EXTENDED_WINDOW_HOURS)), 2)
+
+
+def _transient_story(card: Mapping[str, Any]) -> bool:
+    text = " ".join((str(card.get("headline") or ""), str(card.get("teaser") or ""))).lower()
+    phrases = (
+        "flood advisory", "flood warning", "weather advisory", "tornado warning",
+        "severe thunderstorm warning", "closed in both directions", "road closed",
+        "road closure", "lane closure", "bridge closure", "boil water notice",
+    )
+    return any(phrase in text for phrase in phrases)
+
+
+def _importance_signal(story: Mapping[str, Any] | None) -> tuple[int, str, list[dict[str, Any]]]:
+    if not isinstance(story, Mapping):
+        return 0, "unmatched_story", []
+    importance = story.get("importance") or {}
+    try:
+        score = max(0, min(100, int(importance.get("score", 0) or 0)))
+    except (TypeError, ValueError):
+        score = 0
+    reasons = [dict(row) for row in (importance.get("reasons") or []) if isinstance(row, Mapping)]
+    if score:
+        return score, "persistent_story_importance", reasons
+    breakdown = story.get("score_breakdown") or {}
+    try:
+        score = max(0, min(100, int(breakdown.get("importance", 0) or 0)))
+    except (TypeError, ValueError):
+        score = 0
+    return score, "persistent_score_breakdown", reasons
+
+
+def _locality_signal(story: Mapping[str, Any] | None, category_key: str) -> tuple[int, list[str]]:
+    if isinstance(story, Mapping):
+        relevance = story.get("local_relevance") or {}
+        try:
+            score = max(0, min(100, int(relevance.get("score", 0) or 0)))
+        except (TypeError, ValueError):
+            score = 0
+        counties = [str(value) for value in relevance.get("counties") or [] if str(value).strip()]
+        if score:
+            return score, counties
+    category_key = str(category_key or "").strip().lower()
+    if category_key == "florida":
+        return 55, []
+    county_map = {
+        "martin": ["Martin County"],
+        "st_lucie": ["St. Lucie County"],
+        "indian_river": ["Indian River County"],
+    }
+    return 100, county_map.get(category_key, [])
+
+
+def _source_trust_signal(story: Mapping[str, Any] | None) -> int:
+    if isinstance(story, Mapping):
+        breakdown = story.get("score_breakdown") or {}
+        try:
+            value = int(breakdown.get("source_trust", 0) or 0)
+        except (TypeError, ValueError):
+            value = 0
+        if value:
+            return max(0, min(100, value))
+        values = []
+        for candidate in story.get("title_candidates") or []:
+            if not isinstance(candidate, Mapping):
+                continue
+            try:
+                values.append(max(0, min(100, int(candidate.get("source_trust", 50) or 50))))
+            except (TypeError, ValueError):
+                pass
+        if values:
+            return max(values)
+    return 50
+
+
+def _urgency_signal(card: Mapping[str, Any]) -> int:
+    try:
+        return max(0, min(10, int(card.get("urgency_score", 0) or 0)))
+    except (TypeError, ValueError):
+        return 0
+
+
+def _ranking_eligibility(card: Mapping[str, Any], age_hours: float | None, urgency: int, category_key: str) -> tuple[bool, str]:
+    if card.get("pin_position"):
+        return True, "manual_pin_override"
+    if age_hours is None:
+        return (urgency >= RANKING_EXTENDED_URGENCY_MIN, "undated_high_urgency" if urgency >= RANKING_EXTENDED_URGENCY_MIN else "undated")
+    if age_hours > RANKING_EXTENDED_WINDOW_HOURS:
+        return False, "older_than_60_hours"
+    if _transient_story(card) and age_hours > RANKING_TRANSIENT_MAX_HOURS:
+        return False, "expired_transient_story"
+    if str(category_key or "") == "sports" and age_hours > RANKING_SPORTS_MAX_HOURS and urgency < 9:
+        return False, "routine_sports_older_than_24_hours"
+    if age_hours > RANKING_FRESH_WINDOW_HOURS and urgency < RANKING_EXTENDED_URGENCY_MIN:
+        return False, "older_than_48_hours_not_urgent_enough"
+    if age_hours > RANKING_FRESH_WINDOW_HOURS:
+        return True, "high_urgency_extended_window"
+    return True, "fresh_window"
+
+
+def _score_card(
+    card: Mapping[str, Any],
+    story: Mapping[str, Any] | None,
+    archive_entry: Mapping[str, Any] | None,
+    *,
+    reference_time: datetime,
+) -> tuple[int, dict[str, Any]]:
+    """Build the v1.13.7.0 shadow editorial score from independent newsroom signals."""
+    category_key = str(card.get("cat_key") or card.get("category_key") or "")
+    urgency = _urgency_signal(card)
+    importance, importance_basis, importance_reasons = _importance_signal(story)
+    locality, counties = _locality_signal(story, category_key)
+    source_trust = _source_trust_signal(story)
+    published_at, timestamp_basis = _effective_publication_datetime(card, story, archive_entry)
+    age = _age_hours(published_at, reference_time)
+    freshness = _freshness_score(age)
+
+    breaking_bonus = 8.0 if card.get("is_breaking") else 0.0
+    material_update_bonus = 6.0 if (
+        card.get("meaningful_update_validated")
+        or (archive_entry or {}).get("meaningful_update_validated")
+    ) else 0.0
+    weighted = (
+        0.34 * importance
+        + 0.24 * freshness
+        + 0.22 * (urgency * 10)
+        + 0.12 * locality
+        + 0.08 * source_trust
+        + breaking_bonus
+        + material_update_bonus
+    )
+    score = max(0, min(100, round(weighted)))
+    eligible, eligibility_reason = _ranking_eligibility(card, age, urgency, category_key)
     return score, {
         "score": score,
-        "basis": "live_urgency_fallback",
-        "urgency_score": urgency,
+        "basis": "homepage_editorial_shadow_v2",
+        "importance": importance,
+        "importance_basis": importance_basis,
+        "importance_reasons": importance_reasons,
+        "freshness": freshness,
+        "urgency": urgency,
+        "locality": locality,
+        "counties": counties,
+        "source_trust": source_trust,
+        "breaking_bonus": breaking_bonus,
+        "material_update_bonus": material_update_bonus,
+        "age_hours": round(age, 2) if age is not None else None,
+        "timestamp_basis": timestamp_basis,
+        "deck_eligible": eligible,
+        "eligibility_reason": eligibility_reason,
     }
 
 
@@ -336,8 +553,6 @@ def _identity_key(
     custom = bool(card.get("is_custom") or card.get("authoritative_custom"))
     slug = str(card.get("_archived_slug") or card.get("slug") or (archive_entry or {}).get("slug") or "").strip()
     if custom:
-        # Custom articles are never collapsed into generated coverage merely because
-        # the registry thinks they describe the same event.
         return (f"custom:{slug or _norm_title(str(card.get('headline') or ''))}", "custom_article")
 
     story_id = str((story or {}).get("story_id") or "").strip()
@@ -354,18 +569,185 @@ def _identity_key(
     return (f"title:{_norm_title(str(card.get('headline') or ''))}", "normalized_title")
 
 
+def _category_saturation_penalty(category_key: str, selected: Sequence[Mapping[str, Any]]) -> float:
+    if not category_key:
+        return 0.0
+    count = sum(1 for row in selected if str(row.get("category_key") or "") == category_key)
+    if count < 2:
+        return 0.0
+    if count == 2:
+        return 6.0
+    if count == 3:
+        return 12.0
+    return min(24.0, 18.0 + (count - 4) * 3.0)
+
+
+def _county_saturation_penalty(counties: Sequence[str], selected: Sequence[Mapping[str, Any]]) -> float:
+    unique = sorted({str(value) for value in counties if str(value).strip()})
+    if len(unique) != 1:
+        return 0.0
+    county = unique[0]
+    count = sum(1 for row in selected if county in (row.get("score_breakdown", {}).get("counties") or []))
+    return min(12.0, max(0, count - 2) * 4.0)
+
+
+def _selection_reason(row: Mapping[str, Any], category_penalty: float, county_penalty: float) -> str:
+    breakdown = row.get("score_breakdown") or {}
+    pieces = [
+        f"importance {breakdown.get('importance', 0)}",
+        f"freshness {breakdown.get('freshness', 0)}",
+        f"urgency {breakdown.get('urgency', 0)}/10",
+    ]
+    if breakdown.get("material_update_bonus"):
+        pieces.append("validated material update")
+    if breakdown.get("breaking_bonus"):
+        pieces.append("breaking")
+    if category_penalty:
+        pieces.append(f"-{category_penalty:g} category saturation")
+    if county_penalty:
+        pieces.append(f"-{county_penalty:g} county saturation")
+    return "; ".join(pieces)
+
+
+def _select_editorial_deck(rows: Sequence[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+    """Greedy shadow deck with soft diversity penalties and no representation quotas."""
+    if limit <= 0:
+        return []
+    eligible = [row for row in rows if row.get("deck_eligible") or row.get("pinned")]
+    selected: list[dict[str, Any]] = []
+    remaining = list(eligible)
+
+    for position in range(1, min(limit, len(eligible)) + 1):
+        fixed = next(
+            (
+                row for row in remaining
+                if row.get("position_locked") and int(row.get("current_position") or 0) == position
+            ),
+            None,
+        )
+        if fixed is not None:
+            fixed["selection_score"] = float(fixed["score"])
+            fixed["diversity_penalty"] = 0.0
+            fixed["category_saturation_penalty"] = 0.0
+            fixed["county_saturation_penalty"] = 0.0
+            fixed["selection_reason"] = f"position locked: {fixed.get('position_lock_reason') or 'manual authority'}"
+            selected.append(fixed)
+            remaining.remove(fixed)
+            continue
+
+        movable = [row for row in remaining if not row.get("position_locked")]
+        if not movable:
+            break
+        scored = []
+        for row in movable:
+            category_penalty = _category_saturation_penalty(str(row.get("category_key") or ""), selected)
+            county_penalty = _county_saturation_penalty(
+                row.get("score_breakdown", {}).get("counties") or [], selected
+            )
+            effective = float(row.get("score") or 0) - category_penalty - county_penalty
+            scored.append((effective, category_penalty, county_penalty, row))
+        scored.sort(key=lambda value: (
+            -value[0],
+            -float(value[3].get("score") or 0),
+            float(value[3].get("score_breakdown", {}).get("age_hours") or 999999.0),
+            int(value[3].get("current_position") or 999999),
+            str(value[3].get("headline") or "").lower(),
+        ))
+        effective, category_penalty, county_penalty, chosen = scored[0]
+        chosen["selection_score"] = round(effective, 2)
+        chosen["category_saturation_penalty"] = category_penalty
+        chosen["county_saturation_penalty"] = county_penalty
+        chosen["diversity_penalty"] = round(category_penalty + county_penalty, 2)
+        chosen["selection_reason"] = _selection_reason(chosen, category_penalty, county_penalty)
+        selected.append(chosen)
+        remaining.remove(chosen)
+
+    # Explicit pin positions are presentation authority even in shadow mode.
+    pinned = [row for row in selected if row.get("pin_position")]
+    if pinned:
+        unpinned = [row for row in selected if not row.get("pin_position")]
+        for row in sorted(pinned, key=lambda item: int(item.get("pin_position") or 999)):
+            position = max(1, int(row.get("pin_position") or 1))
+            unpinned.insert(min(position - 1, len(unpinned)), row)
+        selected = unpinned[:limit]
+    return selected[:limit]
+
+
+def _build_review_markdown(report: Mapping[str, Any]) -> str:
+    hero = report.get("hero") or {}
+    lines = [
+        "# TCT Homepage Editorial Ranking — Shadow Review",
+        "",
+        "**Publication behavior changed:** No. This is recommendation-only.",
+        "",
+        "## Hero",
+        "",
+        f"- Current: **{hero.get('current_headline') or '(none)'}**",
+        f"- Recommended: **{hero.get('recommended_headline') or '(none)'}**",
+        f"- Recommendation: {'CHANGE' if hero.get('change_recommended') else 'KEEP'} (not enforced)",
+        "",
+        "## Top Stories deck",
+        "",
+        "| Rank | Current | Recommended | Score | Why |",
+        "| ---: | --- | --- | ---: | --- |",
+    ]
+    current = list(report.get("current_deck") or [])
+    recommended = list(report.get("recommended_deck") or [])
+    items_by_headline = {str(row.get("headline") or ""): row for row in report.get("items") or []}
+    length = max(len(current), len(recommended))
+    for index in range(length):
+        current_headline = current[index] if index < len(current) else "—"
+        recommended_headline = recommended[index] if index < len(recommended) else "—"
+        row = items_by_headline.get(recommended_headline, {})
+        reason = str(row.get("selection_reason") or row.get("score_breakdown", {}).get("eligibility_reason") or "")
+        lines.append(
+            f"| {index + 1} | {current_headline} | {recommended_headline} | {row.get('score', '')} | {reason} |"
+        )
+    lines.extend([
+        "",
+        "## Recommended moves",
+        "",
+    ])
+    moves = list(report.get("recommendations") or [])
+    if not moves:
+        lines.append("No top-deck moves recommended.")
+    else:
+        for move in moves:
+            lines.append(
+                f"- **{move.get('headline')}**: {move.get('from_position')} → {move.get('to_position')} — {move.get('explanation')}"
+            )
+    lines.extend([
+        "",
+        "## Guardrails",
+        "",
+        "- Hero changes: disabled",
+        "- Card reordering: disabled",
+        "- Manual pins: preserved",
+        "- Custom articles: compete normally unless manually pinned",
+        "- Stories older than the Top Stories freshness window cannot be promoted back into the deck",
+        "- Category/county balance uses soft saturation penalties only; there are no representation quotas",
+        "- Identity conflicts remain position-locked and block enforcement readiness",
+        "",
+    ])
+    return "\n".join(lines)
+
+
 def build_homepage_ranking_recommendations(
     cards: Sequence[Mapping[str, Any]],
     hero: Mapping[str, Any] | None,
     *,
     registry: Mapping[str, Any],
     archive: Sequence[Mapping[str, Any]] = (),
-    max_recommendations: int = 10,
+    max_recommendations: int = 12,
     generated_at: str | None = None,
     excluded_candidates: Sequence[Mapping[str, Any]] = (),
+    deck_limit: int = RANKING_DECK_LIMIT,
+    current_deck_count: int | None = None,
 ) -> dict[str, Any]:
-    """Return a deduplicated recommendation report without mutating cards or hero."""
+    """Return a guarded editorial-deck recommendation without mutating the live homepage."""
     original_snapshot = deepcopy(list(cards))
+    hero_snapshot = deepcopy(dict(hero or {}))
+    reference = _reference_datetime(generated_at)
     by_id, by_url, by_title, by_slug = _story_indexes(registry)
     archive_by_slug, archive_by_title = _archive_indexes(archive)
 
@@ -379,11 +761,7 @@ def build_homepage_ranking_recommendations(
         archive_entry_hint = archive_by_slug.get(slug) if slug else archive_by_title.get(
             _norm_title(str(card.get("headline") or ""))
         )
-        legacy_status = str(
-            card.get("legacy_identity_status")
-            or (archive_entry_hint or {}).get("legacy_identity_status")
-            or ""
-        )
+        legacy_status = str(card.get("legacy_identity_status") or (archive_entry_hint or {}).get("legacy_identity_status") or "")
         ranking_eligible = card.get("ranking_eligible")
         if ranking_eligible is None and archive_entry_hint is not None:
             ranking_eligible = archive_entry_hint.get("ranking_eligible")
@@ -396,27 +774,14 @@ def build_homepage_ranking_recommendations(
                 "placement_position": placement_position,
                 "slug": slug,
                 "legacy_identity_status": legacy_status or "archive_unresolved",
-                "reason": (
-                    (archive_entry_hint or {}).get("identity_quarantine_reason")
-                    or "unresolved_legacy_identity_excluded_from_ranking"
-                ),
+                "reason": (archive_entry_hint or {}).get("identity_quarantine_reason") or "unresolved_legacy_identity_excluded_from_ranking",
             })
             continue
-        (
-            story,
-            match_basis,
-            archive_entry,
-            identity_confidence,
-            identity_evidence,
-            identity_warning,
-        ) = _resolve_story(
+
+        story, match_basis, archive_entry, identity_confidence, identity_evidence, identity_warning = _resolve_story(
             card,
-            by_id=by_id,
-            by_url=by_url,
-            by_title=by_title,
-            by_slug=by_slug,
-            archive_by_slug=archive_by_slug,
-            archive_by_title=archive_by_title,
+            by_id=by_id, by_url=by_url, by_title=by_title, by_slug=by_slug,
+            archive_by_slug=archive_by_slug, archive_by_title=archive_by_title,
         )
         identity_key, identity_basis = _identity_key(card, story, archive_entry)
         if identity_key in identity_to_row:
@@ -432,12 +797,20 @@ def build_homepage_ranking_recommendations(
             })
             continue
 
-        score, breakdown = _score_card(card, story)
+        score, breakdown = _score_card(card, story, archive_entry, reference_time=reference)
         current_position = len(unique_rows) + 1
         custom = bool(card.get("is_custom") or card.get("authoritative_custom"))
         pin_position = card.get("pin_position")
+        # A stable custom slug is sufficient recommendation identity. Custom work is
+        # not editorially pinned merely because it was manually authored.
+        if custom and str(card.get("_archived_slug") or card.get("slug") or (archive_entry or {}).get("slug") or "").strip():
+            if identity_confidence in {"low", "medium", "unmatched"}:
+                identity_confidence = "high"
+            if not identity_evidence:
+                identity_evidence = ["authoritative_custom_slug"]
+            identity_warning = ""
         identity_locked = bool(identity_warning) or identity_confidence in {"low", "medium"}
-        position_locked = custom or bool(pin_position) or identity_locked
+        position_locked = bool(pin_position) or identity_locked
         row = {
             "current_position": current_position,
             "recommended_position": current_position,
@@ -448,6 +821,8 @@ def build_homepage_ranking_recommendations(
             "story_id": str((story or {}).get("story_id") or ""),
             "score": score,
             "score_breakdown": breakdown,
+            "deck_eligible": bool(breakdown.get("deck_eligible")),
+            "eligibility_reason": str(breakdown.get("eligibility_reason") or ""),
             "match_basis": match_basis,
             "identity_confidence": identity_confidence,
             "identity_evidence": list(identity_evidence),
@@ -461,8 +836,7 @@ def build_homepage_ranking_recommendations(
             "custom": custom,
             "position_locked": position_locked,
             "position_lock_reason": (
-                "custom_article" if custom
-                else "pin_position" if pin_position
+                "pin_position" if pin_position
                 else "identity_conflict" if identity_warning
                 else "medium_identity_confidence" if identity_confidence == "medium"
                 else "low_identity_confidence" if identity_confidence == "low"
@@ -472,55 +846,110 @@ def build_homepage_ranking_recommendations(
         unique_rows.append(row)
         identity_to_row[identity_key] = row
 
-    # Lock custom articles and explicitly pinned cards at their current unique-card
-    # position. Recommendations must never use registry uncertainty to move manual work.
-    locked_positions = {int(row["current_position"]): row for row in unique_rows if row["position_locked"]}
-    movable = [row for row in unique_rows if not row["position_locked"]]
-    movable.sort(key=lambda row: (-int(row["score"]), row["current_position"], row["headline"].lower()))
-
-    recommended: list[dict[str, Any]] = []
-    movable_iter = iter(movable)
-    for position in range(1, len(unique_rows) + 1):
-        row = locked_positions.get(position)
-        if row is None:
-            row = next(movable_iter, None)
-        if row is None:
-            continue
+    recommended_deck_rows = _select_editorial_deck(unique_rows, deck_limit)
+    recommended_deck_ids = {id(row) for row in recommended_deck_rows}
+    current_sorted = sorted(unique_rows, key=lambda row: row["current_position"])
+    remainder = [row for row in current_sorted if id(row) not in recommended_deck_ids]
+    recommended = list(recommended_deck_rows) + remainder
+    for position, row in enumerate(recommended, start=1):
         row["recommended_position"] = position
-        recommended.append(row)
 
-    moves = [
-        {
-            "action": "recommend_reorder_card",
+    if current_deck_count is None:
+        current_deck_count = min(deck_limit, len(current_sorted))
+    try:
+        current_deck_count = max(0, min(deck_limit, int(current_deck_count)))
+    except (TypeError, ValueError):
+        current_deck_count = min(deck_limit, len(current_sorted))
+    current_deck_rows = current_sorted[:current_deck_count]
+    current_deck = [row["headline"] for row in current_deck_rows]
+    recommended_deck = [row["headline"] for row in recommended_deck_rows]
+    current_deck_set = set(current_deck)
+    recommended_deck_set = set(recommended_deck)
+
+    moves = []
+    for row in recommended:
+        if row["current_position"] == row["recommended_position"] or row.get("position_locked"):
+            continue
+        crosses_deck = (row["headline"] in current_deck_set) != (row["headline"] in recommended_deck_set)
+        within_deck = row["headline"] in current_deck_set or row["headline"] in recommended_deck_set
+        if not (crosses_deck or within_deck):
+            continue
+        if row["headline"] in recommended_deck_set and row["headline"] not in current_deck_set:
+            action = "recommend_promote_to_top_deck"
+        elif row["headline"] in current_deck_set and row["headline"] not in recommended_deck_set:
+            action = "recommend_demote_from_top_deck"
+        else:
+            action = "recommend_reorder_top_deck"
+        moves.append({
+            "action": action,
             "headline": row["headline"],
             "story_id": row["story_id"],
             "identity": row["identity"],
             "from_position": row["current_position"],
             "to_position": row["recommended_position"],
             "score": row["score"],
-            "reason": row["score_breakdown"],
+            "selection_score": row.get("selection_score", row["score"]),
+            "explanation": row.get("selection_reason") or _selection_reason(row, 0.0, 0.0),
             "enforced": False,
-        }
-        for row in recommended
-        if row["current_position"] != row["recommended_position"] and not row["position_locked"]
-    ]
+        })
     moves.sort(key=lambda move: (abs(move["from_position"] - move["to_position"]), move["score"]), reverse=True)
 
-    assert list(cards) == original_snapshot, "ranking recommendation builder mutated live cards"
-
-    now = generated_at or datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
-    matched = sum(1 for row in unique_rows if row["story_id"])
-    high_confidence_matches = sum(
-        1 for row in unique_rows
-        if row["story_id"] and row.get("identity_confidence") == "high"
+    # Hero is evaluated from the current hero plus the recommended deck but never changed.
+    hero_candidates: list[dict[str, Any]] = []
+    hero_card = dict(hero or {})
+    if hero_card.get("headline"):
+        hero_slug = str(hero_card.get("_archived_slug") or hero_card.get("slug") or "").strip()
+        hero_archive = archive_by_slug.get(hero_slug) if hero_slug else archive_by_title.get(_norm_title(str(hero_card.get("headline") or "")))
+        hero_story, hero_match, hero_archive, hero_conf, hero_evidence, hero_warning = _resolve_story(
+            hero_card,
+            by_id=by_id, by_url=by_url, by_title=by_title, by_slug=by_slug,
+            archive_by_slug=archive_by_slug, archive_by_title=archive_by_title,
+        )
+        hero_score, hero_breakdown = _score_card(hero_card, hero_story, hero_archive, reference_time=reference)
+        hero_candidates.append({
+            "headline": str(hero_card.get("headline") or ""),
+            "score": hero_score,
+            "score_breakdown": hero_breakdown,
+            "identity_confidence": hero_conf,
+            "identity_warning": hero_warning,
+            "current_hero": True,
+        })
+    for row in recommended_deck_rows:
+        hero_candidates.append({
+            "headline": row["headline"],
+            "score": row["score"],
+            "score_breakdown": row["score_breakdown"],
+            "identity_confidence": row["identity_confidence"],
+            "identity_warning": row["identity_warning"],
+            "current_hero": False,
+        })
+    viable_hero_candidates = [
+        row for row in hero_candidates
+        if row.get("score_breakdown", {}).get("deck_eligible")
+        and not row.get("identity_warning")
+        and row.get("identity_confidence") not in {"low", "medium"}
+    ]
+    viable_hero_candidates.sort(key=lambda row: (-int(row.get("score") or 0), 0 if row.get("current_hero") else 1, str(row.get("headline") or "").lower()))
+    hero_recommended = viable_hero_candidates[0] if viable_hero_candidates else (hero_candidates[0] if hero_candidates else {})
+    hero_current = hero_candidates[0] if hero_candidates else {}
+    hero_change_recommended = bool(
+        hero_recommended
+        and hero_current
+        and hero_recommended.get("headline") != hero_current.get("headline")
+        and int(hero_recommended.get("score") or 0) >= int(hero_current.get("score") or 0) + 8
     )
+    hero_effective_recommendation = hero_recommended if hero_change_recommended else hero_current
+
+    assert list(cards) == original_snapshot, "ranking recommendation builder mutated live cards"
+    assert dict(hero or {}) == hero_snapshot, "ranking recommendation builder mutated live hero"
+
+    matched = sum(1 for row in unique_rows if row["story_id"])
+    high_confidence_matches = sum(1 for row in unique_rows if row["story_id"] and row.get("identity_confidence") == "high")
     fallback = len(unique_rows) - matched
     identity_warnings = [
         {
-            "headline": row["headline"],
-            "current_position": row["current_position"],
-            "story_id": row["story_id"],
-            "match_basis": row["match_basis"],
+            "headline": row["headline"], "current_position": row["current_position"],
+            "story_id": row["story_id"], "match_basis": row["match_basis"],
             "identity_confidence": row.get("identity_confidence", ""),
             "identity_warning": row.get("identity_warning", ""),
             "position_lock_reason": row.get("position_lock_reason", ""),
@@ -534,30 +963,46 @@ def build_homepage_ranking_recommendations(
         if int(row.get("urgency_score", 0) or 0) >= 8
         and (row.get("age_hours") is None or float(row.get("age_hours") or 0) < 24)
     ]
+    stale_deck_candidates_excluded = [row for row in unique_rows if not row.get("deck_eligible")]
     match_ready = bool(len(unique_rows) > 0 and matched / len(unique_rows) >= 0.8)
     confidence_ready = not identity_warnings
     exclusion_ready = not recent_high_urgency_exclusions
     enforcement_ready = match_ready and confidence_ready and exclusion_ready
-    return {
-        "schema_version": 3,
+
+    report = {
+        "schema_version": RANKING_SCHEMA_VERSION,
         "version": RANKING_RECOMMENDATION_VERSION,
         "mode": RANKING_MODE,
-        "generated_at": now,
+        "generated_at": reference.isoformat(timespec="seconds").replace("+00:00", "Z"),
         "publication_behavior_changed": False,
         "hero": {
-            "headline": str((hero or {}).get("headline") or ""),
+            "current_headline": str(hero_current.get("headline") or ""),
+            "recommended_headline": str(hero_effective_recommendation.get("headline") or ""),
+            "current_score": int(hero_current.get("score") or 0),
+            "recommended_score": int(hero_effective_recommendation.get("score") or 0),
+            "top_scoring_candidate_headline": str(hero_recommended.get("headline") or ""),
+            "top_scoring_candidate_score": int(hero_recommended.get("score") or 0),
+            "score_margin": int(hero_recommended.get("score") or 0) - int(hero_current.get("score") or 0),
+            "change_threshold": 8,
+            "change_recommended": hero_change_recommended,
             "observe_only": True,
             "changed": False,
         },
         "controls": {
             "hero_changes_enabled": False,
             "card_reordering_enabled": False,
-            "custom_articles_position_locked": True,
+            "custom_articles_position_locked": False,
+            "custom_articles_compete_normally": True,
             "custom_pin_positions_preserved": True,
             "deduplicate_cross_category_placements": True,
             "unresolved_legacy_archive_excluded": True,
             "uncorroborated_story_ids_position_locked": True,
             "identity_conflicts_block_enforcement": True,
+            "freshness_contract_applied_to_recommendations": True,
+            "soft_category_saturation": True,
+            "soft_county_saturation": True,
+            "county_representation_quotas": False,
+            "deck_limit": deck_limit,
             "max_reported_recommendations": max_recommendations,
         },
         "summary": {
@@ -573,10 +1018,15 @@ def build_homepage_ranking_recommendations(
             "registry_match_rate": round((matched / len(unique_rows)), 4) if unique_rows else 1.0,
             "high_confidence_match_rate": round((high_confidence_matches / len(unique_rows)), 4) if unique_rows else 1.0,
             "recommended_moves": len(moves),
-            "unchanged_positions": len(unique_rows) - len(moves),
+            "unchanged_positions": sum(1 for row in unique_rows if row["current_position"] == row["recommended_position"]),
             "reported_moves": min(len(moves), max_recommendations),
+            "deck_limit": deck_limit,
+            "current_deck_count": len(current_deck),
+            "recommended_deck_count": len(recommended_deck),
+            "stale_or_ineligible_candidates_excluded_from_deck": len(stale_deck_candidates_excluded),
             "excluded_candidates": len(excluded_candidates),
             "recent_high_urgency_exclusions": len(recent_high_urgency_exclusions),
+            "hero_change_recommended": hero_change_recommended,
             "enforcement_readiness": "eligible_for_review" if enforcement_ready else "not_ready",
             "enforcement_readiness_reason": (
                 "At least 80% of unique cards matched persistent story IDs, every identity was corroborated, and no recent high-urgency candidate was filtered"
@@ -590,16 +1040,27 @@ def build_homepage_ranking_recommendations(
                 )
             ),
         },
-        "current_order": [row["headline"] for row in sorted(unique_rows, key=lambda row: row["current_position"])],
-        "recommended_order": [row["headline"] for row in sorted(recommended, key=lambda row: row["recommended_position"])],
+        "current_order": [row["headline"] for row in current_sorted],
+        "recommended_order": [row["headline"] for row in recommended],
+        "current_deck": current_deck,
+        "recommended_deck": recommended_deck,
         "recommendations": moves[:max_recommendations],
-        "items": sorted(recommended, key=lambda row: row["recommended_position"]),
+        "items": recommended,
+        "stale_or_ineligible_deck_candidates": [
+            {
+                "headline": row["headline"], "current_position": row["current_position"],
+                "age_hours": row.get("score_breakdown", {}).get("age_hours"),
+                "eligibility_reason": row.get("eligibility_reason"), "score": row.get("score"),
+            }
+            for row in stale_deck_candidates_excluded
+        ],
         "excluded_duplicate_placements": duplicate_placements,
         "excluded_legacy_identity_placements": legacy_identity_exclusions,
         "identity_warnings": identity_warnings,
         "excluded_candidates": excluded_candidates,
         "recent_high_urgency_exclusions": recent_high_urgency_exclusions,
     }
+    return report
 
 
 def write_homepage_ranking_recommendations(
@@ -609,8 +1070,11 @@ def write_homepage_ranking_recommendations(
     registry_path: Path,
     archive: Sequence[Mapping[str, Any]],
     output_path: Path,
-    max_recommendations: int = 10,
+    max_recommendations: int = 12,
     excluded_candidates: Sequence[Mapping[str, Any]] = (),
+    review_path: Path | None = None,
+    deck_limit: int = RANKING_DECK_LIMIT,
+    current_deck_count: int | None = None,
 ) -> dict[str, Any]:
     registry = _load_json(Path(registry_path), {})
     report = build_homepage_ranking_recommendations(
@@ -620,6 +1084,14 @@ def write_homepage_ranking_recommendations(
         archive=archive,
         max_recommendations=max_recommendations,
         excluded_candidates=excluded_candidates,
+        deck_limit=deck_limit,
+        current_deck_count=current_deck_count,
     )
     _atomic_write_json(Path(output_path), report)
+    if review_path is not None:
+        review_path = Path(review_path)
+        review_path.parent.mkdir(parents=True, exist_ok=True)
+        temp = review_path.with_suffix(review_path.suffix + ".tmp")
+        temp.write_text(_build_review_markdown(report), encoding="utf-8")
+        temp.replace(review_path)
     return report

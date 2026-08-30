@@ -14252,9 +14252,10 @@ def render_index(all_categories, top_cat):
             "redirect/story-equivalent placement(s) to direct canonical URLs"
         )
 
-    # v1.11.4.0 ranking rollout: confidence-gated observe and explain only. The report compares the
-    # already-selected live homepage card order with the persistent editorial score
-    # order. It never mutates the hero, card sequence, custom pins, or rendered HTML.
+    # v1.13.7.0 homepage editorial ranking authority — shadow phase only.
+    # The ranker now evaluates a 12-story editorial deck plus a hero recommendation
+    # using freshness, news value, locality, urgency, source trust, and soft diversity
+    # penalties. It writes JSON + a human-readable review, but cannot mutate live order.
     if write_homepage_ranking_recommendations is not None:
         try:
             _ranking_report = write_homepage_ranking_recommendations(
@@ -14263,21 +14264,24 @@ def render_index(all_categories, top_cat):
                 registry_path=EDITORIAL_REGISTRY_PATH,
                 archive=archive_for_links,
                 output_path=OUTPUT_DIR / "data" / "homepage-ranking-recommendations.json",
-                max_recommendations=10,
+                review_path=OUTPUT_DIR / "data" / "homepage-ranking-review.md",
+                max_recommendations=12,
                 excluded_candidates=HERO_PREFILTER_AUDIT,
+                current_deck_count=_top_stories_report.get("selected_count", len(topnews)),
             )
             _ranking_summary = _ranking_report.get("summary", {})
+            _ranking_hero = _ranking_report.get("hero", {})
             print(
-                "  Homepage ranking recommendations: "
-                f"{_ranking_summary.get('recommended_moves', 0)} move(s), "
-                f"{_ranking_summary.get('high_confidence_registry_matches', _ranking_summary.get('registry_matches', 0))}/"
-                f"{_ranking_summary.get('unique_cards_observed', _ranking_summary.get('cards_observed', 0))} unique cards high-confidence matched; "
+                "  Homepage editorial ranking shadow: "
+                f"{_ranking_summary.get('recommended_moves', 0)} top-deck move(s), "
+                f"{_ranking_summary.get('recommended_deck_count', 0)} recommended deck story/stories, "
+                f"{_ranking_summary.get('stale_or_ineligible_candidates_excluded_from_deck', 0)} stale/ineligible candidate(s) barred from promotion; "
+                f"hero={'change' if _ranking_hero.get('change_recommended') else 'keep'}; "
                 f"{_ranking_summary.get('identity_warning_count', 0)} identity warning(s); "
-                f"{_ranking_summary.get('duplicate_placements_excluded', 0)} duplicate placement(s) excluded; "
                 "observe-only"
             )
         except Exception as exc:
-            print(f"  Homepage ranking recommendations unavailable; live order unchanged: {exc}")
+            print(f"  Homepage editorial ranking shadow unavailable; live order unchanged: {exc}")
 
     support_card = _homepage_support_card_html()
 
