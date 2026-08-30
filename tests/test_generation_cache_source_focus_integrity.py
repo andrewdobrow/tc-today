@@ -182,3 +182,35 @@ def test_category_cache_contract_version_invalidates_pre_guard_keys():
     assert generate.CATEGORY_GENERATION_PROMPT_VERSION == (
         "v1.13.0.3-source-focus-cache-integrity"
     )
+
+
+def test_cached_source_resolution_prefers_exact_url_over_stale_source_index():
+    generate = _load_generate_module()
+    wflx_url = "https://www.wflx.com/2026/08/27/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-brush"
+    wpbf_url = "https://www.wpbf.com/article/florida-drones-swamp-crash-deputy-police/73555828"
+    cached_item = {
+        "headline": "Man arrested after hit-and-run crash, two-hour manhunt through Palm City swamp",
+        "source_index": 1,
+        "source_url": wflx_url,
+        "link": wflx_url,
+    }
+    current_sources = [
+        {
+            "title": "'Trying to swim and get away from those drones': Martin County uses multiple drones to catch suspect - WPBF",
+            "link": wpbf_url,
+            "article_text": "Martin County deputies used multiple drones to locate a suspect underwater in a swamp.",
+        },
+        {
+            "title": "Hit-and-run suspect arrested after manhunt through Palm City swamps and brush - WFLX",
+            "link": wflx_url,
+            "article_text": "Likenson Daceus led deputies through dense woods and swamp after a hit-and-run crash in Palm City.",
+        },
+    ]
+
+    source = generate._cached_source_for_generated_item(cached_item, current_sources)
+    probe = generate._cached_item_authority_probe(dict(cached_item), current_sources)
+
+    assert source is current_sources[1]
+    assert probe["source_url"] == wflx_url
+    assert probe["source_title"].endswith("- WFLX")
+    assert "multiple drones" not in probe["article_text"]

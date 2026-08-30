@@ -464,3 +464,37 @@ def test_source_focus_guard_rejects_policy_rewrite_of_shark_sighting_story():
     assert "generated_copy_drifted_from_source_focus" in diagnostics["missing"]
     assert diagnostics["source_focus"]["title_similarity"]["score"] < 0.38
     assert diagnostics["source_focus"]["lead_token_overlap"] < 0.30
+
+
+def test_archive_article_body_reads_membership_preview_for_final_framing(tmp_path, monkeypatch):
+    g = _load_generate()
+    monkeypatch.setattr(g, "OUTPUT_DIR", tmp_path)
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    slug = "2026-08-29-palm-city-boaters-parking"
+    preview_lead = (
+        "Some boaters in Palm City are raising concerns about whether they will still "
+        "be able to use Charlie Leighton Park's boat ramp after a $4.5 million overhaul."
+    )
+    html = (
+        '<div class="article-body tct-member-preview">'
+        '<div class="tct-preview-copy" data-tct-preview-copy="true">'
+        f'<p>{preview_lead}</p></div></div>'
+        '<div class="tct-member-only"><section class="tct-paywall"></section>'
+        '<div id="tct-protected-content" class="article-body tct-protected-content"></div></div>'
+        '<div class="article-share">Share</div>'
+    )
+    (articles / f"{slug}.html").write_text(html, encoding="utf-8")
+
+    recovered = g._archive_article_body({"slug": slug})
+    assert recovered == preview_lead
+
+    item = {
+        "headline": "Palm City boaters raise concerns about parking after $4.5 million renovation",
+        "body": "Some boaters say the new parking spaces are too small after a $4.5 million overhaul.",
+        "_archived_slug": slug,
+    }
+    kept, rejected = g._filter_article_framing_live_placements([item])
+
+    assert kept == [item]
+    assert rejected == []

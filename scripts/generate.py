@@ -1140,21 +1140,38 @@ def _category_generation_cache_key(category_key, headlines):
     })
 
 def _cached_source_for_generated_item(item, headlines):
-    """Resolve cached generated copy back to the current publisher source row."""
+    """Resolve cached generated copy back to the current publisher source row.
+
+    ``source_index`` is only stable inside the source packet that produced the cached
+    output. A later run can reorder or replace that packet, so an exact source URL
+    must outrank the historical numeric index. Otherwise a valid cached article can
+    inherit another publisher row's title/text while retaining its original URL.
+    """
     if not isinstance(item, dict):
         return {}
     sources = list(headlines or [])
+    item_url = _normalize_cache_url(
+        item.get("source_url") or item.get("link") or ""
+    )
+
     try:
         source_index = int(item.get("source_index")) - 1
     except (TypeError, ValueError):
         source_index = -1
-    if 0 <= source_index < len(sources) and isinstance(sources[source_index], dict):
-        return sources[source_index]
 
-    item_url = _normalize_cache_url(
-        item.get("source_url") or item.get("link") or ""
+    indexed_source = (
+        sources[source_index]
+        if 0 <= source_index < len(sources) and isinstance(sources[source_index], dict)
+        else None
     )
+
     if item_url:
+        if indexed_source is not None:
+            indexed_url = _normalize_cache_url(
+                indexed_source.get("source_url") or indexed_source.get("link") or ""
+            )
+            if indexed_url and indexed_url == item_url:
+                return indexed_source
         for source in sources:
             if not isinstance(source, dict):
                 continue
@@ -1163,6 +1180,12 @@ def _cached_source_for_generated_item(item, headlines):
             )
             if source_url and source_url == item_url:
                 return source
+        # The historical source is no longer in the current packet. Keep the cached
+        # provenance instead of rebinding it to an unrelated row at the same index.
+        return item
+
+    if indexed_source is not None:
+        return indexed_source
     return item
 
 
@@ -4757,7 +4780,14 @@ def _archive_article_metrics(entry):
         return 0, 0
 
 def _archive_article_body(entry):
-    """Return the existing full article body as plain paragraphs for hero previews."""
+    """Return the best article text available from an existing public article page.
+
+    Legacy/unprotected pages still contain the complete ``article-body``. Membership
+    pages intentionally do not expose the protected remainder in the repository, but
+    they do retain the complete public preview lead. Returning that preview is more
+    authoritative than falling back to the shorter archive teaser and prevents final
+    framing checks from evaluating text the reader never actually sees.
+    """
     slug = entry.get("slug", "")
     if not slug:
         return ""
@@ -4768,6 +4798,12 @@ def _archive_article_body(entry):
             r'<div class="article-body">(.*?)</div>\s*(?:<aside class="newsletter-inline-slot[^>]*>.*?</aside>\s*)?<div class="article-share">',
             html_text, re.IGNORECASE | re.DOTALL,
         )
+        if not match:
+            match = re.search(
+                r'<div class="article-body tct-member-preview"[^>]*>(.*?)</div>\s*'
+                r'<div class="tct-member-only"[^>]*>',
+                html_text, re.IGNORECASE | re.DOTALL,
+            )
         if not match:
             return ""
         body_html = match.group(1)
