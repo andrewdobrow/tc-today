@@ -1,7 +1,7 @@
 {
   "schema_version": 5,
   "gate_version": "1.8",
-  "generated_at": "2026-08-30T01:48:43.256169+00:00",
+  "generated_at": "2026-08-30T03:29:14.468036+00:00",
   "policy": {
     "recent_window_days": 7,
     "max_candidates": 4,
@@ -62,15 +62,15 @@
     }
   },
   "summary": {
-    "evaluations": 47,
+    "evaluations": 48,
     "candidate_pairs": 0,
     "structured_conflict_overrides": 0,
     "model_calls": 0,
     "cache_hits": 0,
-    "no_candidate_passes": 47,
+    "no_candidate_passes": 48,
     "duplicates_preserved": 0,
     "canonical_updates_selected": 0,
-    "new_stories_allowed": 0,
+    "new_stories_allowed": 1,
     "retroactive_rows_retained": 47,
     "holds": 0,
     "retroactive_redirects": 0,
@@ -87,15 +87,15 @@
     "pre_generation_materiality_holds": 1,
     "pre_generation_materiality_model_calls": 1,
     "pre_generation_materiality_cache_hits": 2,
-    "terminal_permalink_evaluations": 0,
-    "terminal_permalink_candidate_pairs": 0,
-    "terminal_permalink_model_calls": 0,
+    "terminal_permalink_evaluations": 1,
+    "terminal_permalink_candidate_pairs": 12,
+    "terminal_permalink_model_calls": 1,
     "terminal_permalink_cache_hits": 0,
     "terminal_permalink_resolution_evaluations": 0,
     "terminal_permalink_resolution_model_calls": 0,
     "terminal_permalink_resolution_cache_hits": 0,
     "terminal_permalink_holds_resolved": 0,
-    "terminal_permalink_new_authorized": 0,
+    "terminal_permalink_new_authorized": 1,
     "terminal_permalink_duplicates_blocked": 0,
     "terminal_permalink_updates_routed": 0,
     "terminal_permalink_holds": 0
@@ -193,13 +193,16 @@
       "semantic_action": "hold",
       "confidence": 0.98,
       "shared_anchors": [
-        "Port St. Lucie location only"
+        "Port St. Lucie",
+        "St. Lucie County"
       ],
       "novel_facts": [
-        "EF0 tornado struck Port St. Lucie on unspecified date",
-        "Corgi named Luna, age 6, went missing during tornado in Bay St. Lucie community",
-        "Owner Molly Wing-Berman's home damaged by tornado",
-        "Luna found three streets away by neighbors and reunited with owner"
+        "EF0 tornado struck Port St. Lucie",
+        "Corgi named Luna went missing during tornado",
+        "Owner Molly Wing-Berman",
+        "Bay St. Lucie community",
+        "Luna found three streets away by neighbors",
+        "Dog reunited with owner"
       ],
       "reason": "Model contradicted the already-proven canonical identity; preserve existing canonical and retry on a later run.",
       "validation_errors": [
@@ -652,7 +655,7 @@
       "phase": "retroactive_recent_archive_repair",
       "incoming_headline": "Ronald Corbin, Martin County High School choral teacher for 34 years, dies",
       "incoming_source_url": "https://www.wpbf.com/article/ronald-l-corbin-beloved-choral-teacher-at-martin-high-school-for-34-years-dies/73506173",
-      "incoming_story_id": "story_006759",
+      "incoming_story_id": "story_006774",
       "candidates": [],
       "decision": {
         "status": "no_candidates",
@@ -830,8 +833,8 @@
     },
     {
       "phase": "retroactive_recent_archive_repair",
-      "incoming_headline": "Martin County deputies used drones to track hit-and-run suspect hiding underwater in Palm City swamp",
-      "incoming_source_url": "https://www.wpbf.com/article/martin-county-deputies-search-for-hit-and-run-suspect-in-palm-city/73536091",
+      "incoming_headline": "Man arrested after hit-and-run crash, two-hour manhunt through Palm City swamp",
+      "incoming_source_url": "https://www.wflx.com/2026/08/27/hit-and-run-suspect-arrested-after-manhunt-through-palm-city-swamps-brush",
       "incoming_story_id": "story_006122",
       "candidates": [],
       "decision": {
@@ -1145,6 +1148,198 @@
         "shared_anchors": [],
         "novel_facts": [],
         "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "forward_publication",
+      "incoming_headline": "One hospitalized after apartment fire at Peacock Run complex in Port St. Lucie",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-one-person-sent-to-fire-at-apartment-in-st-luce-county/73560474",
+      "incoming_story_id": "story_006819",
+      "candidates": [],
+      "decision": {
+        "status": "no_candidates",
+        "action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 1.0,
+        "shared_anchors": [],
+        "novel_facts": [],
+        "reason": "No recent fuzzy candidates crossed the retrieval threshold.",
+        "validation_errors": []
+      }
+    },
+    {
+      "phase": "terminal_permalink_authority",
+      "gate_version": "1.1",
+      "resolution_version": "1.0",
+      "model": "claude-sonnet-5",
+      "incoming_headline": "One hospitalized after apartment fire at Peacock Run complex in Port St. Lucie",
+      "incoming_source_url": "https://www.wpbf.com/article/florida-one-person-sent-to-fire-at-apartment-in-st-luce-county/73560474",
+      "incoming_story_id": "story_006819",
+      "candidates": [
+        {
+          "slug": "2026-08-25-st-lucie-county-fire-district-contains-residential-fire-on-east-erie-drive-in-fo",
+          "headline": "St. Lucie County Fire District contains residential fire on East Erie Drive in Fort Pierce",
+          "terminal_recall_tier": 4,
+          "terminal_recall_score": 0.6652,
+          "retrieval_score": 0.5372,
+          "reasons": [
+            "shared_locality_and_event_family",
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-08-22-field-of-greens-to-open-first-treasure-coast-location-in-port-st-lucie",
+          "headline": "Field of Greens to open first Treasure Coast location in Port St. Lucie",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.54,
+          "retrieval_score": 0.521,
+          "reasons": [
+            "publication_gap_7_days"
+          ]
+        },
+        {
+          "slug": "2026-08-16-stuart-man-65-struck-and-killed-crossing-us-1-in-st-lucie-county",
+          "headline": "Stuart man, 65, struck and killed crossing U.S. 1 in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5095,
+          "retrieval_score": 0.5085,
+          "reasons": [
+            "publication_gap_14_days"
+          ]
+        },
+        {
+          "slug": "2026-08-22-off-duty-st-lucie-county-deputy-spots-burglary-suspect-leads-to-arrest-near-port",
+          "headline": "Off-duty St. Lucie County deputy spots burglary suspect, leads to arrest near Port St. Lucie",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.5061,
+          "retrieval_score": 0.4871,
+          "reasons": [
+            "publication_gap_8_days"
+          ]
+        },
+        {
+          "slug": "2026-08-27-port-st-lucie-police-dispel-active-shooter-rumor-after-swat-operation-on-southea",
+          "headline": "Port St. Lucie police dispel active shooter rumor after SWAT operation on Southeast West Dunbrooke Circle",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4851,
+          "retrieval_score": 0.4511,
+          "reasons": [
+            "publication_gap_2_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
+          "headline": "Port St. Lucie High School football player held in ICE custody after school zone speeding violation",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4839,
+          "retrieval_score": 0.4499,
+          "reasons": [
+            "publication_gap_4_days"
+          ]
+        },
+        {
+          "slug": "2026-08-18-port-st-lucie-voters-head-to-polls-tuesday-for-mayoral-election",
+          "headline": "Port St. Lucie voters head to polls Tuesday for mayoral election",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4648,
+          "retrieval_score": 0.4578,
+          "reasons": [
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-08-18-st-lucie-nuclear-plant-back-at-full-power-after-control-rod-failure-prompted-shu",
+          "headline": "St. Lucie Nuclear Plant back at full power after control rod failure prompted shutdown",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4558,
+          "retrieval_score": 0.4488,
+          "reasons": [
+            "publication_gap_11_days"
+          ]
+        },
+        {
+          "slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+          "headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.434,
+          "retrieval_score": 0.4,
+          "reasons": [
+            "publication_gap_3_days"
+          ]
+        },
+        {
+          "slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
+          "headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4236,
+          "retrieval_score": 0.3956,
+          "reasons": [
+            "publication_gap_5_days"
+          ]
+        },
+        {
+          "slug": "2026-08-15-uber-passenger-accused-of-beating-driver-stealing-tesla-in-fort-pierce-carjackin",
+          "headline": "Uber passenger accused of beating driver, stealing Tesla in Fort Pierce carjacking",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4182,
+          "retrieval_score": 0.4182,
+          "reasons": [
+            "publication_gap_15_days",
+            "outside_recent_window"
+          ]
+        },
+        {
+          "slug": "2026-08-16-melbourne-man-82-dies-after-jeep-strikes-tree-in-median-of-interstate-95-in-st-l",
+          "headline": "Melbourne man, 82, dies after single-vehicle crash on I-95 in St. Lucie County",
+          "terminal_recall_tier": 1,
+          "terminal_recall_score": 0.4154,
+          "retrieval_score": 0.4114,
+          "reasons": [
+            "publication_gap_13_days"
+          ]
+        }
+      ],
+      "initial_decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Fire at Peacock Run Apartments in Port St. Lucie (off I-95)",
+          "One person hospitalized in stable condition",
+          "Cat rescued with oxygen, bird did not survive",
+          "First-floor apartment in three-story building"
+        ],
+        "reason": "No candidate involves the same location, incident, or timeframe. The closest fire-related candidate (East Erie Drive, Fort Pierce) is a distinct residential fire at a different address and date, not an apartment complex fire. No shared named participants, addresses, or case details link this to any candidate.",
+        "validation_errors": []
+      },
+      "resolution_decision": {},
+      "decision": {
+        "status": "validated",
+        "action": "new_story",
+        "recommended_action": "new_story",
+        "selected_candidate_slug": "",
+        "same_real_world_event": false,
+        "material_new_update": false,
+        "independently_newsworthy_followup": false,
+        "confidence": 0.95,
+        "shared_anchors": [],
+        "novel_facts": [
+          "Fire at Peacock Run Apartments in Port St. Lucie (off I-95)",
+          "One person hospitalized in stable condition",
+          "Cat rescued with oxygen, bird did not survive",
+          "First-floor apartment in three-story building"
+        ],
+        "reason": "No candidate involves the same location, incident, or timeframe. The closest fire-related candidate (East Erie Drive, Fort Pierce) is a distinct residential fire at a different address and date, not an apartment complex fire. No shared named participants, addresses, or case details link this to any candidate.",
         "validation_errors": []
       }
     }
