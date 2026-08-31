@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-08-31T20:01:36Z",
+  "generated_at": "2026-08-31T20:46:45Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,26 +15,26 @@
   "summary": {
     "category_count": 9,
     "statuses": {
+      "cache_hit": 1,
       "category_eligibility_archive_recovery": 6,
-      "generated_live": 2,
-      "no_publishable_sources": 1
+      "no_publishable_sources": 2
     },
     "failures": {
       "no_category_eligible_sources": 6
     },
-    "model_attempt_count": 2,
-    "model_elapsed_seconds": 12.905,
-    "archive_recovery_requested_count": 7,
+    "model_attempt_count": 0,
+    "model_elapsed_seconds": 0.0,
+    "archive_recovery_requested_count": 8,
     "sports_expired_event_preview_count": 0,
     "contextual_update_lead_rejection_count": 0,
     "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 2,
-    "published_story_duplicate_suppression_count": 24,
-    "story_aware_update_context_count": 1,
-    "material_update_promotion_evaluation_count": 3,
+    "category_eligibility_rejection_count": 3,
+    "published_story_duplicate_suppression_count": 28,
+    "story_aware_update_context_count": 0,
+    "material_update_promotion_evaluation_count": 4,
     "material_update_promotion_count": 0,
     "material_update_promotion_cache_hit_count": 3,
-    "material_update_promotion_model_call_count": 0
+    "material_update_promotion_model_call_count": 1
   },
   "categories": [
     {
@@ -175,30 +175,23 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 33.813
+      "elapsed_seconds": 21.446
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
-      "status": "generated_live",
+      "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 8,
-      "selected_source_count": 1,
+      "publishable_source_count": 6,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 4.844,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 4.845,
-      "failure_code": "",
-      "failure_summary": "",
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
+      "failure_code": "no_category_eligible_sources",
+      "failure_summary": "No source passed Crime & Safety category eligibility contract",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -208,7 +201,7 @@
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
       "category_eligibility_assessed_count": 3,
-      "category_eligibility_rejection_count": 2,
+      "category_eligibility_rejection_count": 3,
       "category_eligibility_rejections": [
         {
           "contract_version": "1.0-primary-crime-safety-focus",
@@ -235,6 +228,20 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
+          "headline": "Homes, cars flooded in Indiantown neighborhood despite $2.18M drainage project - cw34.com",
+          "source_url": "https://cw34.com/news/local/homes-cars-flooded-in-indiantown-martin-county-county-booker-park-neighborhood-despite-2-million-drainage-project-flooding-drainage-stormwater-swales-driveway-culverts-homes-cars-flooded-damage-carpets"
+        },
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
           "headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com",
           "source_url": "https://cw34.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news"
         }
@@ -243,12 +250,12 @@
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
-          "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach",
-          "editorial_story_id": "story_007068",
-          "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
-          "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
-          "basis": "authorized_canonical_identity_skip",
+          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
+          "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+          "editorial_story_id": "story_007106",
+          "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+          "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+          "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         }
       ],
@@ -261,12 +268,12 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
-          "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
-          "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach",
-          "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
-          "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
+          "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+          "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+          "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
           "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -276,11 +283,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
-      "generated_card_count": 0,
-      "elapsed_seconds": 58.023
+      "elapsed_seconds": 20.865
     },
     {
       "category_key": "business",
@@ -420,7 +423,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 2,
-      "elapsed_seconds": 17.83
+      "elapsed_seconds": 15.064
     },
     {
       "category_key": "sports",
@@ -484,8 +487,8 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 6,
-      "elapsed_seconds": 21.523
+      "new_publication_stale_rejected_count": 7,
+      "elapsed_seconds": 11.307
     },
     {
       "category_key": "things_to_do",
@@ -595,7 +598,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 14.843
+      "elapsed_seconds": 11.748
     },
     {
       "category_key": "florida",
@@ -633,23 +636,23 @@
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 31.778
+      "elapsed_seconds": 22.629
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
-      "status": "category_eligibility_archive_recovery",
+      "status": "no_publishable_sources",
       "fetched_candidate_count": 27,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 1,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 0,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
       "attempt_count": 0,
       "attempts": [],
       "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Martin County category eligibility contract",
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -658,11 +661,31 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 6,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
+          "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+          "editorial_story_id": "story_007106",
+          "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+          "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Two people, dog escape safely after garage fire in Jensen Beach - Yahoo",
+          "source_url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNQ1RBelBDcEtwNWJ0ZDlxY0NudEJhVG1SVjRRZ0dDQ0FzRWlIWmlvZXFid3EyNEdkT2NqX28zdHBpSExQcDRIVmtVYTAtNHBONTJjcjNRQmZ1REd6VTVfelIxQkVnb0RNVWhldmtsMEtaTGc4eXQ3S0NacUdrTENWMktyNA",
+          "editorial_story_id": "story_007068",
+          "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+          "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "martin",
           "source_headline": "Two people, dog escape safely after garage fire in Jensen Beach - WPBF",
@@ -711,6 +734,36 @@
       "material_update_promotion_cache_hit_count": 1,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "martin",
+          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
+          "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+          "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+          "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Two people, dog escape safely after garage fire in Jensen Beach - Yahoo",
+          "source_url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNQ1RBelBDcEtwNWJ0ZDlxY0NudEJhVG1SVjRRZ0dDQ0FzRWlIWmlvZXFid3EyNEdkT2NqX28zdHBpSExQcDRIVmtVYTAtNHBONTJjcjNRQmZ1REd6VTVfelIxQkVnb0RNVWhldmtsMEtaTGc4eXQ3S0NacUdrTENWMktyNA",
+          "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+          "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "insufficient_source_depth",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "martin",
           "source_headline": "Two people, dog escape safely after garage fire in Jensen Beach - WPBF",
@@ -792,28 +845,21 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 41.901
+      "elapsed_seconds": 18.609
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
+      "status": "cache_hit",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 23,
-      "publishable_source_count": 2,
+      "fresh_candidate_count": 21,
+      "publishable_source_count": 1,
       "selected_source_count": 1,
-      "cache_hit": false,
+      "cache_hit": true,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 8.06,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 8.06,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -824,11 +870,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 2,
+      "category_eligibility_assessed_count": 1,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 7,
+      "published_story_duplicate_suppression_count": 9,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
+          "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+          "editorial_story_id": "story_007106",
+          "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+          "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Treasure Coast Hyrox Trials this weekend as Iron Knight Gym builds powerlifting community in Port St. Lucie",
@@ -853,7 +909,7 @@
           "category_key": "st_lucie",
           "source_headline": "Three arrested in St. Lucie County convenience store drug bust after detectives find crack cocaine - WPBF",
           "source_url": "https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149",
-          "editorial_story_id": "story_007023",
+          "editorial_story_id": "story_007099",
           "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
           "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
           "basis": "authorized_canonical_identity_skip",
@@ -873,7 +929,7 @@
           "category_key": "st_lucie",
           "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
           "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
-          "editorial_story_id": "story_007023",
+          "editorial_story_id": "story_007099",
           "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
           "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
           "basis": "exact_source_and_persistent_story_skip",
@@ -898,56 +954,40 @@
           "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
           "basis": "registry_same_event_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        }
-      ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
+        },
         {
+          "category_key": "st_lucie",
           "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - cw34.com",
           "source_url": "https://cw34.com/news/local/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire?teaserSource=trending",
-          "publisher": "cw34.com",
+          "editorial_story_id": "story_005719",
           "canonical_slug": "2026-08-25-st-lucie-county-fire-district-contains-residential-fire-on-east-erie-drive-in-fo",
           "canonical_headline": "St. Lucie County Fire District contains residential fire on East Erie Drive in Fort Pierce",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "incident:missing-person:fort-pierce",
-            "story:story_000695",
-            "source:https://cw34.com/news/local/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire?teaserSource=trending"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=1",
-            "shared_locality=['fort-pierce', 'st-lucie', 'st-lucie-county']",
-            "shared_event_families=['fire']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['east-erie-drive']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['fire', 'fort']",
-            "shared_distinctive_token_count=26",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
         }
       ],
-      "material_update_promotion_evaluation_count": 1,
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
+      "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
+          "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+          "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+          "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "st_lucie",
           "source_headline": "Treasure Coast Hyrox Trials this weekend as Iron Knight Gym builds powerlifting community in Port St. Lucie",
@@ -1072,14 +1112,43 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - cw34.com",
+          "source_url": "https://cw34.com/news/local/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire?teaserSource=trending",
+          "canonical_slug": "2026-08-25-st-lucie-county-fire-district-contains-residential-fire-on-east-erie-drive-in-fo",
+          "canonical_headline": "St. Lucie County Fire District contains residential fire on East Erie Drive in Fort Pierce",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "preserve_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "duplicate_use_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "St. Lucie County Fire District response",
+            "East Erie Drive in Fort Pierce",
+            "residential structure fire",
+            "fire contained to area of origin",
+            "prevented spread to nearby mobile homes",
+            "Fire Marshal's Office investigation"
+          ],
+          "novel_facts": [
+            "Incoming specifies the fire occurred on Sunday (candidate says Monday - likely publication timing difference)",
+            "Incoming uses '400 block' is not specified in incoming but is in candidate"
+          ],
+          "reason": "Both articles describe the identical fire incident: St. Lucie County Fire District responding to a residential structure fire on East Erie Drive in Fort Pierce that was contained before spreading to mobile homes. The core facts are identical - same location, same responding agency, same outcome (contained to origin area, prevented spread to mobile homes), same ongoing Fire Marshal investigation. The incoming article provides no material new information such as fire cause determination, damage estimates, injuries, arrests, or other developments. The date discrepancy (Sunday vs Monday) likely reflects when the incident occurred versus when initial reports were published. This is simply another outlet covering the same event with the same information.",
+          "validation_errors": []
         }
       ],
-      "new_publication_stale_rejected_count": 1,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
+      "new_publication_stale_rejected_count": 0,
       "live_hero_headline": "Port St. Lucie homeowners receiving notices about Waste Pro settlement credits on property tax bills",
-      "generated_card_count": 0,
-      "elapsed_seconds": 32.608
+      "elapsed_seconds": 25.464
     },
     {
       "category_key": "indian_river",
@@ -1087,7 +1156,7 @@
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 5,
+      "publishable_source_count": 4,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -1104,7 +1173,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 5,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 1,
@@ -1144,7 +1213,7 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 23.689
+      "elapsed_seconds": 25.619
     }
   ]
 }
