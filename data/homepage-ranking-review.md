@@ -4,27 +4,24 @@
 
 ## Hero
 
-- Current: **Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery**
-- Recommended: **Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery**
+- Current: **Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart**
+- Recommended: **Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart**
 - Recommendation: KEEP (not enforced)
 
 ## Top Stories deck
 
 | Rank | Current | Recommended | Score | Why |
 | ---: | --- | --- | ---: | --- |
-| 1 | Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns | Man arrested after hit-and-run crash, two-hour manhunt through Palm City swamp | 54 | importance 45; freshness 36.52; urgency 2/10; validated material update |
-| 2 | Lightning strike injures man on boat near Sandsprit Park in Stuart | Lightning strike injures man on boat near Sandsprit Park in Stuart | 50 | importance 35; freshness 59.85; urgency 2/10 |
-| 3 | Man arrested after hit-and-run crash, two-hour manhunt through Palm City swamp | Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns | 46 | importance 0; freshness 91.58; urgency 2/10 |
-| 4 | One hospitalized after apartment fire at Peacock Run complex in Port St. Lucie | One hospitalized after apartment fire at Peacock Run complex in Port St. Lucie | 42 | importance 25; freshness 39.32; urgency 2/10; -6 category saturation |
-| 5 | Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach | Port St. Lucie homeowners to receive credits on solid waste bills from $24 million Waste Pro settlement | 33 | importance 10; freshness 23.76; urgency 2/10 |
-| 6 | Port St. Lucie homeowners to receive credits on solid waste bills from $24 million Waste Pro settlement | Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach | 29 | importance 0; freshness 36.52; urgency 2/10; -4 county saturation |
+| 1 | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery | 58 | importance 35; freshness 92.93; urgency 2/10 |
+| 2 | Lightning strike injures man on boat near Sandsprit Park in Stuart | Man arrested after hit-and-run crash, two-hour manhunt through Palm City swamp | 52 | importance 45; freshness 29.5; urgency 2/10; validated material update |
+| 3 | Man arrested after hit-and-run crash, two-hour manhunt through Palm City swamp | Lightning strike injures man on boat near Sandsprit Park in Stuart | 49 | importance 35; freshness 52.83; urgency 2/10; -6 category saturation |
+| 4 | One hospitalized after apartment fire at Peacock Run complex in Port St. Lucie | One hospitalized after apartment fire at Peacock Run complex in Port St. Lucie | 40 | importance 25; freshness 32.3; urgency 2/10; -12 category saturation |
+| 5 | Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach | Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach | 27 | importance 0; freshness 29.5; urgency 2/10; -18 category saturation |
 
 ## Recommended moves
 
-- **Man arrested after hit-and-run crash, two-hour manhunt through Palm City swamp**: 3 → 1 — importance 45; freshness 36.52; urgency 2/10; validated material update
-- **Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns**: 1 → 3 — importance 0; freshness 91.58; urgency 2/10
-- **Port St. Lucie homeowners to receive credits on solid waste bills from $24 million Waste Pro settlement**: 6 → 5 — importance 10; freshness 23.76; urgency 2/10
-- **Martin County Sheriff's Office searches for missing Oklahoma visitor last seen at Chastain Beach**: 5 → 6 — importance 0; freshness 36.52; urgency 2/10; -4 county saturation
+- **Man arrested after hit-and-run crash, two-hour manhunt through Palm City swamp**: 3 → 2 — importance 45; freshness 29.5; urgency 2/10; validated material update
+- **Lightning strike injures man on boat near Sandsprit Park in Stuart**: 2 → 3 — importance 35; freshness 52.83; urgency 2/10; -6 category saturation
 
 ## Guardrails
 

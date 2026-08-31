@@ -7,7 +7,7 @@
     "resolver_version": "3.0",
     "relationship_engine_version": "1.5"
   },
-  "generated_at": "2026-08-31T15:53:28Z",
+  "generated_at": "2026-08-31T20:06:15Z",
   "mode": "enforce",
   "publication_behavior_changed": false,
   "activation": {
@@ -49,123 +49,193 @@
   },
   "registry_path": "data/editorial_story_registry.json",
   "audit": {
-    "candidates_processed": 159,
+    "candidates_processed": 177,
     "routes": {
-      "generate_new": 75,
-      "skip": 83,
-      "update_existing": 1
+      "generate_new": 91,
+      "skip": 86
     },
     "eligibility": {
-      "listing": 1,
-      "low_value": 127,
-      "publishable": 31
+      "low_value": 143,
+      "publishable": 33,
+      "search_page": 1
     },
     "source_classes": {
-      "aggregator": 128,
-      "local_news": 22,
-      "regional_news": 9
+      "aggregator": 143,
+      "local_news": 21,
+      "regional_news": 11,
+      "unknown": 2
     },
     "rejected_count": 1,
     "rejected_examples": [
       {
-        "headline": "5680 Highway A1a Apt 111, Vero Beach, FL 32963 - Realtor.com",
-        "source_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNQ0wzZTFUSElZcjhLOUdvUmQ5SXRwOERBOTdlUHJpLXNVbXQxMnFnV3VuSF8xVUtZOTdCY01raFlTUlhsUFZ2bGxIUUlrYTdLYkZkckNkbjV4X3psR1lPaXBWX3hUMjU3NWVLV0g4SDlRUXdfbzB5Vk0tUklYTXNqazVTWkZWcFZ0cS1IckpUaW5FNUVlMjFTLTJYblM1d2tMc28wRlJCRk1Fdw?oc=5",
-        "status": "listing",
+        "headline": "Search underway for missing person at Lake Osborne after possible wave runner incident",
+        "source_url": "https://www.wptv.com/news/palm-beach-county/region-c-palm-beach-county/search-underway-for-missing-person-at-lake-osborne-following-possible-wave-runner-incident",
+        "status": "search_page",
         "reasons": [
-          "Headline matches listing pattern 'realtor.com'"
+          "URL path matches blocked pattern '/search'"
         ],
-        "source_class": "aggregator"
+        "source_class": "local_news"
       }
     ]
   },
   "relationships": {
     "counts": {
-      "new_story": 68,
-      "same_event": 91
+      "new_story": 56,
+      "same_event": 121
     },
     "examples": [
       {
-        "story_id": "story_007024",
-        "title": "Miss America contestants share laughs, luggage secrets and pageant prep in West Palm Beach",
-        "event_key": "unknown-event-a0ddf91ae0",
+        "story_id": "story_007100",
+        "title": "Property tax plan could cost Florida public health systems $323 million - Tallahassee Democrat",
+        "event_key": "unknown-event-968300a820",
         "relationship": "new_story",
         "confidence": 0.0,
         "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "",
+        "title": "Search underway for missing person at Lake Osborne after possible wave runner incident",
+        "event_key": "",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "",
+        "decision_trace": []
+      },
+      {
+        "story_id": "story_007101",
+        "title": "Byron Donalds promises to ‘respect’ local data center bans if elected Governor - The Miami Times",
+        "event_key": "unknown-event-92e31ce4ee",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_007102",
+        "title": "High rain chances continue this week and into this weekend in Florida - tcpalm.com",
+        "event_key": "unknown-event-42b012a6b9",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_007103",
+        "title": "Man arrested after police find him sleeping in West Palm Beach school stairwell with a loaded firearm",
+        "event_key": "unknown-event-9f7971bf3e",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_007024",
+        "title": "Miss America contestants share laughs, luggage secrets and pageant prep in West Palm Beach",
+        "event_key": "unknown-event-a0ddf91ae0",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_007025",
         "title": "Report projects Florida hospital districts could lose $323M under Amendment 3 - WFTV",
         "event_key": "unknown-event-e6209a2e7d",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_007026",
         "title": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
         "event_key": "fire-stuart-11a01aa141",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_007027",
         "title": "2 bicyclists, including 1 child, hospitalized after vehicle crash near Westlake",
         "event_key": "traffic-crash-f49d9a6b46-f49d9a6b46",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_007028",
         "title": "'Things will never be the same': Shot by former co-worker, gas station employee still fighting to recover",
         "event_key": "unknown-event-39fd362475",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_007029",
-        "title": "Florida best public high schools, nine in St. Lucie County - Treasure Coast News",
-        "event_key": "unknown-event-1735e91934",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "title": "Florida best public high schools, nine in St. Lucie County - tcpalm.com",
+        "event_key": "unknown-event-d990a8e0b6",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_007030",
         "title": "Florida districts plan more school closures. Researchers call for caution. - Yahoo",
         "event_key": "unknown-event-f79b905af7",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -174,10 +244,11 @@
         "event_key": "traffic-crash-9700e8a4ca-9700e8a4ca",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/deputies-search-for-driver-who-killed-pedestrian-in-lake-worth-beach-hit-and-run",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -197,26 +268,28 @@
       },
       {
         "story_id": "story_007031",
-        "title": "Florida official worried about moving school near proposed data center - Treasure Coast News",
-        "event_key": "unknown-event-9cd5007974",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "title": "Florida official worried about moving school near proposed data center - tcpalm.com",
+        "event_key": "unknown-event-fb13186725",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_007032",
-        "title": "Florida school district putting downtown property on the market - Treasure Coast News",
-        "event_key": "unknown-event-d4baed0587",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "title": "Florida school district putting downtown property on the market - tcpalm.com",
+        "event_key": "unknown-event-d66f5bcc1d",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -253,10 +326,11 @@
         "event_key": "unknown-event-ec698dc68f",
         "relationship": "same_event",
         "confidence": 1.0,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -264,76 +338,6 @@
         "story_id": "story_006888",
         "title": "Colorado man charged with attempting to murder 5 deputy US marshals in Florida - 9News",
         "event_key": "unknown-event-25995650bd",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_006859",
-        "title": "Republicans fret as Talarico bombards airwaves and Paxton awaits Trump team’s cash",
-        "event_key": "unknown-event-54ce00a10c",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_006865",
-        "title": "Treasure Coast Hyrox Trials this weekend as Iron Knight Gym builds powerlifting community in Port St. Lucie",
-        "event_key": "unknown-event-b9052c5e24",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_006860",
-        "title": "Man injured in lightning strike on boat near Sandsprit Park in Stuart",
-        "event_key": "fire-stuart-6ac9fad09a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000067",
-        "title": "Central High School (Fort Pierce, FL) Football - MaxPreps",
-        "event_key": "unknown-event-791279ad14",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_006781",
-        "title": "Treasure Coast apartment fire sends one to hospital, pet bird dies - Treasure Coast News",
-        "event_key": "fire-2d6416591d-2d6416591d",
         "relationship": "same_event",
         "confidence": 1.0,
         "reason": "Exact event key already belongs to this story",
@@ -347,9 +351,9 @@
     ],
     "decision_trace_examples": [
       {
-        "story_id": "story_007024",
-        "title": "Miss America contestants share laughs, luggage secrets and pageant prep in West Palm Beach",
-        "event_key": "unknown-event-a0ddf91ae0",
+        "story_id": "story_007100",
+        "title": "Property tax plan could cost Florida public health systems $323 million - Tallahassee Democrat",
+        "event_key": "unknown-event-968300a820",
         "relationship": "new_story",
         "confidence": 0.0,
         "matched_existing": false,
@@ -357,84 +361,149 @@
         "decision_trace": [
           "Sparse event-key resolver guard: true",
           "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_007101",
+        "title": "Byron Donalds promises to ‘respect’ local data center bans if elected Governor - The Miami Times",
+        "event_key": "unknown-event-92e31ce4ee",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_007102",
+        "title": "High rain chances continue this week and into this weekend in Florida - tcpalm.com",
+        "event_key": "unknown-event-42b012a6b9",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_007103",
+        "title": "Man arrested after police find him sleeping in West Palm Beach school stairwell with a loaded firearm",
+        "event_key": "unknown-event-9f7971bf3e",
+        "relationship": "new_story",
+        "confidence": 0.0,
+        "matched_existing": false,
+        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "decision_trace": [
+          "Sparse event-key resolver guard: true",
+          "Resolver same-event merge bypassed: true"
+        ]
+      },
+      {
+        "story_id": "story_007024",
+        "title": "Miss America contestants share laughs, luggage secrets and pageant prep in West Palm Beach",
+        "event_key": "unknown-event-a0ddf91ae0",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
+        "decision_trace": [
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_007025",
         "title": "Report projects Florida hospital districts could lose $323M under Amendment 3 - WFTV",
         "event_key": "unknown-event-e6209a2e7d",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_007026",
         "title": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
         "event_key": "fire-stuart-11a01aa141",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_007027",
         "title": "2 bicyclists, including 1 child, hospitalized after vehicle crash near Westlake",
         "event_key": "traffic-crash-f49d9a6b46-f49d9a6b46",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_007028",
         "title": "'Things will never be the same': Shot by former co-worker, gas station employee still fighting to recover",
         "event_key": "unknown-event-39fd362475",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_007029",
-        "title": "Florida best public high schools, nine in St. Lucie County - Treasure Coast News",
-        "event_key": "unknown-event-1735e91934",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "title": "Florida best public high schools, nine in St. Lucie County - tcpalm.com",
+        "event_key": "unknown-event-d990a8e0b6",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_007030",
         "title": "Florida districts plan more school closures. Researchers call for caution. - Yahoo",
         "event_key": "unknown-event-f79b905af7",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -444,10 +513,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact source article URL already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
-          "Exact source article identity: true",
-          "Normalized source URL: https://www.wptv.com/news/local-news/our-community/lake-worth-beach-boynton-beach-lantana/deputies-search-for-driver-who-killed-pedestrian-in-lake-worth-beach-hit-and-run",
+          "Relationship: same_event",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -468,28 +538,30 @@
       },
       {
         "story_id": "story_007031",
-        "title": "Florida official worried about moving school near proposed data center - Treasure Coast News",
-        "event_key": "unknown-event-9cd5007974",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "title": "Florida official worried about moving school near proposed data center - tcpalm.com",
+        "event_key": "unknown-event-fb13186725",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
         "story_id": "story_007032",
-        "title": "Florida school district putting downtown property on the market - Treasure Coast News",
-        "event_key": "unknown-event-d4baed0587",
-        "relationship": "new_story",
-        "confidence": 0.0,
-        "matched_existing": false,
-        "reason": "Created new story: sparse event keys require exact-title identity or a supported follow-up",
+        "title": "Florida school district putting downtown property on the market - tcpalm.com",
+        "event_key": "unknown-event-d66f5bcc1d",
+        "relationship": "same_event",
+        "confidence": 1.0,
+        "matched_existing": true,
+        "reason": "Exact normalized title already belongs to this story",
         "decision_trace": [
-          "Sparse event-key resolver guard: true",
-          "Resolver same-event merge bypassed: true"
+          "Relationship: same_event",
+          "Exact normalized title match: true",
+          "Confidence: 1.00"
         ]
       },
       {
@@ -529,10 +601,11 @@
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
-        "reason": "Exact normalized title already belongs to this story",
+        "reason": "Exact event key already belongs to this story",
         "decision_trace": [
           "Relationship: same_event",
-          "Exact normalized title match: true",
+          "Exact event-key mapping: true",
+          "No novel follow-up milestone: true",
           "Confidence: 1.00"
         ]
       },
@@ -555,66 +628,6 @@
         "story_id": "story_006859",
         "title": "Republicans fret as Talarico bombards airwaves and Paxton awaits Trump team’s cash",
         "event_key": "unknown-event-54ce00a10c",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_006865",
-        "title": "Treasure Coast Hyrox Trials this weekend as Iron Knight Gym builds powerlifting community in Port St. Lucie",
-        "event_key": "unknown-event-b9052c5e24",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_006860",
-        "title": "Man injured in lightning strike on boat near Sandsprit Park in Stuart",
-        "event_key": "fire-stuart-6ac9fad09a",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_000067",
-        "title": "Central High School (Fort Pierce, FL) Football - MaxPreps",
-        "event_key": "unknown-event-791279ad14",
-        "relationship": "same_event",
-        "confidence": 1.0,
-        "matched_existing": true,
-        "reason": "Exact event key already belongs to this story",
-        "decision_trace": [
-          "Relationship: same_event",
-          "Exact event-key mapping: true",
-          "No novel follow-up milestone: true",
-          "Confidence: 1.00"
-        ]
-      },
-      {
-        "story_id": "story_006781",
-        "title": "Treasure Coast apartment fire sends one to hospital, pet bird dies - Treasure Coast News",
-        "event_key": "fire-2d6416591d-2d6416591d",
         "relationship": "same_event",
         "confidence": 1.0,
         "matched_existing": true,
@@ -631,22 +644,99 @@
   "follow_up_detection": {
     "mode": "observe_only",
     "publication_behavior_changed": false,
-    "candidate_count": 0,
+    "candidate_count": 2,
     "high_confidence_candidate_count": 0,
     "unanchored_candidate_suppressed_count": 0,
-    "current_relationships": {},
-    "milestones": {},
-    "reason_codes": {},
-    "examples": [],
+    "current_relationships": {
+      "new_story": 2
+    },
+    "milestones": {
+      "arrest": 1,
+      "death": 1
+    },
+    "reason_codes": {
+      "entity_match": 2,
+      "identity_anchor_qualified": 2,
+      "location_match": 2,
+      "novel_milestone": 2,
+      "title_continuity": 1
+    },
+    "examples": [
+      {
+        "headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
+        "event_key": "named-person-death:st-the",
+        "current_story_id": "story_007106",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_003862",
+        "candidate_confidence": 0.627273,
+        "candidate_milestones": [
+          "death"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "entity_match",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_003862",
+          "Novel milestones: death",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.27",
+          "Location match: True",
+          "Agency match: False",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.63"
+        ]
+      },
+      {
+        "headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com",
+        "event_key": "unknown-event-c6e4a12541",
+        "current_story_id": "story_007113",
+        "current_relationship": "new_story",
+        "candidate_story_id": "story_004543",
+        "candidate_confidence": 0.644444,
+        "candidate_milestones": [
+          "arrest"
+        ],
+        "candidate_reason_codes": [
+          "novel_milestone",
+          "location_match",
+          "entity_match",
+          "title_continuity",
+          "identity_anchor_qualified"
+        ],
+        "candidate_trace": [
+          "Follow-up candidate mode: observe_only",
+          "Candidate story: story_004543",
+          "Novel milestones: arrest",
+          "Exact event-key anchor: False",
+          "Facts overlap: 0.00",
+          "Title overlap: 0.44",
+          "Location match: True",
+          "Agency match: False",
+          "Event type match: False",
+          "Entity match: True",
+          "Agency conflict: False",
+          "Event type conflict: False",
+          "Candidate confidence: 0.64"
+        ]
+      }
+    ],
     "retrospective_candidate_count": 31,
     "retrospective_high_confidence_candidate_count": 8,
     "retrospective_activation_eligible_candidate_count": 6,
     "retrospective": {
       "mode": "retrospective_observe_only",
       "publication_behavior_changed": false,
-      "stories_with_timelines": 1064,
-      "timeline_entries_examined": 2956,
-      "transitions_examined": 1778,
+      "stories_with_timelines": 1088,
+      "timeline_entries_examined": 3000,
+      "transitions_examined": 1799,
       "candidate_scope": "distinct_article_transitions",
       "candidate_count": 31,
       "high_confidence_candidate_count": 8,
@@ -1671,11 +1761,11 @@
         "timeline_identity_unanchored": 21,
         "weak_title_continuity": 8
       },
-      "excluded_entry_count": 124,
+      "excluded_entry_count": 122,
       "exclusion_reasons": {
-        "insufficient_title_detail": 35,
+        "insufficient_title_detail": 34,
         "low_value_title": 16,
-        "social_source": 74
+        "social_source": 73
       },
       "examples": [
         {
@@ -3846,36 +3936,36 @@
   },
   "local_relevance": {
     "scopes": {
-      "florida": 1039,
-      "treasure_coast_local": 823,
-      "treasure_coast_region": 405,
-      "unknown": 1958
+      "florida": 1051,
+      "treasure_coast_local": 826,
+      "treasure_coast_region": 407,
+      "unknown": 1980
     },
-    "average_score": 60.79
+    "average_score": 60.71
   },
   "editorial_proximity": {
     "scopes": {
-      "florida": 1039,
-      "treasure_coast_local": 823,
-      "treasure_coast_region": 405,
-      "unknown": 1958
+      "florida": 1051,
+      "treasure_coast_local": 826,
+      "treasure_coast_region": 407,
+      "unknown": 1980
     },
-    "average_priority": 3.34
+    "average_priority": 3.41
   },
   "story_lifecycle": {
     "counts": {
-      "active": 3422,
-      "developing": 57,
-      "ongoing": 744,
+      "active": 3456,
+      "developing": 82,
+      "ongoing": 724,
       "resolved": 2
     }
   },
   "registry_health": {
-    "repair_version": 14,
+    "repair_version": 15,
     "changed": false,
     "status": "clean",
-    "active_stories_before": 5603,
-    "active_stories_after": 5603,
+    "active_stories_before": 5670,
+    "active_stories_after": 5670,
     "quarantined_story_count": 0,
     "quarantined_story_ids": [],
     "quarantine_reasons": {},
@@ -3900,97 +3990,25 @@
     "timeline_coherence_new_story_ids": [],
     "remaining_timeline_coherence_violations": 0,
     "timeline_coherence_violation_story_ids": [],
-    "incident_anchor_to_story_count": 96,
+    "incident_anchor_to_story_count": 97,
     "unified_incident_groups_resolved": 0,
     "unified_incident_story_records_removed": 0,
     "remaining_unified_incident_groups": 0,
-    "generated_at": "2026-08-31T15:43:15Z",
-    "quarantined_story_records_retained": 743,
-    "active_story_count": 5672
+    "generated_at": "2026-08-31T19:55:38Z",
+    "quarantined_story_records_retained": 749,
+    "active_story_count": 5728
   },
   "stories": {
-    "total": 4225,
+    "total": 4264,
     "importance_levels": {
       "breaking": 5,
-      "high": 73,
-      "normal": 638,
-      "low": 3509,
+      "high": 75,
+      "normal": 647,
+      "low": 3537,
       "archived": 0
     },
-    "average_importance": 8.73,
+    "average_importance": 8.8,
     "top": [
-      {
-        "story_id": "story_001880",
-        "title": "Videos surface in St. Lucie County firefighter hazing controversy leading to terminations, suspensions",
-        "score": 95,
-        "editorial_priority": 92,
-        "editorial_score": 92,
-        "score_breakdown": {
-          "score": 92,
-          "importance": 95,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.85,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 71.27
-        },
-        "level": "breaking",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "St. Lucie County"
-          ],
-          "places": [
-            "Port St. Lucie",
-            "Fort Pierce"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 41,
-        "timeline_entries": 25,
-        "relationship_decisions": 15,
-        "canonical_source_candidates": 25,
-        "lifecycle": {
-          "state": "developing",
-          "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-28T16:28:00.012064+00:00",
-          "hours_since_update": 71.27,
-          "event_count": 41,
-          "timeline_entries": 25
-        }
-      },
       {
         "story_id": "story_000695",
         "title": "16-year-old Centennial High School student hit by car while crossing Port St. Lucie intersection - WPTV",
@@ -4004,7 +4022,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 134.03
+          "age_hours": 138.31
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4067,7 +4085,7 @@
           "scope": "treasure_coast_local",
           "reason": "Directly affects a Treasure Coast county or municipality"
         },
-        "event_count": 84,
+        "event_count": 85,
         "timeline_entries": 72,
         "relationship_decisions": 23,
         "canonical_source_candidates": 83,
@@ -4075,8 +4093,8 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-26T01:42:10.693389+00:00",
-          "hours_since_update": 134.03,
-          "event_count": 84,
+          "hours_since_update": 138.31,
+          "event_count": 85,
           "timeline_entries": 72
         }
       },
@@ -4093,7 +4111,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 116.42
+          "age_hours": 120.63
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4157,9 +4175,140 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-26T19:18:41.219878+00:00",
-          "hours_since_update": 116.42,
+          "hours_since_update": 120.63,
           "event_count": 28,
           "timeline_entries": 20
+        }
+      },
+      {
+        "story_id": "story_001880",
+        "title": "Videos surface in St. Lucie County firefighter hazing controversy leading to terminations, suspensions",
+        "score": 95,
+        "editorial_priority": 75,
+        "editorial_score": 75,
+        "score_breakdown": {
+          "score": 75,
+          "importance": 95,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.7,
+          "source_multiplier": 1.135,
+          "source_trust": 95,
+          "age_hours": 75.48
+        },
+        "level": "breaking",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          },
+          {
+            "code": "follow_up",
+            "label": "Story has follow-up coverage",
+            "points": 10
+          },
+          {
+            "code": "multi_agency",
+            "label": "Multiple agencies involved",
+            "points": 10
+          },
+          {
+            "code": "multi_county",
+            "label": "Multi-county impact",
+            "points": 10
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "St. Lucie County"
+          ],
+          "places": [
+            "Port St. Lucie",
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 41,
+        "timeline_entries": 25,
+        "relationship_decisions": 15,
+        "canonical_source_candidates": 25,
+        "lifecycle": {
+          "state": "ongoing",
+          "reason": "Established multi-event story has not updated in the past 72 hours",
+          "last_updated": "2026-08-28T16:28:00.012064+00:00",
+          "hours_since_update": 75.48,
+          "event_count": 41,
+          "timeline_entries": 25
+        }
+      },
+      {
+        "story_id": "story_007106",
+        "title": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
+        "score": 65,
+        "editorial_priority": 73,
+        "editorial_score": 73,
+        "score_breakdown": {
+          "score": 73,
+          "importance": 65,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 1.0,
+          "source_multiplier": 1.12,
+          "source_trust": 90,
+          "age_hours": 0.04
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Martin County",
+            "St. Lucie County"
+          ],
+          "places": [
+            "Stuart",
+            "Port St. Lucie",
+            "Fort Pierce"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 1,
+        "lifecycle": {
+          "state": "active",
+          "reason": "Single-event story is current",
+          "last_updated": "2026-08-31T19:55:07.482601+00:00",
+          "hours_since_update": 0.04,
+          "event_count": 1,
+          "timeline_entries": 1
         }
       },
       {
@@ -4175,7 +4324,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 125.03
+          "age_hours": 129.24
         },
         "level": "high",
         "importance_reasons": [
@@ -4218,7 +4367,7 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-26T10:42:22.175311+00:00",
-          "hours_since_update": 125.03,
+          "hours_since_update": 129.24,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4236,7 +4385,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 422.04
+          "age_hours": 426.25
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4284,7 +4433,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 422.04,
+          "hours_since_update": 426.25,
           "event_count": 7,
           "timeline_entries": 7
         }
@@ -4302,7 +4451,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 413.04
+          "age_hours": 417.25
         },
         "level": "breaking",
         "importance_reasons": [
@@ -4348,7 +4497,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T10:41:34.652293+00:00",
-          "hours_since_update": 413.04,
+          "hours_since_update": 417.25,
           "event_count": 4,
           "timeline_entries": 4
         }
@@ -4366,7 +4515,7 @@
           "freshness_multiplier": 0.85,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 38.03
+          "age_hours": 42.23
         },
         "level": "high",
         "importance_reasons": [
@@ -4400,13 +4549,13 @@
           "state": "active",
           "reason": "Single-event story is current",
           "last_updated": "2026-08-30T01:42:51.409087+00:00",
-          "hours_since_update": 38.03,
+          "hours_since_update": 42.23,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
-        "story_id": "story_007022",
+        "story_id": "story_007098",
         "title": "Port St. Lucie Police Department seeks help finding man connected to active investigation - WPEC",
         "score": 45,
         "editorial_priority": 50,
@@ -4461,7 +4610,7 @@
         "lifecycle": {
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
-          "last_updated": "2026-08-31T15:42:41.012829+00:00",
+          "last_updated": "2026-08-31T19:55:07.482601+00:00",
           "hours_since_update": 0.02,
           "event_count": 2,
           "timeline_entries": 2
@@ -4480,7 +4629,7 @@
           "freshness_multiplier": 0.95,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 13.27
+          "age_hours": 17.48
         },
         "level": "normal",
         "importance_reasons": [
@@ -4523,7 +4672,7 @@
           "state": "developing",
           "reason": "Multiple events or follow-up decisions show the story is evolving",
           "last_updated": "2026-08-31T02:27:42.831331+00:00",
-          "hours_since_update": 13.27,
+          "hours_since_update": 17.48,
           "event_count": 11,
           "timeline_entries": 11
         }
@@ -4541,7 +4690,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 240.04
+          "age_hours": 244.25
         },
         "level": "high",
         "importance_reasons": [
@@ -4585,7 +4734,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-21T15:41:39.092086+00:00",
-          "hours_since_update": 240.04,
+          "hours_since_update": 244.25,
           "event_count": 34,
           "timeline_entries": 34
         }
@@ -4603,7 +4752,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 422.04
+          "age_hours": 426.25
         },
         "level": "high",
         "importance_reasons": [
@@ -4646,7 +4795,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-14T01:41:36.748145+00:00",
-          "hours_since_update": 422.04,
+          "hours_since_update": 426.25,
           "event_count": 3,
           "timeline_entries": 3
         }
@@ -4664,7 +4813,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 350.04
+          "age_hours": 354.25
         },
         "level": "high",
         "importance_reasons": [
@@ -4705,7 +4854,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-17T01:41:33.127844+00:00",
-          "hours_since_update": 350.04,
+          "hours_since_update": 354.25,
           "event_count": 3,
           "timeline_entries": 2
         }
@@ -4723,7 +4872,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 149.03
+          "age_hours": 153.24
         },
         "level": "high",
         "importance_reasons": [
@@ -4762,7 +4911,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-25T10:42:16.525222+00:00",
-          "hours_since_update": 149.03,
+          "hours_since_update": 153.24,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4780,7 +4929,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.126,
           "source_trust": 92,
-          "age_hours": 437.03
+          "age_hours": 441.24
         },
         "level": "high",
         "importance_reasons": [
@@ -4824,7 +4973,7 @@
           "state": "active",
           "reason": "Story remains open pending a resolution or archival threshold",
           "last_updated": "2026-08-13T10:41:50.330585+00:00",
-          "hours_since_update": 437.03,
+          "hours_since_update": 441.24,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -4842,7 +4991,7 @@
           "freshness_multiplier": 0.55,
           "source_multiplier": 1.12,
           "source_trust": 90,
-          "age_hours": 398.3
+          "age_hours": 402.5
         },
         "level": "high",
         "importance_reasons": [
@@ -4885,7 +5034,7 @@
           "state": "active",
           "reason": "Multi-event story remains open but is no longer rapidly developing",
           "last_updated": "2026-08-15T01:26:01.600639+00:00",
-          "hours_since_update": 398.3,
+          "hours_since_update": 402.5,
           "event_count": 2,
           "timeline_entries": 2
         }
@@ -4903,7 +5052,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 116.42
+          "age_hours": 120.63
         },
         "level": "high",
         "importance_reasons": [
@@ -4942,13 +5091,69 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-26T19:18:41.219878+00:00",
-          "hours_since_update": 116.42,
+          "hours_since_update": 120.63,
           "event_count": 1,
           "timeline_entries": 1
         }
       },
       {
         "story_id": "story_006228",
+        "title": "Palm Bay woman killed on I-95 after crash involving alligator - Sebastian Daily",
+        "score": 65,
+        "editorial_priority": 45,
+        "editorial_score": 45,
+        "score_breakdown": {
+          "score": 45,
+          "importance": 65,
+          "proximity_multiplier": 1.0,
+          "freshness_multiplier": 0.7,
+          "source_multiplier": 0.985,
+          "source_trust": 45,
+          "age_hours": 90.23
+        },
+        "level": "high",
+        "importance_reasons": [
+          {
+            "code": "fatality",
+            "label": "Fatality reported",
+            "points": 40
+          },
+          {
+            "code": "public_safety",
+            "label": "Public-safety event",
+            "points": 25
+          }
+        ],
+        "local_relevance": {
+          "scope": "treasure_coast_local",
+          "score": 100,
+          "counties": [
+            "Indian River County"
+          ],
+          "places": [
+            "Sebastian"
+          ]
+        },
+        "editorial_proximity": {
+          "score": 100,
+          "scope": "treasure_coast_local",
+          "reason": "Directly affects a Treasure Coast county or municipality"
+        },
+        "event_count": 1,
+        "timeline_entries": 1,
+        "relationship_decisions": 1,
+        "canonical_source_candidates": 2,
+        "lifecycle": {
+          "state": "ongoing",
+          "reason": "Story is older than 48 hours but remains within the active news window",
+          "last_updated": "2026-08-28T01:42:52.960630+00:00",
+          "hours_since_update": 90.23,
+          "event_count": 1,
+          "timeline_entries": 1
+        }
+      },
+      {
+        "story_id": "story_007092",
         "title": "Palm Bay woman killed on I-95 after alligator triggers chain-reaction crash, FHP says - WKMG",
         "score": 65,
         "editorial_priority": 45,
@@ -4960,7 +5165,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 0.985,
           "source_trust": 45,
-          "age_hours": 101.1
+          "age_hours": 105.31
         },
         "level": "high",
         "importance_reasons": [
@@ -4998,63 +5203,7 @@
           "state": "ongoing",
           "reason": "Story is older than 48 hours but remains within the active news window",
           "last_updated": "2026-08-27T10:42:47.447288+00:00",
-          "hours_since_update": 101.1,
-          "event_count": 1,
-          "timeline_entries": 1
-        }
-      },
-      {
-        "story_id": "story_006396",
-        "title": "Pedestrian killed in crash at U.S. 1 and Barefoot Blvd. - Sebastian Daily",
-        "score": 65,
-        "editorial_priority": 45,
-        "editorial_score": 45,
-        "score_breakdown": {
-          "score": 45,
-          "importance": 65,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 0.985,
-          "source_trust": 45,
-          "age_hours": 86.02
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "fatality",
-            "label": "Fatality reported",
-            "points": 40
-          },
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Indian River County"
-          ],
-          "places": [
-            "Sebastian"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 1,
-        "timeline_entries": 1,
-        "relationship_decisions": 1,
-        "canonical_source_candidates": 1,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Story is older than 48 hours but remains within the active news window",
-          "last_updated": "2026-08-28T01:42:52.960630+00:00",
-          "hours_since_update": 86.02,
+          "hours_since_update": 105.31,
           "event_count": 1,
           "timeline_entries": 1
         }
@@ -5072,7 +5221,7 @@
           "freshness_multiplier": 0.7,
           "source_multiplier": 1.135,
           "source_trust": 95,
-          "age_hours": 96.03
+          "age_hours": 100.24
         },
         "level": "high",
         "importance_reasons": [
@@ -5127,79 +5276,9 @@
           "state": "ongoing",
           "reason": "Established multi-event story has not updated in the past 72 hours",
           "last_updated": "2026-08-27T15:44:47.058272+00:00",
-          "hours_since_update": 96.03,
+          "hours_since_update": 100.24,
           "event_count": 87,
           "timeline_entries": 87
-        }
-      },
-      {
-        "story_id": "story_006042",
-        "title": "Martin County Sheriff's Office detectives arrest 2 men in string of burglaries, recover stolen guns - WPTV",
-        "score": 55,
-        "editorial_priority": 44,
-        "editorial_score": 44,
-        "score_breakdown": {
-          "score": 44,
-          "importance": 55,
-          "proximity_multiplier": 1.0,
-          "freshness_multiplier": 0.7,
-          "source_multiplier": 1.135,
-          "source_trust": 95,
-          "age_hours": 94.16
-        },
-        "level": "high",
-        "importance_reasons": [
-          {
-            "code": "public_safety",
-            "label": "Public-safety event",
-            "points": 25
-          },
-          {
-            "code": "follow_up",
-            "label": "Story has follow-up coverage",
-            "points": 10
-          },
-          {
-            "code": "multi_agency",
-            "label": "Multiple agencies involved",
-            "points": 10
-          },
-          {
-            "code": "multi_county",
-            "label": "Multi-county impact",
-            "points": 10
-          }
-        ],
-        "local_relevance": {
-          "scope": "treasure_coast_local",
-          "score": 100,
-          "counties": [
-            "Martin County",
-            "St. Lucie County"
-          ],
-          "places": [
-            "Stuart",
-            "Palm City",
-            "Hobe Sound",
-            "Port St. Lucie"
-          ]
-        },
-        "editorial_proximity": {
-          "score": 100,
-          "scope": "treasure_coast_local",
-          "reason": "Directly affects a Treasure Coast county or municipality"
-        },
-        "event_count": 15,
-        "timeline_entries": 15,
-        "relationship_decisions": 5,
-        "canonical_source_candidates": 15,
-        "lifecycle": {
-          "state": "ongoing",
-          "reason": "Established multi-event story has not updated in the past 72 hours",
-          "last_updated": "2026-08-27T17:39:05.927333+00:00",
-          "hours_since_update": 94.16,
-          "event_count": 15,
-          "timeline_entries": 15
         }
       }
     ]
@@ -5207,7 +5286,7 @@
   "status": "healthy",
   "category_generation": {
     "schema_version": 7,
-    "generated_at": "2026-08-31T15:49:29Z",
+    "generated_at": "2026-08-31T20:01:36Z",
     "policy": {
       "mode": "fail_closed_archive_recovery",
       "model_call_timeout_seconds": 120.0,
@@ -5222,26 +5301,26 @@
     "summary": {
       "category_count": 9,
       "statuses": {
-        "category_eligibility_archive_recovery": 5,
+        "category_eligibility_archive_recovery": 6,
         "generated_live": 2,
-        "no_publishable_sources": 2
+        "no_publishable_sources": 1
       },
       "failures": {
-        "no_category_eligible_sources": 5
+        "no_category_eligible_sources": 6
       },
       "model_attempt_count": 2,
-      "model_elapsed_seconds": 13.005,
+      "model_elapsed_seconds": 12.905,
       "archive_recovery_requested_count": 7,
       "sports_expired_event_preview_count": 0,
       "contextual_update_lead_rejection_count": 0,
       "article_framing_rejection_count": 0,
       "category_eligibility_rejection_count": 2,
-      "published_story_duplicate_suppression_count": 27,
+      "published_story_duplicate_suppression_count": 24,
       "story_aware_update_context_count": 1,
       "material_update_promotion_evaluation_count": 3,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 1
+      "material_update_promotion_cache_hit_count": 3,
+      "material_update_promotion_model_call_count": 0
     },
     "categories": [
       {
@@ -5249,7 +5328,7 @@
         "category_label": "Local Government",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 21,
+        "fresh_candidate_count": 20,
         "publishable_source_count": 10,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -5267,26 +5346,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "central_government_action_required",
-        "category_eligibility_assessed_count": 1,
-        "category_eligibility_rejection_count": 1,
-        "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-local-government-central-action",
-            "category_key": "local_gov",
-            "mode": "enforce",
-            "policy": "central_government_action_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_central_government_action",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [],
-            "headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
-            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach"
-          }
-        ],
-        "published_story_duplicate_suppression_count": 3,
+        "category_eligibility_assessed_count": 0,
+        "category_eligibility_rejection_count": 0,
+        "category_eligibility_rejections": [],
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
+            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach",
+            "editorial_story_id": "story_007068",
+            "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+            "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Flooding that trapped residents in Indiantown's Booker Park neighborhood prompts drainage concerns",
@@ -5325,6 +5399,21 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "local_gov",
+            "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
+            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach",
+            "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+            "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "local_gov",
             "source_headline": "Flooding that trapped residents in Indiantown's Booker Park neighborhood prompts drainage concerns",
@@ -5372,15 +5461,15 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 42.802
+        "elapsed_seconds": 33.813
       },
       {
         "category_key": "crime",
         "category_label": "Crime & Safety",
         "status": "generated_live",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 20,
-        "publishable_source_count": 7,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 8,
         "selected_source_count": 1,
         "cache_hit": false,
         "archive_recovery_requested": false,
@@ -5389,11 +5478,11 @@
           {
             "attempt": 1,
             "timeout_seconds": 120.0,
-            "elapsed_seconds": 4.248,
+            "elapsed_seconds": 4.844,
             "result": "success"
           }
         ],
-        "model_elapsed_seconds": 4.248,
+        "model_elapsed_seconds": 4.845,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -5404,49 +5493,48 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_crime_safety_focus_required",
-        "category_eligibility_assessed_count": 1,
-        "category_eligibility_rejection_count": 0,
-        "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 4,
+        "category_eligibility_assessed_count": 3,
+        "category_eligibility_rejection_count": 2,
+        "category_eligibility_rejections": [
+          {
+            "contract_version": "1.0-primary-crime-safety-focus",
+            "category_key": "crime",
+            "mode": "enforce",
+            "policy": "primary_crime_safety_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_crime_safety_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Homes, cars flooded in Indiantown neighborhood despite $2.18M drainage project - WPEC",
+            "source_url": "https://cbs12.com/news/local/homes-cars-flooded-in-indiantown-martin-county-county-booker-park-neighborhood-despite-2-million-drainage-project-flooding-drainage-stormwater-swales-driveway-culverts-homes-cars-flooded-damage-carpets?teaserSource=trending"
+          },
+          {
+            "contract_version": "1.0-primary-crime-safety-focus",
+            "category_key": "crime",
+            "mode": "enforce",
+            "policy": "primary_crime_safety_focus_required",
+            "eligible": false,
+            "would_reject": true,
+            "reason": "missing_primary_crime_safety_focus",
+            "positive_signals": [],
+            "competing_signals": [],
+            "local_nexus_signals": [],
+            "headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com",
+            "source_url": "https://cw34.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news"
+          }
+        ],
+        "published_story_duplicate_suppression_count": 1,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "crime",
-            "source_headline": "Flooding that trapped residents in Indiantown's Booker Park neighborhood prompts drainage concerns",
-            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/flooding-that-trapped-residents-in-indiantowns-booker-park-neighborhood-prompts-drainage-concerns",
-            "editorial_story_id": "story_007015",
-            "canonical_slug": "2026-08-31-flooding-traps-dozens-of-indiantown-residents-in-booker-park-neighborhood-sparks",
-            "canonical_headline": "Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Treasure Coast Hyrox Trials this weekend as Iron Knight Gym builds powerlifting community in Port St. Lucie",
-            "source_url": "https://www.wptv.com/sports/treasure-coast-hyrox-trials-this-weekend-as-iron-knight-gym-builds-powerlifting-community-in-port-st-lucie",
-            "editorial_story_id": "story_006865",
-            "canonical_slug": "2026-08-30-iron-knight-gym-in-port-st-lucie-hosts-treasure-coast-hyrox-trials-with-over-70",
-            "canonical_headline": "Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Man injured in lightning strike on boat near Sandsprit Park in Stuart",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/man-injured-in-lightning-strike-on-boat-near-sandsprit-park-in-stuart",
-            "editorial_story_id": "story_006860",
-            "canonical_slug": "2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart",
-            "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Man injured in lightning strike on boat near Sandsprit Park in Stuart - WFLX",
-            "source_url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNT1pIZWw3NWNPLVotc2pIMEhXTi1oX0VXOTlsc19UMVdOOE1KaHFIYXJlZkt5UjQ2UnRNYm5HZVhJS0dXRWFPMFFtWGdYQy0xU3JSTFk5MDV3bjhOT2s3NjVhNXJ4RU1uWUVQUmd5cFdUYVdHRExOQmVFRTNKYWh1RUlMOGs5UEQ3ZWdOZ0xVWlpkMGNEdXRLStIBrAFBVV95cUxQNERiZ3hPTDlwa2lDNExzdHJuZ1podXBacTc3cktxS1p5a292VmNMUzhrRW1ONzBjeFk2SWdTRGczbFozV1pnS19vUzBOdWhIdF9pelRJNDBCQU5IYkk0ODFNd1hyMzdEMUlNOEpabTBzMlVfQXNxdWlVR1dGQy1XcjRmb3ZFSUFwVzdHWGNuNmZXM1VYMWJ5TUVHc1RERDdDemdMd05naWVjdUdM",
-            "editorial_story_id": "story_006860",
-            "canonical_slug": "2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart",
-            "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
-            "basis": "registry_same_event_and_persistent_story_skip",
+            "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
+            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach",
+            "editorial_story_id": "story_007068",
+            "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+            "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+            "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -5459,58 +5547,13 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "crime",
-            "source_headline": "Flooding that trapped residents in Indiantown's Booker Park neighborhood prompts drainage concerns",
-            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/flooding-that-trapped-residents-in-indiantowns-booker-park-neighborhood-prompts-drainage-concerns",
-            "canonical_slug": "2026-08-31-flooding-traps-dozens-of-indiantown-residents-in-booker-park-neighborhood-sparks",
-            "canonical_headline": "Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns",
+            "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
+            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach",
+            "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+            "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
+            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
             "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Treasure Coast Hyrox Trials this weekend as Iron Knight Gym builds powerlifting community in Port St. Lucie",
-            "source_url": "https://www.wptv.com/sports/treasure-coast-hyrox-trials-this-weekend-as-iron-knight-gym-builds-powerlifting-community-in-port-st-lucie",
-            "canonical_slug": "2026-08-30-iron-knight-gym-in-port-st-lucie-hosts-treasure-coast-hyrox-trials-with-over-70",
-            "canonical_headline": "Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Man injured in lightning strike on boat near Sandsprit Park in Stuart",
-            "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/man-injured-in-lightning-strike-on-boat-near-sandsprit-park-in-stuart",
-            "canonical_slug": "2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart",
-            "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "crime",
-            "source_headline": "Man injured in lightning strike on boat near Sandsprit Park in Stuart - WFLX",
-            "source_url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNT1pIZWw3NWNPLVotc2pIMEhXTi1oX0VXOTlsc19UMVdOOE1KaHFIYXJlZkt5UjQ2UnRNYm5HZVhJS0dXRWFPMFFtWGdYQy0xU3JSTFk5MDV3bjhOT2s3NjVhNXJ4RU1uWUVQUmd5cFdUYVdHRExOQmVFRTNKYWh1RUlMOGs5UEQ3ZWdOZ0xVWlpkMGNEdXRLStIBrAFBVV95cUxQNERiZ3hPTDlwa2lDNExzdHJuZ1podXBacTc3cktxS1p5a292VmNMUzhrRW1ONzBjeFk2SWdTRGczbFozV1pnS19vUzBOdWhIdF9pelRJNDBCQU5IYkk0ODFNd1hyMzdEMUlNOEpabTBzMlVfQXNxdWlVR1dGQy1XcjRmb3ZFSUFwVzdHWGNuNmZXM1VYMWJ5TUVHc1RERDdDemdMd05naWVjdUdM",
-            "canonical_slug": "2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart",
-            "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -5521,16 +5564,16 @@
         "new_publication_stale_rejected_count": 0,
         "generation_status": "success",
         "budget_seconds": 180.0,
-        "live_hero_headline": "Charging lithium-ion battery sparks garage fire in Jensen Beach, 2 residents and dog escape safely",
+        "live_hero_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
         "generated_card_count": 0,
-        "elapsed_seconds": 29.556
+        "elapsed_seconds": 58.023
       },
       {
         "category_key": "business",
         "category_label": "Business & Development",
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
-        "fresh_candidate_count": 18,
+        "fresh_candidate_count": 20,
         "publishable_source_count": 8,
         "selected_source_count": 0,
         "cache_hit": false,
@@ -5548,30 +5591,21 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "enforce",
         "category_eligibility_policy": "primary_business_development_focus_required",
-        "category_eligibility_assessed_count": 1,
-        "category_eligibility_rejection_count": 1,
-        "category_eligibility_rejections": [
-          {
-            "contract_version": "1.0-business-development-primary-focus",
-            "category_key": "business",
-            "mode": "enforce",
-            "policy": "primary_business_development_focus_required",
-            "eligible": false,
-            "would_reject": true,
-            "reason": "missing_primary_business_development_focus",
-            "positive_signals": [],
-            "competing_signals": [],
-            "local_nexus_signals": [
-              "source_locality:martin county",
-              "source_locality:stuart",
-              "source_locality:jensen beach"
-            ],
-            "headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
-            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach"
-          }
-        ],
-        "published_story_duplicate_suppression_count": 6,
+        "category_eligibility_assessed_count": 0,
+        "category_eligibility_rejection_count": 0,
+        "category_eligibility_rejections": [],
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "business",
+            "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
+            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach",
+            "editorial_story_id": "story_007068",
+            "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+            "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "business",
             "source_headline": "Flooding that trapped residents in Indiantown's Booker Park neighborhood prompts drainage concerns",
@@ -5601,36 +5635,6 @@
             "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
-            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
-            "editorial_story_id": "story_006685",
-            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
-            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Florida now the sole state to reject share of $18B Meta youth safety settlement",
-            "source_url": "https://www.wptv.com/news/palm-beach-county/florida-now-the-sole-state-to-reject-share-of-18b-meta-youth-safety-settlement",
-            "editorial_story_id": "story_006600",
-            "canonical_slug": "2026-08-29-florida-rejects-18-billion-meta-settlement-becomes-sole-state-to-pursue-independ",
-            "canonical_headline": "Florida rejects $18 billion Meta settlement, becomes sole state to pursue independent lawsuit over youth safety",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
-            "editorial_story_id": "story_006602",
-            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
-            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 0,
@@ -5640,6 +5644,21 @@
         "material_update_promotion_cache_hit_count": 0,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "business",
+            "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
+            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach",
+            "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+            "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "business",
             "source_headline": "Flooding that trapped residents in Indiantown's Booker Park neighborhood prompts drainage concerns",
@@ -5684,55 +5703,10 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Charlie Leighton Park boat ramp improvements raise concerns about parking space for larger boats",
-            "source_url": "https://www.wptv.com/news/region-martin-county/palm-city/charlie-leighton-park-boat-ramp-improvements-raise-concerns-about-parking-space-for-larger-boats",
-            "canonical_slug": "2026-08-29-palm-city-boaters-raise-concerns-about-parking-space-sizes-at-charlie-leighton-p",
-            "canonical_headline": "Palm City boaters raise concerns about parking space sizes at Charlie Leighton Park after $4.5 million renovation",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "Florida now the sole state to reject share of $18B Meta youth safety settlement",
-            "source_url": "https://www.wptv.com/news/palm-beach-county/florida-now-the-sole-state-to-reject-share-of-18b-meta-youth-safety-settlement",
-            "canonical_slug": "2026-08-29-florida-rejects-18-billion-meta-settlement-becomes-sole-state-to-pursue-independ",
-            "canonical_headline": "Florida rejects $18 billion Meta settlement, becomes sole state to pursue independent lawsuit over youth safety",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "business",
-            "source_headline": "LIST: City of Port St. Lucie hosts community meetings leading up to election",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/list-city-of-port-st-lucie-hosts-community-meetings-leading-up-to-election",
-            "canonical_slug": "2026-08-28-port-st-lucie-schedules-community-meetings-on-2026-ballot-issues-city-budget",
-            "canonical_headline": "Port St. Lucie schedules community meetings on 2026 ballot issues, city budget",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 27.058
+        "new_publication_stale_rejected_count": 2,
+        "elapsed_seconds": 17.83
       },
       {
         "category_key": "sports",
@@ -5740,7 +5714,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 1,
+        "publishable_source_count": 2,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -5796,8 +5770,8 @@
             "action": "preserve_existing_canonical"
           }
         ],
-        "new_publication_stale_rejected_count": 8,
-        "elapsed_seconds": 32.255
+        "new_publication_stale_rejected_count": 6,
+        "elapsed_seconds": 21.523
       },
       {
         "category_key": "things_to_do",
@@ -5907,7 +5881,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 13.944
+        "elapsed_seconds": 14.843
       },
       {
         "category_key": "florida",
@@ -5945,30 +5919,23 @@
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 43.867
+        "elapsed_seconds": 31.778
       },
       {
         "category_key": "martin",
         "category_label": "Martin County",
-        "status": "generated_live",
-        "fetched_candidate_count": 25,
-        "fresh_candidate_count": 24,
-        "publishable_source_count": 4,
-        "selected_source_count": 4,
+        "status": "category_eligibility_archive_recovery",
+        "fetched_candidate_count": 27,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 1,
+        "selected_source_count": 0,
         "cache_hit": false,
-        "archive_recovery_requested": false,
-        "attempt_count": 1,
-        "attempts": [
-          {
-            "attempt": 1,
-            "timeout_seconds": 120.0,
-            "elapsed_seconds": 8.757,
-            "result": "success"
-          }
-        ],
-        "model_elapsed_seconds": 8.757,
-        "failure_code": "",
-        "failure_summary": "",
+        "archive_recovery_requested": true,
+        "attempt_count": 0,
+        "attempts": [],
+        "model_elapsed_seconds": 0.0,
+        "failure_code": "no_category_eligible_sources",
+        "failure_summary": "No source passed Martin County category eligibility contract",
         "sports_expired_event_preview_count": 0,
         "sports_expired_event_previews": [],
         "contextual_update_lead_rejection_count": 0,
@@ -5977,11 +5944,41 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 4,
+        "category_eligibility_assessed_count": 1,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 1,
+        "published_story_duplicate_suppression_count": 4,
         "published_story_duplicate_suppressions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Two people, dog escape safely after garage fire in Jensen Beach - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-two-people-dog-escape-safely-after-garage-fire-in-jensen-beach/73569727",
+            "editorial_story_id": "story_007068",
+            "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+            "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Dog, 2 people evacuated after lithium-ion battery sparks Jensen Beach garage fire - WPEC",
+            "source_url": "https://cbs12.com/news/local/dog-2-people-rescued-lithium-ion-battery-sparks-jensen-beach-garage-fire-northeast-cypress-lane-jensen-beach-palm-beach-county-fire-rescue-florida-news",
+            "editorial_story_id": "story_007068",
+            "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+            "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach - WPTV",
+            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach",
+            "editorial_story_id": "story_007068",
+            "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+            "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+            "basis": "authorized_canonical_identity_skip",
+            "reason": "registry_skip_story_already_published"
+          },
           {
             "category_key": "martin",
             "source_headline": "Martin County Sheriff's Office searching for man visiting from Oklahoma - WPBF",
@@ -6000,6 +5997,51 @@
         "material_update_promotion_cache_hit_count": 1,
         "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
+          {
+            "category_key": "martin",
+            "source_headline": "Two people, dog escape safely after garage fire in Jensen Beach - WPBF",
+            "source_url": "https://www.wpbf.com/article/florida-two-people-dog-escape-safely-after-garage-fire-in-jensen-beach/73569727",
+            "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+            "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+            "canonical_is_custom": false,
+            "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "Dog, 2 people evacuated after lithium-ion battery sparks Jensen Beach garage fire - WPEC",
+            "source_url": "https://cbs12.com/news/local/dog-2-people-rescued-lithium-ion-battery-sparks-jensen-beach-garage-fire-northeast-cypress-lane-jensen-beach-palm-beach-county-fire-rescue-florida-news",
+            "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+            "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "martin",
+            "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach - WPTV",
+            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach",
+            "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+            "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
           {
             "category_key": "martin",
             "source_headline": "Martin County Sheriff's Office searching for man visiting from Oklahoma - WPBF",
@@ -6036,25 +6078,28 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "generation_status": "success",
-        "budget_seconds": 180.0,
-        "live_hero_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
-        "generated_card_count": 0,
-        "elapsed_seconds": 43.718
+        "elapsed_seconds": 41.901
       },
       {
         "category_key": "st_lucie",
         "category_label": "St. Lucie County",
-        "status": "no_publishable_sources",
+        "status": "generated_live",
         "fetched_candidate_count": 30,
-        "fresh_candidate_count": 21,
-        "publishable_source_count": 0,
-        "selected_source_count": 0,
+        "fresh_candidate_count": 23,
+        "publishable_source_count": 2,
+        "selected_source_count": 1,
         "cache_hit": false,
-        "archive_recovery_requested": true,
-        "attempt_count": 0,
-        "attempts": [],
-        "model_elapsed_seconds": 0.0,
+        "archive_recovery_requested": false,
+        "attempt_count": 1,
+        "attempts": [
+          {
+            "attempt": 1,
+            "timeout_seconds": 120.0,
+            "elapsed_seconds": 8.06,
+            "result": "success"
+          }
+        ],
+        "model_elapsed_seconds": 8.06,
         "failure_code": "",
         "failure_summary": "",
         "sports_expired_event_preview_count": 0,
@@ -6065,10 +6110,10 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 0,
+        "category_eligibility_assessed_count": 2,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
-        "published_story_duplicate_suppression_count": 9,
+        "published_story_duplicate_suppression_count": 7,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "st_lucie",
@@ -6078,16 +6123,6 @@
             "canonical_slug": "2026-08-30-iron-knight-gym-in-port-st-lucie-hosts-treasure-coast-hyrox-trials-with-over-70",
             "canonical_headline": "Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend",
             "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Man injured in lightning strike on boat near Sandsprit Park in Stuart - WPTV",
-            "source_url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxOalUtcEVaTUUwNVpBc3FITG4zcDRob3pGeW9UNmYxY2R5X29IQ0VnY3l0T3UyZVdyaUdJdDdHQmJWVExpaDhQUE8wdTN2eVZpTWcxb0Utc3lXNVJLd3kyanpmcmM2T09VSEZLOTk0ZlpKMHdRNmkxYjE5NTlRUDhfZGV6LU1sUUFvS3FtUXYyaXZDbmkzbThaTFc3NEFmSDVQWmZOZmRETjBaZ3hzTl9zOFY4R3lzSnA2QW5xcWlHRHpiYzBBTm1RQ1ZWVQ",
-            "editorial_story_id": "story_006860",
-            "canonical_slug": "2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart",
-            "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
-            "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
           {
@@ -6102,9 +6137,9 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "St. Lucie County store bust uncovers crack cocaine, marijuana - WPBF",
+            "source_headline": "Three arrested in St. Lucie County convenience store drug bust after detectives find crack cocaine - WPBF",
             "source_url": "https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149",
-            "editorial_story_id": "story_007012",
+            "editorial_story_id": "story_007023",
             "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
             "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
             "basis": "authorized_canonical_identity_skip",
@@ -6117,6 +6152,16 @@
             "editorial_story_id": "story_006819",
             "canonical_slug": "2026-08-29-one-hospitalized-after-apartment-fire-at-peacock-run-complex-in-port-st-lucie",
             "canonical_headline": "One hospitalized after apartment fire at Peacock Run complex in Port St. Lucie",
+            "basis": "exact_source_and_persistent_story_skip",
+            "reason": "registry_skip_story_already_published"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
+            "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
+            "editorial_story_id": "story_007023",
+            "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
+            "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
             "basis": "exact_source_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
           },
@@ -6139,47 +6184,45 @@
             "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
             "basis": "registry_same_event_and_persistent_story_skip",
             "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "GALLERY: EF-0 tornado carrying peak winds of 75 mph touches down in Port St. Lucie - WPEC",
-            "source_url": "https://cbs12.com/news/local/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday",
-            "editorial_story_id": "story_005683",
-            "canonical_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
-            "canonical_headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
-            "editorial_story_id": "story_005782",
-            "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
-            "canonical_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
-            "basis": "exact_source_and_persistent_story_skip",
-            "reason": "registry_skip_story_already_published"
           }
         ],
         "story_aware_update_context_count": 1,
         "story_aware_update_context_bindings": [
           {
-            "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
-            "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
-            "publisher": "cbs12.com",
-            "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
-            "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
-            "basis": "exact_source_url",
+            "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - cw34.com",
+            "source_url": "https://cw34.com/news/local/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire?teaserSource=trending",
+            "publisher": "cw34.com",
+            "canonical_slug": "2026-08-25-st-lucie-county-fire-district-contains-residential-fire-on-east-erie-drive-in-fo",
+            "canonical_headline": "St. Lucie County Fire District contains residential fire on East Erie Drive in Fort Pierce",
+            "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
             "identity_keys": [
-              "story:story_007023",
-              "source:https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime"
+              "incident:missing-person:fort-pierce",
+              "story:story_000695",
+              "source:https://cw34.com/news/local/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire?teaserSource=trending"
             ],
-            "match_confidence": 0.99,
+            "match_confidence": 0.95,
             "evidence_dimensions": [
-              "source"
+              "bounded_time_window",
+              "shared_locality",
+              "shared_event_family",
+              "shared_precise_location",
+              "shared_headline_topic",
+              "distinctive_fact_overlap"
             ],
             "decision_trace": [
-              "deterministic_identity_keys=source:https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
+              "left_identity_origin=source_derived",
+              "right_identity_origin=source_derived",
+              "publication_gap_days=1",
+              "shared_locality=['fort-pierce', 'st-lucie', 'st-lucie-county']",
+              "shared_event_families=['fire']",
+              "shared_named_people=[]",
+              "shared_precise_locations=['east-erie-drive']",
+              "shared_agencies=[]",
+              "shared_subject_phrases=[]",
+              "shared_headline_topic_core=['fire', 'fort']",
+              "shared_distinctive_token_count=26",
+              "identity_outcome=same_event_verified",
+              "evidence_tier=hard_composite_identity",
               "write_authorized=True"
             ],
             "relationship": "same_event_verified",
@@ -6188,8 +6231,8 @@
         ],
         "material_update_promotion_evaluation_count": 1,
         "material_update_promotion_count": 0,
-        "material_update_promotion_cache_hit_count": 0,
-        "material_update_promotion_model_call_count": 1,
+        "material_update_promotion_cache_hit_count": 1,
+        "material_update_promotion_model_call_count": 0,
         "material_update_promotion_decisions": [
           {
             "category_key": "st_lucie",
@@ -6200,21 +6243,6 @@
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
             "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Man injured in lightning strike on boat near Sandsprit Park in Stuart - WPTV",
-            "source_url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxOalUtcEVaTUUwNVpBc3FITG4zcDRob3pGeW9UNmYxY2R5X29IQ0VnY3l0T3UyZVdyaUdJdDdHQmJWVExpaDhQUE8wdTN2eVZpTWcxb0Utc3lXNVJLd3kyanpmcmM2T09VSEZLOTk0ZlpKMHdRNmkxYjE5NTlRUDhfZGV6LU1sUUFvS3FtUXYyaXZDbmkzbThaTFc3NEFmSDVQWmZOZmRETjBaZ3hzTl9zOFY4R3lzSnA2QW5xcWlHRHpiYzBBTm1RQ1ZWVQ",
-            "canonical_slug": "2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart",
-            "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
-            "canonical_is_custom": false,
-            "identity_basis": "registry_same_event_and_persistent_story_skip",
-            "eligibility_reason": "insufficient_source_depth",
             "evaluated": false,
             "promoted": false,
             "cache_hit": false,
@@ -6238,7 +6266,7 @@
           },
           {
             "category_key": "st_lucie",
-            "source_headline": "St. Lucie County store bust uncovers crack cocaine, marijuana - WPBF",
+            "source_headline": "Three arrested in St. Lucie County convenience store drug bust after detectives find crack cocaine - WPBF",
             "source_url": "https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149",
             "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
             "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
@@ -6247,8 +6275,8 @@
             "eligibility_reason": "newer_source_requires_materiality_decision",
             "evaluated": true,
             "promoted": false,
-            "cache_hit": false,
-            "model_call": true,
+            "cache_hit": true,
+            "model_call": false,
             "action": "preserve_existing_canonical",
             "semantic_status": "validated",
             "semantic_action": "duplicate_use_existing_canonical",
@@ -6259,13 +6287,16 @@
               "St. Lucie County Sheriff's Office",
               "Ayhem Jaber Ubayda, 21",
               "Melvin James Kelly, 60",
-              "Mobley, 71 (John Alvin J. Mobley in candidate)",
+              "John Alvin J. Mobley (age 71 in candidate)",
               "14 grams crack cocaine",
               "128 grams marijuana packaged for sale",
               "Same three arrests with identical charges"
             ],
-            "novel_facts": [],
-            "reason": "Both articles report the identical Friday drug bust at Sam's Drive Thru at 1502 Avenue D, with the same three arrestees (Ayhem Jaber Ubayda, Melvin James Kelly, and Mobley), same quantities of drugs recovered (14g crack cocaine, 128g marijuana), and same charges. The incoming article contains no material new information - it is simply another outlet's coverage of the same event with the same facts in slightly different wording. No arrests, charges, court actions, or other developments have occurred since the canonical was published.",
+            "novel_facts": [
+              "Incoming provides first name 'John' for Mobley (mentioned as just 'Mobley' in incoming body but 'John Alvin J. Mobley' in candidate)",
+              "Minor address variation: 'Avenue D' vs 'Avenue Drive' (likely same location)"
+            ],
+            "reason": "Both articles report the exact same Friday drug bust at Sam's Drive Thru convenience store with identical participants (Ubayda, Mobley, Kelly), same quantities of drugs seized (14g crack cocaine, 128g marijuana), and same charges. The incoming article contains no material updates beyond what was already reported in the canonical candidate - it's simply another outlet's coverage of the same event with the same facts.",
             "validation_errors": []
           },
           {
@@ -6276,6 +6307,21 @@
             "canonical_headline": "One hospitalized after apartment fire at Peacock Run complex in Port St. Lucie",
             "canonical_is_custom": false,
             "identity_basis": "exact_source_and_persistent_story_skip",
+            "eligibility_reason": "incoming_not_newer_than_canonical",
+            "evaluated": false,
+            "promoted": false,
+            "cache_hit": false,
+            "model_call": false,
+            "action": "preserve_existing_canonical"
+          },
+          {
+            "category_key": "st_lucie",
+            "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
+            "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
+            "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
+            "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
+            "canonical_is_custom": false,
+            "identity_basis": "pre_generation_ledger:exact_source_url",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -6312,40 +6358,14 @@
             "cache_hit": false,
             "model_call": false,
             "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "GALLERY: EF-0 tornado carrying peak winds of 75 mph touches down in Port St. Lucie - WPEC",
-            "source_url": "https://cbs12.com/news/local/national-weather-service-crews-to-assess-treasure-coast-storm-damage-monday",
-            "canonical_slug": "2026-08-25-port-st-lucie-residents-receive-tornado-emergency-alert-20-minutes-after-storm-p",
-            "canonical_headline": "National Weather Service confirms EF-0 tornado touched down in Port St. Lucie Sunday evening",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
-          },
-          {
-            "category_key": "st_lucie",
-            "source_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood - WPTV",
-            "source_url": "https://www.wptv.com/news/local-news/our-community/port-st-lucie/port-st-lucie-residents-say-tornado-alerts-came-too-late-after-ef-0-strikes-neighborhood",
-            "canonical_slug": "2026-08-25-port-st-lucie-residents-question-why-tornado-alerts-arrived-late-or-never-came-a",
-            "canonical_headline": "Port St. Lucie residents say tornado alerts came too late after EF-0 strikes neighborhood",
-            "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
-            "eligibility_reason": "incoming_not_newer_than_canonical",
-            "evaluated": false,
-            "promoted": false,
-            "cache_hit": false,
-            "model_call": false,
-            "action": "preserve_existing_canonical"
           }
         ],
         "new_publication_stale_rejected_count": 1,
-        "elapsed_seconds": 40.154
+        "generation_status": "success",
+        "budget_seconds": 180.0,
+        "live_hero_headline": "Port St. Lucie homeowners receiving notices about Waste Pro settlement credits on property tax bills",
+        "generated_card_count": 0,
+        "elapsed_seconds": 32.608
       },
       {
         "category_key": "indian_river",
@@ -6353,7 +6373,7 @@
         "status": "category_eligibility_archive_recovery",
         "fetched_candidate_count": 24,
         "fresh_candidate_count": 23,
-        "publishable_source_count": 7,
+        "publishable_source_count": 5,
         "selected_source_count": 0,
         "cache_hit": false,
         "archive_recovery_requested": true,
@@ -6370,19 +6390,19 @@
         "article_framing_rejections": [],
         "category_eligibility_mode": "existing_geographic_enforce",
         "category_eligibility_policy": "county_locality",
-        "category_eligibility_assessed_count": 7,
+        "category_eligibility_assessed_count": 5,
         "category_eligibility_rejection_count": 0,
         "category_eligibility_rejections": [],
         "published_story_duplicate_suppression_count": 1,
         "published_story_duplicate_suppressions": [
           {
             "category_key": "indian_river",
-            "source_headline": "Flooding that trapped residents in Indiantown's Booker Park neighborhood prompts drainage concerns",
-            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/flooding-that-trapped-residents-in-indiantowns-booker-park-neighborhood-prompts-drainage-concerns",
-            "editorial_story_id": "story_007015",
-            "canonical_slug": "2026-08-31-flooding-traps-dozens-of-indiantown-residents-in-booker-park-neighborhood-sparks",
-            "canonical_headline": "Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns",
-            "basis": "exact_source_and_persistent_story_skip",
+            "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
+            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach",
+            "editorial_story_id": "story_007068",
+            "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+            "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+            "basis": "authorized_canonical_identity_skip",
             "reason": "registry_skip_story_already_published"
           }
         ],
@@ -6395,12 +6415,12 @@
         "material_update_promotion_decisions": [
           {
             "category_key": "indian_river",
-            "source_headline": "Flooding that trapped residents in Indiantown's Booker Park neighborhood prompts drainage concerns",
-            "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/flooding-that-trapped-residents-in-indiantowns-booker-park-neighborhood-prompts-drainage-concerns",
-            "canonical_slug": "2026-08-31-flooding-traps-dozens-of-indiantown-residents-in-booker-park-neighborhood-sparks",
-            "canonical_headline": "Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns",
+            "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
+            "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach",
+            "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+            "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
             "canonical_is_custom": false,
-            "identity_basis": "exact_source_and_persistent_story_skip",
+            "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
             "eligibility_reason": "incoming_not_newer_than_canonical",
             "evaluated": false,
             "promoted": false,
@@ -6410,7 +6430,7 @@
           }
         ],
         "new_publication_stale_rejected_count": 0,
-        "elapsed_seconds": 26.603
+        "elapsed_seconds": 23.689
       }
     ]
   }
