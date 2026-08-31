@@ -894,3 +894,95 @@ def test_late_material_update_composition_failure_leaves_original_skip_row_untou
     assert incoming == original
     assert incoming["_editorial_route"] == "skip"
     assert "_canonical_write_authorization" not in incoming
+
+
+def test_late_validated_material_update_can_refresh_custom_canonical(monkeypatch):
+    """A custom permalink is protected from replacement, not frozen from verified updates."""
+    g = _load_generate()
+    canonical = {
+        "slug": "custom-missing-person",
+        "headline": "Sheriff searches for missing visitor",
+        "teaser": "Deputies are searching for a missing visitor.",
+        "body": "Deputies said the visitor was last seen near the beach and asked the public for information.",
+        "category_key": "martin",
+        "date": "2026-08-29",
+        "lastmod": "2026-08-29",
+        "first_published": "Sat, 29 Aug 2026 20:00:00 GMT",
+        "source_url": "https://example.com/custom-source",
+        "editorial_story_id": "custom:missing-person",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+        "is_custom": True,
+        "authoritative_custom": True,
+    }
+    incoming = {
+        "title": "Sheriff releases new details in search for missing visitor",
+        "summary": "Officials released additional identifying details and search information.",
+        "article_text": " ".join(["Officials released additional identifying details and search information."] * 30),
+        "link": "https://example.com/followup",
+        "source_url": "https://example.com/followup",
+        "published": "Sun, 30 Aug 2026 18:00:00 GMT",
+        "source_quality": "full",
+        "editorial_story_id": canonical["editorial_story_id"],
+        "_editorial_story_id": canonical["editorial_story_id"],
+        "_editorial_route": "skip",
+        "_editorial_relationship": "same_event",
+        "_editorial_relationship_confidence": 1.0,
+    }
+    monkeypatch.setattr(
+        g,
+        "adjudicate_semantic_publication_candidates",
+        lambda *args, **kwargs: _material_update_decision(
+            canonical["slug"], "Officials released additional identifying details"
+        ),
+    )
+
+    def _compose(canonical_arg, incoming_arg, decision_arg, report_arg, *, phase):
+        assert canonical_arg is canonical
+        assert phase == "late_published_skip_write_barrier"
+        merged = dict(incoming_arg)
+        merged.update({
+            "headline": "Sheriff releases new details in search for missing visitor",
+            "teaser": "Officials released additional identifying details in the continuing search.",
+            "body": (
+                "Officials released additional identifying details in the continuing search for the visitor, "
+                "who was first reported missing after being seen near the beach. This materially updates the earlier report."
+            ),
+            "story_form": "update",
+            "canonical_slug": canonical["slug"],
+        })
+        return merged, {"status": "validated", "validation_errors": []}
+
+    monkeypatch.setattr(g, "_semantic_material_update_composition", _compose)
+
+    merged, row = g._late_published_skip_material_update_promotion(
+        incoming,
+        canonical,
+        "durable_custom_incident_identity:missing-person|visitor",
+        {"schema_version": 1, "entries": {}},
+        {"summary": {}},
+    )
+
+    assert merged is not None
+    assert row["promoted"] is True
+    assert merged["_late_published_skip_material_update_promotion"] is True
+    assert merged["_late_published_skip_material_update_canonical_slug"] == canonical["slug"]
+    assert g._canonical_write_authorized(merged, canonical) is True
+    assert g._authorized_custom_material_update(merged, canonical) is True
+
+
+def test_custom_canonical_still_rejects_unverified_external_overwrite():
+    g = _load_generate()
+    canonical = {
+        "slug": "custom-canonical",
+        "headline": "Manual TCT story",
+        "is_custom": True,
+        "authoritative_custom": True,
+    }
+    incoming = {
+        "headline": "Publisher rewrite of manual TCT story",
+        "_semantic_material_update": True,
+        "canonical_slug": canonical["slug"],
+    }
+
+    assert g._authorized_custom_material_update(incoming, canonical) is False

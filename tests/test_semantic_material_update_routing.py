@@ -490,3 +490,91 @@ def test_material_update_request_matches_current_anthropic_sdk_without_temperatu
 
     assert result["status"] == "validated"
     assert len(client.messages.calls) == 1
+
+
+def test_waste_pro_semantic_update_passes_second_context_contract(tmp_path, monkeypatch):
+    """Regression for Aug. 31 Waste Pro false ``new_development_missing`` hold."""
+    generate = _load_generate(tmp_path)
+    canonical = {
+        "slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
+        "headline": "Port St. Lucie homeowners to receive credits on solid waste bills from $24 million Waste Pro settlement",
+        "teaser": "Port St. Lucie residents will receive credits from the city's Waste Pro settlement.",
+        "body": (
+            "Port St. Lucie reached a $24 million settlement with former trash hauler Waste Pro after "
+            "a dispute over missed pickups. The city said eligible residents would receive credits.\n\n"
+            "The settlement resolved litigation over Waste Pro service.\n\n"
+            "City officials said distribution details would follow."
+        ),
+        "date": "2026-08-29",
+        "first_published": "2026-08-29T12:00:00-04:00",
+    }
+    incoming = {
+        "headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC",
+        "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC",
+        "source_title": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC",
+        "body": (
+            "Port St. Lucie homeowners are finding a flyer in their mailboxes explaining how the $24 million "
+            "settlement will appear on their property tax bill. The settlement is being distributed over "
+            "95,000 eligible properties, with different credit amounts based on eligibility."
+        ),
+        "source_url": "https://cbs12.com/news/local/waste-pro-credit",
+        "published": "Mon, 31 Aug 2026 16:35:41 GMT",
+    }
+    decision = {
+        "status": "validated",
+        "action": "update_existing_canonical",
+        "selected_candidate_slug": canonical["slug"],
+        "same_real_world_event": True,
+        "material_new_update": True,
+        "confidence": 0.95,
+        "shared_anchors": ["$24 million Waste Pro settlement", "Port St. Lucie"],
+        "novel_facts": [
+            "Specific credit amounts: $364 for 57,000 long-term homeowners, $64 for 38,000 other eligible properties",
+            "95,000 total eligible properties",
+            "Credits appearing on property tax bills (not just solid waste bills)",
+            "City Council voted in June to use tax credits instead of checks",
+        ],
+        "validation_errors": [],
+    }
+    composed_body = (
+        "Port St. Lucie homeowners are finding flyers in their mailboxes explaining how the city's $24 million "
+        "settlement with Waste Pro will appear as credits on their property tax bills. The settlement money is "
+        "being distributed over 95,000 eligible properties following the city's lawsuit against its former trash "
+        "hauler for two years of unreliable service and missed pickups.\n\n"
+        "About 57,000 homeowners who have stayed at the same property since the 2022 tax roll will receive an "
+        "estimated $364 credit. Roughly 38,000 other eligible properties will receive an estimated $64 credit.\n\n"
+        "The City Council voted in June to return all of the settlement money through property tax credits rather "
+        "than mailing checks. Residents objected to the decision.\n\n"
+        "The credits are landing as property owners receive their TRIM notices, and voters are expected to weigh "
+        "in on twice-weekly pickup through a straw ballot question in November."
+    )
+    monkeypatch.setattr(
+        generate,
+        "compose_semantic_material_update",
+        lambda *args, **kwargs: {
+            "status": "validated",
+            "headline": "Port St. Lucie homeowners receiving Waste Pro settlement credits on property tax bills",
+            "teaser": "Port St. Lucie homeowners are receiving Waste Pro settlement credits on property tax bills, with different amounts across 95,000 eligible properties.",
+            "body": composed_body,
+            "word_count": len(composed_body.split()),
+            "paragraph_count": 4,
+            "baseline_lead_hits": ["port", "lucie", "waste", "settlement"],
+            "novelty_lead_hits": ["95000", "property"],
+            "validation_errors": [],
+        },
+    )
+    report = {"summary": {}, "material_update_compositions": []}
+
+    merged, result = generate._semantic_material_update_composition(
+        canonical,
+        incoming,
+        decision,
+        report,
+        phase="forward_publication",
+    )
+
+    assert merged is not None
+    assert result["status"] == "validated"
+    assert result["context_diagnostics"]["passed"] is True
+    assert result["context_diagnostics"]["novelty_anchor"] == "semantic_gate_novel_fact"
+    assert "95000" in result["context_diagnostics"]["semantic_novel_fact_hits"]

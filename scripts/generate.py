@@ -6512,10 +6512,16 @@ _UPDATE_CONTEXT_STOP_WORDS = {
 
 
 def _update_context_tokens(text):
+    # Preserve material numeric facts such as 95,000 properties or a $364 credit.
+    # The older tokenizer split comma-formatted numbers into tiny fragments (``95``
+    # and ``000``), making a genuinely new quantified development invisible to the
+    # deterministic update-lead validator.
+    value = re.sub(r"(?<=\d),(?=\d)", "", str(text or "").lower())
     return {
         token
-        for token in re.findall(r"[a-z0-9]+", str(text or "").lower())
-        if len(token) >= 4 and token not in _UPDATE_CONTEXT_STOP_WORDS
+        for token in re.findall(r"[a-z0-9]+", value)
+        if (len(token) >= 4 or (token.isdigit() and len(token) >= 2))
+        and token not in _UPDATE_CONTEXT_STOP_WORDS
     }
 
 
@@ -6587,6 +6593,33 @@ def _update_lead_diagnostics(item, source=None):
     )
     baseline_present = baseline_anchor_present and baseline_details_present
 
+    # For an ordinary model-written update, headline-distinctive language remains a
+    # useful cheap novelty signal. For a *semantic material update*, however, the
+    # semantic gate has already produced explicit novel facts. Those facts are the
+    # authoritative novelty specification and may be paraphrased in the replacement
+    # lead (for example ``notice in the mail`` -> ``flyers in their mailboxes``).
+    # Requiring literal source-headline tokens after that stronger decision created
+    # false ``new_development_missing`` holds.
+    semantic_decision = (
+        source.get("_semantic_material_update_decision")
+        or item.get("_semantic_material_update_decision")
+        or {}
+    )
+    explicit_novel_facts = list(
+        (semantic_decision.get("novel_facts") if isinstance(semantic_decision, dict) else None)
+        or source.get("_editorial_new_facts")
+        or item.get("_editorial_new_facts")
+        or []
+    )
+    canonical_context_tokens = _update_context_tokens(
+        " ".join(filter(None, [canonical_headline, canonical_body]))
+    )
+    novel_fact_tokens = sorted(
+        _update_context_tokens(" ".join(str(value) for value in explicit_novel_facts))
+        - canonical_context_tokens
+    )
+    novel_fact_hits = sorted(set(novel_fact_tokens) & lead_tokens)
+
     novelty_name, novelty_pattern = _first_matching_anchor(
         source_title, _UPDATE_NOVELTY_ANCHORS
     )
@@ -6594,7 +6627,10 @@ def _update_lead_diagnostics(item, source=None):
         _update_context_tokens(source_title) - _update_context_tokens(canonical_headline)
     )
     novelty_token_hits = sorted(set(novelty_tokens) & lead_tokens)
-    if novelty_pattern is not None:
+    if explicit_novel_facts and novel_fact_tokens:
+        novelty_name = "semantic_gate_novel_fact"
+        novelty_present = bool(novel_fact_hits)
+    elif novelty_pattern is not None:
         novelty_present = bool(novelty_pattern.search(lead))
     elif canonical_context_available and novelty_tokens:
         novelty_name = "source_distinctive_detail"
@@ -6633,6 +6669,8 @@ def _update_lead_diagnostics(item, source=None):
         "novelty_anchor": novelty_name,
         "novelty_present": novelty_present,
         "novelty_token_hits": novelty_token_hits,
+        "semantic_novel_fact_hits": novel_fact_hits,
+        "semantic_novel_fact_token_count": len(novel_fact_tokens),
         "missing": missing,
         "source_title": source_title,
         "headline": str(item.get("headline") or ""),
@@ -29895,13 +29933,12 @@ def write_archives(all_categories, top_cat):
                 if str(hero.get("link") or "").startswith(f"{SITE_URL}/articles/"):
                     hero["link"] = normalized_source_url or source_url
 
-        # HARD PROTECTION: an archived CUSTOM article is never overwritten by anything,
-        # and a feed story that matches one is DROPPED rather than published as its own
-        # duplicate. Custom articles are hand-written and authoritative; the custom
-        # version already covers this story, so a parallel WPTV/feed version at its own
-        # permalink is a pure duplicate. Clearing `existing` alone was not enough — it
-        # let the feed story fall through and create a NEW article, which is exactly the
-        # duplicate permalink this guard is meant to prevent. So we skip it entirely.
+        # CUSTOM CANONICAL PROTECTION: the manually authored permalink is immutable,
+        # not the article text forever. Unverified feed copies are dropped so they can
+        # never replace custom reporting or mint a parallel URL. A feed source may
+        # update the custom page in place only when the target-bound semantic material
+        # update authority below has validated the new development and authorized that
+        # exact canonical write.
         if existing and (existing.get("is_custom") or existing.get("authoritative_custom")) and not (hero.get("is_custom") or hero.get("authoritative_custom")):
             _custom_material_update_authorized = _authorized_custom_material_update(
                 hero, existing
@@ -32499,6 +32536,10 @@ def _late_published_skip_material_update_promotion(
     working["_editorial_new_facts"] = list(decision.get("novel_facts") or [])
     working["_semantic_material_update"] = True
     working["_semantic_material_update_decision"] = copy.deepcopy(decision)
+    working["_late_published_skip_material_update_promotion"] = True
+    working["_late_published_skip_material_update_canonical_slug"] = str(
+        canonical.get("slug") or ""
+    )
     working["canonical_slug"] = str(canonical.get("slug") or "")
     working["canonical_publication_id"] = _stable_publication_id(canonical.get("slug", ""))
     _attach_canonical_update_context(working, canonical, basis)
@@ -32530,6 +32571,10 @@ def _late_published_skip_material_update_promotion(
     merged["_semantic_material_update"] = True
     merged["_semantic_material_update_decision"] = copy.deepcopy(decision)
     merged["_semantic_material_update_composition"] = copy.deepcopy(composition or {})
+    merged["_late_published_skip_material_update_promotion"] = True
+    merged["_late_published_skip_material_update_canonical_slug"] = str(
+        canonical.get("slug") or ""
+    )
     merged["_editorial_route"] = "update_existing"
     merged["editorial_route"] = "update_existing"
     merged["story_form"] = "update"
@@ -32540,18 +32585,35 @@ def _late_published_skip_material_update_promotion(
     return merged, row
 
 def _authorized_custom_material_update(item, canonical):
-    """Permit only a target-bound validated material update to modify a custom canonical."""
-    return bool(
+    """Permit only a target-bound validated material update to modify a custom canonical.
+
+    Custom copy remains canonical editorial authority, but it is not permanently
+    frozen. A newer feed source may revise that page only after identity, semantic
+    materiality, composition, and canonical-write authorization all succeed. Both
+    the pre-generation path and the late write-barrier path are valid authorities.
+    """
+    if not (
         isinstance(item, dict)
         and isinstance(canonical, dict)
         and (canonical.get("is_custom") or canonical.get("authoritative_custom"))
         and not (item.get("is_custom") or item.get("authoritative_custom"))
-        and item.get("_pre_generation_material_update_promotion")
         and item.get("_semantic_material_update")
         and _canonical_write_authorized(item, canonical)
+    ):
+        return False
+
+    canonical_slug = str(canonical.get("slug") or "")
+    pre_generation = bool(
+        item.get("_pre_generation_material_update_promotion")
         and str(item.get("_pre_generation_material_update_canonical_slug") or "")
-        == str(canonical.get("slug") or "")
+        == canonical_slug
     )
+    late_write_barrier = bool(
+        item.get("_late_published_skip_material_update_promotion")
+        and str(item.get("_late_published_skip_material_update_canonical_slug") or "")
+        == canonical_slug
+    )
+    return bool(pre_generation or late_write_barrier)
 
 def _filter_published_skip_candidates(headlines, archive, category_key=""):
     """Remove already-published no-change sources before Claude sees them."""

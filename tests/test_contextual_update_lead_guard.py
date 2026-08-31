@@ -334,3 +334,50 @@ def test_release_version_and_report_schema_are_bumped():
     version = tuple(int(part) for part in observability.ENGINE_VERSION.split("."))
     assert version >= (1, 11, 8, 4)
     assert observability.OBSERVABILITY_SCHEMA_VERSION >= 17
+
+
+def test_semantic_material_update_accepts_paraphrased_quantified_new_development():
+    """Waste Pro regression: validated novel facts must outrank headline wording."""
+    generate = _load_generate_module()
+    canonical = {
+        "slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
+        "headline": "Port St. Lucie homeowners to receive credits on solid waste bills from $24 million Waste Pro settlement",
+        "body": (
+            "Port St. Lucie reached a $24 million settlement with former trash hauler Waste Pro "
+            "after a dispute over missed pickups. The city said residents would receive credits."
+        ),
+    }
+    novel_facts = [
+        "Specific credit amounts: $364 for 57,000 long-term homeowners, $64 for 38,000 other eligible properties",
+        "95,000 total eligible properties",
+        "Credits appearing on property tax bills (not just solid waste bills)",
+        "City Council voted in June to use tax credits instead of checks",
+    ]
+    item = {
+        "headline": "Port St. Lucie homeowners receiving Waste Pro settlement credits on property tax bills",
+        "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC",
+        "body": (
+            "Port St. Lucie homeowners are finding flyers in their mailboxes explaining how the city's "
+            "$24 million settlement with Waste Pro will appear as credits on their property tax bills. "
+            "The settlement money is being distributed over 95,000 eligible properties following the "
+            "city's lawsuit against its former trash hauler for two years of unreliable service and missed pickups.\n\n"
+            "About 57,000 longtime homeowners will receive an estimated $364 credit, while roughly "
+            "38,000 other eligible properties will receive about $64.\n\n"
+            "The City Council voted in June to return the settlement through tax credits rather than checks."
+        ),
+        "_editorial_new_facts": novel_facts,
+        "_semantic_material_update_decision": {
+            "status": "validated",
+            "action": "update_existing_canonical",
+            "material_new_update": True,
+            "novel_facts": novel_facts,
+        },
+    }
+
+    diagnostics = generate._update_replacement_diagnostics(item, canonical)
+
+    assert diagnostics["passed"] is True
+    assert diagnostics["novelty_anchor"] == "semantic_gate_novel_fact"
+    assert diagnostics["novelty_present"] is True
+    assert "95000" in diagnostics["semantic_novel_fact_hits"]
+    assert "new_development_missing" not in diagnostics["missing"]
