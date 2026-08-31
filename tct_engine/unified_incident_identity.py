@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 import re
 from typing import Any, Iterable, Mapping
 
-UNIFIED_INCIDENT_EVIDENCE_VERSION = 3
+UNIFIED_INCIDENT_EVIDENCE_VERSION = 4
 _STORY_EVIDENCE_CACHE: dict[tuple[Any, ...], tuple["UnifiedIncidentEvidence", ...]] = {}
 _STORY_EVIDENCE_CACHE_LIMIT = 10000
 
@@ -44,6 +44,49 @@ def _tokens(value: object) -> set[str]:
 
 def _overlap(left: set[str], right: set[str]) -> float:
     return len(left & right) / min(len(left), len(right)) if left and right else 0.0
+
+
+def _person_alias_key(value: object) -> str:
+    """Normalize a person to first + surname, ignoring middle names/suffix drift."""
+    parts = [token for token in _WORD_RE.findall(str(value or "").casefold()) if token]
+    while parts and parts[-1] in {"jr", "sr", "ii", "iii", "iv", "v"}:
+        parts.pop()
+    if len(parts) < 2:
+        return ""
+    return f"{parts[0]} {parts[-1]}"
+
+
+def _missing_person_shared_aliases(
+    people_a: set[str], people_b: set[str],
+    distinctive_a: set[str], distinctive_b: set[str],
+) -> set[str]:
+    """Return conservative missing-person subject aliases shared across framings.
+
+    A follow-up may say ``Michael Debevec`` while the original alert says
+    ``Michael Anthony Debevec II``. Some publisher copy does not tie the shortened
+    name to a syntactic "missing" role, so it lands in distinctive tokens rather
+    than ``people``. First + surname agreement is accepted only when the other side
+    has no competing extracted person.
+    """
+    aliases_a = {key for value in people_a if (key := _person_alias_key(value))}
+    aliases_b = {key for value in people_b if (key := _person_alias_key(value))}
+    shared = aliases_a & aliases_b
+    if shared:
+        return shared
+
+    def present(alias: str, tokens: set[str]) -> bool:
+        parts = alias.split()
+        return len(parts) == 2 and all(part in tokens for part in parts)
+
+    # If both sides extracted different people, fail closed; token fallbacks could
+    # otherwise mistake a family member or official for the missing subject.
+    if people_a and people_b:
+        return set()
+    if people_a and not people_b:
+        return {alias for alias in aliases_a if present(alias, distinctive_b)}
+    if people_b and not people_a:
+        return {alias for alias in aliases_b if present(alias, distinctive_a)}
+    return set()
 
 
 def _family(text: str) -> str:
@@ -320,6 +363,12 @@ def compare_unified_incident_evidence(
 
     shared_concepts = concepts_a & concepts_b
     shared_people = people_a & people_b
+    shared_person_aliases = set()
+    if incoming.family == "missing_person":
+        shared_person_aliases = _missing_person_shared_aliases(
+            people_a, people_b, distinctive_a, distinctive_b
+        )
+    effective_shared_people = shared_people or shared_person_aliases
     shared_locations = locations_a & locations_b
     shared_agencies = agencies_a & agencies_b
     shared_distinctive = distinctive_a & distinctive_b
@@ -327,13 +376,17 @@ def compare_unified_incident_evidence(
     title_overlap = _overlap(title_a, title_b)
 
     location_conflict = bool(locations_a and locations_b and not shared_locations)
-    if location_conflict and not shared_people and incoming.family != "road_rage":
+    if location_conflict and not effective_shared_people and incoming.family != "road_rage":
         return 0.0, ("Location conflict: true",)
 
     confidence = 0.0
     qualified = False
-    if shared_people:
+    if effective_shared_people:
         confidence = 0.94 + min(0.04, 0.01 * len(shared_concepts))
+        # Missing-person first+surname aliases are intentionally treated as the same
+        # named subject even when a middle name/suffix disappeared in follow-up copy.
+        if incoming.family == "missing_person" and shared_person_aliases:
+            confidence = max(confidence, 0.97)
         qualified = True
     elif incoming.family == "animal_cruelty":
         ages_a = {value for value in concepts_a if value.startswith("age_")}
@@ -378,7 +431,7 @@ def compare_unified_incident_evidence(
         ages_b = {value for value in concepts_b if value.startswith("age_")}
         shared_age = ages_a & ages_b
         age_conflict = bool(ages_a and ages_b and not shared_age)
-        person_conflict = bool(people_a and people_b and not shared_people)
+        person_conflict = bool(people_a and people_b and not effective_shared_people)
         if age_conflict or person_conflict:
             return 0.0, (
                 f"Missing-person age conflict: {age_conflict}",
@@ -478,6 +531,7 @@ def compare_unified_incident_evidence(
         f"Compatible event family: {incoming.family == known.family}",
         f"Event family: {incoming.family}",
         f"Shared people: {', '.join(sorted(shared_people)) or 'none'}",
+        f"Shared person aliases: {', '.join(sorted(shared_person_aliases)) or 'none'}",
         f"Shared locations: {', '.join(sorted(shared_locations)) or 'none'}",
         f"Shared agencies: {', '.join(sorted(shared_agencies)) or 'none'}",
         f"Shared concepts: {', '.join(sorted(shared_concepts)) or 'none'}",

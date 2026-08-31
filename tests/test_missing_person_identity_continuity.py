@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from tct_engine import EditorialAction, EditorialEngine
+from tct_engine.incident_identity import incident_anchor_key
 from tct_engine.unified_incident_identity import (
     build_unified_incident_evidence,
     compare_unified_incident_evidence,
@@ -332,7 +333,7 @@ def test_named_missing_person_publisher_drift_matches_authoritative_custom():
         _debevec_later_publisher_source(), _debevec_custom_canonical()
     )
     assert matched is True
-    assert key == "missing-person|michael-anthony-debevec"
+    assert key == "missing-person|michael-debevec"
 
 
 def test_fragmented_registry_cannot_mint_second_url_for_named_custom_missing_person():
@@ -440,3 +441,180 @@ def test_known_debevec_duplicate_url_remains_redirect_even_after_archive_row_is_
     rendered = (articles / f"{source_slug}.html").read_text(encoding="utf-8")
     assert f"/articles/{g.DEBEVEC_MISSING_CANONICAL_SLUG}.html" in rendered
     assert "noindex,follow" in rendered
+
+
+
+def _debevec_actual_followup_source():
+    """Exact production framing that escaped on the run after v1.13.6.8l."""
+    body = (
+        "The Martin County Sheriff's Office is searching for a missing man from "
+        "Oklahoma who was last seen Wednesday afternoon at Chastain Beach on "
+        "Hutchinson Island. Michael Debevec visited the beach known as The Rocks "
+        "on the southern tip of Hutchinson Island, where his vehicle was found. "
+        "His family has not heard from him. The sheriff's office said Debevec may "
+        "be experiencing an emotional breakdown."
+    )
+    return {
+        "title": (
+            "Martin County Sheriff's Office searches for missing Oklahoma man "
+            "last seen at Hutchinson Island beach"
+        ),
+        "headline": (
+            "Martin County Sheriff's Office searches for missing Oklahoma man "
+            "last seen at Hutchinson Island beach"
+        ),
+        "summary": body,
+        "teaser": body,
+        "article_text": body,
+        "body": body,
+        "source_url": "https://www.wpbf.com/example/michael-debevec-followup",
+        "link": "https://www.wpbf.com/example/michael-debevec-followup",
+        "published": "Sun, 30 Aug 2026 17:30:00 GMT",
+        "source_quality": "full",
+        "editorial_story_id": "story_fragmented_debevec_followup",
+        "_editorial_story_id": "story_fragmented_debevec_followup",
+        "_editorial_route": "new_story",
+    }
+
+
+def test_named_missing_person_anchor_survives_middle_name_and_suffix_drop():
+    original = _debevec_custom_canonical()
+    followup = _debevec_actual_followup_source()
+    original_anchor = incident_anchor_key(
+        titles=(original["headline"], original["teaser"]),
+        body=original["teaser"],
+    )
+    followup_anchor = incident_anchor_key(
+        titles=(followup["headline"], followup["teaser"]),
+        body=followup["body"],
+    )
+    assert original_anchor == followup_anchor == "missing-person:michael-debevec"
+
+
+def test_unified_missing_person_identity_accepts_first_surname_alias_when_other_side_is_unambiguous():
+    original = build_unified_incident_evidence(
+        title=_debevec_custom_canonical()["headline"],
+        body=_debevec_custom_canonical()["teaser"],
+        locations=("Martin County",),
+        published_at="2026-08-29T21:48:09-04:00",
+    )
+    followup = build_unified_incident_evidence(
+        title=_debevec_actual_followup_source()["headline"],
+        body=_debevec_actual_followup_source()["body"],
+        locations=("Martin County",),
+        published_at="2026-08-30T17:30:00-04:00",
+    )
+    assert original.people == ("michael anthony debevec",)
+    assert followup.people == ()
+    confidence, trace = compare_unified_incident_evidence(followup, original)
+    assert confidence >= 0.97
+    assert "Shared person aliases: michael debevec" in trace
+
+
+def test_exact_production_debevec_followup_cannot_bypass_custom_canonical():
+    g = _load_generate_module()
+    custom = _debevec_custom_canonical()
+    followup = _debevec_actual_followup_source()
+
+    matched, key = g._durable_custom_identity_match(followup, custom)
+    assert matched is True
+    assert key == "missing-person|michael-debevec"
+
+    canonical, basis = g._published_skip_canonical(followup, [custom])
+    assert canonical is custom
+    assert basis == "durable_custom_incident_identity:missing-person|michael-debevec"
+
+
+def test_custom_incident_match_returns_authoritative_archive_row_not_transient_copy():
+    g = _load_generate_module()
+    custom = _debevec_custom_canonical()
+    followup = _debevec_actual_followup_source()
+    match, confidence, basis = g._find_authoritative_custom_incident_match(
+        followup, [custom], []
+    )
+    assert match is custom
+    assert confidence == 100
+    assert basis == "durable_custom_incident_identity:missing-person|michael-debevec"
+    assert custom["durable_custom_identity_key"] == "missing-person|michael-debevec"
+
+
+def test_two_sequential_debevec_escape_variants_both_redirect_to_original_custom(tmp_path: Path):
+    g = _load_generate_module()
+    articles = tmp_path / "articles"
+    articles.mkdir()
+    custom = _debevec_custom_canonical()
+
+    first_escape = {
+        **_debevec_later_publisher_source(),
+        "slug": (
+            "2026-08-30-martin-county-sheriffs-office-searches-for-missing-"
+            "oklahoma-man-last-seen-at-hut"
+        ),
+        "headline": (
+            "Martin County Sheriff's Office searches for missing Oklahoma man "
+            "last seen at Hutchinson Island"
+        ),
+        "teaser": _debevec_later_publisher_source()["summary"],
+        "date": "2026-08-30",
+        "first_published": "Sun, 30 Aug 2026 13:30:00 -0400",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+    }
+    second_escape = {
+        **_debevec_actual_followup_source(),
+        "slug": (
+            "2026-08-30-martin-county-sheriffs-office-searches-for-oklahoma-"
+            "visitor-last-seen-at-hutchin"
+        ),
+        "date": "2026-08-30",
+        "first_published": "Sun, 30 Aug 2026 17:30:00 -0400",
+        "legacy_identity_status": "identified",
+        "ranking_eligible": True,
+        "is_custom": False,
+        "authoritative_custom": False,
+    }
+
+    cleaned, redirects = g.apply_canonical_story_cleanup(
+        [custom, first_escape, second_escape], articles, tmp_path
+    )
+    assert [row["slug"] for row in cleaned] == [custom["slug"]]
+    redirect_map = {row["source_slug"]: row["target_slug"] for row in redirects}
+    assert redirect_map[first_escape["slug"]] == custom["slug"]
+    assert redirect_map[second_escape["slug"]] == custom["slug"]
+
+
+
+def test_missing_person_incident_anchor_is_publication_ledger_write_authority():
+    g = _load_generate_module()
+    custom = _debevec_custom_canonical()
+    followup = _debevec_actual_followup_source()
+    ledger = g._build_canonical_publication_ledger([custom])
+    canonical, basis, keys = g._canonical_publication_ledger_target(
+        followup, ledger
+    )
+    assert canonical is custom
+    assert "incident:missing-person:michael-debevec" in keys
+    assert basis == "exact_structured_incident_key"
+
+
+def test_sanitize_persists_missing_person_custom_identity_key():
+    g = _load_generate_module()
+    custom = _debevec_custom_canonical()
+    result = g._sanitize_authoritative_custom_archive([custom])
+    assert result[0]["incident_anchor_key"] == "missing-person:michael-debevec"
+    assert result[0]["durable_custom_identity_key"] == "missing-person|michael-debevec"
+
+
+
+def test_named_missing_person_anchor_does_not_merge_different_people():
+    michael = incident_anchor_key(
+        titles=("Deputies search for missing Oklahoma man",),
+        body="Michael Debevec visited Chastain Beach before he was reported missing.",
+    )
+    jordan = incident_anchor_key(
+        titles=("Deputies search for missing Oklahoma man",),
+        body="Jordan Smith visited Chastain Beach before he was reported missing.",
+    )
+    assert michael == "missing-person:michael-debevec"
+    assert jordan == "missing-person:jordan-smith"
+    assert michael != jordan

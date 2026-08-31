@@ -15303,6 +15303,20 @@ def _sanitize_authoritative_custom_archive(archive, articles_dir=None):
     """
     archive = list(archive or [])
 
+    # Persist deterministic incident identity on authoritative custom rows before
+    # recovery, ranking, or publication-ledger construction.  Recomputing this only
+    # inside a one-run fuzzy matcher was not durable: a later publisher could shorten
+    # "Michael Anthony Debevec II" to "Michael Debevec" and mint a second URL.
+    for entry in archive:
+        if not isinstance(entry, dict) or not (entry.get("is_custom") or entry.get("authoritative_custom")):
+            continue
+        anchor = _durable_incident_anchor(entry, include_archive_body=True)
+        if not anchor:
+            continue
+        entry["incident_anchor_key"] = anchor
+        if anchor.startswith("missing-person:"):
+            entry["durable_custom_identity_key"] = anchor.replace(":", "|", 1)
+
     # Backfill the canonical custom story for the July 2026 Stuart hoarding case.
     event_entries = []
     for e in archive:
@@ -15507,6 +15521,16 @@ def _durable_custom_missing_person_identity_match(candidate, authority):
         return False, ""
     if not (authority.get("is_custom") or authority.get("authoritative_custom")):
         return False, ""
+
+    candidate_anchor = _durable_incident_anchor(candidate)
+    authority_anchor = _durable_incident_anchor(authority, include_archive_body=True)
+    if (
+        candidate_anchor
+        and candidate_anchor == authority_anchor
+        and candidate_anchor.startswith("missing-person:")
+    ):
+        return True, candidate_anchor.replace(":", "|", 1)
+
     try:
         from tct_engine.unified_incident_identity import (
             build_unified_incident_evidence,
@@ -15772,24 +15796,33 @@ def _find_authoritative_custom_incident_match(item, archived_customs=None, curre
     for row in list(archived_customs or []) + list(current_customs or []):
         if not row or not (row.get("is_custom") or row.get("authoritative_custom")):
             continue
-        authorities.append(_event_audit_item(row, "custom"))
+        authorities.append((row, _event_audit_item(row, "custom")))
 
     best = None
     best_confidence = 0
     best_basis = ""
-    for authority in authorities:
+    for authority_row, authority in authorities:
         durable_match, durable_key = _durable_custom_identity_match(candidate, authority)
         if durable_match:
-            authority["durable_custom_identity_key"] = durable_key
-            return authority, 100, "durable_custom_sports_award_identity"
+            authority_row["durable_custom_identity_key"] = durable_key
+            authority_row.setdefault(
+                "incident_anchor_key", durable_key.replace("|", ":", 1)
+                if durable_key.startswith("missing-person|") else ""
+            )
+            basis = (
+                "durable_custom_sports_award_identity"
+                if durable_key.startswith("sports-award|")
+                else f"durable_custom_incident_identity:{durable_key}"
+            )
+            return authority_row, 100, basis
         authority_key = _known_event_key(_story_text(authority))
         if candidate_key and authority_key and candidate_key == authority_key:
-            return authority, 100, "exact_known_event_key"
+            return authority_row, 100, "exact_known_event_key"
         if not _same_event_items(candidate, authority):
             continue
         confidence = _story_match_confidence(candidate, authority)
         if confidence >= AUTO_SUPPRESSION_CONFIDENCE and confidence > best_confidence:
-            best = authority
+            best = authority_row
             best_confidence = confidence
             best_basis = "high_confidence_custom_incident"
     return best, best_confidence, best_basis
@@ -25317,20 +25350,33 @@ def write_archives(all_categories, top_cat):
             _find_authoritative_custom_incident_match(hero, archive, _current_customs)
         )
         if _custom_incident:
+            # Do not drop the source here. Identity is now proven, so route it to the
+            # existing custom canonical and let the pre/final materiality gate decide
+            # whether richer reporting updates that page in place.  A no-change source
+            # will still be suppressed; a material source can never mint a new slug.
+            hero["canonical_slug"] = str(_custom_incident.get("slug") or "")
+            hero["canonical_publication_id"] = _stable_publication_id(
+                _custom_incident.get("slug", "")
+            )
+            durable_key = str(_custom_incident.get("durable_custom_identity_key") or "")
+            if durable_key:
+                hero["durable_custom_identity_key"] = durable_key
+            incident_key = str(_custom_incident.get("incident_anchor_key") or "")
+            if incident_key:
+                hero["incident_anchor_key"] = incident_key
             _forward_identity_report["publication_holds"].append({
                 "headline": headline,
                 "source_url": normalized_source_url,
-                "reason": "authoritative_custom_incident_already_published",
+                "reason": "authoritative_custom_incident_routed_to_canonical",
                 "canonical_slug": _custom_incident.get("slug", ""),
                 "canonical_headline": _custom_incident.get("headline", ""),
                 "confidence": _custom_incident_confidence,
                 "basis": _custom_incident_basis,
             })
             print(
-                "  AUTHORITATIVE CUSTOM INCIDENT LOCK: skipped feed page "
+                "  AUTHORITATIVE CUSTOM INCIDENT ROUTE: binding feed source "
                 f"'{headline[:60]}' -> {_custom_incident.get('slug','')}"
             )
-            continue
 
         _editorial_story_id = _publication_story_id(hero, _publication_identity)
         if _editorial_story_id:
@@ -25339,6 +25385,18 @@ def write_archives(all_categories, top_cat):
         existing, _target_basis = _find_forward_publication_target(
             hero, archive, _editorial_story_id
         )
+        if _custom_incident is not None:
+            existing = _custom_incident
+            _target_basis = "authoritative_custom_incident:" + str(
+                _custom_incident_basis or "durable_identity"
+            )
+            canonical_story_id = str(
+                _custom_incident.get("editorial_story_id") or ""
+            ).strip()
+            if canonical_story_id:
+                _editorial_story_id = canonical_story_id
+                hero["editorial_story_id"] = canonical_story_id
+                hero["_editorial_story_id"] = canonical_story_id
 
         # CUSTOM PUBLICATION CONTRACT. A manually submitted article is a complete,
         # immutable editorial payload. It never fuzzy-merges into an older permalink

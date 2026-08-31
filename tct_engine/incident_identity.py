@@ -25,7 +25,7 @@ from datetime import datetime, timezone
 import re
 from typing import Any, Iterable, Mapping
 
-INCIDENT_IDENTITY_VERSION = "3.2"
+INCIDENT_IDENTITY_VERSION = "3.3"
 
 _WORD_RE = re.compile(r"[a-z0-9]+")
 _ANIMAL_QUANTITY_RE = re.compile(r"\b(\d{1,3})\s+(?:cats?|dogs?|animals?|pets?)\b", re.IGNORECASE)
@@ -115,6 +115,74 @@ _DEATH_CONTEXT_RE = re.compile(
     r"celebration of life|loss of|remember(?:ed|ing)?|honor(?:s|ed|ing)? (?:the )?life)\b",
     re.IGNORECASE,
 )
+
+# Named missing-person incidents need a stable subject anchor that survives normal
+# publisher drift: a first report may use the full legal name while a follow-up
+# drops the middle name and simply says the person "visited" or "went to" the
+# last-seen location.  The anchor deliberately uses first + surname only.
+_MISSING_PERSON_CONTEXT_RE = re.compile(
+    r"\b(?:missing|reported missing|went missing|last seen|disappeared|disappearance|"
+    r"search(?:es|ed|ing)? for|seek(?:s|ing)?|locat(?:e|ing)|looking for|help find)\b",
+    re.IGNORECASE,
+)
+_MISSING_PERSON_NAME_WORD = r"[A-Z][A-Za-z'’\-]*"
+_MISSING_PERSON_NAME = (
+    rf"{_MISSING_PERSON_NAME_WORD}(?:\s+{_MISSING_PERSON_NAME_WORD}){{1,3}}"
+)
+_MISSING_PERSON_SUFFIXES = {"jr", "sr", "ii", "iii", "iv", "v"}
+_MISSING_PERSON_EXCLUDED_NAME_TOKENS = {
+    "county", "sheriff", "police", "office", "department", "beach", "island",
+    "park", "city", "school", "hospital", "highway", "road", "street",
+}
+
+def _missing_person_subject_key(text: str) -> str:
+    """Return ``first-surname`` for one explicitly framed missing-person subject."""
+    raw = str(text or "")
+    if not _MISSING_PERSON_CONTEXT_RE.search(raw):
+        return ""
+    patterns = (
+        rf"\b(?:find|finding|locate|locating|search(?:es|ed|ing)? for|looking for|"
+        rf"seek(?:s|ing)?|help find)\s+(?:an?\s+|the\s+)?({_MISSING_PERSON_NAME})\b",
+        rf"\b({_MISSING_PERSON_NAME})\b[^.!?]{{0,80}}\b(?:reported missing|went missing|"
+        rf"is missing|was missing|last seen|disappeared)\b",
+        # Follow-up copy often names the subject in a movement sentence immediately
+        # after a generic "missing man/woman" lead, e.g. "Michael Debevec visited..."
+        rf"\b({_MISSING_PERSON_NAME})(?:,?\s+who\s+)?(?:\s+was)?\s+"
+        rf"(?:visiting|visited|went to|had gone to|left for|headed to|traveled to|"
+        rf"travelled to|drove to|walked to)\b",
+    )
+    candidates = []
+    for pattern in patterns:
+        for match in re.finditer(pattern, raw):
+            words = [
+                re.sub(r"[^A-Za-z'’.-]", "", token).strip(".'’- ")
+                for token in match.group(1).split()
+            ]
+            words = [word for word in words if word]
+            while words and words[-1].casefold().rstrip(".") in _MISSING_PERSON_SUFFIXES:
+                words.pop()
+            if len(words) < 2:
+                continue
+            normalized_words = [
+                re.sub(r"(?:'s|’s)$", "", word.casefold()).rstrip(".")
+                for word in words
+            ]
+            first = normalized_words[0]
+            last = normalized_words[-1]
+            if any(
+                token in _MISSING_PERSON_EXCLUDED_NAME_TOKENS or token == "the"
+                for token in normalized_words
+            ):
+                continue
+            if len(first) < 2 or len(last) < 3:
+                continue
+            candidates.append(f"{_slug(first)}-{_slug(last)}")
+    unique = tuple(dict.fromkeys(value for value in candidates if value and "-" in value))
+    return unique[0] if len(unique) == 1 else ""
+
+def _named_missing_person_anchor(text: str) -> str:
+    subject = _missing_person_subject_key(text)
+    return f"missing-person:{subject}" if subject else ""
 
 
 def title_supports_named_person_death(value: object) -> bool:
@@ -484,6 +552,12 @@ def incident_anchor_key(
         anchor, _people = _named_person_death_anchor(full_text, entities=entities)
         if anchor:
             return anchor
+
+    # Missing-person identity is likewise title/context gated, but its subject may
+    # appear only in the body after a generic "missing man" headline.
+    missing_anchor = _named_missing_person_anchor(full_text)
+    if missing_anchor:
+        return missing_anchor
 
     operation_anchor = _named_law_enforcement_operation_anchor(full_text)
     if operation_anchor:
