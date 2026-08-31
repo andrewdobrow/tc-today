@@ -1,6 +1,6 @@
 {
   "schema_version": 7,
-  "generated_at": "2026-08-31T21:59:00Z",
+  "generated_at": "2026-08-31T23:06:44Z",
   "policy": {
     "mode": "fail_closed_archive_recovery",
     "model_call_timeout_seconds": 120.0,
@@ -15,49 +15,62 @@
   "summary": {
     "category_count": 9,
     "statuses": {
-      "category_eligibility_archive_recovery": 5,
-      "generated_live": 4
+      "category_eligibility_archive_recovery": 4,
+      "generated_live": 2,
+      "generation_failed_archive_recovery": 2,
+      "no_publishable_sources": 1
     },
     "failures": {
-      "no_category_eligible_sources": 5
+      "contextless_update_lead": 2,
+      "no_category_eligible_sources": 4
     },
-    "model_attempt_count": 4,
-    "model_elapsed_seconds": 35.323,
-    "archive_recovery_requested_count": 5,
+    "model_attempt_count": 7,
+    "model_elapsed_seconds": 113.247,
+    "archive_recovery_requested_count": 7,
     "sports_expired_event_preview_count": 0,
-    "contextual_update_lead_rejection_count": 0,
-    "article_framing_rejection_count": 0,
-    "category_eligibility_rejection_count": 5,
-    "published_story_duplicate_suppression_count": 20,
-    "story_aware_update_context_count": 2,
-    "material_update_promotion_evaluation_count": 6,
-    "material_update_promotion_count": 0,
-    "material_update_promotion_cache_hit_count": 4,
-    "material_update_promotion_model_call_count": 2
+    "contextual_update_lead_rejection_count": 4,
+    "article_framing_rejection_count": 1,
+    "category_eligibility_rejection_count": 7,
+    "published_story_duplicate_suppression_count": 26,
+    "story_aware_update_context_count": 1,
+    "material_update_promotion_evaluation_count": 7,
+    "material_update_promotion_count": 3,
+    "material_update_promotion_cache_hit_count": 0,
+    "material_update_promotion_model_call_count": 7
   },
   "categories": [
     {
       "category_key": "local_gov",
       "category_label": "Local Government",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 22,
       "publishable_source_count": 12,
-      "selected_source_count": 1,
+      "selected_source_count": 2,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 7.256,
-          "result": "success"
+          "elapsed_seconds": 17.961,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 19.532,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com"
         }
       ],
-      "model_elapsed_seconds": 7.256,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 37.494,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: new_development_missing — Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -66,11 +79,21 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "central_government_action_required",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
       "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Florida Department of Transportation revokes permits for automated license plate readers",
+          "source_url": "https://www.wptv.com/news/state/permits-for-automated-license-plate-readers-revoked-fdot",
+          "editorial_story_id": "story_007183",
+          "canonical_slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+          "canonical_headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "local_gov",
           "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
@@ -80,25 +103,68 @@
           "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
           "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Flooding that trapped residents in Indiantown's Booker Park neighborhood prompts drainage concerns",
-          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/flooding-that-trapped-residents-in-indiantowns-booker-park-neighborhood-prompts-drainage-concerns",
-          "editorial_story_id": "story_007015",
-          "canonical_slug": "2026-08-31-flooding-traps-dozens-of-indiantown-residents-in-booker-park-neighborhood-sparks",
-          "canonical_headline": "Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
-      "material_update_promotion_evaluation_count": 0,
-      "material_update_promotion_count": 0,
+      "material_update_promotion_evaluation_count": 1,
+      "material_update_promotion_count": 1,
       "material_update_promotion_cache_hit_count": 0,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "local_gov",
+          "source_headline": "Florida Department of Transportation revokes permits for automated license plate readers",
+          "source_url": "https://www.wptv.com/news/state/permits-for-automated-license-plate-readers-revoked-fdot",
+          "canonical_slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+          "canonical_headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "local_gov",
+          "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - cw34.com",
+          "source_url": "https://cw34.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
+          "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
+          "canonical_headline": "Port St. Lucie homeowners to receive credits on solid waste bills from $24 million Waste Pro settlement",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": true,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "update_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "update_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "$24 million settlement with Waste Pro",
+            "Port St. Lucie city",
+            "Credits being distributed to homeowners",
+            "City mailing flyers to residents explaining the credits",
+            "Settlement relates to former trash hauler's unreliable service"
+          ],
+          "novel_facts": [
+            "Specific credit amounts: $364 for ~57,000 homeowners on 2022 tax roll, $64 for ~38,000 other eligible properties",
+            "Credits applied to property tax bills (not solid waste bills as candidate stated)",
+            "Settlement distributed over 95,000 eligible properties",
+            "June City Council vote decided on tax credits instead of mailed checks",
+            "Only Councilwoman Jolien Caraballo supported cash payments approach",
+            "Council rejected using settlement for second weekly pickup",
+            "Resident reaction quotes from Deborah Koon-Martin",
+            "FCC Environmental Services identified as current trash hauler",
+            "Straw ballot question on twice-weekly pickup expected in November"
+          ],
+          "reason": "Same event: both cover the $24 million Waste Pro settlement and distribution to Port St. Lucie homeowners via credits. Material update: incoming article provides crucial details missing from candidate including specific credit amounts ($364 vs $64), June council vote details, property tax bill vs solid waste bill clarification, distribution methodology, council member positions, resident reactions, and upcoming November ballot question. These are significant factual additions that change what readers need to know about how they'll receive their settlement money.",
+          "validation_errors": []
+        },
         {
           "category_key": "local_gov",
           "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
@@ -113,36 +179,19 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "local_gov",
-          "source_headline": "Flooding that trapped residents in Indiantown's Booker Park neighborhood prompts drainage concerns",
-          "source_url": "https://www.wptv.com/news/region-martin-county/indiantown/flooding-that-trapped-residents-in-indiantowns-booker-park-neighborhood-prompts-drainage-concerns",
-          "canonical_slug": "2026-08-31-flooding-traps-dozens-of-indiantown-residents-in-booker-park-neighborhood-sparks",
-          "canonical_headline": "Flooding traps dozens of Indiantown residents in Booker Park neighborhood, sparks drainage system concerns",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Indiantown begins drainage infrastructure review after Saturday flooding",
-      "generated_card_count": 0,
-      "elapsed_seconds": 36.413
+      "elapsed_seconds": 80.471
     },
     {
       "category_key": "crime",
       "category_label": "Crime & Safety",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 23,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 8,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -160,9 +209,23 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_crime_safety_focus_required",
-      "category_eligibility_assessed_count": 4,
-      "category_eligibility_rejection_count": 4,
+      "category_eligibility_assessed_count": 5,
+      "category_eligibility_rejection_count": 5,
       "category_eligibility_rejections": [
+        {
+          "contract_version": "1.0-primary-crime-safety-focus",
+          "category_key": "crime",
+          "mode": "enforce",
+          "policy": "primary_crime_safety_focus_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "missing_primary_crime_safety_focus",
+          "positive_signals": [],
+          "competing_signals": [],
+          "local_nexus_signals": [],
+          "headline": "New data center proposed for western St. Lucie County near Interstate 95",
+          "source_url": "https://www.wptv.com/news/local-news/our-community/fort-pierce/203-acre-data-center-proposed-for-western-st-lucie-county-near-interstate-95"
+        },
         {
           "contract_version": "1.0-primary-crime-safety-focus",
           "category_key": "crime",
@@ -188,7 +251,7 @@
           "positive_signals": [],
           "competing_signals": [],
           "local_nexus_signals": [],
-          "headline": "Homes, cars flooded in Indiantown neighborhood despite $2.18M drainage project - cbs12.com",
+          "headline": "Homes, cars flooded in Indiantown neighborhood despite $2.18M drainage project - WPEC",
           "source_url": "https://cbs12.com/news/local/homes-cars-flooded-in-indiantown-martin-county-county-booker-park-neighborhood-despite-2-million-drainage-project-flooding-drainage-stormwater-swales-driveway-culverts-homes-cars-flooded-damage-carpets?teaserSource=trending"
         },
         {
@@ -220,11 +283,21 @@
           "source_url": "https://cw34.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news"
         }
       ],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 2,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "crime",
-          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cbs12.com",
+          "source_headline": "Florida Department of Transportation revokes permits for automated license plate readers",
+          "source_url": "https://www.wptv.com/news/state/permits-for-automated-license-plate-readers-revoked-fdot",
+          "editorial_story_id": "story_007183",
+          "canonical_slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+          "canonical_headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
           "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
           "editorial_story_id": "story_007106",
           "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
@@ -242,7 +315,22 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "crime",
-          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cbs12.com",
+          "source_headline": "Florida Department of Transportation revokes permits for automated license plate readers",
+          "source_url": "https://www.wptv.com/news/state/permits-for-automated-license-plate-readers-revoked-fdot",
+          "canonical_slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+          "canonical_headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "crime",
+          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
           "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
           "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
           "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
@@ -257,23 +345,30 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 18.967
+      "elapsed_seconds": 17.721
     },
     {
       "category_key": "business",
       "category_label": "Business & Development",
-      "status": "category_eligibility_archive_recovery",
+      "status": "generated_live",
       "fetched_candidate_count": 24,
       "fresh_candidate_count": 20,
       "publishable_source_count": 11,
-      "selected_source_count": 0,
+      "selected_source_count": 1,
       "cache_hit": false,
-      "archive_recovery_requested": true,
-      "attempt_count": 0,
-      "attempts": [],
-      "model_elapsed_seconds": 0.0,
-      "failure_code": "no_category_eligible_sources",
-      "failure_summary": "No source passed Business & Development category eligibility contract",
+      "archive_recovery_requested": false,
+      "attempt_count": 1,
+      "attempts": [
+        {
+          "attempt": 1,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 6.935,
+          "result": "success"
+        }
+      ],
+      "model_elapsed_seconds": 6.935,
+      "failure_code": "",
+      "failure_summary": "",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -282,7 +377,7 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "primary_business_development_focus_required",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 1,
       "category_eligibility_rejections": [
         {
@@ -305,6 +400,16 @@
       ],
       "published_story_duplicate_suppression_count": 4,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "business",
+          "source_headline": "Florida Department of Transportation revokes permits for automated license plate readers",
+          "source_url": "https://www.wptv.com/news/state/permits-for-automated-license-plate-readers-revoked-fdot",
+          "editorial_story_id": "story_007183",
+          "canonical_slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+          "canonical_headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "business",
           "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
@@ -334,16 +439,6 @@
           "canonical_headline": "Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Man injured in lightning strike on boat near Sandsprit Park in Stuart",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/man-injured-in-lightning-strike-on-boat-near-sandsprit-park-in-stuart",
-          "editorial_story_id": "story_006860",
-          "canonical_slug": "2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart",
-          "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
-          "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
         }
       ],
       "story_aware_update_context_count": 0,
@@ -353,6 +448,21 @@
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
       "material_update_promotion_decisions": [
+        {
+          "category_key": "business",
+          "source_headline": "Florida Department of Transportation revokes permits for automated license plate readers",
+          "source_url": "https://www.wptv.com/news/state/permits-for-automated-license-plate-readers-revoked-fdot",
+          "canonical_slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+          "canonical_headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
         {
           "category_key": "business",
           "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
@@ -397,25 +507,14 @@
           "cache_hit": false,
           "model_call": false,
           "action": "preserve_existing_canonical"
-        },
-        {
-          "category_key": "business",
-          "source_headline": "Man injured in lightning strike on boat near Sandsprit Park in Stuart",
-          "source_url": "https://www.wptv.com/news/treasure-coast/region-martin-county/man-injured-in-lightning-strike-on-boat-near-sandsprit-park-in-stuart",
-          "canonical_slug": "2026-08-30-lightning-strike-injures-man-on-boat-near-sandsprit-park-in-stuart",
-          "canonical_headline": "Lightning strike injures man on boat near Sandsprit Park in Stuart",
-          "canonical_is_custom": false,
-          "identity_basis": "exact_source_and_persistent_story_skip",
-          "eligibility_reason": "incoming_not_newer_than_canonical",
-          "evaluated": false,
-          "promoted": false,
-          "cache_hit": false,
-          "model_call": false,
-          "action": "preserve_existing_canonical"
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 18.207
+      "generation_status": "success",
+      "budget_seconds": 180.0,
+      "live_hero_headline": "Data center proposed for 174 acres off West Midway Road in St. Lucie County",
+      "generated_card_count": 0,
+      "elapsed_seconds": 24.89
     },
     {
       "category_key": "sports",
@@ -479,16 +578,16 @@
           "action": "preserve_existing_canonical"
         }
       ],
-      "new_publication_stale_rejected_count": 8,
-      "elapsed_seconds": 10.86
+      "new_publication_stale_rejected_count": 10,
+      "elapsed_seconds": 13.469
     },
     {
       "category_key": "things_to_do",
       "category_label": "Things To Do",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 22,
-      "publishable_source_count": 2,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 3,
       "selected_source_count": 0,
       "cache_hit": false,
       "archive_recovery_requested": true,
@@ -505,21 +604,33 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "enforce",
       "category_eligibility_policy": "local_attendable_activity_required",
-      "category_eligibility_assessed_count": 0,
-      "category_eligibility_rejection_count": 0,
-      "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 2,
-      "published_story_duplicate_suppressions": [
+      "category_eligibility_assessed_count": 1,
+      "category_eligibility_rejection_count": 1,
+      "category_eligibility_rejections": [
         {
+          "contract_version": "1.0-local-attendable-activity-focus",
           "category_key": "things_to_do",
-          "source_headline": "Not every home is right for a border collie — here's what future adopters need to know",
-          "source_url": "https://www.wptv.com/shining-a-light/not-every-home-is-right-for-a-border-collie-heres-what-future-adopters-need-to-know",
-          "editorial_story_id": "story_003665",
-          "canonical_slug": "2026-08-25-all-36-border-collies-surrendered-in-palm-city-cruelty-case-adoptions-open-sept",
-          "canonical_headline": "All 36 Border Collies surrendered to Humane Society after Palm City rescue, adoptions open Sept. 1",
-          "basis": "registry_same_event_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
+          "mode": "enforce",
+          "policy": "local_attendable_activity_required",
+          "eligible": false,
+          "would_reject": true,
+          "reason": "competing_story_form_without_attendable_activity_focus",
+          "positive_signals": [
+            "scheduled_event:benefit"
+          ],
+          "competing_signals": [
+            "crime_public_safety:sheriff",
+            "animal_welfare_update:hoarding case"
+          ],
+          "local_nexus_signals": [
+            "treasure_coast_locality"
+          ],
+          "headline": "Not every home is right for a border collie — here's what future adopters need to know",
+          "source_url": "https://www.wptv.com/shining-a-light/not-every-home-is-right-for-a-border-collie-heres-what-future-adopters-need-to-know"
+        }
+      ],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
         {
           "category_key": "things_to_do",
           "source_headline": "Martin County PAL hosting Jeep Duck Scavenger Hunt fundraiser",
@@ -531,12 +642,36 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 0,
-      "story_aware_update_context_bindings": [],
+      "story_aware_update_context_count": 1,
+      "story_aware_update_context_bindings": [
+        {
+          "source_headline": "Not every home is right for a border collie — here's what future adopters need to know",
+          "source_url": "https://www.wptv.com/shining-a-light/not-every-home-is-right-for-a-border-collie-heres-what-future-adopters-need-to-know",
+          "publisher": "www.wptv.com",
+          "canonical_slug": "2026-07-20-more-than-70-animals-found-in-stuart-home-during-large-scale-hoarding-response",
+          "canonical_headline": "More Than 70 Animals Found in Stuart Home During Large-Scale Hoarding Response",
+          "basis": "exact_structured_incident_key",
+          "identity_keys": [
+            "incident:mass-animal-hoarding:martin-county",
+            "story:story_003665",
+            "source:https://www.wptv.com/shining-a-light/not-every-home-is-right-for-a-border-collie-heres-what-future-adopters-need-to-know"
+          ],
+          "match_confidence": 0.99,
+          "evidence_dimensions": [
+            "incident"
+          ],
+          "decision_trace": [
+            "deterministic_identity_keys=incident:mass-animal-hoarding:martin-county",
+            "write_authorized=True"
+          ],
+          "relationship": "same_event_verified",
+          "final_publication_action": "canonical_bound_before_generation"
+        }
+      ],
       "material_update_promotion_evaluation_count": 1,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_count": 1,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 1,
       "material_update_promotion_decisions": [
         {
           "category_key": "things_to_do",
@@ -548,29 +683,32 @@
           "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
+          "promoted": true,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "update_existing_canonical",
           "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
+          "semantic_action": "update_existing_canonical",
           "confidence": 0.95,
           "shared_anchors": [
-            "36 Border Collies from Palm City hoarding case",
-            "Removed Aug. 10 from Palm City home",
+            "36 Border Collies removed from Palm City home",
+            "August 10 rescue date",
             "Martin County Sheriff's Office investigation",
             "Humane Society of the Treasure Coast",
-            "Adoption applications opening Sept. 1"
+            "Adoptions opening September 1",
+            "Animal hoarding case"
           ],
           "novel_facts": [
-            "Volunteer Sue Park quoted on dog progress",
-            "Dogs coming off anxiety and pain medications",
-            "Specific adoption criteria (no apartments, fenced yards preferred)",
-            "Director Lori Tucker quoted",
-            "Sarah Fisher quoted on Border Collie characteristics",
-            "Details on matchmaker adoption approach vs first-come-first-served"
+            "Dogs are now coming off anxiety and pain medications",
+            "Dogs are learning to walk on leash and beginning to trust humans",
+            "Specific adoption criteria: no apartments, fenced-in backyard preferred, land/acreage preferred",
+            "Matchmaker adoption process instead of first-come-first-served",
+            "Detailed Border Collie breed requirements and behavioral expectations",
+            "Current behavioral observations from shelter play yard visit",
+            "Quotes from volunteer Sue Park about progress",
+            "Quotes from Director of Operations Lori Tucker about housing requirements"
           ],
-          "reason": "Both articles cover the same real-world event: the 36 Border Collies rescued from a Palm City home on Aug. 10 and the Sept. 1 adoption opening. The incoming article adds detail about the dogs' recovery progress, breed requirements, and adoption process, but these are explanatory follow-up details rather than material new developments. No new event has occurred (arrest, charge, ruling, death, identification, etc.). This is angle-shifted coverage with additional quotes and breed education that should update the existing canonical rather than create a new URL.",
+          "reason": "Same event: both articles cover the 36 Border Collies removed from a Palm City home on Aug. 10 in a hoarding case. The incoming article provides material updates on the dogs' recovery progress (coming off medications, learning to walk on leash, emotional healing), specific adoption criteria (no apartments, fenced yards required), and details about the matchmaker adoption process. These are meaningful developments in the ongoing story that readers need to know as the Sept. 1 adoption date approaches. This is not independently newsworthy as a separate story—it's a progress update on the same rescue case that belongs in the existing canonical.",
           "validation_errors": []
         },
         {
@@ -590,28 +728,21 @@
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 11.45
+      "elapsed_seconds": 23.898
     },
     {
       "category_key": "florida",
       "category_label": "Florida",
-      "status": "generated_live",
+      "status": "no_publishable_sources",
       "fetched_candidate_count": 24,
-      "fresh_candidate_count": 24,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 0,
+      "selected_source_count": 0,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
-      "attempts": [
-        {
-          "attempt": 1,
-          "timeout_seconds": 120.0,
-          "elapsed_seconds": 7.936,
-          "result": "success"
-        }
-      ],
-      "model_elapsed_seconds": 7.936,
+      "archive_recovery_requested": true,
+      "attempt_count": 0,
+      "attempts": [],
+      "model_elapsed_seconds": 0.0,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -622,45 +753,76 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "observe_only",
       "category_eligibility_policy": "future_explicit_contract",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 0,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 0,
-      "published_story_duplicate_suppressions": [],
+      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppressions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Florida Department of Transportation revokes permits for automated license plate readers",
+          "source_url": "https://www.wptv.com/news/state/permits-for-automated-license-plate-readers-revoked-fdot",
+          "editorial_story_id": "story_007183",
+          "canonical_slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+          "canonical_headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        }
+      ],
       "story_aware_update_context_count": 0,
       "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 0,
       "material_update_promotion_count": 0,
       "material_update_promotion_cache_hit_count": 0,
       "material_update_promotion_model_call_count": 0,
-      "material_update_promotion_decisions": [],
+      "material_update_promotion_decisions": [
+        {
+          "category_key": "florida",
+          "source_headline": "Florida Department of Transportation revokes permits for automated license plate readers",
+          "source_url": "https://www.wptv.com/news/state/permits-for-automated-license-plate-readers-revoked-fdot",
+          "canonical_slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+          "canonical_headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        }
+      ],
       "new_publication_stale_rejected_count": 0,
-      "generation_status": "success",
-      "budget_seconds": 180.0,
-      "live_hero_headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
-      "generated_card_count": 0,
-      "elapsed_seconds": 21.994
+      "elapsed_seconds": 11.098
     },
     {
       "category_key": "martin",
       "category_label": "Martin County",
       "status": "generated_live",
-      "fetched_candidate_count": 27,
+      "fetched_candidate_count": 28,
       "fresh_candidate_count": 23,
-      "publishable_source_count": 3,
-      "selected_source_count": 3,
+      "publishable_source_count": 2,
+      "selected_source_count": 2,
       "cache_hit": false,
       "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 11.537,
+          "elapsed_seconds": 11.329,
+          "result": "article_framing_integrity",
+          "error_type": "ArticleFramingIntegrityError",
+          "error_summary": "Article framing integrity failed for hero: headline_money_claim_missing_from_lead — Indiantown's Booker Park floods despite $2.18 million drainage project completed in 2022"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 12.292,
           "result": "success"
         }
       ],
-      "model_elapsed_seconds": 11.537,
+      "model_elapsed_seconds": 23.621,
       "failure_code": "",
       "failure_summary": "",
       "sports_expired_event_preview_count": 0,
@@ -671,14 +833,14 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 3,
+      "category_eligibility_assessed_count": 2,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 4,
+      "published_story_duplicate_suppression_count": 5,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "martin",
-          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cbs12.com",
+          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
           "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
           "editorial_story_id": "story_007106",
           "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
@@ -694,6 +856,16 @@
           "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
           "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
           "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Dog, 2 people evacuated after lithium-ion battery sparks Jensen Beach garage fire - WPEC",
+          "source_url": "https://cbs12.com/news/local/dog-2-people-rescued-lithium-ion-battery-sparks-jensen-beach-garage-fire-northeast-cypress-lane-jensen-beach-palm-beach-county-fire-rescue-florida-news",
+          "editorial_story_id": "story_007068",
+          "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+          "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+          "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -717,56 +889,16 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Dog, 2 people evacuated after lithium-ion battery sparks Jensen Beach garage fire - cbs12.com",
-          "source_url": "https://cbs12.com/news/local/dog-2-people-rescued-lithium-ion-battery-sparks-jensen-beach-garage-fire-northeast-cypress-lane-jensen-beach-palm-beach-county-fire-rescue-florida-news",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
-          "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
-          "basis": "event-identity-authority:precise_location_plus_distinctive_facts",
-          "identity_keys": [
-            "story:story_007069",
-            "source:https://cbs12.com/news/local/dog-2-people-rescued-lithium-ion-battery-sparks-jensen-beach-garage-fire-northeast-cypress-lane-jensen-beach-palm-beach-county-fire-rescue-florida-news"
-          ],
-          "match_confidence": 0.95,
-          "evidence_dimensions": [
-            "bounded_time_window",
-            "shared_locality",
-            "shared_event_family",
-            "shared_precise_location",
-            "shared_headline_topic",
-            "distinctive_fact_overlap"
-          ],
-          "decision_trace": [
-            "left_identity_origin=source_derived",
-            "right_identity_origin=source_derived",
-            "publication_gap_days=0",
-            "shared_locality=['jensen-beach', 'martin-county']",
-            "shared_event_families=['animal-case']",
-            "shared_named_people=[]",
-            "shared_precise_locations=['northeast-cypress-lane']",
-            "shared_agencies=[]",
-            "shared_subject_phrases=[]",
-            "shared_headline_topic_core=['dog', 'fire', 'garage']",
-            "shared_distinctive_token_count=43",
-            "identity_outcome=same_event_verified",
-            "evidence_tier=hard_composite_identity",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 2,
       "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 1,
-      "material_update_promotion_model_call_count": 1,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
         {
           "category_key": "martin",
-          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - cbs12.com",
+          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
           "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
           "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
           "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
@@ -797,21 +929,37 @@
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 1.0,
           "shared_anchors": [
-            "Monday morning fire in Jensen Beach",
-            "2700 block of Northeast Cypress Lane",
-            "Reported just after 6:30 a.m.",
-            "Two people and a dog escaped",
-            "Garage fire caused by charging lithium-ion battery",
-            "Martin County Fire Rescue response",
-            "Same source URL (WPBF)"
+            "Same source URL (https://www.wpbf.com/article/florida-two-people-dog-escape-safely-after-garage-fire-in-jensen-beach/73569727)",
+            "Same date: Monday morning, August 31, 2026",
+            "Same location: 2700 block of Northeast Cypress Lane, Jensen Beach",
+            "Same time: just after 6:30 a.m.",
+            "Same incident: garage fire caused by charging lithium-ion battery",
+            "Same outcome: two people and dog escaped safely",
+            "Same responding agency: Martin County Fire Rescue"
           ],
           "novel_facts": [
-            "Additional detail about fire containment preventing spread beyond garage",
-            "Safety reminder about unplugging batteries when fully charged",
-            "Reference to National Fire Protection Association website"
+            "Additional safety advice to unplug batteries once fully charged",
+            "Reference to National Fire Protection Association website",
+            "Detail that fire was contained and prevented from spreading beyond garage",
+            "Note that no neighboring structures were threatened"
           ],
-          "reason": "This is identical to the canonical candidate - same source URL, same incident on Monday morning at 6:30 a.m. in the 2700 block of Northeast Cypress Lane, same lithium-ion battery cause, same two people and dog escaping. The incoming article contains only routine additional details (containment specifics, safety tips, resource links) that do not constitute a material update. No new developments like injuries, arrests, cause determination, or investigation findings. The retrieval evidence confirms this is an exact source match and persistent story.",
+          "reason": "This is the exact same article from the same source URL covering the identical garage fire incident. The incoming article contains only routine scene details (containment specifics, neighboring structures not threatened) and expanded safety guidance, which are not material updates. No arrests, injuries, causes determined, or other substantive developments have occurred. The retrieval evidence confirms this is a persistent story ID match and exact source match.",
           "validation_errors": []
+        },
+        {
+          "category_key": "martin",
+          "source_headline": "Dog, 2 people evacuated after lithium-ion battery sparks Jensen Beach garage fire - WPEC",
+          "source_url": "https://cbs12.com/news/local/dog-2-people-rescued-lithium-ion-battery-sparks-jensen-beach-garage-fire-northeast-cypress-lane-jensen-beach-palm-beach-county-fire-rescue-florida-news",
+          "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+          "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
         },
         {
           "category_key": "martin",
@@ -839,27 +987,27 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
+          "cache_hit": false,
+          "model_call": true,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.98,
           "shared_anchors": [
-            "Michael Debevec (Michael Anthony Debevec II) missing person",
-            "Martin County Sheriff's Office search",
+            "Michael Debevec (Michael Anthony Debevec II) - same missing person",
+            "Martin County Sheriff's Office conducting search",
             "Visiting from Oklahoma",
             "Last seen at Chastain Beach (The Rocks)",
             "Vehicle found at the beach",
-            "Family has not heard from him",
-            "Last seen Wednesday afternoon/Aug. 26"
+            "Last seen Wednesday/Aug. 26 afternoon",
+            "Family has not heard from him"
           ],
           "novel_facts": [
-            "May be experiencing an emotional breakdown (additional detail)",
             "Physical description: 5-foot-7 with blue eyes",
-            "LinkedIn page lists him from Broken Arrow, Oklahoma"
+            "LinkedIn page shows he's from Broken Arrow, Oklahoma",
+            "May be experiencing an emotional breakdown"
           ],
-          "reason": "Both articles cover the identical missing person case: Michael Debevec from Oklahoma, last seen at Chastain Beach on Aug. 26/Wednesday afternoon, vehicle found at the beach, family hasn't heard from him. The incoming article adds minor descriptive details (height, eye color, possible emotional breakdown, specific Oklahoma city) but contains no material update such as him being found, an arrest, a body being discovered, or any significant development in the search. These are routine descriptive details that should be incorporated into the existing canonical story rather than warrant a new URL.",
+          "reason": "Both articles cover the identical missing person case: Michael Debevec from Oklahoma, last seen at Chastain Beach on Aug. 26. The incoming article adds minor descriptive details (height, eye color, specific Oklahoma city, emotional state mention) but contains no material update such as him being found, new leads, search developments, or investigative findings. These are routine supplemental details that would normally be added to the existing canonical rather than warrant a new story URL.",
           "validation_errors": []
         }
       ],
@@ -868,30 +1016,40 @@
       "budget_seconds": 180.0,
       "live_hero_headline": "Indiantown's Booker Park floods despite $2.18 million drainage project completed in 2022",
       "generated_card_count": 1,
-      "elapsed_seconds": 37.82
+      "elapsed_seconds": 61.008
     },
     {
       "category_key": "st_lucie",
       "category_label": "St. Lucie County",
-      "status": "generated_live",
+      "status": "generation_failed_archive_recovery",
       "fetched_candidate_count": 30,
-      "fresh_candidate_count": 25,
-      "publishable_source_count": 1,
-      "selected_source_count": 1,
+      "fresh_candidate_count": 23,
+      "publishable_source_count": 4,
+      "selected_source_count": 4,
       "cache_hit": false,
-      "archive_recovery_requested": false,
-      "attempt_count": 1,
+      "archive_recovery_requested": true,
+      "attempt_count": 2,
       "attempts": [
         {
           "attempt": 1,
           "timeout_seconds": 120.0,
-          "elapsed_seconds": 8.594,
-          "result": "success"
+          "elapsed_seconds": 21.5,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC"
+        },
+        {
+          "attempt": 2,
+          "timeout_seconds": 120.0,
+          "elapsed_seconds": 23.697,
+          "result": "contextless_update_lead",
+          "error_type": "ContextualUpdateLeadError",
+          "error_summary": "Contextless update lead for hero: new_development_missing — Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC"
         }
       ],
-      "model_elapsed_seconds": 8.594,
-      "failure_code": "",
-      "failure_summary": "",
+      "model_elapsed_seconds": 45.197,
+      "failure_code": "contextless_update_lead",
+      "failure_summary": "Contextless update lead for hero: new_development_missing — Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC",
       "sports_expired_event_preview_count": 0,
       "sports_expired_event_previews": [],
       "contextual_update_lead_rejection_count": 0,
@@ -900,18 +1058,18 @@
       "article_framing_rejections": [],
       "category_eligibility_mode": "existing_geographic_enforce",
       "category_eligibility_policy": "county_locality",
-      "category_eligibility_assessed_count": 1,
+      "category_eligibility_assessed_count": 4,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 5,
+      "published_story_duplicate_suppression_count": 7,
       "published_story_duplicate_suppressions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Treasure Coast Hyrox Trials this weekend as Iron Knight Gym builds powerlifting community in Port St. Lucie",
-          "source_url": "https://www.wptv.com/sports/treasure-coast-hyrox-trials-this-weekend-as-iron-knight-gym-builds-powerlifting-community-in-port-st-lucie",
-          "editorial_story_id": "story_006865",
-          "canonical_slug": "2026-08-30-iron-knight-gym-in-port-st-lucie-hosts-treasure-coast-hyrox-trials-with-over-70",
-          "canonical_headline": "Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend",
+          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
+          "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+          "editorial_story_id": "story_007106",
+          "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+          "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
           "basis": "exact_source_and_persistent_story_skip",
           "reason": "registry_skip_story_already_published"
         },
@@ -923,16 +1081,6 @@
           "canonical_slug": "2026-08-30-iron-knight-gym-in-port-st-lucie-hosts-treasure-coast-hyrox-trials-with-over-70",
           "canonical_headline": "Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend",
           "basis": "exact_source_and_persistent_story_skip",
-          "reason": "registry_skip_story_already_published"
-        },
-        {
-          "category_key": "st_lucie",
-          "source_headline": "Three arrested in St. Lucie County convenience store drug bust after detectives find crack cocaine - WPBF",
-          "source_url": "https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149",
-          "editorial_story_id": "story_007099",
-          "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
-          "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
-          "basis": "authorized_canonical_identity_skip",
           "reason": "registry_skip_story_already_published"
         },
         {
@@ -947,6 +1095,36 @@
         },
         {
           "category_key": "st_lucie",
+          "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
+          "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
+          "editorial_story_id": "story_007099",
+          "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
+          "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie High football player held on ICE detainer after school zone speeding stop - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-high-football-player-held-on-ice-detainer-after-school-zone-speeding-stop-us-immigration-customs-enforcement-st-lucie-county-sheriffs-office-florida-news",
+          "editorial_story_id": "story_005957",
+          "canonical_slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
+          "canonical_headline": "Port St. Lucie High School football player held in ICE custody after school zone speeding violation",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "2 arrested in string of car burglaries in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/two-men-arrested-string-firearm-burglaries-plagued-neighborhoods-gated-communities-martin-county-st-lucie-county-martin-county-sheriffs-office-st-lucie-county-sheriffs-office-guns-crime-florida-news",
+          "editorial_story_id": "story_006042",
+          "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+          "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
+          "basis": "registry_same_event_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "st_lucie",
           "source_headline": "Fire crews contain Fort Pierce structure blaze before it spreads to mobile homes - cw34.com",
           "source_url": "https://cw34.com/news/local/fire-crews-contain-fort-pierce-structure-blaze-before-it-spreads-to-mobile-homes-florida-news-florida-fire-local-news-local-fire?teaserSource=trending",
           "editorial_story_id": "story_005719",
@@ -956,42 +1134,59 @@
           "reason": "registry_skip_story_already_published"
         }
       ],
-      "story_aware_update_context_count": 1,
-      "story_aware_update_context_bindings": [
-        {
-          "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - cbs12.com",
-          "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
-          "publisher": "cbs12.com",
-          "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
-          "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
-          "basis": "exact_source_url",
-          "identity_keys": [
-            "story:story_000695",
-            "source:https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime"
-          ],
-          "match_confidence": 0.99,
-          "evidence_dimensions": [
-            "source"
-          ],
-          "decision_trace": [
-            "deterministic_identity_keys=source:https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
-            "write_authorized=True"
-          ],
-          "relationship": "same_event_verified",
-          "final_publication_action": "canonical_bound_before_generation"
-        }
-      ],
+      "story_aware_update_context_count": 0,
+      "story_aware_update_context_bindings": [],
       "material_update_promotion_evaluation_count": 2,
-      "material_update_promotion_count": 0,
-      "material_update_promotion_cache_hit_count": 2,
-      "material_update_promotion_model_call_count": 0,
+      "material_update_promotion_count": 1,
+      "material_update_promotion_cache_hit_count": 0,
+      "material_update_promotion_model_call_count": 2,
       "material_update_promotion_decisions": [
         {
           "category_key": "st_lucie",
-          "source_headline": "Treasure Coast Hyrox Trials this weekend as Iron Knight Gym builds powerlifting community in Port St. Lucie",
-          "source_url": "https://www.wptv.com/sports/treasure-coast-hyrox-trials-this-weekend-as-iron-knight-gym-builds-powerlifting-community-in-port-st-lucie",
-          "canonical_slug": "2026-08-30-iron-knight-gym-in-port-st-lucie-hosts-treasure-coast-hyrox-trials-with-over-70",
-          "canonical_headline": "Iron Knight Gym in Port St. Lucie hosts Treasure Coast Hyrox Trials with over 70 athletes this weekend",
+          "source_headline": "Port St. Lucie homeowners are getting a notice in the mail about their Waste Pro credit - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-homeowners-are-getting-a-notice-in-the-mail-about-their-waste-pro-credit-florida-news",
+          "canonical_slug": "2026-08-29-port-st-lucie-homeowners-to-receive-credits-on-solid-waste-bills-from-24-million",
+          "canonical_headline": "Port St. Lucie homeowners to receive credits on solid waste bills from $24 million Waste Pro settlement",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "newer_source_requires_materiality_decision",
+          "evaluated": true,
+          "promoted": true,
+          "cache_hit": false,
+          "model_call": true,
+          "action": "update_existing_canonical",
+          "semantic_status": "validated",
+          "semantic_action": "update_existing_canonical",
+          "confidence": 0.95,
+          "shared_anchors": [
+            "$24 million settlement with Waste Pro",
+            "Port St. Lucie city distributing credits to homeowners",
+            "Flyers being mailed to residents explaining the credits",
+            "Credits applied to property tax/solid waste bills",
+            "Settlement from lawsuit over unreliable trash service"
+          ],
+          "novel_facts": [
+            "Specific credit amounts: $364 for ~57,000 long-term homeowners, $64 for ~38,000 other eligible properties",
+            "95,000 total eligible properties",
+            "Resident reactions quoted (Deborah Koon-Martin)",
+            "Details on June City Council vote choosing credits over checks",
+            "Councilwoman Jolien Caraballo was only member supporting checks",
+            "Council concerns about cost and security of mailing checks",
+            "Audience reaction: boos and jeers at the vote",
+            "Quote from Councilman Anthony Bonna about keeping money out of general fund",
+            "Connection to TRIM notices timing",
+            "FCC Environmental Services identified as current trash hauler",
+            "November straw ballot question on twice-weekly pickup mentioned"
+          ],
+          "reason": "Same event: both articles cover the $24 million Waste Pro settlement distribution to Port St. Lucie homeowners via credits and the mailing of flyers explaining this. Material update present: the incoming article provides substantial new information including specific credit amounts ($364 vs $64), breakdown of eligible properties (57,000 vs 38,000), detailed resident and council member reactions with quotes, voting details from the June meeting, and context about the November ballot question. This is not independently newsworthy enough to merit its own URL—it's additional detail and resident reaction to the settlement distribution already reported, which should update the existing canonical.",
+          "validation_errors": []
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Former Treasure Coast Hospice employee jailed in ring theft from dead patient - WPEC",
+          "source_url": "https://cbs12.com/news/local/former-hospice-employee-steals-rings-deceased-patient-pawns-jewelry-port-st-lucie-stuart-police-florida-news-theft-from-dead-patient-stole-rings-police-say",
+          "canonical_slug": "2026-08-31-former-treasure-coast-hospice-employee-arrested-for-stealing-rings-from-dead-pat",
+          "canonical_headline": "Former Treasure Coast Hospice employee arrested for stealing rings from dead patient in Stuart",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
@@ -1018,47 +1213,57 @@
         },
         {
           "category_key": "st_lucie",
-          "source_headline": "Three arrested in St. Lucie County convenience store drug bust after detectives find crack cocaine - WPBF",
-          "source_url": "https://www.wpbf.com/article/st-lucie-county-convenience-store-drug-bust/73559149",
-          "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
-          "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
-          "canonical_is_custom": false,
-          "identity_basis": "pre_generation_ledger:event-identity-authority:participant_plus_precise_location",
-          "eligibility_reason": "newer_source_requires_materiality_decision",
-          "evaluated": true,
-          "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
-          "action": "preserve_existing_canonical",
-          "semantic_status": "validated",
-          "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.98,
-          "shared_anchors": [
-            "Sam's Drive Thru convenience store at 1502 Avenue D/Drive",
-            "Friday search warrant execution",
-            "St. Lucie County Sheriff's Office",
-            "Ayhem Jaber Ubayda, 21",
-            "Melvin James Kelly, 60",
-            "John Alvin J. Mobley (age 71 in candidate)",
-            "14 grams crack cocaine",
-            "128 grams marijuana packaged for sale",
-            "Same three arrests with identical charges"
-          ],
-          "novel_facts": [
-            "Incoming provides first name 'John' for Mobley (mentioned as just 'Mobley' in incoming body but 'John Alvin J. Mobley' in candidate)",
-            "Minor address variation: 'Avenue D' vs 'Avenue Drive' (likely same location)"
-          ],
-          "reason": "Both articles report the exact same Friday drug bust at Sam's Drive Thru convenience store with identical participants (Ubayda, Mobley, Kelly), same quantities of drugs seized (14g crack cocaine, 128g marijuana), and same charges. The incoming article contains no material updates beyond what was already reported in the canonical candidate - it's simply another outlet's coverage of the same event with the same facts.",
-          "validation_errors": []
-        },
-        {
-          "category_key": "st_lucie",
           "source_headline": "One person sent to hospital after apartment fire in Port St. Lucie - WPBF",
           "source_url": "https://www.wpbf.com/article/florida-one-person-sent-to-fire-at-apartment-in-st-luce-county/73560474",
           "canonical_slug": "2026-08-29-one-hospitalized-after-apartment-fire-at-peacock-run-complex-in-port-st-lucie",
           "canonical_headline": "One hospitalized after apartment fire at Peacock Run complex in Port St. Lucie",
           "canonical_is_custom": false,
           "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Three St. Lucie County men arrested after being found with marijuana, cocaine - WPEC",
+          "source_url": "https://cbs12.com/news/crime/three-st-lucie-county-men-arrested-after-being-found-with-marijuana-cocaine-florida-news-florida-crime-local-news-local-crime",
+          "canonical_slug": "2026-08-28-three-st-lucie-county-men-arrested-on-drug-charges-after-search-at-convenience-s",
+          "canonical_headline": "Three St. Lucie County men arrested on drug charges after search at convenience store",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:exact_source_url",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "Port St. Lucie High football player held on ICE detainer after school zone speeding stop - WPEC",
+          "source_url": "https://cbs12.com/news/local/port-st-lucie-high-football-player-held-on-ice-detainer-after-school-zone-speeding-stop-us-immigration-customs-enforcement-st-lucie-county-sheriffs-office-florida-news",
+          "canonical_slug": "2026-08-26-port-st-lucie-high-school-senior-in-ice-custody-after-traffic-stop-on-way-to-sch",
+          "canonical_headline": "Port St. Lucie High School football player held in ICE custody after school zone speeding violation",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
+          "eligibility_reason": "material_update_source_already_absorbed",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "st_lucie",
+          "source_headline": "2 arrested in string of car burglaries in Martin County - WPEC",
+          "source_url": "https://cbs12.com/news/local/two-men-arrested-string-firearm-burglaries-plagued-neighborhoods-gated-communities-martin-county-st-lucie-county-martin-county-sheriffs-office-st-lucie-county-sheriffs-office-guns-crime-florida-news",
+          "canonical_slug": "2026-08-26-two-st-lucie-county-men-arrested-in-martin-county-burglaries-13-cases-closed",
+          "canonical_headline": "Two Port St. Lucie men arrested in Martin County burglary spree, 13 cases closed",
+          "canonical_is_custom": false,
+          "identity_basis": "registry_same_event_and_persistent_story_skip",
           "eligibility_reason": "incoming_not_newer_than_canonical",
           "evaluated": false,
           "promoted": false,
@@ -1077,41 +1282,39 @@
           "eligibility_reason": "newer_source_requires_materiality_decision",
           "evaluated": true,
           "promoted": false,
-          "cache_hit": true,
-          "model_call": false,
+          "cache_hit": false,
+          "model_call": true,
           "action": "preserve_existing_canonical",
           "semantic_status": "validated",
           "semantic_action": "duplicate_use_existing_canonical",
-          "confidence": 0.95,
+          "confidence": 0.98,
           "shared_anchors": [
-            "St. Lucie County Fire District response",
             "East Erie Drive in Fort Pierce",
-            "residential structure fire",
-            "fire contained to area of origin",
-            "prevented spread to nearby mobile homes",
+            "St. Lucie County Fire District response",
+            "Residential structure fire",
+            "Fire contained to area of origin",
+            "Prevention of spread to nearby mobile homes",
             "Fire Marshal's Office investigation"
           ],
           "novel_facts": [
-            "Incoming specifies the fire occurred on Sunday (candidate says Monday - likely publication timing difference)",
-            "Incoming uses '400 block' is not specified in incoming but is in candidate"
+            "Incoming specifies 'Sunday' as day of incident",
+            "Incoming mentions '400 block' address detail from candidate not in incoming lead"
           ],
-          "reason": "Both articles describe the identical fire incident: St. Lucie County Fire District responding to a residential structure fire on East Erie Drive in Fort Pierce that was contained before spreading to mobile homes. The core facts are identical - same location, same responding agency, same outcome (contained to origin area, prevented spread to mobile homes), same ongoing Fire Marshal investigation. The incoming article provides no material new information such as fire cause determination, damage estimates, injuries, arrests, or other developments. The date discrepancy (Sunday vs Monday) likely reflects when the incident occurred versus when initial reports were published. This is simply another outlet covering the same event with the same information.",
+          "reason": "Both articles cover the identical residential structure fire on East Erie Drive in Fort Pierce responded to by St. Lucie County Fire District. All core facts match: same location (East Erie Drive), same agency response (SLCFD), same outcome (fire contained to area of origin, prevented spread to mobile homes), same investigation status (Fire Marshal investigating). The incoming article adds no material new information beyond what the canonical already reported - no arrest, no cause determination, no victim identification, no casualty update. The date discrepancy (incoming says 'Sunday' vs candidate says 'Monday') appears to be a minor reporting variation, but all substantive details align perfectly. This is the same event with no newsworthy development.",
           "validation_errors": []
         }
       ],
-      "new_publication_stale_rejected_count": 3,
-      "generation_status": "success",
+      "new_publication_stale_rejected_count": 0,
+      "generation_status": "failed",
       "budget_seconds": 180.0,
-      "live_hero_headline": "Port St. Lucie homeowners receiving notices about Waste Pro settlement credits on tax bills",
-      "generated_card_count": 0,
-      "elapsed_seconds": 25.639
+      "elapsed_seconds": 91.327
     },
     {
       "category_key": "indian_river",
       "category_label": "Indian River County",
       "status": "category_eligibility_archive_recovery",
       "fetched_candidate_count": 25,
-      "fresh_candidate_count": 24,
+      "fresh_candidate_count": 22,
       "publishable_source_count": 6,
       "selected_source_count": 0,
       "cache_hit": false,
@@ -1132,8 +1335,28 @@
       "category_eligibility_assessed_count": 6,
       "category_eligibility_rejection_count": 0,
       "category_eligibility_rejections": [],
-      "published_story_duplicate_suppression_count": 1,
+      "published_story_duplicate_suppression_count": 3,
       "published_story_duplicate_suppressions": [
+        {
+          "category_key": "indian_river",
+          "source_headline": "Florida Department of Transportation revokes permits for automated license plate readers",
+          "source_url": "https://www.wptv.com/news/state/permits-for-automated-license-plate-readers-revoked-fdot",
+          "editorial_story_id": "story_007183",
+          "canonical_slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+          "canonical_headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
+          "basis": "exact_source_and_persistent_story_skip",
+          "reason": "registry_skip_story_already_published"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
+          "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach",
+          "editorial_story_id": "story_007068",
+          "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+          "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+          "basis": "authorized_canonical_identity_skip",
+          "reason": "registry_skip_story_already_published"
+        },
         {
           "category_key": "indian_river",
           "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
@@ -1154,6 +1377,36 @@
       "material_update_promotion_decisions": [
         {
           "category_key": "indian_river",
+          "source_headline": "Florida Department of Transportation revokes permits for automated license plate readers",
+          "source_url": "https://www.wptv.com/news/state/permits-for-automated-license-plate-readers-revoked-fdot",
+          "canonical_slug": "2026-08-31-florida-department-of-transportation-revokes-permits-for-automated-license-plate",
+          "canonical_headline": "Florida Department of Transportation revokes permits for automated license plate readers statewide",
+          "canonical_is_custom": false,
+          "identity_basis": "exact_source_and_persistent_story_skip",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
+          "source_headline": "2 people, dog safe after garage fire sparks from lithium-ion battery in Jensen Beach",
+          "source_url": "https://www.wptv.com/news/region-martin-county/jensen-beach/2-people-dog-safe-after-garage-fire-sparks-from-lithium-ion-battery-in-jensen-beach",
+          "canonical_slug": "2026-08-31-two-people-dog-escape-jensen-beach-garage-fire-caused-by-charging-lithium-ion-ba",
+          "canonical_headline": "Two people, dog escape Jensen Beach garage fire caused by charging lithium-ion battery",
+          "canonical_is_custom": false,
+          "identity_basis": "pre_generation_ledger:event-identity-authority:precise_location_plus_distinctive_facts",
+          "eligibility_reason": "incoming_not_newer_than_canonical",
+          "evaluated": false,
+          "promoted": false,
+          "cache_hit": false,
+          "model_call": false,
+          "action": "preserve_existing_canonical"
+        },
+        {
+          "category_key": "indian_river",
           "source_headline": "Vero Beach flooding on Ocean Drive leaves businesses struggling; city says fix could cost millions - WPTV",
           "source_url": "https://www.wptv.com/news/local-news/our-community/vero-beach/indian-river-county/vero-beach-flooding-on-ocean-drive-leaves-businesses-struggling-city-says-fix-could-cost-millions",
           "canonical_slug": "2026-08-27-vero-beach-flooding-on-ocean-drive-threatens-businesses-as-city-says-fix-could-c",
@@ -1170,22 +1423,25 @@
           "semantic_action": "duplicate_use_existing_canonical",
           "confidence": 0.98,
           "shared_anchors": [
-            "Ocean Drive in Vero Beach",
-            "Wednesday's storm flooding",
+            "Ocean Drive in Vero Beach flooding",
             "Lee Olsen, general manager at Waldo's Restaurant and Bar",
-            "Water reached knee height",
-            "City says fix could cost millions and take years",
-            "Monday flooding also mentioned",
-            "Pump stations designed for 1 inch/hour but storms exceeded 2 inches/hour",
-            "No improvement project planned"
+            "Wednesday's storm causing knee-high flooding",
+            "City stating fix could cost millions and take years",
+            "Same source URL (wptv.com)",
+            "Public works explanation about 1 inch per hour design capacity vs 2+ inches actual rainfall",
+            "No improvement project currently planned"
           ],
-          "novel_facts": [],
-          "reason": "This is the exact same article from the same source (WPTV) about the same recurring flooding situation on Ocean Drive. The incoming article has identical quotes from Lee Olsen, same details about Wednesday and Monday flooding, same business owner concerns, same city response about millions in costs, and same technical details about drainage capacity. The retrieval evidence confirms 'exact_source_and_persistent_story_skip' and 'persistent_story_id_match: true', indicating this is a rerun or republication of the same content. No new developments, arrests, policy changes, or material updates are present—just the same story with identical facts and quotes.",
+          "novel_facts": [
+            "Additional detail about Monday flooding earlier in the week",
+            "Aubrey Moxley and Leah Trodglen from Allure Gallery quoted",
+            "Minor additional witness color about daily thunderstorm pattern"
+          ],
+          "reason": "This is the exact same article from the same source (WPTV) about the same recurring flooding issue on Ocean Drive. The incoming article dated 2026-08-30 appears to be a republication or slight expansion of the canonical from 2026-08-27, with the same headline structure, same primary source (Lee Olsen), same Wednesday storm anchor, and identical city response about millions in costs. The added quotes from gallery workers and mention of Monday's flooding are routine scene detail and witness color, not material updates like an arrest, official cause determination, or policy decision. No new government action, casualty change, or accountability development has occurred.",
           "validation_errors": []
         }
       ],
       "new_publication_stale_rejected_count": 0,
-      "elapsed_seconds": 27.645
+      "elapsed_seconds": 25.783
     }
   ]
 }
