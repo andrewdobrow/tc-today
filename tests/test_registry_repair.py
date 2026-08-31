@@ -7,6 +7,7 @@ from tct_engine.registry_repair import (
     normalize_identity_title,
     quarantine_active_story_contamination,
     repair_registry_payload,
+    merge_story_records,
     strip_publisher_suffix,
 )
 from tct_engine.story_registry import StoryRegistry
@@ -555,3 +556,76 @@ def test_multi_family_catchall_guard_does_not_quarantine_long_single_incident_fa
 
     assert "story_009998" in payload["stories"]
     assert "story_009998" not in report.quarantine_reasons
+
+
+def test_timeline_split_negative_identity_blocks_weaker_remerge() -> None:
+    """A deterministic coherence split must outrank later title/incident similarity."""
+    title = "Palm Bay breaking-news headline reused across incompatible incidents"
+    first = _story(
+        "story_000001",
+        events=["unknown-event-1111111111"],
+        titles=[title],
+        event_types=["shooting"],
+    )
+    second = _story(
+        "story_000002",
+        events=["unknown-event-2222222222"],
+        titles=[title],
+        event_types=["traffic crash"],
+    )
+    for story in (first, second):
+        story["timeline_coherence_repair"] = {
+            "repair_version": 15,
+            "original_story_id": "story_000001",
+            "reason": "incompatible_event_families_without_identity_continuity",
+        }
+        story["timeline_coherence_split_roots"] = ["story_000001"]
+
+    payload = {
+        "stories": {
+            "story_000001": first,
+            "story_000002": second,
+        },
+        "event_to_story": {
+            "unknown-event-1111111111": "story_000001",
+            "unknown-event-2222222222": "story_000002",
+        },
+        "incident_anchor_to_story": {},
+        "story_aliases": {},
+        "quarantined_stories": {},
+    }
+
+    report = repair_registry_payload(payload)
+
+    assert set(payload["stories"]) == {"story_000001", "story_000002"}
+    assert report.merged_story_ids == {}
+    # Deliberately separated siblings are not an unresolved registry-health error.
+    assert report.remaining_exact_duplicate_title_groups == 0
+    assert report.remaining_publisher_title_duplicate_groups == 0
+    assert report.remaining_source_identity_groups == 0
+    assert report.remaining_incident_identity_groups == 0
+    assert report.remaining_unified_incident_groups == 0
+
+
+def test_merge_propagates_timeline_split_negative_identity_to_new_primary() -> None:
+    """If a stronger external canonical wins, it must inherit split lineage."""
+    primary = _story(
+        "story_000010",
+        events=["unknown-event-1010101010"],
+        titles=["Higher-trust canonical coverage"],
+        custom=True,
+    )
+    secondary = _story(
+        "story_000011",
+        events=["unknown-event-1111111111"],
+        titles=["Detached timeline fragment"],
+    )
+    secondary["timeline_coherence_repair"] = {
+        "repair_version": 15,
+        "original_story_id": "story_000001",
+    }
+    secondary["timeline_coherence_split_roots"] = ["story_000001"]
+
+    merge_story_records(primary, secondary)
+
+    assert primary["timeline_coherence_split_roots"] == ["story_000001"]

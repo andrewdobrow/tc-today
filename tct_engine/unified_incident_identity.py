@@ -707,9 +707,29 @@ def story_has_verified_unified_identity(story: Mapping[str, Any]) -> bool:
     return len({find(index) for index in range(len(evidence))}) == 1
 
 
+def _timeline_split_lineage_roots(story: Mapping[str, Any]) -> frozenset[str]:
+    """Read durable negative-identity roots written by registry repair."""
+
+    roots = {
+        str(value or "").strip()
+        for value in (story.get("timeline_coherence_split_roots", ()) or ())
+        if str(value or "").strip()
+    }
+    repair = story.get("timeline_coherence_repair")
+    if isinstance(repair, Mapping):
+        original = str(repair.get("original_story_id") or "").strip()
+        if original:
+            roots.add(original)
+    return frozenset(roots)
+
+
 def unified_incident_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[str]]:
     ids = list(stories)
     parent = {story_id: story_id for story_id in ids}
+    lineages = {
+        story_id: set(_timeline_split_lineage_roots(story))
+        for story_id, story in stories.items()
+    }
 
     def find(value: str) -> str:
         while parent[value] != value:
@@ -719,8 +739,16 @@ def unified_incident_components(stories: Mapping[str, Mapping[str, Any]]) -> lis
 
     def union(left: str, right: str) -> None:
         a, b = find(left), find(right)
-        if a != b:
-            parent[b] = a
+        if a == b:
+            return
+        # A high-confidence timeline split is negative identity authority. Do not
+        # let weaker cross-source similarity reconnect sibling components, even
+        # transitively through a third record.
+        if lineages.get(a, set()) & lineages.get(b, set()):
+            return
+        parent[b] = a
+        lineages.setdefault(a, set()).update(lineages.get(b, set()))
+        lineages.pop(b, None)
 
     # Evidence extraction can inspect timeline URLs and legacy rows. Cache it once
     # per story; recomputing it inside the pairwise family loop previously turned a

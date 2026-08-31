@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 
@@ -242,3 +243,66 @@ def test_aliases_are_flattened_to_active_canonical_after_canonical_is_merged():
     assert payload["story_aliases"]["story_000001"] == "story_000003"
     assert payload["story_aliases"]["story_000002"] == "story_000003"
     assert all(target in payload["stories"] for target in payload["story_aliases"].values())
+
+
+def test_registry_preflight_does_not_oscillate_split_fragment_back_into_origin(
+    tmp_path, monkeypatch
+):
+    """Regression for the production 006228 -> 007107 non-convergence loop.
+
+    Timeline repair may split one contaminated record into two incompatible
+    incidents that still share weak legacy title/source evidence.  That weak
+    evidence must never merge the siblings back together, otherwise every
+    top-level pass creates a fresh detached ID and immediately swallows it again.
+    """
+    title = "Legacy headline shared by two incompatible timeline components"
+    payload = {
+        "stories": {
+            "story_000001": _story("story_000001", title, "event-a"),
+        },
+        "event_to_story": {"event-a": "story_000001"},
+        "incident_anchor_to_story": {},
+        "story_aliases": {},
+        "quarantined_stories": {},
+        "next_story_id": 2,
+    }
+    path = tmp_path / "registry.json"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+    real_split = registry_repair._repair_timeline_coherence
+    split_done = False
+
+    def split_once(current):
+        nonlocal split_done
+        if split_done:
+            return 0, 0, [], {}
+        split_done = True
+        primary = current["stories"]["story_000001"]
+        detached = copy.deepcopy(primary)
+        detached["story_id"] = "story_000002"
+        detached["events"] = ["event-b"]
+        detached["timeline"][0]["event_key"] = "event-b"
+        detached["timeline"][0]["article_id"] = "article-story_000002"
+        detached["timeline"][0]["canonical_article_id"] = "article-story_000002"
+        for record in (primary, detached):
+            record["timeline_coherence_repair"] = {
+                "repair_version": 15,
+                "original_story_id": "story_000001",
+                "reason": "incompatible_event_families_without_identity_continuity",
+            }
+            record["timeline_coherence_split_roots"] = ["story_000001"]
+        current["stories"]["story_000002"] = detached
+        current["next_story_id"] = 3
+        return 1, 1, ["story_000002"], {"story_000001": ["story_000002"]}
+
+    monkeypatch.setattr(registry_repair, "_repair_timeline_coherence", split_once)
+    try:
+        result = normalize_registry(path)
+    finally:
+        monkeypatch.setattr(registry_repair, "_repair_timeline_coherence", real_split)
+
+    persisted = json.loads(path.read_text(encoding="utf-8"))
+    assert result["verification_clean"] is True
+    assert result["repair_passes"] == 2
+    assert set(persisted["stories"]) == {"story_000001", "story_000002"}
+    assert persisted["story_aliases"] == {}

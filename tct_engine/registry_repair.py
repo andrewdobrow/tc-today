@@ -38,7 +38,7 @@ from .source_identity import (
     story_source_identity_urls,
 )
 
-REPAIR_VERSION = 14
+REPAIR_VERSION = 15
 
 _LEGACY_GENERIC_EVENT_KEYS = frozenset({"unknown-event", "fire", "traffic-crash"})
 _HASH_SUFFIX_RE = re.compile(r"-[0-9a-f]{10}$")
@@ -402,6 +402,55 @@ def _story_number(story_id: str) -> int:
     return int(match.group(1)) if match else 10**12
 
 
+def _timeline_split_lineage_roots(story: Mapping[str, Any]) -> frozenset[str]:
+    """Return durable negative-identity roots created by coherence repair.
+
+    A timeline-coherence split is stronger evidence than later exact-title, source,
+    or incident similarity: the splitter has already proven that the components
+    cannot safely be one story.  Persist the original split root so a later repair
+    layer (or a later top-level preflight pass) cannot glue sibling components back
+    together and create a split/merge oscillation.
+    """
+
+    roots = {
+        str(value or "").strip()
+        for value in (story.get("timeline_coherence_split_roots", ()) or ())
+        if str(value or "").strip()
+    }
+    repair = story.get("timeline_coherence_repair")
+    if isinstance(repair, Mapping):
+        original = str(repair.get("original_story_id") or "").strip()
+        if original:
+            roots.add(original)
+    return frozenset(roots)
+
+
+def _lineage_safe_union(
+    left: str,
+    right: str,
+    *,
+    parent: MutableMapping[str, str],
+    lineages: MutableMapping[str, set[str]],
+) -> bool:
+    """Union two identity components unless a prior split proves conflict."""
+
+    def find(value: str) -> str:
+        while parent[value] != value:
+            parent[value] = parent[parent[value]]
+            value = parent[value]
+        return value
+
+    a, b = find(left), find(right)
+    if a == b:
+        return True
+    if lineages.get(a, set()) & lineages.get(b, set()):
+        return False
+    parent[b] = a
+    lineages.setdefault(a, set()).update(lineages.get(b, set()))
+    lineages.pop(b, None)
+    return True
+
+
 def _canonical_candidate_priority(story: Mapping[str, Any]) -> tuple[int, int, int]:
     candidates = list(story.get("title_candidates", ()) or ())
     return max(
@@ -461,6 +510,13 @@ def _select_canonical_title(story: MutableMapping[str, Any]) -> str:
 
 
 def merge_story_records(primary: MutableMapping[str, Any], secondary: Mapping[str, Any]) -> None:
+    split_roots = sorted(
+        _timeline_split_lineage_roots(primary)
+        | _timeline_split_lineage_roots(secondary)
+    )
+    if split_roots:
+        primary["timeline_coherence_split_roots"] = split_roots
+
     for field in (
         "events", "titles", "title_tokens", "fact_tokens", "facts", "locations",
         "agencies", "event_types", "entities", "sources",
@@ -589,6 +645,10 @@ class RegistryRepairReport:
 
 def _duplicate_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[str]]:
     parent = {story_id: story_id for story_id in stories}
+    lineages = {
+        story_id: set(_timeline_split_lineage_roots(story))
+        for story_id, story in stories.items()
+    }
 
     def find(story_id: str) -> str:
         while parent[story_id] != story_id:
@@ -597,9 +657,7 @@ def _duplicate_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[
         return story_id
 
     def union(left: str, right: str) -> None:
-        a, b = find(left), find(right)
-        if a != b:
-            parent[b] = a
+        _lineage_safe_union(left, right, parent=parent, lineages=lineages)
 
     title_index: dict[str, list[str]] = {}
     event_index: dict[str, list[str]] = {}
@@ -629,6 +687,10 @@ def _incident_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[s
     """Return conservative high-confidence incident identity components."""
 
     parent = {story_id: story_id for story_id in stories}
+    lineages = {
+        story_id: set(_timeline_split_lineage_roots(story))
+        for story_id, story in stories.items()
+    }
 
     def find(story_id: str) -> str:
         while parent[story_id] != story_id:
@@ -637,9 +699,7 @@ def _incident_components(stories: Mapping[str, Mapping[str, Any]]) -> list[set[s
         return story_id
 
     def union(left: str, right: str) -> None:
-        a, b = find(left), find(right)
-        if a != b:
-            parent[b] = a
+        _lineage_safe_union(left, right, parent=parent, lineages=lineages)
 
     story_ids = sorted(stories, key=_story_number)
     signatures = {
@@ -1075,6 +1135,9 @@ def _component_record(
             "reasons": [],
         },
         "identity_contamination_repaired": True,
+        "timeline_coherence_split_roots": sorted(
+            _timeline_split_lineage_roots(original) | {original_story_id}
+        ),
         "timeline_coherence_repair": {
             "repair_version": REPAIR_VERSION,
             "original_story_id": original_story_id,
@@ -1171,6 +1234,10 @@ def _source_identity_components(stories: Mapping[str, Mapping[str, Any]]) -> lis
     """Return components sharing an exact safe article identity URL."""
 
     parent = {story_id: story_id for story_id in stories}
+    lineages = {
+        story_id: set(_timeline_split_lineage_roots(story))
+        for story_id, story in stories.items()
+    }
 
     def find(story_id: str) -> str:
         while parent[story_id] != story_id:
@@ -1179,9 +1246,7 @@ def _source_identity_components(stories: Mapping[str, Mapping[str, Any]]) -> lis
         return story_id
 
     def union(left: str, right: str) -> None:
-        a, b = find(left), find(right)
-        if a != b:
-            parent[b] = a
+        _lineage_safe_union(left, right, parent=parent, lineages=lineages)
 
     source_index: dict[str, list[str]] = {}
     for story_id, story in stories.items():
@@ -1218,6 +1283,41 @@ def _count_source_identity_groups(stories: Mapping[str, Mapping[str, Any]]) -> i
     return len(_source_identity_components(stories))
 
 
+def _count_mergeable_index_groups(
+    index: Mapping[str, set[str]],
+    stories: Mapping[str, Mapping[str, Any]],
+) -> int:
+    """Count only duplicate groups that still have legal merge authority.
+
+    Two timeline-split siblings may intentionally retain the same legacy title or
+    source evidence.  Once coherence repair proved they are different incidents,
+    those rows are no longer an unresolved duplicate-health failure.
+    """
+
+    groups = 0
+    for story_ids in index.values():
+        active = sorted({story_id for story_id in story_ids if story_id in stories})
+        if len(active) < 2:
+            continue
+        parent = {story_id: story_id for story_id in active}
+        lineages = {
+            story_id: set(_timeline_split_lineage_roots(stories[story_id]))
+            for story_id in active
+        }
+
+        def find(value: str) -> str:
+            while parent[value] != value:
+                parent[value] = parent[parent[value]]
+                value = parent[value]
+            return value
+
+        for left, right in itertools.combinations(active, 2):
+            _lineage_safe_union(left, right, parent=parent, lineages=lineages)
+        if any(len({story_id for story_id in active if find(story_id) == root}) > 1 for root in {find(story_id) for story_id in active}):
+            groups += 1
+    return groups
+
+
 def _count_exact_duplicate_title_groups(stories: Mapping[str, Mapping[str, Any]]) -> int:
     title_index: dict[str, set[str]] = {}
     for story_id, story in stories.items():
@@ -1225,7 +1325,7 @@ def _count_exact_duplicate_title_groups(stories: Mapping[str, Mapping[str, Any]]
             normalized = normalize_title(title)
             if len(normalized.split()) >= 4:
                 title_index.setdefault(normalized, set()).add(story_id)
-    return sum(1 for story_ids in title_index.values() if len(story_ids) > 1)
+    return _count_mergeable_index_groups(title_index, stories)
 
 
 def _count_publisher_title_duplicate_groups(stories: Mapping[str, Mapping[str, Any]]) -> int:
@@ -1235,7 +1335,7 @@ def _count_publisher_title_duplicate_groups(stories: Mapping[str, Mapping[str, A
             normalized = normalize_identity_title(title)
             if len(normalized.split()) >= 4:
                 title_index.setdefault(normalized, set()).add(story_id)
-    return sum(1 for story_ids in title_index.values() if len(story_ids) > 1)
+    return _count_mergeable_index_groups(title_index, stories)
 
 
 def _resolve_alias_target(
